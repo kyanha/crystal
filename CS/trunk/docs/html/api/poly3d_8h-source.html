@@ -56,7 +56,7 @@
 <a name="l00048"></a><a class="code" href="classcsPoly3D.html#n0">00048</a>   <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;csVector3&gt;</a> vertices;
 00049 
 00050 <span class="keyword">public</span>:
-00054   <a class="code" href="classcsPoly3D.html">csPoly3D</a> (<span class="keywordtype">int</span> start_size = 10);
+00054   <a class="code" href="classcsPoly3D.html">csPoly3D</a> (size_t start_size = 10);
 00055 
 00057   <a class="code" href="classcsPoly3D.html">csPoly3D</a> (<span class="keyword">const</span> <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; copy);
 00058 
@@ -64,24 +64,24 @@
 00061 
 00065   <span class="keywordtype">void</span> MakeEmpty ();
 00066 
-<a name="l00070"></a><a class="code" href="classcsPoly3D.html#a4">00070</a>   <span class="keywordtype">int</span> GetVertexCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> vertices.<a class="code" href="classcsArray.html#a4">Length</a> (); }
+<a name="l00070"></a><a class="code" href="classcsPoly3D.html#a4">00070</a>   size_t GetVertexCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> vertices.<a class="code" href="classcsArray.html#a4">Length</a> (); }
 00071 
 <a name="l00075"></a><a class="code" href="classcsPoly3D.html#a5">00075</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* GetVertices ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> vertices.<a class="code" href="classcsDirtyAccessArray.html#a3">GetArray</a> (); }
 00076 
 <a name="l00080"></a><a class="code" href="classcsPoly3D.html#a6">00080</a>   <a class="code" href="classcsVector3.html">csVector3</a>* GetVertices () { <span class="keywordflow">return</span> vertices.<a class="code" href="classcsDirtyAccessArray.html#a3">GetArray</a> (); }
 00081 
-<a name="l00085"></a><a class="code" href="classcsPoly3D.html#a7">00085</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* GetVertex (<span class="keywordtype">int</span> i)<span class="keyword"> const</span>
+<a name="l00085"></a><a class="code" href="classcsPoly3D.html#a7">00085</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* GetVertex (size_t i)<span class="keyword"> const</span>
 00086 <span class="keyword">  </span>{
-00087     <span class="keywordflow">if</span> (i&lt;0 || i&gt;=(int)vertices.<a class="code" href="classcsArray.html#a4">Length</a> ()) <span class="keywordflow">return</span> 0;
+00087     <span class="keywordflow">if</span> (i &gt;= vertices.<a class="code" href="classcsArray.html#a4">Length</a> ()) <span class="keywordflow">return</span> 0;
 00088     <span class="keywordflow">return</span> &amp;(vertices.<a class="code" href="classcsDirtyAccessArray.html#a3">GetArray</a> ()[i]);
 00089   }
 00090 
-<a name="l00094"></a><a class="code" href="classcsPoly3D.html#a8">00094</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; operator[] (<span class="keywordtype">int</span> i)
+<a name="l00094"></a><a class="code" href="classcsPoly3D.html#a8">00094</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; operator[] (size_t i)
 00095   {
 00096     <span class="keywordflow">return</span> vertices[i];
 00097   }
 00098 
-<a name="l00102"></a><a class="code" href="classcsPoly3D.html#a9">00102</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; operator[] (<span class="keywordtype">int</span> i)<span class="keyword"> const</span>
+<a name="l00102"></a><a class="code" href="classcsPoly3D.html#a9">00102</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; operator[] (size_t i)<span class="keyword"> const</span>
 00103 <span class="keyword">  </span>{
 00104     <span class="keywordflow">return</span> vertices[i];
 00105   }
@@ -95,17 +95,17 @@
 00119 
 00123   <span class="keywordtype">bool</span> In (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) <span class="keyword">const</span>;
 00124 
-00128   <span class="keyword">static</span> <span class="keywordtype">bool</span> In (<a class="code" href="classcsVector3.html">csVector3</a>* poly, <span class="keywordtype">int</span> num_poly, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v);
+00128   <span class="keyword">static</span> <span class="keywordtype">bool</span> In (<a class="code" href="classcsVector3.html">csVector3</a>* poly, size_t num_poly, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v);
 00129 
-00133   <span class="keywordtype">void</span> MakeRoom (<span class="keywordtype">int</span> new_max);
+00133   <span class="keywordtype">void</span> MakeRoom (size_t new_max);
 00134 
-<a name="l00138"></a><a class="code" href="classcsPoly3D.html#a14">00138</a>   <span class="keywordtype">void</span> SetVertexCount (<span class="keywordtype">int</span> n) { vertices.<a class="code" href="classcsArray.html#a7">SetLength</a> (n); }
+<a name="l00138"></a><a class="code" href="classcsPoly3D.html#a14">00138</a>   <span class="keywordtype">void</span> SetVertexCount (size_t n) { vertices.<a class="code" href="classcsArray.html#a7">SetLength</a> (n); }
 00139 
-<a name="l00144"></a><a class="code" href="classcsPoly3D.html#a15">00144</a>   <span class="keywordtype">int</span> AddVertex (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) { <span class="keywordflow">return</span> AddVertex (v.<a class="code" href="classcsVector3.html#m0">x</a>, v.<a class="code" href="classcsVector3.html#m1">y</a>, v.<a class="code" href="classcsVector3.html#m2">z</a>); }
+<a name="l00144"></a><a class="code" href="classcsPoly3D.html#a15">00144</a>   size_t AddVertex (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) { <span class="keywordflow">return</span> AddVertex (v.<a class="code" href="classcsVector3.html#m0">x</a>, v.<a class="code" href="classcsVector3.html#m1">y</a>, v.<a class="code" href="classcsVector3.html#m2">z</a>); }
 00145 
-00150   <span class="keywordtype">int</span> AddVertex (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z);
+00150   size_t AddVertex (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z);
 00151 
-<a name="l00155"></a><a class="code" href="classcsPoly3D.html#a17">00155</a>   <span class="keywordtype">void</span> SetVertices (<a class="code" href="classcsVector3.html">csVector3</a> <span class="keyword">const</span>* v, <span class="keywordtype">int</span> num)
+<a name="l00155"></a><a class="code" href="classcsPoly3D.html#a17">00155</a>   <span class="keywordtype">void</span> SetVertices (<a class="code" href="classcsVector3.html">csVector3</a> <span class="keyword">const</span>* v, size_t num)
 00156   {
 00157     MakeRoom (num);
 00158     memcpy (vertices.<a class="code" href="classcsDirtyAccessArray.html#a3">GetArray</a> (), v, num * <span class="keyword">sizeof</span> (csVector3));
@@ -133,7 +133,7 @@
 00207   }
 00208 
 00216   <span class="keyword">static</span> <span class="keywordtype">int</span> Classify (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl,
-00217         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, <span class="keywordtype">int</span> num_vertices);
+00217         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, size_t num_vertices);
 00218 
 <a name="l00226"></a><a class="code" href="classcsPoly3D.html#a22">00226</a>   <span class="keywordtype">int</span> Classify (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl)<span class="keyword"> const</span>
 00227 <span class="keyword">  </span>{
@@ -157,7 +157,7 @@
 00252 
 00254   <span class="keywordtype">void</span> SplitWithPlaneZ (<a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; front, <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; back, <span class="keywordtype">float</span> z) <span class="keyword">const</span>;
 00255 
-00257   <span class="keyword">static</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, <span class="keywordtype">int</span> num);
+00257   <span class="keyword">static</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, size_t num);
 00258 
 00260   <span class="keyword">static</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;csVector3&gt;</a>&amp; poly);
 00261 
@@ -166,7 +166,7 @@
 00265     <span class="keywordflow">return</span> ComputeNormal (vertices.<a class="code" href="classcsDirtyAccessArray.html#a3">GetArray</a> (), vertices.<a class="code" href="classcsArray.html#a4">Length</a> ());
 00266   }
 00267 
-00269   <span class="keyword">static</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, <span class="keywordtype">int</span> num);
+00269   <span class="keyword">static</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, size_t num);
 00270 
 00272   <span class="keyword">static</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;csVector3&gt;</a>&amp; poly);
 00273 
@@ -191,12 +191,12 @@
 <a name="l00306"></a><a class="code" href="classcsVector3Array.html">00306</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csVector3Array : <span class="keyword">public</span> <a class="code" href="classcsPoly3D.html">csPoly3D</a>
 00307 {
 00308 <span class="keyword">public</span>:
-00309   csVector3Array (<span class="keywordtype">int</span> start_size = 10) : <a class="code" href="classcsPoly3D.html#a0">csPoly3D</a> (start_size) { }
+00309   csVector3Array (size_t start_size = 10) : <a class="code" href="classcsPoly3D.html#a0">csPoly3D</a> (start_size) { }
 00310 
-<a name="l00315"></a><a class="code" href="classcsVector3Array.html#a1">00315</a>   <span class="keywordtype">int</span> AddVertexSmart (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+<a name="l00315"></a><a class="code" href="classcsVector3Array.html#a1">00315</a>   size_t AddVertexSmart (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
 00316   { <span class="keywordflow">return</span> AddVertexSmart (v.<a class="code" href="classcsVector3.html#m0">x</a>, v.<a class="code" href="classcsVector3.html#m1">y</a>, v.<a class="code" href="classcsVector3.html#m2">z</a>); }
 00317 
-00322   <span class="keywordtype">int</span> AddVertexSmart (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z);
+00322   size_t AddVertexSmart (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z);
 00323 
 00335   <span class="keyword">static</span> <a class="code" href="structcsCompressVertex.html">csCompressVertex</a>* CompressVertices (<a class="code" href="classcsVector3.html">csVector3</a>* vertices,
 00336         size_t num_vertices, <a class="code" href="classcsVector3.html">csVector3</a>*&amp; new_vertices, size_t&amp; new_count);

@@ -36,26 +36,28 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Get name of the File where it was loaded from.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a2">SetFileName</a> (const char *filename)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Set name of the File where it was loaded from.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual int&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a3">GetNumberOfPasses</a> ()=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Get number of passes this shader have.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a4">ActivatePass</a> (unsigned int number)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Activate a pass for rendering.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a5">SetupPass</a> (const <a class="el" href="structcsRenderMesh.html">csRenderMesh</a> *mesh, <a class="el" href="structcsRenderMeshModes.html">csRenderMeshModes</a> &amp;modes, const <a class="el" href="shader_8h.html#a0">csShaderVarStack</a> &amp;stacks)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Setup a pass.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a6">TeardownPass</a> ()=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Tear down current state, and prepare for a new mesh (for which SetupPass is called).</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a7">DeactivatePass</a> ()=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Completly deactivate a pass.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual size_t&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a3">GetTicket</a> (const <a class="el" href="structcsRenderMeshModes.html">csRenderMeshModes</a> &amp;modes, const <a class="el" href="shader_8h.html#a0">csShaderVarStack</a> &amp;stacks)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Query a "shader ticket".</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual size_t&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a4">GetNumberOfPasses</a> (size_t ticket)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get number of passes this shader have.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a5">ActivatePass</a> (size_t ticket, size_t number)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Activate a pass for rendering.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a6">SetupPass</a> (size_t ticket, const <a class="el" href="structcsRenderMesh.html">csRenderMesh</a> *mesh, <a class="el" href="structcsRenderMeshModes.html">csRenderMeshModes</a> &amp;modes, const <a class="el" href="shader_8h.html#a0">csShaderVarStack</a> &amp;stacks)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Setup a pass.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a7">TeardownPass</a> (size_t ticket)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Tear down current state, and prepare for a new mesh (for which SetupPass is called).</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShader.html#a8">DeactivatePass</a> (size_t ticket)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Completly deactivate a pass.</em> <a href="#a8"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Specific shader.
 <p>
-Can/will be either render-specific or general The shader in this form is "compiled" and cannot be modified 
+Can/will be either render-specific or general The shader in this form is "compiled" and cannot be modified. 
 <p>
 
 <p>
 Definition at line <a class="el" href="shader_8h-source.html#l00190">190</a> of file <a class="el" href="shader_8h-source.html">shader.h</a>.<hr><h2>Member Function Documentation</h2>
-<a name="a4" doxytag="iShader::ActivatePass"></a><p>
+<a name="a5" doxytag="iShader::ActivatePass"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -63,10 +65,19 @@ Definition at line <a class="el" href="shader_8h-source.html#l00190">190</a> of 
         <tr>
           <td class="md" nowrap valign="top"> virtual bool iShader::ActivatePass </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">unsigned int&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>number</em>          </td>
-          <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
+          <td class="md" nowrap valign="top">size_t&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>ticket</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>size_t&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>number</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
         </tr>
 
       </table>
@@ -86,7 +97,7 @@ Activate a pass for rendering.
     </td>
   </tr>
 </table>
-<a name="a7" doxytag="iShader::DeactivatePass"></a><p>
+<a name="a8" doxytag="iShader::DeactivatePass"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -94,7 +105,8 @@ Activate a pass for rendering.
         <tr>
           <td class="md" nowrap valign="top"> virtual bool iShader::DeactivatePass </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" nowrap valign="top">size_t&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>ticket</em>          </td>
           <td class="md" valign="top">)&nbsp;</td>
           <td class="md" nowrap><code> [pure virtual]</code></td>
         </tr>
@@ -146,15 +158,16 @@ Get name of the File where it was loaded from.
     </td>
   </tr>
 </table>
-<a name="a3" doxytag="iShader::GetNumberOfPasses"></a><p>
+<a name="a4" doxytag="iShader::GetNumberOfPasses"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> virtual int iShader::GetNumberOfPasses </td>
+          <td class="md" nowrap valign="top"> virtual size_t iShader::GetNumberOfPasses </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" nowrap valign="top">size_t&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>ticket</em>          </td>
           <td class="md" valign="top">)&nbsp;</td>
           <td class="md" nowrap><code> [pure virtual]</code></td>
         </tr>
@@ -174,6 +187,46 @@ Get name of the File where it was loaded from.
 Get number of passes this shader have.
 <p>
     </td>
+  </tr>
+</table>
+<a name="a3" doxytag="iShader::GetTicket"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual size_t iShader::GetTicket </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const <a class="el" href="structcsRenderMeshModes.html">csRenderMeshModes</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>modes</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>const <a class="el" href="shader_8h.html#a0">csShaderVarStack</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>stacks</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Query a "shader ticket".
+<p>
+Internally, a shader may choose one of several actual techniques or variants at runtime. However, the variant has to be known in order to determine the number of passes or to do pass preparation. As the decision what variant is to be used is made based on the mesh modes and the shader vars used for rendering, those have to be provided to get the actual variant, which is then identified by the "ticket".     </td>
   </tr>
 </table>
 <a name="a0" doxytag="iShader::QueryObject"></a><p>
@@ -237,7 +290,7 @@ Set name of the File where it was loaded from.
     </td>
   </tr>
 </table>
-<a name="a5" doxytag="iShader::SetupPass"></a><p>
+<a name="a6" doxytag="iShader::SetupPass"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -245,7 +298,13 @@ Set name of the File where it was loaded from.
         <tr>
           <td class="md" nowrap valign="top"> virtual bool iShader::SetupPass </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">const <a class="el" href="structcsRenderMesh.html">csRenderMesh</a> *&nbsp;</td>
+          <td class="md" nowrap valign="top">size_t&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>ticket</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>const <a class="el" href="structcsRenderMesh.html">csRenderMesh</a> *&nbsp;</td>
           <td class="mdname" nowrap>&nbsp; <em>mesh</em>, </td>
         </tr>
         <tr>
@@ -283,7 +342,7 @@ Setup a pass.
     </td>
   </tr>
 </table>
-<a name="a6" doxytag="iShader::TeardownPass"></a><p>
+<a name="a7" doxytag="iShader::TeardownPass"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -291,7 +350,8 @@ Setup a pass.
         <tr>
           <td class="md" nowrap valign="top"> virtual bool iShader::TeardownPass </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" nowrap valign="top">size_t&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>ticket</em>          </td>
           <td class="md" valign="top">)&nbsp;</td>
           <td class="md" nowrap><code> [pure virtual]</code></td>
         </tr>
