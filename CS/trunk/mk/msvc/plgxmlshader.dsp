@@ -240,12 +240,40 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\condeval.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\docwrap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\expparser.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\xmlshader.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\condeval.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\docwrap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\expparser.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\tokenhelper.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\xmlshader.h
