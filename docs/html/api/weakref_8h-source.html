@@ -41,117 +41,119 @@
 00023 <span class="preprocessor">#include "csextern.h"</span>
 00024 <span class="preprocessor">#include "csutil/ref.h"</span>
 00025 
-00041 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00042"></a><a class="code" href="classcsWeakRef.html">00042</a> <span class="keyword">class </span><a class="code" href="classcsWeakRef.html">csWeakRef</a>
-00043 {
-00044 <span class="keyword">private</span>:
-00045   T* obj;
-00046 
-00052   <span class="keywordtype">void</span> Unlink ()
-00053   {
-00054     <span class="keywordflow">if</span> (obj) obj-&gt;RemoveRefOwner ((<a class="code" href="structiBase.html">iBase</a>**)&amp;obj);
-00055   }
-00056 
-00060   <span class="keywordtype">void</span> Link ()
-00061   {
-00062     <span class="keywordflow">if</span> (obj) obj-&gt;AddRefOwner ((<a class="code" href="structiBase.html">iBase</a>**)&amp;obj);
-00063   }
-00064 
-00065 <span class="keyword">public</span>:
-<a name="l00069"></a><a class="code" href="classcsWeakRef.html#a0">00069</a>   <a class="code" href="classcsWeakRef.html#a0">csWeakRef</a> () : obj (0) {}
-00070 
-<a name="l00074"></a><a class="code" href="classcsWeakRef.html#a1">00074</a>   <a class="code" href="classcsWeakRef.html#a0">csWeakRef</a> (T* newobj)
-00075   {
-00076     obj = newobj;
-00077     Link ();
-00078   }
-00079 
-<a name="l00083"></a><a class="code" href="classcsWeakRef.html#a2">00083</a>   <a class="code" href="classcsWeakRef.html#a0">csWeakRef</a> (<a class="code" href="classcsWeakRef.html">csWeakRef</a> <span class="keyword">const</span>&amp; other) : obj (other.obj)
-00084   {
-00085     Link ();
-00086   }
-00087 
-<a name="l00092"></a><a class="code" href="classcsWeakRef.html#a3">00092</a>   <a class="code" href="classcsWeakRef.html#a0">csWeakRef</a> (<span class="keyword">const</span> <a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp; newobj)
-00093   {
-00094     <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a> r = newobj;
-00095     obj = r;
-00096     Link ();
-00097   }
-00098 
-<a name="l00102"></a><a class="code" href="classcsWeakRef.html#a4">00102</a>   <a class="code" href="classcsWeakRef.html#a4">~csWeakRef</a> ()
-00103   {
-00104     Unlink ();
-00105   }
-00106 
-<a name="l00110"></a><a class="code" href="classcsWeakRef.html#a5">00110</a>   <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; <a class="code" href="classcsWeakRef.html#a5">operator = </a>(T* newobj)
-00111   {
-00112     <span class="keywordflow">if</span> (obj != newobj)
-00113     {
-00114       Unlink ();
-00115       obj = newobj;
-00116       Link ();
-00117     }
-00118     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00119   }
-00120 
-<a name="l00125"></a><a class="code" href="classcsWeakRef.html#a6">00125</a>   <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; <a class="code" href="classcsWeakRef.html#a5">operator = </a>(<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a> newobj)
-00126   {
-00127     <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a> r = newobj;
-00128     <span class="keywordflow">if</span> (obj != r)
-00129     {
-00130       Unlink ();
-00131       obj = r;
-00132       Link ();
-00133     }
-00134     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00135   }
-00136 
-<a name="l00140"></a><a class="code" href="classcsWeakRef.html#a7">00140</a>   <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; <a class="code" href="classcsWeakRef.html#a5">operator = </a>(<a class="code" href="classcsWeakRef.html">csWeakRef</a> <span class="keyword">const</span>&amp; other)
-00141   {
-00142     this-&gt;<a class="code" href="classcsWeakRef.html#a5">operator=</a>(other.<a class="code" href="classcsWeakRef.html#o0">obj</a>);
-00143     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00144   }
-00145 
-<a name="l00147"></a><a class="code" href="classcsWeakRef.html#l0">00147</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l0">operator == </a>(<span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1, <span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r2)
-00148   {
-00149     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> == r2.<a class="code" href="classcsWeakRef.html#o0">obj</a>;
-00150   }
-<a name="l00152"></a><a class="code" href="classcsWeakRef.html#l1">00152</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l1">operator != </a>(<span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1, <span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r2)
-00153   {
-00154     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> != r2.<a class="code" href="classcsWeakRef.html#o0">obj</a>;
-00155   }
-<a name="l00157"></a><a class="code" href="classcsWeakRef.html#l2">00157</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l0">operator == </a>(<span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1, T* obj)
-00158   {
-00159     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> == obj;
-00160   }
-<a name="l00162"></a><a class="code" href="classcsWeakRef.html#l3">00162</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l1">operator != </a>(<span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1, T* obj)
-00163   {
-00164     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> != obj;
-00165   }
-<a name="l00167"></a><a class="code" href="classcsWeakRef.html#l4">00167</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l0">operator == </a>(T* obj, <span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1)
-00168   {
-00169     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> == obj;
-00170   }
-<a name="l00172"></a><a class="code" href="classcsWeakRef.html#l5">00172</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l1">operator != </a>(T* obj, <span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1)
-00173   {
-00174     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> != obj;
-00175   }
-00176 
-<a name="l00178"></a><a class="code" href="classcsWeakRef.html#a8">00178</a>   T* <a class="code" href="classcsWeakRef.html#a8">operator -&gt; </a>()<span class="keyword"> const</span>
-00179 <span class="keyword">  </span>{ <span class="keywordflow">return</span> obj; }
-00180   
-<a name="l00182"></a><a class="code" href="classcsWeakRef.html#a9">00182</a>   <a class="code" href="classcsWeakRef.html#a9">operator T* </a>()<span class="keyword"> const</span>
-00183 <span class="keyword">  </span>{ <span class="keywordflow">return</span> obj; }
-00184   
-<a name="l00186"></a><a class="code" href="classcsWeakRef.html#a10">00186</a>   T&amp; <a class="code" href="classcsWeakRef.html#a10">operator* </a>()<span class="keyword"> const</span>
-00187 <span class="keyword">  </span>{ <span class="keywordflow">return</span> *obj; }
-00188 
-<a name="l00193"></a><a class="code" href="classcsWeakRef.html#a11">00193</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#a11">IsValid</a> ()<span class="keyword"> const</span>
-00194 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (obj != 0); }
-00195 };
-00196 
-00197 <span class="preprocessor">#endif // __CS_WEAKREF_H__</span>
-00198 <span class="preprocessor"></span>
+00026 <span class="keyword">struct </span><a class="code" href="structiBase.html">iBase</a>;
+00027 
+00043 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00044"></a><a class="code" href="classcsWeakRef.html">00044</a> <span class="keyword">class </span><a class="code" href="classcsWeakRef.html">csWeakRef</a>
+00045 {
+00046 <span class="keyword">private</span>:
+00047   T* obj;
+00048 
+00054   <span class="keywordtype">void</span> Unlink ()
+00055   {
+00056     <span class="keywordflow">if</span> (obj) obj-&gt;RemoveRefOwner ((<a class="code" href="structiBase.html">iBase</a>**)&amp;obj);
+00057   }
+00058 
+00062   <span class="keywordtype">void</span> Link ()
+00063   {
+00064     <span class="keywordflow">if</span> (obj) obj-&gt;AddRefOwner ((<a class="code" href="structiBase.html">iBase</a>**)&amp;obj);
+00065   }
+00066 
+00067 <span class="keyword">public</span>:
+<a name="l00071"></a><a class="code" href="classcsWeakRef.html#a0">00071</a>   <a class="code" href="classcsWeakRef.html#a0">csWeakRef</a> () : obj (0) {}
+00072 
+<a name="l00076"></a><a class="code" href="classcsWeakRef.html#a1">00076</a>   <a class="code" href="classcsWeakRef.html#a0">csWeakRef</a> (T* newobj)
+00077   {
+00078     obj = newobj;
+00079     Link ();
+00080   }
+00081 
+<a name="l00085"></a><a class="code" href="classcsWeakRef.html#a2">00085</a>   <a class="code" href="classcsWeakRef.html#a0">csWeakRef</a> (<a class="code" href="classcsWeakRef.html">csWeakRef</a> <span class="keyword">const</span>&amp; other) : obj (other.obj)
+00086   {
+00087     Link ();
+00088   }
+00089 
+<a name="l00094"></a><a class="code" href="classcsWeakRef.html#a3">00094</a>   <a class="code" href="classcsWeakRef.html#a0">csWeakRef</a> (<span class="keyword">const</span> <a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp; newobj)
+00095   {
+00096     <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a> r = newobj;
+00097     obj = r;
+00098     Link ();
+00099   }
+00100 
+<a name="l00104"></a><a class="code" href="classcsWeakRef.html#a4">00104</a>   <a class="code" href="classcsWeakRef.html#a4">~csWeakRef</a> ()
+00105   {
+00106     Unlink ();
+00107   }
+00108 
+<a name="l00112"></a><a class="code" href="classcsWeakRef.html#a5">00112</a>   <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; <a class="code" href="classcsWeakRef.html#a5">operator = </a>(T* newobj)
+00113   {
+00114     <span class="keywordflow">if</span> (obj != newobj)
+00115     {
+00116       Unlink ();
+00117       obj = newobj;
+00118       Link ();
+00119     }
+00120     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00121   }
+00122 
+<a name="l00127"></a><a class="code" href="classcsWeakRef.html#a6">00127</a>   <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; <a class="code" href="classcsWeakRef.html#a5">operator = </a>(<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a> newobj)
+00128   {
+00129     <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a> r = newobj;
+00130     <span class="keywordflow">if</span> (obj != r)
+00131     {
+00132       Unlink ();
+00133       obj = r;
+00134       Link ();
+00135     }
+00136     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00137   }
+00138 
+<a name="l00142"></a><a class="code" href="classcsWeakRef.html#a7">00142</a>   <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; <a class="code" href="classcsWeakRef.html#a5">operator = </a>(<a class="code" href="classcsWeakRef.html">csWeakRef</a> <span class="keyword">const</span>&amp; other)
+00143   {
+00144     this-&gt;<a class="code" href="classcsWeakRef.html#a5">operator=</a>(other.<a class="code" href="classcsWeakRef.html#o0">obj</a>);
+00145     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00146   }
+00147 
+<a name="l00149"></a><a class="code" href="classcsWeakRef.html#l0">00149</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l0">operator == </a>(<span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1, <span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r2)
+00150   {
+00151     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> == r2.<a class="code" href="classcsWeakRef.html#o0">obj</a>;
+00152   }
+<a name="l00154"></a><a class="code" href="classcsWeakRef.html#l1">00154</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l1">operator != </a>(<span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1, <span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r2)
+00155   {
+00156     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> != r2.<a class="code" href="classcsWeakRef.html#o0">obj</a>;
+00157   }
+<a name="l00159"></a><a class="code" href="classcsWeakRef.html#l2">00159</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l0">operator == </a>(<span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1, T* obj)
+00160   {
+00161     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> == obj;
+00162   }
+<a name="l00164"></a><a class="code" href="classcsWeakRef.html#l3">00164</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l1">operator != </a>(<span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1, T* obj)
+00165   {
+00166     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> != obj;
+00167   }
+<a name="l00169"></a><a class="code" href="classcsWeakRef.html#l4">00169</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l0">operator == </a>(T* obj, <span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1)
+00170   {
+00171     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> == obj;
+00172   }
+<a name="l00174"></a><a class="code" href="classcsWeakRef.html#l5">00174</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#l1">operator != </a>(T* obj, <span class="keyword">const</span> <a class="code" href="classcsWeakRef.html">csWeakRef</a>&amp; r1)
+00175   {
+00176     <span class="keywordflow">return</span> r1.<a class="code" href="classcsWeakRef.html#o0">obj</a> != obj;
+00177   }
+00178 
+<a name="l00180"></a><a class="code" href="classcsWeakRef.html#a8">00180</a>   T* <a class="code" href="classcsWeakRef.html#a8">operator -&gt; </a>()<span class="keyword"> const</span>
+00181 <span class="keyword">  </span>{ <span class="keywordflow">return</span> obj; }
+00182   
+<a name="l00184"></a><a class="code" href="classcsWeakRef.html#a9">00184</a>   <a class="code" href="classcsWeakRef.html#a9">operator T* </a>()<span class="keyword"> const</span>
+00185 <span class="keyword">  </span>{ <span class="keywordflow">return</span> obj; }
+00186   
+<a name="l00188"></a><a class="code" href="classcsWeakRef.html#a10">00188</a>   T&amp; <a class="code" href="classcsWeakRef.html#a10">operator* </a>()<span class="keyword"> const</span>
+00189 <span class="keyword">  </span>{ <span class="keywordflow">return</span> *obj; }
+00190 
+<a name="l00195"></a><a class="code" href="classcsWeakRef.html#a11">00195</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsWeakRef.html#a11">IsValid</a> ()<span class="keyword"> const</span>
+00196 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (obj != 0); }
+00197 };
+00198 
+00199 <span class="preprocessor">#endif // __CS_WEAKREF_H__</span>
+00200 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
