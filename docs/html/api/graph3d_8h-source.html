@@ -500,7 +500,7 @@
 00776   };
 00777 };
 00778 
-00779 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>, 5, 4, 1);
+00779 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>, 5, 5, 0);
 00780 
 <a name="l00798"></a><a class="code" href="structiGraphics3D.html">00798</a> <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
 00799 {
@@ -568,98 +568,101 @@
 00970 
 00979   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iRenderBuffer&gt;</a> <a class="code" href="structiGraphics3D.html#a31">CreateRenderBuffer</a> (<span class="keywordtype">int</span> size, 
 00980     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <a class="code" href="group__gfx3d.html#a82">csRenderBufferComponentType</a> componentType, 
-00981     <span class="keywordtype">int</span> componentCount, <span class="keywordtype">bool</span> index) = 0;
-00982 
-00989   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a32">CreateInterleavedRenderBuffers</a> (<span class="keywordtype">int</span> size, 
-00990     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <span class="keywordtype">int</span> count, <a class="code" href="classcsArray.html">csArray&lt;iRenderBuffer*&gt;</a> &amp;buffers) = 0;
-00991 
-00996   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a33">SetBufferState</a> (<a class="code" href="group__gfx3d.html#a76">csVertexAttrib</a>* attribs,
-00997         <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>** buffers, <span class="keywordtype">int</span> count) = 0;
-00998 
-01003   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a34">SetTextureState</a> (<span class="keywordtype">int</span>* units, <a class="code" href="structiTextureHandle.html">iTextureHandle</a>** textures,
-01004         <span class="keywordtype">int</span> count) = 0;
+00981     <span class="keywordtype">int</span> componentCount) = 0;
+00993   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iRenderBuffer&gt;</a> <a class="code" href="structiGraphics3D.html#a32">CreateIndexRenderBuffer</a> (<span class="keywordtype">int</span> size, 
+00994     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <a class="code" href="group__gfx3d.html#a82">csRenderBufferComponentType</a> componentType,
+00995     size_t rangeStart, size_t rangeEnd) = 0;
+00996 
+01003   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a33">CreateInterleavedRenderBuffers</a> (<span class="keywordtype">int</span> size, 
+01004     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <span class="keywordtype">int</span> count, <a class="code" href="classcsRefArray.html">csRefArray&lt;iRenderBuffer&gt;</a>&amp; buffers) = 0;
 01005 
-01007   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a35">DrawMesh</a> (<span class="keyword">const</span> <a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a>* mymesh,
-01008     <span class="keyword">const</span> <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>&amp; modes,
-01009     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&lt; <a class="code" href="classcsArray.html">csArray&lt;csShaderVariable*&gt;</a> &gt; &amp;stacks) = 0;
-01010 
-01012   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a36">SetWriteMask</a> (<span class="keywordtype">bool</span> red, <span class="keywordtype">bool</span> green, <span class="keywordtype">bool</span> blue, <span class="keywordtype">bool</span> alpha) = 0;
-01013 
-01015   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a37">GetWriteMask</a> (<span class="keywordtype">bool</span> &amp;red, <span class="keywordtype">bool</span> &amp;green, <span class="keywordtype">bool</span> &amp;blue,
-01016         <span class="keywordtype">bool</span> &amp;alpha) <span class="keyword">const</span> = 0;
-01017 
-01019   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a38">SetZMode</a> (<a class="code" href="group__gfx3d.html#a75">csZBufMode</a> mode) = 0;
-01020 
-01022   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a39">EnableZOffset</a> () = 0;
-01023 
-01025   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a40">DisableZOffset</a> () = 0;
-01026 
-01028   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a41">SetShadowState</a> (<span class="keywordtype">int</span> state) = 0;
-01029 
-01030   <span class="comment">//=========================================================================</span>
-01031   <span class="comment">// Below this line are all functions that are not yet implemented by</span>
-01032   <span class="comment">// the new renderer or are not going to be implemented ever. In the</span>
-01033   <span class="comment">// last case they will be removed as soon as we permanently switch</span>
-01034   <span class="comment">// to the new renderer. @@@NR@@@</span>
-01035   <span class="comment">//=========================================================================</span>
-01037 <span class="comment">  virtual uint32 *GetZBuffAt (int x, int y) = 0;</span>
-01038 
-01040   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiGraphics3D.html#a43">GetZBuffValue</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
-01041 
-01043   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a44">DrawPolygon</a> (<a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a>&amp; poly) = 0;
-01044 
-01051   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a45">DrawPolygonDebug</a> (<a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a>&amp; poly) = 0;
+01010   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a34">SetBufferState</a> (<a class="code" href="group__gfx3d.html#a76">csVertexAttrib</a>* attribs,
+01011         <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>** buffers, <span class="keywordtype">int</span> count) = 0;
+01012 
+01017   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a35">SetTextureState</a> (<span class="keywordtype">int</span>* units, <a class="code" href="structiTextureHandle.html">iTextureHandle</a>** textures,
+01018         <span class="keywordtype">int</span> count) = 0;
+01019 
+01021   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a36">DrawMesh</a> (<span class="keyword">const</span> <a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a>* mymesh,
+01022     <span class="keyword">const</span> <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>&amp; modes,
+01023     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&lt; <a class="code" href="classcsArray.html">csArray&lt;csShaderVariable*&gt;</a> &gt; &amp;stacks) = 0;
+01024 
+01026   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a37">SetWriteMask</a> (<span class="keywordtype">bool</span> red, <span class="keywordtype">bool</span> green, <span class="keywordtype">bool</span> blue, <span class="keywordtype">bool</span> alpha) = 0;
+01027 
+01029   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a38">GetWriteMask</a> (<span class="keywordtype">bool</span> &amp;red, <span class="keywordtype">bool</span> &amp;green, <span class="keywordtype">bool</span> &amp;blue,
+01030         <span class="keywordtype">bool</span> &amp;alpha) <span class="keyword">const</span> = 0;
+01031 
+01033   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a39">SetZMode</a> (<a class="code" href="group__gfx3d.html#a75">csZBufMode</a> mode) = 0;
+01034 
+01036   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a40">EnableZOffset</a> () = 0;
+01037 
+01039   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a41">DisableZOffset</a> () = 0;
+01040 
+01042   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a42">SetShadowState</a> (<span class="keywordtype">int</span> state) = 0;
+01043 
+01044   <span class="comment">//=========================================================================</span>
+01045   <span class="comment">// Below this line are all functions that are not yet implemented by</span>
+01046   <span class="comment">// the new renderer or are not going to be implemented ever. In the</span>
+01047   <span class="comment">// last case they will be removed as soon as we permanently switch</span>
+01048   <span class="comment">// to the new renderer. @@@NR@@@</span>
+01049   <span class="comment">//=========================================================================</span>
+01051 <span class="comment">  virtual uint32 *GetZBuffAt (int x, int y) = 0;</span>
 01052 
-01071   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a46">DrawPolygonFX</a> (<a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a>&amp; poly) = 0;
-01072 
-01076   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a47">DrawTriangleMesh</a> (<a class="code" href="structG3DTriangleMesh.html">G3DTriangleMesh</a>&amp; mesh) = 0;
-01077 
-01081   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a48">DrawPolygonMesh</a> (<a class="code" href="structG3DPolygonMesh.html">G3DPolygonMesh</a>&amp; mesh) = 0;
-01082 
-01090   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a49">OpenFogObject</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id, <a class="code" href="structcsFog.html">csFog</a>* fog) = 0;
+01054   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiGraphics3D.html#a44">GetZBuffValue</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
+01055 
+01057   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a45">DrawPolygon</a> (<a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a>&amp; poly) = 0;
+01058 
+01065   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a46">DrawPolygonDebug</a> (<a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a>&amp; poly) = 0;
+01066 
+01085   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a47">DrawPolygonFX</a> (<a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a>&amp; poly) = 0;
+01086 
+01090   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a48">DrawTriangleMesh</a> (<a class="code" href="structG3DTriangleMesh.html">G3DTriangleMesh</a>&amp; mesh) = 0;
 01091 
-01103   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a50">DrawFogPolygon</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id, <a class="code" href="structG3DPolygonDFP.html">G3DPolygonDFP</a>&amp; poly, <span class="keywordtype">int</span> fogtype) = 0;
-01104 
-01110   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a51">CloseFogObject</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id) = 0;
-01111 
-01121   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a52">OpenPortal</a> (size_t numVertices, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>* vertices,
-01122     <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; normal, <span class="keywordtype">bool</span> floating) = 0;
-01123 
-01128   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a53">ClosePortal</a> (<span class="keywordtype">bool</span> zfill_portal) = 0;
-01129 
-01131   <span class="keyword">virtual</span> <a class="code" href="structiHalo.html">iHalo</a> *<a class="code" href="structiGraphics3D.html#a54">CreateHalo</a> (<span class="keywordtype">float</span> iR, <span class="keywordtype">float</span> iG, <span class="keywordtype">float</span> iB,
-01132     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *iAlpha, <span class="keywordtype">int</span> iWidth, <span class="keywordtype">int</span> iHeight) = 0;
-01133 
-01135   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a55">DumpCache</a> () = 0;
-01136 
-01138   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a56">ClearCache</a> () = 0;
-01139 
-01145   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a57">RemoveFromCache</a> (<a class="code" href="structiRendererLightmap.html">iRendererLightmap</a>* rlm) = 0;
-01146 
-01151   <span class="keyword">virtual</span> <a class="code" href="structiVertexBufferManager.html">iVertexBufferManager</a>* <a class="code" href="structiGraphics3D.html#a58">GetVertexBufferManager</a> () = 0;
-01152   
-01153   <span class="comment">//=========================================================================</span>
-01154   <span class="comment">// Here ends the zone of unimplemented methods.</span>
-01155   <span class="comment">//=========================================================================</span>
-01156 
-01161   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a59">IsLightmapOK</a> (<span class="keywordtype">int</span> lmw, <span class="keywordtype">int</span> lmh, 
-01162     <span class="keywordtype">int</span> lightCellSize) = 0;
-01163     
-01164   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonRenderer&gt;</a> CreatePolygonRenderer () = 0;
-01165 
-01166   <span class="comment">/*</span>
-01167 <span class="comment">    @@@ Needed for SW poly drawing ATM.</span>
-01168 <span class="comment">   */</span>
-01169   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetWorldToCamera (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* w2c) = 0;
+01095   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a49">DrawPolygonMesh</a> (<a class="code" href="structG3DPolygonMesh.html">G3DPolygonMesh</a>&amp; mesh) = 0;
+01096 
+01104   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a50">OpenFogObject</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id, <a class="code" href="structcsFog.html">csFog</a>* fog) = 0;
+01105 
+01117   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a51">DrawFogPolygon</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id, <a class="code" href="structG3DPolygonDFP.html">G3DPolygonDFP</a>&amp; poly, <span class="keywordtype">int</span> fogtype) = 0;
+01118 
+01124   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a52">CloseFogObject</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id) = 0;
+01125 
+01135   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a53">OpenPortal</a> (size_t numVertices, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>* vertices,
+01136     <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; normal, <span class="keywordtype">bool</span> floating) = 0;
+01137 
+01142   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a54">ClosePortal</a> (<span class="keywordtype">bool</span> zfill_portal) = 0;
+01143 
+01145   <span class="keyword">virtual</span> <a class="code" href="structiHalo.html">iHalo</a> *<a class="code" href="structiGraphics3D.html#a55">CreateHalo</a> (<span class="keywordtype">float</span> iR, <span class="keywordtype">float</span> iG, <span class="keywordtype">float</span> iB,
+01146     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *iAlpha, <span class="keywordtype">int</span> iWidth, <span class="keywordtype">int</span> iHeight) = 0;
+01147 
+01149   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a56">DumpCache</a> () = 0;
+01150 
+01152   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a57">ClearCache</a> () = 0;
+01153 
+01159   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a58">RemoveFromCache</a> (<a class="code" href="structiRendererLightmap.html">iRendererLightmap</a>* rlm) = 0;
+01160 
+01165   <span class="keyword">virtual</span> <a class="code" href="structiVertexBufferManager.html">iVertexBufferManager</a>* <a class="code" href="structiGraphics3D.html#a59">GetVertexBufferManager</a> () = 0;
+01166   
+01167   <span class="comment">//=========================================================================</span>
+01168   <span class="comment">// Here ends the zone of unimplemented methods.</span>
+01169   <span class="comment">//=========================================================================</span>
 01170 
-01182   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a62">DrawSimpleMesh</a> (<span class="keyword">const</span> <a class="code" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a>&amp; mesh,
-01183     <a class="code" href="group__util.html#a8">uint</a> flags = 0) = 0;
+01175   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a60">IsLightmapOK</a> (<span class="keywordtype">int</span> lmw, <span class="keywordtype">int</span> lmh, 
+01176     <span class="keywordtype">int</span> lightCellSize) = 0;
+01177     
+01178   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonRenderer&gt;</a> CreatePolygonRenderer () = 0;
+01179 
+01180   <span class="comment">/*</span>
+01181 <span class="comment">    @@@ Needed for SW poly drawing ATM.</span>
+01182 <span class="comment">   */</span>
+01183   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetWorldToCamera (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* w2c) = 0;
 01184 
-01186   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> <a class="code" href="structiGraphics3D.html#a63">GetZMode</a> () = 0;
-01187 };
-01188 
-01191 <span class="preprocessor">#endif // __CS_IVIDEO_GRAPH3D_H__</span>
-01192 <span class="preprocessor"></span>
+01196   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a63">DrawSimpleMesh</a> (<span class="keyword">const</span> <a class="code" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a>&amp; mesh,
+01197     <a class="code" href="group__util.html#a8">uint</a> flags = 0) = 0;
+01198 
+01200   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> <a class="code" href="structiGraphics3D.html#a64">GetZMode</a> () = 0;
+01201 };
+01202 
+01205 <span class="preprocessor">#endif // __CS_IVIDEO_GRAPH3D_H__</span>
+01206 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
