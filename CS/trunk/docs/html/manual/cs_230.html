@@ -23,106 +23,138 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC653"></A>
+<A NAME="SEC656"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_229.html#SEC652"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC666"> &gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_229.html#SEC655"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC666"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC653"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC950">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC953">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
 <H3> 7.8.3 Perl Bindings </H3>
-<!--docid::SEC653::-->
-<P>
-
-CS has extensive bindings for Perl version 5.
-</P><P>
-
-<A NAME="SEC654"></A>
-<H3> Getting Started </H3>
-<!--docid::SEC654::-->
-<P>
-
-To make use of CS classes from a Perl script, first make sure that the file
-cspace.pm (found in your CS/scripts/perl5 directory) is available to Perl.
-The easiest way to do this is with this code near the top of your script:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>BEGIN { push @INC, "$ENV{CRYSTAL}/scripts/perl5" }
-</pre></td></tr></table></P><P>
-
-Also make sure that the cspace.so (Unix/Linux/MacOSX) or cspace.dll (Windows)
-file is in the same directory as the cspace.pm file.
-</P><P>
-
-Then add this line near the top of the script:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>use cspace;
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC655"></A>
-<H3> Quick Start  </H3>
-<!--docid::SEC655::-->
-<P>
-
-To get started with pure Perl scripts right away, you probably want to know
-how to initialize CS and get an iObjectRegistry pointer:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$object_reg = cspace::csInitializer::CreateEnvironment([ $0, @ARGV ]);
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC656"></A>
-<H3> Functions and Classes </H3>
 <!--docid::SEC656::-->
 <P>
 
-CS has several global functions, which can be accessed easily from Perl.
-For instance, in C++, one might do:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>const char *str = "Hello, world!";
-int key = csHashCompute (str);
-</pre></td></tr></table>Perl is almost exactly the same, the most notable difference being the
-<CODE>cspace::</CODE> prefix:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$str = "Hello, world!";
-$key = cspace::csHashCompute ($str);
-</pre></td></tr></table></P><P>
-
-To create an object instance, we use the <CODE>new</CODE> "keyword":
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect = new cspace::csVector3 (1, 2, 3);
-</pre></td></tr></table>The object will be deleted automatically when it goes out of scope.
-Perl also has built-in reference counting, so if the object is still referenced
-in some other Perl code when it goes out of scope, it will still exist until
-there are no more references to it in Perl.
+Crystal Space has extensive bindings for Perl version 5.
 </P><P>
 
-There are three ways to access object properties:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>print $vect-&#62;x;		# Preferred way, conforms to Perl convention
-print $vect-&#62;{"x"};	# Swig's generated primary way
-print $vect-&#62;get_x();	# Swig's generated secondary way
-</pre></td></tr></table></P><P>
-
-And three ways to modify object properties:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect-&#62;x(123);		# Preferred way, conforms to Perl convention
-$vect-&#62;{"x"} = 123;	# Swig's generated primary way
-$vect-&#62;set_x(123);	# Swig's generated secondary way
-</pre></td></tr></table></P><P>
-
-Calling methods works as you might expect:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect-&#62;Norm();
-</pre></td></tr></table></P><P>
-
 <A NAME="SEC657"></A>
-<H3> Arrays </H3>
+<H3> Getting Started </H3>
 <!--docid::SEC657::-->
 <P>
 
-Wherever an array is expected, or wherever an array is returned, in or from
-a CS C++ call, a Perl array reference is used.
+To make use of Crystal Space classes from a Perl script, first make sure that
+the file `<SAMP>cspace.pm</SAMP>' is available to Perl.  This file is installed at
+`<TT>${prefix}/share/crystalspace/perl5</TT>', where `<TT>${prefix}</TT>' is the
+location at which Crystal Space was installed (typically,
+`<TT>/usr/local</TT>'). You may also find a copy of this file in the
+`<TT>CS/scripts/perl5</TT>' source directory.  The easiest way to tell Perl where this file resides is via the `<SAMP>lib</SAMP>' pragma:
 </P><P>
 
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>use lib "$ENV{CRYSTAL}/share/crystalspace/perl5";
+</pre></td></tr></table></P><P>
+
+You can also use Perl's `<SAMP>-I</SAMP>' command-line option to tell it the location
+of this file.
+</P><P>
+
+The `<TT>cspace.so</TT>' (Unix, Linux, MacOS/X) or `<TT>cspace.dll</TT>' (Windows)
+shared library file should reside the same directory as the `<TT>cspace.pm</TT>'
+file. This happens automatically when you install Crystal Space (via `<SAMP>make
+instal</SAMP>' or `<SAMP>jam install</SAMP>').
+</P><P>
+
+To actually utilize Crystal Space from within your script, begin with:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>use cspace;
+</pre></td></tr></table></P><P>
+
 <A NAME="SEC658"></A>
-<H3> Operator Overloading </H3>
+<H3> Quick Start  </H3>
 <!--docid::SEC658::-->
+<P>
+
+To get started with pure Perl scripts, you probably want to know how to
+initialize Crystal Space and obtain an `<SAMP>iObjectRegistry</SAMP>' pointer:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>my $object_reg =
+  cspace::csInitializer::CreateEnvironment([$0, @ARGV]);
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC659"></A>
+<H3> Functions and Classes </H3>
+<!--docid::SEC659::-->
+<P>
+
+Crystal Space has several global functions which can be accessed easily from
+Perl.  For instance, in C++, one might say:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>char const* str = "Hello, world!";
+int key = csHashCompute(str);
+</pre></td></tr></table></P><P>
+
+Perl is almost exactly the same, the most notable difference being the
+<CODE>cspace::</CODE> prefix:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>my $str = "Hello, world!";
+my $key = cspace::csHashCompute($str);
+</pre></td></tr></table></P><P>
+
+To create an object instance, use the `<SAMP>new</SAMP>' method:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>my $vect = new cspace::csVector3(1, 2, 3);
+</pre></td></tr></table></P><P>
+
+The object will be deleted automatically when it goes out of scope.  Perl also
+has built-in reference counting, so if the object is still referenced in some
+other Perl code when one reference goes out of scope, it will continue to exist
+until there are no more references to it in Perl.
+</P><P>
+
+There are three ways to access object properties:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>print $vect-&#62;x;       # Preferred way, conforms to Perl convention
+print $vect-&#62;{"x"}; # Swig's generated primary way
+print $vect-&#62;get_x(); # Swig's generated secondary way
+</pre></td></tr></table></P><P>
+
+And, three ways to modify object properties:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect-&#62;x(123);        # Preferred way, conforms to Perl convention
+$vect-&#62;{"x"} = 123; # Swig's generated primary way
+$vect-&#62;set_x(123);    # Swig's generated secondary way
+</pre></td></tr></table></P><P>
+
+Calling methods works as you might expect:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect-&#62;Norm();
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC660"></A>
+<H3> Arrays </H3>
+<!--docid::SEC660::-->
+<P>
+
+Wherever an array is expected, or wherever an array is returned, in or from
+a Crystal Space C++ function, a Perl array reference is used.
+</P><P>
+
+<A NAME="SEC661"></A>
+<H3> Operator Overloading </H3>
+<!--docid::SEC661::-->
 <P>
 
 Operator overloading is not yet supported. All the code required to support it
@@ -141,9 +173,9 @@ hash, glob, subroutine), <CODE>abs</CODE> (absolute value), truth evaluation,
 stringify and numerify.
 </P><P>
 
-<A NAME="SEC659"></A>
+<A NAME="SEC662"></A>
 <H3> Interface Pointers </H3>
-<!--docid::SEC659::-->
+<!--docid::SEC662::-->
 <P>
 
 Supposing you call a function that returns a pointer to some interface.
@@ -152,147 +184,152 @@ objects are used in Perl (see above). You can call their methods in the same
 way, and pass them on to further functions as parameters where appropriate.
 </P><P>
 
-The Perl bindings automatically correctly handle csRef and csPtr.
+The Perl bindings automatically correctly handle <CODE>csRef&#60;&#62;</CODE> and
+<CODE>csPtr&#60;&#62;</CODE>.
 </P><P>
 
-<A NAME="SEC660"></A>
+<A NAME="SEC663"></A>
 <H3> Implementing Interfaces </H3>
-<!--docid::SEC660::-->
+<!--docid::SEC663::-->
 <P>
 
-You can write your own Perl class and have it inherit from a CS interface,
-then use instances of that class wherever an implementation of that interface
-is expected. Currently the interfaces that support this feature are
-<CODE>iEventHandler iEventPlug iAwsSink</CODE> but it is easy to add more.
+You can write your own Perl class and have it inherit from a Crystal Space
+interface, then use instances of that class wherever an implementation of that
+interface is expected. Currently the interfaces that support this feature are
+`<SAMP>iEventHandler</SAMP>', `<SAMP>iEventPlug</SAMP>', and `<SAMP>iAwsSink</SAMP>', but it is easy to
+add more.
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>package MyPerlEventHandler;
 @ISA = qw{ cspace::iEventHandler };
 sub new
 {
-  $x = {};
-  bless ($x, "MyPerlEventHandler");
+  my $x = {};
+  bless($x, "MyPerlEventHandler");
   return $x;
 }
 sub HandleEvent
 {
-  ($self, $event) = @_;
+  my ($self, $event) = @_;
   # your event handler here...
 }
 
 package main;
-$eventq = cspace::CS_QUERY_REGISTRY ($object_reg, "iEventQueue");
-$handler = new MyPerlEventHandler;
-$eventq-&#62;RegisterListener ($handler);
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC661"></A>
-<H3> Special Cases </H3>
-<!--docid::SEC661::-->
-<P>
-
-<A NAME="SEC662"></A>
-<H4> Macros that take Interfaces as Parameters </H4>
-<!--docid::SEC662::-->
-<P>
-
-In Perl, CS macros that take interface names as parameters, for instance
-<CODE>CS_QUERY_REGISTRY()</CODE>, take those interface names as strings:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$engine = cspace::CS_QUERY_REGISTRY($object_reg, "iEngine");
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC663"></A>
-<H4> <CODE>csRGBpixel</CODE> </H4>
-<!--docid::SEC663::-->
-<P>
-
-To convert a <CODE>csRGBpixel</CODE> to a <CODE>csRGBcolor</CODE>, use the
-<CODE>asRGBcolor</CODE> method:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$color = $pixel-&#62;asRGBcolor();
+my $eventq = cspace::CS_QUERY_REGISTRY($object_reg, "iEventQueue");
+my $handler = new MyPerlEventHandler;
+$eventq-&#62;RegisterListener($handler);
 </pre></td></tr></table></P><P>
 
 <A NAME="SEC664"></A>
-<H4> <CODE>iSprite2DState</CODE> </H4>
+<H3> Special Cases </H3>
 <!--docid::SEC664::-->
 <P>
 
-<CODE>iSprite2DState</CODE> has an extra method in Perl, <CODE>GetVertexByIndex</CODE>,
-which takes a single integer parameter, an array index, and returns a
-<CODE>csSprite2DVertex</CODE> from the sprite's array of vertices.
+Take note of these special cases.
 </P><P>
 
 <A NAME="SEC665"></A>
-<H4> <CODE>iEvent</CODE> </H4>
+<H4> Macros Accepting Interfaces as Parameters </H4>
 <!--docid::SEC665::-->
 <P>
 
-The overloaded <CODE>Add</CODE> and <CODE>Find</CODE> methods in <CODE>iEvent</CODE> are
-replaced in Perl with ones with names which explicitly specify the types
-of their parameters (since otherwise Perl wouldn't know which C++ function to
+In Perl, Crystal Space macros that take interface names as parameters--for
+instance <CODE>CS_QUERY_REGISTRY()</CODE>---take those interface names as strings:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>my $engine = cspace::CS_QUERY_REGISTRY($object_reg, "iEngine");
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC666"></A>
+<H4> <CODE>csRGBpixel</CODE> </H4>
+<!--docid::SEC666::-->
+<P>
+
+To convert a `<SAMP>csRGBpixel</SAMP>' to a `<SAMP>csRGBcolor</SAMP>', use the
+<CODE>csRGBpixel::asRGBcolor()</CODE> method:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>my $color = $pixel-&#62;asRGBcolor();
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC667"></A>
+<H4> <CODE>iSprite2DState</CODE> </H4>
+<!--docid::SEC667::-->
+<P>
+
+`<SAMP>iSprite2DState</SAMP>' has an extra method in Perl, <CODE>GetVertexByIndex()</CODE>,
+which accepts a single integer parameter (an array index) and returns a
+`<SAMP>csSprite2DVertex</SAMP>' from the sprite's array of vertices.
+</P><P>
+
+<A NAME="SEC668"></A>
+<H4> <CODE>iEvent</CODE> </H4>
+<!--docid::SEC668::-->
+<P>
+
+The overloaded <CODE>iEvent::Add()</CODE> and <CODE>Find()</CODE> methods are
+replaced in Perl with ones given names which explicitly specify the types
+of their parameters (since otherwise Perl would not know which C++ function to
 call):
 </P><P>
 
 <UL>
 <LI>
-<CODE>AddInt8</CODE>
+<CODE>AddInt8()</CODE>
 <LI>
-<CODE>AddInt16</CODE>
+<CODE>AddInt16()</CODE>
 <LI>
-<CODE>AddInt32</CODE>
+<CODE>AddInt32()</CODE>
 <LI>
-<CODE>AddUInt8</CODE>
+<CODE>AddUInt8()</CODE>
 <LI>
-<CODE>AddUInt16</CODE>
+<CODE>AddUInt16()</CODE>
 <LI>
-<CODE>AddUInt32</CODE>
+<CODE>AddUInt32()</CODE>
 <LI>
-<CODE>AddFloat</CODE>
+<CODE>AddFloat()</CODE>
 <LI>
-<CODE>AddDouble</CODE>
+<CODE>AddDouble()</CODE>
 <LI>
-<CODE>AddString</CODE>
+<CODE>AddString()</CODE>
 <LI>
-<CODE>AddBool</CODE>
+<CODE>AddBool()</CODE>
 <LI>
-<CODE>AddVoidPtr</CODE>
+<CODE>AddVoidPtr()</CODE>
 <LI>
-<CODE>FindInt8</CODE>
+<CODE>FindInt8()</CODE>
 <LI>
-<CODE>FindInt16</CODE>
+<CODE>FindInt16()</CODE>
 <LI>
-<CODE>FindInt32</CODE>
+<CODE>FindInt32()</CODE>
 <LI>
-<CODE>FindUInt8</CODE>
+<CODE>FindUInt8()</CODE>
 <LI>
-<CODE>FindUInt16</CODE>
+<CODE>FindUInt16()</CODE>
 <LI>
-<CODE>FindUInt32</CODE>
+<CODE>FindUInt32()</CODE>
 <LI>
-<CODE>FindFloat</CODE>
+<CODE>FindFloat()</CODE>
 <LI>
-<CODE>FindDouble</CODE>
+<CODE>FindDouble()</CODE>
 <LI>
-<CODE>FindString</CODE>
+<CODE>FindString()</CODE>
 <LI>
-<CODE>FindBool</CODE>
+<CODE>FindBool()</CODE>
 <LI>
-<CODE>FindVoidPtr</CODE>
+<CODE>FindVoidPtr()</CODE>
 </UL>
 <A NAME="Animation"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_229.html#SEC652"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC666"> &gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_229.html#SEC655"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC666"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC653"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC950">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC953">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
