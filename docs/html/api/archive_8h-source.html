@@ -46,135 +46,135 @@
 00028 
 00029 <span class="keyword">struct </span><a class="code" href="structcsFileTime.html">csFileTime</a>;
 00030 
-<a name="l00051"></a><a class="code" href="classcsArchive.html">00051</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT <a class="code" href="classcsArchive.html">csArchive</a>
-00052 {
-00053 <span class="keyword">public</span>:
-00054   <span class="keyword">static</span> <span class="keywordtype">char</span> hdr_central[4];
-00055   <span class="keyword">static</span> <span class="keywordtype">char</span> hdr_local[4];
-00056   <span class="keyword">static</span> <span class="keywordtype">char</span> hdr_endcentral[4];
-00057   <span class="keyword">static</span> <span class="keywordtype">char</span> hdr_extlocal[4];
-00058 
-00059 <span class="keyword">private</span>:
-00061   <span class="keyword">class </span>ArchiveEntry
-00062   {
-00063   <span class="keyword">public</span>:
-00064     <span class="keywordtype">char</span> *filename;
-00065     ZIP_central_directory_file_header info;
-00066     <span class="keywordtype">char</span> *buffer;
-00067     size_t buffer_pos;
-00068     size_t buffer_size;
-00069     <span class="keywordtype">char</span> *extrafield, *comment;
-00070     <span class="keywordtype">bool</span> faked;
-00071 
-00072     ArchiveEntry (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, ZIP_central_directory_file_header &amp;cdfh);
-00073     ~ArchiveEntry ();
-00074     <span class="keywordtype">bool</span> Append (<span class="keyword">const</span> <span class="keywordtype">void</span> *data, size_t size);
-00075     <span class="keywordtype">bool</span> WriteLFH (FILE *file);
-00076     <span class="keywordtype">bool</span> WriteCDFH (FILE *file);
-00077     <span class="keywordtype">bool</span> ReadExtraField (FILE *file, size_t extra_field_length);
-00078     <span class="keywordtype">bool</span> ReadFileComment (FILE *file, size_t file_comment_length);
-00079     <span class="keywordtype">bool</span> WriteFile (FILE *file);
-00080     <span class="keywordtype">void</span> FreeBuffer ();
-00081   };
-00082   <span class="keyword">friend</span> <span class="keyword">class </span>ArchiveEntry;
-00083 
-00085   <span class="keyword">class </span>CS_CSUTIL_EXPORT ArchiveEntryVector : <span class="keyword">public</span> <a class="code" href="classcsPDelArray.html">csPDelArray</a>&lt;ArchiveEntry&gt;
-00086   {
-00087   <span class="keyword">public</span>:
-00088     ArchiveEntryVector () : <a class="code" href="classcsPDelArray.html">csPDelArray&lt;ArchiveEntry&gt;</a> (256, 256) {}
-00089     <span class="keyword">static</span> <span class="keywordtype">int</span> Compare (ArchiveEntry* <span class="keyword">const</span>&amp; Item1, ArchiveEntry* <span class="keyword">const</span>&amp; Item2)
-00090     { <span class="keywordflow">return</span> strcmp (Item1-&gt;filename, Item2-&gt;filename); }
-00091     <span class="keyword">static</span> <span class="keywordtype">int</span> CompareKey (ArchiveEntry* <span class="keyword">const</span>&amp; Item, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span>&amp; Key)
-00092     { <span class="keywordflow">return</span> strcmp (Item-&gt;filename, Key); }
-00093   };
-00094 
-00095   ArchiveEntryVector dir;       <span class="comment">// Archive directory: chain head (sorted)</span>
-00096   <a class="code" href="classcsStringArray.html">csStringArray</a> del;            <span class="comment">// Files that should be deleted (sorted)</span>
-00097   <a class="code" href="classcsArray.html">csArray&lt;ArchiveEntry*&gt;</a> lazy;  <span class="comment">// Lazy operations (unsorted)</span>
-00098 
-00099   <span class="keywordtype">char</span> *filename;               <span class="comment">// Archive file name</span>
-00100   FILE *file;                   <span class="comment">// Archive file pointer.</span>
-00101 
-00102   size_t comment_length;        <span class="comment">// Archive comment length</span>
-00103   <span class="keywordtype">char</span> *comment;                <span class="comment">// Archive comment</span>
-00104 
-00105   <span class="keywordtype">void</span> ReadDirectory ();
-00106   <span class="keywordtype">bool</span> IsDeleted (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
-00107   <span class="keywordtype">void</span> UnpackTime (ush zdate, ush ztime, <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;rtime) <span class="keyword">const</span>;
-00108   <span class="keywordtype">void</span> PackTime (<span class="keyword">const</span> <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime, ush &amp;rdate, ush &amp;rtime) <span class="keyword">const</span>;
-00109   <span class="keywordtype">bool</span> ReadArchiveComment (FILE *file, size_t zipfile_comment_length);
-00110   <span class="keywordtype">void</span> LoadECDR (ZIP_end_central_dir_record &amp;ecdr, <span class="keywordtype">char</span> *buff);
-00111   <span class="keywordtype">bool</span> ReadCDFH (ZIP_central_directory_file_header &amp;cdfh, FILE *file);
-00112   <span class="keywordtype">bool</span> ReadLFH (ZIP_local_file_header &amp;lfh, FILE *file);
-00113   <span class="keywordtype">bool</span> WriteECDR (ZIP_end_central_dir_record &amp;ecdr, FILE *file);
-00114   <span class="keywordtype">bool</span> WriteZipArchive ();
-00115   <span class="keywordtype">bool</span> WriteCentralDirectory (FILE *temp);
-00116   <span class="keywordtype">void</span> UpdateDirectory ();
-00117   <span class="keywordtype">void</span> ReadZipDirectory (FILE *infile);
-00118   ArchiveEntry *InsertEntry (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-00119     ZIP_central_directory_file_header &amp;cdfh);
-00120   <span class="keywordtype">void</span> ReadZipEntries (FILE *infile);
-00121   <span class="keywordtype">char</span> *ReadEntry (FILE *infile, ArchiveEntry *f);
-00122   ArchiveEntry *CreateArchiveEntry (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-00123     size_t size = 0, <span class="keywordtype">bool</span> pack = <span class="keyword">true</span>);
-00124   <span class="keywordtype">void</span> ResetArchiveEntry (ArchiveEntry *f, size_t size, <span class="keywordtype">bool</span> pack);
-00125 
-00126 <span class="keyword">public</span>:
-00128   <a class="code" href="classcsArchive.html">csArchive</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);
-00130   ~<a class="code" href="classcsArchive.html">csArchive</a> ();
-00131 
-00133   <span class="keywordtype">void</span> Dir () <span class="keyword">const</span>;
-00134 
-00149   <span class="keywordtype">void</span> *NewFile (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, size_t size = 0, <span class="keywordtype">bool</span> pack = <span class="keyword">true</span>);
-00150 
-00155   <span class="keywordtype">bool</span> DeleteFile (<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
-00156 
-00161   <span class="keywordtype">bool</span> FileExists (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, size_t *size = 0) <span class="keyword">const</span>;
-00162 
-00169   <span class="keywordtype">char</span> *Read (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, size_t *size = 0);
-00170 
-00177   <span class="keywordtype">bool</span> Write (<span class="keywordtype">void</span> *entry, <span class="keyword">const</span> <span class="keywordtype">char</span> *data, size_t size);
-00178 
-00188   <span class="keywordtype">bool</span> Flush ();
-00189 
-<a name="l00191"></a><a class="code" href="classcsArchive.html#a9">00191</a>   <span class="keywordtype">void</span> *GetFile (<span class="keywordtype">int</span> no)
-00192   { <span class="keywordflow">return</span> (no &gt;= 0) &amp;&amp; (no &lt; dir.<a class="code" href="classcsArray.html#a4">Length</a> ()) ? dir.<a class="code" href="classcsArray.html#a9">Get</a> (no) : 0; }
-00193 
-00195   <span class="keywordtype">void</span> *FindName (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
-<a name="l00197"></a><a class="code" href="classcsArchive.html#a11">00197</a>   <span class="keywordtype">char</span> *GetFileName (<span class="keywordtype">void</span> *entry)<span class="keyword"> const</span>
-00198 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ((ArchiveEntry*)entry)-&gt;filename; }
-<a name="l00200"></a><a class="code" href="classcsArchive.html#a12">00200</a>   size_t GetFileSize (<span class="keywordtype">void</span> *entry)<span class="keyword"> const</span>
-00201 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ((ArchiveEntry*)entry)-&gt;info.ucsize; }
-00203   <span class="keywordtype">void</span> GetFileTime (<span class="keywordtype">void</span> *entry, <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime) <span class="keyword">const</span>;
-00205   <span class="keywordtype">void</span> SetFileTime (<span class="keywordtype">void</span> *entry, <span class="keyword">const</span> <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime);
-00206 
-<a name="l00208"></a><a class="code" href="classcsArchive.html#a15">00208</a>   <span class="keywordtype">char</span> *GetName ()<span class="keyword"> const</span>
-00209 <span class="keyword">  </span>{ <span class="keywordflow">return</span> filename; }
-<a name="l00211"></a><a class="code" href="classcsArchive.html#a16">00211</a>   <span class="keywordtype">char</span> *GetComment ()<span class="keyword"> const</span>
-00212 <span class="keyword">  </span>{ <span class="keywordflow">return</span> comment; }
-00213 };
-00214 
-<a name="l00215"></a><a class="code" href="classcsArchive.html#a13">00215</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsArchive.html#a13">csArchive::GetFileTime</a> (<span class="keywordtype">void</span> *entry, <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime)<span class="keyword"> const</span>
-00216 <span class="keyword"></span>{
-00217   <span class="keywordflow">if</span> (entry)
-00218   {
-00219     UnpackTime (((ArchiveEntry*)entry)-&gt;info.last_mod_file_date,
-00220                 ((ArchiveEntry*)entry)-&gt;info.last_mod_file_time,
-00221                 ztime);
-00222   } <span class="comment">/* endif */</span>
-00223 }
-00224 
-<a name="l00225"></a><a class="code" href="classcsArchive.html#a14">00225</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsArchive.html#a14">csArchive::SetFileTime</a> (<span class="keywordtype">void</span> *entry, <span class="keyword">const</span> <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime)
-00226 {
-00227   <span class="keywordflow">if</span> (entry)
-00228   {
-00229     PackTime (ztime,
-00230               ((ArchiveEntry*)entry)-&gt;info.last_mod_file_date,
-00231               ((ArchiveEntry*)entry)-&gt;info.last_mod_file_time);
-00232   } <span class="comment">/* endif */</span>
-00233 }
-00234 
-00235 <span class="preprocessor">#endif // __CS_ARCHIVE_H__</span>
+<a name="l00052"></a><a class="code" href="classcsArchive.html">00052</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT <a class="code" href="classcsArchive.html">csArchive</a>
+00053 {
+00054 <span class="keyword">public</span>:
+00055   <span class="keyword">static</span> <span class="keywordtype">char</span> hdr_central[4];
+00056   <span class="keyword">static</span> <span class="keywordtype">char</span> hdr_local[4];
+00057   <span class="keyword">static</span> <span class="keywordtype">char</span> hdr_endcentral[4];
+00058   <span class="keyword">static</span> <span class="keywordtype">char</span> hdr_extlocal[4];
+00059 
+00060 <span class="keyword">private</span>:
+00062   <span class="keyword">class </span>ArchiveEntry
+00063   {
+00064   <span class="keyword">public</span>:
+00065     <span class="keywordtype">char</span> *filename;
+00066     ZIP_central_directory_file_header info;
+00067     <span class="keywordtype">char</span> *buffer;
+00068     size_t buffer_pos;
+00069     size_t buffer_size;
+00070     <span class="keywordtype">char</span> *extrafield, *comment;
+00071     <span class="keywordtype">bool</span> faked;
+00072 
+00073     ArchiveEntry (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, ZIP_central_directory_file_header &amp;cdfh);
+00074     ~ArchiveEntry ();
+00075     <span class="keywordtype">bool</span> Append (<span class="keyword">const</span> <span class="keywordtype">void</span> *data, size_t size);
+00076     <span class="keywordtype">bool</span> WriteLFH (FILE *file);
+00077     <span class="keywordtype">bool</span> WriteCDFH (FILE *file);
+00078     <span class="keywordtype">bool</span> ReadExtraField (FILE *file, size_t extra_field_length);
+00079     <span class="keywordtype">bool</span> ReadFileComment (FILE *file, size_t file_comment_length);
+00080     <span class="keywordtype">bool</span> WriteFile (FILE *file);
+00081     <span class="keywordtype">void</span> FreeBuffer ();
+00082   };
+00083   <span class="keyword">friend</span> <span class="keyword">class </span>ArchiveEntry;
+00084 
+00086   <span class="keyword">class </span>CS_CSUTIL_EXPORT ArchiveEntryVector : <span class="keyword">public</span> <a class="code" href="classcsPDelArray.html">csPDelArray</a>&lt;ArchiveEntry&gt;
+00087   {
+00088   <span class="keyword">public</span>:
+00089     ArchiveEntryVector () : <a class="code" href="classcsPDelArray.html">csPDelArray&lt;ArchiveEntry&gt;</a> (256, 256) {}
+00090     <span class="keyword">static</span> <span class="keywordtype">int</span> Compare (ArchiveEntry* <span class="keyword">const</span>&amp; Item1, ArchiveEntry* <span class="keyword">const</span>&amp; Item2)
+00091     { <span class="keywordflow">return</span> strcmp (Item1-&gt;filename, Item2-&gt;filename); }
+00092     <span class="keyword">static</span> <span class="keywordtype">int</span> CompareKey (ArchiveEntry* <span class="keyword">const</span>&amp; Item, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span>&amp; Key)
+00093     { <span class="keywordflow">return</span> strcmp (Item-&gt;filename, Key); }
+00094   };
+00095 
+00096   ArchiveEntryVector dir;       <span class="comment">// Archive directory: chain head (sorted)</span>
+00097   <a class="code" href="classcsStringArray.html">csStringArray</a> del;            <span class="comment">// Files that should be deleted (sorted)</span>
+00098   <a class="code" href="classcsArray.html">csArray&lt;ArchiveEntry*&gt;</a> lazy;  <span class="comment">// Lazy operations (unsorted)</span>
+00099 
+00100   <span class="keywordtype">char</span> *filename;               <span class="comment">// Archive file name</span>
+00101   FILE *file;                   <span class="comment">// Archive file pointer.</span>
+00102 
+00103   size_t comment_length;        <span class="comment">// Archive comment length</span>
+00104   <span class="keywordtype">char</span> *comment;                <span class="comment">// Archive comment</span>
+00105 
+00106   <span class="keywordtype">void</span> ReadDirectory ();
+00107   <span class="keywordtype">bool</span> IsDeleted (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+00108   <span class="keywordtype">void</span> UnpackTime (ush zdate, ush ztime, <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;rtime) <span class="keyword">const</span>;
+00109   <span class="keywordtype">void</span> PackTime (<span class="keyword">const</span> <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime, ush &amp;rdate, ush &amp;rtime) <span class="keyword">const</span>;
+00110   <span class="keywordtype">bool</span> ReadArchiveComment (FILE *file, size_t zipfile_comment_length);
+00111   <span class="keywordtype">void</span> LoadECDR (ZIP_end_central_dir_record &amp;ecdr, <span class="keywordtype">char</span> *buff);
+00112   <span class="keywordtype">bool</span> ReadCDFH (ZIP_central_directory_file_header &amp;cdfh, FILE *file);
+00113   <span class="keywordtype">bool</span> ReadLFH (ZIP_local_file_header &amp;lfh, FILE *file);
+00114   <span class="keywordtype">bool</span> WriteECDR (ZIP_end_central_dir_record &amp;ecdr, FILE *file);
+00115   <span class="keywordtype">bool</span> WriteZipArchive ();
+00116   <span class="keywordtype">bool</span> WriteCentralDirectory (FILE *temp);
+00117   <span class="keywordtype">void</span> UpdateDirectory ();
+00118   <span class="keywordtype">void</span> ReadZipDirectory (FILE *infile);
+00119   ArchiveEntry *InsertEntry (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+00120     ZIP_central_directory_file_header &amp;cdfh);
+00121   <span class="keywordtype">void</span> ReadZipEntries (FILE *infile);
+00122   <span class="keywordtype">char</span> *ReadEntry (FILE *infile, ArchiveEntry *f);
+00123   ArchiveEntry *CreateArchiveEntry (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+00124     size_t size = 0, <span class="keywordtype">bool</span> pack = <span class="keyword">true</span>);
+00125   <span class="keywordtype">void</span> ResetArchiveEntry (ArchiveEntry *f, size_t size, <span class="keywordtype">bool</span> pack);
+00126 
+00127 <span class="keyword">public</span>:
+00129   <a class="code" href="classcsArchive.html">csArchive</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);
+00131   ~<a class="code" href="classcsArchive.html">csArchive</a> ();
+00132 
+00134   <span class="keywordtype">void</span> Dir () <span class="keyword">const</span>;
+00135 
+00150   <span class="keywordtype">void</span> *NewFile (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, size_t size = 0, <span class="keywordtype">bool</span> pack = <span class="keyword">true</span>);
+00151 
+00156   <span class="keywordtype">bool</span> DeleteFile (<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
+00157 
+00162   <span class="keywordtype">bool</span> FileExists (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, size_t *size = 0) <span class="keyword">const</span>;
+00163 
+00170   <span class="keywordtype">char</span> *Read (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, size_t *size = 0);
+00171 
+00178   <span class="keywordtype">bool</span> Write (<span class="keywordtype">void</span> *entry, <span class="keyword">const</span> <span class="keywordtype">char</span> *data, size_t size);
+00179 
+00189   <span class="keywordtype">bool</span> Flush ();
+00190 
+<a name="l00192"></a><a class="code" href="classcsArchive.html#a9">00192</a>   <span class="keywordtype">void</span> *GetFile (<span class="keywordtype">int</span> no)
+00193   { <span class="keywordflow">return</span> (no &gt;= 0) &amp;&amp; (no &lt; dir.<a class="code" href="classcsArray.html#a4">Length</a> ()) ? dir.<a class="code" href="classcsArray.html#a9">Get</a> (no) : 0; }
+00194 
+00196   <span class="keywordtype">void</span> *FindName (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) <span class="keyword">const</span>;
+<a name="l00198"></a><a class="code" href="classcsArchive.html#a11">00198</a>   <span class="keywordtype">char</span> *GetFileName (<span class="keywordtype">void</span> *entry)<span class="keyword"> const</span>
+00199 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ((ArchiveEntry*)entry)-&gt;filename; }
+<a name="l00201"></a><a class="code" href="classcsArchive.html#a12">00201</a>   size_t GetFileSize (<span class="keywordtype">void</span> *entry)<span class="keyword"> const</span>
+00202 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ((ArchiveEntry*)entry)-&gt;info.ucsize; }
+00204   <span class="keywordtype">void</span> GetFileTime (<span class="keywordtype">void</span> *entry, <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime) <span class="keyword">const</span>;
+00206   <span class="keywordtype">void</span> SetFileTime (<span class="keywordtype">void</span> *entry, <span class="keyword">const</span> <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime);
+00207 
+<a name="l00209"></a><a class="code" href="classcsArchive.html#a15">00209</a>   <span class="keywordtype">char</span> *GetName ()<span class="keyword"> const</span>
+00210 <span class="keyword">  </span>{ <span class="keywordflow">return</span> filename; }
+<a name="l00212"></a><a class="code" href="classcsArchive.html#a16">00212</a>   <span class="keywordtype">char</span> *GetComment ()<span class="keyword"> const</span>
+00213 <span class="keyword">  </span>{ <span class="keywordflow">return</span> comment; }
+00214 };
+00215 
+<a name="l00216"></a><a class="code" href="classcsArchive.html#a13">00216</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsArchive.html#a13">csArchive::GetFileTime</a> (<span class="keywordtype">void</span> *entry, <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime)<span class="keyword"> const</span>
+00217 <span class="keyword"></span>{
+00218   <span class="keywordflow">if</span> (entry)
+00219   {
+00220     UnpackTime (((ArchiveEntry*)entry)-&gt;info.last_mod_file_date,
+00221                 ((ArchiveEntry*)entry)-&gt;info.last_mod_file_time,
+00222                 ztime);
+00223   } <span class="comment">/* endif */</span>
+00224 }
+00225 
+<a name="l00226"></a><a class="code" href="classcsArchive.html#a14">00226</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsArchive.html#a14">csArchive::SetFileTime</a> (<span class="keywordtype">void</span> *entry, <span class="keyword">const</span> <a class="code" href="structcsFileTime.html">csFileTime</a> &amp;ztime)
+00227 {
+00228   <span class="keywordflow">if</span> (entry)
+00229   {
+00230     PackTime (ztime,
+00231               ((ArchiveEntry*)entry)-&gt;info.last_mod_file_date,
+00232               ((ArchiveEntry*)entry)-&gt;info.last_mod_file_time);
+00233   } <span class="comment">/* endif */</span>
+00234 }
+00235 
+00236 <span class="preprocessor">#endif // __CS_ARCHIVE_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
