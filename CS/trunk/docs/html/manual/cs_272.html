@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Coding Style</TITLE>
+<TITLE>Crystal Space: Portability</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Coding Style">
-<META NAME="keywords" CONTENT="Crystal Space: Coding Style">
+<META NAME="description" CONTENT="Crystal Space: Portability">
+<META NAME="keywords" CONTENT="Crystal Space: Portability">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,182 +23,331 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC817"></A>
+<A NAME="SEC816"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC816"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC818"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC810"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC810"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC820"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC811"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC817"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC810"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC810"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC820"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 9.3 Coding Style </H2>
-<!--docid::SEC817::-->
+<H2> 9.2 Portability </H2>
+<!--docid::SEC816::-->
 <P>
 
-For consistency and ease of future maintenance, when working on Crystal Space
-source code, please follow the following guidelines.  Also be sure to read
-important portability guidelines presented in the <CITE>Portability</CITE> section.
-See section <A HREF="cs_271.html#SEC816">9.2 Portability</A>.
+<EM>Written by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>, with
+contributions by others.</EM>
+</P><P>
+
+Crystal Space is a highly portable cross-platform 3D engine and toolkit.  As a
+contributor to the project, you should familiarize yourself with the issues
+discussed in this section in order to ensure maximum portability of code which
+you write and resources which you create.
 </P><P>
 
 <OL>
 <LI>
-<EM>Indentation</EM>
+<EM>Endian-ness</EM>
 <P>
 
-Indent with two (2) spaces. If you use tabs then they must be interpreted as
-eight (8) spaces. This means that you should not use the tab character for
-indentation since that would indent by eight characters rather than two. Also
-consider avoiding tabs altogether in order to eliminate tab-related problems.
-Here is an example of proper indentation:
+Beware of code that is endian-specific.  To facilitate writing portable code,
+key off of the `<SAMP>CS_BIG_ENDIAN</SAMP>' or `<SAMP>CS_LITTLE_ENDIAN</SAMP>' macros if
+necessary.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>void foo()
+Avoid casting a `<SAMP>long*</SAMP>' or `<SAMP>int*</SAMP>' to a `<SAMP>short*</SAMP>' or `<SAMP>char*</SAMP>'
+as a slick way of checking the value of a particular sub-byte of the number
+since this trick will fail on platforms with different endian-ness.  In other
+words, given the declaration `<SAMP>long n = 1</SAMP>', and the expression `<SAMP>short
+p = *((short*)&#38;n)</SAMP>', on a little-endian platform, `<SAMP>p</SAMP>' will equal 1, but on
+a big-endian platform, `<SAMP>p</SAMP>' will equal 0.
+</P><P>
+
+Avoid using C "unions" to represent bit-sets since they can result in
+endian-related problems if improperly used or stored as persistent data.
+Using bit-masks is a much better and far more portable solution.
+</P><P>
+
+Beware of reading and writing data to binary format files and sending such
+information over the network.  Unless special care is taken to ensure
+portability, these files and network related facilities will suffer
+endian-related problems.  Use the network functions <CODE>ntohl()</CODE>,
+<CODE>ntohs()</CODE>, <CODE>htonl()</CODE>, and <CODE>htons()</CODE> to convert numbers to
+canonical format before transmitting them over the network.  You can also make
+use of the Crystal Space endian-related conversion functions found in
+`<TT>CS/include/csutil/csendian.h</TT>'.
+</P><P>
+
+<LI>
+<EM>Data Alignment</EM>
+<P>
+
+Some platforms require data values to be strictly aligned in memory.  For
+instance, some processors can not access a `<SAMP>long</SAMP>' value at an odd memory
+address or at an address which is not a multiple of four (which is the size in
+bytes of the `<SAMP>long</SAMP>' data type).  In such cases, the program may crash.
+Other processors may be able to access misaligned values, but at greatly
+reduced speed, which can slow down program execution significantly if done
+frequently enough.
+</P><P>
+
+In most cases, the compiler ensures that values are properly aligned for the
+given processor, but this problem can crop up when reading byte-streams from
+external sources such as binary files or network connections.  In such cases,
+it is up to you to ensure the proper alignment of the data before accessing
+it.
+</P><P>
+
+For instance, if you are reading elements from a byte-stream and the next
+element to be read is a `<SAMP>long</SAMP>', then the following code to extract the
+value is <EM>incorrect</EM> and <EM>non-portable</EM> since it does not ensure
+that the data is aligned properly for `<SAMP>long</SAMP>' access:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>long extract_long(unsigned char const* stream)
 {
-  int a;
-  for (a = 0; a &#60; 10; a++)
-  {
-    int b = bar();
-    if (a &#60; b)
-      printf ("Hello\n");
-  }
+  return *((long*)stream);
 }
 </pre></td></tr></table></P><P>
 
-This example also illustrates how to place curly braces and where to add
-spaces, for example `<SAMP>for_(</SAMP>' rather than `<SAMP>for(_</SAMP>', where `<SAMP>_</SAMP>'
-represents whitespace in this context.  Also add sufficient whitespace between
-tokens.
+The correct way to code this example would be as follows:
 </P><P>
 
-In cases you are unsure what specific coding style to employ, just follow the
-style in the code you're editing or your personal preference. Always try to 
-keep it both readable and consistent. 
-</P><P>
-
-<LI>
-<EM>Class and Method Naming</EM>
-<P>
-
-Classes should be named in this fashion: <CODE>csThisIsAClass</CODE>. The name
-starts with lower-case `<SAMP>cs</SAMP>' and has every word capitalized (also known
-as "CamelCase").
-</P><P>
-
-Methods and functions should be named in this fashion: <CODE>ThisIsAMethod()</CODE>.
-Each word in the name is capitalized.
-</P><P>
-
-<LI>
-<EM>SCF Interfaces</EM>
-<P>
-
-SCF interfaces always start with a lower `<SAMP>i</SAMP>', as in
-<CODE>iThisIsAnInterface</CODE>.  See section <A HREF="cs_139.html#SEC359">6.2 Shared Class Facility (SCF)</A>.
-</P><P>
-
-<LI>
-<EM>Doxygen and Comments</EM>
-<P>
-
-Use Doxygen comments in header files to document classes, methods, and
-functions. These comments are extracted with the Doxygen tool and HTML
-documentation is generated from them.
-</P><P>
-
-<STRONG>Warning</STRONG>: Always use Doxygen comments for a class. If you fail to do so
-then Doxygen will ignore comments for methods within the class itself.
-</P><P>
-
-A one line Doxygen comment uses three slashes (`<SAMP>///</SAMP>') rather than two as
-is typical for normal C++ comments.  Multi-line Doxygen comments are specified
-with `<SAMP>/** <small>...</small> */</SAMP>' rather than `<SAMP>/* <small>...</small> */</SAMP>'.  Here is an
-example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/**
- * This class represents a blue ball.
- * Blue balls bounce higher than red balls.
- */
-class csBlueBall
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>long extract_long(unsigned char const* stream)
 {
-private:
-  // A private function, so no Doxygen comment here,
-  // but still commented for readers of the header file.
-  void PrivateFunction();
-
-public:
-  /// This is the constructor which initializes the blue ball.
-  csBlueBall();
-
-  /**
-   * This is a multi-line comment.
-   * And this is the second line of the multi-line comment.
-   */
-  void Deflate();
-};
+  long n;
+  memcpy(&#38;n, stream, sizeof(n));
+  return n;
+}
 </pre></td></tr></table></P><P>
 
 <LI>
-<EM>Maximum Line Length</EM>
+<EM>Data type sizes</EM>
 <P>
 
-In general, lines in source code should be no longer than 78 characters.  This
-facilitates generation of hard-copy and works better with certain tools which
-process code or text files.
+Don't make any assumptions about the size of `<SAMP>int</SAMP>', `<SAMP>long</SAMP>', 
+`<SAMP>size_t</SAMP>', `<SAMP>void*</SAMP>' etc such as <CODE>sizeof(int)==4</CODE>, 
+<CODE>sizeof(int)==sizeof(void*)</CODE>, <CODE>sizeof(long)==sizeof(void*)</CODE> and so 
+on. If a specifically sized type is needed (for example, when reading a file
+and the format specification dictates a certain word size) use the sized types
+from `<TT>cstypes.h</TT>' (e.g. `<SAMP>int32</SAMP>', `<SAMP>uint8</SAMP>'). Consequently, also 
+avoid constructs such as casting pointers to `<SAMP>int</SAMP>'s. If there's a rare 
+case that no other way than casting a pointer to/from an integral type, use the 
+value of the `<SAMP>CS_PROCESSOR_SIZE</SAMP>' macro (usually 32 or 64) to determine an 
+appropriate sized type.
 </P><P>
 
 <LI>
-<EM>Multiple-Inclusion Protection for Headers</EM>
+<EM>Floating Points</EM>
 <P>
 
-Be certain to insert multiple-inclusion protection in all header files.  These
-controls should take this form:
+Depending upon the accuracy and representation of floating point values on
+some platforms, a number may successfully compare to (and equal) 0.0 on one
+platform or processor but fail on another.  In order to avoid such problems,
+compare numbers to a small value such as `<SAMP>EPSILON</SAMP>'.  In other words, if
+`<SAMP>EPSILON</SAMP>' is defined as a very small value, use `<SAMP>(val &#60; EPSILON)</SAMP>'
+rather than `<SAMP>(val == 0.0)</SAMP>'.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#ifndef __CS_FILENAME_H__
-#define __CS_FILENAME_H__
-<small>...</small>
-#endif // __CS_FILENAME_H__
+As a corollary.  when comparing two floating point values, employ the
+`<SAMP>EPSILON</SAMP>' trick to ensure that they compare properly over a wide variety
+of platforms.  In other words, instead of `<SAMP>(float1 &#60; float2)</SAMP>', use
+`<SAMP>(float1 &#60; float2 + EPSILON)</SAMP>'.
+</P><P>
+
+<LI>
+<EM>Scope of `<SAMP>for</SAMP>' Statements</EM>
+<P>
+
+Some compilers do not properly scope a variable declared in a <CODE>for(;;)</CODE>
+statement to the loop itself.  In other words, some compilers treat the
+following code:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>for (int i = 0; <small>...</small>) <small>...</small>
 </pre></td></tr></table></P><P>
 
-<LI>
-<EM>Include `<TT>cssysdef.h</TT>'</EM>
-<P>
+As though `<SAMP>i</SAMP>' was declared outside of the `<SAMP>for</SAMP>' statement, as in:
+</P><P>
 
-Always include `<TT>cssysdef.h</TT>' in each source or header file as the very 
-first file included.  The latter is recommended, as it makes headers more
-self-contained.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>int i;
+for (i = 0; <small>...</small>) <small>...</small>
+</pre></td></tr></table></P><P>
+
+This can be a problem when several `<SAMP>for</SAMP>' loops exists at the same scoping
+level in a single block since some compilers will complain that `<SAMP>i</SAMP>' is
+being redeclared by all `<SAMP>for</SAMP>' loops following the first one.  In other
+words, the following code will generate a "variable redeclaration" warning
+with some compilers:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>for (int i = 0; <small>...</small>) <small>...</small>
+<small>...</small> other code <small>...</small>
+for (int i = 5; <small>...</small>) <small>...</small>
+</pre></td></tr></table></P><P>
+
+In cases where the variable appears in only a single `<SAMP>for</SAMP>' loop, declaring
+it directly in the `<SAMP>for</SAMP>' statement is perfectly safe, but in cases where
+many such loops may want to use the same variable name, the variable should
+be declared once outside of all loops, as in the following example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>int i;
+for (i = 0; <small>...</small>) <small>...</small>
+<small>...</small> other code <small>...</small>
+for (i = 5; <small>...</small>) <small>...</small>
+</pre></td></tr></table></P><P>
+
+The Microsoft Visual C++ compiler is known to suffer from this problem,
+however most modern C++ compilers properly scope variables declared in the
+`<SAMP>for</SAMP>' statement.
 </P><P>
 
 <LI>
-<EM>Module and Library Dependencies</EM>
+<EM>Avoid Global Objects With Constructors in Plug-In Modules</EM>
 <P>
 
-Do not introduce unnecessary dependencies between libraries and modules.
-Absolutely avoid introducing circular dependencies.
+Avoid placing global objects which require automatic construction in
+dynamically loaded libraries (plug-in modules).  Some platforms fail to call
+the object's constructor at the time the library is loaded.  Therefore it is
+unsafe to rely on such objects.
 </P><P>
 
-For instance, code in the <CODE>csutil</CODE> library should never refer to code
-from the <CODE>cstool</CODE> library.  The other way around is okay, however,
-since <CODE>cstool</CODE> is at a higher level within the dependency hierarchy.
+<LI>
+<EM>Avoid Initializing Global Variables via Functions in Plug-In Modules</EM>
+<P>
+
+Avoid initializing global variables within a plug-in module via function
+call.  In other words, in the following example, the function <CODE>foo()</CODE>
+should not rely upon the variable `<SAMP>angle</SAMP>' as having been properly
+initialized, assuming that this code fragment appears in a plug-in module.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>static float angle = cos(0.23);
+void foo() { printf("angle=%g\n", angle); }
+</pre></td></tr></table></P><P>
+
+Instead, you should arrange for such variables to be initialized manually by
+some other mechanism.  Here is one possible (though not ideal) way to ensure
+that `<SAMP>angle</SAMP>' is initialized before it is accessed.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>static float angle = 0;
+void foo()
+{
+  static bool angle_ok = false;
+  if (!angle_ok)
+  {
+    angle = cos(0.23);
+    angle_ok = true;
+  }
+  printf("angle=%g\n", angle);
+}
+</pre></td></tr></table></P><P>
+
+An even better solution is to utilize the initialization hooks provided by the
+SCF system to initialize global variables at the time that the plug-in
+module is loaded.  See section <A HREF="cs_139.html#SEC359">6.2 Shared Class Facility (SCF)</A>.
+</P><P>
+
+<LI>
+<EM>Pathname Syntax</EM>
+<P>
+
+Pathname syntax varies widely from platform to platform.  For instance, a
+Unix-style pathname such as `<TT>/mnt/home/zoop.c</TT>' might appear as
+`<TT>C:\home\zoop.c</TT>' on DOS and Windows, and `<TT>vol:home:zoop.c</TT>' on
+Macintosh.
+</P><P>
+
+When programming you should always use Unix-style pathname syntax in your
+<CODE>#include</CODE> directives; that is, always use the forward slash `<SAMP>/</SAMP>', as
+in <CODE>#include "csutil/scf.h"</CODE>.  The forward slash is understood by
+compilers on all platforms including Unix, Windows, and Macintosh.  Never use
+`<SAMP>\</SAMP>' or `<SAMP>:</SAMP>' in filenames mentioned by an <CODE>#include</CODE> directive.
+Even though your Windows or Macintosh compiler might accept these characters,
+the Unix compilers will not.  The obvious exception to this rule is for source
+files which are intended only for a specific platform.  Such files may use the
+prohibited characters, but in general there is no reason to do so.
+</P><P>
+
+At the application level, when writing a program or library which utilizes
+Crystal Space you should make use of the VFS facility which provides a
+unified way of referring to files by hiding platform-specific pathname syntax
+details.  Under VFS's unified naming scheme, all pathnames use the
+Unix-style syntax and VFS translates such pathnames to a form appropriate
+for the host platform.  See section <A HREF="cs_159.html#SEC393">7.2 Virtual File System (VFS)</A>.
+</P><P>
+
+<LI>
+<EM>Filesystem Case Sensitivity</EM>
+<P>
+
+Some operating systems have case sensitive filenames, whereas others do not.
+Undesirable things happen if you capitalize a file one way in an
+<CODE>#include</CODE> directive and a different way for the actual filename.  This
+problem may not even be apparent on your platform if you are using a
+case-insensitive file system such as DOS, Windows, or Macintosh (HFS).  In
+general, it is preferable to use entirely lower-case filenames for files which
+are shared between ports.
+</P><P>
+
+<STRONG>Warning</STRONG>: `<TT>WinCVS</TT>' has been reported to botch capitalization of
+files.  Please be aware of this potential problem.
+</P><P>
+
+<LI>
+<EM>Makefiles and Project Files</EM>
+<P>
+
+Some platforms use custom project files, whereas other platforms use the
+Crystal Space makefile system.  If you change a makefile and then change the
+code so that it depends on this change, ports for other platforms will
+probably break.  This may be unavoidable to some extent, but try to minimize
+the breakage.  For example, wrap the dependent code in an <CODE>#ifdef</CODE> and
+check for operating systems that <EM>do</EM> support the change.  This will
+allow other systems to continue to work without your change.  After committing
+your change to the CVS repository, be sure to inform port maintainers
+that their projects may need to be updated in order to support your
+modifications.
+</P><P>
+
+<LI>
+<EM>Ensuring Rendering</EM>
+<P>
+
+Some renderers and video drivers depend on the <CODE>BeginDraw()</CODE> and
+<CODE>FinishDraw()</CODE> calls to `<SAMP>iGraphics3D</SAMP>' or `<SAMP>iGraphics2D</SAMP>'.  Thus
+every <CODE>BeginDraw()</CODE> must be followed by a <CODE>FinishDraw()</CODE> or nothing
+will be rendered.  Microsoft's DirectX renderer is known to have this
+requirement, so be sure to follow this guideline for maximum portability.
+</P><P>
+
+<LI>
+<EM>Template precautions</EM>
+<P>
+
+These days, C++ compilers used with Crystal Space support templates, and the
+project makes use of templates for several utility classes.  For portability
+reasons, however, the entire template implementation should be placed into the
+header file.  There should be no associated source code file.
 </OL>
-<A NAME="CVS Guide"></A>
+<A NAME="Coding Style"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC816"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC818"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC810"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC810"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC820"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC811"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC817"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC810"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC810"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC820"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

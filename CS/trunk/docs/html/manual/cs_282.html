@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Release Notes 92</TITLE>
+<TITLE>Crystal Space: Release Notes 94</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Release Notes 92">
-<META NAME="keywords" CONTENT="Crystal Space: Release Notes 92">
+<META NAME="description" CONTENT="Crystal Space: Release Notes 94">
+<META NAME="keywords" CONTENT="Crystal Space: Release Notes 94">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,227 +23,254 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC909"></A>
+<A NAME="SEC903"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_281.html#SEC903"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC920"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_281.html#SEC888"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC909"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC822"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC822"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> C.5 Release Notes from 0.90 to 0.92 </H2>
-<!--docid::SEC909::-->
+<H2> C.4 Release Notes from 0.92 to 0.94 </H2>
+<!--docid::SEC903::-->
 <P>
 
-This section documents the major changes between versions 0.90 and 0.92 of of
+This section documents the major changes between versions 0.92 and 0.94 of of
 Crystal Space.
 </P><P>
 
-<A NAME="SEC910"></A>
-<H3> csInitializer changes </H3>
-<!--docid::SEC910::-->
+<A NAME="SEC904"></A>
+<H3> Loader and Saver Changes </H3>
+<!--docid::SEC904::-->
 <P>
 
-<CODE>csInitializer::CreateEnvironment()</CODE> now accepts two additional
-parameters: `<SAMP>argc</SAMP>' and `<SAMP>argv</SAMP>'.
-Consequently <CODE>csInitializer::SetupKeyboardHandler()</CODE> has been removed.
+All plugins implementing `<SAMP>iLoaderPlugin</SAMP>' will have to be changed
+since the material and mesh factory lists are now replaced with a
+`<SAMP>iLoaderContext</SAMP>' parameter.
 </P><P>
 
-<A NAME="SEC911"></A>
-<H3> iCollideSystem Changes </H3>
-<!--docid::SEC911::-->
-<P>
-
-The <CODE>iCollideSystem::Collide()</CODE> function now accepts
-`<SAMP>csReversibleTransform</SAMP>' transforms instead of just `<SAMP>csTransform</SAMP>'.
+This change also means that <CODE>iTerrFuncState::LoadMaterialGroup()</CODE>
+now expects an `<SAMP>iLoaderContext</SAMP>' instead of `<SAMP>iMaterialList</SAMP>'.
 </P><P>
 
-<A NAME="SEC912"></A>
-<H3> Texture Manager Changes </H3>
-<!--docid::SEC912::-->
-<P>
-
-The following deregistration functions have been removed.  Instead, use the
-normal <CODE>DecRef()</CODE> mechanism.
+<EM>Warning</EM>: This loader change means that the searching restricted
+on the current region now actually works. This means that by default
+when loading a map it will <EM>only</EM> find objects defined in this map.
 </P><P>
 
-<UL>
-<LI>
-<CODE>iTextureManager::UnregisterTexture()</CODE>
-<LI>
-<CODE>iTextureManager::UnregisterMaterial()</CODE>
-</UL>
-<P>
-
-<A NAME="SEC913"></A>
-<H3> iRegion </H3>
-<!--docid::SEC913::-->
-<P>
-
-The functions <CODE>iRegion::Find<small>...</small>()</CODE> will no longer increase
-the reference count of the returned objects.
+The `<SAMP>iSaverPlugin</SAMP>' interface has also changed. It now uses an
+`<SAMP>iFile</SAMP>' parameter instead of `<SAMP>iStrVector</SAMP>'.
 </P><P>
 
-<A NAME="SEC914"></A>
-<H3> GetThingState </H3>
-<!--docid::SEC914::-->
+<A NAME="SEC905"></A>
+<H3> iCamera Changes </H3>
+<!--docid::SEC905::-->
 <P>
 
-<CODE>iEngine::GetThingState()</CODE> has not been removed but this function
-is now deprecated. It is recommended that you get the `<SAMP>iMeshObjectType</SAMP>'
-for the thing mesh objects the usual way (i.e. by loading the plugin).
+Added <CODE>iCamera::SetFarPlane()</CODE> and changed <CODE>iCamera::GetFarPlane()</CODE>
+to return a pointer to the far plane. This function will return null if
+no far plane is used.
 </P><P>
 
-<A NAME="SEC915"></A>
-<H3> iThingState </H3>
-<!--docid::SEC915::-->
-<P>
-
-The following functions were made `<SAMP>const</SAMP>' in `<SAMP>iThingState</SAMP>':
-<UL>
-<LI>
-<CODE>CurveTexel()</CODE>
-<LI>
-<CODE>CurveVertex()</CODE>
-<LI>
-<CODE>GetCurveVertices()</CODE>
-<LI>
-<CODE>GetCurveVertexCount()</CODE>
-<LI>
-<CODE>GetCurveCount()</CODE>
-<LI>
-<CODE>GetCurvesScale()</CODE>
-<LI>
-<CODE>GetMovingOption()</CODE>
-<LI>
-<CODE>GetPortalCount()</CODE>
-<LI>
-<CODE>GetPortal()</CODE>
-<LI>
-<CODE>GetPortalPolygon()</CODE>
-<LI>
-<CODE>GetVertexCount()</CODE>
-</UL>
-<P>
-
-The following methods were renamed in `<SAMP>iThingState</SAMP>':
+The following constants have been renamed in order to avoid pollution of the
+global namespace:
 </P><P>
 
 <UL>
 <LI>
-<CODE>CurveVertex()</CODE> => <CODE>GetCurveVertex()</CODE>
+<CODE>VEC_FORWARD</CODE> => <CODE>CS_VEC_FORWARD</CODE>
 <LI>
-<CODE>CurveTexel()</CODE> => <CODE>GetCuveTexel()</CODE>
+<CODE>VEC_BACKWARD</CODE> => <CODE>CS_VEC_BACKWARD</CODE>
+<LI>
+<CODE>VEC_RIGHT</CODE> => <CODE>CS_VEC_RIGHT</CODE>
+<LI>
+<CODE>VEC_LEFT</CODE> => <CODE>CS_VEC_LEFT</CODE>
+<LI>
+<CODE>VEC_UP</CODE> => <CODE>CS_VEC_UP</CODE>
+<LI>
+<CODE>VEC_DOWN</CODE> => <CODE>CS_VEC_DOWN</CODE>
+<LI>
+<CODE>VEC_ROT_RIGHT</CODE> => <CODE>CS_VEC_ROT_RIGHT</CODE>
+<LI>
+<CODE>VEC_ROT_LEFT</CODE> => <CODE>CS_VEC_ROT_LEFT</CODE>
+<LI>
+<CODE>VEC_TILT_RIGHT</CODE> => <CODE>CS_VEC_TILT_RIGHT</CODE>
+<LI>
+<CODE>VEC_TILT_LEFT</CODE> => <CODE>CS_VEC_TILT_LEFT</CODE>
+<LI>
+<CODE>VEC_TILT_UP</CODE> => <CODE>CS_VEC_TILT_UP</CODE>
+<LI>
+<CODE>VEC_TILT_DOWN</CODE> => <CODE>CS_VEC_TILT_DOWN</CODE>
 </UL>
 <P>
 
-Added several functions to `<SAMP>iThingState</SAMP>':
+<A NAME="SEC906"></A>
+<H3> Engine Changes </H3>
+<!--docid::SEC906::-->
+<P>
+
+Far plane handling in the engine has changed. Polygons are no longer
+clipped exactly to the far plane but instead the polygons are rejected
+which are fully behind the far plane.
+</P><P>
+
+<CODE>iEngine::LoadMeshFactory()</CODE> and <CODE>iEngine::LoadMeshWrapper()</CODE>
+used to have a `<SAMP>classId</SAMP>' parameter. That parameter has now been removed.
+</P><P>
+
+<A NAME="SEC907"></A>
+<H3> Various Changes </H3>
+<!--docid::SEC907::-->
+<P>
+
+<CODE>csPlane3::ClipPolygon()</CODE> will now by default consider the
+polygon to be visible on the negative side of the plane
+(<CODE>csPlane3::Classify()</CODE>) as opposed to the positive side like
+it used to be. It now has a third parameter `<SAMP>reversed</SAMP>' which
+you can set to <CODE>true</CODE> so that it behaves again as before.
+</P><P>
+
+<A NAME="SEC908"></A>
+<H3> Various Constant Changes </H3>
+<!--docid::SEC908::-->
+<P>
+
+The following constants have been renamed in order to avoid pollution of the
+global namespace:
 </P><P>
 
 <UL>
 <LI>
-<CODE>FindPolygonIndex()</CODE>
+<CODE>BOX_CORNER_xy</CODE> => <CODE>CS_BOX_CORNER_xy</CODE>
 <LI>
-<CODE>RemovePolygon()</CODE>
+<CODE>BOX_CORNER_xY</CODE> => <CODE>CS_BOX_CORNER_xY</CODE>
 <LI>
-<CODE>RemovePolygons()</CODE>
+<CODE>BOX_CORNER_Xy</CODE> => <CODE>CS_BOX_CORNER_Xy</CODE>
 <LI>
-<CODE>SetVertex()</CODE>
+<CODE>BOX_CORNER_XY</CODE> => <CODE>CS_BOX_CORNER_XY</CODE>
 <LI>
-<CODE>DeleteVertex()</CODE>
+<CODE>BOX_EDGE_xy_Xy</CODE> => <CODE>CS_BOX_EDGE_xy_Xy</CODE>
 <LI>
-<CODE>DeleteVertices()</CODE>
+<CODE>BOX_EDGE_Xy_xy</CODE> => <CODE>CS_BOX_EDGE_Xy_xy</CODE>
 <LI>
-<CODE>SetCurveVertex()</CODE>
+<CODE>BOX_EDGE_Xy_XY</CODE> => <CODE>CS_BOX_EDGE_Xy_XY</CODE>
 <LI>
-<CODE>SetCurveTexel()</CODE>
+<CODE>BOX_EDGE_XY_xy</CODE> => <CODE>CS_BOX_EDGE_XY_Xy</CODE>
 <LI>
-<CODE>ClearCurveVertices()</CODE>
+<CODE>BOX_EDGE_XY_xY</CODE> => <CODE>CS_BOX_EDGE_XY_xY</CODE>
 <LI>
-<CODE>FindCurveIndex()</CODE>
+<CODE>BOX_EDGE_xY_XY</CODE> => <CODE>CS_BOX_EDGE_xY_XY</CODE>
 <LI>
-<CODE>RemoveCurve()</CODE>
+<CODE>BOX_EDGE_xY_xy</CODE> => <CODE>CS_BOX_EDGE_xY_xy</CODE>
 <LI>
-<CODE>RemoveCurves()</CODE>
+<CODE>BOX_EDGE_xy_XY</CODE> => <CODE>CS_BOX_EDGE_xy_xY</CODE>
+<LI>
+<CODE>BOX_CORNER_xyz</CODE> => <CODE>CS_BOX_CORNER_xyz</CODE>
+<LI>
+<CODE>BOX_CORNER_xyZ</CODE> => <CODE>CS_BOX_CORNER_xyZ</CODE>
+<LI>
+<CODE>BOX_CORNER_xYz</CODE> => <CODE>CS_BOX_CORNER_xYz</CODE>
+<LI>
+<CODE>BOX_CORNER_xYZ</CODE> => <CODE>CS_BOX_CORNER_xYZ</CODE>
+<LI>
+<CODE>BOX_CORNER_Xyz</CODE> => <CODE>CS_BOX_CORNER_Xyz</CODE>
+<LI>
+<CODE>BOX_CORNER_XyZ</CODE> => <CODE>CS_BOX_CORNER_XyZ</CODE>
+<LI>
+<CODE>BOX_CORNER_XYz</CODE> => <CODE>CS_BOX_CORNER_XYz</CODE>
+<LI>
+<CODE>BOX_CORNER_XYZ</CODE> => <CODE>CS_BOX_CORNER_XYZ</CODE>
+<LI>
+<CODE>BOX_SIDE_x</CODE> => <CODE>CS_BOX_SIDE_x</CODE>
+<LI>
+<CODE>BOX_SIDE_X</CODE> => <CODE>CS_BOX_SIDE_X</CODE>
+<LI>
+<CODE>BOX_SIDE_y</CODE> => <CODE>CS_BOX_SIDE_y</CODE>
+<LI>
+<CODE>BOX_SIDE_Y</CODE> => <CODE>CS_BOX_SIDE_Y</CODE>
+<LI>
+<CODE>BOX_SIDE_z</CODE> => <CODE>CS_BOX_SIDE_z</CODE>
+<LI>
+<CODE>BOX_SIDE_Z</CODE> => <CODE>CS_BOX_SIDE_Z</CODE>
+<LI>
+<CODE>BOX_INSIDE</CODE> => <CODE>CS_BOX_INSIDE</CODE>
+<LI>
+<CODE>BOX_EDGE_Xyz_xyz</CODE> => <CODE>CS_BOX_EDGE_Xyz_xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_xyz_Xyz</CODE> => <CODE>CS_BOX_EDGE_xyz_Xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_xyz_xYz</CODE> => <CODE>CS_BOX_EDGE_xyz_xYz</CODE>
+<LI>
+<CODE>BOX_EDGE_xYz_xyz</CODE> => <CODE>CS_BOX_EDGE_xYz_xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_xYz_XYz</CODE> => <CODE>CS_BOX_EDGE_xYz_XYz</CODE>
+<LI>
+<CODE>BOX_EDGE_XYz_xYz</CODE> => <CODE>CS_BOX_EDGE_XYz_xYz</CODE>
+<LI>
+<CODE>BOX_EDGE_XYz_Xyz</CODE> => <CODE>CS_BOX_EDGE_XYz_Xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_Xyz_XYz</CODE> => <CODE>CS_BOX_EDGE_Xyz_XYz</CODE>
+<LI>
+<CODE>BOX_EDGE_Xyz_XyZ</CODE> => <CODE>CS_BOX_EDGE_Xyz_XyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XyZ_Xyz</CODE> => <CODE>CS_BOX_EDGE_XyZ_Xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_XyZ_XYZ</CODE> => <CODE>CS_BOX_EDGE_XyZ_XYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XYZ_XyZ</CODE> => <CODE>CS_BOX_EDGE_XYZ_XyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XYZ_XYz</CODE> => <CODE>CS_BOX_EDGE_XYZ_XYz</CODE>
+<LI>
+<CODE>BOX_EDGE_XYz_XYZ</CODE> => <CODE>CS_BOX_EDGE_XYz_XYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XYZ_xYZ</CODE> => <CODE>CS_BOX_EDGE_XYZ_xYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xYZ_XYZ</CODE> => <CODE>CS_BOX_EDGE_xYZ_XYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xYZ_xYz</CODE> => <CODE>CS_BOX_EDGE_xYZ_xYz</CODE>
+<LI>
+<CODE>BOX_EDGE_xYz_xYZ</CODE> => <CODE>CS_BOX_EDGE_xYz_xYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xYZ_xyZ</CODE> => <CODE>CS_BOX_EDGE_xYZ_xyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xyZ_xYZ</CODE> => <CODE>CS_BOX_EDGE_xyZ_xYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xyZ_xyz</CODE> => <CODE>CS_BOX_EDGE_xyZ_xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_xyz_xyZ</CODE> => <CODE>CS_BOX_EDGE_xyz_xyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xyZ_XyZ</CODE> => <CODE>CS_BOX_EDGE_xyZ_XyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XyZ_xyZ</CODE> => <CODE>CS_BOX_EDGE_XyZ_xyZ</CODE>
+<LI>
+<CODE>POL_FRONT</CODE> => <CODE>CS_POL_FRONT</CODE>
+<LI>
+<CODE>POL_BACK</CODE> => <CODE>CS_POL_BACK</CODE>
+<LI>
+<CODE>POL_SAME_PLANE</CODE> => <CODE>CS_POL_SAME_PLANE</CODE>
+<LI>
+<CODE>POL_SPLIT_NEEDED</CODE> => <CODE>CS_POL_SPLIT_NEEDED</CODE>
+<LI>
+<CODE>DECLARE_TYPED_QUEUE</CODE> => <CODE>CS_DECLARE_TYPED_QUEUE</CODE>
+<LI>
+<CODE>DECLARE_TYPED_QUEUE_BASE</CODE> => <CODE>CS_DECLARE_TYPED_QUEUE_BASE</CODE>
 </UL>
-<P>
-
-<A NAME="SEC916"></A>
-<H3> Isometric Engine  </H3>
-<!--docid::SEC916::-->
-<P>
-
-Added <CODE>iIsoEngine::GetMaterialList()</CODE> and removed all other
-material functions from <CODE>iIsoEngine</CODE> except the one to create a material
-from a VFS path.
-</P><P>
-
-Added <CODE>iIsoEngine::GetMeshFactories()</CODE> and removed the following
-functions.
-</P><P>
-
-<UL>
-<LI>
-<CODE>AddMeshFactory()</CODE>
-<LI>
-<CODE>FindMeshFactory()</CODE>
-<LI>
-<CODE>RemoveMeshFactory()</CODE>
-</UL>
-<P>
-
-<A NAME="SEC917"></A>
-<H3> Terrain Mesh Object </H3>
-<!--docid::SEC917::-->
-<P>
-
-Changed <CODE>iTerrFuncState::LoadMaterialGroup()</CODE> so that the first
-parameter is now a material list, `<SAMP>iMaterialList</SAMP>', instead of
-`<SAMP>iEngine</SAMP>'.
-</P><P>
-
-<A NAME="SEC918"></A>
-<H3> Loader and Saver Plugins </H3>
-<!--docid::SEC918::-->
-<P>
-
-Changed <CODE>iLoaderPlugin::Parse()</CODE> to accept a material list and mesh
-factory list (`<SAMP>iMaterialList</SAMP>' and `<SAMP>iMeshFactoryList</SAMP>') instead of an
-`<SAMP>iEngine</SAMP>' instance.
-</P><P>
-
-Changed <CODE>iSaverPlugin::WriteDown()</CODE> so that it no longer has
-the `<SAMP>iEngine</SAMP>' parameter.
-</P><P>
-
-<A NAME="SEC919"></A>
-<H3> iMeshObject and iMeshObjectFactory Changes </H3>
-<!--docid::SEC919::-->
-<P>
-
-Added <CODE>SetLogicalParent()</CODE> and <CODE>GetLogicalParent()</CODE> to
-both `<SAMP>iMeshObject</SAMP>' and `<SAMP>iMeshObjectFactory</SAMP>'. This should
-be no issue for applications simply using mesh objects but it is an
-issue if you made your own mesh object implementation. Also beware
-that there have been some changes in the way the parser interact
-with the plugin loaders. The plugin loaders are no longer responsible
-for setting the factory pointer. The parser will now do that.
-<A NAME="Release Notes 90"></A>
+<A NAME="Release Notes 92"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_281.html#SEC903"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC920"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_281.html#SEC888"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC909"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC822"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC822"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -26,13 +26,13 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A NAME="SEC656"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_229.html#SEC655"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC668"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC653"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC669"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
@@ -40,33 +40,50 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <!--docid::SEC656::-->
 <P>
 
-Crystal Space has extensive bindings for Perl version 5.
+Crystal Space is accessible from Perl in two ways: (1) as a Crystal Space
+plugin module in which C++ code can call upon Perl code, and in which Perl code
+can call upon Crystal Space; (2) as a pure Perl module named `<TT>cspace</TT>'
+which one can `<SAMP>use</SAMP>' from within Perl programs.  To use the first option,
+load the `<TT>csperl5</TT>' plugin as you would load any other Crystal Space
+plugin, and interact with it via the SCF `<SAMP>iScript</SAMP>' interface
+(see section <A HREF="cs_228.html#SEC654">7.8.1 The iScript Interface</A>).  The second approach allows you to write Crystal
+Space applications entirely in Perl, without any C++ coding.  The rest of this
+document pertains to the second method of using Crystal Space from Perl, though
+much of the discussion is meaningful to both methods.
 </P><P>
 
-<A NAME="SEC657"></A>
-<H3> Getting Started </H3>
-<!--docid::SEC657::-->
-<P>
-
-To make use of Crystal Space classes from a Perl script, first make sure that
-the file `<SAMP>cspace.pm</SAMP>' is available to Perl.  This file is installed at
-`<TT>${prefix}/share/crystalspace/perl5</TT>', where `<TT>${prefix}</TT>' is the
-location at which Crystal Space was installed (typically,
-`<TT>/usr/local</TT>'). You may also find a copy of this file in the
-`<TT>CS/scripts/perl5</TT>' source directory.  The easiest way to tell Perl where this file resides is via the `<SAMP>lib</SAMP>' pragma:
+To make use of Crystal Space classes from a pure Perl script, first make sure
+that the file `<SAMP>cspace.pm</SAMP>' is available to Perl.  This file is installed
+at:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>use lib "$ENV{CRYSTAL}/share/crystalspace/perl5";
+<CODE>${prefix}/share/crystalspace/bindings/perl5/cspace.pm</CODE>
+</P><P>
+
+where `<TT>${prefix}</TT>' is the location at which Crystal Space was installed
+(typically, `<TT>/usr/local</TT>'). If you have not installed Crystal Space, then
+you can find this file in the top level build directory after building the
+project (the `<TT>CS</TT>' directory if you built and configured there).  There are
+several ways to tell Perl where this file resides. One way is to use the
+`<SAMP>lib</SAMP>' pragma within your Perl code:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>use lib "$ENV{CRYSTAL}/share/crystalspace/bindings/perl5";
 </pre></td></tr></table></P><P>
 
 You can also use Perl's `<SAMP>-I</SAMP>' command-line option to tell it the location
-of this file.
+of this file. Finally, you can set the `<SAMP>PERL5LIB</SAMP>' environment variable so
+that it mentions the directory containing `<TT>cspace.pm</TT>'.
 </P><P>
 
-The `<TT>cspace.so</TT>' (Unix, Linux, MacOS/X) or `<TT>cspace.dll</TT>' (Windows)
-shared library file should reside the same directory as the `<TT>cspace.pm</TT>'
-file. This happens automatically when you install Crystal Space (via `<SAMP>make
-instal</SAMP>' or `<SAMP>jam install</SAMP>').
+In addition to the `<SAMP>.pm</SAMP>' file, there is also a shared library,
+`<TT>cspace</TT>', which contains the low-level bindings between Perl and Crystal
+Space. On Unix and MacOS/X, this file is named `<TT>cspace.so</TT>'; on Windows it
+is named `<TT>cspace.dll</TT>'. The shared library file should reside in the same
+directory as the `<TT>cspace.pm</TT>' file. This happens automatically when you
+install Crystal Space (via `<SAMP>make install</SAMP>' or `<SAMP>jam install</SAMP>'). If you
+have not installed Crystal Space, then the shared library will be in the
+top-level build directory, along with `<TT>cspace.pm</TT>'.
 </P><P>
 
 To actually utilize Crystal Space from within your script, begin with:
@@ -75,9 +92,9 @@ To actually utilize Crystal Space from within your script, begin with:
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>use cspace;
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC658"></A>
-<H3> Quick Start  </H3>
-<!--docid::SEC658::-->
+<A NAME="SEC657"></A>
+<H3> Getting Started </H3>
+<!--docid::SEC657::-->
 <P>
 
 To get started with pure Perl scripts, you probably want to know how to
@@ -88,9 +105,9 @@ initialize Crystal Space and obtain an `<SAMP>iObjectRegistry</SAMP>' pointer:
   cspace::csInitializer::CreateEnvironment([$0, @ARGV]);
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC659"></A>
+<A NAME="SEC658"></A>
 <H3> Functions and Classes </H3>
-<!--docid::SEC659::-->
+<!--docid::SEC658::-->
 <P>
 
 Crystal Space has several global functions which can be accessed easily from
@@ -101,7 +118,7 @@ Perl.  For instance, in C++, one might say:
 int key = csHashCompute(str);
 </pre></td></tr></table></P><P>
 
-Perl is almost exactly the same, the most notable difference being the
+Perl is almost exactly the same, the most notable difference is the
 <CODE>cspace::</CODE> prefix:
 </P><P>
 
@@ -125,16 +142,16 @@ There are three ways to access object properties:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>print $vect-&#62;x;       # Preferred way, conforms to Perl convention
-print $vect-&#62;{"x"}; # Swig's generated primary way
-print $vect-&#62;get_x(); # Swig's generated secondary way
+print $vect-&#62;{"x"}; # Swig's primary way
+print $vect-&#62;get_x(); # Swig's secondary way
 </pre></td></tr></table></P><P>
 
 And, three ways to modify object properties:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect-&#62;x(123);        # Preferred way, conforms to Perl convention
-$vect-&#62;{"x"} = 123; # Swig's generated primary way
-$vect-&#62;set_x(123);    # Swig's generated secondary way
+$vect-&#62;{"x"} = 123; # Swig's primary way
+$vect-&#62;set_x(123);    # Swig's secondary way
 </pre></td></tr></table></P><P>
 
 Calling methods works as you might expect:
@@ -143,24 +160,22 @@ Calling methods works as you might expect:
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect-&#62;Norm();
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC660"></A>
+<A NAME="SEC659"></A>
 <H3> Arrays </H3>
-<!--docid::SEC660::-->
+<!--docid::SEC659::-->
 <P>
 
 Wherever an array is expected, or wherever an array is returned, in or from
 a Crystal Space C++ function, a Perl array reference is used.
 </P><P>
 
-<A NAME="SEC661"></A>
+<A NAME="SEC660"></A>
 <H3> Operator Overloading </H3>
-<!--docid::SEC661::-->
+<!--docid::SEC660::-->
 <P>
 
 Operator overloading is not yet supported. All the code required to support it
 has been written, but the code requires some non-existant features of Swig.
-</P><P>
-
 The operators that exist in C++ and which Perl can overload are:
 <CODE>+ - * / % &#60;&#60; &#62;&#62; &#38; | ^ &#38;&#38; || ! ~ &#60; &#60;= == &#62;= &#62; != ++ --
 = += -= *= /= %= &#60;&#60;= &#62;&#62;= &#38;= |= ^=</CODE>
@@ -173,24 +188,24 @@ hash, glob, subroutine), <CODE>abs</CODE> (absolute value), truth evaluation,
 stringify and numerify.
 </P><P>
 
-<A NAME="SEC662"></A>
+<A NAME="SEC661"></A>
 <H3> Interface Pointers </H3>
-<!--docid::SEC662::-->
+<!--docid::SEC661::-->
 <P>
 
-Supposing you call a function that returns a pointer to some interface.
+Suppose you call a function that returns a pointer to some SCF interface.
 You can store the returned value in a variable, and use it similarly to how
-objects are used in Perl (see above). You can call their methods in the same
-way, and pass them on to further functions as parameters where appropriate.
+objects are used in Perl (see above). You can call methods in the same
+way, and pass them on to other functions as arguments where appropriate.
 </P><P>
 
-The Perl bindings automatically correctly handle <CODE>csRef&#60;&#62;</CODE> and
+The Perl bindings automatically and correctly handle <CODE>csRef&#60;&#62;</CODE> and
 <CODE>csPtr&#60;&#62;</CODE>.
 </P><P>
 
-<A NAME="SEC663"></A>
+<A NAME="SEC662"></A>
 <H3> Implementing Interfaces </H3>
-<!--docid::SEC663::-->
+<!--docid::SEC662::-->
 <P>
 
 You can write your own Perl class and have it inherit from a Crystal Space
@@ -220,29 +235,33 @@ my $handler = new MyPerlEventHandler;
 $eventq-&#62;RegisterListener($handler);
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC664"></A>
+<A NAME="SEC663"></A>
 <H3> Special Cases </H3>
+<!--docid::SEC663::-->
+<P>
+
+Take note of the following special cases.
+</P><P>
+
+<A NAME="SEC664"></A>
+<H4> Macros Accepting Interfaces as Parameters </H4>
 <!--docid::SEC664::-->
 <P>
 
-Take note of these special cases.
-</P><P>
-
-<A NAME="SEC665"></A>
-<H4> Macros Accepting Interfaces as Parameters </H4>
-<!--docid::SEC665::-->
-<P>
-
 In Perl, Crystal Space macros that take interface names as parameters--for
-instance <CODE>CS_QUERY_REGISTRY()</CODE>---take those interface names as strings:
+instance <CODE>CS_QUERY_REGISTRY()</CODE>---take interface names as strings:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>my $engine = cspace::CS_QUERY_REGISTRY($object_reg, "iEngine");
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC666"></A>
+This differs from the C++ <CODE>CS_QUERY_REGISTRY()</CODE> macro in which
+`<SAMP>iEngine</SAMP>' would not be quoted.
+</P><P>
+
+<A NAME="SEC665"></A>
 <H4> <CODE>csRGBpixel</CODE> </H4>
-<!--docid::SEC666::-->
+<!--docid::SEC665::-->
 <P>
 
 To convert a `<SAMP>csRGBpixel</SAMP>' to a `<SAMP>csRGBcolor</SAMP>', use the
@@ -252,9 +271,9 @@ To convert a `<SAMP>csRGBpixel</SAMP>' to a `<SAMP>csRGBcolor</SAMP>', use the
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>my $color = $pixel-&#62;asRGBcolor();
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC667"></A>
+<A NAME="SEC666"></A>
 <H4> <CODE>iSprite2DState</CODE> </H4>
-<!--docid::SEC667::-->
+<!--docid::SEC666::-->
 <P>
 
 `<SAMP>iSprite2DState</SAMP>' has an extra method in Perl, <CODE>GetVertexByIndex()</CODE>,
@@ -262,9 +281,9 @@ which accepts a single integer parameter (an array index) and returns a
 `<SAMP>csSprite2DVertex</SAMP>' from the sprite's array of vertices.
 </P><P>
 
-<A NAME="SEC668"></A>
+<A NAME="SEC667"></A>
 <H4> <CODE>iEvent</CODE> </H4>
-<!--docid::SEC668::-->
+<!--docid::SEC667::-->
 <P>
 
 The overloaded <CODE>iEvent::Add()</CODE> and <CODE>Find()</CODE> methods are
@@ -319,17 +338,17 @@ call):
 <LI>
 <CODE>FindVoidPtr()</CODE>
 </UL>
-<A NAME="Animation"></A>
+<A NAME="Python Bindings"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_229.html#SEC655"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC668"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC653"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC669"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

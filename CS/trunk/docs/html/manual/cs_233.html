@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Sprite Actions</TITLE>
+<TITLE>Crystal Space: Introduction</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Sprite Actions">
-<META NAME="keywords" CONTENT="Crystal Space: Sprite Actions">
+<META NAME="description" CONTENT="Crystal Space: Introduction">
+<META NAME="keywords" CONTENT="Crystal Space: Introduction">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,208 +23,59 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC671"></A>
+<A NAME="SEC670"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC670"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC676"> &gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC669"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC671"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC653"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC682"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC669"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC682"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.9.2 Sprite Actions </H3>
-<!--docid::SEC671::-->
+<H3> 7.9.1 Introduction </H3>
+<!--docid::SEC670::-->
 <P>
 
 <EM>Written by Michael Voase,
 <A HREF="mailto:mvoase@midcoast.com.au">mvoase@midcoast.com.au</A>.</EM>
 </P><P>
 
-A sprite action is a series of frames which contains the position of each
-vertex in a sprite for a particular time. This means for each frame, a
-complete duplicate of the vertex list must be loaded into the sprite for
-each frame. The positions of the vertices of course will vary, however, the
-number of vertices in each frame must be equal. We will cover why later.
+Crystal Space provides two basic mechanisms for animating sprites. The first
+is frame based animation in which a mesh is defined in each frame and used
+in a loop. The second method is skeletal animation using the CAL3D library.
 </P><P>
 
-<A NAME="SEC672"></A>
-<H4> Creating a Sprite in a Map File </H4>
-<!--docid::SEC672::-->
-<P>
-
-A sprite in a map file consists of two declaration. The first is the
-declaration for its <EM>factory</EM> the second is a declaration of its 
-<EM>instance</EM> in a given sector. The factory declaration is what we are
-mostly interested in at the moment.
+For the purpose of this document I will describe frame based animation as an
+<EM>action</EM>.  This name is coined from the class the implements frame
+animations in the 3D sprite object `<SAMP>csSpriteAction2</SAMP>' and has been
+traditionally referred to as an `<SAMP>action</SAMP>' in the sprite loader plug in.
 </P><P>
 
-Now if you recall from Mesh Object Concepts (see section <A HREF="cs_208.html#SEC553">7.7.1 MeshObject Concepts</A>), the
-factory acts as a database of all the vertices, triangles and texels used
-to define a mesh object. The primary purpose of this is to have a single
-database for each mesh object. So this is where we will be defining our
-sprite with its multiple actions.
+This document presumes that you have an operational copy of Crystal Space.
+For details on obtaining and building Crystal Space please refer to the
+relevant sections on obtaining (see section <A HREF="cs_7.html#SEC7">1.6 Where to Get Crystal Space</A>) and building
+(see section <A HREF="cs_16.html#SEC23">2. Building and Installing</A>) Crystal Space.
 </P><P>
 
-The declaration starts with the `<SAMP>meshfact</SAMP>' token, and looks something
-like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshfact name="fact"&#62;
-  &#60;plugin&#62;crystalspace.mesh.loader.factory.sprite.3d&#60;/plugin&#62;
-  &#60;params&#62;
-    &#60;material&#62;white&#60;/material&#62;
-    &#60;frame name="first"&#62;
-      &#60;v x="0" y="0" z="0" u="0" v="0"/&#62;
-      &#60;v x="0" y="1" z="0" u="0" v="0"/&#62;
-      &#60;v x="1" y="0" z="0" u="0" v="0"/&#62;
-      &#60;v x="0" y="0" z="1" u="0" v="0"/&#62;
-    &#60;/frame&#62;
-    &#60;frame name="second"&#62;
-      &#60;v x="0" y="0" z="0" u="0" v="0"/&#62;
-      &#60;v x="0" y="1.2" z="0" u="0" v="0"/&#62;
-      &#60;v x="1.2" y="0" z="0" u="0" v="0"/&#62;
-      &#60;v x="0" y="0" z="1.2" u="0" v="0"/&#62;
-    &#60;/frame&#62;
-    &#60;frame name="third"&#62;
-      &#60;v x="0" y="0" z="0" u="0" v="0"/&#62;
-      &#60;v x="0" y="1.4" z="0" u="0" v="0"/&#62;
-      &#60;v x="1.4" y="0" z="0" u="0" v="0"/&#62;
-      &#60;v x="0" y="0" z="1.4" u="0" v="0"/&#62;
-    &#60;/frame&#62;
-    &#60;frame name="fourth"&#62;
-      &#60;v x="0" y="0" z="0" u="0" v="0"/&#62;
-      &#60;v x="0" y="1.2" z="0" u="0" v="0"/&#62;
-      &#60;v x="1.2" y="0" z="0" u="0" v="0"/&#62;
-      &#60;v x="0" y="0" z="1.2" u="0" v="0"/&#62;
-    &#60;/frame&#62;
-    
-    &#60;t t1="0" t2="1" t3="2"/&#62;
-    &#60;t t1="0" t2="3" t3="1"/&#62;
-    &#60;t t1="0" t2="2" t3="3"/&#62;
-    &#60;t t1="1" t2="3" t3="2"/&#62;
-    
-    &#60;action name="default"&#62;
-      &#60;f name="first" delay="200"/&#62;
-      &#60;f name="second" delay="200"/&#62;
-      &#60;f name="third" delay="200"/&#62;
-      &#60;f name="fourth" delay="200"/&#62;
-    &#60;/action&#62;
-  &#60;/params&#62;
-&#60;/meshfact&#62;
-</pre></td></tr></table></P><P>
-
-This example defines a triangular pyramid which grow larger and smaller.
-To put this sprite into action, you also need to declare an instance of
-the sprite in a sector. In your map file (somewhere inside a `<SAMP>sector</SAMP>'
-declaration), place the following mesh object declaration.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshobj name="test1"&#62;
-  &#60;plugin&#62;crystalspace.mesh.loader.sprite.3d&#60;/plugin&#62;
-  &#60;params&#62;
-    &#60;factory&#62;fact&#60;/factory&#62;
-    &#60;action&#62;default&#60;/action&#62;
-    &#60;tween /&#62;
-  &#60;/params&#62;
-  &#60;move&#62;
-    &#60;v x="0" y="0" z="5.0" /&#62;
-  &#60;/move&#62;
-  &#60;priority&#62;object&#60;/priority&#62;
-  &#60;zuse /&#62;
-&#60;/meshobj&#62;
-</pre></td></tr></table></P><P>
-
-After zipping the map file up with your sprite you should see and active
-sprite five units in front of you.
-</P><P>
-
-<A NAME="SEC673"></A>
-<H4> Meaning of the Sprite </H4>
-<!--docid::SEC673::-->
-<P>
-
-Okay, we have an example of a an animation. As you can see from the example,
-the sprite <EM>factory</EM> declaration, the sprite consists of four frames
-each enclosed in the `<SAMP>frame</SAMP>' keyword. Each frame defines the vertices
-of the pyramid in each frame. The `<SAMP>v</SAMP>' token stands for <EM>vertex</EM>.
-You will also note that each frame contains a name. This is important as the
-name is used to reference the frame. This applies to both map files and
-the sprite 3D interface.
-</P><P>
-
-After the frames have been defined, a list of triangles is then declared.
-Note that the `<SAMP>t</SAMP>' tokens are declared after the frames. Trying
-to define the triangles before the frames will result in an error and will
-be flagged as such. Each `<SAMP>t</SAMP>' declaration contains three indices
-to the defined frame vertices. The index starts at zero and has a maximum
-value equal the number of vertices minus one. During the course of animation
-the triangle lists are applied to the corresponding frame and are then
-sent to the graphics renderer. This is one reason why each frame must
-contain the same number of vertices. Lastly, at the end of the mesh factory
-declaration, there is an `<SAMP>action</SAMP>' declared. 
-</P><P>
-
-<A NAME="SEC674"></A>
-<H4> Action Declaration </H4>
-<!--docid::SEC674::-->
-<P>
-
-The declaration starts with the `<SAMP>action</SAMP>' token and is then followed by
-the name of the action. Setting the name is important as this is how you
-will reference the action both in the map file and in the sprite interface.
-Its also a good idea <EM>not</EM> to use the same name twice, as you will prevent
-the second action from being accessed. You can use the same name for an action
-and a frame, as they are stored in different places. In general though,
-never use the same name for two items of the same type, whether it be a mesh
-object, a frame, or whatever.
-</P><P>
-
-After the name of the action, we enter into the body of the action where the
-frame <EM>sequences</EM> are defined. Each frame of the sequence starts with
-the `<SAMP>F</SAMP>' token (standing for frame) and contains the name of the frame
-and the duration that it is valid for. The frame name must be one from the 
-previous list of frames and the duration is in milliseconds. The duration 
-represents how long the frame will be shown for. This sprite contains only
-one action. It can contain many actions. However, in all cases there must be
-at least one action (usually called <EM>default</EM>) defined for the sprite.
-</P><P>
-
-Lastly to implement this action, the `<SAMP>action</SAMP>' keyword is used in the
-mesh object declaration to tell the engine which action to use on this sprite
-instance. If no action is defined in the mesh object then the engine will
-use the first action defined in the factory regardless of its name.
-</P><P>
-
-<A NAME="SEC675"></A>
-<H4> Tweening and Actions. </H4>
-<!--docid::SEC675::-->
-<P>
-
-You may have noticed that the animation looks somewhat jumpy when viewed.
-This is due to the tweening flag on the sprite <EM>instance</EM> being set
-to false. To enable tweening, set the tweening flag to true (it is normally
-enabled). Tweening is a method of producing a smoother animation by
-interpolating the position of the vertices between frame based on a ratio
-of the time into the frame and the duration of the frame. Enabling
-tweening in an animation involves an additional overhead in calculating
-the interpolated vertices, however, produces a more satisfactory result.
-This is also the second reason why each frame must have the same number
-of vertices.
-<A NAME="The Sprite Action Interface"></A>
+Lastly, actions are specific to sprite 3D. There is no exactly
+corresponding interface to thing or ball as yet, for example. So I am also
+presuming you have read to sections prior to this section about sprites, if
+not, then it would be a good idea to do so before delving into this section.
+<A NAME="Sprite Actions"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC670"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC676"> &gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC669"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC671"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC653"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC682"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC669"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC682"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
