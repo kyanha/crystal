@@ -35,9 +35,9 @@
 <tr><td colspan=2><br><h2>Public Methods</h2></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiObjectRegistry.html#a1">Clear</a> ()=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Clear the object registry and release all references.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiObjectRegistry.html#a2">Register</a> (<a class="el" href="structiBase.html">iBase</a> *, char const *tag=0)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiObjectRegistry.html#a2">Register</a> (<a class="el" href="structiBase.html">iBase</a> *obj, char const *tag=0)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Register an object with this registry.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiObjectRegistry.html#a3">Unregister</a> (<a class="el" href="structiBase.html">iBase</a> *, char const *tag=0)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiObjectRegistry.html#a3">Unregister</a> (<a class="el" href="structiBase.html">iBase</a> *obj, char const *tag=0)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Unregister an object with this registry.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="structiBase.html">iBase</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiObjectRegistry.html#a4">Get</a> (char const *tag)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get the registered object corresponding with the given tag.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
@@ -213,7 +213,8 @@ Implemented in <a class="el" href="classcsObjectRegistry.html#a7">csObjectRegist
 <p>
 Get the registered object corresponding with the given tag and implementing the specified interface.
 <p>
-The <a class="el" href="structiBase.html">iBase</a> pointers returned by the iterator will be the requested interface itself so there is no need to do further <a class="el" href="structiBase.html#a3">QueryInterface()</a>. This function will increase the ref count of the returned object. 
+<dl compact><dt><b>Remarks: </b></dt><dd>
+The reference count of the returned object will be artifically incremented, so clients must take care to decrement the reference when no longer needed. </dl>
 <p>
 Implemented in <a class="el" href="classcsObjectRegistry.html#a6">csObjectRegistry</a>.    </td>
   </tr>
@@ -246,7 +247,8 @@ Implemented in <a class="el" href="classcsObjectRegistry.html#a6">csObjectRegist
 <p>
 Get the registered object corresponding with the given tag.
 <p>
-This function will increase the ref count of the returned object. 
+<dl compact><dt><b>Remarks: </b></dt><dd>
+The reference count of the returned object will be artifically incremented, so clients must take care to decrement the reference when no longer needed. </dl>
 <p>
 Implemented in <a class="el" href="classcsObjectRegistry.html#a5">csObjectRegistry</a>.    </td>
   </tr>
@@ -260,7 +262,7 @@ Implemented in <a class="el" href="classcsObjectRegistry.html#a5">csObjectRegist
           <td class="md" nowrap valign="top"> virtual bool iObjectRegistry::Register </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structiBase.html">iBase</a> *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp;, </td>
+          <td class="mdname" nowrap>&nbsp; <em>obj</em>, </td>
         </tr>
         <tr>
           <td></td>
@@ -288,11 +290,19 @@ Implemented in <a class="el" href="classcsObjectRegistry.html#a5">csObjectRegist
 <p>
 Register an object with this registry.
 <p>
-The same object can be registered multiple times but in that case it is probably best to have different tags so they can be distinguished. This function will increase the ref count of the given object. 
+The same object can be registered multiple times but in that case it is probably best to have different tags so they can be distinguished. <dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>obj</em>&nbsp;</td><td>
+Object to place into the registry. </td></tr>
+<tr><td valign=top><em>tag</em>&nbsp;</td><td>
+Optional tag. The tag is interpreted in any way the client sees fit, however some facilities expect tags to follow a certain convention, so be sure to check suitable documentation. </td></tr>
+</table>
+</dl><dl compact><dt><b>Returns: </b></dt><dd>
+False if the given tag is already registered; if obj is null; or if the registry is in the process of being cleared. </dl><dl compact><dt><b>Remarks: </b></dt><dd>
+The reference count of obj will be incremented at registration time. </dl>
 <p>
- Note that a given tag (if non-0) may only be registered once. This function will return false otherwise. 
-<p>
- This function will also fail if this object registry is being cleared. 
+ <dl compact><dt><b>Remarks: </b></dt><dd>
+A particular tag can only be registered once. If you need to re-use a tag, first unregister the object to which it is associated. </dl>
 <p>
 Implemented in <a class="el" href="classcsObjectRegistry.html#a3">csObjectRegistry</a>.    </td>
   </tr>
@@ -306,7 +316,7 @@ Implemented in <a class="el" href="classcsObjectRegistry.html#a3">csObjectRegist
           <td class="md" nowrap valign="top"> virtual void iObjectRegistry::Unregister </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structiBase.html">iBase</a> *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp;, </td>
+          <td class="mdname" nowrap>&nbsp; <em>obj</em>, </td>
         </tr>
         <tr>
           <td></td>
@@ -334,7 +344,18 @@ Implemented in <a class="el" href="classcsObjectRegistry.html#a3">csObjectRegist
 <p>
 Unregister an object with this registry.
 <p>
-If 'tag' is not given then it will unregister all occurrences of the given object in the registry (i.e. for all tags). If 'tag' is given then only the object that has that tag will be unregistered. This function will decrease the ref count of the given object. 
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>obj</em>&nbsp;</td><td>
+Object to removed from the registry. </td></tr>
+<tr><td valign=top><em>tag</em>&nbsp;</td><td>
+Optional tag. </td></tr>
+</table>
+</dl><dl compact><dt><b>Remarks: </b></dt><dd>
+If tag is not provided, * then it will unregister all occurrences of obj * in the registry (i.e. for all tags). If tag is provided, then only * the particular registration of obj associated with tag will be unregistered. </dl>
+<p>
+ <dl compact><dt><b>Remarks: </b></dt><dd>
+The reference count of obj will be decremented at removal time. </dl>
 <p>
 Implemented in <a class="el" href="classcsObjectRegistry.html#a4">csObjectRegistry</a>.    </td>
   </tr>
