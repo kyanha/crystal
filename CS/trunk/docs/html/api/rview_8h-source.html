@@ -79,7 +79,7 @@
 00093 <span class="keyword">public</span>:
 <a name="l00095"></a><a class="code" href="classcsRenderContext.html#m0">00095</a>   <a class="code" href="structiCamera.html">iCamera</a>* <a class="code" href="classcsRenderContext.html#m0">icamera</a>;
 <a name="l00097"></a><a class="code" href="classcsRenderContext.html#m1">00097</a>   <a class="code" href="structiClipper2D.html">iClipper2D</a>* <a class="code" href="classcsRenderContext.html#m1">iview</a>;
-<a name="l00099"></a><a class="code" href="classcsRenderContext.html#m2">00099</a>   <a class="code" href="classcsPlane3.html">csPlane3</a> <a class="code" href="classcsRenderContext.html#m2">frustum</a>[5];
+00099   <a class="code" href="classcsPlane3.html">csPlane3</a> frustum[5];
 00100 
 <a name="l00102"></a><a class="code" href="classcsRenderContext.html#m3">00102</a>   <a class="code" href="classcsPlane3.html">csPlane3</a> <a class="code" href="classcsRenderContext.html#m3">clip_planes</a>[7];
 <a name="l00104"></a><a class="code" href="classcsRenderContext.html#m4">00104</a>   uint32 <a class="code" href="classcsRenderContext.html#m4">clip_planes_mask</a>;
@@ -133,37 +133,27 @@
 00233   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderView.html#a11">CalculateClipSettings</a> (uint32 frustum_mask,
 00234     <span class="keywordtype">int</span> &amp;clip_portal, <span class="keywordtype">int</span> &amp;clip_plane, <span class="keywordtype">int</span> &amp;clip_z_plane) = 0;
 00235 
-00241   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiRenderView.html#a12">TestBSphere</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; o2c,
+00241   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiRenderView.html#a12">TestBSphere</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; w2c,
 00242         <span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; sphere) = 0;
-00252   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiRenderView.html#a13">ClipBSphere</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; o2c,
-00253         <span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; sphere,
-00254         <span class="keywordtype">int</span>&amp; clip_portal, <span class="keywordtype">int</span>&amp; clip_plane, <span class="keywordtype">int</span>&amp; clip_z_plane,
-00255         <a class="code" href="classcsVector3.html">csVector3</a>&amp; camera_origin) = 0;
-00256 
-00264   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiRenderView.html#a14">ClipBBox</a> (<span class="keyword">const</span> <a class="code" href="classcsBox2.html">csBox2</a>&amp; sbox, <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; cbox,
-00265         <span class="keywordtype">int</span>&amp; clip_portal, <span class="keywordtype">int</span>&amp; clip_plane, <span class="keywordtype">int</span>&amp; clip_z_plane) = 0;
+00243 
+00255   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiRenderView.html#a13">ClipBBox</a> (<a class="code" href="classcsPlane3.html">csPlane3</a>* planes, uint32&amp; frustum_mask,
+00256         <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; obox,
+00257         <span class="keywordtype">int</span>&amp; clip_portal, <span class="keywordtype">int</span>&amp; clip_plane, <span class="keywordtype">int</span>&amp; clip_z_plane) = 0;
+00258 
+00264   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderView.html#a14">SetupClipPlanes</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; tr_o2c,
+00265         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes, uint32&amp; frustum_mask) = 0;
 00266 
-00274   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiRenderView.html#a14">ClipBBox</a> (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; cbox,
-00275         <span class="keywordtype">int</span>&amp; clip_portal, <span class="keywordtype">int</span>&amp; clip_plane, <span class="keywordtype">int</span>&amp; clip_z_plane) = 0;
+00270   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiRenderView.html#a15">GetThisSector</a> () = 0;
+00271 
+00275   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiRenderView.html#a16">GetPreviousSector</a> () = 0;
 00276 
-00288   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiRenderView.html#a14">ClipBBox</a> (<a class="code" href="classcsPlane3.html">csPlane3</a>* planes, uint32&amp; frustum_mask,
-00289         <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; obox,
-00290         <span class="keywordtype">int</span>&amp; clip_portal, <span class="keywordtype">int</span>&amp; clip_plane, <span class="keywordtype">int</span>&amp; clip_z_plane) = 0;
-00291 
-00297   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderView.html#a17">SetupClipPlanes</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; tr_o2c,
-00298         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes, uint32&amp; frustum_mask) = 0;
-00299 
-00303   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiRenderView.html#a18">GetThisSector</a> () = 0;
-00304 
-00308   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiRenderView.html#a19">GetPreviousSector</a> () = 0;
-00309 
-00313   <span class="keyword">virtual</span> <a class="code" href="structiPortal.html">iPortal</a>* <a class="code" href="structiRenderView.html#a20">GetLastPortal</a> () = 0;
-00314 
-00319   <span class="keyword">virtual</span> <a class="code" href="structiCamera.html">iCamera</a>* <a class="code" href="structiRenderView.html#a21">GetOriginalCamera</a> () <span class="keyword">const</span> = 0;
-00320 };
-00321 
-00324 <span class="preprocessor">#endif // __CS_IENGINE_RVIEW_H__</span>
-00325 <span class="preprocessor"></span>
+00280   <span class="keyword">virtual</span> <a class="code" href="structiPortal.html">iPortal</a>* <a class="code" href="structiRenderView.html#a17">GetLastPortal</a> () = 0;
+00281 
+00286   <span class="keyword">virtual</span> <a class="code" href="structiCamera.html">iCamera</a>* <a class="code" href="structiRenderView.html#a18">GetOriginalCamera</a> () <span class="keyword">const</span> = 0;
+00287 };
+00288 
+00291 <span class="preprocessor">#endif // __CS_IENGINE_RVIEW_H__</span>
+00292 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
