@@ -310,6 +310,10 @@ SOURCE=..\..\libs\csutil\objreg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\parasiticdatabuffer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\physfile.cpp
 # End Source File
 # Begin Source File
@@ -763,6 +767,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\objpool.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\objreg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\parasiticdatabuffer.h
 # End Source File
 # Begin Source File
 
