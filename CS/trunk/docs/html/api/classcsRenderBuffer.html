@@ -369,7 +369,7 @@ Create an index buffer.
     <tr><td valign="top"></td><td valign="top"><em>componentType</em>&nbsp;</td><td>Components Types; usually CS_BUFCOMP_UNSIGNED_INT </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>rangeStart</em>&nbsp;</td><td>Minimum index value that is expected to be written to the created buffer. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>rangeEnd</em>&nbsp;</td><td>Maximum index value that is expected to be written to the created buffer. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>copy</em>&nbsp;</td><td>if true (default) then this buffer will make a copy of the data. Hardware vertex buffers and interleaved buffers will always copy data. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>copy</em>&nbsp;</td><td>if true (default) then this buffer will make a copy of the data, else just svae the buffer pointers provided by the caller. This has some implications: <a class="el" href="classcsRenderBuffer.html#a4">CopyInto()</a> does not copy, merely update the internal buffer pointer. <a class="el" href="classcsRenderBuffer.html#a2">Lock()</a> just returns that pointer. The pointer passed to <a class="el" href="classcsRenderBuffer.html#a4">CopyInto()</a> must be valid over the lifetime of the render buffer. </td></tr>
   </table>
 </dl>
     </td>
@@ -508,7 +508,7 @@ Create a render buffer.
     <tr><td valign="top"></td><td valign="top"><em>type</em>&nbsp;</td><td>Type of buffer; CS_BUF_DYNAMIC, CS_BUF_STATIC or CS_BUF_STREAM. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>componentType</em>&nbsp;</td><td>Components Types; CS_BUFCOMP_FLOAT, CS_BUFCOMP_INT, etc </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>componentCount</em>&nbsp;</td><td>Number of components per element (e.g. 4 for RGBA) </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>copy</em>&nbsp;</td><td>if true (default) then this buffer will make a copy of the data. Hardware vertex buffers and interleaved buffers will always copy data. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>copy</em>&nbsp;</td><td>if true (default) then this buffer will make a copy of the data, else just svae the buffer pointers provided by the caller. This has some implications: <a class="el" href="classcsRenderBuffer.html#a4">CopyInto()</a> does not copy, merely update the internal buffer pointer. <a class="el" href="classcsRenderBuffer.html#a2">Lock()</a> just returns that pointer. The pointer passed to <a class="el" href="classcsRenderBuffer.html#a4">CopyInto()</a> must be valid over the lifetime of the render buffer. </td></tr>
   </table>
 </dl>
     </td>
@@ -574,7 +574,7 @@ Get type of buffer (static/dynamic).
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a5">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00096">96</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00098">98</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.
 <p>
 References <a class="el" href="rndbuf_8h-source.html#l00048">csRenderBufferType</a>.    </td>
   </tr>
@@ -609,7 +609,7 @@ Gets the number of components per element.
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a3">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00084">84</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00086">86</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a6" doxytag="csRenderBuffer::GetComponentType"></a><p>
@@ -642,7 +642,7 @@ Gets the component type (float, int, etc).
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a4">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00090">90</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00092">92</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.
 <p>
 References <a class="el" href="rndbuf_8h-source.html#l00059">csRenderBufferComponentType</a>.    </td>
   </tr>
@@ -738,7 +738,7 @@ Get the distance between two elements (in bytes, includes stride).
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a8">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00113">113</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00115">115</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a14" doxytag="csRenderBuffer::GetMasterBuffer"></a><p>
@@ -771,7 +771,7 @@ The master buffer is the buffer that actually holds the data; while it can be us
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a11">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00133">133</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00135">135</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a11" doxytag="csRenderBuffer::GetOffset"></a><p>
@@ -804,7 +804,7 @@ Get the offset of the buffer (in bytes).
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a9">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00119">119</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00121">121</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a17" doxytag="csRenderBuffer::GetRangeEnd"></a><p>
@@ -837,7 +837,7 @@ The highest index contained in this buffer, only valid for index buffers.
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a14">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00143">143</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00145">145</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a16" doxytag="csRenderBuffer::GetRangeStart"></a><p>
@@ -870,7 +870,7 @@ The lowest index contained in this buffer, only valid for index buffers.
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a13">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00141">141</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00143">143</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a8" doxytag="csRenderBuffer::GetSize"></a><p>
@@ -903,7 +903,7 @@ Get the size of the buffer (in bytes).
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a6">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00102">102</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00104">104</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a9" doxytag="csRenderBuffer::GetStride"></a><p>
@@ -936,7 +936,7 @@ Get the stride of the buffer (in bytes).
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a7">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00108">108</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00110">110</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a12" doxytag="csRenderBuffer::GetVersion"></a><p>
@@ -969,7 +969,7 @@ Get version.
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a10">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00123">123</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00125">125</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.
 <p>
 References <a class="el" href="cstypes_8h-source.html#l00219">uint</a>.    </td>
   </tr>
@@ -1004,7 +1004,7 @@ Whether the buffer is an index buffer.
 <p>
 Implements <a class="el" href="structiRenderBuffer.html#a12">iRenderBuffer</a>.
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00138">138</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00140">140</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a2" doxytag="csRenderBuffer::Lock"></a><p>
@@ -1100,7 +1100,7 @@ buffer holding the data
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00250">250</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00258">258</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p2" doxytag="csRenderBuffer::bufferSize"></a><p>
@@ -1127,7 +1127,7 @@ datatype for each component
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00224">224</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00232">232</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p0" doxytag="csRenderBuffer::bufferType"></a><p>
@@ -1154,7 +1154,7 @@ hint about main usage
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00219">219</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00227">227</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p3" doxytag="csRenderBuffer::compCount"></a><p>
@@ -1181,7 +1181,7 @@ number of components per element
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00226">226</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00234">234</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p1" doxytag="csRenderBuffer::comptype"></a><p>
@@ -1208,7 +1208,7 @@ datatype for each component
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00221">221</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00229">229</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p9" doxytag="csRenderBuffer::doCopy"></a><p>
@@ -1235,7 +1235,7 @@ should we copy data, or just use supplied buffer
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00241">241</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00249">249</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p10" doxytag="csRenderBuffer::doDelete"></a><p>
@@ -1262,7 +1262,7 @@ if buffer should be deleted on deallocation
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00243">243</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00251">251</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p12" doxytag="csRenderBuffer::isIndex"></a><p>
@@ -1289,7 +1289,7 @@ if this is index-buffer
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00247">247</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00255">255</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p11" doxytag="csRenderBuffer::isLocked"></a><p>
@@ -1316,7 +1316,7 @@ currently locked? (to prevent recursive locking)
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00245">245</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00253">253</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p14" doxytag="csRenderBuffer::lastLock"></a><p>
@@ -1343,7 +1343,7 @@ last type of lock used
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00252">252</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00260">260</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p5" doxytag="csRenderBuffer::offset"></a><p>
@@ -1370,7 +1370,7 @@ offset from buffer start to data
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00230">230</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00238">238</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p7" doxytag="csRenderBuffer::rangeEnd"></a><p>
@@ -1397,7 +1397,7 @@ range start for index-buffer
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00235">235</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00243">243</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p6" doxytag="csRenderBuffer::rangeStart"></a><p>
@@ -1424,7 +1424,7 @@ range start for index-buffer
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00233">233</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00241">241</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p4" doxytag="csRenderBuffer::stride"></a><p>
@@ -1451,7 +1451,7 @@ buffer stride
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00228">228</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00236">236</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="p8" doxytag="csRenderBuffer::version"></a><p>
@@ -1478,7 +1478,7 @@ modification number
 <p>
 
 <p>
-Definition at line <a class="el" href="renderbuffer_8h-source.html#l00238">238</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
+Definition at line <a class="el" href="renderbuffer_8h-source.html#l00246">246</a> of file <a class="el" href="renderbuffer_8h-source.html">renderbuffer.h</a>.    </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>

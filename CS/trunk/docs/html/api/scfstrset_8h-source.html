@@ -42,32 +42,52 @@
 00023 <span class="preprocessor">#include "<a class="code" href="iutil_2strset_8h.html">iutil/strset.h</a>"</span>
 00024 <span class="preprocessor">#include "<a class="code" href="csutil_2strset_8h.html">strset.h</a>"</span>
 00025 
-<a name="l00032"></a><a class="code" href="classcsScfStringSet.html">00032</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csScfStringSet : <span class="keyword">public</span> <a class="code" href="structiStringSet.html">iStringSet</a>
-00033 {
-00034   <a class="code" href="classcsStringSet.html">csStringSet</a> set;
-00035 
-00036 <span class="keyword">public</span>:
-00037   SCF_DECLARE_IBASE;
+<a name="l00034"></a><a class="code" href="classcsScfStringSet.html">00034</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csScfStringSet : <span class="keyword">public</span> <a class="code" href="structiStringSet.html">iStringSet</a>
+00035 {
+00036 <span class="keyword">private</span>:
+00037   <a class="code" href="classcsStringSet.html">csStringSet</a> set;
 00038 
-<a name="l00040"></a><a class="code" href="classcsScfStringSet.html#a0">00040</a>   csScfStringSet ()
-00041   { <a class="code" href="group__scf.html#ga25">SCF_CONSTRUCT_IBASE</a> (0); }
-00042 
-<a name="l00044"></a><a class="code" href="classcsScfStringSet.html#a1">00044</a>   csScfStringSet (uint32 size) : set(size)
-00045   { <a class="code" href="group__scf.html#ga25">SCF_CONSTRUCT_IBASE</a> (0); }
-00046 
-<a name="l00048"></a><a class="code" href="classcsScfStringSet.html#a2">00048</a>   <span class="keyword">virtual</span> ~csScfStringSet()
-00049   { <a class="code" href="group__scf.html#ga27">SCF_DESTRUCT_IBASE</a>(); }
-00050 
-00055   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga23">csStringID</a> <a class="code" href="structiStringSet.html#a0">Request</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *s);
-00056 
-00061   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiStringSet.html#a0">Request</a> (csStringID <span class="keywordtype">id</span>) <span class="keyword">const</span>;
-00062 
-00066   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStringSet.html#a2">Contains</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>*) <span class="keyword">const</span>;
-00067 
-00072   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStringSet.html#a3">Clear</a> ();
-00073 };
-00074 
-00075 <span class="preprocessor">#endif // __CS_SCFSTRSET_H__</span>
+00039 <span class="keyword">public</span>:
+00040   SCF_DECLARE_IBASE;
+00041 
+<a name="l00043"></a><a class="code" href="classcsScfStringSet.html#a0">00043</a>   csScfStringSet (size_t size = 23) : set(size)
+00044   { <a class="code" href="group__scf.html#ga25">SCF_CONSTRUCT_IBASE</a> (0); }
+00045 
+<a name="l00047"></a><a class="code" href="classcsScfStringSet.html#a1">00047</a>   <span class="keyword">virtual</span> ~csScfStringSet()
+00048   { <a class="code" href="group__scf.html#ga27">SCF_DESTRUCT_IBASE</a>(); }
+00049 
+<a name="l00056"></a><a class="code" href="classcsScfStringSet.html#a2">00056</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga23">csStringID</a> <a class="code" href="structiStringSet.html#a0">Request</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* s)
+00057   { <span class="keywordflow">return</span> set.Request(s); }
+00058 
+<a name="l00064"></a><a class="code" href="classcsScfStringSet.html#a3">00064</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiStringSet.html#a0">Request</a>(csStringID <span class="keywordtype">id</span>)<span class="keyword"> const</span>
+00065 <span class="keyword">  </span>{ <span class="keywordflow">return</span> set.Request(<span class="keywordtype">id</span>); }
+00066 
+<a name="l00070"></a><a class="code" href="classcsScfStringSet.html#a4">00070</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStringSet.html#a2">Contains</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* s)<span class="keyword"> const</span>
+00071 <span class="keyword">  </span>{ <span class="keywordflow">return</span> set.Contains(s); }
+00072 
+<a name="l00078"></a><a class="code" href="classcsScfStringSet.html#a5">00078</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStringSet.html#a2">Contains</a>(csStringID <span class="keywordtype">id</span>)<span class="keyword"> const</span>
+00079 <span class="keyword">  </span>{ <span class="keywordflow">return</span> set.Contains(<span class="keywordtype">id</span>); }
+00080 
+<a name="l00085"></a><a class="code" href="classcsScfStringSet.html#a6">00085</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStringSet.html#a4">Delete</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* s)
+00086   { <span class="keywordflow">return</span> set.Delete(s); }
+00087 
+<a name="l00092"></a><a class="code" href="classcsScfStringSet.html#a7">00092</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStringSet.html#a4">Delete</a>(csStringID <span class="keywordtype">id</span>)
+00093   { <span class="keywordflow">return</span> set.Delete(<span class="keywordtype">id</span>); }
+00094 
+<a name="l00099"></a><a class="code" href="classcsScfStringSet.html#a8">00099</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStringSet.html#a6">Empty</a>()
+00100   { set.Empty(); }
+00101 
+<a name="l00106"></a><a class="code" href="classcsScfStringSet.html#a9">00106</a>   <span class="comment">/*CS_DEPRECATED_METHOD*/</span> <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStringSet.html#a7">Clear</a>()
+00107   { <span class="keywordflow">return</span> <a class="code" href="structiStringSet.html#a6">Empty</a>(); }
+00108 
+<a name="l00110"></a><a class="code" href="classcsScfStringSet.html#a10">00110</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiStringSet.html#a8">GetSize</a> ()<span class="keyword"> const</span>
+00111 <span class="keyword">  </span>{ <span class="keywordflow">return</span> set.GetSize(); }
+00112 
+<a name="l00118"></a><a class="code" href="classcsScfStringSet.html#a11">00118</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStringSet.html#a9">IsEmpty</a>()<span class="keyword"> const</span>
+00119 <span class="keyword">  </span>{ <span class="keywordflow">return</span> set.IsEmpty(); }
+00120 };
+00121 
+00122 <span class="preprocessor">#endif // __CS_SCFSTRSET_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

@@ -18,7 +18,7 @@
 <h1>iStringSet Struct Reference<br>
 <small>
 [<a class="el" href="group__util.html">Utilities</a>]</small>
-</h1>The string set is a list of strings, all with different content.  
+</h1>The string set is a collection of unique strings.  
 <a href="#_details">More...</a>
 <p>
 <code>#include &lt;<a class="el" href="iutil_2strset_8h-source.html">iutil/strset.h</a>&gt;</code>
@@ -34,31 +34,52 @@
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="group__util.html#ga23">csStringID</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a0">Request</a> (const char *)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Request the ID for the given string.  <a href="#a0"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Request the numeric ID for the given string.  <a href="#a0"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual const char *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a1">Request</a> (<a class="el" href="group__util.html#ga23">csStringID</a>) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Request the string for a given ID.  <a href="#a1"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Request the string corresponding to the given ID.  <a href="#a1"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a2">Contains</a> (char const *) const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if the set contains a particular string.  <a href="#a2"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a3">Clear</a> ()=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a3">Contains</a> (<a class="el" href="group__util.html#ga23">csStringID</a>) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Delete all stored strings.  <a href="#a3"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if the set contains a string with a particular ID.  <a href="#a3"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a4">Delete</a> (char const *)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove specified string.  <a href="#a4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a5">Delete</a> (<a class="el" href="group__util.html#ga23">csStringID</a>)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove a string with the specified ID.  <a href="#a5"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a6">Empty</a> ()=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove all stored strings.  <a href="#a6"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a7">Clear</a> ()=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove all stored strings.  <a href="#a7"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a8">GetSize</a> () const =0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of elements in the hash.  <a href="#a8"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiStringSet.html#a9">IsEmpty</a> () const =0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return true if the hash is empty.  <a href="#a9"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-The string set is a list of strings, all with different content. 
+The string set is a collection of unique strings. 
 <p>
-Each string has an ID number. The most important operation is to request a string, which means to return the ID for the string, adding it to the list if it is not already there.<p>
-To obtain the default string set (to be used when string ID are shared by multiple plugins, e.g. as done in the shader system) use a code snippet similar to the following:<p>
+Each string has an ID number. The most important operation is to request a string, which means to return the ID for the string, adding it to the collection if not already present. This is useful when you need to work with strings but want the performance characteristics of simple numeric comparisons. Rather than performing string comparisons, you instead compare the numeric string ID's.<p>
+As a convenience, the <a class="el" href="classcsInitializer.html">csInitializer</a> class creates a string set at application initialization time and inserts it into the global object registry (<a class="el" href="structiObjectRegistry.html">iObjectRegistry</a>). To obtain a reference this shared string set (which may be desirable when modules need to share string ID's), use a code snippet similar to the following:<p>
 <div class="fragment"><pre class="fragment"> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg = ...;
- <a class="code" href="classcsRef.html">csRef&lt;iStringSet&gt;</a> Strings = CS_QUERY_REGISTRY_TAG_INTERFACE (
+ <a class="code" href="classcsRef.html">csRef&lt;iStringSet&gt;</a> strings = CS_QUERY_REGISTRY_TAG_INTERFACE(
    object_reg, <span class="stringliteral">"crystalspace.shared.stringset"</span>, <a class="code" href="structiStringSet.html">iStringSet</a>);
-</pre></div>
+</pre></div><p>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="classcsStringHash.html">csStringHash</a> <p>
+<a class="el" href="classcsStringSet.html">csStringSet</a> </dd></dl>
+
 <p>
 
 <p>
-Definition at line <a class="el" href="iutil_2strset_8h-source.html#l00058">58</a> of file <a class="el" href="iutil_2strset_8h-source.html">strset.h</a>.<hr><h2>Member Function Documentation</h2>
-<a class="anchor" name="a3" doxytag="iStringSet::Clear"></a><p>
+Definition at line <a class="el" href="iutil_2strset_8h-source.html#l00065">65</a> of file <a class="el" href="iutil_2strset_8h-source.html">strset.h</a>.<hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="a7" doxytag="iStringSet::Clear"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -82,11 +103,45 @@ Definition at line <a class="el" href="iutil_2strset_8h-source.html#l00058">58</
     <td>
 
 <p>
-Delete all stored strings. 
+Remove all stored strings. 
 <p>
-When new strings are registered again, new ID values will be used, not the old ones reused. 
+<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000032">Deprecated:</a></b></dt><dd>Use <a class="el" href="structiStringSet.html#a6">Empty()</a> instead. </dd></dl>
+
 <p>
-Implemented in <a class="el" href="classcsScfStringSet.html#a6">csScfStringSet</a>.    </td>
+Implemented in <a class="el" href="classcsScfStringSet.html#a9">csScfStringSet</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a3" doxytag="iStringSet::Contains"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual bool iStringSet::Contains           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="group__util.html#ga23">csStringID</a>&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Check if the set contains a string with a particular ID. 
+<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>This is rigidly equivalent to <code>return Request(id) != NULL</code>, but more idomatic. </dd></dl>
+
+<p>
+Implemented in <a class="el" href="classcsScfStringSet.html#a5">csScfStringSet</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a2" doxytag="iStringSet::Contains"></a><p>
@@ -118,7 +173,169 @@ Check if the set contains a particular string.
 <p>
 
 <p>
-Implemented in <a class="el" href="classcsScfStringSet.html#a5">csScfStringSet</a>.    </td>
+Implemented in <a class="el" href="classcsScfStringSet.html#a4">csScfStringSet</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a5" doxytag="iStringSet::Delete"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual bool iStringSet::Delete           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="group__util.html#ga23">csStringID</a>&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Remove a string with the specified ID. 
+<p>
+<dl compact><dt><b>Returns:</b></dt><dd>True if a matching string was in thet set; else false. </dd></dl>
+
+<p>
+Implemented in <a class="el" href="classcsScfStringSet.html#a7">csScfStringSet</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a4" doxytag="iStringSet::Delete"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual bool iStringSet::Delete           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">char const *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Remove specified string. 
+<p>
+<dl compact><dt><b>Returns:</b></dt><dd>True if a matching string was in thet set; else false. </dd></dl>
+
+<p>
+Implemented in <a class="el" href="classcsScfStringSet.html#a6">csScfStringSet</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a6" doxytag="iStringSet::Empty"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual void iStringSet::Empty           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Remove all stored strings. 
+<p>
+When new strings are registered again, new ID values will be used; the old ID's will not be re-used. 
+<p>
+Implemented in <a class="el" href="classcsScfStringSet.html#a8">csScfStringSet</a>.
+<p>
+Referenced by <a class="el" href="scfstrset_8h-source.html#l00106">csScfStringSet::Clear()</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a8" doxytag="iStringSet::GetSize"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual size_t iStringSet::GetSize           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Get the number of elements in the hash. 
+<p>
+
+<p>
+Implemented in <a class="el" href="classcsScfStringSet.html#a10">csScfStringSet</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a9" doxytag="iStringSet::IsEmpty"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual bool iStringSet::IsEmpty           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Return true if the hash is empty. 
+<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>Rigidly equivalent to <code>return <a class="el" href="structiStringSet.html#a8">GetSize()</a> == 0</code>, but more idiomatic. </dd></dl>
+
+<p>
+Implemented in <a class="el" href="classcsScfStringSet.html#a11">csScfStringSet</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a1" doxytag="iStringSet::Request"></a><p>
@@ -146,11 +363,12 @@ Implemented in <a class="el" href="classcsScfStringSet.html#a5">csScfStringSet</
     <td>
 
 <p>
-Request the string for a given ID. 
+Request the string corresponding to the given ID. 
 <p>
-Return 0 if the string has not been requested (yet). 
+<dl compact><dt><b>Returns:</b></dt><dd>Null if the string * has not been requested (yet), else the string corresponding to the ID. </dd></dl>
+
 <p>
-Implemented in <a class="el" href="classcsScfStringSet.html#a4">csScfStringSet</a>.    </td>
+Implemented in <a class="el" href="classcsScfStringSet.html#a3">csScfStringSet</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a0" doxytag="iStringSet::Request"></a><p>
@@ -178,11 +396,13 @@ Implemented in <a class="el" href="classcsScfStringSet.html#a4">csScfStringSet</
     <td>
 
 <p>
-Request the ID for the given string. 
+Request the numeric ID for the given string. 
 <p>
-Create a new ID if the string was never requested before. 
+<dl compact><dt><b>Returns:</b></dt><dd>The ID of the string. </dd></dl>
+<dl compact><dt><b>Remarks:</b></dt><dd>Creates a new ID if the string is not yet present in the set, else returns the previously assigned ID. </dd></dl>
+
 <p>
-Implemented in <a class="el" href="classcsScfStringSet.html#a3">csScfStringSet</a>.    </td>
+Implemented in <a class="el" href="classcsScfStringSet.html#a2">csScfStringSet</a>.    </td>
   </tr>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>

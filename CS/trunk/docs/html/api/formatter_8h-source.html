@@ -72,7 +72,7 @@
 00067     startLen (length) { Reset(); }
 <a name="l00069"></a><a class="code" href="classcsFmtDefaultReader.html#a1">00069</a>   <span class="keywordtype">bool</span> GetNext (utf32_char&amp; ch) 
 00070   {
-00071     <span class="keywordtype">int</span> n = <a class="code" href="classcsUnicodeTransform.html#z547_3">csUnicodeTransform::Decode</a> (str, len, ch);
+00071     <span class="keywordtype">int</span> n = <a class="code" href="classcsUnicodeTransform.html#z549_3">csUnicodeTransform::Decode</a> (str, len, ch);
 00072     <span class="keywordflow">if</span> (n == 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
 00073     str += (size_t)n;
 00074     len -= (size_t)n;
@@ -94,7 +94,7 @@
 00098     total (0) {}
 <a name="l00100"></a><a class="code" href="classcsFmtDefaultWriter.html#a1">00100</a>   <span class="keywordtype">void</span> Put (utf32_char ch) 
 00101   { 
-00102     size_t n = (size_t)<a class="code" href="classcsUnicodeTransform.html#z548_3">csUnicodeTransform::Encode</a> (ch, dest, size);
+00102     size_t n = (size_t)<a class="code" href="classcsUnicodeTransform.html#z550_3">csUnicodeTransform::Encode</a> (ch, dest, size);
 00103     total += n;
 00104     n = <a class="code" href="group__geom__utils.html#ga6">csMin</a> (size, n);
 00105     dest += n;
@@ -111,7 +111,7 @@
 00124   <span class="keyword">public</span>:
 00125     <span class="keywordtype">void</span> WriteTo (Twriter&amp; writer, size_t offset = 0, size_t len = (size_t)~0)
 00126     {
-00127       <span class="keyword">const</span> size_t n = MIN (len, <a class="code" href="classcsArray.html#a4">Length</a>());
+00127       <span class="keyword">const</span> size_t n = MIN (len, <a class="code" href="classcsArray.html#a5">Length</a>());
 00128       <span class="keywordflow">for</span> (size_t i = offset; i &lt; n; i++) writer.Put (Get (i));
 00129     }
 00130   };
@@ -542,7 +542,7 @@
 00557               reader.GetPosition() - state.fmtBegin;
 00558             <span class="keywordflow">if</span> (state.currentFormat.conversion != convNone)
 00559               state.currentFormat.paramIdx = state.paramIdx++;
-00560             formatSpecs.<a class="code" href="classcsArray.html#a16">Push</a> (state.currentFormat);
+00560             formatSpecs.<a class="code" href="classcsArray.html#a17">Push</a> (state.currentFormat);
 00561 
 00562             state.Reset();
 00563           }
@@ -562,19 +562,19 @@
 00578     size_t i;
 00579     <span class="comment">// Determine order of params</span>
 00580     <a class="code" href="classcsArray.html">csArray&lt;FormatSpec*&gt;</a> paramOrder;
-00581     paramOrder.<a class="code" href="classcsArray.html#a31">SetCapacity</a> (formatSpecs.<a class="code" href="classcsArray.html#a4">Length</a>());
-00582     <span class="keywordflow">for</span> (i = 0; i &lt; formatSpecs.<a class="code" href="classcsArray.html#a4">Length</a>(); i++)
+00581     paramOrder.<a class="code" href="classcsArray.html#a34">SetCapacity</a> (formatSpecs.<a class="code" href="classcsArray.html#a5">Length</a>());
+00582     <span class="keywordflow">for</span> (i = 0; i &lt; formatSpecs.<a class="code" href="classcsArray.html#a5">Length</a>(); i++)
 00583     {
 00584       FormatSpec&amp; currentFormat = formatSpecs[i];
 00585       <span class="keywordflow">if</span> (currentFormat.conversion == convNone) <span class="keywordflow">continue</span>;
-00586       <span class="keywordflow">if</span> (paramOrder.<a class="code" href="classcsArray.html#a4">Length</a>() &lt;= (size_t)currentFormat.paramIdx)
-00587         paramOrder.<a class="code" href="classcsArray.html#a7">SetLength</a> (currentFormat.paramIdx + 1, 0);
+00586       <span class="keywordflow">if</span> (paramOrder.<a class="code" href="classcsArray.html#a5">Length</a>() &lt;= (size_t)currentFormat.paramIdx)
+00587         paramOrder.<a class="code" href="classcsArray.html#z544_0">SetLength</a> (currentFormat.paramIdx + 1, 0);
 00588       paramOrder[currentFormat.paramIdx] = &amp;currentFormat;
 00589     }
 00590     <span class="comment">// Fetch params from stack in order, store at correct place in params array</span>
-00591     <span class="keywordflow">for</span> (i = 0; i &lt; paramOrder.<a class="code" href="classcsArray.html#a4">Length</a>(); i++)
+00591     <span class="keywordflow">for</span> (i = 0; i &lt; paramOrder.<a class="code" href="classcsArray.html#a5">Length</a>(); i++)
 00592     {
-00593       FmtParam&amp; param = params.<a class="code" href="classcsArray.html#a11">GetExtend</a> (i);
+00593       FmtParam&amp; param = params.<a class="code" href="classcsArray.html#a12">GetExtend</a> (i);
 00594       FormatSpec* fmtPtr = paramOrder[i];
 00595       <span class="keywordflow">if</span> (fmtPtr == 0) 
 00596       {
@@ -700,7 +700,7 @@
 00717     <span class="keywordflow">while</span> (len &gt; 0)
 00718     {
 00719       <a class="code" href="group__util.html#ga22">utf32_char</a> ch;
-00720       <span class="keywordtype">int</span> n = <a class="code" href="classcsUnicodeTransform.html#z547_3">csUnicodeTransform::Decode</a> (stringPtr, len, ch);
+00720       <span class="keywordtype">int</span> n = <a class="code" href="classcsUnicodeTransform.html#z549_3">csUnicodeTransform::Decode</a> (stringPtr, len, ch);
 00721       scratch.Push (ch);
 00722       stringPtr += n;
 00723       len -= (size_t)n;
@@ -1096,14 +1096,14 @@
 01125     reader.Reset();
 01126     size_t i = 0;
 01127     <a class="code" href="group__util.html#ga22">utf32_char</a> ch;
-01128     <span class="keywordflow">while</span> (i &lt; formatSpecs.<a class="code" href="classcsArray.html#a4">Length</a>())
+01128     <span class="keywordflow">while</span> (i &lt; formatSpecs.<a class="code" href="classcsArray.html#a5">Length</a>())
 01129     {
 01130       <span class="keyword">const</span> FormatSpec&amp; currentFormat = formatSpecs[i];
 01131       size_t n;
 01132       <span class="keywordflow">for</span> (n = 0; n &lt; currentFormat.copyRun; n++)
 01133       {
 01134         <span class="keywordflow">if</span> (!reader.GetNext (ch)) <span class="keywordflow">break</span>;
-01135         writer.<a class="code" href="classcsArray.html#a14">Put</a> (ch);
+01135         writer.<a class="code" href="classcsArray.html#a15">Put</a> (ch);
 01136       }
 01137 
 01138       <span class="keywordflow">switch</span> (currentFormat.conversion)
@@ -1120,7 +1120,7 @@
 01149           <span class="keywordflow">break</span>;
 01150         <span class="keywordflow">case</span> convChar:
 01151           {
-01152             writer.<a class="code" href="classcsArray.html#a14">Put</a> (params[currentFormat.paramIdx].vInt);
+01152             writer.<a class="code" href="classcsArray.html#a15">Put</a> (params[currentFormat.paramIdx].vInt);
 01153           }
 01154           <span class="keywordflow">break</span>;
 01155         <span class="keywordflow">case</span> convInt:
@@ -1334,8 +1334,8 @@
 01363       i++;
 01364     }
 01365     <span class="keywordflow">while</span> (reader.GetNext (ch))
-01366       writer.<a class="code" href="classcsArray.html#a14">Put</a> (ch);
-01367     writer.<a class="code" href="classcsArray.html#a14">Put</a> (0);
+01366       writer.<a class="code" href="classcsArray.html#a15">Put</a> (ch);
+01367     writer.<a class="code" href="classcsArray.html#a15">Put</a> (0);
 01368   }
 01369 };
 01370 

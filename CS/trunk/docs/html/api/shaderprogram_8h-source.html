@@ -76,85 +76,83 @@
 00057   <a class="code" href="classcsRef.html">csRef&lt;iSyntaxService&gt;</a> synsrv;
 00058   <a class="code" href="classcsRef.html">csRef&lt;iStringSet&gt;</a> strings;
 00059 
-00060   <span class="keyword">struct </span>VariableMapEntry : <span class="keyword">public</span> csShaderVarMapping
+00060   <span class="keyword">enum</span> ProgramParamType
 00061   {
-00062     <span class="comment">// Variables that can be resolved statically at shader load</span>
-00063     <span class="comment">// or compilation is put in "statlink"</span>
-00064     <a class="code" href="classcsRef.html">csRef&lt;csShaderVariable&gt;</a> statlink;
-00065     <span class="keywordtype">int</span> userInt;
-00066     <span class="keywordtype">void</span>* userPtr;
-00067 
-00068     VariableMapEntry (csStringID s, <span class="keyword">const</span> <span class="keywordtype">char</span>* d) : 
-00069       csShaderVarMapping (s, d)
-00070     { 
-00071       userInt = 0;
-00072       userPtr = 0;
-00073     }
-00074     VariableMapEntry (<span class="keyword">const</span> csShaderVarMapping&amp; other) :
-00075       csShaderVarMapping (other.name, other.destination)
-00076     {
-00077       userInt = 0;
-00078       userPtr = 0;
-00079     }
-00080   };
-00081   <a class="code" href="classcsArray.html">csArray&lt;VariableMapEntry&gt;</a> variablemap;
-00082 
-00083   <span class="keyword">struct </span>ProgramParam
-00084   {
-00085     <span class="keywordtype">bool</span> valid;
-00086     <a class="code" href="classcsVector4.html">csVector4</a> vectorValue;
-00087     <a class="code" href="classcsMatrix3.html">csMatrix3</a> matrixValue;
-00088     <a class="code" href="group__util.html#ga23">csStringID</a> name;
-00089     <a class="code" href="classcsRef.html">csRef&lt;csShaderVariable&gt;</a> var;
-00090 
-00091     ProgramParam() : valid (false), vectorValue (0.0f), 
-00092       name(<a class="code" href="group__util.html#ga24">csInvalidStringID</a>) { }
-00093     ProgramParam(<span class="keyword">const</span> <a class="code" href="classcsVector4.html">csVector4</a>&amp; def) : valid (false), 
-00094       vectorValue (def), name(<a class="code" href="group__util.html#ga24">csInvalidStringID</a>) { }
-00095   };
-00096   <span class="keyword">enum</span> ProgramParamType
-00097   {
-00098     ParamInvalid    = 0,
-00099     ParamFloat      = 0x01,
-00100     ParamVector2    = 0x02,
-00101     ParamVector3    = 0x04,
-00102     ParamVector4    = 0x08,
-00103     ParamMatrix     = 0x10
-00104   };
-00105   <span class="keywordtype">void</span> ResolveParamStatic (ProgramParam&amp; param,
-00106     <a class="code" href="classcsArray.html">csArray&lt;iShaderVariableContext*&gt;</a> &amp;staticContexts);
-00107   <span class="keywordtype">bool</span> ParseProgramParam (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node,
-00108     ProgramParam&amp; param, uint types = ~0);
-00109   <span class="keywordtype">bool</span> RetrieveParamValue (ProgramParam&amp; param, 
-00110     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a>&amp; stacks);
-00111 
-00112   <span class="keywordtype">char</span>* description;
-00113   <a class="code" href="classcsRef.html">csRef&lt;iDocumentNode&gt;</a> programNode;
-00114   <a class="code" href="classcsRef.html">csRef&lt;iFile&gt;</a> programFile;
-00115   <a class="code" href="classcsString.html">csString</a> programFileName;
-00120   <span class="keywordtype">bool</span> doVerbose;
+00062     ParamInvalid    = 0,
+00063     ParamFloat      = 0x01,
+00064     ParamVector2    = 0x02,
+00065     ParamVector3    = 0x04,
+00066     ParamVector4    = 0x08,
+00067     ParamMatrix     = 0x10
+00068   };
+00069   <span class="keyword">struct </span>ProgramParam
+00070   {
+00071     <span class="keywordtype">bool</span> valid;
+00072     <a class="code" href="classcsVector4.html">csVector4</a> vectorValue;
+00073     <a class="code" href="classcsMatrix3.html">csMatrix3</a> matrixValue;
+00074     <a class="code" href="group__util.html#ga23">csStringID</a> name;
+00075     <a class="code" href="classcsRef.html">csRef&lt;csShaderVariable&gt;</a> var;
+00076     ProgramParamType type;
+00077 
+00078     ProgramParam() : valid (false), vectorValue (0.0f), 
+00079       name(<a class="code" href="group__util.html#ga24">csInvalidStringID</a>) { }
+00080     ProgramParam(<span class="keyword">const</span> <a class="code" href="classcsVector4.html">csVector4</a>&amp; def) : valid (false), 
+00081       vectorValue (def), name(<a class="code" href="group__util.html#ga24">csInvalidStringID</a>) { }
+00082   };
+00083   <span class="keywordtype">void</span> ResolveParamStatic (ProgramParam&amp; param,
+00084     <a class="code" href="classcsArray.html">csArray&lt;iShaderVariableContext*&gt;</a> &amp;staticContexts);
+00085   <span class="keywordtype">bool</span> ParseProgramParam (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node,
+00086     ProgramParam&amp; param, uint types = ~0);
+00087   <span class="keywordtype">bool</span> RetrieveParamValue (ProgramParam&amp; param, 
+00088     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a>&amp; stacks);
+00089 
+00090   <span class="keyword">struct </span>VariableMapEntry : <span class="keyword">public</span> csShaderVarMapping
+00091   {
+00092     ProgramParam mappingParam;
+00093     <a class="code" href="group__util.html#ga8">intptr_t</a> userVal;
+00094 
+00095     VariableMapEntry (csStringID s, <span class="keyword">const</span> <span class="keywordtype">char</span>* d) : 
+00096       csShaderVarMapping (s, d)
+00097     { 
+00098       userVal = 0;
+00099       mappingParam.name = s;
+00100     }
+00101     VariableMapEntry (<span class="keyword">const</span> csShaderVarMapping&amp; other) :
+00102       csShaderVarMapping (other.name, other.destination)
+00103     {
+00104       userVal = 0;
+00105       mappingParam.name = other.name;
+00106     }
+00107   };
+00108   <a class="code" href="classcsArray.html">csArray&lt;VariableMapEntry&gt;</a> variablemap;
+00109 
+00110   <span class="keywordtype">char</span>* description;
+00111   <a class="code" href="classcsRef.html">csRef&lt;iDocumentNode&gt;</a> programNode;
+00112   <a class="code" href="classcsRef.html">csRef&lt;iFile&gt;</a> programFile;
+00113   <a class="code" href="classcsString.html">csString</a> programFileName;
+00118   <span class="keywordtype">bool</span> doVerbose;
+00119 
+00120   <a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a> svcontext;
 00121 
-00122   <a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a> svcontext;
-00123 
-00124   <span class="keywordtype">bool</span> ParseCommon (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* child);
-00125   <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* GetProgramNode ();
-00126   <a class="code" href="classcsPtr.html">csPtr&lt;iDataBuffer&gt;</a> GetProgramData ();
-00127   <span class="keywordtype">void</span> ResolveStaticVars (<a class="code" href="classcsArray.html">csArray&lt;iShaderVariableContext*&gt;</a> &amp;staticContexts);
-00128   <span class="keywordtype">void</span> DumpProgramInfo (<a class="code" href="classcsString.html">csString</a>&amp; output);
-00129   <span class="keywordtype">void</span> DumpVariableMappings (<a class="code" href="classcsString.html">csString</a>&amp; output);
-00130 <span class="keyword">public</span>:
-00131   SCF_DECLARE_IBASE;
+00122   <span class="keywordtype">bool</span> ParseCommon (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* child);
+00123   <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* GetProgramNode ();
+00124   <a class="code" href="classcsPtr.html">csPtr&lt;iDataBuffer&gt;</a> GetProgramData ();
+00125   <span class="keywordtype">void</span> ResolveStaticVars (<a class="code" href="classcsArray.html">csArray&lt;iShaderVariableContext*&gt;</a> &amp;staticContexts);
+00126   <span class="keywordtype">void</span> DumpProgramInfo (<a class="code" href="classcsString.html">csString</a>&amp; output);
+00127   <span class="keywordtype">void</span> DumpVariableMappings (<a class="code" href="classcsString.html">csString</a>&amp; output);
+00128 <span class="keyword">public</span>:
+00129   SCF_DECLARE_IBASE;
+00130 
+00131   CS_LEAKGUARD_DECLARE (csShaderProgram);
 00132 
-00133   CS_LEAKGUARD_DECLARE (csShaderProgram);
-00134 
-00135   csShaderProgram (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* objectReg);
-00136   <span class="keyword">virtual</span> ~csShaderProgram ();
-00137 
-00138   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiShaderTUResolver.html#a0">ResolveTextureBinding</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* binding)
-00139   { <span class="keywordflow">return</span> -1; }
-00140 };
-00141 
-00142 <span class="preprocessor">#endif // __CS_SHADERPLUGINS_COMMON_SHADERPROGRAM_H__</span>
+00133   csShaderProgram (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* objectReg);
+00134   <span class="keyword">virtual</span> ~csShaderProgram ();
+00135 
+00136   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiShaderTUResolver.html#a0">ResolveTextureBinding</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* binding)
+00137   { <span class="keywordflow">return</span> -1; }
+00138 };
+00139 
+00140 <span class="preprocessor">#endif // __CS_SHADERPLUGINS_COMMON_SHADERPROGRAM_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
