@@ -87,9 +87,9 @@
 00090 <span class="preprocessor"></span>
 00091 <span class="preprocessor">#ifdef CS_HAVE_INT64_C</span>
 00092 <span class="preprocessor"></span>
-<a name="l00098"></a><a class="code" href="group__util.html#ga117">00098</a> <span class="preprocessor">#define CONST_INT64(x) INT64_C(x)</span>
+<a name="l00098"></a><a class="code" href="group__util.html#ga118">00098</a> <span class="preprocessor">#define CONST_INT64(x) INT64_C(x)</span>
 00099 <span class="preprocessor"></span>
-<a name="l00105"></a><a class="code" href="group__util.html#ga118">00105</a> <span class="preprocessor">#define CONST_UINT64(x) UINT64_C(x)</span>
+<a name="l00105"></a><a class="code" href="group__util.html#ga119">00105</a> <span class="preprocessor">#define CONST_UINT64(x) UINT64_C(x)</span>
 00106 <span class="preprocessor"></span>
 00107 <span class="preprocessor">#else // CS_HAVE_INT64_C</span>
 00108 <span class="preprocessor"></span>
@@ -130,32 +130,61 @@
 00151 <span class="preprocessor">#endif</span>
 00152 <span class="preprocessor"></span>
 00153 
-00154 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
-00155 <span class="preprocessor"></span><span class="preprocessor">#ifndef __STRICT_ANSI__</span>
-00156 <span class="preprocessor"></span>
-<a name="l00159"></a><a class="code" href="group__util.html#ga13">00159</a> <span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> longlong;
-<a name="l00163"></a><a class="code" href="group__util.html#ga14">00163</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> ulonglong;
-00164 <span class="preprocessor">#else</span>
-00165 <span class="preprocessor"></span><span class="comment">// @@@ Correct?</span>
-00166 <span class="keyword">typedef</span> <a class="code" href="group__util.html#ga7">int64</a> longlong;
-00167 <span class="keyword">typedef</span> <a class="code" href="group__util.html#ga6">uint64</a> ulonglong;
-00168 <span class="preprocessor">#endif</span>
-00169 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_COMPILER_MSVC) || defined(CS_COMPILER_BCC)</span>
-00170 <span class="preprocessor"></span><span class="keyword">typedef</span> <a class="code" href="group__util.html#ga7">int64</a> longlong;
-00171 <span class="keyword">typedef</span> <a class="code" href="group__util.html#ga6">uint64</a> ulonglong;
-00172 <span class="preprocessor">#else</span>
-00173 <span class="preprocessor"></span><span class="preprocessor">#ifdef CS_HAVE_STDINT_H</span>
-00174 <span class="preprocessor"></span><span class="keyword">typedef</span> int_least64_t longlong;
-00175 <span class="keyword">typedef</span> uint_least64_t ulonglong;
-00176 <span class="preprocessor">#else </span>
-00177 <span class="preprocessor"></span><span class="preprocessor">#warning Do not know how to declare (u)longlong types</span>
-00178 <span class="preprocessor"></span><span class="preprocessor">#endif </span>
-00179 <span class="preprocessor"></span><span class="preprocessor">#endif </span>
-00180 <span class="preprocessor"></span>
-<a name="l00187"></a><a class="code" href="group__util.html#ga15">00187</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> csTicks;
-00188 
-<a name="l00190"></a><a class="code" href="group__util.html#ga16">00190</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> uint;
-00195 <span class="preprocessor">#endif // __CS_CSTYPES_H__</span>
+00154 <span class="comment">// Provide wchar_t and wint_t. If the configure script determined that these</span>
+00155 <span class="comment">// types exist in the standard headers, then just employ those types.  For</span>
+00156 <span class="comment">// MSVC, where the configure script is not used, check &lt;stddef.h&gt;, &lt;wchar.h&gt;,</span>
+00157 <span class="comment">// and &lt;wctype.h&gt;, which are three of several headers which may provide these</span>
+00158 <span class="comment">// types. We can tell if these headers provided the types by checking if</span>
+00159 <span class="comment">// _WCHAR_T_DEFINED and _WCTYPE_T_DEFINED have been #defined; newer versions of</span>
+00160 <span class="comment">// MSVC will provide them; older ones will not.  If all else fails, then we</span>
+00161 <span class="comment">// fake up these types on our own. glibc also #defines _WINT_T when wint_t is</span>
+00162 <span class="comment">// available, so we double-check that, as well.</span>
+00163 <span class="preprocessor">#include &lt;stddef.h&gt;</span>
+00164 <span class="preprocessor">#if defined(CS_HAVE_WCHAR_H)</span>
+00165 <span class="preprocessor"></span><span class="preprocessor">#include &lt;wchar.h&gt;</span>
+00166 <span class="preprocessor">#endif</span>
+00167 <span class="preprocessor"></span><span class="preprocessor">#if defined(CS_HAVE_WCTYPE_H)</span>
+00168 <span class="preprocessor"></span><span class="preprocessor">#include &lt;wctype.h&gt;</span>
+00169 <span class="preprocessor">#endif</span>
+00170 <span class="preprocessor"></span><span class="preprocessor">#if !defined(CS_HAVE_WCHAR_T) &amp;&amp; !defined(_WCHAR_T_DEFINED)</span>
+00171 <span class="preprocessor"></span><span class="keyword">typedef</span> <a class="code" href="group__util.html#ga2">uint16</a> wchar_t;
+00172 <span class="preprocessor">#define _WCHAR_T_DEFINED</span>
+00173 <span class="preprocessor"></span><span class="preprocessor">#define CS_WCHAR_T_SIZE 2</span>
+00174 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00175 <span class="preprocessor"></span><span class="preprocessor">#if !defined(CS_HAVE_WINT_T) &amp;&amp; !defined(_WCTYPE_T_DEFINED) &amp;&amp; \</span>
+00176 <span class="preprocessor">    !defined(_WINT_T)</span>
+00177 <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">wchar_t</span> wint_t;
+00178 <span class="preprocessor">#define _WCTYPE_T_DEFINED</span>
+00179 <span class="preprocessor"></span><span class="preprocessor">#define _WINT_T</span>
+00180 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00181 <span class="preprocessor"></span>
+00182 
+00183 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
+00184 <span class="preprocessor"></span><span class="preprocessor">#ifndef __STRICT_ANSI__</span>
+00185 <span class="preprocessor"></span>
+<a name="l00188"></a><a class="code" href="group__util.html#ga15">00188</a> <span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> longlong;
+<a name="l00192"></a><a class="code" href="group__util.html#ga16">00192</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> ulonglong;
+00193 <span class="preprocessor">#else</span>
+00194 <span class="preprocessor"></span><span class="comment">// @@@ Correct?</span>
+00195 <span class="keyword">typedef</span> <a class="code" href="group__util.html#ga7">int64</a> longlong;
+00196 <span class="keyword">typedef</span> <a class="code" href="group__util.html#ga6">uint64</a> ulonglong;
+00197 <span class="preprocessor">#endif</span>
+00198 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_COMPILER_MSVC) || defined(CS_COMPILER_BCC)</span>
+00199 <span class="preprocessor"></span><span class="keyword">typedef</span> <a class="code" href="group__util.html#ga7">int64</a> longlong;
+00200 <span class="keyword">typedef</span> <a class="code" href="group__util.html#ga6">uint64</a> ulonglong;
+00201 <span class="preprocessor">#else</span>
+00202 <span class="preprocessor"></span><span class="preprocessor">#ifdef CS_HAVE_STDINT_H</span>
+00203 <span class="preprocessor"></span><span class="keyword">typedef</span> int_least64_t longlong;
+00204 <span class="keyword">typedef</span> uint_least64_t ulonglong;
+00205 <span class="preprocessor">#else </span>
+00206 <span class="preprocessor"></span><span class="preprocessor">#warning Do not know how to declare (u)longlong types</span>
+00207 <span class="preprocessor"></span><span class="preprocessor">#endif </span>
+00208 <span class="preprocessor"></span><span class="preprocessor">#endif </span>
+00209 <span class="preprocessor"></span>
+<a name="l00216"></a><a class="code" href="group__util.html#ga17">00216</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> csTicks;
+00217 
+<a name="l00219"></a><a class="code" href="group__util.html#ga18">00219</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> uint;
+00224 <span class="preprocessor">#endif // __CS_CSTYPES_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

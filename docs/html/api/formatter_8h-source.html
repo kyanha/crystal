@@ -18,1316 +18,1313 @@
 <div class="nav">
 <a class="el" href="dir_000022.html">csutil</a></div>
 <h1>formatter.h</h1><a href="formatter_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
-00002 <span class="comment">    Copyright (C) 2005 by Jorrit Tyberghein</span>
-00003 <span class="comment">              (C) 2005 by Frank Richter</span>
-00004 <span class="comment"></span>
-00005 <span class="comment">    This library is free software; you can redistribute it and/or</span>
-00006 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
-00007 <span class="comment">    License as published by the Free Software Foundation; either</span>
-00008 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
-00009 <span class="comment"></span>
-00010 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
-00011 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-00012 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
-00013 <span class="comment">    Library General Public License for more details.</span>
-00014 <span class="comment"></span>
-00015 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
-00016 <span class="comment">    License along with this library; if not, write to the Free</span>
-00017 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
-00018 <span class="comment">*/</span>
-00019 
-00020 <span class="preprocessor">#ifndef __CS_CSUTIL_FORMATTER_H__</span>
-00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_FORMATTER_H__</span>
-00022 <span class="preprocessor"></span>
-00026 <span class="preprocessor">#include "<a class="code" href="csuctransform_8h.html">csutil/csuctransform.h</a>"</span>
-00027 <span class="preprocessor">#include "<a class="code" href="dirtyaccessarray_8h.html">csutil/dirtyaccessarray.h</a>"</span>
-00028 <span class="preprocessor">#include "<a class="code" href="util_8h.html">csutil/util.h</a>"</span>
-00029 <span class="preprocessor">#include "<a class="code" href="math_8h.html">csgeom/math.h</a>"</span>
-00030 
-00039 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00040"></a><a class="code" href="classcsFmtDefaultReader.html">00040</a> <span class="keyword">class </span><a class="code" href="classcsFmtDefaultReader.html">csFmtDefaultReader</a>
-00041 {
-00042   <span class="keyword">const</span> T* str;
-00043   <span class="keyword">const</span> T* <span class="keyword">const</span> startStr;
-00044   size_t len;
-00045   <span class="keyword">const</span> size_t startLen;
-00046 <span class="keyword">public</span>:
-<a name="l00048"></a><a class="code" href="classcsFmtDefaultReader.html#a0">00048</a>   <a class="code" href="classcsFmtDefaultReader.html">csFmtDefaultReader</a> (<span class="keyword">const</span> T* string, size_t length) : startStr (string), 
-00049     startLen (length) { Reset(); }
-<a name="l00051"></a><a class="code" href="classcsFmtDefaultReader.html#a1">00051</a>   <span class="keywordtype">bool</span> GetNext (utf32_char&amp; ch) 
-00052   {
-00053     <span class="keywordtype">int</span> n = <a class="code" href="classcsUnicodeTransform.html#z580_3">csUnicodeTransform::Decode</a> (str, len, ch);
-00054     <span class="keywordflow">if</span> (n == 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00055     str += (size_t)n;
-00056     len -= (size_t)n;
-00057     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00058   }
-<a name="l00060"></a><a class="code" href="classcsFmtDefaultReader.html#a2">00060</a>   <span class="keywordtype">void</span> Reset() { str = startStr; len = startLen; }
-<a name="l00062"></a><a class="code" href="classcsFmtDefaultReader.html#a3">00062</a>   size_t GetPosition()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> str - startStr; }
-00063 };
-00064 
-00065 
-00071 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00072"></a><a class="code" href="classcsFmtDefaultWriter.html">00072</a> <span class="keyword">class </span><a class="code" href="classcsFmtDefaultWriter.html">csFmtDefaultWriter</a>
-00073 {
-00074   T* dest;
-00075   size_t size;
-00076   size_t total;
-00077 <span class="keyword">public</span>:
-<a name="l00079"></a><a class="code" href="classcsFmtDefaultWriter.html#a0">00079</a>   <a class="code" href="classcsFmtDefaultWriter.html">csFmtDefaultWriter</a> (T* dest, size_t size) : dest (dest), size (size), 
-00080     total (0) {}
-<a name="l00082"></a><a class="code" href="classcsFmtDefaultWriter.html#a1">00082</a>   <span class="keywordtype">void</span> Put (utf32_char ch) 
-00083   { 
-00084     size_t n = (size_t)<a class="code" href="classcsUnicodeTransform.html#z581_3">csUnicodeTransform::Encode</a> (ch, dest, size);
-00085     total += n;
-00086     n = <a class="code" href="group__geom__utils.html#ga6">csMin</a> (size, n);
-00087     dest += n;
-00088     size -= n;
-00089   }
-<a name="l00094"></a><a class="code" href="classcsFmtDefaultWriter.html#a2">00094</a>   size_t GetTotal()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> total; }
-00095 };
-00096 
-00101 <span class="keyword">template</span> &lt;<span class="keyword">class</span> Twriter, <span class="keyword">class</span> Treader&gt;
-<a name="l00102"></a><a class="code" href="classcsPrintfFormatter.html">00102</a> <span class="keyword">class </span><a class="code" href="classcsPrintfFormatter.html">csPrintfFormatter</a>
-00103 {
-00104   <span class="keyword">class </span>Scratch : <span class="keyword">public</span> <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray</a>&lt;utf32_char&gt;
-00105   {
-00106   <span class="keyword">public</span>:
-00107     <span class="keywordtype">void</span> WriteTo (Twriter&amp; writer, size_t offset = 0, size_t len = (size_t)~0)
-00108     {
-00109       <span class="keyword">const</span> size_t n = MIN (len, <a class="code" href="classcsArray.html#a4">Length</a>());
-00110       <span class="keywordflow">for</span> (size_t i = offset; i &lt; n; i++) writer.Put (Get (i));
-00111     }
-00112   };
-00113   Scratch scratch;
-00114 
-00116   <span class="keyword">struct </span>FmtParam
-00117   {
-00118     <span class="keyword">union</span>
-00119 <span class="keyword">    </span>{
-00120       <span class="keywordtype">int</span> vInt;
-00121       <span class="keywordtype">void</span>* vPtr;
-00122       <span class="keywordtype">long</span> vLong;
-00123       <a class="code" href="group__util.html#ga13">longlong</a> vLL;
-00124       <span class="keywordtype">double</span> vDbl;
-00125       <span class="keywordtype">long</span> <span class="keywordtype">double</span> vLongDbl;
-00126       size_t vSzT;
-00127       <a class="code" href="group__util.html#ga10">ptrdiff_t</a> vPDT;
-00128       <a class="code" href="group__util.html#ga11">intmax_t</a> vIMT;
-00129     };
-00130   };
-00131   <span class="keyword">enum</span> Conversion
-00132   {
-00133     convBogus = 0,
-00134     convNone,
-00135     convInt,
-00136     convOctal,
-00137     convUint,
-00138     convHex,
-00139     convFloatFix,
-00140     convFloatExp,
-00141     convFloatGeneral,
-00142     convFloatHex,
-00143     convChar,
-00144     convStr,
-00145     convPtr,
-00146     convGetNum,
-00147     convErrno
-00148   };
-00149   <span class="keyword">enum</span> Type
-00150   {
-00151     typeNone = 0,
-00152     typeChar,
-00153     typeShort,
-00154     typeIntmax,
-00155     typeLong,
-00156     typeLongLong,
-00157     typePtrDiffT,
-00158     typeSizeT
-00159   };
-00161   <span class="keyword">struct </span>FormatSpec
-00162   {
-00163     size_t copyRun;
-00164     size_t fmtSkip;
-00165 
-00166     <span class="keywordtype">int</span> paramIdx;
-00167     <span class="keywordtype">bool</span> leftJustify;
-00168     <span class="keywordtype">bool</span> plusSign;
-00169     <span class="keywordtype">bool</span> spacePrefix;
-00170     <span class="keywordtype">bool</span> basePrefix;
-00171     <span class="comment">//bool grouping;</span>
-00172     <span class="keywordtype">bool</span> padZero;
-00173     <span class="keywordtype">int</span> width;
-00174     <span class="keywordtype">int</span> precision;
-00175     Conversion conversion;
-00176     <span class="keywordtype">bool</span> uppercase;
-00177     Type type;
-00178 
-00179     FormatSpec() { Reset(); }
-00180     <span class="keywordtype">void</span> Reset () 
-00181     { 
-00182       memset (<span class="keyword">this</span>, 0, <span class="keyword">sizeof</span> (*<span class="keyword">this</span>)); 
-00183       precision = -1;
-00184     }
-00185   };
-00186   <a class="code" href="classcsArray.html">csArray&lt;FormatSpec&gt;</a> formatSpecs;
-00187   <a class="code" href="classcsArray.html">csArray&lt;FmtParam&gt;</a> params;
-00188   Treader&amp; reader;
-00189 
-00190   <span class="keyword">struct </span>SpecParseState
-00191   {
-00192     <a class="code" href="group__util.html#ga21">utf32_char</a> ch;
-00193     FormatSpec currentFormat;
-00194     size_t charRun;
-00195     <span class="keywordtype">int</span> paramIdx;
-00196     size_t fmtBegin;
-00197 
-00198     SpecParseState() : paramIdx(0) {}
-00199     <span class="keywordtype">void</span> Reset()
-00200     {
-00201       charRun = 0;
-00202       currentFormat.Reset();
-00203     }
-00204   };
-00205 
-00206   <span class="keywordtype">bool</span> ParseFlag (SpecParseState&amp; state)
-00207   {
-00208     <span class="keywordflow">switch</span> (state.ch)
-00209     {
-00210       <span class="keywordflow">case</span> <span class="charliteral">'-'</span>:
-00211         {
-00212           state.currentFormat.leftJustify = <span class="keyword">true</span>;
-00213           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00214         }
-00215       <span class="keywordflow">case</span> <span class="charliteral">'+'</span>:
-00216         {
-00217           state.currentFormat.plusSign = <span class="keyword">true</span>;
-00218           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00219         }
-00220       <span class="keywordflow">case</span> <span class="charliteral">' '</span>:
-00221         {
-00222           state.currentFormat.spacePrefix = <span class="keyword">true</span>;
-00223           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00224         }
-00225       <span class="keywordflow">case</span> <span class="charliteral">'#'</span>:
-00226         {
-00227           state.currentFormat.basePrefix = <span class="keyword">true</span>;
-00228           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00229         }
-00230       <span class="keywordflow">case</span> <span class="charliteral">'0'</span>:
-00231         {
-00232           state.currentFormat.padZero = <span class="keyword">true</span>;
-00233           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00234         }
-00235       <span class="keywordflow">case</span> <span class="charliteral">'\''</span>:
-00236         {
-00237           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00238         }
-00239     }
-00240     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00241   }
-00242   
-00243   <span class="keywordtype">bool</span> ParseType (SpecParseState&amp; state)
-00244   {
-00245     <span class="keywordflow">switch</span> (state.ch)
-00246     {
-00247       <span class="keywordflow">case</span> <span class="charliteral">'h'</span>:
-00248         {
-00249           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
-00250             state.currentFormat.type = typeShort;
-00251           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.currentFormat.type == typeShort)
-00252             state.currentFormat.type = typeChar;
-00253           <span class="keywordflow">else</span>
-00254             <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00255           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00256         }
-00257       <span class="keywordflow">case</span> <span class="charliteral">'j'</span>:
-00258         {
-00259           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
-00260             state.currentFormat.type = typeIntmax;
-00261           <span class="keywordflow">else</span>
-00262             <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00263           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00264         }
-00265       <span class="keywordflow">case</span> <span class="charliteral">'l'</span>:
-00266         {
-00267           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
-00268             state.currentFormat.type = typeLong;
-00269           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.currentFormat.type == typeLong)
-00270             state.currentFormat.type = typeLongLong;
-00271           <span class="keywordflow">else</span>
-00272             <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00273           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00274         }
-00275       <span class="keywordflow">case</span> <span class="charliteral">'L'</span>:
-00276       <span class="keywordflow">case</span> <span class="charliteral">'q'</span>:
-00277         {
-00278           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
-00279             state.currentFormat.type = typeLongLong;
-00280           <span class="keywordflow">else</span>
-00281             <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00282           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00283         }
-00284       <span class="keywordflow">case</span> <span class="charliteral">'t'</span>:
-00285         {
-00286           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
-00287             state.currentFormat.type = typePtrDiffT;
-00288           <span class="keywordflow">else</span>
-00289             <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00290           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00291         }
-00292       <span class="keywordflow">case</span> <span class="charliteral">'z'</span>:
-00293         {
-00294           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
-00295             state.currentFormat.type = typeSizeT;
-00296           <span class="keywordflow">else</span>
-00297             <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00298           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00299         }
-00300     }
-00301     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00302   }
-00303 
-00304   <span class="keywordtype">bool</span> ParseConversion (SpecParseState&amp; state)
-00305   {
-00306     <span class="keywordflow">switch</span> (state.ch)
-00307     {
-00308       <span class="keywordflow">case</span> <span class="charliteral">'%'</span>:
-00309         {
-00310           <span class="keyword">const</span> size_t fmtLen = (reader.GetPosition() - 1) - state.fmtBegin;
-00311           <span class="keywordflow">if</span> (fmtLen == 1)
-00312           {
-00313             state.currentFormat.conversion = convNone;
-00314             state.fmtBegin++;
-00315             state.currentFormat.copyRun++;
-00316             <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00317           }
-00318           <span class="keywordflow">break</span>;
-00319         }
-00320       <span class="keywordflow">case</span> <span class="charliteral">'d'</span>:
-00321       <span class="keywordflow">case</span> <span class="charliteral">'i'</span>:
-00322         {
-00323           state.currentFormat.conversion = convInt;
-00324           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00325         }
-00326       <span class="keywordflow">case</span> <span class="charliteral">'o'</span>:
-00327         {
-00328           state.currentFormat.conversion = convOctal;
-00329           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00330         }
-00331       <span class="keywordflow">case</span> <span class="charliteral">'u'</span>:
-00332         {
-00333           state.currentFormat.conversion = convUint;
-00334           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00335         }
-00336       <span class="keywordflow">case</span> <span class="charliteral">'x'</span>:
-00337       <span class="keywordflow">case</span> <span class="charliteral">'X'</span>:
-00338         {
-00339           state.currentFormat.conversion = convHex;
-00340           state.currentFormat.uppercase = (state.ch == <span class="charliteral">'X'</span>);
+00002 <span class="comment">    Copyright (C) 2005 by Frank Richter</span>
+00003 <span class="comment"></span>
+00004 <span class="comment">    This library is free software; you can redistribute it and/or</span>
+00005 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
+00006 <span class="comment">    License as published by the Free Software Foundation; either</span>
+00007 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
+00008 <span class="comment"></span>
+00009 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
+00010 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+00011 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+00012 <span class="comment">    Library General Public License for more details.</span>
+00013 <span class="comment"></span>
+00014 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
+00015 <span class="comment">    License along with this library; if not, write to the Free</span>
+00016 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
+00017 <span class="comment">*/</span>
+00018 
+00019 <span class="preprocessor">#ifndef __CS_CSUTIL_FORMATTER_H__</span>
+00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_FORMATTER_H__</span>
+00021 <span class="preprocessor"></span>
+00027 <span class="preprocessor">#include "<a class="code" href="cssysdef_8h.html">cssysdef.h</a>"</span>
+00028 <span class="preprocessor">#include "<a class="code" href="csuctransform_8h.html">csutil/csuctransform.h</a>"</span>
+00029 <span class="preprocessor">#include "<a class="code" href="dirtyaccessarray_8h.html">csutil/dirtyaccessarray.h</a>"</span>
+00030 <span class="preprocessor">#include "<a class="code" href="util_8h.html">csutil/util.h</a>"</span>
+00031 <span class="preprocessor">#include "<a class="code" href="math_8h.html">csgeom/math.h</a>"</span>
+00032 
+00033 <span class="comment">// MinGW uses MS CRT, but it can't grok long double.  VC doesn't have long</span>
+00034 <span class="comment">// double and CRT printf() doesn't know %Lf, %Lg, or %Le.</span>
+00035 <span class="preprocessor">#if defined(__MINGW32__) || defined(CS_COMPILER_MSVC)</span>
+00036 <span class="preprocessor"></span><span class="preprocessor">#define CS_FORMATTER_NO_LONG_DOUBLE_FORMAT</span>
+00037 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00038 <span class="preprocessor"></span>
+00047 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00048"></a><a class="code" href="classcsFmtDefaultReader.html">00048</a> <span class="keyword">class </span><a class="code" href="classcsFmtDefaultReader.html">csFmtDefaultReader</a>
+00049 {
+00050   <span class="keyword">const</span> T* str;
+00051   <span class="keyword">const</span> T* <span class="keyword">const</span> startStr;
+00052   size_t len;
+00053   <span class="keyword">const</span> size_t startLen;
+00054 <span class="keyword">public</span>:
+<a name="l00056"></a><a class="code" href="classcsFmtDefaultReader.html#a0">00056</a>   <a class="code" href="classcsFmtDefaultReader.html">csFmtDefaultReader</a> (<span class="keyword">const</span> T* string, size_t length) : startStr (string), 
+00057     startLen (length) { Reset(); }
+<a name="l00059"></a><a class="code" href="classcsFmtDefaultReader.html#a1">00059</a>   <span class="keywordtype">bool</span> GetNext (utf32_char&amp; ch) 
+00060   {
+00061     <span class="keywordtype">int</span> n = <a class="code" href="classcsUnicodeTransform.html#z580_3">csUnicodeTransform::Decode</a> (str, len, ch);
+00062     <span class="keywordflow">if</span> (n == 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00063     str += (size_t)n;
+00064     len -= (size_t)n;
+00065     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00066   }
+<a name="l00068"></a><a class="code" href="classcsFmtDefaultReader.html#a2">00068</a>   <span class="keywordtype">void</span> Reset() { str = startStr; len = startLen; }
+<a name="l00070"></a><a class="code" href="classcsFmtDefaultReader.html#a3">00070</a>   size_t GetPosition()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> str - startStr; }
+00071 };
+00072 
+00073 
+00079 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00080"></a><a class="code" href="classcsFmtDefaultWriter.html">00080</a> <span class="keyword">class </span><a class="code" href="classcsFmtDefaultWriter.html">csFmtDefaultWriter</a>
+00081 {
+00082   T* dest;
+00083   size_t size;
+00084   size_t total;
+00085 <span class="keyword">public</span>:
+<a name="l00087"></a><a class="code" href="classcsFmtDefaultWriter.html#a0">00087</a>   <a class="code" href="classcsFmtDefaultWriter.html">csFmtDefaultWriter</a> (T* dest, size_t size) : dest (dest), size (size), 
+00088     total (0) {}
+<a name="l00090"></a><a class="code" href="classcsFmtDefaultWriter.html#a1">00090</a>   <span class="keywordtype">void</span> Put (utf32_char ch) 
+00091   { 
+00092     size_t n = (size_t)<a class="code" href="classcsUnicodeTransform.html#z581_3">csUnicodeTransform::Encode</a> (ch, dest, size);
+00093     total += n;
+00094     n = <a class="code" href="group__geom__utils.html#ga6">csMin</a> (size, n);
+00095     dest += n;
+00096     size -= n;
+00097   }
+<a name="l00102"></a><a class="code" href="classcsFmtDefaultWriter.html#a2">00102</a>   size_t GetTotal()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> total; }
+00103 };
+00104 
+00109 <span class="keyword">template</span> &lt;<span class="keyword">class</span> Twriter, <span class="keyword">class</span> Treader&gt;
+<a name="l00110"></a><a class="code" href="classcsPrintfFormatter.html">00110</a> <span class="keyword">class </span><a class="code" href="classcsPrintfFormatter.html">csPrintfFormatter</a>
+00111 {
+00112   <span class="keyword">class </span>Scratch : <span class="keyword">public</span> <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray</a>&lt;utf32_char&gt;
+00113   {
+00114   <span class="keyword">public</span>:
+00115     <span class="keywordtype">void</span> WriteTo (Twriter&amp; writer, size_t offset = 0, size_t len = (size_t)~0)
+00116     {
+00117       <span class="keyword">const</span> size_t n = MIN (len, <a class="code" href="classcsArray.html#a4">Length</a>());
+00118       <span class="keywordflow">for</span> (size_t i = offset; i &lt; n; i++) writer.Put (Get (i));
+00119     }
+00120   };
+00121   Scratch scratch;
+00122 
+00124   <span class="keyword">struct </span>FmtParam
+00125   {
+00126     <span class="keyword">union</span>
+00127 <span class="keyword">    </span>{
+00128       <span class="keywordtype">int</span> vInt;
+00129       <span class="keywordtype">void</span>* vPtr;
+00130       <span class="keywordtype">long</span> vLong;
+00131       <a class="code" href="group__util.html#ga15">longlong</a> vLL;
+00132       <span class="keywordtype">double</span> vDbl;
+00133       <span class="keywordtype">long</span> <span class="keywordtype">double</span> vLongDbl;
+00134       size_t vSzT;
+00135       <a class="code" href="group__util.html#ga10">ptrdiff_t</a> vPDT;
+00136       <a class="code" href="group__util.html#ga11">intmax_t</a> vIMT;
+00137     };
+00138   };
+00139   <span class="keyword">enum</span> Conversion
+00140   {
+00141     convBogus = 0,
+00142     convNone,
+00143     convInt,
+00144     convOctal,
+00145     convUint,
+00146     convHex,
+00147     convFloatFix,
+00148     convFloatExp,
+00149     convFloatGeneral,
+00150     convFloatHex,
+00151     convChar,
+00152     convStr,
+00153     convPtr,
+00154     convGetNum,
+00155     convErrno
+00156   };
+00157   <span class="keyword">enum</span> Type
+00158   {
+00159     typeNone = 0,
+00160     typeChar,
+00161     typeShort,
+00162     typeIntmax,
+00163     typeLong,
+00164     typeLongLong,
+00165     typePtrDiffT,
+00166     typeSizeT
+00167   };
+00169   <span class="keyword">struct </span>FormatSpec
+00170   {
+00171     size_t copyRun;
+00172     size_t fmtSkip;
+00173 
+00174     <span class="keywordtype">int</span> paramIdx;
+00175     <span class="keywordtype">bool</span> leftJustify;
+00176     <span class="keywordtype">bool</span> plusSign;
+00177     <span class="keywordtype">bool</span> spacePrefix;
+00178     <span class="keywordtype">bool</span> basePrefix;
+00179     <span class="keywordtype">bool</span> padZero;
+00180     <span class="keywordtype">int</span> width;
+00181     <span class="keywordtype">int</span> precision;
+00182     Conversion conversion;
+00183     <span class="keywordtype">bool</span> uppercase;
+00184     Type type;
+00185 
+00186     FormatSpec() { Reset(); }
+00187     <span class="keywordtype">void</span> Reset () 
+00188     { 
+00189       memset (<span class="keyword">this</span>, 0, <span class="keyword">sizeof</span> (*<span class="keyword">this</span>)); 
+00190       precision = -1;
+00191     }
+00192   };
+00193   <a class="code" href="classcsArray.html">csArray&lt;FormatSpec&gt;</a> formatSpecs;
+00194   <a class="code" href="classcsArray.html">csArray&lt;FmtParam&gt;</a> params;
+00195   Treader&amp; reader;
+00196 
+00197   <span class="keyword">struct </span>SpecParseState
+00198   {
+00199     <a class="code" href="group__util.html#ga22">utf32_char</a> ch;
+00200     FormatSpec currentFormat;
+00201     size_t charRun;
+00202     <span class="keywordtype">int</span> paramIdx;
+00203     size_t fmtBegin;
+00204 
+00205     SpecParseState() : paramIdx(0) {}
+00206     <span class="keywordtype">void</span> Reset()
+00207     {
+00208       charRun = 0;
+00209       currentFormat.Reset();
+00210     }
+00211   };
+00212 
+00213   <span class="keywordtype">bool</span> ParseFlag (SpecParseState&amp; state)
+00214   {
+00215     <span class="keywordflow">switch</span> (state.ch)
+00216     {
+00217       <span class="keywordflow">case</span> <span class="charliteral">'-'</span>:
+00218         {
+00219           state.currentFormat.leftJustify = <span class="keyword">true</span>;
+00220           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00221         }
+00222       <span class="keywordflow">case</span> <span class="charliteral">'+'</span>:
+00223         {
+00224           state.currentFormat.plusSign = <span class="keyword">true</span>;
+00225           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00226         }
+00227       <span class="keywordflow">case</span> <span class="charliteral">' '</span>:
+00228         {
+00229           state.currentFormat.spacePrefix = <span class="keyword">true</span>;
+00230           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00231         }
+00232       <span class="keywordflow">case</span> <span class="charliteral">'#'</span>:
+00233         {
+00234           state.currentFormat.basePrefix = <span class="keyword">true</span>;
+00235           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00236         }
+00237       <span class="keywordflow">case</span> <span class="charliteral">'0'</span>:
+00238         {
+00239           state.currentFormat.padZero = <span class="keyword">true</span>;
+00240           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00241         }
+00242       <span class="keywordflow">case</span> <span class="charliteral">'\''</span>:
+00243         {
+00244           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00245         }
+00246     }
+00247     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00248   }
+00249   
+00250   <span class="keywordtype">bool</span> ParseType (SpecParseState&amp; state)
+00251   {
+00252     <span class="keywordflow">switch</span> (state.ch)
+00253     {
+00254       <span class="keywordflow">case</span> <span class="charliteral">'h'</span>:
+00255         {
+00256           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
+00257             state.currentFormat.type = typeShort;
+00258           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.currentFormat.type == typeShort)
+00259             state.currentFormat.type = typeChar;
+00260           <span class="keywordflow">else</span>
+00261             <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00262           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00263         }
+00264       <span class="keywordflow">case</span> <span class="charliteral">'j'</span>:
+00265         {
+00266           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
+00267             state.currentFormat.type = typeIntmax;
+00268           <span class="keywordflow">else</span>
+00269             <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00270           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00271         }
+00272       <span class="keywordflow">case</span> <span class="charliteral">'l'</span>:
+00273         {
+00274           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
+00275             state.currentFormat.type = typeLong;
+00276           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.currentFormat.type == typeLong)
+00277             state.currentFormat.type = typeLongLong;
+00278           <span class="keywordflow">else</span>
+00279             <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00280           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00281         }
+00282       <span class="keywordflow">case</span> <span class="charliteral">'L'</span>:
+00283       <span class="keywordflow">case</span> <span class="charliteral">'q'</span>:
+00284         {
+00285           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
+00286             state.currentFormat.type = typeLongLong;
+00287           <span class="keywordflow">else</span>
+00288             <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00289           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00290         }
+00291       <span class="keywordflow">case</span> <span class="charliteral">'t'</span>:
+00292         {
+00293           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
+00294             state.currentFormat.type = typePtrDiffT;
+00295           <span class="keywordflow">else</span>
+00296             <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00297           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00298         }
+00299       <span class="keywordflow">case</span> <span class="charliteral">'z'</span>:
+00300         {
+00301           <span class="keywordflow">if</span> (state.currentFormat.type == typeNone)
+00302             state.currentFormat.type = typeSizeT;
+00303           <span class="keywordflow">else</span>
+00304             <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00305           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00306         }
+00307     }
+00308     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00309   }
+00310 
+00311   <span class="keywordtype">bool</span> ParseConversion (SpecParseState&amp; state)
+00312   {
+00313     <span class="keywordflow">switch</span> (state.ch)
+00314     {
+00315       <span class="keywordflow">case</span> <span class="charliteral">'%'</span>:
+00316         {
+00317           <span class="keyword">const</span> size_t fmtLen = (reader.GetPosition() - 1) - state.fmtBegin;
+00318           <span class="keywordflow">if</span> (fmtLen == 1)
+00319           {
+00320             state.currentFormat.conversion = convNone;
+00321             state.fmtBegin++;
+00322             state.currentFormat.copyRun++;
+00323             <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00324           }
+00325           <span class="keywordflow">break</span>;
+00326         }
+00327       <span class="keywordflow">case</span> <span class="charliteral">'d'</span>:
+00328       <span class="keywordflow">case</span> <span class="charliteral">'i'</span>:
+00329         {
+00330           state.currentFormat.conversion = convInt;
+00331           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00332         }
+00333       <span class="keywordflow">case</span> <span class="charliteral">'o'</span>:
+00334         {
+00335           state.currentFormat.conversion = convOctal;
+00336           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00337         }
+00338       <span class="keywordflow">case</span> <span class="charliteral">'u'</span>:
+00339         {
+00340           state.currentFormat.conversion = convUint;
 00341           <span class="keywordflow">return</span> <span class="keyword">true</span>;
 00342         }
-00343       <span class="keywordflow">case</span> <span class="charliteral">'f'</span>:
-00344         {
-00345           state.currentFormat.conversion = convFloatFix;
-00346           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00347         }
-00348       <span class="keywordflow">case</span> <span class="charliteral">'e'</span>:
-00349       <span class="keywordflow">case</span> <span class="charliteral">'E'</span>:
-00350         {
-00351           state.currentFormat.conversion = convFloatExp;
-00352           state.currentFormat.uppercase = (state.ch == <span class="charliteral">'E'</span>);
+00343       <span class="keywordflow">case</span> <span class="charliteral">'x'</span>:
+00344       <span class="keywordflow">case</span> <span class="charliteral">'X'</span>:
+00345         {
+00346           state.currentFormat.conversion = convHex;
+00347           state.currentFormat.uppercase = (state.ch == <span class="charliteral">'X'</span>);
+00348           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00349         }
+00350       <span class="keywordflow">case</span> <span class="charliteral">'f'</span>:
+00351         {
+00352           state.currentFormat.conversion = convFloatFix;
 00353           <span class="keywordflow">return</span> <span class="keyword">true</span>;
 00354         }
-00355       <span class="keywordflow">case</span> <span class="charliteral">'g'</span>:
-00356       <span class="keywordflow">case</span> <span class="charliteral">'G'</span>:
+00355       <span class="keywordflow">case</span> <span class="charliteral">'e'</span>:
+00356       <span class="keywordflow">case</span> <span class="charliteral">'E'</span>:
 00357         {
-00358           state.currentFormat.conversion = convFloatGeneral;
-00359           state.currentFormat.uppercase = (state.ch == <span class="charliteral">'G'</span>);
+00358           state.currentFormat.conversion = convFloatExp;
+00359           state.currentFormat.uppercase = (state.ch == <span class="charliteral">'E'</span>);
 00360           <span class="keywordflow">return</span> <span class="keyword">true</span>;
 00361         }
-00362       <span class="keywordflow">case</span> <span class="charliteral">'a'</span>:
-00363       <span class="keywordflow">case</span> <span class="charliteral">'A'</span>:
+00362       <span class="keywordflow">case</span> <span class="charliteral">'g'</span>:
+00363       <span class="keywordflow">case</span> <span class="charliteral">'G'</span>:
 00364         {
-00365           state.currentFormat.conversion = convFloatHex;
-00366           state.currentFormat.uppercase = (state.ch == <span class="charliteral">'A'</span>);
+00365           state.currentFormat.conversion = convFloatGeneral;
+00366           state.currentFormat.uppercase = (state.ch == <span class="charliteral">'G'</span>);
 00367           <span class="keywordflow">return</span> <span class="keyword">true</span>;
 00368         }
-00369       <span class="keywordflow">case</span> <span class="charliteral">'c'</span>:
-00370         {
-00371           state.currentFormat.conversion = convChar;
-00372           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00373         }
-00374       <span class="keywordflow">case</span> <span class="charliteral">'C'</span>:
-00375         {
-00376           state.currentFormat.conversion = convChar;
-00377           state.currentFormat.type = typeLong;
-00378           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00379         }
-00380       <span class="keywordflow">case</span> <span class="charliteral">'s'</span>:
-00381         {
-00382           state.currentFormat.conversion = convStr;
-00383           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00384         }
-00385       <span class="keywordflow">case</span> <span class="charliteral">'S'</span>:
-00386         {
-00387           state.currentFormat.conversion = convStr;
-00388           state.currentFormat.type = typeLong;
-00389           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00390         }
-00391       <span class="keywordflow">case</span> <span class="charliteral">'p'</span>:
-00392         {
-00393           state.currentFormat.conversion = convPtr;
-00394           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00395         }
-00396       <span class="keywordflow">case</span> <span class="charliteral">'n'</span>:
-00397         {
-00398           state.currentFormat.conversion = convGetNum;
-00399           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00400         }
-00401       <span class="keywordflow">case</span> <span class="charliteral">'m'</span>:
-00402         {
-00403           state.currentFormat.conversion = convErrno;
-00404           <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00405         }
-00406     }
-00407     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00408   }
-00409 
-00410   <span class="keywordtype">void</span> ParseSpec ()
-00411   {
-00412     <span class="keyword">enum</span> {
-00413       scanFormat,
-00414       formatParamFlagsWidthPrecTypeConversion,
-00415       formatFlagsWidthPrecTypeConversion,
-00416       formatParamWidth,
-00417       formatDotPrecTypeConversion,
-00418       formatPrecTypeConversion,
-00419       formatTypeConversion
-00420     } parseState = scanFormat;
-00421 
-00422     <span class="comment">// Collect positions of state specifiers from format string</span>
-00423     SpecParseState state;
-00424     state.Reset();
-00425     <span class="keywordflow">while</span> (reader.GetNext (state.ch))
-00426     {
-00427       <span class="keywordflow">switch</span> (parseState)
-00428       {
-00429         <span class="comment">// Note: all falling through in this switch() is intentional.</span>
-00430         <span class="keywordflow">case</span> scanFormat:
-00431           {
-00432             <span class="comment">// Check for a % sign</span>
-00433             <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'%'</span>)
-00434             {
-00435               parseState = formatParamFlagsWidthPrecTypeConversion;
-00436               state.fmtBegin = reader.GetPosition() - 1;
-00437               state.currentFormat.copyRun = state.charRun;
-00438             }
-00439             <span class="keywordflow">else</span>
-00440               state.charRun++;
-00441           }
-00442           <span class="keywordflow">break</span>;
-00443         <span class="keywordflow">case</span> formatParamFlagsWidthPrecTypeConversion:
-00444           <span class="comment">// Check for start of width or param index</span>
-00445           <span class="keywordflow">if</span> ((state.ch &gt;= <span class="charliteral">'1'</span>) &amp;&amp; (state.ch &lt;= <span class="charliteral">'9'</span>))
-00446           {
-00447             state.currentFormat.width = state.ch - <span class="charliteral">'0'</span>;
-00448             parseState = formatParamWidth;
-00449             <span class="keywordflow">break</span>;
-00450           }
-00451           <span class="comment">// Check for '*' (fetch width from args)</span>
-00452           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'*'</span>)
+00369       <span class="keywordflow">case</span> <span class="charliteral">'a'</span>:
+00370       <span class="keywordflow">case</span> <span class="charliteral">'A'</span>:
+00371         {
+00372           state.currentFormat.conversion = convFloatHex;
+00373           state.currentFormat.uppercase = (state.ch == <span class="charliteral">'A'</span>);
+00374           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00375         }
+00376       <span class="keywordflow">case</span> <span class="charliteral">'c'</span>:
+00377         {
+00378           state.currentFormat.conversion = convChar;
+00379           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00380         }
+00381       <span class="keywordflow">case</span> <span class="charliteral">'C'</span>:
+00382         {
+00383           state.currentFormat.conversion = convChar;
+00384           state.currentFormat.type = typeLong;
+00385           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00386         }
+00387       <span class="keywordflow">case</span> <span class="charliteral">'s'</span>:
+00388         {
+00389           state.currentFormat.conversion = convStr;
+00390           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00391         }
+00392       <span class="keywordflow">case</span> <span class="charliteral">'S'</span>:
+00393         {
+00394           state.currentFormat.conversion = convStr;
+00395           state.currentFormat.type = typeLong;
+00396           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00397         }
+00398       <span class="keywordflow">case</span> <span class="charliteral">'p'</span>:
+00399         {
+00400           state.currentFormat.conversion = convPtr;
+00401           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00402         }
+00403       <span class="keywordflow">case</span> <span class="charliteral">'n'</span>:
+00404         {
+00405           state.currentFormat.conversion = convGetNum;
+00406           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00407         }
+00408       <span class="keywordflow">case</span> <span class="charliteral">'m'</span>:
+00409         {
+00410           state.currentFormat.conversion = convErrno;
+00411           <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00412         }
+00413     }
+00414     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00415   }
+00416 
+00417   <span class="keywordtype">void</span> ParseSpec ()
+00418   {
+00419     <span class="keyword">enum</span> {
+00420       scanFormat,
+00421       formatParamFlagsWidthPrecTypeConversion,
+00422       formatFlagsWidthPrecTypeConversion,
+00423       formatParamWidth,
+00424       formatDotPrecTypeConversion,
+00425       formatPrecTypeConversion,
+00426       formatTypeConversion
+00427     } parseState = scanFormat;
+00428 
+00429     <span class="comment">// Collect positions of state specifiers from format string</span>
+00430     SpecParseState state;
+00431     state.Reset();
+00432     <span class="keywordflow">while</span> (reader.GetNext (state.ch))
+00433     {
+00434       <span class="keywordflow">switch</span> (parseState)
+00435       {
+00436         <span class="comment">// Note: all falling through in this switch() is intentional.</span>
+00437         <span class="keywordflow">case</span> scanFormat:
+00438           {
+00439             <span class="comment">// Check for a % sign</span>
+00440             <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'%'</span>)
+00441             {
+00442               parseState = formatParamFlagsWidthPrecTypeConversion;
+00443               state.fmtBegin = reader.GetPosition() - 1;
+00444               state.currentFormat.copyRun = state.charRun;
+00445             }
+00446             <span class="keywordflow">else</span>
+00447               state.charRun++;
+00448           }
+00449           <span class="keywordflow">break</span>;
+00450         <span class="keywordflow">case</span> formatParamFlagsWidthPrecTypeConversion:
+00451           <span class="comment">// Check for start of width or param index</span>
+00452           <span class="keywordflow">if</span> ((state.ch &gt;= <span class="charliteral">'1'</span>) &amp;&amp; (state.ch &lt;= <span class="charliteral">'9'</span>))
 00453           {
-00454             state.currentFormat.width = -2;
-00455             parseState = formatDotPrecTypeConversion;
+00454             state.currentFormat.width = state.ch - <span class="charliteral">'0'</span>;
+00455             parseState = formatParamWidth;
 00456             <span class="keywordflow">break</span>;
 00457           }
-00458           <span class="comment">// Param delimiter</span>
-00459           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'$'</span>)
+00458           <span class="comment">// Check for '*' (fetch width from args)</span>
+00459           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'*'</span>)
 00460           {
-00461             <span class="comment">// @@@ Hmm. Empty param...</span>
-00462             parseState = formatFlagsWidthPrecTypeConversion;
+00461             state.currentFormat.width = -2;
+00462             parseState = formatDotPrecTypeConversion;
 00463             <span class="keywordflow">break</span>;
 00464           }
-00465         <span class="keywordflow">case</span> formatParamWidth:
-00466           <span class="keywordflow">if</span> (parseState == formatParamWidth) <span class="comment">// != can occur due fallthrough</span>
+00465           <span class="comment">// Param delimiter</span>
+00466           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'$'</span>)
 00467           {
-00468             <span class="comment">// Subsequent digits width or param index</span>
-00469             <span class="keywordflow">if</span> ((state.ch &gt;= <span class="charliteral">'0'</span>) &amp;&amp; (state.ch &lt;= <span class="charliteral">'9'</span>))
-00470             {
-00471               state.currentFormat.width *= 10;
-00472               state.currentFormat.width += state.ch - <span class="charliteral">'0'</span>;
-00473               <span class="keywordflow">break</span>;
-00474             }
-00475             <span class="comment">// Param delimiter</span>
-00476             <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'$'</span>)
+00468             <span class="comment">// @@@ Hmm. Empty param...</span>
+00469             parseState = formatFlagsWidthPrecTypeConversion;
+00470             <span class="keywordflow">break</span>;
+00471           }
+00472         <span class="keywordflow">case</span> formatParamWidth:
+00473           <span class="keywordflow">if</span> (parseState == formatParamWidth) <span class="comment">// != can occur due fallthrough</span>
+00474           {
+00475             <span class="comment">// Subsequent digits width or param index</span>
+00476             <span class="keywordflow">if</span> ((state.ch &gt;= <span class="charliteral">'0'</span>) &amp;&amp; (state.ch &lt;= <span class="charliteral">'9'</span>))
 00477             {
-00478               state.paramIdx = state.currentFormat.width - 1;
-00479               state.currentFormat.width = 0;
-00480               parseState = formatFlagsWidthPrecTypeConversion;
-00481               <span class="keywordflow">break</span>;
-00482             }
-00483           }
-00484         <span class="keywordflow">case</span> formatFlagsWidthPrecTypeConversion:
-00485           <span class="comment">// Check for start of width</span>
-00486           <span class="keywordflow">if</span> ((state.ch &gt;= <span class="charliteral">'1'</span>) &amp;&amp; (state.ch &lt;= <span class="charliteral">'9'</span>))
-00487           {
-00488             state.currentFormat.width *= 10;
-00489             state.currentFormat.width += state.ch - <span class="charliteral">'0'</span>;
-00490             parseState = formatParamWidth;
-00491             <span class="keywordflow">break</span>;
-00492           }
-00493           <span class="comment">// Check for '*' (fetch width from args)</span>
-00494           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'*'</span>)
-00495           {
-00496             state.currentFormat.width = -2;
-00497             parseState = formatDotPrecTypeConversion;
+00478               state.currentFormat.width *= 10;
+00479               state.currentFormat.width += state.ch - <span class="charliteral">'0'</span>;
+00480               <span class="keywordflow">break</span>;
+00481             }
+00482             <span class="comment">// Param delimiter</span>
+00483             <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'$'</span>)
+00484             {
+00485               state.paramIdx = state.currentFormat.width - 1;
+00486               state.currentFormat.width = 0;
+00487               parseState = formatFlagsWidthPrecTypeConversion;
+00488               <span class="keywordflow">break</span>;
+00489             }
+00490           }
+00491         <span class="keywordflow">case</span> formatFlagsWidthPrecTypeConversion:
+00492           <span class="comment">// Check for start of width</span>
+00493           <span class="keywordflow">if</span> ((state.ch &gt;= <span class="charliteral">'1'</span>) &amp;&amp; (state.ch &lt;= <span class="charliteral">'9'</span>))
+00494           {
+00495             state.currentFormat.width *= 10;
+00496             state.currentFormat.width += state.ch - <span class="charliteral">'0'</span>;
+00497             parseState = formatParamWidth;
 00498             <span class="keywordflow">break</span>;
 00499           }
-00500           <span class="comment">// Check for flags (0, -, ...)</span>
-00501           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ParseFlag (state))
+00500           <span class="comment">// Check for '*' (fetch width from args)</span>
+00501           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'*'</span>)
 00502           {
-00503             parseState = formatFlagsWidthPrecTypeConversion;
-00504             <span class="keywordflow">break</span>;
-00505           }
-00506         <span class="keywordflow">case</span> formatDotPrecTypeConversion:
-00507           <span class="comment">// Check for precision delimiter</span>
-00508           <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'.'</span>)
+00503             state.currentFormat.width = -2;
+00504             parseState = formatDotPrecTypeConversion;
+00505             <span class="keywordflow">break</span>;
+00506           }
+00507           <span class="comment">// Check for flags (0, -, ...)</span>
+00508           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ParseFlag (state))
 00509           {
-00510             parseState = formatPrecTypeConversion;
-00511             state.currentFormat.precision = 0;
-00512             <span class="keywordflow">break</span>;
-00513           }
-00514         <span class="keywordflow">case</span> formatPrecTypeConversion:
-00515           <span class="comment">// Precision digits</span>
-00516           <span class="keywordflow">if</span> ((state.ch &gt;= <span class="charliteral">'0'</span>) &amp;&amp; (state.ch &lt;= <span class="charliteral">'9'</span>))
-00517           {
-00518             state.currentFormat.precision *= 10;
-00519             state.currentFormat.precision += state.ch - <span class="charliteral">'0'</span>;
-00520             <span class="keywordflow">break</span>;
-00521           }
-00522           <span class="comment">// Check for '*' (fetch precision from args)</span>
-00523           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'*'</span>)
+00510             parseState = formatFlagsWidthPrecTypeConversion;
+00511             <span class="keywordflow">break</span>;
+00512           }
+00513         <span class="keywordflow">case</span> formatDotPrecTypeConversion:
+00514           <span class="comment">// Check for precision delimiter</span>
+00515           <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'.'</span>)
+00516           {
+00517             parseState = formatPrecTypeConversion;
+00518             state.currentFormat.precision = 0;
+00519             <span class="keywordflow">break</span>;
+00520           }
+00521         <span class="keywordflow">case</span> formatPrecTypeConversion:
+00522           <span class="comment">// Precision digits</span>
+00523           <span class="keywordflow">if</span> ((state.ch &gt;= <span class="charliteral">'0'</span>) &amp;&amp; (state.ch &lt;= <span class="charliteral">'9'</span>))
 00524           {
-00525             state.currentFormat.precision = -2;
-00526             parseState = formatTypeConversion;
+00525             state.currentFormat.precision *= 10;
+00526             state.currentFormat.precision += state.ch - <span class="charliteral">'0'</span>;
 00527             <span class="keywordflow">break</span>;
 00528           }
-00529           <span class="comment">// Check for param type modifier (l, h, ...)</span>
-00530           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ParseType (state))
+00529           <span class="comment">// Check for '*' (fetch precision from args)</span>
+00530           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (state.ch == <span class="charliteral">'*'</span>)
 00531           {
-00532             parseState = formatPrecTypeConversion;
-00533             <span class="keywordflow">break</span>;
-00534           }
-00535         <span class="keywordflow">case</span> formatTypeConversion:
-00536           <span class="comment">// Check actual conversion (s, d, ...)</span>
-00537           <span class="keywordflow">if</span> (ParseConversion (state))
+00532             state.currentFormat.precision = -2;
+00533             parseState = formatTypeConversion;
+00534             <span class="keywordflow">break</span>;
+00535           }
+00536           <span class="comment">// Check for param type modifier (l, h, ...)</span>
+00537           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ParseType (state))
 00538           {
-00539             state.currentFormat.fmtSkip = reader.GetPosition() - state.fmtBegin;
-00540             <span class="keywordflow">if</span> (state.currentFormat.conversion != convNone)
-00541               state.currentFormat.paramIdx = state.paramIdx++;
-00542             formatSpecs.<a class="code" href="classcsArray.html#a16">Push</a> (state.currentFormat);
-00543 
-00544             state.Reset();
-00545           }
-00546           <span class="keywordflow">else</span>
-00547           {
-00548             state.charRun += reader.GetPosition() - state.fmtBegin;
-00549             state.currentFormat.Reset();
-00550           }
-00551           parseState = scanFormat;
-00552           <span class="keywordflow">break</span>;
-00553       }
-00554     }
-00555   }
-00556 
-00558   <span class="keywordtype">void</span> FetchArgs (va_list args)
-00559   {
-00560     size_t i;
-00561     <span class="comment">// Determine order of params</span>
-00562     <a class="code" href="classcsArray.html">csArray&lt;FormatSpec*&gt;</a> paramOrder;
-00563     paramOrder.<a class="code" href="classcsArray.html#a31">SetCapacity</a> (formatSpecs.<a class="code" href="classcsArray.html#a4">Length</a>());
-00564     <span class="keywordflow">for</span> (i = 0; i &lt; formatSpecs.<a class="code" href="classcsArray.html#a4">Length</a>(); i++)
-00565     {
-00566       FormatSpec&amp; currentFormat = formatSpecs[i];
-00567       <span class="keywordflow">if</span> (currentFormat.conversion == convNone) <span class="keywordflow">continue</span>;
-00568       <span class="keywordflow">if</span> (paramOrder.<a class="code" href="classcsArray.html#a4">Length</a>() &lt;= (size_t)currentFormat.paramIdx)
-00569         paramOrder.<a class="code" href="classcsArray.html#a7">SetLength</a> (currentFormat.paramIdx + 1, 0);
-00570       paramOrder[currentFormat.paramIdx] = &amp;currentFormat;
-00571     }
-00572     <span class="comment">// Fetch params from stack in order, store at correct place in params array</span>
-00573     <span class="keywordflow">for</span> (i = 0; i &lt; paramOrder.<a class="code" href="classcsArray.html#a4">Length</a>(); i++)
-00574     {
-00575       FmtParam&amp; param = params.<a class="code" href="classcsArray.html#a11">GetExtend</a> (i);
-00576       FormatSpec* fmtPtr = paramOrder[i];
-00577       <span class="keywordflow">if</span> (fmtPtr == 0) 
-00578       {
-00579         <span class="comment">// Can just guess here...</span>
-00580         param.vInt = va_arg (args, <span class="keywordtype">int</span>);
-00581         <span class="keywordflow">continue</span>;
-00582       }
-00583       FormatSpec&amp; currentFormat = *fmtPtr;
-00584 
-00585       <span class="keywordflow">if</span> (currentFormat.width == -2)
+00539             parseState = formatPrecTypeConversion;
+00540             <span class="keywordflow">break</span>;
+00541           }
+00542         <span class="keywordflow">case</span> formatTypeConversion:
+00543           <span class="comment">// Check actual conversion (s, d, ...)</span>
+00544           <span class="keywordflow">if</span> (ParseConversion (state))
+00545           {
+00546             state.currentFormat.fmtSkip =
+00547               reader.GetPosition() - state.fmtBegin;
+00548             <span class="keywordflow">if</span> (state.currentFormat.conversion != convNone)
+00549               state.currentFormat.paramIdx = state.paramIdx++;
+00550             formatSpecs.<a class="code" href="classcsArray.html#a16">Push</a> (state.currentFormat);
+00551 
+00552             state.Reset();
+00553           }
+00554           <span class="keywordflow">else</span>
+00555           {
+00556             state.charRun += reader.GetPosition() - state.fmtBegin;
+00557             state.currentFormat.Reset();
+00558           }
+00559           parseState = scanFormat;
+00560           <span class="keywordflow">break</span>;
+00561       }
+00562     }
+00563   }
+00564 
+00566   <span class="keywordtype">void</span> FetchArgs (va_list args)
+00567   {
+00568     size_t i;
+00569     <span class="comment">// Determine order of params</span>
+00570     <a class="code" href="classcsArray.html">csArray&lt;FormatSpec*&gt;</a> paramOrder;
+00571     paramOrder.<a class="code" href="classcsArray.html#a31">SetCapacity</a> (formatSpecs.<a class="code" href="classcsArray.html#a4">Length</a>());
+00572     <span class="keywordflow">for</span> (i = 0; i &lt; formatSpecs.<a class="code" href="classcsArray.html#a4">Length</a>(); i++)
+00573     {
+00574       FormatSpec&amp; currentFormat = formatSpecs[i];
+00575       <span class="keywordflow">if</span> (currentFormat.conversion == convNone) <span class="keywordflow">continue</span>;
+00576       <span class="keywordflow">if</span> (paramOrder.<a class="code" href="classcsArray.html#a4">Length</a>() &lt;= (size_t)currentFormat.paramIdx)
+00577         paramOrder.<a class="code" href="classcsArray.html#a7">SetLength</a> (currentFormat.paramIdx + 1, 0);
+00578       paramOrder[currentFormat.paramIdx] = &amp;currentFormat;
+00579     }
+00580     <span class="comment">// Fetch params from stack in order, store at correct place in params array</span>
+00581     <span class="keywordflow">for</span> (i = 0; i &lt; paramOrder.<a class="code" href="classcsArray.html#a4">Length</a>(); i++)
+00582     {
+00583       FmtParam&amp; param = params.<a class="code" href="classcsArray.html#a11">GetExtend</a> (i);
+00584       FormatSpec* fmtPtr = paramOrder[i];
+00585       <span class="keywordflow">if</span> (fmtPtr == 0) 
 00586       {
-00587         currentFormat.width = va_arg (args, <span class="keywordtype">int</span>);
-00588         <span class="keywordflow">if</span> (currentFormat.width &lt; 0)
-00589         {
-00590           currentFormat.width = -currentFormat.width;
-00591           currentFormat.leftJustify = <span class="keyword">true</span>;
-00592         }
-00593       }
-00594       <span class="keywordflow">if</span> (currentFormat.precision == -2)
-00595       {
-00596         <span class="keywordtype">int</span> v = va_arg (args, <span class="keywordtype">int</span>);
-00597         <span class="keywordflow">if</span> (v &gt;= 0) 
-00598           currentFormat.precision = v;
-00599         <span class="keywordflow">else</span>
-00600           currentFormat.precision = -1;
+00587         <span class="comment">// Can just guess here...</span>
+00588         param.vInt = va_arg (args, <span class="keywordtype">int</span>);
+00589         <span class="keywordflow">continue</span>;
+00590       }
+00591       FormatSpec&amp; currentFormat = *fmtPtr;
+00592 
+00593       <span class="keywordflow">if</span> (currentFormat.width == -2)
+00594       {
+00595         currentFormat.width = va_arg (args, <span class="keywordtype">int</span>);
+00596         <span class="keywordflow">if</span> (currentFormat.width &lt; 0)
+00597         {
+00598           currentFormat.width = -currentFormat.width;
+00599           currentFormat.leftJustify = <span class="keyword">true</span>;
+00600         }
 00601       }
-00602       <span class="keywordflow">switch</span> (currentFormat.conversion)
+00602       <span class="keywordflow">if</span> (currentFormat.precision == -2)
 00603       {
-00604         <span class="keywordflow">case</span> convInt:
-00605         <span class="keywordflow">case</span> convOctal:
-00606         <span class="keywordflow">case</span> convUint:
-00607         <span class="keywordflow">case</span> convHex:
-00608         <span class="keywordflow">default</span>:
-00609           {
-00610             <span class="keywordflow">switch</span> (currentFormat.type)
-00611             {
-00612               <span class="keywordflow">case</span> typeIntmax:
-00613                 param.vIMT = va_arg (args, <a class="code" href="group__util.html#ga11">intmax_t</a>);
-00614                 <span class="keywordflow">break</span>;
-00615               <span class="keywordflow">case</span> typeLong:
-00616                 param.vLong = va_arg (args, <span class="keywordtype">long</span>);
-00617                 <span class="keywordflow">break</span>;
-00618               <span class="keywordflow">case</span> typeLongLong:
-00619                 param.vLL = va_arg (args, <a class="code" href="group__util.html#ga13">longlong</a>);
-00620                 <span class="keywordflow">break</span>;
-00621               <span class="keywordflow">case</span> typePtrDiffT:
-00622                 param.vPDT = va_arg (args, <a class="code" href="group__util.html#ga10">ptrdiff_t</a>);
-00623                 <span class="keywordflow">break</span>;
-00624               <span class="keywordflow">case</span> typeSizeT:
-00625                 param.vSzT = va_arg (args, size_t);
-00626                 <span class="keywordflow">break</span>;
-00627               <span class="keywordflow">case</span> typeShort:
-00628                 param.vInt = (short)(va_arg (args, <span class="keywordtype">int</span>));
-00629                 <span class="keywordflow">break</span>;
-00630               <span class="keywordflow">case</span> typeChar:
-00631                 param.vInt = (char)(va_arg (args, <span class="keywordtype">int</span>));
-00632                 <span class="keywordflow">break</span>;
-00633               <span class="keywordflow">default</span>:
-00634                 param.vInt = va_arg (args, <span class="keywordtype">int</span>);
-00635                 <span class="keywordflow">break</span>;
-00636             }
-00637           }
-00638           <span class="keywordflow">break</span>;
-00639         <span class="keywordflow">case</span> convErrno:
-00640           param.vInt = errno;
-00641           <span class="keywordflow">break</span>;
-00642         <span class="keywordflow">case</span> convChar:
-00643           <span class="keywordflow">if</span> (currentFormat.type == typeLong)
-00644           {
-00645             param.vInt = (wint_t)(va_arg (args, <span class="keywordtype">int</span>));
-00646           }
-00647           <span class="keywordflow">else</span>
-00648           {
-00649             param.vInt = (<span class="keywordtype">unsigned</span> char)(va_arg (args, <span class="keywordtype">int</span>));
-00650           }
-00651           <span class="keywordflow">break</span>;
-00652         <span class="keywordflow">case</span> convFloatFix:
-00653         <span class="keywordflow">case</span> convFloatExp:
-00654         <span class="keywordflow">case</span> convFloatGeneral:
-00655         <span class="keywordflow">case</span> convFloatHex:
-00656           <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
-00657           {
-00658             param.vLongDbl = va_arg (args, <span class="keywordtype">long</span> <span class="keywordtype">double</span>);
-00659           }
-00660           <span class="keywordflow">else</span>
-00661           {
-00662             param.vDbl = va_arg (args, <span class="keywordtype">double</span>);
-00663           }
-00664           <span class="keywordflow">break</span>;
-00665         <span class="keywordflow">case</span> convStr:
-00666         <span class="keywordflow">case</span> convPtr:
-00667         <span class="keywordflow">case</span> convGetNum:
-00668           param.vPtr = va_arg (args, <span class="keywordtype">void</span>*);
-00669           <span class="keywordflow">break</span>;
-00670         <span class="keywordflow">case</span> convNone:
-00671           <span class="keywordflow">break</span>;
-00672       }
-00673     }
-00674   }
-00675 
-00676   <span class="keywordtype">void</span> Init (va_list args)
-00677   {
-00678     ParseSpec ();
-00679     FetchArgs (args);
-00680   }
-00681 
-00683   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
-00684   <span class="keywordtype">void</span> OutputString (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat,
-00685     <span class="keyword">const</span> T* stringPtr)
-00686   {
-00687     <span class="keywordflow">if</span> (stringPtr == 0)
-00688     {
-00689       OutputString (writer, currentFormat, (<a class="code" href="group__util.html#ga19">utf8_char</a>*)<span class="stringliteral">"(nil)"</span>);
-00690       <span class="keywordflow">return</span>;
-00691     }
-00692 
-00693     size_t scratchOffs = scratch.Length();
-00694     size_t len = 0;
-00695     {
-00696       <span class="keyword">const</span> T* ptr = stringPtr;
-00697       <span class="keywordflow">while</span> (*ptr++ != 0) len++;
-00698     }
-00699     <span class="keywordflow">while</span> (len &gt; 0)
-00700     {
-00701       <a class="code" href="group__util.html#ga21">utf32_char</a> ch;
-00702       <span class="keywordtype">int</span> n = <a class="code" href="classcsUnicodeTransform.html#z580_3">csUnicodeTransform::Decode</a> (stringPtr, len, ch);
-00703       scratch.Push (ch);
-00704       stringPtr += n;
-00705       len -= (size_t)n;
+00604         <span class="keywordtype">int</span> v = va_arg (args, <span class="keywordtype">int</span>);
+00605         <span class="keywordflow">if</span> (v &gt;= 0) 
+00606           currentFormat.precision = v;
+00607         <span class="keywordflow">else</span>
+00608           currentFormat.precision = -1;
+00609       }
+00610       <span class="keywordflow">switch</span> (currentFormat.conversion)
+00611       {
+00612         <span class="keywordflow">case</span> convInt:
+00613         <span class="keywordflow">case</span> convOctal:
+00614         <span class="keywordflow">case</span> convUint:
+00615         <span class="keywordflow">case</span> convHex:
+00616         <span class="keywordflow">default</span>:
+00617           {
+00618             <span class="keywordflow">switch</span> (currentFormat.type)
+00619             {
+00620               <span class="keywordflow">case</span> typeIntmax:
+00621                 param.vIMT = va_arg (args, <a class="code" href="group__util.html#ga11">intmax_t</a>);
+00622                 <span class="keywordflow">break</span>;
+00623               <span class="keywordflow">case</span> typeLong:
+00624                 param.vLong = va_arg (args, <span class="keywordtype">long</span>);
+00625                 <span class="keywordflow">break</span>;
+00626               <span class="keywordflow">case</span> typeLongLong:
+00627                 param.vLL = va_arg (args, <a class="code" href="group__util.html#ga15">longlong</a>);
+00628                 <span class="keywordflow">break</span>;
+00629               <span class="keywordflow">case</span> typePtrDiffT:
+00630                 param.vPDT = va_arg (args, <a class="code" href="group__util.html#ga10">ptrdiff_t</a>);
+00631                 <span class="keywordflow">break</span>;
+00632               <span class="keywordflow">case</span> typeSizeT:
+00633                 param.vSzT = va_arg (args, size_t);
+00634                 <span class="keywordflow">break</span>;
+00635               <span class="keywordflow">case</span> typeShort:
+00636                 param.vInt = (short)(va_arg (args, <span class="keywordtype">int</span>));
+00637                 <span class="keywordflow">break</span>;
+00638               <span class="keywordflow">case</span> typeChar:
+00639                 param.vInt = (char)(va_arg (args, <span class="keywordtype">int</span>));
+00640                 <span class="keywordflow">break</span>;
+00641               <span class="keywordflow">default</span>:
+00642                 param.vInt = va_arg (args, <span class="keywordtype">int</span>);
+00643                 <span class="keywordflow">break</span>;
+00644             }
+00645           }
+00646           <span class="keywordflow">break</span>;
+00647         <span class="keywordflow">case</span> convErrno:
+00648           param.vInt = errno;
+00649           <span class="keywordflow">break</span>;
+00650         <span class="keywordflow">case</span> convChar:
+00651           <span class="keywordflow">if</span> (currentFormat.type == typeLong)
+00652           {
+00653             param.vInt = (wint_t)(va_arg (args, <span class="keywordtype">int</span>));
+00654           }
+00655           <span class="keywordflow">else</span>
+00656           {
+00657             param.vInt = (<span class="keywordtype">unsigned</span> char)(va_arg (args, <span class="keywordtype">int</span>));
+00658           }
+00659           <span class="keywordflow">break</span>;
+00660         <span class="keywordflow">case</span> convFloatFix:
+00661         <span class="keywordflow">case</span> convFloatExp:
+00662         <span class="keywordflow">case</span> convFloatGeneral:
+00663         <span class="keywordflow">case</span> convFloatHex:
+00664           <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
+00665           {
+00666             param.vLongDbl = va_arg (args, <span class="keywordtype">long</span> <span class="keywordtype">double</span>);
+00667           }
+00668           <span class="keywordflow">else</span>
+00669           {
+00670             param.vDbl = va_arg (args, <span class="keywordtype">double</span>);
+00671           }
+00672           <span class="keywordflow">break</span>;
+00673         <span class="keywordflow">case</span> convStr:
+00674         <span class="keywordflow">case</span> convPtr:
+00675         <span class="keywordflow">case</span> convGetNum:
+00676           param.vPtr = va_arg (args, <span class="keywordtype">void</span>*);
+00677           <span class="keywordflow">break</span>;
+00678         <span class="keywordflow">case</span> convNone:
+00679           <span class="keywordflow">break</span>;
+00680       }
+00681     }
+00682   }
+00683 
+00684   <span class="keywordtype">void</span> Init (va_list args)
+00685   {
+00686     ParseSpec ();
+00687     FetchArgs (args);
+00688   }
+00689 
+00691   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+00692   <span class="keywordtype">void</span> OutputString (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat,
+00693     <span class="keyword">const</span> T* stringPtr)
+00694   {
+00695     <span class="keywordflow">if</span> (stringPtr == 0)
+00696     {
+00697       OutputString (writer, currentFormat, (<a class="code" href="group__util.html#ga20">utf8_char</a>*)<span class="stringliteral">"(nil)"</span>);
+00698       <span class="keywordflow">return</span>;
+00699     }
+00700 
+00701     size_t scratchOffs = scratch.Length();
+00702     size_t len = 0;
+00703     {
+00704       <span class="keyword">const</span> T* ptr = stringPtr;
+00705       <span class="keywordflow">while</span> (*ptr++ != 0) len++;
 00706     }
-00707     <span class="keywordflow">if</span> (!currentFormat.leftJustify 
-00708       &amp;&amp; ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs)))
-00709     {
-00710       size_t d = (size_t)currentFormat.width - scratch.Length() + scratchOffs;
-00711       <span class="keywordflow">while</span> (d-- &gt; 0) writer.Put (<span class="charliteral">' '</span>);
-00712     }
-00713     scratch.WriteTo (writer, scratchOffs);
-00714     <span class="keywordflow">if</span> (currentFormat.leftJustify 
-00715       &amp;&amp; ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs)))
-00716     {
-00717       size_t d = (size_t)currentFormat.width - scratch.Length() + scratchOffs;
-00718       <span class="keywordflow">while</span> (d-- &gt; 0) writer.Put (<span class="charliteral">' '</span>);
-00719     }
-00720     scratch.Truncate (scratchOffs);
-00721   }
-00722 
-00724   <span class="keywordtype">void</span> DoPadding (<span class="keyword">const</span> FormatSpec&amp; currentFormat, <span class="keyword">const</span> size_t scratchOffs,
-00725     <span class="keyword">const</span> size_t insert0offs)
-00726   {
-00727     <span class="keywordflow">if</span> (currentFormat.leftJustify)
-00728     {
-00729       <span class="keywordflow">while</span> ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs))
-00730       {
-00731         scratch.Push (<span class="charliteral">' '</span>);
-00732       }
-00733     }
-00734     <span class="keywordflow">else</span>
-00735     {
-00736       <span class="keywordflow">if</span> (currentFormat.padZero)
-00737       {
-00738         <span class="keywordflow">while</span> ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs))
-00739         {
-00740           scratch.Insert (insert0offs, <span class="charliteral">'0'</span>);
-00741         }
-00742       }
-00743       <span class="keywordflow">else</span>
-00744       {
-00745         <span class="keywordflow">while</span> ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs))
-00746         {
-00747           scratch.Insert (scratchOffs, <span class="charliteral">' '</span>);
-00748         }
-00749       }
-00750     }
-00751   }
-00752 
-00754   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
-00755   <span class="keywordtype">void</span> OutputInt (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat, T value)
-00756   {
-00757     <span class="keyword">const</span> size_t scratchOffs = scratch.Length();
-00758     size_t insertOffs = scratchOffs;
-00759 
-00760     <span class="keywordflow">if</span> (value &lt; 0)
-00761     {
-00762       scratch.Push (<span class="charliteral">'-'</span>);
-00763       insertOffs++;
-00764       value = -value;
-00765     }
-00766     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.plusSign)
-00767     {
-00768       scratch.Push (<span class="charliteral">'+'</span>);
-00769       insertOffs++;
-00770     }
-00771     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.spacePrefix)
-00772     {
-00773       scratch.Push (<span class="charliteral">' '</span>);
-00774       insertOffs++;
-00775     }
-00776 
-00777     <span class="keywordtype">int</span> width = 0;
-00778     <span class="keywordtype">int</span> numDigits = currentFormat.precision;
-00779     <span class="keywordflow">if</span> (!((value == 0) &amp;&amp; (numDigits == 0)))
+00707     <span class="keywordflow">while</span> (len &gt; 0)
+00708     {
+00709       <a class="code" href="group__util.html#ga22">utf32_char</a> ch;
+00710       <span class="keywordtype">int</span> n = <a class="code" href="classcsUnicodeTransform.html#z580_3">csUnicodeTransform::Decode</a> (stringPtr, len, ch);
+00711       scratch.Push (ch);
+00712       stringPtr += n;
+00713       len -= (size_t)n;
+00714     }
+00715     <span class="keywordflow">if</span> (!currentFormat.leftJustify 
+00716       &amp;&amp; ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs)))
+00717     {
+00718       size_t d = (size_t)currentFormat.width - scratch.Length() + scratchOffs;
+00719       <span class="keywordflow">while</span> (d-- &gt; 0) writer.Put (<span class="charliteral">' '</span>);
+00720     }
+00721     scratch.WriteTo (writer, scratchOffs);
+00722     <span class="keywordflow">if</span> (currentFormat.leftJustify 
+00723       &amp;&amp; ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs)))
+00724     {
+00725       size_t d = (size_t)currentFormat.width - scratch.Length() + scratchOffs;
+00726       <span class="keywordflow">while</span> (d-- &gt; 0) writer.Put (<span class="charliteral">' '</span>);
+00727     }
+00728     scratch.Truncate (scratchOffs);
+00729   }
+00730 
+00732   <span class="keywordtype">void</span> DoPadding (<span class="keyword">const</span> FormatSpec&amp; currentFormat, <span class="keyword">const</span> size_t scratchOffs,
+00733     <span class="keyword">const</span> size_t insert0offs)
+00734   {
+00735     <span class="keywordflow">if</span> (currentFormat.leftJustify)
+00736     {
+00737       <span class="keywordflow">while</span> ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs))
+00738       {
+00739         scratch.Push (<span class="charliteral">' '</span>);
+00740       }
+00741     }
+00742     <span class="keywordflow">else</span>
+00743     {
+00744       <span class="keywordflow">if</span> (currentFormat.padZero)
+00745       {
+00746         <span class="keywordflow">while</span> ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs))
+00747         {
+00748           scratch.Insert (insert0offs, <span class="charliteral">'0'</span>);
+00749         }
+00750       }
+00751       <span class="keywordflow">else</span>
+00752       {
+00753         <span class="keywordflow">while</span> ((size_t)currentFormat.width &gt; (scratch.Length() - scratchOffs))
+00754         {
+00755           scratch.Insert (scratchOffs, <span class="charliteral">' '</span>);
+00756         }
+00757       }
+00758     }
+00759   }
+00760 
+00762   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+00763   <span class="keywordtype">void</span> OutputInt (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat, T value)
+00764   {
+00765     <span class="keyword">const</span> size_t scratchOffs = scratch.Length();
+00766     size_t insertOffs = scratchOffs;
+00767 
+00768     <span class="keywordflow">if</span> (value &lt; 0)
+00769     {
+00770       scratch.Push (<span class="charliteral">'-'</span>);
+00771       insertOffs++;
+00772       value = -value;
+00773     }
+00774     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.plusSign)
+00775     {
+00776       scratch.Push (<span class="charliteral">'+'</span>);
+00777       insertOffs++;
+00778     }
+00779     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.spacePrefix)
 00780     {
-00781       <span class="keywordflow">do</span>
-00782       {
-00783         <span class="keywordtype">int</span> d = value % 10;
-00784         scratch.Insert (insertOffs, d + <span class="charliteral">'0'</span>);
-00785         width++;
-00786         value = value / 10;
-00787       }
-00788       <span class="keywordflow">while</span> ((value != 0) || (width &lt; numDigits));
-00789     }
-00790     DoPadding (currentFormat, scratchOffs, insertOffs);
-00791     scratch.WriteTo (writer, scratchOffs);
-00792     scratch.Truncate (scratchOffs);
-00793   }
-00794 
-00796   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
-00797   <span class="keywordtype">void</span> OutputUint (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat,
-00798     T value, <a class="code" href="group__util.html#ga16">uint</a> radix, <span class="keyword">const</span> <span class="keywordtype">char</span>* prefix = 0)
-00799   {
-00800     <span class="keyword">const</span> <a class="code" href="group__util.html#ga21">utf32_char</a> letterFirst = currentFormat.uppercase ? <span class="charliteral">'A'</span> : <span class="charliteral">'a'</span>;
-00801     <span class="keyword">const</span> size_t scratchOffs = scratch.Length();
-00802     size_t insertOffs = scratchOffs;
-00803 
-00804     <span class="keywordflow">if</span> (prefix != 0)
-00805     {
-00806       <span class="keywordflow">while</span> (*prefix != 0)
-00807       {
-00808         <a class="code" href="group__util.html#ga21">utf32_char</a> ch = (value != 0) ? *prefix : <span class="charliteral">' '</span>;
-00809         scratch.Push (ch);
-00810         insertOffs++;
-00811         prefix++;
-00812       }
-00813     }
-00814 
-00815     <span class="keywordtype">int</span> width = 0;
-00816     <span class="keywordtype">int</span> numDigits = currentFormat.precision;
-00817     <span class="keywordflow">if</span> (!((value == 0) &amp;&amp; (numDigits == 0)))
-00818     {
-00819       <span class="keywordflow">do</span>
-00820       {
-00821         <a class="code" href="group__util.html#ga16">uint</a> d = value % radix;
-00822         <a class="code" href="group__util.html#ga21">utf32_char</a> ch;
-00823         <span class="keywordflow">if</span> (d &lt;= 9)
-00824           ch = d + <span class="charliteral">'0'</span>;
-00825         <span class="keywordflow">else</span>
-00826           ch = d - 10 + letterFirst;
-00827         scratch.Insert (insertOffs, ch);
-00828         width++;
-00829         value = value / radix;
-00830       }
-00831       <span class="keywordflow">while</span> ((value != 0) || (width &lt; numDigits));
-00832     }
-00833     DoPadding (currentFormat, scratchOffs, insertOffs);
-00834     scratch.WriteTo (writer, scratchOffs);
-00835     scratch.Truncate (scratchOffs);
-00836   }
-00837 
-00839   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
-00840   <span class="keywordtype">void</span> OutputFloat (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat,
-00841     <span class="keyword">const</span> T&amp; value, <span class="keyword">const</span> <span class="keywordtype">char</span>* type)
-00842   {
-00843     <span class="keywordtype">char</span> flags[5] = <span class="stringliteral">""</span>;
-00844     <span class="keywordflow">if</span> (currentFormat.plusSign)
-00845       strcat (flags, <span class="stringliteral">"+"</span>);
-00846     <span class="keywordflow">if</span> (currentFormat.spacePrefix)
-00847       strcat (flags, <span class="stringliteral">" "</span>);
-00848     <span class="keywordflow">if</span> (currentFormat.basePrefix)
-00849       strcat (flags, <span class="stringliteral">"#"</span>);
-00850     <span class="keywordflow">if</span> (currentFormat.padZero)
-00851       strcat (flags, <span class="stringliteral">"0"</span>);
-00852     <a class="code" href="cssysdef_8h.html#a4">CS_ALLOC_STACK_ARRAY</a>(<span class="keywordtype">char</span>, precStr, 
-00853       (<span class="keyword">sizeof</span>(currentFormat.precision) * 24) / 10 + 3);
-00854     <span class="keywordflow">if</span> (currentFormat.precision &gt;= 0)
-00855       sprintf (precStr, <span class="stringliteral">".%d"</span>, currentFormat.precision);
-00856     <span class="keywordflow">else</span>
-00857       precStr[0] = 0;
-00858     <a class="code" href="cssysdef_8h.html#a4">CS_ALLOC_STACK_ARRAY</a>(<span class="keywordtype">char</span>, formatStr, 1 + strlen (flags)
-00859       + (<span class="keyword">sizeof</span>(currentFormat.width) * 24) / 10 + 2 + strlen (precStr) + 2);
-00860     sprintf (formatStr, <span class="stringliteral">"%%%s%d%s%s"</span>, flags, currentFormat.width, precStr,
-00861       type);
-00862     <span class="keywordtype">char</span> formattedStr[64];
-00863     sprintf (formattedStr, formatStr, value);
-00864 
-00865     <span class="keywordtype">char</span>* p = formattedStr;
-00866     <span class="keywordflow">while</span> (*p != 0)
-00867       writer.Put (*p++);
-00868   }
-00869 
-00873   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keyword">class</span> Tbase&gt;
-00874   <span class="keyword">struct </span>IEEEFloatMantissa
-00875   {
-00876     Tbase mantissa[<span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase)];
+00781       scratch.Push (<span class="charliteral">' '</span>);
+00782       insertOffs++;
+00783     }
+00784 
+00785     <span class="keywordtype">int</span> width = 0;
+00786     <span class="keywordtype">int</span> numDigits = currentFormat.precision;
+00787     <span class="keywordflow">if</span> (!((value == 0) &amp;&amp; (numDigits == 0)))
+00788     {
+00789       <span class="keywordflow">do</span>
+00790       {
+00791         <span class="keywordtype">int</span> d = value % 10;
+00792         scratch.Insert (insertOffs, d + <span class="charliteral">'0'</span>);
+00793         width++;
+00794         value = value / 10;
+00795       }
+00796       <span class="keywordflow">while</span> ((value != 0) || (width &lt; numDigits));
+00797     }
+00798     DoPadding (currentFormat, scratchOffs, insertOffs);
+00799     scratch.WriteTo (writer, scratchOffs);
+00800     scratch.Truncate (scratchOffs);
+00801   }
+00802 
+00804   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+00805   <span class="keywordtype">void</span> OutputUint (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat,
+00806     T value, <a class="code" href="group__util.html#ga18">uint</a> radix, <span class="keyword">const</span> <span class="keywordtype">char</span>* prefix = 0)
+00807   {
+00808     <span class="keyword">const</span> <a class="code" href="group__util.html#ga22">utf32_char</a> letterFirst = currentFormat.uppercase ? <span class="charliteral">'A'</span> : <span class="charliteral">'a'</span>;
+00809     <span class="keyword">const</span> size_t scratchOffs = scratch.Length();
+00810     size_t insertOffs = scratchOffs;
+00811 
+00812     <span class="keywordflow">if</span> (prefix != 0)
+00813     {
+00814       <span class="keywordflow">while</span> (*prefix != 0)
+00815       {
+00816         <a class="code" href="group__util.html#ga22">utf32_char</a> ch = (value != 0) ? *prefix : <span class="charliteral">' '</span>;
+00817         scratch.Push (ch);
+00818         insertOffs++;
+00819         prefix++;
+00820       }
+00821     }
+00822 
+00823     <span class="keywordtype">int</span> width = 0;
+00824     <span class="keywordtype">int</span> numDigits = currentFormat.precision;
+00825     <span class="keywordflow">if</span> (!((value == 0) &amp;&amp; (numDigits == 0)))
+00826     {
+00827       <span class="keywordflow">do</span>
+00828       {
+00829         <a class="code" href="group__util.html#ga18">uint</a> d = value % radix;
+00830         <a class="code" href="group__util.html#ga22">utf32_char</a> ch;
+00831         <span class="keywordflow">if</span> (d &lt;= 9)
+00832           ch = d + <span class="charliteral">'0'</span>;
+00833         <span class="keywordflow">else</span>
+00834           ch = d - 10 + letterFirst;
+00835         scratch.Insert (insertOffs, ch);
+00836         width++;
+00837         value = value / radix;
+00838       }
+00839       <span class="keywordflow">while</span> ((value != 0) || (width &lt; numDigits));
+00840     }
+00841     DoPadding (currentFormat, scratchOffs, insertOffs);
+00842     scratch.WriteTo (writer, scratchOffs);
+00843     scratch.Truncate (scratchOffs);
+00844   }
+00845 
+00847   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+00848   <span class="keywordtype">void</span> OutputFloat (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat,
+00849     <span class="keyword">const</span> T&amp; value, <span class="keyword">const</span> <span class="keywordtype">char</span>* type)
+00850   {
+00851     <span class="keywordtype">char</span> flags[5] = <span class="stringliteral">""</span>;
+00852     <span class="keywordflow">if</span> (currentFormat.plusSign)
+00853       strcat (flags, <span class="stringliteral">"+"</span>);
+00854     <span class="keywordflow">if</span> (currentFormat.spacePrefix)
+00855       strcat (flags, <span class="stringliteral">" "</span>);
+00856     <span class="keywordflow">if</span> (currentFormat.basePrefix)
+00857       strcat (flags, <span class="stringliteral">"#"</span>);
+00858     <span class="keywordflow">if</span> (currentFormat.padZero)
+00859       strcat (flags, <span class="stringliteral">"0"</span>);
+00860     <a class="code" href="cssysdef_8h.html#a4">CS_ALLOC_STACK_ARRAY</a>(<span class="keywordtype">char</span>, precStr, 
+00861       (<span class="keyword">sizeof</span>(currentFormat.precision) * 24) / 10 + 3);
+00862     <span class="keywordflow">if</span> (currentFormat.precision &gt;= 0)
+00863       sprintf (precStr, <span class="stringliteral">".%d"</span>, currentFormat.precision);
+00864     <span class="keywordflow">else</span>
+00865       precStr[0] = 0;
+00866     <a class="code" href="cssysdef_8h.html#a4">CS_ALLOC_STACK_ARRAY</a>(<span class="keywordtype">char</span>, formatStr, 1 + strlen (flags)
+00867       + (<span class="keyword">sizeof</span>(currentFormat.width) * 24) / 10 + 2 + strlen (precStr) + 2);
+00868     sprintf (formatStr, <span class="stringliteral">"%%%s%d%s%s"</span>, flags, currentFormat.width, precStr,
+00869       type);
+00870     <span class="keywordtype">char</span> formattedStr[64];
+00871     sprintf (formattedStr, formatStr, value);
+00872 
+00873     <span class="keywordtype">char</span>* p = formattedStr;
+00874     <span class="keywordflow">while</span> (*p != 0)
+00875       writer.Put (*p++);
+00876   }
 00877 
-00878     Tbase&amp; operator[] (<span class="keywordtype">int</span> index)
-00879     { <span class="keywordflow">return</span> mantissa[index]; }
-00880     <span class="keywordtype">bool</span> Eq0 ()
-00881     {
-00882       <span class="keywordflow">for</span> (<a class="code" href="group__util.html#ga16">uint</a> n = 0; n &lt; <span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase); n++)
-00883       {
-00884         <span class="keywordflow">if</span> (mantissa[n] != 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00885       }
-00886       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00887     }
-00888     <span class="keyword">const</span> Tbase operator&amp; (Tbase other)<span class="keyword"> const</span>
-00889 <span class="keyword">    </span>{ <span class="keywordflow">return</span> mantissa[0] &amp; other; }
-00890     IEEEFloatMantissa&amp; operator&lt;&lt;= (<span class="keywordtype">int</span> shift)
-00891     { 
-00892       <span class="keyword">const</span> <span class="keywordtype">int</span> ovShift = <span class="keyword">sizeof</span>(Tbase) * 8 - shift;
-00893       Tbase overflow = 0;
-00894       <span class="keywordflow">for</span> (<a class="code" href="group__util.html#ga16">uint</a> n = 0; n &lt; <span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase); n++)
-00895       {
-00896         Tbase newOverflow = mantissa[n] &gt;&gt; ovShift;
-00897         mantissa[n] = (mantissa[n] &lt;&lt; shift) | overflow;
-00898         overflow = newOverflow;
-00899       }
-00900       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00901     }
-00902     Tbase&amp; Leftmost ()
-00903     { <span class="keywordflow">return</span> mantissa[<span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase)-1]; }
-00904   };
-00905 
-00907   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keyword">class</span> Tbase&gt;
-00908   <span class="keyword">struct </span>IEEEFloatSplitter
-00909   {
-00910     <span class="keywordtype">bool</span> sign;
-00911     Tbase exp;
-00912 
-00913     IEEEFloatMantissa&lt;T, Tbase&gt; mantissa;
-00914 
-00915     IEEEFloatSplitter (<span class="keyword">const</span> T&amp; val, <span class="keyword">const</span> <span class="keywordtype">int</span> mantissaBits,
-00916       <span class="keyword">const</span> <span class="keywordtype">int</span> expBits) 
-00917     {
-00918       <span class="keyword">const</span> <span class="keywordtype">int</span> baseBits = <span class="keyword">sizeof</span>(Tbase) * 8;
-00919       <span class="keyword">const</span> <span class="keywordtype">int</span> signBit = mantissaBits + expBits;
+00881   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keyword">class</span> Tbase&gt;
+00882   <span class="keyword">struct </span>IEEEFloatMantissa
+00883   {
+00884     Tbase mantissa[<span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase)];
+00885 
+00886     Tbase&amp; operator[] (<span class="keywordtype">int</span> index)
+00887     { <span class="keywordflow">return</span> mantissa[index]; }
+00888     <span class="keywordtype">bool</span> Eq0 ()
+00889     {
+00890       <span class="keywordflow">for</span> (<a class="code" href="group__util.html#ga18">uint</a> n = 0; n &lt; <span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase); n++)
+00891       {
+00892         <span class="keywordflow">if</span> (mantissa[n] != 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00893       }
+00894       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00895     }
+00896     <span class="keyword">const</span> Tbase operator&amp; (Tbase other)<span class="keyword"> const</span>
+00897 <span class="keyword">    </span>{ <span class="keywordflow">return</span> mantissa[0] &amp; other; }
+00898     IEEEFloatMantissa&amp; operator&lt;&lt;= (<span class="keywordtype">int</span> shift)
+00899     { 
+00900       <span class="keyword">const</span> <span class="keywordtype">int</span> ovShift = <span class="keyword">sizeof</span>(Tbase) * 8 - shift;
+00901       Tbase overflow = 0;
+00902       <span class="keywordflow">for</span> (<a class="code" href="group__util.html#ga18">uint</a> n = 0; n &lt; <span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase); n++)
+00903       {
+00904         Tbase newOverflow = mantissa[n] &gt;&gt; ovShift;
+00905         mantissa[n] = (mantissa[n] &lt;&lt; shift) | overflow;
+00906         overflow = newOverflow;
+00907       }
+00908       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00909     }
+00910     Tbase&amp; Leftmost ()
+00911     { <span class="keywordflow">return</span> mantissa[<span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase)-1]; }
+00912   };
+00913 
+00915   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keyword">class</span> Tbase&gt;
+00916   <span class="keyword">struct </span>IEEEFloatSplitter
+00917   {
+00918     <span class="keywordtype">bool</span> sign;
+00919     Tbase exp;
 00920 
-00921       <span class="keyword">union</span>
-00922 <span class="keyword">      </span>{
-00923         T v;
-00924         Tbase vB[<span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase)];
-00925       } toBase;
-00926       toBase.v = val;
-00927 <span class="preprocessor">  #ifdef CS_LITTLE_ENDIAN</span>
-00928 <span class="preprocessor"></span>      <span class="keyword">const</span> <span class="keywordtype">int</span> hi = (<span class="keyword">sizeof</span> (T) / <span class="keyword">sizeof</span> (Tbase)) - 1;
-00929       <span class="keyword">const</span> <span class="keywordtype">int</span> lo = 0;
-00930       <span class="keyword">const</span> <span class="keywordtype">int</span> d = 1;
-00931 <span class="preprocessor">  #else</span>
-00932 <span class="preprocessor"></span>      <span class="keyword">const</span> <span class="keywordtype">int</span> hi = 0;
-00933       <span class="keyword">const</span> <span class="keywordtype">int</span> lo = (<span class="keyword">sizeof</span> (T) / <span class="keyword">sizeof</span> (Tbase)) - 1;
-00934       <span class="keyword">const</span> <span class="keywordtype">int</span> d = -1;
-00935 <span class="preprocessor">  #endif</span>
-00936 <span class="preprocessor"></span>      sign = toBase.vB[lo + (signBit / baseBits) * d]
-00937         &amp; (1 &lt;&lt; (signBit % baseBits));
-00938       exp = (toBase.vB[hi] &gt;&gt; (mantissaBits % (baseBits)))
-00939         &amp; ((1 &lt;&lt; expBits) - 1);
-00940       <span class="keywordflow">for</span> (<span class="keywordtype">int</span> n = lo, p = 0; n != hi + d; n += d, p++)
-00941       {
-00942         <span class="keyword">const</span> <span class="keywordtype">int</span> bit = p * baseBits;
-00943         <span class="keyword">const</span> Tbase mask = ((bit + baseBits) &lt;= mantissaBits) ? ~0 
-00944           : ((1 &lt;&lt; (mantissaBits % baseBits)) - 1);
-00945         mantissa[p] = toBase.vB[n] &amp; mask;
-00946       }
-00947     }
-00948   };
-00950   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-00951   <span class="keywordtype">void</span> OutputFloatHex (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat,
-00952     <span class="keyword">const</span> T&amp; value, <span class="keyword">const</span> <span class="keywordtype">int</span> vMantissaBits, <span class="keyword">const</span> <span class="keywordtype">int</span> expBits, <span class="keyword">const</span> <span class="keywordtype">int</span> bias)
-00953   {
-00954     <span class="keyword">const</span> <a class="code" href="group__util.html#ga21">utf32_char</a> letterFirst = currentFormat.uppercase ? <span class="charliteral">'A'</span> : <span class="charliteral">'a'</span>;
-00955 
-00956 <span class="preprocessor">#ifdef CS_IEEE_DOUBLE_FORMAT</span>
-00957 <span class="preprocessor"></span><span class="preprocessor">#ifdef CS_PROCESSOR_X86</span>
-00958 <span class="preprocessor"></span>    <span class="comment">// @@@ x86 long double uses explicit mantissa MSB</span>
-00959     <span class="keyword">const</span> <span class="keywordtype">bool</span> hiddenBit = !(vMantissaBits &gt;= 63);
-00960 <span class="preprocessor">#else</span>
-00961 <span class="preprocessor"></span>    <span class="keyword">const</span> <span class="keywordtype">bool</span> hiddenBit = <span class="keyword">false</span>;
-00962 <span class="preprocessor">#endif</span>
-00963 <span class="preprocessor"></span>    <span class="keyword">const</span> <span class="keywordtype">int</span> mantissaBits = vMantissaBits - (hiddenBit ? 1 : 0);
-00964     IEEEFloatSplitter&lt;T, uint&gt; vSplit (value, mantissaBits, expBits);
-00965     <span class="keyword">const</span> <a class="code" href="group__util.html#ga16">uint</a> expMax = (1 &lt;&lt; (<span class="keyword">sizeof</span>(T) * 8 - mantissaBits - 1)) - 1;
-00966 
-00967     <span class="keywordflow">if</span> ((vSplit.exp == expMax) &amp;&amp; vSplit.mantissa.Eq0())
-00968     {
-00969       <span class="keywordtype">char</span> infStr[5];
-00970       <span class="keywordflow">if</span> (vSplit.sign)
-00971       {
-00972         strcpy (infStr, <span class="stringliteral">"-"</span>);
-00973       }
-00974       <span class="keywordflow">else</span>
-00975       {
-00976         <span class="keywordflow">if</span> (currentFormat.plusSign)
-00977           strcpy (infStr, <span class="stringliteral">"+"</span>);
-00978         <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.spacePrefix)
-00979           strcpy (infStr, <span class="stringliteral">" "</span>);
-00980         <span class="keywordflow">else</span>
-00981           strcpy (infStr, <span class="stringliteral">""</span>);
-00982       }
-00983       strcat (infStr, currentFormat.uppercase ? <span class="stringliteral">"INF"</span> : <span class="stringliteral">"inf"</span>);
-00984       OutputString (writer, currentFormat, 
-00985         (<a class="code" href="group__util.html#ga19">utf8_char</a>*)infStr);
-00986       <span class="keywordflow">return</span>;
-00987     }
-00988     <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((vSplit.exp == expMax) &amp;&amp; !vSplit.mantissa.Eq0())
-00989     {
-00990       <span class="keywordtype">char</span> nanStr[5];
-00991       <span class="keywordflow">if</span> (vSplit.sign)
-00992       {
-00993         strcpy (nanStr, <span class="stringliteral">"-"</span>);
-00994       }
-00995       <span class="keywordflow">else</span>
-00996       {
-00997         <span class="keywordflow">if</span> (currentFormat.plusSign)
-00998           strcpy (nanStr, <span class="stringliteral">"+"</span>);
-00999         <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.spacePrefix)
-01000           strcpy (nanStr, <span class="stringliteral">" "</span>);
-01001         <span class="keywordflow">else</span>
-01002           strcpy (nanStr, <span class="stringliteral">""</span>);
-01003       }
-01004       strcat (nanStr, currentFormat.uppercase ? <span class="stringliteral">"NAN"</span> : <span class="stringliteral">"nan"</span>);
-01005       OutputString (writer, currentFormat, 
-01006         (<a class="code" href="group__util.html#ga19">utf8_char</a>*)nanStr);
-01007       <span class="keywordflow">return</span>;
-01008     }
-01009 
-01010     <span class="keyword">const</span> size_t scratchOffs = scratch.Length();
-01011     <span class="keywordflow">if</span> (vSplit.sign)
-01012     {
-01013       scratch.Push (<span class="charliteral">'-'</span>);
-01014     }
-01015     scratch.Push (<span class="charliteral">'0'</span>);
-01016     scratch.Push (currentFormat.uppercase ? <span class="charliteral">'X'</span> : <span class="charliteral">'x'</span>);
-01017     <span class="keywordflow">if</span> (hiddenBit)
-01018     {
-01019       <span class="keywordflow">if</span> (vSplit.exp == 0)
-01020         scratch.Push (<span class="charliteral">'0'</span>);
-01021       <span class="keywordflow">else</span>
-01022         scratch.Push (<span class="charliteral">'1'</span>);
-01023     }
-01024     <span class="keywordflow">else</span>
-01025     {
-01026       <span class="keyword">const</span> <span class="keywordtype">int</span> bitNum = mantissaBits - 1;
-01027       <span class="keyword">const</span> <span class="keywordtype">int</span> baseBits = <span class="keyword">sizeof</span> (uint) * 8;
-01028       <span class="keyword">const</span> <span class="keywordtype">int</span> bitIndex = bitNum / baseBits;
-01029       scratch.Push (<span class="charliteral">'0'</span> + ((vSplit.mantissa[bitIndex] 
-01030         &gt;&gt; (bitNum % baseBits)) &amp; 1));
-01031       vSplit.mantissa &lt;&lt;= 1;
-01032     }
-01033     <span class="keywordflow">if</span> ((currentFormat.precision &gt; 0) || (!vSplit.mantissa.Eq0()))
-01034     {
-01035       scratch.Push (<span class="charliteral">'.'</span>);
-01036       
-01037       IEEEFloatMantissa&lt;T, uint&gt; m (vSplit.mantissa);
-01038       m &lt;&lt;= <span class="keyword">sizeof</span>(T)*8 - mantissaBits;
-01039       <span class="keywordtype">int</span> w = 0;
-01040       <span class="keywordflow">do</span>
-01041       {
-01042         <a class="code" href="group__util.html#ga16">uint</a> d = m.Leftmost() &gt;&gt; ((<span class="keyword">sizeof</span>(uint)*8)-4);
-01043         <a class="code" href="group__util.html#ga21">utf32_char</a> ch;
-01044         <span class="keywordflow">if</span> (d &lt;= 9)
-01045           ch = d + <span class="charliteral">'0'</span>;
-01046         <span class="keywordflow">else</span>
-01047           ch = d - 10 + letterFirst;
-01048         scratch.Push (ch);
-01049         m &lt;&lt;= 4;
-01050         w++;
-01051       }
-01052       <span class="keywordflow">while</span> ((w &lt; currentFormat.precision) 
-01053         || ((currentFormat.precision &lt;= 0) &amp;&amp; !m.Eq0()));
-01054     }
-01055     scratch.Push (currentFormat.uppercase ? <span class="charliteral">'P'</span> : <span class="charliteral">'p'</span>);
-01056     <span class="keywordtype">int</span> e;
-01057     <span class="keywordflow">if</span> ((vSplit.exp == 0) &amp;&amp; vSplit.mantissa.Eq0())
-01058       e = 0;
-01059     <span class="keywordflow">else</span>
-01060       e = (int)vSplit.exp + bias;
-01061     <span class="keywordflow">if</span> (e &lt; 0)
-01062     {
-01063       scratch.Push (<span class="charliteral">'-'</span>);
-01064       e = -e;
-01065     }
-01066     <span class="keywordflow">else</span>
-01067       scratch.Push (<span class="charliteral">'+'</span>);
-01068     <span class="keyword">const</span> size_t insertOffs = scratch.Length();;
-01069     <span class="keywordflow">do</span>
+00921     csPrintfFormatter::IEEEFloatMantissa&lt;T, Tbase&gt; mantissa;
+00922 
+00923     IEEEFloatSplitter (<span class="keyword">const</span> T&amp; val, <span class="keyword">const</span> <span class="keywordtype">int</span> mantissaBits,
+00924       <span class="keyword">const</span> <span class="keywordtype">int</span> expBits) 
+00925     {
+00926       <span class="keyword">const</span> <span class="keywordtype">int</span> baseBits = <span class="keyword">sizeof</span>(Tbase) * 8;
+00927       <span class="keyword">const</span> <span class="keywordtype">int</span> signBit = mantissaBits + expBits;
+00928 
+00929       <span class="keyword">union</span>
+00930 <span class="keyword">      </span>{
+00931         T v;
+00932         Tbase vB[<span class="keyword">sizeof</span>(T)/<span class="keyword">sizeof</span>(Tbase)];
+00933       } toBase;
+00934       toBase.v = val;
+00935 <span class="preprocessor">  #ifdef CS_LITTLE_ENDIAN</span>
+00936 <span class="preprocessor"></span>      <span class="keyword">const</span> <span class="keywordtype">int</span> hi = (<span class="keyword">sizeof</span> (T) / <span class="keyword">sizeof</span> (Tbase)) - 1;
+00937       <span class="keyword">const</span> <span class="keywordtype">int</span> lo = 0;
+00938       <span class="keyword">const</span> <span class="keywordtype">int</span> d = 1;
+00939 <span class="preprocessor">  #else</span>
+00940 <span class="preprocessor"></span>      <span class="keyword">const</span> <span class="keywordtype">int</span> hi = 0;
+00941       <span class="keyword">const</span> <span class="keywordtype">int</span> lo = (<span class="keyword">sizeof</span> (T) / <span class="keyword">sizeof</span> (Tbase)) - 1;
+00942       <span class="keyword">const</span> <span class="keywordtype">int</span> d = -1;
+00943 <span class="preprocessor">  #endif</span>
+00944 <span class="preprocessor"></span>      sign = toBase.vB[lo + (signBit / baseBits) * d]
+00945         &amp; (1 &lt;&lt; (signBit % baseBits));
+00946       exp = (toBase.vB[hi] &gt;&gt; (mantissaBits % (baseBits)))
+00947         &amp; ((1 &lt;&lt; expBits) - 1);
+00948       <span class="keywordflow">for</span> (<span class="keywordtype">int</span> n = lo, p = 0; n != hi + d; n += d, p++)
+00949       {
+00950         <span class="keyword">const</span> <span class="keywordtype">int</span> bit = p * baseBits;
+00951         <span class="keyword">const</span> Tbase mask = ((bit + baseBits) &lt;= mantissaBits) ? ~0 
+00952           : ((1 &lt;&lt; (mantissaBits % baseBits)) - 1);
+00953         mantissa[p] = toBase.vB[n] &amp; mask;
+00954       }
+00955     }
+00956   };
+00958   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+00959   <span class="keywordtype">void</span> OutputFloatHex (Twriter&amp; writer, <span class="keyword">const</span> FormatSpec&amp; currentFormat,
+00960     <span class="keyword">const</span> T&amp; value, <span class="keyword">const</span> <span class="keywordtype">int</span> vMantissaBits, <span class="keyword">const</span> <span class="keywordtype">int</span> expBits, <span class="keyword">const</span> <span class="keywordtype">int</span> bias)
+00961   {
+00962 <span class="preprocessor">#ifdef CS_IEEE_DOUBLE_FORMAT</span>
+00963 <span class="preprocessor"></span>    <span class="keyword">const</span> <a class="code" href="group__util.html#ga22">utf32_char</a> letterFirst = currentFormat.uppercase ? <span class="charliteral">'A'</span> : <span class="charliteral">'a'</span>;
+00964 
+00965 <span class="preprocessor">#ifdef CS_PROCESSOR_X86</span>
+00966 <span class="preprocessor"></span>    <span class="comment">// @@@ x86 long double uses explicit mantissa MSB</span>
+00967     <span class="keyword">const</span> <span class="keywordtype">bool</span> hiddenBit = !(vMantissaBits &gt;= 63);
+00968 <span class="preprocessor">#else</span>
+00969 <span class="preprocessor"></span>    <span class="keyword">const</span> <span class="keywordtype">bool</span> hiddenBit = <span class="keyword">false</span>;
+00970 <span class="preprocessor">#endif</span>
+00971 <span class="preprocessor"></span>    <span class="keyword">const</span> <span class="keywordtype">int</span> mantissaBits = vMantissaBits - (hiddenBit ? 1 : 0);
+00972     IEEEFloatSplitter&lt;T, uint&gt; vSplit (value, mantissaBits, expBits);
+00973     <span class="keyword">const</span> <a class="code" href="group__util.html#ga18">uint</a> expMax = (1 &lt;&lt; (<span class="keyword">sizeof</span>(T) * 8 - mantissaBits - 1)) - 1;
+00974 
+00975     <span class="keywordflow">if</span> ((vSplit.exp == expMax) &amp;&amp; vSplit.mantissa.Eq0())
+00976     {
+00977       <span class="keywordtype">char</span> infStr[5];
+00978       <span class="keywordflow">if</span> (vSplit.sign)
+00979       {
+00980         strcpy (infStr, <span class="stringliteral">"-"</span>);
+00981       }
+00982       <span class="keywordflow">else</span>
+00983       {
+00984         <span class="keywordflow">if</span> (currentFormat.plusSign)
+00985           strcpy (infStr, <span class="stringliteral">"+"</span>);
+00986         <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.spacePrefix)
+00987           strcpy (infStr, <span class="stringliteral">" "</span>);
+00988         <span class="keywordflow">else</span>
+00989           strcpy (infStr, <span class="stringliteral">""</span>);
+00990       }
+00991       strcat (infStr, currentFormat.uppercase ? <span class="stringliteral">"INF"</span> : <span class="stringliteral">"inf"</span>);
+00992       OutputString (writer, currentFormat, 
+00993         (<a class="code" href="group__util.html#ga20">utf8_char</a>*)infStr);
+00994       <span class="keywordflow">return</span>;
+00995     }
+00996     <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((vSplit.exp == expMax) &amp;&amp; !vSplit.mantissa.Eq0())
+00997     {
+00998       <span class="keywordtype">char</span> nanStr[5];
+00999       <span class="keywordflow">if</span> (vSplit.sign)
+01000       {
+01001         strcpy (nanStr, <span class="stringliteral">"-"</span>);
+01002       }
+01003       <span class="keywordflow">else</span>
+01004       {
+01005         <span class="keywordflow">if</span> (currentFormat.plusSign)
+01006           strcpy (nanStr, <span class="stringliteral">"+"</span>);
+01007         <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.spacePrefix)
+01008           strcpy (nanStr, <span class="stringliteral">" "</span>);
+01009         <span class="keywordflow">else</span>
+01010           strcpy (nanStr, <span class="stringliteral">""</span>);
+01011       }
+01012       strcat (nanStr, currentFormat.uppercase ? <span class="stringliteral">"NAN"</span> : <span class="stringliteral">"nan"</span>);
+01013       OutputString (writer, currentFormat, 
+01014         (<a class="code" href="group__util.html#ga20">utf8_char</a>*)nanStr);
+01015       <span class="keywordflow">return</span>;
+01016     }
+01017 
+01018     <span class="keyword">const</span> size_t scratchOffs = scratch.Length();
+01019     <span class="keywordflow">if</span> (vSplit.sign)
+01020     {
+01021       scratch.Push (<span class="charliteral">'-'</span>);
+01022     }
+01023     scratch.Push (<span class="charliteral">'0'</span>);
+01024     scratch.Push (currentFormat.uppercase ? <span class="charliteral">'X'</span> : <span class="charliteral">'x'</span>);
+01025     <span class="keywordflow">if</span> (hiddenBit)
+01026     {
+01027       <span class="keywordflow">if</span> (vSplit.exp == 0)
+01028         scratch.Push (<span class="charliteral">'0'</span>);
+01029       <span class="keywordflow">else</span>
+01030         scratch.Push (<span class="charliteral">'1'</span>);
+01031     }
+01032     <span class="keywordflow">else</span>
+01033     {
+01034       <span class="keyword">const</span> <span class="keywordtype">int</span> bitNum = mantissaBits - 1;
+01035       <span class="keyword">const</span> <span class="keywordtype">int</span> baseBits = <span class="keyword">sizeof</span> (uint) * 8;
+01036       <span class="keyword">const</span> <span class="keywordtype">int</span> bitIndex = bitNum / baseBits;
+01037       scratch.Push (<span class="charliteral">'0'</span> + ((vSplit.mantissa[bitIndex] 
+01038         &gt;&gt; (bitNum % baseBits)) &amp; 1));
+01039       vSplit.mantissa &lt;&lt;= 1;
+01040     }
+01041     <span class="keywordflow">if</span> ((currentFormat.precision &gt; 0) || (!vSplit.mantissa.Eq0()))
+01042     {
+01043       scratch.Push (<span class="charliteral">'.'</span>);
+01044       
+01045       IEEEFloatMantissa&lt;T, uint&gt; m (vSplit.mantissa);
+01046       m &lt;&lt;= <span class="keyword">sizeof</span>(T)*8 - mantissaBits;
+01047       <span class="keywordtype">int</span> w = 0;
+01048       <span class="keywordflow">do</span>
+01049       {
+01050         <a class="code" href="group__util.html#ga18">uint</a> d = m.Leftmost() &gt;&gt; ((<span class="keyword">sizeof</span>(uint)*8)-4);
+01051         <a class="code" href="group__util.html#ga22">utf32_char</a> ch;
+01052         <span class="keywordflow">if</span> (d &lt;= 9)
+01053           ch = d + <span class="charliteral">'0'</span>;
+01054         <span class="keywordflow">else</span>
+01055           ch = d - 10 + letterFirst;
+01056         scratch.Push (ch);
+01057         m &lt;&lt;= 4;
+01058         w++;
+01059       }
+01060       <span class="keywordflow">while</span> ((w &lt; currentFormat.precision) 
+01061         || ((currentFormat.precision &lt;= 0) &amp;&amp; !m.Eq0()));
+01062     }
+01063     scratch.Push (currentFormat.uppercase ? <span class="charliteral">'P'</span> : <span class="charliteral">'p'</span>);
+01064     <span class="keywordtype">int</span> e;
+01065     <span class="keywordflow">if</span> ((vSplit.exp == 0) &amp;&amp; vSplit.mantissa.Eq0())
+01066       e = 0;
+01067     <span class="keywordflow">else</span>
+01068       e = (int)vSplit.exp + bias;
+01069     <span class="keywordflow">if</span> (e &lt; 0)
 01070     {
-01071       <a class="code" href="group__util.html#ga16">uint</a> d = e % 10;
-01072       scratch.Insert (insertOffs, d + <span class="charliteral">'0'</span>);
-01073       e = e / 10;
-01074     }
-01075     <span class="keywordflow">while</span> (e != 0);
-01076 
-01077     DoPadding (currentFormat, scratchOffs, 
-01078       vSplit.sign ? scratchOffs + 1 : scratchOffs);
-01079     scratch.WriteTo (writer, scratchOffs);
-01080     scratch.Truncate (scratchOffs);
-01081 <span class="preprocessor">#else</span>
-01082 <span class="preprocessor"></span><span class="preprocessor">  #warning Dont know how to hex-format floats for you</span>
-01083 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-01084 <span class="preprocessor"></span>  }
-01085 <span class="keyword">public</span>:
-<a name="l01087"></a><a class="code" href="classcsPrintfFormatter.html#a0">01087</a>   <a class="code" href="classcsPrintfFormatter.html">csPrintfFormatter</a> (Treader* reader, va_list args) : reader (*reader)
-01088   {
-01089     Init (args);
-01090   }
-<a name="l01092"></a><a class="code" href="classcsPrintfFormatter.html#a1">01092</a>   <a class="code" href="classcsPrintfFormatter.html">csPrintfFormatter</a> (Treader* reader, ...) : reader (*reader)
-01093   {
-01094     va_list ap;
-01095     va_start(ap, reader);
-01096     Init (ap);
-01097     va_end(ap);
+01071       scratch.Push (<span class="charliteral">'-'</span>);
+01072       e = -e;
+01073     }
+01074     <span class="keywordflow">else</span>
+01075       scratch.Push (<span class="charliteral">'+'</span>);
+01076     <span class="keyword">const</span> size_t insertOffs = scratch.Length();;
+01077     <span class="keywordflow">do</span>
+01078     {
+01079       <a class="code" href="group__util.html#ga18">uint</a> d = e % 10;
+01080       scratch.Insert (insertOffs, d + <span class="charliteral">'0'</span>);
+01081       e = e / 10;
+01082     }
+01083     <span class="keywordflow">while</span> (e != 0);
+01084 
+01085     DoPadding (currentFormat, scratchOffs, 
+01086       vSplit.sign ? scratchOffs + 1 : scratchOffs);
+01087     scratch.WriteTo (writer, scratchOffs);
+01088     scratch.Truncate (scratchOffs);
+01089 <span class="preprocessor">#else</span>
+01090 <span class="preprocessor"></span><span class="preprocessor">  #warning Dont know how to hex-format floats for you</span>
+01091 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+01092 <span class="preprocessor"></span>  }
+01093 <span class="keyword">public</span>:
+<a name="l01095"></a><a class="code" href="classcsPrintfFormatter.html#a0">01095</a>   <a class="code" href="classcsPrintfFormatter.html">csPrintfFormatter</a> (Treader* reader, va_list args) : reader (*reader)
+01096   {
+01097     Init (args);
 01098   }
-<a name="l01100"></a><a class="code" href="classcsPrintfFormatter.html#a2">01100</a>   <span class="keywordtype">void</span> Format (Twriter&amp; writer)
+<a name="l01100"></a><a class="code" href="classcsPrintfFormatter.html#a1">01100</a>   <a class="code" href="classcsPrintfFormatter.html">csPrintfFormatter</a> (Treader* reader, ...) : reader (*reader)
 01101   {
-01102     reader.Reset();
-01103     size_t i = 0;
-01104     <a class="code" href="group__util.html#ga21">utf32_char</a> ch;
-01105     <span class="keywordflow">while</span> (i &lt; formatSpecs.<a class="code" href="classcsArray.html#a4">Length</a>())
-01106     {
-01107       <span class="keyword">const</span> FormatSpec&amp; currentFormat = formatSpecs[i];
-01108       size_t n;
-01109       <span class="keywordflow">for</span> (n = 0; n &lt; currentFormat.copyRun; n++)
-01110       {
-01111         <span class="keywordflow">if</span> (!reader.GetNext (ch)) <span class="keywordflow">break</span>;
-01112         writer.<a class="code" href="classcsArray.html#a14">Put</a> (ch);
-01113       }
-01114 
-01115       <span class="keywordflow">switch</span> (currentFormat.conversion)
-01116       {
-01117         <span class="keywordflow">case</span> convStr:
-01118           {
-01119             <span class="keywordflow">if</span> (currentFormat.type == typeLong)
-01120               OutputString (writer, currentFormat, 
-01121               (<span class="keywordtype">wchar_t</span>*)(params[currentFormat.paramIdx].vPtr));
-01122             <span class="keywordflow">else</span>
-01123               OutputString (writer, currentFormat, 
-01124               (<a class="code" href="group__util.html#ga19">utf8_char</a>*)(params[currentFormat.paramIdx].vPtr));
-01125           }
-01126           <span class="keywordflow">break</span>;
-01127         <span class="keywordflow">case</span> convChar:
-01128           {
-01129             writer.<a class="code" href="classcsArray.html#a14">Put</a> (params[currentFormat.paramIdx].vInt);
-01130           }
-01131           <span class="keywordflow">break</span>;
-01132         <span class="keywordflow">case</span> convInt:
-01133           {
-01134             <span class="keyword">const</span> FmtParam&amp; param = params[currentFormat.paramIdx];
-01135             <span class="keywordflow">switch</span> (currentFormat.type)
-01136             {
-01137               <span class="keywordflow">case</span> typeIntmax:
-01138                 {
-01139                   <a class="code" href="group__util.html#ga11">intmax_t</a> v = param.vIMT;
-01140                   OutputInt (writer, currentFormat, v);
-01141                 }
-01142                 <span class="keywordflow">break</span>;
-01143               <span class="keywordflow">case</span> typeLong:
-01144                 {
-01145                   <span class="keywordtype">long</span> v = param.vLong;
-01146                   OutputInt (writer, currentFormat, v);
-01147                 }
-01148                 <span class="keywordflow">break</span>;
-01149               <span class="keywordflow">case</span> typeLongLong:
-01150                 {
-01151                   <a class="code" href="group__util.html#ga13">longlong</a> v = param.vLL;
-01152                   OutputInt (writer, currentFormat, v);
-01153                 }
-01154                 <span class="keywordflow">break</span>;
-01155               <span class="keywordflow">case</span> typePtrDiffT:
-01156                 {
-01157                   <a class="code" href="group__util.html#ga10">ptrdiff_t</a> v = param.vPDT;
-01158                   OutputInt (writer, currentFormat, v);
-01159                 }
-01160                 <span class="keywordflow">break</span>;
-01161               <span class="keywordflow">case</span> typeSizeT:
-01162                 {
-01163                   size_t v = param.vSzT;
-01164                   OutputInt (writer, currentFormat, v);
-01165                 }
-01166                 <span class="keywordflow">break</span>;
-01167               <span class="keywordflow">default</span>:
-01168                 {
-01169                   <span class="keywordtype">int</span> v = param.vInt;
-01170                   OutputInt (writer, currentFormat, v);
-01171                 }
-01172                 <span class="keywordflow">break</span>;
-01173             }
-01174           }
-01175           <span class="keywordflow">break</span>;
-01176         <span class="keywordflow">case</span> convHex:
-01177         <span class="keywordflow">case</span> convUint:
-01178         <span class="keywordflow">case</span> convOctal:
-01179           {
-01180             <a class="code" href="group__util.html#ga16">uint</a> uiradix;
-01181             <span class="keyword">const</span> <span class="keywordtype">char</span>* prefix;
-01182             <span class="keywordflow">if</span> (currentFormat.conversion == convHex)
-01183             {
-01184               uiradix = 16;
-01185               prefix = currentFormat.basePrefix 
-01186                 ? (currentFormat.uppercase ? <span class="stringliteral">"0X"</span> : <span class="stringliteral">"0x"</span>) : 0;
-01187             }
-01188             <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.conversion == convOctal)
-01189             {
-01190               uiradix = 8;
-01191               prefix = currentFormat.basePrefix ? <span class="stringliteral">"0"</span> : 0;
-01192             }
-01193             <span class="keywordflow">else</span>
-01194             {
-01195               uiradix = 10;
-01196               prefix = 0;
-01197             }
-01198             <span class="keyword">const</span> FmtParam&amp; param = params[currentFormat.paramIdx];
-01199             <span class="keywordflow">switch</span> (currentFormat.type)
-01200             {
-01201               <span class="keywordflow">case</span> typeIntmax:
-01202                 {
-01203                   <a class="code" href="group__util.html#ga11">intmax_t</a> v = param.vIMT;
-01204                   OutputUint (writer, currentFormat, v, uiradix, prefix);
-01205                 }
-01206                 <span class="keywordflow">break</span>;
-01207               <span class="keywordflow">case</span> typeLong:
-01208                 {
-01209                   <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> v = param.vLong;
-01210                   OutputUint (writer, currentFormat, v, uiradix, prefix);
-01211                 }
-01212                 <span class="keywordflow">break</span>;
-01213               <span class="keywordflow">case</span> typeLongLong:
-01214                 {
-01215                   <a class="code" href="group__util.html#ga14">ulonglong</a> v = param.vLL;
-01216                   OutputUint (writer, currentFormat, v, uiradix, prefix);
-01217                 }
-01218                 <span class="keywordflow">break</span>;
-01219               <span class="keywordflow">case</span> typePtrDiffT:
-01220                 {
-01221                   <a class="code" href="group__util.html#ga10">ptrdiff_t</a> v = param.vPDT;
-01222                   OutputUint (writer, currentFormat, v, uiradix, prefix);
-01223                 }
-01224                 <span class="keywordflow">break</span>;
-01225               <span class="keywordflow">case</span> typeSizeT:
-01226                 {
-01227                   size_t v = param.vSzT;
-01228                   OutputUint (writer, currentFormat, v, uiradix, prefix);
-01229                 }
-01230                 <span class="keywordflow">break</span>;
-01231               <span class="keywordflow">default</span>:
-01232                 {
-01233                   <a class="code" href="group__util.html#ga16">uint</a> v = param.vInt;
-01234                   OutputUint (writer, currentFormat, v, uiradix, prefix);
-01235                 }
-01236                 <span class="keywordflow">break</span>;
-01237             }
-01238           }
-01239           <span class="keywordflow">break</span>;
-01240         <span class="keywordflow">case</span> convGetNum:
-01241           *((<span class="keywordtype">int</span>*)(params[currentFormat.paramIdx].vPtr)) = writer.GetTotal();
-01242           <span class="keywordflow">break</span>;
-01243         <span class="keywordflow">case</span> convErrno:
-01244           OutputString (writer, currentFormat, 
-01245             (<a class="code" href="group__util.html#ga19">utf8_char</a>*)strerror (params[currentFormat.paramIdx].vInt));
-01246           <span class="keywordflow">break</span>;
-01247         <span class="keywordflow">case</span> convPtr:
-01248           {
-01249             FormatSpec fakeFormat;
-01250             fakeFormat.leftJustify = currentFormat.leftJustify;
-01251             fakeFormat.precision = <span class="keyword">sizeof</span> (uintptr_t) * 2;
-01252             <span class="keywordflow">if</span> (params[currentFormat.paramIdx].vPtr == 0)
-01253             {
-01254               OutputString (writer, fakeFormat, (<a class="code" href="group__util.html#ga19">utf8_char</a>*)<span class="stringliteral">"(null)"</span>);
-01255             }
-01256             <span class="keywordflow">else</span>
-01257             {
-01258               OutputUint (writer, fakeFormat, 
-01259                 (<a class="code" href="group__util.html#ga9">uintptr_t</a>)params[currentFormat.paramIdx].vPtr, 16, <span class="stringliteral">"0x"</span>);
-01260             }
-01261           }
-01262           <span class="keywordflow">break</span>;
-01263         <span class="keywordflow">case</span> convFloatFix:
-01264           {
-01265             <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
-01266             {
-01267 <span class="preprocessor">#if defined(__MINGW32__) || defined(CS_COMPILER_MSVC)</span>
-01268 <span class="preprocessor"></span>              <span class="comment">// @@@ MinGW uses MS CRT, but it can't grok long double.</span>
-01269               <span class="comment">// VC doesn't have long double, but CRT printf() doesn't know</span>
-01270               <span class="comment">// %Lf either.</span>
-01271               OutputFloat (writer, currentFormat, 
-01272               (<span class="keywordtype">double</span>)params[currentFormat.paramIdx].vLongDbl, <span class="stringliteral">"f"</span>);
-01273 <span class="preprocessor">#else</span>
-01274 <span class="preprocessor"></span>              OutputFloat (writer, currentFormat, 
-01275               params[currentFormat.paramIdx].vLongDbl, <span class="stringliteral">"Lf"</span>);
-01276 <span class="preprocessor">#endif</span>
-01277 <span class="preprocessor"></span>            }
-01278             <span class="keywordflow">else</span>
-01279               OutputFloat (writer, currentFormat, 
-01280               params[currentFormat.paramIdx].vDbl, <span class="stringliteral">"f"</span>);
-01281           }
-01282           <span class="keywordflow">break</span>;
-01283         <span class="keywordflow">case</span> convFloatExp:
-01284           {
-01285             <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
-01286             {
-01287 <span class="preprocessor">#if defined(__MINGW32__) || defined(CS_COMPILER_MSVC)</span>
-01288 <span class="preprocessor"></span>              <span class="comment">// @@@ MinGW uses MS CRT, but it can't grok long double.</span>
-01289               <span class="comment">// VC doesn't have long double, but CRT printf() doesn't know</span>
-01290               <span class="comment">// %Le either.</span>
-01291               OutputFloat (writer, currentFormat, 
-01292               (<span class="keywordtype">double</span>)params[currentFormat.paramIdx].vLongDbl, 
-01293               currentFormat.uppercase ? <span class="stringliteral">"E"</span> : <span class="stringliteral">"e"</span>);
-01294 <span class="preprocessor">#else</span>
-01295 <span class="preprocessor"></span>              OutputFloat (writer, currentFormat, 
-01296               params[currentFormat.paramIdx].vLongDbl, 
-01297               currentFormat.uppercase ? <span class="stringliteral">"LE"</span> : <span class="stringliteral">"Le"</span>);
-01298 <span class="preprocessor">#endif</span>
-01299 <span class="preprocessor"></span>            }
-01300             <span class="keywordflow">else</span>
-01301               OutputFloat (writer, currentFormat, 
-01302               params[currentFormat.paramIdx].vDbl, 
-01303               currentFormat.uppercase ? <span class="stringliteral">"E"</span> : <span class="stringliteral">"e"</span>);
-01304           }
-01305           <span class="keywordflow">break</span>;
-01306         <span class="keywordflow">case</span> convFloatGeneral:
-01307           {
-01308             <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
-01309             {
-01310 <span class="preprocessor">#if defined(__MINGW32__) || defined(CS_COMPILER_MSVC)</span>
-01311 <span class="preprocessor"></span>              <span class="comment">// @@@ MinGW uses MS CRT, but it can't grok long double.</span>
-01312               <span class="comment">// VC doesn't have long double, but CRT printf() doesn't know</span>
-01313               <span class="comment">// %Lg either.</span>
-01314               OutputFloat (writer, currentFormat, 
-01315               (<span class="keywordtype">double</span>)params[currentFormat.paramIdx].vLongDbl, 
-01316               currentFormat.uppercase ? <span class="stringliteral">"G"</span> : <span class="stringliteral">"g"</span>);
-01317 <span class="preprocessor">#else</span>
-01318 <span class="preprocessor"></span>              OutputFloat (writer, currentFormat, 
-01319               params[currentFormat.paramIdx].vLongDbl, 
-01320               currentFormat.uppercase ? <span class="stringliteral">"LG"</span> : <span class="stringliteral">"Lg"</span>);
-01321 <span class="preprocessor">#endif</span>
-01322 <span class="preprocessor"></span>            }
-01323             <span class="keywordflow">else</span>
-01324               OutputFloat (writer, currentFormat, 
-01325               params[currentFormat.paramIdx].vDbl, 
-01326               currentFormat.uppercase ? <span class="stringliteral">"G"</span> : <span class="stringliteral">"g"</span>);
-01327           }
-01328           <span class="keywordflow">break</span>;
-01329         <span class="keywordflow">case</span> convFloatHex:
-01330           {
-01331             <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
-01332               OutputFloatHex (writer, currentFormat, 
-01333               params[currentFormat.paramIdx].vLongDbl, LDBL_MANT_DIG, 
-01334               csLog2 (LDBL_MAX_EXP) + 1, -(LDBL_MAX_EXP - 1));
-01335             <span class="keywordflow">else</span>
-01336               OutputFloatHex (writer, currentFormat, 
-01337               params[currentFormat.paramIdx].vDbl, DBL_MANT_DIG, 
-01338               csLog2 (DBL_MAX_EXP) + 1, -(DBL_MAX_EXP - 1));
-01339           }
-01340           <span class="keywordflow">break</span>;
-01341         <span class="keywordflow">default</span>:
-01342           <span class="keywordflow">break</span>;
-01343       }
-01344 
-01345       <span class="keywordflow">for</span> (n = 0; n &lt; currentFormat.fmtSkip; n++)
-01346       {
-01347         <span class="keywordflow">if</span> (!reader.GetNext (ch)) <span class="keywordflow">break</span>;
-01348       }
-01349       i++;
-01350     }
-01351     <span class="keywordflow">while</span> (reader.GetNext (ch))
-01352       writer.<a class="code" href="classcsArray.html#a14">Put</a> (ch);
-01353     writer.<a class="code" href="classcsArray.html#a14">Put</a> (0);
-01354   }
-01355 };
-01356 
-01359 <span class="preprocessor">#endif // __CS_CSUTIL_FORMATTER_H__</span>
+01102     va_list ap;
+01103     va_start(ap, reader);
+01104     Init (ap);
+01105     va_end(ap);
+01106   }
+<a name="l01108"></a><a class="code" href="classcsPrintfFormatter.html#a2">01108</a>   <span class="keywordtype">void</span> Format (Twriter&amp; writer)
+01109   {
+01110     reader.Reset();
+01111     size_t i = 0;
+01112     <a class="code" href="group__util.html#ga22">utf32_char</a> ch;
+01113     <span class="keywordflow">while</span> (i &lt; formatSpecs.<a class="code" href="classcsArray.html#a4">Length</a>())
+01114     {
+01115       <span class="keyword">const</span> FormatSpec&amp; currentFormat = formatSpecs[i];
+01116       size_t n;
+01117       <span class="keywordflow">for</span> (n = 0; n &lt; currentFormat.copyRun; n++)
+01118       {
+01119         <span class="keywordflow">if</span> (!reader.GetNext (ch)) <span class="keywordflow">break</span>;
+01120         writer.<a class="code" href="classcsArray.html#a14">Put</a> (ch);
+01121       }
+01122 
+01123       <span class="keywordflow">switch</span> (currentFormat.conversion)
+01124       {
+01125         <span class="keywordflow">case</span> convStr:
+01126           {
+01127             <span class="keywordflow">if</span> (currentFormat.type == typeLong)
+01128               OutputString (writer, currentFormat, 
+01129               (<span class="keywordtype">wchar_t</span>*)(params[currentFormat.paramIdx].vPtr));
+01130             <span class="keywordflow">else</span>
+01131               OutputString (writer, currentFormat, 
+01132               (<a class="code" href="group__util.html#ga20">utf8_char</a>*)(params[currentFormat.paramIdx].vPtr));
+01133           }
+01134           <span class="keywordflow">break</span>;
+01135         <span class="keywordflow">case</span> convChar:
+01136           {
+01137             writer.<a class="code" href="classcsArray.html#a14">Put</a> (params[currentFormat.paramIdx].vInt);
+01138           }
+01139           <span class="keywordflow">break</span>;
+01140         <span class="keywordflow">case</span> convInt:
+01141           {
+01142             <span class="keyword">const</span> FmtParam&amp; param = params[currentFormat.paramIdx];
+01143             <span class="keywordflow">switch</span> (currentFormat.type)
+01144             {
+01145               <span class="keywordflow">case</span> typeIntmax:
+01146                 {
+01147                   <a class="code" href="group__util.html#ga11">intmax_t</a> v = param.vIMT;
+01148                   OutputInt (writer, currentFormat, v);
+01149                 }
+01150                 <span class="keywordflow">break</span>;
+01151               <span class="keywordflow">case</span> typeLong:
+01152                 {
+01153                   <span class="keywordtype">long</span> v = param.vLong;
+01154                   OutputInt (writer, currentFormat, v);
+01155                 }
+01156                 <span class="keywordflow">break</span>;
+01157               <span class="keywordflow">case</span> typeLongLong:
+01158                 {
+01159                   <a class="code" href="group__util.html#ga15">longlong</a> v = param.vLL;
+01160                   OutputInt (writer, currentFormat, v);
+01161                 }
+01162                 <span class="keywordflow">break</span>;
+01163               <span class="keywordflow">case</span> typePtrDiffT:
+01164                 {
+01165                   <a class="code" href="group__util.html#ga10">ptrdiff_t</a> v = param.vPDT;
+01166                   OutputInt (writer, currentFormat, v);
+01167                 }
+01168                 <span class="keywordflow">break</span>;
+01169               <span class="keywordflow">case</span> typeSizeT:
+01170                 {
+01171                   size_t v = param.vSzT;
+01172                   OutputInt (writer, currentFormat, v);
+01173                 }
+01174                 <span class="keywordflow">break</span>;
+01175               <span class="keywordflow">default</span>:
+01176                 {
+01177                   <span class="keywordtype">int</span> v = param.vInt;
+01178                   OutputInt (writer, currentFormat, v);
+01179                 }
+01180                 <span class="keywordflow">break</span>;
+01181             }
+01182           }
+01183           <span class="keywordflow">break</span>;
+01184         <span class="keywordflow">case</span> convHex:
+01185         <span class="keywordflow">case</span> convUint:
+01186         <span class="keywordflow">case</span> convOctal:
+01187           {
+01188             <a class="code" href="group__util.html#ga18">uint</a> uiradix;
+01189             <span class="keyword">const</span> <span class="keywordtype">char</span>* prefix;
+01190             <span class="keywordflow">if</span> (currentFormat.conversion == convHex)
+01191             {
+01192               uiradix = 16;
+01193               prefix = currentFormat.basePrefix 
+01194                 ? (currentFormat.uppercase ? <span class="stringliteral">"0X"</span> : <span class="stringliteral">"0x"</span>) : 0;
+01195             }
+01196             <span class="keywordflow">else</span> <span class="keywordflow">if</span> (currentFormat.conversion == convOctal)
+01197             {
+01198               uiradix = 8;
+01199               prefix = currentFormat.basePrefix ? <span class="stringliteral">"0"</span> : 0;
+01200             }
+01201             <span class="keywordflow">else</span>
+01202             {
+01203               uiradix = 10;
+01204               prefix = 0;
+01205             }
+01206             <span class="keyword">const</span> FmtParam&amp; param = params[currentFormat.paramIdx];
+01207             <span class="keywordflow">switch</span> (currentFormat.type)
+01208             {
+01209               <span class="keywordflow">case</span> typeIntmax:
+01210                 {
+01211                   <a class="code" href="group__util.html#ga11">intmax_t</a> v = param.vIMT;
+01212                   OutputUint (writer, currentFormat, v, uiradix, prefix);
+01213                 }
+01214                 <span class="keywordflow">break</span>;
+01215               <span class="keywordflow">case</span> typeLong:
+01216                 {
+01217                   <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> v = param.vLong;
+01218                   OutputUint (writer, currentFormat, v, uiradix, prefix);
+01219                 }
+01220                 <span class="keywordflow">break</span>;
+01221               <span class="keywordflow">case</span> typeLongLong:
+01222                 {
+01223                   <a class="code" href="group__util.html#ga16">ulonglong</a> v = param.vLL;
+01224                   OutputUint (writer, currentFormat, v, uiradix, prefix);
+01225                 }
+01226                 <span class="keywordflow">break</span>;
+01227               <span class="keywordflow">case</span> typePtrDiffT:
+01228                 {
+01229                   <a class="code" href="group__util.html#ga10">ptrdiff_t</a> v = param.vPDT;
+01230                   OutputUint (writer, currentFormat, v, uiradix, prefix);
+01231                 }
+01232                 <span class="keywordflow">break</span>;
+01233               <span class="keywordflow">case</span> typeSizeT:
+01234                 {
+01235                   size_t v = param.vSzT;
+01236                   OutputUint (writer, currentFormat, v, uiradix, prefix);
+01237                 }
+01238                 <span class="keywordflow">break</span>;
+01239               <span class="keywordflow">default</span>:
+01240                 {
+01241                   <a class="code" href="group__util.html#ga18">uint</a> v = param.vInt;
+01242                   OutputUint (writer, currentFormat, v, uiradix, prefix);
+01243                 }
+01244                 <span class="keywordflow">break</span>;
+01245             }
+01246           }
+01247           <span class="keywordflow">break</span>;
+01248         <span class="keywordflow">case</span> convGetNum:
+01249           *((<span class="keywordtype">int</span>*)(params[currentFormat.paramIdx].vPtr)) = writer.GetTotal();
+01250           <span class="keywordflow">break</span>;
+01251         <span class="keywordflow">case</span> convErrno:
+01252           OutputString (writer, currentFormat, 
+01253             (<a class="code" href="group__util.html#ga20">utf8_char</a>*)strerror (params[currentFormat.paramIdx].vInt));
+01254           <span class="keywordflow">break</span>;
+01255         <span class="keywordflow">case</span> convPtr:
+01256           {
+01257             FormatSpec fakeFormat;
+01258             fakeFormat.leftJustify = currentFormat.leftJustify;
+01259             fakeFormat.precision = <span class="keyword">sizeof</span> (uintptr_t) * 2;
+01260             <span class="keywordflow">if</span> (params[currentFormat.paramIdx].vPtr == 0)
+01261             {
+01262               OutputString (writer, fakeFormat, (<a class="code" href="group__util.html#ga20">utf8_char</a>*)<span class="stringliteral">"(null)"</span>);
+01263             }
+01264             <span class="keywordflow">else</span>
+01265             {
+01266               OutputUint (writer, fakeFormat, 
+01267                 (<a class="code" href="group__util.html#ga9">uintptr_t</a>)params[currentFormat.paramIdx].vPtr, 16, <span class="stringliteral">"0x"</span>);
+01268             }
+01269           }
+01270           <span class="keywordflow">break</span>;
+01271         <span class="keywordflow">case</span> convFloatFix:
+01272           {
+01273             <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
+01274             {
+01275 <span class="preprocessor">#ifdef CS_FORMATTER_NO_LONG_DOUBLE_FORMAT</span>
+01276 <span class="preprocessor"></span>              OutputFloat (writer, currentFormat, 
+01277               (<span class="keywordtype">double</span>)params[currentFormat.paramIdx].vLongDbl, <span class="stringliteral">"f"</span>);
+01278 <span class="preprocessor">#else</span>
+01279 <span class="preprocessor"></span>              OutputFloat (writer, currentFormat, 
+01280               params[currentFormat.paramIdx].vLongDbl, <span class="stringliteral">"Lf"</span>);
+01281 <span class="preprocessor">#endif</span>
+01282 <span class="preprocessor"></span>            }
+01283             <span class="keywordflow">else</span>
+01284               OutputFloat (writer, currentFormat, 
+01285               params[currentFormat.paramIdx].vDbl, <span class="stringliteral">"f"</span>);
+01286           }
+01287           <span class="keywordflow">break</span>;
+01288         <span class="keywordflow">case</span> convFloatExp:
+01289           {
+01290             <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
+01291             {
+01292 <span class="preprocessor">#ifdef CS_FORMATTER_NO_LONG_DOUBLE_FORMAT</span>
+01293 <span class="preprocessor"></span>              OutputFloat (writer, currentFormat, 
+01294               (<span class="keywordtype">double</span>)params[currentFormat.paramIdx].vLongDbl, 
+01295               currentFormat.uppercase ? <span class="stringliteral">"E"</span> : <span class="stringliteral">"e"</span>);
+01296 <span class="preprocessor">#else</span>
+01297 <span class="preprocessor"></span>              OutputFloat (writer, currentFormat, 
+01298               params[currentFormat.paramIdx].vLongDbl, 
+01299               currentFormat.uppercase ? <span class="stringliteral">"LE"</span> : <span class="stringliteral">"Le"</span>);
+01300 <span class="preprocessor">#endif</span>
+01301 <span class="preprocessor"></span>            }
+01302             <span class="keywordflow">else</span>
+01303               OutputFloat (writer, currentFormat, 
+01304               params[currentFormat.paramIdx].vDbl, 
+01305               currentFormat.uppercase ? <span class="stringliteral">"E"</span> : <span class="stringliteral">"e"</span>);
+01306           }
+01307           <span class="keywordflow">break</span>;
+01308         <span class="keywordflow">case</span> convFloatGeneral:
+01309           {
+01310             <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
+01311             {
+01312 <span class="preprocessor">#ifdef CS_FORMATTER_NO_LONG_DOUBLE_FORMAT</span>
+01313 <span class="preprocessor"></span>              OutputFloat (writer, currentFormat, 
+01314               (<span class="keywordtype">double</span>)params[currentFormat.paramIdx].vLongDbl, 
+01315               currentFormat.uppercase ? <span class="stringliteral">"G"</span> : <span class="stringliteral">"g"</span>);
+01316 <span class="preprocessor">#else</span>
+01317 <span class="preprocessor"></span>              OutputFloat (writer, currentFormat, 
+01318               params[currentFormat.paramIdx].vLongDbl, 
+01319               currentFormat.uppercase ? <span class="stringliteral">"LG"</span> : <span class="stringliteral">"Lg"</span>);
+01320 <span class="preprocessor">#endif</span>
+01321 <span class="preprocessor"></span>            }
+01322             <span class="keywordflow">else</span>
+01323               OutputFloat (writer, currentFormat, 
+01324               params[currentFormat.paramIdx].vDbl, 
+01325               currentFormat.uppercase ? <span class="stringliteral">"G"</span> : <span class="stringliteral">"g"</span>);
+01326           }
+01327           <span class="keywordflow">break</span>;
+01328         <span class="keywordflow">case</span> convFloatHex:
+01329           {
+01330             <span class="keywordflow">if</span> (currentFormat.type == typeLongLong)
+01331               OutputFloatHex (writer, currentFormat, 
+01332               params[currentFormat.paramIdx].vLongDbl, LDBL_MANT_DIG, 
+01333               csLog2 (LDBL_MAX_EXP) + 1, -(LDBL_MAX_EXP - 1));
+01334             <span class="keywordflow">else</span>
+01335               OutputFloatHex (writer, currentFormat, 
+01336               params[currentFormat.paramIdx].vDbl, DBL_MANT_DIG, 
+01337               csLog2 (DBL_MAX_EXP) + 1, -(DBL_MAX_EXP - 1));
+01338           }
+01339           <span class="keywordflow">break</span>;
+01340         <span class="keywordflow">default</span>:
+01341           <span class="keywordflow">break</span>;
+01342       }
+01343 
+01344       <span class="keywordflow">for</span> (n = 0; n &lt; currentFormat.fmtSkip; n++)
+01345       {
+01346         <span class="keywordflow">if</span> (!reader.GetNext (ch)) <span class="keywordflow">break</span>;
+01347       }
+01348       i++;
+01349     }
+01350     <span class="keywordflow">while</span> (reader.GetNext (ch))
+01351       writer.<a class="code" href="classcsArray.html#a14">Put</a> (ch);
+01352     writer.<a class="code" href="classcsArray.html#a14">Put</a> (0);
+01353   }
+01354 };
+01355 
+01358 <span class="preprocessor">#endif // __CS_CSUTIL_FORMATTER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
