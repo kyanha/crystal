@@ -458,6 +458,10 @@ SOURCE=..\..\libs\csutil\win32\dir.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\win32\expandname.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\win32\filesysconfig.cpp
 # End Source File
 # Begin Source File
@@ -939,6 +943,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\verbosity.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\vfscache.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\vfsplat.h
 # End Source File
 # Begin Source File
 
