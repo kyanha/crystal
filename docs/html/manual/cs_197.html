@@ -26,13 +26,13 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A NAME="SEC476"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC470"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC490"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC492"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC403"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_166.html#SEC408"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC490"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC492"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC941">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC943">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
@@ -1016,6 +1016,11 @@ The settings for this step are restored.
 </UL>
 <P>
 
+<A NAME="SEC490"></A>
+<H4> Drawing a Frame: Getting the Visible Meshes </H4>
+<!--docid::SEC490::-->
+<P>
+
 One very important function that is called from within <CODE>iRenderStep::Perform()</CODE>
 is <CODE>iSector::GetVisibleMeshes()</CODE>. This function is responsible for finding all
 meshes that are visible. To calculate this the sector will use the visibility
@@ -1088,22 +1093,91 @@ lod the parent is a mesh that is at least as big as the biggest child. Usually a
 with an appropriate box is used for that purpose.
 </P><P>
 
-@@@TODO: explain iPortalContainer::Draw()
+<A NAME="SEC491"></A>
+<H4> Drawing a Frame: Traversing Portals </H4>
+<!--docid::SEC491::-->
+<P>
+
+During perform of the renderstep it will try traverse portals if that renderstep
+has portal traversal enabled. This will proceed to <CODE>iPortalContainer::Draw()</CODE>
+which will do the following steps:
+</P><P>
+
+<UL>
+<LI>
+First it will call <CODE>Prepare()</CODE> to make sure that the portal container
+is ready for use. This function will initialize the portal container, compress
+the vertices (remove double vertices) and calculate the bounding box and sphere.
+<P>
+
+<LI>
+Then it will call <CODE>WorldToCamera()</CODE>. This will take the world space vertices
+and planes and transform them to camera space.
+<P>
+
+<LI>
+Then it sets up the portal and far plane if needed.
+<P>
+
+<LI>
+During the call to <CODE>GetRenderMeshes()</CODE> that occured earlier (when the renderloop
+called <CODE>iSector-&#62;GetVisibleMeshes()</CODE>) we tested if the portal container object
+needed to be clipped to the frustum or near plane. We kept the result of that
+clip result in the variables <CODE>clip_plane</CODE>, <CODE>clip_portal</CODE>, and
+<CODE>clip_z_plane</CODE>. If clipping is required then we will loop over every portal
+and clip it before we traverse it. If no clipping is required we will simply loop
+over all portals and traverse them.
+<P>
+
+<LI>
+Traversing through a portal is done with <CODE>DrawOnePortal()</CODE>. This function will
+first set up various things for fog and floating portals (like call
+<CODE>iGraphics3D::OpenPortal()</CODE>) and then it will call <CODE>csPortal::Draw()</CODE>.
+<P>
+
+<LI>
+<CODE>csPortal::Draw()</CODE> will first make sure the sector is there by calling
+<CODE>CompleteSector()</CODE>. This function calls missing sector callbacks if the sector
+is missing and if those callbacks are there. This gives the application a chance
+to load the destination sector. If this fails then portal traversal will not occur.
+<P>
+
+<LI>
+<CODE>csPortal::Draw()</CODE> will also make sure we are not recursing too much in the
+same sector. This is to avoid infinite loops caused by space warping portals
+that warp back in space so that the same portal is visible again.
+<P>
+
+<LI>
+Then this function will update the <CODE>csRenderView</CODE> for the current portal
+(i.e. clipper, fog information, recursion level, last portal, previous sector,
+clip plane, <small>...</small>).
+<P>
+
+<LI>
+If this is a space warping portal (a portal that changes the camera transform) then
+a new camera is created. @@@ TODO Continue here...
+<P>
+
+</UL>
+<P>
+
 @@@TODO: explain Frustvis::VisTest()
 @@@TODO: explain Dynavis::VisTest()
+@@@TODO: explain the operations of one mesh object in the above context
 </P><P>
 
 <A NAME="csParser"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC470"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC490"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC492"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC403"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_166.html#SEC408"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC490"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC492"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC941">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC943">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
