@@ -244,38 +244,41 @@
 00539                              t2.<a class="code" href="classcsTransform.html#n1">v_o2t</a> + t2.<a class="code" href="classcsReversibleTransform.html#n0">m_t2o</a>*t1.<a class="code" href="classcsTransform.html#n1">v_o2t</a>);
 00540   }
 00541 
-00554   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <a class="code" href="classcsTransform.html">csTransform</a> <a class="code" href="classcsTransform.html#l0">operator* </a>(<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t1,
-00555                               <span class="keyword">const</span> csReversibleTransform&amp; t2);
-00556 
-00569   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csReversibleTransform&amp; operator/= (
-00570     csReversibleTransform&amp; t1, <span class="keyword">const</span> csReversibleTransform&amp; t2);
-00571 
-00584   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csReversibleTransform operator/ (
-00585     <span class="keyword">const</span> csReversibleTransform&amp; t1, <span class="keyword">const</span> csReversibleTransform&amp; t2);
-00586 };
-00587 
-<a name="l00594"></a><a class="code" href="classcsOrthoTransform.html">00594</a> <span class="keyword">class </span><a class="code" href="classcsOrthoTransform.html">csOrthoTransform</a> : <span class="keyword">public</span> csReversibleTransform
-00595 {
-00596 <span class="keyword">public</span>:
-<a name="l00600"></a><a class="code" href="classcsOrthoTransform.html#a0">00600</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> () : csReversibleTransform () {}
-00601 
-<a name="l00605"></a><a class="code" href="classcsOrthoTransform.html#a1">00605</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; o2t, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) :
-00606     csReversibleTransform (o2t, o2t.GetTranspose (), pos) { }
-00607 
-<a name="l00611"></a><a class="code" href="classcsOrthoTransform.html#a2">00611</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t) :
-00612     csReversibleTransform (t.<a class="code" href="classcsTransform.html#a4">GetO2T</a> (), t.<a class="code" href="classcsTransform.html#a4">GetO2T</a> ().GetTranspose (),
-00613         t.<a class="code" href="classcsTransform.html#a5">GetO2TTranslation</a> ())
-00614   { }
-00615 
-<a name="l00620"></a><a class="code" href="classcsOrthoTransform.html#a3">00620</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsOrthoTransform.html#a3">SetO2T</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
-00621   { <a class="code" href="classcsTransform.html#n0">m_o2t</a> = m;  <a class="code" href="classcsReversibleTransform.html#n0">m_t2o</a> = <a class="code" href="classcsTransform.html#n0">m_o2t</a>.<a class="code" href="classcsMatrix3.html#a23">GetTranspose</a> (); }
-00622 
-<a name="l00628"></a><a class="code" href="classcsOrthoTransform.html#a4">00628</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsOrthoTransform.html#a4">SetT2O</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
-00629   { <a class="code" href="classcsReversibleTransform.html#n0">m_t2o</a> = m;  <a class="code" href="classcsTransform.html#n0">m_o2t</a> = <a class="code" href="classcsReversibleTransform.html#n0">m_t2o</a>.<a class="code" href="classcsMatrix3.html#a23">GetTranspose</a> (); }
-00630 };
-00631 
-00634 <span class="preprocessor">#endif // __CS_TRANSFORM_H__</span>
-00635 <span class="preprocessor"></span>
+00542 <span class="preprocessor">#if !defined(SWIG) </span><span class="comment">/* Otherwise Swig 1.3.22 thinks this is multiply declared */</span>
+00543 
+00555   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <a class="code" href="classcsTransform.html">csTransform</a> <a class="code" href="classcsTransform.html#l0">operator* </a>(<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t1,
+00556                               <span class="keyword">const</span> csReversibleTransform&amp; t2);
+00557 <span class="preprocessor">#endif</span>
+00558 <span class="preprocessor"></span>
+00571   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csReversibleTransform&amp; operator/= (
+00572     csReversibleTransform&amp; t1, <span class="keyword">const</span> csReversibleTransform&amp; t2);
+00573 
+00586   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csReversibleTransform operator/ (
+00587     <span class="keyword">const</span> csReversibleTransform&amp; t1, <span class="keyword">const</span> csReversibleTransform&amp; t2);
+00588 };
+00589 
+<a name="l00596"></a><a class="code" href="classcsOrthoTransform.html">00596</a> <span class="keyword">class </span><a class="code" href="classcsOrthoTransform.html">csOrthoTransform</a> : <span class="keyword">public</span> csReversibleTransform
+00597 {
+00598 <span class="keyword">public</span>:
+<a name="l00602"></a><a class="code" href="classcsOrthoTransform.html#a0">00602</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> () : csReversibleTransform () {}
+00603 
+<a name="l00607"></a><a class="code" href="classcsOrthoTransform.html#a1">00607</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; o2t, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) :
+00608     csReversibleTransform (o2t, o2t.GetTranspose (), pos) { }
+00609 
+<a name="l00613"></a><a class="code" href="classcsOrthoTransform.html#a2">00613</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t) :
+00614     csReversibleTransform (t.<a class="code" href="classcsTransform.html#a4">GetO2T</a> (), t.<a class="code" href="classcsTransform.html#a4">GetO2T</a> ().GetTranspose (),
+00615         t.<a class="code" href="classcsTransform.html#a5">GetO2TTranslation</a> ())
+00616   { }
+00617 
+<a name="l00622"></a><a class="code" href="classcsOrthoTransform.html#a3">00622</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsOrthoTransform.html#a3">SetO2T</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
+00623   { <a class="code" href="classcsTransform.html#n0">m_o2t</a> = m;  <a class="code" href="classcsReversibleTransform.html#n0">m_t2o</a> = <a class="code" href="classcsTransform.html#n0">m_o2t</a>.<a class="code" href="classcsMatrix3.html#a23">GetTranspose</a> (); }
+00624 
+<a name="l00630"></a><a class="code" href="classcsOrthoTransform.html#a4">00630</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsOrthoTransform.html#a4">SetT2O</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
+00631   { <a class="code" href="classcsReversibleTransform.html#n0">m_t2o</a> = m;  <a class="code" href="classcsTransform.html#n0">m_o2t</a> = <a class="code" href="classcsReversibleTransform.html#n0">m_t2o</a>.<a class="code" href="classcsMatrix3.html#a23">GetTranspose</a> (); }
+00632 };
+00633 
+00636 <span class="preprocessor">#endif // __CS_TRANSFORM_H__</span>
+00637 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
