@@ -24,7 +24,7 @@ static char const metainfo_bruteblock[] =
 "      <class>"
 "        <name>crystalspace.mesh.object.terrain.bruteblock</name>"
 "        <implementation>csTerrainObjectType</implementation>"
-"        <description>Crystal Space Brute Block Terrain Mesh Type</description>"
+"        <description>Brute Block Terrain Mesh Type</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"

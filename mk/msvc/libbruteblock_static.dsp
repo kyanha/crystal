@@ -142,7 +142,7 @@ SOURCE=..\..\mk\msvc\libbruteblock_staticreg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain_brute\object\brute.cpp
+SOURCE=..\..\plugins\mesh\terrain\brute\brute.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -150,7 +150,7 @@ SOURCE=..\..\plugins\mesh\terrain_brute\object\brute.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain_brute\object\brute.h
+SOURCE=..\..\plugins\mesh\terrain\brute\brute.h
 # End Source File
 # End Group
 # End Target
