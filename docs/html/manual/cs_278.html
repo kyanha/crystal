@@ -26,13 +26,13 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A NAME="SEC823"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC832"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC833"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC955"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC956"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC955">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC956">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
@@ -535,17 +535,63 @@ by invoking the Jam rule `<SAMP>ExternalLibs</SAMP>'. For MSVC project files, th
 location of the wxWidgets resources will have to be added as <EM>additional
 include directories</EM> and <EM>additional library directories</EM>, in the project
 settings or globally, to ensure that MSVC will be able to find them.
+</P><P>
+
+<A NAME="SEC832"></A>
+<H3> Procedural Texture Relocation </H3>
+<!--docid::SEC832::-->
+ 
+Implementations of the standard procedural textures (dots, fire, plasma, etc.)
+now reside directly in the `<TT>stdpt</TT>' plugin
+(`<TT>CS/plugins/proctex/standard</TT>'), rather than in the `<TT>cstool</TT>'
+library. Consequently, the following previously public headers are no longer
+available:
+ 
+<UL>
+<LI>
+<CODE>cstool/prdots.h</CODE>
+<LI>
+<CODE>cstool/prfire.h</CODE>
+<LI>
+<CODE>cstool/prplasma.h</CODE>
+<LI>
+<CODE>cstool/prsky.h</CODE>
+<LI>
+<CODE>cstool/prwater.h</CODE>
+</UL>
+ 
+Likewise, procedural textures can no longer be created programmatically via
+`<SAMP>new csProcFire</SAMP>'.  Instead, you must now use the plugin system to create
+such textures. For example:
+ 
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iPluginManager&#62; plugin_mgr(
+  CS_QUERY_REGISTRY(object_reg, iPluginManager));
+csRef&#60;iTextureType&#62; type(CS_QUERY_PLUGIN_CLASS (plugin_mgr,
+  "crystalspace.texture.type.fire", iTextureType));
+if (!type)
+{
+  type = CS_LOAD_PLUGIN(plugin_mgr,
+    "crystalspace.texture.type.fire", iTextureType);
+}
+csRef&#60;iTextureFactory&#62; fireFact = type-&#62;NewFactory();
+csRef&#60;iTextureWrapper&#62; tex = fireFact-&#62;Generate();
+csRef&#60;iFireTexture&#62; fire = SCF_QUERY_INTERFACE(tex, iFireTexture);
+</pre></td></tr></table> 
+Various procedural textures may or may not implement their own custom SCF
+interfaces beyond the normal interfaces implemented by all procedural
+textures. In the example above, the "fire" texture implements the specialized
+`<SAMP>iFireTexture</SAMP>'.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC832"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC833"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC955"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC956"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC955">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC956">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
