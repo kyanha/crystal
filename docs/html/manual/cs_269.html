@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: MacOS/X Cocoa Frame Buffer</TITLE>
+<TITLE>Crystal Space: Threads in CS</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: MacOS/X Cocoa Frame Buffer">
-<META NAME="keywords" CONTENT="Crystal Space: MacOS/X Cocoa Frame Buffer">
+<META NAME="description" CONTENT="Crystal Space: Threads in CS">
+<META NAME="keywords" CONTENT="Crystal Space: Threads in CS">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,202 +23,151 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC803"></A>
+<A NAME="SEC799"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC804"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC798"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC799"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC805"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC798"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC794"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC793"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 8.1.1.4 Cocoa Frame Buffer </H4>
-<!--docid::SEC803::-->
+<H2> 8.2 Threads in Crystal Space </H2>
+<!--docid::SEC799::-->
 <P>
 
-This section describes the frame buffer format managed by the low-level
-Cocoa-based 2D driver and the manner in which the pixel data is manipulated.
-This discussion does not pertain to the OpenGL or CoreGraphics drivers.
+<EM>Written by Jorrit Tyberghein.</EM>
 </P><P>
 
-With few exceptions, most NextStep, OpenStep, and MacOS/X Server 1.0 (Rhapsody)
-installations are configured for <EM>true-color</EM> rather than palletized color.
-However, true-color is rather relative in the case of the Cocoa-based 2D
-graphics driver since the `<SAMP>NSBitmapImageRep</SAMP>' class supports only a limited
-number of configurations for image data.  Historically, on NextStep, these
-configurations were limited to:
+The Crystal Space project as such is not thread-safe. So when using
+threads in combination with Crystal Space you have to be careful. However,
+several parts of Crystal Space are thread-safe to some degree. This is
+documented in this section. However, by default you must assume that some
+Crystal Space plugin or module is not thread-safe unless it is mentioned here.
 </P><P>
 
-<BLOCKQUOTE>
-<TABLE>
-<TR><TD>2-bit gray </TD><TD> <CODE>NX_TwoBitGrayDepth</CODE></TD>
-</TR>
-<TR><TD>8-bit gray </TD><TD> <CODE>NX_EightBitGrayDepth</CODE></TD>
-</TR>
-<TR><TD>8-bit color </TD><TD> <CODE>NX_EightBitRGBDepth</CODE> (via RGB palette)</TD>
-</TR>
-<TR><TD>12-bit color </TD><TD> <CODE>NX_TwelveBitRGBDepth</CODE></TD>
-</TR>
-<TR><TD>24-bit color </TD><TD> <CODE>NX_TwentyFourBitRGBDepth</CODE></TD>
-</TR></TABLE>
-</BLOCKQUOTE>
+<A NAME="SEC800"></A>
+<H4> Threadsafe parts of Crystal Space </H4>
+<!--docid::SEC800::-->
 <P>
 
-OpenStep and MacOS/X Server 1.0 (Rhapsody) took a stab at providing more
-comprehensive color depth support, but in their released state, these
-facilities provided little additional assistance and consequently are not
-discussed further.
+<UL>
+<LI>
+SCF (see section <A HREF="cs_138.html#SEC350">6.2 Shared Class Facility (SCF)</A>) class loading/unloading is safe. This means that
+<CODE>SCF_CREATE_INSTANCE()</CODE> and all the routines in `<SAMP>iSCF</SAMP>' that have
+to do with loaded classes are safe.
+<P>
+
+<LI>
+The plugin manager is safe, thus macros such as <CODE>CS_LOAD_PLUGIN()</CODE>,
+<CODE>CS_LOAD_PLUGIN_ALWAYS()</CODE>, and <CODE>CS_QUERY_PLUGIN_CLASS()</CODE> are safe.
+<P>
+
+<LI>
+The object registry is safe, thus macros like <CODE>CS_QUERY_REGISTRY()</CODE>
+are safe. The <CODE>iObjectRegistryIterator</CODE> takes a copy of the data
+over which it iterates so it will not even lock.
+<P>
+
+<LI>
+VFS (see section <A HREF="cs_158.html#SEC384">7.2 Virtual File System (VFS)</A>) is thread-safe for most operations.  But do not work on
+the same `<SAMP>iFile</SAMP>' from different threads!  That is not thread-safe.  Also
+the concept of the current directory is not really valid with threads.
+<P>
+
+<LI>
+The TinyXML, XMLRead, and BinaryXML parsers are thread safe in the sense
+that it is okay to create and work on separate documents in separate threads.
+However it is <EM>not</EM> okay to work on the same document in different
+threads.
+<P>
+
+<LI>
+The syntax services plugin is safe for the basic parsing tools (vectors,
+matrices, reporting errors, etc.). For polygons and thing related objects
+this has not yet been checked for safety.
+<P>
+
+<LI>
+The `<SAMP>simpcon</SAMP>' and `<SAMP>csconout</SAMP>' output consoles are thread-safe provided
+auto-updating is disabled which you can set like this:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iConsoleOutput&#62; con = ...;
+con-&#62;AutoUpdate(false);
+</pre></td></tr></table></P><P>
+
+Note that by default auto-updating is enabled!
 </P><P>
 
-At the lowest level, the WindowServer itself supports additional configurations
-and adjusts appropriately to the underlying hardware.  Historically, the
-high-level Cocoa API, however, did not have access to this information
-(without resorting to private and unsupported API), and consequently did
-not make use of it.  Furthermore, even in 8-bit color mode the application had
-neither access to, nor knowledge of the palette.  In this case the 8-bit number
-is simply an opaque color value of which no further interpretation can be made.
-</P><P>
+<LI>
+The reporter plugin is fully thread-safe.
+<P>
 
-To further complicate matters, in order to achieve decent video performance,
-image data sent to the WindowServer needs to be specially formatted, as
-discussed in the video optimizations section,
-<A HREF="cs_268.html#SEC802">8.1.1.3 Cocoa Video Optimization</A>.  In particular, for optimal
-performance, 12-bit and 24-bit data must include an alpha channel and all alpha
-bits must be set to one.
-</P><P>
+<LI>
+The standard reporter listener plugin is thread-safe for basic operations
+but not for initialization. That should be done from the main thread.
+Also note that thread-safety of the standard reporter listener depends
+on thread-safety of the output console that is being used.
+<P>
 
-Unfortunately the Crystal Space software renderer is unable to produce image
-data in a format usable by the WindowServer when video performance is a
-concern.  This is unfortunate since it means that the Cocoa-based 2D driver
-must itself massage the data into a format suitable to `<SAMP>NSBitmapImageRep</SAMP>'
-and the WindowServer.  This can be a time consuming operation.
-</P><P>
+<LI>
+The following mesh object and factory loaders are thread-safe provided that the
+implementation of `<SAMP>iLoaderContext</SAMP>' is thread-safe.  Please note that the
+default <CODE>iLoaderContext</CODE> is <EM>not</EM> thread-safe which makes all loader
+plugins unsafe by default.
+<P>
 
-Crystal Space's software renderer is unable to produce the proper image format
-for several reasons.
+<UL>
+<LI>
+<EM>Genmesh loader</EM>: Aside from a small design mistake with streams in
+case the new renderer is used, the genmesh loader plugin is perfectly
+thread-safe.
+</UL>
+<P>
+
+</UL>
+<P>
+
+<A NAME="SEC801"></A>
+<H4> Threaded Loading </H4>
+<!--docid::SEC801::-->
+<P>
+
+One important threaded section of Crystal Space is the threaded loader.  In
+order to ensure that the threaded loader works correctly you must make sure
+that you use thread-safe versions of the following modules in Crystal Space:
 </P><P>
 
 <UL>
 <LI>
-The rendering engine has no facilities for forcing certain unused bits to
-conform to a certain value.  In this case the alpha bits need to be set to one.
-<P>
-
+<CODE>iReporter</CODE> (the standard reporter is okay).
 <LI>
-The rendering engine does not support the common `<SAMP>NSBitmapImageRep</SAMP>' pixel
-configurations.  For instance, the software renderer has modes for only 8-bit,
-15-bit, and 16-bit, but not the 12-bit RGB data which is expected by the
-Cocoa image classes.
-<P>
-
+<CODE>iReporterListener</CODE> (the standard reporter listener is okay).
 <LI>
-For performance reasons of its own, the software renderer is hard-coded to
-produce pixel data in the format NBGR for big-endian and NRGB for
-little-endian (as seen from a CPU register perspective), where `N'
-represents unused and potentially uninitialized bits.  Neither of these pixel
-formats is suitable for the Cocoa image classes.
+<CODE>iConsoleOutput</CODE> (`<TT>simpcon</TT>' and `<TT>csconout</TT>' are okay provided
+auto-updating is disabled).
+<LI>
+<CODE>iLoaderContext</CODE> (the threaded loader provides a thread-safe version
+of this one).
+<LI>
+<CODE>iDocumentSystem</CODE> (TinyXML, XMLRead, and BinaryXML are all okay).
 </UL>
-<P>
-
-The upshot is that even though the `<SAMP>NSBitmapImageRep</SAMP>' class supports
-true-color data and Crystal Space is capable of generating true-color data, the
-formats are incompatible from the perspective of a Cocoa-based 2D driver.
-</P><P>
-
-There are at least a couple of solutions to the problem of pixel-format
-mismatch between Crystal Space's software renderer and `<SAMP>NSBitmapImageRep</SAMP>':
-</P><P>
-
-<UL>
-<LI>
-Parameterize the software renderer's hard-coded constants such that those
-constants can be modified at compile-time, and then build several versions of
-the renderer, each geared for a particular pixel format.  To some extent, this
-approach has already been implemented for a few fixed 8-, 15-, 16-, and 32-bit
-pixel formats, however extending it to handle the many existing (and potential
-future) MacOS/X formats could become quickly nightmarish, as well as lead to
-bloat.
-<P>
-
-One other obstacle to this approach is that on 32-bit RGB big-endian
-hardware, the `<SAMP>NSBitmapImageRep</SAMP>' expects the pixel data to occupy the
-high-byte of the longword which represents each pixel.  Historically, the
-software renderer has had trouble dealing with pixel data which occupies the
-high-byte since most programmers working on the renderer only test it with
-pixel formats which do not occupy that byte.  As a consequence, it is common
-for breakage to occur as changes are made to the renderer.  Although the
-maintainer of the Cocoa-based driver has painstakingly eradicated all known
-bugs of this nature in the software renderer, the framework is still quite
-fragile and breaks easily.
-</P><P>
-
-<LI>
-Allow the renderer to generate pixel data in one of its hard-coded formats and
-then massage the data into a format suitable for `<SAMP>NSBitmapImageRep</SAMP>' and
-the WindowServer in a post-processing step just before sending it off to the
-WindowServer.  The downside to this approach is that post-processing can be
-time-consuming as well as memory intensive since such processing often involves
-copying the pixel data from one frame-buffer to another.  (The double
-frame-buffer requirement is a limitation of the way in which many Crystal Space
-applications deal with the frame-buffer.  These applications expect that the
-frame-buffer data will remain valid and unmodified from frame to frame, thus
-massaging the data in-place is not a viable approach.) The benefit of the
-post-processing approach, on the other hand, is that it is much less fragile
-than parameterizing the renderer.
-</UL>
-<P>
-
-The Cocoa-based driver employs the second approach since it is more robust and
-reliable.  In the interest of video performance, whenever possible, the driver
-attempts to perform as much of the time-consuming post-processing work in a
-one-time initialization step.  The additional benefit of performing some of the
-time-consuming work in an initialization step is that the actual
-post-processing step becomes somewhat simplified.
-</P><P>
-
-The Cocoa-based 2D driver is automatically configured to generate 32-bit
-RGB image data when running on machines configured for 24- or 32-bit
-RGBA display.  Conversion of Crystal Space 32-bit RGB:888 data to
-RGBA:8888 needed by `<SAMP>NSBitmapImageRep</SAMP>' and the WindowServer is
-encapsulated in the class `<SAMP>CocoaFrameBuffer32</SAMP>'.  Just prior to flushing
-the image data to the display, `<SAMP>CocoaFrameBuffer32</SAMP>' transmutes the pixel
-data into a format suitable for `<SAMP>NSBitmapImageRep</SAMP>'.  It also ensures that
-the alpha byte is set to <CODE>0xff</CODE>, as explained in the video optimizations
-section, <A HREF="cs_268.html#SEC802">8.1.1.3 Cocoa Video Optimization</A>.
-</P><P>
-
-The 2D driver is automatically configured to generate 15-bit RGB image
-data when running on machines configured for 12-, 15-, or 16-bit RGBA
-display (or some other unrecognized configuration).  Conversion of Crystal
-Space 15-bit RGB:555 data to RGBA:4444 needed by
-`<SAMP>NSBitmapImageRep</SAMP>' and the WindowServer is encapsulated in the class
-`<SAMP>CocoaFrameBuffer15</SAMP>'.  In order to avoid time-consuming bit manipulation
-of image data, this class generates a translation table which equates each
-possible RGB:555 color value with the corresponding RGBA:4444 color.
-The alpha nybble of the translated color contains <CODE>0x0f</CODE> as explained in
-the video optimizations section, <A HREF="cs_268.html#SEC802">8.1.1.3 Cocoa Video Optimization</A>.  To
-translate incoming RGB:555 data to RGBA:4444,
-`<SAMP>CocoaFrameBuffer15</SAMP>' enumerates over each color value in the incoming
-image data, looks up its corresponding RGBA:4444 value in the translation
-table and outputs that color.  This technique is both simple and reasonably
-efficient.
-</P><P>
-
-<A NAME="MacOS/X Dynamic Linking"></A>
+<A NAME="Contributing"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC804"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC798"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC799"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC805"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC798"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC794"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC793"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
