@@ -815,7 +815,39 @@ over those discovered later.
 Previously, VFS stopped searching for configuration information at the
 first directory containing a file named `<TT>vfs.cfg</TT>', and loaded only that
 file.
-<A NAME="Release Notes 98"></A>
+</P><P>
+
+<A NAME="SEC_20"></A>
+<H3> <CODE>iEvent</CODE> Changes </H3>
+<!--docid::SEC_20::-->
+<P>
+
+The <CODE>iEvent::Find()</CODE> method was renamed to <CODE>Retrieve()</CODE> and exhibits
+different return value semantics. Rather than returning a mere boolean result,
+it now returns one of the `<SAMP>csEventError) enumeration constants.  Of
+particular note, in the case of success, <CODE>csEventErrNone</CODE> is returned,
+which has a value of 0. This success value could be misinterpreted as "false"
+by the unwary when changing code to deal with this change. Conditionals which
+test if retrieval of an attribute succeeded must be changed to take this new
+semantic into account. For instance, code such as the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iEvent* ev = <small>...</small>;
+if (ev-&#62;Find({dots</SAMP>'))
+{
+  <small>...</small>
+}
+</pre></td></tr></table></P><P>
+
+must be changed to perform an explicit test on the return value of
+<CODE>Retrieve()</CODE>, rather than relying upon default boolean semantics:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (ev-&#62;Retrieve(<small>...</small>) == csEventErrNone)
+{
+  <small>...</small>
+}
+</pre></td></tr></table><A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.html#SECC"> &lt; </A>]</TD>
