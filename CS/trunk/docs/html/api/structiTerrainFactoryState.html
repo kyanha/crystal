@@ -29,10 +29,10 @@
 <a href="structiTerrainFactoryState-members.html">List of all members.</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Public Methods</h2></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiTerrainFactoryState.html#a0">SetScale</a> (const <a class="el" href="classcsVector3.html">csVector3</a> &amp;scale)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Set/Get the 3 axis scale of the terrain.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiTerrainFactoryState.html#a2">SetHeightMap</a> (const <a class="el" href="classcsArray.html">csArray</a>&lt; float &gt; &amp;data, int x, int y)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Sets the heightmap for heightvalues Note x and y must be 2^n + 1 and usually they must be equal.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiTerrainFactoryState.html#a0">SetTerraFormer</a> (<a class="el" href="structiTerraFormer.html">iTerraFormer</a> *form)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>The terraformer defines the height, scale and other properties related to the formation and structure of the terrain.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiTerrainFactoryState.html#a2">SetSamplerRegion</a> (const <a class="el" href="classcsBox2.html">csBox2</a> &amp;region)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>This specifies the max region the renderer will sample from.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiTerrainFactoryState.html#a4">SaveState</a> (const char *filename)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Save/Restore preprocessing information, the algorithm will do some preprocessing based on the material and height information this allows the process to be saved out to a file and cached for later reuse (maybe this should be the caching system) In some cases it may actually memorymap this file.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
 </table>
@@ -43,7 +43,7 @@ It is up to the algorithm to determine the best use of the information provided 
 <p>
 
 <p>
-Definition at line <a class="el" href="terrain_8h-source.html#l00118">118</a> of file <a class="el" href="terrain_8h-source.html">terrain.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="terrain_8h-source.html#l00120">120</a> of file <a class="el" href="terrain_8h-source.html">terrain.h</a>.<hr><h2>Member Function Documentation</h2>
 <a name="a4" doxytag="iTerrainFactoryState::SaveState"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -75,62 +75,16 @@ Save/Restore preprocessing information, the algorithm will do some preprocessing
     </td>
   </tr>
 </table>
-<a name="a2" doxytag="iTerrainFactoryState::SetHeightMap"></a><p>
+<a name="a2" doxytag="iTerrainFactoryState::SetSamplerRegion"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> virtual bool iTerrainFactoryState::SetHeightMap </td>
+          <td class="md" nowrap valign="top"> virtual void iTerrainFactoryState::SetSamplerRegion </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">const <a class="el" href="classcsArray.html">csArray</a>&lt; float &gt; &amp;&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>data</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>x</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>y</em></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"><code> [pure virtual]</code></td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Sets the heightmap for heightvalues Note x and y must be 2^n + 1 and usually they must be equal.
-<p>
-    </td>
-  </tr>
-</table>
-<a name="a0" doxytag="iTerrainFactoryState::SetScale"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> virtual void iTerrainFactoryState::SetScale </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">const <a class="el" href="classcsVector3.html">csVector3</a> &amp;&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>scale</em>          </td>
+          <td class="md" nowrap valign="top">const <a class="el" href="classcsBox2.html">csBox2</a> &amp;&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>region</em>          </td>
           <td class="md" valign="top">)&nbsp;</td>
           <td class="md" nowrap><code> [pure virtual]</code></td>
         </tr>
@@ -147,9 +101,40 @@ Sets the heightmap for heightvalues Note x and y must be 2^n + 1 and usually the
     <td>
 
 <p>
-Set/Get the 3 axis scale of the terrain.
+This specifies the max region the renderer will sample from.
 <p>
+This  is more of a hint to the renderer as it may try to optimally sample only from regions near the camera.     </td>
+  </tr>
+</table>
+<a name="a0" doxytag="iTerrainFactoryState::SetTerraFormer"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual void iTerrainFactoryState::SetTerraFormer </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiTerraFormer.html">iTerraFormer</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>form</em>          </td>
+          <td class="md" valign="top">)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
     </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+The terraformer defines the height, scale and other properties related to the formation and structure of the terrain.
+<p>
+The terrain rendering plugin will sample from this data model based on its algorithm. The terraformer can be shared between plugins, especially plugins which use the information for  vegatation rendering.     </td>
   </tr>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
