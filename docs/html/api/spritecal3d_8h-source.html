@@ -55,7 +55,7 @@
 00038 <span class="keyword">class </span>CalModel;
 00039 <span class="keyword">class </span>CalCoreModel;
 00040 
-00041 <a class="code" href="group__scf.html#a66">SCF_VERSION</a> (<a class="code" href="structiSpriteCal3DSocket.html">iSpriteCal3DSocket</a>, 0, 0, 1);
+00041 <a class="code" href="group__scf.html#a66">SCF_VERSION</a> (<a class="code" href="structiSpriteCal3DSocket.html">iSpriteCal3DSocket</a>, 0, 0, 2);
 00042 
 <a name="l00047"></a><a class="code" href="structiSpriteCal3DSocket.html">00047</a> <span class="keyword">struct </span><a class="code" href="structiSpriteCal3DSocket.html">iSpriteCal3DSocket</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
 00048 {
@@ -184,69 +184,73 @@
 00347 
 00349   <span class="keyword">virtual</span> <span class="keywordtype">int</span>  <a class="code" href="structiSpriteCal3DState.html#a2">GetAnimType</a>(<span class="keywordtype">int</span> idx) = 0;
 00350 
-00352   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a3">ClearAllAnims</a>() = 0;
+00352   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSpriteCal3DState.html#a3">FindAnim</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
 00353 
-00358   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a4">SetAnimCycle</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> weight) = 0;
-00359 
-00364   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a4">SetAnimCycle</a>(<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> weight) = 0;
-00365 
-00374   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a6">AddAnimCycle</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> weight, <span class="keywordtype">float</span> delay) = 0;
-00375 
-00379   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a6">AddAnimCycle</a>(<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> weight, <span class="keywordtype">float</span> delay) = 0;
-00380 
-00385   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a8">ClearAnimCycle</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> delay) = 0;
-00386 
-00392   <span class="keyword">virtual</span> <span class="keywordtype">int</span>  <a class="code" href="structiSpriteCal3DState.html#a9">GetActiveAnimCount</a>() = 0;
-00393 
-00400   <span class="keyword">virtual</span> <span class="keywordtype">int</span>  <a class="code" href="structiSpriteCal3DState.html#a10">GetActiveAnims</a>(<span class="keywordtype">char</span> *buffer,<span class="keywordtype">int</span> max_length) = 0;
-00401 
-00406   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a11">SetActiveAnims</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *buffer,<span class="keywordtype">int</span> anim_count) = 0;
-00407 
-00414   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a12">SetAnimAction</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> delayIn,
-00415                              <span class="keywordtype">float</span> delayOut) = 0;
-00416 
-00423   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a12">SetAnimAction</a>(<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> delayIn,
-00424                              <span class="keywordtype">float</span> delayOut) = 0;
-00425 
-00434   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a14">SetVelocity</a>(<span class="keywordtype">float</span> vel,<a class="code" href="classcsRandomGen.html">csRandomGen</a> *rng=0) = 0;
+00355   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a4">ClearAllAnims</a>() = 0;
+00356 
+00361   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a5">SetAnimCycle</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> weight) = 0;
+00362 
+00367   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a5">SetAnimCycle</a>(<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> weight) = 0;
+00368 
+00377   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a7">AddAnimCycle</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> weight, <span class="keywordtype">float</span> delay) = 0;
+00378 
+00382   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a7">AddAnimCycle</a>(<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> weight, <span class="keywordtype">float</span> delay) = 0;
+00383 
+00388   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a9">ClearAnimCycle</a>(<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> delay) = 0;
+00389 
+00395   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a9">ClearAnimCycle</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> delay) = 0;
+00396 
+00402   <span class="keyword">virtual</span> <span class="keywordtype">int</span>  <a class="code" href="structiSpriteCal3DState.html#a11">GetActiveAnimCount</a>() = 0;
+00403 
+00410   <span class="keyword">virtual</span> <span class="keywordtype">int</span>  <a class="code" href="structiSpriteCal3DState.html#a12">GetActiveAnims</a>(<span class="keywordtype">char</span> *buffer,<span class="keywordtype">int</span> max_length) = 0;
+00411 
+00416   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a13">SetActiveAnims</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *buffer,<span class="keywordtype">int</span> anim_count) = 0;
+00417 
+00424   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a14">SetAnimAction</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> delayIn,
+00425                              <span class="keywordtype">float</span> delayOut) = 0;
+00426 
+00433   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a14">SetAnimAction</a>(<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> delayIn,
+00434                              <span class="keywordtype">float</span> delayOut) = 0;
 00435 
-00439   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a15">SetDefaultIdleAnim</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
-00440 
-00445   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a16">SetLOD</a>(<span class="keywordtype">float</span> lod) = 0;
-00446 
-00451   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a17">AttachCoreMesh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *meshname) = 0;
-00452 
-00460   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a17">AttachCoreMesh</a>(<span class="keywordtype">int</span> mesh_id,<span class="keywordtype">int</span> iMatWrap) = 0;
-00461 
-00466   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a19">DetachCoreMesh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *meshname) = 0;
-00467 
-00474   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a19">DetachCoreMesh</a>(<span class="keywordtype">int</span> mesh_id) = 0;
-00475 
-00485   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a21">BlendMorphTarget</a>(<span class="keywordtype">int</span> morph_animation_id, <span class="keywordtype">float</span> weight,
-00486         <span class="keywordtype">float</span> delay) = 0;
-00487 
-00496   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a22">ClearMorphTarget</a>(<span class="keywordtype">int</span> morph_animation_id, <span class="keywordtype">float</span> delay) = 0;
+00444   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a16">SetVelocity</a>(<span class="keywordtype">float</span> vel,<a class="code" href="classcsRandomGen.html">csRandomGen</a> *rng=0) = 0;
+00445 
+00449   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a17">SetDefaultIdleAnim</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
+00450 
+00455   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a18">SetLOD</a>(<span class="keywordtype">float</span> lod) = 0;
+00456 
+00461   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a19">AttachCoreMesh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *meshname) = 0;
+00462 
+00470   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a19">AttachCoreMesh</a>(<span class="keywordtype">int</span> mesh_id,<span class="keywordtype">int</span> iMatWrap) = 0;
+00471 
+00476   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a21">DetachCoreMesh</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *meshname) = 0;
+00477 
+00484   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a21">DetachCoreMesh</a>(<span class="keywordtype">int</span> mesh_id) = 0;
+00485 
+00495   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a23">BlendMorphTarget</a>(<span class="keywordtype">int</span> morph_animation_id, <span class="keywordtype">float</span> weight,
+00496         <span class="keywordtype">float</span> delay) = 0;
 00497 
-00499   <span class="keyword">virtual</span> <a class="code" href="structiSpriteCal3DSocket.html">iSpriteCal3DSocket</a>* <a class="code" href="structiSpriteCal3DState.html#a23">FindSocket</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a> *mesh) <span class="keyword">const</span> = 0;
-00500 
-00502   <span class="keyword">virtual</span> <a class="code" href="structiSpriteCal3DSocket.html">iSpriteCal3DSocket</a>* <a class="code" href="structiSpriteCal3DState.html#a23">FindSocket</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) <span class="keyword">const</span> = 0;
-00503 
-00505   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a25">SetMaterial</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *mesh_name,<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a> *mat) = 0;
-00506 
-00508   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a26">SetTimeFactor</a>(<span class="keywordtype">float</span> timeFactor) = 0;
-00509 
-00511   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiSpriteCal3DState.html#a27">GetTimeFactor</a>() = 0;
-00512 
-00514   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiSpriteCal3DState.html#a28">GetAnimationTime</a>() = 0;
-00515 
-00517   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiSpriteCal3DState.html#a29">GetAnimationDuration</a>() = 0;
-00518 
-00520   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a30">SetAnimationTime</a>(<span class="keywordtype">float</span> animationTime) = 0;
-00521 
-00527   <span class="keyword">virtual</span> CalModel *<a class="code" href="structiSpriteCal3DState.html#a31">GetCal3DModel</a>() = 0;
-00528 };
-00529 
-00530 <span class="preprocessor">#endif// __CS_IMESH_SPRITECAL3D_H__</span>
+00506   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a24">ClearMorphTarget</a>(<span class="keywordtype">int</span> morph_animation_id, <span class="keywordtype">float</span> delay) = 0;
+00507 
+00509   <span class="keyword">virtual</span> <a class="code" href="structiSpriteCal3DSocket.html">iSpriteCal3DSocket</a>* <a class="code" href="structiSpriteCal3DState.html#a25">FindSocket</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a> *mesh) <span class="keyword">const</span> = 0;
+00510 
+00512   <span class="keyword">virtual</span> <a class="code" href="structiSpriteCal3DSocket.html">iSpriteCal3DSocket</a>* <a class="code" href="structiSpriteCal3DState.html#a25">FindSocket</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) <span class="keyword">const</span> = 0;
+00513 
+00515   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSpriteCal3DState.html#a27">SetMaterial</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *mesh_name,<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a> *mat) = 0;
+00516 
+00518   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a28">SetTimeFactor</a>(<span class="keywordtype">float</span> timeFactor) = 0;
+00519 
+00521   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiSpriteCal3DState.html#a29">GetTimeFactor</a>() = 0;
+00522 
+00524   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiSpriteCal3DState.html#a30">GetAnimationTime</a>() = 0;
+00525 
+00527   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiSpriteCal3DState.html#a31">GetAnimationDuration</a>() = 0;
+00528 
+00530   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSpriteCal3DState.html#a32">SetAnimationTime</a>(<span class="keywordtype">float</span> animationTime) = 0;
+00531 
+00537   <span class="keyword">virtual</span> CalModel *<a class="code" href="structiSpriteCal3DState.html#a33">GetCal3DModel</a>() = 0;
+00538 };
+00539 
+00540 <span class="preprocessor">#endif// __CS_IMESH_SPRITECAL3D_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.3 
 </small></address> </div></body> </html>
