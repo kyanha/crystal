@@ -92,55 +92,57 @@
 00106 
 00110   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Yield () = 0;
 00111 
-00115   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetLastError () = 0;
+00115   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetLastError () <span class="keyword">const</span> = 0;
 00116 };
 00117 
 00118 
 <a name="l00126"></a><a class="code" href="classcsMutex.html">00126</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csMutex : <span class="keyword">public</span> <a class="code" href="classcsRefCount.html">csRefCount</a>
 00127 {
 00128 <span class="keyword">public</span>:
-00137   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> Create (<span class="keywordtype">bool</span> needrecursive = <span class="keyword">false</span>);
-00138 
-00145   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> LockWait() = 0;
-00146 
-00153   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> LockTry () = 0;
-00154 
-00161   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Release () = 0;
-00162 
-00166   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetLastError () = 0;
-00167 };
-00168 
-00169 
-<a name="l00173"></a><a class="code" href="classcsSemaphore.html">00173</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csSemaphore : <span class="keyword">public</span> <a class="code" href="classcsRefCount.html">csRefCount</a>
-00174 {
-00175 <span class="keyword">public</span>:
-00177   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;csSemaphore&gt;</a> Create (uint32 value = 0);
-00178 
-00185   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> LockWait () = 0;
-00186 
-00193   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> LockTry () = 0;
-00194 
-00201   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Release () = 0;
-00202 
-00204   <span class="keyword">virtual</span> uint32 Value () = 0;
-00205 
-00209   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetLastError () = 0;
-00210 };
-00211 
-00212 
-<a name="l00216"></a><a class="code" href="classcsCondition.html">00216</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csCondition : <span class="keyword">public</span> <a class="code" href="classcsRefCount.html">csRefCount</a>
-00217 {
-00218 <span class="keyword">public</span>:
-00220   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;csCondition&gt;</a> Create (uint32 conditionAttributes = 0);
-00221 
-00230   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Signal (<span class="keywordtype">bool</span> WakeAll = <span class="keyword">false</span>) = 0;
-00231 
-00242   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Wait (csMutex*, <a class="code" href="group__util.html#a11">csTicks</a> timeout = 0) = 0;
-00243 
-00247   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetLastError () = 0;
-00248 };
-00249 
-00250 <span class="preprocessor">#endif // __CS_CSSYS_THREAD_H__</span>
+00146   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> Create (<span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>);
+00147 
+00154   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> LockWait() = 0;
+00155 
+00162   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> LockTry () = 0;
+00163 
+00170   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Release () = 0;
+00171 
+00175   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetLastError () <span class="keyword">const</span> = 0;
+00176 
+00180   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsRecursive () <span class="keyword">const</span> = 0;
+00181 };
+00182 
+00183 
+<a name="l00187"></a><a class="code" href="classcsSemaphore.html">00187</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csSemaphore : <span class="keyword">public</span> <a class="code" href="classcsRefCount.html">csRefCount</a>
+00188 {
+00189 <span class="keyword">public</span>:
+00191   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;csSemaphore&gt;</a> Create (uint32 value = 0);
+00192 
+00199   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> LockWait () = 0;
+00200 
+00207   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> LockTry () = 0;
+00208 
+00215   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Release () = 0;
+00216 
+00218   <span class="keyword">virtual</span> uint32 Value () = 0;
+00219 
+00223   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetLastError () <span class="keyword">const</span> = 0;
+00224 };
+00225 
+00226 
+<a name="l00230"></a><a class="code" href="classcsCondition.html">00230</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csCondition : <span class="keyword">public</span> <a class="code" href="classcsRefCount.html">csRefCount</a>
+00231 {
+00232 <span class="keyword">public</span>:
+00234   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;csCondition&gt;</a> Create (uint32 conditionAttributes = 0);
+00235 
+00244   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Signal (<span class="keywordtype">bool</span> WakeAll = <span class="keyword">false</span>) = 0;
+00245 
+00269   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Wait (csMutex* mutex, <a class="code" href="group__util.html#a11">csTicks</a> timeout = 0) = 0;
+00270 
+00274   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetLastError () <span class="keyword">const</span> = 0;
+00275 };
+00276 
+00277 <span class="preprocessor">#endif // __CS_CSSYS_THREAD_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.3 
 </small></address> </div></body> </html>
