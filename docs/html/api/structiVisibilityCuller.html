@@ -52,12 +52,14 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Mark all objects as visible that are in the volume formed by the set of planes.</em> <a href="#a8"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiVisibilityCuller.html#a9">VisTest</a> (<a class="el" href="classcsPlane3.html">csPlane3</a> *plane, int num_planes, <a class="el" href="structiVisibilityCullerListener.html">iVisibilityCullerListener</a> *viscallback)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Notify the visibility callback of all objects that are in the volume formed by the set of planes.</em> <a href="#a9"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiVisibilityObjectIterator.html">iVisibilityObjectIterator</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiVisibilityCuller.html#a10">IntersectSegment</a> (const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end, bool accurate=false)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiVisibilityObjectIterator.html">iVisibilityObjectIterator</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiVisibilityCuller.html#a10">IntersectSegmentSloppy</a> (const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Intersect a segment with all objects in the visibility culler and return them all in an iterator.</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVisibilityCuller.html#a11">IntersectSegment</a> (const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end, <a class="el" href="classcsVector3.html">csVector3</a> &amp;isect, float *pr=0, <a class="el" href="structiMeshWrapper.html">iMeshWrapper</a> **p_mesh=0, int *poly_idx=0, bool accurate=true)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Intersect a beam using this culler and return the intersection point, the mesh and optional polygon index.</em> <a href="#a11"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiVisibilityCuller.html#a12">CastShadows</a> (<a class="el" href="structiFrustumView.html">iFrustumView</a> *fview)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Start casting shadows from a given point in space.</em> <a href="#a12"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiVisibilityObjectIterator.html">iVisibilityObjectIterator</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiVisibilityCuller.html#a11">IntersectSegment</a> (const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end, bool accurate=false)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Intersect a segment with all objects in the visibility culler and return them all in an iterator.</em> <a href="#a11"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVisibilityCuller.html#a12">IntersectSegment</a> (const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end, <a class="el" href="classcsVector3.html">csVector3</a> &amp;isect, float *pr=0, <a class="el" href="structiMeshWrapper.html">iMeshWrapper</a> **p_mesh=0, int *poly_idx=0, bool accurate=true)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Intersect a beam using this culler and return the intersection point, the mesh and optional polygon index.</em> <a href="#a12"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiVisibilityCuller.html#a13">CastShadows</a> (<a class="el" href="structiFrustumView.html">iFrustumView</a> *fview)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Start casting shadows from a given point in space.</em> <a href="#a13"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This interface represents a visibility culling system.
@@ -75,7 +77,7 @@ Main users of this interface: <ul>
 
 <p>
 Definition at line <a class="el" href="viscull_8h-source.html#l00105">105</a> of file <a class="el" href="viscull_8h-source.html">viscull.h</a>.<hr><h2>Member Function Documentation</h2>
-<a name="a12" doxytag="iVisibilityCuller::CastShadows"></a><p>
+<a name="a13" doxytag="iVisibilityCuller::CastShadows"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -103,10 +105,10 @@ Definition at line <a class="el" href="viscull_8h-source.html#l00105">105</a> of
 <p>
 Start casting shadows from a given point in space.
 <p>
-What this will do is traverse all objects registered to the visibility culler. If some object implements <a class="el" href="structiShadowCaster.html">iShadowCaster</a> then this function will use the shadows casted by that object and put them in the frustum view. This function will then also call the object function which is assigned to <a class="el" href="structiFrustumView.html">iFrustumView</a>. That object function will (for example) call <a class="el" href="structiShadowReceiver.html">iShadowReceiver</a>-&gt;<a class="el" href="structiVisibilityCuller.html#a12">CastShadows()</a> to cast the collected shadows on the shadow receiver.     </td>
+What this will do is traverse all objects registered to the visibility culler. If some object implements <a class="el" href="structiShadowCaster.html">iShadowCaster</a> then this function will use the shadows casted by that object and put them in the frustum view. This function will then also call the object function which is assigned to <a class="el" href="structiFrustumView.html">iFrustumView</a>. That object function will (for example) call <a class="el" href="structiShadowReceiver.html">iShadowReceiver</a>-&gt;<a class="el" href="structiVisibilityCuller.html#a13">CastShadows()</a> to cast the collected shadows on the shadow receiver.     </td>
   </tr>
 </table>
-<a name="a11" doxytag="iVisibilityCuller::IntersectSegment"></a><p>
+<a name="a12" doxytag="iVisibilityCuller::IntersectSegment"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -176,7 +178,7 @@ Intersect a beam using this culler and return the intersection point, the mesh a
 If the returned mesh is 0 then this means that the object belonging to the culler itself was hit. Some meshes don't support returning polygon indices in which case that field will always be -1. If accurate is false then a less accurate (and faster) method is used. In that case the polygon index will never be filled.     </td>
   </tr>
 </table>
-<a name="a10" doxytag="iVisibilityCuller::IntersectSegment"></a><p>
+<a name="a11" doxytag="iVisibilityCuller::IntersectSegment"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -220,6 +222,46 @@ If the returned mesh is 0 then this means that the object belonging to the culle
 Intersect a segment with all objects in the visibility culler and return them all in an iterator.
 <p>
 If accurate is true then a more accurate (and slower) method is used.     </td>
+  </tr>
+</table>
+<a name="a10" doxytag="iVisibilityCuller::IntersectSegmentSloppy"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt;<a class="el" href="structiVisibilityObjectIterator.html">iVisibilityObjectIterator</a>&gt; iVisibilityCuller::IntersectSegmentSloppy </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const <a class="el" href="classcsVector3.html">csVector3</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>start</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>const <a class="el" href="classcsVector3.html">csVector3</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>end</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Intersect a segment with all objects in the visibility culler and return them all in an iterator.
+<p>
+This function is less accurate then <a class="el" href="structiVisibilityCuller.html#a11">IntersectSegment()</a> because it might also return objects that are not even hit by the beam but just close to it.     </td>
   </tr>
 </table>
 <a name="a4" doxytag="iVisibilityCuller::PrecacheCulling"></a><p>

@@ -73,7 +73,7 @@
 00078     <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a> *mesh, uint32 frustum_mask) = 0;
 00079 };
 00080 
-00081 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVisibilityCuller.html">iVisibilityCuller</a>, 0, 5, 0);
+00081 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVisibilityCuller.html">iVisibilityCuller</a>, 0, 6, 0);
 00082 
 <a name="l00105"></a><a class="code" href="structiVisibilityCuller.html">00105</a> <span class="keyword">struct </span><a class="code" href="structiVisibilityCuller.html">iVisibilityCuller</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
 00106 {
@@ -95,41 +95,44 @@
 00164 
 00171   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVisibilityCuller.html#a3">VisTest</a> (<a class="code" href="classcsPlane3.html">csPlane3</a>* plane, <span class="keywordtype">int</span> num_planes, 
 00172     <a class="code" href="structiVisibilityCullerListener.html">iVisibilityCullerListener</a>* viscallback) = 0;
-00173         
-00179   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iVisibilityObjectIterator&gt;</a> <a class="code" href="structiVisibilityCuller.html#a10">IntersectSegment</a> (
-00180     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end, <span class="keywordtype">bool</span> accurate = <span class="keyword">false</span>) = 0;
-00181 
-00191   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVisibilityCuller.html#a10">IntersectSegment</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start,
-00192     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end, <a class="code" href="classcsVector3.html">csVector3</a>&amp; isect, <span class="keywordtype">float</span>* pr = 0,
-00193     <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>** p_mesh = 0, <span class="keywordtype">int</span>* poly_idx = 0,
-00194     <span class="keywordtype">bool</span> accurate = <span class="keyword">true</span>) = 0;
-00195 
-00206   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVisibilityCuller.html#a12">CastShadows</a> (<a class="code" href="structiFrustumView.html">iFrustumView</a>* fview) = 0;
-00207 
-00214   <span class="comment">//virtual uint32 GetCurrentVisibilityNumber () const = 0;</span>
-00215 };
+00173 
+00180   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iVisibilityObjectIterator&gt;</a> <a class="code" href="structiVisibilityCuller.html#a10">IntersectSegmentSloppy</a> (
+00181     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end) = 0;
+00182 
+00188   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iVisibilityObjectIterator&gt;</a> <a class="code" href="structiVisibilityCuller.html#a11">IntersectSegment</a> (
+00189     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end, <span class="keywordtype">bool</span> accurate = <span class="keyword">false</span>) = 0;
+00190 
+00200   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVisibilityCuller.html#a11">IntersectSegment</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start,
+00201     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end, <a class="code" href="classcsVector3.html">csVector3</a>&amp; isect, <span class="keywordtype">float</span>* pr = 0,
+00202     <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>** p_mesh = 0, <span class="keywordtype">int</span>* poly_idx = 0,
+00203     <span class="keywordtype">bool</span> accurate = <span class="keyword">true</span>) = 0;
+00204 
+00215   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVisibilityCuller.html#a13">CastShadows</a> (<a class="code" href="structiFrustumView.html">iFrustumView</a>* fview) = 0;
 00216 
-<a name="l00224"></a><a class="code" href="group__engine3d__vis.html#a1">00224</a> <span class="preprocessor">#define CS_CULLER_HINT_GOODOCCLUDER 4</span>
-00225 <span class="preprocessor"></span>
-<a name="l00230"></a><a class="code" href="group__engine3d__vis.html#a2">00230</a> <span class="preprocessor">#define CS_CULLER_HINT_BADOCCLUDER 8</span>
-00231 <span class="preprocessor"></span>
-00234 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVisibilityObject.html">iVisibilityObject</a>, 0, 2, 1);
-00235 
-<a name="l00253"></a><a class="code" href="structiVisibilityObject.html">00253</a> <span class="keyword">struct </span><a class="code" href="structiVisibilityObject.html">iVisibilityObject</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00254 {
-00256   <span class="keyword">virtual</span> <a class="code" href="structiMovable.html">iMovable</a>* <a class="code" href="structiVisibilityObject.html#a0">GetMovable</a> () <span class="keyword">const</span> = 0;
-00258   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiVisibilityObject.html#a1">GetMeshWrapper</a> () <span class="keyword">const</span> = 0;
-00259 
-00265   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVisibilityObject.html#a2">SetVisibilityNumber</a> (uint32 visnr) = 0;
-00271   <span class="keyword">virtual</span> uint32 <a class="code" href="structiVisibilityObject.html#a3">GetVisibilityNumber</a> () <span class="keyword">const</span> = 0;
-00272 
-00276   <span class="keyword">virtual</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>* <a class="code" href="structiVisibilityObject.html#a4">GetObjectModel</a> () = 0;
-00277 
-00286   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiVisibilityObject.html#a5">GetCullerFlags</a> () = 0;
-00287 };
-00288 
-00291 <span class="preprocessor">#endif // __CS_IENGINE_VISCULL_H__</span>
-00292 <span class="preprocessor"></span>
+00223   <span class="comment">//virtual uint32 GetCurrentVisibilityNumber () const = 0;</span>
+00224 };
+00225 
+<a name="l00233"></a><a class="code" href="group__engine3d__vis.html#a1">00233</a> <span class="preprocessor">#define CS_CULLER_HINT_GOODOCCLUDER 4</span>
+00234 <span class="preprocessor"></span>
+<a name="l00239"></a><a class="code" href="group__engine3d__vis.html#a2">00239</a> <span class="preprocessor">#define CS_CULLER_HINT_BADOCCLUDER 8</span>
+00240 <span class="preprocessor"></span>
+00243 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVisibilityObject.html">iVisibilityObject</a>, 0, 2, 1);
+00244 
+<a name="l00262"></a><a class="code" href="structiVisibilityObject.html">00262</a> <span class="keyword">struct </span><a class="code" href="structiVisibilityObject.html">iVisibilityObject</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00263 {
+00265   <span class="keyword">virtual</span> <a class="code" href="structiMovable.html">iMovable</a>* <a class="code" href="structiVisibilityObject.html#a0">GetMovable</a> () <span class="keyword">const</span> = 0;
+00267   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiVisibilityObject.html#a1">GetMeshWrapper</a> () <span class="keyword">const</span> = 0;
+00268 
+00274   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVisibilityObject.html#a2">SetVisibilityNumber</a> (uint32 visnr) = 0;
+00280   <span class="keyword">virtual</span> uint32 <a class="code" href="structiVisibilityObject.html#a3">GetVisibilityNumber</a> () <span class="keyword">const</span> = 0;
+00281 
+00285   <span class="keyword">virtual</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>* <a class="code" href="structiVisibilityObject.html#a4">GetObjectModel</a> () = 0;
+00286 
+00295   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiVisibilityObject.html#a5">GetCullerFlags</a> () = 0;
+00296 };
+00297 
+00300 <span class="preprocessor">#endif // __CS_IENGINE_VISCULL_H__</span>
+00301 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
