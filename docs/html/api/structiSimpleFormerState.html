@@ -35,13 +35,77 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Set a scaling factor to be applied to the heightmap region (X, Z) and height (Y).</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiSimpleFormerState.html#a2">SetOffset</a> (<a class="el" href="classcsVector3.html">csVector3</a> scale)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Set a offset to be applied to the heightmap region (X, Z) and height (Y).</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiSimpleFormerState.html#a3">SetIntegerMap</a> (<a class="el" href="strhash_8h.html#a0">csStringID</a> type, <a class="el" href="structiImage.html">iImage</a> *map, int scale=1, int offset=0)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set a generic additional integer map to be used.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiSimpleFormerState.html#a4">SetFloatMap</a> (<a class="el" href="strhash_8h.html#a0">csStringID</a> type, <a class="el" href="structiImage.html">iImage</a> *map, float scale=1.0, float offset=0.0)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set a generic additional float map to be used.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 iSimpleFormerState exposes implementation specific methods for the SimpleTerraformer plugin
 <p>
 
 <p>
-Definition at line <a class="el" href="simpleformer_8h-source.html#l00032">32</a> of file <a class="el" href="simpleformer_8h-source.html">simpleformer.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="simpleformer_8h-source.html#l00033">33</a> of file <a class="el" href="simpleformer_8h-source.html">simpleformer.h</a>.<hr><h2>Member Function Documentation</h2>
+<a name="a4" doxytag="iSimpleFormerState::SetFloatMap"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual bool iSimpleFormerState::SetFloatMap </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="strhash_8h.html#a0">csStringID</a>&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>type</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structiImage.html">iImage</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>map</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>float&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>scale</em> = 1.0, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>float&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>offset</em> = 0.0</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Set a generic additional float map to be used.
+<p>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>type</em>&nbsp;</td><td>
+is the ID for this map. To get values of this you need to fetch the stringset with tag 'crystalspace.shared.stringset' and 'Request()' an ID from that. </td></tr>
+<tr><td valign=top><em>map</em>&nbsp;</td><td>
+is the image from which this map will be made. If this is an indexed image then the integer index will be casted to float, diviced by 256 and then scaled+offset. If this is a 24-bit image then the three color components are averaged resulting in a value between 0 and 1 too. </td></tr>
+</table>
+</dl><dl compact><dt><b>Returns: </b></dt><dd>
+false on error (bad dimension or image). </dl>    </td>
+  </tr>
+</table>
 <a name="a0" doxytag="iSimpleFormerState::SetHeightmap"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -71,6 +135,66 @@ Definition at line <a class="el" href="simpleformer_8h-source.html#l00032">32</a
 Set a heightmap to be used.
 <p>
 The heightmap will by default be covering a region from -1..1 along X and Z, and areas outside this will return a height of 0     </td>
+  </tr>
+</table>
+<a name="a3" doxytag="iSimpleFormerState::SetIntegerMap"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual bool iSimpleFormerState::SetIntegerMap </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="strhash_8h.html#a0">csStringID</a>&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>type</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structiImage.html">iImage</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>map</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>scale</em> = 1, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>offset</em> = 0</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Set a generic additional integer map to be used.
+<p>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>type</em>&nbsp;</td><td>
+is the ID for this map. To get values of this you need to fetch the stringset with tag 'crystalspace.shared.stringset' and 'Request()' an ID from that. </td></tr>
+<tr><td valign=top><em>map</em>&nbsp;</td><td>
+is the image from which this map will be made. This must be an indexed (palette) image. </td></tr>
+</table>
+</dl><dl compact><dt><b>Returns: </b></dt><dd>
+false on error (bad dimension or image). </dl>    </td>
   </tr>
 </table>
 <a name="a2" doxytag="iSimpleFormerState::SetOffset"></a><p>
