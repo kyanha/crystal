@@ -40,8 +40,8 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <!--docid::SEC174::-->
 <P>
 
-It is good practice to always put defines and declares in header
-files as opposed to source files. In some cases it is even needed. Here
+It is good practice to always put definitions and declarations in header
+files as opposed to source files. In some cases it is even required. Here
 we will show the header file for a simple Crystal Space application.
 Although this is not strictly required, we use a class to encapsulate
 the application logic. Our `<TT>simple.h</TT>' header looks as follows:
@@ -186,17 +186,23 @@ the things and features it already has:
 <UL>
 <LI>
 It will open a window.
+<P>
+
 <LI>
 You can control the size of the window and the video driver used
-for that window with commandline options (`<SAMP>-video</SAMP>' and `<SAMP>-mode</SAMP>'
-commandline options).
+for that window with command-line options (`<SAMP>-video</SAMP>' and `<SAMP>-mode</SAMP>'
+command-line options).
+<P>
+
 <LI>
-It will give commandline help when you use the `<SAMP>-help</SAMP>' commandline
+It will give command-line help when you use the `<SAMP>-help</SAMP>' command-line
 option.
+<P>
+
 <LI>
 It has the following plugins initialized and ready to use: engine, 3D
 renderer, canvas, reporter, reporter listener, font server, image loader,
-level loader, and VFS.
+map loader, and VFS.
 </UL>
 <P>
 
@@ -210,31 +216,32 @@ essential for every application using Crystal Space.  It makes sure that the
 <CODE>main()</CODE> routine is correctly linked and called on every platform.
 </P><P>
 
-<CODE>csInitializer::RequestPlugins()</CODE> will use the config file
-(which we are not using in this tutorial), the commandline and the
-requested plugins to find out which plugins to load. The commandline
-has highest priority, followed by the config file and lastly the
+<CODE>csInitializer::RequestPlugins()</CODE> will use the configuration file
+(which we are not using in this tutorial), the command-line and the
+requested plugins to find out which plugins to load. The command-line
+has highest priority, followed by the configuration file and lastly the
 requested plugins.
 </P><P>
 
 This concludes the initialization pass.
 </P><P>
 
-In <CODE>Simple::Application()</CODE> we will open the window with a call
+In <CODE>Simple::Application()</CODE> we open the window with a call
 to the function <CODE>csInitializer::OpenApplication()</CODE>. This sends
-the `<SAMP>cscmdSystemOpen</SAMP>' message to all components that are
-listening to the event queue.  One of the plugins that does this is
+the `<SAMP>cscmdSystemOpen</SAMP>' broadcast message to all components that are
+listening to the event queue.  One of the plugins that listens for this is
 the 3D renderer which will then open its window (or enable graphics
 on a non-windowing operating system).
 </P><P>
 
-After that we will query the object registry to find out all the
-common objects that we're going to need later and store a reference
-in our main class. Because we use <CODE>csRef&#60;&#62;</CODE> or smart pointers
-we don't have to worry about <CODE>DecRef()</CODE>.
+After that, we query the object registry to locate all the
+common objects that we will need later, and store references to them
+in our main class. Because we use <CODE>csRef&#60;&#62;</CODE> or smart pointers,
+we don't have to worry about invoking <CODE>IncRef()</CODE> and <CODE>DecRef()</CODE>
+manually.
 </P><P>
 
-Finally we will start the default main loop by calling Run().
+Finally we start the default main loop by calling <CODE>Run()</CODE>.
 </P><P>
 
 <A NAME="Simple Event Handling"></A>

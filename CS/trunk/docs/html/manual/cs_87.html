@@ -65,36 +65,36 @@ routine right before the <CODE>Initialize()</CODE> function:
 }
 </pre></td></tr></table></P><P>
 
-This code will first use <CODE>iVFS::ChDir()</CODE> to set the current
+This code first uses <CODE>iVFS::ChDir()</CODE> to set the current
 directory in the virtual file system to `<TT>/lev/flarge</TT>'. In the
-case of `<SAMP>flarge</SAMP>' this MOUNT POINT is already created in the
-config file `<TT>vfs.cfg</TT>'. If this is not the case for your own levels
-you can either modify `<TT>vfs.cfg</TT>' or else call <CODE>iVFS::Mount()</CODE>
+case of `<SAMP>flarge</SAMP>' this <EM>mount point</EM> exists already in the
+configuration file `<TT>vfs.cfg</TT>'. If this is not the case for your own levels,
+you can either modify `<TT>vfs.cfg</TT>', provide your own `<TT>vfs.cfg</TT>', or
+else call <CODE>iVFS::Mount()</CODE>
 to map a physical file path (can be a ZIP archive file as well)
 to a virtual directory.
 </P><P>
 
 The call to <CODE>iLoader::LoadMapFile()</CODE> will take the given filename
 (in this case `<TT>world</TT>') and open it from the current VFS
-directory. Then it will parse that file and create the geometry which
+directory. Then, it will parse that file and create the geometry which
 is specified there.
 </P><P>
 
-If this is successful then you must call <CODE>iEngine::Prepare()</CODE> to
+If loading is successful, then you must call <CODE>iEngine::Prepare()</CODE> to
 make sure that all lightmaps are correctly loaded from the cache
 and other necessary setup work is done (i.e. textures are registered
 and so on).
 </P><P>
 
-We additionally change the last part of <CODE>Application()</CODE> to
-this:
+Additionally, change the last part of <CODE>Application()</CODE> to this:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Application ()
 {
   <small>...</small>
 
-  view = csPtr&#60;iView&#62; (new csView (engine, g3d));
+  view.AttachNew(new csView (engine, g3d));
   iGraphics2D* g2d = g3d-&#62;GetDriver2D ();
   view-&#62;SetRectangle (0, 0, g2d-&#62;GetWidth (), g2d-&#62;GetHeight ());
 
@@ -104,8 +104,9 @@ this:
 }
 </pre></td></tr></table></P><P>
 
-So first we create our view but doesn't yet set the current sector.
-<CODE>LoadMap()</CODE> will do that based on the loaded level.
+So, first we create our view but haven't set the current sector.
+Instead, we will have <CODE>LoadMap()</CODE> do that based upon the loaded map,
+as shown below.
 </P><P>
 
 <A NAME="Simple Locating the Camera"></A>

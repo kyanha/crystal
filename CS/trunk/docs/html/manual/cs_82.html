@@ -41,10 +41,12 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <P>
 
 To make this example a little more interesting the material is going to be
-loaded <EM>after</EM> the other setup of the texture manager has been done.
+loaded <EM>after</EM> the other set-up of the texture manager has been performed.
 This is not really needed but it illustrates how a game might load materials
-dynamically later when the application is already running.  So first we edit
+dynamically after the application is already running.  So, first we edit
 `<TT>simple.h</TT>':
+</P><P>
+
 <TABLE><tr><td>&nbsp;</td><td class=example><pre><small>...</small>
 class Simple
 {
@@ -54,7 +56,7 @@ private:
   <small>...</small>
 </pre></td></tr></table></P><P>
 
-Then we edit `<TT>simple.cpp</TT>' and add the following in
+Then, we edit `<TT>simple.cpp</TT>' and add the following in
 <CODE>Simple::Application()</CODE> and <CODE>Simple::CreateSprites()</CODE>
 (before `<SAMP>return true</SAMP>'):
 </P><P>
@@ -80,13 +82,13 @@ void Simple::CreateSprites()
 }
 </pre></td></tr></table></P><P>
 
-This code first loads a texture in our engine with
+This code first loads a texture with
 <CODE>iLoader::LoadTexture()</CODE>.  The second argument is the file name for our
 texture (VFS path) and the first argument is how that texture should be
-named in the engine.  In this case we use `<SAMP>spark</SAMP>' for that because that's
+named in the engine.  In this case we use "spark" for that because that's
 how the `<TT>sprite1</TT>' definition wants it. The third parameter indicates
 for what we want to use this texture. In this case we want to use it to texture
-map a model for the 3D engine so the texture must be prepared for 3D.
+map a model for the 3D engine, so the texture must be prepared for 3D.
 The fourth parameter is the texture manager which will be used to register
 and prepare the texture and material. This is done automatically by
 this function because the fifth parameter is set to 'true'. In the previous
@@ -98,17 +100,17 @@ and the last boolean parameter because <CODE>Prepare()</CODE> automatically
 registers and prepares all textures and materials that are loaded.
 </P><P>
 
-If this loading succeeds this function will register our texture with the
+If loading succeeds this function will register our texture with the
 texture manager. As mentioned above this is needed because we are loading
-this texture AFTER <CODE>engine-&#62;Prepare()</CODE>. So this is an easy way to
+this texture <EM>after</EM> <CODE>engine-&#62;Prepare()</CODE>. So, this is an easy way to
 dynamically add textures and materials even when the engine is already
-running. Note that if you plan to load many new textures and materials
+running. Note that if you plan to load many new textures and materials,
 it is more efficient to not let this function register automatically but
 instead register them manually and then call <CODE>txtmgr-&#62;PrepareTextures()</CODE>
 to prepare them all at once.
 </P><P>
 
-Note that when you load a texture like this there will also be an
+Further note that when you load a texture like this, there will also be an
 associated material with the same name. The engine itself works with
 materials and doesn't directly use textures. The material in this case
 is simply a wrapper on top of the texture. But you could also add detail
