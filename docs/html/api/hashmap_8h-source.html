@@ -54,141 +54,158 @@
 00036 
 00037 <span class="keyword">class </span><a class="code" href="classcsHashMap.html">csHashMap</a>;
 00038 
-00040 <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> csHashKey;
-00042 <span class="keyword">typedef</span> <span class="keywordtype">void</span>* csHashObject;
-00043 
-<a name="l00047"></a><a class="code" href="structcsHashElement.html">00047</a> <span class="keyword">struct </span><a class="code" href="structcsHashElement.html">csHashElement</a>
-00048 {
-00049   csHashKey key;
-00050   csHashObject object;
-00051 };
-00052 
-00054 <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;csHashElement&gt;</a> <a class="code" href="classcsArray.html">csHashBucket</a>;
-00056 <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;csHashBucket&gt;</a> <a class="code" href="classcsArray.html">csHashBucketVector</a>;
-00057 
-<a name="l00066"></a><a class="code" href="classcsGlobalHashIterator.html">00066</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT <a class="code" href="classcsGlobalHashIterator.html">csGlobalHashIterator</a>
-00067 {
-00068   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHashMap.html">csHashMap</a>;
-00069   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsGlobalHashIteratorReversible.html">csGlobalHashIteratorReversible</a>;
-00070 
-00071 <span class="keyword">private</span>:
-00073   csHashBucket* bucket;
-00075   <span class="keyword">const</span> csHashBucket* cbucket;
-00077   <span class="keywordtype">int</span> element_index;
-00079   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bucket_index;
-00081   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bucket_len;
-00083   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> nbuckets;
-00085   <a class="code" href="classcsHashMap.html">csHashMap</a>* hash;
-00087   <span class="keyword">const</span> <a class="code" href="classcsHashMap.html">csHashMap</a>* chash;
-00088 
-00089 <span class="keyword">private</span>:
-00091   <span class="keywordtype">void</span> GotoNextElement ();
-00092 
-00094   <span class="keywordtype">void</span> GotoNextElementConst ();
-00095 
-00096 <span class="keyword">public</span>:
-00102   <a class="code" href="classcsGlobalHashIterator.html">csGlobalHashIterator</a> (<a class="code" href="classcsHashMap.html">csHashMap</a>* hash);
+00039 <span class="preprocessor">#ifndef CS_PLATFORM_IS_64BITS</span>
+00040 <span class="preprocessor"></span><span class="preprocessor"># if (_MSC_VER &gt;= 1300)</span>
+00041 <span class="preprocessor"></span>  <span class="comment">/*</span>
+00042 <span class="comment">   * Silence VC7 64bit warning.</span>
+00043 <span class="comment">   */</span>
+00044   <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> __w64 csHashKey;
+00045 <span class="preprocessor"># else</span>
+00046 <span class="preprocessor"></span>
+00047   <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> csHashKey;
+00048 <span class="preprocessor"># endif</span>
+00049 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00050 <span class="preprocessor"></span>  <span class="comment">/*</span>
+00051 <span class="comment">   * At some places, pointers are casted to csHashKey. Work around truncation</span>
+00052 <span class="comment">   * problems by forcing csHashKey to at least 64bit on 64bit machines.</span>
+00053 <span class="comment">   */</span>
+00054   <span class="keyword">typedef</span> uint64 csHashKey;
+00055 <span class="preprocessor">#endif</span>
+00056 <span class="preprocessor"></span>
+00057 <span class="keyword">typedef</span> <span class="keywordtype">void</span>* csHashObject;
+00058 
+<a name="l00062"></a><a class="code" href="structcsHashElement.html">00062</a> <span class="keyword">struct </span><a class="code" href="structcsHashElement.html">csHashElement</a>
+00063 {
+00064   csHashKey key;
+00065   csHashObject object;
+00066 };
+00067 
+00069 <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;csHashElement&gt;</a> <a class="code" href="classcsArray.html">csHashBucket</a>;
+00071 <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;csHashBucket&gt;</a> <a class="code" href="classcsArray.html">csHashBucketVector</a>;
+00072 
+<a name="l00081"></a><a class="code" href="classcsGlobalHashIterator.html">00081</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT <a class="code" href="classcsGlobalHashIterator.html">csGlobalHashIterator</a>
+00082 {
+00083   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHashMap.html">csHashMap</a>;
+00084   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsGlobalHashIteratorReversible.html">csGlobalHashIteratorReversible</a>;
+00085 
+00086 <span class="keyword">private</span>:
+00088   csHashBucket* bucket;
+00090   <span class="keyword">const</span> csHashBucket* cbucket;
+00092   size_t element_index;
+00094   size_t bucket_index;
+00096   size_t bucket_len;
+00098   size_t nbuckets;
+00100   <a class="code" href="classcsHashMap.html">csHashMap</a>* hash;
+00102   <span class="keyword">const</span> <a class="code" href="classcsHashMap.html">csHashMap</a>* chash;
 00103 
-00107   <a class="code" href="classcsGlobalHashIterator.html">csGlobalHashIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHashMap.html">csHashMap</a>* hash);
-00108 
-00110   <span class="keywordtype">bool</span> HasNext () <span class="keyword">const</span>;
-00112   csHashObject Next ();
-00114   csHashObject NextConst ();
-00119   <span class="keywordtype">void</span> DeleteNext ();
-00120 };
-00121 
-<a name="l00130"></a><a class="code" href="classcsHashIterator.html">00130</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csHashIterator
-00131 {
-00132   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHashMap.html">csHashMap</a>;
-00133   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHashIteratorReversible.html">csHashIteratorReversible</a>;
-00134 
-00135 <span class="keyword">private</span>:
-00137   csHashBucket* bucket;
-00139   <span class="keyword">const</span> csHashBucket* cbucket;
-00141   <span class="keywordtype">int</span> element_index;
-00143   <span class="keywordtype">int</span> current_index;
-00145   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bucket_index;
-00147   csHashKey key;
-00149   <a class="code" href="classcsHashMap.html">csHashMap</a>* hash;
-00151   <span class="keyword">const</span> <a class="code" href="classcsHashMap.html">csHashMap</a>* chash;
-00152 
-00153 <span class="keyword">private</span>:
-00155   <span class="keywordtype">void</span> GotoNextSameKey ();
-00156 
-00158   <span class="keywordtype">void</span> GotoNextSameKeyConst ();
-00159 
-00160 <span class="keyword">public</span>:
-00166   csHashIterator (<a class="code" href="classcsHashMap.html">csHashMap</a>* hash, csHashKey Key);
+00104 <span class="keyword">private</span>:
+00106   <span class="keywordtype">void</span> GotoNextElement ();
+00107 
+00109   <span class="keywordtype">void</span> GotoNextElementConst ();
+00110 
+00111 <span class="keyword">public</span>:
+00117   <a class="code" href="classcsGlobalHashIterator.html">csGlobalHashIterator</a> (<a class="code" href="classcsHashMap.html">csHashMap</a>* hash);
+00118 
+00122   <a class="code" href="classcsGlobalHashIterator.html">csGlobalHashIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHashMap.html">csHashMap</a>* hash);
+00123 
+00125   <span class="keywordtype">bool</span> HasNext () <span class="keyword">const</span>;
+00127   csHashObject Next ();
+00129   csHashObject NextConst ();
+00134   <span class="keywordtype">void</span> DeleteNext ();
+00135 };
+00136 
+<a name="l00145"></a><a class="code" href="classcsHashIterator.html">00145</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csHashIterator
+00146 {
+00147   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHashMap.html">csHashMap</a>;
+00148   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHashIteratorReversible.html">csHashIteratorReversible</a>;
+00149 
+00150 <span class="keyword">private</span>:
+00152   csHashBucket* bucket;
+00154   <span class="keyword">const</span> csHashBucket* cbucket;
+00156   size_t element_index;
+00158   size_t current_index;
+00160   size_t bucket_index;
+00162   csHashKey key;
+00164   <a class="code" href="classcsHashMap.html">csHashMap</a>* hash;
+00166   <span class="keyword">const</span> <a class="code" href="classcsHashMap.html">csHashMap</a>* chash;
 00167 
-00171   csHashIterator (<span class="keyword">const</span> <a class="code" href="classcsHashMap.html">csHashMap</a>* hash, csHashKey Key);
-00172 
-00174   <span class="keywordtype">bool</span> HasNext () <span class="keyword">const</span>;
-00176   csHashObject Next ();
-00178   csHashObject NextConst ();
-00183   <span class="keywordtype">void</span> DeleteNext ();
-00184 };
-00185 
-<a name="l00193"></a><a class="code" href="classcsHashMap.html">00193</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csHashMap
-00194 {
-00195   <span class="keyword">friend</span> <span class="keyword">class </span>csHashIterator;
-00196   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsGlobalHashIterator.html">csGlobalHashIterator</a>;
-00197   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHashMapReversible.html">csHashMapReversible</a>;
-00198 
-00199 <span class="keyword">private</span>:
-00201   csHashBucketVector Buckets;
-00203   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> NumBuckets;
-00205   <span class="keywordtype">int</span> hash_elements;
-00206 
-00208   <span class="keywordtype">void</span> ChangeBuckets (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> newsize);
-00209 
-00213   <span class="keywordtype">void</span> PutInternal (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> idx, csHashKey key, csHashObject object);
-00214 
-00215 
-00217   <span class="keyword">static</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> FindNextPrime (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num);
-00218 
-00219 <span class="keyword">public</span>:
-00220   <span class="keyword">static</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> prime_table[];
+00168 <span class="keyword">private</span>:
+00170   <span class="keywordtype">void</span> GotoNextSameKey ();
+00171 
+00173   <span class="keywordtype">void</span> GotoNextSameKeyConst ();
+00174 
+00175 <span class="keyword">public</span>:
+00181   csHashIterator (<a class="code" href="classcsHashMap.html">csHashMap</a>* hash, csHashKey Key);
+00182 
+00186   csHashIterator (<span class="keyword">const</span> <a class="code" href="classcsHashMap.html">csHashMap</a>* hash, csHashKey Key);
+00187 
+00189   <span class="keywordtype">bool</span> HasNext () <span class="keyword">const</span>;
+00191   csHashObject Next ();
+00193   csHashObject NextConst ();
+00198   <span class="keywordtype">void</span> DeleteNext ();
+00199 };
+00200 
+<a name="l00208"></a><a class="code" href="classcsHashMap.html">00208</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csHashMap
+00209 {
+00210   <span class="keyword">friend</span> <span class="keyword">class </span>csHashIterator;
+00211   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsGlobalHashIterator.html">csGlobalHashIterator</a>;
+00212   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHashMapReversible.html">csHashMapReversible</a>;
+00213 
+00214 <span class="keyword">private</span>:
+00216   csHashBucketVector Buckets;
+00218   size_t NumBuckets;
+00220   size_t hash_elements;
 00221 
-00232   csHashMap (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size = 53);
+00223   <span class="keywordtype">void</span> ChangeBuckets (size_t newsize);
+00224 
+00228   <span class="keywordtype">void</span> PutInternal (size_t idx, csHashKey key, csHashObject object);
+00229 
+00230 
+00232   <span class="keyword">static</span> size_t FindNextPrime (size_t num);
 00233 
-00238   <span class="keyword">virtual</span> ~csHashMap ();
-00239 
-00245   <span class="keywordtype">void</span> Put (csHashKey key, csHashObject object);
-00246 
-00254   csHashObject Get (csHashKey key) <span class="keyword">const</span>;
-00255 
-00262   <span class="keywordtype">void</span> Delete (csHashKey key, csHashObject object);
-00263 
-00267   <span class="keywordtype">void</span> DeleteAll (csHashKey key);
-00268 
-00272   <span class="keywordtype">void</span> DeleteAll ();
-00273 
-00277   <span class="keywordtype">void</span> DumpStats ();
-00278 };
-00279 
-<a name="l00285"></a><a class="code" href="classcsHashSet.html">00285</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csHashSet
-00286 {
-00287 <span class="keyword">private</span>:
-00288   csHashMap map;
-00289 
-00290 <span class="keyword">public</span>:
-00295   csHashSet (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size = 211);
-00296 
-00301   <span class="keywordtype">void</span> Add (csHashObject object);
-00302 
-00309   <span class="keywordtype">void</span> AddNoTest (csHashObject object);
-00310 
-00314   <span class="keywordtype">bool</span> In (csHashObject object);
-00315 
-00319   <span class="keywordtype">void</span> DeleteAll ();
-00320 
-00325   <span class="keywordtype">void</span> Delete (csHashObject object);
-00326 
-<a name="l00328"></a><a class="code" href="classcsHashSet.html#a6">00328</a>   <span class="keyword">inline</span> csHashMap *GetHashMap () {<span class="keywordflow">return</span> &amp;map;}
-00329 };
+00234 <span class="keyword">public</span>:
+00235   <span class="keyword">static</span> size_t prime_table[];
+00236 
+00247   csHashMap (size_t size = 53);
+00248 
+00253   <span class="keyword">virtual</span> ~csHashMap ();
+00254 
+00260   <span class="keywordtype">void</span> Put (csHashKey key, csHashObject object);
+00261 
+00269   csHashObject Get (csHashKey key) <span class="keyword">const</span>;
+00270 
+00277   <span class="keywordtype">void</span> Delete (csHashKey key, csHashObject object);
+00278 
+00282   <span class="keywordtype">void</span> DeleteAll (csHashKey key);
+00283 
+00287   <span class="keywordtype">void</span> DeleteAll ();
+00288 
+00292   <span class="keywordtype">void</span> DumpStats ();
+00293 };
+00294 
+<a name="l00300"></a><a class="code" href="classcsHashSet.html">00300</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csHashSet
+00301 {
+00302 <span class="keyword">private</span>:
+00303   csHashMap map;
+00304 
+00305 <span class="keyword">public</span>:
+00310   csHashSet (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> size = 211);
+00311 
+00316   <span class="keywordtype">void</span> Add (csHashObject object);
+00317 
+00324   <span class="keywordtype">void</span> AddNoTest (csHashObject object);
+00325 
+00329   <span class="keywordtype">bool</span> In (csHashObject object);
 00330 
-00331 <span class="preprocessor">#endif // __CS_HASHMAP_H__</span>
-00332 <span class="preprocessor"></span>
+00334   <span class="keywordtype">void</span> DeleteAll ();
+00335 
+00340   <span class="keywordtype">void</span> Delete (csHashObject object);
+00341 
+<a name="l00343"></a><a class="code" href="classcsHashSet.html#a6">00343</a>   <span class="keyword">inline</span> csHashMap *GetHashMap () {<span class="keywordflow">return</span> &amp;map;}
+00344 };
+00345 
+00346 <span class="preprocessor">#endif // __CS_HASHMAP_H__</span>
+00347 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

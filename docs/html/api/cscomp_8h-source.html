@@ -176,257 +176,276 @@
 <a name="l00387"></a><a class="code" href="classcsComponent.html#q4">00387</a>   <span class="keyword">static</span> cswsRectVector *visregion;
 00388 
 00389 <span class="keyword">public</span>:
-<a name="l00391"></a><a class="code" href="classcsComponent.html#m0">00391</a>   <a class="code" href="classcsComponent.html">csComponent</a> *focused;
-<a name="l00393"></a><a class="code" href="classcsComponent.html#m1">00393</a>   <a class="code" href="classcsComponent.html">csComponent</a> *top;
-<a name="l00395"></a><a class="code" href="classcsComponent.html#m3">00395</a>   <a class="code" href="classcsComponent.html">csComponent</a> *next, *prev;
-<a name="l00397"></a><a class="code" href="classcsComponent.html#m4">00397</a>   <a class="code" href="classcsComponent.html">csComponent</a> *parent;
-<a name="l00399"></a><a class="code" href="classcsComponent.html#m5">00399</a>   <a class="code" href="classcsApp.html">csApp</a> *app;
-<a name="l00401"></a><a class="code" href="classcsComponent.html#m6">00401</a>   <a class="code" href="classcsSkinSlice.html">csSkinSlice</a> *skinslice;
-<a name="l00403"></a><a class="code" href="classcsComponent.html#m7">00403</a>   <span class="keywordtype">void</span>** skindata;
-<a name="l00405"></a><a class="code" href="classcsComponent.html#m8">00405</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> id;
-<a name="l00407"></a><a class="code" href="classcsComponent.html#m9">00407</a>   <a class="code" href="classcsRect.html">csRect</a> bound;
+00390 <span class="preprocessor">#ifndef CS_PLATFORM_IS_64BITS</span>
+00391 <span class="preprocessor"></span><span class="preprocessor"># if (_MSC_VER &gt;= 1300)</span>
+00392 <span class="preprocessor"></span>  <span class="comment">/*</span>
+00393 <span class="comment">   * Silence VC7 64bit warning.</span>
+00394 <span class="comment">   */</span>
+00395   <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> __w64 ID;
+00396 <span class="preprocessor"># else</span>
+00397 <span class="preprocessor"></span>
+<a name="l00398"></a><a class="code" href="classcsComponent.html#s0">00398</a>   <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> ID;
+00399 <span class="preprocessor"># endif</span>
+00400 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00401 <span class="preprocessor"></span>  <span class="comment">/*</span>
+00402 <span class="comment">   * At some places, pointers are casted to csHashKey. Work around truncation</span>
+00403 <span class="comment">   * problems by forcing csHashKey to at least 64bit on 64bit machines.</span>
+00404 <span class="comment">   */</span>
+00405   <span class="keyword">typedef</span> uint64 ID;
+00406 <span class="preprocessor">#endif</span>
+00407 <span class="preprocessor"></span>
 00408 
-00410   <a class="code" href="classcsComponent.html">csComponent</a> (<a class="code" href="classcsComponent.html">csComponent</a> *iParent);
-00412   <span class="keyword">virtual</span> ~<a class="code" href="classcsComponent.html">csComponent</a> ();
-00413 
-00415   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Insert (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
-00416 
-00418   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Delete (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
-00419 
-00421   <span class="keywordtype">void</span> DeleteAll ();
-00422 
-00424   <span class="keywordtype">void</span> InsertClipChild (<a class="code" href="classcsComponent.html">csComponent</a> *clipchild);
-00425 
-00427   <span class="keywordtype">void</span> DeleteClipChild (<a class="code" href="classcsComponent.html">csComponent</a> *clipchild);
-00428 
-<a name="l00430"></a><a class="code" href="classcsComponent.html#a7">00430</a>   <a class="code" href="classcsComponent.html">csComponent</a> *GetClipParent ()
-00431   { <span class="keywordflow">return</span> clipparent; }
+<a name="l00410"></a><a class="code" href="classcsComponent.html#m0">00410</a>   <a class="code" href="classcsComponent.html">csComponent</a> *focused;
+<a name="l00412"></a><a class="code" href="classcsComponent.html#m1">00412</a>   <a class="code" href="classcsComponent.html">csComponent</a> *top;
+<a name="l00414"></a><a class="code" href="classcsComponent.html#m3">00414</a>   <a class="code" href="classcsComponent.html">csComponent</a> *next, *prev;
+<a name="l00416"></a><a class="code" href="classcsComponent.html#m4">00416</a>   <a class="code" href="classcsComponent.html">csComponent</a> *parent;
+<a name="l00418"></a><a class="code" href="classcsComponent.html#m5">00418</a>   <a class="code" href="classcsApp.html">csApp</a> *app;
+<a name="l00420"></a><a class="code" href="classcsComponent.html#m6">00420</a>   <a class="code" href="classcsSkinSlice.html">csSkinSlice</a> *skinslice;
+<a name="l00422"></a><a class="code" href="classcsComponent.html#m7">00422</a>   <span class="keywordtype">void</span>** skindata;
+<a name="l00424"></a><a class="code" href="classcsComponent.html#m8">00424</a>   ID id;
+<a name="l00426"></a><a class="code" href="classcsComponent.html#m9">00426</a>   <a class="code" href="classcsRect.html">csRect</a> bound;
+00427 
+00429   <a class="code" href="classcsComponent.html">csComponent</a> (<a class="code" href="classcsComponent.html">csComponent</a> *iParent);
+00431   <span class="keyword">virtual</span> ~<a class="code" href="classcsComponent.html">csComponent</a> ();
 00432 
-00434   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SetFocused (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
+00434   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Insert (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
 00435 
-<a name="l00437"></a><a class="code" href="classcsComponent.html#a9">00437</a>   <a class="code" href="classcsComponent.html">csComponent</a> *GetFocused ()
-00438   { <span class="keywordflow">return</span> focused; }
-00439 
-00441   <span class="keywordtype">bool</span> Select ();
-00442 
-00444   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *NextChild (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0, <span class="keywordtype">bool</span> disabled = <span class="keyword">false</span>);
-00445 
-00447   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *PrevChild (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0, <span class="keywordtype">bool</span> disabled = <span class="keyword">false</span>);
-00448 
-00450   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *NextControl (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0);
+00437   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Delete (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
+00438 
+00440   <span class="keywordtype">void</span> DeleteAll ();
+00441 
+00443   <span class="keywordtype">void</span> InsertClipChild (<a class="code" href="classcsComponent.html">csComponent</a> *clipchild);
+00444 
+00446   <span class="keywordtype">void</span> DeleteClipChild (<a class="code" href="classcsComponent.html">csComponent</a> *clipchild);
+00447 
+<a name="l00449"></a><a class="code" href="classcsComponent.html#a7">00449</a>   <a class="code" href="classcsComponent.html">csComponent</a> *GetClipParent ()
+00450   { <span class="keywordflow">return</span> clipparent; }
 00451 
-00453   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *PrevControl (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0);
+00453   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SetFocused (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
 00454 
-00456   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *NextGroup (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0);
-00457 
-00459   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *PrevGroup (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0);
-00460 
-00462   <span class="keywordtype">bool</span> FixFocused ();
-00463 
-00468   <span class="keywordtype">bool</span> SetZorder (<a class="code" href="classcsComponent.html">csComponent</a> *comp, <a class="code" href="classcsComponent.html">csComponent</a> *below);
-00469 
-<a name="l00471"></a><a class="code" href="classcsComponent.html#a19">00471</a>   <a class="code" href="classcsComponent.html">csComponent</a> *GetTop ()
-00472   { <span class="keywordflow">return</span> top; }
+<a name="l00456"></a><a class="code" href="classcsComponent.html#a9">00456</a>   <a class="code" href="classcsComponent.html">csComponent</a> *GetFocused ()
+00457   { <span class="keywordflow">return</span> focused; }
+00458 
+00460   <span class="keywordtype">bool</span> Select ();
+00461 
+00463   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *NextChild (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0, <span class="keywordtype">bool</span> disabled = <span class="keyword">false</span>);
+00464 
+00466   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *PrevChild (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0, <span class="keywordtype">bool</span> disabled = <span class="keyword">false</span>);
+00467 
+00469   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *NextControl (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0);
+00470 
+00472   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *PrevControl (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0);
 00473 
-00484   <span class="keywordtype">void</span> SetPalette (<span class="keywordtype">int</span> *iPalette, <span class="keywordtype">int</span> iPaletteSize);
-00485 
-<a name="l00487"></a><a class="code" href="classcsComponent.html#a21">00487</a>   <span class="keywordtype">void</span> SetPalette (<span class="keywordtype">int</span> iPaletteID)
-00488   { SetPalette (<a class="code" href="group__csws__skins.html#a0">cswsPalette</a> [iPaletteID].Palette, <a class="code" href="group__csws__skins.html#a0">cswsPalette</a> [iPaletteID].Size); }
-00489 
-00491   <span class="keywordtype">void</span> ResetPalette ();
+00475   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *NextGroup (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0);
+00476 
+00478   <span class="keyword">virtual</span> <a class="code" href="classcsComponent.html">csComponent</a> *PrevGroup (<a class="code" href="classcsComponent.html">csComponent</a> *start = 0);
+00479 
+00481   <span class="keywordtype">bool</span> FixFocused ();
+00482 
+00487   <span class="keywordtype">bool</span> SetZorder (<a class="code" href="classcsComponent.html">csComponent</a> *comp, <a class="code" href="classcsComponent.html">csComponent</a> *below);
+00488 
+<a name="l00490"></a><a class="code" href="classcsComponent.html#a19">00490</a>   <a class="code" href="classcsComponent.html">csComponent</a> *GetTop ()
+00491   { <span class="keywordflow">return</span> top; }
 00492 
-00494   <span class="keywordtype">void</span> SetColor (<span class="keywordtype">int</span> Index, <span class="keywordtype">int</span> Color);
-00495 
-<a name="l00497"></a><a class="code" href="classcsComponent.html#a24">00497</a>   <span class="keywordtype">int</span> GetColor (<span class="keywordtype">int</span> Index)
-00498    { <span class="keywordflow">if</span> (Index &amp; 0x80000000) <span class="keywordflow">return</span> Index;
-00499     <span class="keywordflow">if</span> (Index &gt;= palettesize) <span class="keywordflow">return</span> <a class="code" href="group__csws__skins.html#a153a159">cs_Color_Red_L</a>; <span class="keywordflow">else</span> <span class="keywordflow">return</span> palette[Index]; }
-00500 
-00507   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetText (<span class="keyword">const</span> <span class="keywordtype">char</span> *iText);
-00509   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetText (<span class="keywordtype">char</span> *oText, <span class="keywordtype">int</span> iTextSize) <span class="keyword">const</span>;
-<a name="l00511"></a><a class="code" href="classcsComponent.html#a27">00511</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetText ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> text; }
-00512 
-00519   <a class="code" href="classcsComponent.html">csComponent</a> *ForEach (<span class="keywordtype">bool</span> (*func) (<a class="code" href="classcsComponent.html">csComponent</a> *child, <span class="keywordtype">void</span> *param),
-00520     <span class="keywordtype">void</span> *param = 0, <span class="keywordtype">bool</span> Zorder = <span class="keyword">false</span>);
-00521 
-00523   <a class="code" href="classcsComponent.html">csComponent</a> *GetChild (<span class="keywordtype">int</span> find_id) <span class="keyword">const</span>;
-00524 
-00526   <span class="keywordtype">void</span> SetApp (<a class="code" href="classcsApp.html">csApp</a> *newapp);
-00527 
-00529   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
-00530 
-00537   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PreHandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
-00538 
-00540   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PostHandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
-00541 
-00543   <span class="keywordtype">void</span> *SendCommand (<span class="keywordtype">int</span> CommandCode, <span class="keywordtype">void</span> *Info = 0);
-00545   <span class="keywordtype">void</span> *SendBroadcast (<span class="keywordtype">int</span> CommandCode, <span class="keywordtype">void</span> *Info = 0);
+00503   <span class="keywordtype">void</span> SetPalette (<span class="keywordtype">int</span> *iPalette, <span class="keywordtype">int</span> iPaletteSize);
+00504 
+<a name="l00506"></a><a class="code" href="classcsComponent.html#a21">00506</a>   <span class="keywordtype">void</span> SetPalette (<span class="keywordtype">int</span> iPaletteID)
+00507   { SetPalette (<a class="code" href="group__csws__skins.html#a0">cswsPalette</a> [iPaletteID].Palette, <a class="code" href="group__csws__skins.html#a0">cswsPalette</a> [iPaletteID].Size); }
+00508 
+00510   <span class="keywordtype">void</span> ResetPalette ();
+00511 
+00513   <span class="keywordtype">void</span> SetColor (<span class="keywordtype">int</span> Index, <span class="keywordtype">int</span> Color);
+00514 
+<a name="l00516"></a><a class="code" href="classcsComponent.html#a24">00516</a>   <span class="keywordtype">int</span> GetColor (<span class="keywordtype">int</span> Index)
+00517    { <span class="keywordflow">if</span> (Index &amp; 0x80000000) <span class="keywordflow">return</span> Index;
+00518     <span class="keywordflow">if</span> (Index &gt;= palettesize) <span class="keywordflow">return</span> <a class="code" href="group__csws__skins.html#a153a159">cs_Color_Red_L</a>; <span class="keywordflow">else</span> <span class="keywordflow">return</span> palette[Index]; }
+00519 
+00526   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetText (<span class="keyword">const</span> <span class="keywordtype">char</span> *iText);
+00528   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetText (<span class="keywordtype">char</span> *oText, size_t iTextSize) <span class="keyword">const</span>;
+<a name="l00530"></a><a class="code" href="classcsComponent.html#a27">00530</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetText ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> text; }
+00531 
+00538   <a class="code" href="classcsComponent.html">csComponent</a> *ForEach (<span class="keywordtype">bool</span> (*func) (<a class="code" href="classcsComponent.html">csComponent</a> *child, <span class="keywordtype">void</span> *param),
+00539     <span class="keywordtype">void</span> *param = 0, <span class="keywordtype">bool</span> Zorder = <span class="keyword">false</span>);
+00540 
+00542   <a class="code" href="classcsComponent.html">csComponent</a> *GetChild (ID find_id) <span class="keyword">const</span>;
+00543 
+00545   <span class="keywordtype">void</span> SetApp (<a class="code" href="classcsApp.html">csApp</a> *newapp);
 00546 
-00548   <a class="code" href="classcsComponent.html">csComponent</a> *GetDefault ();
+00548   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
 00549 
-00551   <span class="keywordtype">void</span> Redraw ();
-00552 
-00554   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Draw ();
-00555 
-00557   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Show (<span class="keywordtype">bool</span> focused = <span class="keyword">false</span>);
-00558 
-00560   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Hide ();
-00561 
-00563   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SetRect (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
-00564 
-<a name="l00566"></a><a class="code" href="classcsComponent.html#a42">00566</a>   <span class="keywordtype">bool</span> SetRect (<a class="code" href="classcsRect.html">csRect</a> &amp;rect)
-00567   { <span class="keywordflow">return</span> SetRect (rect.<a class="code" href="classcsRect.html#m0">xmin</a>, rect.<a class="code" href="classcsRect.html#m1">ymin</a>, rect.<a class="code" href="classcsRect.html#m2">xmax</a>, rect.<a class="code" href="classcsRect.html#m3">ymax</a>); }
+00556   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PreHandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
+00557 
+00559   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PostHandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
+00560 
+00562   <span class="keywordtype">void</span> *SendCommand (<span class="keywordtype">int</span> CommandCode, <span class="keywordtype">void</span> *Info = 0);
+00564   <span class="keywordtype">void</span> *SendBroadcast (<span class="keywordtype">int</span> CommandCode, <span class="keywordtype">void</span> *Info = 0);
+00565 
+00567   <a class="code" href="classcsComponent.html">csComponent</a> *GetDefault ();
 00568 
-00570   <span class="keywordtype">bool</span> SetDragRect (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
+00570   <span class="keywordtype">void</span> Redraw ();
 00571 
-<a name="l00573"></a><a class="code" href="classcsComponent.html#a44">00573</a>   <span class="keywordtype">void</span> SetPos (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
-00574   { SetRect (x, y, x + bound.<a class="code" href="classcsRect.html#m2">xmax</a> - bound.<a class="code" href="classcsRect.html#m0">xmin</a>, y + bound.<a class="code" href="classcsRect.html#m3">ymax</a> - bound.<a class="code" href="classcsRect.html#m1">ymin</a>); }
-00575 
-<a name="l00577"></a><a class="code" href="classcsComponent.html#a45">00577</a>   <span class="keywordtype">void</span> SetSize (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h)
-00578   { SetRect (bound.<a class="code" href="classcsRect.html#m0">xmin</a>, bound.<a class="code" href="classcsRect.html#m1">ymin</a>, bound.<a class="code" href="classcsRect.html#m0">xmin</a> + w, bound.<a class="code" href="classcsRect.html#m1">ymin</a> + h); }
-00579 
-00581   <span class="keywordtype">void</span> Center (<span class="keywordtype">bool</span> iHoriz = <span class="keyword">true</span>, <span class="keywordtype">bool</span> iVert = <span class="keyword">true</span>);
-00582 
-00584   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Maximize ();
-00585 
-00587   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Restore ();
-00588 
-00597   <span class="keywordtype">void</span> Invalidate (<a class="code" href="classcsRect.html">csRect</a> &amp;area, <span class="keywordtype">bool</span> IncludeChildren = <span class="keyword">false</span>,
-00598     <a class="code" href="classcsComponent.html">csComponent</a> *below = 0);
-00599 
-<a name="l00601"></a><a class="code" href="classcsComponent.html#a50">00601</a>   <span class="keywordtype">void</span> Invalidate (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax,
-00602     <span class="keywordtype">bool</span> IncludeChildren = <span class="keyword">false</span>, <a class="code" href="classcsComponent.html">csComponent</a> *below = 0)
-00603   {
-00604     <a class="code" href="classcsRect.html">csRect</a> inv (xmin, ymin, xmax, ymax);
-00605     Invalidate (inv, IncludeChildren, below);
-00606   }
+00573   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Draw ();
+00574 
+00576   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Show (<span class="keywordtype">bool</span> focused = <span class="keyword">false</span>);
+00577 
+00579   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Hide ();
+00580 
+00582   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SetRect (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
+00583 
+<a name="l00585"></a><a class="code" href="classcsComponent.html#a42">00585</a>   <span class="keywordtype">bool</span> SetRect (<a class="code" href="classcsRect.html">csRect</a> &amp;rect)
+00586   { <span class="keywordflow">return</span> SetRect (rect.<a class="code" href="classcsRect.html#m0">xmin</a>, rect.<a class="code" href="classcsRect.html#m1">ymin</a>, rect.<a class="code" href="classcsRect.html#m2">xmax</a>, rect.<a class="code" href="classcsRect.html#m3">ymax</a>); }
+00587 
+00589   <span class="keywordtype">bool</span> SetDragRect (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
+00590 
+<a name="l00592"></a><a class="code" href="classcsComponent.html#a44">00592</a>   <span class="keywordtype">void</span> SetPos (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00593   { SetRect (x, y, x + bound.<a class="code" href="classcsRect.html#m2">xmax</a> - bound.<a class="code" href="classcsRect.html#m0">xmin</a>, y + bound.<a class="code" href="classcsRect.html#m3">ymax</a> - bound.<a class="code" href="classcsRect.html#m1">ymin</a>); }
+00594 
+<a name="l00596"></a><a class="code" href="classcsComponent.html#a45">00596</a>   <span class="keywordtype">void</span> SetSize (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h)
+00597   { SetRect (bound.<a class="code" href="classcsRect.html#m0">xmin</a>, bound.<a class="code" href="classcsRect.html#m1">ymin</a>, bound.<a class="code" href="classcsRect.html#m0">xmin</a> + w, bound.<a class="code" href="classcsRect.html#m1">ymin</a> + h); }
+00598 
+00600   <span class="keywordtype">void</span> Center (<span class="keywordtype">bool</span> iHoriz = <span class="keyword">true</span>, <span class="keywordtype">bool</span> iVert = <span class="keyword">true</span>);
+00601 
+00603   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Maximize ();
+00604 
+00606   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Restore ();
 00607 
-<a name="l00609"></a><a class="code" href="classcsComponent.html#a51">00609</a>   <span class="keywordtype">void</span> Invalidate (<span class="keywordtype">bool</span> IncludeChildren = <span class="keyword">false</span>, <a class="code" href="classcsComponent.html">csComponent</a> *below = 0)
-00610   { Invalidate (-99999, -99999, +99999, +99999, IncludeChildren, below); }
-00611 
-00613   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetState (<span class="keywordtype">int</span> mask, <span class="keywordtype">bool</span> enable);
-00614 
-<a name="l00616"></a><a class="code" href="classcsComponent.html#a53">00616</a>   <span class="keywordtype">int</span> GetState (<span class="keywordtype">int</span> mask)
-00617   { <span class="keywordflow">return</span> (state &amp; mask); }
+00616   <span class="keywordtype">void</span> Invalidate (<a class="code" href="classcsRect.html">csRect</a> &amp;area, <span class="keywordtype">bool</span> IncludeChildren = <span class="keyword">false</span>,
+00617     <a class="code" href="classcsComponent.html">csComponent</a> *below = 0);
 00618 
-<a name="l00620"></a><a class="code" href="classcsComponent.html#a54">00620</a>   <span class="keywordtype">void</span> SetDragStyle (<span class="keywordtype">int</span> iDragStyle)
-00621   { DragStyle = iDragStyle; }
-00622 
-<a name="l00624"></a><a class="code" href="classcsComponent.html#a55">00624</a>   <span class="keywordtype">int</span> GetDragStyle ()
-00625   { <span class="keywordflow">return</span> DragStyle; }
+<a name="l00620"></a><a class="code" href="classcsComponent.html#a50">00620</a>   <span class="keywordtype">void</span> Invalidate (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax,
+00621     <span class="keywordtype">bool</span> IncludeChildren = <span class="keyword">false</span>, <a class="code" href="classcsComponent.html">csComponent</a> *below = 0)
+00622   {
+00623     <a class="code" href="classcsRect.html">csRect</a> inv (xmin, ymin, xmax, ymax);
+00624     Invalidate (inv, IncludeChildren, below);
+00625   }
 00626 
-<a name="l00628"></a><a class="code" href="classcsComponent.html#a56">00628</a>   <span class="keywordtype">void</span> SetResizeMode (<span class="keywordtype">int</span> iResizeMode)
-00629   { ResizeMode = iResizeMode; }
+<a name="l00628"></a><a class="code" href="classcsComponent.html#a51">00628</a>   <span class="keywordtype">void</span> Invalidate (<span class="keywordtype">bool</span> IncludeChildren = <span class="keyword">false</span>, <a class="code" href="classcsComponent.html">csComponent</a> *below = 0)
+00629   { Invalidate (-99999, -99999, +99999, +99999, IncludeChildren, below); }
 00630 
-<a name="l00632"></a><a class="code" href="classcsComponent.html#a57">00632</a>   <span class="keywordtype">int</span> GetResizeMode ()
-00633   { <span class="keywordflow">return</span> ResizeMode; }
-00634 
-00636   <span class="keywordtype">void</span> LocalToGlobal (<span class="keywordtype">int</span> &amp;x, <span class="keywordtype">int</span> &amp;y);
+00632   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetState (<span class="keywordtype">int</span> mask, <span class="keywordtype">bool</span> enable);
+00633 
+<a name="l00635"></a><a class="code" href="classcsComponent.html#a53">00635</a>   <span class="keywordtype">int</span> GetState (<span class="keywordtype">int</span> mask)
+00636   { <span class="keywordflow">return</span> (state &amp; mask); }
 00637 
-00639   <span class="keywordtype">void</span> GlobalToLocal (<span class="keywordtype">int</span> &amp;x, <span class="keywordtype">int</span> &amp;y);
-00640 
-00646   <span class="keywordtype">void</span> OtherToThis (<a class="code" href="classcsComponent.html">csComponent</a> *from, <span class="keywordtype">int</span> &amp;x, <span class="keywordtype">int</span> &amp;y);
-00647 
-00649   <span class="keywordtype">void</span> Drag (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> DragMode);
-00650 
-00652   <span class="keywordtype">void</span> SetMouse (<a class="code" href="group__gfx2d.html#a1">csMouseCursorID</a> Cursor);
+<a name="l00639"></a><a class="code" href="classcsComponent.html#a54">00639</a>   <span class="keywordtype">void</span> SetDragStyle (<span class="keywordtype">int</span> iDragStyle)
+00640   { DragStyle = iDragStyle; }
+00641 
+<a name="l00643"></a><a class="code" href="classcsComponent.html#a55">00643</a>   <span class="keywordtype">int</span> GetDragStyle ()
+00644   { <span class="keywordflow">return</span> DragStyle; }
+00645 
+<a name="l00647"></a><a class="code" href="classcsComponent.html#a56">00647</a>   <span class="keywordtype">void</span> SetResizeMode (<span class="keywordtype">int</span> iResizeMode)
+00648   { ResizeMode = iResizeMode; }
+00649 
+<a name="l00651"></a><a class="code" href="classcsComponent.html#a57">00651</a>   <span class="keywordtype">int</span> GetResizeMode ()
+00652   { <span class="keywordflow">return</span> ResizeMode; }
 00653 
-00659   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Close ();
-00660 
-00671   <a class="code" href="classcsComponent.html">csComponent</a> *GetChildAt (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y,
-00672     <span class="keywordtype">bool</span> (*func) (<a class="code" href="classcsComponent.html">csComponent</a> *, <span class="keywordtype">void</span> *) = 0, <span class="keywordtype">void</span> *data = 0);
-00673 
-00678   <span class="keywordtype">void</span> SetSizingCursor (<span class="keywordtype">int</span> dragtype);
+00655   <span class="keywordtype">void</span> LocalToGlobal (<span class="keywordtype">int</span> &amp;x, <span class="keywordtype">int</span> &amp;y);
+00656 
+00658   <span class="keywordtype">void</span> GlobalToLocal (<span class="keywordtype">int</span> &amp;x, <span class="keywordtype">int</span> &amp;y);
+00659 
+00665   <span class="keywordtype">void</span> OtherToThis (<a class="code" href="classcsComponent.html">csComponent</a> *from, <span class="keywordtype">int</span> &amp;x, <span class="keywordtype">int</span> &amp;y);
+00666 
+00668   <span class="keywordtype">void</span> Drag (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> DragMode);
+00669 
+00671   <span class="keywordtype">void</span> SetMouse (<a class="code" href="group__gfx2d.html#a1">csMouseCursorID</a> Cursor);
+00672 
+00678   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Close ();
 00679 
-00681   <span class="keywordtype">bool</span> GetMousePosition (<span class="keywordtype">int</span> &amp;x, <span class="keywordtype">int</span> &amp;y);
-00682 
-00705   <span class="keywordtype">bool</span> HandleDragEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event, <span class="keywordtype">int</span> BorderW, <span class="keywordtype">int</span> BorderH);
-00706 
-00708   <span class="keyword">virtual</span> <span class="keywordtype">void</span> FixPosition (<span class="keywordtype">int</span> &amp;newX, <span class="keywordtype">int</span> &amp;newY);
-00709 
-00711   <span class="keyword">virtual</span> <span class="keywordtype">void</span> FixSize (<span class="keywordtype">int</span> &amp;newW, <span class="keywordtype">int</span> &amp;newH);
-00712 
-00714   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SuggestSize (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h);
-00715 
-00717   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetSuggestedSize (<span class="keywordtype">int</span> dw, <span class="keywordtype">int</span> dh);
-00718 
-00720   <span class="keywordtype">void</span> FindMaxFreeRect (<a class="code" href="classcsRect.html">csRect</a> &amp;area);
-00721 
-00723   <span class="keyword">virtual</span> <span class="keywordtype">char</span> *GetSkinName ();
-00724 
-00726   <span class="keyword">virtual</span> <a class="code" href="classcsSkin.html">csSkin</a> *GetSkin ();
-00727 
-<a name="l00745"></a><a class="code" href="classcsComponent.html#a75">00745</a>   <span class="keywordtype">void</span> SetClipRect (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax)
-00746   { clip.<a class="code" href="classcsRect.html#a14">Set</a> (xmin, ymin, xmax, ymax); }
-00747 
-<a name="l00749"></a><a class="code" href="classcsComponent.html#a76">00749</a>   <span class="keywordtype">void</span> SetClipRect ()
-00750   { clip.<a class="code" href="classcsRect.html#a13">MakeEmpty</a> (); }
-00751 
-00753   <span class="keywordtype">void</span> SetFont (<a class="code" href="structiFont.html">iFont</a> *iNewFont);
-00754 
-00756   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetFont (<a class="code" href="structiFont.html">iFont</a> *&amp;oFont);
-00757 
-00759   <span class="keywordtype">void</span> Box (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax, <span class="keywordtype">int</span> colindx);
-00760 
-00762   <span class="keywordtype">void</span> Line (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">int</span> colindx);
-00763 
-00765   <span class="keywordtype">void</span> Pixel (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> colindx);
+00690   <a class="code" href="classcsComponent.html">csComponent</a> *GetChildAt (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y,
+00691     <span class="keywordtype">bool</span> (*func) (<a class="code" href="classcsComponent.html">csComponent</a> *, <span class="keywordtype">void</span> *) = 0, <span class="keywordtype">void</span> *data = 0);
+00692 
+00697   <span class="keywordtype">void</span> SetSizingCursor (<span class="keywordtype">int</span> dragtype);
+00698 
+00700   <span class="keywordtype">bool</span> GetMousePosition (<span class="keywordtype">int</span> &amp;x, <span class="keywordtype">int</span> &amp;y);
+00701 
+00724   <span class="keywordtype">bool</span> HandleDragEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event, <span class="keywordtype">int</span> BorderW, <span class="keywordtype">int</span> BorderH);
+00725 
+00727   <span class="keyword">virtual</span> <span class="keywordtype">void</span> FixPosition (<span class="keywordtype">int</span> &amp;newX, <span class="keywordtype">int</span> &amp;newY);
+00728 
+00730   <span class="keyword">virtual</span> <span class="keywordtype">void</span> FixSize (<span class="keywordtype">int</span> &amp;newW, <span class="keywordtype">int</span> &amp;newH);
+00731 
+00733   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SuggestSize (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h);
+00734 
+00736   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetSuggestedSize (<span class="keywordtype">int</span> dw, <span class="keywordtype">int</span> dh);
+00737 
+00739   <span class="keywordtype">void</span> FindMaxFreeRect (<a class="code" href="classcsRect.html">csRect</a> &amp;area);
+00740 
+00742   <span class="keyword">virtual</span> <span class="keywordtype">char</span> *GetSkinName ();
+00743 
+00745   <span class="keyword">virtual</span> <a class="code" href="classcsSkin.html">csSkin</a> *GetSkin ();
+00746 
+<a name="l00764"></a><a class="code" href="classcsComponent.html#a75">00764</a>   <span class="keywordtype">void</span> SetClipRect (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax)
+00765   { clip.<a class="code" href="classcsRect.html#a14">Set</a> (xmin, ymin, xmax, ymax); }
 00766 
-00768   <span class="keywordtype">void</span> Text (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> fgindx, <span class="keywordtype">int</span> bgindx, <span class="keyword">const</span> <span class="keywordtype">char</span> *s);
-00769 
-00771   <span class="keywordtype">void</span> Pixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, uint8 Alpha = 0);
-<a name="l00773"></a><a class="code" href="classcsComponent.html#a84">00773</a>   <span class="keywordtype">void</span> Pixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, uint8 Alpha = 0)
-00774   { Pixmap (s2d, x, y, s2d-&gt;<a class="code" href="classcsPixmap.html#a1">Width</a> (), s2d-&gt;<a class="code" href="classcsPixmap.html#a2">Height</a> (), Alpha); }
-00776   <span class="keywordtype">void</span> Pixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">int</span> orgx, <span class="keywordtype">int</span> orgy,
-00777     uint8 Alpha = 0);
-00779   <span class="keywordtype">void</span> Texture (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *tex, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h,
-00780     <span class="keywordtype">int</span> orgx, <span class="keywordtype">int</span> orgy, uint8 Alpha = 0);
-00781 
-00783   <span class="keywordtype">int</span> GetTextSize (<span class="keyword">const</span> <span class="keywordtype">char</span> *text, <span class="keywordtype">int</span> *oHeight = 0);
-00785   <span class="keywordtype">int</span> GetTextChars (<span class="keyword">const</span> <span class="keywordtype">char</span> *text, <span class="keywordtype">int</span> iWidth);
-00786 
-00788   <span class="keywordtype">void</span> Rect3D (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax, <span class="keywordtype">int</span> darkindx, <span class="keywordtype">int</span> lightindx);
-00789 
-00791   <span class="keywordtype">void</span> ObliqueRect3D (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax, <span class="keywordtype">int</span> cornersize,
-00792     <span class="keywordtype">int</span> darkindx, <span class="keywordtype">int</span> lightindx);
-00793 
-<a name="l00795"></a><a class="code" href="classcsComponent.html#a91">00795</a>   <span class="keywordtype">void</span> Clear (<span class="keywordtype">int</span> colindx)
-00796   { Box (0, 0, bound.<a class="code" href="classcsRect.html#a19">Width</a> (), bound.<a class="code" href="classcsRect.html#a20">Height</a> (), colindx); }
-00797 
-00799   <span class="keywordtype">void</span> ClearZbuffer (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
+<a name="l00768"></a><a class="code" href="classcsComponent.html#a76">00768</a>   <span class="keywordtype">void</span> SetClipRect ()
+00769   { clip.<a class="code" href="classcsRect.html#a13">MakeEmpty</a> (); }
+00770 
+00772   <span class="keywordtype">void</span> SetFont (<a class="code" href="structiFont.html">iFont</a> *iNewFont);
+00773 
+00775   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetFont (<a class="code" href="structiFont.html">iFont</a> *&amp;oFont);
+00776 
+00778   <span class="keywordtype">void</span> Box (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax, <span class="keywordtype">int</span> colindx);
+00779 
+00781   <span class="keywordtype">void</span> Line (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">int</span> colindx);
+00782 
+00784   <span class="keywordtype">void</span> Pixel (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> colindx);
+00785 
+00787   <span class="keywordtype">void</span> Text (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> fgindx, <span class="keywordtype">int</span> bgindx, <span class="keyword">const</span> <span class="keywordtype">char</span> *s);
+00788 
+00790   <span class="keywordtype">void</span> Pixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, uint8 Alpha = 0);
+<a name="l00792"></a><a class="code" href="classcsComponent.html#a84">00792</a>   <span class="keywordtype">void</span> Pixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, uint8 Alpha = 0)
+00793   { Pixmap (s2d, x, y, s2d-&gt;<a class="code" href="classcsPixmap.html#a1">Width</a> (), s2d-&gt;<a class="code" href="classcsPixmap.html#a2">Height</a> (), Alpha); }
+00795   <span class="keywordtype">void</span> Pixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">int</span> orgx, <span class="keywordtype">int</span> orgy,
+00796     uint8 Alpha = 0);
+00798   <span class="keywordtype">void</span> Texture (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *tex, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h,
+00799     <span class="keywordtype">int</span> orgx, <span class="keywordtype">int</span> orgy, uint8 Alpha = 0);
 00800 
-<a name="l00802"></a><a class="code" href="classcsComponent.html#a93">00802</a>   <span class="keywordtype">void</span> ClearZbuffer ()
-00803   { ClearZbuffer (0, 0, bound.<a class="code" href="classcsRect.html#a19">Width</a> (), bound.<a class="code" href="classcsRect.html#a20">Height</a> ()); }
-00804 
-00806   <span class="keywordtype">void</span> Polygon3D (<a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a> &amp;poly, <a class="code" href="group__util.html#a8">uint</a> mode);
-00807 
-00809 
-00811   <span class="keywordtype">void</span> DrawUnderline (<span class="keywordtype">int</span> iX, <span class="keywordtype">int</span> iY, <span class="keyword">const</span> <span class="keywordtype">char</span> *iText, <span class="keywordtype">int</span> iUnderlinePos,
-00812     <span class="keywordtype">int</span> iColor);
-00813 
-00814 <span class="keyword">protected</span>:
-00820   <span class="keywordtype">void</span> Clip (cswsRectVector &amp;rect, <a class="code" href="classcsComponent.html">csComponent</a> *last, <span class="keywordtype">bool</span> forchild = <span class="keyword">false</span>);
-00821 
-00823   <span class="keywordtype">void</span> ClipChild (cswsRectVector &amp;rect, <a class="code" href="classcsComponent.html">csComponent</a> *child);
-00824 
-00831   <span class="keywordtype">void</span> FastClip (cswsRectVector &amp;rect);
+00802   <span class="keywordtype">int</span> GetTextSize (<span class="keyword">const</span> <span class="keywordtype">char</span> *text, <span class="keywordtype">int</span> *oHeight = 0);
+00804   <span class="keywordtype">int</span> GetTextChars (<span class="keyword">const</span> <span class="keywordtype">char</span> *text, <span class="keywordtype">int</span> iWidth);
+00805 
+00807   <span class="keywordtype">void</span> Rect3D (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax, <span class="keywordtype">int</span> darkindx, <span class="keywordtype">int</span> lightindx);
+00808 
+00810   <span class="keywordtype">void</span> ObliqueRect3D (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax, <span class="keywordtype">int</span> cornersize,
+00811     <span class="keywordtype">int</span> darkindx, <span class="keywordtype">int</span> lightindx);
+00812 
+<a name="l00814"></a><a class="code" href="classcsComponent.html#a91">00814</a>   <span class="keywordtype">void</span> Clear (<span class="keywordtype">int</span> colindx)
+00815   { Box (0, 0, bound.<a class="code" href="classcsRect.html#a19">Width</a> (), bound.<a class="code" href="classcsRect.html#a20">Height</a> (), colindx); }
+00816 
+00818   <span class="keywordtype">void</span> ClearZbuffer (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
+00819 
+<a name="l00821"></a><a class="code" href="classcsComponent.html#a93">00821</a>   <span class="keywordtype">void</span> ClearZbuffer ()
+00822   { ClearZbuffer (0, 0, bound.<a class="code" href="classcsRect.html#a19">Width</a> (), bound.<a class="code" href="classcsRect.html#a20">Height</a> ()); }
+00823 
+00825   <span class="keywordtype">void</span> Polygon3D (<a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a> &amp;poly, <a class="code" href="group__util.html#a8">uint</a> mode);
+00826 
+00828 
+00830   <span class="keywordtype">void</span> DrawUnderline (<span class="keywordtype">int</span> iX, <span class="keywordtype">int</span> iY, <span class="keyword">const</span> <span class="keywordtype">char</span> *iText, size_t iUnderlinePos,
+00831     <span class="keywordtype">int</span> iColor);
 00832 
-00838   <span class="keyword">static</span> <span class="keywordtype">void</span> PrepareLabel (<span class="keyword">const</span> <span class="keywordtype">char</span> *iLabel, <span class="keywordtype">char</span> * &amp;oLabel, <span class="keywordtype">int</span> &amp;oUnderlinePos);
-00839 
-00841   <span class="keywordtype">bool</span> CheckHotKey (<a class="code" href="structiEvent.html">iEvent</a> &amp;<a class="code" href="structiEvent.html">iEvent</a>, <span class="keywordtype">char</span> iHotKey);
-00842 
-00844   <span class="keyword">static</span> <span class="keywordtype">int</span> WordLeft (<span class="keyword">const</span> <span class="keywordtype">char</span> *iText, <span class="keywordtype">int</span> StartPos);
-00846   <span class="keyword">static</span> <span class="keywordtype">int</span> WordRight (<span class="keyword">const</span> <span class="keywordtype">char</span> *iText, <span class="keywordtype">int</span> StartPos);
-00847 
-00849   <span class="keywordtype">bool</span> ApplySkin (<a class="code" href="classcsSkin.html">csSkin</a> *Skin);
-00850 
-00859   <span class="keywordtype">void</span> CheckDirtyTD (<a class="code" href="classcsRect.html">csRect</a> &amp;ioR);
-00867   <span class="keywordtype">void</span> CheckDirtyBU (<a class="code" href="classcsRect.html">csRect</a> &amp;ioR);
-00868 
-00869 <span class="keyword">private</span>:
-00870   <span class="keyword">static</span> <span class="keywordtype">bool</span> do_handle_event (<a class="code" href="classcsComponent.html">csComponent</a> *child, <span class="keywordtype">void</span> *param);
-00871 };
-00872 
-00875 <span class="preprocessor">#endif // __CS_CSCOMP_H__</span>
+00833 <span class="keyword">protected</span>:
+00839   <span class="keywordtype">void</span> Clip (cswsRectVector &amp;rect, <a class="code" href="classcsComponent.html">csComponent</a> *last, <span class="keywordtype">bool</span> forchild = <span class="keyword">false</span>);
+00840 
+00842   <span class="keywordtype">void</span> ClipChild (cswsRectVector &amp;rect, <a class="code" href="classcsComponent.html">csComponent</a> *child);
+00843 
+00850   <span class="keywordtype">void</span> FastClip (cswsRectVector &amp;rect);
+00851 
+00857   <span class="keyword">static</span> <span class="keywordtype">void</span> PrepareLabel (<span class="keyword">const</span> <span class="keywordtype">char</span> *iLabel, <span class="keywordtype">char</span> * &amp;oLabel, size_t &amp;oUnderlinePos);
+00858 
+00860   <span class="keywordtype">bool</span> CheckHotKey (<a class="code" href="structiEvent.html">iEvent</a> &amp;<a class="code" href="structiEvent.html">iEvent</a>, <span class="keywordtype">char</span> iHotKey);
+00861 
+00863   <span class="keyword">static</span> size_t WordLeft (<span class="keyword">const</span> <span class="keywordtype">char</span> *iText, size_t StartPos);
+00865   <span class="keyword">static</span> size_t WordRight (<span class="keyword">const</span> <span class="keywordtype">char</span> *iText, size_t StartPos);
+00866 
+00868   <span class="keywordtype">bool</span> ApplySkin (<a class="code" href="classcsSkin.html">csSkin</a> *Skin);
+00869 
+00878   <span class="keywordtype">void</span> CheckDirtyTD (<a class="code" href="classcsRect.html">csRect</a> &amp;ioR);
+00886   <span class="keywordtype">void</span> CheckDirtyBU (<a class="code" href="classcsRect.html">csRect</a> &amp;ioR);
+00887 
+00888 <span class="keyword">private</span>:
+00889   <span class="keyword">static</span> <span class="keywordtype">bool</span> do_handle_event (<a class="code" href="classcsComponent.html">csComponent</a> *child, <span class="keywordtype">void</span> *param);
+00890 };
+00891 
+00894 <span class="preprocessor">#endif // __CS_CSCOMP_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
