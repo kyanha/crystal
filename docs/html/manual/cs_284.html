@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Index</TITLE>
+<TITLE>Crystal Space: Release Notes 17</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Index">
-<META NAME="keywords" CONTENT="Crystal Space: Index">
+<META NAME="description" CONTENT="Crystal Space: Release Notes 17">
+<META NAME="keywords" CONTENT="Crystal Space: Release Notes 17">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,387 +23,453 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC937"></A>
+<A NAME="SEC931"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC927"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html"> &gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC922"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC941"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC941"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC937">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC941">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H1> Index </H1>
+<H2> C.8 Release Notes from 0.16 to 0.17 </H2>
+<!--docid::SEC931::-->
+<P>
+
+This section documents the major changes between versions 0.16 and 0.17 of of
+Crystal Space.
+</P><P>
+
+<A NAME="SEC932"></A>
+<H3> Signature Change: NextFrame(elapsed_time/current_time) </H3>
+<!--docid::SEC932::-->
+<P>
+
+<CODE>csSystemDriver::NextFrame()</CODE> no longer accepts `<SAMP>elapsed_time</SAMP>' and
+`<SAMP>current_time</SAMP>' arguments, so you have to change the prototype of your own
+subclassed version of <CODE>NextFrame()</CODE> and call the following three lines in
+the order below (only if you need the elapsed and current time, of course):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>void MySubclass::NextFrame()
+{
+  SysSystemDriver::NextFrame();
+  cs_time elapsed_time, current_time;
+  GetElapsedTime(elapsed_time,current_time);
+  <small>...</small>
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC933"></A>
+<H3> Signature Change: HandleEvent(csEvent) </H3>
+<!--docid::SEC933::-->
+<P>
+
+The argument of <CODE>csSystemDriver::HandleEvent()</CODE> has changed from a
+`<SAMP>csEvent*</SAMP>' parameter to an `<SAMP>iEvent*</SAMP>'.  Update your subclassed
+versions if present.
+</P><P>
+
+<A NAME="SEC934"></A>
+<H3> Materials Versus Textures </H3>
+<!--docid::SEC934::-->
+<P>
+
+Crystal Space 0.17 supports <EM>materials</EM> in the sense that the API is
+ready for it.  There is no real material support though.  A material currently
+just corresponds with a texture.  Here are a few short remarks about the
+changes:
+</P><P>
+
+<UL>
+<LI>
+<CODE>csTextureHandle()</CODE> was renamed to <CODE>csTextureWrapper()</CODE>.
+<P>
+
+<LI>
+New class: <CODE>csMaterialWrapper</CODE>
+<P>
+
+<LI>
+The methods <CODE>SetTexture()</CODE> and <CODE>GetTexture()</CODE> were renamed to
+<CODE>SetMaterial()</CODE> and <CODE>GetMaterial()</CODE>, respectively, in many places.
+<P>
+
+<LI>
+The methods
+<CODE>SetTextureHandle()</CODE> and <CODE>GetTextureHandle()</CODE> were renamed to
+<CODE>SetMaterialWrapper()</CODE> and <CODE>GetMaterialWrapper()</CODE>, respectively.
+</UL>
+<P>
+
+In general, in most places where you used to use <CODE>SetTexture()</CODE> or
+<CODE>GetTexture()</CODE> you now need to use the material versions.  There are few
+places where you deal directly with textures.  The material system sits on top
+of the texture system and is what you should use in most cases.
+</P><P>
+
+`<SAMP>csWorld</SAMP>' now has a <CODE>GetMaterials()</CODE> function which you probably
+should use wherever you used <CODE>GetTextures()</CODE> in the past.
+</P><P>
+
+In the loader you can find a new function, <CODE>csLoader::FindMaterial()</CODE>,
+which will find a material with the given name.  If not found it tries to find
+a texture with of the same name and, if found, will automatically then create
+a material from that texture.
+</P><P>
+
+The <CODE>csLoader::LoadTexture()</CODE> method is a bit special.  As before, it
+loads a texture (and returns a `<SAMP>csTextureWrapper</SAMP>') but it also adds a
+material with the same name to the material list.  You can then fetch that
+material from that list with code similar to the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csLoader::LoadTexture(world,"myTexture","/lib/std/stone4.gif");
+csMaterialWrapper* m =
+  world-&#62;GetMaterials()-&#62;FindByName("myTexture");
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC935"></A>
+<H3> Collision Detection Plugin </H3>
+<!--docid::SEC935::-->
+<P>
+
+This is a very significant change.  The RAPID collision detection system
+has been completely removed from the engine and is now available through a
+plug-in module.  This change will most likely require the most complicated
+changes to your code.
+</P><P>
+
+The first thing you need to add to your application is code to load the
+plugin.  You can do this with the following code:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>char const* p = Config-&#62;GetStr (
+  "YourGame",
+  "COLLDET_PLUGIN",
+  "crystalspace.colldet.rapid");
+collide_system =
+  LOAD_PLUGIN(this, p, "CollDet", iCollideSystem);
+if (!collide_system)
+{
+  Printf(MSG_FATAL_ERROR,
+    "No Collision Detection plugin found!\n");
+  return false;
+}
+</pre></td></tr></table></P><P>
+
+This code loads the rapid collision detection plugin by default (which is the
+only one we have now) but it also reads an entry from your config file so that
+the user can possibly change it.  If you don't want that then you can just
+hardcode the `<SAMP>p</SAMP>' pointer with the name of the RAPID plugin.
+</P><P>
+
+Note that you need to store the value of `<SAMP>collide_system</SAMP>' some place
+where it can be accessed by the routines that need to do the collision
+detection.
+</P><P>
+
+Then the class `<SAMP>csRAPIDCollider</SAMP>' has been removed from csengine.  Instead
+there is a new class, `<SAMP>csCollider</SAMP>'.  This class encapsulates an
+`<SAMP>iCollider</SAMP>' (which is something that is returned from
+`<SAMP>collide_system</SAMP>').  This is the easiest way to use the new collision
+detection system as it more closely resembles what was possible with
+`<SAMP>csRAPIDCollider</SAMP>'.  To make a `<SAMP>csCollider</SAMP>' you can use the following
+code:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iPolygonMesh* mesh =
+  QUERY_INTERFACE(object, iPolygonMesh);
+csCollider* collider =
+  new csCollider(*object, collide_system, mesh);
+</pre></td></tr></table></P><P>
+
+`<SAMP>object</SAMP>' can be a sector, sprite, thing, or your own object that supports
+the `<SAMP>iPolygonMesh</SAMP>' interface.  The new collider will be attached (through
+the `<SAMP>csObject</SAMP>' system) to the object.  This is similar to what happened
+with the old `<SAMP>csRAPIDCollider</SAMP>' class.
+</P><P>
+
+To do collision detection you need to find the colliders (or have them stored
+somewhere) and then you can do:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool rc = collide_system-&#62;Collide(
+  col1-&#62;GetCollider(), trans1,
+  col2-&#62;GetCollider(), trans2);
+</pre></td></tr></table></P><P>
+
+Or:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool rc = col1-&#62;Collide(*object2, trans1, trans2);
+</pre></td></tr></table></P><P>
+
+With `<SAMP>col1</SAMP>' and `<SAMP>col2</SAMP>' are the colliders (`<SAMP>csCollider</SAMP>') and
+`<SAMP>object2</SAMP>' is the second object.  `<SAMP>trans1</SAMP>' and `<SAMP>trans2</SAMP>' are the
+respective transformations.
+</P><P>
+
+Note that before you call this you probably want to initialize the collision
+system like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>collide_system-&#62;ResetCollisionPairs();
+collide_system-&#62;SetOneHitOnly(<VAR>true</VAR>/<VAR>false</VAR>);
+</pre></td></tr></table></P><P>
+
+The argument for the second function depends on whether or not you
+are interested in receiving more than one hit.
+</P><P>
+
+Note that <CODE>ResetCollisionPairs()</CODE> is important. Every call
+to <CODE>Collide()</CODE> will add additional collision pairs to this array.
+So you have to reset it if you are no longer interested in that.
+</P><P>
+
+Note that <CODE>csRAPIDCollider::Report()</CODE> is gone. If you want that
+functionality you have to do it on your own (which is not difficult).
+</P><P>
+
+<A NAME="SEC936"></A>
+<H3> Texture Mapping Changes </H3>
+<!--docid::SEC936::-->
+<P>
+
+The way engine defines and uses texturing has changed.  There are four polygon
+texturing types now:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>POLYTXT_NONE</CODE>
+<DD>No texturing.  Useful when using materials without textures.  It defines no
+texturing parameters at all thus saves memory.
+<P>
+
+<DT><CODE>POLYTXT_FLAT</CODE>
+<DD>Flat-shading.  Only the angle between light and polygon normal is considered
+if `<SAMP>CS_POLY_LIGHTING</SAMP>' flag is set, and entire polygon is painted with one
+lighting value.  Every vertex has an U/V pair associated.
+<P>
+
+<DT><CODE>POLYTXT_GOURAUD</CODE>
+<DD>Every polygon vertex has a color and those colors are interpolated across
+scanlines.
+<P>
+
+<DT><CODE>POLYTXT_LIGHTMAP</CODE>
+<DD>A polygon which has an associated lightmap and a texture plane.
+</DL>
+<P>
+
+Now it is possible to define and use objects which have flat-color but still
+receive light with Gouraud as well as without Gouraud interpolation; in
+general this open a whole new area for experimenting.
+</P><P>
+
+In practice this means that `<SAMP>csGouraudShaded</SAMP>' is gone and has been
+replaced with `<SAMP>csPolyTexGouraud</SAMP>'.  `<SAMP>csLightMapped</SAMP>' has also gone and
+is replaced with `<SAMP>csPolyTexLightMap</SAMP>'.
+</P><P>
+
+<A NAME="SEC937"></A>
+<H3> Sound Changes </H3>
 <!--docid::SEC937::-->
 <P>
 
-<table><tr><th valign=top>Jump to: &nbsp; </th><td><A HREF="cs_284.html#cp_-" style="text-decoration:none"><b>-</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_." style="text-decoration:none"><b>.</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_/" style="text-decoration:none"><b>/</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_2" style="text-decoration:none"><b>2</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_3" style="text-decoration:none"><b>3</b></A>
- &nbsp; 
-<BR>
-<A HREF="cs_284.html#cp_A" style="text-decoration:none"><b>A</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_B" style="text-decoration:none"><b>B</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_C" style="text-decoration:none"><b>C</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_D" style="text-decoration:none"><b>D</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_E" style="text-decoration:none"><b>E</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_F" style="text-decoration:none"><b>F</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_G" style="text-decoration:none"><b>G</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_H" style="text-decoration:none"><b>H</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_I" style="text-decoration:none"><b>I</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_J" style="text-decoration:none"><b>J</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_K" style="text-decoration:none"><b>K</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_L" style="text-decoration:none"><b>L</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_M" style="text-decoration:none"><b>M</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_N" style="text-decoration:none"><b>N</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_O" style="text-decoration:none"><b>O</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_P" style="text-decoration:none"><b>P</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_Q" style="text-decoration:none"><b>Q</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_R" style="text-decoration:none"><b>R</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_S" style="text-decoration:none"><b>S</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_T" style="text-decoration:none"><b>T</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_U" style="text-decoration:none"><b>U</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_V" style="text-decoration:none"><b>V</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_W" style="text-decoration:none"><b>W</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_X" style="text-decoration:none"><b>X</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_Z" style="text-decoration:none"><b>Z</b></A>
- &nbsp; 
-</td></tr></table><br><P></P>
-<TABLE border=0>
-<TR><TD></TD><TH ALIGN=LEFT>Index Entry</TH><TH ALIGN=LEFT> Section</TH></TR>
-<TR><TD COLSPAN=3> <HR></TD></TR>
-<TR><TH><A NAME="cp_-"></A>-</TH><TD></TD><TD></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_47.html#SEC125"><CODE>-relight</CODE></A></TD><TD valign=top><A HREF="cs_47.html#SEC125">4.2 Walktest</A></TD></TR>
-<TR><TD COLSPAN=3> <HR></TD></TR>
-<TR><TH><A NAME="cp_."></A>.</TH><TD></TD><TD></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC837">`<TT>.csplugin</TT>' files</A></TD><TD valign=top><A HREF="cs_277.html#SEC837">SCF Changes</A></TD></TR>
-<TR><TD COLSPAN=3> <HR></TD></TR>
-<TR><TH><A NAME="cp_/"></A>/</TH><TD></TD><TD></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_47.html#SEC125">`<TT>/lev/flarge/world</TT>'</A></TD><TD valign=top><A HREF="cs_47.html#SEC125">4.2 Walktest</A></TD></TR>
-<TR><TD COLSPAN=3> <HR></TD></TR>
-<TR><TH><A NAME="cp_2"></A>2</TH><TD></TD><TD></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_210.html#SEC560">2D Sprite</A></TD><TD valign=top><A HREF="cs_210.html#SEC560">7.7.4 Sprite2D Mesh Object</A></TD></TR>
-<TR><TD COLSPAN=3> <HR></TD></TR>
-<TR><TH><A NAME="cp_3"></A>3</TH><TD></TD><TD></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_164.html#SEC404">3D Engine</A></TD><TD valign=top><A HREF="cs_164.html#SEC404">7.5 The 3D Engine (<CODE>csEngine</CODE>)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_211.html#SEC567">3D Sprite</A></TD><TD valign=top><A HREF="cs_211.html#SEC567">7.7.5 Sprite3D Mesh Object</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_212.html#SEC574">3D Sprite</A></TD><TD valign=top><A HREF="cs_212.html#SEC574">7.7.6 SpriteCal3D Mesh Object</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_213.html#SEC577">3D Sprite</A></TD><TD valign=top><A HREF="cs_213.html#SEC577">7.7.7 Genmesh Mesh Object</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_187.html#SEC451">3D Sprites</A></TD><TD valign=top><A HREF="cs_187.html#SEC451">7.5.9 3D Sprites</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX1">`<TT>3ds2lev</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD COLSPAN=3> <HR></TD></TR>
-<TR><TH><A NAME="cp_A"></A>A</TH><TD></TD><TD></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_57.html#SEC135">Actions</A></TD><TD valign=top><A HREF="cs_57.html#SEC135">4.2.4.6 Mesh Manipulation Commands</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_199.html#SEC504">addons (Map File)</A></TD><TD valign=top><A HREF="cs_199.html#SEC504">Addon Section</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC918"><CODE>AdvanceSpriteFrames()</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC918">C.6 Release Notes from 0.17 to 0.18</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_236.html#SEC676">Alternate Windowing System</A></TD><TD valign=top><A HREF="cs_236.html#SEC676">7.11 Alternate Windowing System (AWS)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_230.html#SEC661">Animation</A></TD><TD valign=top><A HREF="cs_230.html#SEC661">7.9 Animation</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_7.html#SEC9">API, Public</A></TD><TD valign=top><A HREF="cs_7.html#SEC9">Documentation</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_45.html#SEC123">Applications</A></TD><TD valign=top><A HREF="cs_45.html#SEC123">4. Applications</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX2">Applications, `<TT>3ds2lev</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX4">Applications, `<TT>csdemo</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX6">Applications, `<TT>csfedit</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX8">Applications, `<TT>csfgen</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX10">Applications, `<TT>csvid</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX12">Applications, `<TT>cswstest</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX14">Applications, `<TT>g2dtest</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX16">Applications, `<TT>gfxtest</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX18">Applications, `<TT>isotest</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX20">Applications, `<TT>map2cs</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_63.html#SEC141">Applications, `<TT>map2cs</TT>'</A></TD><TD valign=top><A HREF="cs_63.html#SEC141">4.3 Quake Map Converter (<CODE>map2cs</CODE>)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX22">Applications, `<TT>mdl2spr</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_68.html#SEC151">Applications, `<TT>mdl2spr</TT>'</A></TD><TD valign=top><A HREF="cs_68.html#SEC151">4.4 Quake Model Converter (<CODE>mdl2spr</CODE>)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#SEC124">Applications, Overview</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX24">Applications, `<TT>perftest</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX26">Applications, `<TT>pysimp</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#SEC124">Applications, Quick Overview</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX28">Applications, `<TT>vsh</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX30">Applications, `<TT>walktest</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_61.html#SEC139">`<TT>autoexec.cfg</TT>'</A></TD><TD valign=top><A HREF="cs_61.html#SEC139">4.2.5 Special Keys</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_236.html#SEC676">AWS</A></TD><TD valign=top><A HREF="cs_236.html#SEC676">7.11 Alternate Windowing System (AWS)</A></TD></TR>
-<TR><TD COLSPAN=3> <HR></TD></TR>
-<TR><TH><A NAME="cp_B"></A>B</TH><TD></TD><TD></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_214.html#SEC583">Ball</A></TD><TD valign=top><A HREF="cs_214.html#SEC583">7.7.8 Ball Mesh Object</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_71.html#SEC156">Basic Crystal Space Concepts</A></TD><TD valign=top><A HREF="cs_71.html#SEC156">5.1.1 Basic Crystal Space Concepts</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC817">Bezier Curve Changes</A></TD><TD valign=top><A HREF="cs_277.html#SEC817">Bezier Curve Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_61.html#SEC139">bind</A></TD><TD valign=top><A HREF="cs_61.html#SEC139">4.2.5 Special Keys</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_7.html#SEC8">Bleeding-Edge Developmental Releases</A></TD><TD valign=top><A HREF="cs_7.html#SEC8">Bleeding-Edge Developmental Releases (CVS)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_162.html#SEC394"><CODE>Blit()</CODE></A></TD><TD valign=top><A HREF="cs_162.html#SEC394">Updating a Texture Image</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_51.html#SEC129">Boolean Commands</A></TD><TD valign=top><A HREF="cs_51.html#SEC129">4.2.4 Console Commands</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_10.html#SEC12">Bug Reporting</A></TD><TD valign=top><A HREF="cs_10.html#SEC12">1.9 Feedback and Bug Reporting</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_16.html#SEC23">Building</A></TD><TD valign=top><A HREF="cs_16.html#SEC23">2. Building and Installing</A></TD></TR>
-<TR><TD COLSPAN=3> <HR></TD></TR>
-<TR><TH><A NAME="cp_C"></A>C</TH><TD></TD><TD></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_212.html#SEC574">Cal3D</A></TD><TD valign=top><A HREF="cs_212.html#SEC574">7.7.6 SpriteCal3D Mesh Object</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_116.html#SEC260">camera space</A></TD><TD valign=top><A HREF="cs_116.html#SEC260">5.8.7 Camera Movement</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_78.html#SEC173">Camera, Tutorial</A></TD><TD valign=top><A HREF="cs_78.html#SEC173">5.2.4 The Camera</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_168.html#SEC418">Cameras</A></TD><TD valign=top><A HREF="cs_168.html#SEC418">7.5.4 Cameras and Matrices</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_117.html#SEC263">clicking on objects</A></TD><TD valign=top><A HREF="cs_117.html#SEC263">5.8.8 Clicking on Objects</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC918"><CODE>CLights</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC918">C.6 Release Notes from 0.17 to 0.18</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_270.html#SEC808">Coding Portability</A></TD><TD valign=top><A HREF="cs_270.html#SEC808">9.2 Portability</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_200.html#SEC509">collections (Map File)</A></TD><TD valign=top><A HREF="cs_200.html#SEC509">Collection Specification</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_111.html#SEC231">collision detection</A></TD><TD valign=top><A HREF="cs_111.html#SEC231">5.8.2 Doing Collision Detection</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_283.html#SEC931">Collision Detection Changes</A></TD><TD valign=top><A HREF="cs_283.html#SEC931">Collision Detection Plugin</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_50.html#SEC128">Command line options</A></TD><TD valign=top><A HREF="cs_50.html#SEC128">4.2.3 Command Line options</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_35.html#SEC100">Command Line Options</A></TD><TD valign=top><A HREF="cs_35.html#SEC100">3.1 Common Command Line Options</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_71.html#SEC163">Commandline Parser</A></TD><TD valign=top><A HREF="cs_71.html#SEC163">The Commandline Parser</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_35.html#SEC100">Common Command Line Options</A></TD><TD valign=top><A HREF="cs_35.html#SEC100">3.1 Common Command Line Options</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_73.html#SEC168">Compiling an Application, Tutorial</A></TD><TD valign=top><A HREF="cs_73.html#SEC168">5.1.3 Compiling the Application</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_19.html#SEC28">Compression library, zlib</A></TD><TD valign=top><A HREF="cs_19.html#SEC28">zlib</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_62.html#SEC140">Configuration</A></TD><TD valign=top><A HREF="cs_62.html#SEC140">4.2.6 Configuration Files</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_37.html#SEC102">Configuration Domains</A></TD><TD valign=top><A HREF="cs_37.html#SEC102">3.3 Configuration Domains</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_36.html#SEC101">Configuration File</A></TD><TD valign=top><A HREF="cs_36.html#SEC101">3.2 Configuration File</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC921">Configuration Files</A></TD><TD valign=top><A HREF="cs_282.html#SEC921">Configuration File Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_71.html#SEC164">Configuration Manager</A></TD><TD valign=top><A HREF="cs_71.html#SEC164">The Configuration Manager</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_43.html#SEC121">Configuration, Console</A></TD><TD valign=top><A HREF="cs_43.html#SEC121">3.4.5 Console Configuration</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_41.html#SEC114">Configuration, Engine</A></TD><TD valign=top><A HREF="cs_41.html#SEC114">3.4.3 Engine Configuration</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_40.html#SEC113">Configuration, Graphics</A></TD><TD valign=top><A HREF="cs_40.html#SEC113">3.4.2 Graphics Configuration</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_44.html#SEC122">Configuration, Mouse</A></TD><TD valign=top><A HREF="cs_44.html#SEC122">3.4.6 Mouse Configuration</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_42.html#SEC117">Configuration, Sound</A></TD><TD valign=top><A HREF="cs_42.html#SEC117">3.4.4 Sound Configuration</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_39.html#SEC110">Configuration, System</A></TD><TD valign=top><A HREF="cs_39.html#SEC110">3.4.1 System Configuration</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_51.html#SEC129">Console Commands</A></TD><TD valign=top><A HREF="cs_51.html#SEC129">4.2.4 Console Commands</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_13.html#SEC15">Contributors</A></TD><TD valign=top><A HREF="cs_13.html#SEC15">1.12 Crystal Space Contributors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_63.html#SEC141">Conversion, Quake Map (`<TT>map2cs</TT>')</A></TD><TD valign=top><A HREF="cs_63.html#SEC141">4.3 Quake Map Converter (<CODE>map2cs</CODE>)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_100.html#SEC200">Converting the Model, <CODE>md32spr</CODE> Tutorial</A></TD><TD valign=top><A HREF="cs_100.html#SEC200">Converting the Model</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_124.html#SEC297">`<TT>cs-config</TT>'</A></TD><TD valign=top><A HREF="cs_124.html#SEC297">The `<TT>cs-config</TT>' Script</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC876"><CODE>CS_DECLARE_GROWING_ARRAY</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC876">Typed Vectors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC876"><CODE>CS_DECLARE_OBJECT_VECTOR</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC876">Typed Vectors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC876"><CODE>CS_DECLARE_TYPED_VECTOR</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC876">Typed Vectors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC858"><CODE>CS_ENTITY_CAMERA</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC858">Skyboxes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC856"><CODE>CS_ENTITY_INVISIBLE</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC856">Mesh flag change</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC856"><CODE>CS_ENTITY_INVISIBLEMESH</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC856">Mesh flag change</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC856"><CODE>CS_ENTITY_NOHITBEAM</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC856">Mesh flag change</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC859"><CODE>CS_FX_GOURAUD</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC859">CS_FX_GOURAUD removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC868"><CODE>CS_GET_CHILD_OBJECT_FAST</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC868">Fast SCF Interfaces</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC868"><CODE>CS_GET_FIRST_NAMED_CHILD_OBJECT_FAST</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC868">Fast SCF Interfaces</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC868"><CODE>CS_GET_NAMED_CHILD_OBJECT_FAST</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC868">Fast SCF Interfaces</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_70.html#SEC155">CS_LOAD_PLUGIN</A></TD><TD valign=top><A HREF="cs_70.html#SEC155">5.1 Developing a Crystal Space Application</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC898"><CODE>CS_QUERY_PLUGIN</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC898">System Driver Removal and Application Structure</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC898"><CODE>CS_QUERY_REGISTRY</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC898">System Driver Removal and Application Structure</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC915"><CODE>csApp.Execute()</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC915">CSWS Modal Session Paradigm Shift</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC915"><CODE>csApp.GetTopModalComponent()</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC915">CSWS Modal Session Paradigm Shift</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC915"><CODE>csApp.GetTopModalUserdata()</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC915">CSWS Modal Session Paradigm Shift</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC915"><CODE>csApp.StartModal()</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC915">CSWS Modal Session Paradigm Shift</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC915"><CODE>csApp.StopModal()</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC915">CSWS Modal Session Paradigm Shift</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC829"><CODE>csArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC829">Array Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC830"><CODE>csArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC830">csPArray Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC832"><CODE>csArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC832">csVector and csBasicVector Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC832"><CODE>csBasicVector</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC832">csVector and csBasicVector Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_283.html#SEC935"><CODE>csCamera</CODE> Changes</A></TD><TD valign=top><A HREF="cs_283.html#SEC935">API Changes: csCamera</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_71.html#SEC161"><CODE>cscmdProcess</CODE></A></TD><TD valign=top><A HREF="cs_71.html#SEC161">The Event Queue</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC911"><CODE>csCollider</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC911">csCollider</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_111.html#SEC231"><CODE>csColliderWrapper</CODE></A></TD><TD valign=top><A HREF="cs_111.html#SEC231">5.8.2 Doing Collision Detection</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC911"><CODE>csColliderWrapper</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC911">csCollider</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX3">`<TT>csdemo</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC829"><CODE>csDirtyAccessArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC829">Array Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_164.html#SEC404">csEngine</A></TD><TD valign=top><A HREF="cs_164.html#SEC404">7.5 The 3D Engine (<CODE>csEngine</CODE>)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC918"><CODE>csEngine</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC918">C.6 Release Notes from 0.17 to 0.18</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC919"><CODE>csEngine</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC919">Name Change: csWorld => csEngine</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC917"><CODE>csEngine.NextFrame()</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC917">Miscellaneous Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC835"><CODE>csEvent</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC835">Event-Related Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_283.html#SEC929"><CODE>csEvent</CODE> Changes</A></TD><TD valign=top><A HREF="cs_283.html#SEC929">Signature Change: HandleEvent(csEvent)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC835"><CODE>csEventCord</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC835">Event-Related Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC835"><CODE>csEventOutlet</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC835">Event-Related Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC835"><CODE>csEventQueue</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC835">Event-Related Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX5">`<TT>csfedit</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX7">`<TT>csfgen</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC917"><CODE>csFilenameMatches()</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC917">Miscellaneous Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC909"><CODE>csfx</CODE> Library</A></TD><TD valign=top><A HREF="cs_281.html#SEC909">Library Renamed: csfx</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_149.html#SEC371">csGeom</A></TD><TD valign=top><A HREF="cs_149.html#SEC371">6.3 Geometry Library (<CODE>csGeom</CODE>)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC867"><CODE>csGetObject()</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC867">csGetObject and csGetCommand</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC834"><CODE>csGlobalHashIterator</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC834">csHashMap Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC917"><CODE>csGlobMatches()</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC917">Miscellaneous Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC829"><CODE>csGrowingArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC829">Array Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC876"><CODE>csGrowingArray&#60;T&#62;</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC876">Typed Vectors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC833"><CODE>csHash</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC833">Hash and Set Templates</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC834"><CODE>csHashIterator</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC834">csHashMap Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC834"><CODE>csHashMap</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC834">csHashMap Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC900"><CODE>csImageLoader</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC900">Image Loading</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_70.html#SEC155"><CODE>csInitializer</CODE></A></TD><TD valign=top><A HREF="cs_70.html#SEC155">5.1 Developing a Crystal Space Application</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_71.html#SEC166"><CODE>csInitializer</CODE></A></TD><TD valign=top><A HREF="cs_71.html#SEC166">The <CODE>csInitializer</CODE> class</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_280.html#SEC884"><CODE>csInitializer</CODE></A></TD><TD valign=top><A HREF="cs_280.html#SEC884">csInitializer changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC898"><CODE>csInitializer</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC898">System Driver Removal and Application Structure</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC912"><CODE>csKeyValuePair</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC912">Key/Node Mechanism</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC901"><CODE>csLoader</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC901">Map Loading (csLoader)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_207.html#SEC549">csMeshWrapper</A></TD><TD valign=top><A HREF="cs_207.html#SEC549">7.7.1 MeshObject Concepts</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC917"><CODE>csMeshWrapper</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC917">Miscellaneous Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC915"><CODE>csMessageBox()</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC915">CSWS Modal Session Paradigm Shift</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC827"><CODE>csModelDataActionIterator</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC827">Iterator Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC827"><CODE>csModelDataMaterialIterator</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC827">Iterator Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC827"><CODE>csModelDataObjectIterator</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC827">Iterator Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC827"><CODE>csModelDataPolygonIterator</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC827">Iterator Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC827"><CODE>csModelDataTextureIterator</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC827">Iterator Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_283.html#SEC934"><CODE>csMovable</CODE></A></TD><TD valign=top><A HREF="cs_283.html#SEC934">Thing and Sprite Changes (csMovable)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC827"><CODE>csNodeIterator</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC827">Iterator Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_122.html#SEC285"><CODE>csObject</CODE></A></TD><TD valign=top><A HREF="cs_122.html#SEC285">5.8.13 Attaching User Objects to CS Objects</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_123.html#SEC292"><CODE>csObject</CODE></A></TD><TD valign=top><A HREF="cs_123.html#SEC292">5.8.14 Attaching User Objects to CS Objects in a map file</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_136.html#SEC353"><CODE>csObject</CODE></A></TD><TD valign=top><A HREF="cs_136.html#SEC353">6.1.1 <CODE>csObject</CODE></A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC910"><CODE>csobject</CODE> Library</A></TD><TD valign=top><A HREF="cs_281.html#SEC910">Library Removed: csobject</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_116.html#SEC260">`<SAMP>csOrthoTransform</SAMP>'</A></TD><TD valign=top><A HREF="cs_116.html#SEC260">5.8.7 Camera Movement</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC830"><CODE>csPArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC830">csPArray Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC876"><CODE>csPArray&#60;T&#62;</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC876">Typed Vectors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_196.html#SEC488">csParser</A></TD><TD valign=top><A HREF="cs_196.html#SEC488">7.6 The Map File Parser (<CODE>csParser</CODE>)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC829"><CODE>csPDelArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC829">Array Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC832"><CODE>csPDelArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC832">csVector and csBasicVector Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC876"><CODE>csPDelArray&#60;T&#62;</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC876">Typed Vectors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_229.html#SEC649"><CODE>csPerl</CODE></A></TD><TD valign=top><A HREF="cs_229.html#SEC649">7.8.3 Perl Bindings</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC918"><CODE>csPixmap</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC918">C.6 Release Notes from 0.17 to 0.18</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC923"><CODE>csPixmap</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC923">csPixmap Moved and Renamed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_279.html#SEC881"><CODE>csPlane3.ClipPolygon()</CODE></A></TD><TD valign=top><A HREF="cs_279.html#SEC881">Various Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_70.html#SEC155"><CODE>csPluginLoader</CODE></A></TD><TD valign=top><A HREF="cs_70.html#SEC155">5.1 Developing a Crystal Space Application</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC835"><CODE>csPoolEvent</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC835">Event-Related Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_162.html#SEC395"><CODE>csProcTexture</CODE></A></TD><TD valign=top><A HREF="cs_162.html#SEC395">Using csProcTexture</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_110.html#SEC223"><CODE>csPtr</CODE></A></TD><TD valign=top><A HREF="cs_110.html#SEC223">5.8.1 Correctly Using Smart Pointers</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_228.html#SEC648"><CODE>csPython</CODE></A></TD><TD valign=top><A HREF="cs_228.html#SEC648">7.8.2 Python Bindings</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_110.html#SEC223"><CODE>csRef</CODE></A></TD><TD valign=top><A HREF="cs_110.html#SEC223">5.8.1 Correctly Using Smart Pointers</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC829"><CODE>csRefArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC829">Array Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC832"><CODE>csRefArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC832">csVector and csBasicVector Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC876"><CODE>csRefArray&#60;T&#62;</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC876">Typed Vectors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_278.html#SEC876"><CODE>csRefArrayObject&#60;T&#62;</CODE></A></TD><TD valign=top><A HREF="cs_278.html#SEC876">Typed Vectors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC918"><CODE>csRenderView</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC918">C.6 Release Notes from 0.17 to 0.18</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_113.html#SEC243"><CODE>csReversibleTransform</CODE></A></TD><TD valign=top><A HREF="cs_113.html#SEC243">5.8.4 Mesh Movement</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_116.html#SEC260">`<SAMP>csReversibleTransform</SAMP>'</A></TD><TD valign=top><A HREF="cs_116.html#SEC260">5.8.7 Camera Movement</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_121.html#SEC279"><CODE>csSector</CODE></A></TD><TD valign=top><A HREF="cs_121.html#SEC279">5.8.12 Render Priorities and Objects in Sectors</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC906"><CODE>csSector</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC906">Sectors Have No Polygons</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC833"><CODE>csSet</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC833">Hash and Set Templates</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_120.html#SEC273"><CODE>csSimplePixmap</CODE></A></TD><TD valign=top><A HREF="cs_120.html#SEC273">5.8.11 Loading Images for Pixmaps</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC918"><CODE>csSimplePixmap</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC918">C.6 Release Notes from 0.17 to 0.18</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC923"><CODE>csSimplePixmap</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC923">csPixmap Moved and Renamed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC922">csSprite2D</A></TD><TD valign=top><A HREF="cs_282.html#SEC922">Mesh Object Plugins</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC922">csSprite3D</A></TD><TD valign=top><A HREF="cs_282.html#SEC922">Mesh Object Plugins</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC829"><CODE>csStringArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC829">Array Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC831"><CODE>csStringArray</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC831">csStrVector and iStrVector Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC831"><CODE>csStrVector</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC831">csStrVector and iStrVector Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC898"><CODE>csSystemDriver</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC898">System Driver Removal and Application Structure</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC902"><CODE>csThing</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC902">Things are Mesh Objects</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC918"><CODE>csThingTemplate</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC918">C.6 Release Notes from 0.17 to 0.18</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC920"><CODE>csThingTemplate</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC920">csThingTemplate Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC909"><CODE>cstool</CODE> Library</A></TD><TD valign=top><A HREF="cs_281.html#SEC909">Library Renamed: csfx</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC827"><CODE>csTypedObjectIterator</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC827">Iterator Changes</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_135.html#SEC352">csUtil</A></TD><TD valign=top><A HREF="cs_135.html#SEC352">6.1 Utility Library (<CODE>csUtil</CODE>)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC910"><CODE>csutil</CODE> Library</A></TD><TD valign=top><A HREF="cs_281.html#SEC910">Library Removed: csobject</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_277.html#SEC832"><CODE>csVector</CODE></A></TD><TD valign=top><A HREF="cs_277.html#SEC832">csVector and csBasicVector Removed</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX9">`<TT>csvid</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC913"><CODE>csView</CODE></A></TD><TD valign=top><A HREF="cs_281.html#SEC913">csView</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC918"><CODE>csWorld</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC918">C.6 Release Notes from 0.17 to 0.18</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_282.html#SEC919"><CODE>csWorld</CODE></A></TD><TD valign=top><A HREF="cs_282.html#SEC919">Name Change: csWorld => csEngine</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_283.html#SEC936"><CODE>csWorld</CODE> Changes</A></TD><TD valign=top><A HREF="cs_283.html#SEC936">API Changes: csWorld</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_120.html#SEC273">CSWS</A></TD><TD valign=top><A HREF="cs_120.html#SEC273">5.8.11 Loading Images for Pixmaps</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_150.html#SEC372">CSWS</A></TD><TD valign=top><A HREF="cs_150.html#SEC372">6.4 Crystal Space Windowing System (CSWS)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_281.html#SEC915">CSWS</A></TD><TD valign=top><A HREF="cs_281.html#SEC915">CSWS Modal Session Paradigm Shift</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_46.html#IDX11">`<TT>cswstest</TT>'</A></TD><TD valign=top><A HREF="cs_46.html#SEC124">4.1 Quick Overview</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_177.html#SEC435">Culling, Visibility</A></TD><TD valign=top><A HREF="cs_177.html#SEC435">7.5.7 Visibility Culling In Detail</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_194.html#SEC466">Culling, Visibility</A></TD><TD valign=top><A HREF="cs_194.html#SEC466">7.5.13 How to Create Optimal Maps for Crystal Space</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_283.html#SEC928"><CODE>current_time</CODE> Changes</A></TD><TD valign=top><A HREF="cs_283.html#SEC928">Signature Change: NextFrame(elapsed_time/current_time)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_180.html#SEC441">Curved Surfaces, Visibility</A></TD><TD valign=top><A HREF="cs_180.html#SEC441">Curved Surfaces</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_7.html#SEC8">CVS</A></TD><TD valign=top><A HREF="cs_7.html#SEC8">Bleeding-Edge Developmental Releases (CVS)</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_272.html#SEC810">CVS Etiquette</A></TD><TD valign=top><A HREF="cs_272.html#SEC810">9.4 CVS Etiquette Guidelines</A></TD></TR>
-<TR><TD></TD><TD valign=top><A HREF="cs_272.html#SEC810">CVS Guide</A></TD><TD valign=top><A HREF="cs_272.html#SEC810">9.4 CVS Etiquette Guidelines</A></TD></TR>
-<TR><TD COLSPAN=3> <HR></TD></TR>
-</TABLE><P></P><table><tr><th valign=top>Jump to: &nbsp; </th><td><A HREF="cs_284.html#cp_-" style="text-decoration:none"><b>-</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_." style="text-decoration:none"><b>.</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_/" style="text-decoration:none"><b>/</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_2" style="text-decoration:none"><b>2</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_3" style="text-decoration:none"><b>3</b></A>
- &nbsp; 
-<BR>
-<A HREF="cs_284.html#cp_A" style="text-decoration:none"><b>A</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_B" style="text-decoration:none"><b>B</b></A>
- &nbsp; 
-<A HREF="cs_284.html#cp_C" style="text-decoration:none"><b>C</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_D" style="text-decoration:none"><b>D</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_E" style="text-decoration:none"><b>E</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_F" style="text-decoration:none"><b>F</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_G" style="text-decoration:none"><b>G</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_H" style="text-decoration:none"><b>H</b></A>
- &nbsp; 
-<A HREF="cs_285.html#cp_I" style="text-decoration:none"><b>I</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_J" style="text-decoration:none"><b>J</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_K" style="text-decoration:none"><b>K</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_L" style="text-decoration:none"><b>L</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_M" style="text-decoration:none"><b>M</b></A>
- &nbsp; 
-<A HREF="cs_286.html#cp_N" style="text-decoration:none"><b>N</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_O" style="text-decoration:none"><b>O</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_P" style="text-decoration:none"><b>P</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_Q" style="text-decoration:none"><b>Q</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_R" style="text-decoration:none"><b>R</b></A>
- &nbsp; 
-<A HREF="cs_287.html#cp_S" style="text-decoration:none"><b>S</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_T" style="text-decoration:none"><b>T</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_U" style="text-decoration:none"><b>U</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_V" style="text-decoration:none"><b>V</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_W" style="text-decoration:none"><b>W</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_X" style="text-decoration:none"><b>X</b></A>
- &nbsp; 
-<A HREF="cs_288.html#cp_Z" style="text-decoration:none"><b>Z</b></A>
- &nbsp; 
-</td></tr></table><br><HR SIZE=1>
+Merged sound buffers into sound sources.  We now have 3D and non-3D sound
+sources.  Non-3D sources are what were formerly sound buffers.  As a parameter
+to `<SAMP>Renderer-&#62;CreateSource()</SAMP>' you can indicate if you want a 3D or non-3D
+source.
+</P><P>
+
+The sound loader is now a plugin and must be loaded as such.  It uses the
+`<SAMP>iSoundLoader</SAMP>' interface.  A loaded sound data block is represented by
+`<SAMP>iSoundData</SAMP>'.
+</P><P>
+
+If you use standard Crystal Space libraries to load sounds, this is all you
+need to be aware of.  Otherwise you should also know how to load a sound
+without `<SAMP>csParser</SAMP>'.
+</P><P>
+
+To load a sound the sound loader now needs some information describing the
+format of the sound.  This information can be queried from the sound renderer.
+Also, a sound can be optionally be loaded as <EM>stream</EM>.  This is currently
+not useful for anything, but will instead affect performance and memory in a
+negative way.  It is intended as a future option to load background music.
+All member functions of `<SAMP>iSoundData</SAMP>' are intended for private use (of
+course you may use them, but I don't think they are useful).  To load a sound,
+perform the following steps.
+</P><P>
+
+<OL>
+<LI>
+Load the file buffer from a VFS path.  See section <A HREF="cs_158.html#SEC389">7.2 Virtual File System (VFS)</A>.
+<P>
+
+<LI>
+Ask the sound renderer for the format descriptor (`<SAMP>csSoundFormat</SAMP>').
+<P>
+
+<LI>
+Pass both the file data and the format to the sound loader, using `<SAMP>false</SAMP>'
+for streaming (the default).  After that, you may delete the file data.
+</OL>
+<P>
+
+<A NAME="SEC938"></A>
+<H3> Thing and Sprite Changes (csMovable) </H3>
+<!--docid::SEC938::-->
+<P>
+
+The movement system of Things and Sprites has been merged into one class
+called `<SAMP>csMovable</SAMP>'.  Thus, all functions such as <CODE>SetPosition()</CODE>,
+<CODE>SetTransform()</CODE>, and so on, have been removed from `<SAMP>csThing</SAMP>' and
+`<SAMP>csSprite</SAMP>'.  Instead there is a function <CODE>GetMovable()</CODE> (both for
+Things and Sprites) which returns the `<SAMP>csMovable</SAMP>' for that object.  There
+is also a new function called <CODE>csMovable::UpdateMove()</CODE>--which resembles
+the original <CODE>csThing::Transform()</CODE> somewhat--which you <EM>must</EM> call
+after updating the position and/or transformation of the movable which belongs
+to the object.
+</P><P>
+
+In addition to the changes related to `<SAMP>csMovable</SAMP>' the linked list of sky
+and thing objects in a sector has also been replaced by a `<SAMP>csVector</SAMP>' and
+things are now also kept in a global list in the `<SAMP>csWorld</SAMP>', just like
+sprites.  This means that sprites and things look a lot more like each other
+now with regards to movement and placement in sectors.  This means that
+functions such as <CODE>AddThing()</CODE>, <CODE>GetNumThings()</CODE>,
+<CODE>RemoveThing()</CODE> and <CODE>GetFirstThing()</CODE> are now gone, as are the
+similar methods for sky objects.  Instead, you should work through the new
+public `<SAMP>skies</SAMP>' and `<SAMP>things</SAMP>' vectors.  In addition to this the
+<CODE>GetNext()</CODE> and <CODE>GetParent()</CODE> functions have been removed from
+`<SAMP>csPolygonSet</SAMP>'.
+</P><P>
+
+Given the old code to operate on things:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csThing* thing = new csThing(world);
+sector-&#62;AddThing(thing);
+thing-&#62;SetPosition(csVector3(0,0,3));
+thing-&#62;SetTransform(csMatrix3());
+thing-&#62;Transform();
+<small>...</small>
+sector-&#62;RemoveThing(thing);
+delete thing;
+</pre></td></tr></table></P><P>
+
+It will need to be converted to the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csThing* thing = new csThing(world);
+world-&#62;things.Push(thing);
+csMovable&#38; move = thing-&#62;GetMovable();
+move.SetSector(sector);
+move.SetPosition(csVector3(0,0,3));
+move.SetTransform(csMatrix3());
+move.UpdateMove();
+<small>...</small>
+world-&#62;RemoveThing(thing);
+</pre></td></tr></table></P><P>
+
+Given the old to operate on sprites:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSprite3D* sprite = new csSprite3D(world);
+world-&#62;sprites.Push(sprite);
+sprite-&#62;MoveToSector(sector);
+sprite-&#62;SetPosition(csVector3(0,0,3));
+sprite-&#62;SetTransform(csMatrix3());
+</pre></td></tr></table></P><P>
+
+It will need to be transformed to:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSprite3D* sprite = new csSprite3D(world);
+world-&#62;sprites.Push(sprite);
+csMovable&#38; move = sprite-&#62;GetMovable();
+move.SetSector(sector);
+move.SetPosition(csVector3(0,0,3));
+move.SetTransform(csMatrix3());
+move.UpdateMove();
+</pre></td></tr></table></P><P>
+
+Especially note the new call to <CODE>UpdateMove()</CODE>.
+</P><P>
+
+<A NAME="SEC939"></A>
+<H3> API Changes: csCamera </H3>
+<!--docid::SEC939::-->
+<P>
+
+The function <CODE>SetFOV()</CODE> now needs an extra parameter which is the width
+of the display.  This is needed for calculating the angle of the FOV
+(<EM>field of view</EM>).  In addition, there are now new <CODE>SetFOVAngle()</CODE>
+and <CODE>GetFOVAngle()</CODE> functions.  <CODE>GetFOVAngle()</CODE> used to be in
+<CODE>csRenderView()</CODE>.
+</P><P>
+
+<A NAME="SEC940"></A>
+<H3> API Changes: csWorld </H3>
+<!--docid::SEC940::-->
+<P>
+
+Here is a list of the more significant API changes to `<SAMP>csWorld</SAMP>'.
+</P><P>
+
+<UL>
+<LI>
+Added <CODE>csWorld::FindLight(char const* name)</CODE>.
+<P>
+
+<LI>
+Removed <CODE>csWorld::NewSector()</CODE>.  Use <CODE>world-&#62;CreateCsSector()</CODE>
+instead.
+<P>
+
+<LI>
+Removed <CODE>csWorld::GetThing()</CODE>.  Use <CODE>world-&#62;things.FindByName()</CODE>
+instead.
+<P>
+
+<LI>
+Removed the method <CODE>csWorld::GetSpriteTemplate()</CODE>.  Instead, use this
+expression: <CODE>world-&#62;sprite_templates.FindByName()</CODE>
+<P>
+
+<LI>
+Removed the method <CODE>csWorld::GetThingTemplate()</CODE>.  Instead, use this
+expression: <CODE>world-&#62;thing_templates.FindByName()</CODE> instead.
+<P>
+
+<LI>
+Added <CODE>csWorld::UnlinkCollection()</CODE> and
+<CODE>csWorld::RemoveCollection()</CODE>.
+<P>
+
+<LI>
+Added <CODE>csWorld::GetBeginDrawFlags()</CODE>.  This is a very important function
+that you <EM>must</EM> invoke when calling <CODE>iGraphics3D::BeginDraw()</CODE> in
+your application just before you give control to the engine for drawing.
+</UL>
+<P>
+
+<A NAME="Index"></A>
+<HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC927"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html"> &gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC922"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC941"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC941"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC937">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC941">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
