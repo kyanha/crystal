@@ -38,86 +38,87 @@
 00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CANVAS_COMMON_DRAW_LINE_H__</span>
 00022 <span class="preprocessor"></span>
 00023 <span class="preprocessor">#include "draw_common.h"</span>
-00024 
-00025 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel, <span class="keyword">class</span> Tpixmixer&gt;
-00026 <span class="keyword">class </span>csG2DDrawLine
-00027 {
-00028 <span class="keyword">public</span>:
-00029   <span class="keyword">static</span> <span class="keywordtype">void</span> DrawLine (<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* G2D, <span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2,
-00030     Tpixel color, <a class="code" href="group__util.html#ga0">uint8</a> alpha)
-00031   {
-00032     Tpixmixer mixer (G2D, color, alpha);
-00033     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* Memory = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o6">Memory</a>;
-00034     <span class="keyword">const</span> <span class="keywordtype">int</span>* LineAddress = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o8">LineAddress</a>;
-00035 
-00036     <span class="keywordtype">int</span> fx1 = <a class="code" href="group__floating__point.html#ga0">csQint</a> (x1), fx2 = <a class="code" href="group__floating__point.html#ga0">csQint</a> (x2),
-00037         fy1 = <a class="code" href="group__floating__point.html#ga0">csQint</a> (y1), fy2 = <a class="code" href="group__floating__point.html#ga0">csQint</a> (y2);
-00038     
-00039     <span class="keywordflow">if</span> (fy1 == fy2)
-00040     {
-00041       <span class="keywordflow">if</span> (fx2 - fx1)
-00042       {
-00043         <span class="keywordflow">if</span> (fx1 &gt; fx2) { <span class="keywordtype">int</span> tmp = fx1; fx1 = fx2; fx2 = tmp; }
-00044         <span class="keywordtype">int</span> count = fx2 - fx1 + 1;
-00045         <span class="keyword">register</span> Tpixel* dest = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (fx1, fy1);
-00046         <span class="keywordflow">while</span> (count--) mixer.Mix (*dest++);
-00047       }
-00048       <span class="keywordflow">else</span>
-00049         mixer.Mix (*((Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (fx1, fy1)));
-00050     }
-00051     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (abs (fx2 - fx1) &gt; abs (fy2 - fy1))
-00052     {
-00053       <span class="comment">// Transform floating-point format to 16.16 fixed-point</span>
-00054       fy1 = <a class="code" href="group__floating__point.html#ga3">csQint16</a> (y1); fy2 = <a class="code" href="group__floating__point.html#ga3">csQint16</a> (y2);
-00055   
-00056       <span class="keywordflow">if</span> (fx1 &gt; fx2)
-00057       {
-00058         <span class="keywordtype">int</span> tmp = fx1; fx1 = fx2; fx2 = tmp;
-00059         tmp = fy1; fy1 = fy2; fy2 = tmp;
-00060       }
-00061   
-00062       <span class="comment">// delta Y can be negative</span>
-00063       <span class="keywordtype">int</span> deltay = (fy2 - fy1) / (fx2 - fx1 + 1);
-00064   
-00065       {                                                         
-00066         <span class="keywordtype">int</span> x, y;                                               
-00067         <span class="keywordflow">for</span> (x = fx1, y = fy1 + deltay / 2; x &lt;= fx2; x++)      
-00068         {                                                               
-00069           Tpixel* p = (Tpixel*)(Memory +                        
-00070             (x * <span class="keyword">sizeof</span> (Tpixel) + LineAddress [y &gt;&gt; 16]));     
-00071           mixer.Mix (*p); y += deltay;                                  
-00072         }                                                               
-00073       }
-00074     }
-00075     <span class="keywordflow">else</span>
-00076     {
-00077       <span class="comment">// Transform floating-point format to 16.16 fixed-point</span>
-00078       fx1 = <a class="code" href="group__floating__point.html#ga3">csQint16</a> (x1); fx2 = <a class="code" href="group__floating__point.html#ga3">csQint16</a> (x2);
-00079   
-00080       <span class="keywordflow">if</span> (fy1 &gt; fy2)
-00081       {
-00082         <span class="keywordtype">int</span> tmp = fy1; fy1 = fy2; fy2 = tmp;
-00083         tmp = fx1; fx1 = fx2; fx2 = tmp;
-00084       }
-00085   
-00086       <span class="comment">// delta X can be negative</span>
-00087       <span class="keywordtype">int</span> deltax = (fx2 - fx1) / (fy2 - fy1 + 1);
-00088   
-00089       {                             
-00090         <span class="keywordtype">int</span> x, y; 
-00091         <span class="keywordflow">for</span> (x = fx1 + deltax / 2, y = fy1; y &lt;= fy2; y++)  
-00092         {                               
-00093           Tpixel* p = (Tpixel*)(Memory +             
-00094             ((x &gt;&gt; 16) * <span class="keyword">sizeof</span> (Tpixel) + LineAddress [y]));  
-00095           mixer.Mix (*p); x += deltax;                  
-00096         }                               
-00097       }
-00098     }
-00099     
-00100   }
-00101 };
-00102 
-00103 <span class="preprocessor">#endif // __CS_CANVAS_COMMON_DRAW_LINE_H__</span>
+00024 <span class="preprocessor">#include "<a class="code" href="csqint_8h.html">csqint.h</a>"</span>
+00025 
+00026 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel, <span class="keyword">class</span> Tpixmixer&gt;
+00027 <span class="keyword">class </span>csG2DDrawLine
+00028 {
+00029 <span class="keyword">public</span>:
+00030   <span class="keyword">static</span> <span class="keywordtype">void</span> DrawLine (<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* G2D, <span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2,
+00031     Tpixel color, <a class="code" href="group__util.html#ga0">uint8</a> alpha)
+00032   {
+00033     Tpixmixer mixer (G2D, color, alpha);
+00034     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* Memory = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o6">Memory</a>;
+00035     <span class="keyword">const</span> <span class="keywordtype">int</span>* LineAddress = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o8">LineAddress</a>;
+00036 
+00037     <span class="keywordtype">int</span> fx1 = <a class="code" href="group__floating__point.html#ga0">csQint</a> (x1), fx2 = <a class="code" href="group__floating__point.html#ga0">csQint</a> (x2),
+00038         fy1 = <a class="code" href="group__floating__point.html#ga0">csQint</a> (y1), fy2 = <a class="code" href="group__floating__point.html#ga0">csQint</a> (y2);
+00039     
+00040     <span class="keywordflow">if</span> (fy1 == fy2)
+00041     {
+00042       <span class="keywordflow">if</span> (fx2 - fx1)
+00043       {
+00044         <span class="keywordflow">if</span> (fx1 &gt; fx2) { <span class="keywordtype">int</span> tmp = fx1; fx1 = fx2; fx2 = tmp; }
+00045         <span class="keywordtype">int</span> count = fx2 - fx1 + 1;
+00046         <span class="keyword">register</span> Tpixel* dest = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (fx1, fy1);
+00047         <span class="keywordflow">while</span> (count--) mixer.Mix (*dest++);
+00048       }
+00049       <span class="keywordflow">else</span>
+00050         mixer.Mix (*((Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (fx1, fy1)));
+00051     }
+00052     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (abs (fx2 - fx1) &gt; abs (fy2 - fy1))
+00053     {
+00054       <span class="comment">// Transform floating-point format to 16.16 fixed-point</span>
+00055       fy1 = <a class="code" href="group__floating__point.html#ga3">csQint16</a> (y1); fy2 = <a class="code" href="group__floating__point.html#ga3">csQint16</a> (y2);
+00056   
+00057       <span class="keywordflow">if</span> (fx1 &gt; fx2)
+00058       {
+00059         <span class="keywordtype">int</span> tmp = fx1; fx1 = fx2; fx2 = tmp;
+00060         tmp = fy1; fy1 = fy2; fy2 = tmp;
+00061       }
+00062   
+00063       <span class="comment">// delta Y can be negative</span>
+00064       <span class="keywordtype">int</span> deltay = (fy2 - fy1) / (fx2 - fx1 + 1);
+00065   
+00066       {                                                         
+00067         <span class="keywordtype">int</span> x, y;                                               
+00068         <span class="keywordflow">for</span> (x = fx1, y = fy1 + deltay / 2; x &lt;= fx2; x++)      
+00069         {                                                               
+00070           Tpixel* p = (Tpixel*)(Memory +                        
+00071             (x * <span class="keyword">sizeof</span> (Tpixel) + LineAddress [y &gt;&gt; 16]));     
+00072           mixer.Mix (*p); y += deltay;                                  
+00073         }                                                               
+00074       }
+00075     }
+00076     <span class="keywordflow">else</span>
+00077     {
+00078       <span class="comment">// Transform floating-point format to 16.16 fixed-point</span>
+00079       fx1 = <a class="code" href="group__floating__point.html#ga3">csQint16</a> (x1); fx2 = <a class="code" href="group__floating__point.html#ga3">csQint16</a> (x2);
+00080   
+00081       <span class="keywordflow">if</span> (fy1 &gt; fy2)
+00082       {
+00083         <span class="keywordtype">int</span> tmp = fy1; fy1 = fy2; fy2 = tmp;
+00084         tmp = fx1; fx1 = fx2; fx2 = tmp;
+00085       }
+00086   
+00087       <span class="comment">// delta X can be negative</span>
+00088       <span class="keywordtype">int</span> deltax = (fx2 - fx1) / (fy2 - fy1 + 1);
+00089   
+00090       {                             
+00091         <span class="keywordtype">int</span> x, y; 
+00092         <span class="keywordflow">for</span> (x = fx1 + deltax / 2, y = fy1; y &lt;= fy2; y++)  
+00093         {                               
+00094           Tpixel* p = (Tpixel*)(Memory +             
+00095             ((x &gt;&gt; 16) * <span class="keyword">sizeof</span> (Tpixel) + LineAddress [y]));  
+00096           mixer.Mix (*p); x += deltax;                  
+00097         }                               
+00098       }
+00099     }
+00100     
+00101   }
+00102 };
+00103 
+00104 <span class="preprocessor">#endif // __CS_CANVAS_COMMON_DRAW_LINE_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.6 
 </small></address> </div></body> </html>
