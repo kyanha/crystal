@@ -242,6 +242,10 @@ SOURCE=..\..\libs\csgeom\quaterni.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\solidspace.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\sphere.cpp
 # End Source File
 # Begin Source File
@@ -423,6 +427,10 @@ SOURCE=..\..\libs\csgeom\..\..\include\csgeom\quaterni.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\..\..\include\csgeom\segment.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\solidspace.h
 # End Source File
 # Begin Source File
 
