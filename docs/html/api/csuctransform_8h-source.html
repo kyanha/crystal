@@ -594,66 +594,66 @@
 00709     }
 00710   }
 00711   
-<a name="l00721"></a><a class="code" href="classcsUnicodeTransform.html#z113_1">00721</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_1">UTF8Rewind</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a11">utf8_char</a>* str, size_t maxRew)
-00722   {
-00723     <span class="keywordflow">if</span> (maxRew &lt; 1) <span class="keywordflow">return</span> 0;
-00724     
-00725     <span class="keyword">const</span> <a class="code" href="group__util.html#a11">utf8_char</a>* pos = str - 1;
-00726     
-00727     <span class="keywordflow">if</span> ((*pos &amp; 0x80) == 0)
-00728     {
-00729       <span class="keywordflow">return</span> 1;
-00730     }
-00731     
-00732     <span class="comment">// Skip backward to the first byte of the sequence.</span>
-00733     <span class="keywordtype">int</span> skip = 1;
-00734     <span class="keywordflow">while</span> (((*pos &amp; 0xc0) == 0x80) &amp;&amp; ((size_t)skip &lt; maxRew))
-00735     {
-00736       skip++;
-00737       pos--;
-00738     }
-00739     
-00740     <span class="keywordflow">return</span> skip;
-00741   }
-00742   
-<a name="l00748"></a><a class="code" href="classcsUnicodeTransform.html#z113_2">00748</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_2">UTF16Skip</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a12">utf16_char</a>* str, size_t maxSkip)
-00749   {
-00750     <span class="keywordflow">if</span> (<a class="code" href="group__util.html#a92">CS_UC_IS_HIGH_SURROGATE</a> (*str))
-00751       <span class="keywordflow">return</span> (int)(MIN(maxSkip, 2));
-00752     <span class="keywordflow">else</span>
-00753       <span class="keywordflow">return</span> (int)(MIN(maxSkip, 1));
-00754   }
-00755   
-<a name="l00761"></a><a class="code" href="classcsUnicodeTransform.html#z113_3">00761</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_3">UTF16Rewind</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a12">utf16_char</a>* str, size_t maxRew)
-00762   {
-00763     <span class="keywordflow">if</span> (maxRew &lt; 1) <span class="keywordflow">return</span> 0;
-00764     
-00765     <span class="keyword">const</span> <a class="code" href="group__util.html#a12">utf16_char</a>* pos = str - 1;
-00766     <span class="keywordflow">if</span> (!<a class="code" href="group__util.html#a91">CS_UC_IS_SURROGATE</a>(*pos)) 
-00767       <span class="keywordflow">return</span> 1;
-00768     <span class="keywordflow">else</span>
-00769     {
-00770       <span class="keywordflow">if</span> ((maxRew &gt; 1) &amp;&amp; (<a class="code" href="group__util.html#a92">CS_UC_IS_HIGH_SURROGATE</a>(*(pos - 1))))
-00771         <span class="keywordflow">return</span> 2;
-00772       <span class="keywordflow">else</span>
-00773         <span class="keywordflow">return</span> 1;
-00774     }
-00775   }
-00776   
-<a name="l00782"></a><a class="code" href="classcsUnicodeTransform.html#z113_4">00782</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_4">UTF32Skip</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a13">utf32_char</a>* str, size_t maxSkip)
-00783   {
-00784     <span class="keywordflow">return</span> (int)(MIN(maxSkip, 1));
-00785   }
-00786 
-<a name="l00792"></a><a class="code" href="classcsUnicodeTransform.html#z113_5">00792</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_5">UTF32Rewind</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a13">utf32_char</a>* str, size_t maxRew)
-00793   {
-00794     <span class="keywordflow">if</span> (maxRew &lt; 1) <span class="keywordflow">return</span> 0;
-00795     <span class="keywordflow">return</span> 1;
-00796   }
-00798 };
-00799 
-00802 <span class="preprocessor">#endif</span>
-00803 <span class="preprocessor"></span>
+<a name="l00722"></a><a class="code" href="classcsUnicodeTransform.html#z113_1">00722</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_1">UTF8Rewind</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a11">utf8_char</a>* str, size_t maxRew)
+00723   {
+00724     <span class="keywordflow">if</span> (maxRew &lt; 1) <span class="keywordflow">return</span> 0;
+00725     
+00726     <span class="keyword">const</span> <a class="code" href="group__util.html#a11">utf8_char</a>* pos = str - 1;
+00727     
+00728     <span class="keywordflow">if</span> ((*pos &amp; 0x80) == 0)
+00729     {
+00730       <span class="keywordflow">return</span> 1;
+00731     }
+00732     
+00733     <span class="comment">// Skip backward to the first byte of the sequence.</span>
+00734     <span class="keywordtype">int</span> skip = 1;
+00735     <span class="keywordflow">while</span> (((*pos &amp; 0xc0) == 0x80) &amp;&amp; ((size_t)skip &lt; maxRew))
+00736     {
+00737       skip++;
+00738       pos--;
+00739     }
+00740     
+00741     <span class="keywordflow">return</span> skip;
+00742   }
+00743   
+<a name="l00749"></a><a class="code" href="classcsUnicodeTransform.html#z113_2">00749</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_2">UTF16Skip</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a12">utf16_char</a>* str, size_t maxSkip)
+00750   {
+00751     <span class="keywordflow">if</span> (<a class="code" href="group__util.html#a92">CS_UC_IS_HIGH_SURROGATE</a> (*str))
+00752       <span class="keywordflow">return</span> (int)(MIN(maxSkip, 2));
+00753     <span class="keywordflow">else</span>
+00754       <span class="keywordflow">return</span> (int)(MIN(maxSkip, 1));
+00755   }
+00756   
+<a name="l00762"></a><a class="code" href="classcsUnicodeTransform.html#z113_3">00762</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_3">UTF16Rewind</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a12">utf16_char</a>* str, size_t maxRew)
+00763   {
+00764     <span class="keywordflow">if</span> (maxRew &lt; 1) <span class="keywordflow">return</span> 0;
+00765     
+00766     <span class="keyword">const</span> <a class="code" href="group__util.html#a12">utf16_char</a>* pos = str - 1;
+00767     <span class="keywordflow">if</span> (!<a class="code" href="group__util.html#a91">CS_UC_IS_SURROGATE</a>(*pos)) 
+00768       <span class="keywordflow">return</span> 1;
+00769     <span class="keywordflow">else</span>
+00770     {
+00771       <span class="keywordflow">if</span> ((maxRew &gt; 1) &amp;&amp; (<a class="code" href="group__util.html#a92">CS_UC_IS_HIGH_SURROGATE</a>(*(pos - 1))))
+00772         <span class="keywordflow">return</span> 2;
+00773       <span class="keywordflow">else</span>
+00774         <span class="keywordflow">return</span> 1;
+00775     }
+00776   }
+00777   
+<a name="l00783"></a><a class="code" href="classcsUnicodeTransform.html#z113_4">00783</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_4">UTF32Skip</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a13">utf32_char</a>* str, size_t maxSkip)
+00784   {
+00785     <span class="keywordflow">return</span> (int)(MIN(maxSkip, 1));
+00786   }
+00787 
+<a name="l00793"></a><a class="code" href="classcsUnicodeTransform.html#z113_5">00793</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsUnicodeTransform.html#z113_5">UTF32Rewind</a> (<span class="keyword">const</span> <a class="code" href="group__util.html#a13">utf32_char</a>* str, size_t maxRew)
+00794   {
+00795     <span class="keywordflow">if</span> (maxRew &lt; 1) <span class="keywordflow">return</span> 0;
+00796     <span class="keywordflow">return</span> 1;
+00797   }
+00799 };
+00800 
+00803 <span class="preprocessor">#endif</span>
+00804 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
