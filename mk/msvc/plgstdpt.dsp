@@ -60,7 +60,7 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /OPT:NOREF /dll /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /OPT:NOREF /dll /out:"..\..\stdpt.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -92,7 +92,7 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\stdpt.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -124,7 +124,7 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /OPT:NOREF /dll /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /OPT:NOREF /dll /out:"..\..\stdpt.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -156,7 +156,7 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\stdpt.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -188,7 +188,7 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\stdpt.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -220,7 +220,7 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\stdpt.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -240,11 +240,27 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\proctex\standard\dots.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\proctex\standard\fire.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\proctex\standard\plasma.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\sky.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\proctex\standard\stdproctex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\water.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -252,11 +268,27 @@ SOURCE=..\..\plugins\proctex\standard\stdproctex.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\proctex\standard\dots.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\proctex\standard\fire.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\proctex\standard\plasma.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\sky.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\proctex\standard\stdproctex.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\water.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
