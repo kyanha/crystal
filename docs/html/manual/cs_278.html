@@ -26,13 +26,13 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A NAME="SEC819"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC824"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC825"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC947"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC948"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC947">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC948">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
@@ -60,7 +60,7 @@ in nothing more than simple-looking compiler warnings. However, it may have
 caused <EM>semantics</EM> to change subtly.
 </P><P>
 
-This has the greatest impact in the following areas:
+This has the greatest impact in the following areas discussed below.
 </P><P>
 
 <A NAME="SEC821"></A>
@@ -104,8 +104,8 @@ If the `<SAMP>int</SAMP>' is changed simply to a `<SAMP>size_t</SAMP>', this
 <CODE>for</CODE>-loop misbehaves unexpectedly. When `<SAMP>i</SAMP>' becomes 0, the body 
 of the loop is executed correctly. However, decrementing `<SAMP>i</SAMP>' will 
 <STRONG>not</STRONG> cause `<SAMP>i</SAMP>' to have a negative value--after all, `<SAMP>size_t</SAMP>'
-is unsigned. Instead, decreasing will make `<SAMP>i</SAMP>' wrap around from 0 to
-something like 0xffffffff (on 32-bit machines). Clearly, this is greater
+is unsigned. Instead, decrementing will make `<SAMP>i</SAMP>' wrap around from 0 to
+0xffffffff (on 32-bit machines). Clearly, this is greater
 than 0, effectively causing an infinite loop. The same thing also happens when
 `<SAMP>a</SAMP>' has no items (i.e. `<SAMP>a.Length() == 0</SAMP>'). Here the
 -1 in the initialization of `<SAMP>i</SAMP>' causes wrap-around.
@@ -176,7 +176,7 @@ else
 }
 </pre></td></tr></table></P><P>
 
-Has to be replaced with:
+Must be replaced with:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>csArray&#60;<small>...</small>&#62; a;
@@ -194,40 +194,106 @@ else
 </pre></td></tr></table></P><P>
 
 <A NAME="SEC823"></A>
-<H3> Texture and Material preparation </H3>
+<H3> Texture and Material Preparation </H3>
 <!--docid::SEC823::-->
 <P>
 
-Texture and material preparation is now fully automatic. It is no
-longer needed to <EM>prepare</EM> a texture or a material before you can use
-it. It is sufficient to just register the texture or material. This means
-that the following functions are removed (and you can just remove them from
-your applications if you use them):
+Texture and material preparation is now fully automatic. It is no longer
+necessary to <EM>prepare</EM> a texture or a material before you can use it. It is
+sufficient simply to register the texture or material. This means that the
+following functions have been removed (and you can just remove invocations of
+them from your applications if you used them):
 </P><P>
 
 <UL>
 <LI>
-<CODE>iTextureHandle::Prepare()</CODE>
-<LI>
 <CODE>iMaterialHandle::Prepare()</CODE>
 <LI>
-<CODE>iTextureManager::PrepareTextures()</CODE>
+<CODE>iTextureHandle::Prepare()</CODE>
 <LI>
 <CODE>iTextureManager::PrepareMaterials()</CODE>
+<LI>
+<CODE>iTextureManager::PrepareTextures()</CODE>
 </UL>
 <P>
 
+<A NAME="SEC824"></A>
+<H3> Pollution Reduction </H3>
+<!--docid::SEC824::-->
+<P>
+
+The following global header files have been renamed in order to avoid possible
+conflict with headers installed by other packages.
+</P><P>
+
+<UL>
+<LI>
+<CODE>platform.h</CODE> => <CODE>csplatform.h</CODE>
+<LI>
+<CODE>qint.h</CODE> => <CODE>csqint.h</CODE>
+<LI>
+<CODE>qsqrt.h</CODE> => <CODE>csqsqrt.h</CODE>
+<LI>
+<CODE>volatile.h</CODE> => <CODE>csconfig.h</CODE>
+</UL>
+<P>
+
+The following symbols have been renamed in order to avoid pollution of the
+global namespace.
+</P><P>
+
+<UL>
+<LI>
+<CODE>QInt</CODE> => <CODE>csQint()</CODE>
+<LI>
+<CODE>QInt8</CODE> => <CODE>csQint8()</CODE>
+<LI>
+<CODE>QInt16</CODE> => <CODE>csQint16()</CODE>
+<LI>
+<CODE>QInt24</CODE> => <CODE>csQint24()</CODE>
+<LI>
+<CODE>qisqrt</CODE> => <CODE>csQisqrt()</CODE>
+<LI>
+<CODE>qsqrt</CODE> => <CODE>csQsqrt()</CODE>
+<LI>
+<CODE>QRound</CODE> => <CODE>csQround()</CODE>
+<LI>
+<CODE>COMP_BC</CODE> => <CODE>CS_COMPILER_BCC</CODE>
+<LI>
+<CODE>COMP_GCC</CODE> => <CODE>CS_COMPILER_GCC</CODE>
+<LI>
+<CODE>COMP_VC</CODE> => <CODE>CS_COMPILER_MSVC</CODE>
+<LI>
+<CODE>DO_MMX</CODE> => <CODE>CS_USE_MMX</CODE>
+<LI>
+<CODE>DO_NASM</CODE> => <CODE>CS_USE_NASM</CODE>
+<LI>
+<CODE>OS_DOS</CODE> => <CODE>CS_PLATFORM_DOS</CODE>
+<LI>
+<CODE>OS_MACOSX</CODE> => <CODE>CS_PLATFORM_MACOSX</CODE>
+<LI>
+<CODE>OS_UNIX</CODE> => <CODE>CS_PLATFORM_UNIX</CODE>
+<LI>
+<CODE>OS_WIN32</CODE> => <CODE>CS_PLATFORM_WIN32</CODE>
+<LI>
+<CODE>PROC_FOO</CODE> => <CODE>CS_PROCESSOR_FOO</CODE> (where `<SAMP>FOO</SAMP>' is
+`<SAMP>X86</SAMP>', `<SAMP>M68K</SAMP>', etc.)
+<LI>
+<CODE>CS_PROCSIZE</CODE> => <CODE>CS_PROCESSOR_SIZE</CODE>
+<LI>
+<CODE>WIN32_VOLATILE</CODE> => <CODE>CS_WIN32_CSCONFIG</CODE>
+</UL>
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC824"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC825"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC947"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC948"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC947">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC948">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
