@@ -868,6 +868,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\plugmgr.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\..\..\include\csutil\pooledscfclass.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\..\..\include\csutil\prfxcfg.h
 # End Source File
 # Begin Source File
