@@ -36,28 +36,30 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 6.1.1 <CODE>csObject</CODE> </H3>
+<H3> 6.1.1 `<SAMP>csObject</SAMP>' </H3>
 <!--docid::SEC6.1.1::-->
 <P>
 
-The <CODE>csObject</CODE> class can be used to build object hierarchies. It supports
+The `<SAMP>csObject</SAMP>' class can be used to build object hierarchies. It supports
 building a simple tree structure. To use this functionality, you should derive
-your classes from <CODE>csObject</CODE>. <CODE>csObject</CODE> implements the
-<CODE>iObject</CODE> interface and can store any number of <CODE>iObject</CODE> children.
-Furthermore, every <CODE>csObject</CODE> has a name.
+your classes from `<SAMP>csObject</SAMP>'. `<SAMP>csObject</SAMP>' implements the
+`<SAMP>iObject</SAMP>' interface and can store any number of `<SAMP>iObject</SAMP>' children.
+Furthermore, every `<SAMP>csObject</SAMP>' may have a name.
 </P><P>
 
-All child objects are <CODE>IncRef</CODE>'ed when added and <CODE>DecRef</CODE>'ed when
+All child objects are <CODE>IncRef()</CODE>'ed when added and <CODE>DecRef()</CODE>'ed when
 removed. An object also stores a pointer to its parent (which is not
 reference-counted to avoid circular references). Note that this pointer will
 always point to the last parent if the object is added to more than one
 parent. When the object is removed from a parent, the pointer is set to
-<CODE>0</CODE>, even if the object is still a child of another parent!
+null, even if the object is still a child of another parent!
 </P><P>
 
-Although the children of an object are only available as <CODE>iObject</CODE>'s,
-you can use <CODE>SCF_QUERY_INTERFACE</CODE> to query other interfaces from them.
-Some convenience macros are also available:
+Although the children of an object are only available as `<SAMP>iObject</SAMP>'
+instances, you can use <CODE>SCF_QUERY_INTERFACE()</CODE> to query other interfaces
+from them.  Some convenience macros are also available:
+</P><P>
+
 <DL COMPACT>
 <DT><CODE>CS_GET_CHILD_OBJECT(object,Interface)</CODE>
 <DD>Get the first child object that implements the given interface.
@@ -75,12 +77,14 @@ multiple objects with the same name correctly.
 it does not implement the requested interface (in that case, <CODE>0</CODE> is
 returned). This is slightly faster.
 </DL>
-Note that all these macros increase the reference count of the returned
-object by 1.
 <P>
 
+Note that all these macros increase the reference count of the returned
+object by 1.
+</P><P>
+
 Note that there are a few HOWTO's describing possible uses for the
-<CODE>csObject</CODE> system (see section <A HREF="cs_5.8.13.html#SEC5.8.13">5.8.13 Attaching User Objects to CS Objects</A> and
+`<SAMP>csObject</SAMP>' system (see section <A HREF="cs_5.8.13.html#SEC5.8.13">5.8.13 Attaching User Objects to CS Objects</A> and
 see section <A HREF="cs_5.8.14.html#SEC5.8.14">5.8.14 Attaching User Objects to CS Objects in a map file</A>).
 </P><P>
 

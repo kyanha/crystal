@@ -483,35 +483,63 @@ clients of those headers.
 </P><P>
 
 <A NAME="SEC_8"></A>
-<H3> Convenience Libraries </H3>
+<H3> Library Consolidation </H3>
 <!--docid::SEC_8::-->
 <P>
 
-Crystal Space now publishes several convenience libraries which eliminate much
-of the drudgery associated with implementing SCF interfaces in certain
-types of common plugin modules. For example, the `<SAMP>csGraphics2D</SAMP>' class in
-the new `<TT>csplugincommon</TT>' library implements the `<SAMP>iGraphics2D</SAMP>'
-interface and provides much of the functionality common to most canvases.
-Likewise, the `<SAMP>csGraphics3D</SAMP>' class implements the `<SAMP>iGraphics3D</SAMP>'
-interface and provides much functionality common to renderers. You are not
-required to utilize these implementations when authoring your own plugins, but
-they are available for your convenience.
+In order to simplify end-user documentation and client usage, the Crystal Space
+link libraries `<TT>csutil</TT>', `<TT>csgeom</TT>', `<TT>csgfx</TT>', and `<TT>cstool</TT>'
+have been merged into a single master library named `<TT>crystalspace</TT>' 
+(i.e. `<TT>libcrystalspace.a</TT>' or `<SAMP>crystalspace.lib</SAMP>').
 </P><P>
 
-The new convenience libraries are:
+The tools `<SAMP>cs-config</SAMP>' and `<SAMP>jamtemplate</SAMP>' (see section <A HREF="cs_5.8.15.html#SEC5.8.15">5.8.15 Creating an External Crystal Space Application</A>),
+documentation, and all other client-oriented utilities have been updated
+appropriately to reflect this change. If you had installed Crystal Space
+previously, you should manually removed the now obsolete installed libraries
+from the installation location (typically, `<TT>${prefix}/lib</TT>').
+</P><P>
+
+Developers of Crystal Space itself should note that the sources and headers
+continue to reside in their separate `<TT>csutil</TT>', `<TT>csgeom</TT>', etc.,
+directories; and (importantly) the modules themselves remain conceptually
+distinct. This will not change. The consolidation of the physical link library
+was an end-user convenience.
+</P><P>
+
+<A NAME="SEC_9"></A>
+<H3> Convenience Classes and Libraries </H3>
+<!--docid::SEC_9::-->
+<P>
+
+Crystal Space now publishes several convenience classes and libraries which
+eliminate much of the drudgery associated with implementing SCF interfaces
+in certain types of common plugin modules. For example, the `<SAMP>csGraphics2D</SAMP>'
+class implements the `<SAMP>iGraphics2D</SAMP>' interface and provides much of the
+functionality common to most canvases.  Likewise, the `<SAMP>csGraphics3D</SAMP>' class
+implements the `<SAMP>iGraphics3D</SAMP>' interface and provides much functionality
+common to renderers. You are not required to utilize these implementations when
+authoring your own plugins, but they are available for your convenience.
+</P><P>
+
+Most of these newly published facilities are bundled in the consolidated master
+`<TT>crystalspace</TT>' library, but a few are provided in separate libraries
+because they rely upon external resources which may not be present on all
+platforms or in all installations. The convenience libraries are:
 </P><P>
 
 <DL COMPACT>
-<DT><CODE>csplugincommon</CODE>
-<DD>Canvas, image loader, particle system, renderer, shader, sound loader,
-and sound renderer support.
-<DT><CODE>csplugincommon_dx</CODE>
+<DT><CODE>crystalspace</CODE>
+<DD>Canvas, image loader, particle system, renderer, shader, sound loader, and
+sound renderer support, in addition to the normal Crystal Space classes and
+utilities.
+<DT><CODE>crystalspace_directx</CODE>
 <DD>DirectX support.
-<DT><CODE>csplugincommon_osx</CODE>
+<DT><CODE>crystalspace_macosx</CODE>
 <DD>MacOS/X canvas support.
-<DT><CODE>csplugincommon_ogl</CODE>
+<DT><CODE>crystalspace_opengl</CODE>
 <DD>OpenGL support.
-<DT><CODE>csplugincommon_w32</CODE>
+<DT><CODE>crystalspace_windows</CODE>
 <DD>Windows support.
 </DL>
 <P>
@@ -520,9 +548,9 @@ For a complete list of available convenience classes, consult the header files
 in the subdirectories of `<TT>CS/include/csplugincommon</TT>'.
 </P><P>
 
-<A NAME="SEC_9"></A>
+<A NAME="SEC_10"></A>
 <H3> Convenience Headers </H3>
-<!--docid::SEC_9::-->
+<!--docid::SEC_10::-->
 <P>
 
 For convenience, several top-level <EM>master header</EM> files have been added to
@@ -544,8 +572,6 @@ follows.
 <DD>Content of `<TT>CS/include/cstool</TT>'.
 <DT><CODE>csutil.h</CODE>
 <DD>Content of `<TT>CS/include/csutil</TT>'.
-<DT><CODE>csws.h</CODE>
-<DD>Content of `<TT>CS/include/csws</TT>'.
 <DT><CODE>iaws.h</CODE>
 <DD>Content of `<TT>CS/include/iaws</TT>'.
 <DT><CODE>iengine.h</CODE>
@@ -633,14 +659,14 @@ include directories</EM> and <EM>additional library directories</EM>, in the pro
 settings or globally, to ensure that MSVC will be able to find them.
 </P><P>
 
-<A NAME="SEC_10"></A>
+<A NAME="SEC_11"></A>
 <H3> Procedural Texture Relocation </H3>
-<!--docid::SEC_10::-->
+<!--docid::SEC_11::-->
  
 Implementations of the standard procedural textures (dots, fire, plasma, etc.)
 now reside directly in the `<TT>stdpt</TT>' plugin
 (`<TT>CS/plugins/proctex/standard</TT>'), rather than in the `<TT>cstool</TT>'
-library. Consequently, the following previously public headers are no longer
+module. Consequently, the following previously public headers are no longer
 available:
  
 <UL>
@@ -679,9 +705,9 @@ textures. In the example above, the "fire" texture implements the specialized
 `<SAMP>iFireTexture</SAMP>'.
 <P>
 
-<A NAME="SEC_11"></A>
+<A NAME="SEC_12"></A>
 <H3> Joystick Corrections </H3>
-<!--docid::SEC_11::-->
+<!--docid::SEC_12::-->
 <P>
 
 The implementation of `<SAMP>iJoystickDriver</SAMP>' has been fixed to treat joystick
@@ -692,9 +718,9 @@ considered them 1-based.  It now uniformly treats joystick numbers as
 are also 1-based.
 </P><P>
 
-<A NAME="SEC_12"></A>
+<A NAME="SEC_13"></A>
 <H3> <CODE>iGraphics2D</CODE> Alpha Color Support </H3>
-<!--docid::SEC_12::-->
+<!--docid::SEC_13::-->
 <P>
 
 `<SAMP>iGraphics2D</SAMP>' now supports an alpha channel. <CODE>iGraphics2D::FindRGB()</CODE>
@@ -708,9 +734,9 @@ of using `<SAMP>-1</SAMP>' as the color value, to obtain a color value from
 but an alpha component of 0.
 </P><P>
 
-<A NAME="SEC_13"></A>
+<A NAME="SEC_14"></A>
 <H3> `<TT>csutil/garray.h</TT>' Deprecated </H3>
-<!--docid::SEC_13::-->
+<!--docid::SEC_14::-->
 <P>
 
 The `<TT>csutil/garray.h</TT>' file, containing the class 
@@ -719,9 +745,9 @@ file name `<TT>csutil/dirtyaccessarray.h</TT>'. No functional changes have been
 made to the class.
 </P><P>
 
-<A NAME="SEC_14"></A>
+<A NAME="SEC_15"></A>
 <H3> <CODE>csList&#60;&#62;::Iterator</CODE> Normalization </H3>
-<!--docid::SEC_14::-->
+<!--docid::SEC_15::-->
 <P>
 
 The behavior of <CODE>csList&#60;&#62;::Iterator</CODE> has been normalized so that it
@@ -783,9 +809,9 @@ consistent with other iterators throughout the toolkit, in which these methods
 return references.
 </P><P>
 
-<A NAME="SEC_15"></A>
+<A NAME="SEC_16"></A>
 <H3> <CODE>iDocument</CODE> Changes </H3>
-<!--docid::SEC_15::-->
+<!--docid::SEC_16::-->
 <P>
 
 The <CODE>iDocument::Parse()</CODE> method now accepts an optional argument
@@ -809,9 +835,9 @@ for more information regarding this issue.
 <A HREF="http://www.xml.com/axml/notes/AllWSAlways.html">http://www.xml.com/axml/notes/AllWSAlways.html</A>
 </P><P>
 
-<A NAME="SEC_16"></A>
+<A NAME="SEC_17"></A>
 <H3> Naming Normalization </H3>
-<!--docid::SEC_16::-->
+<!--docid::SEC_17::-->
 <P>
 
 The following SCF class names have been normalized in order to be
@@ -987,9 +1013,9 @@ name change.
 </UL>
 <P>
 
-<A NAME="SEC_17"></A>
+<A NAME="SEC_18"></A>
 <H3> Default <CODE>csHash&#60;&#62;</CODE> (and <CODE>csHashReversible&#60;&#62;</CODE>) Table Size </H3>
-<!--docid::SEC_17::-->
+<!--docid::SEC_18::-->
 <P>
 
 The default hash table size and grow rate has been reduced from 257 and 64 to
@@ -999,9 +1025,9 @@ upon construction of a <CODE>csHash&#60;&#62;</CODE> or <CODE>csHashReversible&#
 the Public API Documentation of <CODE>csHash&#60;&#62;</CODE> for more information.
 </P><P>
 
-<A NAME="SEC_18"></A>
+<A NAME="SEC_19"></A>
 <H3> <CODE>iTextureManager::FreeImages()</CODE> Removal </H3>
-<!--docid::SEC_18::-->
+<!--docid::SEC_19::-->
 <P>
 
 <CODE>iTextureManager::FreeImages()</CODE> has been removed.  It was used to release
@@ -1011,9 +1037,9 @@ texture are released by the renderer as soon as the image data is converted
 into the internal texture format (that is, uploaded to the graphics hardware).
 </P><P>
 
-<A NAME="SEC_19"></A>
+<A NAME="SEC_20"></A>
 <H3> Java Bindings  </H3>
-<!--docid::SEC_19::-->
+<!--docid::SEC_20::-->
 <P>
 
 The Java bindings for Crystal Space have been fully integrated into the project
@@ -1028,9 +1054,9 @@ domain name "crystalspace3d.org". This replaces the older package name
 `<SAMP>net.sourceforge.crystal</SAMP>'.
 </P><P>
 
-<A NAME="SEC_20"></A>
+<A NAME="SEC_21"></A>
 <H3> VFS Changes </H3>
-<!--docid::SEC_20::-->
+<!--docid::SEC_21::-->
 <P>
 
 At initialization time, VFS now merges all `<TT>vfs.cfg</TT>' files located
@@ -1047,9 +1073,9 @@ configuration files discovered earlier in the scan take precedence over those
 discovered later.
 </P><P>
 
-<A NAME="SEC_21"></A>
+<A NAME="SEC_22"></A>
 <H3> <CODE>iEvent</CODE> Changes </H3>
-<!--docid::SEC_21::-->
+<!--docid::SEC_22::-->
 <P>
 
 The <CODE>iEvent::Find()</CODE> method was renamed to <CODE>Retrieve()</CODE> and exhibits
@@ -1079,9 +1105,9 @@ must be changed to perform an explicit test on the return value of
 }
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC_22"></A>
+<A NAME="SEC_23"></A>
 <H3> Old Renderer Architecture Removed </H3>
-<!--docid::SEC_22::-->
+<!--docid::SEC_23::-->
 <P>
 
 The old rendering architecture along with the old renderer plugins have been
@@ -1090,9 +1116,9 @@ been deprecated because they are not applicable to the new rendering
 architecture. The results of the old renderer removal are summarized below.
 </P><P>
 
-<A NAME="SEC_23"></A>
+<A NAME="SEC_24"></A>
 <H4> Removed plugins </H4>
-<!--docid::SEC_23::-->
+<!--docid::SEC_24::-->
 <P>
 
 The following plugin modules have been removed:
@@ -1110,9 +1136,9 @@ Old <CODE>null3d</CODE> (`<TT>plugins/video/renderer/null</TT>')
 </UL>
 <P>
 
-<A NAME="SEC_24"></A>
+<A NAME="SEC_25"></A>
 <H4> Removed Application </H4>
-<!--docid::SEC_24::-->
+<!--docid::SEC_25::-->
 <P>
 
 The `<SAMP>perftest</SAMP>' application has been removed, since it is no longer has any
@@ -1120,9 +1146,9 @@ purpose.  For the future the `<SAMP>csbench</SAMP>' application should be extend
 provide more information.
 </P><P>
 
-<A NAME="SEC_25"></A>
+<A NAME="SEC_26"></A>
 <H4> Removed and Renamed Files </H4>
-<!--docid::SEC_25::-->
+<!--docid::SEC_26::-->
 <P>
 
 The following files were removed:
@@ -1152,9 +1178,9 @@ The following files in `<TT>data/shader</TT>' were renamed:
 </UL>
 <P>
 
-<A NAME="SEC_26"></A>
+<A NAME="SEC_27"></A>
 <H4> Removed Methods and Classes </H4>
-<!--docid::SEC_26::-->
+<!--docid::SEC_27::-->
 <P>
 
 The following methods have been removed from the `<SAMP>iGraphics3D</SAMP>' interface:
@@ -1232,9 +1258,9 @@ removed or have become private, and are no longer available to client code:
 </UL>
 <P>
 
-<A NAME="SEC_27"></A>
+<A NAME="SEC_28"></A>
 <H3> Query Macros </H3>
-<!--docid::SEC_27::-->
+<!--docid::SEC_28::-->
 <P>
 
 The macro <CODE>CS_QUERY_REGISTRY_PLUGIN()</CODE> has been added to
@@ -1246,9 +1272,9 @@ the object with the object-registry if the plugin manager loads it
 successfully.
 </P><P>
 
-<A NAME="SEC_28"></A>
+<A NAME="SEC_29"></A>
 <H3> Random Number Generator Changes </H3>
-<!--docid::SEC_28::-->
+<!--docid::SEC_29::-->
 <P>
 
 The global function <CODE>csFastRandFloat()</CODE> has been retired.  In its stead is
@@ -1260,9 +1286,9 @@ useful.  (Note that the more general-purpose `<SAMP>csRandomGen</SAMP>' class is
 able to vend floating point numbers.)
 </P><P>
 
-<A NAME="SEC_29"></A>
+<A NAME="SEC_30"></A>
 <H3> `<SAMP>iImage</SAMP>' Changes </H3>
-<!--docid::SEC_29::-->
+<!--docid::SEC_30::-->
 <P>
 
 The `<SAMP>iImage</SAMP>' interface has been reduced to a level where it merely serves
@@ -1308,18 +1334,18 @@ As a side-effect of these changes, the `<SAMP>csImageFile</SAMP>' and
 `<SAMP>csImageMemory</SAMP>' were merged and the former removed.
 </P><P>
 
-<A NAME="SEC_30"></A>
+<A NAME="SEC_31"></A>
 <H3> `<SAMP>iMaterialList</SAMP>' Change </H3>
-<!--docid::SEC_30::-->
+<!--docid::SEC_31::-->
 <P>
 
 The function <CODE>iMaterialList::NewMaterial()</CODE> now needs an additional
 name parameter. It is not recommended to change the name later.
 </P><P>
 
-<A NAME="SEC_31"></A>
+<A NAME="SEC_32"></A>
 <H3> <CODE>iObjectModel</CODE> Change </H3>
-<!--docid::SEC_31::-->
+<!--docid::SEC_32::-->
 <P>
 
 The function <CODE>iObjectModel::GetObjectBoundingBox()</CODE> only has one
@@ -1329,9 +1355,9 @@ was not implemented anywhere. In addition to that the constants
 are also removed.
 </P><P>
 
-<A NAME="SEC_32"></A>
+<A NAME="SEC_33"></A>
 <H3> <CODE>iImageIO::Load()</CODE> Parameter Change </H3>
-<!--docid::SEC_32::-->
+<!--docid::SEC_33::-->
 <P>
 
 <CODE>iImageIO::Load()</CODE> now requires the image source data in an 
@@ -1339,9 +1365,9 @@ are also removed.
 parameters.
 </P><P>
 
-<A NAME="SEC_33"></A>
+<A NAME="SEC_34"></A>
 <H3> `<SAMP>iLight</SAMP>' Changes </H3>
-<!--docid::SEC_33::-->
+<!--docid::SEC_34::-->
 <P>
 
 The `<SAMP>iLight</SAMP>' and its implementation (`<SAMP>csLight</SAMP>') have been extended to
@@ -1364,9 +1390,9 @@ the first attenuation constant. See comments in
 attenuation modes.
 </P><P>
 
-<A NAME="SEC_34"></A>
+<A NAME="SEC_35"></A>
 <H3> <CODE>CS_DECLARE_OBJECT_ITERATOR()</CODE> Removal </H3>
-<!--docid::SEC_34::-->
+<!--docid::SEC_35::-->
 <P>
 
 The `<SAMP>iObject</SAMP>' iterator creation macro <CODE>CS_DECLARE_OBJECT_ITERATOR()</CODE>
@@ -1401,9 +1427,9 @@ while (iter.HasNext())
 {
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC_35"></A>
+<A NAME="SEC_36"></A>
 <H3> Reference Count Automation </H3>
-<!--docid::SEC_35::-->
+<!--docid::SEC_36::-->
 <P>
 
 For consistency with the bulk of the Crystal Space API, and in order to
@@ -1438,14 +1464,14 @@ dispose manually via <CODE>DecRef()</CODE>.
 </UL>
 <P>
 
-<A NAME="SEC_36"></A>
+<A NAME="SEC_37"></A>
 <H3> Render Buffer Changes </H3>
-<!--docid::SEC_36::-->
+<!--docid::SEC_37::-->
 <P>
 
 The `<SAMP>iRenderBuffer</SAMP>' interface was made renderer-independant. Consequently,
 creation was moved out of `<SAMP>iGraphics3D</SAMP>' and into `<SAMP>csRenderBuffer</SAMP>' in
-the `<TT>csgfx</TT>' library (see `<TT>csgfx/renderbuffer.h</TT>').  The semantics of
+the `<TT>csgfx</TT>' module (see `<TT>csgfx/renderbuffer.h</TT>').  The semantics of
 the parameters have changed too: notably, instead of specifying the byte size
 of a buffer, the element count is specified. The same change has been made to
 <CODE>CopyToBuffer()</CODE> (which has been renamed to <CODE>CopyInto()</CODE> to enforce
@@ -1518,9 +1544,9 @@ the mesh provides them). They are:
 </UL>
 <P>
 
-<A NAME="SEC_37"></A>
+<A NAME="SEC_38"></A>
 <H3> String Changes </H3>
-<!--docid::SEC_37::-->
+<!--docid::SEC_38::-->
 <P>
 
 The class hierarchy of `<SAMP>csString</SAMP>' has changed. Most functionality is now
@@ -1588,9 +1614,9 @@ Likewise, the following string-related functions have been renamed:
 </UL>
 <P>
 
-<A NAME="SEC_38"></A>
+<A NAME="SEC_39"></A>
 <H3> RAPID Collision Detection Plugin Removal </H3>
-<!--docid::SEC_38::-->
+<!--docid::SEC_39::-->
 <P>
 
 The RAPID collision detection plugin has been removed. In addition to
@@ -1599,9 +1625,9 @@ prevented its use in commercial applications.  You should instead now use the
 OPCODE plugin.
 </P><P>
 
-<A NAME="SEC_39"></A>
+<A NAME="SEC_40"></A>
 <H3> 64-Bit Portability Changes </H3>
-<!--docid::SEC_39::-->
+<!--docid::SEC_40::-->
 <P>
 
 Some changes have been made to the Crystal Space API in order to better
@@ -1652,34 +1678,6 @@ for the opaque "info" member of <CODE>csevCommand</CODE>-type events.
 <CODE>iEventOutlet::Broadcast()</CODE>
 <LI>
 <CODE>iEventOutlet::ImmediateBroadcast()</CODE>
-</UL>
-<P>
-
-The deprecated CSWS module (Crystal Space Windowing System) has also been
-converted. Specifically, the following methods now deal with `<SAMP>intptr_t</SAMP>'
-rather than `<SAMP>void*</SAMP>' for all of CSWS's opaque data needs. CSWS
-callback functions are likewise impacted.
-</P><P>
-
-<UL>
-<LI>
-<CODE>csComponent::ForEach()</CODE>
-<LI>
-<CODE>csComponent::SendBroadcast()</CODE>
-<LI>
-<CODE>csComponent::SendCommand()</CODE>
-<LI>
-<CODE>csKeyboardAccelerator::Broadcast()</CODE>
-<LI>
-<CODE>csKeyboardAccelerator::Command()</CODE>
-<LI>
-<CODE>csListBoxItem::ForEachItem()</CODE>
-<LI>
-<CODE>csTimer::csTimer()</CODE>
-<LI>
-<CODE>csTreeBox::ForEachItem()</CODE>
-<LI>
-<CODE>csTreeItem::ForEachItem()</CODE>
 </UL>
 <P>
 
@@ -1736,16 +1734,17 @@ supports such deprecation warnings. (Presently, only modern version of the
 GNU compiler are so configured.)
 </P><P>
 
-<A NAME="SEC_40"></A>
-<H3> Cg matrix bindings </H3>
-<!--docid::SEC_40::-->
+<A NAME="SEC_41"></A>
+<H3> Cg Matrix Bindings </H3>
+<!--docid::SEC_41::-->
 <P>
 
-The semantics of a Cg vertex program matrix parameter were determined through
-the variable name; e.g. a name of `<SAMP>ModelViewProj</SAMP>' bound the combined 
-model view and projection matrix to the variable. This is still supported but
-deprecated. CrystalSpace now requires Cg 1.3 which allows the matrix semantics 
-specification in a way similar to other semantics specification. For example:
+Previously, the semantics of a Cg vertex program matrix parameter were
+determined through the variable name; e.g. a name of `<SAMP>ModelViewProj</SAMP>' bound
+the combined model view and projection matrix to the variable. This is still
+supported but deprecated. CrystalSpace now requires Cg 1.3 which allows the
+matrix semantics specification in a way similar to other semantics
+specification. For example:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>uniform float4x4 ModelViewProj
@@ -1757,8 +1756,17 @@ Becomes:
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>uniform float4x4 ModelViewProj : state.matrix.mvp
 </pre></td></tr></table></P><P>
 
-Check the `<TT>data/shaders/</TT>' directory for more examples. For more detailed 
-information, consult the Cg and `<SAMP>ARB_vertex_program</SAMP>' documentations.
+Check the `<TT>data/shaders/</TT>' directory for further examples. For more
+detailed information, consult the Cg and `<SAMP>ARB_vertex_program</SAMP>'
+documentations.
+</P><P>
+
+<A NAME="SEC_42"></A>
+<H3> CSWS Removal </H3>
+<!--docid::SEC_42::-->
+<P>
+
+The CSWS library was removed. 
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
