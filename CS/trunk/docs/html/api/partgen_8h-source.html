@@ -76,10 +76,10 @@
 <a name="l00070"></a><a class="code" href="classcsParticleSystem.html#p6">00070</a>   <a class="code" href="classcsRefArray.html">csRefArray&lt;iSprite2DState&gt;</a> sprite2ds;
 00071   <a class="code" href="classcsRefArray.html">csRefArray&lt;iParticle&gt;</a> particles;
 <a name="l00073"></a><a class="code" href="classcsParticleSystem.html#p8">00073</a>   <span class="keywordtype">bool</span> self_destruct;
-00074   <a class="code" href="group__util.html#ga11">csTicks</a> time_to_live; <span class="comment">// msec</span>
+00074   <a class="code" href="group__util.html#ga15">csTicks</a> time_to_live; <span class="comment">// msec</span>
 <a name="l00076"></a><a class="code" href="classcsParticleSystem.html#p10">00076</a> <span class="comment"></span>  <a class="code" href="classcsColor.html">csColor</a> color;
 <a name="l00078"></a><a class="code" href="classcsParticleSystem.html#p11">00078</a>   <a class="code" href="classcsRef.html">csRef&lt;iMaterialWrapper&gt;</a> mat;
-<a name="l00080"></a><a class="code" href="classcsParticleSystem.html#p12">00080</a>   <a class="code" href="group__util.html#ga12">uint</a> MixMode;
+<a name="l00080"></a><a class="code" href="classcsParticleSystem.html#p12">00080</a>   <a class="code" href="group__util.html#ga16">uint</a> MixMode;
 <a name="l00082"></a><a class="code" href="classcsParticleSystem.html#p13">00082</a>   <span class="keywordtype">bool</span> change_color; <a class="code" href="classcsColor.html">csColor</a> colorpersecond;
 <a name="l00084"></a><a class="code" href="classcsParticleSystem.html#p15">00084</a>   <span class="keywordtype">bool</span> change_size; <span class="keywordtype">float</span> scalepersecond;
 <a name="l00086"></a><a class="code" href="classcsParticleSystem.html#p17">00086</a>   <span class="keywordtype">bool</span> change_alpha; <span class="keywordtype">float</span> alphapersecond; <span class="keywordtype">float</span> alpha_now;
@@ -88,7 +88,7 @@
 00095   <a class="code" href="structiMeshObjectDrawCallback.html">iMeshObjectDrawCallback</a>* vis_cb;
 00096 
 <a name="l00098"></a><a class="code" href="classcsParticleSystem.html#p24">00098</a>   <a class="code" href="classcsRef.html">csRef&lt;iMeshObjectFactory&gt;</a> spr_factory;
-<a name="l00100"></a><a class="code" href="classcsParticleSystem.html#p25">00100</a>   <a class="code" href="group__util.html#ga11">csTicks</a> prev_time;
+<a name="l00100"></a><a class="code" href="classcsParticleSystem.html#p25">00100</a>   <a class="code" href="group__util.html#ga15">csTicks</a> prev_time;
 00101   <span class="keywordtype">float</span> current_lod;
 00102   uint32 current_features;
 00103 
@@ -171,7 +171,7 @@
 00208   { self_destruct=<span class="keyword">true</span>; time_to_live = t; };
 <a name="l00210"></a><a class="code" href="classcsParticleSystem.html#a12">00210</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnSetSelfDestruct () { self_destruct=<span class="keyword">false</span>; }
 <a name="l00212"></a><a class="code" href="classcsParticleSystem.html#a13">00212</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetSelfDestruct ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> self_destruct; }
-<a name="l00214"></a><a class="code" href="classcsParticleSystem.html#a14">00214</a>   <span class="keyword">inline</span> <a class="code" href="group__util.html#ga11">csTicks</a> GetTimeToLive ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> time_to_live; }
+<a name="l00214"></a><a class="code" href="classcsParticleSystem.html#a14">00214</a>   <span class="keyword">inline</span> <a class="code" href="group__util.html#ga15">csTicks</a> GetTimeToLive ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> time_to_live; }
 00215 
 <a name="l00217"></a><a class="code" href="classcsParticleSystem.html#a15">00217</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetChangeColor(<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col)
 00218   {change_color = <span class="keyword">true</span>; colorpersecond = col;}
@@ -249,7 +249,7 @@
 00315   }
 <a name="l00316"></a><a class="code" href="classcsParticleSystem.html#a46">00316</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a6">NextFrame</a> (csTicks current_time, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <span class="comment">/*pos*/</span>)
 00317   {
-00318     <a class="code" href="group__util.html#ga11">csTicks</a> elaps = 0;
+00318     <a class="code" href="group__util.html#ga15">csTicks</a> elaps = 0;
 00319     <span class="keywordflow">if</span> (prev_time != 0) elaps = current_time-prev_time;
 00320     prev_time = current_time;
 00321     Update (elaps);
@@ -324,7 +324,7 @@
 00394       scfParent-&gt;MixMode = mode;
 00395       scfParent-&gt;SetupMixMode ();
 00396     }
-00397     <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> GetMixMode ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> scfParent-&gt;MixMode; }
+00397     <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga16">uint</a> GetMixMode ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> scfParent-&gt;MixMode; }
 00398     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetColor (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color)
 00399     {
 00400       scfParent-&gt;color = color;
