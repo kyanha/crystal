@@ -752,6 +752,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\debug.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\..\..\include\csutil\dirtyaccessarray.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\..\..\include\csutil\event.h
 # End Source File
 # Begin Source File
