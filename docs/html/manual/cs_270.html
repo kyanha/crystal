@@ -127,6 +127,22 @@ The correct way to code this example would be as follows:
 </pre></td></tr></table></P><P>
 
 <LI>
+<EM>Data type sizes</EM>
+<P>
+
+Don't make any assumptions about the size of `<SAMP>int</SAMP>', `<SAMP>long</SAMP>', 
+`<SAMP>size_t</SAMP>', `<SAMP>void*</SAMP>' etc such as <CODE>sizeof(int)==4</CODE>, 
+<CODE>sizeof(int)==sizeof(void*)</CODE>, <CODE>sizeof(long)==sizeof(void*)</CODE> and so 
+on. If a specifically sized type is needed (for example, when reading a file
+and the format specification dictates a certain word size) use the sized types
+from `<TT>cstypes.h</TT>' (e.g. `<SAMP>int32</SAMP>', `<SAMP>uint8</SAMP>'). Consequently, also 
+avoid constructs such as casting pointers to `<SAMP>int</SAMP>'s. If there's a rare 
+case that no other way than casting a pointer to/from an integral type, use the 
+value of the `<SAMP>CS_PROCSIZE</SAMP>' macro (usually 32 or 64) to determine an 
+appropriate sized type.
+</P><P>
+
+<LI>
 <EM>Floating Points</EM>
 <P>
 
@@ -313,7 +329,7 @@ requirement, so be sure to follow this guideline for maximum portability.
 </P><P>
 
 <LI>
-<EM>Avoid Templates</EM>
+<EM>Template precautions</EM>
 <P>
 
 These days, C++ compilers used with Crystal Space support templates, and the
