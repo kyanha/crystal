@@ -138,10 +138,6 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\appwalktest_static_staticuse.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\apps\walktest\bot.cpp
 # End Source File
 # Begin Source File
@@ -179,6 +175,10 @@ SOURCE=..\..\apps\walktest\walktest.cpp
 # Begin Source File
 
 SOURCE=..\..\apps\walktest\wentity.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\mk\msvc\appwalktest_static_staticuse.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"

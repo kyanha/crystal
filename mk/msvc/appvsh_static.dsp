@@ -138,11 +138,11 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\appvsh_static_staticuse.cpp
+SOURCE=..\..\apps\tools\vsh\vsh.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\tools\vsh\vsh.cpp
+SOURCE=..\..\mk\msvc\appvsh_static_staticuse.cpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"
