@@ -42,7 +42,7 @@
 <tr><td nowrap align=right valign=top>virtual int&nbsp;</td><td valign=bottom><a class="el" href="structiMouseDriver.html#a3">GetLastY</a> ()=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Query last mouse Y position.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiMouseDriver.html#a4">GetLastButton</a> (int button)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Query the last known mouse button state.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Query the last known mouse button state. Button numbers start at 1.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiMouseDriver.html#a5">DoButton</a> (int button, bool down, int x, int y)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Call this to add a 'mouse button down/up' event to queue.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiMouseDriver.html#a6">DoMotion</a> (int x, int y)=0</td></tr>
@@ -53,7 +53,7 @@ Generic Mouse Driver.
 <p>
 
 <p>
- Mouse driver should generate events and put them into the event queue. Also it is responsible for generating double-click events. Typically, one instance of this object is available from the shared-object registry (<a class="el" href="structiObjectRegistry.html">iObjectRegistry</a>) under the name "crystalspace.driver.input.generic.mouse". 
+ The mouse driver listens for mouse-related events from the event queue and records state information about recent events. It is responsible for synthesizing double-click events when it detects that two mouse-down events have occurred for the same mouse button within a short interval. Mouse button numbers start at 1. The left mouse button is 1, the right is 2, the middle 3, and so on. Typically, one instance of this object is available from the shared-object registry (<a class="el" href="structiObjectRegistry.html">iObjectRegistry</a>) under the name "crystalspace.driver.input.generic.mouse". 
 <p>
  Main creators of instances implementing this interface: <ul>
 <li><a class="el" href="classcsInitializer.html#d0">csInitializer::CreateEnvironment()</a> <li><a class="el" href="classcsInitializer.html#d8">csInitializer::CreateInputDrivers()</a> </ul>
@@ -63,7 +63,7 @@ Main ways to get pointers to this interface: <ul>
 <p>
 
 <p>
-Definition at line <a class="el" href="iutil_2csinput_8h-source.html#l00175">175</a> of file <a class="el" href="iutil_2csinput_8h-source.html">csinput.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="iutil_2csinput_8h-source.html#l00180">180</a> of file <a class="el" href="iutil_2csinput_8h-source.html">csinput.h</a>.<hr><h2>Member Function Documentation</h2>
 <a name="a5" doxytag="iMouseDriver::DoButton"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -113,7 +113,7 @@ Definition at line <a class="el" href="iutil_2csinput_8h-source.html#l00175">175
 <p>
 Call this to add a 'mouse button down/up' event to queue.
 <p>
-
+Button numbers start at one. 
 <p>
 Implemented in <a class="el" href="classcsMouseDriver.html#a7">csMouseDriver</a>.    </td>
   </tr>
@@ -186,7 +186,7 @@ Implemented in <a class="el" href="classcsMouseDriver.html#a8">csMouseDriver</a>
     <td>
 
 <p>
-Query the last known mouse button state.
+Query the last known mouse button state. Button numbers start at 1.
 <p>
 
 <p>
