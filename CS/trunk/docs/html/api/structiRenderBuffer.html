@@ -32,7 +32,7 @@
 <a href="structiRenderBuffer-members.html">List of all members.</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Public Methods</h2></td></tr>
-<tr><td nowrap align=right valign=top>virtual void *&nbsp;</td><td valign=bottom><a class="el" href="structiRenderBuffer.html#a0">Lock</a> (<a class="el" href="group__gfx3d.html#a83">csRenderBufferLockType</a> lockType)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual void *&nbsp;</td><td valign=bottom><a class="el" href="structiRenderBuffer.html#a0">Lock</a> (<a class="el" href="group__gfx3d.html#a83">csRenderBufferLockType</a> lockType, bool samePointer=false)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Lock the buffer to allow writing and give us a pointer to the data.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiRenderBuffer.html#a1">Release</a> ()=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Releases the buffer. After this all writing to the buffer is illegal.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
@@ -56,7 +56,7 @@ It can ONLY be created by the VB manager
 <p>
 
 <p>
-Definition at line <a class="el" href="rndbuf_8h-source.html#l00083">83</a> of file <a class="el" href="rndbuf_8h-source.html">rndbuf.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="rndbuf_8h-source.html#l00087">87</a> of file <a class="el" href="rndbuf_8h-source.html">rndbuf.h</a>.<hr><h2>Member Function Documentation</h2>
 <a name="a7" doxytag="iRenderBuffer::GetBufferType"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -186,9 +186,18 @@ Get the size of the buffer (in bytes).
           <td class="md" nowrap valign="top"> virtual void* iRenderBuffer::Lock </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="group__gfx3d.html#a83">csRenderBufferLockType</a>&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>lockType</em>          </td>
-          <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
+          <td class="mdname" nowrap>&nbsp; <em>lockType</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>samePointer</em> = false</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
         </tr>
 
       </table>
@@ -205,7 +214,12 @@ Get the size of the buffer (in bytes).
 <p>
 Lock the buffer to allow writing and give us a pointer to the data.
 <p>
-The pointer will be (void*)-1 if there was some error.     </td>
+The pointer will be (void*)-1 if there was some error. <dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>samePointer</em>&nbsp;</td><td>
+Specifies whether the same pointer as last time should  be returned (ie all the old data will be still there, useful if only a part of the data is changed). However, setting this to 'true' may  cause a performance penalty - specifically, if the data is currently in use, the driver may have to wait until the buffer is available again. </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a1" doxytag="iRenderBuffer::Release"></a><p>
