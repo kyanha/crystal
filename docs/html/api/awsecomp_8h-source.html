@@ -74,413 +74,321 @@
 <a name="l00091"></a><a class="code" href="classawsEmbeddedComponent.html#a7">00091</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a7">Create</a> (<a class="code" href="structiAws.html">iAws</a> *m, <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *parent,
 00092         <a class="code" href="structiAwsComponentNode.html">iAwsComponentNode</a> *settings)
 00093   {
-00094     <a class="code" href="classawsEmbeddedComponent.html#a30">SetID</a> (settings-&gt;<a class="code" href="structiAwsKey.html#a1">Name</a>());
-00095     <a class="code" href="classawsEmbeddedComponent.html#a58">SetParent</a> (parent);
-00096       
-00097     <span class="comment">// set ourself up by querying the settings </span>
-00098     <span class="keywordflow">if</span> (!<a class="code" href="classawsEmbeddedComponent.html#a8">Setup</a> (m, settings)) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00099       
-00100     <span class="comment">// if we are a top-level component link in to the top-level list</span>
-00101     <span class="keywordflow">if</span> (<a class="code" href="classawsEmbeddedComponent.html#a57">Parent</a> () == 0)
-00102     {
-00103       <span class="comment">// Link into the current hierarchy, at the top.</span>
-00104       <span class="keywordflow">if</span> (m-&gt;<a class="code" href="structiAws.html#a5">GetTopComponent</a> () == 0)
-00105       {
-00106         m-&gt;<a class="code" href="structiAws.html#a6">SetTopComponent</a> (<span class="keyword">this</span>);
-00107       }
-00108       <span class="keywordflow">else</span>
-00109       {
-00110         <a class="code" href="classawsEmbeddedComponent.html#a96">LinkAbove</a> (m-&gt;<a class="code" href="structiAws.html#a5">GetTopComponent</a> ());
-00111         m-&gt;<a class="code" href="structiAws.html#a6">SetTopComponent</a> (<span class="keyword">this</span>);
-00112       }
-00113     }
-00114       
-00115     <span class="comment">// unless you have set the non client flag by this point </span>
-00116     <span class="comment">// you get added to the parent's layout</span>
-00117     <span class="keywordflow">if</span> (~<a class="code" href="classawsEmbeddedComponent.html#a15">Flags</a>() &amp; <a class="code" href="group__aws__comp__flags.html#a1">AWSF_CMP_NON_CLIENT</a> &amp;&amp; <a class="code" href="classawsEmbeddedComponent.html#a57">Parent</a>() &amp;&amp; <a class="code" href="classawsEmbeddedComponent.html#a57">Parent</a>()-&gt;<a class="code" href="structiAwsComponent.html#a17">Layout</a>())
-00118       <a class="code" href="classawsEmbeddedComponent.html#a57">Parent</a>()-&gt;<a class="code" href="structiAwsComponent.html#a17">Layout</a>()-&gt;<a class="code" href="structiAwsLayoutManager.html#a1">AddComponent</a>(<span class="keyword">this</span>, settings);
-00119       
-00120     <span class="keywordflow">if</span> (<a class="code" href="classawsEmbeddedComponent.html#a57">Parent</a>())
-00121       <a class="code" href="classawsEmbeddedComponent.html#a57">Parent</a>()-&gt;<a class="code" href="structiAwsComponent.html#a50">AddChild</a>(<span class="keyword">this</span>);
-00122     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00123   }
-00124     
-<a name="l00126"></a><a class="code" href="classawsEmbeddedComponent.html#a8">00126</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a8">Setup</a> (<a class="code" href="structiAws.html">iAws</a> *wmgr, <a class="code" href="structiAwsComponentNode.html">iAwsComponentNode</a> *settings)
-00127   { <span class="keywordflow">return</span> comp-&gt;Setup (wmgr, settings); }
-00128     
-<a name="l00133"></a><a class="code" href="classawsEmbeddedComponent.html#a9">00133</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a9">HandleEvent</a>(<a class="code" href="structiEvent.html">iEvent</a>&amp; Event)
-00134   {
-00135     <span class="keywordflow">switch</span> (Event.<a class="code" href="structiEvent.html#m0">Type</a>)
-00136     {
-00137       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a125">csevMouseMove</a>:
-00138         <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a70">OnMouseMove</a> (Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m2">Button</a>, Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m0">x</a>, Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m1">y</a>);
-00139       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a127">csevMouseUp</a>:
-00140         <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a69">OnMouseUp</a> (Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m2">Button</a>, Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m0">x</a>, Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m1">y</a>);
-00141       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a126">csevMouseDown</a>:
-00142         <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a68">OnMouseDown</a> (Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m2">Button</a>, Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m0">x</a>, Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m1">y</a>);
-00143       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a128">csevMouseClick</a>:
-00144         <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a71">OnMouseClick</a> (Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m2">Button</a>, Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m0">x</a>, Event.<a class="code" href="structiEvent.html#m5">Mouse</a>.<a class="code" href="structcsEventMouseData.html#m1">y</a>);
-00145       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a135">csevMouseEnter</a>:
-00146         <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a74">OnMouseEnter</a> ();
-00147       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a136">csevMouseExit</a>:
-00148         <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a73">OnMouseExit</a> ();
-00149       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a124">csevKeyboard</a>:
-00150         {
-00151           <span class="keywordflow">if</span> (<a class="code" href="classcsKeyEventHelper.html#d3">csKeyEventHelper::GetEventType</a> (&amp;Event) == <a class="code" href="group__event__handling.html#a129a142">csKeyEventTypeDown</a>)
-00152           {
-00153             <a class="code" href="structcsKeyEventData.html">csKeyEventData</a> eventData;
-00154             <a class="code" href="classcsKeyEventHelper.html#d6">csKeyEventHelper::GetEventData</a> (&amp;Event, eventData);
-00155             <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a75">OnKeyboard</a> (eventData);
-00156           }
-00157           <span class="keywordflow">else</span>
-00158             <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00159         }
-00160       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a138">csevGainFocus</a>:
-00161         <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a77">OnGainFocus</a> ();
-00162       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a137">csevLostFocus</a>:
-00163         <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a76">OnLostFocus</a> ();
-00164       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#a128a140">csevFrameStart</a>:
-00165         <span class="keywordflow">return</span> <a class="code" href="classawsEmbeddedComponent.html#a87">OnFrame</a> ();
-00166     }
-00167     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00168   }
-00169  
-<a name="l00174"></a><a class="code" href="classawsEmbeddedComponent.html#a10">00174</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a10">GetProperty</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">void</span> **parm)
-00175   { <span class="keywordflow">return</span> comp-&gt;GetProperty (name, parm); }
-00176 
-<a name="l00181"></a><a class="code" href="classawsEmbeddedComponent.html#a11">00181</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a11">SetProperty</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">void</span> *parm)
-00182   { <span class="keywordflow">return</span> comp-&gt;SetProperty (name, parm); }
-00183 
-<a name="l00185"></a><a class="code" href="classawsEmbeddedComponent.html#a12">00185</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a12">Execute</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *action, <a class="code" href="structiAwsParmList.html">iAwsParmList</a>* parmlist)
-00186   { <span class="keywordflow">return</span> comp-&gt;Execute (action, parmlist); }
-00187 
-<a name="l00189"></a><a class="code" href="classawsEmbeddedComponent.html#a13">00189</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a13">SetFlag</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> flag)
-00190   { comp-&gt;SetFlag (flag); }
-00191 
-<a name="l00193"></a><a class="code" href="classawsEmbeddedComponent.html#a14">00193</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a14">ClearFlag</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> flag)
-00194   { comp-&gt;ClearFlag (flag); }
-00195 
-<a name="l00197"></a><a class="code" href="classawsEmbeddedComponent.html#a15">00197</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classawsEmbeddedComponent.html#a15">Flags</a> ()
-00198   { <span class="keywordflow">return</span> comp-&gt;Flags (); }
-00199 
-<a name="l00201"></a><a class="code" href="classawsEmbeddedComponent.html#a16">00201</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a16">Invalidate</a> ()
-00202   { comp-&gt;Invalidate (); }
-00203 
-<a name="l00205"></a><a class="code" href="classawsEmbeddedComponent.html#a17">00205</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a16">Invalidate</a> (<a class="code" href="classcsRect.html">csRect</a> area)
-00206   { comp-&gt;Invalidate (area); }
-00207 
-<a name="l00209"></a><a class="code" href="classawsEmbeddedComponent.html#a18">00209</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a18">Frame</a> ()
-00210   { <span class="keywordflow">return</span> comp-&gt;Frame (); }
+00094     <span class="keywordflow">return</span> comp-&gt;Create(m, parent, settings);
+00095   }
+00096     
+<a name="l00098"></a><a class="code" href="classawsEmbeddedComponent.html#a8">00098</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a8">Setup</a> (<a class="code" href="structiAws.html">iAws</a> *wmgr, <a class="code" href="structiAwsComponentNode.html">iAwsComponentNode</a> *settings)
+00099   { <span class="keywordflow">return</span> comp-&gt;Setup (wmgr, settings); }
+00100     
+<a name="l00105"></a><a class="code" href="classawsEmbeddedComponent.html#a9">00105</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a9">HandleEvent</a>(<a class="code" href="structiEvent.html">iEvent</a>&amp; Event)
+00106   {
+00107     <span class="keywordflow">return</span> comp-&gt;HandleEvent(Event);
+00108   }
+00109  
+<a name="l00114"></a><a class="code" href="classawsEmbeddedComponent.html#a10">00114</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a10">GetProperty</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">void</span> **parm)
+00115   { <span class="keywordflow">return</span> comp-&gt;GetProperty (name, parm); }
+00116 
+<a name="l00121"></a><a class="code" href="classawsEmbeddedComponent.html#a11">00121</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a11">SetProperty</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">void</span> *parm)
+00122   { <span class="keywordflow">return</span> comp-&gt;SetProperty (name, parm); }
+00123 
+<a name="l00125"></a><a class="code" href="classawsEmbeddedComponent.html#a12">00125</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a12">Execute</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *action, <a class="code" href="structiAwsParmList.html">iAwsParmList</a>* parmlist)
+00126   { <span class="keywordflow">return</span> comp-&gt;Execute (action, parmlist); }
+00127 
+<a name="l00129"></a><a class="code" href="classawsEmbeddedComponent.html#a13">00129</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a13">SetFlag</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> flag)
+00130   { comp-&gt;SetFlag (flag); }
+00131 
+<a name="l00133"></a><a class="code" href="classawsEmbeddedComponent.html#a14">00133</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a14">ClearFlag</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> flag)
+00134   { comp-&gt;ClearFlag (flag); }
+00135 
+<a name="l00137"></a><a class="code" href="classawsEmbeddedComponent.html#a15">00137</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classawsEmbeddedComponent.html#a15">Flags</a> ()
+00138   { <span class="keywordflow">return</span> comp-&gt;Flags (); }
+00139 
+<a name="l00141"></a><a class="code" href="classawsEmbeddedComponent.html#a16">00141</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a16">Invalidate</a> ()
+00142   { comp-&gt;Invalidate (); }
+00143 
+<a name="l00145"></a><a class="code" href="classawsEmbeddedComponent.html#a17">00145</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a16">Invalidate</a> (<a class="code" href="classcsRect.html">csRect</a> area)
+00146   { comp-&gt;Invalidate (area); }
+00147 
+<a name="l00149"></a><a class="code" href="classawsEmbeddedComponent.html#a18">00149</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a18">Frame</a> ()
+00150   { <span class="keywordflow">return</span> comp-&gt;Frame (); }
+00151 
+<a name="l00153"></a><a class="code" href="classawsEmbeddedComponent.html#a19">00153</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a19">ClientFrame</a> ()
+00154   { <span class="keywordflow">return</span> comp-&gt;ClientFrame (); }
+00155 
+<a name="l00160"></a><a class="code" href="classawsEmbeddedComponent.html#a20">00160</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classawsEmbeddedComponent.html#a20">Type</a> ()
+00161   { <span class="keywordflow">return</span> comp-&gt;Type (); }
+00162 
+<a name="l00164"></a><a class="code" href="classawsEmbeddedComponent.html#a21">00164</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a21">Overlaps</a> (<a class="code" href="classcsRect.html">csRect</a> &amp;r)
+00165   { <span class="keywordflow">return</span> comp-&gt;Overlaps (r); }
+00166 
+<a name="l00168"></a><a class="code" href="classawsEmbeddedComponent.html#a22">00168</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a22">isHidden</a> ()
+00169   { <span class="keywordflow">return</span> comp-&gt;isHidden (); }
+00170 
+<a name="l00172"></a><a class="code" href="classawsEmbeddedComponent.html#a23">00172</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a23">Hide</a> ()
+00173   { comp-&gt;Hide (); }
+00174 
+<a name="l00176"></a><a class="code" href="classawsEmbeddedComponent.html#a24">00176</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a24">Show</a> ()
+00177   { comp-&gt;Show (); }
+00178 
+<a name="l00180"></a><a class="code" href="classawsEmbeddedComponent.html#a25">00180</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a25">Move</a> (<span class="keywordtype">int</span> delta_x, <span class="keywordtype">int</span> delta_y)
+00181   { comp-&gt;Move (delta_x, delta_y); }
+00182 
+<a name="l00184"></a><a class="code" href="classawsEmbeddedComponent.html#a26">00184</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a26">MoveTo</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00185   { comp-&gt;MoveTo (x, y); }
+00186 
+<a name="l00188"></a><a class="code" href="classawsEmbeddedComponent.html#a27">00188</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a27">Resize</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height)
+00189   { comp-&gt;Resize (width, height); }
+00190 
+<a name="l00192"></a><a class="code" href="classawsEmbeddedComponent.html#a28">00192</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a28">ResizeTo</a> (<a class="code" href="classcsRect.html">csRect</a> newFrame)
+00193   { comp-&gt;ResizeTo (newFrame); }
+00194 
+<a name="l00196"></a><a class="code" href="classawsEmbeddedComponent.html#a29">00196</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code" href="classawsEmbeddedComponent.html#a29">GetID</a> ()
+00197   { <span class="keywordflow">return</span> comp-&gt;GetID (); }
+00198 
+<a name="l00203"></a><a class="code" href="classawsEmbeddedComponent.html#a30">00203</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a30">SetID</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> id)
+00204   { comp-&gt;SetID (id); }
+00205 
+<a name="l00206"></a><a class="code" href="classawsEmbeddedComponent.html#a31">00206</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a>* <a class="code" href="classawsEmbeddedComponent.html#a31">FindChild</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name)
+00207   { <span class="keywordflow">return</span> comp-&gt;FindChild (name); }
+00208 
+<a name="l00209"></a><a class="code" href="classawsEmbeddedComponent.html#a32">00209</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a>* <a class="code" href="classawsEmbeddedComponent.html#a32">DoFindChild</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> id)
+00210   { <span class="keywordflow">return</span> comp-&gt;DoFindChild (id); }
 00211 
-<a name="l00213"></a><a class="code" href="classawsEmbeddedComponent.html#a19">00213</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a19">ClientFrame</a> ()
-00214   { <span class="keywordflow">return</span> comp-&gt;ClientFrame (); }
-00215 
-<a name="l00220"></a><a class="code" href="classawsEmbeddedComponent.html#a20">00220</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classawsEmbeddedComponent.html#a20">Type</a> ()
-00221   { <span class="keywordflow">return</span> comp-&gt;Type (); }
-00222 
-<a name="l00224"></a><a class="code" href="classawsEmbeddedComponent.html#a21">00224</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a21">Overlaps</a> (<a class="code" href="classcsRect.html">csRect</a> &amp;r)
-00225   { <span class="keywordflow">return</span> comp-&gt;Overlaps (r); }
-00226 
-<a name="l00228"></a><a class="code" href="classawsEmbeddedComponent.html#a22">00228</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a22">isHidden</a> ()
-00229   { <span class="keywordflow">return</span> comp-&gt;isHidden (); }
-00230 
-<a name="l00232"></a><a class="code" href="classawsEmbeddedComponent.html#a23">00232</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a23">Hide</a> ()
-00233   { comp-&gt;Hide (); }
-00234 
-<a name="l00236"></a><a class="code" href="classawsEmbeddedComponent.html#a24">00236</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a24">Show</a> ()
-00237   { comp-&gt;Show (); }
-00238 
-<a name="l00240"></a><a class="code" href="classawsEmbeddedComponent.html#a25">00240</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a25">Move</a> (<span class="keywordtype">int</span> delta_x, <span class="keywordtype">int</span> delta_y)
-00241   { comp-&gt;Move (delta_x, delta_y); }
-00242 
-<a name="l00244"></a><a class="code" href="classawsEmbeddedComponent.html#a26">00244</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a26">MoveTo</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
-00245   { comp-&gt;MoveTo (x, y); }
-00246 
-<a name="l00248"></a><a class="code" href="classawsEmbeddedComponent.html#a27">00248</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a27">Resize</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height)
-00249   { comp-&gt;Resize (width, height); }
-00250 
-<a name="l00252"></a><a class="code" href="classawsEmbeddedComponent.html#a28">00252</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a28">ResizeTo</a> (<a class="code" href="classcsRect.html">csRect</a> newFrame)
-00253   { comp-&gt;ResizeTo (newFrame); }
-00254 
-<a name="l00256"></a><a class="code" href="classawsEmbeddedComponent.html#a29">00256</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code" href="classawsEmbeddedComponent.html#a29">GetID</a> ()
-00257   { <span class="keywordflow">return</span> comp-&gt;GetID (); }
-00258 
-<a name="l00263"></a><a class="code" href="classawsEmbeddedComponent.html#a30">00263</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a30">SetID</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> id)
-00264   { comp-&gt;SetID (id); }
-00265 
-<a name="l00266"></a><a class="code" href="classawsEmbeddedComponent.html#a31">00266</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a>* <a class="code" href="classawsEmbeddedComponent.html#a31">FindChild</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name)
-00267   { <span class="keywordflow">return</span> comp-&gt;FindChild (name); }
-00268 
-<a name="l00269"></a><a class="code" href="classawsEmbeddedComponent.html#a32">00269</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a>* <a class="code" href="classawsEmbeddedComponent.html#a32">DoFindChild</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> id)
-00270   { <span class="keywordflow">return</span> comp-&gt;DoFindChild (id); }
+<a name="l00212"></a><a class="code" href="classawsEmbeddedComponent.html#a33">00212</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a33">IsMaximized</a>()
+00213   { <span class="keywordflow">return</span> comp-&gt;IsMaximized(); }
+00214 
+<a name="l00215"></a><a class="code" href="classawsEmbeddedComponent.html#a34">00215</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a34">Maximize</a>()
+00216   { comp-&gt;Maximize(); }
+00217 
+<a name="l00218"></a><a class="code" href="classawsEmbeddedComponent.html#a35">00218</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a35">UnMaximize</a>()
+00219   { comp-&gt;UnMaximize(); }
+00220 
+<a name="l00222"></a><a class="code" href="classawsEmbeddedComponent.html#a36">00222</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a36">LayoutChildren</a> ()
+00223   { comp-&gt;LayoutChildren (); }
+00224 
+<a name="l00225"></a><a class="code" href="classawsEmbeddedComponent.html#a37">00225</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a37">AddToLayout</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp, <a class="code" href="structiAwsComponentNode.html">iAwsComponentNode</a>* settings)
+00226   { comp-&gt;AddToLayout (cmp, settings); }
+00227 
+<a name="l00229"></a><a class="code" href="classawsEmbeddedComponent.html#a38">00229</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a38">SetFocusable</a> (<span class="keywordtype">bool</span> focusable)
+00230   { comp-&gt;SetFocusable (focusable); }
+00231 
+<a name="l00233"></a><a class="code" href="classawsEmbeddedComponent.html#a39">00233</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a39">Focusable</a> ()
+00234   { <span class="keywordflow">return</span> comp-&gt;Focusable (); }
+00235 
+<a name="l00237"></a><a class="code" href="classawsEmbeddedComponent.html#a40">00237</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a40">isFocused</a> ()
+00238   { <span class="keywordflow">return</span> comp-&gt;isFocused (); }
+00239 
+<a name="l00241"></a><a class="code" href="classawsEmbeddedComponent.html#a41">00241</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a41">SetFocus</a> ()
+00242   { comp-&gt;SetFocus (); }
+00243 
+<a name="l00245"></a><a class="code" href="classawsEmbeddedComponent.html#a42">00245</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a42">UnsetFocus</a> ()
+00246   { comp-&gt;UnsetFocus (); }
+00247 
+<a name="l00249"></a><a class="code" href="classawsEmbeddedComponent.html#a43">00249</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a43">AddToTabOrder</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
+00250   { <span class="keywordflow">return</span> comp-&gt;AddToTabOrder (cmp); }
+00251 
+<a name="l00253"></a><a class="code" href="classawsEmbeddedComponent.html#a44">00253</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a44">TabNext</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
+00254   { <span class="keywordflow">return</span> comp-&gt;TabNext (cmp); }
+00255 
+<a name="l00257"></a><a class="code" href="classawsEmbeddedComponent.html#a45">00257</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a45">TabPrev</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
+00258   { <span class="keywordflow">return</span> comp-&gt;TabPrev (cmp); }
+00259 
+<a name="l00261"></a><a class="code" href="classawsEmbeddedComponent.html#a46">00261</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classawsEmbeddedComponent.html#a46">GetTabLength</a> ()
+00262   { <span class="keywordflow">return</span> comp-&gt;GetTabLength (); }
+00263 
+<a name="l00265"></a><a class="code" href="classawsEmbeddedComponent.html#a47">00265</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a47">GetTabComponent</a> (<span class="keywordtype">int</span> index)
+00266   { <span class="keywordflow">return</span> comp-&gt;GetTabComponent (index); }
+00267 
+<a name="l00269"></a><a class="code" href="classawsEmbeddedComponent.html#a48">00269</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a48">GetFirstFocusableChild</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *comp)
+00270   { <span class="keywordflow">return</span> comp-&gt;<a class="code" href="structiAwsComponent.html#a63">GetFirstFocusableChild</a> (comp); }
 00271 
-<a name="l00272"></a><a class="code" href="classawsEmbeddedComponent.html#a33">00272</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a33">IsMaximized</a>()
-00273   { <span class="keywordflow">return</span> comp-&gt;IsMaximized(); }
-00274 
-<a name="l00275"></a><a class="code" href="classawsEmbeddedComponent.html#a34">00275</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a34">Maximize</a>()
-00276   { comp-&gt;Maximize(); }
-00277 
-<a name="l00278"></a><a class="code" href="classawsEmbeddedComponent.html#a35">00278</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a35">UnMaximize</a>()
-00279   { comp-&gt;UnMaximize(); }
-00280 
-<a name="l00282"></a><a class="code" href="classawsEmbeddedComponent.html#a36">00282</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a36">LayoutChildren</a> ()
-00283   { comp-&gt;LayoutChildren (); }
-00284 
-<a name="l00285"></a><a class="code" href="classawsEmbeddedComponent.html#a37">00285</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a37">AddToLayout</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp, <a class="code" href="structiAwsComponentNode.html">iAwsComponentNode</a>* settings)
-00286   { comp-&gt;AddToLayout (cmp, settings); }
+<a name="l00273"></a><a class="code" href="classawsEmbeddedComponent.html#a49">00273</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a49">AddChild</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a>* child)
+00274   { comp-&gt;AddChild(child); }
+00275 
+<a name="l00277"></a><a class="code" href="classawsEmbeddedComponent.html#a50">00277</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a50">RemoveChild</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *child)
+00278   { comp-&gt;RemoveChild(child); }
+00279 
+<a name="l00281"></a><a class="code" href="classawsEmbeddedComponent.html#a51">00281</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classawsEmbeddedComponent.html#a51">GetChildCount</a>()
+00282   { <span class="keywordflow">return</span> comp-&gt;GetChildCount(); }
+00283 
+<a name="l00285"></a><a class="code" href="classawsEmbeddedComponent.html#a52">00285</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a52">GetTopChild</a>()
+00286   { <span class="keywordflow">return</span> comp-&gt;GetTopChild(); }
 00287 
-<a name="l00289"></a><a class="code" href="classawsEmbeddedComponent.html#a38">00289</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a38">SetFocusable</a> (<span class="keywordtype">bool</span> focusable)
-00290   { comp-&gt;SetFocusable (focusable); }
+<a name="l00289"></a><a class="code" href="classawsEmbeddedComponent.html#a53">00289</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a53">HasChildren</a>()
+00290   { <span class="keywordflow">return</span> comp-&gt;HasChildren(); }
 00291 
-<a name="l00293"></a><a class="code" href="classawsEmbeddedComponent.html#a39">00293</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a39">Focusable</a> ()
-00294   { <span class="keywordflow">return</span> comp-&gt;Focusable (); }
-00295 
-<a name="l00297"></a><a class="code" href="classawsEmbeddedComponent.html#a40">00297</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a40">isFocused</a> ()
-00298   { <span class="keywordflow">return</span> comp-&gt;isFocused (); }
-00299 
-<a name="l00301"></a><a class="code" href="classawsEmbeddedComponent.html#a41">00301</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a41">SetFocus</a> ()
-00302   { comp-&gt;SetFocus (); }
-00303 
-<a name="l00305"></a><a class="code" href="classawsEmbeddedComponent.html#a42">00305</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a42">UnsetFocus</a> ()
-00306   { comp-&gt;UnsetFocus (); }
-00307 
-<a name="l00309"></a><a class="code" href="classawsEmbeddedComponent.html#a43">00309</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a43">AddToTabOrder</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
-00310   { <span class="keywordflow">return</span> comp-&gt;AddToTabOrder (cmp); }
-00311 
-<a name="l00313"></a><a class="code" href="classawsEmbeddedComponent.html#a44">00313</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a44">TabNext</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
-00314   { <span class="keywordflow">return</span> comp-&gt;TabNext (cmp); }
-00315 
-<a name="l00317"></a><a class="code" href="classawsEmbeddedComponent.html#a45">00317</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a45">TabPrev</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
-00318   { <span class="keywordflow">return</span> comp-&gt;TabPrev (cmp); }
-00319 
-<a name="l00321"></a><a class="code" href="classawsEmbeddedComponent.html#a46">00321</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classawsEmbeddedComponent.html#a46">GetTabLength</a> ()
-00322   { <span class="keywordflow">return</span> comp-&gt;GetTabLength (); }
-00323 
-<a name="l00325"></a><a class="code" href="classawsEmbeddedComponent.html#a47">00325</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a47">GetTabComponent</a> (<span class="keywordtype">int</span> index)
-00326   { <span class="keywordflow">return</span> comp-&gt;GetTabComponent (index); }
-00327 
-<a name="l00329"></a><a class="code" href="classawsEmbeddedComponent.html#a48">00329</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a48">GetFirstFocusableChild</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *comp)
-00330   { <span class="keywordflow">return</span> comp-&gt;<a class="code" href="structiAwsComponent.html#a63">GetFirstFocusableChild</a> (comp); }
-00331 
-<a name="l00333"></a><a class="code" href="classawsEmbeddedComponent.html#a49">00333</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a49">AddChild</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a>* child)
-00334   { comp-&gt;AddChild(child); }
-00335 
-<a name="l00337"></a><a class="code" href="classawsEmbeddedComponent.html#a50">00337</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a50">RemoveChild</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *child)
-00338   { comp-&gt;RemoveChild(child); }
-00339 
-<a name="l00341"></a><a class="code" href="classawsEmbeddedComponent.html#a51">00341</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classawsEmbeddedComponent.html#a51">GetChildCount</a>()
-00342   { <span class="keywordflow">return</span> comp-&gt;GetChildCount(); }
-00343 
-<a name="l00345"></a><a class="code" href="classawsEmbeddedComponent.html#a52">00345</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a52">GetTopChild</a>()
-00346   { <span class="keywordflow">return</span> comp-&gt;GetTopChild(); }
-00347 
-<a name="l00349"></a><a class="code" href="classawsEmbeddedComponent.html#a53">00349</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a53">HasChildren</a>()
-00350   { <span class="keywordflow">return</span> comp-&gt;HasChildren(); }
-00351 
-<a name="l00352"></a><a class="code" href="classawsEmbeddedComponent.html#a54">00352</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a54">ChildAt</a>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
-00353   { <span class="keywordflow">return</span> comp-&gt;ChildAt(x,y); }
+<a name="l00292"></a><a class="code" href="classawsEmbeddedComponent.html#a54">00292</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a54">ChildAt</a>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00293   { <span class="keywordflow">return</span> comp-&gt;ChildAt(x,y); }
+00294 
+<a name="l00300"></a><a class="code" href="classawsEmbeddedComponent.html#a55">00300</a>   <a class="code" href="structiAws.html">iAws</a> *<a class="code" href="classawsEmbeddedComponent.html#a55">WindowManager</a>()
+00301   { <span class="keywordflow">return</span> comp-&gt;Window()-&gt;WindowManager(); }
+00302 
+<a name="l00304"></a><a class="code" href="classawsEmbeddedComponent.html#a56">00304</a>   <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a56">Window</a>()
+00305   { <span class="keywordflow">return</span> comp-&gt;Window(); }
+00306 
+<a name="l00308"></a><a class="code" href="classawsEmbeddedComponent.html#a57">00308</a>   <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a57">Parent</a>()
+00309   { <span class="keywordflow">return</span> comp-&gt;Parent(); }
+00310 
+<a name="l00312"></a><a class="code" href="classawsEmbeddedComponent.html#a58">00312</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a58">SetParent</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *parent)
+00313   { comp-&gt;SetParent(parent); }
+00314 
+<a name="l00316"></a><a class="code" href="classawsEmbeddedComponent.html#a59">00316</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a59">ComponentAbove</a>()
+00317   { <span class="keywordflow">return</span> comp-&gt;ComponentAbove(); }
+00318 
+<a name="l00320"></a><a class="code" href="classawsEmbeddedComponent.html#a60">00320</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a60">ComponentBelow</a>()
+00321   { <span class="keywordflow">return</span> comp-&gt;ComponentBelow(); }
+00322 
+<a name="l00324"></a><a class="code" href="classawsEmbeddedComponent.html#a61">00324</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a61">SetComponentAbove</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
+00325   { comp-&gt;SetComponentAbove(cmp); }
+00326 
+<a name="l00328"></a><a class="code" href="classawsEmbeddedComponent.html#a62">00328</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a62">SetComponentBelow</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
+00329   { comp-&gt;SetComponentBelow(cmp); }
+00330 
+<a name="l00332"></a><a class="code" href="classawsEmbeddedComponent.html#a63">00332</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a63">Raise</a>()
+00333   { comp-&gt;Raise (); }
+00334 
+<a name="l00336"></a><a class="code" href="classawsEmbeddedComponent.html#a64">00336</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a64">Lower</a>()
+00337   { comp-&gt;Lower (); }
+00338 
+<a name="l00340"></a><a class="code" href="classawsEmbeddedComponent.html#a65">00340</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a65">SetRedrawTag</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> tag)
+00341   { comp-&gt;SetRedrawTag (tag); }
+00342 
+<a name="l00344"></a><a class="code" href="classawsEmbeddedComponent.html#a66">00344</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classawsEmbeddedComponent.html#a66">RedrawTag</a>()
+00345   { <span class="keywordflow">return</span> comp-&gt;RedrawTag (); }
+00346 
+<a name="l00348"></a><a class="code" href="classawsEmbeddedComponent.html#a67">00348</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a67">OnDraw</a>(<a class="code" href="classcsRect.html">csRect</a> clip)
+00349   { comp-&gt;OnDraw (clip); }
+00350 
+<a name="l00352"></a><a class="code" href="classawsEmbeddedComponent.html#a68">00352</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a68">OnMouseDown</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00353   { <span class="keywordflow">return</span> comp-&gt;OnMouseDown (button, x, y); }
 00354 
-<a name="l00360"></a><a class="code" href="classawsEmbeddedComponent.html#a55">00360</a>   <a class="code" href="structiAws.html">iAws</a> *<a class="code" href="classawsEmbeddedComponent.html#a55">WindowManager</a>()
-00361   { <span class="keywordflow">return</span> comp-&gt;Window()-&gt;WindowManager(); }
+<a name="l00356"></a><a class="code" href="classawsEmbeddedComponent.html#a69">00356</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a69">OnMouseUp</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00357   { <span class="keywordflow">return</span> comp-&gt;OnMouseUp (button, x, y); }
+00358 
+<a name="l00360"></a><a class="code" href="classawsEmbeddedComponent.html#a70">00360</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a70">OnMouseMove</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00361   { <span class="keywordflow">return</span> comp-&gt;OnMouseMove (button, x, y); }
 00362 
-<a name="l00364"></a><a class="code" href="classawsEmbeddedComponent.html#a56">00364</a>   <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a56">Window</a>()
-00365   { <span class="keywordflow">return</span> comp-&gt;Window(); }
+<a name="l00364"></a><a class="code" href="classawsEmbeddedComponent.html#a71">00364</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a71">OnMouseClick</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00365   { <span class="keywordflow">return</span> comp-&gt;OnMouseClick (button, x, y); }
 00366 
-<a name="l00368"></a><a class="code" href="classawsEmbeddedComponent.html#a57">00368</a>   <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a57">Parent</a>()
-00369   { <span class="keywordflow">return</span> comp-&gt;Parent(); }
+<a name="l00368"></a><a class="code" href="classawsEmbeddedComponent.html#a72">00368</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a72">OnMouseDoubleClick</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00369   { <span class="keywordflow">return</span> comp-&gt;OnMouseDoubleClick (button, x, y); }
 00370 
-<a name="l00372"></a><a class="code" href="classawsEmbeddedComponent.html#a58">00372</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a58">SetParent</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *parent)
-00373   { comp-&gt;SetParent(parent); }
+<a name="l00372"></a><a class="code" href="classawsEmbeddedComponent.html#a73">00372</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a73">OnMouseExit</a>()
+00373   { <span class="keywordflow">return</span> comp-&gt;OnMouseExit (); }
 00374 
-<a name="l00376"></a><a class="code" href="classawsEmbeddedComponent.html#a59">00376</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a59">ComponentAbove</a>()
-00377   { <span class="keywordflow">return</span> comp-&gt;ComponentAbove(); }
+<a name="l00376"></a><a class="code" href="classawsEmbeddedComponent.html#a74">00376</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a74">OnMouseEnter</a>()
+00377   { <span class="keywordflow">return</span> comp-&gt;OnMouseEnter (); }
 00378 
-<a name="l00380"></a><a class="code" href="classawsEmbeddedComponent.html#a60">00380</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsComponent.html">iAwsComponent</a> *<a class="code" href="classawsEmbeddedComponent.html#a60">ComponentBelow</a>()
-00381   { <span class="keywordflow">return</span> comp-&gt;ComponentBelow(); }
+<a name="l00380"></a><a class="code" href="classawsEmbeddedComponent.html#a75">00380</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a75">OnKeyboard</a> (<span class="keyword">const</span> <a class="code" href="structcsKeyEventData.html">csKeyEventData</a>&amp; eventData)
+00381   { <span class="keywordflow">return</span> comp-&gt;OnKeyboard (eventData); }
 00382 
-<a name="l00384"></a><a class="code" href="classawsEmbeddedComponent.html#a61">00384</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a61">SetComponentAbove</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
-00385   { comp-&gt;SetComponentAbove(cmp); }
+<a name="l00384"></a><a class="code" href="classawsEmbeddedComponent.html#a76">00384</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a76">OnLostFocus</a>()
+00385   { <span class="keywordflow">return</span> comp-&gt;OnLostFocus (); }
 00386 
-<a name="l00388"></a><a class="code" href="classawsEmbeddedComponent.html#a62">00388</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a62">SetComponentBelow</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *cmp)
-00389   { comp-&gt;SetComponentBelow(cmp); }
+<a name="l00388"></a><a class="code" href="classawsEmbeddedComponent.html#a77">00388</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a77">OnGainFocus</a>()
+00389   { <span class="keywordflow">return</span> comp-&gt;OnGainFocus (); }
 00390 
-<a name="l00392"></a><a class="code" href="classawsEmbeddedComponent.html#a63">00392</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a63">Raise</a>()
-00393   { comp-&gt;Raise (); }
+<a name="l00392"></a><a class="code" href="classawsEmbeddedComponent.html#a78">00392</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsLayoutManager.html">iAwsLayoutManager</a> *<a class="code" href="classawsEmbeddedComponent.html#a78">Layout</a>()
+00393   { <span class="keywordflow">return</span> comp-&gt;Layout ();}
 00394 
-<a name="l00396"></a><a class="code" href="classawsEmbeddedComponent.html#a64">00396</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a64">Lower</a>()
-00397   { comp-&gt;Lower (); }
+<a name="l00396"></a><a class="code" href="classawsEmbeddedComponent.html#a79">00396</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a79">SetLayout</a>(<a class="code" href="structiAwsLayoutManager.html">iAwsLayoutManager</a> *layoutMgr)
+00397   { comp-&gt;SetLayout(layoutMgr); }
 00398 
-<a name="l00400"></a><a class="code" href="classawsEmbeddedComponent.html#a65">00400</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a65">SetRedrawTag</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> tag)
-00401   { comp-&gt;SetRedrawTag (tag); }
+<a name="l00400"></a><a class="code" href="classawsEmbeddedComponent.html#a80">00400</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a80">getPreferredSize</a>()
+00401   { <span class="keywordflow">return</span> comp-&gt;getPreferredSize (); }
 00402 
-<a name="l00404"></a><a class="code" href="classawsEmbeddedComponent.html#a66">00404</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="classawsEmbeddedComponent.html#a66">RedrawTag</a>()
-00405   { <span class="keywordflow">return</span> comp-&gt;RedrawTag (); }
+<a name="l00404"></a><a class="code" href="classawsEmbeddedComponent.html#a81">00404</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a81">setPreferredSize</a> (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; size)
+00405   { comp-&gt;setPreferredSize(size); }
 00406 
-<a name="l00408"></a><a class="code" href="classawsEmbeddedComponent.html#a67">00408</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a67">OnDraw</a>(<a class="code" href="classcsRect.html">csRect</a> clip)
-00409   { comp-&gt;OnDraw (clip); }
+<a name="l00408"></a><a class="code" href="classawsEmbeddedComponent.html#a82">00408</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a82">clearPreferredSize</a> ()
+00409   { comp-&gt;clearPreferredSize(); }
 00410 
-<a name="l00412"></a><a class="code" href="classawsEmbeddedComponent.html#a68">00412</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a68">OnMouseDown</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
-00413   { <span class="keywordflow">return</span> comp-&gt;OnMouseDown (button, x, y); }
+<a name="l00412"></a><a class="code" href="classawsEmbeddedComponent.html#a83">00412</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a83">getMinimumSize</a>()
+00413   { <span class="keywordflow">return</span> comp-&gt;getMinimumSize (); }
 00414 
-<a name="l00416"></a><a class="code" href="classawsEmbeddedComponent.html#a69">00416</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a69">OnMouseUp</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
-00417   { <span class="keywordflow">return</span> comp-&gt;OnMouseUp (button, x, y); }
+<a name="l00416"></a><a class="code" href="classawsEmbeddedComponent.html#a84">00416</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a84">getInsets</a>()
+00417   { <span class="keywordflow">return</span> comp-&gt;getInsets (); }
 00418 
-<a name="l00420"></a><a class="code" href="classawsEmbeddedComponent.html#a70">00420</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a70">OnMouseMove</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
-00421   { <span class="keywordflow">return</span> comp-&gt;OnMouseMove (button, x, y); }
+<a name="l00420"></a><a class="code" href="classawsEmbeddedComponent.html#a85">00420</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a85">isDeaf</a>()
+00421   { <span class="keywordflow">return</span> comp-&gt;isDeaf (); }
 00422 
-<a name="l00424"></a><a class="code" href="classawsEmbeddedComponent.html#a71">00424</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a71">OnMouseClick</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
-00425   { <span class="keywordflow">return</span> comp-&gt;OnMouseClick (button, x, y); }
+<a name="l00424"></a><a class="code" href="classawsEmbeddedComponent.html#a86">00424</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a86">SetDeaf</a> (<span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a85">isDeaf</a>)
+00425   { comp-&gt;SetDeaf (<a class="code" href="classawsEmbeddedComponent.html#a85">isDeaf</a>); }
 00426 
-<a name="l00428"></a><a class="code" href="classawsEmbeddedComponent.html#a72">00428</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a72">OnMouseDoubleClick</a>(<span class="keywordtype">int</span> button, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
-00429   { <span class="keywordflow">return</span> comp-&gt;OnMouseDoubleClick (button, x, y); }
+<a name="l00428"></a><a class="code" href="classawsEmbeddedComponent.html#a87">00428</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a87">OnFrame</a>()
+00429   { <span class="keywordflow">return</span> comp-&gt;OnFrame ();}
 00430 
-<a name="l00432"></a><a class="code" href="classawsEmbeddedComponent.html#a73">00432</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a73">OnMouseExit</a>()
-00433   { <span class="keywordflow">return</span> comp-&gt;OnMouseExit (); }
+<a name="l00432"></a><a class="code" href="classawsEmbeddedComponent.html#a88">00432</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a88">OnAdded</a>()
+00433   { comp-&gt;OnAdded ();}
 00434 
-<a name="l00436"></a><a class="code" href="classawsEmbeddedComponent.html#a74">00436</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a74">OnMouseEnter</a>()
-00437   { <span class="keywordflow">return</span> comp-&gt;OnMouseEnter (); }
+<a name="l00436"></a><a class="code" href="classawsEmbeddedComponent.html#a89">00436</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a89">OnResized</a>()
+00437   { comp-&gt;OnResized ();}
 00438 
-<a name="l00440"></a><a class="code" href="classawsEmbeddedComponent.html#a75">00440</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a75">OnKeyboard</a> (<span class="keyword">const</span> <a class="code" href="structcsKeyEventData.html">csKeyEventData</a>&amp; eventData)
-00441   { <span class="keywordflow">return</span> comp-&gt;OnKeyboard (eventData); }
+<a name="l00440"></a><a class="code" href="classawsEmbeddedComponent.html#a90">00440</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a90">OnChildMoved</a>()
+00441   { comp-&gt;OnChildMoved(); }
 00442 
-<a name="l00444"></a><a class="code" href="classawsEmbeddedComponent.html#a76">00444</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a76">OnLostFocus</a>()
-00445   { <span class="keywordflow">return</span> comp-&gt;OnLostFocus (); }
+<a name="l00444"></a><a class="code" href="classawsEmbeddedComponent.html#a91">00444</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a91">OnRaise</a>()
+00445   { comp-&gt;OnRaise(); }
 00446 
-<a name="l00448"></a><a class="code" href="classawsEmbeddedComponent.html#a77">00448</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a77">OnGainFocus</a>()
-00449   { <span class="keywordflow">return</span> comp-&gt;OnGainFocus (); }
+<a name="l00448"></a><a class="code" href="classawsEmbeddedComponent.html#a92">00448</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a92">OnLower</a>()
+00449   { comp-&gt;OnLower(); }
 00450 
-<a name="l00452"></a><a class="code" href="classawsEmbeddedComponent.html#a78">00452</a>   <span class="keyword">virtual</span> <a class="code" href="structiAwsLayoutManager.html">iAwsLayoutManager</a> *<a class="code" href="classawsEmbeddedComponent.html#a78">Layout</a>()
-00453   { <span class="keywordflow">return</span> comp-&gt;Layout ();}
+<a name="l00452"></a><a class="code" href="classawsEmbeddedComponent.html#a93">00452</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a93">OnChildHide</a>()
+00453   { comp-&gt;OnChildHide(); }
 00454 
-<a name="l00456"></a><a class="code" href="classawsEmbeddedComponent.html#a79">00456</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a79">SetLayout</a>(<a class="code" href="structiAwsLayoutManager.html">iAwsLayoutManager</a> *layoutMgr)
-00457   { comp-&gt;SetLayout(layoutMgr); }
+<a name="l00456"></a><a class="code" href="classawsEmbeddedComponent.html#a94">00456</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a94">OnChildShow</a>()
+00457   { comp-&gt;OnChildShow(); }
 00458 
-<a name="l00460"></a><a class="code" href="classawsEmbeddedComponent.html#a80">00460</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a80">getPreferredSize</a>()
-00461   { <span class="keywordflow">return</span> comp-&gt;getPreferredSize (); }
+<a name="l00460"></a><a class="code" href="classawsEmbeddedComponent.html#a95">00460</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a95">Unlink</a>()
+00461   { comp-&gt;Unlink(); }
 00462 
-<a name="l00464"></a><a class="code" href="classawsEmbeddedComponent.html#a81">00464</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a81">setPreferredSize</a> (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; size)
-00465   { comp-&gt;setPreferredSize(size); }
+<a name="l00464"></a><a class="code" href="classawsEmbeddedComponent.html#a96">00464</a>   <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a96">LinkBelow</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *c)
+00465   { comp-&gt;LinkBelow(c); }
 00466 
-<a name="l00468"></a><a class="code" href="classawsEmbeddedComponent.html#a82">00468</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a82">clearPreferredSize</a> ()
-00469   { comp-&gt;clearPreferredSize(); }
+<a name="l00468"></a><a class="code" href="classawsEmbeddedComponent.html#a97">00468</a>   <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a97">LinkAbove</a> (<a class="code" href="structiAwsComponent.html">iAwsComponent</a> *c)
+00469   { comp-&gt;LinkAbove(c); }
 00470 
-<a name="l00472"></a><a class="code" href="classawsEmbeddedComponent.html#a83">00472</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a83">getMinimumSize</a>()
-00473   { <span class="keywordflow">return</span> comp-&gt;getMinimumSize (); }
+<a name="l00472"></a><a class="code" href="classawsEmbeddedComponent.html#a98">00472</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a98">SetTopChild</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a>* child)
+00473   { comp-&gt;SetTopChild(child); }
 00474 
-<a name="l00476"></a><a class="code" href="classawsEmbeddedComponent.html#a84">00476</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRect.html">csRect</a> <a class="code" href="classawsEmbeddedComponent.html#a84">getInsets</a>()
-00477   { <span class="keywordflow">return</span> comp-&gt;getInsets (); }
+<a name="l00476"></a><a class="code" href="classawsEmbeddedComponent.html#a99">00476</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a99">OnSetFocus</a>()
+00477   { comp-&gt;OnSetFocus(); }
 00478 
-<a name="l00480"></a><a class="code" href="classawsEmbeddedComponent.html#a85">00480</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a85">isDeaf</a>()
-00481   { <span class="keywordflow">return</span> comp-&gt;isDeaf (); }
-00482 
-<a name="l00484"></a><a class="code" href="classawsEmbeddedComponent.html#a86">00484</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a86">SetDeaf</a> (<span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a85">isDeaf</a>)
-00485   { comp-&gt;SetDeaf (<a class="code" href="classawsEmbeddedComponent.html#a85">isDeaf</a>); }
-00486 
-<a name="l00488"></a><a class="code" href="classawsEmbeddedComponent.html#a87">00488</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classawsEmbeddedComponent.html#a87">OnFrame</a>()
-00489   { <span class="keywordflow">return</span> comp-&gt;OnFrame ();}
-00490 
-<a name="l00492"></a><a class="code" href="classawsEmbeddedComponent.html#a88">00492</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a88">OnAdded</a>()
-00493   { comp-&gt;OnAdded ();}
-00494 
-<a name="l00496"></a><a class="code" href="classawsEmbeddedComponent.html#a89">00496</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a89">OnResized</a>()
-00497   { comp-&gt;OnResized ();}
-00498 
-<a name="l00500"></a><a class="code" href="classawsEmbeddedComponent.html#a90">00500</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a90">OnChildMoved</a>()
-00501   { comp-&gt;OnChildMoved(); }
-00502 
-<a name="l00504"></a><a class="code" href="classawsEmbeddedComponent.html#a91">00504</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a91">OnRaise</a>()
-00505   { comp-&gt;OnRaise(); }
+<a name="l00480"></a><a class="code" href="classawsEmbeddedComponent.html#a100">00480</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a100">OnUnsetFocus</a>()
+00481   { comp-&gt;OnUnsetFocus(); }
+00482 };
+00483 
+<a name="l00487"></a><a class="code" href="classawsEmbeddedComponentFactory.html">00487</a> <span class="keyword">class </span><a class="code" href="classawsEmbeddedComponentFactory.html">awsEmbeddedComponentFactory</a> : <span class="keyword">public</span> <a class="code" href="structiAwsComponentFactory.html">iAwsComponentFactory</a>
+00488 {
+00489 <span class="keyword">protected</span>:
+00490   <a class="code" href="structiAws.html">iAws</a> *wmgr;
+00491 
+00492 <span class="keyword">public</span>:
+<a name="l00497"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a0">00497</a>   <a class="code" href="classawsEmbeddedComponentFactory.html#a0">awsEmbeddedComponentFactory</a>(<a class="code" href="structiAws.html">iAws</a> *_wmgr)
+00498   {
+00499     wmgr = _wmgr;
+00500   }
+00501 
+<a name="l00503"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a1">00503</a>   <span class="keyword">virtual</span> <a class="code" href="classawsEmbeddedComponentFactory.html#a1">~awsEmbeddedComponentFactory</a>()
+00504   {
+00505   }
 00506 
-<a name="l00508"></a><a class="code" href="classawsEmbeddedComponent.html#a92">00508</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a92">OnLower</a>()
-00509   { comp-&gt;OnLower(); }
-00510 
-<a name="l00512"></a><a class="code" href="classawsEmbeddedComponent.html#a93">00512</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a93">OnChildHide</a>()
-00513   { comp-&gt;OnChildHide(); }
-00514 
-<a name="l00516"></a><a class="code" href="classawsEmbeddedComponent.html#a94">00516</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a94">OnChildShow</a>()
-00517   { comp-&gt;OnChildShow(); }
-00518 
-<a name="l00520"></a><a class="code" href="classawsEmbeddedComponent.html#a95">00520</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a95">Unlink</a>()
-00521   { comp-&gt;Unlink(); }
+<a name="l00508"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a2">00508</a>   <a class="code" href="structiAws.html">iAws</a> *<a class="code" href="classawsEmbeddedComponentFactory.html#a2">WindowManager</a>() { <span class="keywordflow">return</span> wmgr; }
+00509 
+<a name="l00511"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a3">00511</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponentFactory.html#a3">Register</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *type)
+00512   {
+00513     wmgr-&gt;<a class="code" href="structiAws.html#a3">RegisterComponentFactory</a>(<span class="keyword">this</span>, type);
+00514   }
+00515 
+<a name="l00517"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a4">00517</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponentFactory.html#a4">RegisterConstant</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">int</span> value)
+00518   {
+00519     wmgr-&gt;<a class="code" href="structiAws.html#a0">GetPrefMgr</a>()-&gt;<a class="code" href="structiAwsPrefManager.html#a37">RegisterConstant</a>(name, value);
+00520   }
+00521 };
 00522 
-<a name="l00524"></a><a class="code" href="classawsEmbeddedComponent.html#a96">00524</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a96">LinkAbove</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a>* other)
-00525   {
-00526     <span class="comment">// We must do this manually. If we instead called comp-&gt;LinkAbove(), it</span>
-00527     <span class="comment">// would incorrectly link 'comp' into the component list rather than this</span>
-00528     <span class="comment">// wrapper instance, which means that methods, such as</span>
-00529     <span class="comment">// awsManager::RecursiveDrawChildren(), would invoke methods in 'comp'</span>
-00530     <span class="comment">// (such as comp-&gt;OnDraw()) rather than the overriden methods in this</span>
-00531     <span class="comment">// wrapper.</span>
-00532     <span class="keywordflow">if</span> (other)
-00533     {
-00534       <a class="code" href="structiAwsComponent.html">iAwsComponent</a>* above = other-&gt;<a class="code" href="structiAwsComponent.html#a54">ComponentAbove</a>();
-00535       comp-&gt;SetComponentAbove(above);
-00536       comp-&gt;SetComponentBelow(other);
-00537       other-&gt;<a class="code" href="structiAwsComponent.html#a56">SetComponentAbove</a>(<span class="keyword">this</span>);
-00538       <span class="keywordflow">if</span> (above)
-00539         above-&gt;<a class="code" href="structiAwsComponent.html#a57">SetComponentBelow</a>(<span class="keyword">this</span>);
-00540     }
-00541   }
-00542 
-<a name="l00544"></a><a class="code" href="classawsEmbeddedComponent.html#a97">00544</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a97">LinkBelow</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a>* other)
-00545   {
-00546     <span class="comment">// We must do this manually. If we instead called comp-&gt;LinkBelow(), it</span>
-00547     <span class="comment">// would incorrectly link 'comp' into the component list rather than this</span>
-00548     <span class="comment">// wrapper instance, which means that methods, such as</span>
-00549     <span class="comment">// awsManager::RecursiveDrawChildren(), would invoke methods in 'comp'</span>
-00550     <span class="comment">// (such as comp-&gt;OnDraw()) rather than the overriden methods in this</span>
-00551     <span class="comment">// wrapper.</span>
-00552     <span class="keywordflow">if</span> (other)
-00553     {
-00554       <a class="code" href="structiAwsComponent.html">iAwsComponent</a>* below = other-&gt;<a class="code" href="structiAwsComponent.html#a55">ComponentBelow</a>();
-00555       comp-&gt;SetComponentAbove(other);
-00556       comp-&gt;SetComponentBelow(below);
-00557       other-&gt;<a class="code" href="structiAwsComponent.html#a57">SetComponentBelow</a>(<span class="keyword">this</span>);
-00558       <span class="keywordflow">if</span> (below)
-00559         below-&gt;<a class="code" href="structiAwsComponent.html#a56">SetComponentAbove</a>(<span class="keyword">this</span>);
-00560     }
-00561   }
-00562 
-<a name="l00564"></a><a class="code" href="classawsEmbeddedComponent.html#a98">00564</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a98">SetTopChild</a>(<a class="code" href="structiAwsComponent.html">iAwsComponent</a>* child)
-00565   { comp-&gt;SetTopChild(child); }
-00566 
-<a name="l00568"></a><a class="code" href="classawsEmbeddedComponent.html#a99">00568</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a99">OnSetFocus</a>()
-00569   { comp-&gt;OnSetFocus(); }
-00570 
-<a name="l00572"></a><a class="code" href="classawsEmbeddedComponent.html#a100">00572</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponent.html#a100">OnUnsetFocus</a>()
-00573   { comp-&gt;OnUnsetFocus(); }
-00574 };
-00575 
-<a name="l00579"></a><a class="code" href="classawsEmbeddedComponentFactory.html">00579</a> <span class="keyword">class </span><a class="code" href="classawsEmbeddedComponentFactory.html">awsEmbeddedComponentFactory</a> : <span class="keyword">public</span> <a class="code" href="structiAwsComponentFactory.html">iAwsComponentFactory</a>
-00580 {
-00581 <span class="keyword">protected</span>:
-00582   <a class="code" href="structiAws.html">iAws</a> *wmgr;
-00583 
-00584 <span class="keyword">public</span>:
-<a name="l00589"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a0">00589</a>   <a class="code" href="classawsEmbeddedComponentFactory.html#a0">awsEmbeddedComponentFactory</a>(<a class="code" href="structiAws.html">iAws</a> *_wmgr)
-00590   {
-00591     wmgr = _wmgr;
-00592   }
-00593 
-<a name="l00595"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a1">00595</a>   <span class="keyword">virtual</span> <a class="code" href="classawsEmbeddedComponentFactory.html#a1">~awsEmbeddedComponentFactory</a>()
-00596   {
-00597   }
-00598 
-<a name="l00600"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a2">00600</a>   <a class="code" href="structiAws.html">iAws</a> *<a class="code" href="classawsEmbeddedComponentFactory.html#a2">WindowManager</a>() { <span class="keywordflow">return</span> wmgr; }
-00601 
-<a name="l00603"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a3">00603</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponentFactory.html#a3">Register</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *type)
-00604   {
-00605     wmgr-&gt;<a class="code" href="structiAws.html#a3">RegisterComponentFactory</a>(<span class="keyword">this</span>, type);
-00606   }
-00607 
-<a name="l00609"></a><a class="code" href="classawsEmbeddedComponentFactory.html#a4">00609</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classawsEmbeddedComponentFactory.html#a4">RegisterConstant</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">int</span> value)
-00610   {
-00611     wmgr-&gt;<a class="code" href="structiAws.html#a0">GetPrefMgr</a>()-&gt;<a class="code" href="structiAwsPrefManager.html#a37">RegisterConstant</a>(name, value);
-00612   }
-00613 };
-00614 
-00615 <span class="preprocessor">#endif // __CS_AWS_EMBEDDED_COMPONENT_H__</span>
-00616 <span class="preprocessor"></span>
+00523 <span class="preprocessor">#endif // __CS_AWS_EMBEDDED_COMPONENT_H__</span>
+00524 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
