@@ -25,107 +25,106 @@
 00006 <span class="comment">//  Copyright (c) 2001 Matt Reda. All rights reserved.</span>
 00007 <span class="comment">//</span>
 00008 
-00009 <span class="comment">// For setting mouse cursor</span>
-00010 <span class="preprocessor">#include "<a class="code" href="cursor_8h.html">ivideo/cursor.h</a>"</span>
-00011 
-00012 <span class="preprocessor">#ifndef __CS_OSXDELEGATE2D_H__</span>
-00013 <span class="preprocessor"></span><span class="preprocessor">#define __CS_OSXDELEGATE2D_H__</span>
-00014 <span class="preprocessor"></span>
+00009 <span class="preprocessor">#ifndef __CS_OSXDELEGATE2D_H__</span>
+00010 <span class="preprocessor"></span><span class="preprocessor">#define __CS_OSXDELEGATE2D_H__</span>
+00011 <span class="preprocessor"></span>
+00012 <span class="preprocessor">#include "csextern_osx.h"</span>
+00013 <span class="preprocessor">#include "<a class="code" href="cursor_8h.html">ivideo/cursor.h</a>"</span>
+00014 
 00015 <span class="preprocessor">#include &lt;OpenGL/OpenGL.h&gt;</span>
 00016 
-00017 
-00018 <span class="comment">// Part of this API must be callable from C++ code.  So we have to generate a C API that provides access to</span>
-00019 <span class="comment">// this class</span>
-00020 <span class="preprocessor">#if !defined(__cplusplus)</span>
-00021 <span class="preprocessor"></span>
-00022 <span class="preprocessor">#import &lt;Cocoa/Cocoa.h&gt;</span>
+00017 <span class="comment">// Part of this API must be callable from C++ code.  So we have to generate a C</span>
+00018 <span class="comment">// API that provides access to this class</span>
+00019 <span class="preprocessor">#if !defined(__cplusplus)</span>
+00020 <span class="preprocessor"></span>
+00021 <span class="preprocessor">#import &lt;Cocoa/Cocoa.h&gt;</span>
+00022 <span class="preprocessor">#import "OSXDriver2D.h"</span>
 00023 
-00024 <span class="preprocessor">#import "OSXDriver2D.h"</span>
-00025 
-00026 
-00027 <span class="keyword">@interface </span>OSXDelegate2D : NSObject
-00028 {
-00029     <span class="comment">// Keep track of mouse tracking state</span>
-00030     NSTrackingRectTag trackingMouseTag;
-00031     BOOL trackingMouse;
-00032     BOOL hideMouse;                             <span class="comment">// YES if mouse is not visible</span>
-00033 
-00034     <span class="comment">// Window - created even in fullscreen mode to get events (but with a different style)</span>
-00035     <span class="comment">// Window can have one of two titles - Paused or active</span>
-00036     NSWindow *window;
-00037     <span class="keywordtype">int</span> style;
-00038     NSString *title, *pausedTitle;
+00024 <span class="keyword">@interface </span>OSXDelegate2D : NSObject
+00025 {
+00026   <span class="comment">// Keep track of mouse tracking state</span>
+00027   NSTrackingRectTag trackingMouseTag;
+00028   BOOL trackingMouse;
+00029   BOOL hideMouse; <span class="comment">// YES if mouse is not visible</span>
+00030 
+00031   <span class="comment">// Window - created even in fullscreen mode to get events (but with a</span>
+00032   <span class="comment">// different style) Window can have one of two titles - Paused or active</span>
+00033   NSWindow *window;
+00034   <span class="keywordtype">int</span> style;
+00035   NSString *title, *pausedTitle;
+00036 
+00037   <span class="comment">// Is window paused (out of focus, etc)</span>
+00038   BOOL isPaused;
 00039 
-00040     <span class="comment">// Is window paused (out of focus, etc)</span>
-00041     BOOL isPaused;
+00040   <span class="comment">// Driver that this object works with</span>
+00041   OSXDriver2D driver;
 00042 
-00043     <span class="comment">// Driver that this object works with</span>
-00044     OSXDriver2D driver;
-00045 
-00046     <span class="comment">// Last processed event type.</span>
-00047     <span class="keywordtype">int</span> lastEventType;
-00048 }
+00043   <span class="comment">// Last processed event type.</span>
+00044   <span class="keywordtype">int</span> lastEventType;
+00045 }
+00046 
+00047 <span class="comment">// Initialize with driver</span>
+00048 - (<span class="keywordtype">id</span>) initWithDriver:(OSXDriver2D) drv;
 00049 
-00050 <span class="comment">// Initialize with driver</span>
-00051 - (<span class="keywordtype">id</span>) initWithDriver:(OSXDriver2D) drv;
+00050 <span class="comment">// Deallocate object</span>
+00051 - (<span class="keywordtype">void</span>) dealloc;
 00052 
-00053 <span class="comment">// Deallocate object</span>
-00054 - (<span class="keywordtype">void</span>) dealloc;
-00055 
-00056 <span class="comment">// Open a window if none open</span>
-00057 - (BOOL) openWindow:(<span class="keywordtype">char</span> *) winTitle width:(<span class="keywordtype">int</span>) w height:(<span class="keywordtype">int</span>) h depth:(<span class="keywordtype">int</span>) d fullscreen:(BOOL) fs onDisplay:(CGDirectDisplayID) display onScreen:(<span class="keywordtype">int</span>) screen;
-00058 
-00059 <span class="comment">// Set the window's title</span>
-00060 - (<span class="keywordtype">void</span>) setTitle:(<span class="keywordtype">char</span> *) newTitle;
-00061 
-00062 <span class="comment">// Set the mouse cursor</span>
-00063 - (BOOL) setMouseCursor:(csMouseCursorID) cursor;
-00064 
-00065 <span class="comment">// Start/Stop tracking mouse position</span>
-00066 - (<span class="keywordtype">void</span>) startTrackingMouse;
-00067 - (<span class="keywordtype">void</span>) stopTrackingMouse;
-00068 
-00069 <span class="comment">// Handle mouse entering or leaving the tracking area</span>
-00070 - (<span class="keywordtype">void</span>) mouseEntered:(NSEvent *) ev;
-00071 - (<span class="keywordtype">void</span>) mouseExited:(NSEvent *) ev;
-00072 
-00073 <span class="comment">// Close window (destroys OpenGL context as well)</span>
-00074 - (<span class="keywordtype">void</span>) closeWindow;
-00075 
-00076 <span class="comment">// Change focus of window and adjust title</span>
-00077 - (<span class="keywordtype">void</span>) focusChanged:(BOOL) focused shouldPause:(BOOL) pause;
-00078 
-00079 <span class="comment">// Dispatch an event to the driver</span>
-00080 - (<span class="keywordtype">void</span>) dispatchEvent:(NSEvent *) ev forView:(NSView *) view;
-00081 
-00082 <span class="keyword">@end</span>
-00083 
-00084 
-00085 <span class="preprocessor">#else // __cplusplus</span>
-00086 <span class="preprocessor"></span>
-00087 <span class="preprocessor">#include &lt;ApplicationServices/ApplicationServices.h&gt;</span>
-00088 
-00089 <span class="preprocessor">#define DEL2D_FUNC(ret, func) __private_extern__ "C" ret OSXDelegate2D_##func</span>
-00090 <span class="preprocessor"></span>
-00091 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *OSXDelegate2D;
-00092 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *csGraphics2DHandle;
-00093 
-00094 <span class="comment">// C API to driver delegate class</span>
-00095 DEL2D_FUNC(OSXDelegate2D, <span class="keyword">new</span>)(csGraphics2DHandle drv);
-00096 DEL2D_FUNC(<span class="keywordtype">void</span>, <span class="keyword">delete</span>)(OSXDelegate2D delegate);
-00097 DEL2D_FUNC(<span class="keywordtype">bool</span>, openWindow)(OSXDelegate2D delegate, <span class="keywordtype">char</span> *title, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">int</span> d, <span class="keywordtype">bool</span> fs, CGDirectDisplayID display, <span class="keywordtype">int</span> screen);
-00098 DEL2D_FUNC(<span class="keywordtype">void</span>, closeWindow)(OSXDelegate2D delegate);
-00099 DEL2D_FUNC(<span class="keywordtype">void</span>, setTitle)(OSXDelegate2D delegate, <span class="keywordtype">char</span> *title);
-00100 DEL2D_FUNC(<span class="keywordtype">bool</span>, setMouseCursor)(OSXDelegate2D delegate, <a class="code" href="group__gfx2d.html#ga1">csMouseCursorID</a> cursor);
-00101 DEL2D_FUNC(<span class="keywordtype">void</span>, focusChanged)(OSXDelegate2D delegate, <span class="keywordtype">bool</span> focused, <span class="keywordtype">bool</span> shouldPause);
-00102 DEL2D_FUNC(<span class="keywordtype">void</span>, setLevel)(OSXDelegate2D delegate, <span class="keywordtype">int</span> level);
-00103 DEL2D_FUNC(<span class="keywordtype">void</span>, setMousePosition)(OSXDelegate2D delegate, CGPoint point);
-00104 
-00105 <span class="preprocessor">#undef DEL2D_FUNC</span>
-00106 <span class="preprocessor"></span>
-00107 <span class="preprocessor">#endif // __cplusplus</span>
-00108 <span class="preprocessor"></span>
-00109 <span class="preprocessor">#endif // __CS_OSXDELEGATE2D_H__</span>
+00053 <span class="comment">// Open a window if none open</span>
+00054 - (BOOL) openWindow:(<span class="keywordtype">char</span> *) winTitle width:(<span class="keywordtype">int</span>) w height:(<span class="keywordtype">int</span>) h
+00055   depth:(<span class="keywordtype">int</span>) d fullscreen:(BOOL) fs onDisplay:(CGDirectDisplayID)
+00056   display onScreen:(<span class="keywordtype">int</span>) screen;
+00057 
+00058 <span class="comment">// Set the window's title</span>
+00059 - (<span class="keywordtype">void</span>) setTitle:(<span class="keywordtype">char</span> *) newTitle;
+00060 
+00061 <span class="comment">// Set the mouse cursor</span>
+00062 - (BOOL) setMouseCursor:(csMouseCursorID) cursor;
+00063 
+00064 <span class="comment">// Start/Stop tracking mouse position</span>
+00065 - (<span class="keywordtype">void</span>) startTrackingMouse;
+00066 - (<span class="keywordtype">void</span>) stopTrackingMouse;
+00067 
+00068 <span class="comment">// Handle mouse entering or leaving the tracking area</span>
+00069 - (<span class="keywordtype">void</span>) mouseEntered:(NSEvent *) ev;
+00070 - (<span class="keywordtype">void</span>) mouseExited:(NSEvent *) ev;
+00071 
+00072 <span class="comment">// Close window (destroys OpenGL context as well)</span>
+00073 - (<span class="keywordtype">void</span>) closeWindow;
+00074 
+00075 <span class="comment">// Change focus of window and adjust title</span>
+00076 - (<span class="keywordtype">void</span>) focusChanged:(BOOL) focused shouldPause:(BOOL) pause;
+00077 
+00078 <span class="comment">// Dispatch an event to the driver</span>
+00079 - (<span class="keywordtype">void</span>) dispatchEvent:(NSEvent *) ev forView:(NSView *) view;
+00080 
+00081 <span class="keyword">@end</span>
+00082 
+00083 <span class="preprocessor">#else // __cplusplus</span>
+00084 <span class="preprocessor"></span>
+00085 <span class="preprocessor">#include &lt;ApplicationServices/ApplicationServices.h&gt;</span>
+00086 
+00087 <span class="preprocessor">#define DEL2D_FUNC(ret, func) __private_extern__ "C" ret OSXDelegate2D_##func</span>
+00088 <span class="preprocessor"></span>
+00089 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *OSXDelegate2D;
+00090 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *csGraphics2DHandle;
+00091 
+00092 <span class="comment">// C API to driver delegate class</span>
+00093 DEL2D_FUNC(OSXDelegate2D, <span class="keyword">new</span>)(csGraphics2DHandle drv);
+00094 DEL2D_FUNC(<span class="keywordtype">void</span>, <span class="keyword">delete</span>)(OSXDelegate2D);
+00095 DEL2D_FUNC(<span class="keywordtype">bool</span>, openWindow)(OSXDelegate2D, <span class="keywordtype">char</span> *title, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h,
+00096   <span class="keywordtype">int</span> d, <span class="keywordtype">bool</span> fs, CGDirectDisplayID display, <span class="keywordtype">int</span> screen);
+00097 DEL2D_FUNC(<span class="keywordtype">void</span>, closeWindow)(OSXDelegate2D);
+00098 DEL2D_FUNC(<span class="keywordtype">void</span>, setTitle)(OSXDelegate2D, <span class="keywordtype">char</span> *title);
+00099 DEL2D_FUNC(<span class="keywordtype">bool</span>, setMouseCursor)(OSXDelegate2D, csMouseCursorID);
+00100 DEL2D_FUNC(<span class="keywordtype">void</span>, focusChanged)(OSXDelegate2D, <span class="keywordtype">bool</span> focused, <span class="keywordtype">bool</span> shouldPause);
+00101 DEL2D_FUNC(<span class="keywordtype">void</span>, setLevel)(OSXDelegate2D, <span class="keywordtype">int</span> level);
+00102 DEL2D_FUNC(<span class="keywordtype">void</span>, setMousePosition)(OSXDelegate2D, CGPoint point);
+00103 
+00104 <span class="preprocessor">#undef DEL2D_FUNC</span>
+00105 <span class="preprocessor"></span>
+00106 <span class="preprocessor">#endif // __cplusplus</span>
+00107 <span class="preprocessor"></span>
+00108 <span class="preprocessor">#endif // __CS_OSXDELEGATE2D_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
