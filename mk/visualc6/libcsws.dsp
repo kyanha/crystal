@@ -180,172 +180,163 @@ PostBuild_Cmds=echo File is a lib, Copy skipped.
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\csws\csabslay.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csabslay.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csapp.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csapp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csbackgr.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csbackgr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csbaglay.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csbaglay.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csbdrlay.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csbdrlay.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csboxlay.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csboxlay.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csbutton.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csbutton.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cschkbox.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cschkbox.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cscomp.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cscomp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cscwheel.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cscwheel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csdialog.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csdialog.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csflwlay.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csflwlay.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csgfxppl.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csgfxppl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csgrdlay.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csgrdlay.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csgrid.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csgrid.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cshints.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cshints.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csiline.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csiline.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cskeyacc.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cskeyacc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cslayout.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cslayout.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cslistbx.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cslistbx.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csmenu.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csmenu.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csmouse.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csmouse.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csnotebk.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csnotebk.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csradbut.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csradbut.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csscrbar.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csscrbar.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csskin.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csskin.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csspinbx.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csspinbx.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cssplit.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cssplit.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csstatic.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csstatic.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csstddlg.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csstddlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cstimer.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cstimer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cstree.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cstree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csttlbar.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csttlbar.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cswindow.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cswindow.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\csws.h
+SOURCE=..\..\libs\csws\..\..\include\csws\csws.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cswsaux.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cswsaux.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cswspal.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cswspal.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cswstex.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cswstex.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\cswsutil.h
+SOURCE=..\..\libs\csws\..\..\include\csws\cswsutil.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csws\sdefault.h
-# End Source File
-
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\data\config\csws.cfg
+SOURCE=..\..\libs\csws\..\..\include\csws\sdefault.h
 # End Source File
 
 # End Group

@@ -216,15 +216,7 @@ SOURCE=..\..\plugins\console\output\fancy\fancycon.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\fancycon.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgfancycon.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\console\output\fancy\fancycon.csplugin
 # End Source File
 
 # End Group

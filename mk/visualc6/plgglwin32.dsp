@@ -56,7 +56,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib glu32.lib  /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib  /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
 TargetPath=".\csrelease\temp\plgglwin32\glwin32.dll"
 SOURCE="$(InputPath)"
@@ -88,7 +88,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib glu32.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 TargetPath=".\csdebug\temp\plgglwin32\glwin32.dll"
@@ -121,7 +121,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib glu32.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csmemdbg\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csmemdbg\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 TargetPath=".\csmemdbg\temp\plgglwin32\glwin32.dll"
@@ -153,7 +153,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib glu32.lib  /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib  /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
 TargetPath=".\csrelease\temp\plgglwin32\glwin32.dll"
 SOURCE="$(InputPath)"
@@ -185,7 +185,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib glu32.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib opengl32.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgglwin32\glwin32.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 TargetPath=".\csdebug\temp\plgglwin32\glwin32.dll"
@@ -207,50 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\common\fontcache.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\graph2d.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\scrshot.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\softfontcache.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\driverdb.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glcommon2d.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glextmanager.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glfontcache.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glss.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glstates.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\iogl.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\canvas\openglwin\oglg2d.h
 # End Source File
 
@@ -262,47 +218,11 @@ SOURCE=..\..\plugins\video\canvas\openglwin\oglg2d.h
 
 SOURCE=..\..\mk\visualc6\plgglwin32.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglwin\glwin32.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\fontcache.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\graph2d.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\scrshot.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\softfontcache.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\driverdb.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glcommon2d.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glfontcache.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glss.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\canvas\openglwin\oglg2d.cpp

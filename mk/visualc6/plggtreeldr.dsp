@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\genmesh\persist\tree\gtreeldr.h
 
 SOURCE=..\..\mk\visualc6\plggtreeldr.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\genmesh\persist\tree\gtreeldr.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

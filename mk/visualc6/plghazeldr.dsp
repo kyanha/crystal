@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\haze\persist\standard\hazeldr.h
 
 SOURCE=..\..\mk\visualc6\plghazeldr.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\haze\persist\standard\hazeldr.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

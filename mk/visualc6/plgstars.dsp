@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\stars\object\stars.h
 
 SOURCE=..\..\mk\visualc6\plgstars.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\stars\object\stars.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

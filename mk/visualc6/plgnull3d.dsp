@@ -207,18 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\common\polybuf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\txtmgr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\vbufmgr.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\renderer\null\null_g3d.h
 # End Source File
 # Begin Source File
@@ -232,37 +220,13 @@ SOURCE=..\..\plugins\video\renderer\null\null_txt.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\null3d.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgnull3d.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\null\drawsprt.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\null\null3d.csplugin
 # End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\polybuf.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\txtmgr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\vbufmgr.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\renderer\null\null_g3d.cpp

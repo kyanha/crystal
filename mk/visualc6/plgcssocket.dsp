@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\net\driver\socket\socket.h
 
 SOURCE=..\..\mk\visualc6\plgcssocket.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\net\driver\socket\cssocket.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

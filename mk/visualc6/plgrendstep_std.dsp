@@ -207,18 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\renderloop\common\basesteploader.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\renderloop\common\basesteptype.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\renderloop\common\parserenderstep.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\engine\renderloop\stdsteps\fullquad.h
 # End Source File
 # Begin Source File
@@ -246,27 +234,11 @@ SOURCE=..\..\plugins\engine\renderloop\stdsteps\target.h
 
 SOURCE=..\..\mk\visualc6\plgrendstep_std.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\renderloop\stdsteps\rendstep_std.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\renderloop\common\basesteploader.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\renderloop\common\basesteptype.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\renderloop\common\parserenderstep.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\renderloop\stdsteps\fullquad.cpp

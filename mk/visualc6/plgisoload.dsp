@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\isoldr\isoload.h
 
 SOURCE=..\..\mk\visualc6\plgisoload.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\isoldr\isoload.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

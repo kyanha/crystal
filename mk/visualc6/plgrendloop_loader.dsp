@@ -207,10 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\renderloop\common\parserenderstep.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\engine\renderloop\loader\rlloader.h
 # End Source File
 
@@ -222,19 +218,11 @@ SOURCE=..\..\plugins\engine\renderloop\loader\rlloader.h
 
 SOURCE=..\..\mk\visualc6\plgrendloop_loader.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\renderloop\loader\rendloop_loader.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\renderloop\common\parserenderstep.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\renderloop\loader\rlloader.cpp

@@ -180,120 +180,111 @@ PostBuild_Cmds=echo File is a lib, Copy skipped.
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\cstool\anonrndbuf.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\anonrndbuf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\basetexfact.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\basetexfact.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\collider.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\collider.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\csanim2d.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\csanim2d.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\csfxscr.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\csfxscr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\cspixmap.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\cspixmap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\csview.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\csview.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\gentrtex.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\gentrtex.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\initapp.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\initapp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\keyval.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\keyval.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\mapnode.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\mapnode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\mdldata.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\mdldata.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\mdltool.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\mdltool.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\meshobjtmpl.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\meshobjtmpl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\prdots.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\prdots.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\prfire.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\prfire.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\proctex.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\proctex.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\prplasma.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\prplasma.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\prsky.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\prsky.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\prwater.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\prwater.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\rbuflock.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\rbuflock.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\rendermeshholder.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\rendermeshholder.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\rendermeshlist.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\rendermeshlist.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\sndwrap.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\sndwrap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\sprbuild.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\sprbuild.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\tokenlist.h
+SOURCE=..\..\libs\cstool\..\..\include\cstool\tokenlist.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\cstool\vidprefs.h
-# End Source File
-
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\data\config\system.cfg
+SOURCE=..\..\libs\cstool\..\..\include\cstool\vidprefs.h
 # End Source File
 
 # End Group

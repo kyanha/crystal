@@ -207,26 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\common\dpmesh.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\dtmesh.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\polybuf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\txtmgr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\vbufmgr.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\renderer\software\scan.h
 # End Source File
 # Begin Source File
@@ -256,89 +236,13 @@ SOURCE=..\..\plugins\video\renderer\software\tcache.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\soft3d.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgsoft3d.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\blend.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\drawsprt.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\haloscan.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\lightmap.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\pixtype.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\scanalph.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\scanln.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\scanpi.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\scanpi2.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\scanxx.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\scanxxfx.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\soft3d.csplugin
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\software\unblend.inc
 # End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\dpmesh.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\dtmesh.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\polybuf.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\txtmgr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\vbufmgr.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\renderer\software\drawpmap.cpp

@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\bezier\persist\standard\bezierldr.h
 
 SOURCE=..\..\mk\visualc6\plgbezierldr.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\bezier\persist\standard\bezierldr.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

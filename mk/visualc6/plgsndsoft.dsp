@@ -207,14 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\common\shdl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\renderer\common\slstn.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\sound\renderer\software\sndhdl.h
 # End Source File
 # Begin Source File
@@ -234,23 +226,11 @@ SOURCE=..\..\plugins\sound\renderer\software\srdrsrc.h
 
 SOURCE=..\..\mk\visualc6\plgsndsoft.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\renderer\software\sndsoft.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\renderer\common\shdl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\renderer\common\slstn.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\sound\renderer\software\sndhdl.cpp

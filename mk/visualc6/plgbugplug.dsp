@@ -224,19 +224,7 @@ SOURCE=..\..\plugins\bugplug\spider.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\bugplug.cfg
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\data\config\bugplug.key
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgbugplug.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\bugplug\bugplug.csplugin
 # End Source File
 
 # End Group

@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\video\loader\tga\tgaimage.h
 
 SOURCE=..\..\mk\visualc6\plgcstgaimg.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\loader\tga\cstgaimg.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\spiral\persist\standard\spirldr.h
 
 SOURCE=..\..\mk\visualc6\plgspirldr.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\spiral\persist\standard\spirldr.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

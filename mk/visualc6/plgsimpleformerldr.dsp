@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\terraformer\simpleformer\loader\loader.h
 
 SOURCE=..\..\mk\visualc6\plgsimpleformerldr.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\terraformer\simpleformer\loader\simpleformerldr.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

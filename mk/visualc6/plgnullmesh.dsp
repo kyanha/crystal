@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\null\object\nullmesh.h
 
 SOURCE=..\..\mk\visualc6\plgnullmesh.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\null\object\nullmesh.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -199,10 +199,6 @@ SOURCE=..\..\apps\tutorial\awstut\awstut.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\awstut.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\appawstut.rc
 # End Source File
 

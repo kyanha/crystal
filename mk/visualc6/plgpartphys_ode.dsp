@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\particles\physics\ode\odeparticles.h
 
 SOURCE=..\..\mk\visualc6\plgpartphys_ode.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\particles\physics\ode\partphys_ode.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

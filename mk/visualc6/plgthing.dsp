@@ -236,15 +236,7 @@ SOURCE=..\..\plugins\mesh\thing\object\thing.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\thing.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgthing.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\thing\object\thing.csplugin
 # End Source File
 
 # End Group

@@ -207,10 +207,6 @@ SOURCE=..\..\apps\tests\awstest\cuscomp.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\awstest.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\appawstest.rc
 # End Source File
 

@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\ball\object\ball.h
 
 SOURCE=..\..\mk\visualc6\plgball.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\ball\object\ball.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\haze\object\haze.h
 
 SOURCE=..\..\mk\visualc6\plghaze.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\haze\object\haze.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

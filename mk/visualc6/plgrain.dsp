@@ -207,14 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\partgen\partgen.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\partgen\particle.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\mesh\rain\object\rain.h
 # End Source File
 
@@ -226,23 +218,11 @@ SOURCE=..\..\plugins\mesh\rain\object\rain.h
 
 SOURCE=..\..\mk\visualc6\plgrain.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\rain\object\rain.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\partgen\partgen.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\partgen\particle.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\mesh\rain\object\rain.cpp

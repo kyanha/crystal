@@ -211,10 +211,6 @@ SOURCE=..\..\apps\demo\demoseq.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\csdemo.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\appcsdemo.rc
 # End Source File
 

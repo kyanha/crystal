@@ -199,10 +199,6 @@ SOURCE=..\..\apps\tests\joytest\joytest.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\apps\tests\joytest\joytest.csplugin
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\appjoytest.rc
 # End Source File
 

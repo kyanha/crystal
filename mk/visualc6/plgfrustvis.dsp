@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\culling\frustvis\frustvis.h
 
 SOURCE=..\..\mk\visualc6\plgfrustvis.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\culling\frustvis\frustvis.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

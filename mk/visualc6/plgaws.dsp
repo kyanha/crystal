@@ -207,30 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\iaws\aws.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\iaws\awscnvs.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\iaws\awsdefs.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\iaws\awsdock.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\iaws\awsecomp.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\iaws\awsparm.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\aws\aws.h
 # End Source File
 # Begin Source File
@@ -393,10 +369,6 @@ SOURCE=..\..\plugins\aws\slparse.h
 # Begin Source File
 
 SOURCE=..\..\mk\visualc6\plgaws.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\aws.csplugin
 # End Source File
 
 # End Group

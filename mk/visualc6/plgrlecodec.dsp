@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\video\format\codecs\rle\rle.h
 
 SOURCE=..\..\mk\visualc6\plgrlecodec.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\format\codecs\rle\rlecodec.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

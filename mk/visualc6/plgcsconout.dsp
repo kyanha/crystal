@@ -220,15 +220,7 @@ SOURCE=..\..\plugins\console\output\standard\csconout.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\standardcon.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgcsconout.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\console\output\standard\csconout.csplugin
 # End Source File
 
 # End Group

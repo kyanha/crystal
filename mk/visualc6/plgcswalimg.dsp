@@ -222,10 +222,6 @@ SOURCE=..\..\plugins\video\loader\wal\walpal.h
 
 SOURCE=..\..\mk\visualc6\plgcswalimg.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\loader\wal\cswalimg.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
