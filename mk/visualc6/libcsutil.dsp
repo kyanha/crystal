@@ -252,6 +252,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\csevent.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cseventflattener.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\..\..\include\csutil\cseventq.h
 # End Source File
 # Begin Source File
@@ -698,6 +702,10 @@ SOURCE=..\..\libs\csutil\csevcord.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\csevent.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\cseventflattener.cpp
 # End Source File
 # Begin Source File
 
