@@ -449,46 +449,46 @@ follows.
 
 <DL COMPACT>
 <DT><CODE>crystalspace.h</CODE>
-<DD>All public headers in entire Crystal Space SDK.
+<DD>Nearly all public headers in entire Crystal Space SDK.
 <DT><CODE>csgeom.h</CODE>
-<DD>All of `<TT>CS/include/csgeom</TT>'.
+<DD>Content of `<TT>CS/include/csgeom</TT>'.
 <DT><CODE>csgfx.h</CODE>
-<DD>All of `<TT>CS/include/csgfx</TT>'.
+<DD>Content of `<TT>CS/include/csgfx</TT>'.
 <DT><CODE>cstool.h</CODE>
-<DD>All of `<TT>CS/include/cstool</TT>'.
+<DD>Content of `<TT>CS/include/cstool</TT>'.
 <DT><CODE>csutil.h</CODE>
-<DD>All of `<TT>CS/include/csutil</TT>'.
+<DD>Content of `<TT>CS/include/csutil</TT>'.
 <DT><CODE>csws.h</CODE>
-<DD>All of `<TT>CS/include/csws</TT>'.
+<DD>Content of `<TT>CS/include/csws</TT>'.
 <DT><CODE>iaws.h</CODE>
-<DD>All of `<TT>CS/include/iaws</TT>'.
+<DD>Content of `<TT>CS/include/iaws</TT>'.
 <DT><CODE>iengine.h</CODE>
-<DD>All of `<TT>CS/include/iengine</TT>'.
+<DD>Content of `<TT>CS/include/iengine</TT>'.
 <DT><CODE>igeom.h</CODE>
-<DD>All of `<TT>CS/include/igeom</TT>'.
+<DD>Content of `<TT>CS/include/igeom</TT>'.
 <DT><CODE>igraphic.h</CODE>
-<DD>All of `<TT>CS/include/igraphic</TT>'.
+<DD>Content of `<TT>CS/include/igraphic</TT>'.
 <DT><CODE>imap.h</CODE>
-<DD>All of `<TT>CS/include/imap</TT>'.
+<DD>Content of `<TT>CS/include/imap</TT>'.
 <DT><CODE>imesh.h</CODE>
-<DD>All of `<TT>CS/include/imesh</TT>'.
+<DD>Content of `<TT>CS/include/imesh</TT>'.
 <DT><CODE>inetwork.h</CODE>
-<DD>All of `<TT>CS/include/inetwork</TT>'.
+<DD>Content of `<TT>CS/include/inetwork</TT>'.
 <DT><CODE>isound.h</CODE>
-<DD>All of `<TT>CS/include/isound</TT>'.
+<DD>Content of `<TT>CS/include/isound</TT>'.
 <DT><CODE>itexture.h</CODE>
-<DD>All of `<TT>CS/include/itexture</TT>'.
+<DD>Content of `<TT>CS/include/itexture</TT>'.
 <DT><CODE>iutil.h</CODE>
-<DD>All of `<TT>CS/include/iutil</TT>'.
+<DD>Content of `<TT>CS/include/iutil</TT>'.
 <DT><CODE>ivaria.h</CODE>
-<DD>All of `<TT>CS/include/ivaria</TT>'.
+<DD>Content of `<TT>CS/include/ivaria</TT>'.
 <DT><CODE>ivideo.h</CODE>
-<DD>All of `<TT>CS/include/ivideo</TT>'.
+<DD>Content of `<TT>CS/include/ivideo</TT>'.
 </DL>
 <P>
 
-Users new to the SDK will probably want to include `<TT>crystalspace.h</TT>' since
-it is simplest; whereas more advanced users may want to include
+Users new to the SDK will probably want to include `<TT>crystalspace.h</TT>'
+since it is simplest; whereas more advanced users may want to include
 `<TT>csutil.h</TT>', `<TT>cstool.h</TT>', etc.; and power users can continue to include
 only the individual headers required by a particular piece of code.
 </P><P>
@@ -497,6 +497,44 @@ As a corollary, the old `<TT>CS/include/css.h</TT>' header, which included many,
 though not all Crystal Space header files, has been removed. If you require
 this type functionality from a header, then include the new
 `<TT>crystalspace.h</TT>' instead.
+</P><P>
+
+Be aware that there is a very small set of public headers not included in any
+of the master headers. These are omitted from the master headers because they
+reference external resources which might not be known or available to all
+clients of the master headers. Clients requiring these special-case headers
+will need to include them manually, on an as-needed basis, and arrange that the
+build system has sufficient knowledge about the external resources to satisfy
+the dependencies at build time.  The list of headers which are excluded from
+the master headers follows.
+</P><P>
+
+<UL>
+<LI>
+<CODE>csutil/archive.h</CODE>
+<LI>
+<CODE>csutil/zip.h</CODE>
+<LI>
+<CODE>inetwork/vosapi.h</CODE>
+<LI>
+<CODE>ivaria/ode.h</CODE>
+<LI>
+<CODE>ivideo/wxwin.h</CODE>
+</UL>
+<P>
+
+As an example, if you need access to the `<SAMP>iWxWindow</SAMP>' interface, then you
+must include `<TT>ivideo/wxwin.h</TT>' manually; it will not be included as part of
+`<TT>crystalspace.h</TT>' or the other master headers. Furthermore, you will need
+to let the build system know where it can find the wxWidgets resources (headers
+and libraries). Typically, this is done by adding a wxWidgets check to your
+project's `<TT>configure</TT>' script; emitting the results of the check to your
+`<TT>Jamconfig</TT>' file with the <CODE>CS_EMIT_BUILD_RESULT()</CODE> Autoconf macro;
+and finally utilizing the result of that check in your project's `<TT>Jamfile</TT>'
+by invoking the Jam rule `<SAMP>ExternalLibs</SAMP>'. For MSVC project files, the
+location of the wxWidgets resources will have to be added as <EM>additional
+include directories</EM> and <EM>additional library directories</EM>, in the project
+settings or globally, to ensure that MSVC will be able to find them.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
