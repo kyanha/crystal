@@ -150,10 +150,6 @@ SOURCE=..\..\libs\csgeom\chainhull2d.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\crysball.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgeom\csrect.cpp
 # End Source File
 # Begin Source File
@@ -938,10 +934,6 @@ SOURCE=..\..\libs\..\include\csgeom\chainhull2d.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\csgeom\crysball.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csgeom\cspoint.h
 # End Source File
 # Begin Source File
@@ -1615,10 +1607,6 @@ SOURCE=..\..\libs\..\include\csutil\hashhandlers.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\hashr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\..\include\csutil\indprint.h
 # End Source File
 # Begin Source File
 
