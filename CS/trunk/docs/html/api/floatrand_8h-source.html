@@ -17,44 +17,70 @@
 <div class="qindex"><a class="qindex" href="index.html">Main&nbsp;Page</a> | <a class="qindex" href="modules.html">Modules</a> | <a class="qindex" href="hierarchy.html">Class&nbsp;Hierarchy</a> | <a class="qindex" href="classes.html">Alphabetical&nbsp;List</a> | <a class="qindex" href="annotated.html">Compound&nbsp;List</a> | <a class="qindex" href="files.html">File&nbsp;List</a> | <a class="qindex" href="functions.html">Compound&nbsp;Members</a> | <a class="qindex" href="globals.html">File&nbsp;Members</a> | <a class="qindex" href="pages.html">Related&nbsp;Pages</a></div>
 <h1>csutil/floatrand.h</h1><div class="fragment"><pre>00001 <span class="comment">/*</span>
 00002 <span class="comment">    Copyright (C) 2004 by Jorrit Tyberghein</span>
-00003 <span class="comment"></span>
-00004 <span class="comment">    Fast simple floating point generator for a floating point value</span>
-00005 <span class="comment">    between 0 and 1.</span>
-00006 <span class="comment"></span>
-00007 <span class="comment">    This library is free software; you can redistribute it and/or</span>
-00008 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
-00009 <span class="comment">    License as published by the Free Software Foundation; either</span>
-00010 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
-00011 <span class="comment"></span>
-00012 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
-00013 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-00014 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
-00015 <span class="comment">    Library General Public License for more details.</span>
-00016 <span class="comment"></span>
-00017 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
-00018 <span class="comment">    License along with this library; if not, write to the Free</span>
-00019 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
-00020 <span class="comment">*/</span>
-00021 
-00022 <span class="preprocessor">#ifndef __CS_FLOATRAND_H__</span>
-00023 <span class="preprocessor"></span><span class="preprocessor">#define __CS_FLOATRAND_H__</span>
-00024 <span class="preprocessor"></span>
-00025 <span class="preprocessor">#include "csextern.h"</span>
-00026 
-00027 CS_CSUTIL_EXPORT_VAR <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cs_floatrand_seed;
-00028 
-00029 <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> csFastRandFloat ()
-00030 {
-00031   <span class="keyword">static</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> b = 1664525;
-00032   <span class="keyword">static</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> c = 1013904223;
-00033   cs_floatrand_seed = b*cs_floatrand_seed + c;
-00034   uint32 temp = 0x3f800000 | (0x007fffff &amp; cs_floatrand_seed);
-00035   <span class="keywordtype">float</span> r = (*(<span class="keywordtype">float</span>*)&amp;temp)-1.0;
-00036   <span class="keywordflow">return</span> r;
-00037 }
-00038 
-00039 <span class="preprocessor">#endif // __CS_FLOATRAND_H__</span>
-00040 <span class="preprocessor"></span>
+00003 <span class="comment">    Copyright (C) 2005 by Eric Sunshine</span>
+00004 <span class="comment"></span>
+00005 <span class="comment">    This library is free software; you can redistribute it and/or</span>
+00006 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
+00007 <span class="comment">    License as published by the Free Software Foundation; either</span>
+00008 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
+00009 <span class="comment"></span>
+00010 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
+00011 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+00012 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+00013 <span class="comment">    Library General Public License for more details.</span>
+00014 <span class="comment"></span>
+00015 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
+00016 <span class="comment">    License along with this library; if not, write to the Free</span>
+00017 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
+00018 <span class="comment">*/</span>
+00019 
+00020 <span class="preprocessor">#ifndef __CS_CSUTIL_FLOATRAND_H__</span>
+00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_FLOATRAND_H__</span>
+00022 <span class="preprocessor"></span>
+00023 <span class="preprocessor">#include "csextern.h"</span>
+00024 
+<a name="l00028"></a><a class="code" href="classcsRandomFloatGen.html">00028</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csRandomFloatGen
+00029 {
+00030 <span class="keyword">private</span>:
+00031   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> seed;
+00032 
+00033 <span class="keyword">public</span>:
+<a name="l00035"></a><a class="code" href="classcsRandomFloatGen.html#a0">00035</a>   csRandomFloatGen ()
+00036   { Initialize(); }
+<a name="l00038"></a><a class="code" href="classcsRandomFloatGen.html#a1">00038</a>   csRandomFloatGen (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> seed)
+00039   { Initialize(seed); }
+00040 
+00042   <span class="keywordtype">void</span> Initialize();
+<a name="l00044"></a><a class="code" href="classcsRandomFloatGen.html#a3">00044</a>   <span class="keywordtype">void</span> Initialize(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> new_seed)
+00045   { seed = new_seed; }
+00046 
+<a name="l00048"></a><a class="code" href="classcsRandomFloatGen.html#a4">00048</a>   <span class="keywordtype">float</span> Get()
+00049   {
+00050     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <span class="keyword">const</span> b = 1664525;
+00051     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <span class="keyword">const</span> c = 1013904223;
+00052     seed = b * seed + c;
+00053     uint32 temp = 0x3f800000 | (0x007fffff &amp; seed);
+00054     <span class="keywordflow">return</span> (*(<span class="keywordtype">float</span>*)&amp;temp) - 1.0;
+00055   }
+00056 
+<a name="l00058"></a><a class="code" href="classcsRandomFloatGen.html#a5">00058</a>   <span class="keywordtype">float</span> Get(<span class="keywordtype">float</span> max)
+00059   {
+00060     <span class="keywordflow">return</span> max * Get();
+00061   }
+00062 
+<a name="l00064"></a><a class="code" href="classcsRandomFloatGen.html#a6">00064</a>   <span class="keywordtype">float</span> Get(<span class="keywordtype">float</span> min, <span class="keywordtype">float</span> max)
+00065   {
+00066     <span class="keywordtype">float</span> <span class="keyword">const</span> w = max - min;
+00067     <span class="keywordflow">return</span> min + w * Get();
+00068   }
+00069 
+<a name="l00071"></a><a class="code" href="classcsRandomFloatGen.html#a7">00071</a>   <span class="keywordtype">float</span> GetAngle()
+00072   {
+00073     <span class="keywordflow">return</span> TWO_PI * Get();
+00074   }
+00075 };
+00076 
+00077 <span class="preprocessor">#endif // __CS_CSUTIL_FLOATRAND_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.3 
 </small></address> </div></body> </html>
