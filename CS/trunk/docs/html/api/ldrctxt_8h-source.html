@@ -46,36 +46,39 @@
 00032 <span class="keyword">struct </span><a class="code" href="structiRegion.html">iRegion</a>;
 00033 <span class="keyword">struct </span><a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>;
 00034 <span class="keyword">struct </span><a class="code" href="structiLight.html">iLight</a>;
-00035 
-00036 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiLoaderContext.html">iLoaderContext</a>, 0, 1, 0);
-00037 
-<a name="l00051"></a><a class="code" href="structiLoaderContext.html">00051</a> <span class="keyword">struct </span><a class="code" href="structiLoaderContext.html">iLoaderContext</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00052 {
-00054   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiLoaderContext.html#a0">FindSector</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00055   
-00061   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiLoaderContext.html#a1">FindMaterial</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename) = 0;
-00062 
-00069   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiLoaderContext.html#a2">FindNamedMaterial</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00070         <span class="keyword">const</span> <span class="keywordtype">char</span> *filename) = 0;
-00072   <span class="keyword">virtual</span> <a class="code" href="structiMeshFactoryWrapper.html">iMeshFactoryWrapper</a>* <a class="code" href="structiLoaderContext.html#a3">FindMeshFactory</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00074   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiLoaderContext.html#a4">FindMeshObject</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00075   
-00080   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiLoaderContext.html#a5">FindTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename) = 0;
-00081 
-00086   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiLoaderContext.html#a6">FindNamedTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00087         <span class="keyword">const</span> <span class="keywordtype">char</span> *filename) = 0;
-00088 
-00090   <span class="keyword">virtual</span> <a class="code" href="structiLight.html">iLight</a>* <a class="code" href="structiLoaderContext.html#a7">FindLight</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00091 
-00096   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoaderContext.html#a8">CheckDupes</a> () <span class="keyword">const</span> = 0;
-00097 
-00102   <span class="keyword">virtual</span> <a class="code" href="structiRegion.html">iRegion</a>* <a class="code" href="structiLoaderContext.html#a9">GetRegion</a> () <span class="keyword">const</span> = 0;
-00103 
-00108   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoaderContext.html#a10">CurrentRegionOnly</a> () <span class="keyword">const</span> = 0;
-00109 };
-00110 
-00113 <span class="preprocessor">#endif // __CS_IMAP_LDRCTXT_H__</span>
-00114 <span class="preprocessor"></span>
+00035 <span class="keyword">struct </span><a class="code" href="structiShader.html">iShader</a>;
+00036 
+00037 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiLoaderContext.html">iLoaderContext</a>, 0, 2, 0);
+00038 
+<a name="l00052"></a><a class="code" href="structiLoaderContext.html">00052</a> <span class="keyword">struct </span><a class="code" href="structiLoaderContext.html">iLoaderContext</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00053 {
+00055   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiLoaderContext.html#a0">FindSector</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00056   
+00062   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiLoaderContext.html#a1">FindMaterial</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename) = 0;
+00063 
+00070   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiLoaderContext.html#a2">FindNamedMaterial</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00071         <span class="keyword">const</span> <span class="keywordtype">char</span> *filename) = 0;
+00073   <span class="keyword">virtual</span> <a class="code" href="structiMeshFactoryWrapper.html">iMeshFactoryWrapper</a>* <a class="code" href="structiLoaderContext.html#a3">FindMeshFactory</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00075   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiLoaderContext.html#a4">FindMeshObject</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00076   
+00081   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiLoaderContext.html#a5">FindTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename) = 0;
+00082 
+00087   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiLoaderContext.html#a6">FindNamedTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00088         <span class="keyword">const</span> <span class="keywordtype">char</span> *filename) = 0;
+00089 
+00091   <span class="keyword">virtual</span> <a class="code" href="structiLight.html">iLight</a>* <a class="code" href="structiLoaderContext.html#a7">FindLight</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00092 
+00094   <span class="keyword">virtual</span> <a class="code" href="structiShader.html">iShader</a>* <a class="code" href="structiLoaderContext.html#a8">FindShader</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00095 
+00100   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoaderContext.html#a9">CheckDupes</a> () <span class="keyword">const</span> = 0;
+00101 
+00106   <span class="keyword">virtual</span> <a class="code" href="structiRegion.html">iRegion</a>* <a class="code" href="structiLoaderContext.html#a10">GetRegion</a> () <span class="keyword">const</span> = 0;
+00107 
+00112   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoaderContext.html#a11">CurrentRegionOnly</a> () <span class="keyword">const</span> = 0;
+00113 };
+00114 
+00117 <span class="preprocessor">#endif // __CS_IMAP_LDRCTXT_H__</span>
+00118 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
