@@ -44,106 +44,129 @@
 00033 <span class="preprocessor">#define SCF_DECLARE_IBASE_POOLED_DECL(Class, parentClass)\</span>
 00034 <span class="preprocessor">  Class Pool                                            \</span>
 00035 <span class="preprocessor">  {                                                     \</span>
-00036 <span class="preprocessor">    parentClass* pool;                                  \</span>
-00037 <span class="preprocessor">  public:                                               \</span>
-00038 <span class="preprocessor">    Pool ();                                            \</span>
-00039 <span class="preprocessor">    ~Pool ();                                           \</span>
-00040 <span class="preprocessor">    parentClass* Alloc ();                              \</span>
-00041 <span class="preprocessor">    void Recycle (parentClass* instance);               \</span>
-00042 <span class="preprocessor">  };                                                    \</span>
-00043 <span class="preprocessor">  friend class Pool;                                    \</span>
-00044 <span class="preprocessor">  Pool* scfPool;                                        \</span>
-00045 <span class="preprocessor">  parentClass* poolNext;                                \</span>
-00046 <span class="preprocessor">  virtual void PoolRecycle ();                          \</span>
-00047 <span class="preprocessor">  SCF_DECLARE_IBASE                                     \</span>
-00048 <span class="preprocessor">  </span>
-00049 <span class="preprocessor"></span>
-<a name="l00074"></a><a class="code" href="group__scf.html#ga6">00074</a> <span class="preprocessor">#define SCF_DECLARE_IBASE_POOLED(parentClass) \</span>
-00075 <span class="preprocessor">  SCF_DECLARE_IBASE_POOLED_DECL(class, parentClass)</span>
-00076 <span class="preprocessor"></span>
-<a name="l00080"></a><a class="code" href="group__scf.html#ga7">00080</a> <span class="preprocessor">#define SCF_DECLARE_IBASE_POOLED_EXTERN(Extern, parentClass) \</span>
-00081 <span class="preprocessor">  SCF_DECLARE_IBASE_POOLED_DECL(class Extern, parentClass)</span>
-00082 <span class="preprocessor"></span>
-<a name="l00087"></a><a class="code" href="group__scf.html#ga8">00087</a> <span class="preprocessor">#define SCF_CONSTRUCT_IBASE_POOLED(Pool)                \</span>
-00088 <span class="preprocessor">  SCF_CONSTRUCT_IBASE(0);                               \</span>
-00089 <span class="preprocessor">  poolNext = 0;                                         \</span>
-00090 <span class="preprocessor">  scfPool = (Pool)</span>
-00091 <span class="preprocessor"></span>  
-<a name="l00095"></a><a class="code" href="group__scf.html#ga9">00095</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL_CTOR(Class)            \</span>
-00096 <span class="preprocessor">Class::Pool::Pool ()                                    \</span>
-00097 <span class="preprocessor">{                                                       \</span>
-00098 <span class="preprocessor">  pool = 0;                                             \</span>
-00099 <span class="preprocessor">}                                               </span>
-00100 <span class="preprocessor"></span>    
-<a name="l00104"></a><a class="code" href="group__scf.html#ga10">00104</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL_DTOR(Class)            \</span>
-00105 <span class="preprocessor">Class::Pool::~Pool ()                                   \</span>
-00106 <span class="preprocessor">{                                                       \</span>
-00107 <span class="preprocessor">  while (pool != 0)                                     \</span>
-00108 <span class="preprocessor">  {                                                     \</span>
-00109 <span class="preprocessor">    Class* n = pool-&gt;poolNext;                          \</span>
-00110 <span class="preprocessor">    delete pool;                                        \</span>
-00111 <span class="preprocessor">    pool = n;                                           \</span>
-00112 <span class="preprocessor">  }                                                     \</span>
-00113 <span class="preprocessor">}                                                       </span>
-00114 <span class="preprocessor"></span>
-<a name="l00118"></a><a class="code" href="group__scf.html#ga11">00118</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL_ALLOC(Class)           \</span>
-00119 <span class="preprocessor">Class* Class::Pool::Alloc ()                            \</span>
-00120 <span class="preprocessor">{                                                       \</span>
-00121 <span class="preprocessor">  Class* newInst;                                       \</span>
-00122 <span class="preprocessor">  if (pool != 0)                                        \</span>
-00123 <span class="preprocessor">  {                                                     \</span>
-00124 <span class="preprocessor">    newInst = pool;                                     \</span>
-00125 <span class="preprocessor">    pool = pool-&gt;poolNext;                              \</span>
-00126 <span class="preprocessor">  }                                                     \</span>
-00127 <span class="preprocessor">  else                                                  \</span>
-00128 <span class="preprocessor">    newInst = new Class (this);                         \</span>
-00129 <span class="preprocessor">  return newInst;                                       \</span>
-00130 <span class="preprocessor">}</span>
-00131 <span class="preprocessor"></span>
-<a name="l00135"></a><a class="code" href="group__scf.html#ga12">00135</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL_RECYCLE(Class)         \</span>
-00136 <span class="preprocessor">void Class::Pool::Recycle (Class* instance)             \</span>
-00137 <span class="preprocessor">{                                                       \</span>
-00138 <span class="preprocessor">  instance-&gt;PoolRecycle ();                             \</span>
-00139 <span class="preprocessor">  instance-&gt;poolNext = pool;                            \</span>
-00140 <span class="preprocessor">  pool = instance;                                      \</span>
-00141 <span class="preprocessor">}</span>
-00142 <span class="preprocessor"></span>
-<a name="l00146"></a><a class="code" href="group__scf.html#ga13">00146</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL(Class)                 \</span>
-00147 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL_CTOR(Class)                  \</span>
-00148 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL_DTOR(Class)                  \</span>
-00149 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL_ALLOC(Class)                 \</span>
-00150 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL_RECYCLE(Class)</span>
-00151 <span class="preprocessor"></span>  
-<a name="l00155"></a><a class="code" href="group__scf.html#ga14">00155</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_INCREF_POOLED(Class)        \</span>
-00156 <span class="preprocessor">void Class::IncRef ()                                   \</span>
-00157 <span class="preprocessor">{                                                       \</span>
-00158 <span class="preprocessor">  scfRefCount++;                                        \</span>
-00159 <span class="preprocessor">}</span>
-00160 <span class="preprocessor"></span>
-<a name="l00164"></a><a class="code" href="group__scf.html#ga15">00164</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_DECREF_POOLED(Class)        \</span>
-00165 <span class="preprocessor">void Class::DecRef ()                                   \</span>
-00166 <span class="preprocessor">{                                                       \</span>
-00167 <span class="preprocessor">  if (scfRefCount == 1)                                 \</span>
-00168 <span class="preprocessor">  {                                                     \</span>
-00169 <span class="preprocessor">    scfPool-&gt;Recycle (this);                            \</span>
-00170 <span class="preprocessor">    return;                                             \</span>
-00171 <span class="preprocessor">  }                                                     \</span>
-00172 <span class="preprocessor">  scfRefCount--;                                        \</span>
-00173 <span class="preprocessor">}</span>
-00174 <span class="preprocessor"></span>
-<a name="l00178"></a><a class="code" href="group__scf.html#ga16">00178</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOLED(Class)               \</span>
-00179 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL(Class)                       \</span>
-00180 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_INCREF_POOLED(Class)              \</span>
-00181 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_DECREF_POOLED(Class)              \</span>
-00182 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_GETREFCOUNT(Class)                \</span>
-00183 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_REFOWNER(Class)                   \</span>
-00184 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_REMOVE_REF_OWNERS(Class)          \</span>
-00185 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_QUERY(Class)</span>
-00186 <span class="preprocessor"></span>
-<a name="l00190"></a><a class="code" href="group__scf.html#ga17">00190</a> <span class="preprocessor">#define SCF_IMPLEMENT_DEFAULT_POOLRECYCLE(Class)        \</span>
-00191 <span class="preprocessor">void Class::PoolRecycle () { }</span>
-00192 <span class="preprocessor"></span>
-00195 <span class="preprocessor">#endif // __CS_UTIL_POOLEDSCFCLASS_H__</span>
+00036 <span class="preprocessor">    struct PoolEntry;                                   \</span>
+00037 <span class="preprocessor">    PoolEntry* pool;                                    \</span>
+00038 <span class="preprocessor">    PoolEntry* allocedEntries;                          \</span>
+00039 <span class="preprocessor">  public:                                               \</span>
+00040 <span class="preprocessor">    Pool ();                                            \</span>
+00041 <span class="preprocessor">    ~Pool ();                                           \</span>
+00042 <span class="preprocessor">    parentClass* Alloc ();                              \</span>
+00043 <span class="preprocessor">    void Recycle (parentClass* instance);               \</span>
+00044 <span class="preprocessor">  };                                                    \</span>
+00045 <span class="preprocessor">  friend class Pool;                                    \</span>
+00046 <span class="preprocessor">  Pool* scfPool;                                        \</span>
+00047 <span class="preprocessor">  SCF_DECLARE_IBASE</span>
+00048 <span class="preprocessor"></span>  
+<a name="l00069"></a><a class="code" href="group__scf.html#ga6">00069</a> <span class="preprocessor">#define SCF_DECLARE_IBASE_POOLED(parentClass) \</span>
+00070 <span class="preprocessor">  SCF_DECLARE_IBASE_POOLED_DECL(class, parentClass)</span>
+00071 <span class="preprocessor"></span>
+<a name="l00075"></a><a class="code" href="group__scf.html#ga7">00075</a> <span class="preprocessor">#define SCF_DECLARE_IBASE_POOLED_EXTERN(Extern, parentClass) \</span>
+00076 <span class="preprocessor">  SCF_DECLARE_IBASE_POOLED_DECL(class Extern, parentClass)</span>
+00077 <span class="preprocessor"></span>
+<a name="l00082"></a><a class="code" href="group__scf.html#ga8">00082</a> <span class="preprocessor">#define SCF_CONSTRUCT_IBASE_POOLED(Pool)                \</span>
+00083 <span class="preprocessor">  SCF_CONSTRUCT_IBASE(0);                               \</span>
+00084 <span class="preprocessor">  scfPool = (Pool)</span>
+00085 <span class="preprocessor"></span>
+00086 <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL_HELPERS(parentClass)   \</span>
+00087 <span class="preprocessor">  struct parentClass::Pool::PoolEntry                   \</span>
+00088 <span class="preprocessor">  {                                                     \</span>
+00089 <span class="preprocessor">    parentClass instance;                               \</span>
+00090 <span class="preprocessor">    PoolEntry* next;                                    \</span>
+00091 <span class="preprocessor">  };</span>
+00092 <span class="preprocessor"></span>  
+<a name="l00096"></a><a class="code" href="group__scf.html#ga10">00096</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL_CTOR(Class)            \</span>
+00097 <span class="preprocessor">Class::Pool::Pool ()                                    \</span>
+00098 <span class="preprocessor">{                                                       \</span>
+00099 <span class="preprocessor">  pool = 0;                                             \</span>
+00100 <span class="preprocessor">  allocedEntries = 0;                                   \</span>
+00101 <span class="preprocessor">}</span>
+00102 <span class="preprocessor"></span>    
+<a name="l00106"></a><a class="code" href="group__scf.html#ga11">00106</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL_DTOR(Class)            \</span>
+00107 <span class="preprocessor">Class::Pool::~Pool ()                                   \</span>
+00108 <span class="preprocessor">{                                                       \</span>
+00109 <span class="preprocessor">  while (pool != 0)                                     \</span>
+00110 <span class="preprocessor">  {                                                     \</span>
+00111 <span class="preprocessor">    PoolEntry* n = pool-&gt;next;                          \</span>
+00112 <span class="preprocessor">    free (pool);                                        \</span>
+00113 <span class="preprocessor">    pool = n;                                           \</span>
+00114 <span class="preprocessor">  }                                                     \</span>
+00115 <span class="preprocessor">  CS_ASSERT_MSG ("not all SCF-pooled instances released",\</span>
+00116 <span class="preprocessor">    allocedEntries == 0);                               \</span>
+00117 <span class="preprocessor">}                                                       </span>
+00118 <span class="preprocessor"></span>
+<a name="l00122"></a><a class="code" href="group__scf.html#ga12">00122</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL_ALLOC(Class)           \</span>
+00123 <span class="preprocessor">Class* Class::Pool::Alloc ()                            \</span>
+00124 <span class="preprocessor">{                                                       \</span>
+00125 <span class="preprocessor">  PoolEntry* newEntry;                                  \</span>
+00126 <span class="preprocessor">  if (pool != 0)                                        \</span>
+00127 <span class="preprocessor">  {                                                     \</span>
+00128 <span class="preprocessor">    newEntry = pool;                                    \</span>
+00129 <span class="preprocessor">    pool = pool-&gt;next;                                  \</span>
+00130 <span class="preprocessor">  }                                                     \</span>
+00131 <span class="preprocessor">  else                                                  \</span>
+00132 <span class="preprocessor">  {                                                     \</span>
+00133 <span class="preprocessor">    newEntry = (PoolEntry*)malloc (sizeof (PoolEntry)); \</span>
+00134 <span class="preprocessor">  }                                                     \</span>
+00135 <span class="preprocessor">  Class* newInst = &amp;newEntry-&gt;instance;                 \</span>
+00136 <span class="preprocessor">  new (newInst) Class (this);                           \</span>
+00137 <span class="preprocessor">  newEntry-&gt;next = allocedEntries;                      \</span>
+00138 <span class="preprocessor">  allocedEntries = newEntry;                            \</span>
+00139 <span class="preprocessor">  return newInst;                                       \</span>
+00140 <span class="preprocessor">}</span>
+00141 <span class="preprocessor"></span>
+<a name="l00145"></a><a class="code" href="group__scf.html#ga13">00145</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL_RECYCLE(Class)         \</span>
+00146 <span class="preprocessor">void Class::Pool::Recycle (Class* instance)             \</span>
+00147 <span class="preprocessor">{                                                       \</span>
+00148 <span class="preprocessor">  PoolEntry* prev = 0;                                  \</span>
+00149 <span class="preprocessor">  PoolEntry* entry = allocedEntries;                    \</span>
+00150 <span class="preprocessor">  while (&amp;entry-&gt;instance != instance)                  \</span>
+00151 <span class="preprocessor">  {                                                     \</span>
+00152 <span class="preprocessor">    prev = entry;                                       \</span>
+00153 <span class="preprocessor">    entry = entry-&gt;next;                                \</span>
+00154 <span class="preprocessor">  }                                                     \</span>
+00155 <span class="preprocessor">  if (prev != 0)                                        \</span>
+00156 <span class="preprocessor">    prev-&gt;next = entry-&gt;next;                           \</span>
+00157 <span class="preprocessor">  else                                                  \</span>
+00158 <span class="preprocessor">    allocedEntries = entry-&gt;next;                       \</span>
+00159 <span class="preprocessor">  instance-&gt;~Class();                                   \</span>
+00160 <span class="preprocessor">  entry-&gt;next = pool;                                   \</span>
+00161 <span class="preprocessor">  pool = entry;                                         \</span>
+00162 <span class="preprocessor">}</span>
+00163 <span class="preprocessor"></span>
+<a name="l00167"></a><a class="code" href="group__scf.html#ga14">00167</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOL(Class)                 \</span>
+00168 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL_CTOR(Class)                  \</span>
+00169 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL_DTOR(Class)                  \</span>
+00170 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL_ALLOC(Class)                 \</span>
+00171 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL_RECYCLE(Class)</span>
+00172 <span class="preprocessor"></span>  
+<a name="l00176"></a><a class="code" href="group__scf.html#ga15">00176</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_INCREF_POOLED(Class)        \</span>
+00177 <span class="preprocessor">void Class::IncRef ()                                   \</span>
+00178 <span class="preprocessor">{                                                       \</span>
+00179 <span class="preprocessor">  scfRefCount++;                                        \</span>
+00180 <span class="preprocessor">}</span>
+00181 <span class="preprocessor"></span>
+<a name="l00185"></a><a class="code" href="group__scf.html#ga16">00185</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_DECREF_POOLED(Class)        \</span>
+00186 <span class="preprocessor">void Class::DecRef ()                                   \</span>
+00187 <span class="preprocessor">{                                                       \</span>
+00188 <span class="preprocessor">  if (scfRefCount == 1)                                 \</span>
+00189 <span class="preprocessor">  {                                                     \</span>
+00190 <span class="preprocessor">    scfPool-&gt;Recycle (this);                            \</span>
+00191 <span class="preprocessor">    return;                                             \</span>
+00192 <span class="preprocessor">  }                                                     \</span>
+00193 <span class="preprocessor">  scfRefCount--;                                        \</span>
+00194 <span class="preprocessor">}</span>
+00195 <span class="preprocessor"></span>
+<a name="l00199"></a><a class="code" href="group__scf.html#ga17">00199</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_POOLED(Class)               \</span>
+00200 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL_HELPERS(Class)               \</span>
+00201 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_POOL(Class)                       \</span>
+00202 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_INCREF_POOLED(Class)              \</span>
+00203 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_DECREF_POOLED(Class)              \</span>
+00204 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_GETREFCOUNT(Class)                \</span>
+00205 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_REFOWNER(Class)                   \</span>
+00206 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_REMOVE_REF_OWNERS(Class)          \</span>
+00207 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_QUERY(Class)</span>
+00208 <span class="preprocessor"></span>
+00211 <span class="preprocessor">#endif // __CS_UTIL_POOLEDSCFCLASS_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

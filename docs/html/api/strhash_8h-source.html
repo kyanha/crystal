@@ -41,63 +41,55 @@
 00022 <span class="preprocessor">#include "csextern.h"</span>
 00023 <span class="preprocessor">#include "<a class="code" href="hash_8h.html">hash.h</a>"</span>
 00024 <span class="preprocessor">#include "<a class="code" href="hashhandlers_8h.html">hashhandlers.h</a>"</span>
-00025 <span class="preprocessor">#include "<a class="code" href="iutil_2strset_8h.html">iutil/strset.h</a>"</span>
-00026 
-00031 <span class="keyword">class </span><a class="code" href="classcsStringHashIterator.html">csStringHashIterator</a>;
-00032 
-<a name="l00040"></a><a class="code" href="classcsStringHash.html">00040</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csStringHash
-00041 {
-00042 <span class="keyword">private</span>:
-00043   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsStringHashIterator.html">csStringHashIterator</a>;
-00044 
-00045   <span class="keyword">struct </span>csRegisteredString
-00046   {
-00047     <span class="keyword">typedef</span> <a class="code" href="group__util.html#ga23">csStringID</a> IDtype;
-00048     IDtype ID;
-00049     <span class="comment">//char String[];</span>
-00050 
-00051     <span class="keyword">static</span> csRegisteredString* Alloc (<span class="keyword">const</span> <span class="keywordtype">char</span>* str);
-00052     <span class="keyword">static</span> <span class="keywordtype">void</span> Free (csRegisteredString* regStr);
-00053     <span class="keyword">const</span> <span class="keywordtype">char</span>* GetString()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ((<span class="keywordtype">char</span>*)<span class="keyword">this</span>) + <span class="keyword">sizeof</span> (IDtype); }
-00054   };
-00055   
-00056   <a class="code" href="classcsHash.html">csHash&lt;csRegisteredString*, const char*, csConstCharHashKeyHandler&gt;</a> Registry;
-00057 
-00058 <span class="keyword">public</span>:
-00060   <a class="code" href="classcsStringHash.html#a0">csStringHash</a> (<span class="keywordtype">int</span> size = 23);
-00062   <a class="code" href="classcsStringHash.html#a1">~csStringHash</a> ();
-00063 
-00083   <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringHash.html#a2">Register</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s, <a class="code" href="group__util.html#ga23">csStringID</a> <span class="keywordtype">id</span> = 0);
-00084 
-00090   <a class="code" href="group__util.html#ga23">csStringID</a> <a class="code" href="classcsStringHash.html#a3">Request</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s) <span class="keyword">const</span>;
-00091 
-00100   <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringHash.html#a3">Request</a> (<a class="code" href="group__util.html#ga23">csStringID</a> <span class="keywordtype">id</span>) <span class="keyword">const</span>;
-00101 
-<a name="l00107"></a><a class="code" href="classcsStringHash.html#a5">00107</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsStringHash.html#a5">Contains</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* s)<span class="keyword"> const</span>
-00108 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsStringHash.html#a3">Request</a>(s) != csInvalidStringID; }
-00109 
-00113   <span class="keywordtype">void</span> <a class="code" href="classcsStringHash.html#a6">Clear</a> ();
-00114 };
-00115 
-<a name="l00121"></a><a class="code" href="classcsStringHashIterator.html">00121</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csStringHashIterator
-00122 {
-00123   <span class="keyword">friend</span> <span class="keyword">class </span>csStringHash;
-00124 
-00125 <span class="keyword">private</span>:
-00126   <span class="comment">//csGlobalHashIterator* hashIt;</span>
-00127   <a class="code" href="classcsHash.html">csHash</a>&lt;csStringHash::csRegisteredString*, <span class="keyword">const</span> <span class="keywordtype">char</span>*, 
-00128     <a class="code" href="classcsConstCharHashKeyHandler.html">csConstCharHashKeyHandler</a>&gt;::GlobalIterator hashIt;
-00129 
-00130 <span class="keyword">public</span>:
-00131 
-00137   <a class="code" href="classcsStringHashIterator.html#a0">csStringHashIterator</a> (csStringHash*);
-00139   <span class="keyword">virtual</span> <a class="code" href="classcsStringHashIterator.html#a1">~csStringHashIterator</a> ();
-00140 
-00142   <span class="keywordtype">bool</span> <a class="code" href="classcsStringHashIterator.html#a2">HasNext</a> ();
-00144   <a class="code" href="group__util.html#ga23">csStringID</a> <a class="code" href="classcsStringHashIterator.html#a3">Next</a> ();
-00145 };
-00146 
-00147 <span class="preprocessor">#endif // __CS_STRHASH_H__</span>
+00025 <span class="preprocessor">#include "<a class="code" href="mempool_8h.html">mempool.h</a>"</span>
+00026 <span class="preprocessor">#include "<a class="code" href="iutil_2strset_8h.html">iutil/strset.h</a>"</span>
+00027 
+<a name="l00039"></a><a class="code" href="classcsStringHash.html">00039</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csStringHash
+00040 {
+00041 <span class="keyword">private</span>:
+00042   <span class="keyword">typedef</span> <a class="code" href="classcsHash.html">csHash&lt;csStringID, char const*, csConstCharHashKeyHandler&gt;</a> <a class="code" href="classcsHash.html">HashType</a>;
+00043   <a class="code" href="classcsHash.html">HashType</a> registry;
+00044   <a class="code" href="classcsMemoryPool.html">csMemoryPool</a> pool;
+00045 
+00046 <span class="keyword">public</span>:
+00047   <span class="keyword">typedef</span> HashType::GlobalIterator GlobalIterator;
+00048 
+00049 <span class="keyword">public</span>:
+00051   <a class="code" href="classcsStringHash.html#a0">csStringHash</a> (size_t size = 23);
+00053   <a class="code" href="classcsStringHash.html#a1">~csStringHash</a> ();
+00054 
+00074   <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringHash.html#a2">Register</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s, <a class="code" href="group__util.html#ga23">csStringID</a> <span class="keywordtype">id</span> = 0);
+00075 
+00081   <a class="code" href="group__util.html#ga23">csStringID</a> <a class="code" href="classcsStringHash.html#a3">Request</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s) <span class="keyword">const</span>;
+00082 
+00093   <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringHash.html#a3">Request</a> (<a class="code" href="group__util.html#ga23">csStringID</a> <span class="keywordtype">id</span>) <span class="keyword">const</span>;
+00094 
+<a name="l00100"></a><a class="code" href="classcsStringHash.html#a5">00100</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsStringHash.html#a5">Contains</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* s)<span class="keyword"> const</span>
+00101 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsStringHash.html#a3">Request</a>(s) != csInvalidStringID; }
+00102 
+<a name="l00111"></a><a class="code" href="classcsStringHash.html#a6">00111</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsStringHash.html#a5">Contains</a>(csStringID <span class="keywordtype">id</span>)<span class="keyword"> const</span>
+00112 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsStringHash.html#a3">Request</a>(<span class="keywordtype">id</span>) != 0; }
+00113 
+00118   <span class="keywordtype">bool</span> <a class="code" href="classcsStringHash.html#a7">Delete</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* s);
+00119 
+00126   <span class="keywordtype">bool</span> <a class="code" href="classcsStringHash.html#a7">Delete</a>(csStringID <span class="keywordtype">id</span>);
+00127 
+00131   <span class="keywordtype">void</span> <a class="code" href="classcsStringHash.html#a9">Empty</a> ();
+00132 
+<a name="l00137"></a><a class="code" href="classcsStringHash.html#a10">00137</a>   <span class="comment">/*CS_DEPRECATED_METHOD*/</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringHash.html#a10">Clear</a> ()
+00138   { <a class="code" href="classcsStringHash.html#a9">Empty</a>(); }
+00139 
+<a name="l00141"></a><a class="code" href="classcsStringHash.html#a11">00141</a>   size_t <a class="code" href="classcsStringHash.html#a11">GetSize</a> ()<span class="keyword"> const</span>
+00142 <span class="keyword">  </span>{ <span class="keywordflow">return</span> registry.<a class="code" href="classcsHash.html#a16">GetSize</a> (); }
+00143 
+<a name="l00149"></a><a class="code" href="classcsStringHash.html#a12">00149</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsStringHash.html#a12">IsEmpty</a>()<span class="keyword"> const</span>
+00150 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsStringHash.html#a11">GetSize</a>() == 0; }
+00151 
+<a name="l00157"></a><a class="code" href="classcsStringHash.html#a13">00157</a>   GlobalIterator <a class="code" href="classcsStringHash.html#a13">GetIterator</a> ()<span class="keyword"> const</span>
+00158 <span class="keyword">  </span>{ <span class="keywordflow">return</span> registry.<a class="code" href="classcsHash.html#a19">GetIterator</a>(); }
+00159 };
+00160 
+00161 <span class="preprocessor">#endif // __CS_STRHASH_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
