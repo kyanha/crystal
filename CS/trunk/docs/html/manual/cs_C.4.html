@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Release Notes 94</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Release Notes 94">
+<META NAME="keywords" CONTENT="Crystal Space: Release Notes 94">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SECC.4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.3.html#SECC.3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.5.html#SECC.5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.html#SECC"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.html#SECC"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H2> C.4 Release Notes from 0.92 to 0.94 </H2>
+<!--docid::SECC.4::-->
+<P>
+
+This section documents the major changes between versions 0.92 and 0.94 of of
+Crystal Space.
+</P><P>
+
+<A NAME="SEC_1"></A>
+<H3> Loader and Saver Changes </H3>
+<!--docid::SEC_1::-->
+<P>
+
+All plugins implementing `<SAMP>iLoaderPlugin</SAMP>' will have to be changed
+since the material and mesh factory lists are now replaced with a
+`<SAMP>iLoaderContext</SAMP>' parameter.
+</P><P>
+
+This change also means that <CODE>iTerrFuncState::LoadMaterialGroup()</CODE>
+now expects an `<SAMP>iLoaderContext</SAMP>' instead of `<SAMP>iMaterialList</SAMP>'.
+</P><P>
+
+<EM>Warning</EM>: This loader change means that the searching restricted
+on the current region now actually works. This means that by default
+when loading a map it will <EM>only</EM> find objects defined in this map.
+</P><P>
+
+The `<SAMP>iSaverPlugin</SAMP>' interface has also changed. It now uses an
+`<SAMP>iFile</SAMP>' parameter instead of `<SAMP>iStrVector</SAMP>'.
+</P><P>
+
+<A NAME="SEC_2"></A>
+<H3> iCamera Changes </H3>
+<!--docid::SEC_2::-->
+<P>
+
+Added <CODE>iCamera::SetFarPlane()</CODE> and changed <CODE>iCamera::GetFarPlane()</CODE>
+to return a pointer to the far plane. This function will return null if
+no far plane is used.
+</P><P>
+
+The following constants have been renamed in order to avoid pollution of the
+global namespace:
+</P><P>
+
+<UL>
+<LI>
+<CODE>VEC_FORWARD</CODE> => <CODE>CS_VEC_FORWARD</CODE>
+<LI>
+<CODE>VEC_BACKWARD</CODE> => <CODE>CS_VEC_BACKWARD</CODE>
+<LI>
+<CODE>VEC_RIGHT</CODE> => <CODE>CS_VEC_RIGHT</CODE>
+<LI>
+<CODE>VEC_LEFT</CODE> => <CODE>CS_VEC_LEFT</CODE>
+<LI>
+<CODE>VEC_UP</CODE> => <CODE>CS_VEC_UP</CODE>
+<LI>
+<CODE>VEC_DOWN</CODE> => <CODE>CS_VEC_DOWN</CODE>
+<LI>
+<CODE>VEC_ROT_RIGHT</CODE> => <CODE>CS_VEC_ROT_RIGHT</CODE>
+<LI>
+<CODE>VEC_ROT_LEFT</CODE> => <CODE>CS_VEC_ROT_LEFT</CODE>
+<LI>
+<CODE>VEC_TILT_RIGHT</CODE> => <CODE>CS_VEC_TILT_RIGHT</CODE>
+<LI>
+<CODE>VEC_TILT_LEFT</CODE> => <CODE>CS_VEC_TILT_LEFT</CODE>
+<LI>
+<CODE>VEC_TILT_UP</CODE> => <CODE>CS_VEC_TILT_UP</CODE>
+<LI>
+<CODE>VEC_TILT_DOWN</CODE> => <CODE>CS_VEC_TILT_DOWN</CODE>
+</UL>
+<P>
+
+<A NAME="SEC_3"></A>
+<H3> Engine Changes </H3>
+<!--docid::SEC_3::-->
+<P>
+
+Far plane handling in the engine has changed. Polygons are no longer
+clipped exactly to the far plane but instead the polygons are rejected
+which are fully behind the far plane.
+</P><P>
+
+<CODE>iEngine::LoadMeshFactory()</CODE> and <CODE>iEngine::LoadMeshWrapper()</CODE>
+used to have a `<SAMP>classId</SAMP>' parameter. That parameter has now been removed.
+</P><P>
+
+<A NAME="SEC_4"></A>
+<H3> Various Changes </H3>
+<!--docid::SEC_4::-->
+<P>
+
+<CODE>csPlane3::ClipPolygon()</CODE> will now by default consider the
+polygon to be visible on the negative side of the plane
+(<CODE>csPlane3::Classify()</CODE>) as opposed to the positive side like
+it used to be. It now has a third parameter `<SAMP>reversed</SAMP>' which
+you can set to <CODE>true</CODE> so that it behaves again as before.
+</P><P>
+
+<A NAME="SEC_5"></A>
+<H3> Various Constant Changes </H3>
+<!--docid::SEC_5::-->
+<P>
+
+The following constants have been renamed in order to avoid pollution of the
+global namespace:
+</P><P>
+
+<UL>
+<LI>
+<CODE>BOX_CORNER_xy</CODE> => <CODE>CS_BOX_CORNER_xy</CODE>
+<LI>
+<CODE>BOX_CORNER_xY</CODE> => <CODE>CS_BOX_CORNER_xY</CODE>
+<LI>
+<CODE>BOX_CORNER_Xy</CODE> => <CODE>CS_BOX_CORNER_Xy</CODE>
+<LI>
+<CODE>BOX_CORNER_XY</CODE> => <CODE>CS_BOX_CORNER_XY</CODE>
+<LI>
+<CODE>BOX_EDGE_xy_Xy</CODE> => <CODE>CS_BOX_EDGE_xy_Xy</CODE>
+<LI>
+<CODE>BOX_EDGE_Xy_xy</CODE> => <CODE>CS_BOX_EDGE_Xy_xy</CODE>
+<LI>
+<CODE>BOX_EDGE_Xy_XY</CODE> => <CODE>CS_BOX_EDGE_Xy_XY</CODE>
+<LI>
+<CODE>BOX_EDGE_XY_xy</CODE> => <CODE>CS_BOX_EDGE_XY_Xy</CODE>
+<LI>
+<CODE>BOX_EDGE_XY_xY</CODE> => <CODE>CS_BOX_EDGE_XY_xY</CODE>
+<LI>
+<CODE>BOX_EDGE_xY_XY</CODE> => <CODE>CS_BOX_EDGE_xY_XY</CODE>
+<LI>
+<CODE>BOX_EDGE_xY_xy</CODE> => <CODE>CS_BOX_EDGE_xY_xy</CODE>
+<LI>
+<CODE>BOX_EDGE_xy_XY</CODE> => <CODE>CS_BOX_EDGE_xy_xY</CODE>
+<LI>
+<CODE>BOX_CORNER_xyz</CODE> => <CODE>CS_BOX_CORNER_xyz</CODE>
+<LI>
+<CODE>BOX_CORNER_xyZ</CODE> => <CODE>CS_BOX_CORNER_xyZ</CODE>
+<LI>
+<CODE>BOX_CORNER_xYz</CODE> => <CODE>CS_BOX_CORNER_xYz</CODE>
+<LI>
+<CODE>BOX_CORNER_xYZ</CODE> => <CODE>CS_BOX_CORNER_xYZ</CODE>
+<LI>
+<CODE>BOX_CORNER_Xyz</CODE> => <CODE>CS_BOX_CORNER_Xyz</CODE>
+<LI>
+<CODE>BOX_CORNER_XyZ</CODE> => <CODE>CS_BOX_CORNER_XyZ</CODE>
+<LI>
+<CODE>BOX_CORNER_XYz</CODE> => <CODE>CS_BOX_CORNER_XYz</CODE>
+<LI>
+<CODE>BOX_CORNER_XYZ</CODE> => <CODE>CS_BOX_CORNER_XYZ</CODE>
+<LI>
+<CODE>BOX_SIDE_x</CODE> => <CODE>CS_BOX_SIDE_x</CODE>
+<LI>
+<CODE>BOX_SIDE_X</CODE> => <CODE>CS_BOX_SIDE_X</CODE>
+<LI>
+<CODE>BOX_SIDE_y</CODE> => <CODE>CS_BOX_SIDE_y</CODE>
+<LI>
+<CODE>BOX_SIDE_Y</CODE> => <CODE>CS_BOX_SIDE_Y</CODE>
+<LI>
+<CODE>BOX_SIDE_z</CODE> => <CODE>CS_BOX_SIDE_z</CODE>
+<LI>
+<CODE>BOX_SIDE_Z</CODE> => <CODE>CS_BOX_SIDE_Z</CODE>
+<LI>
+<CODE>BOX_INSIDE</CODE> => <CODE>CS_BOX_INSIDE</CODE>
+<LI>
+<CODE>BOX_EDGE_Xyz_xyz</CODE> => <CODE>CS_BOX_EDGE_Xyz_xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_xyz_Xyz</CODE> => <CODE>CS_BOX_EDGE_xyz_Xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_xyz_xYz</CODE> => <CODE>CS_BOX_EDGE_xyz_xYz</CODE>
+<LI>
+<CODE>BOX_EDGE_xYz_xyz</CODE> => <CODE>CS_BOX_EDGE_xYz_xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_xYz_XYz</CODE> => <CODE>CS_BOX_EDGE_xYz_XYz</CODE>
+<LI>
+<CODE>BOX_EDGE_XYz_xYz</CODE> => <CODE>CS_BOX_EDGE_XYz_xYz</CODE>
+<LI>
+<CODE>BOX_EDGE_XYz_Xyz</CODE> => <CODE>CS_BOX_EDGE_XYz_Xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_Xyz_XYz</CODE> => <CODE>CS_BOX_EDGE_Xyz_XYz</CODE>
+<LI>
+<CODE>BOX_EDGE_Xyz_XyZ</CODE> => <CODE>CS_BOX_EDGE_Xyz_XyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XyZ_Xyz</CODE> => <CODE>CS_BOX_EDGE_XyZ_Xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_XyZ_XYZ</CODE> => <CODE>CS_BOX_EDGE_XyZ_XYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XYZ_XyZ</CODE> => <CODE>CS_BOX_EDGE_XYZ_XyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XYZ_XYz</CODE> => <CODE>CS_BOX_EDGE_XYZ_XYz</CODE>
+<LI>
+<CODE>BOX_EDGE_XYz_XYZ</CODE> => <CODE>CS_BOX_EDGE_XYz_XYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XYZ_xYZ</CODE> => <CODE>CS_BOX_EDGE_XYZ_xYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xYZ_XYZ</CODE> => <CODE>CS_BOX_EDGE_xYZ_XYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xYZ_xYz</CODE> => <CODE>CS_BOX_EDGE_xYZ_xYz</CODE>
+<LI>
+<CODE>BOX_EDGE_xYz_xYZ</CODE> => <CODE>CS_BOX_EDGE_xYz_xYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xYZ_xyZ</CODE> => <CODE>CS_BOX_EDGE_xYZ_xyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xyZ_xYZ</CODE> => <CODE>CS_BOX_EDGE_xyZ_xYZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xyZ_xyz</CODE> => <CODE>CS_BOX_EDGE_xyZ_xyz</CODE>
+<LI>
+<CODE>BOX_EDGE_xyz_xyZ</CODE> => <CODE>CS_BOX_EDGE_xyz_xyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_xyZ_XyZ</CODE> => <CODE>CS_BOX_EDGE_xyZ_XyZ</CODE>
+<LI>
+<CODE>BOX_EDGE_XyZ_xyZ</CODE> => <CODE>CS_BOX_EDGE_XyZ_xyZ</CODE>
+<LI>
+<CODE>POL_FRONT</CODE> => <CODE>CS_POL_FRONT</CODE>
+<LI>
+<CODE>POL_BACK</CODE> => <CODE>CS_POL_BACK</CODE>
+<LI>
+<CODE>POL_SAME_PLANE</CODE> => <CODE>CS_POL_SAME_PLANE</CODE>
+<LI>
+<CODE>POL_SPLIT_NEEDED</CODE> => <CODE>CS_POL_SPLIT_NEEDED</CODE>
+<LI>
+<CODE>DECLARE_TYPED_QUEUE</CODE> => <CODE>CS_DECLARE_TYPED_QUEUE</CODE>
+<LI>
+<CODE>DECLARE_TYPED_QUEUE_BASE</CODE> => <CODE>CS_DECLARE_TYPED_QUEUE_BASE</CODE>
+</UL>
+<A NAME="Release Notes 92"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.3.html#SECC.3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.5.html#SECC.5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.html#SECC"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.html#SECC"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

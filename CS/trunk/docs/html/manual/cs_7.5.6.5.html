@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Texture Mapping Instructions</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Texture Mapping Instructions">
+<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping Instructions">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.5.6.5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.6.4.html#SEC7.5.6.4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.6.6.html#SEC7.5.6.6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.5.html#SEC7.5.5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.6.html#SEC7.5.6"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.7.html#SEC7.5.7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H4> 7.5.6.5 Instructions for Texture Mapper </H4>
+<!--docid::SEC7.5.6.5::-->
+<P>
+
+In the Crystal Space map file,
+the `<SAMP>orig</SAMP>', `<SAMP>first</SAMP>', and `<SAMP>second</SAMP>' vertex keywords describe the
+texture plane.  What Crystal Space does internally is to create a
+transformation matrix/vector which translates object space (3D coordinates) to
+texture space (<EM>u,v</EM> coordinates).  Here is how this works.
+</P><P>
+
+First a few definitions:
+</P><P>
+
+<UL>
+<LI>
+<CODE>orig</CODE> vector is <EM>Vo</EM>
+<LI>
+<CODE>first</CODE> vector is <EM>V1</EM>
+<LI>
+<CODE>second</CODE> vector is <EM>V2</EM>
+<LI>
+<CODE>firstlen</CODE> is <EM>L1</EM>
+<LI>
+<CODE>secondlen</CODE> is <EM>L2</EM>
+<LI>
+Length of
+<EM>V1 - Vo</EM>
+is <EM>l1</EM>
+<LI>
+Length of
+<EM>V2 - Vo</EM>
+is <EM>l2</EM>
+</UL>
+<P>
+
+<EM>Vo</EM>, <EM>V1</EM> and <EM>V2</EM> are vertices in object space.  These define
+the local coordinate system for texture space.  So we have the following
+mapping:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>Vo</EM> ==> (<EM>0</EM>,<EM>0</EM>)<BR>
+<EM>V1</EM> ==> (<EM>L1</EM>,<EM>0</EM>)<BR>
+<EM>V2</EM> ==> (<EM>0</EM>,<EM>L2</EM>)
+</BLOCKQUOTE>
+<P>
+
+It is important to realize that the coordinate (0,0) in texture space is the
+top-left coordinate of the texture and (1,1) is the bottom-right corner.  The
+coordinate (2,2) is thus the bottom-right corner of a tiled texture (2x2
+times).
+</P><P>
+
+The conversion to the matrix happens as follows:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>Vu = (len1 / l1) * (V1-Vo)</EM><BR>
+<EM>Vv = (len2 / l2) * (V2-Vo)</EM>
+</BLOCKQUOTE>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>      / Vu.x Vv.x 1 \
+Mot = | Vu.y Vv.y 1 |
+      \ Vu.z Vv.z 1 /
+</pre></td></tr></table><P>
+
+The last column represents the <EM>W</EM> texture component which is not used.
+</P><P>
+
+<BLOCKQUOTE>
+<EM>Vot = &#60;Vo.x Vo.y Vo.z&#62;</EM>
+</BLOCKQUOTE>
+<P>
+
+So <EM>Mot</EM> and <EM>Vot</EM> are the transformation matrix/vector to go from
+object to texture space.  Use these as follows:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>T = Mot * (O - Vot)</EM>
+</BLOCKQUOTE>
+<P>
+
+With <EM>O</EM> being the object space vector that you want to convert and
+<EM>T</EM> the texture space vector.  Only the <EM>x</EM> and <EM>y</EM> components
+are used of <EM>T</EM>.  <EM>x</EM> represents <EM>u</EM> and <EM>y</EM> represents
+<EM>v</EM>.
+</P><P>
+
+Using the last equation you can convert every point of your polygon to texture
+space.
+</P><P>
+
+<A NAME="Texture Mapping Animations"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.6.4.html#SEC7.5.6.4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.6.6.html#SEC7.5.6.6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.5.html#SEC7.5.5"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.6.html#SEC7.5.6"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.7.html#SEC7.5.7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

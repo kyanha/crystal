@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: SCF</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: SCF">
+<META NAME="keywords" CONTENT="Crystal Space: SCF">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC6.2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.1.2.html#SEC6.1.2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.1.html#SEC6.2.1"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.1.html#SEC6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.html#SEC6"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.3.html#SEC6.3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H2> 6.2 Shared Class Facility (SCF) </H2>
+<!--docid::SEC6.2::-->
+<P>
+
+<EM>Original SCF design and concept by Andrew Zabolotny, 1999.  This
+document and Crystal Space's particular SCF implementation were written,
+and are copyright &copy; 1999 by Andrew Zabolotny,
+<A HREF="mailto:bit@eltech.ru">bit@eltech.ru</A>.  SCF is distributed under the GNU Library
+General Public License (LGPL).  See section <A HREF="cs_1.13.html#SEC1.13">1.13 GNU Library General Public License</A>.</EM>
+</P><P>
+
+<EM>Documentation revised significantly by Eric Sunshine,
+<A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.  Last updated September 24, 2003.</EM>
+</P><P>
+
+This library is intended for separating C++ class implementations from programs
+that use them.  This is achieved by separating class implementations into a
+separate module in the form of shared libraries, which are also called
+<EM>plugin modules</EM>.  Separating the implementation of a class from the
+program helps to address problems regarding shared library facility
+incompatibilities on different platforms.  It also makes it possible to use
+different mechanisms for SCF, for example inter-process communication
+(through pipes, shared memory, or whatever); communication through network or
+through a COM or CORBA request broker; although currently only two
+minimal configurations supported: using shared libraries and using static
+linkage (for platforms that don't have shared library support).
+</P><P>
+
+There is a HOWTO which explains how to create a plugin module from the
+ground up using SCF technology (see section <A HREF="cs_5.8.20.html#SEC5.8.20">5.8.20 Create Your Own Plugin</A>).
+The HOWTO provides a much more concise explanation about how to create and
+utilize a plugin than what you will find here, since this section is more
+interested in exposing SCF in gory detail.  There is also a HOWTO
+which explains how to make using SCF interfaces easier by using smart
+pointers (see section <A HREF="cs_5.8.1.html#SEC5.8.1">5.8.1 Correctly Using Smart Pointers</A>).
+</P><P>
+
+The SCF implementation is resides within the `<TT>csutil</TT>' library.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.1.html#SEC6.2.1">6.2.1 How it Works</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.2.html#SEC6.2.2">6.2.2 Using SCF</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.3.html#SEC6.2.3">6.2.3 Classes Implementing Multiple Interfaces</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.4.html#SEC6.2.4">6.2.4 Interface Versions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.5.html#SEC6.2.5">6.2.5 Client Side</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.6.html#SEC6.2.6">6.2.6 Plugin Meta-Information</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.7.html#SEC6.2.7">6.2.7 Meta-Information Embedding</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.8.html#SEC6.2.8">6.2.8 Plugin Discovery</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.9.html#SEC6.2.9">6.2.9 Example</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_6.2.10.html#SEC6.2.10">6.2.10 Advanced Techniques</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="SCF Explained"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.1.2.html#SEC6.1.2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.1.html#SEC6.2.1"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.1.html#SEC6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.html#SEC6"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.3.html#SEC6.3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

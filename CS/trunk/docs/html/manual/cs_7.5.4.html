@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Cameras and Matrices</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Cameras and Matrices">
+<META NAME="keywords" CONTENT="Crystal Space: Cameras and Matrices">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.5.4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.3.html#SEC7.5.3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.5.html#SEC7.5.5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.4.html#SEC7.4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.html#SEC7.5"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 7.5.4 Cameras and Matrices </H3>
+<!--docid::SEC7.5.4::-->
+<P>
+
+<EM>Written by Jorrit Tyberghein,
+<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.  Mathematical typesetting for
+TeX performed by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
+</P><P>
+
+This section describes how a camera in a 3D engine can be represented by a 3x3
+matrix and a 3-element vector.  This is the method that is used in the Crystal
+Space engine but it is general enough that it can be used in other engines as
+well.
+</P><P>
+
+<A NAME="SEC_1"></A>
+<H4> Theory </H4>
+<!--docid::SEC_1::-->
+<P>
+
+A way to look at the matrix and vector representation of a camera is by seeing
+the matrix as a 3 dimensional arrow pointing in some direction (the direction
+the camera is looking at) and the vector as the starting point (origin) of
+that arrow.
+</P><P>
+
+What does this matrix do? It performs a linear transformation from 3D to 3D.
+With a 3x3 matrix you can represent every linear transformation from one 3D
+space to another 3D space.  The matrix that we use for a camera is just a
+linear transformation matrix that transforms coordinates represented in one
+coordinate system to another.  Let's assume that everything in the world is
+defined by using 3D vertices with an <EM>x</EM>, <EM>y</EM>, and <EM>z</EM>
+component.  So a vertex is defined by three numbers: <EM>x</EM>, <EM>y</EM>, and
+<EM>z</EM>.  These three numbers only have meaning when used relative to some
+origin.  A origin is defined by three axes (if it is a 3D origin that is).
+</P><P>
+
+So our camera matrix transforms 3D vertices from world space to camera space.
+This means that a vertex with position (<EM>x,y,z</EM>) in the world (in world
+space) will get new coordinates (<EM>x',y',z'</EM>) in camera space.  The only
+reason that we want to apply this transformation is to make things easier for
+the rest of the 3D engine.  Because after this transformation we can program
+the rest of the engine as if every vertex is represented in camera space.  In
+other words; a vertex with coordinates (<EM>0,0,5</EM>) will be a vertex that
+lies just in front of the camera at distance 5.  A vertex with coordinates
+(<EM>1,3,-5</EM>) is behind the plane of the camera and can thus be easily
+discarded.  The test <EM>Z &#60; 0</EM> is thus an easy test to see if a vertex will
+be visible or not.
+</P><P>
+
+How does this transformation work? In fact it is just matrix algebra.  For
+example, if the camera matrix is represented by <EM>M</EM> and the camera
+position is represented by <EM>P</EM> then we can write the equation to
+transform from world space to camera space by using:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>C = M * (W - P)</EM>
+</BLOCKQUOTE>
+<P>
+
+<EM>W</EM> is a 3D vector describing the position of a vertex in world space
+coordinates.  <EM>C</EM> is a 3D vector describing the position of a vertex in
+camera space coordinates.
+</P><P>
+
+This formula does the following.  First it translates the world space position
+so that the camera position is at (<EM>0,0,0</EM>).  This is done by <EM>W -
+P</EM>.  As you can see a vertex that would be on the same world space coordinates
+as the camera would be translated to (<EM>0,0,0</EM>).  The result of this
+calculation is another 3D vector.
+</P><P>
+
+This vector is then multiplied by the camera matrix <EM>M</EM> to transform it
+to camera space.  You can visualize this by treating <EM>M</EM> as an arrow
+pointing in some direction and the vertex lying somewhere relative to that
+arrow.  By transforming with <EM>M</EM> (multiplying) we move the arrow until it
+points just the way we want it (with the Z-axis in front and so on).
+</P><P>
+
+A matrix by vector multiplication is defined as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ a b c \     / x \     / a * x + b * y + c * z \
+| d e f |  *  | y |  =  | d * x + e * y + f * z |
+\ g h i /     \ z /     \ g * x + h * y + i * z /
+</pre></td></tr></table></P><P>
+
+So for example, let's apply this formula in the initial configuration, with
+the camera pointing forwards in world space.  The camera matrix is then equal
+to:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 1 0 0 \
+| 0 1 0 |
+\ 0 0 1 /
+</pre></td></tr></table></P><P>
+
+And the vector is equal to:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 0 \
+| 0 |
+\ 0 /
+</pre></td></tr></table></P><P>
+
+Translation of a vertex in world space coordinates to camera space coordinates
+makes no changes since the camera is at the origin of the world.
+Transformation results in the previous formula being applied:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 1 0 0 \     / x \     / 1 * x + 0 * y + 0 * z \
+| 0 1 0 |  *  | y |  =  | 0 * x + 1 * y + 0 * z |
+\ 0 0 1 /     \ z /     \ 0 * x + 0 * y + 1 * z /
+</pre></td></tr></table></P><P>
+
+So as you can see, this does not change the vertex at all.
+</P><P>
+
+<A NAME="SEC_2"></A>
+<H4> Practice </H4>
+<!--docid::SEC_2::-->
+<P>
+
+Now that the theory behind camera mathematics has been described, it is time
+to see everything put into practice in order to actually move the camera.  All
+of the different kind of movements that the camera can do are also performed
+as transformations.
+</P><P>
+
+For example, let's say that you want to move the camera forward a bit.  If you
+would represent this movement in camera space than you would say that the
+camera moves from (<EM>0,0,0</EM>)---since the camera is at the origin in camera
+space--to (<EM>0,0,d</EM>) with <EM>d</EM> the distance that you want it to move.
+This is because we defined camera space so that <EM>Z</EM> is in front of you.
+</P><P>
+
+But we want to know the position of the camera in world space.  In fact, what
+we want to do is to transform the camera space position (<EM>0,0,d</EM>) to
+world space.  This would then be the new position for the camera.
+</P><P>
+
+So we need the inverse transformation.  To calculate the inverse
+transformation you need to calculate the inverse of the matrix <EM>M</EM>.
+Let's call this inverse <EM>M'</EM>.  From Matrix Algebra, we know that
+<EM>M * M' = I</EM>
+(where <EM>I</EM> is the identity matrix).
+</P><P>
+
+Calculation of the inverse of a matrix is a bit complicated.  For exact
+details, consult a Matrix Algebra textbook.  In practical terms, it is done by
+starting with the following formula which is our transformation from world to
+camera space equation:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>C = M * (W - P)</EM>
+</BLOCKQUOTE>
+<P>
+
+We would now like to calculate the new equation for the inverse
+transformation.  We already have <EM>M'</EM> (the inverse matrix).  Ok, let us
+multiply both sides of the equation by <EM>M'</EM>.  This gives:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>M' * C = M' * M * (W - P)</EM>
+</BLOCKQUOTE>
+<P>
+
+Since
+<EM>M' * M = I</EM>,
+this results in:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>M' * C = W - P</EM>
+</BLOCKQUOTE>
+<P>
+
+So the equation we are looking for is:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>W = M' * C + P</EM>
+</BLOCKQUOTE>
+<P>
+
+So this is the equation that transforms camera space to world space.  Now we
+can use this to transform (<EM>0,0,d</EM>) to the new camera space coordinates.
+Other movements (like moving to the right (<EM>d,0,0</EM>), up (<EM>0,d,0</EM>),
+down (<EM>0,-d,0</EM>), and so on) are all performed in an equivalent manner.
+</P><P>
+
+If you want to turn right then your position will not change but you will have
+to change the transformation matrix.  This works differently.  For example, to
+turn right you would want to rotate a certain angle around the Y-axis (since
+the Y-axis points upwards).  This rotation can be represented by the following
+matrix (known as a <EM>rotation matrix</EM>) which rotates about the Y-axis:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ cos(a)   0    -sin(a) \
+| 0        1    0       |
+\ sin(a)   0    cos(a)  /
+</pre></td></tr></table></P><P>
+
+To see why this works, just try multiplying it by some vectors in 3D and see
+where they will transform too.
+</P><P>
+
+How can we then use this matrix to turn our camera to the right? An important
+thing to realize is that transformations can be combined by multiplying the
+transformation matrices together.  For example, if we have our matrix <EM>M</EM>
+transforming from world to camera space and we would like to apply the Y-axis
+rotation on the camera then you can see this as a combination of first the
+transformation from world to camera space followed by the rotation along the
+Y-axis.  So instead of:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>C = M * (W - P)</EM>
+</BLOCKQUOTE>
+<P>
+
+We would want to use:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>C = R * M * (W - P)</EM>
+</BLOCKQUOTE>
+<P>
+
+Where <EM>R</EM> is the rotation matrix.
+</P><P>
+
+<EM>R * M * (W - P)</EM>
+means to first apply transformation <EM>M</EM> on (<EM>W - P</EM>) and after that
+apply transformation <EM>R</EM> on the result.  Note that multiplication of
+matrices is not commutative.
+<EM>R * M</EM>
+is not guaranteed to be the same as
+<EM>M * R</EM>.
+</P><P>
+
+So, we can conclude from this that we just have to multiply the camera matrix
+by <EM>R</EM> to get the new camera matrix:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>M' = R * M</EM>
+</BLOCKQUOTE>
+<P>
+
+Matrix multiplication works as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ a b c \   / A B C \   / a*A+b*D+c*G a*B+b*E+c*H a*C+b*F+c*I \
+| d e f | * | D E F | = | d*A+e*D+f*G d*B+e*E+f*H d*C+e*F+f*I |
+\ g h i /   \ G H I /   \ g*A+h*D+i*G g*B+h*E+i*H g*C+h*F+i*I /
+</pre></td></tr></table></P><P>
+
+Rotation along the other axes works in a similar fashion.  Rotation along the
+X-axis is represented by:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 1   0        0       \
+| 0   cos(a)   -sin(a) |
+\ 0   sin(a)   cos(a)  /
+</pre></td></tr></table></P><P>
+
+Rotation along the Z-axis is represented by:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ cos(a)   -sin(a) 0  \
+| sin(a)   cos(a)  0  |
+\ 0        0       1  /
+</pre></td></tr></table></P><P>
+
+With these formulas you should be able to do any movement of the camera that
+you want, including rotating the camera around the direction it is looking.
+</P><P>
+
+<A NAME="Space Warping"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.3.html#SEC7.5.3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.5.html#SEC7.5.5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.4.html#SEC7.4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.html#SEC7.5"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

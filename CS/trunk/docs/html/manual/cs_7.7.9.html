@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: MeshObject Emit</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: MeshObject Emit">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject Emit">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.7.9"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.8.html#SEC7.7.8"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.10.html#SEC7.7.10"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.8.html#SEC7.8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 7.7.9 Emitter Mesh Object </H3>
+<!--docid::SEC7.7.9::-->
+<P>
+
+<EM>Written by Wouter Wijngaards,
+<A HREF="mailto:wouterw@cs.vu.nl">wouterw@cs.vu.nl</A>.</EM>
+</P><P>
+
+An emitter particle system is a very general particle system, that
+can do a variety of things. See the general particle system documentation 
+which is valid for all particle systems, for 
+global options. See section <A HREF="cs_7.7.10.html#SEC7.7.10">7.7.10 Particle Systems in General</A>.
+</P><P>
+
+The emitter can be customized to a high degree, using the `<SAMP>iEmitGen3D</SAMP>'
+objects. Particles are emitted from position you choose, with speeds
+and accelerations you choose. During their lifetime they age and change
+as you choose.
+</P><P>
+
+<A NAME="SEC_1"></A>
+<H4> Basic Structure      </H4>
+<!--docid::SEC_1::-->
+<P>
+
+The following SCF class names are used (for <CODE>CS_LOAD_PLUGIN()</CODE>):
+</P><P>
+
+<UL>
+<LI>
+Type plugin: `<SAMP>crystalspace.mesh.object.emit</SAMP>'
+<LI>
+Loader plugin: `<SAMP>crystalspace.mesh.loader.emit</SAMP>'
+<LI>
+Factory loader plugin: `<SAMP>crystalspace.mesh.loader.factory.emit</SAMP>'
+</UL>
+<P>
+
+Objects in this plugin implement the following SCF interfaces (acquire
+with <CODE>SCF_QUERY_INTERFACE()</CODE>):
+</P><P>
+
+<UL>
+<LI>
+<EM>MeshObject</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObject</SAMP>'
+<LI>
+Implements `<SAMP>iParticleState</SAMP>'
+<LI>
+Implements `<SAMP>iEmitState</SAMP>'
+</UL>
+<LI>
+<EM>MeshObjectFactory</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObjectFactory</SAMP>'
+<LI>
+Implements `<SAMP>iEmitFactoryState</SAMP>'
+</UL>
+<LI>
+<EM>MeshObjectFactory</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObjectType</SAMP>'
+</UL>
+</UL>
+<P>
+
+<A NAME="SEC_2"></A>
+<H4> Factory State Interface     </H4>
+<!--docid::SEC_2::-->
+<P>
+
+The factory state interface has methods to create new emitter objects,
+that implement the `<SAMP>iEmitGen3D</SAMP>' interface. These objects return a random
+3D x,y,z value. They are used to specify starting position, speed and
+acceleration for the particles. Several exist:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>iEmitFixed</CODE>
+<DD>This emitter returns a fixed x,y,z value. Corresponds to a point in space,
+a fixed speed, or fixed acceleration.
+<DT><CODE>iEmitBox</CODE>
+<DD>Returns a value with each component between a min and max.  Corresponds to
+points from a box in space.  Use it to variate x,y,z for speed and
+acceleration, or to get positions inside a box.
+<DT><CODE>iEmitSphere</CODE>
+<DD>Returns a point in a sphere. The center of the sphere and a min and max radius
+must be given. The point is between the min and max radius from the center.
+Thus you can generate points from a hollowed sphere if you like.
+The points are evenly distributed across the entire volume of the sphere.
+<DT><CODE>iEmitCone</CODE>
+<DD>Returns a point inside a cone. Give a start point, aperture angle, azimuth
+and elevation just like in the fountain particle system. The points are
+chosen between a min and max distance from the origin.
+<DT><CODE>iEmitMix</CODE>
+<DD>The mix has a set of other `<SAMP>iEmitGen3D</SAMP>' objects, and samples a weighted
+distribution from them. You can give some other emitgen3ds and a weight
+for each one. Items with a heavier weight will be asked to return a 
+point more often.
+<P>
+
+For example, you could add several EmitLine objects to the mix, each 
+with a weight equal to its length. Then the mix will return points from
+a random line, but those points will be evenly distributed in space.
+<DT><CODE>iEmitLine</CODE>
+<DD>Returns points from the line between start and end position.
+<DT><CODE>iEmitCylinder</CODE>
+<DD>Give the start and end of the middle line of the cylinder, the two end
+points. Returns points between min and max radius from the middle line.
+The points are evenly distributed in space. Also, when the start = end point,
+points from a circle are returned.
+<DT><CODE>iEmitSphereTangent</CODE>
+<DD>The position point that is passed is used to compute a vector that is
+tangential to a sphere, relative to given origin. Use it to give a speed
+or acceleration tangential to a sphere. Speed is between min and max.
+<DT><CODE>iEmitCylinderTangent</CODE>
+<DD>The position point that is passed is used to compute a vector that is
+tangential to a cylinder, relative to given start and end of the middle line. 
+Use it to give a speed or acceleration tangential to a cylinder. Speed is 
+between min and max.
+</DL>
+<P>
+
+<A NAME="SEC_3"></A>
+<H4> Factory Loader     </H4>
+<!--docid::SEC_3::-->
+<P>
+
+The emitter mesh factory loader has no parameters.
+</P><P>
+
+<A NAME="SEC_4"></A>
+<H4> Object State Interface     </H4>
+<!--docid::SEC_4::-->
+<P>
+
+`<SAMP>iEmitState</SAMP>' is the SCF interface that you can
+use to set/get settings for a emitter object. The definition of this
+interface can be found in `<TT>CS/include/imesh/emit.h</TT>' and that's also the
+header file you need to include in your applications to use this plugin.
+Using this interface you can access the number of particles, the size
+of the particles, and various other emitter parameters.
+You can set:
+</P><P>
+
+<UL>
+<LI>
+The number of particles
+<LI>
+If particles are lighted
+<LI>
+The time a particle lives, in msec (1/1000). This is the maximum age 
+of the particles.
+<LI>
+The starting position `<SAMP>iEmitGen3D</SAMP>'.
+<LI>
+The starting speed `<SAMP>iEmitGen3D</SAMP>'.
+<LI>
+The starting acceleration `<SAMP>iEmitGen3D</SAMP>'.
+<LI>
+The attractor `<SAMP>iEmitGen3D</SAMP>'. You can also leave this at NULL, and 
+no attractor is used. If given, each point is mysteriously attracted
+to a point generated by the attractor `<SAMP>iEmitGen3D</SAMP>'. 
+<LI>
+The force of the attractor, higher means a faster acceleration
+towards the attractor. Negative will repel.
+<LI>
+The shape of the particles, either rectangular (given width, height)
+or regular shaped (given number of sides and radius).
+<LI>
+Also a table a ages and settings can be given. The particles will
+have their settings interpolated from the table in their lifetime.
+At a particular time (in milliseconds), you can set the colour of the particle,
+the alpha value of the particle (1=transparent), the swirliness of the
+particle (it will jiggle around a bit), the rotationspeed (positive or
+negative) in radians per second, and the scale (relative to the starting
+scale) of the particle.
+</UL>
+<P>
+
+In addition you can use `<SAMP>iParticleState</SAMP>'.
+</P><P>
+
+<A NAME="SEC_5"></A>
+<H4> Object Loader     </H4>
+<!--docid::SEC_5::-->
+<P>
+
+Also see the general documentation for particle systems for other recognized
+keywords.  See section <A HREF="cs_7.7.10.html#SEC7.7.10">7.7.10 Particle Systems in General</A>.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>&#60;rectparticles w="" h="" /&#62;</CODE>
+<DD>Set the width and height of the particles rectangular shape.
+<DT><CODE>&#60;regularparticles sides="" radius="" /&#62;</CODE>
+<DD>Set the number of sides and a radius of the regular shaped particles.
+<DT><CODE>&#60;totaltime&#62;milliseconds&#60;/totaltime&#62;</CODE>
+<DD>Set the maximum age in milliseconds.
+<DT><CODE>&#60;lighting&#62;yes/no&#60;/lighting&#62;</CODE>
+<DD>Disable or enable lighting for the particles
+<DT><CODE>&#60;number&#62;numberparticles&#60;/number&#62;</CODE>
+<DD>Set the number of particles
+<DT><CODE>&#60;startpos&#62; <small>...</small></CODE>
+<DD>Give an EMIT object for starting position.
+<DT><CODE>&#60;startspeed&#62; <small>...</small></CODE>
+<DD>Give the starting speed EMIT.
+<DT><CODE>&#60;startaccel&#62; <small>...</small></CODE>
+<DD>Give the starting acceleration EMIT.
+<DT><CODE>&#60;attractorforce&#62;forcevalue&#60;/attractorforce&#62;</CODE>
+<DD>Give the attractor force value.
+<DT><CODE>&#60;attractor&#62; <small>...</small></CODE>
+<DD>Give the EMIT that makes attracting points (per particle).
+<DT><CODE>&#60;aging&#62; <small>...</small></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>	&#60;color red="" green="" blue="" /&#62;
+	&#60;time&#62;time&#60;/time&#62;
+	&#60;alpha&#62;alpha&#60;/alpha&#62;
+	&#60;swirl&#62;swirl&#60;/swirl&#62;
+	&#60;rotspeed&#62;rotspeed&#60;/rotspeed&#62;
+	&#60;scale&#62;scale&#60;/scale&#62;
+&#60;/aging&#62;
+</pre></td></tr></table>Give a colour red, colour green, colour blue, age time, alpha, swirl, 
+rotationspeed and scale. 
+<DT><CODE>&#60;emitfixed x="" y="" z="" /&#62;</CODE>
+<DD>Fixed (x, y, z) emitter.
+<DT><CODE></CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;emitbox&#62;
+	&#60;min x="" y="" z="" /&#62;
+	&#60;max x="" y="" z="" /&#62;
+&#60;/emitbox&#62;
+</pre></td></tr></table>Box emitter, min x,y,z, max x,y,z.
+<DT><CODE>&#60;emitsphere x="" y="" z="" p="" q="" r="" /&#62;</CODE>
+<DD>Sphere emitter, origin x,y,z, min, max.
+<DT><CODE>&#60;emitcone x="" y="" z="" p="" q="" r="" s="" t="" /&#62;</CODE>
+<DD>Cone emitter, start x,y,z, elevation, azimuth, aperture, min,max radius.
+<DT><CODE>&#60;emitmix&#62; <small>...</small></CODE>
+<DD>Use several `<SAMP>emitmix</SAMP>' keywords in a row to create a mix with several
+EMITs.  Inside each `<SAMP>emitmix</SAMP>', <CODE>WEIGHT(value)</CODE> can be used to
+set the weight.
+<DT><CODE>&#60;emitline&#62;</CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>	&#60;min x="" y="" z="" /&#62;
+	&#60;max x="" y="" z="" /&#62;
+&#60;/emitline&#62;
+</pre></td></tr></table>Line emitter, start, end point.
+<DT><CODE>&#60;emitcylinder p="" q="" /&#62;</CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>	&#60;min x="" y="" z="" /&#62;
+	&#60;max x="" y="" z="" /&#62;
+&#60;/emitcylinder&#62;
+</pre></td></tr></table>Cylinder emitter, min, max distance, start, end point.
+<DT><CODE>&#60;emitcylindertangent p="" q="" /&#62;</CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>	&#60;min x="" y="" z="" /&#62;
+	&#60;max x="" y="" z="" /&#62;
+&#60;/emitcylindertangent&#62;
+</pre></td></tr></table>CylinderTangent emitter. Give start, end point, min, max speed.
+<DT><CODE>&#60;emitspheretangent p="" q="" /&#62;</CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>	&#60;min x="" y="" z="" /&#62;
+	&#60;max x="" y="" z="" /&#62;
+&#60;/emitspheretangent&#62;
+</pre></td></tr></table>SphereTangent emitter. Give origin, min, max speed.
+</DL>
+<A NAME="MeshObject PartSys"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.8.html#SEC7.7.8"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.10.html#SEC7.7.10"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.8.html#SEC7.8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Map File Grammar</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Map File Grammar">
+<META NAME="keywords" CONTENT="Crystal Space: Map File Grammar">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.6.2.1"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.html#SEC7.6.2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.2.html#SEC7.6.2.2"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.1.html#SEC7.6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.html#SEC7.6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H4> 7.6.2.1 Grammar </H4>
+<!--docid::SEC7.6.2.1::-->
+<P>
+
+<EM>Written by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
+</P><P>
+
+The syntax for the standard Crystal Space map file is specified using a
+context-free grammar using a modified BNF (<EM>Backus-Naur Form</EM>)
+notation.
+</P><P>
+
+<EM>Terminal</EM> symbols (also known as <EM>tokens</EM>) are denoted like this,
+`<CODE>VERTEX</CODE>'.  <EM>Non-terminal</EM> symbols are denoted in this fashion,
+<EM>vector</EM>.  Expressions enclosed within `[' and `]' are optional.  When
+an expression is followed by the notation `<small>...</small>', then the expression may
+appear zero or more times.  Finally, the symbol '|' appearing between
+expressions indicates selection.  Either the expression to the left may be
+utilized, or the one to the right, but not both.  An example follows.
+</P><P>
+
+<EM>flip</EM> => `<CODE>HEAD</CODE>' | `<CODE>TAIL</CODE>'<BR>
+<EM>wager</EM> => `<CODE>WAGER</CODE>' <EM>flip</EM>     `<CODE>(</CODE>' <EM>money</EM> [ `<CODE>,</CODE>' <EM>money</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+In this example, a `<SAMP>WAGER</SAMP>' may be followed by either `<SAMP>HEAD</SAMP>' or
+`<SAMP>TAIL</SAMP>', and then by a parenthesized list of monetary values separated by
+commas.  At least one monetary value must be specified.  All subsequent values
+(including the comma) are optional, as denoted by `[' and `]'.  Here are a
+couple of valid expressions which satisfy the <EM>wager</EM> production:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>WAGER HEAD (44)
+WAGER TAIL (5, 39, 2)
+</pre></td></tr></table></P><P>
+
+And here are a few invalid expressions which do not:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>WAGER HEAD (44,)
+WAGER TAIL (,23)
+WAGER TAIL ()
+WAGER EITHER (81, 15)
+WAGER (72, 91)
+</pre></td></tr></table></P><P>
+
+<A NAME="Map File Syntax"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.html#SEC7.6.2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.2.html#SEC7.6.2.2"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.1.html#SEC7.6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.html#SEC7.6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

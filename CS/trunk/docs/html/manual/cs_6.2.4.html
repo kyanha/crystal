@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: SCF Versions</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: SCF Versions">
+<META NAME="keywords" CONTENT="Crystal Space: SCF Versions">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC6.2.4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.3.html#SEC6.2.3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.5.html#SEC6.2.5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.1.html#SEC6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.html#SEC6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.3.html#SEC6.3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 6.2.4 Interface Versions </H3>
+<!--docid::SEC6.2.4::-->
+<P>
+
+Unlike COM, SCF supports interface versions.  That is, a shared class
+could implement version 0.3.6 of given interface, and if client requests that
+interface of a version lower or equal than 0.3.6, a correct interface pointer
+is returned.  For this to work you need to define inside each interface header
+file a specialization of the <CODE>scfInterface&#60;&#62;</CODE> template class for each
+interface.  This specialization must provide the interface's version number as
+the result of its <CODE>GetVersion()</CODE> method.  To correctly support different
+versions of interfaces you should follow these guidelines:
+</P><P>
+
+<UL>
+<LI>
+Do not insert new methods into existing interfaces.  Instead, you should
+append them after last defined method.
+<P>
+
+<LI>
+If your change made the interface invalid for clients that expect older
+versions of interfaces (for example, you broke the previous rule), increase
+the major version number, and set minor and micro versions to zero.
+<P>
+
+<LI>
+If your changes are relatively minor, but you do a major release, increase the
+minor version number and drop the micro version to zero.
+<P>
+
+<LI>
+If you are in the development process, and did a minor change to the
+interface, increase the micro version.
+</UL>
+<P>
+
+The possible range for major and minor version numbers is 0..255, and the
+range for micro version number is 0..65535.
+</P><P>
+
+When you query an interface, you should always tell it what interface version
+are you looking for.  If a module cannot provide an interface compatible with
+the requested version, then <CODE>QueryInterface()</CODE> will return `<SAMP>NULL</SAMP>'
+(same as if interface wasn't available at all).  You can use
+<CODE>scfCompatibleVersion()</CODE> to check whether the requested version is
+compatible with interface version.  In fact, the
+<CODE>SCF_IMPLEMENTS_INTERFACE()</CODE> and
+<CODE>SCF_IMPLEMENTS_EMBEDDED_INTERFACE()</CODE> macros employ this function
+automatically.
+</P><P>
+
+Since specializing the <CODE>scfInterface&#60;&#62;</CODE> template for each interface is an
+onerous task, you can instead automate the task via use of the
+<CODE>SCF_VERSION()</CODE> macro.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_VERSION(iMyGraphics3D, 0, 0, 1);
+
+struct iMyGraphics3D : public iBase
+{
+  <small>...</small>
+};
+</pre></td></tr></table></P><P>
+
+If you are placing your interfaces in your project's own namespace, then you
+must invoke the <CODE>SCF_VERSION()</CODE> macro outside your namespace.  For
+instance:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>namespace MyProject
+{
+  struct iMyGraphics3D : public iBase
+  {
+    <small>...</small>
+  };
+}
+
+SCF_VERSION(MyProject::iMyGraphics3D, 0, 0, 1);
+</pre></td></tr></table></P><P>
+
+<A NAME="SCF Client"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.3.html#SEC6.2.3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.5.html#SEC6.2.5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.1.html#SEC6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.html#SEC6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.3.html#SEC6.3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

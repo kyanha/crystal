@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: AWS Quick Start</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: AWS Quick Start">
+<META NAME="keywords" CONTENT="Crystal Space: AWS Quick Start">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.11.1"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.2.html#SEC7.11.2"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 7.11.1 Quick Start </H3>
+<!--docid::SEC7.11.1::-->
+<P>
+
+In order to startup and use AWS, the following tasks must be performed.
+</P><P>
+
+<OL>
+<LI>
+Initialize the Crystal Space facilities in the normal fashion.
+(see section <A HREF="cs_5.2.html#SEC5.2">5.2 Simple Tutorial 1</A>).  In particular,
+<CODE>csInitializer::OpenApplication()</CODE> must be invoked before any of the
+following tasks are performed.  Initializing an AWS application also
+involves loading the AWS plugin.  You can do this via the normal
+<CODE>csInitializer::RequestPlugins()</CODE> invocation (the common approach), or you
+can load it separately, if desired:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iAws&#62; aws = CS_LOAD_PLUGIN(plugin_mgr,
+  "crystalspace.window.alternatemanager", iAws);
+</pre></td></tr></table></P><P>
+
+If you know ahead of time that your application will be using AWS, then
+loading the plugin via <CODE>csInitializer::OpenApplication()</CODE> is more
+convenient and less error-prone.
+</P><P>
+
+<LI>
+Setup the AWS canvas.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>awsCanvas = aws-&#62;SetupCanvas (0, myG2D, myG3D);
+</pre></td></tr></table></P><P>
+
+Where <CODE>myG2D</CODE> and <CODE>myG3D</CODE> are your <CODE>iGraphics2D</CODE> and 
+<CODE>iGraphics3D</CODE> cavas objects, respectively.
+</P><P>
+
+<LI>
+Load definition files.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>aws-&#62;GetPrefMgr()-&#62;Load("/aws/awstest.def");
+</pre></td></tr></table></P><P>
+
+Substitute the VFS path of your own definition file in place of the path
+shown in the example.
+</P><P>
+
+<LI>
+Select a default skin that <EM>all</EM> windows will use.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>aws-&#62;GetPrefMgr()-&#62;SelectDefaultSkin("Normal Windows");
+</pre></td></tr></table></P><P>
+
+<LI>
+Create and display your windows.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iAwsWindow&#62; test2 = aws-&#62;CreateWindowFrom("Another");
+csRef&#60;iAwsWindow&#62; test1 = aws-&#62;CreateWindowFrom("Form1");
+if (test1) test1-&#62;Show();
+if (test2) test2-&#62;Show();
+</pre></td></tr></table></P><P>
+
+<LI>
+Finally, you have to make sure it actually renders to the display.
+So, in your program's main drawing loop you might use code similar to this:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>// Start drawing 2D graphics.
+if (!myG3D-&#62;BeginDraw (CSDRAW_2DGRAPHICS))
+  return;
+// Make sure invalidated areas get a chance to
+// redraw themselves.
+aws-&#62;Redraw ();
+// Draw the current view of the window system to a
+// graphics context with a certain alpha value.
+aws-&#62;Print (myG3D, 64);
+</pre></td></tr></table></OL>
+<P>
+
+That's all there is to it.  AWS is designed to be easy to use.  Of course,
+this brief examination does not illustrate how to get user input from
+components in the windows, nor does it illustrate how to do anything other than
+display your windows.  However, the windows created here are full-fledged
+windows with all the controls listed in the definition that you've created.
+For more advanced topics, read about signals (see section <A HREF="cs_7.11.2.html#SEC7.11.2">7.11.2 Signals: Responding To User Input</A>) and custom
+components (see section <A HREF="cs_7.11.3.html#SEC7.11.3">7.11.3 Creating Custom AWS Components</A>).
+<A NAME="AWS Signals"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.2.html#SEC7.11.2"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

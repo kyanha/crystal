@@ -1,0 +1,560 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: HOWTO Creating External MSVC 6 Application</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: HOWTO Creating External MSVC 6 Application">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Creating External MSVC 6 Application">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC5.8.16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.15.html#SEC5.8.15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.17.html#SEC5.8.17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.7.html#SEC5.7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.html#SEC5.8"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.html#SEC6"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 5.8.16 Creating an External MSVC 6 Application </H3>
+<!--docid::SEC5.8.16::-->
+<P>
+
+<EM>Written by Philip Wyett <A HREF="mailto:philipwyett@dsl.pipex.com">philipwyett@dsl.pipex.com</A>.</EM>
+<EM>Last updated 13 May 2003.</EM>
+</P><P>
+
+This HOWTO is a step by step guide for creating a basic Crystal Space
+application with MSVC 6 outside the Crystal Space source tree.
+</P><P>
+
+IMPORTANT: This tutorial assumes you have a basic familiarity with
+MSVC and it's inner workings. This tutorial also assumes you have a fully
+compiled (both release and debug) version of Crystal Space somewhere on your
+computer.
+</P><P>
+
+In addition to this written tutorial. You can download zip archive(s)
+containing video (in avi format) of each step in the tutorial. You can download each
+video with every step as you progress or download all the videos in a
+single zip archive via the link below.
+</P><P>
+
+All Steps Videos - 4.5Mb zip archive download.
+</P><P>
+
+<A HREF="ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/all_steps.zip">ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/all_steps.zip</A>
+</P><P>
+
+NOTE: In the videos you will see red and blue stars appear. These are to
+indicate mouse clicks. Red for a left mouse button click or double click. A
+blue star appearing indicates a right mouse button click.
+</P><P>
+
+<A NAME="SEC_1"></A>
+<H4> Step 1 - Creating a basic project workspace. </H4>
+<!--docid::SEC_1::-->
+<P>
+
+Step 1 Video - 0.4Mb zip archive download.
+</P><P>
+
+<A HREF="ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_01.zip">ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_01.zip</A>
+</P><P>
+
+Start MSVC 6 and then click on <EM>New</EM> from the <EM>File</EM> menu.  You
+will now be presented with a dialog box (see image below) for creating a new
+project.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap0.jpg" ALT="tutorial/howto/msvc6proj/snap0"></CENTER>
+</P><P>
+
+Firstly we select the type of application we wish to create. Crystal Space
+win32 applications primarily work from a console application base.  This
+still allows the creation of <EM>Graphical User Interface</EM> (GUI)
+applications. However, it also allows you to use the <EM>-console</EM>
+command line switch and access more verbose runtime data normally only
+available with debug builds.  If you do wish to create standard win32
+applications, you may do so.  However... the <EM>-console</EM> switch will
+not operate correctly in that type of application.
+</P><P>
+
+Select <EM>Win32 Console Application</EM>. Now enter the name of your application
+in the <EM>Project name</EM> text box.  In our example, the application will be
+named `<TT>simple1</TT>'.  Once done, click on the <EM>OK</EM> button.
+</P><P>
+
+You will now be presented with another dialog box (see image below), which asks
+what type of console application you would like to create.  We are working from
+a blank canvas, as all Crystal Space application are.  Thus we select
+<EM>An empty project</EM>.  Once done, click on the <EM>Finish</EM> button.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap1.jpg" ALT="tutorial/howto/msvc6proj/snap1"></CENTER>
+</P><P>
+
+You should now be presented with a new dialog box (see image below).  This
+dialog is to confirm the previous settings you have supplied during the
+workspace creation process.  Once checked and verified to be correct, click on
+the <EM>OK</EM> button.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap2.jpg" ALT="tutorial/howto/msvc6proj/snap2"></CENTER>
+</P><P>
+
+You should now be in the MSVC 6 IDE (Intergrated Development
+Environment), with the <EM>simple1</EM> project workspace loaded.  Lets move on...
+</P><P>
+
+<A NAME="SEC_2"></A>
+<H4> Step 2 - Adding files/code to the workspace. </H4>
+<!--docid::SEC_2::-->
+<P>
+
+Step 2 Video - 0.4Mb zip archive download.
+</P><P>
+
+<A HREF="ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_02.zip">ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_02.zip</A>
+</P><P>
+
+Rather than create code for this tutorial and keeping inline with time honored
+tradition - We are now going to cheat and use existing Crystal Space code. :-)
+</P><P>
+
+Firstly copy and paste the `<TT>simple1.cpp</TT>' and `<TT>simple1.h</TT>' from the
+Crystal Space code tree, into the newly created `<TT>simple1</TT>' project
+directory.  These files can be found here:
+</P><P>
+
+`<TT>CS\apps\tutorial\simple1\</TT>'
+</P><P>
+
+Once done, return to the MSVC IDE and select the <EM>FileView</EM> tab
+within the <EM>Workspace</EM> window.  See the image below to see the
+<EM>Workspace</EM> window from within the MSVC IDE.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap3.jpg" ALT="tutorial/howto/msvc6proj/snap3"></CENTER>
+</P><P>
+
+To add file(s) to a project workspace, select the appropriate folder in the
+<EM>Workspace</EM> window, be that <EM>Source Files</EM> or <EM>Include Files</EM>
+etc.  Right click on it to bring up the context menu and then click on
+<EM>Add Files To Folder</EM>.  You will now be presented with the <EM>Insert
+Files into Project</EM> dialog box, which can be seen below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap4.jpg" ALT="tutorial/howto/msvc6proj/snap4"></CENTER>
+</P><P>
+
+After selecting the desired file(s) you wish to add, click on the <EM>OK</EM>
+button to finalize your choice(s) and be returned back to the MSVC IDE.  
+Repeat this process twice adding `<TT>simple1.cpp</TT>' to the <EM>Source Files</EM>
+folder and `<TT>simple1.h</TT>' to the <EM>Include Files</EM> folder. Once done you
+should have a <EM>Workspace</EM> window which looks like the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap5.jpg" ALT="tutorial/howto/msvc6proj/snap5"></CENTER>
+</P><P>
+
+<A NAME="SEC_3"></A>
+<H4> Step 3 - Setting Crystal Space PATHS inside MSVC. </H4>
+<!--docid::SEC_3::-->
+<P>
+
+Step 3 Video - 1.02Mb zip archive download.
+</P><P>
+
+<A HREF="ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_03.zip">ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_03.zip</A>
+</P><P>
+
+First thing we need todo is point MSVC to both Crystal Spaces
+`<TT>include</TT>' and both the release and debug build `<TT>libs</TT>' directories, so
+it may access them at compile/link time. Select <EM>Tools</EM> from the
+<EM>File</EM> menu and then <EM>Options...</EM>. You will now be presented with the
+<EM>Options</EM> dialog box, which can be seen below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap6.jpg" ALT="tutorial/howto/msvc6proj/snap6"></CENTER>
+</P><P>
+
+Click on <EM>Directories</EM> tab of the <EM>Options</EM> dialog. Lets first
+add the path to the location of the Crystal Space `<TT>include</TT>' directory.  
+Select <EM>Include files</EM> in the <EM>Show directories for</EM> drop down menu.  
+Next click on an empty area at the bottom of the list in the <EM>Directories</EM>
+window.  This will open it with a browse button (button with three dots) on the
+right hand side, enabling you to and select the Crystal Space
+`<TT>include</TT>' directory - wherever it is on your system.  See the imsge below
+for an example of it set.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap7.jpg" ALT="tutorial/howto/msvc6proj/snap7"></CENTER>
+</P><P>
+
+To set the paths to the Crystal Space lib files, you must remember you need to
+add two--one pointing to the location where the release libs are and another
+to where the debug libs are located. In the <EM>Show directories for</EM> drop
+down menu, now select <EM>Library files</EM>. Follow the same browse and
+selection procedure as you used when adding the `<TT>include</TT>' path, adding the
+following paths - adjusting for where you have Crystal Space located on your
+system.
+</P><P>
+
+`<TT>CS\out\release\libs\</TT>'<BR>
+`<TT>CS\out\debug\libs\</TT>'
+</P><P>
+
+See image below for an example of these set.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap8.jpg" ALT="tutorial/howto/msvc6proj/snap8"></CENTER>
+</P><P>
+
+Once done, click on the <EM>OK</EM> button and return to the MSVC IDE.
+</P><P>
+
+<A NAME="SEC_4"></A>
+<H4> Step 4 - Setting Preprocessor Definitions in MSVC. </H4>
+<!--docid::SEC_4::-->
+<P>
+
+Step 4 Video - 0.9Mb zip archive download.
+</P><P>
+
+<A HREF="ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_04.zip">ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_04.zip</A>
+</P><P>
+
+Crystal Space essentially has three preprocessor definitions which MUST be
+set in-order to successfully compile and link your application. They are
+`<SAMP>CS_WIN32_CSCONFIG</SAMP>', which is added whether the build is release or
+debug.  `<SAMP>__CRYSTAL_SPACE__</SAMP>', which is also set whether the build is
+release or debug. And finally `<SAMP>CS_RELEASE</SAMP>' or `<SAMP>CS_DEBUG</SAMP>',
+which is added as you may guess `<SAMP>CS_RELEASE</SAMP>' in the settings for
+release builds and `<SAMP>CS_DEBUG</SAMP>' in the settings for debug builds.
+</P><P>
+
+To set the preprocessor definitions for your project. Select your project in the
+<EM>Workspace</EM> window. See area highlighted in blue in the image below.  Now,
+from the <EM>File</EM> menu select <EM>Projects</EM> then <EM>Settings...</EM>.  
+Alternatively, you can right click on the highlighted area in the
+<EM>Workspace</EM> and then click on <EM>Settings...</EM> - both ways work.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap9.jpg" ALT="tutorial/howto/msvc6proj/snap9"></CENTER>
+</P><P>
+
+Once you have clicked on <EM>Settings...</EM>. You will then be presented with the
+<EM>Settings</EM> dialog box, which can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap10.jpg" ALT="tutorial/howto/msvc6proj/snap10"></CENTER>
+</P><P>
+
+Select the <EM>C/C++</EM> tab and insert the appropriate definitions in the
+<EM>Preprocessor definitions</EM> text box i.e. for a debug build
+`<SAMP>CS_WIN32_CSCONFIG</SAMP>',  `<SAMP>__CRYSTAL_SPACE__</SAMP>' and
+`<SAMP>CS_DEBUG</SAMP>', making sure to separate with commas.  An example the
+ones entered for a debug build can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap11.jpg" ALT="tutorial/howto/msvc6proj/snap11"></CENTER>
+</P><P>
+
+Select the <EM>C/C++</EM> tab and insert the appropriate definitions in the
+<EM>Preprocessor definitions</EM> text box i.e. for a release build
+`<SAMP>CS_WIN32_CSCONFIG</SAMP>',  `<SAMP>__CRYSTAL_SPACE__</SAMP>' and
+`<SAMP>CS_RELEASE</SAMP>', making sure to separate with commas.  An example the
+ones entered for a release build can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap12.jpg" ALT="tutorial/howto/msvc6proj/snap12"></CENTER>
+</P><P>
+
+Once done, click on the <EM>OK</EM> button and return to the MSVC IDE.
+</P><P>
+
+<A NAME="SEC_5"></A>
+<H4> Step 5 - Setting Run-Time Library Used with Crystal Space Applications. </H4>
+<!--docid::SEC_5::-->
+<P>
+
+Step 5 Video - 0.5Mb zip archive download.
+</P><P>
+
+<A HREF="ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_05.zip">ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_05.zip</A>
+</P><P>
+
+As in step 4 we need to change one or more project settings. Select your project
+in the <EM>Workspace</EM> window. See area highlighted in blue in the image below.  
+Now, from the <EM>File</EM> menu select <EM>Projects</EM> then <EM>Settings...</EM>.  
+Alternatively, you can right click on the highlighted area in the
+<EM>Workspace</EM> and then click on <EM>Settings...</EM> - both ways work.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap9.jpg" ALT="tutorial/howto/msvc6proj/snap9"></CENTER>
+</P><P>
+
+Once you have clicked on <EM>Settings...</EM>, you will be presented with the
+<EM>Settings</EM> dialog box once again.
+</P><P>
+
+Select the <EM>C/C++</EM> tab and then from the <EM>Category</EM> drop down menu,
+select <EM>Code Generation</EM>. Crystal Space uses the Multithreaded DLL run-time
+internally, so to avoid conflict and errors applications should use the same.
+</P><P>
+
+For debug builds you need to select <EM>Debug Multithreaded DLL</EM> from the
+<EM>Use run-time library</EM> drop down menu. As can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap13.jpg" ALT="tutorial/howto/msvc6proj/snap13"></CENTER>
+</P><P>
+
+For release builds you need to select <EM>Multithreaded DLL</EM> from the
+<EM>Use run-time library</EM> drop down menu. As can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap14.jpg" ALT="tutorial/howto/msvc6proj/snap14"></CENTER>
+</P><P>
+
+Once done, click on the <EM>OK</EM> button and return to the MSVC IDE.
+</P><P>
+
+<A NAME="SEC_6"></A>
+<H4> Step 6 - Setting the Crystal Space static libs to link with. </H4>
+<!--docid::SEC_6::-->
+<P>
+
+Step 6 Video - 1.4Mb zip archive download.
+</P><P>
+
+<A HREF="ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_06.zip">ftp://sunsite.dk/projects/crystal/support/msvc/howtos/msvc6_ext_app/step_06.zip</A>
+</P><P>
+
+When compiling Crystal Space in release and debug mode, you will end up with the
+following static libs, some of which you may require at some point in your own
+applications if you use the functionality contained within a given library.
+</P><P>
+
+Crystal Space debug library names (the <EM>_d</EM> indicates a debug CS library):
+</P><P>
+
+<CODE>libcsutil_d.lib libcsgeom_d.lib libcsgfx_d.lib libcstool_d.lib libcsws_d.lib</CODE>
+</P><P>
+
+Crystal Space release library names:
+</P><P>
+
+<CODE>libcsutil.lib libcsgeom.lib libcsgfx.lib libcstool.lib libcsws.lib</CODE>
+</P><P>
+
+To add the necessary libraries to link our application.  As in step 4
+we need to change one or more project settings. Select your project in the
+<EM>Workspace</EM> window. See area highlighted in blue in the image below.  Now,
+from the <EM>File</EM> menu select <EM>Projects</EM> then <EM>Settings...</EM>.  
+Alternatively, you can right click on the highlighted area in the
+<EM>Workspace</EM> and then click on <EM>Settings...</EM> - both ways work.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap9.jpg" ALT="tutorial/howto/msvc6proj/snap9"></CENTER>
+</P><P>
+
+For our application we need only need link with a few of the available Crystal
+Space static libraries.  Select the <EM>Link</EM> tab and in the text box
+<EM>Object/library modules</EM> add the Crystal Space libraries as named below
+into the box with those already there.
+</P><P>
+
+Debug:
+</P><P>
+
+<CODE>libcsutil_d.lib libcsgeom_d.lib libcsgfx_d.lib libcstool_d.lib</CODE>
+</P><P>
+
+See image below for example of debug build link settings.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap15.jpg" ALT="tutorial/howto/msvc6proj/snap15"></CENTER>
+</P><P>
+
+Release:
+</P><P>
+
+<CODE>libcsutil.lib libcsgeom.lib libcsgfx.lib libcstool.lib</CODE>
+</P><P>
+
+See image below for example of release build link settings.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc6proj/snap16.jpg" ALT="tutorial/howto/msvc6proj/snap16"></CENTER>
+</P><P>
+
+Finally, click on OK to return to the MSVC IDE and then build the
+project.
+</P><P>
+
+<A NAME="SEC_7"></A>
+<H4> Commonly encountered problems. </H4>
+<!--docid::SEC_7::-->
+<P>
+
+<UL>
+<LI>
+Q. <EM>I get the following error:</EM>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>----------Configuration: simple1 - Win32 Release----------
+Compiling...
+simple1.cpp
+C:\CS\INCLUDE\csplatform.h(26) : fatal error C1083:
+  Cannot open include file: 'csconfig.h': No such file or directory
+Error executing cl.exe.
+
+simple1.exe - 1 error(s), 0 warning(s)
+</pre></td></tr></table></P><P>
+
+A. Repeat <EM>Step 4</EM> - You seem to have not set one or more of the
+preprocessor definitions correctly.
+</P><P>
+
+<LI>
+Q. <EM>I get the following link errors:</EM>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>----------Configuration: simple1 - Win32 Release----------
+Compiling...
+simple1.cpp
+Linking...
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: void __thiscall csReversibleTransform::RotateThis(
+    class csVector3 const &#38;,float)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static struct iSCF *  iSCF::SCF"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: __thiscall csView::csView(
+    struct iEngine *,struct iGraphics3D *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static bool __cdecl csInitializer::OpenApplication(
+    struct iObjectRegistry *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static void __cdecl csCommandLineHelper::Help(
+    struct iObjectRegistry *,struct iCommandLineParser *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static bool __cdecl csCommandLineHelper::CheckHelp(
+    struct iObjectRegistry *,struct iCommandLineParser *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static bool __cdecl csInitializer::SetupEventHandler(
+    struct iObjectRegistry *,
+    bool (__cdecl*)(struct iEvent &#38;),unsigned int)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static bool __cdecl csInitializer::RequestPlugins(
+  struct iObjectRegistry *,...)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "bool __cdecl csDefaultRunLoop(struct iObjectRegistry *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static void __cdecl csInitializer::DestroyApplication(
+    struct iObjectRegistry *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static struct iObjectRegistry * __cdec
+   csInitializer::CreateEnvironment(
+   int,char const * const * const)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "int __cdecl csPrintf(char const *,...)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "int __cdecl csPrintfV(char const *,char *)"
+MSVCRT.lib(crtexe.obj) : error LNK2001:
+  unresolved external symbol _main
+Release/simple1.exe : fatal error LNK1120: 14 unresolved externals
+Error executing link.exe.
+
+simple1.exe - 15 error(s), 0 warning(s)
+</pre></td></tr></table></P><P>
+
+A. This would indicate that you have forgotten to add the Crystal Space static
+libraries to link with.  Work through <EM>Step 6</EM> again and re-check the
+settings you have entered.
+</P><P>
+
+<LI>
+Q. <EM>I get the following link errors:</EM>
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>----------Configuration: simple1 - Win32 Release----------
+Compiling...
+simple1.cpp
+Linking...
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _strchr already defined in LIBC.lib(strchr.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _strstr already defined in LIBC.lib(strstr.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _tolower already defined in LIBC.lib(tolower.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _strncpy already defined in LIBC.lib(strncpy.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _free already defined in LIBC.lib(free.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _memmove already defined in LIBC.lib(memmove.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _realloc already defined in LIBC.lib(realloc.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _malloc already defined in LIBC.lib(malloc.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _strncmp already defined in LIBC.lib(strncmp.obj)
+LINK : warning LNK4098: defaultlib "MSVCRT" conflicts with use
+  of other libs; use /NODEFAULTLIB:library
+Release/simple1.exe : fatal error LNK1169: one or more multiply
+  defined symbols found
+Error executing link.exe.
+
+simple1.exe - 10 error(s), 1 warning(s)
+</pre></td></tr></table></P><P>
+
+A. This or similar LNK2005 errors, tend to indicate that you have forgotten to
+set the correct run-time library in the project settings.  Work through
+<EM>Step 5</EM> again and make sure you have your project set to
+<EM>Debug Multithreaded DLL</EM> or <EM>Multithreaded DLL</EM> for debug and
+release builds respectively.
+</UL>
+<A NAME="HOWTO Creating External MSVC 7 Application"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.15.html#SEC5.8.15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.17.html#SEC5.8.17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.7.html#SEC5.7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.html#SEC5.8"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.html#SEC6"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Simple Loading The Map</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Simple Loading The Map">
+<META NAME="keywords" CONTENT="Crystal Space: Simple Loading The Map">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC5.4.2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.4.1.html#SEC5.4.1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.4.3.html#SEC5.4.3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.3.html#SEC5.3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.4.html#SEC5.4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.5.html#SEC5.5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 5.4.2 Loading The Map </H3>
+<!--docid::SEC5.4.2::-->
+<P>
+
+Here we add the code to load a map. In this example we will load the
+`<SAMP>flarge</SAMP>' map which is included with Crystal Space.
+</P><P>
+
+In the second tutorial we already mentioned VFS (see section <A HREF="cs_7.2.html#SEC7.2">7.2 Virtual File System (VFS)</A>). This
+is important in this case too since we are going to load the map from
+the virtual filesystem. To do this we first add the new <CODE>LoadMap()</CODE>
+routine right before the <CODE>Initialize()</CODE> function:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::LoadMap ()
+{
+  // Set VFS current directory to the level we want to load.
+  csRef&#60;iVFS&#62; VFS (CS_QUERY_REGISTRY (object_reg, iVFS));
+  VFS-&#62;ChDir ("/lev/flarge");
+  // Load the level file which is called 'world'.
+  if (!loader-&#62;LoadMapFile ("world"))
+    ReportError("Error couldn't load level!");
+
+  engine-&#62;Prepare ();
+
+  return true;
+}
+</pre></td></tr></table></P><P>
+
+This code first uses <CODE>iVFS::ChDir()</CODE> to set the current
+directory in the virtual file system to `<TT>/lev/flarge</TT>'. In the
+case of `<SAMP>flarge</SAMP>' this <EM>mount point</EM> exists already in the
+configuration file `<TT>vfs.cfg</TT>'. If this is not the case for your own levels,
+you can either modify `<TT>vfs.cfg</TT>', provide your own `<TT>vfs.cfg</TT>', or
+else call <CODE>iVFS::Mount()</CODE>
+to map a physical file path (can be a ZIP archive file as well)
+to a virtual directory.
+</P><P>
+
+The call to <CODE>iLoader::LoadMapFile()</CODE> will take the given filename
+(in this case `<TT>world</TT>') and open it from the current VFS
+directory. Then, it will parse that file and create the geometry which
+is specified there.
+</P><P>
+
+If loading is successful, then you must call <CODE>iEngine::Prepare()</CODE> to
+make sure that all lightmaps are correctly loaded from the cache
+and other necessary setup work is done (i.e. textures are registered
+and so on).
+</P><P>
+
+Additionally, change the last part of <CODE>Application()</CODE> to this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Application ()
+{
+  <small>...</small>
+
+  view.AttachNew(new csView (engine, g3d));
+  iGraphics2D* g2d = g3d-&#62;GetDriver2D ();
+  view-&#62;SetRectangle (0, 0, g2d-&#62;GetWidth (), g2d-&#62;GetHeight ());
+
+  if (!LoadMap ()) return false;
+
+  <small>...</small>
+}
+</pre></td></tr></table></P><P>
+
+So, first we create our view but haven't set the current sector.
+Instead, we will have <CODE>LoadMap()</CODE> do that based upon the loaded map,
+as shown below.
+</P><P>
+
+<A NAME="Simple Locating the Camera"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.4.1.html#SEC5.4.1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.4.3.html#SEC5.4.3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.3.html#SEC5.3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.4.html#SEC5.4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.5.html#SEC5.5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

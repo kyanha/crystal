@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: SCF Meta Info Embedding</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: SCF Meta Info Embedding">
+<META NAME="keywords" CONTENT="Crystal Space: SCF Meta Info Embedding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC6.2.7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.6.html#SEC6.2.6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.8.html#SEC6.2.8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.1.html#SEC6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.html#SEC6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.3.html#SEC6.3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 6.2.7 Meta-Information Embedding </H3>
+<!--docid::SEC6.2.7::-->
+<P>
+
+The Crystal Space `<TT>configure</TT>' script option
+`<SAMP>--enable-meta-info-embedding</SAMP>' controls whether or not the build system
+embeds the plugin meta-information into plugin modules (if supported by the
+platform), and whether or not the plugin loader looks for embedded
+meta-information.  If this option is disabled, or if embedding is not supported
+by the platform, then the meta-information is laid down alongside the built
+plugin module (`<TT>.so</TT>' or `<TT>.dll</TT>') in a text file with the same name as
+the plugin module, except with extension `<TT>.csplugin</TT>'.  The
+meta-information embedding option is enabled, by default.
+</P><P>
+
+The platform-specific plugin loaders are capable of reading plugin
+meta-information when it is embedded and when it exists in a stand-alone
+`<TT>.csplugin</TT>' resource.  Even when configured for embedding, the plugin
+loaders will still be able to recognize and utilize external `<TT>.csplugin</TT>'
+resource.  This means that Crystal Space-based projects with unsophisticated
+build systems, which are incapable of embedding meta-information into the
+plugin module, can still create usable plugins by simply placing a copy of the
+`<TT>.csplugin</TT>' file alongside the plugin executable (`<TT>.so</TT>' or
+`<TT>.dll</TT>').
+</P><P>
+
+External projects which are based upon Crystal Space's Jam build system
+(`<TT>CS/mk/jam</TT>') inherit, for free, the capability of embedding
+meta-information within plugin modules (if supported by the platform).  Simply
+grab the newer `<TT>.jam</TT>' files from `<TT>CS/mk/jam</TT>', and add a few
+definitions to the project's `<TT>Jamconfig</TT>' file.  The exact set of
+definitions is platform-specific, so consult the appropriate Jam file
+(`<TT>unix.jam</TT>', `<TT>win32.jam</TT>', or `<TT>macosx.jam</TT>') to determine
+precisely which which definitions are required.  Here is a list of definitions
+required at the time of writing:
+</P><P>
+
+<DL COMPACT>
+<DT>Unix
+<DD><CODE>EMBED_META = yes</CODE><BR>
+<CODE>LIBBFD.AVAILABLE = yes</CODE><BR>
+<CODE>OBJCOPY.AVAILABLE = yes</CODE><BR>
+<CODE>CMD.OBJCOPY = objcopy</CODE>
+<P>
+
+<DT>Windows
+<DD><CODE>EMBED_META = yes</CODE>
+<P>
+
+<DT>MacOS/X
+<DD><CODE>EMBED_META = yes</CODE>
+</DL>
+<P>
+
+<A NAME="SCF Plugin Discovery"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.6.html#SEC6.2.6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.8.html#SEC6.2.8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.1.html#SEC6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.2.html#SEC6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.3.html#SEC6.3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>
