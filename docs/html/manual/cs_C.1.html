@@ -1585,6 +1585,154 @@ Likewise, the following string-related functions have been renamed:
 <LI>
 <CODE>csFindReplace()</CODE> => <CODE>csReplaceAll()</CODE>
 </UL>
+<P>
+
+<A NAME="SEC_38"></A>
+<H3> RAPID Collision Detection Plugin Removal </H3>
+<!--docid::SEC_38::-->
+<P>
+
+The RAPID collision detection plugin has been removed. In addition to
+being slower than the OPCODE plugin and consuming more memory, its license
+prevented its use in commercial applications.  You should instead now use the
+OPCODE plugin.
+</P><P>
+
+<A NAME="SEC_39"></A>
+<H3> 64-Bit Portability Changes </H3>
+<!--docid::SEC_39::-->
+<P>
+
+Some changes have been made to the Crystal Space API in order to better
+support 64-bit hardware, which is now becoming common. Additional changes to
+improve 64-bit support have also been made internally, but the internal changes
+essentially are transparent to external clients.
+</P><P>
+
+The most significant change to the API involves methods and classes
+dealing with data opaquely. Historically, opaque data has been handled using
+`<SAMP>void*</SAMP>', and programmers would cast numbers, booleans, and pointers to
+`<SAMP>void*</SAMP>' when it was necessary to deal with the data in an opaque fashion.
+This technique, however, is not portable to 64-bit platforms. For this reason,
+the new standard type `<SAMP>intptr_t</SAMP>' was introduced. This type is guaranteed
+to be large enough to store any integral numeric or pointer value regardless of
+the machine's word size.
+</P><P>
+
+Crystal Space now uniformly uses `<SAMP>intptr_t</SAMP>', rather than `<SAMP>void*</SAMP>',
+when dealing with opaque data. Upgrading your code to reflect this change is
+usually quite simple. Where your code presently declares a variable or casts a
+value to `<SAMP>void*</SAMP>', change it to `<SAMP>intptr_t</SAMP>'. Likewise, `<SAMP>void**</SAMP>'
+becomes `<SAMP>intptr_t*</SAMP>'. For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iGraphics2D canvas = <small>...</small>;
+iEventOutlet* outlet = <small>...</small>;
+outlet-&#62;Broadcast(cscmdCanvasExposed, (void*)canvas);
+</pre></td></tr></table></P><P>
+
+Becomes:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>outlet-&#62;Broadcast(cscmdCanvasExposed, (intptr_t)canvas);
+</pre></td></tr></table></P><P>
+
+The event system is impacted by this change. Specifically, the following
+methods and data members now deal with `<SAMP>intptr_t</SAMP>' rather than `<SAMP>void*</SAMP>'
+for the opaque "info" member of <CODE>csevCommand</CODE>-type events.
+</P><P>
+
+<UL>
+<LI>
+<CODE>csEvent::csEvent()</CODE>
+<LI>
+<CODE>csEventCommandData::Info</CODE>
+<LI>
+<CODE>iEventOutlet::Broadcast()</CODE>
+<LI>
+<CODE>iEventOutlet::ImmediateBroadcast()</CODE>
+</UL>
+<P>
+
+The deprecated CSWS module (Crystal Space Windowing System) has also been
+converted. Specifically, the following methods now deal with `<SAMP>intptr_t</SAMP>'
+rather than `<SAMP>void*</SAMP>' for all of CSWS's opaque data needs. CSWS
+callback functions are likewise impacted.
+</P><P>
+
+<UL>
+<LI>
+<CODE>csComponent::ForEach()</CODE>
+<LI>
+<CODE>csComponent::SendBroadcast()</CODE>
+<LI>
+<CODE>csComponent::SendCommand()</CODE>
+<LI>
+<CODE>csKeyboardAccelerator::Broadcast()</CODE>
+<LI>
+<CODE>csKeyboardAccelerator::Command()</CODE>
+<LI>
+<CODE>csListBoxItem::ForEachItem()</CODE>
+<LI>
+<CODE>csTimer::csTimer()</CODE>
+<LI>
+<CODE>csTreeBox::ForEachItem()</CODE>
+<LI>
+<CODE>csTreeItem::ForEachItem()</CODE>
+</UL>
+<P>
+
+The AWS plugin (Alternate Window System) and its interfaces have been been
+updated for 64-bit platform conformance.  Specifically, the following methods
+now deal with `<SAMP>intptr_t</SAMP>' rather than `<SAMP>void*</SAMP>' for all of AWS's
+opaque data needs.
+</P><P>
+
+<UL>
+<LI>
+<CODE>iAwsComponent::GetProperty()</CODE>
+<LI>
+<CODE>iAwsComponent::SetProperty()</CODE>
+<LI>
+<CODE>iAwsParmList::AddOpaque()</CODE>
+<LI>
+<CODE>iAwsParmList::GetOpaque()</CODE>
+<LI>
+<CODE>iAwsSink::RegisterTrigger()</CODE>
+<LI>
+<CODE>iAwsSinkManager::CreateSink()</CODE>
+</UL>
+<P>
+
+AWS callback functions (<EM>triggers</EM>) are likewise impacted. You need to
+change the declaration of your triggers to use `<SAMP>intptr_t</SAMP>' rather than
+`<SAMP>void*</SAMP>'. For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>void MyTrigger(void* sink, iAwsSource* source);
+</pre></td></tr></table></P><P>
+
+Becomes:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>void MyTrigger(intptr_t sink, iAwsSource* source);
+</pre></td></tr></table></P><P>
+
+Since converting client AWS code to the new API can be rather onerous
+on account of the amount of repetitious manual labor involved, the old
+`<SAMP>void*</SAMP>' API is still present in AWS, though heavily
+deprecated. In the interests of 64-bit portability, the old API will be
+removed at some point in the future.  You are encouraged, therefore, to convert
+your code to the new API. As an aid to clients in upgrading their code to
+the new API, one of two control macros can be defined which will help to
+isolate code which needs to be updated.  Defining `<SAMP>AWS_OBSOLETE_VOIDP</SAMP>'
+(via `<SAMP>#define</SAMP>' before including `<TT>iaws/aws.h</TT>') removes from the
+API all methods dealing with `<SAMP>void*</SAMP>', thus invocations of any such
+methods will result in compilation errors. Alternately, defining
+`<SAMP>AWS_DEPRECATE_VOIDP</SAMP>', will cause invocations of methods dealing with
+`<SAMP>void*</SAMP>' to generate compilation warnings, assuming that the compiler
+supports such deprecation warnings. (Presently, only modern version of the
+GNU compiler are so configured.)
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>

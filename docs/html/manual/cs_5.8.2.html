@@ -40,9 +40,9 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <!--docid::SEC5.8.2::-->
 <P>
 
-Collision detection in CS is one of the more complicated issues. In this
-section I give a quick description of all the classes and interfaces in CS
-and what you should do to use them.
+Collision detection in Crystal Space is one of the more complicated issues. In
+this section I give a quick description of all the classes and interfaces in
+Crystal Space and what you should do to use them.
 </P><P>
 
 <A NAME="SEC_1"></A>
@@ -52,8 +52,8 @@ and what you should do to use them.
 
 The basis of the collision detection system is the `<SAMP>iCollideSystem</SAMP>'.
 This is an interface which is implemented by some collision detection plugin.
-At this moment we have implementations of RAPID and OPCODE collision
-detection systems.
+At this moment we have an implementation using the OPCODE collision
+detection system.
 </P><P>
 
 To load a collision detection system you can use the following code:
@@ -77,11 +77,11 @@ if (!cd_sys)
 </pre></td></tr></table></P><P>
 
 This is a very general example.  It will first get the preferred collision
-detection plugin from the config file.  If the config file doesn't specify it
-then it will use 'crystalspace.collisiondetection.rapid' which is the only one
-we have at the moment.  If you don't want to let the users choose another
-plugin then you can also hardcode the string.  The cd_sys should be stored
-somewhere central (i.e. your application class).
+detection plugin from the configuration file.  If the configuration file does
+not specify it then it will use `<SAMP>crystalspace.collisiondetection.opcode</SAMP>'
+which is the one we have at the moment.  If you do not want to let the users
+choose another plugin then you can also hard-code the string.  The
+`<SAMP>cd_sys</SAMP>' should be stored somewhere central (i.e. your application class).
 </P><P>
 
 <A NAME="SEC_2"></A>
@@ -92,10 +92,10 @@ somewhere central (i.e. your application class).
 Before you can use the collision detection system you have to make
 instances of `<SAMP>iCollider</SAMP>'. Only the collide system can do that. To
 create an `<SAMP>iCollider</SAMP>' you have to give an instance of `<SAMP>iPolygonMesh</SAMP>'.
-Several meshes in CS implement `<SAMP>iPolygonMesh</SAMP>'. If you have special
-geometry on your own you can make your own classes to implement
-`<SAMP>iPolygonMesh</SAMP>'. Here is some code on how to initialize the collider
-for a mesh:
+Several meshes in Crystal Space implement `<SAMP>iPolygonMesh</SAMP>'. If you have
+special geometry on your own you can make your own classes to implement
+`<SAMP>iPolygonMesh</SAMP>'. Here is some code on how to initialize the collider for a
+mesh:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iCollider&#62; MyGame::InitCollider (iMeshWrapper* mesh)
@@ -122,13 +122,13 @@ mesh. In that case you can easily store the collider in that entity class.
 
 However, you can also use the `<SAMP>iObject</SAMP>' system to attach your collider
 to the mesh itself. An easy way to do this is to use the
-<CODE>csColliderWrapper</CODE> class that you can find in the <CODE>cstool</CODE>
-library. <CODE>csColliderWrapper</CODE> is a subclass of <CODE>csObject</CODE> which
-means that you can attach this object to any other <CODE>csObject</CODE>.
-<CODE>csColliderWrapper</CODE> additionally holds a pointer to an <CODE>iCollider</CODE>.
-This means that you can create a <CODE>csColliderWrapper</CODE> to hold your
-<CODE>iCollider</CODE> for some mesh object and then you can attach
-that <CODE>csColliderWrapper</CODE> to the mesh object itself. To do this
+`<SAMP>csColliderWrapper</SAMP>' class that you can find in the `<TT>cstool</TT>'
+library. `<SAMP>csColliderWrapper</SAMP>' is a subclass of `<SAMP>csObject</SAMP>' which
+means that you can attach this object to any other `<SAMP>csObject</SAMP>'.
+`<SAMP>csColliderWrapper</SAMP>' additionally holds a pointer to an `<SAMP>iCollider</SAMP>'.
+This means that you can create a `<SAMP>csColliderWrapper</SAMP>' to hold your
+`<SAMP>iCollider</SAMP>' for some mesh object and then you can attach
+that `<SAMP>csColliderWrapper</SAMP>' to the mesh object itself. To do this
 use the following code instead of the <CODE>InitCollider()</CODE> routine
 above:
 </P><P>
@@ -149,8 +149,8 @@ above:
 }
 </pre></td></tr></table></P><P>
 
-This example creates a new instance of <CODE>csColliderWrapper</CODE> which
-is automatically stored with the <CODE>iObject</CODE> that belongs
+This example creates a new instance of `<SAMP>csColliderWrapper</SAMP>' which
+is automatically stored with the `<SAMP>iObject</SAMP>' that belongs
 with the given mesh. So there is no need to store it otherwise. Later
 on you can retrieve the collider for some mesh by doing:
 </P><P>
@@ -164,7 +164,7 @@ initializes all collider wrappers for all objects in the engine.
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>csColliderWrapper* colwrap = 
-  csColliderWrapper::GetColliderWrapper(mesh-&#62;QueryObject ());
+  csColliderWrapper::GetColliderWrapper(mesh-&#62;QueryObject());
 iCollider* collider = colwrap-&#62;GetCollider();
 </pre></td></tr></table></P><P>
 
@@ -202,7 +202,7 @@ main game class.
 <P>
 
 When everything is set up it is time to do collision detection. To test
-for collisions you use the <CODE>Collide</CODE> function in `<SAMP>iCollideSystem</SAMP>'.
+for collisions you use the <CODE>Collide()</CODE> function in `<SAMP>iCollideSystem</SAMP>'.
 This will test the collisions between two colliders. The result of this
 will be true or false and in addition the collide system will keep a list
 of all triangle pairs for the hits. Those triangle pairs can be used to
@@ -216,45 +216,49 @@ sphere for that. Also you should only do collision detection if the object
 moves.
 </P><P>
 
-Note! Don't forget to call <CODE>ResetCollisionPairs</CODE> before doing collision
-detection! Otherwise the internal table of collision pairs will grow
+<EM>Note</EM>: Do not forget to call <CODE>ResetCollisionPairs()</CODE> before doing
+collision detection! Otherwise the internal table of collision pairs will grow
 forever.
 </P><P>
 
 <A NAME="SEC_5"></A>
-<H4> Sliding Along Walls (this section is in beta) </H4>
+<H4> Sliding Along Walls </H4>
 <!--docid::SEC_5::-->
 <P>
 
+(<EM>Note: This section is in beta status.</EM>)
+</P><P>
+
 For detecting collision between a mesh and the static world, it is better
-to use the <CODE>CollidePath</CODE> method of `<SAMP>iCollideSystem</SAMP>'. Its use
-is similar to <CODE>Collide</CODE> but it takes arrays of `<SAMP>iCollider</SAMP>''s
-and `<SAMP>csReversibleTransform</SAMP>''s. It also takes a `<SAMP>csVector3</SAMP>'
+to use the <CODE>CollidePath()</CODE> method of `<SAMP>iCollideSystem</SAMP>'. Its use
+is similar to <CODE>Collide()</CODE> but it takes arrays of `<SAMP>iCollider</SAMP>'
+and `<SAMP>csReversibleTransform</SAMP>' instances. It also takes a `<SAMP>csVector3</SAMP>'
 (passed by reference). This is the translation vector of the movement
-that the mesh wants to take (<CODE>CollidePath</CODE> is called before the
-movement occurs). The interface is detailed further in the public API docs.
+that the mesh wants to take (<CODE>CollidePath()</CODE> is called before the
+movement occurs). The interface is detailed further in the public API
+docs.
 </P><P>
 
 The translation vector is modified to reflect the distance that the mesh
 was able to move before it collided with the world. So you should move
 the mesh that far, and subtract the new vector from the original vector,
-to get the distance still to go. We will call this <CODE>V</CODE>.
+to get the distance still to go. We will call this `<SAMP>V</SAMP>'.
 </P><P>
 
 Use <CODE>GetCollisionPairs</CODE> to get the triangle that was collided with.
-It is described by the points <CODE>a2, b2, c2</CODE> in the
+It is described by the points `<SAMP>a2</SAMP>', `<SAMP>b2</SAMP>', `<SAMP>c2</SAMP>' in the
 `<SAMP>csCollisionPair</SAMP>' structure. Then use those points to create a
-`<SAMP>csPlane3</SAMP>'. We will call this <CODE>P</CODE>.
+`<SAMP>csPlane3</SAMP>'. We will call this `<SAMP>P</SAMP>'.
 </P><P>
 
-We want to give our vector a new direction so that it is on <CODE>P</CODE>.
-The cross-product (<CODE>V % P.Normal()</CODE>) of the two will give a vector
+We want to give our vector a new direction so that it is on `<SAMP>P</SAMP>'.
+The cross-product (`<SAMP>V % P.Normal()</SAMP>') of the two will give a vector
 which is on the plane, but perpendicular to the vector that we want.
-Taking the cross-product again (now <CODE>(V % P.Normal()) % P.Normal()</CODE>)
+Taking the cross-product again (now `<SAMP>(V % P.Normal()) % P.Normal()</SAMP>')
 will give the vector we want.
 </P><P>
 
-Now we try to move the mesh along this new vector. Hopefully there will be
+Now we try to move the mesh along this new vector. Hopefully, there will be
 no collision this time, but if there is we must do the whole thing over
 again. Example:
 </P><P>
@@ -262,8 +266,8 @@ again. Example:
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>void Player::Move (csVector3 move)
 {
   csVector3 old (move);
-  while (collsys-&#62;CollidePath (player_collider, player_transform, move,
-         world_colliders, world_transforms) != 1)
+  while (collsys-&#62;CollidePath (player_collider, player_transform,
+         move, world_colliders, world_transforms) != 1)
   {
     player_transform-&#62;Translate (move);
     csCollisionPair *pair = collsys-&#62;GetCollisionPairs ();
@@ -282,14 +286,14 @@ player walks into a corner, but it serves as an example.
 </P><P>
 
 <A NAME="SEC_6"></A>
-<H4> Limitation of RAPID and OPCODE </H4>
+<H4> Limitation of OPCODE </H4>
 <!--docid::SEC_6::-->
 <P>
 
-The current RAPID and OPCODE collision detection implementations
-have one important limitation. They assume that the transform from object
-to world space will not change the size of the object. i.e. you cannot scale the
-object using the object to world transformation (which is kept in the
+The current OPCODE collision detection implementation
+has one important limitation. It assumes that the transform from object
+to world space will not change the size of the object; i.e. you cannot scale
+the object using the object to world transformation (which is kept in the
 `<SAMP>iMovable</SAMP>') and expect collision detection to be ok. The only way
 aroud this limitation is to use <CODE>HardTransform()</CODE> to transform
 the object space vertices itself. But this can of course not be used
@@ -298,11 +302,11 @@ the object changes.
 </P><P>
 
 <A NAME="SEC_7"></A>
-<H4> Include Files </H4>
+<H4> Header Files </H4>
 <!--docid::SEC_7::-->
 <P>
 
-The include files useful for this section are:
+The header files useful for this section are:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;iutil/object.h&#62;
