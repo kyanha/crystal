@@ -23,21 +23,21 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC800"></A>
+<A NAME="SEC796"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC799"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_267.html#SEC801"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC798"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC799"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC805"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC795"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_267.html#SEC797"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC794"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC795"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC799"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
 <H4> 8.1.1.1 Contents </H4>
-<!--docid::SEC800::-->
+<!--docid::SEC796::-->
 <P>
 
 The root components of the MacOS/X port of Crystal Space are contained within
@@ -47,7 +47,6 @@ these directories:
 <UL>
 <LI><CODE>CS/libs/csutil/macosx</CODE>
 <LI><CODE>CS/plugins/sound/driver/coreaudio</CODE>
-<LI><CODE>CS/plugins/video/canvas/macosx/cocoa</CODE>
 <LI><CODE>CS/plugins/video/canvas/macosx/common</CODE>
 <LI><CODE>CS/plugins/video/canvas/macosx/coregraphics</CODE>
 <LI><CODE>CS/plugins/video/canvas/macosx/opengl</CODE>
@@ -109,7 +108,7 @@ focus of keyboard and mouse events.
 <DD>A thin C++ wrapper over the Objective-C plugin loading facilities.  The
 interface between the C++ and Objective-C facilities is implemented via a
 pure-C bridge, thus allowing Crystal Space's C++ Shared Class Facility
-(see section <A HREF="cs_138.html#SEC354">6.2 Shared Class Facility (SCF)</A>) to successfully load plugin modules via the Objective-C dynamic
+(see section <A HREF="cs_138.html#SEC350">6.2 Shared Class Facility (SCF)</A>) to successfully load plugin modules via the Objective-C dynamic
 linking facility.
 <P>
 
@@ -163,80 +162,21 @@ Located in `<TT>CS/include/csutil/macosx</TT>'.
 <DD>A configuration file which defines platform-specific settings such as the menu
 layout appropriate for the application.  This file is actually located in the
 `<TT>CS/data/config</TT>' directory which is typically mounted at the virtual
-location `<TT>/config/</TT>' (see section <A HREF="cs_158.html#SEC388">7.2 Virtual File System (VFS)</A>).
-</DL>
-<P>
-
-The directory `<TT>CS/plugins/video/canvas/macosx/cocoa</TT>' contains the MacOS/X
-Cocoa-based 2D canvas which provides 2D graphics capability to the Crystal
-Space engine.  Unlike the lower-level CoreGraphics and OpenGL 2D drivers, this
-driver employs only very high-level Cocoa API and is consequently more
-portable, though slower.  This module is responsible for providing a
-hardware-specific frame-buffer into which Crystal Space can draw.  It is also
-responsible for actually displaying the frame-buffer in a manner which is
-appropriate for the given platform.  The files comprising the Cocoa 2D graphics
-library are:
-</P><P>
-
-<DL COMPACT>
-<DT><CODE>CocoaDriver2D.cpp</CODE>
-<DD><DT><CODE>CocoaDriver2D.h</CODE>
-<DD>Defines the class `<SAMP>CocoaDriver2D</SAMP>' which provides an Cocoa-based 2D drawing
-surface to Crystal Space.  This is the sole interface through which Crystal
-Space communicates with the Cocoa 2D graphics services.
-<P>
-
-<DT><CODE>CocoaDelegate2D.m</CODE>
-<DD><DT><CODE>CocoaDelegate2D.h</CODE>
-<DD>Implements the Objective-C portion of the Cocoa-based 2D driver.  This class
-is responsible for managing the window and view into which Crystal Space draws.
-It is also the window's delegate object.
-<P>
-
-<DT><CODE>CocoaView.m</CODE>
-<DD><DT><CODE>CocoaView.h</CODE>
-<DD>An Objective-C subclass of Cocoa's `<SAMP>NSView</SAMP>' class.  This is the view where
-the rendered scene from Crystal Space is actually displayed.  This class also
-forwards received keyboard and mouse events to the shared `<SAMP>iOSXAssistant</SAMP>'
-instance for interpretation and handling.
-<P>
-
-<DT><CODE>CocoaFrameBuffer.h</CODE>
-<DD>An abstract 2D frame buffer class which defines the interface of objects which
-are capable of converting a raw Crystal Space frame buffer into an
-<CODE>NSImage</CODE>-format frame buffer.
-<P>
-
-<DT><CODE>CocoaFrameBuffer15.cpp</CODE>
-<DD><DT><CODE>CocoaFrameBuffer15.h</CODE>
-<DD>A concrete subclass of `<SAMP>CocoaFrameBuffer</SAMP>' which can convert Crystal Space
-RGB:555 to MacOS/X RGBA:4444.
-<P>
-
-<DT><CODE>CocoaFrameBuffer32.cpp</CODE>
-<DD><DT><CODE>CocoaFrameBuffer32.h</CODE>
-<DD>A concrete subclass of `<SAMP>CocoaFrameBuffer</SAMP>' which can convert Crystal Space
-RGB:888 to MacOS/X RGBA:8888.
-<P>
-
-<DT><CODE>CocoaMemory.m</CODE>
-<DD><DT><CODE>CocoaMemory.h</CODE>
-<DD>Utility functions for manipulation of page-aligned memory blocks for the
-`<SAMP>CocoaFrameBuffer</SAMP>' subclasses.
+location `<TT>/config/</TT>' (see section <A HREF="cs_158.html#SEC384">7.2 Virtual File System (VFS)</A>).
 </DL>
 <P>
 
 <A NAME="MacOS/X Run-Loop"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC799"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_267.html#SEC801"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC798"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC799"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC805"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC795"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_267.html#SEC797"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC794"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC795"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC799"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

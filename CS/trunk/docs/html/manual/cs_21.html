@@ -29,10 +29,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_22.html#SEC39"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_19.html#SEC26"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_20.html#SEC35"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_32.html#SEC96"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_32.html#SEC92"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
@@ -68,15 +68,9 @@ between Windows and Unix safely
 <!--docid::SEC37::-->
 <P>
 
-The makefiles require GNU make, which is typically named `<TT>make</TT>' on
-most systems. If this is not the case then substitute `<TT>gmake</TT>',
-`<TT>gnumake</TT>' or whatever GNU make is called on your system. It is
-<EM>not</EM> possible to build Crystal Space using any other make program. If you
-do not have a suitable make program, then you can instead build the project
-with Jam, which is available from:
-</P><P>
-
-<A HREF="ftp://ftp.perforce.com/jam">ftp://ftp.perforce.com/jam</A>
+Crystal Space can be built with either `<TT>make</TT>' or Jam (see  <A HREF="cs_18.html#GettingJam">GettingJam</A>).
+Both tools work equally well.  In the examples below, wherever `<SAMP>make -k</SAMP>'
+is used, you can instead substitute `<TT>jam</TT>' if you so desire.
 </P><P>
 
 You first need to configure the project for your platform.  You do this
@@ -100,14 +94,15 @@ For a list of useful configuration options, invoke:
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>./configure --help=short
 </pre></td></tr></table></P><P>
 
-You can optionally invoke the `<SAMP>depend</SAMP>' make target to ensure that all
-build-time dependencies are correct.  This is only important if you intend to
-make changes to the Crystal Space sources and want to be sure that all files
-will be recompiled that are in need of recompilation.  You can, however, can
-safely omit this step if desired.
+If the Crystal Space source directory is read-only, if it is shared between
+several developers, or if you simply dislike building a project within its
+source tree, you can instead configure and build from a different directory.
+For instance:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>make depend
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>mkdir $HOME/builddir
+cd $HOME/builddir
+/path/to/CS/configure --enable-debug
 </pre></td></tr></table></P><P>
 
 Now, you can actually build the entire project:
@@ -116,40 +111,17 @@ Now, you can actually build the entire project:
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>make -k all
 </pre></td></tr></table></P><P>
 
+Alternately, if you have Jam installed:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>jam all
+</pre></td></tr></table></P><P>
+
 The build process will create an executable for each demonstration program or
-tool, and a dynamic-load-library for each plugin modules (with extension
-`<TT>*.so</TT>' on Linux and most Unix platforms).  Plugin modules include 3D
+tool, and a dynamic-load-library for each plugin module (with extension
+`<TT>.so</TT>' on Linux and most Unix platforms).  Plugin modules include 3D
 renderers, 2D canvases, 3D engine, isometric engine, etc.
 </P><P>
-
-You can now run the executable `<TT>walktest</TT>'.
-</P><P>
-
-<A NAME="SEC38"></A>
-<H4> Renderer Selection </H4>
-<!--docid::SEC38::-->
-<P>
-
-The OpenGL renderer is used by default when you run Crystal Space programs.  To
-select a different renderruer, such as the software renderer, you can edit your
-local configuration file `<TT>$HOME/.crystal/Global.cfg</TT>'.  Add the following
-line to select the software renderer for all applications:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>System.Plugins.iGraphics3D = crystalspace.graphics3d.software
-</pre></td></tr></table></P><P>
-
-The software renderer can run with the X11 or SVGAlib drivers.  If the
-`<SAMP>DISPLAY</SAMP>' environment variable is defined it will choose the X11 driver,
-otherwise it will try the `<SAMP>SVGAlib</SAMP>' driver, if SVGAlib is available on
-your platform.
-</P><P>
-
-Alternately, you can choose the software renderer from the command-line:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>./walktest -video=software
-</pre></td></tr></table></P><P>
 
 Finally, if you want to utilize Crystal Space as a software development kit
 (SDK), you can install it and then clean up the detritus of the build
@@ -158,17 +130,44 @@ process:
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>make install
 make distclean
-</pre></td></tr></table><A NAME="MSVC"></A>
+</pre></td></tr></table></P><P>
+
+You can now try running the `<TT>walktest</TT>' demonstration. See section <A HREF="cs_33.html#SEC93">2.6 Quick Start</A>.
+</P><P>
+
+<A NAME="SEC38"></A>
+<H4> Renderer Selection </H4>
+<!--docid::SEC38::-->
+<P>
+
+The OpenGL renderer is used by default when you run Crystal Space programs.  To
+select a different renderer, such as the software renderer, you can edit your
+local configuration file `<TT>$HOME/.crystal/Global.cfg</TT>'.  Add the following
+line to select the software renderer for all applications:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>System.Plugins.iGraphics3D = crystalspace.graphics3d.software
+</pre></td></tr></table></P><P>
+
+Alternately, you can choose the software renderer from the command-line:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>./walktest -video=software
+</pre></td></tr></table></P><P>
+
+The software renderer interacts with X11, placing output on the display
+indicated by the `<SAMP>DISPLAY</SAMP>' environment variable.
+<A NAME="MSVC"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_20.html#SEC35"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_22.html#SEC39"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_19.html#SEC26"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_20.html#SEC35"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_32.html#SEC96"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_32.html#SEC92"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

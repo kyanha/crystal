@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Threads in CS</TITLE>
+<TITLE>Crystal Space: Writing Documentation</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Threads in CS">
-<META NAME="keywords" CONTENT="Crystal Space: Threads in CS">
+<META NAME="description" CONTENT="Crystal Space: Writing Documentation">
+<META NAME="keywords" CONTENT="Crystal Space: Writing Documentation">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,151 +23,226 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC805"></A>
+<A NAME="SEC803"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC804"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC798"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC797"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC812"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 8.2 Threads in Crystal Space </H2>
+<H2> 9.1 Writing Documentation </H2>
+<!--docid::SEC803::-->
+<P>
+
+This section contains guidelines and instructions for writing documentation
+for the Crystal Space project.  Read this section if you are interested in
+contributing to the documentation project.
+</P><P>
+
+These guidelines deal with subdivision of the documentation into files, into
+chapters and sections, and with node placing and linking.  To understand this
+document, you should know that <EM>chapters</EM> is the general division of a
+Texinfo file into several parts, and <EM>sections</EM> is the next subdivision.
+<EM>ToC</EM> means "Table of Contents".  "folder" and "directory" have the
+expected meaning.
+</P><P>
+
+Please follow these guidelines when writing documentation for Crystal Space.
+</P><P>
+
+<A NAME="SEC804"></A>
+<H4> General  </H4>
+<!--docid::SEC804::-->
+<P>
+
+Write documentation using the Texinfo mark-up language. You can get more
+information at <A HREF="http://www.texinfo.org/">http://www.texinfo.org/</A>.
+</P><P>
+
+The documentation is converted from Texinfo to other formats, such as
+HTML. Conversion to most important formats happens automatically within
+the CVS repository by an automated mechanism, so you only have to commit
+the Texinfo docs if you make any changes.
+</P><P>
+
+To make writing the documentation easier, `<SAMP>@node</SAMP>' and `<SAMP>@menu</SAMP>'
+directives in the Texinfo sources can be repaired, which means that the
+links to the previous, next and top nodes are generated automatically. So you
+can safely write the following line, omitting the various links which the
+`<SAMP>@node</SAMP>' directive normally requires:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>@node MySection
+@section My Section Title
+</pre></td></tr></table></P><P>
+
+The repair occurs automatically within the CVS repository by an automated
+mechanism, however you can also repair the files manually if you use the
+GNU makefile system by invoking the following command:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>make repairdoc
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC805"></A>
+<H4> Conversion and Maintenance via Makefile Targets </H4>
 <!--docid::SEC805::-->
 <P>
 
-<EM>Written by Jorrit Tyberghein.</EM>
+If you are using the GNU makefile system, you can use the following
+makefile targets to convert the Texinfo documents to different formats.
+The output will be placed in subdirectories of `<TT>${builddir}/out/docs/</TT>'.
 </P><P>
 
-The Crystal Space project as such is not thread-safe. So when using
-threads in combination with Crystal Space you have to be careful. However,
-several parts of Crystal Space are thread-safe to some degree. This is
-documented in this section. However, by default you must assume that some
-Crystal Space plugin or module is not thread-safe unless it is mentioned here.
-</P><P>
+<DL COMPACT>
+<DT><CODE>make apihtml</CODE>
+<DD>Generate HTML version of public API reference via Doxygen.  This is
+the reference manual for people using Crystal Space in their own projects.  It
+only documents public classes and functions.
+<P>
+
+<DT><CODE>make apidevhtml</CODE>
+<DD>Generate HTML version of developer API reference via Doxygen.  This
+is the reference manual for people actually working on Crystal Space itself. 
+It documents all classes and functions.
+<P>
+
+<DT><CODE>make manualhtml</CODE>
+<DD>Convert the Crystal Space manual to HTML format.
+<P>
+
+<DT><CODE>make manualdvi</CODE>
+<DD>Convert the Crystal Space manual to DVI format.
+<P>
+
+<DT><CODE>make manualps</CODE>
+<DD>Convert the Crystal Space manual to PostScript format.
+<P>
+
+<DT><CODE>make manualpdf</CODE>
+<DD>Convert the Crystal Space manual to PDF format.
+<P>
+
+<DT><CODE>make manualinfo</CODE>
+<DD>Convert the Crystal Space manual to GNU Info format.
+<P>
+
+<DT><CODE>make repairdoc</CODE>
+<DD>Repair all `<SAMP>@node</SAMP>' and `<SAMP>@menu</SAMP>' directives in the Texinfo sources.
+<P>
+
+<DT><CODE>make cleandoc</CODE>
+<DD>Delete all converted documents.
+</DL>
+<P>
 
 <A NAME="SEC806"></A>
-<H4> Threadsafe parts of Crystal Space </H4>
+<H4> Directory Structure </H4>
 <!--docid::SEC806::-->
 <P>
 
-<UL>
-<LI>
-SCF (see section <A HREF="cs_138.html#SEC354">6.2 Shared Class Facility (SCF)</A>) class loading/unloading is safe. This means that
-<CODE>SCF_CREATE_INSTANCE()</CODE> and all the routines in `<SAMP>iSCF</SAMP>' that have
-to do with loaded classes are safe.
-<P>
-
-<LI>
-The plugin manager is safe, thus macros such as <CODE>CS_LOAD_PLUGIN()</CODE>,
-<CODE>CS_LOAD_PLUGIN_ALWAYS()</CODE>, and <CODE>CS_QUERY_PLUGIN_CLASS()</CODE> are safe.
-<P>
-
-<LI>
-The object registry is safe, thus macros like <CODE>CS_QUERY_REGISTRY()</CODE>
-are safe. The <CODE>iObjectRegistryIterator</CODE> takes a copy of the data
-over which it iterates so it will not even lock.
-<P>
-
-<LI>
-VFS (see section <A HREF="cs_158.html#SEC388">7.2 Virtual File System (VFS)</A>) is thread-safe for most operations.  But do not work on
-the same `<SAMP>iFile</SAMP>' from different threads!  That is not thread-safe.  Also
-the concept of the current directory is not really valid with threads.
-<P>
-
-<LI>
-The TinyXML, XMLRead, and BinaryXML parsers are thread safe in the sense
-that it is okay to create and work on separate documents in separate threads.
-However it is <EM>not</EM> okay to work on the same document in different
-threads.
-<P>
-
-<LI>
-The syntax services plugin is safe for the basic parsing tools (vectors,
-matrices, reporting errors, etc.). For polygons and thing related objects
-this has not yet been checked for safety.
-<P>
-
-<LI>
-The `<SAMP>simpcon</SAMP>' and `<SAMP>csconout</SAMP>' output consoles are thread-safe provided
-auto-updating is disabled which you can set like this:
-<P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iConsoleOutput&#62; con = ...;
-con-&#62;AutoUpdate(false);
-</pre></td></tr></table></P><P>
-
-Note that by default auto-updating is enabled!
+The `<TT>CS/docs/texinfo</TT>' directory contains:
 </P><P>
 
-<LI>
-The reporter plugin is fully thread-safe.
-<P>
-
-<LI>
-The standard reporter listener plugin is thread-safe for basic operations
-but not for initialization. That should be done from the main thread.
-Also note that thread-safety of the standard reporter listener depends
-on thread-safety of the output console that is being used.
-<P>
-
-<LI>
-The following mesh object and factory loaders are thread-safe provided that the
-implementation of `<SAMP>iLoaderContext</SAMP>' is thread-safe.  Please note that the
-default <CODE>iLoaderContext</CODE> is <EM>not</EM> thread-safe which makes all loader
-plugins unsafe by default.
-<P>
-
 <UL>
 <LI>
-<EM>Genmesh loader</EM>: Aside from a small design mistake with streams in
-case the new renderer is used, the genmesh loader plugin is perfectly
-thread-safe.
-</UL>
+A table-of-contents file named `<TT>cs.txi</TT>'.  This is the platform-independent
+root of the entire documentation hierarchy.
 <P>
 
+<LI>
+Platform-dependent configuration files, such as `<TT>unixdef.txi</TT>',
+`<TT>macdef.txi</TT>', etc.
+<P>
+
+<LI>
+Platform-dependent wrapper files, such as `<TT>cs-unix.txi</TT>',
+`<TT>cs-mac.txi</TT>', etc.  These are the platform-specific root files for the
+entire documentation hierarchy.  They import the platform-dependent
+configuration (i.e. `<TT>unixdef.txi</TT>' and then the TOC file
+`<TT>cs.txi</TT>'.
+<P>
+
+<LI>
+Other configuration files, like `<TT>version.txi</TT>', `<TT>cpyright.txi</TT>', etc.,
+and helper files for conversion to other formats, like `<TT>texinfo.tex</TT>'.
+<P>
+
+<LI>
+One subdirectory for each chapter. Each chapter directory contains at least
+one file called `<TT>chapter.txi</TT>', which is the root import file for this
+chapter. The TOC file will only include `<TT>chapter.txi</TT>', which then
+includes one file in this directory for every section.
+<P>
+
+If one section in a chapter is too big for a single file, this section is split
+into several files by subsections.  These files are again often placed into a
+subdirectory.
 </UL>
 <P>
 
 <A NAME="SEC807"></A>
-<H4> Threaded Loading </H4>
+<H4> Formatting Conventions </H4>
 <!--docid::SEC807::-->
 <P>
 
-One important threaded section of Crystal Space is the threaded loader.  In
-order to ensure that the threaded loader works correctly you must make sure
-that you use thread-safe versions of the following modules in Crystal Space:
+Here are some general formatting conventions.
 </P><P>
 
 <UL>
 <LI>
-<CODE>iReporter</CODE> (the standard reporter is okay).
+When creating <CODE>@itemize</CODE> lists, one blank line should separate each
+<CODE>@item</CODE> except for short lists of items with short descriptions.  Also
+remember to use the <CODE>@bullet</CODE> directive after the <CODE>@itemze</CODE>
+directive, as in <CODE>@itemize @bullet</CODE>.
+<P>
+
 <LI>
-<CODE>iReporterListener</CODE> (the standard reporter listener is okay).
+Do not indent the text of items within <CODE>@itemize</CODE> or
+<CODE>@table</CODE> blocks.  Allow the formatting tools to perform the indentation
+automatically. This also applies to <CODE>@example</CODE> blocks, but here you
+may indent sub-blocks. For example, you may want to create a block like this:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>@example
+int Increment(int n)
+@{
+  return n + 1;
+@}
+@end example
+</pre></td></tr></table></P><P>
+
+Then you may, of course, indent the `<SAMP>return</SAMP>' line, but not the other
+lines.
+</P><P>
+
 <LI>
-<CODE>iConsoleOutput</CODE> (`<TT>simpcon</TT>' and `<TT>csconout</TT>' are okay provided
-auto-updating is disabled).
+Do not use tabs to indent code in <CODE>@example</CODE> blocks since the formatting
+tools do not faithfully reproduce the tab's indentation.  Instead, always
+indent using spaces.
+<P>
+
 <LI>
-<CODE>iLoaderContext</CODE> (the threaded loader provides a thread-safe version
-of this one).
-<LI>
-<CODE>iDocumentSystem</CODE> (TinyXML, XMLRead, and BinaryXML are all okay).
+Attempt to keep the content of Texinfo source files under 80-columns in width
+if possible.  This is a general guidelines rather than a hard rule.
 </UL>
-<A NAME="Contributing"></A>
+<A NAME="Portability"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC804"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC798"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC797"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC812"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
