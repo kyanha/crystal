@@ -1186,6 +1186,10 @@ SOURCE=..\..\libs\..\include\csgfx\vertexlight.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csgfx\vertexlistwalker.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csgfx\xorpat.h
 # End Source File
 # Begin Source File
