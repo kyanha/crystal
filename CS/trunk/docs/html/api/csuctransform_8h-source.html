@@ -41,13 +41,13 @@
 00022 <span class="preprocessor">#include "<a class="code" href="csunicode_8h.html">csunicode.h</a>"</span>
 00023 
 00031 
-<a name="l00032"></a><a class="code" href="group__util.html#ga123">00032</a> <span class="preprocessor">#define CS_UC_MAX_UTF8_ENCODED          6</span>
+<a name="l00032"></a><a class="code" href="group__util.html#ga128">00032</a> <span class="preprocessor">#define CS_UC_MAX_UTF8_ENCODED          6</span>
 00033 <span class="preprocessor"></span>
-<a name="l00034"></a><a class="code" href="group__util.html#ga124">00034</a> <span class="preprocessor">#define CS_UC_MAX_UTF16_ENCODED         2</span>
+<a name="l00034"></a><a class="code" href="group__util.html#ga129">00034</a> <span class="preprocessor">#define CS_UC_MAX_UTF16_ENCODED         2</span>
 00035 <span class="preprocessor"></span>
-<a name="l00036"></a><a class="code" href="group__util.html#ga125">00036</a> <span class="preprocessor">#define CS_UC_MAX_UTF32_ENCODED         1</span>
+<a name="l00036"></a><a class="code" href="group__util.html#ga130">00036</a> <span class="preprocessor">#define CS_UC_MAX_UTF32_ENCODED         1</span>
 00037 <span class="preprocessor"></span>
-<a name="l00041"></a><a class="code" href="group__util.html#ga126">00041</a> <span class="preprocessor">#define CS_UC_MAX_MAPPED                3</span>
+<a name="l00041"></a><a class="code" href="group__util.html#ga131">00041</a> <span class="preprocessor">#define CS_UC_MAX_MAPPED                3</span>
 00042 <span class="preprocessor"></span> 
 <a name="l00046"></a><a class="code" href="classcsUnicodeTransform.html">00046</a> <span class="keyword">class </span><a class="code" href="classcsUnicodeTransform.html">csUnicodeTransform</a>
 00047 {
@@ -84,7 +84,7 @@
 00096     }
 00097     <span class="keywordtype">int</span> chUsed = 0;
 00098     
-00099     <a class="code" href="group__util.html#ga19">utf8_char</a> curCh;
+00099     <a class="code" href="group__util.html#ga20">utf8_char</a> curCh;
 00100     GET_NEXT(curCh);
 00101     <span class="keywordflow">if</span> ((curCh &amp; 0x80) == 0)
 00102     {
@@ -155,8 +155,8 @@
 00167 <span class="comment">      }</span>
 00168 <span class="comment">      */</span>
 00169       
-00170       <span class="keywordflow">if</span> (!returnNonChar &amp;&amp; (<a class="code" href="group__util.html#ga135">CS_UC_IS_NONCHARACTER</a>(ch) 
-00171         || <a class="code" href="group__util.html#ga132">CS_UC_IS_SURROGATE</a>(ch)))
+00170       <span class="keywordflow">if</span> (!returnNonChar &amp;&amp; (<a class="code" href="group__util.html#ga139">CS_UC_IS_NONCHARACTER</a>(ch) 
+00171         || <a class="code" href="group__util.html#ga136">CS_UC_IS_SURROGATE</a>(ch)))
 00172         FAIL(chUsed);
 00173       SUCCEED;
 00174     }
@@ -171,20 +171,20 @@
 00187     }
 00188     <span class="keywordtype">int</span> chUsed = 0;
 00189     
-00190     <a class="code" href="group__util.html#ga20">utf16_char</a> curCh;
+00190     <a class="code" href="group__util.html#ga21">utf16_char</a> curCh;
 00191     GET_NEXT(curCh);
 00192     <span class="comment">// Decode surrogate</span>
-00193     <span class="keywordflow">if</span> (<a class="code" href="group__util.html#ga132">CS_UC_IS_SURROGATE</a> (curCh))
+00193     <span class="keywordflow">if</span> (<a class="code" href="group__util.html#ga136">CS_UC_IS_SURROGATE</a> (curCh))
 00194     {
 00195       <span class="comment">// Invalid code</span>
-00196       <span class="keywordflow">if</span> (!<a class="code" href="group__util.html#ga133">CS_UC_IS_HIGH_SURROGATE</a> (curCh))
+00196       <span class="keywordflow">if</span> (!<a class="code" href="group__util.html#ga137">CS_UC_IS_HIGH_SURROGATE</a> (curCh))
 00197       {
 00198         FAIL(chUsed);
 00199       }
 00200       ch = 0x10000 + ((curCh &amp; 0x03ff) &lt;&lt; 10);
 00201       GET_NEXT(curCh);
 00202       <span class="comment">// Invalid code</span>
-00203       <span class="keywordflow">if</span> (!<a class="code" href="group__util.html#ga134">CS_UC_IS_LOW_SURROGATE</a> (curCh))
+00203       <span class="keywordflow">if</span> (!<a class="code" href="group__util.html#ga138">CS_UC_IS_LOW_SURROGATE</a> (curCh))
 00204       {
 00205         <span class="comment">// Fail with 1 so the char is handled upon the next Decode.</span>
 00206         FAIL(1);
@@ -195,8 +195,8 @@
 00211     {
 00212       ch = curCh;
 00213     }
-00214     <span class="keywordflow">if</span> (!returnNonChar &amp;&amp; (<a class="code" href="group__util.html#ga135">CS_UC_IS_NONCHARACTER</a>(ch) 
-00215       || <a class="code" href="group__util.html#ga132">CS_UC_IS_SURROGATE</a>(ch)))
+00214     <span class="keywordflow">if</span> (!returnNonChar &amp;&amp; (<a class="code" href="group__util.html#ga139">CS_UC_IS_NONCHARACTER</a>(ch) 
+00215       || <a class="code" href="group__util.html#ga136">CS_UC_IS_SURROGATE</a>(ch)))
 00216       FAIL(chUsed);
 00217     SUCCEED;
 00218   }
@@ -211,8 +211,8 @@
 00231     <span class="keywordtype">int</span> chUsed = 0;
 00232     
 00233     GET_NEXT(ch);
-00234     <span class="keywordflow">if</span> ((!returnNonChar &amp;&amp; (<a class="code" href="group__util.html#ga135">CS_UC_IS_NONCHARACTER</a>(ch) 
-00235       || <a class="code" href="group__util.html#ga132">CS_UC_IS_SURROGATE</a>(ch))) || (ch &gt; CS_UC_LAST_CHAR))
+00234     <span class="keywordflow">if</span> ((!returnNonChar &amp;&amp; (<a class="code" href="group__util.html#ga139">CS_UC_IS_NONCHARACTER</a>(ch) 
+00235       || <a class="code" href="group__util.html#ga136">CS_UC_IS_SURROGATE</a>(ch))) || (ch &gt; CS_UC_LAST_CHAR))
 00236       FAIL(chUsed);
 00237     SUCCEED;
 00238   }
@@ -250,33 +250,33 @@
 <a name="l00298"></a><a class="code" href="classcsUnicodeTransform.html#z581_0">00298</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> EncodeUTF8 (<span class="keyword">const</span> utf32_char ch, utf8_char* buf, 
 00299     size_t bufsize, <span class="keywordtype">bool</span> allowNonchars = <span class="keyword">false</span>)
 00300   {
-00301     <span class="keywordflow">if</span> ((!allowNonchars &amp;&amp; ((<a class="code" href="group__util.html#ga135">CS_UC_IS_NONCHARACTER</a>(ch)) 
-00302       || (<a class="code" href="group__util.html#ga132">CS_UC_IS_SURROGATE</a>(ch)))) || (ch &gt; CS_UC_LAST_CHAR))
+00301     <span class="keywordflow">if</span> ((!allowNonchars &amp;&amp; ((<a class="code" href="group__util.html#ga139">CS_UC_IS_NONCHARACTER</a>(ch)) 
+00302       || (<a class="code" href="group__util.html#ga136">CS_UC_IS_SURROGATE</a>(ch)))) || (ch &gt; CS_UC_LAST_CHAR))
 00303       <span class="keywordflow">return</span> 0;
 00304     size_t bufRemaining = bufsize;
 00305     <span class="keywordtype">int</span> encodedLen = 0;
 00306     
 00307     <span class="keywordflow">if</span> (ch &lt; 0x80)
 00308     {
-00309       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)ch);
+00309       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)ch);
 00310     }
 00311     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ch &lt; 0x800)
 00312     {
-00313       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)(0xc0 | (ch &gt;&gt; 6)));
-00314       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)(0x80 | (ch &amp; 0x3f)));
+00313       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)(0xc0 | (ch &gt;&gt; 6)));
+00314       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)(0x80 | (ch &amp; 0x3f)));
 00315     }
 00316     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ch &lt; 0x10000)
 00317     {
-00318       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)(0xe0 | (ch &gt;&gt; 12)));
-00319       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)(0x80 | ((ch &gt;&gt; 6) &amp; 0x3f)));
-00320       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)(0x80 | (ch &amp; 0x3f)));
+00318       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)(0xe0 | (ch &gt;&gt; 12)));
+00319       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)(0x80 | ((ch &gt;&gt; 6) &amp; 0x3f)));
+00320       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)(0x80 | (ch &amp; 0x3f)));
 00321     }
 00322     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ch &lt; 0x200000)
 00323     {
-00324       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)(0xf0 | (ch &gt;&gt; 18)));
-00325       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)(0x80 | ((ch &gt;&gt; 12) &amp; 0x3f)));
-00326       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)(0x80 | ((ch &gt;&gt; 6) &amp; 0x3f)));
-00327       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga19">utf8_char</a>)(0x80 | (ch &amp; 0x3f)));
+00324       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)(0xf0 | (ch &gt;&gt; 18)));
+00325       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)(0x80 | ((ch &gt;&gt; 12) &amp; 0x3f)));
+00326       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)(0x80 | ((ch &gt;&gt; 6) &amp; 0x3f)));
+00327       OUTPUT_CHAR ((<a class="code" href="group__util.html#ga20">utf8_char</a>)(0x80 | (ch &amp; 0x3f)));
 00328     }
 00329     <span class="comment">/*</span>
 00330 <span class="comment">    else if (ch &lt; 0x4000000)</span>
@@ -303,23 +303,23 @@
 <a name="l00355"></a><a class="code" href="classcsUnicodeTransform.html#z581_1">00355</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> EncodeUTF16 (<span class="keyword">const</span> utf32_char ch, utf16_char* buf, 
 00356     size_t bufsize, <span class="keywordtype">bool</span> allowNonchars = <span class="keyword">false</span>)
 00357   {
-00358     <span class="keywordflow">if</span> ((!allowNonchars &amp;&amp; ((<a class="code" href="group__util.html#ga135">CS_UC_IS_NONCHARACTER</a>(ch)) 
-00359       || (<a class="code" href="group__util.html#ga132">CS_UC_IS_SURROGATE</a>(ch)))) || (ch &gt; CS_UC_LAST_CHAR))
+00358     <span class="keywordflow">if</span> ((!allowNonchars &amp;&amp; ((<a class="code" href="group__util.html#ga139">CS_UC_IS_NONCHARACTER</a>(ch)) 
+00359       || (<a class="code" href="group__util.html#ga136">CS_UC_IS_SURROGATE</a>(ch)))) || (ch &gt; CS_UC_LAST_CHAR))
 00360       <span class="keywordflow">return</span> 0;
 00361     size_t bufRemaining = bufsize;
 00362     <span class="keywordtype">int</span> encodedLen = 0;
 00363     
 00364     <span class="keywordflow">if</span> (ch &lt; 0x10000)
 00365     {
-00366       OUTPUT_CHAR((<a class="code" href="group__util.html#ga20">utf16_char</a>)ch);
+00366       OUTPUT_CHAR((<a class="code" href="group__util.html#ga21">utf16_char</a>)ch);
 00367     }
 00368     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ch &lt; 0x100000)
 00369     {
-00370       <a class="code" href="group__util.html#ga21">utf32_char</a> ch_shifted = ch - 0x10000;
-00371       OUTPUT_CHAR((<a class="code" href="group__util.html#ga20">utf16_char</a>)((ch_shifted &gt;&gt; 10) 
-00372         | <a class="code" href="group__util.html#ga136">CS_UC_CHAR_HIGH_SURROGATE_FIRST</a>));
-00373       OUTPUT_CHAR((<a class="code" href="group__util.html#ga20">utf16_char</a>)((ch_shifted &amp; 0x3ff) 
-00374         | <a class="code" href="group__util.html#ga138">CS_UC_CHAR_LOW_SURROGATE_FIRST</a>));
+00370       <a class="code" href="group__util.html#ga22">utf32_char</a> ch_shifted = ch - 0x10000;
+00371       OUTPUT_CHAR((<a class="code" href="group__util.html#ga21">utf16_char</a>)((ch_shifted &gt;&gt; 10) 
+00372         | <a class="code" href="group__util.html#ga140">CS_UC_CHAR_HIGH_SURROGATE_FIRST</a>));
+00373       OUTPUT_CHAR((<a class="code" href="group__util.html#ga21">utf16_char</a>)((ch_shifted &amp; 0x3ff) 
+00374         | <a class="code" href="group__util.html#ga142">CS_UC_CHAR_LOW_SURROGATE_FIRST</a>));
 00375     }
 00376     <span class="keywordflow">else</span>
 00377       <span class="keywordflow">return</span> 0;
@@ -330,8 +330,8 @@
 <a name="l00386"></a><a class="code" href="classcsUnicodeTransform.html#z581_2">00386</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> EncodeUTF32 (<span class="keyword">const</span> utf32_char ch, utf32_char* buf, 
 00387     size_t bufsize, <span class="keywordtype">bool</span> allowNonchars = <span class="keyword">false</span>)
 00388   {
-00389     <span class="keywordflow">if</span> ((!allowNonchars &amp;&amp; ((<a class="code" href="group__util.html#ga135">CS_UC_IS_NONCHARACTER</a>(ch)) 
-00390       || (<a class="code" href="group__util.html#ga132">CS_UC_IS_SURROGATE</a>(ch)))) || (ch &gt; CS_UC_LAST_CHAR))
+00389     <span class="keywordflow">if</span> ((!allowNonchars &amp;&amp; ((<a class="code" href="group__util.html#ga139">CS_UC_IS_NONCHARACTER</a>(ch)) 
+00390       || (<a class="code" href="group__util.html#ga136">CS_UC_IS_SURROGATE</a>(ch)))) || (ch &gt; CS_UC_LAST_CHAR))
 00391       <span class="keywordflow">return</span> 0;
 00392     size_t bufRemaining = bufsize;
 00393     <span class="keywordtype">int</span> encodedLen = 0;
@@ -431,7 +431,7 @@
 00539     <span class="keywordflow">if</span> (srcSize == (size_t)-1)                                          
 00540     {                                                                   
 00541       srcChars = 0;                                                     
-00542       <span class="keyword">const</span> <a class="code" href="group__util.html#ga19">utf8_char</a>* sptr = source;                                   
+00542       <span class="keyword">const</span> <a class="code" href="group__util.html#ga20">utf8_char</a>* sptr = source;                                   
 00543       <span class="keywordflow">while</span> (*sptr++ != 0) srcChars++;                                  
 00544     }                           
 00545     <span class="keywordflow">if</span> ((dest != 0) &amp;&amp; (destSize != 0))
@@ -500,20 +500,20 @@
 00608 <span class="preprocessor"></span>  <span class="comment">// Methods below for doxygen documentation are here as the size '2' is </span>
 00609   <span class="comment">// default.</span>
 00610   
-<a name="l00617"></a><a class="code" href="classcsUnicodeTransform.html#z583_0">00617</a>   <span class="keyword">inline</span> <span class="keyword">static</span> size_t UTF8toWC (<span class="keywordtype">wchar_t</span>* dest, size_t destSize, 
+00617   <span class="keyword">inline</span> <span class="keyword">static</span> size_t UTF8toWC (<span class="keywordtype">wchar_t</span>* dest, size_t destSize, 
 00618     <span class="keyword">const</span> utf8_char* source, size_t srcSize)
 00619   {
-00620     <span class="keywordflow">return</span> UTF8to16 ((<a class="code" href="group__util.html#ga20">utf16_char</a>*)dest, destSize, source, srcSize);
+00620     <span class="keywordflow">return</span> UTF8to16 ((utf16_char*)dest, destSize, source, srcSize);
 00621   };
 00622 
-<a name="l00627"></a><a class="code" href="classcsUnicodeTransform.html#z583_1">00627</a>   <span class="keyword">inline</span> <span class="keyword">static</span> size_t UTF16toWC (<span class="keywordtype">wchar_t</span>* dest, size_t destSize, 
+00627   <span class="keyword">inline</span> <span class="keyword">static</span> size_t UTF16toWC (<span class="keywordtype">wchar_t</span>* dest, size_t destSize, 
 00628     <span class="keyword">const</span> utf16_char* source, size_t srcSize)
 00629   {
 00630     size_t srcChars = srcSize;                                          
 00631     <span class="keywordflow">if</span> (srcSize == (size_t)-1)                                          
 00632     {                                                                   
 00633       srcChars = 0;                                                     
-00634       <span class="keyword">const</span> <a class="code" href="group__util.html#ga20">utf16_char</a>* sptr = source;                                  
+00634       <span class="keyword">const</span> <a class="code" href="group__util.html#ga21">utf16_char</a>* sptr = source;                                  
 00635       <span class="keywordflow">while</span> (*sptr++ != 0) srcChars++;                                  
 00636     }                           
 00637     <span class="keywordflow">if</span> ((dest != 0) &amp;&amp; (destSize != 0))
@@ -525,19 +525,19 @@
 00643     <span class="keywordflow">return</span> srcChars + 1;
 00644   };
 00645 
-<a name="l00650"></a><a class="code" href="classcsUnicodeTransform.html#z583_2">00650</a>   <span class="keyword">inline</span> <span class="keyword">static</span> size_t UTF32toWC (<span class="keywordtype">wchar_t</span>* dest, size_t destSize, 
+00650   <span class="keyword">inline</span> <span class="keyword">static</span> size_t UTF32toWC (<span class="keywordtype">wchar_t</span>* dest, size_t destSize, 
 00651     <span class="keyword">const</span> utf32_char* source, size_t srcSize)
 00652   {
-00653     <span class="keywordflow">return</span> UTF32to16 ((<a class="code" href="group__util.html#ga20">utf16_char</a>*)dest, destSize, source, srcSize);
+00653     <span class="keywordflow">return</span> UTF32to16 ((utf16_char*)dest, destSize, source, srcSize);
 00654   };
 00655   
-<a name="l00660"></a><a class="code" href="classcsUnicodeTransform.html#z583_3">00660</a>   <span class="keyword">inline</span> <span class="keyword">static</span> size_t WCtoUTF8 (utf8_char* dest, size_t destSize, 
+00660   <span class="keyword">inline</span> <span class="keyword">static</span> size_t WCtoUTF8 (utf8_char* dest, size_t destSize, 
 00661     <span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* source, size_t srcSize)
 00662   {
-00663     <span class="keywordflow">return</span> UTF16to8 (dest, destSize, (<a class="code" href="group__util.html#ga20">utf16_char</a>*)source, srcSize);
+00663     <span class="keywordflow">return</span> UTF16to8 (dest, destSize, (utf16_char*)source, srcSize);
 00664   };
 00665 
-<a name="l00670"></a><a class="code" href="classcsUnicodeTransform.html#z583_4">00670</a>   <span class="keyword">inline</span> <span class="keyword">static</span> size_t WCtoUTF16 (utf16_char* dest, size_t destSize, 
+00670   <span class="keyword">inline</span> <span class="keyword">static</span> size_t WCtoUTF16 (utf16_char* dest, size_t destSize, 
 00671     <span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* source, size_t srcSize)
 00672   {
 00673     size_t srcChars = srcSize;                                          
@@ -556,24 +556,24 @@
 00686     <span class="keywordflow">return</span> srcChars + 1;
 00687   };
 00688 
-<a name="l00693"></a><a class="code" href="classcsUnicodeTransform.html#z583_5">00693</a>   <span class="keyword">inline</span> <span class="keyword">static</span> size_t WCtoUTF32 (utf32_char* dest, size_t destSize, 
+00693   <span class="keyword">inline</span> <span class="keyword">static</span> size_t WCtoUTF32 (utf32_char* dest, size_t destSize, 
 00694     <span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* source, size_t srcSize)
 00695   {
-00696     <span class="keywordflow">return</span> UTF16to32 (dest, destSize, (<a class="code" href="group__util.html#ga20">utf16_char</a>*)source, srcSize);
+00696     <span class="keywordflow">return</span> UTF16to32 (dest, destSize, (utf16_char*)source, srcSize);
 00697   };
 00698 
 00699 <span class="preprocessor">#if !defined(CS_COMPILER_MSVC)</span>
 00700 <span class="preprocessor"></span>  <span class="comment">/* @@@ For VC6, utf16_char == wchar_t, complains below. (Can be avoided on </span>
 00701 <span class="comment">   * VC7 with "Builtin wchar_t" - but disabled for CS.) */</span>
-<a name="l00706"></a><a class="code" href="classcsUnicodeTransform.html#z583_6">00706</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> Decode (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* str, size_t strlen, 
+00706   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> Decode (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* str, size_t strlen, 
 00707     utf32_char&amp; ch, <span class="keywordtype">bool</span>* isValid = 0, <span class="keywordtype">bool</span> returnNonChar = <span class="keyword">false</span>)
 00708   {
-00709     <span class="keywordflow">return</span> UTF16Decode ((<a class="code" href="group__util.html#ga20">utf16_char</a>*)str, strlen, ch, isValid, returnNonChar);
+00709     <span class="keywordflow">return</span> UTF16Decode ((utf16_char*)str, strlen, ch, isValid, returnNonChar);
 00710   }
-<a name="l00715"></a><a class="code" href="classcsUnicodeTransform.html#z583_7">00715</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> Encode (<span class="keyword">const</span> utf32_char ch, <span class="keywordtype">wchar_t</span>* buf, 
+00715   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> Encode (<span class="keyword">const</span> utf32_char ch, <span class="keywordtype">wchar_t</span>* buf, 
 00716     size_t bufsize, <span class="keywordtype">bool</span> allowNonchars = <span class="keyword">false</span>)
 00717   {
-00718     <span class="keywordflow">return</span> EncodeUTF16 (ch, (<a class="code" href="group__util.html#ga20">utf16_char</a>*)buf, bufsize, allowNonchars);
+00718     <span class="keywordflow">return</span> EncodeUTF16 (ch, (utf16_char*)buf, bufsize, allowNonchars);
 00719   }
 00720 <span class="preprocessor">#endif</span>
 00721 <span class="preprocessor"></span>
@@ -597,7 +597,7 @@
 00739     <span class="keywordflow">if</span> (srcSize == (size_t)-1)                                          
 00740     {                                                                   
 00741       srcChars = 0;                                                     
-00742       <span class="keyword">const</span> <a class="code" href="group__util.html#ga21">utf32_char</a>* sptr = source;                                  
+00742       <span class="keyword">const</span> <a class="code" href="group__util.html#ga22">utf32_char</a>* sptr = source;                                  
 00743       <span class="keywordflow">while</span> (*sptr++ != 0) srcChars++;                                  
 00744     }                           
 00745     <span class="keywordflow">if</span> ((dest != 0) &amp;&amp; (destSize != 0))
@@ -654,7 +654,7 @@
 00796 <span class="preprocessor"></span><span class="preprocessor">  #error Odd-sized, unsupported wchar_t!</span>
 00797 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 00798 <span class="preprocessor"></span>
-<a name="l00811"></a><a class="code" href="classcsUnicodeTransform.html#z584_0">00811</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF8Skip (<span class="keyword">const</span> utf8_char* str, size_t maxSkip)
+<a name="l00811"></a><a class="code" href="classcsUnicodeTransform.html#z583_0">00811</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF8Skip (<span class="keyword">const</span> utf8_char* str, size_t maxSkip)
 00812   {
 00813     <span class="keywordflow">if</span> (maxSkip &lt; 1) <span class="keywordflow">return</span> 0;
 00814   
@@ -685,11 +685,11 @@
 00839     }
 00840   }
 00841   
-<a name="l00852"></a><a class="code" href="classcsUnicodeTransform.html#z584_1">00852</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF8Rewind (<span class="keyword">const</span> utf8_char* str, size_t maxRew)
+<a name="l00852"></a><a class="code" href="classcsUnicodeTransform.html#z583_1">00852</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF8Rewind (<span class="keyword">const</span> utf8_char* str, size_t maxRew)
 00853   {
 00854     <span class="keywordflow">if</span> (maxRew &lt; 1) <span class="keywordflow">return</span> 0;
 00855     
-00856     <span class="keyword">const</span> <a class="code" href="group__util.html#ga19">utf8_char</a>* pos = str - 1;
+00856     <span class="keyword">const</span> <a class="code" href="group__util.html#ga20">utf8_char</a>* pos = str - 1;
 00857     
 00858     <span class="keywordflow">if</span> ((*pos &amp; 0x80) == 0)
 00859     {
@@ -707,36 +707,36 @@
 00871     <span class="keywordflow">return</span> skip;
 00872   }
 00873   
-<a name="l00879"></a><a class="code" href="classcsUnicodeTransform.html#z584_2">00879</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF16Skip (<span class="keyword">const</span> utf16_char* str, size_t maxSkip)
+<a name="l00879"></a><a class="code" href="classcsUnicodeTransform.html#z583_2">00879</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF16Skip (<span class="keyword">const</span> utf16_char* str, size_t maxSkip)
 00880   {
-00881     <span class="keywordflow">if</span> (<a class="code" href="group__util.html#ga133">CS_UC_IS_HIGH_SURROGATE</a> (*str))
+00881     <span class="keywordflow">if</span> (<a class="code" href="group__util.html#ga137">CS_UC_IS_HIGH_SURROGATE</a> (*str))
 00882       <span class="keywordflow">return</span> (int)(MIN(maxSkip, 2));
 00883     <span class="keywordflow">else</span>
 00884       <span class="keywordflow">return</span> (int)(MIN(maxSkip, 1));
 00885   }
 00886   
-<a name="l00892"></a><a class="code" href="classcsUnicodeTransform.html#z584_3">00892</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF16Rewind (<span class="keyword">const</span> utf16_char* str, size_t maxRew)
+<a name="l00892"></a><a class="code" href="classcsUnicodeTransform.html#z583_3">00892</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF16Rewind (<span class="keyword">const</span> utf16_char* str, size_t maxRew)
 00893   {
 00894     <span class="keywordflow">if</span> (maxRew &lt; 1) <span class="keywordflow">return</span> 0;
 00895     
-00896     <span class="keyword">const</span> <a class="code" href="group__util.html#ga20">utf16_char</a>* pos = str - 1;
-00897     <span class="keywordflow">if</span> (!<a class="code" href="group__util.html#ga132">CS_UC_IS_SURROGATE</a>(*pos)) 
+00896     <span class="keyword">const</span> <a class="code" href="group__util.html#ga21">utf16_char</a>* pos = str - 1;
+00897     <span class="keywordflow">if</span> (!<a class="code" href="group__util.html#ga136">CS_UC_IS_SURROGATE</a>(*pos)) 
 00898       <span class="keywordflow">return</span> 1;
 00899     <span class="keywordflow">else</span>
 00900     {
-00901       <span class="keywordflow">if</span> ((maxRew &gt; 1) &amp;&amp; (<a class="code" href="group__util.html#ga133">CS_UC_IS_HIGH_SURROGATE</a>(*(pos - 1))))
+00901       <span class="keywordflow">if</span> ((maxRew &gt; 1) &amp;&amp; (<a class="code" href="group__util.html#ga137">CS_UC_IS_HIGH_SURROGATE</a>(*(pos - 1))))
 00902         <span class="keywordflow">return</span> 2;
 00903       <span class="keywordflow">else</span>
 00904         <span class="keywordflow">return</span> 1;
 00905     }
 00906   }
 00907   
-<a name="l00913"></a><a class="code" href="classcsUnicodeTransform.html#z584_4">00913</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF32Skip (<span class="keyword">const</span> utf32_char* str, size_t maxSkip)
+<a name="l00913"></a><a class="code" href="classcsUnicodeTransform.html#z583_4">00913</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF32Skip (<span class="keyword">const</span> utf32_char* str, size_t maxSkip)
 00914   {
 00915     <span class="keywordflow">return</span> (int)(MIN(maxSkip, 1));
 00916   }
 00917 
-<a name="l00923"></a><a class="code" href="classcsUnicodeTransform.html#z584_5">00923</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF32Rewind (<span class="keyword">const</span> utf32_char* str, size_t maxRew)
+<a name="l00923"></a><a class="code" href="classcsUnicodeTransform.html#z583_5">00923</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">int</span> UTF32Rewind (<span class="keyword">const</span> utf32_char* str, size_t maxRew)
 00924   {
 00925     <span class="keywordflow">if</span> (maxRew &lt; 1) <span class="keywordflow">return</span> 0;
 00926     <span class="keywordflow">return</span> 1;
