@@ -146,6 +146,10 @@ SOURCE=..\..\libs\csgeom\bsptree.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\chainhull2d.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\crysball.cpp
 # End Source File
 # Begin Source File
@@ -299,6 +303,10 @@ SOURCE=..\..\libs\csgeom\..\..\include\csgeom\box.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\..\..\include\csgeom\bsptree.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\chainhull2d.h
 # End Source File
 # Begin Source File
 
