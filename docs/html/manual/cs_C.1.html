@@ -49,7 +49,7 @@ Crystal Space.
 <!--docid::SEC_1::-->
 <P>
 
-<CODE>csArray&#60;&#62;</CODE> has been changed to use the <CODE>size_t</CODE> instead of
+<CODE>csArray&#60;&#62;</CODE> has been changed to use `<SAMP>size_t</SAMP>' instead of
 `<SAMP>int</SAMP>' for array sizes and indices.  Probably, the most significant
 semantic difference of this change is that `<SAMP>size_t</SAMP>' is usually
 <EM>unsigned</EM> as opposed to `<SAMP>int</SAMP>' which is <EM>signed</EM>.
@@ -88,9 +88,9 @@ for (size_t i = 0, n = a.Length(); i &#60; n; i++)
 <small>...</small>
 </pre></td></tr></table></P><P>
 
-Backward iteration is a bit more problematic. As mentioned before, 
-`<SAMP>size_t</SAMP>' is unsigned, so you do not have negative values. This can be a
-problem in constructs like:
+Backward iteration is a bit more problematic. As mentioned before,
+`<SAMP>size_t</SAMP>' typically is unsigned, so you do not have negative values. This
+can be a problem in constructs like:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>csArray&#60;<small>...</small>&#62; a;
@@ -151,7 +151,7 @@ Functions like <CODE>csArray&#60;&#62;::FindSortedKey()</CODE> and <CODE>csArray
 used to return -1 to signify that an item was not found.  This is still the
 case, but with a twist.  Now, `<SAMP>(size_t)-1</SAMP>' is returned.  For convenience,
 a constant, `<SAMP>csArrayItemNotFound</SAMP>', has been added, which has this exact
-value.  It can be used in comparions to make it clear what is actually being
+value.  It can be used in comparisons to make it clear what is actually being
 checked.
 </P><P>
 
@@ -313,17 +313,53 @@ global namespace.
 
 <UL>
 <LI>
+<CODE>big_endian_float()</CODE> => <CODE>csBigEndianFloat()</CODE>
+<LI>
+<CODE>big_endian_long()</CODE> => <CODE>csBigEndianLong()</CODE>
+<LI>
+<CODE>big_endian_longlong()</CODE> => <CODE>csBigEndianLongLong()</CODE>
+<LI>
+<CODE>big_endian_short()</CODE> => <CODE>csBigEndianShort()</CODE>
+<LI>
 <CODE>COMP_BC</CODE> => <CODE>CS_COMPILER_BCC</CODE>
 <LI>
 <CODE>COMP_GCC</CODE> => <CODE>CS_COMPILER_GCC</CODE>
 <LI>
 <CODE>COMP_VC</CODE> => <CODE>CS_COMPILER_MSVC</CODE>
 <LI>
+<CODE>convert_endian()</CODE> => <CODE>csConvertEndian()</CODE>
+<LI>
 <CODE>CS_PROCSIZE</CODE> => <CODE>CS_PROCESSOR_SIZE</CODE>
 <LI>
 <CODE>DO_MMX</CODE> => <CODE>CS_USE_MMX</CODE>
 <LI>
 <CODE>DO_NASM</CODE> => <CODE>CS_USE_NASM</CODE>
+<LI>
+<CODE>double2longlong()</CODE> => <CODE>csDoubleToLongLong()</CODE>
+<LI>
+<CODE>float2long()</CODE> => <CODE>csFloatToLong()</CODE>
+<LI>
+<CODE>float2short()</CODE> => <CODE>csFloatToShort()</CODE>
+<LI>
+<CODE>get_le_float16()</CODE> => <CODE>csGetLittleEndianFloat16()</CODE>
+<LI>
+<CODE>get_le_float32()</CODE> => <CODE>csGetLittleEndianFloat32()</CODE>
+<LI>
+<CODE>get_le_long()</CODE> => <CODE>csGetLittleEndianLong()</CODE>
+<LI>
+<CODE>get_le_short()</CODE> => <CODE>csGetLittleEndianShort()</CODE>
+<LI>
+<CODE>little_endian_float()</CODE> => <CODE>csLittleEndianFloat()</CODE>
+<LI>
+<CODE>little_endian_long()</CODE> => <CODE>csLittleEndianLong()</CODE>
+<LI>
+<CODE>little_endian_longlong()</CODE> => <CODE>csLittleEndianLongLong()</CODE>
+<LI>
+<CODE>little_endian_short()</CODE> => <CODE>csLittleEndianShort()</CODE>
+<LI>
+<CODE>long2float()</CODE> => <CODE>csLongToFloat()</CODE>
+<LI>
+<CODE>longlong2double()</CODE> => <CODE>csLongLongToDouble()</CODE>
 <LI>
 <CODE>MemoryMapFile()</CODE> => <CODE>csMemoryMapFile()</CODE>
 <LI>
@@ -354,17 +390,27 @@ global namespace.
 <LI>
 <CODE>QInt()</CODE> => <CODE>csQint()</CODE>
 <LI>
-<CODE>QInt8()</CODE> => <CODE>csQint8()</CODE>
-<LI>
 <CODE>QInt16()</CODE> => <CODE>csQint16()</CODE>
 <LI>
 <CODE>QInt24()</CODE> => <CODE>csQint24()</CODE>
 <LI>
+<CODE>QInt8()</CODE> => <CODE>csQint8()</CODE>
+<LI>
 <CODE>qisqrt()</CODE> => <CODE>csQisqrt()</CODE>
+<LI>
+<CODE>QRound()</CODE> => <CODE>csQround()</CODE>
 <LI>
 <CODE>qsqrt()</CODE> => <CODE>csQsqrt()</CODE>
 <LI>
-<CODE>QRound()</CODE> => <CODE>csQround()</CODE>
+<CODE>set_le_float16()</CODE> => <CODE>csSetLittleEndianFloat16()</CODE>
+<LI>
+<CODE>set_le_float32()</CODE> => <CODE>csSetLittleEndianFloat32()</CODE>
+<LI>
+<CODE>set_le_long()</CODE> => <CODE>csSetLittleEndianLong()</CODE>
+<LI>
+<CODE>set_le_short()</CODE> => <CODE>csSetLittleEndianShort()</CODE>
+<LI>
+<CODE>short2float()</CODE> => <CODE>csShortToFloat()</CODE>
 <LI>
 <CODE>TEMP_DIR</CODE> => <CODE>CS_TEMP_DIR</CODE>
 <LI>
@@ -560,8 +606,8 @@ available:
 <CODE>cstool/prwater.h</CODE>
 </UL>
  
-Likewise, procedural textures can no longer be created programmatically via,
-for instance, `<SAMP>new csProcFire</SAMP>'.  Instead, you must now use the plugin
+Likewise, procedural textures can no longer be allocated directly (for
+instance, via `<SAMP>new csProcFire</SAMP>').  Instead, you must now use the plugin
 system to create such textures. For example:
  
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iPluginManager&#62; plugin_mgr(
@@ -642,9 +688,11 @@ non-standard idiom, such as:
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>csList&#60;sometype&#62; list = <small>...</small>;
 csList&#60;sometype&#62;::Iterator it(list);
-if (it.HasCurrent()) {
+if (it.HasCurrent())
+{
   do_something(*it);         // First value.
-  while (it.HasNext()) {
+  while (it.HasNext())
+  {
     do_something(it.Next()); // Remaining values.
   }
 }
@@ -654,7 +702,8 @@ Or, the slightly less complicated, though still somewhat convoluted:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>csList&#60;sometype&#62;::Iterator it(list);
-while (it.HasCurrent()) {
+while (it.HasCurrent())
+{
   do_something(*it);
   it.Next();
 }
@@ -667,7 +716,8 @@ idiom:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>csList&#60;sometype&#62;::Iterator it(list);
-while (it.HasNext()) {
+while (it.HasNext())
+{
   do_something(it.Next());
 }
 </pre></td></tr></table></P><P>
@@ -824,7 +874,7 @@ file.
 
 The <CODE>iEvent::Find()</CODE> method was renamed to <CODE>Retrieve()</CODE> and exhibits
 different return value semantics. Rather than returning a mere boolean result,
-it now returns one of the `<SAMP>csEventError) enumeration constants.  Of
+it now returns one of the `<SAMP>csEventError</SAMP>' enumeration constants.  Of
 particular note, in the case of success, <CODE>csEventErrNone</CODE> is returned,
 which has a value of 0. This success value could be misinterpreted as "false"
 by the unwary when fixing code to deal with this semantic change. Conditionals
@@ -833,7 +883,7 @@ new semantic into account. For instance, code such as the following:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>iEvent* ev = <small>...</small>;
-if (ev-&#62;Find({dots</SAMP>'))
+if (ev-&#62;Find(<small>...</small>))
 {
   <small>...</small>
 }
@@ -917,39 +967,39 @@ The following methods have been removed from the `<SAMP>iGraphics3D</SAMP>' inte
 
 <UL>
 <LI>
-<CODE>GetZBuffAt()</CODE>
+<CODE>ClearCache()</CODE>
+<LI>
+<CODE>CloseFogObject()</CODE>
+<LI>
+<CODE>DrawFogPolygon()</CODE>
 <LI>
 <CODE>DrawPolygonDebug()</CODE>
 <LI>
 <CODE>DrawPolygonFX()</CODE>
 <LI>
-<CODE>DrawTriangleMesh()</CODE>
-<LI>
 <CODE>DrawPolygonMesh()</CODE>
 <LI>
-<CODE>OpenFogObject()</CODE>
-<LI>
-<CODE>DrawFogPolygon()</CODE>
-<LI>
-<CODE>CloseFogObject()</CODE>
+<CODE>DrawTriangleMesh()</CODE>
 <LI>
 <CODE>DumpCache()</CODE>
 <LI>
-<CODE>ClearCache()</CODE>
-<LI>
 <CODE>GetVertexBufferManager()</CODE>
+<LI>
+<CODE>GetZBuffAt()</CODE>
+<LI>
+<CODE>OpenFogObject()</CODE>
 </UL>
 <P>
 
-From `<SAMP>iRenderView</SAMP>' following fog-related methods have been removed.
+From `<SAMP>iRenderView</SAMP>', the following fog-related methods have been removed.
 Fog is now calculated within the renderer.
 </P><P>
 
 <UL>
 <LI>
-<CODE>CalculateFogPolygon()</CODE>
-<LI>
 <CODE>CalculateFogMesh()</CODE>
+<LI>
+<CODE>CalculateFogPolygon()</CODE>
 </UL>
 <P>
 
@@ -965,18 +1015,32 @@ or have become private, and are no longer available to client code:
 <LI>
 <CODE>G3DFogInfo</CODE>
 <LI>
-<CODE>G3DPolygonDPFX</CODE>
-<LI>
 <CODE>G3DPolygonDFP</CODE>
 <LI>
-<CODE>G3DPolygonDP</CODE>
+<CODE>G3DPolygonDPFX</CODE>
 <LI>
 <CODE>G3DPolygonDPF</CODE>
 <LI>
-<CODE>G3DTriangleMesh</CODE>
+<CODE>G3DPolygonDP</CODE>
 <LI>
 <CODE>G3DPolygonMesh</CODE>
+<LI>
+<CODE>G3DTriangleMesh</CODE>
 </UL>
+<P>
+
+<A NAME="SEC_26"></A>
+<H3> Query Macros </H3>
+<!--docid::SEC_26::-->
+<P>
+
+The macro <CODE>CS_QUERY_REGISTRY_PLUGIN()</CODE> has been added to
+`<TT>iutil/plugin.h</TT>'. This is a convenience macro which embodies the common
+idiom of first querying the object-registry for an object implementing some
+interface, and then asking the plugin manager to load a plugin supplying the
+desired object if it was not found in the object-registry. It also registers
+the object with the object-registry if the plugin manager loads it
+successfully.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
