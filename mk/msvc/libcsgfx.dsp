@@ -146,6 +146,10 @@ SOURCE=..\..\libs\csgfx\gradient.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\imagecubemapmaker.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\imagemanipulate.cpp
 # End Source File
 # Begin Source File
@@ -207,6 +211,10 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\gradient.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\imagebase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\imagecubemapmaker.h
 # End Source File
 # Begin Source File
 
