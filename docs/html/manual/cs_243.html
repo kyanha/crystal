@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: AWS Component Signals</TITLE>
+<TITLE>Crystal Space: AWS Component Events</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: AWS Component Signals">
-<META NAME="keywords" CONTENT="Crystal Space: AWS Component Signals">
+<META NAME="description" CONTENT="Crystal Space: AWS Component Events">
+<META NAME="keywords" CONTENT="Crystal Space: AWS Component Events">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,101 +23,97 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC690"></A>
+<A NAME="SEC689"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC689"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC691"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC686"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC687"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC691"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC688"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC690"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC686"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC687"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_245.html#SEC691"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.11.3.3 Sending and Receiving Signals </H4>
-<!--docid::SEC690::-->
+<H4> 7.11.3.2 Events: Responding To User Actions </H4>
+<!--docid::SEC689::-->
 <P>
 
-AWS supports signal sources and sinks. A signal is simply a
-bit of information that lets someone know that something
-happened. A signal source is an object that gives out signals.
-A signal sink is an object that receives them. A signal slot is
-a conduit that manages a connection between sources and sinks.
-All AWS components are signal sources. They are derived
-from `<SAMP>awsSource</SAMP>', and thus support all the functionality of
-that class.
+Events are broken out into <CODE>OnBlah()</CODE> functions. The
+parameters for those events are also broken out and passed to the
+functions. At the end of any of the <CODE>OnBlah()</CODE> event
+functions (except <CODE>OnDraw()</CODE>) you should return `<SAMP>true</SAMP>' if the
+event was used by you, otherwise return `<SAMP>false</SAMP>'. You <EM>must</EM>
+override <EM>all</EM> event functions, even if you don't use them
+all. If you will not use a particular event, just return `<SAMP>false</SAMP>'.
 </P><P>
 
-Signals are very distinct from Events. Signals are usually not
-sent for vents like `<SAMP>MouseDown</SAMP>', etc. A signal usually
-indicates that something important happened to the source. Good
-examples of signals are `<SAMP>TextChanged</SAMP>' for a text-box or
-`<SAMP>ButtonClicked</SAMP>' for a command button. These indicate that
-the user has gone through a series of complex motions, and has
-triggered the component to do something that it was programmed
-for. Signals do not include extra parameter information, simply a
-32-bit value that indicates what happened.
+It's important to note that you will only receive events that
+apply to your component. For example, if the mouse is inside
+your component, you will receive all mouse events. However, once
+the mouse leaves the confines of your borders you will no longer
+receive <EM>any</EM> mouse events. The only exception to this is
+the <CODE>OnMouseExit()</CODE> event which is sent to the component that
+just lost the mouse.
 </P><P>
 
-Signals are unique to each component. Therefore, you never have
-to worry about namespace conflicts. For instance, if you want notification
-when a command button is clicked, you can connect your "button clicked"
-handler to the button like this:
+The following is the list of all events understood by components:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>awsSlot slot(mySink);
-slot.Connect(cmdbutton,
-  awsButton::sButtonClicked,
-  doSomethingUsefulTrigger);
-</pre></td></tr></table></P><P>
+<DL COMPACT>
+<DT><CODE>virtual bool OnMouseDown(int button, int x, int y)</CODE>
+<DD>Triggered when the user presses a mouse button.
+<P>
 
-The parameter to the slot is the class that contains your sink.
-This can be any class derived from `<SAMP>iAwsSink</SAMP>'. For the connect
-call, the first parameter is the signal source that you are
-connecting to, the second is the signal you want notification of, and
-the final parameter is the identifier of the trigger you want activated
-on the sink when signaled. A single slot can map between a
-number of sources, signals, and triggers. To get the trigger identifier
-(which may change every time your application is run) you merely
-need to call <CODE>GetTriggerID()</CODE> on the sink with the name of the
-trigger that you want.
-</P><P>
+<DT><CODE>virtual bool OnMouseUp(int button, int x, int y)</CODE>
+<DD>Triggered when the user releases a mouse button.
+<P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>unsigned long trigger = mySink-&#62;GetTriggerID("LoginUser");
-</pre></td></tr></table></P><P>
+<DT><CODE>virtual bool OnMouseMove(int button, int x, int y)</CODE>
+<DD>Triggered when the user moves the mouse.
+<P>
 
-What this means is that you don't have to override the `<SAMP>awsButton</SAMP>'
-class to find out what's going on. In fact, you don't even have
-to know about the button. All you need to know is that it
-supports the signal. If it doesn't support the signal, by the
-way, you will simply never get any information about it. Your slot will
-never become active.
-</P><P>
+<DT><CODE>virtual bool OnMouseClick(int button, int x, int y)</CODE>
+<DD>Triggered when the user clicks the mouse.
+<P>
 
-A slot maps back to a sink's trigger. A single slot is <EM>always</EM>
-bound to a single sink, but there may be other slots bound to the
-same sink. When a trigger gets activated, it's passed in a
-reference to the source of the signal. That way it can get any
-information that it needs out of that source. A trigger could use
-this information to find out what type of component the source is
-and cast it to the correct type. The primary means for doing that
-resides in the <CODE>GetProperty()</CODE> and <CODE>SetProperty</CODE> methods. These
-allow you to request a property by name from a random component.
-If the component does not support the property, the call will
-fail in a graceful manner.
-<A NAME="AWS Trigger Reference"></A>
+<DT><CODE>virtual bool OnMouseDoubleClick(int button, int x, int y)</CODE>
+<DD>Triggered when the user double clicks the mouse.
+<P>
+
+<DT><CODE>virtual bool OnMouseExit()</CODE>
+<DD>Triggered when this component loses mouse focus.
+<P>
+
+<DT><CODE>virtual bool OnMouseEnter()</CODE>
+<DD>Triggered when this component gains mouse focus.
+<P>
+
+<DT><CODE>virtual bool OnKeypress(int key, int modifiers)</CODE>
+<DD>Triggered when the user presses a key.
+<P>
+
+<DT><CODE>virtual bool OnLostFocus()</CODE>
+<DD>Triggered when the keyboard focus is lost.
+<P>
+
+<DT><CODE>virtual bool OnGainFocus()</CODE>
+<DD>Triggered when the keyboard focus is gained.
+</DL>
+<P>
+
+<A NAME="AWS Component Signals"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC689"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC691"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC686"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC687"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC691"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC688"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC690"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC686"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC687"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_245.html#SEC691"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

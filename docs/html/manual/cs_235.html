@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Model Conversion</TITLE>
+<TITLE>Crystal Space: The Sprite Action Interface</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Model Conversion">
-<META NAME="keywords" CONTENT="Crystal Space: Model Conversion">
+<META NAME="description" CONTENT="Crystal Space: The Sprite Action Interface">
+<META NAME="keywords" CONTENT="Crystal Space: The Sprite Action Interface">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,78 +23,239 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC682"></A>
+<A NAME="SEC676"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC676"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC683"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC684"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC671"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC682"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC653"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC669"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC682"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 7.10 Importing Model Files </H2>
-<!--docid::SEC682::-->
+<H3> 7.9.3 The Sprite Action Interface </H3>
+<!--docid::SEC676::-->
 <P>
 
-Crystal Space is able to read other file formats than the native world files.
-For example, it is possible to read a file in the common `<TT>3ds</TT>' file
-format from <EM>3d Studio</EM> and build mesh objects from it. This happens in
-two steps: First the file is read and the data is stored in a
-format-independent, meshobject-independent structure. Then this structure is
-used to build a mesh object. In this section, I will call this structure
-IDS (independent data structure). The details of the IDS are
-explained in the next section.
+<EM>Written by Michael Voase,
+<A HREF="mailto:mvoase@midcoast.com.au">mvoase@midcoast.com.au</A>.</EM>
 </P><P>
 
-Loading a file is done by the <EM>converter plugins</EM>. There are different
-converters for different file formats, but <EM>not</EM> for different types of
-mesh objects. This is not needed as the converters don't deal with mesh
-objects but only create the IDS. Converters can also provide file saving
-in their formats. Using this feature you can for example convert files of
-different formats into another format, such as to convert a `<TT>3ds</TT>' file
-into a `<TT>pov</TT>' file.
-</P><P>
-
-After loading a model you will usually need to prepare the data a bit. This
-is needed because the IDS is not completely independent. In some cases
-this was not possible, while in others this makes things faster and more
-simple. However, Crystal Space provides functions to do this preparation for
-you. They are grouped together in a namespace wrapper called
-<CODE>csModelDataTools</CODE>. As an example, this includes a function to split
-objects using more than one material into objects that don't. 3d sprites in
-Crystal Space are limited to one material per sprite.
-</P><P>
-
-Finally, you have to build a mesh object from the IDS. This is done using
-the so-called <EM>cross-builder plugin</EM> (historical name, I don't know why
-the original author used it :-). I have not tried yet to find a nice and
-common-for-all-meshes interface, so currently the crossbuilder is simply a
-set of three functions: The first function builds a simple thing mesh from
-a single IDS sub-object, the second function does the same for sprites,
-and the third one creates a hierarchy of sprites from all objects in an
-IDS.
-</P><P>
-
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_236.html#SEC683">7.10.1 Common Model Data Structure (<CODE>iModelData</CODE>)</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
+<A NAME="SEC677"></A>
+<H4> Interfacing with the Sprite </H4>
+<!--docid::SEC677::-->
 <P>
 
-<A NAME="Model Data Structure"></A>
+To begin this section, I am assuming here that you are aware of how to obtain
+the various interfaces from the engine.  If not, read the documentation for
+SCF, the Shared Class Facility.  See section <A HREF="cs_139.html#SEC359">6.2 Shared Class Facility (SCF)</A>.  I will be using terminology
+and concepts which are explained in that section.  If you are only interested
+in writing map files for the engine then you can skip ahead to the next
+section.
+</P><P>
+
+Secondly, I am also presuming that you have loaded your sprite into the engine,
+and have access to that sprite via the `<SAMP>iEngine</SAMP>' interface.  That implies
+that you have written a basic Crystal Space application (or are hacking up an
+existing application), and can access your sprite mesh factory using calls
+similar to the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iMeshFactoryWrapper *fwrap = Engine-&#62;FindMeshFactory("name");
+iMeshObjectFactory *fact = fwrap-&#62;GetMeshObjectFactory();
+
+iMeshWrapper *mwrap = Engine-&#62;FindMeshObject("name");
+iMeshObject *mesh = mwrap-&#62;GetMeshObject();
+</pre></td></tr></table></P><P>
+
+With the name being the name of your mesh factory or object, respectively.
+There are four main interfaces that we will be dealing with in this section,
+</P><P>
+
+<UL>
+<LI>
+<CODE>iSpriteFrame</CODE> 
+<LI>
+<CODE>iSpriteAction</CODE> 
+<LI>
+<CODE>iSprite3DFactoryState</CODE> 
+<LI>
+<CODE>iSprite3DState</CODE>. 
+</UL>
+<P>
+
+The declarations for these interfaces can be found in 
+`<TT>CS/include/imesh/sprite3d.h</TT>'. The first two interfaces can be obtained
+by using the <CODE>FindFrame()</CODE> and <CODE>FindAction()</CODE> methods  in the 
+`<SAMP>iSprite3dFactoryState</SAMP>' interface (described later).
+The third interface can be obtained by querying the `<SAMP>iMeshObjectFactory</SAMP>'
+interface. The `<SAMP>iSprite3DState</SAMP>' interface can be obtained from the
+`<SAMP>iMeshObject</SAMP>' interface. The following is a summary of the methods in
+each interface and what they do. An example of obtaining the state interfaces
+is described below:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iSprite3dFactoryState&#62; fstat =
+  SCF_QUERY_INTERFACE(fact, iSprite3dFactoryState);
+csRef&#60;iSprite3DState&#62; stat =
+  SCF_QUERY_INTERFACE(mesh, iSprite3DState);
+</pre></td></tr></table></P><P>
+
+The `<SAMP>mesh</SAMP>' and `<SAMP>fact</SAMP>' variables are the ones mentioned earlier in
+this chapter.  The following is summary of the methods and interface that are
+useful to the sprite animator during production.  This summary does not fully
+document the `<SAMP>iSprite3DState</SAMP>' or `<SAMP>iSprite3DFactoryState</SAMP>' interfaces
+since they are adequately documented elsewhere.  Only methods which are
+relevant to frame animation are treated here.
+</P><P>
+
+<A NAME="SEC678"></A>
+<H4> <CODE>iSpriteFrame</CODE> </H4>
+<!--docid::SEC678::-->
+<P>
+
+Current version: 0.0.2
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>void SetName(char const*)</CODE>
+<DD>Set the name of this frame.
+<DT><CODE>char const* GetName()</CODE>
+<DD>Return the name of this frame
+<DT><CODE>int GetAnmIndex()</CODE>
+<DD>Returns the index of the first vertex used in this frame.  The vertex list is
+stored in the sprite factory.
+<DT><CODE>int GetTexIndex()</CODE>
+<DD>Returns the index to the first texel used in this frame.  The texel list is
+stored in the sprite factory.
+</DL>
+<P>
+
+<A NAME="SEC679"></A>
+<H4> <CODE>iSpriteAction</CODE> </H4>
+<!--docid::SEC679::-->
+<P>
+
+Current version: 0.0.1
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>void SetName(char const*)</CODE>
+<DD>Set the name of this action.
+<DT><CODE>char const* GetName() const</CODE>
+<DD>Return the name of this action.
+<DT><CODE>int GetFrameCount()</CODE>
+<DD>Get the total number of frames in this animation.
+<DT><CODE>iSpriteFrame* GetFrame(int)</CODE>
+<DD>Returns frame specified by input argument.
+<DT><CODE>iSpriteFrame* GetNextFrame()</CODE>
+<DD>Returns the next frame in the sequence.
+<DT><CODE>int GetFrameDelay(int)</CODE>
+<DD>Returns the duration of frame specified by input argument.
+<DT><CODE>void AddFrame(iSpriteFrame* frame, int time)</CODE>
+<DD>Adds the frame given by `<SAMP>frame</SAMP>' to this action
+and set the duration to `<SAMP>time</SAMP>' milliseconds. This method is used
+by the loader to add frames to an action. If you want to "roll your own",
+you will be using this interface to create your own actions. The frame
+must already be present in the frame list held by the sprite factory
+that this action came from.
+</DL>
+<P>
+
+<A NAME="SEC680"></A>
+<H4> <CODE>iSprite3DFactoryState</CODE> </H4>
+<!--docid::SEC680::-->
+<P>
+
+Current version: 0.0.2
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>void AddVertices(int number)</CODE>
+<DD>Adds `<SAMP>number</SAMP>' vertices to <STRONG>all</STRONG> frames
+in this sprite factory. The all is emphasized so that you are aware
+that the actual number of vertices created is `<SAMP>number</SAMP>' multiplied
+by the number of frames. This is done to satisfy the requirement that
+all frames must be of an equal size.
+<DT><CODE>iSpriteFrame* AddFrame()</CODE>
+<DD>Creates a new frame on the sprite frame list and
+returns a pointer to the newly created frame. The loader uses
+this method to load frames into a sprite. For each new frame
+added, an additional bank of vertices and texels is created for
+the new frame. Once you have this frame, you will then be using
+the `<SAMP>iSpriteFrame</SAMP>' interface to operate on the frame.
+<DT><CODE>iSpriteFrame* FindFrame(const char* title)</CODE>
+<DD>Finds the frame named `<SAMP>title</SAMP>' in this sprite
+factory and returns a pointer the frame.
+<DT><CODE>int GetFrameCount()</CODE>
+<DD>Returns the number of frames in this sprite factory.
+<DT><CODE>iSpriteFrame* GetFrame(int index) const</CODE>
+<DD>Returns a pointer to frame `<SAMP>index</SAMP>'. This
+frame is part of the list of frames stored in this sprite factory.
+<DT><CODE>iSpriteAction* AddAction()</CODE>
+<DD>Create a new action and return a pointer to the action.
+Once you have obtained the action, you will then be using the 
+`<SAMP>iSpriteAction</SAMP>' interface to modify this action.
+<DT><CODE>iSpriteAction* FindAction(const char* title) const</CODE>
+<DD>Returns a pointer to the action named `<SAMP>title</SAMP>'.
+<DT><CODE>iSpriteAction* GetFirstAction() const</CODE>
+<DD>Returns a pointer to the first action in this sprite factory.
+<DT><CODE>int GetActionCount() const</CODE>
+<DD>Returns the number of actions stored in this sprite factory.
+<DT><CODE>iSpriteAction* GetAction(int index) const</CODE>
+<DD>Returns a pointer to action number `<SAMP>index</SAMP>'
+<DT><CODE>void EnableTweening(bool flag)</CODE>
+<DD>Enables or disables tweening on this sprite factory
+depending on `<SAMP>flag</SAMP>'. 
+<DT><CODE>bool IsTweeningEnabled()</CODE>
+<DD>Returns the current setting for tweening on this sprite factory.
+</DL>
+<P>
+
+<A NAME="SEC681"></A>
+<H4> <CODE>iSprite3DState</CODE> </H4>
+<!--docid::SEC681::-->
+<P>
+
+Current version: 0.0.4
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>void SetFrame(int index)</CODE>
+<DD>Sets this sprite to frame number `<SAMP>index</SAMP>' in the
+action current applied to this sprite.
+<DT><CODE>int GetCurFrame() const</CODE>
+<DD>Returns the index number of the current frame in the
+current action applied to this sprite.
+<DT><CODE>int GetFrameCount() const</CODE>
+<DD>Returns the number of frames in the current action
+applied to this sprite.
+<DT><CODE>bool SetAction(const char *title)</CODE>
+<DD>Set the current action of this sprite to the action
+named `<SAMP>title</SAMP>'. Returns a flag indicating if the operation was
+successful or not.
+<DT><CODE>iSpriteAction* GetCurAction() const</CODE>
+<DD>Returns a pointer to the current action applied to this sprite.
+<DT><CODE>EnableTweening(bool flag)</CODE>
+<DD>Description: Enables or disables tweening on this sprite according
+to `<SAMP>flag</SAMP>'.
+<DT><CODE>bool IsTweeningEnabled() const</CODE>
+<DD>Returns a flag indicating if tweening is enabled for this sprite.
+</DL>
+<A NAME="Model Conversion"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC676"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC683"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC669"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC684"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC671"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC682"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC653"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_232.html#SEC669"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC682"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

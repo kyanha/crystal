@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: CVS Guide</TITLE>
+<TITLE>Crystal Space: Coding Style</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: CVS Guide">
-<META NAME="keywords" CONTENT="Crystal Space: CVS Guide">
+<META NAME="description" CONTENT="Crystal Space: Coding Style">
+<META NAME="keywords" CONTENT="Crystal Space: Coding Style">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,136 +23,182 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC818"></A>
+<A NAME="SEC817"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC817"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC819"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC810"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC810"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC820"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC816"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC818"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC810"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC810"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC820"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 9.4 CVS Etiquette Guidelines </H2>
-<!--docid::SEC818::-->
+<H2> 9.3 Coding Style </H2>
+<!--docid::SEC817::-->
 <P>
 
-Since Crystal Space has enough developers to warrant the use of CVS to
-manage its code base, there are some rules you need to keep in mind if you
-are going to be making changes of any sort to the CVS source tree.
-</P><P>
-
-First off, to access the CVS repository anonymously, use this
-<CODE>CVSROOT</CODE> setting:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>:pserver:anonymous@cvs.sourceforge.net:/cvsroot/crystal
-</pre></td></tr></table></P><P>
-
-The password for the `<SAMP>anonymous</SAMP>' account is the empty string--that is,
-just press the <KBD>RETURN</KBD> key at the `<SAMP>Password:</SAMP>' prompt.
-</P><P>
-
-For further instructions, please refer to the following document:
-</P><P>
-
-<A HREF="http://sourceforge.net/cvs/?group_id=649">http://sourceforge.net/cvs/?group_id=649</A>
-</P><P>
-
-Once you've logged in, checkout the module `<SAMP>crystal</SAMP>' to download the
-source code to the `<TT>CS</TT>' directory.  See the documentation for your
-CVS client on how to do this.
-</P><P>
-
-If you do not have a developer account, you will be able to check out files,
-but will not be able to commit any changes, so the rest of this document
-doesn't really apply to you.
-</P><P>
-
-If you do have developer account, you will have to access the CVS
-repository via SSH, the secure shell.  Instructions can be found at this
-location:
-</P><P>
-
-<A HREF="http://sourceforge.net/cvs/?group_id=649">http://sourceforge.net/cvs/?group_id=649</A>
-</P><P>
-
-Having a developer account implies you will be able to make changes to the
-code.  You should read the rest of this document before making any changes.
-</P><P>
-
-Below are some guidelines you should follow before committing files.  Also be
-sure to read the important portability guidelines in the <CITE>Portability</CITE>
-section.  See section <A HREF="cs_271.html#SEC816">9.2 Portability</A>.
+For consistency and ease of future maintenance, when working on Crystal Space
+source code, please follow the following guidelines.  Also be sure to read
+important portability guidelines presented in the <CITE>Portability</CITE> section.
+See section <A HREF="cs_272.html#SEC816">9.2 Portability</A>.
 </P><P>
 
 <OL>
 <LI>
-Always perform an `<SAMP>update</SAMP>' before committing new or changed files, and
-then rebuild <EM>everything</EM> from scratch after updating.  <EM>Do not rely
-on dependencies!</EM>  If there were any conflicts during the update, resolve them.
-If there were any merges, examine them to ensure that the merged code still
-accurately reflects your changes.
+<EM>Indentation</EM>
 <P>
 
-<LI>
-If you worked on the engine internals or on the renderers, run <CODE>walktest</CODE>
-using `<TT>flarge</TT>' and visit various locations which exercise the engine's
-features, such as the doughnut in the street and the foggy corridor.
-<P>
-
-<LI>
-If it works, commit <EM>everything</EM> you have modified, not just parts of
-your modifications.  If you have created new files, please be certain that you
-have used the CVS `<SAMP>add</SAMP>' command before committing in order to ensure
-that the new files actually get added to the repository.
-<P>
-
-<LI>
-Do another `<SAMP>update</SAMP>' after committing everything.  Take a look at the
-output to see if you really committed everything you intended to commit.
-<P>
-
-<LI>
-Do another rebuild to ensure your changes didn't collide with somebody else's
-recent changes.
-<P>
-
-<LI>
-For large and important modifications, post a description of your changes to
-the main mailing list, <A HREF="mailto:crystal-main@lists.sourceforge.net">crystal-main@lists.sourceforge.net</A>.  This is
-especially important if your changes may have affected other ports which must
-be updated by other developers as a consequence.
-</OL>
-<P>
-
-This might look overdone to some people, but you should remember that we are
-all working together with the same source.  A bug in your code can cripple the
-entire project.
+Indent with two (2) spaces. If you use tabs then they must be interpreted as
+eight (8) spaces. This means that you should not use the tab character for
+indentation since that would indent by eight characters rather than two. Also
+consider avoiding tabs altogether in order to eliminate tab-related problems.
+Here is an example of proper indentation:
 </P><P>
 
-One final thing to remember is that you should <EM>never</EM> commit files that
-you <EM>know</EM> will stop the progress of other developers.  The CVS
-repository is the place to commit completed code, not code that needs
-debugging because you can't find a certain bug.  Other developers should not
-have to stop and track down your bugs just so they can proceed with their own
-coding.  When you've committed code, please monitor the mailing list regularly
-for any signs that you've caused a problem somewhere.  This is part of the
-responsibility that goes with the ability to commit code.
-<A NAME="Porting"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>void foo()
+{
+  int a;
+  for (a = 0; a &#60; 10; a++)
+  {
+    int b = bar();
+    if (a &#60; b)
+      printf ("Hello\n");
+  }
+}
+</pre></td></tr></table></P><P>
+
+This example also illustrates how to place curly braces and where to add
+spaces, for example `<SAMP>for_(</SAMP>' rather than `<SAMP>for(_</SAMP>', where `<SAMP>_</SAMP>'
+represents whitespace in this context.  Also add sufficient whitespace between
+tokens.
+</P><P>
+
+In cases you are unsure what specific coding style to employ, just follow the
+style in the code you're editing or your personal preference. Always try to 
+keep it both readable and consistent. 
+</P><P>
+
+<LI>
+<EM>Class and Method Naming</EM>
+<P>
+
+Classes should be named in this fashion: <CODE>csThisIsAClass</CODE>. The name
+starts with lower-case `<SAMP>cs</SAMP>' and has every word capitalized (also known
+as "CamelCase").
+</P><P>
+
+Methods and functions should be named in this fashion: <CODE>ThisIsAMethod()</CODE>.
+Each word in the name is capitalized.
+</P><P>
+
+<LI>
+<EM>SCF Interfaces</EM>
+<P>
+
+SCF interfaces always start with a lower `<SAMP>i</SAMP>', as in
+<CODE>iThisIsAnInterface</CODE>.  See section <A HREF="cs_139.html#SEC359">6.2 Shared Class Facility (SCF)</A>.
+</P><P>
+
+<LI>
+<EM>Doxygen and Comments</EM>
+<P>
+
+Use Doxygen comments in header files to document classes, methods, and
+functions. These comments are extracted with the Doxygen tool and HTML
+documentation is generated from them.
+</P><P>
+
+<STRONG>Warning</STRONG>: Always use Doxygen comments for a class. If you fail to do so
+then Doxygen will ignore comments for methods within the class itself.
+</P><P>
+
+A one line Doxygen comment uses three slashes (`<SAMP>///</SAMP>') rather than two as
+is typical for normal C++ comments.  Multi-line Doxygen comments are specified
+with `<SAMP>/** <small>...</small> */</SAMP>' rather than `<SAMP>/* <small>...</small> */</SAMP>'.  Here is an
+example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/**
+ * This class represents a blue ball.
+ * Blue balls bounce higher than red balls.
+ */
+class csBlueBall
+{
+private:
+  // A private function, so no Doxygen comment here,
+  // but still commented for readers of the header file.
+  void PrivateFunction();
+
+public:
+  /// This is the constructor which initializes the blue ball.
+  csBlueBall();
+
+  /**
+   * This is a multi-line comment.
+   * And this is the second line of the multi-line comment.
+   */
+  void Deflate();
+};
+</pre></td></tr></table></P><P>
+
+<LI>
+<EM>Maximum Line Length</EM>
+<P>
+
+In general, lines in source code should be no longer than 78 characters.  This
+facilitates generation of hard-copy and works better with certain tools which
+process code or text files.
+</P><P>
+
+<LI>
+<EM>Multiple-Inclusion Protection for Headers</EM>
+<P>
+
+Be certain to insert multiple-inclusion protection in all header files.  These
+controls should take this form:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#ifndef __CS_FILENAME_H__
+#define __CS_FILENAME_H__
+<small>...</small>
+#endif // __CS_FILENAME_H__
+</pre></td></tr></table></P><P>
+
+<LI>
+<EM>Include `<TT>cssysdef.h</TT>'</EM>
+<P>
+
+Always include `<TT>cssysdef.h</TT>' in each source or header file as the very 
+first file included.  The latter is recommended, as it makes headers more
+self-contained.
+</P><P>
+
+<LI>
+<EM>Module and Library Dependencies</EM>
+<P>
+
+Do not introduce unnecessary dependencies between libraries and modules.
+Absolutely avoid introducing circular dependencies.
+</P><P>
+
+For instance, code in the <CODE>csutil</CODE> library should never refer to code
+from the <CODE>cstool</CODE> library.  The other way around is okay, however,
+since <CODE>cstool</CODE> is at a higher level within the dependency hierarchy.
+</OL>
+<A NAME="CVS Guide"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC817"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC819"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC810"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC810"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC820"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC816"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC818"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC810"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC810"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC820"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC963">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_287.html#SEC963">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
