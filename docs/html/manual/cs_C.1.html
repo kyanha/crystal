@@ -856,6 +856,64 @@ consistent with the names of all other available "null" plugins:
 </UL>
 <P>
 
+For API consistency and uniformity between container classes, the
+following methods have been renamed:
+</P><P>
+
+<UL>
+<LI>
+<CODE>csArray&#60;&#62;::Length()</CODE> => <CODE>csArray&#60;&#62;::GetSize()</CODE>
+<LI>
+<CODE>csArray&#60;&#62;::SetLength()</CODE> => <CODE>csArray&#60;&#62;::SetSize()</CODE>
+<LI>
+<CODE>csHash&#60;&#62;::DeleteAll()</CODE> => <CODE>csHash&#60;&#62;::Empty()</CODE>
+<LI>
+<CODE>csHash&#60;&#62;::In()</CODE> => <CODE>csHash&#60;&#62;::Contains()</CODE>
+<LI>
+<CODE>csHash&#60;&#62;::PutFirst()</CODE> => <CODE>csHash&#60;&#62;::PutUnique()</CODE>
+<LI>
+<CODE>csList&#60;&#62;::FetchPrev()</CODE> => <CODE>csList&#60;&#62;::FetchPrevious()</CODE>
+<LI>
+<CODE>csList&#60;&#62;::HasPrev()</CODE> => <CODE>csList&#60;&#62;::HasPrevious()</CODE>
+<LI>
+<CODE>csSet&#60;&#62;::DeleteAll()</CODE> => <CODE>csSet&#60;&#62;::Empty()</CODE>
+<LI>
+<CODE>csSet&#60;&#62;::In()</CODE> => <CODE>csSet&#60;&#62;::Contains()</CODE>
+<LI>
+<CODE>csString::Clear()</CODE> => <CODE>csString::Empty()</CODE>
+<LI>
+<CODE>csString::FindReplace()</CODE> => <CODE>csString::ReplaceAll()</CODE>
+<LI>
+<CODE>csString::FindStr()</CODE> => <CODE>csString::Find()</CODE>
+<LI>
+<CODE>csString::Reclaim()</CODE> => <CODE>csString::ShrinkBestFit()</CODE>
+<LI>
+<CODE>iString::FindReplace()</CODE> => <CODE>iString::ReplaceAll()</CODE>
+<LI>
+<CODE>iString::FindStr()</CODE> => <CODE>iString::Find()</CODE>
+<LI>
+<CODE>iStringArray::DeleteAll()</CODE> => <CODE>iStringArray::Empty()</CODE>
+<LI>
+<CODE>iStringSet::Clear()</CODE> => <CODE>iStringSet::Empty()</CODE>
+</UL>
+<P>
+
+In most cases, the old names listed above are still recognized for backward
+compatibility, but they are deprecated, so you probably ought to convert to the
+new API at some point. The API of most of the container classes also
+has been expanded, so you may want to study the API reference manual to
+learn about newly available functionality.
+</P><P>
+
+Likewise, the following global functions have been renamed:
+</P><P>
+
+<UL>
+<LI>
+<CODE>csFindReplace()</CODE> => <CODE>csReplaceAll()</CODE>
+</UL>
+<P>
+
 For consistency with like-named methods in other SCF interfaces, the
 following `<SAMP>iImage</SAMP>' methods have been renamed:
 </P><P>
@@ -865,27 +923,6 @@ following `<SAMP>iImage</SAMP>' methods have been renamed:
 <CODE>GetKeycolor()</CODE> => <CODE>GetKeyColor()</CODE>
 <LI>
 <CODE>HasKeycolor()</CODE> => <CODE>HasKeyColor()</CODE>
-</UL>
-<P>
-
-For consistency with related methods (such as <CODE>HasPrevious()</CODE>) in the
-<CODE>csList&#60;&#62;</CODE> template, the following methods have been renamed:
-</P><P>
-
-<UL>
-<LI>
-<CODE>FetchPrev()</CODE> => <CODE>FetchPrevious()</CODE>
-<LI>
-<CODE>HasPrev()</CODE> => <CODE>HasPrevious()</CODE>
-</UL>
-<P>
-
-For clarification, the following <CODE>csHash&#60;&#62;</CODE> methods have been renamed:
-</P><P>
-
-<UL>
-<LI>
-<CODE>PutFirst()</CODE> => <CODE>PutUnique()</CODE>
 </UL>
 <P>
 
@@ -1118,7 +1155,7 @@ must be changed to perform an explicit test on the return value of
 </pre></td></tr></table></P><P>
 
 <A NAME="SEC_23"></A>
-<H3> Old Renderer Architecture Removed </H3>
+<H3> Old Renderer Architecture Removal </H3>
 <!--docid::SEC_23::-->
 <P>
 
@@ -1129,7 +1166,7 @@ architecture. The results of the old renderer removal are summarized below.
 </P><P>
 
 <A NAME="SEC_24"></A>
-<H4> Removed plugins </H4>
+<H4> Removed Plugins </H4>
 <!--docid::SEC_24::-->
 <P>
 
@@ -1600,32 +1637,6 @@ functionality is provided by <CODE>SetGrowsBy(0)</CODE> and <CODE>GetGrowsBy()</
 </UL>
 <P>
 
-For API consistency and uniformity between container classes, the
-following `<SAMP>csString</SAMP>' and `<SAMP>iString</SAMP>' methods (when present) have been
-renamed:
-</P><P>
-
-<UL>
-<LI>
-<CODE>Clear()</CODE> => <CODE>Empty()</CODE>
-<LI>
-<CODE>FindReplace()</CODE> => <CODE>ReplaceAll()</CODE>
-<LI>
-<CODE>FindStr()</CODE> => <CODE>Find()</CODE>
-<LI>
-<CODE>Reclaim()</CODE> => <CODE>ShrinkBestFit()</CODE>
-</UL>
-<P>
-
-Likewise, the following string-related functions have been renamed:
-</P><P>
-
-<UL>
-<LI>
-<CODE>csFindReplace()</CODE> => <CODE>csReplaceAll()</CODE>
-</UL>
-<P>
-
 <A NAME="SEC_39"></A>
 <H3> RAPID Collision Detection Plugin Removal </H3>
 <!--docid::SEC_39::-->
@@ -1822,6 +1833,61 @@ The long-deprecated `<SAMP>csHashMap</SAMP>', `<SAMP>csHashMapReversible</SAMP>'
 <CODE>csHash&#60;&#62;</CODE>, <CODE>csHashReversible&#60;&#62;</CODE>, and <CODE>csSet&#60;&#62;</CODE>.  For
 string-related <EM>set</EM> functionality, you may also want to consider using
 `<SAMP>csStringHash</SAMP>' and `<SAMP>csStringSet</SAMP>'.
+</P><P>
+
+<A NAME="SEC_46"></A>
+<H3> <CODE>csObjectPool&#60;&#62;</CODE> Removal </H3>
+<!--docid::SEC_46::-->
+<P>
+
+The <CODE>csObjectPool&#60;&#62;</CODE> utility class has been removed since it managed
+memory poorly, and failed to invoke the destructor of contained objects at the
+time they were recycled via <CODE>csObjectPool&#60;&#62;::Free()</CODE>, which meant that the
+objects might not release their own resources in a timely fashion.  (It did
+correctly destroy the freed objects when the pool itself was destroyed, but
+should have been doing so at <CODE>Free()</CODE>-time.)
+</P><P>
+
+You can use <CODE>csBlockAllocator&#60;&#62;</CODE> (see `<TT>csutil/blockallocator.h</TT>') as a
+drop-in replacement for <CODE>csObjectPool&#60;&#62;</CODE> since the API of
+<CODE>csBlockAllocator&#60;&#62;</CODE> is a proper superset of the <CODE>csObjectPool&#60;&#62;</CODE>
+API. A global search and replace should be sufficient to account for this
+change.
+</P><P>
+
+<A NAME="SEC_47"></A>
+<H3> `<SAMP>csStringSetIterator</SAMP>' and `<SAMP>csStringHashIterator</SAMP>' Removal </H3>
+<!--docid::SEC_47::-->
+<P>
+
+`<SAMP>csStringSetIterator</SAMP>' and `<SAMP>csStringHashIterator</SAMP>' have been replaced
+by `<SAMP>csStringSet::GlobalIterator</SAMP>' and `<SAMP>csStringHash::GlobalIterator</SAMP>',
+respectively.  Rather than instantiating iterators directly, you now ask the
+set or hash for an iterator. This brings the `<SAMP>csStringSet</SAMP>' and
+`<SAMP>csStringHash</SAMP>' API's in line with other container classes which vend
+iterators. Given old code which is using `<SAMP>csStringSetIterator</SAMP>':
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csStringSet set;
+// ...populate set...
+csStringSetIterator iter(&#38;set);
+while (iter.HasNext())
+{
+  char const* s = iter.Next();
+  // ...do something with `s'...
+}
+</pre></td></tr></table></P><P>
+
+Convert it like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csStringSet::GlobalIterator iter = set.GetIterator();
+while (iter.HasNext())
+{
+</pre></td></tr></table></P><P>
+
+Code using `<SAMP>csStringHashIterator</SAMP>' can be fixed using the same simple
+transformation.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
