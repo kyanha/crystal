@@ -42,113 +42,117 @@
 00032  
 00033 <span class="preprocessor">#include "<a class="code" href="csrect_8h.html">csgeom/csrect.h</a>"</span>
 00034 <span class="preprocessor">#include "cstool/cspixmap.h"</span>
-00035 <span class="preprocessor">#include "<a class="code" href="graph2d_8h.html">ivideo/graph2d.h</a>"</span>
-00036 
-00037 <span class="keyword">class </span><a class="code" href="classcsMouse.html">csMouse</a>;
-00038 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
-00039 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
-00040 
-<a name="l00042"></a><a class="code" href="group__csws.html#a8">00042</a> <span class="preprocessor">#define MAX_CSWS_PIPELINE_LENGTH 16384</span>
-00043 <span class="preprocessor"></span>
-<a name="l00044"></a><a class="code" href="group__csws.html#a9">00044</a> <span class="preprocessor">#define MAX_SYNC_PAGES 8</span>
-00045 <span class="preprocessor"></span>
-<a name="l00073"></a><a class="code" href="classcsGraphicsPipeline.html">00073</a> <span class="keyword">class </span>CS_CSWS_EXPORT <a class="code" href="classcsGraphicsPipeline.html">csGraphicsPipeline</a>
-00074 {
-00075 <span class="keyword">private</span>:
-<a name="l00077"></a><a class="code" href="classcsGraphicsPipeline.html#l0">00077</a>   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsApp.html">csApp</a>;
+00035 <span class="preprocessor">#include "csutil/leakguard.h"</span>
+00036 <span class="preprocessor">#include "<a class="code" href="graph2d_8h.html">ivideo/graph2d.h</a>"</span>
+00037 
+00038 <span class="keyword">class </span><a class="code" href="classcsMouse.html">csMouse</a>;
+00039 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
+00040 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+00041 
+<a name="l00043"></a><a class="code" href="group__csws.html#a8">00043</a> <span class="preprocessor">#define MAX_CSWS_PIPELINE_LENGTH 16384</span>
+00044 <span class="preprocessor"></span>
+<a name="l00045"></a><a class="code" href="group__csws.html#a9">00045</a> <span class="preprocessor">#define MAX_SYNC_PAGES 8</span>
+00046 <span class="preprocessor"></span>
+<a name="l00074"></a><a class="code" href="classcsGraphicsPipeline.html">00074</a> <span class="keyword">class </span>CS_CSWS_EXPORT <a class="code" href="classcsGraphicsPipeline.html">csGraphicsPipeline</a>
+00075 {
+00076 <span class="keyword">public</span>:
+00077   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsGraphicsPipeline.html">csGraphicsPipeline</a>);
 00078 
-00081   <a class="code" href="structcsImageArea.html">csImageArea</a> *SyncArea [<a class="code" href="group__csws.html#a9">MAX_SYNC_PAGES</a>];
-00083   <a class="code" href="classcsRect.html">csRect</a> RefreshRect;
-00085   <a class="code" href="classcsRect.html">csRect</a> PageCarry;
-00087   <span class="keywordtype">int</span> MaxPage;
-00089   <span class="keywordtype">int</span> CurPage;
-00090 
-00092   <span class="keywordtype">int</span> DrawMode;
-00094   <a class="code" href="classcsRect.html">csRect</a> ClipRect;
-00096   <a class="code" href="classcsRect.html">csRect</a> OrigClip;
-00097 
-00098   <span class="comment">// Frame width and height</span>
-00099   <span class="keywordtype">int</span> FrameWidth, FrameHeight;
-00100 
-00101   <span class="comment">// The 2D graphics driver</span>
-00102   <a class="code" href="classcsRef.html">csRef&lt;iGraphics2D&gt;</a> G2D;
-00103   <span class="comment">// The 3D graphics driver</span>
-00104   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> G3D;
-00105 
-00106   <span class="comment">// Do not cache the image of current frame</span>
-00107   <span class="keywordtype">bool</span> DontCacheFrame;
-00108 
-00110   <span class="keywordtype">void</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg);
-00112   <span class="keyword">virtual</span> ~<a class="code" href="classcsGraphicsPipeline.html">csGraphicsPipeline</a> ();
-00113 
-00115   <span class="keywordtype">void</span> Sync (<span class="keywordtype">int</span> CurPage, <span class="keywordtype">int</span> &amp;xmin, <span class="keywordtype">int</span> &amp;ymin, <span class="keywordtype">int</span> &amp;xmax, <span class="keywordtype">int</span> &amp;ymax);
-00116 
-00118   <span class="keywordtype">void</span> Desync ();
-00119 
-00121   <span class="keywordtype">void</span> Box (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax, <span class="keywordtype">int</span> color);
-00122 
-00124   <span class="keywordtype">void</span> Line (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">int</span> color);
-00125 
-00127   <span class="keywordtype">void</span> Pixel (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> color);
-00128 
-00130   <span class="keywordtype">void</span> Text (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> fg, <span class="keywordtype">int</span> bg, <a class="code" href="structiFont.html">iFont</a> *font, <span class="keyword">const</span> <span class="keywordtype">char</span> *s);
-00131 
-00133   <span class="keywordtype">void</span> Pixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, uint8 Alpha);
-00134 
-00136   <span class="keywordtype">void</span> TiledPixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h,
-00137     <span class="keywordtype">int</span> orgx, <span class="keywordtype">int</span> orgy, uint8 Alpha);
+00079 <span class="keyword">private</span>:
+<a name="l00081"></a><a class="code" href="classcsGraphicsPipeline.html#l0">00081</a>   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsApp.html">csApp</a>;
+00082 
+00085   <a class="code" href="structcsImageArea.html">csImageArea</a> *SyncArea [<a class="code" href="group__csws.html#a9">MAX_SYNC_PAGES</a>];
+00087   <a class="code" href="classcsRect.html">csRect</a> RefreshRect;
+00089   <a class="code" href="classcsRect.html">csRect</a> PageCarry;
+00091   <span class="keywordtype">int</span> MaxPage;
+00093   <span class="keywordtype">int</span> CurPage;
+00094 
+00096   <span class="keywordtype">int</span> DrawMode;
+00098   <a class="code" href="classcsRect.html">csRect</a> ClipRect;
+00100   <a class="code" href="classcsRect.html">csRect</a> OrigClip;
+00101 
+00102   <span class="comment">// Frame width and height</span>
+00103   <span class="keywordtype">int</span> FrameWidth, FrameHeight;
+00104 
+00105   <span class="comment">// The 2D graphics driver</span>
+00106   <a class="code" href="classcsRef.html">csRef&lt;iGraphics2D&gt;</a> G2D;
+00107   <span class="comment">// The 3D graphics driver</span>
+00108   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> G3D;
+00109 
+00110   <span class="comment">// Do not cache the image of current frame</span>
+00111   <span class="keywordtype">bool</span> DontCacheFrame;
+00112 
+00114   <span class="keywordtype">void</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg);
+00116   <span class="keyword">virtual</span> ~<a class="code" href="classcsGraphicsPipeline.html">csGraphicsPipeline</a> ();
+00117 
+00119   <span class="keywordtype">void</span> Sync (<span class="keywordtype">int</span> CurPage, <span class="keywordtype">int</span> &amp;xmin, <span class="keywordtype">int</span> &amp;ymin, <span class="keywordtype">int</span> &amp;xmax, <span class="keywordtype">int</span> &amp;ymax);
+00120 
+00122   <span class="keywordtype">void</span> Desync ();
+00123 
+00125   <span class="keywordtype">void</span> Box (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax, <span class="keywordtype">int</span> color);
+00126 
+00128   <span class="keywordtype">void</span> Line (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">int</span> color);
+00129 
+00131   <span class="keywordtype">void</span> Pixel (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> color);
+00132 
+00134   <span class="keywordtype">void</span> Text (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> fg, <span class="keywordtype">int</span> bg, <a class="code" href="structiFont.html">iFont</a> *font, <span class="keyword">const</span> <span class="keywordtype">char</span> *s);
+00135 
+00137   <span class="keywordtype">void</span> Pixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, uint8 Alpha);
 00138 
-00140   <span class="keywordtype">void</span> Texture (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *hTex, <span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy, <span class="keywordtype">int</span> sw, <span class="keywordtype">int</span> sh,
-00141     <span class="keywordtype">int</span> tx, <span class="keywordtype">int</span> ty, <span class="keywordtype">int</span> tw, <span class="keywordtype">int</span> th, uint8 Alpha);
+00140   <span class="keywordtype">void</span> TiledPixmap (<a class="code" href="classcsPixmap.html">csPixmap</a> *s2d, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h,
+00141     <span class="keywordtype">int</span> orgx, <span class="keywordtype">int</span> orgy, uint8 Alpha);
 00142 
-00144   <span class="keywordtype">void</span> SaveArea (<a class="code" href="structcsImageArea.html">csImageArea</a> **Area, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
-00145 
-00147   <span class="keywordtype">void</span> RestoreArea (<a class="code" href="structcsImageArea.html">csImageArea</a> *Area, <span class="keywordtype">bool</span> Free);
-00148 
-00150   <span class="keywordtype">void</span> FreeArea (<a class="code" href="structcsImageArea.html">csImageArea</a> *Area);
-00151 
-00153   <span class="keywordtype">void</span> Clear (<span class="keywordtype">int</span> color);
-00154 
-00156   <span class="keywordtype">void</span> SetClipRect (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
-00157 
-00159   <span class="keywordtype">void</span> RestoreClipRect();
-00160 
-00162   <span class="keywordtype">void</span> Polygon3D (<a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a> &amp;poly, <a class="code" href="group__util.html#a10">uint</a> mode);
-00163 
-00165   <span class="keywordtype">bool</span> ClipLine (<span class="keywordtype">float</span> &amp;x1, <span class="keywordtype">float</span> &amp;y1, <span class="keywordtype">float</span> &amp;x2, <span class="keywordtype">float</span> &amp;y2,
-00166     <span class="keywordtype">int</span> ClipX1, <span class="keywordtype">int</span> ClipY1, <span class="keywordtype">int</span> ClipX2, <span class="keywordtype">int</span> ClipY2);
+00144   <span class="keywordtype">void</span> Texture (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *hTex, <span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy, <span class="keywordtype">int</span> sw, <span class="keywordtype">int</span> sh,
+00145     <span class="keywordtype">int</span> tx, <span class="keywordtype">int</span> ty, <span class="keywordtype">int</span> tw, <span class="keywordtype">int</span> th, uint8 Alpha);
+00146 
+00148   <span class="keywordtype">void</span> SaveArea (<a class="code" href="structcsImageArea.html">csImageArea</a> **Area, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
+00149 
+00151   <span class="keywordtype">void</span> RestoreArea (<a class="code" href="structcsImageArea.html">csImageArea</a> *Area, <span class="keywordtype">bool</span> Free);
+00152 
+00154   <span class="keywordtype">void</span> FreeArea (<a class="code" href="structcsImageArea.html">csImageArea</a> *Area);
+00155 
+00157   <span class="keywordtype">void</span> Clear (<span class="keywordtype">int</span> color);
+00158 
+00160   <span class="keywordtype">void</span> SetClipRect (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
+00161 
+00163   <span class="keywordtype">void</span> RestoreClipRect();
+00164 
+00166   <span class="keywordtype">void</span> Polygon3D (<a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a> &amp;poly, <a class="code" href="group__util.html#a10">uint</a> mode);
 00167 
-00169   <span class="keywordtype">void</span> GetPixel (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, uint8 &amp;oR, uint8 &amp;oG, uint8 &amp;oB);
-00170 
-00172   <span class="keywordtype">bool</span> SwitchMouseCursor (<a class="code" href="group__gfx2d.html#a1">csMouseCursorID</a> Shape);
-00173 
-00175   <span class="keywordtype">void</span> ClearZbuffer ()
-00176   { DrawMode |= <a class="code" href="group__gfx3d.html#a3">CSDRAW_CLEARZBUFFER</a>; }
+00169   <span class="keywordtype">bool</span> ClipLine (<span class="keywordtype">float</span> &amp;x1, <span class="keywordtype">float</span> &amp;y1, <span class="keywordtype">float</span> &amp;x2, <span class="keywordtype">float</span> &amp;y2,
+00170     <span class="keywordtype">int</span> ClipX1, <span class="keywordtype">int</span> ClipY1, <span class="keywordtype">int</span> ClipX2, <span class="keywordtype">int</span> ClipY2);
+00171 
+00173   <span class="keywordtype">void</span> GetPixel (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, uint8 &amp;oR, uint8 &amp;oG, uint8 &amp;oB);
+00174 
+00176   <span class="keywordtype">bool</span> SwitchMouseCursor (<a class="code" href="group__gfx2d.html#a1">csMouseCursorID</a> Shape);
 00177 
-00179   <span class="keywordtype">void</span> ClearZbuffer (<span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> y2);
-00180 
-00182   <span class="keywordtype">void</span> SetZbufferMode (<span class="keywordtype">unsigned</span> mode)
-00183   { G3D-&gt;SetRenderState (<a class="code" href="group__gfx3d.html#a79a98">G3DRENDERSTATE_ZBUFFERMODE</a>, mode); }
+00179   <span class="keywordtype">void</span> ClearZbuffer ()
+00180   { DrawMode |= <a class="code" href="group__gfx3d.html#a3">CSDRAW_CLEARZBUFFER</a>; }
+00181 
+00183   <span class="keywordtype">void</span> ClearZbuffer (<span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> y2);
 00184 
-00186   <span class="keywordtype">void</span> StartFrame (<a class="code" href="classcsMouse.html">csMouse</a> *Mouse);
-00187 
-00189   <span class="keywordtype">void</span> FinishFrame (<a class="code" href="classcsMouse.html">csMouse</a> *Mouse);
-00190 
-00192   <span class="keywordtype">bool</span> BeginDraw (<span class="keywordtype">int</span> iMode)
-00193   { <span class="keywordflow">return</span> (iMode != DrawMode) ? BeginDrawImp (iMode) : true; }
+00186   <span class="keywordtype">void</span> SetZbufferMode (<span class="keywordtype">unsigned</span> mode)
+00187   { G3D-&gt;SetRenderState (<a class="code" href="group__gfx3d.html#a79a98">G3DRENDERSTATE_ZBUFFERMODE</a>, mode); }
+00188 
+00190   <span class="keywordtype">void</span> StartFrame (<a class="code" href="classcsMouse.html">csMouse</a> *Mouse);
+00191 
+00193   <span class="keywordtype">void</span> FinishFrame (<a class="code" href="classcsMouse.html">csMouse</a> *Mouse);
 00194 
-00196   <span class="keywordtype">void</span> FinishDraw ();
-00197 
-00199   <span class="keywordtype">bool</span> BeginDrawImp (<span class="keywordtype">int</span> iMode);
-00200 
-00202   <span class="keywordtype">void</span> FinishDrawImp ();
-00203 
-00205   <span class="keywordtype">void</span> Invalidate (<a class="code" href="classcsRect.html">csRect</a> &amp;rect);
-00206 
-00208   <span class="keywordtype">void</span> CanvasResize ();
-00209 };
+00196   <span class="keywordtype">bool</span> BeginDraw (<span class="keywordtype">int</span> iMode)
+00197   { <span class="keywordflow">return</span> (iMode != DrawMode) ? BeginDrawImp (iMode) : true; }
+00198 
+00200   <span class="keywordtype">void</span> FinishDraw ();
+00201 
+00203   <span class="keywordtype">bool</span> BeginDrawImp (<span class="keywordtype">int</span> iMode);
+00204 
+00206   <span class="keywordtype">void</span> FinishDrawImp ();
+00207 
+00209   <span class="keywordtype">void</span> Invalidate (<a class="code" href="classcsRect.html">csRect</a> &amp;rect);
 00210 
-00213 <span class="preprocessor">#endif // __CS_CSGFXPPL_H__</span>
+00212   <span class="keywordtype">void</span> CanvasResize ();
+00213 };
+00214 
+00217 <span class="preprocessor">#endif // __CS_CSGFXPPL_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
