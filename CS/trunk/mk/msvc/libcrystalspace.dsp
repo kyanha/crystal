@@ -874,6 +874,10 @@ SOURCE=..\..\libs\csutil\win32\registrycfg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\win32\setenv.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\win32\sysroot.cpp
 # End Source File
 # Begin Source File
