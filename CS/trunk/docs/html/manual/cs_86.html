@@ -49,13 +49,12 @@ function. This results in the following for `<TT>simpmap.h</TT>':
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#ifndef __SIMPMAP_H__
 #define __SIMPMAP_H__
 
-#include &#60;stdarg.h&#62;
 #include &#60;crystalspace.h&#62;
 
 class Simple
+  : public csApplicationFramework, public csBaseEventHandler
 {
 private:
-  iObjectRegistry* object_reg;
   csRef&#60;iEngine&#62; engine;
   csRef&#60;iLoader&#62; loader;
   csRef&#60;iGraphics3D&#62; g3d;
@@ -64,9 +63,8 @@ private:
   iSector* room;
   csRef&#60;iView&#62; view;
  
-  static bool SimpleEventHandler (iEvent&#38; ev);
-  bool HandleEvent (iEvent&#38; ev);
-  void SetupFrame ();
+  bool OnKeyboard (iEvent&#38;);
+  void ProcessFrame ();
   void FinishFrame ();
   bool LoadMap ();
 
@@ -74,8 +72,9 @@ public:
   Simple (iObjectRegistry* object_reg);
   ~Simple ();
 
-  bool Initialize ();
-  void Start ();
+  void OnExit ();
+  bool OnInitialize (int argc, char* argv[]);
+  bool Application ();
 };
 
 #endif // __SIMPMAP_H__
@@ -88,19 +87,16 @@ Similarly for `<TT>simpmap.cpp</TT>':
 
 CS_IMPLEMENT_APPLICATION
 
-// The global pointer to simple
-Simple *simple;
-
 Simple::Simple (iObjectRegistry* object_reg)
 {
-  Simple::object_reg = object_reg;
+  SetApplicationName ("Simple Map");
 }
 
 Simple::~Simple ()
 {
 }
 
-void Simple::SetupFrame ()
+void Simple::ProcessFrame ()
 {
   // First get elapsed time from the virtual clock.
   csTicks elapsed_time = vc-&#62;GetElapsedTicks ();
@@ -137,141 +133,69 @@ void Simple::FinishFrame ()
   g3d-&#62;Print (0);
 }
 
-bool Simple::HandleEvent (iEvent&#38; ev)
+bool Simple::OnKeyboard(iEvent&#38; ev)
 {
-  if (ev.Type == csevBroadcast &#38;&#38; ev.Command.Code == cscmdProcess)
+  csKeyEventType eventtype = csKeyEventHelper::GetEventType(&#38;ev);
+  if (eventtype == csKeyEventTypeDown)
   {
-    simple-&#62;SetupFrame ();
-    return true;
-  }
-  else if (ev.Type == csevBroadcast &#38;&#38;
-    ev.Command.Code == cscmdFinalProcess)
-  {
-    simple-&#62;FinishFrame ();
-    return true;
-  }
-  else if (ev.Type == csevKeyboard &#38;&#38; 
-    csKeyEventHelper::GetEventType (&#38;ev) == csKeyEventTypeDown)
-  {
-    if (csKeyEventHelper::GetCookedCode (&#38;ev) == CSKEY_ESC)
+    utf32_char code = csKeyEventHelper::GetCookedCode(&#38;ev);
+    if (code == CSKEY_ESC)
     {
-      csRef&#60;iEventQueue&#62; q(CS_QUERY_REGISTRY(object_reg,iEventQueue));
-      if (q)
-        q-&#62;GetEventOutlet()-&#62;Broadcast (cscmdQuit);
-      return true;
+      csRef&#60;iEventQueue&#62; q = 
+        CS_QUERY_REGISTRY(GetObjectRegistry(), iEventQueue);
+      if (q.IsValid()) q-&#62;GetEventOutlet()-&#62;Broadcast(cscmdQuit);
     }
   }
-
   return false;
-}
-
-bool Simple::SimpleEventHandler (iEvent&#38; ev)
-{
-  return simple-&#62;HandleEvent (ev);
 }
 
 bool Simple::Initialize ()
 {
-  if (!csInitializer::RequestPlugins (object_reg,
-        CS_REQUEST_VFS,
-        CS_REQUEST_SOFTWARE3D,
-        CS_REQUEST_ENGINE,
-        CS_REQUEST_FONTSERVER,
-        CS_REQUEST_IMAGELOADER,
-        CS_REQUEST_LEVELLOADER,
-        CS_REQUEST_REPORTER,
-        CS_REQUEST_REPORTERLISTENER,
-        CS_REQUEST_END))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Can't initialize plugins!");
-    return false;
-  }
+  if (!csInitializer::RequestPlugins(GetObjectRegistry(),
+    CS_REQUEST_VFS,
+    CS_REQUEST_OPENGL3D,
+    CS_REQUEST_ENGINE,
+    CS_REQUEST_FONTSERVER,
+    CS_REQUEST_IMAGELOADER,
+    CS_REQUEST_LEVELLOADER,
+    CS_REQUEST_REPORTER,
+    CS_REQUEST_REPORTERLISTENER,
+    CS_REQUEST_END))
+    return ReportError("Failed to initialize plugins!");
 
-  if (!csInitializer::SetupEventHandler(
-    object_reg, SimpleEventHandler))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Can't initialize event handler!");
-    return false;
-  }
+  if (!RegisterQueue(GetObjectRegistry()))
+    return ReportError("Failed to set up event handler!");
 
-  // Check for commandline help.
-  if (csCommandLineHelper::CheckHelp (object_reg))
-  {
-    csCommandLineHelper::Help (object_reg);
-    return false;
-  }
+  return true;
+}
 
-  // The virtual clock.
-  vc = CS_QUERY_REGISTRY (object_reg, iVirtualClock);
-  if (!vc)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Can't find the virtual clock!");
-    return false;
-  }
+bool Simple::Application()
+{
+  if (!OpenApplication(GetObjectRegistry()))
+    return ReportError("Error opening system!");
 
-  // Find the pointer to engine plugin
-  engine = CS_QUERY_REGISTRY (object_reg, iEngine);
-  if (!engine)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iEngine plugin!");
-    return false;
-  }
+  g3d = CS_QUERY_REGISTRY(GetObjectRegistry(), iGraphics3D);
+  if (!g3d) return ReportError("Failed to locate 3D renderer!");
 
-  loader = CS_QUERY_REGISTRY (object_reg, iLoader);
-  if (!loader)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iLoader plugin!");
-    return false;
-  }
+  engine = CS_QUERY_REGISTRY(GetObjectRegistry(), iEngine);
+  if (!engine) return ReportError("Failed to locate 3D engine!");
 
-  g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
-  if (!g3d)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iGraphics3D plugin!");
-    return false;
-  }
+  vc = CS_QUERY_REGISTRY(GetObjectRegistry(), iVirtualClock);
+  if (!vc) return ReportError("Failed to locate Virtual Clock!");
 
-  kbd = CS_QUERY_REGISTRY (object_reg, iKeyboardDriver);
-  if (!kbd)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iKeyboardDriver plugin!");
-    return false;
-  }
+  kbd = CS_QUERY_REGISTRY(GetObjectRegistry(), iKeyboardDriver);
+  if (!kbd) return ReportError("Failed to locate Keyboard Driver!");
 
-  // Open the main system. This will open all the previously
-  // loaded plug-ins.
-  if (!csInitializer::OpenApplication (object_reg))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Error opening system!");
-    return false;
-  }
+  loader = CS_QUERY_REGISTRY(GetObjectRegistry(), iLoader);
+  if (!loader) return ReportError("Failed to locate Loader!");
 
   view = csPtr&#60;iView&#62; (new csView (engine, g3d));
   iGraphics2D* g2d = g3d-&#62;GetDriver2D ();
   view-&#62;SetRectangle (0, 0, g2d-&#62;GetWidth (), g2d-&#62;GetHeight ());
 
-  return true;
-}
+  Run();
 
-void Simple::Start ()
-{
-  csDefaultRunLoop (object_reg);
+  return true;
 }
 
 /*---------------*
@@ -279,18 +203,7 @@ void Simple::Start ()
  *---------------*/
 int main (int argc, char* argv[])
 {
-  iObjectRegistry* object_reg =
-    csInitializer::CreateEnvironment (argc, argv);
-  if (!object_reg) return -1;
-  simple = new Simple (object_reg);
-
-  if (simple-&#62;Initialize ())
-    simple-&#62;Start ();
-
-  delete simple;
-  csInitializer::DestroyApplication (object_reg);
-
-  return 0;
+  return Simple().Main(argc, argv);
 }
 </pre></td></tr></table></P><P>
 

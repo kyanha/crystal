@@ -50,27 +50,28 @@ the application logic. Our `<TT>simple.h</TT>' header looks as follows:
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#ifndef __SIMPLE_H__
 #define __SIMPLE_H__
 
-#include &#60;stdarg.h&#62;
 #include &#60;crystalspace.h&#62;
 
-class Simple
+class Simple : public csApplicationFramework, public csBaseEventHandler
 {
 private:
-  iObjectRegistry* object_reg;
   csRef&#60;iEngine&#62; engine;
   csRef&#60;iLoader&#62; loader;
   csRef&#60;iGraphics3D&#62; g3d;
   csRef&#60;iKeyboardDriver&#62; kbd;
   csRef&#60;iVirtualClock&#62; vc;
 
-  float rotX, rotY;
- 
+  void ProcessFrame ();
+  void FinishFrame ();
+
 public:
-  Simple (iObjectRegistry* object_reg);
+  Simple ();
   ~Simple ();
 
-  bool Initialize ();
-  void Start ();
+  void OnExit ();
+  bool OnInitialize (int argc, char* argv[]);
+
+  bool Application ();
 };
 
 #endif // __SIMPLE1_H__
@@ -81,15 +82,12 @@ objects that we are going to need a lot. That way we don't have to get
 them every time when we need them. Other than that we have a constructor
 which will do the initialization of these variables, a destructor which
 will clean up the application, an initialization function which will
-be responsible for the full set up of Crystal Space and our application,
-and finally a <CODE>Start()</CODE> function to start the event handler.
+be responsible for the full set up of Crystal Space and our application.
 </P><P>
 
 Note that we use smart pointers (<CODE>csRef&#60;&#62;</CODE>) for several of those
 references. That makes it easier to manage reference counting. We let
-the smart pointer take care of this for us. For `<SAMP>iObjectRegistry</SAMP>'
-we don't do this because for technical reasons it doesn't make sense
-to keep references to that.
+the smart pointer take care of this for us.
 </P><P>
 
 In the source file `<TT>simple.cpp</TT>' we place the following:
@@ -99,111 +97,70 @@ In the source file `<TT>simple.cpp</TT>' we place the following:
 
 CS_IMPLEMENT_APPLICATION
 
-// The global pointer to simple
-Simple* simple = 0;
-
-Simple::Simple (iObjectRegistry* object_reg)
+Simple::Simple ()
 {
-  Simple::object_reg = object_reg;
+  SetApplicationName ("Simple 1");
 }
 
 Simple::~Simple ()
 {
 }
 
-bool Simple::Initialize ()
+void Simple::ProcessFrame ()
 {
-  if (!csInitializer::RequestPlugins (object_reg,
-        CS_REQUEST_VFS,
-        CS_REQUEST_OPENGL3D,
-        CS_REQUEST_ENGINE,
-        CS_REQUEST_FONTSERVER,
-        CS_REQUEST_IMAGELOADER,
-        CS_REQUEST_LEVELLOADER,
-        CS_REQUEST_REPORTER,
-        CS_REQUEST_REPORTERLISTENER,
-        CS_REQUEST_END))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Can't initialize plugins!");
-    return false;
-  }
+}
 
-  // Check for commandline help.
-  if (csCommandLineHelper::CheckHelp (object_reg))
-  {
-    csCommandLineHelper::Help (object_reg);
-    return false;
-  }
+void Simple::FinishFrame ()
+{
+}
 
-  // The virtual clock.
-  vc = CS_QUERY_REGISTRY (object_reg, iVirtualClock);
-  if (!vc)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Can't find the virtual clock!");
-    return false;
-  }
+bool Simple::OnInitialize(int argc, char* argv[])
+{
+  if (!csInitializer::RequestPlugins(GetObjectRegistry(),
+    CS_REQUEST_VFS,
+    CS_REQUEST_OPENGL3D,
+    CS_REQUEST_ENGINE,
+    CS_REQUEST_FONTSERVER,
+    CS_REQUEST_IMAGELOADER,
+    CS_REQUEST_LEVELLOADER,
+    CS_REQUEST_REPORTER,
+    CS_REQUEST_REPORTERLISTENER,
+    CS_REQUEST_END))
+    return ReportError("Failed to initialize plugins!");
 
-  // Find the pointer to engine plugin
-  engine = CS_QUERY_REGISTRY (object_reg, iEngine);
-  if (!engine)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iEngine plugin!");
-    return false;
-  }
-
-  loader = CS_QUERY_REGISTRY (object_reg, iLoader);
-  if (!loader)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iLoader plugin!");
-    return false;
-  }
-
-  g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
-  if (!g3d)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iGraphics3D plugin!");
-    return false;
-  }
-
-  kbd = CS_QUERY_REGISTRY (object_reg, iKeyboardDriver);
-  if (!kbd)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iKeyboardDriver plugin!");
-    return false;
-  }
-
-  // Open the main system. This will open all the previously
-  // loaded plug-ins.
-  if (!csInitializer::OpenApplication (object_reg))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Error opening system!");
-    return false;
-  }
-
-  csReport (object_reg, CS_REPORTER_SEVERITY_NOTIFY,
-        "crystalspace.application.simple",
-        "Simple Crystal Space Application version 0.1.");
+  if (!RegisterQueue(GetObjectRegistry()))
+    return ReportError("Failed to set up event handler!");
 
   return true;
 }
 
-void Simple::Start ()
+void Simple::OnExit()
 {
-  csDefaultRunLoop (object_reg);
+}
+
+bool Simple::Application()
+{
+  if (!OpenApplication(GetObjectRegistry()))
+    return ReportError("Error opening system!");
+
+  g3d = CS_QUERY_REGISTRY(GetObjectRegistry(), iGraphics3D);
+  if (!g3d) return ReportError("Failed to locate 3D renderer!");
+
+  engine = CS_QUERY_REGISTRY(GetObjectRegistry(), iEngine);
+  if (!engine) return ReportError("Failed to locate 3D engine!");
+
+  vc = CS_QUERY_REGISTRY(GetObjectRegistry(), iVirtualClock);
+  if (!vc) return ReportError("Failed to locate Virtual Clock!");
+
+  kbd = CS_QUERY_REGISTRY(GetObjectRegistry(), iKeyboardDriver);
+  if (!kbd) return ReportError("Failed to locate Keyboard Driver!");
+
+  loader = CS_QUERY_REGISTRY(GetObjectRegistry(), iLoader);
+  if (!loader) return ReportError("Failed to locate Loader!");
+
+  Run();
+
+  return true;
 }
 
 /*---------------*
@@ -211,18 +168,7 @@ void Simple::Start ()
  *---------------*/
 int main (int argc, char* argv[])
 {
-  iObjectRegistry* object_reg =
-    csInitializer::CreateEnvironment (argc, argv);
-  if (!object_reg) return -1;
-
-  simple = new Simple (object_reg);
-  if (simple-&#62;Initialize ())
-    simple-&#62;Start ();
-  delete simple;
-  simple = 0;
-
-  csInitializer::DestroyApplication (object_reg);
-  return 0;
+  return Simple().Main(argc, argv);
 }
 </pre></td></tr></table></P><P>
 
@@ -264,55 +210,31 @@ essential for every application using Crystal Space.  It makes sure that the
 <CODE>main()</CODE> routine is correctly linked and called on every platform.
 </P><P>
 
-The main routine first calls <CODE>csInitializer::CreateEnvironment()</CODE>
-to make sure SCF is set up, the object registry is created, commandline
-reading is set up, and several other useful utilities are created
-(plugin manager, event queue, ...).
-Then our main routine creates an instance of our
-`<SAMP>Simple</SAMP>' class. We put this instance into a global variable to make
-access to it easier. The next step is application initialization which
-is done in the <CODE>Initialize()</CODE> function.
-</P><P>
-
-Note the usage of the <CODE>csReport()</CODE> function. This is a convenience
-function to send a message (usually an error or notification) to the
-reporter plugin. It works a lot like <CODE>printf()</CODE> except that you
-additionally need to give the severity level and an identifier which can give
-someone listening to the reporter an idea of the origin of the message.
-</P><P>
-
-<CODE>csInitializer::RequestPlugins()</CODE> will use the config file (which
-we are not using in this tutorial), the commandline and the requested
-plugins to find out which plugins to load. The commandline has highest
-priority, followed by the config file and lastly the requested plugins.
-</P><P>
-
-The <CODE>csCommandLineHelper::CheckHelp()</CODE> function will check if the
-`<SAMP>-help</SAMP>' commandline option is given and if so show the help for
-all loaded plugins (every plugin that is loaded in memory is capable of
-extending the commandline options).
-</P><P>
-
-After that we will query the object registry to find out all the common
-objects that we're going to need later and store a reference in our
-main class. Because we use <CODE>csRef&#60;&#62;</CODE> or smart pointers we don't have
-to worry about <CODE>DecRef()</CODE>.
-</P><P>
-
-Finally, when all is done the window is opened with a call to the function
-<CODE>csInitializer::OpenApplication()</CODE>.  This sends the `<SAMP>cscmdSystemOpen</SAMP>'
-message to all components that are listening to the event queue.  One of the
-plugins that does this is the 3D renderer which will then open its window (or
-enable graphics on a non-windowing operating system).
+<CODE>csInitializer::RequestPlugins()</CODE> will use the config file
+(which we are not using in this tutorial), the commandline and the
+requested plugins to find out which plugins to load. The commandline
+has highest priority, followed by the config file and lastly the
+requested plugins.
 </P><P>
 
 This concludes the initialization pass.
 </P><P>
 
-In <CODE>Simple::Start()</CODE> we will start the default main loop by
-calling <CODE>csDefaultRunLoop()</CODE>. This function will only return when
-the application exits (which this example cannot yet do). Basically
-this function will start the loop to handle events.
+In <CODE>Simple::Application()</CODE> we will open the window with a call
+to the function <CODE>csInitializer::OpenApplication()</CODE>. This sends
+the `<SAMP>cscmdSystemOpen</SAMP>' message to all components that are
+listening to the event queue.  One of the plugins that does this is
+the 3D renderer which will then open its window (or enable graphics
+on a non-windowing operating system).
+</P><P>
+
+After that we will query the object registry to find out all the
+common objects that we're going to need later and store a reference
+in our main class. Because we use <CODE>csRef&#60;&#62;</CODE> or smart pointers
+we don't have to worry about <CODE>DecRef()</CODE>.
+</P><P>
+
+Finally we will start the default main loop by calling Run().
 </P><P>
 
 <A NAME="Simple Event Handling"></A>

@@ -42,25 +42,18 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 Now that we have our material we can use it to load the mesh factory.
 Edit `<TT>simple.cpp</TT>' and add the following code in
-<CODE>Simple::Initialize()</CODE> (before `<SAMP>return true</SAMP>' and after
+<CODE>Simple::CreateSprites()</CODE> (before `<SAMP>return true</SAMP>' and after
 the code we just added to load the material):
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize ()
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>void Simple::CreateSprites ()
 {
   <small>...</small>
   // Load a sprite template from disk.
   csRef&#60;iMeshFactoryWrapper&#62; imeshfact (loader-&#62;LoadMeshObjectFactory (
         "/lib/std/sprite1"));
   if (imeshfact == 0)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple1",
-        "Error loading mesh object factory!");
-    return false;
-  }
-
-  return true;
+    ReportError("Error loading mesh object factory!");
 }
 </pre></td></tr></table></P><P>
 
