@@ -1082,6 +1082,44 @@ which was shared by all clients, instances of `<SAMP>csRandomFloatGen</SAMP>' ca
 controlled and seeded individually, thus making it far more flexible and
 useful.  (Note that the more general-purpose `<SAMP>csRandomGen</SAMP>' class is also
 able to vend floating point numbers.)
+</P><P>
+
+<A NAME="SEC_28"></A>
+<H3> `<SAMP>iImage</SAMP>' Changes </H3>
+<!--docid::SEC_28::-->
+<P>
+
+The `<SAMP>iImage</SAMP>' interface has been reduced to a level where it merely serves
+as a container for pixel data; however, the image editing functionality was
+only relocated, not removed.
+</P><P>
+
+Forbidding direct manipulation of an `<SAMP>iImage</SAMP>''s pixel data has the 
+following consequences:
+<UL>
+<LI>
+The <CODE>Clone()</CODE> function was removed. The
+`<SAMP>csImageMemory</SAMP>' class provides a constructor that copies the pixel data
+from another `<SAMP>iImage</SAMP>' object, providing a functionality equal to 
+<CODE>Clone()</CODE>.
+<LI>
+To edit the pixel data of an image, create a clone of an image (e.g. a
+`<SAMP>csImageMemory</SAMP>' as mentioned above) and manipulate the data in the newly
+cerated instance.
+<LI>
+If the image data is needed in another
+format, as the <CODE>SetFormat()</CODE> call has been removed from the interface.
+<LI>
+The image editing functionality found in methods such as <CODE>Rescale()</CODE>,
+<CODE>Sharpen()</CODE> was moved into the `<SAMP>csImageManipulate</SAMP>' class.
+<LI>
+The <CODE>CopyXXX()</CODE> method that copied an image into another are now provided
+by `<SAMP>csImageMemory</SAMP>'.
+</UL>
+<P>
+
+As a side-effect of these changes, the `<SAMP>csImageFile</SAMP>' and 
+`<SAMP>csImageMemory</SAMP>' were merged and the former removed.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
