@@ -248,6 +248,10 @@ SOURCE=..\..\libs\csgeom\bsptree.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\crysball.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\csrect.cpp
 # End Source File
 # Begin Source File
@@ -261,6 +265,10 @@ SOURCE=..\..\libs\csgeom\fastsqrt.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\frustum.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\kdtree.cpp
 # End Source File
 # Begin Source File
 
@@ -284,7 +292,19 @@ SOURCE=..\..\libs\csgeom\matrix3.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\obb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\path.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\plane3.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\pmtools.cpp
 # End Source File
 # Begin Source File
 
@@ -312,7 +332,19 @@ SOURCE=..\..\libs\csgeom\polyidx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\polymesh.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\polytree.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\quaterni.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\sphere.cpp
 # End Source File
 # Begin Source File
 
@@ -324,7 +356,7 @@ SOURCE=..\..\libs\csgeom\subrec.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\kdtree.cpp
+SOURCE=..\..\libs\csgeom\subrec2.cpp
 # End Source File
 # Begin Source File
 
@@ -336,6 +368,14 @@ SOURCE=..\..\libs\csgeom\transfrm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\trimesh.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\trimeshlod.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\vector2.cpp
 # End Source File
 # Begin Source File
@@ -344,47 +384,7 @@ SOURCE=..\..\libs\csgeom\vector3.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\sphere.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\pmtools.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\subrec2.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\crysball.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\obb.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgeom\vector4.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\trimesh.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\polymesh.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\path.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\polytree.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\trimeshlod.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -396,11 +396,15 @@ SOURCE=..\..\libs\csgeom\obb_priv.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\..\..\include\csgeom\crysball.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\bsptree.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\..\..\include\csgeom\box.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\crysball.h
 # End Source File
 # Begin Source File
 
@@ -561,10 +565,6 @@ SOURCE=..\..\libs\csgeom\..\..\include\csgeom\vector3.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\..\..\include\csgeom\vector4.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\..\..\include\csgeom\bsptree.h
 # End Source File
 # End Group
 # End Target

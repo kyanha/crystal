@@ -240,15 +240,15 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\mesh\terrfunc\object\terrdiv.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\mesh\terrfunc\object\terrfunc.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\mesh\terrfunc\object\terrvis.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\terrfunc\object\terrdiv.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -256,15 +256,15 @@ SOURCE=..\..\plugins\mesh\terrfunc\object\terrdiv.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\mesh\terrfunc\object\terrdiv.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\mesh\terrfunc\object\terrfunc.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\mesh\terrfunc\object\terrvis.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\terrfunc\object\terrdiv.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

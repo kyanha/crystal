@@ -238,15 +238,15 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\apps\tests\awstest\awstest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\apps\tests\awstest\awsmain.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\apps\tests\awstest\awssktst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tests\awstest\awstest.cpp
 # End Source File
 # Begin Source File
 
@@ -258,11 +258,11 @@ SOURCE=..\..\apps\tests\awstest\cuscomp.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\apps\tests\awstest\awstest.h
+SOURCE=..\..\apps\tests\awstest\awssktst.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\tests\awstest\awssktst.h
+SOURCE=..\..\apps\tests\awstest\awstest.h
 # End Source File
 # Begin Source File
 

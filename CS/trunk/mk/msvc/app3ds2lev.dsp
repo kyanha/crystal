@@ -238,11 +238,11 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\apps\import\3ds2lev\levelwriter.cpp
+SOURCE=..\..\apps\import\3ds2lev\3ds2lev.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\import\3ds2lev\3ds2lev.cpp
+SOURCE=..\..\apps\import\3ds2lev\levelwriter.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"

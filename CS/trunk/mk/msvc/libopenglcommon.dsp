@@ -240,7 +240,7 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\openglcommon\glfontcache.cpp
+SOURCE=..\..\plugins\video\canvas\openglcommon\driverdb.cpp
 # End Source File
 # Begin Source File
 
@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\video\canvas\openglcommon\glcommon2d.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\openglcommon\glss.cpp
+SOURCE=..\..\plugins\video\canvas\openglcommon\glfontcache.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\openglcommon\driverdb.cpp
+SOURCE=..\..\plugins\video\canvas\openglcommon\glss.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -260,7 +260,23 @@ SOURCE=..\..\plugins\video\canvas\openglcommon\driverdb.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\video\canvas\openglcommon\driverdb.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\canvas\openglcommon\glcommon2d.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\openglcommon\glextmanager.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\openglcommon\glfontcache.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\openglcommon\glss.h
 # End Source File
 # Begin Source File
 
@@ -269,22 +285,6 @@ SOURCE=..\..\plugins\video\canvas\openglcommon\glstates.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\canvas\openglcommon\iogl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glextmanager.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glss.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\glfontcache.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\openglcommon\driverdb.h
 # End Source File
 # End Group
 # End Target

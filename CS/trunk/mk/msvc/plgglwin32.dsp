@@ -252,11 +252,11 @@ SOURCE=..\..\plugins\video\canvas\openglwin\detectdriver.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\openglwin\oglg2d.h
+SOURCE=..\..\plugins\video\canvas\openglwin\detectdriver.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\openglwin\detectdriver.h
+SOURCE=..\..\plugins\video\canvas\openglwin\oglg2d.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

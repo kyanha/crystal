@@ -244,11 +244,11 @@ SOURCE=..\..\plugins\sound\renderer\openal\alsndhdl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\openal\alsndrdr.cpp
+SOURCE=..\..\plugins\sound\renderer\openal\alsndlst.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\openal\alsndlst.cpp
+SOURCE=..\..\plugins\sound\renderer\openal\alsndrdr.cpp
 # End Source File
 # Begin Source File
 
@@ -260,15 +260,15 @@ SOURCE=..\..\plugins\sound\renderer\openal\alsndsrc.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\openal\alsndrdr.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\sound\renderer\openal\alsndhdl.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\sound\renderer\openal\alsndlst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sound\renderer\openal\alsndrdr.h
 # End Source File
 # Begin Source File
 

@@ -244,6 +244,10 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\glshader_p
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_1xto14.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_emu_ati.cpp
 # End Source File
 # Begin Source File
@@ -256,15 +260,11 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_emu_nv
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_parser.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_1xto14.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_instr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_parser.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -272,7 +272,7 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_instr.
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_emu_nv.h
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_1xto14.h
 # End Source File
 # Begin Source File
 
@@ -288,15 +288,15 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_emu_co
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_parser.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_1xto14.h
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_emu_nv.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_instr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_parser.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -244,10 +244,6 @@ SOURCE=..\..\plugins\csparser\csloader.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\csparser\prsseq.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\csparser\ldrplug.cpp
 # End Source File
 # Begin Source File
@@ -261,6 +257,10 @@ SOURCE=..\..\plugins\csparser\loadtex.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\csparser\prshtgen.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\csparser\prsseq.cpp
 # End Source File
 # Begin Source File
 

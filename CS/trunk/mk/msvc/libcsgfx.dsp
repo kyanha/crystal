@@ -240,15 +240,15 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\libs\csgfx\gradient.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgfx\csimage.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgfx\xorpat.cpp
+SOURCE=..\..\libs\csgfx\csimgvec.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgfx\gradient.cpp
 # End Source File
 # Begin Source File
 
@@ -260,15 +260,11 @@ SOURCE=..\..\libs\csgfx\memimage.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\normalmaptools.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\quantize.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgfx\csimgvec.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgfx\shadervar.cpp
 # End Source File
 # Begin Source File
 
@@ -276,11 +272,15 @@ SOURCE=..\..\libs\csgfx\shaderexp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\shadervar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\shadervarcontext.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgfx\normalmaptools.cpp
+SOURCE=..\..\libs\csgfx\xorpat.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -312,6 +312,10 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\memimage.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\normalmaptools.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\packrgb.h
 # End Source File
 # Begin Source File
@@ -337,10 +341,6 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\shadervarcontext.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\xorpat.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgfx\..\..\include\csgfx\normalmaptools.h
 # End Source File
 # End Group
 # End Target

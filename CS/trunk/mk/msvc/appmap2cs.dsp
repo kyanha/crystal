@@ -378,6 +378,10 @@ SOURCE=..\..\apps\import\map2cs\dmath3d.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\apps\import\map2cs\dochelp.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\apps\import\map2cs\entity.h
 # End Source File
 # Begin Source File
@@ -459,10 +463,6 @@ SOURCE=..\..\apps\import\map2cs\ziparch.h
 # Begin Source File
 
 SOURCE=..\..\apps\import\map2cs\zipfile.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\apps\import\map2cs\dochelp.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

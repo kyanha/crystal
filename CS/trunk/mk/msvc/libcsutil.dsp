@@ -244,7 +244,15 @@ SOURCE=..\..\libs\csutil\archive.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\binder.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\cfgacc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\cfgdoc.cpp
 # End Source File
 # Begin Source File
 
@@ -256,11 +264,15 @@ SOURCE=..\..\libs\csutil\cfgmgr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\cmdhelp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\cmdline.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\scfstrset.cpp
+SOURCE=..\..\libs\csutil\csbaseeventh.cpp
 # End Source File
 # Begin Source File
 
@@ -272,15 +284,15 @@ SOURCE=..\..\libs\csutil\csevent.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\cseventflattener.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\cseventq.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\csinput.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\utiltest.cpp
 # End Source File
 # Begin Source File
 
@@ -312,11 +324,31 @@ SOURCE=..\..\libs\csutil\datastrm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\debug.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\event.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\evoutlet.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\hash.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\hashmap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\hashmapr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\inputdef.cpp
 # End Source File
 # Begin Source File
 
@@ -328,15 +360,55 @@ SOURCE=..\..\libs\csutil\memfile.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\objiter.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\mmapio.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\nulcache.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\objiter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\objreg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\physfile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\plugldr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\plugmgr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\prfxcfg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\radixsort.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\randomgen.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\reftrack.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\reftrackeraccess.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\regexp.cpp
 # End Source File
 # Begin Source File
 
@@ -356,43 +428,15 @@ SOURCE=..\..\libs\csutil\scfstr.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\scfstringarray.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\scfstrset.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\schedule.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\sparse3d.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\strset.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\util.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\tinystr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\objreg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\cmdhelp.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\plugldr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\plugmgr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\virtclk.cpp
 # End Source File
 # Begin Source File
 
@@ -400,87 +444,7 @@ SOURCE=..\..\libs\csutil\snprintf.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\debug.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\binder.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\inputdef.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\vfscache.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\hashmapr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\tinypars.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\tinyxml.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\xmltiny.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\strhash.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\nulcache.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\randomgen.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\physfile.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\csbaseeventh.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\radixsort.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\reftrack.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\scfstringarray.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\hash.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\timer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\event.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\reftrackeraccess.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\cfgdoc.cpp
+SOURCE=..\..\libs\csutil\sparse3d.cpp
 # End Source File
 # Begin Source File
 
@@ -488,15 +452,59 @@ SOURCE=..\..\libs\csutil\statvar.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\strhash.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\stringreader.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\regexp.cpp
+SOURCE=..\..\libs\csutil\strset.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\cseventflattener.cpp
+SOURCE=..\..\libs\csutil\timer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\tinypars.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\tinystr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\tinyxml.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\util.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\utiltest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\vfscache.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\virtclk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\xmltiny.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\DbgHelpAPI.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\callstack.cpp
 # End Source File
 # Begin Source File
 
@@ -513,6 +521,10 @@ SOURCE=..\..\libs\csutil\win32\instpath.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\win32\loadlib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\minidump.cpp
 # End Source File
 # Begin Source File
 
@@ -564,18 +576,6 @@ SOURCE=..\..\libs\csutil\win32\wintools.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\win32\callstack.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\DbgHelpAPI.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\minidump.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\generic\appdir.cpp
 # End Source File
 # Begin Source File
@@ -612,7 +612,19 @@ SOURCE=..\..\libs\csutil\generic\regex.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\reftrack.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\regex_wrapper.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\tinystr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\tinywrap.h
 # End Source File
 # Begin Source File
 
@@ -624,15 +636,11 @@ SOURCE=..\..\libs\csutil\xmltinyp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\regex_wrapper.h
+SOURCE=..\..\libs\csutil\win32\cachedll.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\reftrack.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\tinywrap.h
+SOURCE=..\..\libs\csutil\win32\callstack.h
 # End Source File
 # Begin Source File
 
@@ -645,14 +653,6 @@ SOURCE=..\..\libs\csutil\win32\win32kbd.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\win32\winthread.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\cachedll.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\callstack.h
 # End Source File
 # Begin Source File
 
@@ -685,6 +685,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\callstack.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\cfgacc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cfgdoc.h
 # End Source File
 # Begin Source File
 
@@ -721,6 +725,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\csevcord.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\csevent.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cseventflattener.h
 # End Source File
 # Begin Source File
 
@@ -780,10 +788,6 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\databuf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\fpu80x86.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\..\..\include\csutil\datastrm.h
 # End Source File
 # Begin Source File
@@ -804,7 +808,7 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\flags.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\hashmap.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\fpu80x86.h
 # End Source File
 # Begin Source File
 
@@ -824,7 +828,7 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\hashhandlers.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\sockets.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\hashmap.h
 # End Source File
 # Begin Source File
 
@@ -841,6 +845,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\indprint.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\inputdef.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\leakguard.h
 # End Source File
 # Begin Source File
 
@@ -908,7 +916,7 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\randomgen.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\zip.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\ref.h
 # End Source File
 # Begin Source File
 
@@ -921,6 +929,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\refcount.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\reftrackeraccess.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\regexp.h
 # End Source File
 # Begin Source File
 
@@ -960,7 +972,7 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\snprintf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\leakguard.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\sockets.h
 # End Source File
 # Begin Source File
 
@@ -973,6 +985,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\strhash.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\stringarray.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\stringreader.h
 # End Source File
 # Begin Source File
 
@@ -1028,23 +1044,7 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\xmltiny.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\ref.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\cfgdoc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\regexp.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\stringreader.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\cseventflattener.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\zip.h
 # End Source File
 # Begin Source File
 
@@ -1056,6 +1056,14 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\macosx\csosdefs.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\DbgHelpAPI.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\callstack.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\csconfig.h
 # End Source File
 # Begin Source File
@@ -1064,11 +1072,11 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\csosdefs.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\registrycfg.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\minidump.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\callstack.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\registrycfg.h
 # End Source File
 # Begin Source File
 
@@ -1077,14 +1085,6 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\win32.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\wintools.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\DbgHelpAPI.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\minidump.h
 # End Source File
 # Begin Source File
 

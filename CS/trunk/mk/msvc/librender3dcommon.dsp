@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\video\render3d\common\txtmgr.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\common\txtmgr.h
+SOURCE=..\..\plugins\video\render3d\common\pixfmt.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\common\pixfmt.h
+SOURCE=..\..\plugins\video\render3d\common\txtmgr.h
 # End Source File
 # End Group
 # End Target

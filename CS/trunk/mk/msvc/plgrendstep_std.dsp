@@ -244,11 +244,11 @@ SOURCE=..\..\plugins\engine\renderloop\stdsteps\fullquad.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\renderloop\stdsteps\lightiter.cpp
+SOURCE=..\..\plugins\engine\renderloop\stdsteps\generic.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\renderloop\stdsteps\generic.cpp
+SOURCE=..\..\plugins\engine\renderloop\stdsteps\lightiter.cpp
 # End Source File
 # Begin Source File
 
