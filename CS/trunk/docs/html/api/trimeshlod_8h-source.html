@@ -53,45 +53,57 @@
 <a name="l00043"></a><a class="code" href="classcsTriangleVertexCost.html#m2">00043</a>   <span class="keywordtype">int</span> to_vertex;
 00044 
 00046   <a class="code" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a> () : deleted (false) { }
-00048   ~<a class="code" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a> () { }
+00048   <span class="keyword">virtual</span> ~<a class="code" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a> () { }
 00050   <span class="keywordtype">bool</span> DelVertex (<span class="keywordtype">int</span> idx);
 00052   <span class="keywordtype">void</span> ReplaceVertex (<span class="keywordtype">int</span> old, <span class="keywordtype">int</span> replace);
 00053 
-00058   <span class="keywordtype">void</span> CalculateCost (<a class="code" href="classcsTriangleVerticesCost.html">csTriangleVerticesCost</a>* vertices);
-00059 };
-00060 
-<a name="l00067"></a><a class="code" href="classcsTriangleVerticesCost.html">00067</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csTriangleVerticesCost
+00058   <span class="keyword">virtual</span> <span class="keywordtype">void</span> CalculateCost (<a class="code" href="classcsTriangleVerticesCost.html">csTriangleVerticesCost</a>* vertices,
+00059         <span class="keywordtype">void</span>* userdata) = 0;
+00060 };
+00061 
+<a name="l00067"></a><a class="code" href="classcsTriangleVertexCostEdge.html">00067</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csTriangleVertexCostEdge : <span class="keyword">public</span> <a class="code" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a>
 00068 {
-00069 <span class="keyword">private</span>:
-00070   <a class="code" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a>* vertices;
-00071   <span class="keywordtype">int</span> num_vertices;
-00072 
-00073 <span class="keyword">public</span>:
-00075   csTriangleVerticesCost (<a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>* mesh, <a class="code" href="classcsVector3.html">csVector3</a>* verts,
-00076         <span class="keywordtype">int</span> num_verts);
-00078   ~csTriangleVerticesCost ();
-00083   <span class="keywordtype">void</span> UpdateVertices (<a class="code" href="classcsVector3.html">csVector3</a>* verts);
-00084 
-00086   <span class="keywordtype">int</span> GetVertexCount () { <span class="keywordflow">return</span> num_vertices; }
-00088   <a class="code" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a>&amp; GetVertex (<span class="keywordtype">int</span> idx) { <span class="keywordflow">return</span> vertices[idx]; }
-00089 
-00091   <span class="keywordtype">void</span> CalculateCost ();
-00092 
-00094   <span class="keywordtype">int</span> GetMinimalCostVertex ();
-00095 
-00097   <span class="keywordtype">void</span> Dump ();
-00098 };
-00099 
-<a name="l00104"></a><a class="code" href="classcsTriangleMeshLOD.html">00104</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csTriangleMeshLOD
-00105 {
-00106 <span class="keyword">public</span>:
-00122   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculateLOD (<a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>* mesh, csTriangleVerticesCost* verts,
-00123         <span class="keywordtype">int</span>* translate, <span class="keywordtype">int</span>* emerge_from);
-00124 };
-00125 
-00126 
-00127 <span class="preprocessor">#endif // __CS_TRIMESHLOD_H__</span>
-00128 <span class="preprocessor"></span>
+00069 <span class="keyword">public</span>:
+00070   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsTriangleVertexCost.html#a4">CalculateCost</a> (<a class="code" href="classcsTriangleVerticesCost.html">csTriangleVerticesCost</a>* vertices,
+00071         <span class="keywordtype">void</span>* userdata);
+00072 };
+00073 
+<a name="l00080"></a><a class="code" href="classcsTriangleVerticesCost.html">00080</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csTriangleVerticesCost
+00081 {
+00082 <span class="keyword">private</span>:
+00083   <a class="code" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a>* vertices;
+00084   <span class="keywordtype">int</span> num_vertices;
+00085 
+00086 <span class="keyword">public</span>:
+00099   csTriangleVerticesCost (<a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>* mesh, <a class="code" href="classcsVector3.html">csVector3</a>* verts,
+00100         <span class="keywordtype">int</span> num_verts, <a class="code" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a>* cost_vertices);
+00102   ~csTriangleVerticesCost ();
+00107   <span class="keywordtype">void</span> UpdateVertices (<a class="code" href="classcsVector3.html">csVector3</a>* verts);
+00108 
+00110   <span class="keywordtype">int</span> GetVertexCount () { <span class="keywordflow">return</span> num_vertices; }
+00112   <a class="code" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a>&amp; GetVertex (<span class="keywordtype">int</span> idx) { <span class="keywordflow">return</span> vertices[idx]; }
+00113 
+00115   <span class="keywordtype">void</span> CalculateCost (<span class="keywordtype">void</span>* userdata);
+00116 
+00118   <span class="keywordtype">int</span> GetMinimalCostVertex (<span class="keywordtype">float</span>&amp; min_cost);
+00119 
+00121   <span class="keywordtype">void</span> Dump ();
+00122 };
+00123 
+<a name="l00128"></a><a class="code" href="classcsTriangleMeshLOD.html">00128</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csTriangleMeshLOD
+00129 {
+00130 <span class="keyword">public</span>:
+00147   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculateLOD (<a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>* mesh, csTriangleVerticesCost* verts,
+00148         <span class="keywordtype">int</span>* translate, <span class="keywordtype">int</span>* emerge_from, <span class="keywordtype">void</span>* userdata = 0);
+00149 
+00161   <span class="keyword">static</span> <a class="code" href="structcsTriangle.html">csTriangle</a>* CalculateLOD (<a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>* mesh,
+00162         csTriangleVerticesCost* verts, <span class="keywordtype">float</span> max_cost, <span class="keywordtype">int</span>&amp; num_triangles,
+00163         <span class="keywordtype">void</span>* userdata = 0);
+00164 };
+00165 
+00166 
+00167 <span class="preprocessor">#endif // __CS_TRIMESHLOD_H__</span>
+00168 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

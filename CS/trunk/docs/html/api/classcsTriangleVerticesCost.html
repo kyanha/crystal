@@ -24,13 +24,13 @@
 <a href="classcsTriangleVerticesCost-members.html">List of all members.</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Public Methods</h2></td></tr>
-<tr><td nowrap align=right valign=top>&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleVerticesCost.html#a0">csTriangleVerticesCost</a> (<a class="el" href="classcsTriangleMesh.html">csTriangleMesh</a> *mesh, <a class="el" href="classcsVector3.html">csVector3</a> *verts, int num_verts)</td></tr>
+<tr><td nowrap align=right valign=top>&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleVerticesCost.html#a0">csTriangleVerticesCost</a> (<a class="el" href="classcsTriangleMesh.html">csTriangleMesh</a> *mesh, <a class="el" href="classcsVector3.html">csVector3</a> *verts, int num_verts, <a class="el" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a> *cost_vertices)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Build vertex table for a triangle mesh.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleVerticesCost.html#a2">UpdateVertices</a> (<a class="el" href="classcsVector3.html">csVector3</a> *verts)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Update vertex table for a given set of vertices (with the same number as at init).</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleVerticesCost.html#a5">CalculateCost</a> ()</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleVerticesCost.html#a5">CalculateCost</a> (void *userdata)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Calculate the cost of all vertices.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleVerticesCost.html#a6">GetMinimalCostVertex</a> ()</td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleVerticesCost.html#a6">GetMinimalCostVertex</a> (float &amp;min_cost)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Return the vertex id with minimal cost.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleVerticesCost.html#a7">Dump</a> ()</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Dump connectivity information@ TEMPORARY.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
@@ -42,7 +42,7 @@ This is a general vertices structure but it is mostly useful for LOD generation 
 <p>
 
 <p>
-Definition at line <a class="el" href="trimeshlod_8h-source.html#l00067">67</a> of file <a class="el" href="trimeshlod_8h-source.html">trimeshlod.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
+Definition at line <a class="el" href="trimeshlod_8h-source.html#l00080">80</a> of file <a class="el" href="trimeshlod_8h-source.html">trimeshlod.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a name="a0" doxytag="csTriangleVerticesCost::csTriangleVerticesCost"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -64,7 +64,13 @@ Definition at line <a class="el" href="trimeshlod_8h-source.html#l00067">67</a> 
           <td></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>num_verts</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>num_verts</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>cost_vertices</em></td>
         </tr>
         <tr>
           <td></td>
@@ -86,7 +92,18 @@ Definition at line <a class="el" href="trimeshlod_8h-source.html#l00067">67</a> 
 <p>
 Build vertex table for a triangle mesh.
 <p>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>mesh</em>&nbsp;</td><td>
+is the triangle mesh from which to calculate connectivity information. </td></tr>
+<tr><td valign=top><em>verts</em>&nbsp;</td><td>
+is an array of vertices that will be used to fill the cost vertex table. </td></tr>
+<tr><td valign=top><em>num_verts</em>&nbsp;</td><td>
+is the size of that table. </td></tr>
+<tr><td valign=top><em>cost_vertices</em>&nbsp;</td><td>
+is a table (with same size as 'verts') that contains instances of <a class="el" href="classcsTriangleVertexCost.html">csTriangleVertexCost</a>. This class will take ownership of this array and delete it with delete[] later. </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
@@ -98,7 +115,8 @@ Build vertex table for a triangle mesh.
         <tr>
           <td class="md" nowrap valign="top"> void csTriangleVerticesCost::CalculateCost </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" nowrap valign="top">void *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>userdata</em>          </td>
           <td class="md" valign="top">)&nbsp;</td>
           <td class="md" nowrap></td>
         </tr>
@@ -158,7 +176,8 @@ Dump connectivity information@ TEMPORARY.
         <tr>
           <td class="md" nowrap valign="top"> int csTriangleVerticesCost::GetMinimalCostVertex </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" nowrap valign="top">float &amp;&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>min_cost</em>          </td>
           <td class="md" valign="top">)&nbsp;</td>
           <td class="md" nowrap></td>
         </tr>

@@ -24,15 +24,82 @@
 <a href="classcsTriangleMeshLOD-members.html">List of all members.</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Static Public Methods</h2></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleMeshLOD.html#d0">CalculateLOD</a> (<a class="el" href="classcsTriangleMesh.html">csTriangleMesh</a> *mesh, <a class="el" href="classcsTriangleVerticesCost.html">csTriangleVerticesCost</a> *verts, int *translate, int *emerge_from)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleMeshLOD.html#d0">CalculateLOD</a> (<a class="el" href="classcsTriangleMesh.html">csTriangleMesh</a> *mesh, <a class="el" href="classcsTriangleVerticesCost.html">csTriangleVerticesCost</a> *verts, int *translate, int *emerge_from, void *userdata=0)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>For the given mesh and a set of vertices calculate the best order in which to perform LOD reduction.</em> <a href="#d0"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="structcsTriangle.html">csTriangle</a> *&nbsp;</td><td valign=bottom><a class="el" href="classcsTriangleMeshLOD.html#d1">CalculateLOD</a> (<a class="el" href="classcsTriangleMesh.html">csTriangleMesh</a> *mesh, <a class="el" href="classcsTriangleVerticesCost.html">csTriangleVerticesCost</a> *verts, float max_cost, int &amp;num_triangles, void *userdata=0)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Calculate a simplified set of triangles so that all vertices with cost lower then the maximum cost are removed.</em> <a href="#d1"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 A static class which performs the calculation of the best order to do the collapsing.
 <p>
 
 <p>
-Definition at line <a class="el" href="trimeshlod_8h-source.html#l00104">104</a> of file <a class="el" href="trimeshlod_8h-source.html">trimeshlod.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="trimeshlod_8h-source.html#l00128">128</a> of file <a class="el" href="trimeshlod_8h-source.html">trimeshlod.h</a>.<hr><h2>Member Function Documentation</h2>
+<a name="d1" doxytag="csTriangleMeshLOD::CalculateLOD"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="structcsTriangle.html">csTriangle</a>* csTriangleMeshLOD::CalculateLOD </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="classcsTriangleMesh.html">csTriangleMesh</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>mesh</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="classcsTriangleVerticesCost.html">csTriangleVerticesCost</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>verts</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>float&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>max_cost</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>num_triangles</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>void *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>userdata</em> = 0</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [static]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Calculate a simplified set of triangles so that all vertices with cost lower then the maximum cost are removed.
+<p>
+The resulting simplified triangle mesh is returned (and number of triangles is set to num_triangles). You must delete[] the returned list of triangles if you don't want to use it anymore. <dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>userdata</em>&nbsp;</td><td>
+is given to the CalculateCost() function. </td></tr>
+</table>
+</dl>
+<p>
+ Note. The given 'mesh' and 'verts' objects are no longer valid after calling this function. Don't expect any useful information here.     </td>
+  </tr>
+</table>
 <a name="d0" doxytag="csTriangleMeshLOD::CalculateLOD"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -60,7 +127,13 @@ Definition at line <a class="el" href="trimeshlod_8h-source.html#l00104">104</a>
           <td></td>
           <td></td>
           <td class="md" nowrap>int *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>emerge_from</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>emerge_from</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>void *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>userdata</em> = 0</td>
         </tr>
         <tr>
           <td></td>
@@ -82,11 +155,14 @@ Definition at line <a class="el" href="trimeshlod_8h-source.html#l00104">104</a>
 <p>
 For the given mesh and a set of vertices calculate the best order in which to perform LOD reduction.
 <p>
-This fills two arrays (which should have the same size as the number of vertices in 'verts'). 'translate' contains a mapping from the old order of vertices to the new one. The new ordering of vertices is done in a way so that the first vertex is the one which is always present in the model and with increasing detail, vertices are added in ascending vertex order. 'emerge_from' contains (for a given index in the new order) from which this vertex arises (or seen the other way around: to what this vertex had collapsed).
+This fills two arrays (which should have the same size as the number of vertices in 'verts'). 'translate' contains a mapping from the old order of vertices to the new one. The new ordering of vertices is done in a way so that the first vertex is the one which is always present in the model and with increasing detail, vertices are added in ascending vertex order. 'emerge_from' contains (for a given index in the new order) from which this vertex arises (or seen the other way around: to what this vertex had collapsed). <dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>userdata</em>&nbsp;</td><td>
+is given to the CalculateCost() function. </td></tr>
+</table>
+</dl>
 <p>
-
-<p>
-Note. The given 'mesh' and 'verts' objects are no longer valid after calling this function. Don't expect any useful information here.     </td>
+ Note. The given 'mesh' and 'verts' objects are no longer valid after calling this function. Don't expect any useful information here.     </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
