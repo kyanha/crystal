@@ -40,6 +40,35 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <!--docid::SEC7.2.2::-->
 <P>
 
+When the VFS plugin is loaded, it searches for a configuration file named
+`<TT>vfs.cfg</TT>' in the following locations in the order shown:
+</P><P>
+
+<UL>
+<LI>
+Application resource directory; typically, the directory in which the
+application executable resides but, on MacOS/X, it is the `<TT>Resources</TT>'
+directory within the Cocoa application wrapper for GUI programs. (Returned
+by <CODE>csGetResourceDir()</CODE>.)
+<P>
+
+<LI>
+Directory where application executable resides, or the directory where Cocoa
+application wrapper resides on MacOS/X. (Returned by <CODE>csGetAppDir()</CODE>.)
+<P>
+
+<LI>
+Crystal Space installation directory. (Returned by <CODE>csGetConfigPath()</CODE>.)
+</UL>
+<P>
+
+The full set of directories mounted by VFS after it scans for
+configuration files is the union of the entries in all of the discovered
+`<TT>vfs.cfg</TT>' files. If there are conflicting entries, then mounts and
+variable assignments specified in configuration files discovered earlier in the
+scan take precedence over those discovered later.
+</P><P>
+
 Keys in the `<TT>vfs.cfg</TT>' configuration file with names starting with
 `<SAMP>VFS.Mount.</SAMP>' describe the layout of the <EM>virtual</EM> file system.
 Imagine a clean disk drive onto which you start to create directories by making
@@ -110,7 +139,7 @@ Windows.
 <P>
 
 <DT><CODE>$*</CODE>
-<DD>Application resource directory; typically the directory in which the
+<DD>Application resource directory; typically, the directory in which the
 application executable resides but, on MacOS/X, it is the `<TT>Resources</TT>'
 directory within the Cocoa application wrapper for GUI programs.
 <P>

@@ -285,7 +285,7 @@ Space header tree is now installed (via `<SAMP>make install</SAMP>' or
 being installed directly in the top-level system directory. For example,
 assuming the default installation location, the Crystal Space headers are now
 installed in `<TT>/usr/local/include/crystalspace</TT>'. Previously, they would
-have been installed directly into `<TT>/usr/local/include</TT>'. The
+have been deposited directly into `<TT>/usr/local/include</TT>'. The
 `<SAMP>cs-config</SAMP>' utility script properly returns the new header location in
 response to the `<SAMP>--includedir</SAMP>', `<SAMP>--cflags</SAMP>', and `<SAMP>--cxxflags</SAMP>'
 options, so this relocation should be mostly transparent to external projects.
@@ -793,6 +793,28 @@ into the internal texture format (that is, uploaded to the graphics hardware).
 The Java bindings for Crystal Space have been fully integrated into the project
 and are now well-supported. It is now possible to write Crystal Space program
 entirely in Java. See section <A HREF="cs_7.8.2.html#SEC7.8.2">7.8.2 Java Bindings</A>.
+</P><P>
+
+<A NAME="SEC_19"></A>
+<H3> VFS Changes </H3>
+<!--docid::SEC_19::-->
+<P>
+
+At initialization time, VFS now merges all `<TT>vfs.cfg</TT>' files located
+during its start-up scan. It searches for a file named `<TT>vfs.cfg</TT>' in the
+application resource directory (<CODE>csGetResourceDir()</CODE>), then in the
+directory containing the application (<CODE>csGetAppDir()</CODE>), and finally in the
+Crystal Space installation directory (<CODE>csGetConfigPath()</CODE>).  The full set
+of directories mounted by VFS following the initial configuration file
+scan is the union of the entries in all of the discovered `<TT>vfs.cfg</TT>'
+files. If there are conflicting entries, then mounts and variable assignments
+specified in configuration files discovered earlier in the scan take precedence
+over those discovered later.
+</P><P>
+
+Previously, VFS stopped searching for configuration information at the
+first directory containing a file named `<TT>vfs.cfg</TT>', and loaded only that
+file.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
