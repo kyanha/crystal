@@ -353,96 +353,95 @@
 00495     <span class="keywordflow">if</span> (v.<a class="code" href="classcsDVector3.html#m2">z</a> &gt; max.<a class="code" href="classcsDVector3.html#m2">z</a>) max.<a class="code" href="classcsDVector3.html#m2">z</a> = v.<a class="code" href="classcsDVector3.html#m2">z</a>; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (v.<a class="code" href="classcsDVector3.html#m2">z</a> &lt; min.<a class="code" href="classcsDVector3.html#m2">z</a> ) min.<a class="code" href="classcsDVector3.html#m2">z</a> = v.<a class="code" href="classcsDVector3.html#m2">z</a>;
 00496   }
 00497 
-<a name="l00503"></a><a class="code" href="classcsDMath3.html#d5">00503</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">double</span> Area3 (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a> &amp;a, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a> &amp;b,
+<a name="l00503"></a><a class="code" href="classcsDMath3.html#d5">00503</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">double</span> DoubleArea3 (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a> &amp;a, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a> &amp;b,
 00504                              <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a> &amp;c)
 00505   {
 00506     <a class="code" href="classcsDVector3.html">csDVector3</a> v1 = b - a;
 00507     <a class="code" href="classcsDVector3.html">csDVector3</a> v2 = c - a;
-00508     <span class="keywordflow">return</span> ((v1.<a class="code" href="classcsDVector3.html#m1">y</a> * v2.<a class="code" href="classcsDVector3.html#m2">z</a> + v1.<a class="code" href="classcsDVector3.html#m2">z</a> * v2.<a class="code" href="classcsDVector3.html#m0">x</a> + v1.<a class="code" href="classcsDVector3.html#m0">x</a> * v2.<a class="code" href="classcsDVector3.html#m1">y</a>) -
-00509             (v1.<a class="code" href="classcsDVector3.html#m1">y</a> * v2.<a class="code" href="classcsDVector3.html#m0">x</a> + v1.<a class="code" href="classcsDVector3.html#m0">x</a> * v2.<a class="code" href="classcsDVector3.html#m2">z</a> + v1.<a class="code" href="classcsDVector3.html#m2">z</a> * v2.<a class="code" href="classcsDVector3.html#m1">y</a>));
-00510   }
-00511 
-<a name="l00517"></a><a class="code" href="classcsDMath3.html#d6">00517</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">void</span> CalcNormal (<a class="code" href="classcsDVector3.html">csDVector3</a>&amp; norm,     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v1,
-00518                                  <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v2, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v3)
-00519   {
-00520     norm = (v1-v2)%(v1-v3);
-00521   }
-00522 
-<a name="l00528"></a><a class="code" href="classcsDMath3.html#d7">00528</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> CalcNormal (<a class="code" href="classcsDVector3.html">csDVector3</a>&amp; norm,
-00529                           <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u)
-00530   { norm = u%v; <span class="comment">/* NOT v%u - vertexes are defined clockwise */</span> }
-00531 
-<a name="l00538"></a><a class="code" href="classcsDMath3.html#d8">00538</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> CalcPlane (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v2,
-00539          <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v3, <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; normal, <span class="keywordtype">double</span>&amp; D)
-00540   {
-00541     normal = (v1-v2)%(v1-v3);
-00542     D = - (normal * v1);
-00543   }
-00544 
-<a name="l00551"></a><a class="code" href="classcsDMath3.html#d9">00551</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanesEqual (<span class="keyword">const</span> csDPlane&amp; p1, <span class="keyword">const</span> csDPlane&amp; p2)
-00552   {
-00553     <span class="keywordflow">return</span> ( ( p1.<a class="code" href="classcsDPlane.html#m0">norm</a> - p2.<a class="code" href="classcsDPlane.html#m0">norm</a>) &lt; (double).001 ) &amp;&amp;
-00554              (  ABS (p1.<a class="code" href="classcsDPlane.html#m1">DD</a>-p2.<a class="code" href="classcsDPlane.html#m1">DD</a>) &lt; (double).001 );
-00555   }
-00556 
-00562   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanesClose (<span class="keyword">const</span> csDPlane&amp; p1, <span class="keyword">const</span> csDPlane&amp; p2);
-00563 };
-00564 
-<a name="l00569"></a><a class="code" href="classcsDSquaredDist.html">00569</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csDSquaredDist
-00570 {
-00571 <span class="keyword">public</span>:
-<a name="l00573"></a><a class="code" href="classcsDSquaredDist.html#d0">00573</a>   <span class="keyword">static</span> <span class="keywordtype">double</span> PointPoint (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p2)
-00574   { <span class="keywordflow">return</span> dSqr (p1.<a class="code" href="classcsDVector3.html#m0">x</a> - p2.<a class="code" href="classcsDVector3.html#m0">x</a>) + dSqr (p1.<a class="code" href="classcsDVector3.html#m1">y</a> - p2.<a class="code" href="classcsDVector3.html#m1">y</a>) + dSqr (p1.<a class="code" href="classcsDVector3.html#m2">z</a> - p2.<a class="code" href="classcsDVector3.html#m2">z</a>); }
-00575 
-00577   <span class="keyword">static</span> <span class="keywordtype">double</span> PointLine (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p,
-00578                           <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; l1, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; l2);
-00579 
-<a name="l00581"></a><a class="code" href="classcsDSquaredDist.html#d2">00581</a>   <span class="keyword">static</span> <span class="keywordtype">double</span> PointPlane (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p, <span class="keyword">const</span> csDPlane&amp; plane)
-00582   { <span class="keywordtype">double</span> r = plane.<a class="code" href="classcsDPlane.html#a14">Classify</a> (p);  <span class="keywordflow">return</span> r * r; }
-00583 
-00590   <span class="keyword">static</span> <span class="keywordtype">double</span> PointPoly (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p, <a class="code" href="classcsDVector3.html">csDVector3</a> *V, <span class="keywordtype">int</span> n,
-00591                           <span class="keyword">const</span> csDPlane&amp; plane, <span class="keywordtype">double</span> sqdist = -1);
-00592 };
-00593 
-<a name="l00599"></a><a class="code" href="classcsDIntersect3.html">00599</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csDIntersect3
-00600 {
-00601 <span class="keyword">public</span>:
-00606   <span class="keyword">static</span> <span class="keywordtype">void</span> Plane (
-00607     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
-00608     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; normal, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; a, <span class="comment">// plane</span>
-00609     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);                    <span class="comment">// intersection point</span>
-00610 
-00619   <span class="keyword">static</span> <span class="keywordtype">bool</span> Plane (
-00620     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
-00621     <span class="keywordtype">double</span> A, <span class="keywordtype">double</span> B, <span class="keywordtype">double</span> C, <span class="keywordtype">double</span> D, <span class="comment">// plane Ax+By+Cz+D=0</span>
-00622     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect,                     <span class="comment">// intersection point</span>
-00623     <span class="keywordtype">double</span>&amp; dist);                       <span class="comment">// distance from u to isect</span>
-00624 
-00633   <span class="keyword">static</span> <span class="keywordtype">bool</span> Plane (
-00634     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
-00635     <span class="keyword">const</span> csDPlane&amp; p,                     <span class="comment">// plane Ax+By+Cz+D=0</span>
-00636     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect,                     <span class="comment">// intersection point</span>
-00637     <span class="keywordtype">double</span>&amp; dist);                       <span class="comment">// distance from u to isect</span>
-00638 
-00644   <span class="keyword">static</span> <span class="keywordtype">bool</span> Planes(<span class="keyword">const</span> csDPlane&amp; p1, <span class="keyword">const</span> csDPlane&amp; p2,
-00645                      <span class="keyword">const</span> csDPlane&amp; p3, <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);
-00646 
-00653   <span class="keyword">static</span> <span class="keywordtype">double</span> Z0Plane (
-00654     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
-00655     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);                    <span class="comment">// intersection point</span>
-00656 
-00663   <span class="keyword">static</span> <span class="keywordtype">double</span> ZPlane (<span class="keywordtype">double</span> zval,      <span class="comment">// plane z = zval</span>
-00664     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
-00665     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);                    <span class="comment">// intersection point</span>
-00666 
-00671   <span class="keyword">static</span> <span class="keywordtype">double</span> XFrustum (
-00672     <span class="keywordtype">double</span> A, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);
-00673 
-00678   <span class="keyword">static</span> <span class="keywordtype">double</span> YFrustum (
-00679     <span class="keywordtype">double</span> B, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);
-00680 };
-00681 
-00684 <span class="preprocessor">#endif // __CS_MATH3D_D_H__</span>
+00508     <span class="keywordflow">return</span> (v1 % v2).<a class="code" href="classcsDVector3.html#a15">Norm</a> ();
+00509   }
+00510 
+<a name="l00516"></a><a class="code" href="classcsDMath3.html#d6">00516</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">void</span> CalcNormal (<a class="code" href="classcsDVector3.html">csDVector3</a>&amp; norm,     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v1,
+00517                                  <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v2, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v3)
+00518   {
+00519     norm = (v1-v2)%(v1-v3);
+00520   }
+00521 
+<a name="l00527"></a><a class="code" href="classcsDMath3.html#d7">00527</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> CalcNormal (<a class="code" href="classcsDVector3.html">csDVector3</a>&amp; norm,
+00528                           <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u)
+00529   { norm = u%v; <span class="comment">/* NOT v%u - vertexes are defined clockwise */</span> }
+00530 
+<a name="l00537"></a><a class="code" href="classcsDMath3.html#d8">00537</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> CalcPlane (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v2,
+00538          <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v3, <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; normal, <span class="keywordtype">double</span>&amp; D)
+00539   {
+00540     normal = (v1-v2)%(v1-v3);
+00541     D = - (normal * v1);
+00542   }
+00543 
+<a name="l00550"></a><a class="code" href="classcsDMath3.html#d9">00550</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanesEqual (<span class="keyword">const</span> csDPlane&amp; p1, <span class="keyword">const</span> csDPlane&amp; p2)
+00551   {
+00552     <span class="keywordflow">return</span> ( ( p1.<a class="code" href="classcsDPlane.html#m0">norm</a> - p2.<a class="code" href="classcsDPlane.html#m0">norm</a>) &lt; (double).001 ) &amp;&amp;
+00553              (  ABS (p1.<a class="code" href="classcsDPlane.html#m1">DD</a>-p2.<a class="code" href="classcsDPlane.html#m1">DD</a>) &lt; (double).001 );
+00554   }
+00555 
+00561   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanesClose (<span class="keyword">const</span> csDPlane&amp; p1, <span class="keyword">const</span> csDPlane&amp; p2);
+00562 };
+00563 
+<a name="l00568"></a><a class="code" href="classcsDSquaredDist.html">00568</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csDSquaredDist
+00569 {
+00570 <span class="keyword">public</span>:
+<a name="l00572"></a><a class="code" href="classcsDSquaredDist.html#d0">00572</a>   <span class="keyword">static</span> <span class="keywordtype">double</span> PointPoint (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p2)
+00573   { <span class="keywordflow">return</span> dSqr (p1.<a class="code" href="classcsDVector3.html#m0">x</a> - p2.<a class="code" href="classcsDVector3.html#m0">x</a>) + dSqr (p1.<a class="code" href="classcsDVector3.html#m1">y</a> - p2.<a class="code" href="classcsDVector3.html#m1">y</a>) + dSqr (p1.<a class="code" href="classcsDVector3.html#m2">z</a> - p2.<a class="code" href="classcsDVector3.html#m2">z</a>); }
+00574 
+00576   <span class="keyword">static</span> <span class="keywordtype">double</span> PointLine (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p,
+00577                           <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; l1, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; l2);
+00578 
+<a name="l00580"></a><a class="code" href="classcsDSquaredDist.html#d2">00580</a>   <span class="keyword">static</span> <span class="keywordtype">double</span> PointPlane (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p, <span class="keyword">const</span> csDPlane&amp; plane)
+00581   { <span class="keywordtype">double</span> r = plane.<a class="code" href="classcsDPlane.html#a14">Classify</a> (p);  <span class="keywordflow">return</span> r * r; }
+00582 
+00589   <span class="keyword">static</span> <span class="keywordtype">double</span> PointPoly (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; p, <a class="code" href="classcsDVector3.html">csDVector3</a> *V, <span class="keywordtype">int</span> n,
+00590                           <span class="keyword">const</span> csDPlane&amp; plane, <span class="keywordtype">double</span> sqdist = -1);
+00591 };
+00592 
+<a name="l00598"></a><a class="code" href="classcsDIntersect3.html">00598</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csDIntersect3
+00599 {
+00600 <span class="keyword">public</span>:
+00605   <span class="keyword">static</span> <span class="keywordtype">void</span> Plane (
+00606     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
+00607     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; normal, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; a, <span class="comment">// plane</span>
+00608     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);                    <span class="comment">// intersection point</span>
+00609 
+00618   <span class="keyword">static</span> <span class="keywordtype">bool</span> Plane (
+00619     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
+00620     <span class="keywordtype">double</span> A, <span class="keywordtype">double</span> B, <span class="keywordtype">double</span> C, <span class="keywordtype">double</span> D, <span class="comment">// plane Ax+By+Cz+D=0</span>
+00621     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect,                     <span class="comment">// intersection point</span>
+00622     <span class="keywordtype">double</span>&amp; dist);                       <span class="comment">// distance from u to isect</span>
+00623 
+00632   <span class="keyword">static</span> <span class="keywordtype">bool</span> Plane (
+00633     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
+00634     <span class="keyword">const</span> csDPlane&amp; p,                     <span class="comment">// plane Ax+By+Cz+D=0</span>
+00635     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect,                     <span class="comment">// intersection point</span>
+00636     <span class="keywordtype">double</span>&amp; dist);                       <span class="comment">// distance from u to isect</span>
+00637 
+00643   <span class="keyword">static</span> <span class="keywordtype">bool</span> Planes(<span class="keyword">const</span> csDPlane&amp; p1, <span class="keyword">const</span> csDPlane&amp; p2,
+00644                      <span class="keyword">const</span> csDPlane&amp; p3, <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);
+00645 
+00652   <span class="keyword">static</span> <span class="keywordtype">double</span> Z0Plane (
+00653     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
+00654     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);                    <span class="comment">// intersection point</span>
+00655 
+00662   <span class="keyword">static</span> <span class="keywordtype">double</span> ZPlane (<span class="keywordtype">double</span> zval,      <span class="comment">// plane z = zval</span>
+00663     <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <span class="comment">// segment</span>
+00664     <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);                    <span class="comment">// intersection point</span>
+00665 
+00670   <span class="keyword">static</span> <span class="keywordtype">double</span> XFrustum (
+00671     <span class="keywordtype">double</span> A, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);
+00672 
+00677   <span class="keyword">static</span> <span class="keywordtype">double</span> YFrustum (
+00678     <span class="keywordtype">double</span> B, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v, <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; isect);
+00679 };
+00680 
+00683 <span class="preprocessor">#endif // __CS_MATH3D_D_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
