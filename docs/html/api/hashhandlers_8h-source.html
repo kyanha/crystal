@@ -63,48 +63,49 @@
 00062   <span class="keywordtype">char</span>* str;
 00063 
 00064 <span class="keyword">public</span>:
-00065   <a class="code" href="classcsStrKey.html">csStrKey</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s) { str = <a class="code" href="group__util.html#a72">csStrNew</a> (s); }
-00066   <a class="code" href="classcsStrKey.html">csStrKey</a> (<span class="keyword">const</span> <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; c) { str = <a class="code" href="group__util.html#a72">csStrNew</a> (c.<a class="code" href="classcsStrKey.html#o0">str</a>); }
-00067   ~<a class="code" href="classcsStrKey.html">csStrKey</a> () { <span class="keyword">delete</span>[] str; }
-00068   <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; o)
-00069   {
-00070     <span class="keyword">delete</span>[] str; str = <a class="code" href="group__util.html#a72">csStrNew</a> (o.<a class="code" href="classcsStrKey.html#o0">str</a>);
-00071     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00072   }
-00073   operator const char* ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> str; }
-00074 };
-00075 
-00082 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00083"></a><a class="code" href="classcsRefHashKeyHandler.html">00083</a> <span class="keyword">class </span><a class="code" href="classcsRefHashKeyHandler.html">csRefHashKeyHandler</a>
-00084 {
-00085 <span class="keyword">public</span>:
-00086   <span class="keyword">static</span> uint32 ComputeHash (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key)
-00087   {
-00088     <span class="keywordflow">return</span> (uint32)((T*)key);
-00089   }
-00090 
-00091   <span class="keyword">static</span> <span class="keywordtype">bool</span> CompareKeys (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key2)
-00092   {
-00093     <span class="keywordflow">return</span> ((T*)key1 == (T*)key2);
-00094   }
-00095 };
-00096 
-00100 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00101"></a><a class="code" href="classcsStructKeyHandler.html">00101</a> <span class="keyword">class </span><a class="code" href="classcsStructKeyHandler.html">csStructKeyHandler</a>
-00102 {
-00103 <span class="keyword">public</span>:
-00104   <span class="keyword">static</span> uint32 ComputeHash (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key)
-00105   {
-00106     <span class="keywordflow">return</span> csHashCompute ((<span class="keywordtype">char</span>*)&amp;key, <span class="keyword">sizeof</span> (T));
-00107   }
-00108 
-00109   <span class="keyword">static</span> <span class="keywordtype">bool</span> CompareKeys (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key2)
-00110   {
-00111     <span class="keywordflow">return</span> (memcmp (&amp;key1, &amp;key2, <span class="keyword">sizeof</span> (T)) == 0);
-00112   }
-00113 };
-00114 
-00115 <span class="preprocessor">#endif // __CS_UTIL_HASHHANDLERS_H__</span>
+00065   <a class="code" href="classcsStrKey.html">csStrKey</a> () { str = 0; }
+00066   <a class="code" href="classcsStrKey.html">csStrKey</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s) { str = <a class="code" href="group__util.html#a72">csStrNew</a> (s); }
+00067   <a class="code" href="classcsStrKey.html">csStrKey</a> (<span class="keyword">const</span> <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; c) { str = <a class="code" href="group__util.html#a72">csStrNew</a> (c.<a class="code" href="classcsStrKey.html#o0">str</a>); }
+00068   ~<a class="code" href="classcsStrKey.html">csStrKey</a> () { <span class="keyword">delete</span>[] str; }
+00069   <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; o)
+00070   {
+00071     <span class="keyword">delete</span>[] str; str = <a class="code" href="group__util.html#a72">csStrNew</a> (o.<a class="code" href="classcsStrKey.html#o0">str</a>);
+00072     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00073   }
+00074   operator const char* ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> str; }
+00075 };
+00076 
+00083 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00084"></a><a class="code" href="classcsRefHashKeyHandler.html">00084</a> <span class="keyword">class </span><a class="code" href="classcsRefHashKeyHandler.html">csRefHashKeyHandler</a>
+00085 {
+00086 <span class="keyword">public</span>:
+00087   <span class="keyword">static</span> uint32 ComputeHash (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key)
+00088   {
+00089     <span class="keywordflow">return</span> (uint32)((T*)key);
+00090   }
+00091 
+00092   <span class="keyword">static</span> <span class="keywordtype">bool</span> CompareKeys (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key2)
+00093   {
+00094     <span class="keywordflow">return</span> ((T*)key1 == (T*)key2);
+00095   }
+00096 };
+00097 
+00101 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00102"></a><a class="code" href="classcsStructKeyHandler.html">00102</a> <span class="keyword">class </span><a class="code" href="classcsStructKeyHandler.html">csStructKeyHandler</a>
+00103 {
+00104 <span class="keyword">public</span>:
+00105   <span class="keyword">static</span> uint32 ComputeHash (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key)
+00106   {
+00107     <span class="keywordflow">return</span> csHashCompute ((<span class="keywordtype">char</span>*)&amp;key, <span class="keyword">sizeof</span> (T));
+00108   }
+00109 
+00110   <span class="keyword">static</span> <span class="keywordtype">bool</span> CompareKeys (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key2)
+00111   {
+00112     <span class="keywordflow">return</span> (memcmp (&amp;key1, &amp;key2, <span class="keyword">sizeof</span> (T)) == 0);
+00113   }
+00114 };
+00115 
+00116 <span class="preprocessor">#endif // __CS_UTIL_HASHHANDLERS_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
