@@ -62,7 +62,7 @@ implementation is given; only method declarations.  The implementation will
 come later in the code of the plugin.
 </P><P>
 
-This concept completely analogous to the Java interface mechanism.  The
+This concept is completely analogous to the Java interface mechanism.  The
 advantage of using this paradigm is that you have a clear separation between
 the API and the implementation.  This allows one to easily replace an
 implementation of some API or even provide multiple implementations (for
@@ -83,10 +83,10 @@ class csVector3;
 SCF_VERSION (iMyApi, 0, 0, 1);
 
 /**
-* This is the API for our plugin. I recommend
-* to use better comments then this one here in a
-* real situation.
-*/
+ * This is the API for our plugin. It is recommended
+ * that you use better comments than this one in a
+ * real situation.
+ */
 struct iMyApi : public iBase
 {
 /// Do something.
@@ -134,9 +134,9 @@ is easy to see that they refer to SCF interfaces.
 </P><P>
 
 We inherit from `<SAMP>iBase</SAMP>' because it is the basis of all SCF
-interfaces.  All SCF interfaces need to inherit from `<SAMP>iBase</SAMP>'.  This
-will ensure that we have reference counting (more on that later) and also takes
-care of the other internal SCF issues.
+interfaces.  All SCF interfaces must inherit from `<SAMP>iBase</SAMP>' either
+directly or indirectly.  This will ensure that we have reference counting (more
+on that later) and also takes care of the other internal SCF issues.
 </P><P>
 
 In that structure we define two methods: <CODE>DoSomething()</CODE> and
@@ -215,12 +215,14 @@ public:
 #endif // __GAME_MYPLUG_H__
 </pre></td></tr></table></P><P>
 
-This requires a little explanation.  The CRYSTAL SPACE framework requires
-that every SCF class implement the `<SAMP>iComponent</SAMP>' interface.  This
-interface has a single method, <CODE>Initialize()</CODE>, with which the class will
-be initialized after it is instantiated.  This gives the instance a chance to
-perform various initialization operations and it also provides the instance
-with a pointer to the global object registry.
+This requires a little explanation.  The Crystal Space plugin framework
+requires that every <EM>named</EM> SCF class which will be requested by name
+from a plugin module via the Crystal Space <EM>plugin manager/loader</EM> must
+implement the `<SAMP>iComponent</SAMP>' interface.  This interface has a single method,
+<CODE>Initialize()</CODE>, with which the class will be initialized after it is
+instantiated.  This gives the instance a chance to perform various
+initialization operations and it also provides the instance with a pointer to
+the global object registry.
 </P><P>
 
 But, our plugin also needs to implement its own native `<SAMP>iMyApi</SAMP>' interface.
