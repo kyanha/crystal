@@ -25,6 +25,8 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Base implementation of a generic event handler.</em> <a href="classcsBaseEventHandler.html#_details">More...</a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>struct &nbsp;</td><td valign=bottom><a class="el" href="structiEvent.html">iEvent</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>This interface describes any system event.</em> <a href="structiEvent.html#_details">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>struct &nbsp;</td><td valign=bottom><a class="el" href="structiEventAttributeIterator.html">iEventAttributeIterator</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Event attribute iterator.</em> <a href="structiEventAttributeIterator.html#_details">More...</a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>struct &nbsp;</td><td valign=bottom><a class="el" href="structcsEventCommandData.html">csEventCommandData</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Command event data in <a class="el" href="structiEvent.html">iEvent</a>.</em> <a href="structcsEventCommandData.html#_details">More...</a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>struct &nbsp;</td><td valign=bottom><a class="el" href="structiEventCord.html">iEventCord</a></td></tr>
@@ -338,6 +340,7 @@ The system driver checks it and if several event plugs generates conflicting typ
 <a class="el" href="group__event__handling.html#a131a152">csKeyModifierNumAny</a> =  0x1f
  }</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Modifier numbers.</em> <a href="#a131">More...</a><em></em></font><br><br></td></tr>
+<tr><td colspan=2><br><h2>[NOHEADER]</h2></td></tr>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a8">CS_MAX_MOUSE_BUTTONS</a>&nbsp;&nbsp;&nbsp;10</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Maximal number of mouse buttons supported.</em> <a href="#a8"></a><em></em></font><br><br></td></tr>
@@ -410,6 +413,34 @@ The system driver checks it and if several event plugs generates conflicting typ
 <br>
  }</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>General Command Codes.</em> <a href="#a133">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a134">csEventError</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a0">csEventErrNone</a>, 
+<a class="el" href="group__event__handling.html#a134a1">csEventErrLossy</a>, 
+<a class="el" href="group__event__handling.html#a134a2">csEventErrNotFound</a>, 
+<a class="el" href="group__event__handling.html#a134a3">csEventErrMismatchInt</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a136">csEventErrMismatchUInt</a>, 
+<a class="el" href="group__event__handling.html#a134a137">csEventErrMismatchFloat</a>, 
+<a class="el" href="group__event__handling.html#a134a138">csEventErrMismatchBuffer</a>, 
+<a class="el" href="group__event__handling.html#a134a139">csEventErrMismatchEvent</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a140">csEventErrMismatchIBase</a>, 
+<a class="el" href="group__event__handling.html#a134a9">csEventErrUhOhUnknown</a>
+<br>
+ }</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Error codes for event attribute retrieval.</em> <a href="#a134">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a135">csEventAttributeType</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a135a10">csEventAttrUnknown</a>, 
+<a class="el" href="group__event__handling.html#a135a11">csEventAttrInt</a>, 
+<a class="el" href="group__event__handling.html#a135a12">csEventAttrUInt</a>, 
+<a class="el" href="group__event__handling.html#a135a13">csEventAttrFloat</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a135a14">csEventAttrDatabuffer</a>, 
+<a class="el" href="group__event__handling.html#a135a15">csEventAttrEvent</a>, 
+<a class="el" href="group__event__handling.html#a135a16">csEventAttriBase</a>
+<br>
+ }</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Various atteibute data types supported by the event system (<a class="el" href="structiEvent.html">iEvent</a>).</em> <a href="#a135">More...</a><em></em></font><br><br></td></tr>
 </table>
 <h3><a name="Keyboard">Keyboard events</a>
 </h3> Keyboard events are emitted when the user does something with the keyboard - presses down a key ("key down" events), holds it down (more "key down"  events in a specific interval - "auto-repeat") and releases it ("key up".) 
@@ -491,7 +522,7 @@ Check if a event is any input event.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00158">158</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00160">160</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a29" doxytag="evdefs.h::CS_IS_JOYSTICK_EVENT"></a><p>
@@ -522,7 +553,7 @@ Check if a event is a joystick event.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00156">156</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00158">158</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a27" doxytag="evdefs.h::CS_IS_KEYBOARD_EVENT"></a><p>
@@ -553,7 +584,7 @@ Check if a event is a keyboard event.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00152">152</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00154">154</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a28" doxytag="evdefs.h::CS_IS_MOUSE_EVENT"></a><p>
@@ -584,7 +615,7 @@ Check if a event is a mouse event.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00154">154</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00156">156</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a10" doxytag="csinput.h::CS_MAX_JOYSTICK_BUTTONS"></a><p>
@@ -694,7 +725,7 @@ Event flag: Ignore `true' returned from HandleEvent which says that event has be
 <p>
 Normally this is set only for csevBroadcast events. 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00171">171</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00173">173</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a126" doxytag="evdefs.h::CSEVTYPE_Joystick"></a><p>
@@ -720,7 +751,7 @@ Joystick events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00497">497</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00501">501</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a124" doxytag="evdefs.h::CSEVTYPE_Keyboard"></a><p>
@@ -746,7 +777,7 @@ Keyboard events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00493">493</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00497">497</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a125" doxytag="evdefs.h::CSEVTYPE_Mouse"></a><p>
@@ -772,7 +803,7 @@ Mouse events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00495">495</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00499">499</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a99" doxytag="evdefs.h::CSKEY_ALT"></a><p>
@@ -798,7 +829,7 @@ Undistinguished Alt.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00412">412</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00416">416</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a95" doxytag="evdefs.h::CSKEY_ALT_FIRST"></a><p>
@@ -824,7 +855,7 @@ Lowest code of the Alt modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00403">403</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00407">407</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a96" doxytag="evdefs.h::CSKEY_ALT_LAST"></a><p>
@@ -850,7 +881,7 @@ Highest code of the Alt modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00405">405</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00409">409</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a97" doxytag="evdefs.h::CSKEY_ALT_LEFT"></a><p>
@@ -876,7 +907,7 @@ Left Alt.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00408">408</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00412">412</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a94" doxytag="evdefs.h::CSKEY_ALT_NUM"></a><p>
@@ -907,7 +938,7 @@ Construct a key code for the Alt modifier key number <em>n</em>.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00401">401</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00405">405</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a98" doxytag="evdefs.h::CSKEY_ALT_RIGHT"></a><p>
@@ -933,7 +964,7 @@ Right Alt.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00410">410</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00414">414</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a43" doxytag="evdefs.h::CSKEY_BACKSPACE"></a><p>
@@ -959,7 +990,7 @@ Back-space key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00279">279</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00283">283</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a122" doxytag="evdefs.h::CSKEY_CAPSLOCK"></a><p>
@@ -985,7 +1016,7 @@ CapsLock key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00468">468</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00472">472</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a109" doxytag="evdefs.h::CSKEY_CENTER"></a><p>
@@ -1011,7 +1042,7 @@ Keypad "Center" (5).
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00437">437</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00441">441</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a60" doxytag="evdefs.h::CSKEY_CONTEXT"></a><p>
@@ -1037,7 +1068,7 @@ The "Context menu" key on Windows keyboards.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00316">316</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00320">320</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a93" doxytag="evdefs.h::CSKEY_CTRL"></a><p>
@@ -1063,7 +1094,7 @@ Undistinguished Ctrl.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00398">398</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00402">402</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a89" doxytag="evdefs.h::CSKEY_CTRL_FIRST"></a><p>
@@ -1089,7 +1120,7 @@ Lowest code of the Ctrl modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00389">389</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00393">393</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a90" doxytag="evdefs.h::CSKEY_CTRL_LAST"></a><p>
@@ -1115,7 +1146,7 @@ Highest code of the Ctrl modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00391">391</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00395">395</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a91" doxytag="evdefs.h::CSKEY_CTRL_LEFT"></a><p>
@@ -1141,7 +1172,7 @@ Left Ctrl.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00394">394</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00398">398</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a88" doxytag="evdefs.h::CSKEY_CTRL_NUM"></a><p>
@@ -1172,7 +1203,7 @@ Construct a key code for the Ctrl modifier key number <em>n</em>.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00387">387</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00391">391</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a92" doxytag="evdefs.h::CSKEY_CTRL_RIGHT"></a><p>
@@ -1198,7 +1229,7 @@ Right Ctrl.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00396">396</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00400">400</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a59" doxytag="evdefs.h::CSKEY_DEL"></a><p>
@@ -1224,7 +1255,7 @@ Delete key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00314">314</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00318">318</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a51" doxytag="evdefs.h::CSKEY_DOWN"></a><p>
@@ -1250,7 +1281,7 @@ Down arrow key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00298">298</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00302">302</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a57" doxytag="evdefs.h::CSKEY_END"></a><p>
@@ -1276,7 +1307,7 @@ End key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00310">310</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00314">314</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a41" doxytag="evdefs.h::CSKEY_ENTER"></a><p>
@@ -1302,7 +1333,7 @@ Enter key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00275">275</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00279">279</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a40" doxytag="evdefs.h::CSKEY_ESC"></a><p>
@@ -1328,7 +1359,7 @@ ESCape key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00273">273</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00277">277</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a63" doxytag="evdefs.h::CSKEY_F1"></a><p>
@@ -1354,7 +1385,7 @@ Function key F1.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00322">322</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00326">326</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a72" doxytag="evdefs.h::CSKEY_F10"></a><p>
@@ -1380,7 +1411,7 @@ Function key F10.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00340">340</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00344">344</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a73" doxytag="evdefs.h::CSKEY_F11"></a><p>
@@ -1406,7 +1437,7 @@ Function key F11.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00342">342</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00346">346</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a74" doxytag="evdefs.h::CSKEY_F12"></a><p>
@@ -1432,7 +1463,7 @@ Function key F12.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00344">344</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00348">348</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a64" doxytag="evdefs.h::CSKEY_F2"></a><p>
@@ -1458,7 +1489,7 @@ Function key F2.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00324">324</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00328">328</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a65" doxytag="evdefs.h::CSKEY_F3"></a><p>
@@ -1484,7 +1515,7 @@ Function key F3.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00326">326</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00330">330</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a66" doxytag="evdefs.h::CSKEY_F4"></a><p>
@@ -1510,7 +1541,7 @@ Function key F4.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00328">328</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00332">332</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a67" doxytag="evdefs.h::CSKEY_F5"></a><p>
@@ -1536,7 +1567,7 @@ Function key F5.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00330">330</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00334">334</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a68" doxytag="evdefs.h::CSKEY_F6"></a><p>
@@ -1562,7 +1593,7 @@ Function key F6.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00332">332</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00336">336</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a69" doxytag="evdefs.h::CSKEY_F7"></a><p>
@@ -1588,7 +1619,7 @@ Function key F7.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00334">334</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00338">338</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a70" doxytag="evdefs.h::CSKEY_F8"></a><p>
@@ -1614,7 +1645,7 @@ Function key F8.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00336">336</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00340">340</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a71" doxytag="evdefs.h::CSKEY_F9"></a><p>
@@ -1640,7 +1671,7 @@ Function key F9.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00338">338</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00342">342</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a56" doxytag="evdefs.h::CSKEY_HOME"></a><p>
@@ -1666,7 +1697,7 @@ Home key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00308">308</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00312">312</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a58" doxytag="evdefs.h::CSKEY_INS"></a><p>
@@ -1692,7 +1723,7 @@ Insert key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00312">312</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00316">316</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a79" doxytag="evdefs.h::CSKEY_IS_MODIFIER"></a><p>
@@ -1725,7 +1756,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00312">312</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00359">359</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00363">363</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a102" doxytag="evdefs.h::CSKEY_IS_PAD_KEY"></a><p>
@@ -1756,7 +1787,7 @@ Helper macro to test whether a key code identifies a keypad key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00420">420</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00424">424</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a48" doxytag="evdefs.h::CSKEY_IS_SPECIAL"></a><p>
@@ -1787,7 +1818,7 @@ Helper macro to determine whether a key code identifies a special key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00290">290</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00294">294</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a52" doxytag="evdefs.h::CSKEY_LEFT"></a><p>
@@ -1813,7 +1844,7 @@ Left arrow key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00300">300</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00304">304</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a78" doxytag="evdefs.h::CSKEY_MODIFIER"></a><p>
@@ -1847,7 +1878,7 @@ Helper macro to construct a modifiers key code.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00356">356</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00360">360</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a75" doxytag="evdefs.h::CSKEY_MODIFIER_FIRST"></a><p>
@@ -1873,7 +1904,7 @@ The lowest code of a modifier key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00347">347</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00351">351</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a76" doxytag="evdefs.h::CSKEY_MODIFIER_LAST"></a><p>
@@ -1899,7 +1930,7 @@ The highest code of a modifier key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00349">349</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00353">353</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a81" doxytag="evdefs.h::CSKEY_MODIFIER_NUM"></a><p>
@@ -1931,7 +1962,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00349">349</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00368">368</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00372">372</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a80" doxytag="evdefs.h::CSKEY_MODIFIER_TYPE"></a><p>
@@ -1963,7 +1994,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00368">368</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00364">364</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00368">368</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a77" doxytag="evdefs.h::CSKEY_MODIFIERTYPE_SHIFT"></a><p>
@@ -1989,7 +2020,7 @@ ESCape key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00354">354</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00358">358</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a114" doxytag="evdefs.h::CSKEY_PAD0"></a><p>
@@ -2015,7 +2046,7 @@ Keypad 0.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00447">447</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00451">451</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a104" doxytag="evdefs.h::CSKEY_PAD1"></a><p>
@@ -2041,7 +2072,7 @@ Keypad 1.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00427">427</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00431">431</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a105" doxytag="evdefs.h::CSKEY_PAD2"></a><p>
@@ -2067,7 +2098,7 @@ Keypad 2.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00429">429</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00433">433</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a106" doxytag="evdefs.h::CSKEY_PAD3"></a><p>
@@ -2093,7 +2124,7 @@ Keypad 3.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00431">431</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00435">435</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a107" doxytag="evdefs.h::CSKEY_PAD4"></a><p>
@@ -2119,7 +2150,7 @@ Keypad 4.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00433">433</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00437">437</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a108" doxytag="evdefs.h::CSKEY_PAD5"></a><p>
@@ -2145,7 +2176,7 @@ Keypad 5.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00435">435</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00439">439</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a110" doxytag="evdefs.h::CSKEY_PAD6"></a><p>
@@ -2171,7 +2202,7 @@ Keypad 6.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00439">439</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00443">443</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a111" doxytag="evdefs.h::CSKEY_PAD7"></a><p>
@@ -2197,7 +2228,7 @@ Keypad 7.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00441">441</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00445">445</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a112" doxytag="evdefs.h::CSKEY_PAD8"></a><p>
@@ -2223,7 +2254,7 @@ Keypad 8.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00443">443</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00447">447</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a113" doxytag="evdefs.h::CSKEY_PAD9"></a><p>
@@ -2249,7 +2280,7 @@ Keypad 9.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00445">445</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00449">449</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a100" doxytag="evdefs.h::CSKEY_PAD_FLAG"></a><p>
@@ -2275,7 +2306,7 @@ Bit that is set if a key is from the keypad.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00415">415</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00419">419</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a101" doxytag="evdefs.h::CSKEY_PAD_KEY"></a><p>
@@ -2306,7 +2337,7 @@ Helper macro to construct a keypade key code.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00417">417</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00421">421</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a103" doxytag="evdefs.h::CSKEY_PAD_TO_NORMAL"></a><p>
@@ -2337,7 +2368,7 @@ Helper macro to convert a 'pad' key code into a 'normal' special key code.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00424">424</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00428">428</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a115" doxytag="evdefs.h::CSKEY_PADDECIMAL"></a><p>
@@ -2363,7 +2394,7 @@ Keypad Decimal ('.' on English keyboards).
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00449">449</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00453">453</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a116" doxytag="evdefs.h::CSKEY_PADDIV"></a><p>
@@ -2389,7 +2420,7 @@ Keypad Divide.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00451">451</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00455">455</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a120" doxytag="evdefs.h::CSKEY_PADENTER"></a><p>
@@ -2415,7 +2446,7 @@ Keypad Enter.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00459">459</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00463">463</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a118" doxytag="evdefs.h::CSKEY_PADMINUS"></a><p>
@@ -2441,7 +2472,7 @@ Keypad Minus.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00455">455</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00459">459</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a117" doxytag="evdefs.h::CSKEY_PADMULT"></a><p>
@@ -2467,7 +2498,7 @@ Keypad Multiply.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00453">453</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00457">457</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a121" doxytag="evdefs.h::CSKEY_PADNUM"></a><p>
@@ -2493,7 +2524,7 @@ NumLock key.
 <p>
 Both a modifier and a keypad key. 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00465">465</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00469">469</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a119" doxytag="evdefs.h::CSKEY_PADPLUS"></a><p>
@@ -2519,7 +2550,7 @@ Keypad Plus.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00457">457</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00461">461</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a62" doxytag="evdefs.h::CSKEY_PAUSE"></a><p>
@@ -2545,7 +2576,7 @@ The Pause key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00320">320</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00324">324</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a55" doxytag="evdefs.h::CSKEY_PGDN"></a><p>
@@ -2571,7 +2602,7 @@ PageDown key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00306">306</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00310">310</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a54" doxytag="evdefs.h::CSKEY_PGUP"></a><p>
@@ -2597,7 +2628,7 @@ PageUp key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00304">304</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00308">308</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a61" doxytag="evdefs.h::CSKEY_PRINTSCREEN"></a><p>
@@ -2623,7 +2654,7 @@ The Print Screen key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00318">318</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00322">322</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a53" doxytag="evdefs.h::CSKEY_RIGHT"></a><p>
@@ -2649,7 +2680,7 @@ Right arrow key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00302">302</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00306">306</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a123" doxytag="evdefs.h::CSKEY_SCROLLLOCK"></a><p>
@@ -2675,7 +2706,7 @@ ScrollLock key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00471">471</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00475">475</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a87" doxytag="evdefs.h::CSKEY_SHIFT"></a><p>
@@ -2701,7 +2732,7 @@ Undistinguished Shift.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00384">384</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00388">388</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a83" doxytag="evdefs.h::CSKEY_SHIFT_FIRST"></a><p>
@@ -2727,7 +2758,7 @@ Lowest code of the Shift modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00375">375</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00379">379</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a84" doxytag="evdefs.h::CSKEY_SHIFT_LAST"></a><p>
@@ -2753,7 +2784,7 @@ Highest code of the Shift modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00377">377</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00381">381</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a85" doxytag="evdefs.h::CSKEY_SHIFT_LEFT"></a><p>
@@ -2779,7 +2810,7 @@ Left Shift.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00380">380</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00384">384</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a82" doxytag="evdefs.h::CSKEY_SHIFT_NUM"></a><p>
@@ -2810,7 +2841,7 @@ Construct a key code for the Shift modifier key number <em>n</em>.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00373">373</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00377">377</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a86" doxytag="evdefs.h::CSKEY_SHIFT_RIGHT"></a><p>
@@ -2836,7 +2867,7 @@ Right Shift.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00382">382</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00386">386</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a44" doxytag="evdefs.h::CSKEY_SPACE"></a><p>
@@ -2862,7 +2893,7 @@ Space key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00281">281</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00285">285</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a47" doxytag="evdefs.h::CSKEY_SPECIAL"></a><p>
@@ -2893,7 +2924,7 @@ Helper macro to construct a special key code.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00288">288</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00292">292</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a45" doxytag="evdefs.h::CSKEY_SPECIAL_FIRST"></a><p>
@@ -2919,7 +2950,7 @@ The lowest code of a special key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00284">284</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00288">288</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a46" doxytag="evdefs.h::CSKEY_SPECIAL_LAST"></a><p>
@@ -2945,7 +2976,7 @@ The highest code of a special key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00286">286</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00290">290</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a49" doxytag="evdefs.h::CSKEY_SPECIAL_NUM"></a><p>
@@ -2976,7 +3007,7 @@ Helper macro to determine the parameter that was given to <a class="el" href="gr
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00293">293</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00297">297</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a42" doxytag="evdefs.h::CSKEY_TAB"></a><p>
@@ -3002,7 +3033,7 @@ Tab key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00277">277</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00281">281</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a50" doxytag="evdefs.h::CSKEY_UP"></a><p>
@@ -3028,7 +3059,7 @@ Up arrow key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00296">296</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00300">300</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a39" doxytag="evdefs.h::CSMASK_ALLMODIFIERS"></a><p>
@@ -3055,7 +3086,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00296">296</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00257">257</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00261">261</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a35" doxytag="evdefs.h::CSMASK_ALLSHIFTS"></a><p>
@@ -3081,7 +3112,7 @@ All shift keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00248">248</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00252">252</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a34" doxytag="evdefs.h::CSMASK_ALT"></a><p>
@@ -3107,7 +3138,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00248">248</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00246">246</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00250">250</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a23" doxytag="evdefs.h::CSMASK_Broadcast"></a><p>
@@ -3133,7 +3164,7 @@ Broadcast message events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00137">137</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00139">139</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a36" doxytag="evdefs.h::CSMASK_CAPSLOCK"></a><p>
@@ -3159,7 +3190,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00137">137</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00251">251</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00255">255</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a22" doxytag="evdefs.h::CSMASK_Command"></a><p>
@@ -3185,7 +3216,7 @@ Command message events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00135">135</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00137">137</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a33" doxytag="evdefs.h::CSMASK_CTRL"></a><p>
@@ -3211,7 +3242,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00135">135</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00244">244</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00248">248</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a12" doxytag="evdefs.h::CSMASK_FrameProcess"></a><p>
@@ -3237,7 +3268,7 @@ The plugin will be called at the start of every frame and at the end of every fr
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00115">115</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00117">117</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a26" doxytag="evdefs.h::CSMASK_Input"></a><p>
@@ -3263,7 +3294,7 @@ This mask identifies any input evemt.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00147">147</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00149">149</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a25" doxytag="evdefs.h::CSMASK_Joystick"></a><p>
@@ -3289,7 +3320,7 @@ This mask identifies any joystick event.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00144">144</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00146">146</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a20" doxytag="evdefs.h::CSMASK_JoystickDown"></a><p>
@@ -3315,7 +3346,7 @@ Joystick button down events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00131">131</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00133">133</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a19" doxytag="evdefs.h::CSMASK_JoystickMove"></a><p>
@@ -3341,7 +3372,7 @@ Joystick movement events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00129">129</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00131">131</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a21" doxytag="evdefs.h::CSMASK_JoystickUp"></a><p>
@@ -3367,7 +3398,7 @@ Joystick button up events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00133">133</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00135">135</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a13" doxytag="evdefs.h::CSMASK_Keyboard"></a><p>
@@ -3393,7 +3424,7 @@ Keyboard events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00117">117</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00119">119</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a24" doxytag="evdefs.h::CSMASK_Mouse"></a><p>
@@ -3420,7 +3451,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00117">117</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00140">140</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00142">142</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a17" doxytag="evdefs.h::CSMASK_MouseClick"></a><p>
@@ -3446,7 +3477,7 @@ Mouse click events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00125">125</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00127">127</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a18" doxytag="evdefs.h::CSMASK_MouseDoubleClick"></a><p>
@@ -3472,7 +3503,7 @@ Mouse double click events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00127">127</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00129">129</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a15" doxytag="evdefs.h::CSMASK_MouseDown"></a><p>
@@ -3498,7 +3529,7 @@ Mouse down events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00121">121</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00123">123</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a14" doxytag="evdefs.h::CSMASK_MouseMove"></a><p>
@@ -3524,7 +3555,7 @@ Mouse move events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00119">119</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00121">121</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a16" doxytag="evdefs.h::CSMASK_MouseUp"></a><p>
@@ -3550,7 +3581,7 @@ Mouse up events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00123">123</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00125">125</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a11" doxytag="evdefs.h::CSMASK_Nothing"></a><p>
@@ -3576,7 +3607,7 @@ Event mask: Empty event.
 <p>
 If a plugin registers to receive this kind of events via iEventQueue::RegisterListener(plugin, CSMASK_Nothing) this has a special meaning: the plugin will be called at the start of every frame and at the end of every frame with an csevBroadcast event with the Event.Command.Code equal to either cscmdPreProcess or cscmdPostProcess. 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00109">109</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00111">111</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a37" doxytag="evdefs.h::CSMASK_NUMLOCK"></a><p>
@@ -3602,7 +3633,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00109">109</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00253">253</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00257">257</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a38" doxytag="evdefs.h::CSMASK_SCROLLLOCK"></a><p>
@@ -3628,7 +3659,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00253">253</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00255">255</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00259">259</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a32" doxytag="evdefs.h::CSMASK_SHIFT"></a><p>
@@ -3654,7 +3685,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00255">255</a> of 
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00242">242</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00246">246</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <hr><h2>Typedef Documentation</h2>
@@ -3934,7 +3965,7 @@ Broadcast indicating that the display canvas has just become visible (such as be
 </dl>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00518">518</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00522">522</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a128" doxytag="evdefs.h::_csEventType"></a><p>
@@ -3984,8 +4015,10 @@ A joystick button has been pressed.</td></tr>
 <tr><td valign=top><em><a name="a128a132" doxytag="csevJoystickUp"></a><em>csevJoystickUp</em></em>&nbsp;</td><td>
 A joystick button has been released.</td></tr>
 <tr><td valign=top><em><a name="a128a133" doxytag="csevCommand"></a><em>csevCommand</em></em>&nbsp;</td><td>
-Somebody(-thing) sent a command. <dl compact><dt><b>See also: </b></dt><dd>
-<a class="el" href="structcsEventCommandData.html">csEventCommandData</a>.</dl></td></tr>
+Somebody(-thing) sent a command.
+<p>
+<dl compact><dt><b>See also: </b></dt><dd>
+<a class="el" href="structcsEventCommandData.html">csEventCommandData</a> </dl></td></tr>
 <tr><td valign=top><em><a name="a128a134" doxytag="csevBroadcast"></a><em>csevBroadcast</em></em>&nbsp;</td><td>
 Somebody(-thing) sent a broadcast command.</td></tr>
 <tr><td valign=top><em><a name="a128a135" doxytag="csevMouseEnter"></a><em>csevMouseEnter</em></em>&nbsp;</td><td>
@@ -4038,7 +4071,7 @@ Normal character.</td></tr>
 </dl>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00475">475</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00479">479</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a129" doxytag="evdefs.h::_csKeyEventType"></a><p>
@@ -4072,7 +4105,7 @@ A 'key up' event.</td></tr>
 </dl>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00087">87</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00089">89</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a131" doxytag="evdefs.h::_csKeyModifierNumType"></a><p>
@@ -4108,7 +4141,7 @@ The default number for a 'right' version of a key.</td></tr>
 </dl>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00198">198</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00202">202</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a130" doxytag="evdefs.h::_csKeyModifierType"></a><p>
@@ -4150,7 +4183,119 @@ Modifier types.
 </dl>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00178">178</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00180">180</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+  </tr>
+</table>
+<a name="a135" doxytag="event.h::csEventAttributeType"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> enum csEventAttributeType
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Various atteibute data types supported by the event system (<a class="el" href="structiEvent.html">iEvent</a>).
+<p>
+<dl compact><dt><b>Enumeration values: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em><a name="a135a10" doxytag="csEventAttrUnknown"></a><em>csEventAttrUnknown</em></em>&nbsp;</td><td>
+The attribute type is unknown.
+<p>
+This shouldn't occur. </td></tr>
+<tr><td valign=top><em><a name="a135a11" doxytag="csEventAttrInt"></a><em>csEventAttrInt</em></em>&nbsp;</td><td>
+A signed integer is contained.</td></tr>
+<tr><td valign=top><em><a name="a135a12" doxytag="csEventAttrUInt"></a><em>csEventAttrUInt</em></em>&nbsp;</td><td>
+An unsigned integer is contained.</td></tr>
+<tr><td valign=top><em><a name="a135a13" doxytag="csEventAttrFloat"></a><em>csEventAttrFloat</em></em>&nbsp;</td><td>
+A floating point number is contained.</td></tr>
+<tr><td valign=top><em><a name="a135a14" doxytag="csEventAttrDatabuffer"></a><em>csEventAttrDatabuffer</em></em>&nbsp;</td><td>
+A string or raw data buffer is contained.</td></tr>
+<tr><td valign=top><em><a name="a135a15" doxytag="csEventAttrEvent"></a><em>csEventAttrEvent</em></em>&nbsp;</td><td>
+An <a class="el" href="structiEvent.html">iEvent</a> is contained.</td></tr>
+<tr><td valign=top><em><a name="a135a16" doxytag="csEventAttriBase"></a><em>csEventAttriBase</em></em>&nbsp;</td><td>
+An <a class="el" href="structiBase.html">iBase</a> interface is contained.</td></tr>
+</table>
+</dl>
+
+<p>
+Definition at line <a class="el" href="iutil_2event_8h-source.html#l00203">203</a> of file <a class="el" href="iutil_2event_8h-source.html">event.h</a>.    </td>
+  </tr>
+</table>
+<a name="a134" doxytag="event.h::csEventError"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> enum csEventError
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Error codes for event attribute retrieval.
+<p>
+<dl compact><dt><b>Enumeration values: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em><a name="a134a0" doxytag="csEventErrNone"></a><em>csEventErrNone</em></em>&nbsp;</td><td>
+No error.</td></tr>
+<tr><td valign=top><em><a name="a134a1" doxytag="csEventErrLossy"></a><em>csEventErrLossy</em></em>&nbsp;</td><td>
+The attribute value could be converted to the requested type, however, data was lost during the conversion.</td></tr>
+<tr><td valign=top><em><a name="a134a2" doxytag="csEventErrNotFound"></a><em>csEventErrNotFound</em></em>&nbsp;</td><td>
+The requested attribute was not found.</td></tr>
+<tr><td valign=top><em><a name="a134a3" doxytag="csEventErrMismatchInt"></a><em>csEventErrMismatchInt</em></em>&nbsp;</td><td>
+The contained value can not be converted to the requested type.
+<p>
+The error code indicates the actual contained type. </td></tr>
+<tr><td valign=top><em><a name="a134a136" doxytag="csEventErrMismatchUInt"></a><em>csEventErrMismatchUInt</em></em>&nbsp;</td><td>
+The contained value can not be converted to the requested type.
+<p>
+The error code indicates the actual contained type. </td></tr>
+<tr><td valign=top><em><a name="a134a137" doxytag="csEventErrMismatchFloat"></a><em>csEventErrMismatchFloat</em></em>&nbsp;</td><td>
+The contained value can not be converted to the requested type.
+<p>
+The error code indicates the actual contained type. </td></tr>
+<tr><td valign=top><em><a name="a134a138" doxytag="csEventErrMismatchBuffer"></a><em>csEventErrMismatchBuffer</em></em>&nbsp;</td><td>
+The contained value can not be converted to the requested type.
+<p>
+The error code indicates the actual contained type. </td></tr>
+<tr><td valign=top><em><a name="a134a139" doxytag="csEventErrMismatchEvent"></a><em>csEventErrMismatchEvent</em></em>&nbsp;</td><td>
+The contained value can not be converted to the requested type.
+<p>
+The error code indicates the actual contained type. </td></tr>
+<tr><td valign=top><em><a name="a134a140" doxytag="csEventErrMismatchIBase"></a><em>csEventErrMismatchIBase</em></em>&nbsp;</td><td>
+The contained value can not be converted to the requested type.
+<p>
+The error code indicates the actual contained type. </td></tr>
+<tr><td valign=top><em><a name="a134a9" doxytag="csEventErrUhOhUnknown"></a><em>csEventErrUhOhUnknown</em></em>&nbsp;</td><td>
+Unknown error.
+<p>
+Something doesn't work like it should. </td></tr>
+</table>
+</dl>
+
+<p>
+Definition at line <a class="el" href="iutil_2event_8h-source.html#l00173">173</a> of file <a class="el" href="iutil_2event_8h-source.html">event.h</a>.
+<p>
+Referenced by <a class="el" href="csevent_8h-source.html#l00223">csEvent::Retrieve()</a>.    </td>
   </tr>
 </table>
 <a name="a127" doxytag="csinput.h::csKeyComposeResult"></a><p>

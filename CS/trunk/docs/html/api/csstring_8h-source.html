@@ -170,297 +170,274 @@
 <a name="l00368"></a><a class="code" href="classcsString.html#z101_6">00368</a>   STR_APPEND(<span class="keywordtype">float</span>, <span class="stringliteral">"%g"</span>, 64)
 <a name="l00369"></a><a class="code" href="classcsString.html#z101_7">00369</a>   STR_APPEND(<span class="keywordtype">double</span>, <span class="stringliteral">"%g"</span>, 64)
 00370 #undef STR_APPEND
-00373 <span class="preprocessor">#if !defined(CS_USE_FAKE_BOOL_TYPE)</span>
-00374 <span class="preprocessor"></span>
-<a name="l00375"></a><a class="code" href="classcsString.html#a32">00375</a>   <a class="code" href="classcsString.html">csString</a>&amp; Append (<span class="keywordtype">bool</span> b) { <span class="keywordflow">return</span> Append (b ? <span class="stringliteral">"1"</span> : <span class="stringliteral">"0"</span>); }
-00376 <span class="preprocessor">#endif</span>
-00377 <span class="preprocessor"></span>
-00387   <a class="code" href="classcsString.html">csString</a>&amp; Replace (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str, size_t Count = (size_t)-1);
-00388 
-00398   <a class="code" href="classcsString.html">csString</a>&amp; Replace (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str, size_t Count = (size_t)-1);
-00399 
-00400 <span class="preprocessor">#define STR_REPLACE(TYPE) \</span>
-00401 <span class="preprocessor">csString&amp; Replace (TYPE s) { Size = 0; return Append(s); }</span>
-00402 <span class="preprocessor"></span>
-<a name="l00407"></a><a class="code" href="classcsString.html#z102_0">00407</a>   STR_REPLACE(<span class="keywordtype">char</span>)
-<a name="l00408"></a><a class="code" href="classcsString.html#z102_1">00408</a>   STR_REPLACE(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
-<a name="l00409"></a><a class="code" href="classcsString.html#z102_2">00409</a>   STR_REPLACE(<span class="keywordtype">short</span>)
-<a name="l00410"></a><a class="code" href="classcsString.html#z102_3">00410</a>   STR_REPLACE(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-<a name="l00411"></a><a class="code" href="classcsString.html#z102_4">00411</a>   STR_REPLACE(<span class="keywordtype">int</span>)
-<a name="l00412"></a><a class="code" href="classcsString.html#z102_5">00412</a>   STR_REPLACE(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-<a name="l00413"></a><a class="code" href="classcsString.html#z102_6">00413</a>   STR_REPLACE(<span class="keywordtype">long</span>)
-<a name="l00414"></a><a class="code" href="classcsString.html#z102_7">00414</a>   STR_REPLACE(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-<a name="l00415"></a><a class="code" href="classcsString.html#z102_8">00415</a>   STR_REPLACE(<span class="keywordtype">float</span>)
-<a name="l00416"></a><a class="code" href="classcsString.html#z102_9">00416</a>   STR_REPLACE(<span class="keywordtype">double</span>)
-00417 #ifndef CS_USE_FAKE_BOOL_TYPE
-<a name="l00418"></a><a class="code" href="classcsString.html#z102_10">00418</a>   STR_REPLACE(<span class="keywordtype">bool</span>)
-00419 #endif
-00420 <span class="preprocessor">#undef STR_REPLACE</span>
-00421 <span class="preprocessor"></span>
-<a name="l00429"></a><a class="code" href="classcsString.html#a35">00429</a>   <span class="keywordtype">bool</span> Compare (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; iStr)<span class="keyword"> const</span>
-00430 <span class="keyword">  </span>{
-00431     <span class="keywordflow">if</span> (&amp;iStr == <span class="keyword">this</span>)
-00432       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00433     size_t <span class="keyword">const</span> n = iStr.<a class="code" href="classcsString.html#a13">Length</a>();
-00434     <span class="keywordflow">if</span> (Size != n)
-00435       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00436     <span class="keywordflow">if</span> (Size == 0 &amp;&amp; n == 0)
-00437       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00438     <span class="keywordflow">return</span> (memcmp (Data, iStr.<a class="code" href="classcsString.html#a10">GetData</a> (), Size) == 0);
-00439   }
-00440 
-<a name="l00447"></a><a class="code" href="classcsString.html#a36">00447</a>   <span class="keywordtype">bool</span> Compare (<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr)<span class="keyword"> const</span>
-00448 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (strcmp (Data ? Data : <span class="stringliteral">""</span>, iStr) == 0); }
-00449 
-<a name="l00456"></a><a class="code" href="classcsString.html#a37">00456</a>   <span class="keywordtype">bool</span> CompareNoCase (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; iStr)<span class="keyword"> const</span>
-00457 <span class="keyword">  </span>{
-00458     <span class="keywordflow">if</span> (&amp;iStr == <span class="keyword">this</span>)
-00459       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00460     size_t <span class="keyword">const</span> n = iStr.<a class="code" href="classcsString.html#a13">Length</a>();
-00461     <span class="keywordflow">if</span> (Size != n)
-00462       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00463     <span class="keywordflow">if</span> (Size == 0 &amp;&amp; n == 0)
-00464       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00465     <span class="keywordflow">return</span> (strncasecmp (Data, iStr.<a class="code" href="classcsString.html#a10">GetData</a> (), Size) == 0);
-00466   }
-00467 
-<a name="l00474"></a><a class="code" href="classcsString.html#a38">00474</a>   <span class="keywordtype">bool</span> CompareNoCase (<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr)<span class="keyword"> const</span>
-00475 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (strncasecmp (Data ? Data : <span class="stringliteral">""</span>, iStr, Size) == 0); }
-00476 
-<a name="l00481"></a><a class="code" href="classcsString.html#a39">00481</a>   <a class="code" href="classcsString.html">csString</a> () : Data (0), Size (0), MaxSize (0), GrowBy (DEFAULT_GROW_BY),
-00482     GrowExponentially (false) {}
-00483 
-<a name="l00489"></a><a class="code" href="classcsString.html#a40">00489</a>   <a class="code" href="classcsString.html">csString</a> (size_t Length) : Data (0), Size (0), MaxSize (0),
-00490     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
-00491   { SetCapacity (Length); }
-00492 
-<a name="l00498"></a><a class="code" href="classcsString.html#a41">00498</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy) : Data (0), Size (0), MaxSize (0),
-00499     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
-00500   { Append (copy); }
-00501 
-<a name="l00507"></a><a class="code" href="classcsString.html#a42">00507</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : Data (0), Size (0), MaxSize (0),
-00508     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
-00509   { Append (src); }
-00510 
-<a name="l00512"></a><a class="code" href="classcsString.html#a43">00512</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">char</span> c) : Data (0), Size (0), MaxSize (0),
-00513     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
-00514   { Append (c); }
-00515 
-<a name="l00517"></a><a class="code" href="classcsString.html#a44">00517</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : Data(0), Size (0), MaxSize (0),
-00518     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
-00519   { Append ((<span class="keywordtype">char</span>) c); }
-00520 
-00522   <span class="keyword">virtual</span> ~<a class="code" href="classcsString.html">csString</a> ();
-00523 
-<a name="l00529"></a><a class="code" href="classcsString.html#a46">00529</a>   <a class="code" href="classcsString.html">csString</a> Clone ()<span class="keyword"> const</span>
-00530 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsString.html">csString</a> (*<span class="keyword">this</span>); }
-00531 
-00539   <a class="code" href="classcsString.html">csString</a>&amp; LTrim();
-00540 
-00548   <a class="code" href="classcsString.html">csString</a>&amp; RTrim();
-00549 
-00555   <a class="code" href="classcsString.html">csString</a>&amp; Trim();
-00556 
-00562   <a class="code" href="classcsString.html">csString</a>&amp; Collapse();
-00563 
-00570   <a class="code" href="classcsString.html">csString</a>&amp; Format(<span class="keyword">const</span> <span class="keywordtype">char</span>* format, ...) CS_GNUC_PRINTF (2, 3);
-00571 
-00578   <a class="code" href="classcsString.html">csString</a>&amp; FormatV(<span class="keyword">const</span> <span class="keywordtype">char</span>* format, va_list args);
-00579 
-00580 <span class="preprocessor">#define STR_FORMAT(TYPE) \</span>
-00581 <span class="preprocessor">  static csString Format (TYPE v);</span>
-00582 <span class="preprocessor"></span>
-00586   STR_FORMAT(<span class="keywordtype">short</span>)
-00587   STR_FORMAT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-00588   STR_FORMAT(<span class="keywordtype">int</span>)
-00589   STR_FORMAT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-00590   STR_FORMAT(<span class="keywordtype">long</span>)
-00591   STR_FORMAT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-00592   STR_FORMAT(<span class="keywordtype">float</span>)
-00593   STR_FORMAT(<span class="keywordtype">double</span>)
-00594 #undef STR_FORMAT
-00595 
-00596 <span class="preprocessor">#define STR_FORMAT_INT(TYPE) \</span>
-00597 <span class="preprocessor">  static csString Format (TYPE v, int width, int prec=0);</span>
-00598 <span class="preprocessor"></span>  STR_FORMAT_INT(<span class="keywordtype">short</span>)
-00599   STR_FORMAT_INT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-00600   STR_FORMAT_INT(<span class="keywordtype">int</span>)
-00601   STR_FORMAT_INT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-00602   STR_FORMAT_INT(<span class="keywordtype">long</span>)
-00603   STR_FORMAT_INT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-00604 #undef STR_FORMAT_INT
-00605 
-00606 <span class="preprocessor">#define STR_FORMAT_FLOAT(TYPE) \</span>
-00607 <span class="preprocessor">  static csString Format (TYPE v, int width, int prec=6);</span>
-00608 <span class="preprocessor"></span>  STR_FORMAT_FLOAT(<span class="keywordtype">float</span>)
-00609   STR_FORMAT_FLOAT(<span class="keywordtype">double</span>)
-00610 #undef STR_FORMAT_FLOAT
-00621   <a class="code" href="classcsString.html">csString</a>&amp; PadLeft (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>);
-00622 
-00624   <a class="code" href="classcsString.html">csString</a> AsPadLeft (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>) <span class="keyword">const</span>;
-00625 
-00626 <span class="preprocessor">#define STR_PADLEFT(TYPE) \</span>
-00627 <span class="preprocessor">  static csString PadLeft (TYPE v, size_t iNewSize, char iChar=' ');</span>
-00628 <span class="preprocessor"></span>
-00632   STR_PADLEFT(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
-00633   STR_PADLEFT(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
-00634   STR_PADLEFT(<span class="keywordtype">char</span>)
-00635   STR_PADLEFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
-00636   STR_PADLEFT(<span class="keywordtype">short</span>)
-00637   STR_PADLEFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-00638   STR_PADLEFT(<span class="keywordtype">int</span>)
-00639   STR_PADLEFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-00640   STR_PADLEFT(<span class="keywordtype">long</span>)
-00641   STR_PADLEFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-00642   STR_PADLEFT(<span class="keywordtype">float</span>)
-00643   STR_PADLEFT(<span class="keywordtype">double</span>)
-00644 #<span class="keywordflow">if</span> !defined(CS_USE_FAKE_BOOL_TYPE)
-00645   STR_PADLEFT(<span class="keywordtype">bool</span>)
-00646 #endif
-00647 <span class="preprocessor">#undef STR_PADLEFT</span>
-00648 <span class="preprocessor"></span>
-00658   <a class="code" href="classcsString.html">csString</a>&amp; PadRight (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>);
-00659 
-00661   <a class="code" href="classcsString.html">csString</a> AsPadRight (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>) <span class="keyword">const</span>;
-00662 
-00663 <span class="preprocessor">#define STR_PADRIGHT(TYPE) \</span>
-00664 <span class="preprocessor">  static csString PadRight (TYPE v, size_t iNewSize, char iChar=' ');</span>
-00665 <span class="preprocessor"></span>
-00669   STR_PADRIGHT(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
-00670   STR_PADRIGHT(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
-00671   STR_PADRIGHT(<span class="keywordtype">char</span>)
-00672   STR_PADRIGHT(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
-00673   STR_PADRIGHT(<span class="keywordtype">short</span>)
-00674   STR_PADRIGHT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-00675   STR_PADRIGHT(<span class="keywordtype">int</span>)
-00676   STR_PADRIGHT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-00677   STR_PADRIGHT(<span class="keywordtype">long</span>)
-00678   STR_PADRIGHT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-00679   STR_PADRIGHT(<span class="keywordtype">float</span>)
-00680   STR_PADRIGHT(<span class="keywordtype">double</span>)
-00681 #<span class="keywordflow">if</span> !defined(CS_USE_FAKE_BOOL_TYPE)
-00682   STR_PADRIGHT(<span class="keywordtype">bool</span>)
-00683 #endif
-00684 <span class="preprocessor">#undef STR_PADRIGHT</span>
-00685 <span class="preprocessor"></span>
-00698   <a class="code" href="classcsString.html">csString</a>&amp; PadCenter (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>);
-00699 
-00701   <a class="code" href="classcsString.html">csString</a> AsPadCenter (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>) <span class="keyword">const</span>;
-00702 
-00703 <span class="preprocessor">#define STR_PADCENTER(TYPE) \</span>
-00704 <span class="preprocessor">  static csString PadCenter (TYPE v, size_t iNewSize, char iChar=' ');</span>
-00705 <span class="preprocessor"></span>
-00709   STR_PADCENTER(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
-00710   STR_PADCENTER(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
-00711   STR_PADCENTER(<span class="keywordtype">char</span>)
-00712   STR_PADCENTER(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
-00713   STR_PADCENTER(<span class="keywordtype">short</span>)
-00714   STR_PADCENTER(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-00715   STR_PADCENTER(<span class="keywordtype">int</span>)
-00716   STR_PADCENTER(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-00717   STR_PADCENTER(<span class="keywordtype">long</span>)
-00718   STR_PADCENTER(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-00719   STR_PADCENTER(<span class="keywordtype">float</span>)
-00720   STR_PADCENTER(<span class="keywordtype">double</span>)
-00721 #<span class="keywordflow">if</span> !defined(CS_USE_FAKE_BOOL_TYPE)
-00722   STR_PADCENTER(<span class="keywordtype">bool</span>)
-00723 #endif
-00724 <span class="preprocessor">#undef STR_PADCENTER</span>
-00725 <span class="preprocessor"></span>
-00727 <span class="preprocessor">#define STR_ASSIGN(TYPE) \</span>
-00728 <span class="preprocessor">const csString&amp; operator = (TYPE s) { return Replace (s); }</span>
-00729 <span class="preprocessor"></span>
-<a name="l00733"></a><a class="code" href="classcsString.html#z107_0">00733</a>   STR_ASSIGN(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
-<a name="l00734"></a><a class="code" href="classcsString.html#z107_1">00734</a>   STR_ASSIGN(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
-<a name="l00735"></a><a class="code" href="classcsString.html#z107_2">00735</a>   STR_ASSIGN(<span class="keywordtype">char</span>)
-<a name="l00736"></a><a class="code" href="classcsString.html#z107_3">00736</a>   STR_ASSIGN(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
-<a name="l00737"></a><a class="code" href="classcsString.html#z107_4">00737</a>   STR_ASSIGN(<span class="keywordtype">short</span>)
-<a name="l00738"></a><a class="code" href="classcsString.html#z107_5">00738</a>   STR_ASSIGN(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-<a name="l00739"></a><a class="code" href="classcsString.html#z107_6">00739</a>   STR_ASSIGN(<span class="keywordtype">int</span>)
-<a name="l00740"></a><a class="code" href="classcsString.html#z107_7">00740</a>   STR_ASSIGN(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-<a name="l00741"></a><a class="code" href="classcsString.html#z107_8">00741</a>   STR_ASSIGN(<span class="keywordtype">long</span>)
-<a name="l00742"></a><a class="code" href="classcsString.html#z107_9">00742</a>   STR_ASSIGN(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-<a name="l00743"></a><a class="code" href="classcsString.html#z107_10">00743</a>   STR_ASSIGN(<span class="keywordtype">float</span>)
-<a name="l00744"></a><a class="code" href="classcsString.html#z107_11">00744</a>   STR_ASSIGN(<span class="keywordtype">double</span>)
-00745 #ifndef CS_USE_FAKE_BOOL_TYPE
-<a name="l00746"></a><a class="code" href="classcsString.html#z107_12">00746</a>   STR_ASSIGN(<span class="keywordtype">bool</span>)
-00747 #endif
-00748 <span class="preprocessor">#undef STR_ASSIGN</span>
-00749 <span class="preprocessor"></span>
-00751 <span class="preprocessor">#define STR_OP_APPEND(TYPE) \</span>
-00752 <span class="preprocessor">  csString &amp;operator += (TYPE s) { return Append (s); }</span>
-00753 <span class="preprocessor"></span>
-<a name="l00757"></a><a class="code" href="classcsString.html#z108_0">00757</a>   STR_OP_APPEND(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
-<a name="l00758"></a><a class="code" href="classcsString.html#z108_1">00758</a>   STR_OP_APPEND(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
-<a name="l00759"></a><a class="code" href="classcsString.html#z108_2">00759</a>   STR_OP_APPEND(<span class="keywordtype">char</span>)
-<a name="l00760"></a><a class="code" href="classcsString.html#z108_3">00760</a>   STR_OP_APPEND(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
-<a name="l00761"></a><a class="code" href="classcsString.html#z108_4">00761</a>   STR_OP_APPEND(<span class="keywordtype">short</span>)
-<a name="l00762"></a><a class="code" href="classcsString.html#z108_5">00762</a>   STR_OP_APPEND(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-<a name="l00763"></a><a class="code" href="classcsString.html#z108_6">00763</a>   STR_OP_APPEND(<span class="keywordtype">int</span>)
-<a name="l00764"></a><a class="code" href="classcsString.html#z108_7">00764</a>   STR_OP_APPEND(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-<a name="l00765"></a><a class="code" href="classcsString.html#z108_8">00765</a>   STR_OP_APPEND(<span class="keywordtype">long</span>)
-<a name="l00766"></a><a class="code" href="classcsString.html#z108_9">00766</a>   STR_OP_APPEND(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-<a name="l00767"></a><a class="code" href="classcsString.html#z108_10">00767</a>   STR_OP_APPEND(<span class="keywordtype">float</span>)
-<a name="l00768"></a><a class="code" href="classcsString.html#z108_11">00768</a>   STR_OP_APPEND(<span class="keywordtype">double</span>)
-00769 #ifndef CS_USE_FAKE_BOOL_TYPE
-<a name="l00770"></a><a class="code" href="classcsString.html#z108_12">00770</a>   STR_OP_APPEND(<span class="keywordtype">bool</span>)
-00771 #endif
-00772 <span class="preprocessor">#undef STR_OP_APPEND</span>
-00773 <span class="preprocessor"></span>
-00775 
-<a name="l00776"></a><a class="code" href="classcsString.html#a59">00776</a>   <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a> &amp;iStr)<span class="keyword"> const</span>
-00777 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Clone ().<a class="code" href="classcsString.html#a24">Append</a> (iStr); }
-00778 
-<a name="l00786"></a><a class="code" href="classcsString.html#a60">00786</a>   operator const char* ()<span class="keyword"> const</span>
-00787 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Data; }
-00788 
-<a name="l00795"></a><a class="code" href="classcsString.html#a61">00795</a>   <span class="keywordtype">bool</span> operator == (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str)<span class="keyword"> const</span>
-00796 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
-<a name="l00803"></a><a class="code" href="classcsString.html#a62">00803</a>   <span class="keywordtype">bool</span> operator == (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
-00804 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
-<a name="l00811"></a><a class="code" href="classcsString.html#a63">00811</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str)<span class="keyword"> const</span>
-00812 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
-<a name="l00819"></a><a class="code" href="classcsString.html#a64">00819</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
-00820 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
-00821 
-00826   <a class="code" href="classcsString.html">csString</a>&amp; Downcase();
-00831   <a class="code" href="classcsString.html">csString</a>&amp; Upcase();
+00373 
+<a name="l00374"></a><a class="code" href="classcsString.html#a32">00374</a>   <a class="code" href="classcsString.html">csString</a>&amp; Append (<span class="keywordtype">bool</span> b) { <span class="keywordflow">return</span> Append (b ? <span class="stringliteral">"1"</span> : <span class="stringliteral">"0"</span>); }
+00375 
+00385   <a class="code" href="classcsString.html">csString</a>&amp; Replace (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str, size_t Count = (size_t)-1);
+00386 
+00396   <a class="code" href="classcsString.html">csString</a>&amp; Replace (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str, size_t Count = (size_t)-1);
+00397 
+00398 <span class="preprocessor">#define STR_REPLACE(TYPE) \</span>
+00399 <span class="preprocessor">csString&amp; Replace (TYPE s) { Size = 0; return Append(s); }</span>
+00400 <span class="preprocessor"></span>
+<a name="l00405"></a><a class="code" href="classcsString.html#z102_0">00405</a>   STR_REPLACE(<span class="keywordtype">char</span>)
+<a name="l00406"></a><a class="code" href="classcsString.html#z102_1">00406</a>   STR_REPLACE(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
+<a name="l00407"></a><a class="code" href="classcsString.html#z102_2">00407</a>   STR_REPLACE(<span class="keywordtype">short</span>)
+<a name="l00408"></a><a class="code" href="classcsString.html#z102_3">00408</a>   STR_REPLACE(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+<a name="l00409"></a><a class="code" href="classcsString.html#z102_4">00409</a>   STR_REPLACE(<span class="keywordtype">int</span>)
+<a name="l00410"></a><a class="code" href="classcsString.html#z102_5">00410</a>   STR_REPLACE(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+<a name="l00411"></a><a class="code" href="classcsString.html#z102_6">00411</a>   STR_REPLACE(<span class="keywordtype">long</span>)
+<a name="l00412"></a><a class="code" href="classcsString.html#z102_7">00412</a>   STR_REPLACE(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+<a name="l00413"></a><a class="code" href="classcsString.html#z102_8">00413</a>   STR_REPLACE(<span class="keywordtype">float</span>)
+<a name="l00414"></a><a class="code" href="classcsString.html#z102_9">00414</a>   STR_REPLACE(<span class="keywordtype">double</span>)
+<a name="l00415"></a><a class="code" href="classcsString.html#z102_10">00415</a>   STR_REPLACE(<span class="keywordtype">bool</span>)
+00416 #undef STR_REPLACE
+<a name="l00425"></a><a class="code" href="classcsString.html#a35">00425</a>   <span class="keywordtype">bool</span> Compare (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; iStr)<span class="keyword"> const</span>
+00426 <span class="keyword">  </span>{
+00427     <span class="keywordflow">if</span> (&amp;iStr == <span class="keyword">this</span>)
+00428       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00429     size_t <span class="keyword">const</span> n = iStr.<a class="code" href="classcsString.html#a13">Length</a>();
+00430     <span class="keywordflow">if</span> (Size != n)
+00431       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00432     <span class="keywordflow">if</span> (Size == 0 &amp;&amp; n == 0)
+00433       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00434     <span class="keywordflow">return</span> (memcmp (Data, iStr.<a class="code" href="classcsString.html#a10">GetData</a> (), Size) == 0);
+00435   }
+00436 
+<a name="l00443"></a><a class="code" href="classcsString.html#a36">00443</a>   <span class="keywordtype">bool</span> Compare (<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr)<span class="keyword"> const</span>
+00444 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (strcmp (Data ? Data : <span class="stringliteral">""</span>, iStr) == 0); }
+00445 
+<a name="l00452"></a><a class="code" href="classcsString.html#a37">00452</a>   <span class="keywordtype">bool</span> CompareNoCase (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; iStr)<span class="keyword"> const</span>
+00453 <span class="keyword">  </span>{
+00454     <span class="keywordflow">if</span> (&amp;iStr == <span class="keyword">this</span>)
+00455       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00456     size_t <span class="keyword">const</span> n = iStr.<a class="code" href="classcsString.html#a13">Length</a>();
+00457     <span class="keywordflow">if</span> (Size != n)
+00458       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00459     <span class="keywordflow">if</span> (Size == 0 &amp;&amp; n == 0)
+00460       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00461     <span class="keywordflow">return</span> (strncasecmp (Data, iStr.<a class="code" href="classcsString.html#a10">GetData</a> (), Size) == 0);
+00462   }
+00463 
+<a name="l00470"></a><a class="code" href="classcsString.html#a38">00470</a>   <span class="keywordtype">bool</span> CompareNoCase (<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr)<span class="keyword"> const</span>
+00471 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (strncasecmp (Data ? Data : <span class="stringliteral">""</span>, iStr, Size) == 0); }
+00472 
+<a name="l00477"></a><a class="code" href="classcsString.html#a39">00477</a>   <a class="code" href="classcsString.html">csString</a> () : Data (0), Size (0), MaxSize (0), GrowBy (DEFAULT_GROW_BY),
+00478     GrowExponentially (false) {}
+00479 
+<a name="l00485"></a><a class="code" href="classcsString.html#a40">00485</a>   <a class="code" href="classcsString.html">csString</a> (size_t Length) : Data (0), Size (0), MaxSize (0),
+00486     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
+00487   { SetCapacity (Length); }
+00488 
+<a name="l00494"></a><a class="code" href="classcsString.html#a41">00494</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy) : Data (0), Size (0), MaxSize (0),
+00495     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
+00496   { Append (copy); }
+00497 
+<a name="l00503"></a><a class="code" href="classcsString.html#a42">00503</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : Data (0), Size (0), MaxSize (0),
+00504     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
+00505   { Append (src); }
+00506 
+<a name="l00508"></a><a class="code" href="classcsString.html#a43">00508</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">char</span> c) : Data (0), Size (0), MaxSize (0),
+00509     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
+00510   { Append (c); }
+00511 
+<a name="l00513"></a><a class="code" href="classcsString.html#a44">00513</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : Data(0), Size (0), MaxSize (0),
+00514     GrowBy (DEFAULT_GROW_BY), GrowExponentially(false)
+00515   { Append ((<span class="keywordtype">char</span>) c); }
+00516 
+00518   <span class="keyword">virtual</span> ~<a class="code" href="classcsString.html">csString</a> ();
+00519 
+<a name="l00525"></a><a class="code" href="classcsString.html#a46">00525</a>   <a class="code" href="classcsString.html">csString</a> Clone ()<span class="keyword"> const</span>
+00526 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsString.html">csString</a> (*<span class="keyword">this</span>); }
+00527 
+00535   <a class="code" href="classcsString.html">csString</a>&amp; LTrim();
+00536 
+00544   <a class="code" href="classcsString.html">csString</a>&amp; RTrim();
+00545 
+00551   <a class="code" href="classcsString.html">csString</a>&amp; Trim();
+00552 
+00558   <a class="code" href="classcsString.html">csString</a>&amp; Collapse();
+00559 
+00566   <a class="code" href="classcsString.html">csString</a>&amp; Format(<span class="keyword">const</span> <span class="keywordtype">char</span>* format, ...) CS_GNUC_PRINTF (2, 3);
+00567 
+00574   <a class="code" href="classcsString.html">csString</a>&amp; FormatV(<span class="keyword">const</span> <span class="keywordtype">char</span>* format, va_list args);
+00575 
+00576 <span class="preprocessor">#define STR_FORMAT(TYPE) \</span>
+00577 <span class="preprocessor">  static csString Format (TYPE v);</span>
+00578 <span class="preprocessor"></span>
+00582   STR_FORMAT(<span class="keywordtype">short</span>)
+00583   STR_FORMAT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+00584   STR_FORMAT(<span class="keywordtype">int</span>)
+00585   STR_FORMAT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+00586   STR_FORMAT(<span class="keywordtype">long</span>)
+00587   STR_FORMAT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+00588   STR_FORMAT(<span class="keywordtype">float</span>)
+00589   STR_FORMAT(<span class="keywordtype">double</span>)
+00590 #undef STR_FORMAT
+00591 
+00592 <span class="preprocessor">#define STR_FORMAT_INT(TYPE) \</span>
+00593 <span class="preprocessor">  static csString Format (TYPE v, int width, int prec=0);</span>
+00594 <span class="preprocessor"></span>  STR_FORMAT_INT(<span class="keywordtype">short</span>)
+00595   STR_FORMAT_INT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+00596   STR_FORMAT_INT(<span class="keywordtype">int</span>)
+00597   STR_FORMAT_INT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+00598   STR_FORMAT_INT(<span class="keywordtype">long</span>)
+00599   STR_FORMAT_INT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+00600 #undef STR_FORMAT_INT
+00601 
+00602 <span class="preprocessor">#define STR_FORMAT_FLOAT(TYPE) \</span>
+00603 <span class="preprocessor">  static csString Format (TYPE v, int width, int prec=6);</span>
+00604 <span class="preprocessor"></span>  STR_FORMAT_FLOAT(<span class="keywordtype">float</span>)
+00605   STR_FORMAT_FLOAT(<span class="keywordtype">double</span>)
+00606 #undef STR_FORMAT_FLOAT
+00617   <a class="code" href="classcsString.html">csString</a>&amp; PadLeft (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>);
+00618 
+00620   <a class="code" href="classcsString.html">csString</a> AsPadLeft (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>) <span class="keyword">const</span>;
+00621 
+00622 <span class="preprocessor">#define STR_PADLEFT(TYPE) \</span>
+00623 <span class="preprocessor">  static csString PadLeft (TYPE v, size_t iNewSize, char iChar=' ');</span>
+00624 <span class="preprocessor"></span>
+00628   STR_PADLEFT(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
+00629   STR_PADLEFT(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
+00630   STR_PADLEFT(<span class="keywordtype">char</span>)
+00631   STR_PADLEFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
+00632   STR_PADLEFT(<span class="keywordtype">short</span>)
+00633   STR_PADLEFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+00634   STR_PADLEFT(<span class="keywordtype">int</span>)
+00635   STR_PADLEFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+00636   STR_PADLEFT(<span class="keywordtype">long</span>)
+00637   STR_PADLEFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+00638   STR_PADLEFT(<span class="keywordtype">float</span>)
+00639   STR_PADLEFT(<span class="keywordtype">double</span>)
+00640   STR_PADLEFT(<span class="keywordtype">bool</span>)
+00641 #undef STR_PADLEFT
+00652   <a class="code" href="classcsString.html">csString</a>&amp; PadRight (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>);
+00653 
+00655   <a class="code" href="classcsString.html">csString</a> AsPadRight (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>) <span class="keyword">const</span>;
+00656 
+00657 <span class="preprocessor">#define STR_PADRIGHT(TYPE) \</span>
+00658 <span class="preprocessor">  static csString PadRight (TYPE v, size_t iNewSize, char iChar=' ');</span>
+00659 <span class="preprocessor"></span>
+00663   STR_PADRIGHT(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
+00664   STR_PADRIGHT(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
+00665   STR_PADRIGHT(<span class="keywordtype">char</span>)
+00666   STR_PADRIGHT(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
+00667   STR_PADRIGHT(<span class="keywordtype">short</span>)
+00668   STR_PADRIGHT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+00669   STR_PADRIGHT(<span class="keywordtype">int</span>)
+00670   STR_PADRIGHT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+00671   STR_PADRIGHT(<span class="keywordtype">long</span>)
+00672   STR_PADRIGHT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+00673   STR_PADRIGHT(<span class="keywordtype">float</span>)
+00674   STR_PADRIGHT(<span class="keywordtype">double</span>)
+00675   STR_PADRIGHT(<span class="keywordtype">bool</span>)
+00676 #undef STR_PADRIGHT
+00690   <a class="code" href="classcsString.html">csString</a>&amp; PadCenter (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>);
+00691 
+00693   <a class="code" href="classcsString.html">csString</a> AsPadCenter (size_t NewSize, <span class="keywordtype">char</span> PadChar = <span class="charliteral">' '</span>) <span class="keyword">const</span>;
+00694 
+00695 <span class="preprocessor">#define STR_PADCENTER(TYPE) \</span>
+00696 <span class="preprocessor">  static csString PadCenter (TYPE v, size_t iNewSize, char iChar=' ');</span>
+00697 <span class="preprocessor"></span>
+00701   STR_PADCENTER(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
+00702   STR_PADCENTER(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
+00703   STR_PADCENTER(<span class="keywordtype">char</span>)
+00704   STR_PADCENTER(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
+00705   STR_PADCENTER(<span class="keywordtype">short</span>)
+00706   STR_PADCENTER(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+00707   STR_PADCENTER(<span class="keywordtype">int</span>)
+00708   STR_PADCENTER(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+00709   STR_PADCENTER(<span class="keywordtype">long</span>)
+00710   STR_PADCENTER(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+00711   STR_PADCENTER(<span class="keywordtype">float</span>)
+00712   STR_PADCENTER(<span class="keywordtype">double</span>)
+00713   STR_PADCENTER(<span class="keywordtype">bool</span>)
+00714 #undef STR_PADCENTER
+00717 <span class="preprocessor">#define STR_ASSIGN(TYPE) \</span>
+00718 <span class="preprocessor">const csString&amp; operator = (TYPE s) { return Replace (s); }</span>
+00719 <span class="preprocessor"></span>
+<a name="l00723"></a><a class="code" href="classcsString.html#z107_0">00723</a>   STR_ASSIGN(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
+<a name="l00724"></a><a class="code" href="classcsString.html#z107_1">00724</a>   STR_ASSIGN(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
+<a name="l00725"></a><a class="code" href="classcsString.html#z107_2">00725</a>   STR_ASSIGN(<span class="keywordtype">char</span>)
+<a name="l00726"></a><a class="code" href="classcsString.html#z107_3">00726</a>   STR_ASSIGN(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
+<a name="l00727"></a><a class="code" href="classcsString.html#z107_4">00727</a>   STR_ASSIGN(<span class="keywordtype">short</span>)
+<a name="l00728"></a><a class="code" href="classcsString.html#z107_5">00728</a>   STR_ASSIGN(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+<a name="l00729"></a><a class="code" href="classcsString.html#z107_6">00729</a>   STR_ASSIGN(<span class="keywordtype">int</span>)
+<a name="l00730"></a><a class="code" href="classcsString.html#z107_7">00730</a>   STR_ASSIGN(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+<a name="l00731"></a><a class="code" href="classcsString.html#z107_8">00731</a>   STR_ASSIGN(<span class="keywordtype">long</span>)
+<a name="l00732"></a><a class="code" href="classcsString.html#z107_9">00732</a>   STR_ASSIGN(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+<a name="l00733"></a><a class="code" href="classcsString.html#z107_10">00733</a>   STR_ASSIGN(<span class="keywordtype">float</span>)
+<a name="l00734"></a><a class="code" href="classcsString.html#z107_11">00734</a>   STR_ASSIGN(<span class="keywordtype">double</span>)
+<a name="l00735"></a><a class="code" href="classcsString.html#z107_12">00735</a>   STR_ASSIGN(<span class="keywordtype">bool</span>)
+00736 #undef STR_ASSIGN
+00739 <span class="preprocessor">#define STR_OP_APPEND(TYPE) \</span>
+00740 <span class="preprocessor">  csString &amp;operator += (TYPE s) { return Append (s); }</span>
+00741 <span class="preprocessor"></span>
+<a name="l00745"></a><a class="code" href="classcsString.html#z108_0">00745</a>   STR_OP_APPEND(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
+<a name="l00746"></a><a class="code" href="classcsString.html#z108_1">00746</a>   STR_OP_APPEND(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
+<a name="l00747"></a><a class="code" href="classcsString.html#z108_2">00747</a>   STR_OP_APPEND(<span class="keywordtype">char</span>)
+<a name="l00748"></a><a class="code" href="classcsString.html#z108_3">00748</a>   STR_OP_APPEND(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
+<a name="l00749"></a><a class="code" href="classcsString.html#z108_4">00749</a>   STR_OP_APPEND(<span class="keywordtype">short</span>)
+<a name="l00750"></a><a class="code" href="classcsString.html#z108_5">00750</a>   STR_OP_APPEND(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+<a name="l00751"></a><a class="code" href="classcsString.html#z108_6">00751</a>   STR_OP_APPEND(<span class="keywordtype">int</span>)
+<a name="l00752"></a><a class="code" href="classcsString.html#z108_7">00752</a>   STR_OP_APPEND(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+<a name="l00753"></a><a class="code" href="classcsString.html#z108_8">00753</a>   STR_OP_APPEND(<span class="keywordtype">long</span>)
+<a name="l00754"></a><a class="code" href="classcsString.html#z108_9">00754</a>   STR_OP_APPEND(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+<a name="l00755"></a><a class="code" href="classcsString.html#z108_10">00755</a>   STR_OP_APPEND(<span class="keywordtype">float</span>)
+<a name="l00756"></a><a class="code" href="classcsString.html#z108_11">00756</a>   STR_OP_APPEND(<span class="keywordtype">double</span>)
+<a name="l00757"></a><a class="code" href="classcsString.html#z108_12">00757</a>   STR_OP_APPEND(<span class="keywordtype">bool</span>)
+00758 #undef STR_OP_APPEND
+00761 
+<a name="l00762"></a><a class="code" href="classcsString.html#a59">00762</a>   <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a> &amp;iStr)<span class="keyword"> const</span>
+00763 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Clone ().<a class="code" href="classcsString.html#a24">Append</a> (iStr); }
+00764 
+<a name="l00772"></a><a class="code" href="classcsString.html#a60">00772</a>   operator const char* ()<span class="keyword"> const</span>
+00773 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Data; }
+00774 
+<a name="l00781"></a><a class="code" href="classcsString.html#a61">00781</a>   <span class="keywordtype">bool</span> operator == (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str)<span class="keyword"> const</span>
+00782 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
+<a name="l00789"></a><a class="code" href="classcsString.html#a62">00789</a>   <span class="keywordtype">bool</span> operator == (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
+00790 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
+<a name="l00797"></a><a class="code" href="classcsString.html#a63">00797</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str)<span class="keyword"> const</span>
+00798 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
+<a name="l00805"></a><a class="code" href="classcsString.html#a64">00805</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
+00806 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
+00807 
+00812   <a class="code" href="classcsString.html">csString</a>&amp; Downcase();
+00817   <a class="code" href="classcsString.html">csString</a>&amp; Upcase();
+00818 
+<a name="l00829"></a><a class="code" href="classcsString.html#a67">00829</a>   <span class="keywordtype">char</span>* Detach ()
+00830   { <span class="keywordtype">char</span>* d = Data; Data = 0; Size = 0; MaxSize = 0; <span class="keywordflow">return</span> d; }
+00831 };
 00832 
-<a name="l00843"></a><a class="code" href="classcsString.html#a67">00843</a>   <span class="keywordtype">char</span>* Detach ()
-00844   { <span class="keywordtype">char</span>* d = Data; Data = 0; Size = 0; MaxSize = 0; <span class="keywordflow">return</span> d; }
-00845 };
-00846 
-<a name="l00848"></a><a class="code" href="csstring_8h.html#a11">00848</a> <span class="keyword">inline</span> <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr1, <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a> &amp;iStr2)
-00849 {
-00850   <span class="keywordflow">return</span> <a class="code" href="classcsString.html">csString</a> (iStr1).<a class="code" href="classcsString.html#a24">Append</a> (iStr2);
-00851 }
-00852 
-<a name="l00854"></a><a class="code" href="csstring_8h.html#a12">00854</a> <span class="keyword">inline</span> <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; iStr1, <span class="keyword">const</span> <span class="keywordtype">char</span>* iStr2)
-00855 {
-00856   <span class="keywordflow">return</span> iStr1.<a class="code" href="classcsString.html#a46">Clone</a> ().<a class="code" href="classcsString.html#a24">Append</a> (iStr2);
-00857 }
-00858 
-00859 <span class="preprocessor">#define STR_SHIFT(TYPE) \</span>
-00860 <span class="preprocessor">  inline csString &amp;operator &lt;&lt; (csString &amp;s, TYPE v) { return s.Append (v); }</span>
-00861 <span class="preprocessor"></span>
-<a name="l00869"></a><a class="code" href="csstring_8h.html#a13">00869</a> STR_SHIFT(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
-<a name="l00870"></a><a class="code" href="csstring_8h.html#a14">00870</a> STR_SHIFT(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
-<a name="l00871"></a><a class="code" href="csstring_8h.html#a15">00871</a> STR_SHIFT(<span class="keywordtype">char</span>)
-<a name="l00872"></a><a class="code" href="csstring_8h.html#a16">00872</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
-<a name="l00873"></a><a class="code" href="csstring_8h.html#a17">00873</a> STR_SHIFT(<span class="keywordtype">short</span>)
-<a name="l00874"></a><a class="code" href="csstring_8h.html#a18">00874</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-<a name="l00875"></a><a class="code" href="csstring_8h.html#a19">00875</a> STR_SHIFT(<span class="keywordtype">int</span>)
-<a name="l00876"></a><a class="code" href="csstring_8h.html#a20">00876</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-<a name="l00877"></a><a class="code" href="csstring_8h.html#a21">00877</a> STR_SHIFT(<span class="keywordtype">long</span>);
-<a name="l00878"></a><a class="code" href="csstring_8h.html#a22">00878</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-<a name="l00879"></a><a class="code" href="csstring_8h.html#a23">00879</a> STR_SHIFT(<span class="keywordtype">float</span>)
-<a name="l00880"></a><a class="code" href="csstring_8h.html#a24">00880</a> STR_SHIFT(<span class="keywordtype">double</span>)
-00881 #<span class="keywordflow">if</span> !defined(CS_USE_FAKE_BOOL_TYPE)
-<a name="l00882"></a><a class="code" href="csstring_8h.html#a25">00882</a> STR_SHIFT(<span class="keywordtype">bool</span>)
-00883 #endif
-00884 <span class="preprocessor">#undef STR_SHIFT</span>
-00885 <span class="preprocessor"></span>
-00887 <span class="preprocessor">#endif // __CS_CSSTRING_H__</span>
+<a name="l00834"></a><a class="code" href="csstring_8h.html#a11">00834</a> <span class="keyword">inline</span> <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr1, <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a> &amp;iStr2)
+00835 {
+00836   <span class="keywordflow">return</span> <a class="code" href="classcsString.html">csString</a> (iStr1).<a class="code" href="classcsString.html#a24">Append</a> (iStr2);
+00837 }
+00838 
+<a name="l00840"></a><a class="code" href="csstring_8h.html#a12">00840</a> <span class="keyword">inline</span> <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; iStr1, <span class="keyword">const</span> <span class="keywordtype">char</span>* iStr2)
+00841 {
+00842   <span class="keywordflow">return</span> iStr1.<a class="code" href="classcsString.html#a46">Clone</a> ().<a class="code" href="classcsString.html#a24">Append</a> (iStr2);
+00843 }
+00844 
+00845 <span class="preprocessor">#define STR_SHIFT(TYPE) \</span>
+00846 <span class="preprocessor">  inline csString &amp;operator &lt;&lt; (csString &amp;s, TYPE v) { return s.Append (v); }</span>
+00847 <span class="preprocessor"></span>
+<a name="l00855"></a><a class="code" href="csstring_8h.html#a13">00855</a> STR_SHIFT(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
+<a name="l00856"></a><a class="code" href="csstring_8h.html#a14">00856</a> STR_SHIFT(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
+<a name="l00857"></a><a class="code" href="csstring_8h.html#a15">00857</a> STR_SHIFT(<span class="keywordtype">char</span>)
+<a name="l00858"></a><a class="code" href="csstring_8h.html#a16">00858</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
+<a name="l00859"></a><a class="code" href="csstring_8h.html#a17">00859</a> STR_SHIFT(<span class="keywordtype">short</span>)
+<a name="l00860"></a><a class="code" href="csstring_8h.html#a18">00860</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+<a name="l00861"></a><a class="code" href="csstring_8h.html#a19">00861</a> STR_SHIFT(<span class="keywordtype">int</span>)
+<a name="l00862"></a><a class="code" href="csstring_8h.html#a20">00862</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+<a name="l00863"></a><a class="code" href="csstring_8h.html#a21">00863</a> STR_SHIFT(<span class="keywordtype">long</span>);
+<a name="l00864"></a><a class="code" href="csstring_8h.html#a22">00864</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+<a name="l00865"></a><a class="code" href="csstring_8h.html#a23">00865</a> STR_SHIFT(<span class="keywordtype">float</span>)
+<a name="l00866"></a><a class="code" href="csstring_8h.html#a24">00866</a> STR_SHIFT(<span class="keywordtype">double</span>)
+<a name="l00867"></a><a class="code" href="csstring_8h.html#a25">00867</a> STR_SHIFT(<span class="keywordtype">bool</span>)
+00868 #undef STR_SHIFT
+00871 <span class="preprocessor">#endif // __CS_CSSTRING_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

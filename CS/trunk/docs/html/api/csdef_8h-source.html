@@ -53,115 +53,105 @@
 00035 <span class="preprocessor">#include &lt;<a class="code" href="string_8h.html">string.h</a>&gt;</span>
 00036 <span class="preprocessor">#include &lt;assert.h&gt;</span>
 00037 
-00038 <span class="comment">// DEPRECATED use "true" instead</span>
-00039 <span class="preprocessor">#ifndef TRUE</span>
-00040 <span class="preprocessor"></span><span class="preprocessor">  #define TRUE 1</span>
-00041 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00042 <span class="preprocessor"></span>
-00043 <span class="comment">// DEPRECATED use "false" instead</span>
-00044 <span class="preprocessor">#ifndef FALSE</span>
-00045 <span class="preprocessor"></span><span class="preprocessor">  #define FALSE 0</span>
-00046 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00047 <span class="preprocessor"></span>
-00048 <span class="preprocessor">#ifndef MIN</span>
-00049 <span class="preprocessor"></span><span class="preprocessor">  #define MIN(a,b) ((a)&lt;(b)?(a):(b))</span>
-00050 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00051 <span class="preprocessor"></span>
-00052 <span class="preprocessor">#ifndef MAX</span>
-00053 <span class="preprocessor"></span><span class="preprocessor">  #define MAX(a,b) ((a)&gt;(b)?(a):(b))</span>
-00054 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00055 <span class="preprocessor"></span>
-00056 <span class="preprocessor">#ifndef ABS</span>
-00057 <span class="preprocessor"></span><span class="preprocessor"> #define ABS(x) ((x)&lt;0?-(x):(x))</span>
-00058 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00059 <span class="preprocessor"></span>
-00060 <span class="preprocessor">#ifndef SIGN</span>
-00061 <span class="preprocessor"></span><span class="preprocessor">  #define SIGN(x) ((x) &lt; 0 ? -1 : ((x) &gt; 0 ? 1 : 0))</span>
+00038 <span class="preprocessor">#ifndef MIN</span>
+00039 <span class="preprocessor"></span><span class="preprocessor">  #define MIN(a,b) ((a)&lt;(b)?(a):(b))</span>
+00040 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00041 <span class="preprocessor"></span>
+00042 <span class="preprocessor">#ifndef MAX</span>
+00043 <span class="preprocessor"></span><span class="preprocessor">  #define MAX(a,b) ((a)&gt;(b)?(a):(b))</span>
+00044 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00045 <span class="preprocessor"></span>
+00046 <span class="preprocessor">#ifndef ABS</span>
+00047 <span class="preprocessor"></span><span class="preprocessor"> #define ABS(x) ((x)&lt;0?-(x):(x))</span>
+00048 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00049 <span class="preprocessor"></span>
+00050 <span class="preprocessor">#ifndef SIGN</span>
+00051 <span class="preprocessor"></span><span class="preprocessor">  #define SIGN(x) ((x) &lt; 0 ? -1 : ((x) &gt; 0 ? 1 : 0))</span>
+00052 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00053 <span class="preprocessor"></span>
+00054 <span class="preprocessor">#ifndef PI</span>
+00055 <span class="preprocessor"></span><span class="preprocessor"> #define PI 3.1415926535897932385f</span>
+00056 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00057 <span class="preprocessor"></span><span class="preprocessor">#ifndef HALF_PI</span>
+00058 <span class="preprocessor"></span><span class="preprocessor">  #define HALF_PI (PI / 2.0f)</span>
+00059 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00060 <span class="preprocessor"></span><span class="preprocessor">#ifndef TWO_PI</span>
+00061 <span class="preprocessor"></span><span class="preprocessor">  #define TWO_PI (PI * 2.0f)</span>
 00062 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 00063 <span class="preprocessor"></span>
-00064 <span class="preprocessor">#ifndef PI</span>
-00065 <span class="preprocessor"></span><span class="preprocessor"> #define PI 3.1415926535897932385f</span>
-00066 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00067 <span class="preprocessor"></span><span class="preprocessor">#ifndef HALF_PI</span>
-00068 <span class="preprocessor"></span><span class="preprocessor">  #define HALF_PI (PI / 2.0f)</span>
-00069 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00070 <span class="preprocessor"></span><span class="preprocessor">#ifndef TWO_PI</span>
-00071 <span class="preprocessor"></span><span class="preprocessor">  #define TWO_PI (PI * 2.0f)</span>
-00072 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00073 <span class="preprocessor"></span>
-00074 <span class="preprocessor">#undef EPSILON</span>
-00075 <span class="preprocessor"></span><span class="preprocessor">#define EPSILON 0.001f                  </span><span class="comment">/* Small value */</span>
-00076 <span class="preprocessor">#undef SMALL_EPSILON</span>
-00077 <span class="preprocessor"></span><span class="preprocessor">#define SMALL_EPSILON 0.000001f         </span><span class="comment">/* Very small value */</span>
-00078 <span class="preprocessor">#undef SMALL_EPSILON_D</span>
-00079 <span class="preprocessor"></span><span class="preprocessor">#define SMALL_EPSILON_D 0.000000000001f </span><span class="comment">/* Very, very small value */</span>
-00080 
-00081 <span class="comment">// Platforms with compilers which only understand old-style C++ casting syntax</span>
-00082 <span class="comment">// should define CS_USE_OLD_STYLE_CASTS.</span>
-00083 <span class="preprocessor">#if defined(CS_USE_OLD_STYLE_CASTS)</span>
-00084 <span class="preprocessor"></span><span class="preprocessor">  #define CS_CAST(C,T,V) ((T)(V))</span>
-00085 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00086 <span class="preprocessor"></span><span class="preprocessor">  #define CS_CAST(C,T,V) (C&lt;T&gt;(V))</span>
-00087 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00088 <span class="preprocessor"></span>
-00089 <span class="preprocessor">#define CS_STATIC_CAST(T,V)      CS_CAST(static_cast,T,V)</span>
-00090 <span class="preprocessor"></span><span class="preprocessor">#define CS_DYNAMIC_CAST(T,V)     CS_CAST(dynamic_cast,T,V)</span>
-00091 <span class="preprocessor"></span><span class="preprocessor">#define CS_REINTERPRET_CAST(T,V) CS_CAST(reinterpret_cast,T,V)</span>
-00092 <span class="preprocessor"></span><span class="preprocessor">#define CS_CONST_CAST(T,V)       CS_CAST(const_cast,T,V)</span>
-00093 <span class="preprocessor"></span>
-00094 <span class="comment">// DEPRECATED use the CS_ prefix versions instead.</span>
-00095 <span class="preprocessor">#define STATIC_CAST(T,V)      CS_STATIC_CAST(T,V)</span>
-00096 <span class="preprocessor"></span><span class="preprocessor">#define DYNAMIC_CAST(T,V)     CS_DYNAMIC_CAST(T,V)</span>
-00097 <span class="preprocessor"></span><span class="preprocessor">#define REINTERPRET_CAST(T,V) CS_REINTERPRET_CAST(T,V)</span>
-00098 <span class="preprocessor"></span><span class="preprocessor">#define CONST_CAST(T,V)       CS_CONST_CAST(T,V)</span>
-00099 <span class="preprocessor"></span>
-00100 <span class="comment">// Platforms which do not have floating-point variations of the standard math.h</span>
-00101 <span class="comment">// cos(), sin(), tan(), sqrt(), etc. functions should define</span>
-00102 <span class="comment">// CS_USE_FAKE_MATH_H_FLOAT_FUNCS.</span>
-00103 <span class="preprocessor">#if defined(CS_USE_FAKE_MATH_H_FLOAT_FUNCS)</span>
-00104 <span class="preprocessor"></span><span class="preprocessor">  #define acosf(X)  CS_STATIC_CAST(float,acos(X))</span>
-00105 <span class="preprocessor"></span><span class="preprocessor">  #define asinf(X)  CS_STATIC_CAST(float,asin(X))</span>
-00106 <span class="preprocessor"></span><span class="preprocessor">  #define atan2f(X) CS_STATIC_CAST(float,atan2(X))</span>
-00107 <span class="preprocessor"></span><span class="preprocessor">  #define atanf(X)  CS_STATIC_CAST(float,atan(X))</span>
-00108 <span class="preprocessor"></span><span class="preprocessor">  #define cosf(X)   CS_STATIC_CAST(float,cos(X))</span>
-00109 <span class="preprocessor"></span><span class="preprocessor">  #define exp2f(X)  CS_STATIC_CAST(float,exp2(X))</span>
-00110 <span class="preprocessor"></span><span class="preprocessor">  #define expf(X)   CS_STATIC_CAST(float,exp(X))</span>
-00111 <span class="preprocessor"></span><span class="preprocessor">  #define log10f(X) CS_STATIC_CAST(float,log10(X))</span>
-00112 <span class="preprocessor"></span><span class="preprocessor">  #define log2f(X)  CS_STATIC_CAST(float,log2(X))</span>
-00113 <span class="preprocessor"></span><span class="preprocessor">  #define logf(X)   CS_STATIC_CAST(float,log(X))</span>
-00114 <span class="preprocessor"></span><span class="preprocessor">  #define powf(X)   CS_STATIC_CAST(float,pow(X))</span>
-00115 <span class="preprocessor"></span><span class="preprocessor">  #define sinf(X)   CS_STATIC_CAST(float,sin(X))</span>
-00116 <span class="preprocessor"></span><span class="preprocessor">  #define sqrtf(X)  CS_STATIC_CAST(float,sqrt(X))</span>
-00117 <span class="preprocessor"></span><span class="preprocessor">  #define tanf(X)   CS_STATIC_CAST(float,tan(X))</span>
-00118 <span class="preprocessor"></span><span class="preprocessor">  #define floorf(X) CS_STATIC_CAST(float,floor(X))</span>
-00119 <span class="preprocessor"></span><span class="preprocessor">  #define ceilf(X)  CS_STATIC_CAST(float,ceil(X))</span>
-00120 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00121 <span class="preprocessor"></span>
-00122 <span class="comment">// Platforms with compilers which do not understand the new C++ keyword</span>
-00123 <span class="comment">// `explicit' should define CS_USE_FAKE_EXPLICIT_KEYWORD.</span>
-00124 <span class="preprocessor">#if defined(CS_USE_FAKE_EXPLICIT_KEYWORD)</span>
-00125 <span class="preprocessor"></span><span class="preprocessor">  #define explicit </span><span class="comment">/* nothing */</span>
-00126 <span class="preprocessor">#endif</span>
-00127 <span class="preprocessor"></span>
-00128 <span class="comment">// Platforms with compilers which do not understand the new C++ keyword</span>
-00129 <span class="comment">// `typename' should define CS_USE_FAKE_TYPENAME_KEYWORD.</span>
-00130 <span class="preprocessor">#if defined(CS_USE_FAKE_TYPENAME_KEYWORD)</span>
-00131 <span class="preprocessor"></span><span class="preprocessor">  #define typename </span><span class="comment">/* nothing */</span>
-00132 <span class="preprocessor">#endif</span>
-00133 <span class="preprocessor"></span>
-00134 <span class="comment">// Platforms with compilers which do not undersatnd the new C++ explicit</span>
-00135 <span class="comment">// template specialization syntax `template&lt;&gt;' should define</span>
-00136 <span class="comment">// CS_USE_OLD_TEMPLATE_SPECIALIZATION.</span>
-00137 <span class="preprocessor">#if defined(CS_USE_OLD_TEMPLATE_SPECIALIZATION)</span>
-00138 <span class="preprocessor"></span><span class="preprocessor">  #define CS_SPECIALIZE_TEMPLATE</span>
-00139 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00140 <span class="preprocessor"></span><span class="preprocessor">  #define CS_SPECIALIZE_TEMPLATE template&lt;&gt;</span>
-00141 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00142 <span class="preprocessor"></span>
-00143 <span class="comment">// The smallest Z at which 3D clipping occurs</span>
-00144 <span class="preprocessor">#define SMALL_Z 0.01f</span>
-00145 <span class="preprocessor"></span>
-00146 <span class="preprocessor">#endif // __CS_CSDEF_H__</span>
+00064 <span class="preprocessor">#undef EPSILON</span>
+00065 <span class="preprocessor"></span><span class="preprocessor">#define EPSILON 0.001f                  </span><span class="comment">/* Small value */</span>
+00066 <span class="preprocessor">#undef SMALL_EPSILON</span>
+00067 <span class="preprocessor"></span><span class="preprocessor">#define SMALL_EPSILON 0.000001f         </span><span class="comment">/* Very small value */</span>
+00068 <span class="preprocessor">#undef SMALL_EPSILON_D</span>
+00069 <span class="preprocessor"></span><span class="preprocessor">#define SMALL_EPSILON_D 0.000000000001f </span><span class="comment">/* Very, very small value */</span>
+00070 
+00071 <span class="comment">// Platforms with compilers which only understand old-style C++ casting syntax</span>
+00072 <span class="comment">// should define CS_USE_OLD_STYLE_CASTS.</span>
+00073 <span class="preprocessor">#if defined(CS_USE_OLD_STYLE_CASTS)</span>
+00074 <span class="preprocessor"></span><span class="preprocessor">  #define CS_CAST(C,T,V) ((T)(V))</span>
+00075 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00076 <span class="preprocessor"></span><span class="preprocessor">  #define CS_CAST(C,T,V) (C&lt;T&gt;(V))</span>
+00077 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00078 <span class="preprocessor"></span>
+00079 <span class="preprocessor">#define CS_STATIC_CAST(T,V)      CS_CAST(static_cast,T,V)</span>
+00080 <span class="preprocessor"></span><span class="preprocessor">#define CS_DYNAMIC_CAST(T,V)     CS_CAST(dynamic_cast,T,V)</span>
+00081 <span class="preprocessor"></span><span class="preprocessor">#define CS_REINTERPRET_CAST(T,V) CS_CAST(reinterpret_cast,T,V)</span>
+00082 <span class="preprocessor"></span><span class="preprocessor">#define CS_CONST_CAST(T,V)       CS_CAST(const_cast,T,V)</span>
+00083 <span class="preprocessor"></span>
+00084 <span class="comment">// DEPRECATED use the CS_ prefix versions instead.</span>
+00085 <span class="preprocessor">#define STATIC_CAST(T,V)      CS_STATIC_CAST(T,V)</span>
+00086 <span class="preprocessor"></span><span class="preprocessor">#define DYNAMIC_CAST(T,V)     CS_DYNAMIC_CAST(T,V)</span>
+00087 <span class="preprocessor"></span><span class="preprocessor">#define REINTERPRET_CAST(T,V) CS_REINTERPRET_CAST(T,V)</span>
+00088 <span class="preprocessor"></span><span class="preprocessor">#define CONST_CAST(T,V)       CS_CONST_CAST(T,V)</span>
+00089 <span class="preprocessor"></span>
+00090 <span class="comment">// Platforms which do not have floating-point variations of the standard math.h</span>
+00091 <span class="comment">// cos(), sin(), tan(), sqrt(), etc. functions should define</span>
+00092 <span class="comment">// CS_USE_FAKE_MATH_H_FLOAT_FUNCS.</span>
+00093 <span class="preprocessor">#if defined(CS_USE_FAKE_MATH_H_FLOAT_FUNCS)</span>
+00094 <span class="preprocessor"></span><span class="preprocessor">  #define acosf(X)  CS_STATIC_CAST(float,acos(X))</span>
+00095 <span class="preprocessor"></span><span class="preprocessor">  #define asinf(X)  CS_STATIC_CAST(float,asin(X))</span>
+00096 <span class="preprocessor"></span><span class="preprocessor">  #define atan2f(X) CS_STATIC_CAST(float,atan2(X))</span>
+00097 <span class="preprocessor"></span><span class="preprocessor">  #define atanf(X)  CS_STATIC_CAST(float,atan(X))</span>
+00098 <span class="preprocessor"></span><span class="preprocessor">  #define cosf(X)   CS_STATIC_CAST(float,cos(X))</span>
+00099 <span class="preprocessor"></span><span class="preprocessor">  #define exp2f(X)  CS_STATIC_CAST(float,exp2(X))</span>
+00100 <span class="preprocessor"></span><span class="preprocessor">  #define expf(X)   CS_STATIC_CAST(float,exp(X))</span>
+00101 <span class="preprocessor"></span><span class="preprocessor">  #define log10f(X) CS_STATIC_CAST(float,log10(X))</span>
+00102 <span class="preprocessor"></span><span class="preprocessor">  #define log2f(X)  CS_STATIC_CAST(float,log2(X))</span>
+00103 <span class="preprocessor"></span><span class="preprocessor">  #define logf(X)   CS_STATIC_CAST(float,log(X))</span>
+00104 <span class="preprocessor"></span><span class="preprocessor">  #define powf(X)   CS_STATIC_CAST(float,pow(X))</span>
+00105 <span class="preprocessor"></span><span class="preprocessor">  #define sinf(X)   CS_STATIC_CAST(float,sin(X))</span>
+00106 <span class="preprocessor"></span><span class="preprocessor">  #define sqrtf(X)  CS_STATIC_CAST(float,sqrt(X))</span>
+00107 <span class="preprocessor"></span><span class="preprocessor">  #define tanf(X)   CS_STATIC_CAST(float,tan(X))</span>
+00108 <span class="preprocessor"></span><span class="preprocessor">  #define floorf(X) CS_STATIC_CAST(float,floor(X))</span>
+00109 <span class="preprocessor"></span><span class="preprocessor">  #define ceilf(X)  CS_STATIC_CAST(float,ceil(X))</span>
+00110 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00111 <span class="preprocessor"></span>
+00112 <span class="comment">// Platforms with compilers which do not understand the new C++ keyword</span>
+00113 <span class="comment">// `explicit' should define CS_USE_FAKE_EXPLICIT_KEYWORD.</span>
+00114 <span class="preprocessor">#if defined(CS_USE_FAKE_EXPLICIT_KEYWORD)</span>
+00115 <span class="preprocessor"></span><span class="preprocessor">  #define explicit </span><span class="comment">/* nothing */</span>
+00116 <span class="preprocessor">#endif</span>
+00117 <span class="preprocessor"></span>
+00118 <span class="comment">// Platforms with compilers which do not understand the new C++ keyword</span>
+00119 <span class="comment">// `typename' should define CS_USE_FAKE_TYPENAME_KEYWORD.</span>
+00120 <span class="preprocessor">#if defined(CS_USE_FAKE_TYPENAME_KEYWORD)</span>
+00121 <span class="preprocessor"></span><span class="preprocessor">  #define typename </span><span class="comment">/* nothing */</span>
+00122 <span class="preprocessor">#endif</span>
+00123 <span class="preprocessor"></span>
+00124 <span class="comment">// Platforms with compilers which do not undersatnd the new C++ explicit</span>
+00125 <span class="comment">// template specialization syntax `template&lt;&gt;' should define</span>
+00126 <span class="comment">// CS_USE_OLD_TEMPLATE_SPECIALIZATION.</span>
+00127 <span class="preprocessor">#if defined(CS_USE_OLD_TEMPLATE_SPECIALIZATION)</span>
+00128 <span class="preprocessor"></span><span class="preprocessor">  #define CS_SPECIALIZE_TEMPLATE</span>
+00129 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00130 <span class="preprocessor"></span><span class="preprocessor">  #define CS_SPECIALIZE_TEMPLATE template&lt;&gt;</span>
+00131 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00132 <span class="preprocessor"></span>
+00133 <span class="comment">// The smallest Z at which 3D clipping occurs</span>
+00134 <span class="preprocessor">#define SMALL_Z 0.01f</span>
+00135 <span class="preprocessor"></span>
+00136 <span class="preprocessor">#endif // __CS_CSDEF_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
