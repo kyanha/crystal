@@ -129,113 +129,125 @@
 00185     }
 00186     <span class="keywordflow">return</span> buf;
 00187   }
-00188 };
-00189 
-<a name="l00193"></a><a class="code" href="structcsPackRGBA.html">00193</a> <span class="keyword">struct </span><a class="code" href="structcsPackRGBA.html">csPackRGBA</a>
-00194 {
-00195   <span class="keyword">static</span> <span class="keywordtype">bool</span> IsRGBpixelSane() { <span class="keywordflow">return</span> (<span class="keyword">sizeof</span>(<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>) == 4); }
-<a name="l00202"></a><a class="code" href="structcsPackRGBA.html#e1">00202</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structcsPackRGBA.html#e1">PackRGBpixelToRGBA</a> (uint8* buf, <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* pixels, 
-00203     size_t numPixels)
-00204   {
-00205     <span class="keywordflow">if</span> (IsRGBpixelSane())
-00206       memcpy (buf, pixels, numPixels * 4);
-00207     <span class="keywordflow">else</span>
-00208     {
-00209       uint8* bufptr = buf;
-00210       <span class="keywordflow">while</span> (numPixels--)
-00211       {
-00212         *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#o0">red</a>;
-00213         *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#o1">green</a>;
-00214         *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#o2">blue</a>;
-00215         *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#o3">alpha</a>;
-00216         pixels++; 
-00217       }
-00218     }
-00219   }
-<a name="l00229"></a><a class="code" href="structcsPackRGBA.html#e2">00229</a>   <span class="keyword">static</span> <span class="keyword">const</span> uint8* <a class="code" href="structcsPackRGBA.html#e1">PackRGBpixelToRGBA</a> (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* pixels, 
-00230     size_t numPixels)
-00231   {
-00232     <span class="keywordflow">if</span> (IsRGBpixelSane())
-00233       <span class="keywordflow">return</span> (uint8*)pixels;
-00234     <span class="keywordflow">else</span>
-00235     {
-00236       uint8* buf = <span class="keyword">new</span> uint8[numPixels * 4];
-00237       <a class="code" href="structcsPackRGBA.html#e1">PackRGBpixelToRGBA</a> (buf, pixels, numPixels);
-00238       <span class="keywordflow">return</span> buf;
-00239     }
-00240   }
-<a name="l00245"></a><a class="code" href="structcsPackRGBA.html#e3">00245</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structcsPackRGBA.html#e3">DiscardPackedRGBA</a> (<span class="keyword">const</span> uint8* rgba) 
-00246   {
-00247     <span class="keywordflow">if</span> (!IsRGBpixelSane())
-00248     {
-00249       <span class="keyword">delete</span>[] (uint8*)rgba;
-00250     }
-00251   }
-<a name="l00258"></a><a class="code" href="structcsPackRGBA.html#e4">00258</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structcsPackRGBA.html#e4">UnpackRGBAtoRGBpixel</a> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* buf, <span class="keyword">const</span> uint8* rgba, 
-00259     size_t numPixels)
-00260   {
-00261     <span class="keywordflow">if</span> (IsRGBpixelSane())
-00262       memcpy (buf, rgba, numPixels * 4);
-00263     <span class="keywordflow">else</span>
-00264     {
-00265       <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* bufptr = buf;
-00266       <span class="keywordflow">while</span> (numPixels--)
-00267       {
-00268         bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o0">red</a> = *rgba++;
-00269         bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o1">green</a> = *rgba++;
-00270         bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o2">blue</a> = *rgba++;
-00271         bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o3">alpha</a> = *rgba++;
-00272         bufptr++; 
-00273       }
-00274     }
-00275   }
-<a name="l00285"></a><a class="code" href="structcsPackRGBA.html#e5">00285</a>   <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="structcsPackRGBA.html#e4">UnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
-00286     size_t numPixels)
-00287   {
-00288     <span class="keywordflow">if</span> (IsRGBpixelSane())
-00289       <span class="keywordflow">return</span> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>*)rgba;
-00290     <span class="keywordflow">else</span>
-00291     {
-00292       <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>[numPixels];
-00293       <a class="code" href="structcsPackRGBA.html#e4">UnpackRGBAtoRGBpixel</a> (buf, rgba, numPixels);
-00294       <span class="keywordflow">return</span> buf;
-00295     }
-00296   }
-<a name="l00306"></a><a class="code" href="structcsPackRGBA.html#e6">00306</a>   <span class="keyword">static</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="structcsPackRGBA.html#e6">CopyUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
-00307     size_t numPixels)
-00308   {
-00309     <span class="keywordflow">if</span> (IsRGBpixelSane())
-00310     {
-00311       <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>[numPixels];
-00312       memcpy (buf, rgba, numPixels * <span class="keyword">sizeof</span>(csRGBpixel));
-00313       <span class="keywordflow">return</span> buf;
-00314     }
-00315     <span class="keywordflow">else</span>
-00316       <span class="keywordflow">return</span> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>*)<a class="code" href="structcsPackRGBA.html#e4">UnpackRGBAtoRGBpixel</a> (rgba, numPixels);
-00317   }
-<a name="l00323"></a><a class="code" href="structcsPackRGBA.html#e7">00323</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structcsPackRGBA.html#e7">csDiscardUnpackedRGBpixel</a> (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* pixels) 
-00324   {
-00325     <span class="keywordflow">if</span> (!IsRGBpixelSane())
-00326       <span class="keyword">delete</span>[] (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>*)pixels;
-00327   }
-<a name="l00337"></a><a class="code" href="structcsPackRGBA.html#e8">00337</a>   <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* <a class="code" href="structcsPackRGBA.html#e8">UnpackRGBAtoRGBcolor</a> (<span class="keyword">const</span> uint8* rgba, 
-00338     size_t numPixels)
-00339   {
-00340     <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>[numPixels];
-00341     csRGBcolor* bufptr = buf;
-00342     <span class="keywordflow">while</span> (numPixels--)
-00343     {
-00344       bufptr-&gt;<a class="code" href="structcsRGBcolor.html#o0">red</a> = *rgba++;
-00345       bufptr-&gt;<a class="code" href="structcsRGBcolor.html#o1">green</a> = *rgba++;
-00346       bufptr-&gt;<a class="code" href="structcsRGBcolor.html#o2">blue</a> = *rgba++;
-00347       rgba++;
-00348       bufptr++; 
-00349     }
-00350     <span class="keywordflow">return</span> buf;
-00351   }
-00352 };
-00353 
-00358 <span class="preprocessor">#endif // __CSGFX_PACKRGB_H__</span>
+<a name="l00194"></a><a class="code" href="structcsPackRGB.html#e8">00194</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structcsPackRGB.html#e8">UnpackRGBtoRGBpixelBuffer</a> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* buf, uint8* rgb,
+00195     size_t numPixels)
+00196   {
+00197     <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* bufptr = buf;
+00198     <span class="keywordflow">while</span> (numPixels--)
+00199     {
+00200       bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o0">red</a> = *rgb++;
+00201       bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o1">green</a> = *rgb++;
+00202       bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o2">blue</a> = *rgb++;
+00203       bufptr++; 
+00204     }
+00205   }
+00206 };
+00207 
+<a name="l00211"></a><a class="code" href="structcsPackRGBA.html">00211</a> <span class="keyword">struct </span><a class="code" href="structcsPackRGBA.html">csPackRGBA</a>
+00212 {
+00213   <span class="keyword">static</span> <span class="keywordtype">bool</span> IsRGBpixelSane() { <span class="keywordflow">return</span> (<span class="keyword">sizeof</span>(<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>) == 4); }
+<a name="l00220"></a><a class="code" href="structcsPackRGBA.html#e1">00220</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structcsPackRGBA.html#e1">PackRGBpixelToRGBA</a> (uint8* buf, <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* pixels, 
+00221     size_t numPixels)
+00222   {
+00223     <span class="keywordflow">if</span> (IsRGBpixelSane())
+00224       memcpy (buf, pixels, numPixels * 4);
+00225     <span class="keywordflow">else</span>
+00226     {
+00227       uint8* bufptr = buf;
+00228       <span class="keywordflow">while</span> (numPixels--)
+00229       {
+00230         *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#o0">red</a>;
+00231         *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#o1">green</a>;
+00232         *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#o2">blue</a>;
+00233         *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#o3">alpha</a>;
+00234         pixels++; 
+00235       }
+00236     }
+00237   }
+<a name="l00247"></a><a class="code" href="structcsPackRGBA.html#e2">00247</a>   <span class="keyword">static</span> <span class="keyword">const</span> uint8* <a class="code" href="structcsPackRGBA.html#e1">PackRGBpixelToRGBA</a> (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* pixels, 
+00248     size_t numPixels)
+00249   {
+00250     <span class="keywordflow">if</span> (IsRGBpixelSane())
+00251       <span class="keywordflow">return</span> (uint8*)pixels;
+00252     <span class="keywordflow">else</span>
+00253     {
+00254       uint8* buf = <span class="keyword">new</span> uint8[numPixels * 4];
+00255       <a class="code" href="structcsPackRGBA.html#e1">PackRGBpixelToRGBA</a> (buf, pixels, numPixels);
+00256       <span class="keywordflow">return</span> buf;
+00257     }
+00258   }
+<a name="l00263"></a><a class="code" href="structcsPackRGBA.html#e3">00263</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structcsPackRGBA.html#e3">DiscardPackedRGBA</a> (<span class="keyword">const</span> uint8* rgba) 
+00264   {
+00265     <span class="keywordflow">if</span> (!IsRGBpixelSane())
+00266     {
+00267       <span class="keyword">delete</span>[] (uint8*)rgba;
+00268     }
+00269   }
+<a name="l00276"></a><a class="code" href="structcsPackRGBA.html#e4">00276</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structcsPackRGBA.html#e4">UnpackRGBAtoRGBpixel</a> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* buf, <span class="keyword">const</span> uint8* rgba, 
+00277     size_t numPixels)
+00278   {
+00279     <span class="keywordflow">if</span> (IsRGBpixelSane())
+00280       memcpy (buf, rgba, numPixels * 4);
+00281     <span class="keywordflow">else</span>
+00282     {
+00283       <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* bufptr = buf;
+00284       <span class="keywordflow">while</span> (numPixels--)
+00285       {
+00286         bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o0">red</a> = *rgba++;
+00287         bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o1">green</a> = *rgba++;
+00288         bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o2">blue</a> = *rgba++;
+00289         bufptr-&gt;<a class="code" href="structcsRGBpixel.html#o3">alpha</a> = *rgba++;
+00290         bufptr++; 
+00291       }
+00292     }
+00293   }
+<a name="l00303"></a><a class="code" href="structcsPackRGBA.html#e5">00303</a>   <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="structcsPackRGBA.html#e4">UnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
+00304     size_t numPixels)
+00305   {
+00306     <span class="keywordflow">if</span> (IsRGBpixelSane())
+00307       <span class="keywordflow">return</span> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>*)rgba;
+00308     <span class="keywordflow">else</span>
+00309     {
+00310       <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>[numPixels];
+00311       <a class="code" href="structcsPackRGBA.html#e4">UnpackRGBAtoRGBpixel</a> (buf, rgba, numPixels);
+00312       <span class="keywordflow">return</span> buf;
+00313     }
+00314   }
+<a name="l00324"></a><a class="code" href="structcsPackRGBA.html#e6">00324</a>   <span class="keyword">static</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="structcsPackRGBA.html#e6">CopyUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
+00325     size_t numPixels)
+00326   {
+00327     <span class="keywordflow">if</span> (IsRGBpixelSane())
+00328     {
+00329       <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>[numPixels];
+00330       memcpy (buf, rgba, numPixels * <span class="keyword">sizeof</span>(csRGBpixel));
+00331       <span class="keywordflow">return</span> buf;
+00332     }
+00333     <span class="keywordflow">else</span>
+00334       <span class="keywordflow">return</span> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>*)<a class="code" href="structcsPackRGBA.html#e4">UnpackRGBAtoRGBpixel</a> (rgba, numPixels);
+00335   }
+<a name="l00341"></a><a class="code" href="structcsPackRGBA.html#e7">00341</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="structcsPackRGBA.html#e7">csDiscardUnpackedRGBpixel</a> (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* pixels) 
+00342   {
+00343     <span class="keywordflow">if</span> (!IsRGBpixelSane())
+00344       <span class="keyword">delete</span>[] (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>*)pixels;
+00345   }
+<a name="l00355"></a><a class="code" href="structcsPackRGBA.html#e8">00355</a>   <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* <a class="code" href="structcsPackRGBA.html#e8">UnpackRGBAtoRGBcolor</a> (<span class="keyword">const</span> uint8* rgba, 
+00356     size_t numPixels)
+00357   {
+00358     <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>[numPixels];
+00359     csRGBcolor* bufptr = buf;
+00360     <span class="keywordflow">while</span> (numPixels--)
+00361     {
+00362       bufptr-&gt;<a class="code" href="structcsRGBcolor.html#o0">red</a> = *rgba++;
+00363       bufptr-&gt;<a class="code" href="structcsRGBcolor.html#o1">green</a> = *rgba++;
+00364       bufptr-&gt;<a class="code" href="structcsRGBcolor.html#o2">blue</a> = *rgba++;
+00365       rgba++;
+00366       bufptr++; 
+00367     }
+00368     <span class="keywordflow">return</span> buf;
+00369   }
+00370 };
+00371 
+00376 <span class="preprocessor">#endif // __CSGFX_PACKRGB_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.3 
 </small></address> </div></body> </html>
