@@ -276,12 +276,12 @@
 00389 <span class="preprocessor">static void getterFunc ## _kill_array ();                               \</span>
 00390 <span class="preprocessor">void getterFunc ## _kill ()                                             \</span>
 00391 <span class="preprocessor">{                                                                       \</span>
-00392 <span class="preprocessor">  (void)getterFunc ## _kill_array;                                      \</span>
+00392 <span class="preprocessor">  (void)(&amp;getterFunc ## _kill_array);                                   \</span>
 00393 <span class="preprocessor">  delete getterFunc ();                                                 \</span>
 00394 <span class="preprocessor">}                                                                       \</span>
 00395 <span class="preprocessor">void getterFunc ## _kill_array ()                                       \</span>
 00396 <span class="preprocessor">{                                                                       \</span>
-00397 <span class="preprocessor">  (void)getterFunc ## _kill;                                            \</span>
+00397 <span class="preprocessor">  (void)(&amp;getterFunc ## _kill);                                         \</span>
 00398 <span class="preprocessor">  delete [] getterFunc ();                                              \</span>
 00399 <span class="preprocessor">}                                                                       \</span>
 00400 <span class="preprocessor">Type* getterFunc ()                                                     \</span>
@@ -321,30 +321,30 @@
 00441 <span class="preprocessor"></span>
 00452 <span class="preprocessor">#ifndef CS_IMPLEMENT_STATIC_CLASSVAR_EXT</span>
 00453 <span class="preprocessor"></span><span class="preprocessor">#define CS_IMPLEMENT_STATIC_CLASSVAR_EXT(Class,var,getterFunc,Type,initParam,\</span>
-00454 <span class="preprocessor">  kill_how)                                                    \</span>
-00455 <span class="preprocessor">Type *Class::var = 0;                                          \</span>
-00456 <span class="preprocessor">extern "C" {                                                   \</span>
-00457 <span class="preprocessor">static void Class ## _ ## getterFunc ## _kill ();              \</span>
-00458 <span class="preprocessor">static void Class ## _ ## getterFunc ## _kill_array ();        \</span>
-00459 <span class="preprocessor">void Class ## _ ## getterFunc ## _kill ()                      \</span>
-00460 <span class="preprocessor">{                                                              \</span>
-00461 <span class="preprocessor">  (void) Class ## _ ## getterFunc ## _kill_array;              \</span>
-00462 <span class="preprocessor">  delete Class::getterFunc ();                                 \</span>
-00463 <span class="preprocessor">}                                                              \</span>
-00464 <span class="preprocessor">void Class ## _ ## getterFunc ## _kill_array ()                \</span>
-00465 <span class="preprocessor">{                                                              \</span>
-00466 <span class="preprocessor">  (void) Class ## _ ## getterFunc ## _kill;                    \</span>
-00467 <span class="preprocessor">  delete [] Class::getterFunc ();                              \</span>
-00468 <span class="preprocessor">}                                                              \</span>
-00469 <span class="preprocessor">}                                                              \</span>
-00470 <span class="preprocessor">Type* Class::getterFunc ()                                     \</span>
-00471 <span class="preprocessor">{                                                              \</span>
-00472 <span class="preprocessor">  if (!var)                                                    \</span>
-00473 <span class="preprocessor">  {                                                            \</span>
-00474 <span class="preprocessor">    var = new Type initParam;                                  \</span>
-00475 <span class="preprocessor">    csStaticVarCleanup (Class ## _ ## getterFunc ## kill_how); \</span>
-00476 <span class="preprocessor">  }                                                            \</span>
-00477 <span class="preprocessor">  return var;                                                  \</span>
+00454 <span class="preprocessor">  kill_how)                                                     \</span>
+00455 <span class="preprocessor">Type *Class::var = 0;                                           \</span>
+00456 <span class="preprocessor">extern "C" {                                                    \</span>
+00457 <span class="preprocessor">static void Class ## _ ## getterFunc ## _kill ();               \</span>
+00458 <span class="preprocessor">static void Class ## _ ## getterFunc ## _kill_array ();         \</span>
+00459 <span class="preprocessor">void Class ## _ ## getterFunc ## _kill ()                       \</span>
+00460 <span class="preprocessor">{                                                               \</span>
+00461 <span class="preprocessor">  delete Class::getterFunc ();                                  \</span>
+00462 <span class="preprocessor">  (void)(&amp;Class ## _ ## getterFunc ## _kill_array);             \</span>
+00463 <span class="preprocessor">}                                                               \</span>
+00464 <span class="preprocessor">void Class ## _ ## getterFunc ## _kill_array ()                 \</span>
+00465 <span class="preprocessor">{                                                               \</span>
+00466 <span class="preprocessor">  delete [] Class::getterFunc ();                               \</span>
+00467 <span class="preprocessor">  (void)(&amp;Class ## _ ## getterFunc ## _kill);                   \</span>
+00468 <span class="preprocessor">}                                                               \</span>
+00469 <span class="preprocessor">}                                                               \</span>
+00470 <span class="preprocessor">Type* Class::getterFunc ()                                      \</span>
+00471 <span class="preprocessor">{                                                               \</span>
+00472 <span class="preprocessor">  if (!var)                                                     \</span>
+00473 <span class="preprocessor">  {                                                             \</span>
+00474 <span class="preprocessor">    var = new Type initParam;                                   \</span>
+00475 <span class="preprocessor">    csStaticVarCleanup (Class ## _ ## getterFunc ## kill_how);  \</span>
+00476 <span class="preprocessor">  }                                                             \</span>
+00477 <span class="preprocessor">  return var;                                                   \</span>
 00478 <span class="preprocessor">}</span>
 00479 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 00480 <span class="preprocessor"></span>
