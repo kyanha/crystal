@@ -45,14 +45,12 @@ application by responding to the <KBD>ESC</KBD> key.  Add the following private
 method to our class in `<TT>simple.h</TT>':
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  bool OnKeyboard (iEvent&#38;);
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool OnKeyboard (iEvent&#38;);
 </pre></td></tr></table></P><P>
 
-The function <CODE>OnKeyboard ()</CODE> will be called from
-csBaseEventHandler once an Event occures.
-</P><P>
-
-Add the following code before <CODE>Simple::OnInitialize()</CODE>:
+The function <CODE>OnKeyboard()</CODE> will be called when an event arrives
+Add the following code to `<TT>simple.cpp</TT>' just before
+<CODE>Simple::OnInitialize()</CODE>:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::OnKeyboard(iEvent&#38; ev)
@@ -73,10 +71,10 @@ Add the following code before <CODE>Simple::OnInitialize()</CODE>:
 </pre></td></tr></table></P><P>
 
 <CODE>OnKeyboard()</CODE> checks if the <KBD>ESC</KBD> key has been pressed. If so it
-will use the object registry to find the global event queue object. Using
-<CODE>Broadcast()</CODE> it will then broadcast the `<SAMP>cscmdQuit</SAMP>' message
-to all interested parties. This will cause the application to quit by ending
-the default run loop.
+uses the object registry to find the global event queue object. Using
+<CODE>Broadcast()</CODE> it then broadcasts the `<SAMP>cscmdQuit</SAMP>' message
+to all interested parties. This will cause the application to quit by
+terminating the run-loop.
 </P><P>
 
 <A NAME="Simple World"></A>

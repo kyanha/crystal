@@ -60,8 +60,10 @@ private:
   csRef&#60;iGraphics3D&#62; g3d;
   csRef&#60;iKeyboardDriver&#62; kbd;
   csRef&#60;iVirtualClock&#62; vc;
-  iSector* room;
   csRef&#60;iView&#62; view;
+  iSector* room;
+  csVector3 pos;
+  float rotX, rotY;
  
   bool OnKeyboard (iEvent&#38;);
   void ProcessFrame ();
@@ -80,7 +82,7 @@ public:
 #endif // __SIMPMAP_H__
 </pre></td></tr></table></P><P>
 
-Similarly for `<TT>simpmap.cpp</TT>':
+Similarly, for `<TT>simpmap.cpp</TT>':
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "simpmap.h"
@@ -105,18 +107,45 @@ void Simple::ProcessFrame ()
   float speed = (elapsed_time / 1000.0) * (0.03 * 20);
 
   iCamera* c = view-&#62;GetCamera();
-  if (kbd-&#62;GetKeyState (CSKEY_RIGHT))
-    c-&#62;GetTransform ().RotateThis (CS_VEC_ROT_RIGHT, speed);
-  if (kbd-&#62;GetKeyState (CSKEY_LEFT))
-    c-&#62;GetTransform ().RotateThis (CS_VEC_ROT_LEFT, speed);
-  if (kbd-&#62;GetKeyState (CSKEY_PGUP))
-    c-&#62;GetTransform ().RotateThis (CS_VEC_TILT_UP, speed);
-  if (kbd-&#62;GetKeyState (CSKEY_PGDN))
-    c-&#62;GetTransform ().RotateThis (CS_VEC_TILT_DOWN, speed);
-  if (kbd-&#62;GetKeyState (CSKEY_UP))
-    c-&#62;Move (CS_VEC_FORWARD * 4 * speed);
-  if (kbd-&#62;GetKeyState (CSKEY_DOWN))
-    c-&#62;Move (CS_VEC_BACKWARD * 4 * speed);
+
+  if (kbd-&#62;GetKeyState (CSKEY_SHIFT))
+  {
+    // If the user is holding down shift, the arrow keys will cause
+    // the camera to strafe up, down, left or right from it's
+    // current position.
+    if (kbd-&#62;GetKeyState (CSKEY_RIGHT))
+      c-&#62;Move (CS_VEC_RIGHT * 4 * speed);
+    if (kbd-&#62;GetKeyState (CSKEY_LEFT))
+      c-&#62;Move (CS_VEC_LEFT * 4 * speed);
+    if (kbd-&#62;GetKeyState (CSKEY_UP))
+      c-&#62;Move (CS_VEC_UP * 4 * speed);
+    if (kbd-&#62;GetKeyState (CSKEY_DOWN))
+      c-&#62;Move (CS_VEC_DOWN * 4 * speed);
+  }
+  else
+  {
+    // left and right cause the camera to rotate on the global Y
+    // axis; page up and page down cause the camera to rotate on the
+    // _camera's_ X axis and up and downarrows cause the camera to
+    // go forwards and backwards.
+    if (kbd-&#62;GetKeyState (CSKEY_RIGHT))
+      rotY += speed;
+    if (kbd-&#62;GetKeyState (CSKEY_LEFT))
+      rotY -= speed;
+    if (kbd-&#62;GetKeyState (CSKEY_PGUP))
+      rotX += speed;
+    if (kbd-&#62;GetKeyState (CSKEY_PGDN))
+      rotX -= speed;
+    if (kbd-&#62;GetKeyState (CSKEY_UP))
+      c-&#62;Move (CS_VEC_FORWARD * 4 * speed);
+    if (kbd-&#62;GetKeyState (CSKEY_DOWN))
+      c-&#62;Move (CS_VEC_BACKWARD * 4 * speed);
+  }
+
+  // We now assign a new rotation transformation to the camera.
+  csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
+  csOrthoTransform ot (rot, c-&#62;GetTransform().GetOrigin ());
+  c-&#62;SetTransform (ot);
 
   // Tell 3D driver we're going to display 3D things.
   if (!g3d-&#62;BeginDraw(
@@ -213,9 +242,9 @@ One important note in the code above: we removed the following line:
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>engine-&#62;SetLightingCacheMode (0);
 </pre></td></tr></table></P><P>
 
-That's because when we are loading from map file we actually want
+That's because, when we are loading from map file, we actually want
 the lighting information to be read from the cache (if present).
-That's because relighting a map can be a time-consuming process.
+We do so because relighting a map can be a time-consuming process.
 </P><P>
 
 <A NAME="Simple Loading The Map"></A>
