@@ -141,7 +141,7 @@ In the source file `<TT>simple.cpp</TT>' we place the following:
 CS_IMPLEMENT_APPLICATION
 
 // The global pointer to simple
-Simple *simple;
+Simple* simple = 0;
 
 Simple::Simple (iObjectRegistry* object_reg)
 {
@@ -257,13 +257,12 @@ int main (int argc, char* argv[])
   if (!object_reg) return -1;
 
   simple = new Simple (object_reg);
-
   if (simple-&#62;Initialize ())
     simple-&#62;Start ();
-
   delete simple;
-  csInitializer::DestroyApplication (object_reg);
+  simple = 0;
 
+  csInitializer::DestroyApplication (object_reg);
   return 0;
 }
 </pre></td></tr></table></P><P>
