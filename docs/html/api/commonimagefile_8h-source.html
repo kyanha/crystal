@@ -17,7 +17,7 @@
 <div class="qindex"><a class="qindex" href="index.html">Main&nbsp;Page</a> | <a class="qindex" href="modules.html">Modules</a> | <a class="qindex" href="hierarchy.html">Class&nbsp;Hierarchy</a> | <a class="qindex" href="classes.html">Alphabetical&nbsp;List</a> | <a class="qindex" href="annotated.html">Class&nbsp;List</a> | <a class="qindex" href="files.html">File&nbsp;List</a> | <a class="qindex" href="functions.html">Class&nbsp;Members</a> | <a class="qindex" href="globals.html">File&nbsp;Members</a> | <a class="qindex" href="pages.html">Related&nbsp;Pages</a></div>
 <div class="nav">
 <a class="el" href="dir_000005.html">csplugincommon</a>&nbsp;/&nbsp;<a class="el" href="dir_000009.html">imageloader</a></div>
-<h1>commonimagefile.h</h1><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
+<h1>commonimagefile.h</h1><a href="commonimagefile_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
 00002 <span class="comment">    Copyright (C) 2005 by Jorrit Tyberghein</span>
 00003 <span class="comment">                  2005 by Frank Richter</span>
 00004 <span class="comment"></span>
@@ -36,115 +36,115 @@
 00017 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
 00018 <span class="comment">*/</span>
 00019 
-00020 <span class="preprocessor">#ifndef __CS_PLUGINS_VIDEO_LOADER_COMMON_COMMONIMAGEFILE_H__</span>
-00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_PLUGINS_VIDEO_LOADER_COMMON_COMMONIMAGEFILE_H__</span>
+00020 <span class="preprocessor">#ifndef __CS_CSPLUGINCOMMON_IMAGELOADER_COMMONIMAGEFILE_H__</span>
+00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSPLUGINCOMMON_IMAGELOADER_COMMONIMAGEFILE_H__</span>
 00022 <span class="preprocessor"></span>
-00023 <span class="preprocessor">#include "csextern.h"</span>
-00024 <span class="preprocessor">#include "<a class="code" href="databuff_8h.html">iutil/databuff.h</a>"</span>
-00025 <span class="preprocessor">#include "<a class="code" href="job_8h.html">iutil/job.h</a>"</span>
-00026 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
-00027 <span class="preprocessor">#include "csgfx/memimage.h"</span>
-00028 
-00029 <span class="keyword">enum</span> csLoaderDataType
-00030 {
-00031   rdtInvalid,
-00032   rdtR8G8B8,
-00033   rdtRGBpixel,
-00034   rdtIndexed
-00035 };
-00036 
-00037 <span class="keyword">class </span><a class="code" href="classcsCommonImageFile.html">csCommonImageFile</a>;
-00038 
-00039 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiImageFileLoader.html">iImageFileLoader</a>, 0, 0, 1);
-00040 
-<a name="l00045"></a><a class="code" href="structiImageFileLoader.html">00045</a> <span class="keyword">struct </span><a class="code" href="structiImageFileLoader.html">iImageFileLoader</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00046 {
-00048   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiImageFileLoader.html#a0">LoadData</a> () = 0;
-00050   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> <a class="code" href="structiImageFileLoader.html#a1">GetRawData</a>() = 0;
-00052   <span class="keyword">virtual</span> csLoaderDataType <a class="code" href="structiImageFileLoader.html#a2">GetDataType</a>() = 0;
-00054   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a3">GetWidth</a>() = 0;
-00056   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a4">GetHeight</a>() = 0;
-00058   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a5">GetFormat</a>() = 0;
-00060   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImageFileLoader.html#a6">ApplyTo</a> (<a class="code" href="classcsImageMemory.html">csImageMemory</a>* image) = 0;
-00061 };
-00062 
-<a name="l00066"></a><a class="code" href="classcsCommonImageFileLoader.html">00066</a> <span class="keyword">class </span>CS_CSPLUGINCOMMON_EXPORT csCommonImageFileLoader : <span class="keyword">public</span> <a class="code" href="structiImageFileLoader.html">iImageFileLoader</a>
-00067 {
-00068 <span class="keyword">protected</span>:
-00069   <span class="keywordtype">int</span> Format;
-00070   <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> rawData;
-00071   csLoaderDataType dataType;
-00072   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* rgbaData;
-00073   uint8* indexData;
-00074   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* palette;
-00075   size_t paletteCount;
-00076   uint8* alpha;
-00077   <span class="keywordtype">bool</span> hasKeycolor;
-00078   <a class="code" href="structcsRGBcolor.html">csRGBcolor</a> keycolor;
-00079   <span class="keywordtype">int</span> Width, Height;
-00080 <span class="keyword">public</span>:
-00081   SCF_DECLARE_IBASE;
-00082 
-00083   csCommonImageFileLoader (<span class="keywordtype">int</span> format);
-00084   <span class="keyword">virtual</span> ~csCommonImageFileLoader();
-00085 
-<a name="l00086"></a><a class="code" href="classcsCommonImageFileLoader.html#a2">00086</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> <a class="code" href="structiImageFileLoader.html#a1">GetRawData</a>() 
-00087   { <span class="keywordflow">return</span> rawData; }
-<a name="l00088"></a><a class="code" href="classcsCommonImageFileLoader.html#a3">00088</a>   <span class="keyword">virtual</span> csLoaderDataType <a class="code" href="structiImageFileLoader.html#a2">GetDataType</a>() 
-00089   { <span class="keywordflow">return</span> dataType; }
-<a name="l00090"></a><a class="code" href="classcsCommonImageFileLoader.html#a4">00090</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a3">GetWidth</a>() { <span class="keywordflow">return</span> Width; }
-<a name="l00091"></a><a class="code" href="classcsCommonImageFileLoader.html#a5">00091</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a4">GetHeight</a>() { <span class="keywordflow">return</span> Height; }
-<a name="l00092"></a><a class="code" href="classcsCommonImageFileLoader.html#a6">00092</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a5">GetFormat</a>() { <span class="keywordflow">return</span> Format; }
-00093   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImageFileLoader.html#a6">ApplyTo</a> (<a class="code" href="classcsImageMemory.html">csImageMemory</a>* image);
-00094 };
-00095 
-00096 <span class="preprocessor">#define THREADED_LOADING</span>
-00097 <span class="preprocessor"></span>
-<a name="l00101"></a><a class="code" href="classcsCommonImageFile.html">00101</a> <span class="keyword">class </span>CS_CSPLUGINCOMMON_EXPORT csCommonImageFile : <span class="keyword">public</span> <a class="code" href="classcsImageMemory.html">csImageMemory</a>
-00102 {
-00103 <span class="keyword">protected</span>:
-00104   <span class="keyword">friend</span> <span class="keyword">class </span>csCommonImageFileLoader;
-00105   
-00106   <span class="keyword">class </span>CS_CSPLUGINCOMMON_EXPORT LoaderJob : <span class="keyword">public</span> <a class="code" href="structiJob.html">iJob</a>
-00107   {
-00108   <span class="keyword">public</span>:
-00109     <a class="code" href="classcsRef.html">csRef&lt;iImageFileLoader&gt;</a> currentLoader;
-00110     <span class="keywordtype">bool</span> loadResult;
-00111     SCF_DECLARE_IBASE;
-00112 
-00113     LoaderJob (<a class="code" href="structiImageFileLoader.html">iImageFileLoader</a>* loader);
-00114     <span class="keyword">virtual</span> ~LoaderJob();
-00115 
-00116     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Run();
-00117   };
-00118 
-00119 <span class="preprocessor">#ifdef THREADED_LOADING</span>
-00120 <span class="preprocessor"></span>  <a class="code" href="classcsRef.html">csRef&lt;LoaderJob&gt;</a> loadJob;
-00121   <a class="code" href="classcsRef.html">csRef&lt;iJobQueue&gt;</a> jobQueue;
-00122 <span class="preprocessor">#else</span>
-00123 <span class="preprocessor"></span>  <a class="code" href="classcsRef.html">csRef&lt;iImageFileLoader&gt;</a> currentLoader;
-00124 <span class="preprocessor">#endif</span>
-00125 <span class="preprocessor"></span>  <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-00126 
-00127   csCommonImageFile (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <span class="keywordtype">int</span> format);
-00128   <span class="keyword">virtual</span> ~csCommonImageFile();
-00129 
-00131   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Load (<a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> source);
-00137   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iImageFileLoader&gt;</a> InitLoader (<a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> source) = 0;
-00138 
-00139   <span class="keywordtype">void</span> WaitForJob() <span class="keyword">const</span>;
-00140   <span class="keywordtype">void</span> MakeImageData();
-00141 
-00142   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">void</span> *GetImageData ();
-00143   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* GetPalette ();
-00144   <span class="keyword">virtual</span> <span class="keyword">const</span> uint8* GetAlpha ();
+00027 <span class="preprocessor">#include "csextern.h"</span>
+00028 <span class="preprocessor">#include "<a class="code" href="databuff_8h.html">iutil/databuff.h</a>"</span>
+00029 <span class="preprocessor">#include "<a class="code" href="job_8h.html">iutil/job.h</a>"</span>
+00030 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
+00031 <span class="preprocessor">#include "csgfx/memimage.h"</span>
+00032 
+<a name="l00041"></a><a class="code" href="group__plugincommon.html#ga7">00041</a> <span class="keyword">enum</span> <a class="code" href="group__plugincommon.html#ga7">csLoaderDataType</a>
+00042 {
+00044   rdtInvalid,
+00046   rdtR8G8B8,
+00048   rdtRGBpixel,
+00050   <a class="code" href="group__plugincommon.html#gga7a4">rdtIndexed</a>
+00051 };
+00052 
+00053 <span class="keyword">class </span><a class="code" href="classcsCommonImageFile.html">csCommonImageFile</a>;
+00054 
+00055 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiImageFileLoader.html">iImageFileLoader</a>, 0, 0, 1);
+00056 
+<a name="l00061"></a><a class="code" href="structiImageFileLoader.html">00061</a> <span class="keyword">struct </span><a class="code" href="structiImageFileLoader.html">iImageFileLoader</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00062 {
+00064   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiImageFileLoader.html#a0">LoadData</a> () = 0;
+00066   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> <a class="code" href="structiImageFileLoader.html#a1">GetRawData</a>() = 0;
+00068   <span class="keyword">virtual</span> <a class="code" href="group__plugincommon.html#ga7">csLoaderDataType</a> <a class="code" href="structiImageFileLoader.html#a2">GetDataType</a>() = 0;
+00070   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a3">GetWidth</a>() = 0;
+00072   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a4">GetHeight</a>() = 0;
+00074   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a5">GetFormat</a>() = 0;
+00076   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImageFileLoader.html#a6">ApplyTo</a> (<a class="code" href="classcsImageMemory.html">csImageMemory</a>* image) = 0;
+00077 };
+00078 
+<a name="l00082"></a><a class="code" href="classcsCommonImageFileLoader.html">00082</a> <span class="keyword">class </span>CS_CSPLUGINCOMMON_EXPORT csCommonImageFileLoader : <span class="keyword">public</span> <a class="code" href="structiImageFileLoader.html">iImageFileLoader</a>
+00083 {
+00084 <span class="keyword">protected</span>:
+00085   <span class="keywordtype">int</span> Format;
+00086   <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> rawData;
+00087   <a class="code" href="group__plugincommon.html#ga7">csLoaderDataType</a> dataType;
+00088   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* rgbaData;
+00089   uint8* indexData;
+00090   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* palette;
+00091   size_t paletteCount;
+00092   uint8* alpha;
+00093   <span class="keywordtype">bool</span> hasKeycolor;
+00094   <a class="code" href="structcsRGBcolor.html">csRGBcolor</a> keycolor;
+00095   <span class="keywordtype">int</span> Width, Height;
+00096 <span class="keyword">public</span>:
+00097   SCF_DECLARE_IBASE;
+00098 
+00099   csCommonImageFileLoader (<span class="keywordtype">int</span> format);
+00100   <span class="keyword">virtual</span> ~csCommonImageFileLoader();
+00101 
+<a name="l00102"></a><a class="code" href="classcsCommonImageFileLoader.html#a2">00102</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> <a class="code" href="structiImageFileLoader.html#a1">GetRawData</a>() 
+00103   { <span class="keywordflow">return</span> rawData; }
+<a name="l00104"></a><a class="code" href="classcsCommonImageFileLoader.html#a3">00104</a>   <span class="keyword">virtual</span> <a class="code" href="group__plugincommon.html#ga7">csLoaderDataType</a> <a class="code" href="structiImageFileLoader.html#a2">GetDataType</a>() 
+00105   { <span class="keywordflow">return</span> dataType; }
+<a name="l00106"></a><a class="code" href="classcsCommonImageFileLoader.html#a4">00106</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a3">GetWidth</a>() { <span class="keywordflow">return</span> Width; }
+<a name="l00107"></a><a class="code" href="classcsCommonImageFileLoader.html#a5">00107</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a4">GetHeight</a>() { <span class="keywordflow">return</span> Height; }
+<a name="l00108"></a><a class="code" href="classcsCommonImageFileLoader.html#a6">00108</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImageFileLoader.html#a5">GetFormat</a>() { <span class="keywordflow">return</span> Format; }
+00109   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImageFileLoader.html#a6">ApplyTo</a> (<a class="code" href="classcsImageMemory.html">csImageMemory</a>* image);
+00110 };
+00111 
+00112 <span class="preprocessor">#define THREADED_LOADING</span>
+00113 <span class="preprocessor"></span>
+<a name="l00117"></a><a class="code" href="classcsCommonImageFile.html">00117</a> <span class="keyword">class </span>CS_CSPLUGINCOMMON_EXPORT csCommonImageFile : <span class="keyword">public</span> <a class="code" href="classcsImageMemory.html">csImageMemory</a>
+00118 {
+00119 <span class="keyword">protected</span>:
+00120   <span class="keyword">friend</span> <span class="keyword">class </span>csCommonImageFileLoader;
+00121   
+00122   <span class="keyword">class </span>CS_CSPLUGINCOMMON_EXPORT LoaderJob : <span class="keyword">public</span> <a class="code" href="structiJob.html">iJob</a>
+00123   {
+00124   <span class="keyword">public</span>:
+00125     <a class="code" href="classcsRef.html">csRef&lt;iImageFileLoader&gt;</a> currentLoader;
+00126     <span class="keywordtype">bool</span> loadResult;
+00127     SCF_DECLARE_IBASE;
+00128 
+00129     LoaderJob (<a class="code" href="structiImageFileLoader.html">iImageFileLoader</a>* loader);
+00130     <span class="keyword">virtual</span> ~LoaderJob();
+00131 
+00132     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Run();
+00133   };
+00134 
+00135 <span class="preprocessor">#ifdef THREADED_LOADING</span>
+00136 <span class="preprocessor"></span>  <a class="code" href="classcsRef.html">csRef&lt;LoaderJob&gt;</a> loadJob;
+00137   <a class="code" href="classcsRef.html">csRef&lt;iJobQueue&gt;</a> jobQueue;
+00138 <span class="preprocessor">#else</span>
+00139 <span class="preprocessor"></span>  <a class="code" href="classcsRef.html">csRef&lt;iImageFileLoader&gt;</a> currentLoader;
+00140 <span class="preprocessor">#endif</span>
+00141 <span class="preprocessor"></span>  <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+00142 
+00143   csCommonImageFile (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <span class="keywordtype">int</span> format);
+00144   <span class="keyword">virtual</span> ~csCommonImageFile();
 00145 
-00146   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* DataTypeString (csLoaderDataType dataType);
-00147   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetRawFormat() <span class="keyword">const</span>;
-00148   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> GetRawData() <span class="keyword">const</span>;
-00149 };
-00150 
-00151 <span class="preprocessor">#endif // __CS_PLUGINS_VIDEO_LOADER_COMMON_COMMONIMAGEFILE_H__</span>
+00147   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Load (<a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> source);
+00153   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iImageFileLoader&gt;</a> InitLoader (<a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> source) = 0;
+00154 
+00156   <span class="keywordtype">void</span> WaitForJob() <span class="keyword">const</span>;
+00158   <span class="keywordtype">void</span> MakeImageData();
+00159 
+00160   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">void</span> *GetImageData ();
+00161   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* GetPalette ();
+00162   <span class="keyword">virtual</span> <span class="keyword">const</span> uint8* GetAlpha ();
+00163 
+00164   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* DataTypeString (<a class="code" href="group__plugincommon.html#ga7">csLoaderDataType</a> dataType);
+00165   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetRawFormat() <span class="keyword">const</span>;
+00166   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> GetRawData() <span class="keyword">const</span>;
+00167 };
+00168 
+00171 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_IMAGELOADER_COMMONIMAGEFILE_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
