@@ -38,48 +38,51 @@
 00020 <span class="preprocessor"></span>
 00035 <span class="preprocessor">#include &lt;sys/types.h&gt;</span>
 00036 
-00037 <span class="preprocessor">#if defined(OS_WIN32) &amp;&amp; !defined(__CYGWIN__)</span>
+00037 <span class="preprocessor">#if defined(CS_PLATFORM_WIN32) &amp;&amp; !defined(__CYGWIN__)</span>
 00038 <span class="preprocessor"></span><span class="preprocessor">#  include &lt;winsock.h&gt;</span>
-00039 <span class="preprocessor">#  ifndef socklen_t</span>
-00040 <span class="preprocessor"></span>     <span class="keyword">typedef</span> <span class="keywordtype">int</span> socklen_t;
-00041 <span class="preprocessor">#  endif</span>
-00042 <span class="preprocessor"></span><span class="preprocessor">#  define CS_NET_SOCKET_INVALID INVALID_SOCKET</span>
-00043 <span class="preprocessor"></span><span class="preprocessor">#  define CS_IOCTLSOCKET ioctlsocket</span>
-00044 <span class="preprocessor"></span><span class="preprocessor">#  define CS_CLOSESOCKET closesocket</span>
-00045 <span class="preprocessor"></span><span class="preprocessor">#  if defined(__CYGWIN__) &amp;&amp; defined(EWOULDBLOCK)</span>
-00046 <span class="preprocessor"></span><span class="preprocessor">#   undef EWOULDBLOCK</span>
-00047 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-00048 <span class="preprocessor"></span><span class="preprocessor">#  define EWOULDBLOCK WSAEWOULDBLOCK</span>
-00049 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GETSOCKETERROR ::WSAGetLastError()</span>
-00050 <span class="preprocessor"></span><span class="preprocessor">#  undef CS_SYSDEF_PROVIDE_SOCKETS</span>
-00051 <span class="preprocessor"></span><span class="preprocessor">#elif defined(OS_UNIX) || defined(__CYGWIN__)</span>
-00052 <span class="preprocessor"></span><span class="preprocessor">#  include &lt;sys/socket.h&gt;</span>
-00053 <span class="preprocessor">#  include &lt;unistd.h&gt;</span>
-00054 <span class="preprocessor">#  define BSD_COMP 1</span>
-00055 <span class="preprocessor"></span><span class="preprocessor">#  include &lt;sys/ioctl.h&gt;</span>
-00056 <span class="preprocessor">#  include &lt;arpa/inet.h&gt;</span>
-00057 <span class="preprocessor">#  include &lt;sys/time.h&gt;</span>
-00058 <span class="preprocessor">#  include &lt;netinet/in.h&gt;</span>
-00059 <span class="preprocessor">#  include &lt;netdb.h&gt;</span>
-00060 <span class="preprocessor">#endif</span>
-00061 <span class="preprocessor"></span><span class="preprocessor">#if !defined (CS_IOCTLSOCKET)</span>
-00062 <span class="preprocessor"></span><span class="preprocessor">#  define CS_IOCTLSOCKET ioctl</span>
-00063 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00064 <span class="preprocessor"></span><span class="preprocessor">#if !defined (CS_CLOSESOCKET)</span>
-00065 <span class="preprocessor"></span><span class="preprocessor">#  define CS_CLOSESOCKET close</span>
-00066 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00067 <span class="preprocessor"></span><span class="preprocessor">#if !defined (CS_GETSOCKETERROR)</span>
-00068 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GETSOCKETERROR errno</span>
-00069 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00070 <span class="preprocessor"></span>
-00071 <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> csNetworkSocket;
-00072 
-00073 <span class="preprocessor">#if !defined (CS_NET_SOCKET_INVALID)</span>
-00074 <span class="preprocessor"></span><span class="preprocessor">#  define CS_NET_SOCKET_INVALID ((csNetworkSocket)~0)</span>
-00075 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00076 <span class="preprocessor"></span>
-00077 <span class="preprocessor">#endif // __CS_CSSYS_SOCKETS_H__</span>
-00078 <span class="preprocessor"></span>
+00039 <span class="preprocessor">#  define CS_NET_SOCKET_INVALID INVALID_SOCKET</span>
+00040 <span class="preprocessor"></span><span class="preprocessor">#  define CS_IOCTLSOCKET ioctlsocket</span>
+00041 <span class="preprocessor"></span><span class="preprocessor">#  define CS_CLOSESOCKET closesocket</span>
+00042 <span class="preprocessor"></span><span class="preprocessor">#  if defined(__CYGWIN__) &amp;&amp; defined(EWOULDBLOCK)</span>
+00043 <span class="preprocessor"></span><span class="preprocessor">#   undef EWOULDBLOCK</span>
+00044 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+00045 <span class="preprocessor"></span><span class="preprocessor">#  define EWOULDBLOCK WSAEWOULDBLOCK</span>
+00046 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GETSOCKETERROR ::WSAGetLastError()</span>
+00047 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_PLATFORM_UNIX) || defined(__CYGWIN__)</span>
+00048 <span class="preprocessor"></span><span class="preprocessor">#  include &lt;sys/socket.h&gt;</span>
+00049 <span class="preprocessor">#  include &lt;unistd.h&gt;</span>
+00050 <span class="preprocessor">#  define BSD_COMP 1</span>
+00051 <span class="preprocessor"></span><span class="preprocessor">#  include &lt;sys/ioctl.h&gt;</span>
+00052 <span class="preprocessor">#  include &lt;arpa/inet.h&gt;</span>
+00053 <span class="preprocessor">#  include &lt;sys/time.h&gt;</span>
+00054 <span class="preprocessor">#  include &lt;netinet/in.h&gt;</span>
+00055 <span class="preprocessor">#  include &lt;netdb.h&gt;</span>
+00056 <span class="preprocessor">#endif</span>
+00057 <span class="preprocessor"></span><span class="preprocessor">#if !defined (CS_IOCTLSOCKET)</span>
+00058 <span class="preprocessor"></span><span class="preprocessor">#  define CS_IOCTLSOCKET ioctl</span>
+00059 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00060 <span class="preprocessor"></span><span class="preprocessor">#if !defined (CS_CLOSESOCKET)</span>
+00061 <span class="preprocessor"></span><span class="preprocessor">#  define CS_CLOSESOCKET close</span>
+00062 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00063 <span class="preprocessor"></span><span class="preprocessor">#if !defined (CS_GETSOCKETERROR)</span>
+00064 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GETSOCKETERROR errno</span>
+00065 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00066 <span class="preprocessor"></span>
+00067 <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> csNetworkSocket;
+00068 
+00069 <span class="preprocessor">#if !defined (CS_NET_SOCKET_INVALID)</span>
+00070 <span class="preprocessor"></span><span class="preprocessor">#  define CS_NET_SOCKET_INVALID ((csNetworkSocket)~0)</span>
+00071 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00072 <span class="preprocessor"></span>
+00073 <span class="comment">// Platforms which do not supply a socklen_t type should define</span>
+00074 <span class="comment">// CS_USE_FAKE_SOCKLEN_TYPE. Note that we invoke the typedef only if some other</span>
+00075 <span class="comment">// entity has not already #defined socklen_t, since the #define would cause</span>
+00076 <span class="comment">// problems (i.e. `typedef int int').</span>
+00077 <span class="preprocessor">#if defined(CS_USE_FAKE_SOCKLEN_TYPE) &amp;&amp; !defined(socklen_t)</span>
+00078 <span class="preprocessor"></span>  <span class="keyword">typedef</span> <span class="keywordtype">int</span> socklen_t;
+00079 <span class="preprocessor">#endif</span>
+00080 <span class="preprocessor"></span>
+00081 <span class="preprocessor">#endif // __CS_CSSYS_SOCKETS_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
