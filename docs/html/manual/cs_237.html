@@ -45,12 +45,23 @@ In order to startup and use AWS, the following tasks must be performed.
 
 <OL>
 <LI>
-Load the AWS plugin.
+Initialize the Crystal Space facilities in the normal fashion.
+(see section <A HREF="cs_74.html#SEC164">5.2 Simple Tutorial 1</A>).  In particular,
+<CODE>csInitializer::OpenApplication()</CODE> must be invoked before any of the
+following tasks are performed.  Initializing an AWS application also
+involves loading the AWS plugin.  You can do this via the normal
+<CODE>csInitializer::RequestPlugins()</CODE> invocation (the common approach), or you
+can load it separately, if desired:
 <P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iAws&#62; aws = CS_LOAD_PLUGIN(plugin_mgr,
   "crystalspace.window.alternatemanager", iAws);
 </pre></td></tr></table></P><P>
+
+If you know ahead of time that your application will be using AWS, then
+loading the plugin via <CODE>csInitializer::OpenApplication()</CODE> is more
+convenient and less error-prone.
+</P><P>
 
 <LI>
 Setup the AWS canvas.
@@ -85,8 +96,8 @@ Select a default skin that <EM>all</EM> windows will use.
 Create and display your windows.
 <P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iAwsWindow&#62; test1 = aws-&#62;CreateWindowFrom("Splash");
-csRef&#60;iAwsWindow&#62; test2 = aws-&#62;CreateWindowFrom("Another");
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iAwsWindow&#62; test2 = aws-&#62;CreateWindowFrom("Another");
+csRef&#60;iAwsWindow&#62; test1 = aws-&#62;CreateWindowFrom("Form1");
 if (test1) test1-&#62;Show();
 if (test2) test2-&#62;Show();
 </pre></td></tr></table></P><P>
