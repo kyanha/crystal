@@ -41,98 +41,97 @@
 00031 <span class="preprocessor">#include "<a class="code" href="csutil_2strset_8h.html">csutil/strset.h</a>"</span>
 00032 <span class="preprocessor">#include "csutil/ref.h"</span>
 00033 <span class="preprocessor">#include "<a class="code" href="graph3d_8h.html">ivideo/graph3d.h</a>"</span>
-00034 <span class="preprocessor">#include "<a class="code" href="transfrm_8h.html">csgeom/transfrm.h</a>"</span>
-00035 <span class="preprocessor">#include "<a class="code" href="shader_8h.html">ivideo/shader/shader.h</a>"</span>
-00036 <span class="preprocessor">#include "<a class="code" href="shadervarcontext_8h.html">csgfx/shadervarcontext.h</a>"</span>
-00037 
-00038 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
-00039 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
-00040 <span class="keyword">class </span><a class="code" href="classcsColor.html">csColor</a>;
-00041 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
-00042 <span class="keyword">struct </span><a class="code" href="structiTextureHandle.html">iTextureHandle</a>;
-00043 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
-00044 <span class="keyword">struct </span>iMeshFactory;
-00045 <span class="keyword">struct </span><a class="code" href="structiPortalContainer.html">iPortalContainer</a>;
-00046 
-<a name="l00053"></a><a class="code" href="structcsRenderMeshModes.html">00053</a> <span class="keyword">struct </span><a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>
-00054 {
-00055   <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a> ()
-00056   {
-00057     <a class="code" href="structcsRenderMeshModes.html#m0">z_buf_mode</a> = <a class="code" href="group__gfx3d.html#a75a53">CS_ZBUF_NONE</a>;
-00058     <a class="code" href="structcsRenderMeshModes.html#m1">mixmode</a> = <a class="code" href="group__gfx3d.html#a18">CS_FX_COPY</a>;
-00059     <a class="code" href="structcsRenderMeshModes.html#m2">alphaType</a> = <a class="code" href="structcsAlphaMode.html#s3s0">csAlphaMode::alphaNone</a>;
-00060   }
-00061 
-00062   ~<a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a> () { }
-00063 
-<a name="l00065"></a><a class="code" href="structcsRenderMeshModes.html#m0">00065</a>   <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> <a class="code" href="structcsRenderMeshModes.html#m0">z_buf_mode</a>;
-00066 
-<a name="l00068"></a><a class="code" href="structcsRenderMeshModes.html#m1">00068</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsRenderMeshModes.html#m1">mixmode</a>;
-00069 
-<a name="l00071"></a><a class="code" href="structcsRenderMeshModes.html#m2">00071</a>   <a class="code" href="structcsAlphaMode.html#s3">csAlphaMode::AlphaType</a> <a class="code" href="structcsRenderMeshModes.html#m2">alphaType</a>;
-00072 };
-00073 
-<a name="l00077"></a><a class="code" href="structcsCoreRenderMesh.html">00077</a> <span class="keyword">struct </span><a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a>
-00078 {
-<a name="l00083"></a><a class="code" href="structcsCoreRenderMesh.html#m0">00083</a>   <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structcsCoreRenderMesh.html#m0">db_mesh_name</a>;
-00084 
-00085   <a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a> () 
-00086   {
-00087     <a class="code" href="structcsCoreRenderMesh.html#m1">clip_portal</a> = 0;
-00088     <a class="code" href="structcsCoreRenderMesh.html#m2">clip_plane</a> = 0;
-00089     <a class="code" href="structcsCoreRenderMesh.html#m3">clip_z_plane</a> = 0;
-00090     <a class="code" href="structcsCoreRenderMesh.html#m4">do_mirror</a> = <span class="keyword">false</span>;
-00091     <a class="code" href="structcsCoreRenderMesh.html#m6">indexstart</a> = <a class="code" href="structcsCoreRenderMesh.html#m7">indexend</a> = 0;
-00092     
-00093     <a class="code" href="structcsCoreRenderMesh.html#m0">db_mesh_name</a> = <span class="stringliteral">"&lt;unknown&gt;"</span>;
-00094   }
-00095 
-00096   ~<a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a> () {}
-00097 
-<a name="l00099"></a><a class="code" href="structcsCoreRenderMesh.html#m1">00099</a>   <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m1">clip_portal</a>;
-00100 
-<a name="l00102"></a><a class="code" href="structcsCoreRenderMesh.html#m2">00102</a>   <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m2">clip_plane</a>;
-00103 
-<a name="l00105"></a><a class="code" href="structcsCoreRenderMesh.html#m3">00105</a>   <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m3">clip_z_plane</a>;
-00106 
-<a name="l00123"></a><a class="code" href="structcsCoreRenderMesh.html#m4">00123</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsCoreRenderMesh.html#m4">do_mirror</a>;
-00124 
-<a name="l00126"></a><a class="code" href="structcsCoreRenderMesh.html#m5">00126</a>   <a class="code" href="group__gfx3d.html#a79">csRenderMeshType</a> <a class="code" href="structcsCoreRenderMesh.html#m5">meshtype</a>;
-00127 
-<a name="l00129"></a><a class="code" href="structcsCoreRenderMesh.html#m6">00129</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m6">indexstart</a>;
-00130 
-<a name="l00132"></a><a class="code" href="structcsCoreRenderMesh.html#m7">00132</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m7">indexend</a>;
-00133 
-<a name="l00135"></a><a class="code" href="structcsCoreRenderMesh.html#m8">00135</a>   <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> <a class="code" href="structcsCoreRenderMesh.html#m8">object2camera</a>;
-00136 
-00138   <span class="comment">//iMaterialHandle* mathandle;</span>
-00139   <span class="comment">// @@@ FIXME: SW needs it</span>
-<a name="l00140"></a><a class="code" href="structcsCoreRenderMesh.html#m9">00140</a>   <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structcsCoreRenderMesh.html#m9">material</a>;
-00141 };
-00142 
-<a name="l00147"></a><a class="code" href="structcsRenderMesh.html">00147</a> <span class="keyword">struct </span><a class="code" href="structcsRenderMesh.html">csRenderMesh</a> : <span class="keyword">public</span> <a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a>, <span class="keyword">public</span> <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>
-00148 {
-00149   <a class="code" href="structcsRenderMesh.html">csRenderMesh</a> () 
-00150   {
-00151     <a class="code" href="structcsRenderMesh.html#m1">portal</a> = 0;
-00152     <a class="code" href="structcsRenderMesh.html#m0">geometryInstance</a> = 0;
-00153     <a class="code" href="structcsRenderMesh.html#m3">lastFrame</a> = ~0;
-00154   }
-00155 
-00156   ~<a class="code" href="structcsRenderMesh.html">csRenderMesh</a> () {}
-00157 
-<a name="l00163"></a><a class="code" href="structcsRenderMesh.html#m0">00163</a>   <span class="keywordtype">void</span> *<a class="code" href="structcsRenderMesh.html#m0">geometryInstance</a>;
-00164 
-<a name="l00166"></a><a class="code" href="structcsRenderMesh.html#m1">00166</a>   <a class="code" href="structiPortalContainer.html">iPortalContainer</a>* <a class="code" href="structcsRenderMesh.html#m1">portal</a>;
-00167 
-<a name="l00169"></a><a class="code" href="structcsRenderMesh.html#m2">00169</a>   <a class="code" href="classcsRef.html">csRef&lt;iShaderVariableContext&gt;</a> <a class="code" href="structcsRenderMesh.html#m2">variablecontext</a>;
-00170 
-<a name="l00175"></a><a class="code" href="structcsRenderMesh.html#m3">00175</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsRenderMesh.html#m3">lastFrame</a>;
-00176 
-<a name="l00178"></a><a class="code" href="structcsRenderMesh.html#m4">00178</a>   <a class="code" href="classcsVector3.html">csVector3</a> <a class="code" href="structcsRenderMesh.html#m4">camera_origin</a>;
-00179 };
-00180 
-00183 <span class="preprocessor">#endif // __CS_IVIDEO_RENDERMESH_H__</span>
+00034 <span class="preprocessor">#include "<a class="code" href="shader_8h.html">ivideo/shader/shader.h</a>"</span>
+00035 <span class="preprocessor">#include "<a class="code" href="shadervarcontext_8h.html">csgfx/shadervarcontext.h</a>"</span>
+00036 
+00037 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
+00038 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
+00039 <span class="keyword">class </span><a class="code" href="classcsColor.html">csColor</a>;
+00040 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
+00041 <span class="keyword">struct </span><a class="code" href="structiTextureHandle.html">iTextureHandle</a>;
+00042 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
+00043 <span class="keyword">struct </span>iMeshFactory;
+00044 <span class="keyword">struct </span><a class="code" href="structiPortalContainer.html">iPortalContainer</a>;
+00045 
+<a name="l00052"></a><a class="code" href="structcsRenderMeshModes.html">00052</a> <span class="keyword">struct </span><a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>
+00053 {
+00054   <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a> ()
+00055   {
+00056     <a class="code" href="structcsRenderMeshModes.html#m0">z_buf_mode</a> = <a class="code" href="group__gfx3d.html#a75a53">CS_ZBUF_NONE</a>;
+00057     <a class="code" href="structcsRenderMeshModes.html#m1">mixmode</a> = <a class="code" href="group__gfx3d.html#a18">CS_FX_COPY</a>;
+00058     <a class="code" href="structcsRenderMeshModes.html#m2">alphaType</a> = <a class="code" href="structcsAlphaMode.html#s3s0">csAlphaMode::alphaNone</a>;
+00059   }
+00060 
+00061   ~<a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a> () { }
+00062 
+<a name="l00064"></a><a class="code" href="structcsRenderMeshModes.html#m0">00064</a>   <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> <a class="code" href="structcsRenderMeshModes.html#m0">z_buf_mode</a>;
+00065 
+<a name="l00067"></a><a class="code" href="structcsRenderMeshModes.html#m1">00067</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsRenderMeshModes.html#m1">mixmode</a>;
+00068 
+<a name="l00070"></a><a class="code" href="structcsRenderMeshModes.html#m2">00070</a>   <a class="code" href="structcsAlphaMode.html#s3">csAlphaMode::AlphaType</a> <a class="code" href="structcsRenderMeshModes.html#m2">alphaType</a>;
+00071 };
+00072 
+<a name="l00076"></a><a class="code" href="structcsCoreRenderMesh.html">00076</a> <span class="keyword">struct </span><a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a>
+00077 {
+<a name="l00082"></a><a class="code" href="structcsCoreRenderMesh.html#m0">00082</a>   <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structcsCoreRenderMesh.html#m0">db_mesh_name</a>;
+00083 
+00084   <a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a> () 
+00085   {
+00086     <a class="code" href="structcsCoreRenderMesh.html#m1">clip_portal</a> = 0;
+00087     <a class="code" href="structcsCoreRenderMesh.html#m2">clip_plane</a> = 0;
+00088     <a class="code" href="structcsCoreRenderMesh.html#m3">clip_z_plane</a> = 0;
+00089     <a class="code" href="structcsCoreRenderMesh.html#m4">do_mirror</a> = <span class="keyword">false</span>;
+00090     <a class="code" href="structcsCoreRenderMesh.html#m6">indexstart</a> = <a class="code" href="structcsCoreRenderMesh.html#m7">indexend</a> = 0;
+00091     
+00092     <a class="code" href="structcsCoreRenderMesh.html#m0">db_mesh_name</a> = <span class="stringliteral">"&lt;unknown&gt;"</span>;
+00093   }
+00094 
+00095   ~<a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a> () {}
+00096 
+<a name="l00098"></a><a class="code" href="structcsCoreRenderMesh.html#m1">00098</a>   <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m1">clip_portal</a>;
+00099 
+<a name="l00101"></a><a class="code" href="structcsCoreRenderMesh.html#m2">00101</a>   <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m2">clip_plane</a>;
+00102 
+<a name="l00104"></a><a class="code" href="structcsCoreRenderMesh.html#m3">00104</a>   <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m3">clip_z_plane</a>;
+00105 
+<a name="l00122"></a><a class="code" href="structcsCoreRenderMesh.html#m4">00122</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsCoreRenderMesh.html#m4">do_mirror</a>;
+00123 
+<a name="l00125"></a><a class="code" href="structcsCoreRenderMesh.html#m5">00125</a>   <a class="code" href="group__gfx3d.html#a79">csRenderMeshType</a> <a class="code" href="structcsCoreRenderMesh.html#m5">meshtype</a>;
+00126 
+<a name="l00128"></a><a class="code" href="structcsCoreRenderMesh.html#m6">00128</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m6">indexstart</a>;
+00129 
+<a name="l00131"></a><a class="code" href="structcsCoreRenderMesh.html#m7">00131</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="structcsCoreRenderMesh.html#m7">indexend</a>;
+00132 
+<a name="l00134"></a><a class="code" href="structcsCoreRenderMesh.html#m8">00134</a>   <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> <a class="code" href="structcsCoreRenderMesh.html#m8">object2camera</a>;
+00135 
+00137   <span class="comment">//iMaterialHandle* mathandle;</span>
+00138   <span class="comment">// @@@ FIXME: SW needs it</span>
+<a name="l00139"></a><a class="code" href="structcsCoreRenderMesh.html#m9">00139</a>   <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structcsCoreRenderMesh.html#m9">material</a>;
+00140 };
+00141 
+<a name="l00146"></a><a class="code" href="structcsRenderMesh.html">00146</a> <span class="keyword">struct </span><a class="code" href="structcsRenderMesh.html">csRenderMesh</a> : <span class="keyword">public</span> <a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a>, <span class="keyword">public</span> <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>
+00147 {
+00148   <a class="code" href="structcsRenderMesh.html">csRenderMesh</a> () 
+00149   {
+00150     <a class="code" href="structcsRenderMesh.html#m1">portal</a> = 0;
+00151     <a class="code" href="structcsRenderMesh.html#m0">geometryInstance</a> = 0;
+00152     <a class="code" href="structcsRenderMesh.html#m3">lastFrame</a> = ~0;
+00153   }
+00154 
+00155   ~<a class="code" href="structcsRenderMesh.html">csRenderMesh</a> () {}
+00156 
+<a name="l00162"></a><a class="code" href="structcsRenderMesh.html#m0">00162</a>   <span class="keywordtype">void</span> *<a class="code" href="structcsRenderMesh.html#m0">geometryInstance</a>;
+00163 
+<a name="l00165"></a><a class="code" href="structcsRenderMesh.html#m1">00165</a>   <a class="code" href="structiPortalContainer.html">iPortalContainer</a>* <a class="code" href="structcsRenderMesh.html#m1">portal</a>;
+00166 
+<a name="l00168"></a><a class="code" href="structcsRenderMesh.html#m2">00168</a>   <a class="code" href="classcsRef.html">csRef&lt;iShaderVariableContext&gt;</a> <a class="code" href="structcsRenderMesh.html#m2">variablecontext</a>;
+00169 
+<a name="l00174"></a><a class="code" href="structcsRenderMesh.html#m3">00174</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsRenderMesh.html#m3">lastFrame</a>;
+00175 
+<a name="l00177"></a><a class="code" href="structcsRenderMesh.html#m4">00177</a>   <a class="code" href="classcsVector3.html">csVector3</a> <a class="code" href="structcsRenderMesh.html#m4">camera_origin</a>;
+00178 };
+00179 
+00182 <span class="preprocessor">#endif // __CS_IVIDEO_RENDERMESH_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
