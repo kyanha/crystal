@@ -37,101 +37,97 @@
 00019 <span class="preprocessor">#ifndef __CS_CSTYPES_H__</span>
 00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSTYPES_H__</span>
 00021 <span class="preprocessor"></span>
-00027 <span class="preprocessor">#ifndef __CS_CSSYSDEFS_H__</span>
-00028 <span class="preprocessor"></span><span class="preprocessor">#error "cssysdef.h must be included in EVERY source file!"</span>
-00029 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00030 <span class="preprocessor"></span>
-00031 <span class="preprocessor">#include "csplatform.h"</span>
-00032 <span class="preprocessor">#include &lt;float.h&gt;</span>
-00033 
-00034 <span class="preprocessor">#if defined(CS_HAS_STDINT_H)</span>
-00035 <span class="preprocessor"></span><span class="preprocessor">#ifndef __STDC_CONSTANT_MACROS</span>
-00036 <span class="preprocessor"></span><span class="preprocessor">#define __STDC_CONSTANT_MACROS</span>
-00037 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00038 <span class="preprocessor"></span><span class="preprocessor">#ifndef __STDC_LIMIT_MACROS</span>
-00039 <span class="preprocessor"></span><span class="preprocessor">#define __STDC_LIMIT_MACROS</span>
-00040 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00041 <span class="preprocessor"></span><span class="preprocessor">#include &lt;stdint.h&gt;</span>
-00042 <span class="preprocessor">#endif</span>
-00043 <span class="preprocessor"></span>
-00052 <span class="preprocessor">#ifndef CS_HAS_STDINT_H</span>
-00053 <span class="preprocessor"></span>
-<a name="l00054"></a><a class="code" href="group__util.html#a0">00054</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="group__util.html#a0">uint8</a>;
-<a name="l00056"></a><a class="code" href="group__util.html#a1">00056</a> <span class="keyword">typedef</span> <span class="keywordtype">char</span> <a class="code" href="group__util.html#a1">int8</a>;
-<a name="l00058"></a><a class="code" href="group__util.html#a2">00058</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="group__util.html#a2">uint16</a>;
-<a name="l00060"></a><a class="code" href="group__util.html#a3">00060</a> <span class="keyword">typedef</span> <span class="keywordtype">short</span> <a class="code" href="group__util.html#a3">int16</a>;
-<a name="l00062"></a><a class="code" href="group__util.html#a4">00062</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#a4">uint32</a>;
-<a name="l00064"></a><a class="code" href="group__util.html#a5">00064</a> <span class="keyword">typedef</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#a5">int32</a>;
-00065 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
-00066 <span class="preprocessor"></span>
-<a name="l00067"></a><a class="code" href="group__util.html#a6">00067</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> <a class="code" href="group__util.html#a6">uint64</a>;
-<a name="l00069"></a><a class="code" href="group__util.html#a7">00069</a> <span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> <a class="code" href="group__util.html#a7">int64</a>;
-00070 <span class="preprocessor">#elif defined(CS_COMPILER_MSVC) || defined(CS_COMPILER_BCC)</span>
-00071 <span class="preprocessor"></span>
-00072 <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> __int64 <a class="code" href="group__util.html#a6">uint64</a>;
-00074 <span class="keyword">typedef</span> __int64 <a class="code" href="group__util.html#a7">int64</a>;
-00076 <span class="preprocessor">#define CONST_INT64(x) x##i64</span>
-00077 <span class="preprocessor"></span>
-00078 <span class="preprocessor">#define CONST_UINT64(x) x##ui64</span>
-00079 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00080 <span class="preprocessor"></span><span class="preprocessor">#warning Do not know how to declare 64-bit integers</span>
-00081 <span class="preprocessor"></span><span class="preprocessor">#endif // CS_COMPILER_GCC</span>
-00082 <span class="preprocessor"></span>
-00083 <span class="preprocessor">#else // CS_HAS_STDINT_H</span>
-00084 <span class="preprocessor"></span>
-00085 <span class="keyword">typedef</span> uint8_t <a class="code" href="group__util.html#a0">uint8</a>;
-00086 <span class="keyword">typedef</span> int8_t <a class="code" href="group__util.html#a1">int8</a>;
-00087 <span class="keyword">typedef</span> uint16_t <a class="code" href="group__util.html#a2">uint16</a>;
-00088 <span class="keyword">typedef</span> int16_t <a class="code" href="group__util.html#a3">int16</a>;
-00089 <span class="keyword">typedef</span> uint32_t <a class="code" href="group__util.html#a4">uint32</a>;
-00090 <span class="keyword">typedef</span> int32_t <a class="code" href="group__util.html#a5">int32</a>;
-00091 <span class="keyword">typedef</span> uint64_t <a class="code" href="group__util.html#a6">uint64</a>;
-00092 <span class="keyword">typedef</span> int64_t <a class="code" href="group__util.html#a7">int64</a>;
-00093 <span class="preprocessor">#endif</span>
-00094 <span class="preprocessor"></span>
-00095 <span class="preprocessor">#ifdef CS_HAS_INT64_C</span>
-00096 <span class="preprocessor"></span>
-00102 <span class="preprocessor">#define CONST_INT64(x) INT64_C(x)</span>
-00103 <span class="preprocessor"></span>
-00109 <span class="preprocessor">#define CONST_UINT64(x) UINT64_C(x)</span>
-00110 <span class="preprocessor"></span>
-00111 <span class="preprocessor">#else // CS_HAS_INT64_C</span>
-00112 <span class="preprocessor"></span>
-00113 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
-00114 <span class="preprocessor"></span><span class="preprocessor">#define CONST_INT64(x)  x ## LL</span>
-00115 <span class="preprocessor"></span><span class="preprocessor">#define CONST_UINT64(x) x ## ULL</span>
-00116 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_COMPILER_MSVC) || defined(CS_COMPILER_BCC)</span>
-00117 <span class="preprocessor"></span><span class="preprocessor">#define CONST_INT64(x)  x##i64</span>
-00118 <span class="preprocessor"></span><span class="preprocessor">#define CONST_UINT64(x) x##ui64</span>
-00119 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00120 <span class="preprocessor"></span><span class="preprocessor">#warning Do not know how to contruct 64-bit integer constants</span>
-00121 <span class="preprocessor"></span><span class="preprocessor">#endif // CS_COMPILER_GCC</span>
-00122 <span class="preprocessor"></span>
-00123 <span class="preprocessor">#endif // CS_HAS_INT64_C</span>
-00124 <span class="preprocessor"></span>
-00125 <span class="comment">// Provide intptr_t and uintptr_t. If the configure script determined that</span>
-00126 <span class="comment">// these types exist in the standard headers, then just employ those types.</span>
-00127 <span class="comment">// For MSVC, where the configure script is not used, check &lt;stddef.h&gt;, which is</span>
-00128 <span class="comment">// one of several headers which may provide these types. We can tell if</span>
-00129 <span class="comment">// &lt;stddef.h&gt; provided the types by checking if _INTPTR_T_DEFINED has been</span>
-00130 <span class="comment">// #defined; newer versions of MSVC will provide them; older ones will not.  If</span>
-00131 <span class="comment">// all else fails, then we fake up these types on our own.</span>
-00132 <span class="preprocessor">#include &lt;stddef.h&gt;</span>
-00133 <span class="preprocessor">#if !defined(CS_HAS_INTPTR_T) &amp;&amp; !defined(_INTPTR_T_DEFINED)</span>
-00134 <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">int</span> intptr_t;
-00135 <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> uintptr_t;
-00136 <span class="preprocessor">#define _INTPTR_T_DEFINED</span>
-00137 <span class="preprocessor"></span><span class="preprocessor">#define _UINTPTR_T_DEFINED</span>
-00138 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00139 <span class="preprocessor"></span>
-00142 
-<a name="l00143"></a><a class="code" href="group__util.html#a10">00143</a> <span class="keyword">typedef</span> <a class="code" href="group__util.html#a4">uint32</a> <a class="code" href="group__util.html#a10">CS_ID</a>;
-00144 
-<a name="l00151"></a><a class="code" href="group__util.html#a11">00151</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#a11">csTicks</a>;
-00152 
-00155 
-<a name="l00156"></a><a class="code" href="group__util.html#a12">00156</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#a12">uint</a>;
-00161 <span class="preprocessor">#endif // __CS_CSTYPES_H__</span>
+00027 <span class="preprocessor">#include "csplatform.h"</span>
+00028 <span class="preprocessor">#include &lt;float.h&gt;</span>
+00029 
+00030 <span class="preprocessor">#if defined(CS_HAS_STDINT_H)</span>
+00031 <span class="preprocessor"></span><span class="preprocessor">#ifndef __STDC_CONSTANT_MACROS</span>
+00032 <span class="preprocessor"></span><span class="preprocessor">#define __STDC_CONSTANT_MACROS</span>
+00033 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00034 <span class="preprocessor"></span><span class="preprocessor">#ifndef __STDC_LIMIT_MACROS</span>
+00035 <span class="preprocessor"></span><span class="preprocessor">#define __STDC_LIMIT_MACROS</span>
+00036 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00037 <span class="preprocessor"></span><span class="preprocessor">#include &lt;stdint.h&gt;</span>
+00038 <span class="preprocessor">#endif</span>
+00039 <span class="preprocessor"></span>
+00048 <span class="preprocessor">#ifndef CS_HAS_STDINT_H</span>
+00049 <span class="preprocessor"></span>
+<a name="l00050"></a><a class="code" href="group__util.html#a0">00050</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="group__util.html#a0">uint8</a>;
+<a name="l00052"></a><a class="code" href="group__util.html#a1">00052</a> <span class="keyword">typedef</span> <span class="keywordtype">char</span> <a class="code" href="group__util.html#a1">int8</a>;
+<a name="l00054"></a><a class="code" href="group__util.html#a2">00054</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="group__util.html#a2">uint16</a>;
+<a name="l00056"></a><a class="code" href="group__util.html#a3">00056</a> <span class="keyword">typedef</span> <span class="keywordtype">short</span> <a class="code" href="group__util.html#a3">int16</a>;
+<a name="l00058"></a><a class="code" href="group__util.html#a4">00058</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#a4">uint32</a>;
+<a name="l00060"></a><a class="code" href="group__util.html#a5">00060</a> <span class="keyword">typedef</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#a5">int32</a>;
+00061 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
+00062 <span class="preprocessor"></span>
+<a name="l00063"></a><a class="code" href="group__util.html#a6">00063</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> <a class="code" href="group__util.html#a6">uint64</a>;
+<a name="l00065"></a><a class="code" href="group__util.html#a7">00065</a> <span class="keyword">typedef</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> <a class="code" href="group__util.html#a7">int64</a>;
+00066 <span class="preprocessor">#elif defined(CS_COMPILER_MSVC) || defined(CS_COMPILER_BCC)</span>
+00067 <span class="preprocessor"></span>
+00068 <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> __int64 <a class="code" href="group__util.html#a6">uint64</a>;
+00070 <span class="keyword">typedef</span> __int64 <a class="code" href="group__util.html#a7">int64</a>;
+00072 <span class="preprocessor">#define CONST_INT64(x) x##i64</span>
+00073 <span class="preprocessor"></span>
+00074 <span class="preprocessor">#define CONST_UINT64(x) x##ui64</span>
+00075 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00076 <span class="preprocessor"></span><span class="preprocessor">#warning Do not know how to declare 64-bit integers</span>
+00077 <span class="preprocessor"></span><span class="preprocessor">#endif // CS_COMPILER_GCC</span>
+00078 <span class="preprocessor"></span>
+00079 <span class="preprocessor">#else // CS_HAS_STDINT_H</span>
+00080 <span class="preprocessor"></span>
+00081 <span class="keyword">typedef</span> uint8_t <a class="code" href="group__util.html#a0">uint8</a>;
+00082 <span class="keyword">typedef</span> int8_t <a class="code" href="group__util.html#a1">int8</a>;
+00083 <span class="keyword">typedef</span> uint16_t <a class="code" href="group__util.html#a2">uint16</a>;
+00084 <span class="keyword">typedef</span> int16_t <a class="code" href="group__util.html#a3">int16</a>;
+00085 <span class="keyword">typedef</span> uint32_t <a class="code" href="group__util.html#a4">uint32</a>;
+00086 <span class="keyword">typedef</span> int32_t <a class="code" href="group__util.html#a5">int32</a>;
+00087 <span class="keyword">typedef</span> uint64_t <a class="code" href="group__util.html#a6">uint64</a>;
+00088 <span class="keyword">typedef</span> int64_t <a class="code" href="group__util.html#a7">int64</a>;
+00089 <span class="preprocessor">#endif</span>
+00090 <span class="preprocessor"></span>
+00091 <span class="preprocessor">#ifdef CS_HAS_INT64_C</span>
+00092 <span class="preprocessor"></span>
+00098 <span class="preprocessor">#define CONST_INT64(x) INT64_C(x)</span>
+00099 <span class="preprocessor"></span>
+00105 <span class="preprocessor">#define CONST_UINT64(x) UINT64_C(x)</span>
+00106 <span class="preprocessor"></span>
+00107 <span class="preprocessor">#else // CS_HAS_INT64_C</span>
+00108 <span class="preprocessor"></span>
+00109 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
+00110 <span class="preprocessor"></span><span class="preprocessor">#define CONST_INT64(x)  x ## LL</span>
+00111 <span class="preprocessor"></span><span class="preprocessor">#define CONST_UINT64(x) x ## ULL</span>
+00112 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_COMPILER_MSVC) || defined(CS_COMPILER_BCC)</span>
+00113 <span class="preprocessor"></span><span class="preprocessor">#define CONST_INT64(x)  x##i64</span>
+00114 <span class="preprocessor"></span><span class="preprocessor">#define CONST_UINT64(x) x##ui64</span>
+00115 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00116 <span class="preprocessor"></span><span class="preprocessor">#warning Do not know how to contruct 64-bit integer constants</span>
+00117 <span class="preprocessor"></span><span class="preprocessor">#endif // CS_COMPILER_GCC</span>
+00118 <span class="preprocessor"></span>
+00119 <span class="preprocessor">#endif // CS_HAS_INT64_C</span>
+00120 <span class="preprocessor"></span>
+00121 <span class="comment">// Provide intptr_t and uintptr_t. If the configure script determined that</span>
+00122 <span class="comment">// these types exist in the standard headers, then just employ those types.</span>
+00123 <span class="comment">// For MSVC, where the configure script is not used, check &lt;stddef.h&gt;, which is</span>
+00124 <span class="comment">// one of several headers which may provide these types. We can tell if</span>
+00125 <span class="comment">// &lt;stddef.h&gt; provided the types by checking if _INTPTR_T_DEFINED has been</span>
+00126 <span class="comment">// #defined; newer versions of MSVC will provide them; older ones will not.  If</span>
+00127 <span class="comment">// all else fails, then we fake up these types on our own.</span>
+00128 <span class="preprocessor">#include &lt;stddef.h&gt;</span>
+00129 <span class="preprocessor">#if !defined(CS_HAS_INTPTR_T) &amp;&amp; !defined(_INTPTR_T_DEFINED)</span>
+00130 <span class="preprocessor"></span><span class="keyword">typedef</span> <span class="keywordtype">int</span> intptr_t;
+00131 <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> uintptr_t;
+00132 <span class="preprocessor">#define _INTPTR_T_DEFINED</span>
+00133 <span class="preprocessor"></span><span class="preprocessor">#define _UINTPTR_T_DEFINED</span>
+00134 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00135 <span class="preprocessor"></span>
+00138 
+<a name="l00139"></a><a class="code" href="group__util.html#a10">00139</a> <span class="keyword">typedef</span> <a class="code" href="group__util.html#a4">uint32</a> <a class="code" href="group__util.html#a10">CS_ID</a>;
+00140 
+<a name="l00147"></a><a class="code" href="group__util.html#a11">00147</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#a11">csTicks</a>;
+00148 
+00151 
+<a name="l00152"></a><a class="code" href="group__util.html#a12">00152</a> <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#a12">uint</a>;
+00157 <span class="preprocessor">#endif // __CS_CSTYPES_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

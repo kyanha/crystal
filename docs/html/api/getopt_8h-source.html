@@ -38,60 +38,64 @@
 00020 <span class="preprocessor">#ifndef __CS_GETOPT_H__</span>
 00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_GETOPT_H__</span>
 00022 <span class="preprocessor"></span>
-00023 <span class="preprocessor">#include "csextern.h"</span>
-00024 
-00029 <span class="preprocessor">#if defined(__NeXT__) || defined(__APPLE__)</span>
-00030 <span class="preprocessor"></span><span class="comment">// NeXT already has a valid getopt; avoid link errors.</span>
-00031 <span class="preprocessor">#define getopt __getopt</span>
-00032 <span class="preprocessor"></span><span class="preprocessor">#define optarg __optarg</span>
-00033 <span class="preprocessor"></span><span class="preprocessor">#define opterr __opterr</span>
-00034 <span class="preprocessor"></span><span class="preprocessor">#define optind __optind</span>
-00035 <span class="preprocessor"></span><span class="preprocessor">#define optopt __optopt</span>
-00036 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00037 <span class="preprocessor"></span>
-<a name="l00044"></a><a class="code" href="getopt_8h.html#a4">00044</a> <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">char</span> *<a class="code" href="getopt_8h.html#a4">optarg</a>;
-00045 
-<a name="l00058"></a><a class="code" href="getopt_8h.html#a5">00058</a> <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> <a class="code" href="getopt_8h.html#a5">optind</a>;
-00059 
-<a name="l00063"></a><a class="code" href="getopt_8h.html#a6">00063</a> <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> <a class="code" href="getopt_8h.html#a6">opterr</a>;
-00064 
-<a name="l00067"></a><a class="code" href="getopt_8h.html#a7">00067</a> <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> <a class="code" href="getopt_8h.html#a7">optopt</a>;
+00023 <span class="preprocessor">#ifndef __STDC__</span>
+00024 <span class="preprocessor"></span><span class="preprocessor">#  define __STDC__ 1</span>
+00025 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00026 <span class="preprocessor"></span>
+00027 <span class="preprocessor">#include "csextern.h"</span>
+00028 
+00033 <span class="preprocessor">#if defined(CS_PLATFORM_MACOSX)</span>
+00034 <span class="preprocessor"></span><span class="comment">// MacOS/X already has a valid getopt; avoid link errors.</span>
+00035 <span class="preprocessor">#define getopt __getopt</span>
+00036 <span class="preprocessor"></span><span class="preprocessor">#define optarg __optarg</span>
+00037 <span class="preprocessor"></span><span class="preprocessor">#define opterr __opterr</span>
+00038 <span class="preprocessor"></span><span class="preprocessor">#define optind __optind</span>
+00039 <span class="preprocessor"></span><span class="preprocessor">#define optopt __optopt</span>
+00040 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00041 <span class="preprocessor"></span>
+<a name="l00048"></a><a class="code" href="getopt_8h.html#a5">00048</a> <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">char</span> *<a class="code" href="getopt_8h.html#a5">optarg</a>;
+00049 
+<a name="l00062"></a><a class="code" href="getopt_8h.html#a6">00062</a> <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> <a class="code" href="getopt_8h.html#a6">optind</a>;
+00063 
+<a name="l00067"></a><a class="code" href="getopt_8h.html#a7">00067</a> <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> <a class="code" href="getopt_8h.html#a7">opterr</a>;
 00068 
-<a name="l00091"></a><a class="code" href="structgetopt__option.html">00091</a> <span class="keyword">struct </span>CS_CSUTIL_EXPORT <a class="code" href="structgetopt__option.html">getopt_option</a>
-00092 {
-00093 <span class="preprocessor">#if defined (__STDC__) &amp;&amp; __STDC__</span>
-00094 <span class="preprocessor"></span>  <span class="keyword">const</span> <span class="keywordtype">char</span> *name;
-00095 <span class="preprocessor">#else</span>
-00096 <span class="preprocessor"></span>  <span class="keywordtype">char</span> *name;
-00097 <span class="preprocessor">#endif</span>
-00098 <span class="preprocessor"></span>  <span class="comment">/* has_arg can't be an enum because some compilers complain about</span>
-00099 <span class="comment">     type mismatches in all the code that assumes it is an int.  */</span>
-00100   <span class="keywordtype">int</span> has_arg;
-00101   <span class="keywordtype">int</span> *flag;
-00102   <span class="keywordtype">int</span> val;
-00103 };
-<a name="l00108"></a><a class="code" href="getopt_8h.html#a0">00108</a> <span class="preprocessor">#define option getopt_option</span>
-00109 <span class="preprocessor"></span>
-00110 <span class="comment">/* Names for the values of the `has_arg' field of `struct option'.  */</span>
-00111 
-00112 <span class="preprocessor">#define no_argument             0</span>
-00113 <span class="preprocessor"></span><span class="preprocessor">#define required_argument       1</span>
-00114 <span class="preprocessor"></span><span class="preprocessor">#define optional_argument       2</span>
-00115 <span class="preprocessor"></span>
-00116 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> getopt (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *<span class="keyword">const</span> *argv, <span class="keyword">const</span> <span class="keywordtype">char</span> *shortopts);
-00117 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> getopt_long (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *<span class="keyword">const</span> *argv, <span class="keyword">const</span> <span class="keywordtype">char</span> *shortopts,
-00118                         <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structgetopt__option.html">getopt_option</a> *longopts, <span class="keywordtype">int</span> *longind);
-00119 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> getopt_long_only (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *<span class="keyword">const</span> *argv,
-00120                              <span class="keyword">const</span> <span class="keywordtype">char</span> *shortopts,
-00121                              <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structgetopt__option.html">getopt_option</a> *longopts, <span class="keywordtype">int</span> *longind);
-00122 
-00123 <span class="comment">/* Internal only.  Users should not call this directly.  */</span>
-00124 <span class="keyword">extern</span> <span class="keywordtype">int</span> _getopt_internal (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *<span class="keyword">const</span> *argv,
-00125                              <span class="keyword">const</span> <span class="keywordtype">char</span> *shortopts,
-00126                              <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structgetopt__option.html">getopt_option</a> *longopts, <span class="keywordtype">int</span> *longind,
-00127                              <span class="keywordtype">int</span> long_only);
-00128 
-00129 <span class="preprocessor">#endif // __CS_GETOPT_H__</span>
+<a name="l00071"></a><a class="code" href="getopt_8h.html#a8">00071</a> <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> <a class="code" href="getopt_8h.html#a8">optopt</a>;
+00072 
+<a name="l00095"></a><a class="code" href="structgetopt__option.html">00095</a> <span class="keyword">struct </span>CS_CSUTIL_EXPORT <a class="code" href="structgetopt__option.html">getopt_option</a>
+00096 {
+00097 <span class="preprocessor">#if defined (__STDC__) &amp;&amp; __STDC__</span>
+00098 <span class="preprocessor"></span>  <span class="keyword">const</span> <span class="keywordtype">char</span> *name;
+00099 <span class="preprocessor">#else</span>
+00100 <span class="preprocessor"></span>  <span class="keywordtype">char</span> *name;
+00101 <span class="preprocessor">#endif</span>
+00102 <span class="preprocessor"></span>  <span class="comment">/* has_arg can't be an enum because some compilers complain about</span>
+00103 <span class="comment">     type mismatches in all the code that assumes it is an int.  */</span>
+00104   <span class="keywordtype">int</span> has_arg;
+00105   <span class="keywordtype">int</span> *flag;
+00106   <span class="keywordtype">int</span> val;
+00107 };
+<a name="l00112"></a><a class="code" href="getopt_8h.html#a1">00112</a> <span class="preprocessor">#define option getopt_option</span>
+00113 <span class="preprocessor"></span>
+00114 <span class="comment">/* Names for the values of the `has_arg' field of `struct option'.  */</span>
+00115 
+00116 <span class="preprocessor">#define no_argument             0</span>
+00117 <span class="preprocessor"></span><span class="preprocessor">#define required_argument       1</span>
+00118 <span class="preprocessor"></span><span class="preprocessor">#define optional_argument       2</span>
+00119 <span class="preprocessor"></span>
+00120 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> getopt (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *<span class="keyword">const</span> *argv, <span class="keyword">const</span> <span class="keywordtype">char</span> *shortopts);
+00121 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> getopt_long (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *<span class="keyword">const</span> *argv, <span class="keyword">const</span> <span class="keywordtype">char</span> *shortopts,
+00122                         <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structgetopt__option.html">getopt_option</a> *longopts, <span class="keywordtype">int</span> *longind);
+00123 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">int</span> getopt_long_only (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *<span class="keyword">const</span> *argv,
+00124                              <span class="keyword">const</span> <span class="keywordtype">char</span> *shortopts,
+00125                              <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structgetopt__option.html">getopt_option</a> *longopts, <span class="keywordtype">int</span> *longind);
+00126 
+00127 <span class="comment">/* Internal only.  Users should not call this directly.  */</span>
+00128 <span class="keyword">extern</span> <span class="keywordtype">int</span> _getopt_internal (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> *<span class="keyword">const</span> *argv,
+00129                              <span class="keyword">const</span> <span class="keywordtype">char</span> *shortopts,
+00130                              <span class="keyword">const</span> <span class="keyword">struct</span> <a class="code" href="structgetopt__option.html">getopt_option</a> *longopts, <span class="keywordtype">int</span> *longind,
+00131                              <span class="keywordtype">int</span> long_only);
+00132 
+00133 <span class="preprocessor">#endif // __CS_GETOPT_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
