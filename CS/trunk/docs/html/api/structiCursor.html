@@ -31,9 +31,9 @@
 <tr><td colspan=2><br><h2>Public Methods</h2></td></tr>
 <tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a0">Setup</a> (<a class="el" href="structiGraphics3D.html">iGraphics3D</a> *, bool ForceEmulation=false)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Must be called before custom cursors will be displayed.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a1">ParseConfigFile</a> (const char *)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Load cursor settings from a configuration file in VFS.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a2">SetCursor</a> (const char *name, <a class="el" href="structiImage.html">iImage</a> *image, <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> keycolor, <a class="el" href="structcsPoint.html">csPoint</a> hotspot=<a class="el" href="structcsPoint.html">csPoint</a>(0, 0), <a class="el" href="group__util.html#a0">uint8</a> transparency=0, <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> fg=<a class="el" href="structcsRGBcolor.html">csRGBcolor</a>(255, 255, 255), <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> bg=<a class="el" href="structcsRGBcolor.html">csRGBcolor</a>(0, 0, 0))=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a1">ParseConfigFile</a> (<a class="el" href="structiConfigFile.html">iConfigFile</a> *)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Load cursor settings from a configuration file.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a2">SetCursor</a> (const char *name, <a class="el" href="structiImage.html">iImage</a> *image, <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> *keycolor=0, <a class="el" href="structcsPoint.html">csPoint</a> hotspot=<a class="el" href="structcsPoint.html">csPoint</a>(0, 0), <a class="el" href="group__util.html#a0">uint8</a> transparency=0, <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> fg=<a class="el" href="structcsRGBcolor.html">csRGBcolor</a>(255, 255, 255), <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> bg=<a class="el" href="structcsRGBcolor.html">csRGBcolor</a>(0, 0, 0))=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Adds or replaces a cursor called name.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a3">SetHotSpot</a> (const char *name, <a class="el" href="structcsPoint.html">csPoint</a> hotspot)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Sets the hotspot (center) of the specified cursor on the pixmap.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
@@ -49,7 +49,7 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Get the hotspot (center) of the specified cursor on the pixmap.</em> <a href="#a8"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="group__util.html#a0">uint8</a>&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a9">GetTransparency</a> (const char *name) const=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get the transparency of the specified cursor.</em> <a href="#a9"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="structcsRGBcolor.html">csRGBcolor</a>&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a10">GetKeyColor</a> (const char *name) const=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual const <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a10">GetKeyColor</a> (const char *name) const=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get key colour of the specified cursor.</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="structcsRGBcolor.html">csRGBcolor</a>&nbsp;</td><td valign=bottom><a class="el" href="structiCursor.html#a11">GetFGColor</a> (const char *name) const=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get the foreground color of the cursor.</em> <a href="#a11"></a><em></em></font><br><br></td></tr>
@@ -69,7 +69,7 @@ Any number of cursors can be set, indexed by key strings, along with hotspots, a
 <p>
 
 <p>
-Definition at line <a class="el" href="custcursor_8h-source.html#l00042">42</a> of file <a class="el" href="custcursor_8h-source.html">custcursor.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="custcursor_8h-source.html#l00043">43</a> of file <a class="el" href="custcursor_8h-source.html">custcursor.h</a>.<hr><h2>Member Function Documentation</h2>
 <a name="a12" doxytag="iCursor::GetBGColor"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -200,7 +200,7 @@ Returns default 0,0 if there is no cursor with this name     </td>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> virtual <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> iCursor::GetKeyColor </td>
+          <td class="md" nowrap valign="top"> virtual const <a class="el" href="structcsRGBcolor.html">csRGBcolor</a>* iCursor::GetKeyColor </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">const char *&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp; <em>name</em>          </td>
@@ -222,7 +222,7 @@ Returns default 0,0 if there is no cursor with this name     </td>
 <p>
 Get key colour of the specified cursor.
 <p>
-Returns default 0,0,0 if there is no cursor with this name     </td>
+Returns default 0 if the cursor has no keycolor set or there is no  cursor with this name     </td>
   </tr>
 </table>
 <a name="a9" doxytag="iCursor::GetTransparency"></a><p>
@@ -264,7 +264,7 @@ Transparency can range from 0 (completely opaque) to 255 (completely transparent
         <tr>
           <td class="md" nowrap valign="top"> virtual bool iCursor::ParseConfigFile </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">const char *&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiConfigFile.html">iConfigFile</a> *&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
           <td class="md" valign="top">)&nbsp;</td>
           <td class="md" nowrap><code> [pure virtual]</code></td>
@@ -282,7 +282,7 @@ Transparency can range from 0 (completely opaque) to 255 (completely transparent
     <td>
 
 <p>
-Load cursor settings from a configuration file in VFS.
+Load cursor settings from a configuration file.
 <p>
     </td>
   </tr>
@@ -414,8 +414,8 @@ These will only be used for graphics drivers which support only monochrome curso
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="structcsRGBcolor.html">csRGBcolor</a>&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>keycolor</em>, </td>
+          <td class="md" nowrap><a class="el" href="structcsRGBcolor.html">csRGBcolor</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>keycolor</em> = 0, </td>
         </tr>
         <tr>
           <td></td>
