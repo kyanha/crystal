@@ -26,13 +26,13 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A NAME="SEC823"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC830"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC831"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC953"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC954"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC953">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC954">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
@@ -51,8 +51,8 @@ Crystal Space.
 
 <CODE>csArray&#60;&#62;</CODE> has been changed to use the <CODE>size_t</CODE> instead of
 `<SAMP>int</SAMP>' for array sizes and indices.  Probably, the most significant
-semantic difference of this change is that `<SAMP>size_t</SAMP>' is <EM>unsigned</EM> as
-opposed to `<SAMP>int</SAMP>' which is <EM>signed</EM>.
+semantic difference of this change is that `<SAMP>size_t</SAMP>' is usually
+<EM>unsigned</EM> as opposed to `<SAMP>int</SAMP>' which is <EM>signed</EM>.
 </P><P>
 
 <STRONG>Read this paragraph carefully.</STRONG> In actual code, this change may result
@@ -223,7 +223,7 @@ them from your applications if you used them):
 <P>
 
 The file `<TT>csutil/inpnames.h</TT>' has been renamed to
-`<TT>inputdef.h</TT>' and the following functions have been removed:
+`<TT>inputdef.h</TT>', and the following functions have been removed:
 </P><P>
 
 <UL>
@@ -251,16 +251,15 @@ and vice versa.
 
 The way to do this is now, however, is to use `<SAMP>csInputDefinition</SAMP>', which
 resides in `<TT>csutil/inputdef.h</TT>'. The preferred way to convert a string to a
-definition is to construct a `<SAMP>csInputDefinition</SAMP>' from a `<SAMP>char
-const*</SAMP>'; and the preferred way to convert a definition back to a string
-(perhaps constructed some other way) is via
+definition is to construct a `<SAMP>csInputDefinition</SAMP>' from a
+`<SAMP>char const*</SAMP>'; and the preferred way to convert a definition back to a
+string (perhaps constructed some other way) is via
 <CODE>csInputDefinition::ToString()</CODE>.
 </P><P>
 
-There are also static helper methods in `<SAMP>csInputDefinition</SAMP>' which
-accept arguments in a similar way to the old functions. These are
-convenience methods which perform the
-work of instantiating the object for you:
+There are also static helper methods in `<SAMP>csInputDefinition</SAMP>' which accept
+arguments in a similar way to the old functions. These are convenience methods
+which perform the work of instantiating the object for you:
 </P><P>
 
 <UL>
@@ -283,13 +282,13 @@ work of instantiating the object for you:
 In order to avoid polluting the top-level system include directory, the Crystal
 Space header tree is now installed (by `<SAMP>make install</SAMP>' or
 `<SAMP>jam install</SAMP>') in a subdirectory named `<TT>crystalspace</TT>', rather than
-being installed directly in top-level system directory. For example, assuming
-the default installation location, the Crystal Space headers are now installed
-in `<TT>/usr/local/include/crystalspace</TT>'. Previously, they would have been
-installed directly in `<TT>/usr/local/include</TT>'. The `<SAMP>cs-config</SAMP>' utility
-script properly returns the new header location in response to the
-`<SAMP>--includedir</SAMP>', `<SAMP>--cflags</SAMP>', and `<SAMP>--cxxflags</SAMP>' options, so this
-relocation should be mostly transparent to external projects.
+being installed directly in the top-level system directory. For example,
+assuming the default installation location, the Crystal Space headers are now
+installed in `<TT>/usr/local/include/crystalspace</TT>'. Previously, they would
+have been installed directly into `<TT>/usr/local/include</TT>'. The
+`<SAMP>cs-config</SAMP>' utility script properly returns the new header location in
+response to the `<SAMP>--includedir</SAMP>', `<SAMP>--cflags</SAMP>', and `<SAMP>--cxxflags</SAMP>'
+options, so this relocation should be mostly transparent to external projects.
 </P><P>
 
 The following global header files have been renamed in order to avoid possible
@@ -314,29 +313,29 @@ global namespace.
 
 <UL>
 <LI>
-<CODE>QInt</CODE> => <CODE>csQint()</CODE>
-<LI>
-<CODE>QInt8</CODE> => <CODE>csQint8()</CODE>
-<LI>
-<CODE>QInt16</CODE> => <CODE>csQint16()</CODE>
-<LI>
-<CODE>QInt24</CODE> => <CODE>csQint24()</CODE>
-<LI>
-<CODE>qisqrt</CODE> => <CODE>csQisqrt()</CODE>
-<LI>
-<CODE>qsqrt</CODE> => <CODE>csQsqrt()</CODE>
-<LI>
-<CODE>QRound</CODE> => <CODE>csQround()</CODE>
-<LI>
 <CODE>COMP_BC</CODE> => <CODE>CS_COMPILER_BCC</CODE>
 <LI>
 <CODE>COMP_GCC</CODE> => <CODE>CS_COMPILER_GCC</CODE>
 <LI>
 <CODE>COMP_VC</CODE> => <CODE>CS_COMPILER_MSVC</CODE>
 <LI>
+<CODE>CS_PROCSIZE</CODE> => <CODE>CS_PROCESSOR_SIZE</CODE>
+<LI>
 <CODE>DO_MMX</CODE> => <CODE>CS_USE_MMX</CODE>
 <LI>
 <CODE>DO_NASM</CODE> => <CODE>CS_USE_NASM</CODE>
+<LI>
+<CODE>MemoryMapFile()</CODE> => <CODE>csMemoryMapFile()</CODE>
+<LI>
+<CODE>MemoryMapWindow()</CODE> => <CODE>csMemoryMapWindow()</CODE>
+<LI>
+<CODE>MKDIR()</CODE> => <CODE>CS_MKDIR()</CODE>
+<LI>
+<CODE>mmioInfo</CODE> => <CODE>csMemMapInfo</CODE>
+<LI>
+<CODE>__NEED_GENERIC_ISDIR</CODE> => <CODE>CS_USE_CUSTOM_ISDIR</CODE>
+<LI>
+<CODE>__NEED_OPENDIR_PROTOTYPE</CODE> => <CODE>CS_WIN32_USE_CUSTOM_OPENDIR</CODE>
 <LI>
 <CODE>OS_DOS</CODE> => <CODE>CS_PLATFORM_DOS</CODE>
 <LI>
@@ -346,24 +345,106 @@ global namespace.
 <LI>
 <CODE>OS_WIN32</CODE> => <CODE>CS_PLATFORM_WIN32</CODE>
 <LI>
+<CODE>PATH_DELIMITER</CODE> => <CODE>CS_PATH_DELIMITER</CODE>
+<LI>
+<CODE>PATH_SEPARATOR</CODE> => <CODE>CS_PATH_SEPARATOR</CODE>
+<LI>
 <CODE>PROC_FOO</CODE> => <CODE>CS_PROCESSOR_FOO</CODE> (where `<SAMP>FOO</SAMP>' is
 `<SAMP>X86</SAMP>', `<SAMP>M68K</SAMP>', etc.)
 <LI>
-<CODE>CS_PROCSIZE</CODE> => <CODE>CS_PROCESSOR_SIZE</CODE>
+<CODE>QInt()</CODE> => <CODE>csQint()</CODE>
+<LI>
+<CODE>QInt8()</CODE> => <CODE>csQint8()</CODE>
+<LI>
+<CODE>QInt16()</CODE> => <CODE>csQint16()</CODE>
+<LI>
+<CODE>QInt24()</CODE> => <CODE>csQint24()</CODE>
+<LI>
+<CODE>qisqrt()</CODE> => <CODE>csQisqrt()</CODE>
+<LI>
+<CODE>qsqrt()</CODE> => <CODE>csQsqrt()</CODE>
+<LI>
+<CODE>QRound()</CODE> => <CODE>csQround()</CODE>
+<LI>
+<CODE>TEMP_DIR</CODE> => <CODE>CS_TEMP_DIR</CODE>
+<LI>
+<CODE>TEMP_FILE</CODE> => <CODE>CS_TEMP_FILE</CODE>
+<LI>
+<CODE>UnMemoryMapFile()</CODE> => <CODE>csUnMemoryMapFile()</CODE>
 <LI>
 <CODE>WIN32_VOLATILE</CODE> => <CODE>CS_WIN32_CSCONFIG</CODE>
 </UL>
+<P>
+
+<A NAME="SEC830"></A>
+<H3> `<TT>cssysdef.h</TT>' Changes </H3>
+<!--docid::SEC830::-->
+<P>
+
+The `<SAMP>CS_SYSDEF_PROVIDE_FACILITY</SAMP>' macros, which clients would
+<CODE>#define</CODE> before including `<TT>cssysdef.h</TT>' in order to alter the
+behavior of `<TT>cssysdef.h</TT>', have been removed. Retirement of these macros
+eliminates the polymorphic behavior of `<TT>cssysdef.h</TT>', thus helping to pave
+the way toward eventually pre-compiling Crystal Space's headers in order to
+reduce overall compilation time.  In addition to removing these macros from
+your code, the following table explains what else (if anything) needs to be
+done to account for the removal.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>CS_SYSDEF_PROVIDE_ACCESS</CODE>
+<DD>No additional changes.
+<DT><CODE>CS_SYSDEF_PROVIDE_ALLOCA</CODE>
+<DD>Use the `<SAMP>CS_ALLOC_STACK_ARRAY()</SAMP>' macro, rather than <CODE>alloca()</CODE>.
+<DT><CODE>CS_SYSDEF_PROVIDE_CASE</CODE>
+<DD>No additional changes.
+<DT><CODE>CS_SYSDEF_PROVIDE_DIR</CODE>
+<DD>No additional changes.
+<DT><CODE>CS_SYSDEF_PROVIDE_EXPAND_PATH</CODE>
+<DD>No additional changes.
+<DT><CODE>CS_SYSDEF_PROVIDE_GETCWD</CODE>
+<DD>No additional changes.
+<DT><CODE>CS_SYSDEF_PROVIDE_GETOPT</CODE>
+<DD>Include `<TT>csutil/getopt.h</TT>'.
+<DT><CODE>CS_SYSDEF_PROVIDE_MKDIR</CODE>
+<DD>Use the `<SAMP>CS_MKDIR(path)</SAMP>' macro to create the directory, rather than the
+obsolete `<SAMP>MKDIR()</SAMP>' macro.
+<DT><CODE>CS_SYSDEF_PROVIDE_PATH</CODE>
+<DD>No additional changes.
+<DT><CODE>CS_SYSDEF_PROVIDE_SELECT</CODE>
+<DD>No additional changes.
+<DT><CODE>CS_SYSDEF_PROVIDE_SOCKETS</CODE>
+<DD>Include `<TT>csutil/sockets.h</TT>'.
+<DT><CODE>CS_SYSDEF_PROVIDE_SOFTWARE2D</CODE>
+<DD>No additional changes.
+<DT><CODE>CS_SYSDEF_PROVIDE_TEMP</CODE>
+<DD>Use the `<SAMP>CS_TEMP_DIR</SAMP>' and `<SAMP>CS_TEMP_FILE</SAMP>' macros, rather than the
+obsolete `<SAMP>TEMP_DIR</SAMP>' and `<SAMP>TEMP_FILE</SAMP>' macros.
+<DT><CODE>CS_SYSDEF_PROVIDE_UNLINK</CODE>
+<DD>No additional changes.
+<DT><CODE>CS_SYSDEF_VFS_PROVIDE_CHECK_VAR</CODE>
+<DD>No additional changes.
+</DL>
+<P>
+
+The age-old restriction that `<TT>cssysdef.h</TT>' could be included only by source
+files (`<TT>.cpp</TT>') has been lifted. This restriction was an unfortunate
+side-effect of the polymorphic behavior of `<TT>cssysdef.h</TT>' in the presence
+of various `<SAMP>CS_SYSDEF_PROVIDE_FACILITY</SAMP>' macros. It is now safe, even
+recommended, to include `<TT>cssysdef.h</TT>' in header files (`<TT>.h</TT>'). Doing so
+helps to make header files more self-contained, thus reducing the burden of
+clients of those headers.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC830"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC831"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC953"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC954"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC953">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC954">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
