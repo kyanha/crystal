@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\explo\persist\standard\exploldr.h
 
 SOURCE=..\..\mk\visualc6\plgexploldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\explo\persist\standard\exploldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\physics\loader\physldr.h
 
 SOURCE=..\..\mk\visualc6\plgphysldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\physics\loader\physldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -222,6 +222,10 @@ SOURCE=..\..\plugins\device\joystick\windows\dinputdefs.h
 
 SOURCE=..\..\mk\visualc6\plgjoywin.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\device\joystick\windows\joywin.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

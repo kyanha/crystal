@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\xmlshader.h
 
 SOURCE=..\..\mk\visualc6\plgxmlshader.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\xmlshader.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

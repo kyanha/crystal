@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\console\output\simple\simpcon.h
 
 SOURCE=..\..\mk\visualc6\plgsimpcon.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\console\output\simple\simpcon.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

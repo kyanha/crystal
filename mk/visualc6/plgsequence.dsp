@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\sequence\sequence.h
 
 SOURCE=..\..\mk\visualc6\plgsequence.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sequence\sequence.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

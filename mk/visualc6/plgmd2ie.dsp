@@ -209,6 +209,10 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 
 SOURCE=..\..\mk\visualc6\plgmd2ie.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\impexp\md2\md2ie.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

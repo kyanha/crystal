@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\fountain\object\fountain.h
 
 SOURCE=..\..\mk\visualc6\plgfountain.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\fountain\object\fountain.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

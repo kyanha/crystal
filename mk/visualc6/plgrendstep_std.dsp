@@ -234,6 +234,10 @@ SOURCE=..\..\plugins\engine\renderloop\stdsteps\target.h
 
 SOURCE=..\..\mk\visualc6\plgrendstep_std.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\renderloop\stdsteps\rendstep_std.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

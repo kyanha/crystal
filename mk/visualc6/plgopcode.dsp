@@ -462,6 +462,10 @@ SOURCE=..\..\plugins\collide\opcode\Stdafx.h
 
 SOURCE=..\..\mk\visualc6\plgopcode.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\opcode.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

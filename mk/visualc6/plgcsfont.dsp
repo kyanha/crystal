@@ -234,6 +234,10 @@ SOURCE=..\..\plugins\font\server\csfont\font_tiny.h
 
 SOURCE=..\..\mk\visualc6\plgcsfont.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\font\server\csfont\csfont.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

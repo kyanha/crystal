@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\canvas\ddraw\g2d.h
 
 SOURCE=..\..\mk\visualc6\plgddraw2d.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\ddraw\ddraw2d.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

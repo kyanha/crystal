@@ -242,6 +242,10 @@ SOURCE=..\..\plugins\movierecorder\rtjpeg.h
 
 SOURCE=..\..\mk\visualc6\plgmovierecorder.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\movierecorder\movierecorder.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\font\server\freefnt2\freefnt2.h
 
 SOURCE=..\..\mk\visualc6\plgfreefnt2.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\font\server\freefnt2\freefnt2.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

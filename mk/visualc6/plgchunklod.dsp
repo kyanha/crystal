@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\terrain\object\chunklod.h
 
 SOURCE=..\..\mk\visualc6\plgchunklod.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\terrain\object\chunklod.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -226,6 +226,10 @@ SOURCE=..\..\plugins\sound\renderer\software\srdrsrc.h
 
 SOURCE=..\..\mk\visualc6\plgsndsoft.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sound\renderer\software\sndsoft.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

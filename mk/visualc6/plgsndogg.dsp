@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\sound\loader\ogg\oggdata.h
 
 SOURCE=..\..\mk\visualc6\plgsndogg.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sound\loader\ogg\sndogg.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

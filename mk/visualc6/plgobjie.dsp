@@ -209,6 +209,10 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 
 SOURCE=..\..\mk\visualc6\plgobjie.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\impexp\obj\objie.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

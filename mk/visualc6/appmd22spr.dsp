@@ -1,27 +1,27 @@
-# Microsoft Developer Studio Project File - Name="appisomap" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="appmd22spr" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) Application" 0x0101
+# TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=appisomap - Win32 Debug
+CFG=appmd22spr - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "appisomap.mak".
+!MESSAGE NMAKE /f "appmd22spr.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "appisomap.mak" CFG="appisomap - Win32 Debug"
+!MESSAGE NMAKE /f "appmd22spr.mak" CFG="appmd22spr - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "appisomap - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Application")
-!MESSAGE "appisomap - Win32 Debug_NR" (based on "Win32 (x86) Application")
-!MESSAGE "appisomap - Win32 Release_NR" (based on "Win32 (x86) Application")
-!MESSAGE "appisomap - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "appisomap - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "appmd22spr - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Console Application")
+!MESSAGE "appmd22spr - Win32 Debug_NR" (based on "Win32 (x86) Console Application")
+!MESSAGE "appmd22spr - Win32 Release_NR" (based on "Win32 (x86) Console Application")
+!MESSAGE "appmd22spr - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "appmd22spr - Win32 Release" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -31,7 +31,7 @@ CFG=appisomap - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "appisomap - Win32 Release"
+!IF  "$(CFG)" == "appmd22spr - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -40,27 +40,27 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "csrelease\temp\appisomap"
-# PROP Intermediate_Dir "csrelease\temp\appisomap"
+# PROP Output_Dir "csrelease\temp\appmd22spr"
+# PROP Intermediate_Dir "csrelease\temp\appmd22spr"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /Gy /GF /W3 /Gm /G5 /Ob2 /Og /Oi /Ot /Oy /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # ADD CPP /nologo /MD /W3 /Gm /GX /G5 /Ob2 /Og /Oi /Ot /Oy /I "..\..\include\csutil\win32" /D "NDEBUG" /D "_MT" /D "_CONSOLE" /D "_MBCS" /D "WIN32" /D "_WINDOWS" /D "WIN32_VOLATILE" /D "__CRYSTAL_SPACE__" /D "CS_STRICT_SMART_POINTERS" /FD /I "..\.." /I "..\..\include" /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG" 
-# ADD RSC /l 0x409 /d "NDEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csrelease\temp\appisomap\appisomap.res"
+# ADD RSC /l 0x409 /d "NDEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csrelease\temp\appmd22spr\appmd22spr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /machine:I386 /out:"csrelease\temp\appisomap\isomap.exe" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /machine:I386 /out:"csrelease\temp\appmd22spr\md22spr.exe" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
-TargetPath".\csrelease\temp\appisomap\isomap.exe"
+TargetPath".\csrelease\temp\appmd22spr\md22spr.exe"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo Moving output to MSVC Release Bin.	copy "$(TargetPath)"  csrelease\bin
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "appisomap - Win32 Debug"
+!ELSEIF  "$(CFG)" == "appmd22spr - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -69,27 +69,27 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "csdebug\temp\appisomap"
-# PROP Intermediate_Dir "csdebug\temp\appisomap"
+# PROP Output_Dir "csdebug\temp\appmd22spr"
+# PROP Intermediate_Dir "csdebug\temp\appmd22spr"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # ADD CPP /nologo /vmb /vms /MDd /W3 /Gm /GR /GX /G5 /ZI /Od /I "..\..\plugins" /I "..\..\include\csutil\win32" /D "_DEBUG" /D "_MT" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "WIN32_VOLATILE" /D "__CRYSTAL_SPACE__" /D "CS_DEBUG" /D "CS_STRICT_SMART_POINTERS" /FD /I "..\.." /I "..\..\include" /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG" 
-# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csdebug\temp\appisomap\appisomap.res"
+# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csdebug\temp\appmd22spr\appmd22spr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /debug /machine:I386 /out:"csdebug\temp\appisomap\isomap.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /debug /machine:I386 /out:"csdebug\temp\appmd22spr\md22spr.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # Begin Special Build Tool
-TargetPath=".\csdebug\temp\appisomap\isomap.exe"
+TargetPath=".\csdebug\temp\appmd22spr\md22spr.exe"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo Moving output to MSVC Debug Bin.	copy "$(TargetPath)"  csdebug\bin
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "appisomap - Win32 ExtensiveMemDebug"
+!ELSEIF  "$(CFG)" == "appmd22spr - Win32 ExtensiveMemDebug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -98,27 +98,27 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "csmemdbg\temp\appisomap"
-# PROP Intermediate_Dir "csmemdbg\temp\appisomap"
+# PROP Output_Dir "csmemdbg\temp\appmd22spr"
+# PROP Intermediate_Dir "csmemdbg\temp\appmd22spr"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # ADD CPP /nologo /vmb /vms /MDd /W3 /Gm /GR /GX /G5 /ZI /Od /I "..\..\include\csutil\win32" /D "_DEBUG" /D "_MT" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "WIN32_VOLATILE" /D "__CRYSTAL_SPACE__" /D "CS_DEBUG" /D "CS_STRICT_SMART_POINTERS" /D "CS_EXTENSIVE_MEMDEBUG" /FD /I "..\.." /I "..\..\include" /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG" 
-# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csmemdbg\temp\appisomap\appisomap.res"
+# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csmemdbg\temp\appmd22spr\appmd22spr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /debug /machine:I386 /out:"csmemdbg\temp\appisomap\isomap.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /debug /machine:I386 /out:"csmemdbg\temp\appmd22spr\md22spr.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # Begin Special Build Tool
-TargetPath=".\csmemdbg\temp\appisomap\isomap.exe"
+TargetPath=".\csmemdbg\temp\appmd22spr\md22spr.exe"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo Moving output to MSVC Debug Bin.	copy "$(TargetPath)"  csmemdbg\bin
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "appisomap - Win32 Release_NR"
+!ELSEIF  "$(CFG)" == "appmd22spr - Win32 Release_NR"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -127,27 +127,27 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "csrelease\temp\appisomap"
-# PROP Intermediate_Dir "csrelease\temp\appisomap"
+# PROP Output_Dir "csrelease\temp\appmd22spr"
+# PROP Intermediate_Dir "csrelease\temp\appmd22spr"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /Gy /GF /W3 /Gm /G5 /Ob2 /Og /Oi /Ot /Oy /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # ADD CPP /nologo /MD /W3 /Gm /GX /G5 /Ob2 /Og /Oi /Ot /Oy /I "..\..\include\csutil\win32" /D "NDEBUG" /D "_MT" /D "_CONSOLE" /D "_MBCS" /D "WIN32" /D "_WINDOWS" /D "WIN32_VOLATILE" /D "__CRYSTAL_SPACE__" /D "CS_STRICT_SMART_POINTERS" /D "CS_USE_NEW_RENDERER" /FD /I "..\.." /I "..\..\include" /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG" 
-# ADD RSC /l 0x409 /d "NDEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csrelease\temp\appisomap\appisomap.res"
+# ADD RSC /l 0x409 /d "NDEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csrelease\temp\appmd22spr\appmd22spr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /machine:I386 /out:"csrelease\temp\appisomap\isomap.exe" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /machine:I386 /out:"csrelease\temp\appmd22spr\md22spr.exe" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
-TargetPath".\csrelease\temp\appisomap\isomap.exe"
+TargetPath".\csrelease\temp\appmd22spr\md22spr.exe"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo Moving output to MSVC Release Bin.	copy "$(TargetPath)"  csrelease\bin
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "appisomap - Win32 Debug_NR"
+!ELSEIF  "$(CFG)" == "appmd22spr - Win32 Debug_NR"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -156,22 +156,22 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "csdebug\temp\appisomap"
-# PROP Intermediate_Dir "csdebug\temp\appisomap"
+# PROP Output_Dir "csdebug\temp\appmd22spr"
+# PROP Intermediate_Dir "csdebug\temp\appmd22spr"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # ADD CPP /nologo /vmb /vms /MDd /W3 /Gm /GR /GX /G5 /ZI /Od /I "..\..\include\csutil\win32" /D "_DEBUG" /D "_MT" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "WIN32_VOLATILE" /D "__CRYSTAL_SPACE__" /D "CS_DEBUG" /D "CS_STRICT_SMART_POINTERS" /D "CS_USE_NEW_RENDERER" /FD /I "..\.." /I "..\..\include" /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG" 
-# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csdebug\temp\appisomap\appisomap.res"
+# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include" /fo".\csdebug\temp\appmd22spr\appmd22spr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /debug /machine:I386 /out:"csdebug\temp\appisomap\isomap.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /debug /machine:I386 /out:"csdebug\temp\appmd22spr\md22spr.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # Begin Special Build Tool
-TargetPath=".\csdebug\temp\appisomap\isomap.exe"
+TargetPath=".\csdebug\temp\appmd22spr\md22spr.exe"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo Moving output to MSVC Debug Bin.	copy "$(TargetPath)"  csdebug\bin
 # End Special Build Tool
@@ -180,17 +180,33 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 
 # Begin Target
 
-# Name "appisomap - Win32 ExtensiveMemDebug"
-# Name "appisomap - Win32 Debug"
-# Name "appisomap - Win32 Release"
-# Name "appisomap - Win32 Debug_NR"
-# Name "appisomap - Win32 Release_NR"
+# Name "appmd22spr - Win32 ExtensiveMemDebug"
+# Name "appmd22spr - Win32 Debug"
+# Name "appmd22spr - Win32 Release"
+# Name "appmd22spr - Win32 Debug_NR"
+# Name "appmd22spr - Win32 Release_NR"
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\apps\isomap\isomap.h
+SOURCE=..\..\apps\import\md22spr\m2s_base.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\import\md22spr\m2s_img.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\import\md22spr\m2s_md2.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\import\md22spr\m2s_mdl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\import\md22spr\m2s_pal.h
 # End Source File
 
 # End Group
@@ -199,7 +215,7 @@ SOURCE=..\..\apps\isomap\isomap.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\mk\visualc6\appisomap.rc
+SOURCE=..\..\mk\visualc6\appmd22spr.rc
 # End Source File
 
 # End Group
@@ -208,7 +224,27 @@ SOURCE=..\..\mk\visualc6\appisomap.rc
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\apps\isomap\isomap.cpp
+SOURCE=..\..\apps\import\md22spr\m2s_base.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\import\md22spr\m2s_img.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\import\md22spr\m2s_md2.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\import\md22spr\m2s_mdl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\import\md22spr\m2s_pal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\import\md22spr\mdl2spr.cpp
 # End Source File
 
 # End Group

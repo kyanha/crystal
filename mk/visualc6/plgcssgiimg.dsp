@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\loader\sgi\sgiimage.h
 
 SOURCE=..\..\mk\visualc6\plgcssgiimg.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\sgi\cssgiimg.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

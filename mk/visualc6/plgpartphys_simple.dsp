@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\particles\physics\simple\simplephys.h
 
 SOURCE=..\..\mk\visualc6\plgpartphys_simple.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\particles\physics\simple\partphys_simple.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

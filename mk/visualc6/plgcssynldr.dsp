@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\csparser\services\syntxldr.h
 
 SOURCE=..\..\mk\visualc6\plgcssynldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\csparser\services\cssynldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

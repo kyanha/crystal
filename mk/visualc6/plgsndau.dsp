@@ -209,6 +209,10 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 
 SOURCE=..\..\mk\visualc6\plgsndau.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sound\loader\au\sndau.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

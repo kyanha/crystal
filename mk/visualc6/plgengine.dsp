@@ -322,6 +322,10 @@ SOURCE=..\..\plugins\engine\3d\texture.h
 
 SOURCE=..\..\mk\visualc6\plgengine.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\3d\engine.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

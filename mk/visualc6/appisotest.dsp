@@ -190,10 +190,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\apps\isotest\genmaze.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\apps\isotest\isotest.h
 # End Source File
 
@@ -210,10 +206,6 @@ SOURCE=..\..\mk\visualc6\appisotest.rc
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\apps\isotest\genmaze.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\apps\isotest\isotest.cpp

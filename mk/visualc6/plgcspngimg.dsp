@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\loader\png\pngimage.h
 
 SOURCE=..\..\mk\visualc6\plgcspngimg.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\png\cspngimg.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\genmesh\persist\standard\gmeshldr.h
 
 SOURCE=..\..\mk\visualc6\plggmeshldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\genmesh\persist\standard\gmeshldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

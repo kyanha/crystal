@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\lghtng\persist\standard\lghtngldr.h
 
 SOURCE=..\..\mk\visualc6\plglghtngldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\lghtng\persist\standard\lghtngldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

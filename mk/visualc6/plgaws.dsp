@@ -370,6 +370,10 @@ SOURCE=..\..\plugins\aws\slparse.h
 
 SOURCE=..\..\mk\visualc6\plgaws.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\aws.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

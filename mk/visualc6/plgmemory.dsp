@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\canvas\memory\memory.h
 
 SOURCE=..\..\mk\visualc6\plgmemory.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\memory\memory.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

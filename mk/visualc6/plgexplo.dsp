@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\explo\object\explo.h
 
 SOURCE=..\..\mk\visualc6\plgexplo.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\explo\object\explo.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

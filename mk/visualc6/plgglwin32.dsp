@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\canvas\openglwin\oglg2d.h
 
 SOURCE=..\..\mk\visualc6\plgglwin32.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\openglwin\glwin32.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

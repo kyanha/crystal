@@ -230,6 +230,10 @@ SOURCE=..\..\plugins\sound\renderer\ds3d\sndsrc.h
 
 SOURCE=..\..\mk\visualc6\plgsndds3d.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sound\renderer\ds3d\sndds3d.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

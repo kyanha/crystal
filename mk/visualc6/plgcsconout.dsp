@@ -222,6 +222,10 @@ SOURCE=..\..\plugins\console\output\standard\csconout.h
 
 SOURCE=..\..\mk\visualc6\plgcsconout.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\console\output\standard\csconout.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

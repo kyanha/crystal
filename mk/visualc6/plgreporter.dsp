@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\reporter\reporter.h
 
 SOURCE=..\..\mk\visualc6\plgreporter.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\reporter\reporter.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -230,6 +230,10 @@ SOURCE=..\..\plugins\sound\renderer\openal\alsndsrc.h
 
 SOURCE=..\..\mk\visualc6\plgsndoal.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sound\renderer\openal\sndoal.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

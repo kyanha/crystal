@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\stdrep\stdrep.h
 
 SOURCE=..\..\mk\visualc6\plgstdrep.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\stdrep\stdrep.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\terrain_brute\object\brute.h
 
 SOURCE=..\..\mk\visualc6\plgbruteblock.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\terrain_brute\object\bruteblock.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

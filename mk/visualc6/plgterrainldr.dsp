@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\terrain\persist\standard\terrainldr.h
 
 SOURCE=..\..\mk\visualc6\plgterrainldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\terrain\persist\standard\terrainldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

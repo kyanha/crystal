@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\font\server\fontplex\fontplex.h
 
 SOURCE=..\..\mk\visualc6\plgfontplex.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\font\server\fontplex\fontplex.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

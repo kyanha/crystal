@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\cursor\cursor.h
 
 SOURCE=..\..\mk\visualc6\plgcscursor.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\cursor\cscursor.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -238,6 +238,10 @@ SOURCE=..\..\plugins\mesh\thing\object\thing.h
 
 SOURCE=..\..\mk\visualc6\plgthing.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\thing\object\thing.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\terrfunc\persist\standard\terrfldr.h
 
 SOURCE=..\..\mk\visualc6\plgterrfldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\terrfunc\persist\standard\terrfldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\snow\object\snow.h
 
 SOURCE=..\..\mk\visualc6\plgsnow.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\snow\object\snow.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"
