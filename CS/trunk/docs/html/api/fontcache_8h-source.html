@@ -42,152 +42,151 @@
 00027 <span class="preprocessor">#include "csextern.h"</span>
 00028 <span class="preprocessor">#include "<a class="code" href="csunicode_8h.html">csutil/csunicode.h</a>"</span>
 00029 <span class="preprocessor">#include "csutil/list.h"</span>
-00030 <span class="preprocessor">#include "csutil/hashmap.h"</span>
-00031 <span class="preprocessor">#include "<a class="code" href="blockallocator_8h.html">csutil/blockallocator.h</a>"</span>
-00032 <span class="preprocessor">#include "<a class="code" href="refcount_8h.html">csutil/refcount.h</a>"</span>
-00033 <span class="preprocessor">#include "<a class="code" href="fontserv_8h.html">ivideo/fontserv.h</a>"</span>
-00034 <span class="preprocessor">#include "<a class="code" href="ivideo_2graph2d_8h.html">ivideo/graph2d.h</a>"</span>
-00035 
-00040 <span class="preprocessor">#define GLYPH_INDEX_UPPER_SHIFT     9</span>
-00041 <span class="preprocessor"></span><span class="preprocessor">#define GLYPH_INDEX_LOWER_COUNT     512</span>
-00042 <span class="preprocessor"></span><span class="preprocessor">#define GLYPH_INDEX_LOWER_MASK      0x1ff</span>
-00043 <span class="preprocessor"></span>
-00044 <span class="preprocessor">#define RELEVANT_WRITE_FLAGS        CS_WRITE_NOANTIALIAS</span>
-00045 <span class="preprocessor"></span>
-<a name="l00053"></a><a class="code" href="classcsFontCache.html">00053</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csFontCache
-00054 {
-00055 <span class="keyword">public</span>:
-00056   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>;
-<a name="l00060"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html">00060</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>
-00061   {
-<a name="l00063"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o0">00063</a>     <a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* font;
-<a name="l00065"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o1">00065</a>     <a class="code" href="group__util.html#ga22">utf32_char</a> glyph;
-<a name="l00067"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o2">00067</a>     <a class="code" href="structcsGlyphMetrics.html">csGlyphMetrics</a> glyphMetrics;
-<a name="l00069"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o3">00069</a>     <span class="keywordtype">bool</span> hasGlyph;
-<a name="l00071"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o4">00071</a>     <a class="code" href="group__util.html#ga18">uint</a> flags;
-00072   };
-00073 
-00074 <span class="keyword">protected</span>:
-<a name="l00078"></a><a class="code" href="structcsFontCache_1_1LRUEntry.html">00078</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>
-00079   {
-<a name="l00081"></a><a class="code" href="structcsFontCache_1_1LRUEntry.html#o0">00081</a>     <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* next;
-<a name="l00083"></a><a class="code" href="structcsFontCache_1_1LRUEntry.html#o1">00083</a>     <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* prev;
-00084 
-<a name="l00086"></a><a class="code" href="structcsFontCache_1_1LRUEntry.html#o2">00086</a>     <a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* cacheData;
-00087   };
-<a name="l00089"></a><a class="code" href="classcsFontCache.html#p0">00089</a>   <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* head;
-<a name="l00091"></a><a class="code" href="classcsFontCache.html#p1">00091</a>   <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* tail;
-00092 
-<a name="l00094"></a><a class="code" href="classcsFontCache.html#p2">00094</a>   <a class="code" href="classcsBlockAllocator.html">csBlockAllocator&lt;LRUEntry&gt;</a> LRUAlloc;
-00095 
-<a name="l00102"></a><a class="code" href="structcsFontCache_1_1PlaneGlyphs.html">00102</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1PlaneGlyphs.html">PlaneGlyphs</a>
-00103   {
-<a name="l00105"></a><a class="code" href="structcsFontCache_1_1PlaneGlyphs.html#o0">00105</a>     <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* entries[GLYPH_INDEX_LOWER_COUNT];
-00106     <span class="keywordtype">int</span> usedGlyphs;
-00107 
-00108     <a class="code" href="structcsFontCache_1_1PlaneGlyphs.html">PlaneGlyphs</a> ()
-00109     {
-00110       memset (entries, 0, <span class="keyword">sizeof</span> (entries));
-00111       usedGlyphs = 0;
-00112     }
-00113   };
-00114 
-00115   <span class="keyword">class </span>PlaneGlyphElementHandler : <span class="keyword">public</span> <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler</a>&lt;PlaneGlyphs*&gt;
-00116   {
-00117   <span class="keyword">public</span>:
-00118     <span class="keyword">static</span> <span class="keywordtype">void</span> Construct (PlaneGlyphs** address, PlaneGlyphs* <span class="keyword">const</span>&amp; src)
-00119     {
-00120       *address = src;
-00121     }
-00122 
-00123     <span class="keyword">static</span> <span class="keywordtype">void</span> Destroy (PlaneGlyphs** address)
-00124     {
-00125     }
-00126 
-00127     <span class="keyword">static</span> <span class="keywordtype">void</span> InitRegion (PlaneGlyphs** address, size_t count)
-00128     {
-00129       memset (address, 0, count * <span class="keyword">sizeof</span> (PlaneGlyphs*));
-00130     }
-00131   };
-00132 
-<a name="l00139"></a><a class="code" href="classcsFontCache.html#x0">00139</a>   <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;PlaneGlyphs*, PlaneGlyphElementHandler&gt;</a> <a class="code" href="classcsArray.html">PlaneGlyphsArray</a>;
-00140 <span class="keyword">public</span>:
-<a name="l00144"></a><a class="code" href="structcsFontCache_1_1KnownFont.html">00144</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>
-00145   {
-00146     <a class="code" href="structiFont.html">iFont</a>* font;
-<a name="l00148"></a><a class="code" href="structcsFontCache_1_1KnownFont.html#o1">00148</a>     <span class="keywordtype">int</span> fontSize;
-00149     <a class="code" href="classcsArray.html">PlaneGlyphsArray</a> planeGlyphs;
-00150   };
-<a name="l00152"></a><a class="code" href="classcsFontCache.html#o3">00152</a>   <span class="keywordtype">int</span> ClipX1, ClipY1, ClipX2, ClipY2;
-00153 <span class="keyword">protected</span>:
-00154 
-<a name="l00156"></a><a class="code" href="classcsFontCache.html#p3">00156</a>   <a class="code" href="classcsArray.html">csArray&lt;KnownFont*&gt;</a> knownFonts;
-00157   <a class="code" href="classcsSet.html">csSet&lt;KnownFont*&gt;</a> purgeableFonts;
-00158 
-00160   <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* <a class="code" href="classcsFontCache.html#b0">FindLRUEntry</a> (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* font, utf32_char glyph);
-00162   <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* <a class="code" href="classcsFontCache.html#b0">FindLRUEntry</a> (<a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* cacheData);
-00163 
-00164   <span class="keyword">static</span> <span class="keywordtype">int</span> KnownFontArrayCompareItems (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <span class="keyword">const</span>&amp; item1, 
-00165     <a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <span class="keyword">const</span>&amp; item2);
-00166   <span class="keyword">static</span> <span class="keywordtype">int</span> KnownFontArrayCompareToKey (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <span class="keyword">const</span>&amp; item1, 
-00167     <a class="code" href="structiFont.html">iFont</a>* <span class="keyword">const</span>&amp; item2);
-00168   <span class="keyword">static</span> <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;KnownFont*,iFont*&gt;</a> KnownFontArrayKeyFunctor(<a class="code" href="structiFont.html">iFont</a>* f)
-00169     { <span class="keywordflow">return</span> <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;KnownFont*,iFont*&gt;</a>(f, KnownFontArrayCompareToKey); }
-00170 
-00172   <span class="keyword">virtual</span> GlyphCacheData* <a class="code" href="classcsFontCache.html#b2">InternalCacheGlyph</a> (KnownFont* font,
-00173     utf32_char glyph, uint flags);
-00175   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b3">InternalUncacheGlyph</a> (GlyphCacheData* cacheData);
-00176 
-00178   GlyphCacheData* <a class="code" href="classcsFontCache.html#b4">CacheGlyphUnsafe</a> (KnownFont* font, 
-00179     utf32_char glyph, uint flags);
-00181   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b5">SetupCacheData</a> (GlyphCacheData* cacheData,
-00182     KnownFont* font, utf32_char glyph, uint flags);
-00183 
-00185   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b6">AddCacheData</a> (KnownFont* font, utf32_char glyph, GlyphCacheData* cacheData);
-00187   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b7">RemoveCacheData</a> (GlyphCacheData* cacheData);
-00189   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b8">RemoveLRUEntry</a> (LRUEntry* entry);
-00191   GlyphCacheData* <a class="code" href="classcsFontCache.html#b9">InternalGetCacheData</a> (KnownFont* font, utf32_char glyph);
-00192 
-<a name="l00196"></a><a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">00196</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">FontDeleteNotify</a> : <span class="keyword">public</span> <a class="code" href="structiFontDeleteNotify.html">iFontDeleteNotify</a>
-00197   {
-00198     csFontCache* cache;
-00199     SCF_DECLARE_IBASE;
-00200     
-00201     <a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">FontDeleteNotify</a> (csFontCache* cache);
-00202     <span class="keyword">virtual</span> ~<a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">FontDeleteNotify</a> ();
-00203 
-00204     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structcsFontCache_1_1FontDeleteNotify.html#a2">BeforeDelete</a> (<a class="code" href="structiFont.html">iFont</a>* font);
-00205   };
-00206   <a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">FontDeleteNotify</a>* deleteCallback;
-00207 
-00208   <span class="keywordtype">void</span> CleanupCache ();
-00209 <span class="keyword">public</span>:
-00210   csFontCache ();
-00211   <span class="keyword">virtual</span> ~csFontCache ();
-00212   
-00214   <a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* <a class="code" href="classcsFontCache.html#a2">CacheGlyph</a> (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* font, utf32_char glyph,
-00215     uint flags);
-00217   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#a3">UncacheGlyph</a> (<a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* cacheData);
-00218 
-00220   <a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <a class="code" href="classcsFontCache.html#a4">GetCachedFont</a> (<a class="code" href="structiFont.html">iFont</a>* font);
-00222   <a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <a class="code" href="classcsFontCache.html#a5">CacheFont</a> (<a class="code" href="structiFont.html">iFont</a>* font);
-00224   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#a6">UncacheFont</a> (<a class="code" href="structiFont.html">iFont</a>* font);
-00226   <a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* <a class="code" href="classcsFontCache.html#a7">GetCacheData</a> (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* font, utf32_char glyph, 
-00227     uint flags);
-00229   <a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* <a class="code" href="classcsFontCache.html#a8">GetLeastUsed</a> ();
-00230 
-00232   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#a9">PurgeEmptyPlanes</a> ();
-00233 
-00234   <span class="keywordtype">void</span> SetClipRect (<span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> y2)
-00235   { 
-00236     <a class="code" href="classcsFontCache.html#o0">ClipX1</a> = x1; <a class="code" href="classcsFontCache.html#o1">ClipY1</a> = y1; <a class="code" href="classcsFontCache.html#o2">ClipX2</a> = x2; <a class="code" href="classcsFontCache.html#o3">ClipY2</a> = y2; 
-00237   }
-00238 
-00242   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#a11">WriteString</a> (<a class="code" href="structiFont.html">iFont</a> *font, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> fg, <span class="keywordtype">int</span> bg, 
-00243     <span class="keyword">const</span> utf8_char* text, uint flags);
-00244 };
-00245 
-00248 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_CANVAS_FONTCACHE_H__</span>
+00030 <span class="preprocessor">#include "<a class="code" href="blockallocator_8h.html">csutil/blockallocator.h</a>"</span>
+00031 <span class="preprocessor">#include "<a class="code" href="refcount_8h.html">csutil/refcount.h</a>"</span>
+00032 <span class="preprocessor">#include "<a class="code" href="fontserv_8h.html">ivideo/fontserv.h</a>"</span>
+00033 <span class="preprocessor">#include "<a class="code" href="ivideo_2graph2d_8h.html">ivideo/graph2d.h</a>"</span>
+00034 
+00039 <span class="preprocessor">#define GLYPH_INDEX_UPPER_SHIFT     9</span>
+00040 <span class="preprocessor"></span><span class="preprocessor">#define GLYPH_INDEX_LOWER_COUNT     512</span>
+00041 <span class="preprocessor"></span><span class="preprocessor">#define GLYPH_INDEX_LOWER_MASK      0x1ff</span>
+00042 <span class="preprocessor"></span>
+00043 <span class="preprocessor">#define RELEVANT_WRITE_FLAGS        CS_WRITE_NOANTIALIAS</span>
+00044 <span class="preprocessor"></span>
+<a name="l00052"></a><a class="code" href="classcsFontCache.html">00052</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csFontCache
+00053 {
+00054 <span class="keyword">public</span>:
+00055   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>;
+<a name="l00059"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html">00059</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>
+00060   {
+<a name="l00062"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o0">00062</a>     <a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* font;
+<a name="l00064"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o1">00064</a>     <a class="code" href="group__util.html#ga22">utf32_char</a> glyph;
+<a name="l00066"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o2">00066</a>     <a class="code" href="structcsGlyphMetrics.html">csGlyphMetrics</a> glyphMetrics;
+<a name="l00068"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o3">00068</a>     <span class="keywordtype">bool</span> hasGlyph;
+<a name="l00070"></a><a class="code" href="structcsFontCache_1_1GlyphCacheData.html#o4">00070</a>     <a class="code" href="group__util.html#ga18">uint</a> flags;
+00071   };
+00072 
+00073 <span class="keyword">protected</span>:
+<a name="l00077"></a><a class="code" href="structcsFontCache_1_1LRUEntry.html">00077</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>
+00078   {
+<a name="l00080"></a><a class="code" href="structcsFontCache_1_1LRUEntry.html#o0">00080</a>     <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* next;
+<a name="l00082"></a><a class="code" href="structcsFontCache_1_1LRUEntry.html#o1">00082</a>     <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* prev;
+00083 
+<a name="l00085"></a><a class="code" href="structcsFontCache_1_1LRUEntry.html#o2">00085</a>     <a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* cacheData;
+00086   };
+<a name="l00088"></a><a class="code" href="classcsFontCache.html#p0">00088</a>   <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* head;
+<a name="l00090"></a><a class="code" href="classcsFontCache.html#p1">00090</a>   <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* tail;
+00091 
+<a name="l00093"></a><a class="code" href="classcsFontCache.html#p2">00093</a>   <a class="code" href="classcsBlockAllocator.html">csBlockAllocator&lt;LRUEntry&gt;</a> LRUAlloc;
+00094 
+<a name="l00101"></a><a class="code" href="structcsFontCache_1_1PlaneGlyphs.html">00101</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1PlaneGlyphs.html">PlaneGlyphs</a>
+00102   {
+<a name="l00104"></a><a class="code" href="structcsFontCache_1_1PlaneGlyphs.html#o0">00104</a>     <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* entries[GLYPH_INDEX_LOWER_COUNT];
+00105     <span class="keywordtype">int</span> usedGlyphs;
+00106 
+00107     <a class="code" href="structcsFontCache_1_1PlaneGlyphs.html">PlaneGlyphs</a> ()
+00108     {
+00109       memset (entries, 0, <span class="keyword">sizeof</span> (entries));
+00110       usedGlyphs = 0;
+00111     }
+00112   };
+00113 
+00114   <span class="keyword">class </span>PlaneGlyphElementHandler : <span class="keyword">public</span> <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler</a>&lt;PlaneGlyphs*&gt;
+00115   {
+00116   <span class="keyword">public</span>:
+00117     <span class="keyword">static</span> <span class="keywordtype">void</span> Construct (PlaneGlyphs** address, PlaneGlyphs* <span class="keyword">const</span>&amp; src)
+00118     {
+00119       *address = src;
+00120     }
+00121 
+00122     <span class="keyword">static</span> <span class="keywordtype">void</span> Destroy (PlaneGlyphs** address)
+00123     {
+00124     }
+00125 
+00126     <span class="keyword">static</span> <span class="keywordtype">void</span> InitRegion (PlaneGlyphs** address, size_t count)
+00127     {
+00128       memset (address, 0, count * <span class="keyword">sizeof</span> (PlaneGlyphs*));
+00129     }
+00130   };
+00131 
+<a name="l00138"></a><a class="code" href="classcsFontCache.html#x0">00138</a>   <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;PlaneGlyphs*, PlaneGlyphElementHandler&gt;</a> <a class="code" href="classcsArray.html">PlaneGlyphsArray</a>;
+00139 <span class="keyword">public</span>:
+<a name="l00143"></a><a class="code" href="structcsFontCache_1_1KnownFont.html">00143</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>
+00144   {
+00145     <a class="code" href="structiFont.html">iFont</a>* font;
+<a name="l00147"></a><a class="code" href="structcsFontCache_1_1KnownFont.html#o1">00147</a>     <span class="keywordtype">int</span> fontSize;
+00148     <a class="code" href="classcsArray.html">PlaneGlyphsArray</a> planeGlyphs;
+00149   };
+<a name="l00151"></a><a class="code" href="classcsFontCache.html#o3">00151</a>   <span class="keywordtype">int</span> ClipX1, ClipY1, ClipX2, ClipY2;
+00152 <span class="keyword">protected</span>:
+00153 
+<a name="l00155"></a><a class="code" href="classcsFontCache.html#p3">00155</a>   <a class="code" href="classcsArray.html">csArray&lt;KnownFont*&gt;</a> knownFonts;
+00156   <a class="code" href="classcsSet.html">csSet&lt;KnownFont*&gt;</a> purgeableFonts;
+00157 
+00159   <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* <a class="code" href="classcsFontCache.html#b0">FindLRUEntry</a> (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* font, utf32_char glyph);
+00161   <a class="code" href="structcsFontCache_1_1LRUEntry.html">LRUEntry</a>* <a class="code" href="classcsFontCache.html#b0">FindLRUEntry</a> (<a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* cacheData);
+00162 
+00163   <span class="keyword">static</span> <span class="keywordtype">int</span> KnownFontArrayCompareItems (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <span class="keyword">const</span>&amp; item1, 
+00164     <a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <span class="keyword">const</span>&amp; item2);
+00165   <span class="keyword">static</span> <span class="keywordtype">int</span> KnownFontArrayCompareToKey (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <span class="keyword">const</span>&amp; item1, 
+00166     <a class="code" href="structiFont.html">iFont</a>* <span class="keyword">const</span>&amp; item2);
+00167   <span class="keyword">static</span> <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;KnownFont*,iFont*&gt;</a> KnownFontArrayKeyFunctor(<a class="code" href="structiFont.html">iFont</a>* f)
+00168     { <span class="keywordflow">return</span> <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;KnownFont*,iFont*&gt;</a>(f, KnownFontArrayCompareToKey); }
+00169 
+00171   <span class="keyword">virtual</span> GlyphCacheData* <a class="code" href="classcsFontCache.html#b2">InternalCacheGlyph</a> (KnownFont* font,
+00172     utf32_char glyph, uint flags);
+00174   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b3">InternalUncacheGlyph</a> (GlyphCacheData* cacheData);
+00175 
+00177   GlyphCacheData* <a class="code" href="classcsFontCache.html#b4">CacheGlyphUnsafe</a> (KnownFont* font, 
+00178     utf32_char glyph, uint flags);
+00180   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b5">SetupCacheData</a> (GlyphCacheData* cacheData,
+00181     KnownFont* font, utf32_char glyph, uint flags);
+00182 
+00184   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b6">AddCacheData</a> (KnownFont* font, utf32_char glyph, GlyphCacheData* cacheData);
+00186   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b7">RemoveCacheData</a> (GlyphCacheData* cacheData);
+00188   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#b8">RemoveLRUEntry</a> (LRUEntry* entry);
+00190   GlyphCacheData* <a class="code" href="classcsFontCache.html#b9">InternalGetCacheData</a> (KnownFont* font, utf32_char glyph);
+00191 
+<a name="l00195"></a><a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">00195</a>   <span class="keyword">struct </span><a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">FontDeleteNotify</a> : <span class="keyword">public</span> <a class="code" href="structiFontDeleteNotify.html">iFontDeleteNotify</a>
+00196   {
+00197     csFontCache* cache;
+00198     SCF_DECLARE_IBASE;
+00199     
+00200     <a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">FontDeleteNotify</a> (csFontCache* cache);
+00201     <span class="keyword">virtual</span> ~<a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">FontDeleteNotify</a> ();
+00202 
+00203     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structcsFontCache_1_1FontDeleteNotify.html#a2">BeforeDelete</a> (<a class="code" href="structiFont.html">iFont</a>* font);
+00204   };
+00205   <a class="code" href="structcsFontCache_1_1FontDeleteNotify.html">FontDeleteNotify</a>* deleteCallback;
+00206 
+00207   <span class="keywordtype">void</span> CleanupCache ();
+00208 <span class="keyword">public</span>:
+00209   csFontCache ();
+00210   <span class="keyword">virtual</span> ~csFontCache ();
+00211   
+00213   <a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* <a class="code" href="classcsFontCache.html#a2">CacheGlyph</a> (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* font, utf32_char glyph,
+00214     uint flags);
+00216   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#a3">UncacheGlyph</a> (<a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* cacheData);
+00217 
+00219   <a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <a class="code" href="classcsFontCache.html#a4">GetCachedFont</a> (<a class="code" href="structiFont.html">iFont</a>* font);
+00221   <a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* <a class="code" href="classcsFontCache.html#a5">CacheFont</a> (<a class="code" href="structiFont.html">iFont</a>* font);
+00223   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#a6">UncacheFont</a> (<a class="code" href="structiFont.html">iFont</a>* font);
+00225   <a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* <a class="code" href="classcsFontCache.html#a7">GetCacheData</a> (<a class="code" href="structcsFontCache_1_1KnownFont.html">KnownFont</a>* font, utf32_char glyph, 
+00226     uint flags);
+00228   <a class="code" href="structcsFontCache_1_1GlyphCacheData.html">GlyphCacheData</a>* <a class="code" href="classcsFontCache.html#a8">GetLeastUsed</a> ();
+00229 
+00231   <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#a9">PurgeEmptyPlanes</a> ();
+00232 
+00233   <span class="keywordtype">void</span> SetClipRect (<span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> y2)
+00234   { 
+00235     <a class="code" href="classcsFontCache.html#o0">ClipX1</a> = x1; <a class="code" href="classcsFontCache.html#o1">ClipY1</a> = y1; <a class="code" href="classcsFontCache.html#o2">ClipX2</a> = x2; <a class="code" href="classcsFontCache.html#o3">ClipY2</a> = y2; 
+00236   }
+00237 
+00241   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#a11">WriteString</a> (<a class="code" href="structiFont.html">iFont</a> *font, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> fg, <span class="keywordtype">int</span> bg, 
+00242     <span class="keyword">const</span> utf8_char* text, uint flags);
+00243 };
+00244 
+00247 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_CANVAS_FONTCACHE_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

@@ -62,7 +62,7 @@
 00055 
 00057   <span class="keyword">virtual</span> ~csClipper ();
 00058 
-00060   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a3">ClipInPlace</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, <span class="keywordtype">int</span> &amp;InOutCount,
+00060   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a3">ClipInPlace</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, size_t &amp;InOutCount,
 00061         <a class="code" href="classcsBox2.html">csBox2</a> &amp;BoundingBox);
 00062 
 <a name="l00064"></a><a class="code" href="classcsClipper.html#a3">00064</a>   uint8 LastClipResult () { <span class="keywordflow">return</span> mrClipping; }
@@ -89,21 +89,21 @@
 <a name="l00094"></a><a class="code" href="classcsBoxClipper.html#a1">00094</a>   csBoxClipper (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2) : region (x1,y1,x2,y2)
 00095   { InitClipBox (); }
 00096 
-00098   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, <span class="keywordtype">int</span> InCount,
-00099     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, <span class="keywordtype">int</span> &amp;OutCount);
+00098   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, size_t InCount,
+00099     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, size_t &amp;OutCount);
 00100 
-00102   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, <span class="keywordtype">int</span> InCount,
-00103     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, <span class="keywordtype">int</span> &amp;OutCount, <a class="code" href="classcsBox2.html">csBox2</a> &amp;BoundingBox);
+00102   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, size_t InCount,
+00103     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, size_t &amp;OutCount, <a class="code" href="classcsBox2.html">csBox2</a> &amp;BoundingBox);
 00104 
-00106   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, <span class="keywordtype">int</span> InCount,
-00107     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, <span class="keywordtype">int</span> &amp;OutCount, <a class="code" href="structcsVertexStatus.html">csVertexStatus</a> *OutStatus);
+00106   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, size_t InCount,
+00107     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, size_t &amp;OutCount, <a class="code" href="structcsVertexStatus.html">csVertexStatus</a> *OutStatus);
 00108 
 00110   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiClipper2D.html#a4">ClassifyBox</a> (<span class="keyword">const</span> <a class="code" href="classcsBox2.html">csBox2</a> &amp;box);
 00111 
 <a name="l00113"></a><a class="code" href="classcsBoxClipper.html#a6">00113</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiClipper2D.html#a5">IsInside</a> (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
 00114   { <span class="keywordflow">return</span> region.In (v.<a class="code" href="classcsVector2.html#o0">x</a>, v.<a class="code" href="classcsVector2.html#o1">y</a>); }
 00115 
-<a name="l00117"></a><a class="code" href="classcsBoxClipper.html#a7">00117</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiClipper2D.html#a6">GetVertexCount</a> ()
+<a name="l00117"></a><a class="code" href="classcsBoxClipper.html#a7">00117</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiClipper2D.html#a6">GetVertexCount</a> ()
 00118   { <span class="keywordflow">return</span> 4; }
 00119 
 <a name="l00121"></a><a class="code" href="classcsBoxClipper.html#a8">00121</a>   <span class="keyword">virtual</span> <a class="code" href="classcsVector2.html">csVector2</a> *<a class="code" href="structiClipper2D.html#a7">GetClipPoly</a> ()
@@ -117,7 +117,7 @@
 00140   <a class="code" href="classcsVector2.html">csVector2</a> *ClipData;
 00142   <a class="code" href="classcsVector2.html">csVector2</a> *ClipPoly;
 00144   <a class="code" href="classcsPoly2D.html">csPoly2D</a> *ClipPoly2D;
-00146   <span class="keywordtype">int</span> ClipPolyVertices;
+00146   size_t ClipPolyVertices;
 00148   <a class="code" href="classcsBox2.html">csBox2</a> ClipBox;
 00149 
 00151   <span class="keywordtype">void</span> Prepare ();
@@ -125,24 +125,24 @@
 00153 <span class="keyword">public</span>:
 00155   csPolygonClipper (<a class="code" href="classcsPoly2D.html">csPoly2D</a> *Clipper, <span class="keywordtype">bool</span> mirror = <span class="keyword">false</span>,
 00156     <span class="keywordtype">bool</span> copy = <span class="keyword">false</span>);
-00158   csPolygonClipper (<a class="code" href="classcsVector2.html">csVector2</a> *Clipper, <span class="keywordtype">int</span> Count, <span class="keywordtype">bool</span> mirror = <span class="keyword">false</span>,
+00158   csPolygonClipper (<a class="code" href="classcsVector2.html">csVector2</a> *Clipper, size_t Count, <span class="keywordtype">bool</span> mirror = <span class="keyword">false</span>,
 00159     <span class="keywordtype">bool</span> copy = <span class="keyword">false</span>);
 00161   <span class="keyword">virtual</span> ~csPolygonClipper ();
 00162 
-00164   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, <span class="keywordtype">int</span> InCount,
-00165     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, <span class="keywordtype">int</span> &amp;OutCount);
+00164   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, size_t InCount,
+00165     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, size_t &amp;OutCount);
 00166 
-00168   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, <span class="keywordtype">int</span> InCount,
-00169     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, <span class="keywordtype">int</span> &amp;OutCount, <a class="code" href="classcsBox2.html">csBox2</a> &amp;BoundingBox);
+00168   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, size_t InCount,
+00169     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, size_t &amp;OutCount, <a class="code" href="classcsBox2.html">csBox2</a> &amp;BoundingBox);
 00170 
-00172   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, <span class="keywordtype">int</span> InCount,
-00173     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, <span class="keywordtype">int</span> &amp;OutCount, <a class="code" href="structcsVertexStatus.html">csVertexStatus</a> *OutStatus);
+00172   <span class="keyword">virtual</span> uint8 <a class="code" href="structiClipper2D.html#a0">Clip</a> (<a class="code" href="classcsVector2.html">csVector2</a> *InPolygon, size_t InCount,
+00173     <a class="code" href="classcsVector2.html">csVector2</a> *OutPolygon, size_t &amp;OutCount, <a class="code" href="structcsVertexStatus.html">csVertexStatus</a> *OutStatus);
 00174 
 00176   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiClipper2D.html#a4">ClassifyBox</a> (<span class="keyword">const</span> <a class="code" href="classcsBox2.html">csBox2</a> &amp;box);
 00177 
 00179   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiClipper2D.html#a5">IsInside</a> (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v);
 00180 
-<a name="l00182"></a><a class="code" href="classcsPolygonClipper.html#a8">00182</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiClipper2D.html#a6">GetVertexCount</a> () { <span class="keywordflow">return</span> ClipPolyVertices; }
+<a name="l00182"></a><a class="code" href="classcsPolygonClipper.html#a8">00182</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiClipper2D.html#a6">GetVertexCount</a> () { <span class="keywordflow">return</span> ClipPolyVertices; }
 00183 
 <a name="l00185"></a><a class="code" href="classcsPolygonClipper.html#a9">00185</a>   <span class="keyword">virtual</span> <a class="code" href="classcsVector2.html">csVector2</a> *<a class="code" href="structiClipper2D.html#a7">GetClipPoly</a> ()
 00186   { <span class="keywordflow">return</span> ClipPoly; }
