@@ -47,325 +47,371 @@
 00028 <span class="preprocessor"></span>
 00033 <span class="preprocessor">#include "csextern.h"</span>
 00034 
-<a name="l00038"></a><a class="code" href="classcsBitArray.html">00038</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csBitArray
-00039 {
-00040 <span class="keyword">public</span>:
-00041   <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> store_type;
-00042 <span class="keyword">private</span>:
-00043   <span class="keyword">enum</span>
-00044   {
-00045     bits_per_byte = 8,
-00046     cell_size     = <span class="keyword">sizeof</span>(store_type) * bits_per_byte
-00047   };
-00048 
-00049   store_type *mpStore;
-00050   store_type mSingleWord; <span class="comment">// Use this buffer when mLength is 1</span>
-00051   size_t mLength;       <span class="comment">// Length of mpStore in units of store_type</span>
-00052   size_t mNumBits;
-00053 
-00055   <span class="keyword">static</span> <span class="keyword">inline</span> size_t GetIndex (size_t bit_num)
-00056   {
-00057     <span class="keywordflow">return</span> bit_num / cell_size;
-00058   }
-00059 
-00060   <span class="keyword">static</span> <span class="keyword">inline</span> size_t GetOffset (size_t bit_num)
-00061   {
-00062     <span class="keywordflow">return</span> bit_num % cell_size;
-00063   }
-00064 
-00065   <span class="keywordtype">void</span> SetSize (size_t newSize)
-00066   {
-00067     size_t newLength;
-00068     <span class="keywordflow">if</span> (newSize == 0)
-00069       newLength = 0;
-00070     <span class="keywordflow">else</span>
-00071       newLength = 1 + GetIndex (newSize - 1);
-00072 
-00073     <span class="comment">// Avoid allocation if length is 1 (common case)</span>
-00074     store_type* newStore;
-00075     <span class="keywordflow">if</span> (newLength &lt;= 1)
-00076       newStore = &amp;mSingleWord;
-00077     <span class="keywordflow">else</span>
-00078       newStore = <span class="keyword">new</span> store_type[newLength];
-00079     
-00080     <span class="keywordflow">if</span> (newLength &gt; 0)
-00081     {
-00082       <span class="keywordflow">if</span> (mLength &gt; 0)
-00083       {
-00084         <span class="keywordflow">if</span> (newStore != mpStore)
-00085           memcpy (newStore, mpStore, 
-00086             (MIN (mLength, newLength)) * <span class="keyword">sizeof</span> (store_type));
-00087       }
-00088       <span class="keywordflow">else</span>
-00089         memset (newStore, 0, newLength * <span class="keyword">sizeof</span> (store_type));
-00090     }
-00091 
-00092     <span class="keywordflow">if</span> (mLength &gt; 1)
-00093       <span class="keyword">delete</span> mpStore;
+00035 <span class="keyword">class </span><a class="code" href="classcsBitArrayHashKeyHandler.html">csBitArrayHashKeyHandler</a>;
+00036 
+<a name="l00040"></a><a class="code" href="classcsBitArray.html">00040</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csBitArray
+00041 {
+00042 <span class="keyword">public</span>:
+00043   <span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> store_type;
+00044 <span class="keyword">private</span>:
+00045   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsBitArrayHashKeyHandler.html">csBitArrayHashKeyHandler</a>;
+00046   <span class="keyword">enum</span>
+00047   {
+00048     bits_per_byte = 8,
+00049     cell_size     = <span class="keyword">sizeof</span>(store_type) * bits_per_byte
+00050   };
+00051 
+00052   store_type *mpStore;
+00053   store_type mSingleWord; <span class="comment">// Use this buffer when mLength is 1</span>
+00054   size_t mLength;       <span class="comment">// Length of mpStore in units of store_type</span>
+00055   size_t mNumBits;
+00056 
+00058   <span class="keyword">static</span> <span class="keyword">inline</span> size_t GetIndex (size_t bit_num)
+00059   {
+00060     <span class="keywordflow">return</span> bit_num / cell_size;
+00061   }
+00062 
+00063   <span class="keyword">static</span> <span class="keyword">inline</span> size_t GetOffset (size_t bit_num)
+00064   {
+00065     <span class="keywordflow">return</span> bit_num % cell_size;
+00066   }
+00067 
+00068   <span class="keywordtype">void</span> SetSize (size_t newSize)
+00069   {
+00070     size_t newLength;
+00071     <span class="keywordflow">if</span> (newSize == 0)
+00072       newLength = 0;
+00073     <span class="keywordflow">else</span>
+00074       newLength = 1 + GetIndex (newSize - 1);
+00075 
+00076     <span class="comment">// Avoid allocation if length is 1 (common case)</span>
+00077     store_type* newStore;
+00078     <span class="keywordflow">if</span> (newLength &lt;= 1)
+00079       newStore = &amp;mSingleWord;
+00080     <span class="keywordflow">else</span>
+00081       newStore = <span class="keyword">new</span> store_type[newLength];
+00082     
+00083     <span class="keywordflow">if</span> (newLength &gt; 0)
+00084     {
+00085       <span class="keywordflow">if</span> (mLength &gt; 0)
+00086       {
+00087         <span class="keywordflow">if</span> (newStore != mpStore)
+00088           memcpy (newStore, mpStore, 
+00089             (MIN (mLength, newLength)) * <span class="keyword">sizeof</span> (store_type));
+00090       }
+00091       <span class="keywordflow">else</span>
+00092         memset (newStore, 0, newLength * <span class="keyword">sizeof</span> (store_type));
+00093     }
 00094 
-00095     mpStore = newStore;
-00096     mNumBits = newSize;
-00097     mLength = newLength;
-00098   }
-00099 
-00101   <span class="keyword">inline</span> <span class="keywordtype">void</span> Trim()
-00102   {
-00103     size_t extra_bits = mNumBits % cell_size;
-00104     <span class="keywordflow">if</span> (mLength &gt; 0 &amp;&amp; extra_bits != 0)
-00105       mpStore[mLength - 1] &amp;= ~((~(store_type) 0) &lt;&lt; extra_bits);
-00106   }
-00107 
-00108 <span class="keyword">public</span>:
-00112   <span class="keyword">class </span>CS_CSUTIL_EXPORT BitProxy
-00113   {
-00114   <span class="keyword">private</span>:
-00115     csBitArray &amp;mArray;
-00116     size_t mPos;
-00117   <span class="keyword">public</span>:
-00119     BitProxy(csBitArray &amp;array, size_t pos): mArray(array), mPos(pos)
-00120     {}
-00121 
-00123     BitProxy &amp;<a class="code" href="classcsBitArray.html#a6">operator= </a>(<span class="keywordtype">bool</span> value)
-00124     {
-00125       mArray.<a class="code" href="classcsBitArray.html#a19">Set</a> (mPos, value);
-00126       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00127     }
-00128 
-00130     BitProxy &amp;<a class="code" href="classcsBitArray.html#a6">operator= </a>(<span class="keyword">const</span> BitProxy &amp;that)
-00131     {
-00132       mArray.<a class="code" href="classcsBitArray.html#a19">Set</a> (mPos, that.mArray.IsBitSet (that.mPos));
-00133       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00134     }
-00135 
-00137     operator bool()<span class="keyword"> const</span>
-00138 <span class="keyword">    </span>{
-00139       <span class="keywordflow">return</span> mArray.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a> (mPos);
-00140     }
-00141 
-00143     <span class="keywordtype">bool</span> Flip()
-00144     {
-00145       mArray.<a class="code" href="classcsBitArray.html#a18">FlipBit</a> (mPos);
-00146       <span class="keywordflow">return</span> mArray.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a> (mPos);
-00147     }
-00148   };
-00149   <span class="keyword">friend</span> <span class="keyword">class </span>BitProxy;
-00150 
-<a name="l00154"></a><a class="code" href="classcsBitArray.html#a0">00154</a>   <a class="code" href="classcsBitArray.html#a0">csBitArray</a> () : mpStore(0), mSingleWord(0), mLength(0), mNumBits(0)
-00155   {
-00156     SetSize (0);
-00157     <span class="comment">// Clear last bits</span>
-00158     Trim();
-00159   }
-00160 
-<a name="l00164"></a><a class="code" href="classcsBitArray.html#a1">00164</a>   <span class="keyword">explicit</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(size_t size) :
-00165     mpStore(0), mSingleWord(0), mLength(0), mNumBits(0)
-00166   {
-00167     SetSize (size);
-00168     <span class="comment">// Clear last bits</span>
-00169     Trim();
-00170   }
-00171 
-<a name="l00175"></a><a class="code" href="classcsBitArray.html#a2">00175</a>   <a class="code" href="classcsBitArray.html#a0">csBitArray</a> (<span class="keyword">const</span> csBitArray &amp;that) :
-00176     mpStore(0), mSingleWord(0), mLength(0), mNumBits(0)
-00177   {
-00178     *<span class="keyword">this</span> = that;
-00179   }
-00180 
-<a name="l00182"></a><a class="code" href="classcsBitArray.html#a3">00182</a>   <span class="keyword">virtual</span> <a class="code" href="classcsBitArray.html#a3">~csBitArray</a>()
-00183   {
-00184     <span class="keywordflow">if</span> (mLength &gt; 1)
-00185       <span class="keyword">delete</span> mpStore;
-00186   }
-00187 
-<a name="l00189"></a><a class="code" href="classcsBitArray.html#a4">00189</a>   size_t <a class="code" href="classcsBitArray.html#a4">Length</a>()<span class="keyword"> const</span>
-00190 <span class="keyword">  </span>{
-00191     <span class="keywordflow">return</span> mNumBits;
-00192   }
-00193 
-<a name="l00199"></a><a class="code" href="classcsBitArray.html#a5">00199</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a5">SetLength</a> (size_t newSize)
-00200   {
-00201     SetSize (newSize);
-00202     <span class="comment">// Clear last bits</span>
-00203     Trim ();
-00204   }
-00205 
-00206   <span class="comment">//</span>
-00207   <span class="comment">// Operators</span>
-00208   <span class="comment">//</span>
-00209 
-<a name="l00211"></a><a class="code" href="classcsBitArray.html#a6">00211</a>   csBitArray &amp;<a class="code" href="classcsBitArray.html#a6">operator=</a>(<span class="keyword">const</span> csBitArray &amp;that)
-00212   {
-00213     <span class="keywordflow">if</span> (<span class="keyword">this</span> != &amp;that)
-00214     {
-00215       SetSize (that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>);
-00216       memcpy (mpStore, that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>, mLength * <span class="keyword">sizeof</span>(store_type));
-00217     }
-00218     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00219   }
-00220 
-<a name="l00222"></a><a class="code" href="classcsBitArray.html#a7">00222</a>   BitProxy <a class="code" href="classcsBitArray.html#a7">operator[] </a>(size_t pos)
-00223   {
-00224     CS_ASSERT (pos &lt; mNumBits);
-00225     <span class="keywordflow">return</span> BitProxy(*<span class="keyword">this</span>, pos);
-00226   }
-00227 
-<a name="l00229"></a><a class="code" href="classcsBitArray.html#a8">00229</a>   <span class="keyword">const</span> BitProxy <a class="code" href="classcsBitArray.html#a7">operator[] </a>(size_t pos)<span class="keyword"> const</span>
-00230 <span class="keyword">  </span>{
-00231     CS_ASSERT (pos &lt; mNumBits);
-00232     <span class="keywordflow">return</span> BitProxy(CS_CONST_CAST(csBitArray&amp;,*<span class="keyword">this</span>), pos);
-00233   }
-00234 
-<a name="l00236"></a><a class="code" href="classcsBitArray.html#a9">00236</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a9">operator==</a>(<span class="keyword">const</span> csBitArray &amp;that)<span class="keyword"> const</span>
-00237 <span class="keyword">  </span>{
-00238     <span class="keywordflow">if</span> (mNumBits != that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>)
-00239       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00240 
-00241     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; mLength; i++)
-00242       <span class="keywordflow">if</span> (mpStore[i] != that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i])
-00243         <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00244     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00245   }
-00246 
-<a name="l00248"></a><a class="code" href="classcsBitArray.html#a10">00248</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a10">operator != </a>(<span class="keyword">const</span> csBitArray &amp;that)<span class="keyword"> const</span>
-00249 <span class="keyword">  </span>{
-00250     <span class="keywordflow">return</span> !(*<span class="keyword">this</span> == that);
-00251   }
-00252 
-<a name="l00254"></a><a class="code" href="classcsBitArray.html#a11">00254</a>   csBitArray&amp; <a class="code" href="classcsBitArray.html#a11">operator &amp;= </a>(<span class="keyword">const</span> csBitArray &amp;that)
-00255   {
-00256     CS_ASSERT (mNumBits == that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>);
-00257     <span class="keywordflow">for</span> (size_t i = 0; i &lt; mLength; i++)
-00258       mpStore[i] &amp;= that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i];
-00259     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00260   }
-00261 
-<a name="l00263"></a><a class="code" href="classcsBitArray.html#a12">00263</a>   csBitArray <a class="code" href="classcsBitArray.html#a12">operator |= </a>(<span class="keyword">const</span> csBitArray &amp;that)
-00264   {
-00265     CS_ASSERT (mNumBits == that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>);
-00266     <span class="keywordflow">for</span> (size_t i = 0; i &lt; mLength; i++)
-00267       mpStore[i] |= that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i];
-00268     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00269   }
-00270 
-<a name="l00272"></a><a class="code" href="classcsBitArray.html#a13">00272</a>   csBitArray <a class="code" href="classcsBitArray.html#a13">operator ^= </a>(<span class="keyword">const</span> csBitArray &amp;that)
-00273   {
-00274     CS_ASSERT (mNumBits == that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>);
-00275     <span class="keywordflow">for</span> (size_t i = 0; i &lt; mLength; i++)
-00276       mpStore[i] ^= that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i];
-00277     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00278   }
-00279 
-<a name="l00281"></a><a class="code" href="classcsBitArray.html#a14">00281</a>   csBitArray <a class="code" href="classcsBitArray.html#a14">operator~</a>()<span class="keyword"> const</span>
-00282 <span class="keyword">  </span>{
-00283     <span class="keywordflow">return</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(*this).<a class="code" href="classcsBitArray.html#a23">FlipAllBits</a>();
-00284   }
-00285 
-<a name="l00287"></a><a class="code" href="classcsBitArray.html#n1">00287</a>   <span class="keyword">friend</span> csBitArray <a class="code" href="classcsBitArray.html#n1">operator&amp; </a>(<span class="keyword">const</span> csBitArray &amp;a1, <span class="keyword">const</span> csBitArray &amp;a2)
-00288   {
-00289     <span class="keywordflow">return</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(a1) &amp;= a2;
-00290   }
-00291 
-<a name="l00293"></a><a class="code" href="classcsBitArray.html#n2">00293</a>   <span class="keyword">friend</span> csBitArray <a class="code" href="classcsBitArray.html#n2">operator | </a>(<span class="keyword">const</span> csBitArray &amp;a1, <span class="keyword">const</span> csBitArray &amp;a2)
-00294   {
-00295     <span class="keywordflow">return</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(a1) |= a2;
-00296   }
-00297 
-<a name="l00299"></a><a class="code" href="classcsBitArray.html#n3">00299</a>   <span class="keyword">friend</span> csBitArray <a class="code" href="classcsBitArray.html#n3">operator ^ </a>(<span class="keyword">const</span> csBitArray &amp;a1, <span class="keyword">const</span> csBitArray &amp;a2)
-00300   {
-00301     <span class="keywordflow">return</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(a1) ^= a2;
-00302   }
-00303 
-00304   <span class="comment">//</span>
-00305   <span class="comment">// Plain English interface</span>
-00306   <span class="comment">//</span>
-00307 
-<a name="l00309"></a><a class="code" href="classcsBitArray.html#a15">00309</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a15">Clear</a>()
-00310   {
-00311     memset (mpStore, 0, mLength * <span class="keyword">sizeof</span>(store_type));
-00312   }
-00313 
-<a name="l00315"></a><a class="code" href="classcsBitArray.html#a16">00315</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a16">SetBit</a> (size_t pos)
-00316   {
-00317     CS_ASSERT (pos &lt; mNumBits);
-00318     mpStore[GetIndex(pos)] |= 1 &lt;&lt; GetOffset(pos);
-00319   }
-00320 
-<a name="l00322"></a><a class="code" href="classcsBitArray.html#a17">00322</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a17">ClearBit</a> (size_t pos)
-00323   {
-00324     CS_ASSERT (pos &lt; mNumBits);
-00325     mpStore[GetIndex(pos)] &amp;= ~(1 &lt;&lt; GetOffset(pos));
-00326   }
-00327 
-<a name="l00329"></a><a class="code" href="classcsBitArray.html#a18">00329</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a18">FlipBit</a> (size_t pos)
-00330   {
-00331     CS_ASSERT (pos &lt; mNumBits);
-00332     mpStore[GetIndex(pos)] ^= 1 &lt;&lt; GetOffset(pos);
-00333   }
-00334 
-<a name="l00336"></a><a class="code" href="classcsBitArray.html#a19">00336</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a19">Set</a> (size_t pos, <span class="keywordtype">bool</span> val)
-00337   {
-00338     val ? <a class="code" href="classcsBitArray.html#a16">SetBit</a>(pos) : <a class="code" href="classcsBitArray.html#a17">ClearBit</a>(pos);
-00339   }
-00340 
-<a name="l00342"></a><a class="code" href="classcsBitArray.html#a20">00342</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a20">IsBitSet</a> (size_t pos)<span class="keyword"> const</span>
-00343 <span class="keyword">  </span>{
-00344     CS_ASSERT (pos &lt; mNumBits);
-00345     <span class="keywordflow">return</span> (mpStore[GetIndex(pos)] &amp; (1 &lt;&lt; GetOffset(pos))) != 0;
-00346   }
-00347 
-<a name="l00352"></a><a class="code" href="classcsBitArray.html#a21">00352</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a21">AreSomeBitsSet</a> (size_t pos, size_t count)<span class="keyword"> const</span>
-00353 <span class="keyword">  </span>{
-00354     CS_ASSERT (pos &lt; mNumBits);
-00355     CS_ASSERT ((pos + count) &lt; mNumBits);
-00356     
-00357     <span class="keywordflow">while</span> (count &gt; 0)
-00358     {
-00359       size_t index = GetIndex (pos);
-00360       size_t offset = GetOffset (pos);
-00361       size_t checkCount = MIN(count, cell_size - offset);
-00362             
-00363       store_type mask = ((1 &lt;&lt; checkCount) - 1) &lt;&lt; offset;
-00364       <span class="keywordflow">if</span> (mpStore[index] &amp; mask) <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00365       pos += checkCount;
-00366       count -= checkCount;
-00367     }
-00368     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00369   }
-00370   
-<a name="l00372"></a><a class="code" href="classcsBitArray.html#a22">00372</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a22">AllBitsFalse</a>()<span class="keyword"> const</span>
-00373 <span class="keyword">  </span>{
-00374     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=0; i &lt; mLength; i++)
-00375       <span class="keywordflow">if</span> (mpStore[i] != 0)
-00376         <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00377     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00378   }
-00379 
-<a name="l00381"></a><a class="code" href="classcsBitArray.html#a23">00381</a>   csBitArray &amp;<a class="code" href="classcsBitArray.html#a23">FlipAllBits</a>()
-00382   {
-00383     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=0; i &lt; mLength; i++)
-00384       mpStore[i] = ~mpStore[i];
-00385 
-00386     Trim();
-00387     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00388   }
-00389 
-<a name="l00391"></a><a class="code" href="classcsBitArray.html#a24">00391</a>   store_type* <a class="code" href="classcsBitArray.html#a24">GetArrayBits</a>()
-00392   {
-00393     <span class="keywordflow">return</span> mpStore;
-00394   }
-00395 
-<a name="l00400"></a><a class="code" href="classcsBitArray.html#a25">00400</a>   store_type <a class="code" href="classcsBitArray.html#a25">GetSingleWord</a>()
-00401   {
-00402     <span class="keywordflow">return</span> mSingleWord;
-00403   }
-00404 
-<a name="l00409"></a><a class="code" href="classcsBitArray.html#a26">00409</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a26">SetSingleWord</a> (store_type sw)
-00410   {
-00411     mSingleWord = sw;
-00412   }
-00413 };
-00414 
-00415 <span class="preprocessor">#endif // __CS_BITARRAY_H__</span>
+00095     <span class="keywordflow">if</span> (mLength &gt; 1)
+00096       <span class="keyword">delete</span> mpStore;
+00097 
+00098     mpStore = newStore;
+00099     mNumBits = newSize;
+00100     mLength = newLength;
+00101   }
+00102 
+00104   <span class="keyword">inline</span> <span class="keywordtype">void</span> Trim()
+00105   {
+00106     size_t extra_bits = mNumBits % cell_size;
+00107     <span class="keywordflow">if</span> (mLength &gt; 0 &amp;&amp; extra_bits != 0)
+00108       mpStore[mLength - 1] &amp;= ~((~(store_type) 0) &lt;&lt; extra_bits);
+00109   }
+00110 
+00111 <span class="keyword">public</span>:
+00115   <span class="keyword">class </span>CS_CSUTIL_EXPORT BitProxy
+00116   {
+00117   <span class="keyword">private</span>:
+00118     csBitArray &amp;mArray;
+00119     size_t mPos;
+00120   <span class="keyword">public</span>:
+00122     BitProxy(csBitArray &amp;array, size_t pos): mArray(array), mPos(pos)
+00123     {}
+00124 
+00126     BitProxy &amp;<a class="code" href="classcsBitArray.html#a6">operator= </a>(<span class="keywordtype">bool</span> value)
+00127     {
+00128       mArray.<a class="code" href="classcsBitArray.html#a19">Set</a> (mPos, value);
+00129       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00130     }
+00131 
+00133     BitProxy &amp;<a class="code" href="classcsBitArray.html#a6">operator= </a>(<span class="keyword">const</span> BitProxy &amp;that)
+00134     {
+00135       mArray.<a class="code" href="classcsBitArray.html#a19">Set</a> (mPos, that.mArray.IsBitSet (that.mPos));
+00136       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00137     }
+00138 
+00140     operator bool()<span class="keyword"> const</span>
+00141 <span class="keyword">    </span>{
+00142       <span class="keywordflow">return</span> mArray.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a> (mPos);
+00143     }
+00144 
+00146     <span class="keywordtype">bool</span> Flip()
+00147     {
+00148       mArray.<a class="code" href="classcsBitArray.html#a18">FlipBit</a> (mPos);
+00149       <span class="keywordflow">return</span> mArray.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a> (mPos);
+00150     }
+00151   };
+00152   <span class="keyword">friend</span> <span class="keyword">class </span>BitProxy;
+00153 
+<a name="l00157"></a><a class="code" href="classcsBitArray.html#a0">00157</a>   <a class="code" href="classcsBitArray.html#a0">csBitArray</a> () : mpStore(0), mSingleWord(0), mLength(0), mNumBits(0)
+00158   {
+00159     SetSize (0);
+00160     <span class="comment">// Clear last bits</span>
+00161     Trim();
+00162   }
+00163 
+<a name="l00167"></a><a class="code" href="classcsBitArray.html#a1">00167</a>   <span class="keyword">explicit</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(size_t size) :
+00168     mpStore(0), mSingleWord(0), mLength(0), mNumBits(0)
+00169   {
+00170     SetSize (size);
+00171     <span class="comment">// Clear last bits</span>
+00172     Trim();
+00173   }
+00174 
+<a name="l00178"></a><a class="code" href="classcsBitArray.html#a2">00178</a>   <a class="code" href="classcsBitArray.html#a0">csBitArray</a> (<span class="keyword">const</span> csBitArray &amp;that) :
+00179     mpStore(0), mSingleWord(0), mLength(0), mNumBits(0)
+00180   {
+00181     *<span class="keyword">this</span> = that;
+00182   }
+00183 
+<a name="l00185"></a><a class="code" href="classcsBitArray.html#a3">00185</a>   <a class="code" href="classcsBitArray.html#a3">~csBitArray</a>()
+00186   {
+00187     <span class="keywordflow">if</span> (mLength &gt; 1)
+00188       <span class="keyword">delete</span> mpStore;
+00189   }
+00190 
+<a name="l00192"></a><a class="code" href="classcsBitArray.html#a4">00192</a>   size_t <a class="code" href="classcsBitArray.html#a4">Length</a>()<span class="keyword"> const</span>
+00193 <span class="keyword">  </span>{
+00194     <span class="keywordflow">return</span> mNumBits;
+00195   }
+00196 
+<a name="l00202"></a><a class="code" href="classcsBitArray.html#a5">00202</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a5">SetLength</a> (size_t newSize)
+00203   {
+00204     SetSize (newSize);
+00205     <span class="comment">// Clear last bits</span>
+00206     Trim ();
+00207   }
+00208 
+00209   <span class="comment">//</span>
+00210   <span class="comment">// Operators</span>
+00211   <span class="comment">//</span>
+00212 
+<a name="l00214"></a><a class="code" href="classcsBitArray.html#a6">00214</a>   csBitArray &amp;<a class="code" href="classcsBitArray.html#a6">operator=</a>(<span class="keyword">const</span> csBitArray &amp;that)
+00215   {
+00216     <span class="keywordflow">if</span> (<span class="keyword">this</span> != &amp;that)
+00217     {
+00218       SetSize (that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>);
+00219       memcpy (mpStore, that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>, mLength * <span class="keyword">sizeof</span>(store_type));
+00220     }
+00221     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00222   }
+00223 
+<a name="l00225"></a><a class="code" href="classcsBitArray.html#a7">00225</a>   BitProxy <a class="code" href="classcsBitArray.html#a7">operator[] </a>(size_t pos)
+00226   {
+00227     CS_ASSERT (pos &lt; mNumBits);
+00228     <span class="keywordflow">return</span> BitProxy(*<span class="keyword">this</span>, pos);
+00229   }
+00230 
+<a name="l00232"></a><a class="code" href="classcsBitArray.html#a8">00232</a>   <span class="keyword">const</span> BitProxy <a class="code" href="classcsBitArray.html#a7">operator[] </a>(size_t pos)<span class="keyword"> const</span>
+00233 <span class="keyword">  </span>{
+00234     CS_ASSERT (pos &lt; mNumBits);
+00235     <span class="keywordflow">return</span> BitProxy(CS_CONST_CAST(csBitArray&amp;,*<span class="keyword">this</span>), pos);
+00236   }
+00237 
+<a name="l00239"></a><a class="code" href="classcsBitArray.html#a9">00239</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a9">operator==</a>(<span class="keyword">const</span> csBitArray &amp;that)<span class="keyword"> const</span>
+00240 <span class="keyword">  </span>{
+00241     <span class="keywordflow">if</span> (mNumBits != that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>)
+00242       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00243 
+00244     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; mLength; i++)
+00245       <span class="keywordflow">if</span> (mpStore[i] != that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i])
+00246         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00247     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00248   }
+00249 
+<a name="l00251"></a><a class="code" href="classcsBitArray.html#a10">00251</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a10">operator != </a>(<span class="keyword">const</span> csBitArray &amp;that)<span class="keyword"> const</span>
+00252 <span class="keyword">  </span>{
+00253     <span class="keywordflow">return</span> !(*<span class="keyword">this</span> == that);
+00254   }
+00255 
+<a name="l00257"></a><a class="code" href="classcsBitArray.html#a11">00257</a>   csBitArray&amp; <a class="code" href="classcsBitArray.html#a11">operator &amp;= </a>(<span class="keyword">const</span> csBitArray &amp;that)
+00258   {
+00259     CS_ASSERT (mNumBits == that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>);
+00260     <span class="keywordflow">for</span> (size_t i = 0; i &lt; mLength; i++)
+00261       mpStore[i] &amp;= that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i];
+00262     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00263   }
+00264 
+<a name="l00266"></a><a class="code" href="classcsBitArray.html#a12">00266</a>   csBitArray <a class="code" href="classcsBitArray.html#a12">operator |= </a>(<span class="keyword">const</span> csBitArray &amp;that)
+00267   {
+00268     CS_ASSERT (mNumBits == that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>);
+00269     <span class="keywordflow">for</span> (size_t i = 0; i &lt; mLength; i++)
+00270       mpStore[i] |= that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i];
+00271     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00272   }
+00273 
+<a name="l00275"></a><a class="code" href="classcsBitArray.html#a13">00275</a>   csBitArray <a class="code" href="classcsBitArray.html#a13">operator ^= </a>(<span class="keyword">const</span> csBitArray &amp;that)
+00276   {
+00277     CS_ASSERT (mNumBits == that.<a class="code" href="classcsBitArray.html#r3">mNumBits</a>);
+00278     <span class="keywordflow">for</span> (size_t i = 0; i &lt; mLength; i++)
+00279       mpStore[i] ^= that.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i];
+00280     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00281   }
+00282 
+<a name="l00284"></a><a class="code" href="classcsBitArray.html#a14">00284</a>   csBitArray <a class="code" href="classcsBitArray.html#a14">operator~</a>()<span class="keyword"> const</span>
+00285 <span class="keyword">  </span>{
+00286     <span class="keywordflow">return</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(*this).<a class="code" href="classcsBitArray.html#a23">FlipAllBits</a>();
+00287   }
+00288 
+<a name="l00290"></a><a class="code" href="classcsBitArray.html#n2">00290</a>   <span class="keyword">friend</span> csBitArray <a class="code" href="classcsBitArray.html#n2">operator&amp; </a>(<span class="keyword">const</span> csBitArray &amp;a1, <span class="keyword">const</span> csBitArray &amp;a2)
+00291   {
+00292     <span class="keywordflow">return</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(a1) &amp;= a2;
+00293   }
+00294 
+<a name="l00296"></a><a class="code" href="classcsBitArray.html#n3">00296</a>   <span class="keyword">friend</span> csBitArray <a class="code" href="classcsBitArray.html#n3">operator | </a>(<span class="keyword">const</span> csBitArray &amp;a1, <span class="keyword">const</span> csBitArray &amp;a2)
+00297   {
+00298     <span class="keywordflow">return</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(a1) |= a2;
+00299   }
+00300 
+<a name="l00302"></a><a class="code" href="classcsBitArray.html#n4">00302</a>   <span class="keyword">friend</span> csBitArray <a class="code" href="classcsBitArray.html#n4">operator ^ </a>(<span class="keyword">const</span> csBitArray &amp;a1, <span class="keyword">const</span> csBitArray &amp;a2)
+00303   {
+00304     <span class="keywordflow">return</span> <a class="code" href="classcsBitArray.html#a0">csBitArray</a>(a1) ^= a2;
+00305   }
+00306 
+00307   <span class="comment">//</span>
+00308   <span class="comment">// Plain English interface</span>
+00309   <span class="comment">//</span>
+00310 
+<a name="l00312"></a><a class="code" href="classcsBitArray.html#a15">00312</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a15">Clear</a>()
+00313   {
+00314     memset (mpStore, 0, mLength * <span class="keyword">sizeof</span>(store_type));
+00315   }
+00316 
+<a name="l00318"></a><a class="code" href="classcsBitArray.html#a16">00318</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a16">SetBit</a> (size_t pos)
+00319   {
+00320     CS_ASSERT (pos &lt; mNumBits);
+00321     mpStore[GetIndex(pos)] |= 1 &lt;&lt; GetOffset(pos);
+00322   }
+00323 
+<a name="l00325"></a><a class="code" href="classcsBitArray.html#a17">00325</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a17">ClearBit</a> (size_t pos)
+00326   {
+00327     CS_ASSERT (pos &lt; mNumBits);
+00328     mpStore[GetIndex(pos)] &amp;= ~(1 &lt;&lt; GetOffset(pos));
+00329   }
+00330 
+<a name="l00332"></a><a class="code" href="classcsBitArray.html#a18">00332</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a18">FlipBit</a> (size_t pos)
+00333   {
+00334     CS_ASSERT (pos &lt; mNumBits);
+00335     mpStore[GetIndex(pos)] ^= 1 &lt;&lt; GetOffset(pos);
+00336   }
+00337 
+<a name="l00339"></a><a class="code" href="classcsBitArray.html#a19">00339</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a19">Set</a> (size_t pos, <span class="keywordtype">bool</span> val)
+00340   {
+00341     val ? <a class="code" href="classcsBitArray.html#a16">SetBit</a>(pos) : <a class="code" href="classcsBitArray.html#a17">ClearBit</a>(pos);
+00342   }
+00343 
+<a name="l00345"></a><a class="code" href="classcsBitArray.html#a20">00345</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a20">IsBitSet</a> (size_t pos)<span class="keyword"> const</span>
+00346 <span class="keyword">  </span>{
+00347     CS_ASSERT (pos &lt; mNumBits);
+00348     <span class="keywordflow">return</span> (mpStore[GetIndex(pos)] &amp; (1 &lt;&lt; GetOffset(pos))) != 0;
+00349   }
+00350 
+<a name="l00355"></a><a class="code" href="classcsBitArray.html#a21">00355</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a21">AreSomeBitsSet</a> (size_t pos, size_t count)<span class="keyword"> const</span>
+00356 <span class="keyword">  </span>{
+00357     CS_ASSERT (pos &lt; mNumBits);
+00358     CS_ASSERT ((pos + count) &lt; mNumBits);
+00359     
+00360     <span class="keywordflow">while</span> (count &gt; 0)
+00361     {
+00362       size_t index = GetIndex (pos);
+00363       size_t offset = GetOffset (pos);
+00364       size_t checkCount = MIN(count, cell_size - offset);
+00365             
+00366       store_type mask = ((1 &lt;&lt; checkCount) - 1) &lt;&lt; offset;
+00367       <span class="keywordflow">if</span> (mpStore[index] &amp; mask) <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00368       pos += checkCount;
+00369       count -= checkCount;
+00370     }
+00371     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00372   }
+00373   
+<a name="l00375"></a><a class="code" href="classcsBitArray.html#a22">00375</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsBitArray.html#a22">AllBitsFalse</a>()<span class="keyword"> const</span>
+00376 <span class="keyword">  </span>{
+00377     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=0; i &lt; mLength; i++)
+00378       <span class="keywordflow">if</span> (mpStore[i] != 0)
+00379         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00380     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00381   }
+00382 
+<a name="l00384"></a><a class="code" href="classcsBitArray.html#a23">00384</a>   csBitArray &amp;<a class="code" href="classcsBitArray.html#a23">FlipAllBits</a>()
+00385   {
+00386     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=0; i &lt; mLength; i++)
+00387       mpStore[i] = ~mpStore[i];
+00388 
+00389     Trim();
+00390     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00391   }
+00392 
+<a name="l00394"></a><a class="code" href="classcsBitArray.html#a24">00394</a>   store_type* <a class="code" href="classcsBitArray.html#a24">GetArrayBits</a>()
+00395   {
+00396     <span class="keywordflow">return</span> mpStore;
+00397   }
+00398 
+<a name="l00403"></a><a class="code" href="classcsBitArray.html#a25">00403</a>   store_type <a class="code" href="classcsBitArray.html#a25">GetSingleWord</a>()
+00404   {
+00405     <span class="keywordflow">return</span> mSingleWord;
+00406   }
+00407 
+<a name="l00412"></a><a class="code" href="classcsBitArray.html#a26">00412</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBitArray.html#a26">SetSingleWord</a> (store_type sw)
+00413   {
+00414     mSingleWord = sw;
+00415   }
+00416 };
+00417 
+<a name="l00421"></a><a class="code" href="classcsBitArrayHashKeyHandler.html">00421</a> <span class="keyword">class </span><a class="code" href="classcsBitArrayHashKeyHandler.html">csBitArrayHashKeyHandler</a>
+00422 {
+00423 <span class="keyword">public</span>:
+00424   <span class="keyword">static</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> ComputeHash (<span class="keyword">const</span> csBitArray&amp; key)
+00425   {
+00426     <span class="keyword">const</span> <span class="keywordtype">int</span> uintCount = <span class="keyword">sizeof</span> (csBitArray::store_type) / <span class="keyword">sizeof</span> (uint);
+00427     <span class="keyword">union</span>
+00428 <span class="keyword">    </span>{
+00429       csBitArray::store_type store;
+00430       <a class="code" href="group__util.html#ga18">uint</a> ui[uintCount];
+00431     } bitStoreToUint;
+00432     <a class="code" href="group__util.html#ga18">uint</a> hash = 0;
+00433     <span class="comment">// @@@ Not very good. Find a better hash function; however, it should</span>
+00434     <span class="comment">// return the same hash for two bit arrays that are the same except for</span>
+00435     <span class="comment">// the amount of trailing zeros. (e.g. f(10010110) == f(100101100000...))</span>
+00436     <span class="keywordflow">for</span> (size_t i = 0; i &lt; key.<a class="code" href="classcsBitArray.html#r2">mLength</a>; i++)
+00437     {
+00438       bitStoreToUint.store = key.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i];
+00439       <span class="keywordflow">for</span> (size_t j = 0; j &lt; uintCount; j++)
+00440         hash += bitStoreToUint.ui[j];
+00441     }
+00442     <span class="keywordflow">return</span> hash;
+00443   }
+00444   <span class="keyword">static</span> <span class="keywordtype">bool</span> CompareKeys (<span class="keyword">const</span> csBitArray&amp; key1, <span class="keyword">const</span> csBitArray&amp; key2)
+00445   {
+00446     size_t compareNum = MIN (key1.<a class="code" href="classcsBitArray.html#r2">mLength</a>, key2.<a class="code" href="classcsBitArray.html#r2">mLength</a>);
+00447     size_t i = 0;
+00448     <span class="keywordflow">for</span> (; i &lt; compareNum; i++)
+00449       <span class="keywordflow">if</span> (key1.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i] != key2.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i]) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00450     <span class="keywordflow">if</span> (key1.<a class="code" href="classcsBitArray.html#r2">mLength</a> &gt; key2.<a class="code" href="classcsBitArray.html#r2">mLength</a>)
+00451     {
+00452       <span class="keywordflow">for</span> (; i &lt; key1.<a class="code" href="classcsBitArray.html#r2">mLength</a>; i++)
+00453         <span class="keywordflow">if</span> (key1.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i] != 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00454     }
+00455     <span class="keywordflow">else</span>
+00456     {
+00457       <span class="keywordflow">for</span> (; i &lt; key2.<a class="code" href="classcsBitArray.html#r2">mLength</a>; i++)
+00458         <span class="keywordflow">if</span> (key2.<a class="code" href="classcsBitArray.html#r0">mpStore</a>[i] != 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00459     }
+00460     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00461   }
+00462 };
+00463 
+00464 <span class="preprocessor">#endif // __CS_BITARRAY_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

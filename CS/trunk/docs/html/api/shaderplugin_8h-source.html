@@ -51,37 +51,41 @@
 00032     : name(n), destination(d) {}
 00033 };
 00034 
-00035 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiShaderProgram.html">iShaderProgram</a>, 0, 2, 1);
-<a name="l00040"></a><a class="code" href="structiShaderProgram.html">00040</a> <span class="keyword">struct </span><a class="code" href="structiShaderProgram.html">iShaderProgram</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00035 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiShaderTUResolver.html">iShaderTUResolver</a>, 0, 0, 1);
+<a name="l00040"></a><a class="code" href="structiShaderTUResolver.html">00040</a> <span class="keyword">struct </span><a class="code" href="structiShaderTUResolver.html">iShaderTUResolver</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
 00041 {
-00043   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderProgram.html#a0">Activate</a>() = 0;
-00044 
-00046   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderProgram.html#a1">Deactivate</a>() = 0;
-00047 
-00049   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderProgram.html#a2">SetupState</a> (<span class="keyword">const</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>* mesh, 
-00050     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks) = 0;
-00051 
-00053   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderProgram.html#a3">ResetState</a> () = 0;
-00054 
-00056   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderProgram.html#a4">Load</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node) = 0;
-00057 
-00059   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderProgram.html#a4">Load</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* program, 
-00060     <a class="code" href="classcsArray.html">csArray&lt;csShaderVarMapping&gt;</a>&amp; mappings) = 0;
+00046   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiShaderTUResolver.html#a0">ResolveTextureBinding</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* binding) = 0;
+00047 };
+00048 
+00049 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiShaderProgram.html">iShaderProgram</a>, 0, 3, 0);
+<a name="l00054"></a><a class="code" href="structiShaderProgram.html">00054</a> <span class="keyword">struct </span><a class="code" href="structiShaderProgram.html">iShaderProgram</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00055 {
+00057   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderProgram.html#a0">Activate</a>() = 0;
+00058 
+00060   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderProgram.html#a1">Deactivate</a>() = 0;
 00061 
-00063   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderProgram.html#a6">Compile</a> (<a class="code" href="classcsArray.html">csArray&lt;iShaderVariableContext*&gt;</a> &amp;staticDomains) = 0;
-00064   
-00069   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiShaderProgram.html#a7">ResolveTextureBinding</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* binding) = 0;
-00070 };
+00063   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderProgram.html#a2">SetupState</a> (<span class="keyword">const</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>* mesh, 
+00064     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks) = 0;
+00065 
+00067   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderProgram.html#a3">ResetState</a> () = 0;
+00068 
+00070   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderProgram.html#a4">Load</a> (<a class="code" href="structiShaderTUResolver.html">iShaderTUResolver</a>* tuResolve, <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node) = 0;
 00071 
-00072 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiShaderProgramPlugin.html">iShaderProgramPlugin</a>,0,1,0);
-<a name="l00077"></a><a class="code" href="structiShaderProgramPlugin.html">00077</a> <span class="keyword">struct </span><a class="code" href="structiShaderProgramPlugin.html">iShaderProgramPlugin</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00078 {
-00079   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iShaderProgram&gt;</a> CreateProgram(<span class="keyword">const</span> <span class="keywordtype">char</span>* type) = 0;
-00080   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SupportType(<span class="keyword">const</span> <span class="keywordtype">char</span>* type) = 0;
-00081 };
-00082 
-00083 <span class="preprocessor">#endif</span>
-00084 <span class="preprocessor"></span>
+00073   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderProgram.html#a4">Load</a> (<a class="code" href="structiShaderTUResolver.html">iShaderTUResolver</a>* tuResolve, <span class="keyword">const</span> <span class="keywordtype">char</span>* program, 
+00074     <a class="code" href="classcsArray.html">csArray&lt;csShaderVarMapping&gt;</a>&amp; mappings) = 0;
+00075 
+00077   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderProgram.html#a6">Compile</a> (<a class="code" href="classcsArray.html">csArray&lt;iShaderVariableContext*&gt;</a> &amp;staticDomains) = 0;
+00078 };
+00079 
+00080 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiShaderProgramPlugin.html">iShaderProgramPlugin</a>,0,1,0);
+<a name="l00085"></a><a class="code" href="structiShaderProgramPlugin.html">00085</a> <span class="keyword">struct </span><a class="code" href="structiShaderProgramPlugin.html">iShaderProgramPlugin</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00086 {
+00087   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iShaderProgram&gt;</a> CreateProgram(<span class="keyword">const</span> <span class="keywordtype">char</span>* type) = 0;
+00088   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SupportType(<span class="keyword">const</span> <span class="keywordtype">char</span>* type) = 0;
+00089 };
+00090 
+00091 <span class="preprocessor">#endif</span>
+00092 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
