@@ -239,7 +239,7 @@
 00293 
 00298   <span class="keywordtype">bool</span> FlushForFull (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
 00299 
-00304   <span class="keywordtype">bool</span> FlushNoDepth (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00304   <span class="keywordtype">bool</span> FlushNoDepth (csTileCol&amp; fvalue);
 00305 
 00310   <span class="keywordtype">bool</span> FlushGeneral (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
 00311 
@@ -352,77 +352,82 @@
 00536 
 00540   <span class="keywordtype">void</span> InsertPolygonInverted (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <span class="keywordtype">float</span> max_depth);
 00541 
-00552   <span class="keywordtype">int</span> InsertPolygon (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <span class="keywordtype">float</span> max_depth,
-00553         <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; modified_bbox);
-00554 
-00568   <span class="keywordtype">int</span> InsertOutline (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans,
-00569         <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts,
-00570         <span class="keywordtype">bool</span>* used_verts,
-00571         <span class="keywordtype">int</span>* edges, <span class="keywordtype">int</span> num_edges, <span class="keywordtype">bool</span> splat_outline,
-00572         <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; modified_bbox);
-00573 
-00579   <span class="keywordtype">bool</span> PrepareTestRectangle (<span class="keyword">const</span> <a class="code" href="classcsBox2.html">csBox2</a>&amp; rect, <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data);
-00580 
-00587   <span class="keywordtype">bool</span> TestRectangle (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
-00588 
-00596   <span class="keywordtype">bool</span> QuickTestRectangle (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
+00548   <span class="keywordtype">void</span> InsertPolygonInvertedNoDepth (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts);
+00549 
+00560   <span class="keywordtype">int</span> InsertPolygon (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <span class="keywordtype">float</span> max_depth,
+00561         <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; modified_bbox);
+00562 
+00576   <span class="keywordtype">int</span> InsertPolygonNoDepth (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts,
+00577         <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; modified_bbox);
+00578 
+00592   <span class="keywordtype">int</span> InsertOutline (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans,
+00593         <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts,
+00594         <span class="keywordtype">bool</span>* used_verts,
+00595         <span class="keywordtype">int</span>* edges, <span class="keywordtype">int</span> num_edges, <span class="keywordtype">bool</span> splat_outline,
+00596         <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; modified_bbox);
 00597 
-00602   <span class="keywordtype">void</span> MarkCulledObject (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data);
-00603 
-00608   <span class="keywordtype">int</span> CountNotCulledObjects (<span class="keyword">const</span> <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; bbox);
-00609 
-00615   <span class="keywordtype">int</span> PrepareWriteQueueTest (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
-00616 
-00624   <span class="keywordtype">int</span> AddWriteQueueTest (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; maindata,
-00625         <span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">bool</span>&amp; relevant);
-00626 
-00632   <span class="keywordtype">bool</span> TestPoint (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point, <span class="keywordtype">float</span> min_depth);
+00603   <span class="keywordtype">bool</span> PrepareTestRectangle (<span class="keyword">const</span> <a class="code" href="classcsBox2.html">csBox2</a>&amp; rect, <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data);
+00604 
+00611   <span class="keywordtype">bool</span> TestRectangle (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
+00612 
+00620   <span class="keywordtype">bool</span> QuickTestRectangle (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
+00621 
+00626   <span class="keywordtype">void</span> MarkCulledObject (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data);
+00627 
+00632   <span class="keywordtype">int</span> CountNotCulledObjects (<span class="keyword">const</span> <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; bbox);
 00633 
-00634   <span class="comment">// Debugging functions.</span>
-00635   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Debug_UnitTest ();
-00636   <a class="code" href="group__util.html#ga11">csTicks</a> Debug_Benchmark (<span class="keywordtype">int</span> num_iterations);
-00637   <span class="keywordtype">void</span> Debug_Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <span class="keywordtype">int</span> zoom = 1);
-00638   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Debug_Dump ();
-00639 
-00640   <span class="keyword">struct </span>DebugHelper : <span class="keyword">public</span> <a class="code" href="structiDebugHelper.html">iDebugHelper</a>
-00641   {
-00642     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (csTiledCoverageBuffer);
-00643     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetSupportedTests ()<span class="keyword"> const</span>
-00644 <span class="keyword">    </span>{
-00645       <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga120">CS_DBGHELP_UNITTEST</a> |
-00646              <a class="code" href="group__util.html#ga121">CS_DBGHELP_BENCHMARK</a> |
-00647              <a class="code" href="group__util.html#ga123">CS_DBGHELP_GFXDUMP</a> |
-00648              <a class="code" href="group__util.html#ga122">CS_DBGHELP_TXTDUMP</a>;
-00649     }
-00650     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> UnitTest ()
-00651     {
-00652       <span class="keywordflow">return</span> scfParent-&gt;Debug_UnitTest ();
-00653     }
-00654     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> StateTest ()
-00655     {
-00656       <span class="keywordflow">return</span> 0;
-00657     }
-00658     <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga11">csTicks</a> Benchmark (<span class="keywordtype">int</span> num_iterations)
-00659     {
-00660       <span class="keywordflow">return</span> scfParent-&gt;Debug_Benchmark (num_iterations);
-00661     }
-00662     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Dump ()
-00663     {
-00664       <span class="keywordflow">return</span> scfParent-&gt;Debug_Dump ();
-00665     }
-00666     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d)
-00667     {
-00668       scfParent-&gt;Debug_Dump (g3d, 1);
-00669     }
-00670     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> DebugCommand (<span class="keyword">const</span> <span class="keywordtype">char</span>*)
-00671     {
-00672       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00639   <span class="keywordtype">int</span> PrepareWriteQueueTest (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
+00640 
+00648   <span class="keywordtype">int</span> AddWriteQueueTest (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; maindata,
+00649         <span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">bool</span>&amp; relevant);
+00650 
+00656   <span class="keywordtype">bool</span> TestPoint (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point, <span class="keywordtype">float</span> min_depth);
+00657 
+00658   <span class="comment">// Debugging functions.</span>
+00659   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Debug_UnitTest ();
+00660   <a class="code" href="group__util.html#ga11">csTicks</a> Debug_Benchmark (<span class="keywordtype">int</span> num_iterations);
+00661   <span class="keywordtype">void</span> Debug_Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <span class="keywordtype">int</span> zoom = 1);
+00662   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Debug_Dump ();
+00663 
+00664   <span class="keyword">struct </span>DebugHelper : <span class="keyword">public</span> <a class="code" href="structiDebugHelper.html">iDebugHelper</a>
+00665   {
+00666     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (csTiledCoverageBuffer);
+00667     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetSupportedTests ()<span class="keyword"> const</span>
+00668 <span class="keyword">    </span>{
+00669       <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga120">CS_DBGHELP_UNITTEST</a> |
+00670              <a class="code" href="group__util.html#ga121">CS_DBGHELP_BENCHMARK</a> |
+00671              <a class="code" href="group__util.html#ga123">CS_DBGHELP_GFXDUMP</a> |
+00672              <a class="code" href="group__util.html#ga122">CS_DBGHELP_TXTDUMP</a>;
 00673     }
-00674   } scfiDebugHelper;
-00675 };
-00676 
-00677 <span class="preprocessor">#endif // __CS_CSGEOM_TCOVBUF_H__</span>
-00678 <span class="preprocessor"></span>
+00674     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> UnitTest ()
+00675     {
+00676       <span class="keywordflow">return</span> scfParent-&gt;Debug_UnitTest ();
+00677     }
+00678     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> StateTest ()
+00679     {
+00680       <span class="keywordflow">return</span> 0;
+00681     }
+00682     <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga11">csTicks</a> Benchmark (<span class="keywordtype">int</span> num_iterations)
+00683     {
+00684       <span class="keywordflow">return</span> scfParent-&gt;Debug_Benchmark (num_iterations);
+00685     }
+00686     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Dump ()
+00687     {
+00688       <span class="keywordflow">return</span> scfParent-&gt;Debug_Dump ();
+00689     }
+00690     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d)
+00691     {
+00692       scfParent-&gt;Debug_Dump (g3d, 1);
+00693     }
+00694     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> DebugCommand (<span class="keyword">const</span> <span class="keywordtype">char</span>*)
+00695     {
+00696       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00697     }
+00698   } scfiDebugHelper;
+00699 };
+00700 
+00701 <span class="preprocessor">#endif // __CS_CSGEOM_TCOVBUF_H__</span>
+00702 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.6 
 </small></address> </div></body> </html>
