@@ -46,701 +46,678 @@
 00036 <span class="preprocessor">#include "<a class="code" href="segment_8h.html">segment.h</a>"</span>
 00037 
 00038 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
-00039 
-00040 <span class="keyword">class </span><a class="code" href="classcsPlane3.html">csPlane3</a>;
-00041 <span class="keyword">class </span><a class="code" href="classcsTransform.html">csTransform</a>;
-00042 <span class="keyword">class </span><a class="code" href="classcsPoly2D.html">csPoly2D</a>;
-00043 
-<a name="l00048"></a><a class="code" href="group__geom__utils.html#ga8">00048</a> <span class="preprocessor">#define CS_BOUNDINGBOX_MAXVALUE 1000000000.</span>
-00049 <span class="preprocessor"></span>
-00053 
-<a name="l00054"></a><a class="code" href="group__geom__utils.html#ga9">00054</a> <span class="preprocessor">#define CS_BOX_CORNER_xy 0</span>
-00055 <span class="preprocessor"></span>
-<a name="l00056"></a><a class="code" href="group__geom__utils.html#ga10">00056</a> <span class="preprocessor">#define CS_BOX_CORNER_xY 1</span>
-00057 <span class="preprocessor"></span>
-<a name="l00058"></a><a class="code" href="group__geom__utils.html#ga11">00058</a> <span class="preprocessor">#define CS_BOX_CORNER_Xy 2</span>
-00059 <span class="preprocessor"></span>
-<a name="l00060"></a><a class="code" href="group__geom__utils.html#ga12">00060</a> <span class="preprocessor">#define CS_BOX_CORNER_XY 3</span>
-00061 <span class="preprocessor"></span>
-<a name="l00062"></a><a class="code" href="group__geom__utils.html#ga13">00062</a> <span class="preprocessor">#define CS_BOX_CENTER2 4</span>
-00063 <span class="preprocessor"></span>
-00069 
-<a name="l00070"></a><a class="code" href="group__geom__utils.html#ga14">00070</a> <span class="preprocessor">#define CS_BOX_EDGE_xy_Xy 0</span>
-00071 <span class="preprocessor"></span>
-<a name="l00072"></a><a class="code" href="group__geom__utils.html#ga15">00072</a> <span class="preprocessor">#define CS_BOX_EDGE_Xy_xy 1</span>
-00073 <span class="preprocessor"></span>
-<a name="l00074"></a><a class="code" href="group__geom__utils.html#ga16">00074</a> <span class="preprocessor">#define CS_BOX_EDGE_Xy_XY 2</span>
-00075 <span class="preprocessor"></span>
-<a name="l00076"></a><a class="code" href="group__geom__utils.html#ga17">00076</a> <span class="preprocessor">#define CS_BOX_EDGE_XY_Xy 3</span>
-00077 <span class="preprocessor"></span>
-<a name="l00078"></a><a class="code" href="group__geom__utils.html#ga18">00078</a> <span class="preprocessor">#define CS_BOX_EDGE_XY_xY 4</span>
-00079 <span class="preprocessor"></span>
-<a name="l00080"></a><a class="code" href="group__geom__utils.html#ga19">00080</a> <span class="preprocessor">#define CS_BOX_EDGE_xY_XY 5</span>
-00081 <span class="preprocessor"></span>
-<a name="l00082"></a><a class="code" href="group__geom__utils.html#ga20">00082</a> <span class="preprocessor">#define CS_BOX_EDGE_xY_xy 6</span>
-00083 <span class="preprocessor"></span>
-<a name="l00084"></a><a class="code" href="group__geom__utils.html#ga21">00084</a> <span class="preprocessor">#define CS_BOX_EDGE_xy_xY 7</span>
-00085 <span class="preprocessor"></span>
-<a name="l00094"></a><a class="code" href="classcsBox2.html">00094</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csBox2
-00095 {
-00096 <span class="keyword">private</span>:
-00097   <span class="keyword">struct </span>bEdge
-00098   {
-00099     <a class="code" href="group__util.html#ga0">uint8</a> v1, v2;       <span class="comment">// Indices of vertex in bounding box (CS_BOX_CORNER_...)</span>
-00100   };
-00101   <span class="comment">// Index by edge number. Edge e and e+1 with e even are opposite edges.</span>
-00102   <span class="comment">// (CS_BOX_EDGE_...)</span>
-00103   <span class="keyword">static</span> bEdge edges[8];
-00104 
-00105 <span class="keyword">protected</span>:
-<a name="l00107"></a><a class="code" href="classcsBox2.html#p0">00107</a>   <a class="code" href="classcsVector2.html">csVector2</a> minbox;
-<a name="l00109"></a><a class="code" href="classcsBox2.html#p1">00109</a>   <a class="code" href="classcsVector2.html">csVector2</a> maxbox;
-00110 
-00111 <span class="keyword">public</span>:
-<a name="l00113"></a><a class="code" href="classcsBox2.html#a0">00113</a>   <span class="keywordtype">float</span> MinX ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.x; }
-<a name="l00115"></a><a class="code" href="classcsBox2.html#a1">00115</a>   <span class="keywordtype">float</span> MinY ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.y; }
-<a name="l00117"></a><a class="code" href="classcsBox2.html#a2">00117</a>   <span class="keywordtype">float</span> MaxX ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.x; }
-<a name="l00119"></a><a class="code" href="classcsBox2.html#a3">00119</a>   <span class="keywordtype">float</span> MaxY ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.y; }
-<a name="l00121"></a><a class="code" href="classcsBox2.html#a4">00121</a>   <span class="keywordtype">float</span> Min (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> idx ? minbox.y : minbox.x; }
-<a name="l00123"></a><a class="code" href="classcsBox2.html#a5">00123</a>   <span class="keywordtype">float</span> Max (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> idx ? maxbox.y : maxbox.x; }
-<a name="l00125"></a><a class="code" href="classcsBox2.html#a6">00125</a>   <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; Min ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox; }
-<a name="l00127"></a><a class="code" href="classcsBox2.html#a7">00127</a>   <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; Max ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox; }
-00128 
-00137   <a class="code" href="classcsVector2.html">csVector2</a> GetCorner (<span class="keywordtype">int</span> corner) <span class="keyword">const</span>;
-00138 
-<a name="l00142"></a><a class="code" href="classcsBox2.html#a9">00142</a>   <a class="code" href="classcsVector2.html">csVector2</a> GetCenter ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (minbox+maxbox)/2; }
-00143 
-00148   <span class="keywordtype">void</span> SetCenter (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; c);
-00149 
-00153   <span class="keywordtype">void</span> SetSize (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; s);
-00154 
-<a name="l00159"></a><a class="code" href="classcsBox2.html#a12">00159</a>   <span class="keywordtype">void</span> GetEdgeInfo (<span class="keywordtype">int</span> edge, <span class="keywordtype">int</span>&amp; v1, <span class="keywordtype">int</span>&amp; v2)<span class="keyword"> const</span>
-00160 <span class="keyword">  </span>{
-00161     v1 = edges[edge].v1;
-00162     v2 = edges[edge].v2;
-00163   }
-00164 
-<a name="l00169"></a><a class="code" href="classcsBox2.html#a13">00169</a>   <a class="code" href="classcsSegment2.html">csSegment2</a> GetEdge (<span class="keywordtype">int</span> edge)<span class="keyword"> const</span>
-00170 <span class="keyword">  </span>{
-00171     <span class="keywordflow">return</span> <a class="code" href="classcsSegment2.html">csSegment2</a> (GetCorner (edges[edge].v1), GetCorner (edges[edge].v2));
-00172   }
-00173 
-<a name="l00178"></a><a class="code" href="classcsBox2.html#a14">00178</a>   <span class="keywordtype">void</span> GetEdge (<span class="keywordtype">int</span> edge, <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; e)<span class="keyword"> const</span>
-00179 <span class="keyword">  </span>{
-00180     e.<a class="code" href="classcsSegment2.html#a4">SetStart</a> (GetCorner (edges[edge].v1));
-00181     e.<a class="code" href="classcsSegment2.html#a5">SetEnd</a> (GetCorner (edges[edge].v2));
-00182   }
-00183 
-00190   <span class="keyword">static</span> <span class="keywordtype">bool</span> Intersect (<span class="keywordtype">float</span> minx, <span class="keywordtype">float</span> miny, <span class="keywordtype">float</span> maxx, <span class="keywordtype">float</span> maxy,
-00191     <a class="code" href="classcsVector2.html">csVector2</a>* poly, <span class="keywordtype">int</span> num_poly);
-00192 
-<a name="l00199"></a><a class="code" href="classcsBox2.html#e1">00199</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> Intersect (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; minbox, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; maxbox,
-00200     <a class="code" href="classcsVector2.html">csVector2</a>* poly, <span class="keywordtype">int</span> num_poly)
-00201   {
-00202     <span class="keywordflow">return</span> Intersect (minbox.<a class="code" href="classcsVector2.html#o0">x</a>, minbox.<a class="code" href="classcsVector2.html#o1">y</a>, maxbox.<a class="code" href="classcsVector2.html#o0">x</a>, maxbox.<a class="code" href="classcsVector2.html#o1">y</a>, poly, num_poly);
-00203   }
-00204 
-<a name="l00211"></a><a class="code" href="classcsBox2.html#a15">00211</a>   <span class="keywordtype">bool</span> Intersect (<a class="code" href="classcsVector2.html">csVector2</a>* poly, <span class="keywordtype">int</span> num_poly)<span class="keyword"> const</span>
-00212 <span class="keyword">  </span>{
-00213     <span class="keywordflow">return</span> Intersect (minbox, maxbox, poly, num_poly);
-00214   }
-00215 
-<a name="l00217"></a><a class="code" href="classcsBox2.html#a16">00217</a>   <span class="keywordtype">bool</span> In (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)<span class="keyword"> const</span>
-00218 <span class="keyword">  </span>{
-00219     <span class="keywordflow">if</span> (x &lt; minbox.x || x &gt; maxbox.x) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00220     <span class="keywordflow">if</span> (y &lt; minbox.y || y &gt; maxbox.y) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00221     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00222   }
-00223 
-<a name="l00225"></a><a class="code" href="classcsBox2.html#a17">00225</a>   <span class="keywordtype">bool</span> In (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)<span class="keyword"> const</span>
-00226 <span class="keyword">  </span>{
-00227     <span class="keywordflow">return</span> In (v.x, v.y);
-00228   }
-00229 
-<a name="l00231"></a><a class="code" href="classcsBox2.html#a18">00231</a>   <span class="keywordtype">bool</span> Overlap (<span class="keyword">const</span> csBox2&amp; box)<span class="keyword"> const</span>
-00232 <span class="keyword">  </span>{
-00233     <span class="keywordflow">if</span> (maxbox.x &lt; box.<a class="code" href="classcsBox2.html#p0">minbox</a>.<a class="code" href="classcsVector2.html#o0">x</a> || minbox.x &gt; box.<a class="code" href="classcsBox2.html#p1">maxbox</a>.<a class="code" href="classcsVector2.html#o0">x</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00234     <span class="keywordflow">if</span> (maxbox.y &lt; box.<a class="code" href="classcsBox2.html#p0">minbox</a>.<a class="code" href="classcsVector2.html#o1">y</a> || minbox.y &gt; box.<a class="code" href="classcsBox2.html#p1">maxbox</a>.<a class="code" href="classcsVector2.html#o1">y</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00235     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00236   }
-00237 
-<a name="l00239"></a><a class="code" href="classcsBox2.html#a19">00239</a>   <span class="keywordtype">bool</span> Contains (<span class="keyword">const</span> csBox2&amp; box)<span class="keyword"> const</span>
-00240 <span class="keyword">  </span>{
-00241     <span class="keywordflow">return</span> (box.<a class="code" href="classcsBox2.html#p0">minbox</a>.<a class="code" href="classcsVector2.html#o0">x</a> &gt;= minbox.x &amp;&amp; box.<a class="code" href="classcsBox2.html#p1">maxbox</a>.<a class="code" href="classcsVector2.html#o0">x</a> &lt;= maxbox.x) &amp;&amp;
-00242            (box.<a class="code" href="classcsBox2.html#p0">minbox</a>.<a class="code" href="classcsVector2.html#o1">y</a> &gt;= minbox.y &amp;&amp; box.<a class="code" href="classcsBox2.html#p1">maxbox</a>.<a class="code" href="classcsVector2.html#o1">y</a> &lt;= maxbox.y);
-00243   }
-00244 
-<a name="l00246"></a><a class="code" href="classcsBox2.html#a20">00246</a>   <span class="keywordtype">bool</span> Empty ()<span class="keyword"> const</span>
-00247 <span class="keyword">  </span>{
-00248     <span class="keywordflow">if</span> (minbox.x &gt; maxbox.x) <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00249     <span class="keywordflow">if</span> (minbox.y &gt; maxbox.y) <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00250     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00251   }
-00252 
-00257   <span class="keywordtype">float</span> SquaredOriginDist () <span class="keyword">const</span>;
-00258 
-00264   <span class="keywordtype">float</span> SquaredOriginMaxDist () <span class="keyword">const</span>;
-00265 
-<a name="l00267"></a><a class="code" href="classcsBox2.html#a23">00267</a>   <span class="keywordtype">void</span> StartBoundingBox ()
-00268   {
-00269     minbox.x =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;  minbox.y =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
-00270     maxbox.x = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;  maxbox.y = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
-00271   }
-00272 
-<a name="l00274"></a><a class="code" href="classcsBox2.html#a24">00274</a>   <span class="keywordtype">void</span> StartBoundingBox (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
-00275   {
-00276     minbox = v;
-00277     maxbox = v;
-00278   }
-00279 
-<a name="l00281"></a><a class="code" href="classcsBox2.html#a25">00281</a>   <span class="keywordtype">void</span> StartBoundingBox (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
-00282   {
-00283     minbox.x = maxbox.x = x;
-00284     minbox.y = maxbox.y = y;
-00285   }
-00286 
-<a name="l00288"></a><a class="code" href="classcsBox2.html#a26">00288</a>   <span class="keywordtype">void</span> AddBoundingVertex (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
-00289   {
-00290     <span class="keywordflow">if</span> (x &lt; minbox.x) minbox.x = x;  <span class="keywordflow">if</span> (x &gt; maxbox.x) maxbox.x = x;
-00291     <span class="keywordflow">if</span> (y &lt; minbox.y) minbox.y = y;  <span class="keywordflow">if</span> (y &gt; maxbox.y) maxbox.y = y;
-00292   }
-00293 
-<a name="l00295"></a><a class="code" href="classcsBox2.html#a27">00295</a>   <span class="keywordtype">void</span> AddBoundingVertex (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
-00296   {
-00297     AddBoundingVertex (v.x, v.y);
-00298   }
-00299 
-<a name="l00305"></a><a class="code" href="classcsBox2.html#a28">00305</a>   <span class="keywordtype">void</span> AddBoundingVertexSmart (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
-00306   {
-00307     <span class="keywordflow">if</span> (x &lt; minbox.x) minbox.x = x; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (x &gt; maxbox.x) maxbox.x = x;
-00308     <span class="keywordflow">if</span> (y &lt; minbox.y) minbox.y = y; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (y &gt; maxbox.y) maxbox.y = y;
-00309   }
-00310 
-<a name="l00316"></a><a class="code" href="classcsBox2.html#a29">00316</a>   <span class="keywordtype">void</span> AddBoundingVertexSmart (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
-00317   {
-00318     AddBoundingVertexSmart (v.x, v.y);
-00319   }
-00320 
-<a name="l00325"></a><a class="code" href="classcsBox2.html#a30">00325</a>   <span class="keywordtype">bool</span> AddBoundingVertexTest (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
-00326   {
-00327     <span class="keywordtype">bool</span> rc = <span class="keyword">false</span>;
-00328     <span class="keywordflow">if</span> (x &lt; minbox.x) { minbox.x = x; rc = <span class="keyword">true</span>; }
-00329     <span class="keywordflow">if</span> (x &gt; maxbox.x) { maxbox.x = x; rc = <span class="keyword">true</span>; }
-00330     <span class="keywordflow">if</span> (y &lt; minbox.y) { minbox.y = y; rc = <span class="keyword">true</span>; }
-00331     <span class="keywordflow">if</span> (y &gt; maxbox.y) { maxbox.y = y; rc = <span class="keyword">true</span>; }
-00332     <span class="keywordflow">return</span> rc;
-00333   }
-00334 
-<a name="l00339"></a><a class="code" href="classcsBox2.html#a31">00339</a>   <span class="keywordtype">bool</span> AddBoundingVertexTest (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
-00340   {
-00341     <span class="keywordflow">return</span> AddBoundingVertexTest (v.x, v.y);
-00342   }
-00343 
-<a name="l00350"></a><a class="code" href="classcsBox2.html#a32">00350</a>   <span class="keywordtype">bool</span> AddBoundingVertexSmartTest (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
-00351   {
-00352     <span class="keywordtype">bool</span> rc = <span class="keyword">false</span>;
-00353     <span class="keywordflow">if</span> (x &lt; minbox.x) { minbox.x = x; rc = <span class="keyword">true</span>; }
-00354     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (x &gt; maxbox.x) { maxbox.x = x; rc = <span class="keyword">true</span>; }
-00355     <span class="keywordflow">if</span> (y &lt; minbox.y) { minbox.y = y; rc = <span class="keyword">true</span>; }
-00356     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (y &gt; maxbox.y) { maxbox.y = y; rc = <span class="keyword">true</span>; }
-00357     <span class="keywordflow">return</span> rc;
-00358   }
-00359 
-<a name="l00366"></a><a class="code" href="classcsBox2.html#a33">00366</a>   <span class="keywordtype">bool</span> AddBoundingVertexSmartTest (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
-00367   {
-00368     <span class="keywordflow">return</span> AddBoundingVertexSmartTest (v.x, v.y);
-00369   }
-00370 
-00371   <span class="comment">//-----</span>
-00372   <span class="comment">// Maintenance Note: The csBox2 constructors and Set() appear at this point</span>
-00373   <span class="comment">// in the file, rather than earlier, in order to appease the OpenStep 4.2</span>
-00374   <span class="comment">// compiler.  Specifically, the problem is that the compiler botches code</span>
-00375   <span class="comment">// generation if an unseen method (which is later declared inline) is</span>
-00376   <span class="comment">// called from within another inline method.  For instance, if the</span>
-00377   <span class="comment">// constructors were listed at the top of the file, rather than here, the</span>
-00378   <span class="comment">// compiler would see calls to Empty() and StartBoundingBox() before seeing</span>
-00379   <span class="comment">// declarations for them.  In such a situation, the buggy compiler</span>
-00380   <span class="comment">// generates a broken object file.  The simple work-around of textually</span>
-00381   <span class="comment">// reorganizing the file ensures that the declarations for Empty() and</span>
-00382   <span class="comment">// StartBoundingBox() are seen before they are called.</span>
-00383   <span class="comment">//-----</span>
-00384 
-<a name="l00386"></a><a class="code" href="classcsBox2.html#a34">00386</a>   csBox2 () : minbox (<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>, <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>),
-00387              maxbox (-<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>, -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>) {}
-00388 
-<a name="l00390"></a><a class="code" href="classcsBox2.html#a35">00390</a>   csBox2 (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v) : minbox (v.x, v.y), maxbox (v.x, v.y) {}
-00391 
-<a name="l00393"></a><a class="code" href="classcsBox2.html#a36">00393</a>   csBox2 (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2) :
-00394     minbox (x1, y1), maxbox (x2, y2)
-00395   { <span class="keywordflow">if</span> (Empty ()) StartBoundingBox (); }
-00396 
-<a name="l00398"></a><a class="code" href="classcsBox2.html#a37">00398</a>   csBox2 (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; r) : minbox (r.xmin, r.ymin), maxbox (r.xmax, r.ymax)
-00399   { }
-00400   
-<a name="l00402"></a><a class="code" href="classcsBox2.html#a38">00402</a>   <span class="keywordtype">void</span> Set (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; bmin, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; bmax)
-00403   {
-00404     minbox = bmin;
-00405     maxbox = bmax;
-00406   }
-00407 
-<a name="l00409"></a><a class="code" href="classcsBox2.html#a39">00409</a>   <span class="keywordtype">void</span> Set (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2)
-00410   {
-00411     <span class="keywordflow">if</span> (x1&gt;x2 || y1&gt;y2) StartBoundingBox();
-00412     <span class="keywordflow">else</span> { minbox.x = x1;  minbox.y = y1;  maxbox.x = x2;  maxbox.y = y2; }
-00413   }
-00414 
-<a name="l00416"></a><a class="code" href="classcsBox2.html#a40">00416</a>   <span class="keywordtype">void</span> SetMin (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> val)
-00417   {
-00418     <span class="keywordflow">if</span> (idx == 1) minbox.y = val;
-00419     <span class="keywordflow">else</span> minbox.x = val;
-00420   }
+00039 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
+00040 
+00041 <span class="keyword">class </span><a class="code" href="classcsPlane3.html">csPlane3</a>;
+00042 <span class="keyword">class </span><a class="code" href="classcsTransform.html">csTransform</a>;
+00043 <span class="keyword">class </span><a class="code" href="classcsPoly2D.html">csPoly2D</a>;
+00044 
+<a name="l00049"></a><a class="code" href="group__geom__utils.html#ga8">00049</a> <span class="preprocessor">#define CS_BOUNDINGBOX_MAXVALUE 1000000000.</span>
+00050 <span class="preprocessor"></span>
+00054 
+<a name="l00055"></a><a class="code" href="group__geom__utils.html#ga9">00055</a> <span class="preprocessor">#define CS_BOX_CORNER_xy 0</span>
+00056 <span class="preprocessor"></span>
+<a name="l00057"></a><a class="code" href="group__geom__utils.html#ga10">00057</a> <span class="preprocessor">#define CS_BOX_CORNER_xY 1</span>
+00058 <span class="preprocessor"></span>
+<a name="l00059"></a><a class="code" href="group__geom__utils.html#ga11">00059</a> <span class="preprocessor">#define CS_BOX_CORNER_Xy 2</span>
+00060 <span class="preprocessor"></span>
+<a name="l00061"></a><a class="code" href="group__geom__utils.html#ga12">00061</a> <span class="preprocessor">#define CS_BOX_CORNER_XY 3</span>
+00062 <span class="preprocessor"></span>
+<a name="l00063"></a><a class="code" href="group__geom__utils.html#ga13">00063</a> <span class="preprocessor">#define CS_BOX_CENTER2 4</span>
+00064 <span class="preprocessor"></span>
+00070 
+<a name="l00071"></a><a class="code" href="group__geom__utils.html#ga14">00071</a> <span class="preprocessor">#define CS_BOX_EDGE_xy_Xy 0</span>
+00072 <span class="preprocessor"></span>
+<a name="l00073"></a><a class="code" href="group__geom__utils.html#ga15">00073</a> <span class="preprocessor">#define CS_BOX_EDGE_Xy_xy 1</span>
+00074 <span class="preprocessor"></span>
+<a name="l00075"></a><a class="code" href="group__geom__utils.html#ga16">00075</a> <span class="preprocessor">#define CS_BOX_EDGE_Xy_XY 2</span>
+00076 <span class="preprocessor"></span>
+<a name="l00077"></a><a class="code" href="group__geom__utils.html#ga17">00077</a> <span class="preprocessor">#define CS_BOX_EDGE_XY_Xy 3</span>
+00078 <span class="preprocessor"></span>
+<a name="l00079"></a><a class="code" href="group__geom__utils.html#ga18">00079</a> <span class="preprocessor">#define CS_BOX_EDGE_XY_xY 4</span>
+00080 <span class="preprocessor"></span>
+<a name="l00081"></a><a class="code" href="group__geom__utils.html#ga19">00081</a> <span class="preprocessor">#define CS_BOX_EDGE_xY_XY 5</span>
+00082 <span class="preprocessor"></span>
+<a name="l00083"></a><a class="code" href="group__geom__utils.html#ga20">00083</a> <span class="preprocessor">#define CS_BOX_EDGE_xY_xy 6</span>
+00084 <span class="preprocessor"></span>
+<a name="l00085"></a><a class="code" href="group__geom__utils.html#ga21">00085</a> <span class="preprocessor">#define CS_BOX_EDGE_xy_xY 7</span>
+00086 <span class="preprocessor"></span>
+<a name="l00095"></a><a class="code" href="classcsBox2.html">00095</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csBox2
+00096 {
+00097 <span class="keyword">private</span>:
+00098   <span class="keyword">struct </span>bEdge
+00099   {
+00100     <a class="code" href="group__util.html#ga0">uint8</a> v1, v2; <span class="comment">// Indices of vertex in bounding box (CS_BOX_CORNER_...)</span>
+00101   };
+00102   <span class="comment">// Index by edge number. Edge e and e+1 with e even are opposite edges.</span>
+00103   <span class="comment">// (CS_BOX_EDGE_...)</span>
+00104   <span class="keyword">static</span> bEdge edges[8];
+00105 
+00106 <span class="keyword">protected</span>:
+<a name="l00108"></a><a class="code" href="classcsBox2.html#p0">00108</a>   <a class="code" href="classcsVector2.html">csVector2</a> minbox;
+<a name="l00110"></a><a class="code" href="classcsBox2.html#p1">00110</a>   <a class="code" href="classcsVector2.html">csVector2</a> maxbox;
+00111 
+00112 <span class="keyword">public</span>:
+<a name="l00114"></a><a class="code" href="classcsBox2.html#a0">00114</a>   <span class="keywordtype">float</span> MinX ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.x; }
+<a name="l00116"></a><a class="code" href="classcsBox2.html#a1">00116</a>   <span class="keywordtype">float</span> MinY ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.y; }
+<a name="l00118"></a><a class="code" href="classcsBox2.html#a2">00118</a>   <span class="keywordtype">float</span> MaxX ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.x; }
+<a name="l00120"></a><a class="code" href="classcsBox2.html#a3">00120</a>   <span class="keywordtype">float</span> MaxY ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.y; }
+<a name="l00122"></a><a class="code" href="classcsBox2.html#a4">00122</a>   <span class="keywordtype">float</span> Min (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> idx ? minbox.y : minbox.x; }
+<a name="l00124"></a><a class="code" href="classcsBox2.html#a5">00124</a>   <span class="keywordtype">float</span> Max (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> idx ? maxbox.y : maxbox.x; }
+<a name="l00126"></a><a class="code" href="classcsBox2.html#a6">00126</a>   <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; Min ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox; }
+<a name="l00128"></a><a class="code" href="classcsBox2.html#a7">00128</a>   <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; Max ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox; }
+00129 
+00138   <a class="code" href="classcsVector2.html">csVector2</a> GetCorner (<span class="keywordtype">int</span> corner) <span class="keyword">const</span>;
+00139 
+<a name="l00143"></a><a class="code" href="classcsBox2.html#a9">00143</a>   <a class="code" href="classcsVector2.html">csVector2</a> GetCenter ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (minbox+maxbox)/2; }
+00144 
+00149   <span class="keywordtype">void</span> SetCenter (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; c);
+00150 
+00154   <span class="keywordtype">void</span> SetSize (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; s);
+00155 
+<a name="l00160"></a><a class="code" href="classcsBox2.html#a12">00160</a>   <span class="keywordtype">void</span> GetEdgeInfo (<span class="keywordtype">int</span> edge, <span class="keywordtype">int</span>&amp; v1, <span class="keywordtype">int</span>&amp; v2)<span class="keyword"> const</span>
+00161 <span class="keyword">  </span>{
+00162     v1 = edges[edge].v1;
+00163     v2 = edges[edge].v2;
+00164   }
+00165 
+<a name="l00170"></a><a class="code" href="classcsBox2.html#a13">00170</a>   <a class="code" href="classcsSegment2.html">csSegment2</a> GetEdge (<span class="keywordtype">int</span> edge)<span class="keyword"> const</span>
+00171 <span class="keyword">  </span>{
+00172     <span class="keywordflow">return</span> <a class="code" href="classcsSegment2.html">csSegment2</a> (GetCorner (edges[edge].v1), GetCorner (edges[edge].v2));
+00173   }
+00174 
+<a name="l00179"></a><a class="code" href="classcsBox2.html#a14">00179</a>   <span class="keywordtype">void</span> GetEdge (<span class="keywordtype">int</span> edge, <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; e)<span class="keyword"> const</span>
+00180 <span class="keyword">  </span>{
+00181     e.<a class="code" href="classcsSegment2.html#a4">SetStart</a> (GetCorner (edges[edge].v1));
+00182     e.<a class="code" href="classcsSegment2.html#a5">SetEnd</a> (GetCorner (edges[edge].v2));
+00183   }
+00184 
+00191   <span class="keyword">static</span> <span class="keywordtype">bool</span> Intersect (<span class="keywordtype">float</span> minx, <span class="keywordtype">float</span> miny, <span class="keywordtype">float</span> maxx, <span class="keywordtype">float</span> maxy,
+00192     <a class="code" href="classcsVector2.html">csVector2</a>* poly, <span class="keywordtype">int</span> num_poly);
+00193 
+<a name="l00200"></a><a class="code" href="classcsBox2.html#e1">00200</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> Intersect (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; minbox, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; maxbox,
+00201     <a class="code" href="classcsVector2.html">csVector2</a>* poly, <span class="keywordtype">int</span> num_poly)
+00202   {
+00203     <span class="keywordflow">return</span> Intersect (minbox.<a class="code" href="classcsVector2.html#o0">x</a>, minbox.<a class="code" href="classcsVector2.html#o1">y</a>, maxbox.<a class="code" href="classcsVector2.html#o0">x</a>, maxbox.<a class="code" href="classcsVector2.html#o1">y</a>, poly, num_poly);
+00204   }
+00205 
+<a name="l00212"></a><a class="code" href="classcsBox2.html#a15">00212</a>   <span class="keywordtype">bool</span> Intersect (<a class="code" href="classcsVector2.html">csVector2</a>* poly, <span class="keywordtype">int</span> num_poly)<span class="keyword"> const</span>
+00213 <span class="keyword">  </span>{
+00214     <span class="keywordflow">return</span> Intersect (minbox, maxbox, poly, num_poly);
+00215   }
+00216 
+<a name="l00218"></a><a class="code" href="classcsBox2.html#a16">00218</a>   <span class="keywordtype">bool</span> In (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)<span class="keyword"> const</span>
+00219 <span class="keyword">  </span>{
+00220     <span class="keywordflow">if</span> (x &lt; minbox.x || x &gt; maxbox.x) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00221     <span class="keywordflow">if</span> (y &lt; minbox.y || y &gt; maxbox.y) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00222     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00223   }
+00224 
+<a name="l00226"></a><a class="code" href="classcsBox2.html#a17">00226</a>   <span class="keywordtype">bool</span> In (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)<span class="keyword"> const</span>
+00227 <span class="keyword">  </span>{
+00228     <span class="keywordflow">return</span> In (v.x, v.y);
+00229   }
+00230 
+<a name="l00232"></a><a class="code" href="classcsBox2.html#a18">00232</a>   <span class="keywordtype">bool</span> Overlap (<span class="keyword">const</span> csBox2&amp; box)<span class="keyword"> const</span>
+00233 <span class="keyword">  </span>{
+00234     <span class="keywordflow">if</span> (maxbox.x &lt; box.<a class="code" href="classcsBox2.html#p0">minbox</a>.<a class="code" href="classcsVector2.html#o0">x</a> || minbox.x &gt; box.<a class="code" href="classcsBox2.html#p1">maxbox</a>.<a class="code" href="classcsVector2.html#o0">x</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00235     <span class="keywordflow">if</span> (maxbox.y &lt; box.<a class="code" href="classcsBox2.html#p0">minbox</a>.<a class="code" href="classcsVector2.html#o1">y</a> || minbox.y &gt; box.<a class="code" href="classcsBox2.html#p1">maxbox</a>.<a class="code" href="classcsVector2.html#o1">y</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00236     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00237   }
+00238 
+<a name="l00240"></a><a class="code" href="classcsBox2.html#a19">00240</a>   <span class="keywordtype">bool</span> Contains (<span class="keyword">const</span> csBox2&amp; box)<span class="keyword"> const</span>
+00241 <span class="keyword">  </span>{
+00242     <span class="keywordflow">return</span> (box.<a class="code" href="classcsBox2.html#p0">minbox</a>.<a class="code" href="classcsVector2.html#o0">x</a> &gt;= minbox.x &amp;&amp; box.<a class="code" href="classcsBox2.html#p1">maxbox</a>.<a class="code" href="classcsVector2.html#o0">x</a> &lt;= maxbox.x) &amp;&amp;
+00243            (box.<a class="code" href="classcsBox2.html#p0">minbox</a>.<a class="code" href="classcsVector2.html#o1">y</a> &gt;= minbox.y &amp;&amp; box.<a class="code" href="classcsBox2.html#p1">maxbox</a>.<a class="code" href="classcsVector2.html#o1">y</a> &lt;= maxbox.y);
+00244   }
+00245 
+<a name="l00247"></a><a class="code" href="classcsBox2.html#a20">00247</a>   <span class="keywordtype">bool</span> Empty ()<span class="keyword"> const</span>
+00248 <span class="keyword">  </span>{
+00249     <span class="keywordflow">if</span> (minbox.x &gt; maxbox.x) <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00250     <span class="keywordflow">if</span> (minbox.y &gt; maxbox.y) <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00251     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00252   }
+00253 
+00258   <span class="keywordtype">float</span> SquaredOriginDist () <span class="keyword">const</span>;
+00259 
+00265   <span class="keywordtype">float</span> SquaredOriginMaxDist () <span class="keyword">const</span>;
+00266 
+<a name="l00268"></a><a class="code" href="classcsBox2.html#a23">00268</a>   <span class="keywordtype">void</span> StartBoundingBox ()
+00269   {
+00270     minbox.x =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;  minbox.y =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
+00271     maxbox.x = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;  maxbox.y = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
+00272   }
+00273 
+<a name="l00275"></a><a class="code" href="classcsBox2.html#a24">00275</a>   <span class="keywordtype">void</span> StartBoundingBox (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
+00276   {
+00277     minbox = v;
+00278     maxbox = v;
+00279   }
+00280 
+<a name="l00282"></a><a class="code" href="classcsBox2.html#a25">00282</a>   <span class="keywordtype">void</span> StartBoundingBox (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
+00283   {
+00284     minbox.x = maxbox.x = x;
+00285     minbox.y = maxbox.y = y;
+00286   }
+00287 
+<a name="l00289"></a><a class="code" href="classcsBox2.html#a26">00289</a>   <span class="keywordtype">void</span> AddBoundingVertex (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
+00290   {
+00291     <span class="keywordflow">if</span> (x &lt; minbox.x) minbox.x = x;  <span class="keywordflow">if</span> (x &gt; maxbox.x) maxbox.x = x;
+00292     <span class="keywordflow">if</span> (y &lt; minbox.y) minbox.y = y;  <span class="keywordflow">if</span> (y &gt; maxbox.y) maxbox.y = y;
+00293   }
+00294 
+<a name="l00296"></a><a class="code" href="classcsBox2.html#a27">00296</a>   <span class="keywordtype">void</span> AddBoundingVertex (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
+00297   {
+00298     AddBoundingVertex (v.x, v.y);
+00299   }
+00300 
+<a name="l00306"></a><a class="code" href="classcsBox2.html#a28">00306</a>   <span class="keywordtype">void</span> AddBoundingVertexSmart (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
+00307   {
+00308     <span class="keywordflow">if</span> (x &lt; minbox.x) minbox.x = x; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (x &gt; maxbox.x) maxbox.x = x;
+00309     <span class="keywordflow">if</span> (y &lt; minbox.y) minbox.y = y; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (y &gt; maxbox.y) maxbox.y = y;
+00310   }
+00311 
+<a name="l00317"></a><a class="code" href="classcsBox2.html#a29">00317</a>   <span class="keywordtype">void</span> AddBoundingVertexSmart (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
+00318   {
+00319     AddBoundingVertexSmart (v.x, v.y);
+00320   }
+00321 
+<a name="l00326"></a><a class="code" href="classcsBox2.html#a30">00326</a>   <span class="keywordtype">bool</span> AddBoundingVertexTest (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
+00327   {
+00328     <span class="keywordtype">bool</span> rc = <span class="keyword">false</span>;
+00329     <span class="keywordflow">if</span> (x &lt; minbox.x) { minbox.x = x; rc = <span class="keyword">true</span>; }
+00330     <span class="keywordflow">if</span> (x &gt; maxbox.x) { maxbox.x = x; rc = <span class="keyword">true</span>; }
+00331     <span class="keywordflow">if</span> (y &lt; minbox.y) { minbox.y = y; rc = <span class="keyword">true</span>; }
+00332     <span class="keywordflow">if</span> (y &gt; maxbox.y) { maxbox.y = y; rc = <span class="keyword">true</span>; }
+00333     <span class="keywordflow">return</span> rc;
+00334   }
+00335 
+<a name="l00340"></a><a class="code" href="classcsBox2.html#a31">00340</a>   <span class="keywordtype">bool</span> AddBoundingVertexTest (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
+00341   {
+00342     <span class="keywordflow">return</span> AddBoundingVertexTest (v.x, v.y);
+00343   }
+00344 
+<a name="l00351"></a><a class="code" href="classcsBox2.html#a32">00351</a>   <span class="keywordtype">bool</span> AddBoundingVertexSmartTest (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)
+00352   {
+00353     <span class="keywordtype">bool</span> rc = <span class="keyword">false</span>;
+00354     <span class="keywordflow">if</span> (x &lt; minbox.x) { minbox.x = x; rc = <span class="keyword">true</span>; }
+00355     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (x &gt; maxbox.x) { maxbox.x = x; rc = <span class="keyword">true</span>; }
+00356     <span class="keywordflow">if</span> (y &lt; minbox.y) { minbox.y = y; rc = <span class="keyword">true</span>; }
+00357     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (y &gt; maxbox.y) { maxbox.y = y; rc = <span class="keyword">true</span>; }
+00358     <span class="keywordflow">return</span> rc;
+00359   }
+00360 
+<a name="l00367"></a><a class="code" href="classcsBox2.html#a33">00367</a>   <span class="keywordtype">bool</span> AddBoundingVertexSmartTest (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v)
+00368   {
+00369     <span class="keywordflow">return</span> AddBoundingVertexSmartTest (v.x, v.y);
+00370   }
+00371 
+<a name="l00373"></a><a class="code" href="classcsBox2.html#a34">00373</a>   csBox2 () : minbox (<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>, <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>),
+00374              maxbox (-<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>, -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>) {}
+00375 
+<a name="l00377"></a><a class="code" href="classcsBox2.html#a35">00377</a>   csBox2 (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v) : minbox (v.x, v.y), maxbox (v.x, v.y) {}
+00378 
+<a name="l00380"></a><a class="code" href="classcsBox2.html#a36">00380</a>   csBox2 (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2) :
+00381     minbox (x1, y1), maxbox (x2, y2)
+00382   { <span class="keywordflow">if</span> (Empty ()) StartBoundingBox (); }
+00383 
+<a name="l00385"></a><a class="code" href="classcsBox2.html#a37">00385</a>   csBox2 (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; r) : minbox (r.xmin, r.ymin), maxbox (r.xmax, r.ymax)
+00386   { }
+00387   
+<a name="l00389"></a><a class="code" href="classcsBox2.html#a38">00389</a>   <span class="keywordtype">void</span> Set (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; bmin, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; bmax)
+00390   {
+00391     minbox = bmin;
+00392     maxbox = bmax;
+00393   }
+00394 
+<a name="l00396"></a><a class="code" href="classcsBox2.html#a39">00396</a>   <span class="keywordtype">void</span> Set (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2)
+00397   {
+00398     <span class="keywordflow">if</span> (x1&gt;x2 || y1&gt;y2) StartBoundingBox();
+00399     <span class="keywordflow">else</span> { minbox.x = x1;  minbox.y = y1;  maxbox.x = x2;  maxbox.y = y2; }
+00400   }
+00401 
+<a name="l00403"></a><a class="code" href="classcsBox2.html#a40">00403</a>   <span class="keywordtype">void</span> SetMin (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> val)
+00404   {
+00405     <span class="keywordflow">if</span> (idx == 1) minbox.y = val;
+00406     <span class="keywordflow">else</span> minbox.x = val;
+00407   }
+00408 
+<a name="l00410"></a><a class="code" href="classcsBox2.html#a41">00410</a>   <span class="keywordtype">void</span> SetMax (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> val)
+00411   {
+00412     <span class="keywordflow">if</span> (idx == 1) maxbox.y = val;
+00413     <span class="keywordflow">else</span> maxbox.x = val;
+00414   }
+00415 
+00420   <a class="code" href="classcsString.html">csString</a> Description() <span class="keyword">const</span>;
 00421 
-<a name="l00423"></a><a class="code" href="classcsBox2.html#a41">00423</a>   <span class="keywordtype">void</span> SetMax (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> val)
-00424   {
-00425     <span class="keywordflow">if</span> (idx == 1) maxbox.y = val;
-00426     <span class="keywordflow">else</span> maxbox.x = val;
-00427   }
-00428 
-00430   csBox2&amp; operator+= (<span class="keyword">const</span> csBox2&amp; box);
-00432   csBox2&amp; operator+= (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point);
-00434   csBox2&amp; operator*= (<span class="keyword">const</span> csBox2&amp; box);
-00436   <span class="keywordtype">bool</span> TestIntersect (<span class="keyword">const</span> csBox2&amp; box) <span class="keyword">const</span>;
-00437 
-00439   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox2 <a class="code" href="csstring_8h.html#a12">operator+ </a>(<span class="keyword">const</span> csBox2&amp; box1, 
-00440     <span class="keyword">const</span> csBox2&amp; box2);
-00442   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox2 <a class="code" href="csstring_8h.html#a12">operator+ </a>(<span class="keyword">const</span> csBox2&amp; box, 
-00443     <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point);
-00445   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox2 operator* (<span class="keyword">const</span> csBox2&amp; box1, 
+00423   csBox2&amp; operator+= (<span class="keyword">const</span> csBox2&amp; box);
+00425   csBox2&amp; operator+= (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point);
+00427   csBox2&amp; operator*= (<span class="keyword">const</span> csBox2&amp; box);
+00429   <span class="keywordtype">bool</span> TestIntersect (<span class="keyword">const</span> csBox2&amp; box) <span class="keyword">const</span>;
+00430 
+00432   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox2 <a class="code" href="csstring_8h.html#a12">operator+ </a>(<span class="keyword">const</span> csBox2&amp; box1, 
+00433     <span class="keyword">const</span> csBox2&amp; box2);
+00435   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox2 <a class="code" href="csstring_8h.html#a12">operator+ </a>(<span class="keyword">const</span> csBox2&amp; box, 
+00436     <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point);
+00438   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox2 operator* (<span class="keyword">const</span> csBox2&amp; box1, 
+00439     <span class="keyword">const</span> csBox2&amp; box2);
+00440 
+00442   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> csBox2&amp; box1, 
+00443     <span class="keyword">const</span> csBox2&amp; box2);
+00445   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> csBox2&amp; box1, 
 00446     <span class="keyword">const</span> csBox2&amp; box2);
-00447 
-00449   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> csBox2&amp; box1, 
-00450     <span class="keyword">const</span> csBox2&amp; box2);
-00452   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> csBox2&amp; box1, 
-00453     <span class="keyword">const</span> csBox2&amp; box2);
-00455   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> csBox2&amp; box1, 
-00456     <span class="keyword">const</span> csBox2&amp; box2);
-00458   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&gt; (<span class="keyword">const</span> csBox2&amp; box1, 
-00459     <span class="keyword">const</span> csBox2&amp; box2);
-00461   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point, 
-00462     <span class="keyword">const</span> csBox2&amp; box);
-00463 };
-00464 
-00469 
-<a name="l00470"></a><a class="code" href="group__geom__utils.html#ga22">00470</a> <span class="preprocessor">#define CS_BOX_CORNER_xyz 0</span>
-00471 <span class="preprocessor"></span>
-<a name="l00472"></a><a class="code" href="group__geom__utils.html#ga23">00472</a> <span class="preprocessor">#define CS_BOX_CORNER_xyZ 1</span>
-00473 <span class="preprocessor"></span>
-<a name="l00474"></a><a class="code" href="group__geom__utils.html#ga24">00474</a> <span class="preprocessor">#define CS_BOX_CORNER_xYz 2</span>
-00475 <span class="preprocessor"></span>
-<a name="l00476"></a><a class="code" href="group__geom__utils.html#ga25">00476</a> <span class="preprocessor">#define CS_BOX_CORNER_xYZ 3</span>
-00477 <span class="preprocessor"></span>
-<a name="l00478"></a><a class="code" href="group__geom__utils.html#ga26">00478</a> <span class="preprocessor">#define CS_BOX_CORNER_Xyz 4</span>
-00479 <span class="preprocessor"></span>
-<a name="l00480"></a><a class="code" href="group__geom__utils.html#ga27">00480</a> <span class="preprocessor">#define CS_BOX_CORNER_XyZ 5</span>
-00481 <span class="preprocessor"></span>
-<a name="l00482"></a><a class="code" href="group__geom__utils.html#ga28">00482</a> <span class="preprocessor">#define CS_BOX_CORNER_XYz 6</span>
-00483 <span class="preprocessor"></span>
-<a name="l00484"></a><a class="code" href="group__geom__utils.html#ga29">00484</a> <span class="preprocessor">#define CS_BOX_CORNER_XYZ 7</span>
-00485 <span class="preprocessor"></span>
-<a name="l00486"></a><a class="code" href="group__geom__utils.html#ga30">00486</a> <span class="preprocessor">#define CS_BOX_CENTER3 8</span>
-00487 <span class="preprocessor"></span>
-00493 
-<a name="l00494"></a><a class="code" href="group__geom__utils.html#ga31">00494</a> <span class="preprocessor">#define CS_BOX_SIDE_x 0</span>
-00495 <span class="preprocessor"></span>
-<a name="l00496"></a><a class="code" href="group__geom__utils.html#ga32">00496</a> <span class="preprocessor">#define CS_BOX_SIDE_X 1</span>
-00497 <span class="preprocessor"></span>
-<a name="l00498"></a><a class="code" href="group__geom__utils.html#ga33">00498</a> <span class="preprocessor">#define CS_BOX_SIDE_y 2</span>
-00499 <span class="preprocessor"></span>
-<a name="l00500"></a><a class="code" href="group__geom__utils.html#ga34">00500</a> <span class="preprocessor">#define CS_BOX_SIDE_Y 3</span>
-00501 <span class="preprocessor"></span>
-<a name="l00502"></a><a class="code" href="group__geom__utils.html#ga35">00502</a> <span class="preprocessor">#define CS_BOX_SIDE_z 4</span>
-00503 <span class="preprocessor"></span>
-<a name="l00504"></a><a class="code" href="group__geom__utils.html#ga36">00504</a> <span class="preprocessor">#define CS_BOX_SIDE_Z 5</span>
-00505 <span class="preprocessor"></span>
-<a name="l00506"></a><a class="code" href="group__geom__utils.html#ga37">00506</a> <span class="preprocessor">#define CS_BOX_INSIDE 6</span>
-00507 <span class="preprocessor"></span>
-00513 
-<a name="l00514"></a><a class="code" href="group__geom__utils.html#ga38">00514</a> <span class="preprocessor">#define CS_BOX_EDGE_Xyz_xyz 0</span>
-00515 <span class="preprocessor"></span>
-<a name="l00516"></a><a class="code" href="group__geom__utils.html#ga39">00516</a> <span class="preprocessor">#define CS_BOX_EDGE_xyz_Xyz 1</span>
-00517 <span class="preprocessor"></span>
-<a name="l00518"></a><a class="code" href="group__geom__utils.html#ga40">00518</a> <span class="preprocessor">#define CS_BOX_EDGE_xyz_xYz 2</span>
-00519 <span class="preprocessor"></span>
-<a name="l00520"></a><a class="code" href="group__geom__utils.html#ga41">00520</a> <span class="preprocessor">#define CS_BOX_EDGE_xYz_xyz 3</span>
-00521 <span class="preprocessor"></span>
-<a name="l00522"></a><a class="code" href="group__geom__utils.html#ga42">00522</a> <span class="preprocessor">#define CS_BOX_EDGE_xYz_XYz 4</span>
-00523 <span class="preprocessor"></span>
-<a name="l00524"></a><a class="code" href="group__geom__utils.html#ga43">00524</a> <span class="preprocessor">#define CS_BOX_EDGE_XYz_xYz 5</span>
-00525 <span class="preprocessor"></span>
-<a name="l00526"></a><a class="code" href="group__geom__utils.html#ga44">00526</a> <span class="preprocessor">#define CS_BOX_EDGE_XYz_Xyz 6</span>
-00527 <span class="preprocessor"></span>
-<a name="l00528"></a><a class="code" href="group__geom__utils.html#ga45">00528</a> <span class="preprocessor">#define CS_BOX_EDGE_Xyz_XYz 7</span>
-00529 <span class="preprocessor"></span>
-<a name="l00530"></a><a class="code" href="group__geom__utils.html#ga46">00530</a> <span class="preprocessor">#define CS_BOX_EDGE_Xyz_XyZ 8</span>
-00531 <span class="preprocessor"></span>
-<a name="l00532"></a><a class="code" href="group__geom__utils.html#ga47">00532</a> <span class="preprocessor">#define CS_BOX_EDGE_XyZ_Xyz 9</span>
-00533 <span class="preprocessor"></span>
-<a name="l00534"></a><a class="code" href="group__geom__utils.html#ga48">00534</a> <span class="preprocessor">#define CS_BOX_EDGE_XyZ_XYZ 10</span>
-00535 <span class="preprocessor"></span>
-<a name="l00536"></a><a class="code" href="group__geom__utils.html#ga49">00536</a> <span class="preprocessor">#define CS_BOX_EDGE_XYZ_XyZ 11</span>
-00537 <span class="preprocessor"></span>
-<a name="l00538"></a><a class="code" href="group__geom__utils.html#ga50">00538</a> <span class="preprocessor">#define CS_BOX_EDGE_XYZ_XYz 12</span>
-00539 <span class="preprocessor"></span>
-<a name="l00540"></a><a class="code" href="group__geom__utils.html#ga51">00540</a> <span class="preprocessor">#define CS_BOX_EDGE_XYz_XYZ 13</span>
-00541 <span class="preprocessor"></span>
-<a name="l00542"></a><a class="code" href="group__geom__utils.html#ga52">00542</a> <span class="preprocessor">#define CS_BOX_EDGE_XYZ_xYZ 14</span>
-00543 <span class="preprocessor"></span>
-<a name="l00544"></a><a class="code" href="group__geom__utils.html#ga53">00544</a> <span class="preprocessor">#define CS_BOX_EDGE_xYZ_XYZ 15</span>
-00545 <span class="preprocessor"></span>
-<a name="l00546"></a><a class="code" href="group__geom__utils.html#ga54">00546</a> <span class="preprocessor">#define CS_BOX_EDGE_xYZ_xYz 16</span>
-00547 <span class="preprocessor"></span>
-<a name="l00548"></a><a class="code" href="group__geom__utils.html#ga55">00548</a> <span class="preprocessor">#define CS_BOX_EDGE_xYz_xYZ 17</span>
-00549 <span class="preprocessor"></span>
-<a name="l00550"></a><a class="code" href="group__geom__utils.html#ga56">00550</a> <span class="preprocessor">#define CS_BOX_EDGE_xYZ_xyZ 18</span>
-00551 <span class="preprocessor"></span>
-<a name="l00552"></a><a class="code" href="group__geom__utils.html#ga57">00552</a> <span class="preprocessor">#define CS_BOX_EDGE_xyZ_xYZ 19</span>
-00553 <span class="preprocessor"></span>
-<a name="l00554"></a><a class="code" href="group__geom__utils.html#ga58">00554</a> <span class="preprocessor">#define CS_BOX_EDGE_xyZ_xyz 20</span>
-00555 <span class="preprocessor"></span>
-<a name="l00556"></a><a class="code" href="group__geom__utils.html#ga59">00556</a> <span class="preprocessor">#define CS_BOX_EDGE_xyz_xyZ 21</span>
-00557 <span class="preprocessor"></span>
-<a name="l00558"></a><a class="code" href="group__geom__utils.html#ga60">00558</a> <span class="preprocessor">#define CS_BOX_EDGE_xyZ_XyZ 22</span>
-00559 <span class="preprocessor"></span>
-<a name="l00560"></a><a class="code" href="group__geom__utils.html#ga61">00560</a> <span class="preprocessor">#define CS_BOX_EDGE_XyZ_xyZ 23</span>
-00561 <span class="preprocessor"></span>
-<a name="l00570"></a><a class="code" href="classcsBox3.html">00570</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csBox3
-00571 {
-00572 <span class="keyword">protected</span>:
-<a name="l00574"></a><a class="code" href="classcsBox3.html#p0">00574</a>   <a class="code" href="classcsVector3.html">csVector3</a> minbox;
-<a name="l00576"></a><a class="code" href="classcsBox3.html#p1">00576</a>   <a class="code" href="classcsVector3.html">csVector3</a> maxbox;
-00580   <span class="keyword">struct </span>bEdge
-00581   {
-00582     <a class="code" href="group__util.html#ga0">uint8</a> v1, v2; <span class="comment">// Indices of vertex in bounding box (CS_BOX_CORNER_...)</span>
-00583     <a class="code" href="group__util.html#ga0">uint8</a> fl, fr; <span class="comment">// Indices of left/right faces sharing edge (CS_BOX_SIDE_...)</span>
-00584   };
-<a name="l00586"></a><a class="code" href="classcsBox3.html#x0">00586</a>   <span class="keyword">typedef</span> <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="classcsBox3.html#x0">bFace</a>[4];       
-<a name="l00591"></a><a class="code" href="classcsBox3.html#t0">00591</a>   <span class="keyword">static</span> bEdge edges[24];
-<a name="l00593"></a><a class="code" href="classcsBox3.html#t1">00593</a>   <span class="keyword">static</span> <a class="code" href="classcsBox3.html#x0">bFace</a> faces[6];
-00594 <span class="keyword">public</span>:
-<a name="l00596"></a><a class="code" href="classcsBox3.html#a0">00596</a>   <span class="keywordtype">float</span> MinX ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.x; }
-<a name="l00598"></a><a class="code" href="classcsBox3.html#a1">00598</a>   <span class="keywordtype">float</span> MinY ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.y; }
-<a name="l00600"></a><a class="code" href="classcsBox3.html#a2">00600</a>   <span class="keywordtype">float</span> MinZ ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.z; }
-<a name="l00602"></a><a class="code" href="classcsBox3.html#a3">00602</a>   <span class="keywordtype">float</span> MaxX ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.x; }
-<a name="l00604"></a><a class="code" href="classcsBox3.html#a4">00604</a>   <span class="keywordtype">float</span> MaxY ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.y; }
-<a name="l00606"></a><a class="code" href="classcsBox3.html#a5">00606</a>   <span class="keywordtype">float</span> MaxZ ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.z; }
-<a name="l00608"></a><a class="code" href="classcsBox3.html#a6">00608</a>   <span class="keywordtype">float</span> Min (<span class="keywordtype">int</span> idx)<span class="keyword"> const</span>
-00609 <span class="keyword">  </span>{ <span class="keywordflow">return</span> idx == 1 ? minbox.y : idx == 0 ? minbox.x : minbox.z; }
-<a name="l00611"></a><a class="code" href="classcsBox3.html#a7">00611</a>   <span class="keywordtype">float</span> Max (<span class="keywordtype">int</span> idx)<span class="keyword"> const</span>
-00612 <span class="keyword">  </span>{ <span class="keywordflow">return</span> idx == 1 ? maxbox.y : idx == 0 ? maxbox.x : maxbox.z; }
-<a name="l00614"></a><a class="code" href="classcsBox3.html#a8">00614</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; Min ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox; }
-<a name="l00616"></a><a class="code" href="classcsBox3.html#a9">00616</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; Max ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox; }
-00617 
-00627   <a class="code" href="classcsVector3.html">csVector3</a> GetCorner (<span class="keywordtype">int</span> corner) <span class="keyword">const</span>;
-00628 
-<a name="l00633"></a><a class="code" href="classcsBox3.html#a11">00633</a>   <span class="keywordtype">void</span> GetEdgeInfo (<span class="keywordtype">int</span> edge, <span class="keywordtype">int</span>&amp; v1, <span class="keywordtype">int</span>&amp; v2, <span class="keywordtype">int</span>&amp; fleft, <span class="keywordtype">int</span>&amp; fright)<span class="keyword"> const</span>
-00634 <span class="keyword">  </span>{
-00635     v1 = edges[edge].v1;
-00636     v2 = edges[edge].v2;
-00637     fleft = edges[edge].fl;
-00638     fright = edges[edge].fr;
-00639   }
-00640 
-<a name="l00645"></a><a class="code" href="classcsBox3.html#a12">00645</a>   <a class="code" href="group__util.html#ga0">uint8</a>* GetFaceEdges (<span class="keywordtype">int</span> face)<span class="keyword"> const</span>
-00646 <span class="keyword">  </span>{
-00647     <span class="keywordflow">return</span> faces[face];
-00648   }
-00649 
-<a name="l00653"></a><a class="code" href="classcsBox3.html#a13">00653</a>   <a class="code" href="classcsVector3.html">csVector3</a> GetCenter ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (minbox+maxbox)/2; }
+00448   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> csBox2&amp; box1, 
+00449     <span class="keyword">const</span> csBox2&amp; box2);
+00451   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&gt; (<span class="keyword">const</span> csBox2&amp; box1, 
+00452     <span class="keyword">const</span> csBox2&amp; box2);
+00454   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point, 
+00455     <span class="keyword">const</span> csBox2&amp; box);
+00456 };
+00457 
+00462 
+<a name="l00463"></a><a class="code" href="group__geom__utils.html#ga22">00463</a> <span class="preprocessor">#define CS_BOX_CORNER_xyz 0</span>
+00464 <span class="preprocessor"></span>
+<a name="l00465"></a><a class="code" href="group__geom__utils.html#ga23">00465</a> <span class="preprocessor">#define CS_BOX_CORNER_xyZ 1</span>
+00466 <span class="preprocessor"></span>
+<a name="l00467"></a><a class="code" href="group__geom__utils.html#ga24">00467</a> <span class="preprocessor">#define CS_BOX_CORNER_xYz 2</span>
+00468 <span class="preprocessor"></span>
+<a name="l00469"></a><a class="code" href="group__geom__utils.html#ga25">00469</a> <span class="preprocessor">#define CS_BOX_CORNER_xYZ 3</span>
+00470 <span class="preprocessor"></span>
+<a name="l00471"></a><a class="code" href="group__geom__utils.html#ga26">00471</a> <span class="preprocessor">#define CS_BOX_CORNER_Xyz 4</span>
+00472 <span class="preprocessor"></span>
+<a name="l00473"></a><a class="code" href="group__geom__utils.html#ga27">00473</a> <span class="preprocessor">#define CS_BOX_CORNER_XyZ 5</span>
+00474 <span class="preprocessor"></span>
+<a name="l00475"></a><a class="code" href="group__geom__utils.html#ga28">00475</a> <span class="preprocessor">#define CS_BOX_CORNER_XYz 6</span>
+00476 <span class="preprocessor"></span>
+<a name="l00477"></a><a class="code" href="group__geom__utils.html#ga29">00477</a> <span class="preprocessor">#define CS_BOX_CORNER_XYZ 7</span>
+00478 <span class="preprocessor"></span>
+<a name="l00479"></a><a class="code" href="group__geom__utils.html#ga30">00479</a> <span class="preprocessor">#define CS_BOX_CENTER3 8</span>
+00480 <span class="preprocessor"></span>
+00486 
+<a name="l00487"></a><a class="code" href="group__geom__utils.html#ga31">00487</a> <span class="preprocessor">#define CS_BOX_SIDE_x 0</span>
+00488 <span class="preprocessor"></span>
+<a name="l00489"></a><a class="code" href="group__geom__utils.html#ga32">00489</a> <span class="preprocessor">#define CS_BOX_SIDE_X 1</span>
+00490 <span class="preprocessor"></span>
+<a name="l00491"></a><a class="code" href="group__geom__utils.html#ga33">00491</a> <span class="preprocessor">#define CS_BOX_SIDE_y 2</span>
+00492 <span class="preprocessor"></span>
+<a name="l00493"></a><a class="code" href="group__geom__utils.html#ga34">00493</a> <span class="preprocessor">#define CS_BOX_SIDE_Y 3</span>
+00494 <span class="preprocessor"></span>
+<a name="l00495"></a><a class="code" href="group__geom__utils.html#ga35">00495</a> <span class="preprocessor">#define CS_BOX_SIDE_z 4</span>
+00496 <span class="preprocessor"></span>
+<a name="l00497"></a><a class="code" href="group__geom__utils.html#ga36">00497</a> <span class="preprocessor">#define CS_BOX_SIDE_Z 5</span>
+00498 <span class="preprocessor"></span>
+<a name="l00499"></a><a class="code" href="group__geom__utils.html#ga37">00499</a> <span class="preprocessor">#define CS_BOX_INSIDE 6</span>
+00500 <span class="preprocessor"></span>
+00506 
+<a name="l00507"></a><a class="code" href="group__geom__utils.html#ga38">00507</a> <span class="preprocessor">#define CS_BOX_EDGE_Xyz_xyz 0</span>
+00508 <span class="preprocessor"></span>
+<a name="l00509"></a><a class="code" href="group__geom__utils.html#ga39">00509</a> <span class="preprocessor">#define CS_BOX_EDGE_xyz_Xyz 1</span>
+00510 <span class="preprocessor"></span>
+<a name="l00511"></a><a class="code" href="group__geom__utils.html#ga40">00511</a> <span class="preprocessor">#define CS_BOX_EDGE_xyz_xYz 2</span>
+00512 <span class="preprocessor"></span>
+<a name="l00513"></a><a class="code" href="group__geom__utils.html#ga41">00513</a> <span class="preprocessor">#define CS_BOX_EDGE_xYz_xyz 3</span>
+00514 <span class="preprocessor"></span>
+<a name="l00515"></a><a class="code" href="group__geom__utils.html#ga42">00515</a> <span class="preprocessor">#define CS_BOX_EDGE_xYz_XYz 4</span>
+00516 <span class="preprocessor"></span>
+<a name="l00517"></a><a class="code" href="group__geom__utils.html#ga43">00517</a> <span class="preprocessor">#define CS_BOX_EDGE_XYz_xYz 5</span>
+00518 <span class="preprocessor"></span>
+<a name="l00519"></a><a class="code" href="group__geom__utils.html#ga44">00519</a> <span class="preprocessor">#define CS_BOX_EDGE_XYz_Xyz 6</span>
+00520 <span class="preprocessor"></span>
+<a name="l00521"></a><a class="code" href="group__geom__utils.html#ga45">00521</a> <span class="preprocessor">#define CS_BOX_EDGE_Xyz_XYz 7</span>
+00522 <span class="preprocessor"></span>
+<a name="l00523"></a><a class="code" href="group__geom__utils.html#ga46">00523</a> <span class="preprocessor">#define CS_BOX_EDGE_Xyz_XyZ 8</span>
+00524 <span class="preprocessor"></span>
+<a name="l00525"></a><a class="code" href="group__geom__utils.html#ga47">00525</a> <span class="preprocessor">#define CS_BOX_EDGE_XyZ_Xyz 9</span>
+00526 <span class="preprocessor"></span>
+<a name="l00527"></a><a class="code" href="group__geom__utils.html#ga48">00527</a> <span class="preprocessor">#define CS_BOX_EDGE_XyZ_XYZ 10</span>
+00528 <span class="preprocessor"></span>
+<a name="l00529"></a><a class="code" href="group__geom__utils.html#ga49">00529</a> <span class="preprocessor">#define CS_BOX_EDGE_XYZ_XyZ 11</span>
+00530 <span class="preprocessor"></span>
+<a name="l00531"></a><a class="code" href="group__geom__utils.html#ga50">00531</a> <span class="preprocessor">#define CS_BOX_EDGE_XYZ_XYz 12</span>
+00532 <span class="preprocessor"></span>
+<a name="l00533"></a><a class="code" href="group__geom__utils.html#ga51">00533</a> <span class="preprocessor">#define CS_BOX_EDGE_XYz_XYZ 13</span>
+00534 <span class="preprocessor"></span>
+<a name="l00535"></a><a class="code" href="group__geom__utils.html#ga52">00535</a> <span class="preprocessor">#define CS_BOX_EDGE_XYZ_xYZ 14</span>
+00536 <span class="preprocessor"></span>
+<a name="l00537"></a><a class="code" href="group__geom__utils.html#ga53">00537</a> <span class="preprocessor">#define CS_BOX_EDGE_xYZ_XYZ 15</span>
+00538 <span class="preprocessor"></span>
+<a name="l00539"></a><a class="code" href="group__geom__utils.html#ga54">00539</a> <span class="preprocessor">#define CS_BOX_EDGE_xYZ_xYz 16</span>
+00540 <span class="preprocessor"></span>
+<a name="l00541"></a><a class="code" href="group__geom__utils.html#ga55">00541</a> <span class="preprocessor">#define CS_BOX_EDGE_xYz_xYZ 17</span>
+00542 <span class="preprocessor"></span>
+<a name="l00543"></a><a class="code" href="group__geom__utils.html#ga56">00543</a> <span class="preprocessor">#define CS_BOX_EDGE_xYZ_xyZ 18</span>
+00544 <span class="preprocessor"></span>
+<a name="l00545"></a><a class="code" href="group__geom__utils.html#ga57">00545</a> <span class="preprocessor">#define CS_BOX_EDGE_xyZ_xYZ 19</span>
+00546 <span class="preprocessor"></span>
+<a name="l00547"></a><a class="code" href="group__geom__utils.html#ga58">00547</a> <span class="preprocessor">#define CS_BOX_EDGE_xyZ_xyz 20</span>
+00548 <span class="preprocessor"></span>
+<a name="l00549"></a><a class="code" href="group__geom__utils.html#ga59">00549</a> <span class="preprocessor">#define CS_BOX_EDGE_xyz_xyZ 21</span>
+00550 <span class="preprocessor"></span>
+<a name="l00551"></a><a class="code" href="group__geom__utils.html#ga60">00551</a> <span class="preprocessor">#define CS_BOX_EDGE_xyZ_XyZ 22</span>
+00552 <span class="preprocessor"></span>
+<a name="l00553"></a><a class="code" href="group__geom__utils.html#ga61">00553</a> <span class="preprocessor">#define CS_BOX_EDGE_XyZ_xyZ 23</span>
+00554 <span class="preprocessor"></span>
+<a name="l00563"></a><a class="code" href="classcsBox3.html">00563</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csBox3
+00564 {
+00565 <span class="keyword">protected</span>:
+<a name="l00567"></a><a class="code" href="classcsBox3.html#p0">00567</a>   <a class="code" href="classcsVector3.html">csVector3</a> minbox;
+<a name="l00569"></a><a class="code" href="classcsBox3.html#p1">00569</a>   <a class="code" href="classcsVector3.html">csVector3</a> maxbox;
+00573   <span class="keyword">struct </span>bEdge
+00574   {
+00575     <a class="code" href="group__util.html#ga0">uint8</a> v1, v2; <span class="comment">// Indices of vertex in bounding box (CS_BOX_CORNER_...)</span>
+00576     <a class="code" href="group__util.html#ga0">uint8</a> fl, fr; <span class="comment">// Indices of left/right faces sharing edge (CS_BOX_SIDE_...)</span>
+00577   };
+<a name="l00579"></a><a class="code" href="classcsBox3.html#x0">00579</a>   <span class="keyword">typedef</span> <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="classcsBox3.html#x0">bFace</a>[4];       
+<a name="l00584"></a><a class="code" href="classcsBox3.html#t0">00584</a>   <span class="keyword">static</span> bEdge edges[24];
+<a name="l00586"></a><a class="code" href="classcsBox3.html#t1">00586</a>   <span class="keyword">static</span> <a class="code" href="classcsBox3.html#x0">bFace</a> faces[6];
+00587 <span class="keyword">public</span>:
+<a name="l00589"></a><a class="code" href="classcsBox3.html#a0">00589</a>   <span class="keywordtype">float</span> MinX ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.x; }
+<a name="l00591"></a><a class="code" href="classcsBox3.html#a1">00591</a>   <span class="keywordtype">float</span> MinY ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.y; }
+<a name="l00593"></a><a class="code" href="classcsBox3.html#a2">00593</a>   <span class="keywordtype">float</span> MinZ ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox.z; }
+<a name="l00595"></a><a class="code" href="classcsBox3.html#a3">00595</a>   <span class="keywordtype">float</span> MaxX ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.x; }
+<a name="l00597"></a><a class="code" href="classcsBox3.html#a4">00597</a>   <span class="keywordtype">float</span> MaxY ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.y; }
+<a name="l00599"></a><a class="code" href="classcsBox3.html#a5">00599</a>   <span class="keywordtype">float</span> MaxZ ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox.z; }
+<a name="l00601"></a><a class="code" href="classcsBox3.html#a6">00601</a>   <span class="keywordtype">float</span> Min (<span class="keywordtype">int</span> idx)<span class="keyword"> const</span>
+00602 <span class="keyword">  </span>{ <span class="keywordflow">return</span> idx == 1 ? minbox.y : idx == 0 ? minbox.x : minbox.z; }
+<a name="l00604"></a><a class="code" href="classcsBox3.html#a7">00604</a>   <span class="keywordtype">float</span> Max (<span class="keywordtype">int</span> idx)<span class="keyword"> const</span>
+00605 <span class="keyword">  </span>{ <span class="keywordflow">return</span> idx == 1 ? maxbox.y : idx == 0 ? maxbox.x : maxbox.z; }
+<a name="l00607"></a><a class="code" href="classcsBox3.html#a8">00607</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; Min ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> minbox; }
+<a name="l00609"></a><a class="code" href="classcsBox3.html#a9">00609</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; Max ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> maxbox; }
+00610 
+00620   <a class="code" href="classcsVector3.html">csVector3</a> GetCorner (<span class="keywordtype">int</span> corner) <span class="keyword">const</span>;
+00621 
+<a name="l00627"></a><a class="code" href="classcsBox3.html#a11">00627</a>   <span class="keywordtype">void</span> GetEdgeInfo (<span class="keywordtype">int</span> edge, <span class="keywordtype">int</span>&amp; v1, <span class="keywordtype">int</span>&amp; v2, <span class="keywordtype">int</span>&amp; fleft, <span class="keywordtype">int</span>&amp; fright)<span class="keyword"> const</span>
+00628 <span class="keyword">  </span>{
+00629     v1 = edges[edge].v1;
+00630     v2 = edges[edge].v2;
+00631     fleft = edges[edge].fl;
+00632     fright = edges[edge].fr;
+00633   }
+00634 
+<a name="l00639"></a><a class="code" href="classcsBox3.html#a12">00639</a>   <a class="code" href="group__util.html#ga0">uint8</a>* GetFaceEdges (<span class="keywordtype">int</span> face)<span class="keyword"> const</span>
+00640 <span class="keyword">  </span>{
+00641     <span class="keywordflow">return</span> faces[face];
+00642   }
+00643 
+<a name="l00647"></a><a class="code" href="classcsBox3.html#a13">00647</a>   <a class="code" href="classcsVector3.html">csVector3</a> GetCenter ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (minbox+maxbox)/2; }
+00648 
+00653   <span class="keywordtype">void</span> SetCenter (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; c);
 00654 
-00659   <span class="keywordtype">void</span> SetCenter (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; c);
-00660 
-00664   <span class="keywordtype">void</span> SetSize (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; s);
+00658   <span class="keywordtype">void</span> SetSize (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; s);
+00659 
+00664   csBox2 GetSide (<span class="keywordtype">int</span> side) <span class="keyword">const</span>;
 00665 
-00670   csBox2 GetSide (<span class="keywordtype">int</span> side) <span class="keyword">const</span>;
-00671 
-00678   <span class="keywordtype">int</span> GetVisibleSides (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos, <span class="keywordtype">int</span>* visible_sides) <span class="keyword">const</span>;
-00679 
-<a name="l00684"></a><a class="code" href="classcsBox3.html#e0">00684</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> OtherSide (<span class="keywordtype">int</span> side)
-00685   {
-00686     <span class="keywordflow">return</span> side ^ 1;
-00687   }
-00688 
-<a name="l00694"></a><a class="code" href="classcsBox3.html#a18">00694</a>   <a class="code" href="classcsSegment3.html">csSegment3</a> GetEdge (<span class="keywordtype">int</span> edge)<span class="keyword"> const</span>
-00695 <span class="keyword">  </span>{
-00696     <span class="keywordflow">return</span> <a class="code" href="classcsSegment3.html">csSegment3</a> (GetCorner (edges[edge].v1), GetCorner (edges[edge].v2));
-00697   }
-00698 
-<a name="l00704"></a><a class="code" href="classcsBox3.html#a19">00704</a>   <span class="keywordtype">void</span> GetEdge (<span class="keywordtype">int</span> edge, <a class="code" href="classcsSegment3.html">csSegment3</a>&amp; e)<span class="keyword"> const</span>
-00705 <span class="keyword">  </span>{
-00706     e.<a class="code" href="classcsSegment3.html#a3">SetStart</a> (GetCorner (edges[edge].v1));
-00707     e.<a class="code" href="classcsSegment3.html#a4">SetEnd</a> (GetCorner (edges[edge].v2));
-00708   }
-00709 
-<a name="l00711"></a><a class="code" href="classcsBox3.html#a20">00711</a>   <span class="keywordtype">bool</span> In (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)<span class="keyword"> const</span>
-00712 <span class="keyword">  </span>{
-00713     <span class="keywordflow">if</span> (x &lt; minbox.x || x &gt; maxbox.x) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00714     <span class="keywordflow">if</span> (y &lt; minbox.y || y &gt; maxbox.y) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00715     <span class="keywordflow">if</span> (z &lt; minbox.z || z &gt; maxbox.z) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00716     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00672   <span class="keywordtype">int</span> GetVisibleSides (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos, <span class="keywordtype">int</span>* visible_sides) <span class="keyword">const</span>;
+00673 
+<a name="l00678"></a><a class="code" href="classcsBox3.html#e0">00678</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> OtherSide (<span class="keywordtype">int</span> side)
+00679   {
+00680     <span class="keywordflow">return</span> side ^ 1;
+00681   }
+00682 
+<a name="l00688"></a><a class="code" href="classcsBox3.html#a18">00688</a>   <a class="code" href="classcsSegment3.html">csSegment3</a> GetEdge (<span class="keywordtype">int</span> edge)<span class="keyword"> const</span>
+00689 <span class="keyword">  </span>{
+00690     <span class="keywordflow">return</span> <a class="code" href="classcsSegment3.html">csSegment3</a> (GetCorner (edges[edge].v1), GetCorner (edges[edge].v2));
+00691   }
+00692 
+<a name="l00698"></a><a class="code" href="classcsBox3.html#a19">00698</a>   <span class="keywordtype">void</span> GetEdge (<span class="keywordtype">int</span> edge, <a class="code" href="classcsSegment3.html">csSegment3</a>&amp; e)<span class="keyword"> const</span>
+00699 <span class="keyword">  </span>{
+00700     e.<a class="code" href="classcsSegment3.html#a3">SetStart</a> (GetCorner (edges[edge].v1));
+00701     e.<a class="code" href="classcsSegment3.html#a4">SetEnd</a> (GetCorner (edges[edge].v2));
+00702   }
+00703 
+<a name="l00705"></a><a class="code" href="classcsBox3.html#a20">00705</a>   <span class="keywordtype">bool</span> In (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)<span class="keyword"> const</span>
+00706 <span class="keyword">  </span>{
+00707     <span class="keywordflow">if</span> (x &lt; minbox.x || x &gt; maxbox.x) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00708     <span class="keywordflow">if</span> (y &lt; minbox.y || y &gt; maxbox.y) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00709     <span class="keywordflow">if</span> (z &lt; minbox.z || z &gt; maxbox.z) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00710     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00711   }
+00712 
+<a name="l00714"></a><a class="code" href="classcsBox3.html#a21">00714</a>   <span class="keywordtype">bool</span> In (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
+00715 <span class="keyword">  </span>{
+00716     <span class="keywordflow">return</span> In (v.x, v.y, v.z);
 00717   }
 00718 
-<a name="l00720"></a><a class="code" href="classcsBox3.html#a21">00720</a>   <span class="keywordtype">bool</span> In (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
+<a name="l00720"></a><a class="code" href="classcsBox3.html#a22">00720</a>   <span class="keywordtype">bool</span> Overlap (<span class="keyword">const</span> csBox3&amp; box)<span class="keyword"> const</span>
 00721 <span class="keyword">  </span>{
-00722     <span class="keywordflow">return</span> In (v.x, v.y, v.z);
-00723   }
-00724 
-<a name="l00726"></a><a class="code" href="classcsBox3.html#a22">00726</a>   <span class="keywordtype">bool</span> Overlap (<span class="keyword">const</span> csBox3&amp; box)<span class="keyword"> const</span>
-00727 <span class="keyword">  </span>{
-00728     <span class="keywordflow">if</span> (maxbox.x &lt; box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o0">x</a> || minbox.x &gt; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o0">x</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00729     <span class="keywordflow">if</span> (maxbox.y &lt; box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o1">y</a> || minbox.y &gt; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o1">y</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00730     <span class="keywordflow">if</span> (maxbox.z &lt; box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o2">z</a> || minbox.z &gt; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o2">z</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00731     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00732   }
-00733 
-<a name="l00735"></a><a class="code" href="classcsBox3.html#a23">00735</a>   <span class="keywordtype">bool</span> Contains (<span class="keyword">const</span> csBox3&amp; box)<span class="keyword"> const</span>
-00736 <span class="keyword">  </span>{
-00737     <span class="keywordflow">return</span> (box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o0">x</a> &gt;= minbox.x &amp;&amp; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o0">x</a> &lt;= maxbox.x) &amp;&amp;
-00738            (box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o1">y</a> &gt;= minbox.y &amp;&amp; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o1">y</a> &lt;= maxbox.y) &amp;&amp;
-00739            (box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o2">z</a> &gt;= minbox.z &amp;&amp; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o2">z</a> &lt;= maxbox.z);
-00740   }
-00741 
-<a name="l00743"></a><a class="code" href="classcsBox3.html#a24">00743</a>   <span class="keywordtype">bool</span> Empty ()<span class="keyword"> const</span>
-00744 <span class="keyword">  </span>{
-00745     <span class="keywordflow">if</span> (minbox.x &gt; maxbox.x) <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00746     <span class="keywordflow">if</span> (minbox.y &gt; maxbox.y) <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00747     <span class="keywordflow">if</span> (minbox.z &gt; maxbox.z) <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00748     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00749   }
-00750 
-<a name="l00752"></a><a class="code" href="classcsBox3.html#a25">00752</a>   <span class="keywordtype">void</span> StartBoundingBox ()
-00753   {
-00754     minbox.x =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
-00755     minbox.y =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
-00756     minbox.z =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
-00757     maxbox.x = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
-00758     maxbox.y = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
-00759     maxbox.z = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
+00722     <span class="keywordflow">if</span> (maxbox.x &lt; box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o0">x</a> || minbox.x &gt; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o0">x</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00723     <span class="keywordflow">if</span> (maxbox.y &lt; box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o1">y</a> || minbox.y &gt; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o1">y</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00724     <span class="keywordflow">if</span> (maxbox.z &lt; box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o2">z</a> || minbox.z &gt; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o2">z</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00725     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00726   }
+00727 
+<a name="l00729"></a><a class="code" href="classcsBox3.html#a23">00729</a>   <span class="keywordtype">bool</span> Contains (<span class="keyword">const</span> csBox3&amp; box)<span class="keyword"> const</span>
+00730 <span class="keyword">  </span>{
+00731     <span class="keywordflow">return</span> (box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o0">x</a> &gt;= minbox.x &amp;&amp; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o0">x</a> &lt;= maxbox.x) &amp;&amp;
+00732            (box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o1">y</a> &gt;= minbox.y &amp;&amp; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o1">y</a> &lt;= maxbox.y) &amp;&amp;
+00733            (box.<a class="code" href="classcsBox3.html#p0">minbox</a>.<a class="code" href="classcsVector3.html#o2">z</a> &gt;= minbox.z &amp;&amp; box.<a class="code" href="classcsBox3.html#p1">maxbox</a>.<a class="code" href="classcsVector3.html#o2">z</a> &lt;= maxbox.z);
+00734   }
+00735 
+<a name="l00737"></a><a class="code" href="classcsBox3.html#a24">00737</a>   <span class="keywordtype">bool</span> Empty ()<span class="keyword"> const</span>
+00738 <span class="keyword">  </span>{
+00739     <span class="keywordflow">if</span> (minbox.x &gt; maxbox.x) <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00740     <span class="keywordflow">if</span> (minbox.y &gt; maxbox.y) <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00741     <span class="keywordflow">if</span> (minbox.z &gt; maxbox.z) <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00742     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00743   }
+00744 
+<a name="l00746"></a><a class="code" href="classcsBox3.html#a25">00746</a>   <span class="keywordtype">void</span> StartBoundingBox ()
+00747   {
+00748     minbox.x =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
+00749     minbox.y =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
+00750     minbox.z =  <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
+00751     maxbox.x = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
+00752     maxbox.y = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
+00753     maxbox.z = -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>;
+00754   }
+00755 
+<a name="l00757"></a><a class="code" href="classcsBox3.html#a26">00757</a>   <span class="keywordtype">void</span> StartBoundingBox (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00758   {
+00759     minbox = v; maxbox = v;
 00760   }
 00761 
-<a name="l00763"></a><a class="code" href="classcsBox3.html#a26">00763</a>   <span class="keywordtype">void</span> StartBoundingBox (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+<a name="l00763"></a><a class="code" href="classcsBox3.html#a27">00763</a>   <span class="keywordtype">void</span> AddBoundingVertex (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)
 00764   {
-00765     minbox = v; maxbox = v;
-00766   }
-00767 
-<a name="l00769"></a><a class="code" href="classcsBox3.html#a27">00769</a>   <span class="keywordtype">void</span> AddBoundingVertex (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)
-00770   {
-00771     <span class="keywordflow">if</span> (x &lt; minbox.x) minbox.x = x; <span class="keywordflow">if</span> (x &gt; maxbox.x) maxbox.x = x;
-00772     <span class="keywordflow">if</span> (y &lt; minbox.y) minbox.y = y; <span class="keywordflow">if</span> (y &gt; maxbox.y) maxbox.y = y;
-00773     <span class="keywordflow">if</span> (z &lt; minbox.z) minbox.z = z; <span class="keywordflow">if</span> (z &gt; maxbox.z) maxbox.z = z;
+00765     <span class="keywordflow">if</span> (x &lt; minbox.x) minbox.x = x; <span class="keywordflow">if</span> (x &gt; maxbox.x) maxbox.x = x;
+00766     <span class="keywordflow">if</span> (y &lt; minbox.y) minbox.y = y; <span class="keywordflow">if</span> (y &gt; maxbox.y) maxbox.y = y;
+00767     <span class="keywordflow">if</span> (z &lt; minbox.z) minbox.z = z; <span class="keywordflow">if</span> (z &gt; maxbox.z) maxbox.z = z;
+00768   }
+00769 
+<a name="l00771"></a><a class="code" href="classcsBox3.html#a28">00771</a>   <span class="keywordtype">void</span> AddBoundingVertex (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00772   {
+00773     AddBoundingVertex (v.x, v.y, v.z);
 00774   }
 00775 
-<a name="l00777"></a><a class="code" href="classcsBox3.html#a28">00777</a>   <span class="keywordtype">void</span> AddBoundingVertex (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-00778   {
-00779     AddBoundingVertex (v.x, v.y, v.z);
-00780   }
-00781 
-<a name="l00787"></a><a class="code" href="classcsBox3.html#a29">00787</a>   <span class="keywordtype">void</span> AddBoundingVertexSmart (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)
-00788   {
-00789     <span class="keywordflow">if</span> (x &lt; minbox.x) minbox.x = x; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (x &gt; maxbox.x) maxbox.x = x;
-00790     <span class="keywordflow">if</span> (y &lt; minbox.y) minbox.y = y; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (y &gt; maxbox.y) maxbox.y = y;
-00791     <span class="keywordflow">if</span> (z &lt; minbox.z) minbox.z = z; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (z &gt; maxbox.z) maxbox.z = z;
-00792   }
-00793 
-<a name="l00799"></a><a class="code" href="classcsBox3.html#a30">00799</a>   <span class="keywordtype">void</span> AddBoundingVertexSmart (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-00800   {
-00801     AddBoundingVertexSmart (v.x, v.y, v.z);
-00802   }
-00803 
-<a name="l00808"></a><a class="code" href="classcsBox3.html#a31">00808</a>   <span class="keywordtype">bool</span> AddBoundingVertexTest (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)
-00809   {
-00810     <span class="keywordtype">bool</span> rc = <span class="keyword">false</span>;
-00811     <span class="keywordflow">if</span> (x &lt; minbox.x) { minbox.x = x; rc = <span class="keyword">true</span>; }
-00812     <span class="keywordflow">if</span> (x &gt; maxbox.x) { maxbox.x = x; rc = <span class="keyword">true</span>; }
-00813     <span class="keywordflow">if</span> (y &lt; minbox.y) { minbox.y = y; rc = <span class="keyword">true</span>; }
-00814     <span class="keywordflow">if</span> (y &gt; maxbox.y) { maxbox.y = y; rc = <span class="keyword">true</span>; }
-00815     <span class="keywordflow">if</span> (z &lt; minbox.z) { minbox.z = z; rc = <span class="keyword">true</span>; }
-00816     <span class="keywordflow">if</span> (z &gt; maxbox.z) { maxbox.z = z; rc = <span class="keyword">true</span>; }
-00817     <span class="keywordflow">return</span> rc;
-00818   }
-00819 
-<a name="l00824"></a><a class="code" href="classcsBox3.html#a32">00824</a>   <span class="keywordtype">bool</span> AddBoundingVertexTest (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-00825   {
-00826     <span class="keywordflow">return</span> AddBoundingVertexTest (v.x, v.y, v.z);
-00827   }
-00828 
-<a name="l00835"></a><a class="code" href="classcsBox3.html#a33">00835</a>   <span class="keywordtype">bool</span> AddBoundingVertexSmartTest (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)
-00836   {
-00837     <span class="keywordtype">bool</span> rc = <span class="keyword">false</span>;
-00838     <span class="keywordflow">if</span> (x &lt; minbox.x) { minbox.x = x; rc = <span class="keyword">true</span>; }
-00839     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (x &gt; maxbox.x) { maxbox.x = x; rc = <span class="keyword">true</span>; }
-00840     <span class="keywordflow">if</span> (y &lt; minbox.y) { minbox.y = y; rc = <span class="keyword">true</span>; }
-00841     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (y &gt; maxbox.y) { maxbox.y = y; rc = <span class="keyword">true</span>; }
-00842     <span class="keywordflow">if</span> (z &lt; minbox.z) { minbox.z = z; rc = <span class="keyword">true</span>; }
-00843     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (z &gt; maxbox.z) { maxbox.z = z; rc = <span class="keyword">true</span>; }
-00844     <span class="keywordflow">return</span> rc;
-00845   }
-00846 
-<a name="l00853"></a><a class="code" href="classcsBox3.html#a34">00853</a>   <span class="keywordtype">bool</span> AddBoundingVertexSmartTest (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-00854   {
-00855     <span class="keywordflow">return</span> AddBoundingVertexSmartTest (v.x, v.y, v.z);
-00856   }
-00857 
-00858   <span class="comment">//-----</span>
-00859   <span class="comment">// Maintenance Note: The csBox3 constructors and Set() appear at this point</span>
-00860   <span class="comment">// in the file, rather than earlier, in order to appease the OpenStep 4.2</span>
-00861   <span class="comment">// compiler.  Specifically, the problem is that the compiler botches code</span>
-00862   <span class="comment">// generation if an unseen method (which is later declared inline) is</span>
-00863   <span class="comment">// called from within another inline method.  For instance, if the</span>
-00864   <span class="comment">// constructors were listed at the top of the file, rather than here, the</span>
-00865   <span class="comment">// compiler would see calls to Empty() and StartBoundingBox() before seeing</span>
-00866   <span class="comment">// declarations for them.  In such a situation, the buggy compiler</span>
-00867   <span class="comment">// generated a broken object file.  The simple work-around of textually</span>
-00868   <span class="comment">// reorganizing the file ensures that the declarations for Empty() and</span>
-00869   <span class="comment">// StartBoundingBox() are seen before they are called.</span>
-00870   <span class="comment">//-----</span>
-00871 
-<a name="l00873"></a><a class="code" href="classcsBox3.html#a35">00873</a>   csBox3 () :
-00874     minbox ( <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>,
-00875              <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>,
-00876              <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>),
-00877     maxbox (-<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>,
-00878             -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>,
-00879             -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>) {}
+<a name="l00781"></a><a class="code" href="classcsBox3.html#a29">00781</a>   <span class="keywordtype">void</span> AddBoundingVertexSmart (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)
+00782   {
+00783     <span class="keywordflow">if</span> (x &lt; minbox.x) minbox.x = x; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (x &gt; maxbox.x) maxbox.x = x;
+00784     <span class="keywordflow">if</span> (y &lt; minbox.y) minbox.y = y; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (y &gt; maxbox.y) maxbox.y = y;
+00785     <span class="keywordflow">if</span> (z &lt; minbox.z) minbox.z = z; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (z &gt; maxbox.z) maxbox.z = z;
+00786   }
+00787 
+<a name="l00793"></a><a class="code" href="classcsBox3.html#a30">00793</a>   <span class="keywordtype">void</span> AddBoundingVertexSmart (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00794   {
+00795     AddBoundingVertexSmart (v.x, v.y, v.z);
+00796   }
+00797 
+<a name="l00802"></a><a class="code" href="classcsBox3.html#a31">00802</a>   <span class="keywordtype">bool</span> AddBoundingVertexTest (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)
+00803   {
+00804     <span class="keywordtype">bool</span> rc = <span class="keyword">false</span>;
+00805     <span class="keywordflow">if</span> (x &lt; minbox.x) { minbox.x = x; rc = <span class="keyword">true</span>; }
+00806     <span class="keywordflow">if</span> (x &gt; maxbox.x) { maxbox.x = x; rc = <span class="keyword">true</span>; }
+00807     <span class="keywordflow">if</span> (y &lt; minbox.y) { minbox.y = y; rc = <span class="keyword">true</span>; }
+00808     <span class="keywordflow">if</span> (y &gt; maxbox.y) { maxbox.y = y; rc = <span class="keyword">true</span>; }
+00809     <span class="keywordflow">if</span> (z &lt; minbox.z) { minbox.z = z; rc = <span class="keyword">true</span>; }
+00810     <span class="keywordflow">if</span> (z &gt; maxbox.z) { maxbox.z = z; rc = <span class="keyword">true</span>; }
+00811     <span class="keywordflow">return</span> rc;
+00812   }
+00813 
+<a name="l00818"></a><a class="code" href="classcsBox3.html#a32">00818</a>   <span class="keywordtype">bool</span> AddBoundingVertexTest (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00819   {
+00820     <span class="keywordflow">return</span> AddBoundingVertexTest (v.x, v.y, v.z);
+00821   }
+00822 
+<a name="l00829"></a><a class="code" href="classcsBox3.html#a33">00829</a>   <span class="keywordtype">bool</span> AddBoundingVertexSmartTest (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z)
+00830   {
+00831     <span class="keywordtype">bool</span> rc = <span class="keyword">false</span>;
+00832     <span class="keywordflow">if</span> (x &lt; minbox.x) { minbox.x = x; rc = <span class="keyword">true</span>; }
+00833     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (x &gt; maxbox.x) { maxbox.x = x; rc = <span class="keyword">true</span>; }
+00834     <span class="keywordflow">if</span> (y &lt; minbox.y) { minbox.y = y; rc = <span class="keyword">true</span>; }
+00835     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (y &gt; maxbox.y) { maxbox.y = y; rc = <span class="keyword">true</span>; }
+00836     <span class="keywordflow">if</span> (z &lt; minbox.z) { minbox.z = z; rc = <span class="keyword">true</span>; }
+00837     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (z &gt; maxbox.z) { maxbox.z = z; rc = <span class="keyword">true</span>; }
+00838     <span class="keywordflow">return</span> rc;
+00839   }
+00840 
+<a name="l00847"></a><a class="code" href="classcsBox3.html#a34">00847</a>   <span class="keywordtype">bool</span> AddBoundingVertexSmartTest (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00848   {
+00849     <span class="keywordflow">return</span> AddBoundingVertexSmartTest (v.x, v.y, v.z);
+00850   }
+00851 
+<a name="l00853"></a><a class="code" href="classcsBox3.html#a35">00853</a>   csBox3 () :
+00854     minbox ( <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>,
+00855              <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>,
+00856              <a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>),
+00857     maxbox (-<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>,
+00858             -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>,
+00859             -<a class="code" href="group__geom__utils.html#ga8">CS_BOUNDINGBOX_MAXVALUE</a>) {}
+00860 
+<a name="l00862"></a><a class="code" href="classcsBox3.html#a36">00862</a>   csBox3 (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) : minbox (v), maxbox (v) { }
+00863 
+<a name="l00865"></a><a class="code" href="classcsBox3.html#a37">00865</a>   csBox3 (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2) :
+00866         minbox (v1), maxbox (v2)
+00867   { <span class="keywordflow">if</span> (Empty ()) StartBoundingBox (); }
+00868 
+<a name="l00870"></a><a class="code" href="classcsBox3.html#a38">00870</a>   csBox3 (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> z1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">float</span> z2) :
+00871     minbox (x1, y1, z1), maxbox (x2, y2, z2)
+00872   { <span class="keywordflow">if</span> (Empty ()) StartBoundingBox (); }
+00873 
+<a name="l00875"></a><a class="code" href="classcsBox3.html#a39">00875</a>   <span class="keywordtype">void</span> Set (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmin, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmax)
+00876   {
+00877     minbox = bmin;
+00878     maxbox = bmax;
+00879   }
 00880 
-<a name="l00882"></a><a class="code" href="classcsBox3.html#a36">00882</a>   csBox3 (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) : minbox (v), maxbox (v) { }
-00883 
-<a name="l00885"></a><a class="code" href="classcsBox3.html#a37">00885</a>   csBox3 (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2) :
-00886         minbox (v1), maxbox (v2)
-00887   { <span class="keywordflow">if</span> (Empty ()) StartBoundingBox (); }
-00888 
-<a name="l00890"></a><a class="code" href="classcsBox3.html#a38">00890</a>   csBox3 (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> z1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">float</span> z2) :
-00891     minbox (x1, y1, z1), maxbox (x2, y2, z2)
-00892   { <span class="keywordflow">if</span> (Empty ()) StartBoundingBox (); }
-00893 
-<a name="l00895"></a><a class="code" href="classcsBox3.html#a39">00895</a>   <span class="keywordtype">void</span> Set (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmin, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmax)
-00896   {
-00897     minbox = bmin;
-00898     maxbox = bmax;
-00899   }
-00900 
-<a name="l00902"></a><a class="code" href="classcsBox3.html#a40">00902</a>   <span class="keywordtype">void</span> Set (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> z1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">float</span> z2)
-00903   {
-00904     <span class="keywordflow">if</span> (x1&gt;x2 || y1&gt;y2 || z1&gt;z2) StartBoundingBox();
-00905     <span class="keywordflow">else</span>
-00906     {
-00907       minbox.x = x1; minbox.y = y1; minbox.z = z1;
-00908       maxbox.x = x2; maxbox.y = y2; maxbox.z = z2;
-00909     }
-00910   }
-00911 
-<a name="l00913"></a><a class="code" href="classcsBox3.html#a41">00913</a>   <span class="keywordtype">void</span> SetMin (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> val)
-00914   {
-00915     <span class="keywordflow">if</span> (idx == 1) minbox.y = val;
-00916     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (idx == 0) minbox.x = val;
-00917     <span class="keywordflow">else</span> minbox.z = val;
-00918   }
-00919 
-<a name="l00921"></a><a class="code" href="classcsBox3.html#a42">00921</a>   <span class="keywordtype">void</span> SetMax (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> val)
-00922   {
-00923     <span class="keywordflow">if</span> (idx == 1) maxbox.y = val;
-00924     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (idx == 0) maxbox.x = val;
-00925     <span class="keywordflow">else</span> maxbox.z = val;
-00926   }
-00927 
-<a name="l00931"></a><a class="code" href="classcsBox3.html#a43">00931</a>   <span class="keywordtype">void</span> Split (<span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where, csBox3&amp; bl, csBox3&amp; br)<span class="keyword"> const</span>
-00932 <span class="keyword">  </span>{
-00933     <span class="keywordflow">switch</span> (axis)
-00934     {
-00935       <span class="keywordflow">case</span> CS_AXIS_X:
-00936         bl.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, minbox.y, minbox.z,
-00937                 where,    maxbox.y, maxbox.z);
-00938         br.<a class="code" href="classcsBox3.html#a39">Set</a> (where,    minbox.y, minbox.z,
-00939                 maxbox.x, maxbox.y, maxbox.z);
-00940         <span class="keywordflow">break</span>;
-00941       <span class="keywordflow">case</span> CS_AXIS_Y:
-00942         bl.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, minbox.y, minbox.z,
-00943                 maxbox.x, where,    maxbox.z);
-00944         br.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, where,    minbox.z,
-00945                 maxbox.x, maxbox.y, maxbox.z);
-00946         <span class="keywordflow">break</span>;
-00947       <span class="keywordflow">case</span> CS_AXIS_Z:
-00948         bl.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, minbox.y, minbox.z,
-00949                 maxbox.x, maxbox.y, where);
-00950         br.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, minbox.y, where,
-00951                 maxbox.x, maxbox.y, maxbox.z);
-00952         <span class="keywordflow">break</span>;
-00953     }
-00954   }
-00955 
-<a name="l00962"></a><a class="code" href="classcsBox3.html#a44">00962</a>   <span class="keywordtype">int</span> TestSplit (<span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where)<span class="keyword"> const</span>
-00963 <span class="keyword">  </span>{
-00964     <span class="keywordflow">if</span> (maxbox[axis] &lt; where) <span class="keywordflow">return</span> -1;
-00965     <span class="keywordflow">if</span> (minbox[axis] &gt; where) <span class="keywordflow">return</span> 1;
-00966     <span class="keywordflow">return</span> 0;
-00967   }
-00968 
-00972   <span class="keywordtype">bool</span> AdjacentX (<span class="keyword">const</span> csBox3&amp; other) <span class="keyword">const</span>;
-00973 
-00977   <span class="keywordtype">bool</span> AdjacentY (<span class="keyword">const</span> csBox3&amp; other) <span class="keyword">const</span>;
-00978 
-00982   <span class="keywordtype">bool</span> AdjacentZ (<span class="keyword">const</span> csBox3&amp; other) <span class="keyword">const</span>;
-00983 
-00990   <span class="keywordtype">int</span> Adjacent (<span class="keyword">const</span> csBox3&amp; other) <span class="keyword">const</span>;
-00991 
-00998   <span class="keywordtype">int</span> CalculatePointSegment (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) <span class="keyword">const</span>;
-00999 
-01008   <span class="keywordtype">void</span> GetConvexOutline (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos,
-01009         <a class="code" href="classcsVector3.html">csVector3</a>* array, <span class="keywordtype">int</span>&amp; num_array, <span class="keywordtype">bool</span> bVisible=<span class="keyword">false</span>) <span class="keyword">const</span>;
-01010 
-01014   <span class="keywordtype">bool</span> Between (<span class="keyword">const</span> csBox3&amp; box1, <span class="keyword">const</span> csBox3&amp; box2) <span class="keyword">const</span>;
-01015 
-01020   <span class="keywordtype">void</span> ManhattanDistance (<span class="keyword">const</span> csBox3&amp; other, <a class="code" href="classcsVector3.html">csVector3</a>&amp; dist) <span class="keyword">const</span>;
-01021 
-01026   <span class="keywordtype">float</span> SquaredOriginDist () <span class="keyword">const</span>;
-01027 
-01033   <span class="keywordtype">float</span> SquaredOriginMaxDist () <span class="keyword">const</span>;
+<a name="l00882"></a><a class="code" href="classcsBox3.html#a40">00882</a>   <span class="keywordtype">void</span> Set (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> z1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">float</span> z2)
+00883   {
+00884     <span class="keywordflow">if</span> (x1&gt;x2 || y1&gt;y2 || z1&gt;z2) StartBoundingBox();
+00885     <span class="keywordflow">else</span>
+00886     {
+00887       minbox.x = x1; minbox.y = y1; minbox.z = z1;
+00888       maxbox.x = x2; maxbox.y = y2; maxbox.z = z2;
+00889     }
+00890   }
+00891 
+<a name="l00893"></a><a class="code" href="classcsBox3.html#a41">00893</a>   <span class="keywordtype">void</span> SetMin (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> val)
+00894   {
+00895     <span class="keywordflow">if</span> (idx == 1) minbox.y = val;
+00896     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (idx == 0) minbox.x = val;
+00897     <span class="keywordflow">else</span> minbox.z = val;
+00898   }
+00899 
+<a name="l00901"></a><a class="code" href="classcsBox3.html#a42">00901</a>   <span class="keywordtype">void</span> SetMax (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> val)
+00902   {
+00903     <span class="keywordflow">if</span> (idx == 1) maxbox.y = val;
+00904     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (idx == 0) maxbox.x = val;
+00905     <span class="keywordflow">else</span> maxbox.z = val;
+00906   }
+00907 
+00912   <a class="code" href="classcsString.html">csString</a> Description() <span class="keyword">const</span>;
+00913 
+<a name="l00917"></a><a class="code" href="classcsBox3.html#a44">00917</a>   <span class="keywordtype">void</span> Split (<span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where, csBox3&amp; bl, csBox3&amp; br)<span class="keyword"> const</span>
+00918 <span class="keyword">  </span>{
+00919     <span class="keywordflow">switch</span> (axis)
+00920     {
+00921       <span class="keywordflow">case</span> CS_AXIS_X:
+00922         bl.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, minbox.y, minbox.z,
+00923                 where,    maxbox.y, maxbox.z);
+00924         br.<a class="code" href="classcsBox3.html#a39">Set</a> (where,    minbox.y, minbox.z,
+00925                 maxbox.x, maxbox.y, maxbox.z);
+00926         <span class="keywordflow">break</span>;
+00927       <span class="keywordflow">case</span> CS_AXIS_Y:
+00928         bl.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, minbox.y, minbox.z,
+00929                 maxbox.x, where,    maxbox.z);
+00930         br.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, where,    minbox.z,
+00931                 maxbox.x, maxbox.y, maxbox.z);
+00932         <span class="keywordflow">break</span>;
+00933       <span class="keywordflow">case</span> CS_AXIS_Z:
+00934         bl.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, minbox.y, minbox.z,
+00935                 maxbox.x, maxbox.y, where);
+00936         br.<a class="code" href="classcsBox3.html#a39">Set</a> (minbox.x, minbox.y, where,
+00937                 maxbox.x, maxbox.y, maxbox.z);
+00938         <span class="keywordflow">break</span>;
+00939     }
+00940   }
+00941 
+<a name="l00948"></a><a class="code" href="classcsBox3.html#a45">00948</a>   <span class="keywordtype">int</span> TestSplit (<span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where)<span class="keyword"> const</span>
+00949 <span class="keyword">  </span>{
+00950     <span class="keywordflow">if</span> (maxbox[axis] &lt; where) <span class="keywordflow">return</span> -1;
+00951     <span class="keywordflow">if</span> (minbox[axis] &gt; where) <span class="keywordflow">return</span> 1;
+00952     <span class="keywordflow">return</span> 0;
+00953   }
+00954 
+00958   <span class="keywordtype">bool</span> AdjacentX (<span class="keyword">const</span> csBox3&amp; other) <span class="keyword">const</span>;
+00959 
+00963   <span class="keywordtype">bool</span> AdjacentY (<span class="keyword">const</span> csBox3&amp; other) <span class="keyword">const</span>;
+00964 
+00968   <span class="keywordtype">bool</span> AdjacentZ (<span class="keyword">const</span> csBox3&amp; other) <span class="keyword">const</span>;
+00969 
+00976   <span class="keywordtype">int</span> Adjacent (<span class="keyword">const</span> csBox3&amp; other) <span class="keyword">const</span>;
+00977 
+00984   <span class="keywordtype">int</span> CalculatePointSegment (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) <span class="keyword">const</span>;
+00985 
+00994   <span class="keywordtype">void</span> GetConvexOutline (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos,
+00995         <a class="code" href="classcsVector3.html">csVector3</a>* array, <span class="keywordtype">int</span>&amp; num_array, <span class="keywordtype">bool</span> bVisible=<span class="keyword">false</span>) <span class="keyword">const</span>;
+00996 
+01000   <span class="keywordtype">bool</span> Between (<span class="keyword">const</span> csBox3&amp; box1, <span class="keyword">const</span> csBox3&amp; box2) <span class="keyword">const</span>;
+01001 
+01006   <span class="keywordtype">void</span> ManhattanDistance (<span class="keyword">const</span> csBox3&amp; other, <a class="code" href="classcsVector3.html">csVector3</a>&amp; dist) <span class="keyword">const</span>;
+01007 
+01012   <span class="keywordtype">float</span> SquaredOriginDist () <span class="keyword">const</span>;
+01013 
+01019   <span class="keywordtype">float</span> SquaredOriginMaxDist () <span class="keyword">const</span>;
+01020 
+01032   <span class="keywordtype">bool</span> ProjectBox (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; trans, <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy,
+01033         csBox2&amp; sbox, <span class="keywordtype">float</span>&amp; min_z, <span class="keywordtype">float</span>&amp; max_z) <span class="keyword">const</span>;
 01034 
-01046   <span class="keywordtype">bool</span> ProjectBox (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; trans, <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy,
-01047         csBox2&amp; sbox, <span class="keywordtype">float</span>&amp; min_z, <span class="keywordtype">float</span>&amp; max_z) <span class="keyword">const</span>;
-01048 
-01058   <span class="keywordtype">bool</span> ProjectOutline (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; trans, <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy,
-01059         <a class="code" href="classcsPoly2D.html">csPoly2D</a>&amp; poly, <span class="keywordtype">float</span>&amp; min_z, <span class="keywordtype">float</span>&amp; max_z) <span class="keyword">const</span>;
-01060 
-01068   <span class="keywordtype">bool</span> ProjectOutline (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; origin,
-01069         <span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where, <a class="code" href="classcsArray.html">csArray&lt;csVector2&gt;</a>&amp; poly) <span class="keyword">const</span>;
-01070 
-01076   <span class="keywordtype">bool</span> ProjectOutline (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; origin,
-01077         <span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where, <a class="code" href="classcsPoly2D.html">csPoly2D</a>&amp; poly) <span class="keyword">const</span>;
-01078 
-01091   <span class="keywordtype">bool</span> ProjectBoxAndOutline (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; trans, <span class="keywordtype">float</span> fov,
-01092         <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, csBox2&amp; sbox, <a class="code" href="classcsPoly2D.html">csPoly2D</a>&amp; poly,
-01093         <span class="keywordtype">float</span>&amp; min_z, <span class="keywordtype">float</span>&amp; max_z) <span class="keyword">const</span>;
-01094 
-01096   csBox3&amp; operator+= (<span class="keyword">const</span> csBox3&amp; box);
-01098   csBox3&amp; operator+= (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
-01100   csBox3&amp; operator*= (<span class="keyword">const</span> csBox3&amp; box);
-01102   <span class="keywordtype">bool</span> TestIntersect (<span class="keyword">const</span> csBox3&amp; box) <span class="keyword">const</span>;
-01103 
-01105   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox3 <a class="code" href="csstring_8h.html#a12">operator+ </a>(<span class="keyword">const</span> csBox3&amp; box1, 
-01106     <span class="keyword">const</span> csBox3&amp; box2);
-01108   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox3 <a class="code" href="csstring_8h.html#a12">operator+ </a>(<span class="keyword">const</span> csBox3&amp; box, 
-01109     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
-01111   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox3 operator* (<span class="keyword">const</span> csBox3&amp; box1, 
-01112     <span class="keyword">const</span> csBox3&amp; box2);
-01113 
-01115   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> csBox3&amp; box1, 
-01116     <span class="keyword">const</span> csBox3&amp; box2);
-01118   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> csBox3&amp; box1, 
-01119     <span class="keyword">const</span> csBox3&amp; box2);
-01121   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> csBox3&amp; box1, 
-01122     <span class="keyword">const</span> csBox3&amp; box2);
-01124   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&gt; (<span class="keyword">const</span> csBox3&amp; box1, 
-01125     <span class="keyword">const</span> csBox3&amp; box2);
-01127   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, 
-01128     <span class="keyword">const</span> csBox3&amp; box);
-01129 };
-01130 
-01133 <span class="preprocessor">#endif // __CS_BOX_H__</span>
+01044   <span class="keywordtype">bool</span> ProjectOutline (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; trans, <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy,
+01045         <a class="code" href="classcsPoly2D.html">csPoly2D</a>&amp; poly, <span class="keywordtype">float</span>&amp; min_z, <span class="keywordtype">float</span>&amp; max_z) <span class="keyword">const</span>;
+01046 
+01054   <span class="keywordtype">bool</span> ProjectOutline (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; origin,
+01055         <span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where, <a class="code" href="classcsArray.html">csArray&lt;csVector2&gt;</a>&amp; poly) <span class="keyword">const</span>;
+01056 
+01062   <span class="keywordtype">bool</span> ProjectOutline (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; origin,
+01063         <span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where, <a class="code" href="classcsPoly2D.html">csPoly2D</a>&amp; poly) <span class="keyword">const</span>;
+01064 
+01077   <span class="keywordtype">bool</span> ProjectBoxAndOutline (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; trans, <span class="keywordtype">float</span> fov,
+01078         <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, csBox2&amp; sbox, <a class="code" href="classcsPoly2D.html">csPoly2D</a>&amp; poly,
+01079         <span class="keywordtype">float</span>&amp; min_z, <span class="keywordtype">float</span>&amp; max_z) <span class="keyword">const</span>;
+01080 
+01082   csBox3&amp; operator+= (<span class="keyword">const</span> csBox3&amp; box);
+01084   csBox3&amp; operator+= (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
+01086   csBox3&amp; operator*= (<span class="keyword">const</span> csBox3&amp; box);
+01088   <span class="keywordtype">bool</span> TestIntersect (<span class="keyword">const</span> csBox3&amp; box) <span class="keyword">const</span>;
+01089 
+01091   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox3 <a class="code" href="csstring_8h.html#a12">operator+ </a>(<span class="keyword">const</span> csBox3&amp; box1, 
+01092     <span class="keyword">const</span> csBox3&amp; box2);
+01094   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox3 <a class="code" href="csstring_8h.html#a12">operator+ </a>(<span class="keyword">const</span> csBox3&amp; box, 
+01095     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
+01097   <span class="keyword">friend</span> CS_CSGEOM_EXPORT csBox3 operator* (<span class="keyword">const</span> csBox3&amp; box1, 
+01098     <span class="keyword">const</span> csBox3&amp; box2);
+01099 
+01101   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> csBox3&amp; box1, 
+01102     <span class="keyword">const</span> csBox3&amp; box2);
+01104   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> csBox3&amp; box1, 
+01105     <span class="keyword">const</span> csBox3&amp; box2);
+01107   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> csBox3&amp; box1, 
+01108     <span class="keyword">const</span> csBox3&amp; box2);
+01110   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&gt; (<span class="keyword">const</span> csBox3&amp; box1, 
+01111     <span class="keyword">const</span> csBox3&amp; box2);
+01113   <span class="keyword">friend</span> CS_CSGEOM_EXPORT <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, 
+01114     <span class="keyword">const</span> csBox3&amp; box);
+01115 };
+01116 
+01119 <span class="preprocessor">#endif // __CS_BOX_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.6 
 </small></address> </div></body> </html>
