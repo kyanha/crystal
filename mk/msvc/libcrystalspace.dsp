@@ -666,14 +666,6 @@ SOURCE=..\..\libs\csutil\hash.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\hashmap.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\hashmapr.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\inputdef.cpp
 # End Source File
 # Begin Source File
@@ -1607,14 +1599,6 @@ SOURCE=..\..\libs\..\include\csutil\hash.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\hashhandlers.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\..\include\csutil\hashmap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\..\include\csutil\hashmapr.h
 # End Source File
 # Begin Source File
 
