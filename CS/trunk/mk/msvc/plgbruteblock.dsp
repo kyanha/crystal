@@ -138,7 +138,7 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain_brute\object\brute.cpp
+SOURCE=..\..\plugins\mesh\terrain\brute\brute.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -146,7 +146,7 @@ SOURCE=..\..\plugins\mesh\terrain_brute\object\brute.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain_brute\object\brute.h
+SOURCE=..\..\plugins\mesh\terrain\brute\brute.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -158,7 +158,7 @@ SOURCE=..\..\mk\msvc\plgbruteblock.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain_brute\object\bruteblock.csplugin
+SOURCE=..\..\plugins\mesh\terrain\brute\bruteblock.csplugin
 # End Source File
 # End Group
 # End Target

@@ -1,25 +1,25 @@
-# Microsoft Developer Studio Project File - Name="libchunklod_static" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="libvproc_std_static" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=libchunklod_static - Win32 Release
+CFG=libvproc_std_static - Win32 Release
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "libchunklod_static.mak".
+!MESSAGE NMAKE /f "libvproc_std_static.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "libchunklod_static.mak" CFG="libchunklod_static - Win32 Release"
+!MESSAGE NMAKE /f "libvproc_std_static.mak" CFG="libvproc_std_static - Win32 Release"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "libchunklod_static - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Static Library")
-!MESSAGE "libchunklod_static - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "libchunklod_static - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "libvproc_std_static - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Static Library")
+!MESSAGE "libvproc_std_static - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "libvproc_std_static - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -30,7 +30,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "libchunklod_static - Win32 Release"
+!IF  "$(CFG)" == "libvproc_std_static - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -39,8 +39,8 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\out\release\build\libchunklod_static\"
-# PROP Intermediate_Dir "..\..\out\release\build\libchunklod_static\"
+# PROP Output_Dir "..\..\out\release\build\libvproc_std_static\"
+# PROP Intermediate_Dir "..\..\out\release\build\libvproc_std_static\"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
@@ -48,13 +48,13 @@ RSC=rc.exe
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "NDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_STATIC_LINKED"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\release\build\libchunklod_static\libchunklod_static.res" /D "NDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_STATIC_LINKED" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\release\build\libvproc_std_static\libvproc_std_static.res" /D "NDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_STATIC_LINKED" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\out\release\libs\libchunklod_static.lib"
+# ADD LIB32 /nologo /out:"..\..\out\release\libs\libvproc_std_static.lib"
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
 # ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /machine:I386 /OPT:NOREF /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
@@ -62,7 +62,7 @@ LINK32=link.exe
 SOURCE="$(InputPath)"
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "libchunklod_static - Win32 Debug"
+!ELSEIF  "$(CFG)" == "libvproc_std_static - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -71,8 +71,8 @@ SOURCE="$(InputPath)"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\out\debug\build\libchunklod_static\"
-# PROP Intermediate_Dir "..\..\out\debug\build\libchunklod_static\"
+# PROP Output_Dir "..\..\out\debug\build\libvproc_std_static\"
+# PROP Intermediate_Dir "..\..\out\debug\build\libvproc_std_static\"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
@@ -80,13 +80,13 @@ SOURCE="$(InputPath)"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_STATIC_LINKED"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\libchunklod_static\libchunklod_static.res" /D "_DEBUG" /D "CS_DEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_STATIC_LINKED" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\libvproc_std_static\libvproc_std_static.res" /D "_DEBUG" /D "CS_DEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_STATIC_LINKED" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\out\debug\libs\libchunklod_static_d.lib"
+# ADD LIB32 /nologo /out:"..\..\out\debug\libs\libvproc_std_static_d.lib"
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
 # ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
@@ -94,7 +94,7 @@ LINK32=link.exe
 SOURCE="$(InputPath)"
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "libchunklod_static - Win32 ExtensiveMemDebug"
+!ELSEIF  "$(CFG)" == "libvproc_std_static - Win32 ExtensiveMemDebug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -103,8 +103,8 @@ SOURCE="$(InputPath)"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\out\debug\build\libchunklod_static\"
-# PROP Intermediate_Dir "..\..\out\debug\build\libchunklod_static\"
+# PROP Output_Dir "..\..\out\debug\build\libvproc_std_static\"
+# PROP Intermediate_Dir "..\..\out\debug\build\libvproc_std_static\"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
@@ -112,13 +112,13 @@ SOURCE="$(InputPath)"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_STATIC_LINKED"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\libchunklod_static\libchunklod_static.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_STATIC_LINKED" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\libvproc_std_static\libvproc_std_static.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_STATIC_LINKED" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\out\debug\libs\libchunklod_static_d.lib"
+# ADD LIB32 /nologo /out:"..\..\out\debug\libs\libvproc_std_static_d.lib"
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
 # ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
@@ -130,19 +130,23 @@ SOURCE="$(InputPath)"
 
 # Begin Target
 
-# Name "libchunklod_static - Win32 Release"
-# Name "libchunklod_static - Win32 Debug"
-# Name "libchunklod_static - Win32 ExtensiveMemDebug"
+# Name "libvproc_std_static - Win32 Release"
+# Name "libvproc_std_static - Win32 Debug"
+# Name "libvproc_std_static - Win32 ExtensiveMemDebug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\libchunklod_staticreg.cpp
+SOURCE=..\..\mk\msvc\libvproc_std_staticreg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain\object\chunklod.cpp
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\vproc_std\vproc_program.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\vproc_std\vproc_std.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -150,7 +154,11 @@ SOURCE=..\..\plugins\mesh\terrain\object\chunklod.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain\object\chunklod.h
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\vproc_std\vproc_program.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\vproc_std\vproc_std.h
 # End Source File
 # End Group
 # End Target
