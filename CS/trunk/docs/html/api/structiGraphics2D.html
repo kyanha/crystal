@@ -56,8 +56,8 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Get the palette (if there is one).</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a11">SetRGB</a> (int i, int r, int g, int b)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Set a color index to given R,G,B (0..255) values.</em> <a href="#a11"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual int&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a12">FindRGB</a> (int r, int g, int b)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Find an RGB color.</em> <a href="#a12"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual int&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a12">FindRGB</a> (int r, int g, int b, int a=255)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Find an RGB (0..255) color.</em> <a href="#a12"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a13">SetClipRect</a> (int nMinX, int nMinY, int nMaxX, int nMaxY)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Set clipping rectangle.</em> <a href="#a13"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a14">GetClipRect</a> (int &amp;nMinX, int &amp;nMinY, int &amp;nMaxX, int &amp;nMaxY)=0</td></tr>
@@ -88,46 +88,48 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Returns the address of the pixel at the specified (x, y) coordinates.</em> <a href="#a26"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a27">GetPixel</a> (int x, int y, <a class="el" href="group__util.html#a0">uint8</a> &amp;oR, <a class="el" href="group__util.html#a0">uint8</a> &amp;oG, <a class="el" href="group__util.html#a0">uint8</a> &amp;oB)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Query pixel R,G,B at given screen location.</em> <a href="#a27"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="structcsImageArea.html">csImageArea</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a28">SaveArea</a> (int x, int y, int w, int h)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Save a subarea of screen and return a handle to saved buffer.</em> <a href="#a28"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a29">RestoreArea</a> (<a class="el" href="structcsImageArea.html">csImageArea</a> *Area, bool Free)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Restore a subarea of screen saved with <a class="el" href="structiGraphics2D.html#a28">SaveArea()</a>.</em> <a href="#a29"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a30">FreeArea</a> (<a class="el" href="structcsImageArea.html">csImageArea</a> *Area)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Free storage allocated for a subarea of screen.</em> <a href="#a30"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a31">Write</a> (<a class="el" href="structiFont.html">iFont</a> *font, int x, int y, int fg, int bg, const char *str, <a class="el" href="group__util.html#a12">uint</a> flags=0)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Write a text string into the back buffer.</em> <a href="#a31"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a32">WriteBaseline</a> (<a class="el" href="structiFont.html">iFont</a> *font, int x, int y, int fg, int bg, const char *str)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a28">GetPixel</a> (int x, int y, <a class="el" href="group__util.html#a0">uint8</a> &amp;oR, <a class="el" href="group__util.html#a0">uint8</a> &amp;oG, <a class="el" href="group__util.html#a0">uint8</a> &amp;oB, <a class="el" href="group__util.html#a0">uint8</a> &amp;oA)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>As <a class="el" href="structiGraphics2D.html#a27">GetPixel()</a> above, but with alpha.</em> <a href="#a28"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="structcsImageArea.html">csImageArea</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a29">SaveArea</a> (int x, int y, int w, int h)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Save a subarea of screen and return a handle to saved buffer.</em> <a href="#a29"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a30">RestoreArea</a> (<a class="el" href="structcsImageArea.html">csImageArea</a> *Area, bool Free)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Restore a subarea of screen saved with <a class="el" href="structiGraphics2D.html#a29">SaveArea()</a>.</em> <a href="#a30"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a31">FreeArea</a> (<a class="el" href="structcsImageArea.html">csImageArea</a> *Area)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Free storage allocated for a subarea of screen.</em> <a href="#a31"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a32">Write</a> (<a class="el" href="structiFont.html">iFont</a> *font, int x, int y, int fg, int bg, const char *str, <a class="el" href="group__util.html#a12">uint</a> flags=0)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Write a text string into the back buffer.</em> <a href="#a32"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a33">AllowResize</a> (bool iAllow)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Enable/disable canvas resizing.</em> <a href="#a33"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a34">Resize</a> (int w, int h)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Resize the canvas.</em> <a href="#a34"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="structiFontServer.html">iFontServer</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a35">GetFontServer</a> ()=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Get the active font server (does not do <a class="el" href="structiBase.html#a0">IncRef()</a>).</em> <a href="#a35"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a36">PerformExtension</a> (char const *command,...)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Perform a system specific exension.</em> <a href="#a36"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a37">PerformExtensionV</a> (char const *command, va_list)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a33">WriteBaseline</a> (<a class="el" href="structiFont.html">iFont</a> *font, int x, int y, int fg, int bg, const char *str)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Write a text string into the back buffer.</em> <a href="#a33"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a34">AllowResize</a> (bool iAllow)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Enable/disable canvas resizing.</em> <a href="#a34"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a35">Resize</a> (int w, int h)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Resize the canvas.</em> <a href="#a35"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="structiFontServer.html">iFontServer</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a36">GetFontServer</a> ()=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get the active font server (does not do <a class="el" href="structiBase.html#a0">IncRef()</a>).</em> <a href="#a36"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a37">PerformExtension</a> (char const *command,...)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Perform a system specific exension.</em> <a href="#a37"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiImage.html">iImage</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a38">ScreenShot</a> ()=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Do a screenshot: return a new <a class="el" href="structiImage.html">iImage</a> object.</em> <a href="#a38"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="structiNativeWindow.html">iNativeWindow</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a39">GetNativeWindow</a> ()=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Get the native window corresponding with this canvas.</em> <a href="#a39"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a40">GetFullScreen</a> ()=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Returns 'true' if the program is being run full-screen.</em> <a href="#a40"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a41">SetFullScreen</a> (bool b)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Change the fullscreen state of the canvas.</em> <a href="#a41"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a42">SetMousePosition</a> (int x, int y)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Set mouse position (relative to top-left of CS window).</em> <a href="#a42"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a43">SetMouseCursor</a> (<a class="el" href="group__gfx2d.html#a1">csMouseCursorID</a> iShape)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Set mouse cursor to one of predefined shape classes (see csmcXXX enum above).</em> <a href="#a43"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a44">SetMouseCursor</a> (<a class="el" href="structiImage.html">iImage</a> *image, const <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> *keycolor=0, int hotspot_x=0, int hotspot_y=0, <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> fg=<a class="el" href="structcsRGBcolor.html">csRGBcolor</a>(255, 255, 255), <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> bg=<a class="el" href="structcsRGBcolor.html">csRGBcolor</a>(0, 0, 0))=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Set mouse cursor using an image.</em> <a href="#a44"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a45">SetGamma</a> (float gamma)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Set gamma value (if supported by canvas).</em> <a href="#a45"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual float&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a46">GetGamma</a> () const=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Get gamma value.</em> <a href="#a46"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; iGraphics2D &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a47">CreateOffscreenCanvas</a> (void *memory, int width, int height, int depth, <a class="el" href="structiOffscreenCanvasCallback.html">iOffscreenCanvasCallback</a> *ofscb)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Create an off-screen canvas so you can render on a given memory area.</em> <a href="#a47"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a38">PerformExtensionV</a> (char const *command, va_list)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Perform a system specific exension.</em> <a href="#a38"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiImage.html">iImage</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a39">ScreenShot</a> ()=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Do a screenshot: return a new <a class="el" href="structiImage.html">iImage</a> object.</em> <a href="#a39"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="structiNativeWindow.html">iNativeWindow</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a40">GetNativeWindow</a> ()=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get the native window corresponding with this canvas.</em> <a href="#a40"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a41">GetFullScreen</a> ()=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Returns 'true' if the program is being run full-screen.</em> <a href="#a41"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a42">SetFullScreen</a> (bool b)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Change the fullscreen state of the canvas.</em> <a href="#a42"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a43">SetMousePosition</a> (int x, int y)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set mouse position (relative to top-left of CS window).</em> <a href="#a43"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a44">SetMouseCursor</a> (<a class="el" href="group__gfx2d.html#a1">csMouseCursorID</a> iShape)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set mouse cursor to one of predefined shape classes (see csmcXXX enum above).</em> <a href="#a44"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a45">SetMouseCursor</a> (<a class="el" href="structiImage.html">iImage</a> *image, const <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> *keycolor=0, int hotspot_x=0, int hotspot_y=0, <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> fg=<a class="el" href="structcsRGBcolor.html">csRGBcolor</a>(255, 255, 255), <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> bg=<a class="el" href="structcsRGBcolor.html">csRGBcolor</a>(0, 0, 0))=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set mouse cursor using an image.</em> <a href="#a45"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a46">SetGamma</a> (float gamma)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set gamma value (if supported by canvas).</em> <a href="#a46"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual float&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a47">GetGamma</a> () const=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get gamma value.</em> <a href="#a47"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; iGraphics2D &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics2D.html#a48">CreateOffscreenCanvas</a> (void *memory, int width, int height, int depth, <a class="el" href="structiOffscreenCanvasCallback.html">iOffscreenCanvasCallback</a> *ofscb)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Create an off-screen canvas so you can render on a given memory area.</em> <a href="#a48"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This is the interface for 2D renderer.
@@ -144,8 +146,8 @@ Main users of this interface: <ul>
 <p>
 
 <p>
-Definition at line <a class="el" href="graph2d_8h-source.html#l00181">181</a> of file <a class="el" href="graph2d_8h-source.html">graph2d.h</a>.<hr><h2>Member Function Documentation</h2>
-<a name="a33" doxytag="iGraphics2D::AllowResize"></a><p>
+Definition at line <a class="el" href="graph2d_8h-source.html#l00182">182</a> of file <a class="el" href="graph2d_8h-source.html">graph2d.h</a>.<hr><h2>Member Function Documentation</h2>
+<a name="a34" doxytag="iGraphics2D::AllowResize"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -432,7 +434,7 @@ Close the device.
     </td>
   </tr>
 </table>
-<a name="a47" doxytag="iGraphics2D::CreateOffscreenCanvas"></a><p>
+<a name="a48" doxytag="iGraphics2D::CreateOffscreenCanvas"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -750,7 +752,13 @@ Draw an array of pixel coordinates with the given color.
           <td></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>b</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>b</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>a</em> = 255</td>
         </tr>
         <tr>
           <td></td>
@@ -770,9 +778,11 @@ Draw an array of pixel coordinates with the given color.
     <td>
 
 <p>
-Find an RGB color.
+Find an RGB (0..255) color.
 <p>
-    </td>
+If there is a palette, this returns an entry index set with <a class="el" href="structiGraphics2D.html#a11">SetRGB()</a>. If the returned value is -1, a suitable palette entry was not found. Without a palette, the actual color bytes are returned. 
+<p>
+ Use returned value for color arguments in iGraphics2D.     </td>
   </tr>
 </table>
 <a name="a16" doxytag="iGraphics2D::FinishDraw"></a><p>
@@ -805,7 +815,7 @@ This routine should be called when you finished drawing.
     </td>
   </tr>
 </table>
-<a name="a30" doxytag="iGraphics2D::FreeArea"></a><p>
+<a name="a31" doxytag="iGraphics2D::FreeArea"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -918,7 +928,7 @@ Get the double buffer state.
     </td>
   </tr>
 </table>
-<a name="a35" doxytag="iGraphics2D::GetFontServer"></a><p>
+<a name="a36" doxytag="iGraphics2D::GetFontServer"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -948,7 +958,7 @@ Get the active font server (does not do <a class="el" href="structiBase.html#a0"
     </td>
   </tr>
 </table>
-<a name="a40" doxytag="iGraphics2D::GetFullScreen"></a><p>
+<a name="a41" doxytag="iGraphics2D::GetFullScreen"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -978,7 +988,7 @@ Returns 'true' if the program is being run full-screen.
     </td>
   </tr>
 </table>
-<a name="a46" doxytag="iGraphics2D::GetGamma"></a><p>
+<a name="a47" doxytag="iGraphics2D::GetGamma"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1038,7 +1048,7 @@ Return the height of the framebuffer.
     </td>
   </tr>
 </table>
-<a name="a39" doxytag="iGraphics2D::GetNativeWindow"></a><p>
+<a name="a40" doxytag="iGraphics2D::GetNativeWindow"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1154,6 +1164,70 @@ This should return 0 if there is no palette (true color displays). This function
 
 <p>
 Get the palette (if there is one).
+<p>
+    </td>
+  </tr>
+</table>
+<a name="a28" doxytag="iGraphics2D::GetPixel"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual void iGraphics2D::GetPixel </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>x</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>y</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#a0">uint8</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>oR</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#a0">uint8</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>oG</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#a0">uint8</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>oB</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#a0">uint8</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>oA</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+As <a class="el" href="structiGraphics2D.html#a27">GetPixel()</a> above, but with alpha.
 <p>
     </td>
   </tr>
@@ -1376,7 +1450,7 @@ Open the device.
     </td>
   </tr>
 </table>
-<a name="a36" doxytag="iGraphics2D::PerformExtension"></a><p>
+<a name="a37" doxytag="iGraphics2D::PerformExtension"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1418,7 +1492,7 @@ Perform a system specific exension.
  The command is a string; any arguments may follow. There is no way to guarantee the uniquiness of commands, so please try to use descriptive command names rather than "a", "b" and so on...     </td>
   </tr>
 </table>
-<a name="a37" doxytag="iGraphics2D::PerformExtensionV"></a><p>
+<a name="a38" doxytag="iGraphics2D::PerformExtensionV"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1457,7 +1531,7 @@ Perform a system specific exension.
 <p>
 
 <p>
- Just like <a class="el" href="structiGraphics2D.html#a36">PerformExtension()</a> except that the command arguments are passed as a `va_list'.     </td>
+ Just like <a class="el" href="structiGraphics2D.html#a37">PerformExtension()</a> except that the command arguments are passed as a `va_list'.     </td>
   </tr>
 </table>
 <a name="a17" doxytag="iGraphics2D::Print"></a><p>
@@ -1491,7 +1565,7 @@ Flip video pages (or dump backbuffer into framebuffer).
 The area parameter is only a hint to the canvas driver. Changes outside the rectangle may or may not be printed as well.     </td>
   </tr>
 </table>
-<a name="a34" doxytag="iGraphics2D::Resize"></a><p>
+<a name="a35" doxytag="iGraphics2D::Resize"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1531,7 +1605,7 @@ Resize the canvas.
     </td>
   </tr>
 </table>
-<a name="a29" doxytag="iGraphics2D::RestoreArea"></a><p>
+<a name="a30" doxytag="iGraphics2D::RestoreArea"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1566,12 +1640,12 @@ Resize the canvas.
     <td>
 
 <p>
-Restore a subarea of screen saved with <a class="el" href="structiGraphics2D.html#a28">SaveArea()</a>.
+Restore a subarea of screen saved with <a class="el" href="structiGraphics2D.html#a29">SaveArea()</a>.
 <p>
     </td>
   </tr>
 </table>
-<a name="a28" doxytag="iGraphics2D::SaveArea"></a><p>
+<a name="a29" doxytag="iGraphics2D::SaveArea"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1620,10 +1694,10 @@ Restore a subarea of screen saved with <a class="el" href="structiGraphics2D.htm
 <p>
 Save a subarea of screen and return a handle to saved buffer.
 <p>
-Storage is allocated in this call, you should either <a class="el" href="structiGraphics2D.html#a30">FreeArea()</a> the handle after usage or RestoreArea () it.     </td>
+Storage is allocated in this call, you should either <a class="el" href="structiGraphics2D.html#a31">FreeArea()</a> the handle after usage or RestoreArea () it.     </td>
   </tr>
 </table>
-<a name="a38" doxytag="iGraphics2D::ScreenShot"></a><p>
+<a name="a39" doxytag="iGraphics2D::ScreenShot"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1705,7 +1779,7 @@ Set clipping rectangle.
 The clipping rectangle is inclusive the top and left edges and exclusive for the right and bottom borders.     </td>
   </tr>
 </table>
-<a name="a41" doxytag="iGraphics2D::SetFullScreen"></a><p>
+<a name="a42" doxytag="iGraphics2D::SetFullScreen"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1736,7 +1810,7 @@ Change the fullscreen state of the canvas.
     </td>
   </tr>
 </table>
-<a name="a45" doxytag="iGraphics2D::SetGamma"></a><p>
+<a name="a46" doxytag="iGraphics2D::SetGamma"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1767,7 +1841,7 @@ Set gamma value (if supported by canvas).
 By default this is 1. Smaller values are darker. If the canvas doesn't support gamma then this function will return false.     </td>
   </tr>
 </table>
-<a name="a44" doxytag="iGraphics2D::SetMouseCursor"></a><p>
+<a name="a45" doxytag="iGraphics2D::SetMouseCursor"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1831,7 +1905,7 @@ Set mouse cursor using an image.
 If the operation is unsupported,  return 'false' otherwise return 'true'. On some platforms there is only monochrome pointers available. In this all black colors in the image will become the value of 'bg' and all  non-black colors will become 'fg'     </td>
   </tr>
 </table>
-<a name="a43" doxytag="iGraphics2D::SetMouseCursor"></a><p>
+<a name="a44" doxytag="iGraphics2D::SetMouseCursor"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1862,7 +1936,7 @@ Set mouse cursor to one of predefined shape classes (see csmcXXX enum above).
 If a specific mouse cursor shape is not supported, return 'false'; otherwise return 'true'. If system supports it the cursor should be set to its nearest system equivalent depending on iShape argument and the routine should return "true".     </td>
   </tr>
 </table>
-<a name="a42" doxytag="iGraphics2D::SetMousePosition"></a><p>
+<a name="a43" doxytag="iGraphics2D::SetMousePosition"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1951,10 +2025,10 @@ Set mouse position (relative to top-left of CS window).
 <p>
 Set a color index to given R,G,B (0..255) values.
 <p>
-    </td>
+Only use if there is a palette.     </td>
   </tr>
 </table>
-<a name="a31" doxytag="iGraphics2D::Write"></a><p>
+<a name="a32" doxytag="iGraphics2D::Write"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2025,7 +2099,7 @@ A negative value for bg color will not draw the background. <dl compact><dt><b>R
 <code>str</code> is expected to be UTF-8 encoded. </dl>    </td>
   </tr>
 </table>
-<a name="a32" doxytag="iGraphics2D::WriteBaseline"></a><p>
+<a name="a33" doxytag="iGraphics2D::WriteBaseline"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2087,7 +2161,7 @@ A negative value for bg color will not draw the background. <dl compact><dt><b>R
 Write a text string into the back buffer.
 <p>
 A negative value for bg color will not draw the background. x and y are the pen position on a baseline. The actual font baseline is shifted up by the font's descent. <dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000003">Deprecated: </a></b></dt><dd>
- Instead, use <a class="el" href="structiGraphics2D.html#a31">Write()</a> with the <a class="el" href="group__gfx2d.html#a20a1">CS_WRITE_BASELINE</a> flag set. </dl>     </td>
+ Instead, use <a class="el" href="structiGraphics2D.html#a32">Write()</a> with the <a class="el" href="group__gfx2d.html#a20a1">CS_WRITE_BASELINE</a> flag set. </dl>     </td>
   </tr>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
