@@ -48,15 +48,15 @@
 00034 
 <a name="l00036"></a><a class="code" href="classcsTreeNode.html#a1">00036</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTreeNode.html#a1">RemoveChild</a> (<a class="code" href="classcsTreeNode.html">csTreeNode</a> *child)
 00037   {
-00038     size_t idx = children.Find (child);
-00039     <span class="keywordflow">if</span> (idx != csArrayItemNotFound) children.DeleteIndex (idx);
+00038     size_t idx = children.<a class="code" href="classcsArray.html#a25">Find</a> (child);
+00039     <span class="keywordflow">if</span> (idx != csArrayItemNotFound) children.<a class="code" href="classcsArray.html#a33">DeleteIndex</a> (idx);
 00040   }
 00041 
 <a name="l00043"></a><a class="code" href="classcsTreeNode.html#a2">00043</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTreeNode.html#a2">AddChild</a> (<a class="code" href="classcsTreeNode.html">csTreeNode</a> *child)
-00044   { children.Push (child); child-&gt;<a class="code" href="classcsTreeNode.html#m0">parent</a> = <span class="keyword">this</span>; }
+00044   { children.<a class="code" href="classcsArray.html#a16">Push</a> (child); child-&gt;<a class="code" href="classcsTreeNode.html#m0">parent</a> = <span class="keyword">this</span>; }
 00045 
 <a name="l00047"></a><a class="code" href="classcsTreeNode.html#a3">00047</a>   <a class="code" href="classcsTreeNode.html#a3">csTreeNode</a> (<a class="code" href="classcsTreeNode.html">csTreeNode</a> *theParent=0)
-00048   { parent=theParent; <span class="keywordflow">if</span> (parent) parent-&gt;<a class="code" href="classcsTreeNode.html#m1">children</a>.Push (<span class="keyword">this</span>); }
+00048   { parent=theParent; <span class="keywordflow">if</span> (parent) parent-&gt;<a class="code" href="classcsTreeNode.html#m1">children</a>.<a class="code" href="classcsArray.html#a16">Push</a> (<span class="keyword">this</span>); }
 00049 
 00050   <span class="keyword">virtual</span> ~<a class="code" href="classcsTreeNode.html">csTreeNode</a> ()
 00051   {
@@ -96,20 +96,20 @@
 00105     <a class="code" href="classcsTreeNode.html">csTreeNode</a> *node, *foundNode = 0;
 00106     <a class="code" href="classcsArray.html">csArray&lt;csTreeNode*&gt;</a> fifo;
 00107 
-00108     fifo.Push (<span class="keyword">this</span>);
+00108     fifo.<a class="code" href="classcsArray.html#a16">Push</a> (<span class="keyword">this</span>);
 00109     <span class="keywordflow">while</span> (fifo.<a class="code" href="classcsArray.html#a4">Length</a> () &gt; 0 &amp;&amp; !(foundNode &amp;&amp; stopOnSuccess))
 00110     {
-00111       node = fifo[0]; fifo.DeleteIndex (0);
+00111       node = fifo[0]; fifo.<a class="code" href="classcsArray.html#a33">DeleteIndex</a> (0);
 00112       <span class="keywordflow">if</span> (TreeFunc (node, param, stopOnSuccess))
 00113         foundNode = node;
 00114       <span class="keywordflow">if</span> (!node-&gt;<a class="code" href="classcsTreeNode.html#a0">IsLeaf</a> () &amp;&amp; (SelBranch==0 || SelBranch (node)))
 00115       {
 00116         size_t i;
 00117         <span class="keywordflow">for</span> (i=0; i &lt; node-&gt;<a class="code" href="classcsTreeNode.html#m1">children</a>.<a class="code" href="classcsArray.html#a4">Length</a> (); i++ )
-00118           fifo.Push (node-&gt;<a class="code" href="classcsTreeNode.html#m1">children</a>[i]);
+00118           fifo.<a class="code" href="classcsArray.html#a16">Push</a> (node-&gt;<a class="code" href="classcsTreeNode.html#m1">children</a>[i]);
 00119       }
 00120     }
-00121     fifo.DeleteAll ();
+00121     fifo.<a class="code" href="classcsArray.html#a28">DeleteAll</a> ();
 00122     <span class="keywordflow">return</span> foundNode;
 00123   }
 00124 
