@@ -900,10 +900,6 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\regexp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\rng.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\..\..\include\csutil\scanstr.h
 # End Source File
 # Begin Source File
