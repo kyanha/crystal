@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Unix</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Unix">
+<META NAME="keywords" CONTENT="Crystal Space: Unix">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2.4.1"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.4.html#SEC2.4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.4.1.1.html#SEC2.4.1.1"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.3.html#SEC2.3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.4.html#SEC2.4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.4.2.html#SEC2.4.2"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 2.4.1 Unix </H3>
+<!--docid::SEC2.4.1::-->
+<P>
+
+This section covers all of the Unix-style platforms supported by Crystal Space,
+including Linux, FreeBSD, NetBSD, Solaris, etc.
+</P><P>
+
+It is also possible to install Crystal Space using packaging systems,
+See section <A HREF="cs_2.4.1.1.html#SEC2.4.1.1">2.4.1.1 Unix using RPM packages</A>.
+</P><P>
+
+Crystal Space's X11 canvas optionally supports the MIT Shared Memory
+Extension (MIT-SHM).  This makes Crystal Space run much faster if your
+server supports it.  The Crystal Space configuration script will detect this
+extension automatically and use it if present.
+</P><P>
+
+A note of caution: Take care when obtaining the Crystal Space source code to
+ensure that the line-terminators are in Unix format (a single linefeed should
+terminate each line).  This is an especially important consideration when
+transporting the code from Windows to Unix.  Although many Unix tools deal
+gracefully with Windows line-terminators (a carriage-return follwed by a
+linefeed), not all tools do so, and may emit apparently inexplicable error
+messages when encountering files with Windows line-terminators.  The official
+distributions of Crystal Space, including the stable releases and the CVS
+snapshots, are packaged with Unix line-terminators, which are acceptable on all
+supported platforms.  These virgin packages themselves can be transported
+between Windows and Unix safely
+</P><P>
+
+<A NAME="SEC_1"></A>
+<H4> Selecting the Renderer Architecture </H4>
+<!--docid::SEC_1::-->
+<P>
+
+At this moment we have two completely different renderer architectures
+in Crystal Space. The old renderer (which is still default) and the new
+renderer. The new renderer hasn't been made default yet because it is still
+considered to be experimental and some features haven't been ported yet
+(like software renderer which works only partially and fog). On the other
+hand the new renderer supports shaders, stencil shadows, and other advanced
+OpenGL stuff and for most people it seems to work very well. So we personally
+recommend trying out the new renderer first. If it doesn't work right for
+you then you should send us a report and go back to old renderer then.
+To use the new renderer you should add the `<SAMP>--enable-new-renderer</SAMP>'
+option to configure below.
+</P><P>
+
+<A NAME="SEC_2"></A>
+<H4> Compiling on Unix </H4>
+<!--docid::SEC_2::-->
+<P>
+
+Crystal Space can be built with either `<TT>make</TT>' or Jam (see  <A HREF="cs_2.2.html#GettingJam">GettingJam</A>).
+Both tools work equally well.  In the examples below, wherever `<SAMP>make -k</SAMP>'
+is used, you can instead substitute `<TT>jam</TT>' if you so desire.
+</P><P>
+
+You first need to configure the project for your platform.  You do this
+by running the configuration script.  For example, from within the `<TT>CS</TT>'
+directory:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>./configure
+</pre></td></tr></table></P><P>
+
+If you wish to build with debugging information enabled, use this command,
+instead:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>./configure --enable-debug
+</pre></td></tr></table></P><P>
+
+If you wish to build with debugging information and for the new renderer
+architecture you can do:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>./configure --enable-debug --enable-new-renderer
+</pre></td></tr></table></P><P>
+
+For a list of useful configuration options, invoke:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>./configure --help=short
+</pre></td></tr></table></P><P>
+
+If the Crystal Space source directory is read-only, if it is shared between
+several developers, or if you simply dislike building a project within its
+source tree, you can instead configure and build from a different directory.
+For instance:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>mkdir $HOME/builddir
+cd $HOME/builddir
+/path/to/CS/configure --enable-debug
+</pre></td></tr></table></P><P>
+
+Now, you can actually build the entire project:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>make -k all
+</pre></td></tr></table></P><P>
+
+Alternately, if you have Jam installed:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>jam all
+</pre></td></tr></table></P><P>
+
+The build process will create an executable for each demonstration program or
+tool, and a dynamic-load-library for each plugin module (with extension
+`<TT>.so</TT>' on Linux and most Unix platforms).  Plugin modules include 3D
+renderers, 2D canvases, 3D engine, etc.
+</P><P>
+
+Finally, if you want to utilize Crystal Space as a software development kit
+(SDK), you can install it and then clean up the detritus of the build
+process:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>make install
+make distclean
+</pre></td></tr></table></P><P>
+
+You can now try running the `<TT>walktest</TT>' demonstration. See section <A HREF="cs_2.6.html#SEC2.6">2.6 Quick Start</A>.
+</P><P>
+
+<A NAME="SEC_3"></A>
+<H4> Renderer Selection </H4>
+<!--docid::SEC_3::-->
+<P>
+
+The OpenGL renderer is used by default when you run Crystal Space programs.  To
+select a different renderer, such as the software renderer, you can edit your
+local configuration file `<TT>$HOME/.crystalspace/Global.cfg</TT>'.  Add the
+following line to select the software renderer for all applications:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>System.Plugins.iGraphics3D = crystalspace.graphics3d.software
+</pre></td></tr></table></P><P>
+
+Alternately, you can choose the software renderer from the command-line:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>./walktest -video=software
+</pre></td></tr></table></P><P>
+
+The software renderer interacts with X11, placing output on the display
+indicated by the `<SAMP>DISPLAY</SAMP>' environment variable.
+</P><P>
+
+<A NAME="RPM"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.4.html#SEC2.4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.4.1.1.html#SEC2.4.1.1"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.3.html#SEC2.3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.4.html#SEC2.4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_2.4.2.html#SEC2.4.2"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

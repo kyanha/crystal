@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: HOWTO Create Thing</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: HOWTO Create Thing">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Create Thing">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC5.8.5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.4.html#SEC5.8.4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.6.html#SEC5.8.6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.7.html#SEC5.7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.html#SEC5.8"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.html#SEC6"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 5.8.5 Creating a Thing Mesh </H3>
+<!--docid::SEC5.8.5::-->
+<P>
+
+This section describes how to create a thing mesh.
+</P><P>
+
+<A NAME="SEC_1"></A>
+<H4> What are Things? </H4>
+<!--docid::SEC_1::-->
+<P>
+
+A `<SAMP>thing</SAMP>' mesh object (see section <A HREF="cs_7.7.19.html#SEC7.7.19">7.7.19 Thing Mesh Object</A>) is an object made
+out of polygons. Every polygon can have another material and the polygons
+can have three or more vertices. A thing uses lightmapping
+for lighting (roughly this means that every polygon gets another texture
+which contains light and shadow information for that polygon).
+</P><P>
+
+Things are useful for static geometry objects or objects that don't animate.
+You can use it for walls, floor, staircases, and even doors that open. As
+long as the object itself doesn't have to animate (but just moves) a thing
+is perfectly fine. For very high detail objects it is probably better to
+use the `<SAMP>genmesh</SAMP>' mesh object (see section <A HREF="cs_7.7.7.html#SEC7.7.7">7.7.7 Genmesh Mesh Object</A> instead. Also
+if you want to use internal animation (like an actor or a creature in your
+game) you should use the `<SAMP>sprite3d</SAMP>' mesh object (see section <A HREF="cs_7.7.5.html#SEC7.7.5">7.7.5 Sprite3D Mesh Object</A>).
+</P><P>
+
+Things can share geometry if they are made from the same factory. Note that
+information like lightmaps is not shared because a lightmap is position
+dependent (i.e. the amount of light a polygon receives depends on where the
+object instance actually is).
+</P><P>
+
+Note that you can hardtransform things (hardmove in maps). If you do this
+on a mesh object instance then the factory will be cloned if it is used
+by multiple mesh objects. That's because hardtransform essentially modifies
+the original geometry and the geometry of a thing is always in the factory.
+So beware of this because it may mean a lot of extra memory usage if you
+hardtransform every instance created from a factory.
+</P><P>
+
+Note that individual polygons can have names. This can be useful for debugging
+and also for attaching specific game features to some polygons (like indicating
+if some polygon is a light switch button or something) but be aware that these
+names add some memory overhead.
+</P><P>
+
+<A NAME="SEC_2"></A>
+<H4> Creating a Thing in a Map </H4>
+<!--docid::SEC_2::-->
+<P>
+
+Here is an example of how to create a cube thing in a map file. Note that
+in this example we avoid the use of a factory. We load a mesh object directly.
+A factory will be created invisibly to support the thing geometry:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshobj name="cube"&#62;
+  &#60;plugin&#62;crystalspace.mesh.loader.thing&#60;/plugin&#62;
+  &#60;params&#62;
+    &#60;v x="-0.5" y="-0.5" z="-0.5" /&#62;
+    &#60;v x="-0.5" y="-0.5" z="0.5" /&#62;
+    &#60;v x="-0.5" y="0.5" z="-0.5" /&#62;
+    &#60;v x="-0.5" y="0.5" z="0.5" /&#62;
+    &#60;v x="0.5" y="-0.5" z="-0.5" /&#62;
+    &#60;v x="0.5" y="-0.5" z="0.5" /&#62;
+    &#60;v x="0.5" y="0.5" z="-0.5" /&#62;
+    &#60;v x="0.5" y="0.5" z="0.5" /&#62;
+
+    &#60;material&#62;upMaterial&#60;/material&#62;
+    &#60;p name="up"&#62;
+      &#60;v&#62;3&#60;/v&#62; &#60;v&#62;7&#60;/v&#62; &#60;v&#62;6&#60;/v&#62; &#60;v&#62;2&#60;/v&#62;
+    &#60;/p&#62;
+    &#60;material&#62;otherMaterial&#60;/material&#62;
+    &#60;p name="north"&#62;
+      &#60;v&#62;1&#60;/v&#62; &#60;v&#62;5&#60;/v&#62; &#60;v&#62;7&#60;/v&#62; &#60;v&#62;3&#60;/v&#62;
+    &#60;/p&#62;
+    &#60;p name="east"&#62;
+      &#60;v&#62;5&#60;/v&#62; &#60;v&#62;4&#60;/v&#62; &#60;v&#62;6&#60;/v&#62; &#60;v&#62;7&#60;/v&#62;
+    &#60;/p&#62;
+    &#60;p name="south"&#62;
+      &#60;v&#62;4&#60;/v&#62; &#60;v&#62;0&#60;/v&#62; &#60;v&#62;2&#60;/v&#62; &#60;v&#62;6&#60;/v&#62;
+    &#60;/p&#62;
+    &#60;p name="west"&#62;
+      &#60;v&#62;0&#60;/v&#62; &#60;v&#62;1&#60;/v&#62; &#60;v&#62;3&#60;/v&#62; &#60;v&#62;2&#60;/v&#62;
+    &#60;/p&#62;
+    &#60;p name="down"&#62;
+      &#60;v&#62;0&#60;/v&#62; &#60;v&#62;4&#60;/v&#62; &#60;v&#62;5&#60;/v&#62; &#60;v&#62;1&#60;/v&#62;
+    &#60;/p&#62;
+  &#60;/params&#62;
+  &#60;move&#62;
+    &#60;v x="1" y="0" z="3" /&#62;
+  &#60;/move&#62;
+&#60;/meshobj&#62;
+</pre></td></tr></table></P><P>
+
+There is a lot more you can do in a thing. For example you can specify
+exactly how you want to map the texture on the polygons.
+In this particular example we create a cube that
+has another material for the upper polygon.
+</P><P>
+
+<A NAME="SEC_3"></A>
+<H4> Creating a Thing from Code </H4>
+<!--docid::SEC_3::-->
+<P>
+
+Here we create the same thing from code. We use a convenience function in
+the engine to create a thing (<CODE>CreateThingMesh</CODE>).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iMaterialWrapper* upMaterial = <small>...</small>
+iMaterialWrapper* otherMaterial = <small>...</small>
+csRef&#60;iMeshWrapper&#62; walls = engine-&#62;CreateThingMesh (room, "cube"));
+csRef&#60;iThingState&#62; ws =
+  SCF_QUERY_INTERFACE (walls-&#62;GetMeshObject (), iThingState);
+csRef&#60;iThingFactoryState&#62; walls_state = ws-&#62;GetFactory ();
+walls_state-&#62;AddQuad (
+  csVector3 (-.5, .5, -.5),
+  csVector3 (.5, .5, -.5),
+  csVector3 (.5, .5, .5),
+  csVector3 (-.5, .5, .5));
+walls_state-&#62;SetPolygonMaterial (CS_POLYRANGE_LAST, upMaterial);
+walls_state-&#62;SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+<small>...</small>
+</pre></td></tr></table></P><P>
+
+This is only an extract of the example but you can easily see how to create
+additional polygons here.
+</P><P>
+
+<A NAME="SEC_4"></A>
+<H4> Include Files   </H4>
+<!--docid::SEC_4::-->
+<P>
+
+The include files useful for this section are:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;imesh/thing.h&#62;
+</pre></td></tr></table><A NAME="HOWTO Create Genmesh"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.4.html#SEC5.8.4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.6.html#SEC5.8.6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.7.html#SEC5.7"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.html#SEC5.8"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_6.html#SEC6"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

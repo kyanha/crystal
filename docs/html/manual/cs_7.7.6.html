@@ -1,0 +1,414 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: MeshObject SprCal3D</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: MeshObject SprCal3D">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject SprCal3D">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.7.6"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.5.html#SEC7.7.5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.7.html#SEC7.7.7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.8.html#SEC7.8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 7.7.6 SpriteCal3D Mesh Object </H3>
+<!--docid::SEC7.7.6::-->
+<P>
+
+`<TT>sprcal3d</TT>' is a 3D mesh that can perform skeletal animation using the
+Cal3D library.
+</P><P>
+
+<A HREF="http://cal3d.sourceforge.net/">http://cal3d.sourceforge.net/</A>
+</P><P>
+
+<A NAME="SEC_1"></A>
+<H4> Making the Model </H4>
+<!--docid::SEC_1::-->
+<P>
+
+This is an example of how to load and view a Cal3d file with the
+`<TT>viewmesh</TT>' program.
+</P><P>
+
+We are going to load the `<TT>cally</TT>' model. The data files of this 
+model are part of the standard Cal3d CVS repository, and can be found at
+`<TT>cal3d/data/cally</TT>'. You must copy the files from this directory
+to `<TT>CS/cally</TT>'.
+</P><P>
+
+Make a new file called `<TT>test.cal3d</TT>' in the `<TT>CS</TT>' directory with
+the following contents:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;!-- The meshfact name is the CS name used to create
+     instances of this object. --&#62;
+&#60;meshfact name="test"&#62;
+
+&#60;!-- The plugin line specifies the plugin to use to parse
+     the succeeding 'params' tag. --&#62;
+&#60;plugin&#62;crystalspace.mesh.loader.factory.sprite.cal3d&#60;/plugin&#62;
+
+&#60;params&#62;
+  &#60;options rotate_x_axis="yes" flip_textures="no" /&#62;
+
+  &#60;!-- Path specifies the OS-dependent directory path to
+       where all the other files are located. (optional) --&#62;
+  &#60;path dir="cally/" /&#62;
+
+  &#60;!-- The cally model is much too large. --&#62;
+  &#60;scale value="0.01" /&#62;
+
+  &#60;!-- Specify cal3d skeleton file used by model. --&#62;
+  &#60;skeleton file="cally.csf" /&#62;
+
+  &#60;!-- Animations specify the filename to load, and the
+       CS-accessible name of this animation.  The type attribute
+       is used to distinguish various types of animations.
+       Recognized types are "idle", "travel", "cycle",
+       "style_cycle", and "action". base_vel specifies the
+       speed of translation which should be used when the
+       animation is playing alone.  min_vel and max_vel are
+       used by the blender to achieve a specified desired
+       velocity.  min_random and max_random are interval to be
+       used in idle override actions, in seconds.  idle_pct is a
+       number between 0 and 100, which is the % probability
+       of that action being the override action. --&#62;
+  &#60;animation
+    file="cally_idle.caf"
+    name="stand"
+    type="idle"
+    base_vel="0"
+    min_vel="0"
+    max_vel="0"
+    min_random="10"
+    max_random="30" /&#62;
+  &#60;animation
+    file="cally_walk.caf"
+    name="walk"
+    type="travel"
+    base_vel="2"
+    min_vel="0"
+    max_vel="3" /&#62;
+  &#60;animation
+    file="cally_strut.caf"
+    name="strut"
+    type="travel"
+    base_vel="2"
+    min_vel="0"
+    max_vel="3" /&#62;
+  &#60;animation
+    file="cally_jog.caf"
+    name="run"
+    type="travel"
+    base_vel="5"
+    min_vel="2"
+    max_vel="5" /&#62;
+  &#60;animation
+    file="cally_wave.caf"
+    name="greet"
+    type="action"
+    idle_pct="33" /&#62;
+  &#60;animation
+    file="cally_tornado_kick.caf"
+    name="hurt"
+    type="action"
+    idle_pct="33" /&#62;
+  &#60;animation
+    file="cally_shoot_arrow.caf"
+    name="shoot"
+    type="action"
+    idle_pct="34" /&#62;
+
+  &#60;!-- Materials are VFS filenames because they are CS
+       materials and not cal3d materials. (optional) We
+       can not use the real .xrf files because CS can't load
+       that format.  --&#62;
+  &#60;material file="/lib/std/green.gif" name="green" /&#62;
+
+  &#60;!-- Meshes specify each attachable part of the model.
+       The name is the CS-accessible name which will be used
+       to select/deselect it for the model.  The material
+       specified is the default CS material used by this
+       mesh.  --&#62;
+  &#60;mesh file="cally_calf_left.cmf"
+        name="cally_calf_left"
+        material="green" /&#62;
+  &#60;mesh file="cally_calf_right.cmf"
+        name="cally_calf_right"
+        material="green" /&#62;
+  &#60;mesh file="cally_chest.cmf"
+        name="cally_chest"
+        material="green" /&#62;
+  &#60;mesh file="cally_foot_left.cmf"
+        name="cally_foot_left"
+        material="green" /&#62;
+  &#60;mesh file="cally_foot_right.cmf"
+        name="cally_foot_right"
+        material="green" /&#62;
+  &#60;mesh file="cally_hand_left.cmf"
+        name="cally_hand_left"
+        material="green" /&#62;
+  &#60;mesh file="cally_hand_right.cmf"
+        name="cally_hand_right"
+        material="green" /&#62;
+  &#60;mesh file="cally_head.cmf"
+        name="cally_head"
+        material="green" /&#62;
+  &#60;mesh file="cally_lowerarm_left.cmf"
+        name="cally_lowerarm_left"
+        material="green" /&#62;
+  &#60;mesh file="cally_lowerarm_right.cmf"
+        name="cally_lowerarm_right"
+        material="green" /&#62;
+  &#60;mesh file="cally_neck.cmf"
+        name="cally_neck"
+        material="green" /&#62;
+  &#60;mesh file="cally_pelvis.cmf"
+        name="cally_pelvis"
+        material="green" /&#62;
+  &#60;mesh file="cally_ponytail.cmf"
+        name="cally_ponytail"
+        material="green" /&#62;
+  &#60;mesh file="cally_thigh_left.cmf"
+        name="cally_thigh_left"
+        material="green" /&#62;
+  &#60;mesh file="cally_thigh_right.cmf"
+        name="cally_thigh_right"
+        material="green" /&#62;
+  &#60;mesh file="cally_upperarm_left.cmf"
+        name="cally_upperarm_left"
+        material="green" /&#62;
+  &#60;mesh file="cally_upperarm_right.cmf"
+        name="cally_upperarm_right"
+        material="green" /&#62;
+
+  &#60;!-- The following rotates the model and all animations around
+       the Y axis by 180 degrees.  Any axis and angle may be
+       specified, and translation may also be specified. --&#62;
+  &#60;hardtransform
+    rot_axis_x="0"
+    rot_axis_y="1"
+    rot_axis_z="0"
+    rot_angle="180" /&#62;
+&#60;/params&#62;
+&#60;/meshfact&#62;
+</pre></td></tr></table></P><P>
+
+Next, you must run `<SAMP>viewmesh</SAMP>' from the `<TT>CS</TT>' directory. 
+Right click on the screen and then select <EM>Load Mesh</EM>.
+Select `<TT>test.cal3d</TT>' from the list of files.
+</P><P>
+
+You should be able to see the `<TT>cally</TT>' model, completely green.
+</P><P>
+
+<A NAME="SEC_2"></A>
+<H4> Displaying the Model </H4>
+<!--docid::SEC_2::-->
+<P>
+
+We now show you how to edit the `<TT>simple1</TT>' tutorial
+(see section <A HREF="cs_5.2.html#SEC5.2">5.2 Simple Tutorial 1</A>) in order to load the Cal3d model.
+</P><P>
+
+Add the following to `<TT>simple1.cpp</TT>'
+just after the call to <CODE>CreateRoom()</CODE> in <CODE>Simple::Application()</CODE>:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iVFS&#62; VFS(CS_QUERY_REGISTRY(object_reg, iVFS));
+VFS-&#62;ChDir("/this/");
+csRef&#60;iMeshFactoryWrapper&#62; imeshfact(
+  loader-&#62;LoadMeshObjectFactory("/this/test.cal3d"));
+if (imeshfact == 0)
+{
+  csReport(object_reg, CS_REPORTER_SEVERITY_ERROR,
+      "crystalspace.application.simple1",
+      "Error loading mesh object factory!");
+  return false;
+}
+csRef&#60;iMeshWrapper&#62; sprite = engine-&#62;CreateMeshWrapper(
+    imeshfact, "Hulk", room, csVector3(0, 4, 0));
+</pre></td></tr></table></P><P>
+
+Now, build `<TT>simple1</TT>', and run it from the `<TT>CS</TT>' directory.
+You should be looking right at the model.
+</P><P>
+
+<A NAME="SEC_3"></A>
+<H4> Controling the Model </H4>
+<!--docid::SEC_3::-->
+<P>
+
+We can now display the model but we cannot set animations, etc.
+To resolve this, insert the following code into `<TT>simple1.cpp</TT>' immediately
+after the code which you inserted to display the model:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>// Make it do something.
+csRef&#60;iSpriteCal3DFactoryState&#62; factstate(
+  SCF_QUERY_INTERFACE(imeshfact-&#62;GetMeshObjectFactory(),
+  iSpriteCal3DFactoryState));
+csRef&#60;iSpriteCal3DState&#62; cal3dstate(SCF_QUERY_INTERFACE(
+  sprite-&#62;GetMeshObject(), iSpriteCal3DState));
+cal3dstate-&#62;SetAnimCycle("walk", 1.0f);
+</pre></td></tr></table></P><P>
+
+Now, build `<TT>simple1</TT>' and run it from the `<TT>CS</TT>' directory.
+You should now see the `<TT>cally</TT>' model "walking".
+</P><P>
+
+Note: See `<TT>CS/include/imesh/spritecal3d.h</TT>' for more information about the
+SCF interfaces `<SAMP>iSpriteCal3DState</SAMP>' and
+`<SAMP>iSpriteCal3DFactoryState</SAMP>'. Alternately, consult the Crystal Space
+API documentation.
+</P><P>
+
+<A NAME="SEC_4"></A>
+<H4> Morph Animations </H4>
+<!--docid::SEC_4::-->
+<P>
+
+You can add morph target meshes to each mesh.  Remember that morph target
+meshes need to have the same number of vertices and they need to be in the same
+order.  (Do not use the progressive mesh export option!).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;mesh file="<small>...</small>" name="<small>...</small>" material="<small>...</small>"&#62;
+  &#60;morphtarget file="<small>...</small>" name="<small>...</small>"/&#62;
+  &#60;morphtarget <small>...</small>/&#62;
+  <small>...</small>
+&#60;/mesh&#62;
+</pre></td></tr></table></P><P>
+
+Each of the morph target meshes need to be assigned to a
+`<SAMP>morphanimnation</SAMP>'.  Do not add a `<SAMP>morphtargetmesh</SAMP>' to more than one
+`<SAMP>morphanimation</SAMP>', since the library is not designed for this, and it would
+cause problems.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;morphanimation name="<small>...</small>"&#62;
+  &#60;morphtarget mesh="meshname" morph="morphname"/&#62;
+  &#60;morphtarget <small>...</small>/&#62;
+  <small>...</small>
+&#60;/morphanimation&#62;
+</pre></td></tr></table></P><P>
+
+You can test a morphanimation if you load the Cal3D file in the `<TT>viewmesh</TT>'
+example program.
+</P><P>
+
+You can use morph animations programmatically as follows.
+</P><P>
+
+In this example, `<SAMP>cal3dfactorystate</SAMP>' is the Cal3D factory state object of
+type `<SAMP>iSpriteCal3DFactoryState</SAMP>'.  Using the state object, find the
+`<SAMP>morphanimationid</SAMP>' with the given name.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>int morphanimationid =
+  cal3dfactorystate-&#62;FindMorphAnimationName(morphanimationname);
+</pre></td></tr></table></P><P>
+
+In this example, `<SAMP>cal3dstate</SAMP>' is the Cal3D state object of type
+`<SAMP>iSpriteCal3DState</SAMP>'.  We instruct it to fully blend (1.0f) the morph
+animation, over a period of (10.0f) ten seconds.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cal3dstate-&#62;BlendMorphTarget(morphanimationid, 1.0f, 10.0f);
+</pre></td></tr></table></P><P>
+
+This example completely clears a morph animation, over a period of ten seconds
+(10.0f).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cal3dstate-&#62;ClearMorphTarget(morphanimationid, 10.0f);
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC_5"></A>
+<H4> Sockets </H4>
+<!--docid::SEC_5::-->
+<P>
+
+Sockets enable you to <EM>attach</EM> any mesh object to a triangle.  The attached
+mesh object then follows the triangle.  Adding a socket to a Cal3D file
+(following the mesh tags) can be done as shown here.  `<SAMP>i</SAMP>', `<SAMP>j</SAMP>', and
+`<SAMP>k</SAMP>' should be numbers.  They are all indices.  The loading order of meshes
+is maintained, so you can deduce which mesh you are using.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;socket name="<small>...</small>" mesh="i" submesh="j" triangle="k"/&#62;
+</pre></td></tr></table></P><P>
+
+You can test a socket if you load the Cal3D file in the `<TT>viewmesh</TT>' example
+program.
+</P><P>
+
+You can use sockets in code as follows.
+</P><P>
+
+In this example, `<SAMP>cal3dstate</SAMP>' is the Cal3D state object of type
+`<SAMP>iSpriteCal3DState</SAMP>'. Here we find a socket with a given name.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iSpriteCal3DSocket* socket = cal3dstate-&#62;FindSocket(name);
+</pre></td></tr></table></P><P>
+
+For this example, `<SAMP>sprite</SAMP>' is the `<SAMP>iMeshWrapper</SAMP>' of the Cal3D sprite,
+and `<SAMP>meshwrap</SAMP>' is the `<SAMP>iMeshWrapper</SAMP>' of the mesh object you want to
+add.  This adds the `<SAMP>meshwrap</SAMP>' as a hierarchical child of `<SAMP>sprite</SAMP>'.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>sprite-&#62;GetChildren()-&#62;Add(meshwrap);
+</pre></td></tr></table></P><P>
+
+Here is how you would set a socket's mesh wrapper.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>socket-&#62;SetMeshWrapper(meshwrap);
+</pre></td></tr></table><A NAME="MeshObject Genmesh"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.5.html#SEC7.7.5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.7.html#SEC7.7.7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.8.html#SEC7.8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Map File Hints</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Map File Hints">
+<META NAME="keywords" CONTENT="Crystal Space: Map File Hints">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.6.2.3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.2.html#SEC7.6.2.2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.1.html#SEC7.6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.html#SEC7.6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H4> 7.6.2.3 Hints </H4>
+<!--docid::SEC7.6.2.3::-->
+<P>
+
+<EM>Written by Jorrit Tyberghein,
+<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.  Mathematical typesetting for
+TeX performed by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
+</P><P>
+
+This section contains extra discussions and hints regarding the map file and
+the objects contained within it (this documentation is a little bit outdated
+but still useful for the general idea. However it should be moved to the
+thing mesh object description).
+</P><P>
+
+First, a little explanation about `<SAMP>LEN</SAMP>' and `<SAMP>TEXLEN</SAMP>'.  With these
+you can specify the size of the texture on the polygon.  For example, let's
+say that you have a rectangular polygon which is 4 units wide and 6 units
+tall.  A texture with `<SAMP>LEN</SAMP>' set to 2 will be tiled 2 times horizontally
+and 3 times vertically.  If this texture is 128x128 (for example) then the
+final texture on the polygon will be 256x384.
+</P><P>
+
+Using a `<SAMP>TEXTURE</SAMP>' statement inside a `<SAMP>POLYGON</SAMP>' or with a
+`<SAMP>PLANE</SAMP>' statement you can obtain even more control over how the texture
+should be scaled across the polygon.  This is most easily explained with an
+example.  Say that you have a polygon like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>VERTEX (0,2,3) VERTEX (2,2,3) VERTEX (2,0,3) VERTEX (0,0,3)
+POLYGON 'poly' (VERTICES (0,1,2,3))
+</pre></td></tr></table></P><P>
+
+Let's say that you want to align the texture so that its origin is at (2,2,3).
+You can do this as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>POLYGON 'poly' (
+  VERTICES (0,1,2,3)
+  TEXTURE (
+    ORIG (2,2,3)
+    FIRST (0,2,3)
+    SECOND (2,0,3)
+    FIRST_LEN (1)
+    SECOND_LEN (1)))
+</pre></td></tr></table></P><P>
+
+With `<SAMP>ORIG</SAMP>', `<SAMP>FIRST</SAMP>', and `<SAMP>SECOND</SAMP>' you specify how the u/v
+coordinate system is located.  The origin of u/v is at `<SAMP>ORIG</SAMP>'; the u-axis
+is at `<SAMP>FIRST-ORIG</SAMP>'; and the v-axis is at `<SAMP>SECOND-ORIG</SAMP>'.
+`<SAMP>FIRST_LEN</SAMP>' and `<SAMP>SECOND_LEN</SAMP>' are similar to `<SAMP>LEN</SAMP>' and
+`<SAMP>TEXLEN</SAMP>' except that you can control the u and v scaling separately here.
+Note that `<SAMP>ORIG</SAMP>', `<SAMP>FIRST</SAMP>', and `<SAMP>SECOND</SAMP>' need not coincide with
+vertices of the polygon.  They should just be on the same plane as the
+polygon.  That way you can also create slanted textures.
+</P><P>
+
+`<SAMP>TEXLEN</SAMP>' in a `<SAMP>THING</SAMP>' or `<SAMP>SECTOR</SAMP>' is the default `<SAMP>LEN</SAMP>' for
+all polygons following the `<SAMP>TEXLEN</SAMP>' declaration.  `<SAMP>TEXNR</SAMP>' in a
+`<SAMP>THING</SAMP>' or `<SAMP>SECTOR</SAMP>' is the default `<SAMP>TEXNR</SAMP>' for all following
+polygons.  <EM>Note, however, that `<SAMP>TEXNR</SAMP>' is considered obsolete and
+its use is deprecated.</EM>
+</P><P>
+
+Use of planes is recommended.  A `<SAMP>PLANE</SAMP>' provides a way to assign a name
+to a texture orientation.  All polygons sharing the same `<SAMP>PLANE</SAMP>' will
+have textures that fit perfectly at the borders.  Crystal Space will also be
+able to do some optimizations on polygons that share the same plane (like
+backface culling an entire set of polygons in one operation).  Note that even
+if a `<SAMP>PLANE</SAMP>' is only used by one polygon it does not hurt.  If you do not
+specify the `<SAMP>PLANE</SAMP>', Crystal Space will create one anyway.
+</P><P>
+
+Currently Crystal Space assumes that there is a sector called `<SAMP>room</SAMP>'.  It
+will use that as a starting place, and will always start at location (0,0,0)
+unless you use an `<SAMP>ORIGIN</SAMP>' directive to instruct it otherwise.
+</P><P>
+
+Note that Sectors must be convex (unless you add a BSP tree).  Things
+need not be convex.
+</P><P>
+
+Vertices in a `<SAMP>THING</SAMP>' are specified in local object space.  You can
+translate this object space to world space with the `<SAMP>MOVE</SAMP>' directive.
+</P><P>
+
+When a `<SAMP>THING</SAMP>' or `<SAMP>SPRITE</SAMP>' is defined in the `<SAMP>WORLD</SAMP>' statement
+and not in a `<SAMP>SECTOR</SAMP>' or `<SAMP>ROOM</SAMP>' then it defines a template.  This
+template can then be used inside a `<SAMP>SECTOR</SAMP>' or `<SAMP>ROOM</SAMP>' by providing
+another `<SAMP>THING</SAMP>' or `<SAMP>SPRITE</SAMP>' statement and using the `<SAMP>TEMPLATE</SAMP>'
+statement there.  It is also possible to define the `<SAMP>THING</SAMP>' or
+`<SAMP>SPRITE</SAMP>' inside a `<SAMP>SECTOR</SAMP>' or `<SAMP>ROOM</SAMP>' directly, but using
+templates is preferable.
+</P><P>
+
+With `<SAMP>WARP</SAMP>' you provide a matrix which will mirror or warp space.  For
+example, when you want to make a mirroring floor the warping matrix should
+invert the Y-axis and leave the others intact.  So the `<SAMP>WARP</SAMP>' matrix
+would be:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 1  0 0 \
+| 0 -1 0 |
+\ 0  0 1 /
+</pre></td></tr></table></P><P>
+
+The vector should be a vector on the plane of the mirror.  It is used to
+determine exactly where mirroring should start.  For example, if the floor is
+at height -1, then (0,-1,0) is a good spot.
+</P><P>
+
+`<SAMP>MATRIX (.5)</SAMP>' is a shorthand for:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ .5  0  0 \
+|  0 .5  0 |
+\  0  0 .5 /
+</pre></td></tr></table></P><P>
+
+Portals are unidirectional.  If you need a `<SAMP>PORTAL</SAMP>' that works in two
+directions (so that you can go back) then you'll also have to specify a
+`<SAMP>PORTAL</SAMP>' in the other sector pointing back.
+</P><P>
+
+Note that even though a `<SAMP>PORTAL</SAMP>' does not require a texture (unless it
+has alpha transparency) you still need to specify one, since Crystal Space
+currently assumes that every polygon has a texture.
+</P><P>
+
+The `<SAMP>ROOM</SAMP>' and `<SAMP>SIXFACE</SAMP>' interfaces are good for human editors but
+it not suited for computer generated output.  Ignore `<SAMP>ROOM</SAMP>' and
+`<SAMP>SIXFACE</SAMP>' if you want to write an editor or converter and concentrate on
+`<SAMP>SECTOR</SAMP>' and `<SAMP>THING</SAMP>' instead.
+</P><P>
+
+<A NAME="MeshObject"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.2.html#SEC7.6.2.2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.1.html#SEC7.6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.html#SEC7.6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: AWS QT Designer and AWS</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: AWS QT Designer and AWS">
+<META NAME="keywords" CONTENT="Crystal Space: AWS QT Designer and AWS">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.11.7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.6.html#SEC7.11.6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 7.11.7 Using QT Designer To Create AWS Definition Files </H3>
+<!--docid::SEC7.11.7::-->
+<P>
+
+On many platforms Trolltechs Designer is available, a tool that lets you create graphical user interfaces like
+Dialogs, Forms etc. It saves the interface description in an easy to read format (XML -  even though i was not 
+able to locate a formal document type description (DTD) for it, it's format is pretty obvious).
+</P><P>
+
+You should be aware that not all features the Designer is capable of can be translated into AWS simply because
+they are not available in AWS. The same is true for features available in AWS but not in Designer.
+</P><P>
+
+<A NAME="SEC_1"></A>
+<H4> What you need </H4>
+<!--docid::SEC_1::-->
+<P>
+
+Since Designer saves its interface description in XML writing an extensible stylesheet to transform it into AWS format
+was an obvious choice. So you will need a XSLT stylesheet processor. You can either choose a commercial product or
+the excellent Xalan which is part of the Apache project. You can get it for free here:
+<A HREF="http://xml.apache.org">http://xml.apache.org</A>
+For development i used the Xalan Java 2 version at: <A HREF="http://xml.apache.org/xalan-j/index.html">http://xml.apache.org/xalan-j/index.html</A>
+</P><P>
+
+<A NAME="SEC_2"></A>
+<H4> How to use it </H4>
+<!--docid::SEC_2::-->
+<P>
+
+Design your dialog or widget in Designer and save it somewhere.
+To process the stylesheet with the java version of Xalan you call:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>java org.apache.xalan.xslt.Process \
+    -IN path/to/the/saved/designer/file.ui \
+    -XSL path/to/CS/scripts/aws/qt2aws.xsl
+</pre></td></tr></table></P><P>
+
+If you use Designer 1.1 (that comes with QT2) you use qt2aws.xsl. The new Designer version 2.0 (which comes with QT3) changed it's .ui DTD slightly. In case you use Designer2.0 use qt3aws.xsl.
+</P><P>
+
+Append the output to a file containing skin definitions.
+</P><P>
+
+<A NAME="SEC_3"></A>
+<H4> What controls are converted ? </H4>
+<!--docid::SEC_3::-->
+<P>
+
+<TABLE>
+<TR><TD><STRONG>QT Class</STRONG> </TD><TD> </TD><TD> <STRONG>AWS Class</STRONG></TD>
+</TR>
+<TR><TD>QPushButton </TD><TD> ==&#62; </TD><TD> Command Button</TD>
+</TR>
+<TR><TD>QRadioButton </TD><TD> ==&#62; </TD><TD> Radio Button</TD>
+</TR>
+<TR><TD>QSlider </TD><TD> ==&#62; </TD><TD> Scroll Bar</TD>
+</TR>
+<TR><TD>QButtonGroup </TD><TD> ==&#62; </TD><TD> Group Frame</TD>
+</TR>
+<TR><TD>QGroupBox </TD><TD> ==&#62; </TD><TD> Group Frame</TD>
+</TR>
+<TR><TD>QFrame </TD><TD> ==&#62; </TD><TD> Group Frame</TD>
+</TR>
+<TR><TD>QCheckBox </TD><TD> ==&#62; </TD><TD> Check Box</TD>
+</TR>
+<TR><TD>QLineEdit </TD><TD> ==&#62; </TD><TD> Text Box</TD>
+</TR>
+<TR><TD>QTextView </TD><TD> ==&#62; </TD><TD> Multiline Edit</TD>
+</TR>
+<TR><TD>QLabel </TD><TD> ==&#62; </TD><TD> Label</TD>
+</TR>
+<TR><TD>QLabel with Pixmap </TD><TD> ==&#62; </TD><TD> Image View</TD>
+</TR>
+<TR><TD>QListBox </TD><TD> ==&#62; </TD><TD> List Box</TD>
+</TR>
+<TR><TD>QListView </TD><TD> ==&#62; </TD><TD> List Box</TD>
+</TR>
+<TR><TD>QDialog </TD><TD> ==&#62; </TD><TD> Window</TD>
+</TR>
+<TR><TD>QWidget </TD><TD> ==&#62; </TD><TD> Window</TD>
+</TR>
+<TR><TD>QTabWidget </TD><TD> ==&#62; </TD><TD> Notebook</TD>
+</TR></TABLE>
+<P>
+
+<A NAME="SEC_4"></A>
+<H3> Special Notes </H3>
+<!--docid::SEC_4::-->
+<P>
+
+<A NAME="SEC_5"></A>
+<H4> AWS Signals and special properties </H4>
+<!--docid::SEC_5::-->
+<P>
+
+You can place special information in the controls <STRONG>whatsThis</STRONG> property. The content will be broken into tokens
+separated by the pipe ("|"). A token consist of a token identifier, the colon : and token text.
+The following tokens are recognized:
+</P><P>
+
+<UL>
+<LI>connect token
+<UL>
+<LI>token identifier: c
+<LI>token text: a list of comma separated items
+<LI>example:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>c:signalClicked,mySink::OnClick,signalBreak,mySink::ByeBye
+</pre></td></tr></table><P>
+
+This will be translated into
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>connect 
+{
+  signalClicked -&#62; mySink::OnClick  
+  signalBreak -&#62; mySink::ByeBye
+}
+</pre></td></tr></table></UL>
+<P>
+
+<LI>literal token
+<UL>
+<LI>token identifier: l
+<LI>token text: some text
+<LI>example:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>l:LeftEye: "Blue"
+</pre></td></tr></table><P>
+
+This will be translated into
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>LeftEye: "Blue"
+</pre></td></tr></table></UL>
+</UL>
+<P>
+
+Both examples from above would be concatenated and placed in the
+<STRONG>whatsThis</STRONG> property and would look like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>c:signalClicked,mySink::OnClick,signalBreak,
+    mySink::ByeBye|l:LeftEye: "Blue"
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC_6"></A>
+<H4> How to handle your own AWS controls </H4>
+<!--docid::SEC_6::-->
+<P>
+
+If you coded your own AWS control you can still use QT to layout the control (at least the common parameters 
+like size and position). For this to work simply choose one of the supported controls and use it as a placeholder.
+Additionally you use the  token identifier 't' in the <STRONG>whatsThis</STRONG> property of that control to name of your control class.
+</P><P>
+
+Example:
+</P><P>
+
+I have created my own push button control. The name of the control class is awsMyFancyPushButtonControl. Since it uses
+all the properties of the standard AWS command button i cleverly use the QPushButton as my placeholder and set all
+the properties i need and QPushButton already offers like size, position, button text and others. Additionally i set the
+t token identifier in property <STRONG>whatsThis</STRONG> to awsMyFancyPushButtonControl.
+</P><P>
+
+<UL>
+<LI>class type token
+<UL>
+<LI>token identifier: t
+<LI>token text: the name of your class
+<LI>example:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>t:awsMyFancyPushButtonControl
+</pre></td></tr></table><P>
+
+This will be translated into
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>component "hitmehard" is "awsMyFancyPushButtonControl"
+{
+  Frame: (10,330) - (121,350)
+  Caption: "update"
+}
+</pre></td></tr></table></UL>
+</UL>
+<A NAME="Internals"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.6.html#SEC7.11.6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

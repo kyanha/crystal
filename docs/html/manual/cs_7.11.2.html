@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: AWS Signals</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: AWS Signals">
+<META NAME="keywords" CONTENT="Crystal Space: AWS Signals">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.11.2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.1.html#SEC7.11.1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.3.html#SEC7.11.3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 7.11.2 Signals: Responding To User Input </H3>
+<!--docid::SEC7.11.2::-->
+<P>
+
+AWS implements a <EM>slot</EM>/<EM>signal</EM> mechanism for responding to user
+input.
+</P><P>
+
+All AWS
+components are signal <EM>sources</EM>, which means that you should be
+able to find out anything important that happens to them by
+creating appropriate <EM>sinks</EM>. The idea here is that the
+application provides certain services. The GUI is event
+driven, which means that you're not so much interested in finding
+out when a certain button is clicked, but rather you would
+like to know when a user wants to do something. For example, you
+don't care so much that the "Login" button has been pressed or
+toggled or selected or whatever it is that happens to the "Login"
+button to activate it, but rather that the user wants to login to
+the system. In the window definition file,
+connection maps that a
+GUI designer can hook up to signal sinks defined by an
+application programmer support this paradigm. For a game, this
+model seems especially appropriate.
+</P><P>
+
+For example, say the application programmer has defined a sink
+called `<SAMP>loginSink</SAMP>'. This sink has a few triggers: `<SAMP>login</SAMP>',
+`<SAMP>setusername</SAMP>', and `<SAMP>setpassword</SAMP>'. In order to have the login
+proceed, all of these triggers must be activated. The simplest
+method would be to hookup the `<SAMP>TextChanged</SAMP>' signal from the
+text boxes to the `<SAMP>setusername</SAMP>' and `<SAMP>setpassword</SAMP>' triggers.
+Both of these triggers might expect to receive a source that is an
+`<SAMP>awsComponent</SAMP>' supporting the property `<SAMP>Text</SAMP>'. A
+command button's `<SAMP>Clicked</SAMP>' signal could be connected to the
+`<SAMP>login</SAMP>' trigger.
+</P><P>
+
+Once everything is properly connected, the following sequence occurs:
+</P><P>
+
+<OL>
+<LI>
+The user enters text into the username box. A signal is sent to the
+`<SAMP>setusername</SAMP>' trigger, which tries to extract the value of the
+`<SAMP>Text</SAMP>' property
+using the component's <CODE>GetProperty()</CODE> method. If this
+succeeds, it stores a copy of the text.
+<P>
+
+<LI>
+The user types in the password box. The same process occurs here.
+<P>
+
+<LI>
+The user clicks on the "Login" button.  The `<SAMP>Clicked</SAMP>' signal is sent to
+the `<SAMP>login</SAMP>' trigger, which then performs some sort of authentication.  It
+might also then call some controlling object to hide the window and change the
+display to an menu or something other.
+</OL>
+<P>
+
+This is the general way that you interact with the user. The
+controlling principle being that the application developer
+provides the means; whereas the GUI designer provides the
+manner. AWS tries to separate controller and view semantics
+as much as possible.
+<A NAME="AWS Custom Components"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.1.html#SEC7.11.1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.3.html#SEC7.11.3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

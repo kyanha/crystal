@@ -1,0 +1,621 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Map File Syntax</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Map File Syntax">
+<META NAME="keywords" CONTENT="Crystal Space: Map File Syntax">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7.6.2.2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.1.html#SEC7.6.2.1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.3.html#SEC7.6.2.3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.1.html#SEC7.6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.html#SEC7.6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H4> 7.6.2.2 Syntax </H4>
+<!--docid::SEC7.6.2.2::-->
+<P>
+
+<EM>Written by numerous Crystal Space developers.  Extensive Texinfo
+typesetting performed by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
+</P><P>
+
+<A NAME="SEC_1"></A>
+<H4> Basic Syntax Elements </H4>
+<!--docid::SEC_1::-->
+<P>
+
+<EM>number</EM>
+</P><P>
+
+A general number.
+</P><P>
+
+<EM>pos-number</EM>
+</P><P>
+
+A general positive number.
+</P><P>
+
+<EM>integer</EM>
+</P><P>
+
+A general integer.
+</P><P>
+
+<EM>pos-integer</EM>
+</P><P>
+
+A positive integer (&#62; 0).
+</P><P>
+
+<EM>number..number</EM>
+</P><P>
+
+A numeric range. For example, `0..1' represents a number between 0 and 1.
+</P><P>
+
+<EM>name</EM>
+</P><P>
+
+A name identifier.  An unquoted string provided that it contains no
+punctuation or whitespace; otherwise delimited by double quotes.
+</P><P>
+
+<EM>string</EM>
+</P><P>
+
+A string delimited by double quotes. Special characters are escaped with a
+backslash.
+</P><P>
+
+<A NAME="SEC_2"></A>
+<H4> Number List </H4>
+<!--docid::SEC_2::-->
+<EM>number-list</EM> => <EM>number</EM> [ `<CODE>,</CODE>' <EM>number</EM> ] <small>...</small>
+<P>
+
+<A NAME="SEC_3"></A>
+<H4> Boolean Value </H4>
+<!--docid::SEC_3::-->
+<EM>yes</EM> => `<CODE>yes</CODE>' | `<CODE>true</CODE>' | `<CODE>on</CODE>' | `<CODE>1</CODE>'<BR>
+<EM>no</EM> => `<CODE>no</CODE>' | `<CODE>false</CODE>' | `<CODE>off</CODE>' | `<CODE>0</CODE>'<BR>
+<EM>yes-no</EM> => <EM>yes</EM> | <EM>no</EM>
+<P>
+
+<A NAME="SEC_4"></A>
+<H4> Color Description </H4>
+<!--docid::SEC_4::-->
+<EM>red</EM> => 0..1<BR>
+<EM>green</EM> => 0..1<BR>
+<EM>blue</EM> => 0..1<BR>
+<EM>gray</EM> => 0..1<BR>
+<EM>color-grayscale</EM> => <EM>gray</EM><BR>
+<EM>color-general</EM> => <EM>red</EM> `<CODE>,</CODE>' <EM>green</EM> `<CODE>,</CODE>' <EM>blue</EM><BR>
+<EM>color</EM> => <EM>color-grayscale</EM> | <EM>color-general</EM>
+<P>
+
+<A NAME="SEC_5"></A>
+<H4> Vectors and Coordinates </H4>
+<!--docid::SEC_5::-->
+Note that the x-axis points to the right, the y-axis points up, and the z-axis
+points forward.
+<P>
+
+<EM>x</EM> => <EM>number</EM><BR>
+<EM>y</EM> => <EM>number</EM><BR>
+<EM>z</EM> => <EM>number</EM><BR>
+<EM>u</EM> => <EM>number</EM><BR>
+<EM>v</EM> => <EM>number</EM><BR>
+<EM>vector-2d</EM> => <EM>x</EM> `<CODE>,</CODE>' <EM>z</EM><BR>
+<EM>vector-3d</EM> => <EM>x</EM> `<CODE>,</CODE>' <EM>y</EM> `<CODE>,</CODE>' <EM>z</EM><BR>
+<EM>vector-4d</EM> => <EM>x</EM> `<CODE>,</CODE>' <EM>y</EM> `<CODE>,</CODE>'     <EM>z</EM> `<CODE>,</CODE>' <EM>r</EM> <BR>
+<EM>vertex-idx</EM> => <EM>integer</EM><BR>
+<EM>coordinate</EM> => <EM>vector-3d</EM><BR>
+<EM>coordinate-2d</EM> => <EM>vector-2d</EM><BR>
+<EM>texture-coordinate</EM> => <EM>u</EM> `<CODE>,</CODE>' <EM>v</EM>
+</P><P>
+
+<A NAME="SEC_6"></A>
+<H4> Object Names </H4>
+<!--docid::SEC_6::-->
+<P>
+
+<EM>sector-name</EM> => <EM>name</EM><BR>
+<EM>light-name</EM> => <EM>name</EM><BR>
+<EM>col-name</EM> => <EM>name</EM><BR>
+<EM>texture-name</EM> => <EM>name</EM><BR>
+<EM>material-name</EM> => <EM>name</EM><BR>
+<EM>mesh-name</EM> => <EM>name</EM><BR>
+<EM>meshfact-name</EM> => <EM>name</EM><BR>
+<EM>library-name</EM> => <EM>name</EM><BR>
+<EM>file-name</EM> => <EM>name</EM><BR>
+<EM>plugin-name</EM> => <EM>name</EM><BR>
+<EM>plugin-shortname</EM> => <EM>name</EM><BR>
+<EM>cache-name</EM> => <EM>name</EM><BR>
+<EM>priority-name</EM> => <EM>name</EM>
+</P><P>
+
+<A NAME="SEC_7"></A>
+<H4> Attributes and Numbers </H4>
+<!--docid::SEC_7::-->
+<EM>radius</EM> => <EM>pos-number</EM><BR>
+<EM>angle</EM> => <EM>number</EM><BR>
+<EM>keyname</EM> => <EM>string</EM><BR>
+<EM>keyvalue</EM> => <EM>string</EM>
+<P>
+
+<A NAME="SEC_8"></A>
+<H4> Visibility Culling  </H4>
+<!--docid::SEC_8::-->
+Sidenote: the `<SAMP>CULLER</SAMP>' statement is going to be obsolete in the future.
+<P>
+
+<EM>culler</EM> => `<CODE>CULLER</CODE>' `<CODE>(</CODE>' <EM>mesh-name</EM> `<CODE>)</CODE>'
+<EM>cullerp</EM> => `<CODE>CULLERP</CODE>' `<CODE>(</CODE>' <EM>plugin-name</EM> `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_9"></A>
+<H4> Key </H4>
+<!--docid::SEC_9::-->
+Use the `<SAMP>KEY</SAMP>' feature to attach arbitrary game data to any Crystal
+Space object. Crystal Space will only store these key/value pairs with
+objects but doesn't otherwise use them. You can iterate over these
+keys in the code.
+<P>
+
+<EM>key</EM> => `<CODE>KEY</CODE>' `<CODE>(</CODE>' <EM>keyname</EM> `<CODE>,</CODE>' <EM>keyvalue</EM> `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_10"></A>
+<H4> Fog </H4>
+<!--docid::SEC_10::-->
+<EM>density</EM> => <EM>number</EM><BR>
+<EM>fog-desc</EM> => `<CODE>FOG</CODE>' `<CODE>(</CODE>' <EM>color</EM> `<CODE>,</CODE>' <EM>density</EM> `<CODE>)</CODE>'<BR>
+<EM>alpha-nr</EM> => `<CODE>0</CODE>' | `<CODE>25</CODE>' | `<CODE>50</CODE>' | `<CODE>75</CODE>'<BR>
+<EM>alpha</EM> => `<CODE>ALPHA</CODE>' `<CODE>(</CODE>' <EM>alpha-nr</EM> `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_11"></A>
+<H4> Matrices, Vectors, Scalers, and Angles </H4>
+<!--docid::SEC_11::-->
+<EM>vector</EM> => `<CODE>V</CODE>' `<CODE>(</CODE>' <EM>vector-3d</EM> `<CODE>)</CODE>'<BR>
+<EM>matrix-scaler</EM> => <EM>number</EM><BR>
+<EM>matrix-x-scaler</EM> => <EM>matrix-scaler</EM><BR>
+<EM>matrix-y-scaler</EM> => <EM>matrix-scaler</EM><BR>
+<EM>matrix-z-scaler</EM> => <EM>matrix-scaler</EM><BR>
+<EM>stated-matrix-x-scaler</EM> => `<CODE>SCALE_X</CODE>' `<CODE>(</CODE>' <EM>matrix-x-scaler</EM> `<CODE>)</CODE>'<BR>
+<EM>stated-matrix-y-scaler</EM> => `<CODE>SCALE_Y</CODE>' `<CODE>(</CODE>' <EM>matrix-y-scaler</EM> `<CODE>)</CODE>'<BR>
+<EM>stated-matrix-z-scaler</EM> => `<CODE>SCALE_Z</CODE>' `<CODE>(</CODE>' <EM>matrix-z-scaler</EM> `<CODE>)</CODE>'<BR>
+<EM>complex-matrix-scaler</EM> => <EM>stated-matrix-x-scaler</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>stated-matrix-y-scaler</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>stated-matrix-z-scaler</EM><BR>
+<EM>full-matrix-scaler</EM> => <EM>matrix-x-scaler</EM> `<CODE>,</CODE>'     <EM>matrix-y-scaler</EM> `<CODE>,</CODE>' <EM>matrix-z-scaler</EM><BR>
+<EM>uniform-matrix-scaler</EM> => <EM>matrix-scaler</EM><BR>
+<EM>simple-matrix-scaler</EM> => `<CODE>SCALE</CODE>' `<CODE>(</CODE>'     <EM>uniform-matrix-scaler</EM> | <EM>full-matrix-scaler</EM> `<CODE>)</CODE>'<BR>
+<EM>compound-matrix-scaler</EM> => <EM>simple-matrix-scaler</EM> | <EM>complex-matrix-scaler</EM>
+<P>
+
+<EM>rotation-x-angle</EM> => <EM>angle</EM><BR>
+<EM>rotation-y-angle</EM> => <EM>angle</EM><BR>
+<EM>rotation-z-angle</EM> => <EM>angle</EM><BR>
+<EM>rotation-x-matrix</EM> => `<CODE>ROT_X</CODE>' `<CODE>(</CODE>' <EM>rotation-x-angle</EM> `<CODE>)</CODE>'<BR>
+<EM>rotation-y-matrix</EM> => `<CODE>ROT_Y</CODE>' `<CODE>(</CODE>' <EM>rotation-y-angle</EM> `<CODE>)</CODE>'<BR>
+<EM>rotation-z-matrix</EM> => `<CODE>ROT_Z</CODE>' `<CODE>(</CODE>' <EM>rotation-z-angle</EM> `<CODE>)</CODE>'<BR>
+<EM>complex-rotation-matrix</EM> => <EM>rotation-x-matrix</EM> |     <EM>rotation-y-matrix</EM> | <EM>rotation-z-matrix</EM><BR>
+<EM>rotation-angles</EM> => <EM>rotation-x-angle</EM> `<CODE>,</CODE>'     <EM>rotation-y-angle</EM> `<CODE>,</CODE>' <EM>rotation-z-angle</EM><BR>
+<EM>simple-rotation-matrix</EM> => `<CODE>ROT</CODE>' `<CODE>(</CODE>' <EM>rotation-angles</EM> `<CODE>)</CODE>'
+</P><P>
+
+<EM>rotation-matrix</EM> => <EM>simple-rotation-matrix</EM> | <EM>complex-rotation-matrix</EM><BR>
+<EM>complex-matrix</EM> => <EM>rotation-matrix</EM> | <EM>compound-matrix-scaler</EM><BR>
+<EM>simple-scaled-matrix</EM> => <EM>uniform-matrix-scaler</EM><BR>
+<EM>normal-matrix</EM> => <EM>vector-3d</EM> `<CODE>,</CODE>' <EM>vector-3d</EM>     `<CODE>,</CODE>' <EM>vector-3d</EM><BR>
+<EM>identity-matrix</EM> => `<CODE>IDENTITY</CODE>'<BR>
+<EM>matrix-type</EM> => <EM>identity-matrix</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>normal-matrix</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>simple-scaled-matrix</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>complex-matrix</EM><BR>
+<EM>matrix</EM> => `<CODE>MATRIX</CODE>' `<CODE>(</CODE>' [ <EM>matrix-type</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+<EM>move-comp</EM> => <EM>matrix</EM> | <EM>vector</EM><BR>
+<EM>move</EM> => `<CODE>MOVE</CODE>' `<CODE>(</CODE>' [ <EM>move-comp</EM> <small>...</small> ] `<CODE>)</CODE>'<BR>
+<EM>hardmove</EM> => `<CODE>HARDMOVE</CODE>' `<CODE>(</CODE>' [ <EM>move-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_12"></A>
+<H4> Lights </H4>
+<!--docid::SEC_12::-->
+It is recommended to use the new syntax for lights.
+<P>
+
+<EM>dynamic-flag</EM> => `<CODE>0</CODE>' | `<CODE>1</CODE>'<BR>
+<EM>light-oldsyntax</EM> => <EM>coordinate</EM> `<CODE>:</CODE>' <EM>radius</EM>     `<CODE>,</CODE>' <EM>color-general</EM> `<CODE>,</CODE>' <EM>dynamic-flag</EM>
+</P><P>
+
+<EM>light-center</EM> => `<CODE>CENTER</CODE>' `<CODE>(</CODE>' <EM>coordinate</EM> `<CODE>)</CODE>'<BR>
+<EM>light-radius</EM> => `<CODE>RADIUS</CODE>' `<CODE>(</CODE>' <EM>radius</EM> `<CODE>)</CODE>'<BR>
+<EM>light-color</EM> => `<CODE>COLOR</CODE>' `<CODE>(</CODE>' <EM>color</EM> `<CODE>)</CODE>'<BR>
+<EM>light-dynamic</EM> => `<CODE>DYNAMIC</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>light-halo</EM> => `<CODE>HALO</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>light-comp</EM> => <EM>light-center</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>light-radius</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>light-dynamic</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>light-color</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>light-halo</EM><BR>
+<EM>light-newsyntax</EM> => [ <EM>light-comp</EM> <small>...</small> ]
+</P><P>
+
+<EM>light</EM> => `<CODE>LIGHT</CODE>' <EM>light-name</EM>     `<CODE>(</CODE>' <EM>light-oldsyntax</EM> | <EM>light-newsyntax</EM> `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_13"></A>
+<H4> Collection Objects </H4>
+<!--docid::SEC_13::-->
+Note that collection objects are NOT hierarchical objects. A collection
+object is just one object that represents a group of other objects.
+<P>
+
+<EM>col-mesh</EM> => `<CODE>MESH</CODE>' `<CODE>(</CODE>' <EM>mesh-name</EM> `<CODE>)</CODE>'<BR>
+<EM>col-collection</EM> => `<CODE>COLLECTION</CODE>' `<CODE>(</CODE>' <EM>col-name</EM> `<CODE>)</CODE>'<BR>
+<EM>col-light</EM> => `<CODE>LIGHT</CODE>' `<CODE>(</CODE>' <EM>light-name</EM> `<CODE>)</CODE>'<BR>
+<EM>col-sector</EM> => `<CODE>SECTOR</CODE>' `<CODE>(</CODE>' <EM>sector-name</EM> `<CODE>)</CODE>'<BR>
+<EM>collection-comp</EM> => <EM>col-collection</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>col-light</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>col-sector</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>col-mesh</EM><BR>
+<EM>collection</EM> => `<CODE>COLLECTION</CODE>' <EM>col-name</EM>     `<CODE>(</CODE>' [ <EM>collection-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_14"></A>
+<H4> Materials and Textures </H4>
+<!--docid::SEC_14::-->
+<EM>material</EM> => `<CODE>MATERIAL</CODE>' `<CODE>(</CODE>' <EM>material-name</EM> `<CODE>)</CODE>'<BR>
+<EM>texture</EM> => `<CODE>TEXTURE</CODE>' `<CODE>(</CODE>' <EM>texture-name</EM> `<CODE>)</CODE>'<BR>
+<P>
+
+<A NAME="SEC_15"></A>
+<H4> Material and Texture Description </H4>
+<!--docid::SEC_15::-->
+<EM>transparent</EM> => `<CODE>TRANSPARENT</CODE>' `<CODE>(</CODE>' <EM>color</EM> `<CODE>)</CODE>'<BR>
+<EM>procedural</EM> => `<CODE>PROCEDURAL</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>tex2d</EM> => `<CODE>FOR_2D</CODE>' `<CODE>(</CODE>' <EM>yes-no</EM> `<CODE>)</CODE>'<BR>
+<EM>tex3d</EM> => `<CODE>FOR_3D</CODE>' `<CODE>(</CODE>' <EM>yes-no</EM> `<CODE>)</CODE>'<BR>
+<EM>persistent</EM> => `<CODE>PERSISTENT</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>filter</EM> => `<CODE>FILTER</CODE>' `<CODE>(</CODE>' <small>...</small> `<CODE>)</CODE>'<BR>
+<EM>mipmap</EM> => `<CODE>MIPMAP</CODE>' `<CODE>(</CODE>' <EM>yes-no</EM> `<CODE>)</CODE>'<BR>
+<EM>dither</EM> => `<CODE>DITHER</CODE>' `<CODE>(</CODE>' <EM>yes-no</EM> `<CODE>)</CODE>'<BR>
+<EM>texture-file</EM> => `<CODE>FILE</CODE>' `<CODE>(</CODE>' <EM>file-name</EM> `<CODE>)</CODE>'
+<P>
+
+<EM>texture-desc-comp</EM> => <EM>transparent</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>filter</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mipmap</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>dither</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>file</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>procedural</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>tex2d</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>tex3d</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>persistent</EM><BR>
+<EM>texture-desc</EM> => `<CODE>TEXTURE</CODE>' <EM>texture-name</EM>     `<CODE>(</CODE>' [ <EM>texture-desc-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+<EM>material-desc-comp</EM> => <EM>texture</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| `<CODE>COLOR</CODE>' `<CODE>(</CODE>' <EM>color</EM> `<CODE>)</CODE>'<BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| `<CODE>DIFFUSE</CODE>' `<CODE>(</CODE>' <EM>number</EM> `<CODE>)</CODE>'<BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| `<CODE>AMBIENT</CODE>' `<CODE>(</CODE>' <EM>number</EM> `<CODE>)</CODE>'<BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| `<CODE>REFLECTION</CODE>' `<CODE>(</CODE>' <EM>number</EM> `<CODE>)</CODE>'<BR>
+<EM>material-desc</EM> => `<CODE>MATERIAL</CODE>' <EM>material-name</EM>     `<CODE>(</CODE>' [ <EM>material-desc-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_16"></A>
+<H4> LOD </H4>
+<!--docid::SEC_16::-->
+<EM>lod-level</EM> => `<CODE>LEVEL</CODE>' `<CODE>(</CODE>' <EM>number</EM> `<CODE>)</CODE>'<BR>
+<EM>lod-comp</EM> => <EM>lod-level</EM><BR>
+<EM>lod</EM> => `<CODE>LOD</CODE>' `<CODE>(</CODE>' [ <EM>lod-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_17"></A>
+<H4> Mesh Objects </H4>
+<!--docid::SEC_17::-->
+Important note! This documentation explains ONLY the basic mesh object
+and factory parsing. It does NOT describe the parsing that is done by
+the loader plugin itself. So this means that everything inside the
+`<SAMP>PARAMS</SAMP>' blocks is not documented in this document. Documentation
+for this will follow later in the mesh object plugin documentation.
+<P>
+
+<EM>plugin</EM> => `<CODE>PLUGIN</CODE>' `<CODE>(</CODE>' <EM>string</EM> `<CODE>)</CODE>'<BR>
+<EM>params</EM> => `<CODE>PARAMS</CODE>' `<CODE>(</CODE>' <EM>string</EM> `<CODE>)</CODE>'
+<EM>paramsfile</EM> => `<CODE>PARAMSFILE</CODE>' `<CODE>(</CODE>' <EM>file-name</EM> `<CODE>)</CODE>'
+<EM>mesh-nolighting</EM> => `<CODE>NOLIGHTING</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-noshadows</EM> => `<CODE>NOSHADOWS</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-invisible</EM> => `<CODE>INVISIBLE</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-detail</EM> => `<CODE>DETAIL</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-zfill</EM> => `<CODE>ZFILL</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-znone</EM> => `<CODE>ZNONE</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-zuse</EM> => `<CODE>ZUSE</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-ztest</EM> => `<CODE>ZTEST</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-camera</EM> => `<CODE>CAMERA</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-convex</EM> => `<CODE>CONVEX</CODE>' `<CODE>(</CODE>' `<CODE>)</CODE>'<BR>
+<EM>mesh-priority</EM> => `<CODE>PRIORITY</CODE>' `<CODE>(</CODE>' <EM>priority-name</EM> `<CODE>)</CODE>'<BR>
+<EM>mesh-lmcache</EM> => `<CODE>LMCACHE</CODE>' `<CODE>(</CODE>' <EM>cache-name</EM> `<CODE>)</CODE>'<BR>
+</P><P>
+
+<EM>mesh-comp</EM> => <EM>plugin</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>addon</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>key</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>params</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>paramsfile</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>move</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>hardmove</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>lod</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>meshref</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-nolighting</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-noshadows</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-invisible</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-detail</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-zfill</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-znone</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-zuse</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-ztest</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-camera</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-convex</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-priority</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-lmcache</EM><BR>
+<EM>mesh</EM> => `<CODE>MESHOBJ</CODE>' <EM>mesh-name</EM>     `<CODE>(</CODE>' [ <EM>mesh-comp</EM> <small>...</small> ] `<CODE>)</CODE>'<BR>
+<EM>meshlib</EM> => `<CODE>MESHLIB</CODE>' <EM>mesh-name</EM>     `<CODE>(</CODE>' [ <EM>mesh-comp</EM> <small>...</small> `<CODE>)</CODE>'
+</P><P>
+
+<EM>meshref-factory</EM> => `<CODE>FACTORY</CODE>' `<CODE>(</CODE>' <EM>meshfact-name</EM> `<CODE>)</CODE>'<BR>
+<EM>meshref-comp</EM> => <EM>meshref-factory</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>addon</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>key</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>move</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>hardmove</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>lod</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-nolighting</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-noshadows</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-invisible</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-detail</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-zfill</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-znone</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-zuse</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-ztest</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-camera</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-convex</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh-priority</EM><BR>
+<EM>meshref</EM> => `<CODE>MESHREF</CODE>' <EM>mesh-name</EM>     `<CODE>(</CODE>' [ <EM>meshref-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_18"></A>
+<H4> Mesh Object Factories </H4>
+<!--docid::SEC_18::-->
+<EM>meshfact-file</EM> => `<CODE>FILE</CODE>' `<CODE>(</CODE>' <EM>file-name</EM> `<CODE>)</CODE>'<BR>
+<EM>meshfact-comp</EM> => <EM>plugin</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>addon</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>params</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>paramsfile</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>meshfact-file</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>meshfact</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>move</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>hardmove</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>lod</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>material</EM><BR>
+<EM>meshfact</EM> => `<CODE>MESHFACT</CODE>' <EM>meshfact-name</EM>     `<CODE>(</CODE>' [ <EM>meshfact-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_19"></A>
+<H4> Nodes </H4>
+<!--docid::SEC_19::-->
+<EM>position</EM> => `<CODE>POSITION</CODE>' `<CODE>(</CODE>' <EM>coordinate</EM> `<CODE>)</CODE>'<BR>
+<EM>node-comp</EM> => <EM>position</EM> | <EM>key</EM><BR>
+<EM>node</EM> => `<CODE>NODE</CODE>' `<CODE>(</CODE>' [ <EM>node-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_20"></A>
+<H4> Sectors  </H4>
+<!--docid::SEC_20::-->
+<P>
+
+<EM>sector-comp</EM> => <EM>addon</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>culler</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>cullerp</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>light</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>mesh</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>meshref</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>meshlib</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>fog-desc</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>key</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>node</EM><BR>
+<EM>sector</EM> => `<CODE>SECTOR</CODE>' <EM>sector-name</EM>     `<CODE>(</CODE>' [ <EM>sector-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_21"></A>
+<H4> Texture List </H4>
+<!--docid::SEC_21::-->
+<EM>textures-comp</EM> => <EM>texture-desc</EM><BR>
+<EM>textures</EM> => `<CODE>TEXTURES</CODE>' `<CODE>(</CODE>' [ <EM>textures-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_22"></A>
+<H4> Material List </H4>
+<!--docid::SEC_22::-->
+<EM>materials-comp</EM> => <EM>material-desc</EM><BR>
+<EM>materials</EM> => `<CODE>MATERIALS</CODE>' `<CODE>(</CODE>' [ <EM>materials-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_23"></A>
+<H4> Material Groupings </H4>
+<!--docid::SEC_23::-->
+Sometimes you want things of the same type but with different materials on it.
+This is where material groupings come in handy.  The final name of a texture
+in a `<SAMP>MAT_SET</SAMP>' expression will be `<VAR>mat-set-name_texture-name</VAR>'.  The
+materials will be merged into the global texture list.  You should define a
+`<SAMP>MAT_SET</SAMP>' after `<SAMP>TEXTURES</SAMP>' since the latter command clears the
+internal list first.
+<P>
+
+<EM>mat-set-name</EM> => <EM>name</EM><BR>
+<EM>material-set</EM> => `<CODE>MAT_SET</CODE>' <EM>mat-set-name</EM> `<CODE>(</CODE>' <EM>materials</EM> `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_24"></A>
+<H4> Library </H4>
+<!--docid::SEC_24::-->
+<EM>library</EM> => `<CODE>LIBRARY</CODE>' <EM>library-name</EM> `<CODE>(</CODE>' <EM>file-name</EM> `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_25"></A>
+<H4> Starting Position </H4>
+<!--docid::SEC_25::-->
+<EM>start-sector</EM> => `<CODE>SECTOR</CODE>' `<CODE>(</CODE>' <EM>sector-name</EM> `<CODE>)</CODE>'<BR>
+<EM>start-position</EM> => `<CODE>POSITION</CODE>' `<CODE>(</CODE>' <EM>coordinate</EM> `<CODE>)</CODE>'<BR>
+<EM>start-up</EM> => `<CODE>UP</CODE>' `<CODE>(</CODE>' <EM>vector-3d</EM> `<CODE>)</CODE>'<BR>
+<EM>start-forward</EM> => `<CODE>FORWARD</CODE>' `<CODE>(</CODE>' <EM>vector-3d</EM> `<CODE>)</CODE>'<BR>
+<EM>start-comp</EM> => <EM>start-sector</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>start-position</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>start-up</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>start-forward</EM><BR>
+<EM>start-newsyntax</EM> => [ <EM>start-comp</EM> <small>...</small> ]<BR>
+<EM>start-oldsyntax</EM> => <EM>sector-name</EM> `<CODE>,</CODE>'     <EM>coordinate</EM><BR>
+<EM>start</EM> => `<CODE>START</CODE>'     `<CODE>(</CODE>' <EM>start-oldsyntax</EM> | <EM>start-newsyntax</EM> `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_26"></A>
+<H4> For Loader Plug-Ins </H4>
+<!--docid::SEC_26::-->
+<EM>plugin-id</EM> => <EM>plugin-name</EM> | <EM>plugin-shortname</EM><BR>
+<EM>plugin-spec</EM> => `<CODE>PLUGIN</CODE>' `<CODE>(</CODE>' <EM>plugin-id</EM> `<CODE>)</CODE>'<BR>
+<EM>plugin-params</EM> => `<CODE>PARAMS</CODE>' `<CODE>(</CODE>' <small>...</small> `<CODE>)</CODE>'<BR>
+<EM>plugin-comp</EM> => `<CODE>PLUGIN</CODE>' <EM>plugin-shortname</EM>     `<CODE>(</CODE>' <EM>plugin-name</EM> `<CODE>)</CODE>'<BR>
+<EM>plugins</EM> => `<CODE>PLUGINS</CODE>'      `<CODE>(</CODE>' [ <EM>plugin-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_27"></A>
+<H4> Add-ons </H4>
+<!--docid::SEC_27::-->
+Same remark as for mesh objects: the stuff that is inside the
+`<SAMP>PARAMS</SAMP>' block is not documented here.
+<P>
+
+<EM>addon-comp</EM> => <EM>plugin-spec</EM> | <EM>plugin-params</EM><BR>
+<EM>addon</EM> => `<CODE>ADDON</CODE>' `<CODE>(</CODE>' [ <EM>addon-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+<A NAME="SEC_28"></A>
+<H4> Sounds </H4>
+<!--docid::SEC_28::-->
+<EM>sound-file</EM> => `<CODE>FILE</CODE>' `<CODE>(</CODE>' <EM>file-name</EM> `<CODE>)</CODE>'<BR>
+<EM>sound</EM> => `<CODE>SOUND</CODE>' [ <EM>file-name</EM> ]     `<CODE>(</CODE>' [ <EM>sound-file</EM> ] `<CODE>)</CODE>'<BR>
+<EM>sounds</EM> => `<CODE>SOUNDS</CODE>' `<CODE>(</CODE>' [ <EM>sound</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_29"></A>
+<H4> Render Priorities  </H4>
+<!--docid::SEC_29::-->
+<EM>rendpri-value</EM> => <EM>integer</EM><BR>
+<EM>rendpri-setting</EM> => `<CODE>BACK2FRONT</CODE>' | `<CODE>FRONT2BACK</CODE>' | `<CODE>NONE</CODE>'<BR>
+<EM>rendpri-comp</EM> => `<CODE>PRIORITY</CODE>' <EM>priority-name</EM>     `<CODE>(</CODE>' <EM>rendpri-value</EM> `<CODE>,</CODE>' <EM>rendpri-setting</EM> `<CODE>)</CODE>'<BR>
+<EM>renderpriorities</EM> => `<CODE>RENDERPRIORITIES</CODE>'     `<CODE>(</CODE>' [ <EM>rendpri-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_30"></A>
+<H4> Settings </H4>
+<!--docid::SEC_30::-->
+<EM>setting-ambient</EM> => `<CODE>AMBIENT</CODE>' `<CODE>(</CODE>' <EM>color</EM> `<CODE>)</CODE>'<BR>
+<EM>setting-clearzbuf</EM> => `<CODE>CLEARZBUF</CODE>' `<CODE>(</CODE>' <EM>yes-no</EM> `<CODE>)</CODE>'<BR>
+<EM>setting-clearscreen</EM> => `<CODE>CLEARSCREEN</CODE>' `<CODE>(</CODE>' <EM>yes-no</EM> `<CODE>)</CODE>'<BR>
+<EM>setting-lightmapcellsize</EM> => `<CODE>LIGHTMAPCELLSIZE</CODE>' `<CODE>(</CODE>' <EM>pos-integer</EM> `<CODE>)</CODE>'<BR>
+<EM>setting-maxlightmapsize</EM> => `<CODE>MAXLIGHTMAPSIZE</CODE>' `<CODE>(</CODE>' <EM>pos-integer</EM> `<CODE>,</CODE>' <EM>pos-integer</EM> `<CODE>)</CODE>'<BR>
+<EM>settings-comp</EM> => <EM>setting-ambient</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>setting-clearzbuf</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>setting-clearscreen</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>setting-lightmapcellsize</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>setting-maxlightmapsize</EM><BR>
+<EM>settings</EM> => `<CODE>SETTINGS</CODE>' `<CODE>(</CODE>' [ <EM>settings-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_31"></A>
+<H4> World </H4>
+<!--docid::SEC_31::-->
+<EM>world-comp</EM> => <EM>textures</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>materials</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>library</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>addon</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>material-set</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>sounds</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>renderpriorities</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>plugins</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>sector</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>meshfact</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>collection</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>start</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>key</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>settings</EM><BR>
+<EM>world</EM> => `<CODE>WORLD</CODE>' `<CODE>(</CODE>' [ <EM>world-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="SEC_32"></A>
+<H4> Library File </H4>
+<!--docid::SEC_32::-->
+<EM>library-comp</EM> => <EM>textures</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>materials</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>meshfact</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>addon</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>meshobj</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>meshref</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>sounds</EM><BR>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| <EM>plugins</EM><BR>
+<EM>library</EM> => `<CODE>LIBRARY</CODE>' `<CODE>(</CODE>' [ <EM>library-comp</EM> <small>...</small> ] `<CODE>)</CODE>'
+<P>
+
+<A NAME="Map File Hints"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.1.html#SEC7.6.2.1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.3.html#SEC7.6.2.3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.1.html#SEC7.6.1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.2.html#SEC7.6.2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.7.html#SEC7.7"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

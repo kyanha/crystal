@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Walktest Movement</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Walktest Movement">
+<META NAME="keywords" CONTENT="Crystal Space: Walktest Movement">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC4.2.4.2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.4.1.html#SEC4.2.4.1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.4.3.html#SEC4.2.4.3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.3.html#SEC4.2.3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.4.html#SEC4.2.4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.5.html#SEC4.2.5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H4> 4.2.4.2 Movement Commands </H4>
+<!--docid::SEC4.2.4.2::-->
+<P>
+
+The actual code for movement is a maze of twisty little subroutines, all alike,
+and this is reflected in the commands available.
+</P><P>
+
+There are several concepts in use in the movement commands.
+</P><P>
+
+<UL>
+<LI>
+Movement in world coordinates.
+<LI>
+Movement relative to way the camera is facing.
+<LI>
+Movement relative to the camera's orientation, ie taking account of any
+rotation along the direction you are looking in.
+<LI>
+Acceleration and decceleration.
+</UL>
+<P>
+
+This has been implemented by having two modes - `<SAMP>move_3d on</SAMP>' and
+`<SAMP>move_3d off</SAMP>'.  This affects the `<SAMP>strafe</SAMP>', `<SAMP>step</SAMP>', `<SAMP>rotate</SAMP>'
+and `<SAMP>look</SAMP>' commands which invoke commands prefixed with `<SAMP>imm_</SAMP>' when
+`<SAMP>move_3d</SAMP>' is on.
+</P><P>
+
+`<SAMP>move_3d</SAMP>' is like Descent, as if you are piloting an air vehicle, and can
+yaw, pitch and roll.
+</P><P>
+
+Without `<SAMP>move_3d</SAMP>', movement is like Quake, and you cannot tip your head
+left and right, only up and down.
+</P><P>
+
+Acceleration and maximum speed are configured in the Configuration file, but
+only affect the step (move in direction of view) and strafe (move perpendicular
+to direction of view) commands, not the rotation commands.
+See section <A HREF="cs_4.2.6.html#SEC4.2.6">4.2.6 Configuration Files</A>.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>facenorth</CODE>
+<DD><DT><CODE>facesouth</CODE>
+<DD><DT><CODE>faceeast</CODE>
+<DD><DT><CODE>facewest</CODE>
+<DD><DT><CODE>facedown</CODE>
+<DD><DT><CODE>faceup</CODE>
+<DD>Point in the specified absolute direction.  Useful if you get lost or if you
+are not pointing quite level, since Walktest has a movement bug which means if
+you are not facing horizontally, you tend to drift forwards or backwards.
+<P>
+
+<DT><CODE>turn [<KBD>b</KBD>]</CODE>
+<DD>Turn 180 from the direction you are facing.
+</DL>
+<P>
+
+The next section of commands work differently if `<SAMP>move_3d</SAMP>' is on.
+`<SAMP>move_3D</SAMP>' mode ignores gravity, and gives a full 3D capability, like
+Descent.  The gravity control can be switched off even if `<SAMP>move_3d</SAMP>' is
+off.  It is of limited use, as these commands are not bound to individual keys
+normally, and you don't really want to keep typing them into the console.
+</P><P>
+
+In 3D mode, they take a single step as described.  In normal mode, they take a
+parameter giving the distance to move.  Remember that <EM>status</EM> means this
+commands takes place as long as the keys are held down.
+</P><P>
+
+<UL>
+<LI><CODE>step_forward n</CODE> [<KBD>status-up</KBD>]
+<LI><CODE>step_backward n</CODE> [<KBD>status-down</KBD>]
+<LI><CODE>strafe_left n</CODE> [<KBD>status-alt-left</KBD>]
+<LI><CODE>strafe_right n</CODE> [<KBD>status-alt-right</KBD>]
+<LI><CODE>look_up n</CODE> [<KBD>status-pgup</KBD>]
+<LI><CODE>look_down n</CODE> [<KBD>status-pgdn</KBD>]
+<LI><CODE>rotate_left n</CODE> [<KBD>status-left</KBD>]
+<LI><CODE>rotate_right n</CODE> [<KBD>status-right</KBD>]
+<LI><CODE>jump</CODE> [<KBD>0</KBD>]
+</UL>
+<P>
+
+If `<SAMP>do_gravity</SAMP>' is enabled (the default) and `<SAMP>on_ground</SAMP>' is set, add
+`<SAMP>cfg_jumpspeed</SAMP>' to upward (y) component.  In short, jump.  And you can't
+jump in midair to keep going upwards.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>move3d [<KBD>3</KBD>]</CODE>
+<DD>Toggle between between pure 3D movement (Descent-like) and `comfortable'
+movement (Quake-like).  The latter is now default.  This basically affects the
+left and right arrow keys which now rotate the camera how you would expect it
+and also includes a gravity system.  When you enable 3D movement the gravity
+system is also disabled, and the left and right arrow keys are like banking a
+plane left or right.
+<P>
+
+<DT><CODE>do_gravity boolean [<KBD>8</KBD>]</CODE>
+<DD>Enable/disable gravity (enabled by default).  If you disable gravity, you can't
+jump.  You can use the `<SAMP>i_up</SAMP>' or `<SAMP>i_down</SAMP>' commands, but they are not
+bound to keys by default.
+</DL>
+<P>
+
+Movement
+</P><P>
+
+These take a pair.  If first = 1, use Slow mode.  If second = 1, use Fast mode.
+Both may be true, in which case slow is assumed.  These commands are bound to
+movement keys.  The <KBD>Control</KBD> key sets the Slow flag, and
+<KBD>Control-Shift</KBD> sets the Fast flag.  There are key bindings for use with
+Slow and Fast, but not Normal speed.
+</P><P>
+
+<UL>
+<LI>i_forward s f [<KBD>Control-UP</KBD>]
+<LI>i_backward s f [<KBD>Control-DOWN</KBD>]
+<LI>i_left s f [<KBD>Control-Alt-LEFT</KBD>]
+<LI>i_right s f [<KBD>Control-Alt-RIGHT</KBD>]
+<LI>i_up s f [<KBD>Control-Alt-UP</KBD>]
+<LI>i_down s f [<KBD>Control-Alt-DOWN</KBD>]
+</UL>
+<P>
+
+These four perform left or right rotation using either camera or world
+coordinates.
+</P><P>
+
+<UL>
+<LI>i_rotleftc [<KBD>Control-LEFT</KBD>]
+<LI>i_rotleftw [<KBD>Control-Shift-Alt-LEFT</KBD>]
+<LI>i_rotrightc [<KBD>Control-RIGHT</KBD>]
+<LI>i_rotrightw [<KBD>Control-Shift-Alt-Right</KBD>]
+</UL>
+<P>
+
+These four perform rotation, left or right, around the X (horizontal) or Z
+(direction of view) axes.
+</P><P>
+
+<UL>
+<LI>i_rotleftx [<KBD>Control-PGDN</KBD>]
+<LI>i_rotleftz [<KBD>Control-Alt-PGUP</KBD>]
+<LI>i_rotrightx [<KBD>Control-PGUP</KBD>]
+<LI>i_rotrightz [<KBD>Control-Alt-PGDN</KBD>]
+</UL>
+<P>
+
+<DL COMPACT>
+<DT><CODE>colldet boolean [<KBD>Shift-8</KBD>]</CODE>
+<DD>Enable/disable collision detection.  This corresponds to the `<SAMP>-colldet</SAMP>'
+and `<SAMP>-nocolldet</SAMP>' command line options.
+<P>
+
+<DT><CODE>freelook [<KBD>\</KBD>]</CODE>
+<DD>If freelook is enabled the mouse moves the camera around like in Quake.  By
+default freelook is disabled, allowing you to move the mouse to point at
+things.
+<P>
+
+<DT><CODE>inverse_mouse Boolean [<KBD>`</KBD>]</CODE>
+<DD>This changes the up and down operation of the mouse, so the mouse acts like a
+joystick when in freelook mode.  Pull the mouse back to look up, push it
+forwards to look down.
+</DL>
+<P>
+
+<A NAME="Walktest Special Effects"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.4.1.html#SEC4.2.4.1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.4.3.html#SEC4.2.4.3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.3.html#SEC4.2.3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.4.html#SEC4.2.4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_4.2.5.html#SEC4.2.5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>
