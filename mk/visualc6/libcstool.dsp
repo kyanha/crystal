@@ -196,6 +196,10 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\csanim2d.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\..\..\include\cstool\csapplicationframework.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\..\..\include\cstool\csfxscr.h
 # End Source File
 # Begin Source File
@@ -306,6 +310,10 @@ SOURCE=..\..\libs\cstool\collider.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\csanim2d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\csapplicationframework.cpp
 # End Source File
 # Begin Source File
 
