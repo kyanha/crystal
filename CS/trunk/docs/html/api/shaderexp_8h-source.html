@@ -40,130 +40,141 @@
 00022 <span class="preprocessor">#include "csextern.h"</span>
 00023 
 00024 <span class="preprocessor">#include "<a class="code" href="strhash_8h.html">csutil/strhash.h</a>"</span>
-00025 <span class="preprocessor">#include "<a class="code" href="vector4_8h.html">csgeom/vector4.h</a>"</span>
-00026 <span class="preprocessor">#include "csutil/array.h"</span>
-00027 
-00028 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
-00029 <span class="keyword">class </span><a class="code" href="classcsShaderVariable.html">csShaderVariable</a>;
-00030 <span class="keyword">struct </span><a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>;
-00031 <span class="keyword">struct </span><a class="code" href="structiStringSet.html">iStringSet</a>;
-00032 <span class="keyword">struct </span><a class="code" href="structiDocumentNode.html">iDocumentNode</a>;
-00033 <span class="keyword">struct </span>cons;
-00034 
-<a name="l00038"></a><a class="code" href="classcsShaderExpression.html">00038</a> <span class="keyword">class </span>CS_CSGFX_EXPORT <a class="code" href="classcsShaderExpression.html">csShaderExpression</a> 
-00039 {
-00040 <span class="keyword">public</span>:
-00041   <span class="keyword">struct </span>oper_arg 
-00042   { 
-00043     uint8 type;
-00044     
-00045     <span class="keyword">union </span>
-00046 <span class="keyword">    </span>{
-00047       <span class="keywordtype">float</span> num;
-00048       <a class="code" href="strhash_8h.html#a0">csStringID</a> var;
-00049       
-00050       <span class="comment">// Illegal outside of a cons cell</span>
-00051       <span class="keywordtype">int</span> oper;
-00052       cons * cell;
-00053 
-00054       <span class="comment">// Special internal values</span>
-00055       <span class="keywordtype">int</span> acc;
-00056     };
-00057     
-00058     <a class="code" href="classcsVector4.html">csVector4</a> vec4;
-00059   };
-00060 
-00061   <span class="keyword">struct </span>oper 
-00062   {
-00063     uint8 opcode, acc;
-00064     oper_arg arg1, arg2;
-00065   };
-00066 
-00067   <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;oper&gt;</a> <a class="code" href="classcsArray.html">oper_array</a>;
-00068   <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;oper_arg&gt;</a> <a class="code" href="classcsArray.html">arg_array</a>;
+00025 <span class="preprocessor">#include "csutil/array.h"</span>
+00026 <span class="preprocessor">#include "csutil/leakguard.h"</span>
+00027 <span class="preprocessor">#include "<a class="code" href="vector4_8h.html">csgeom/vector4.h</a>"</span>
+00028 
+00029 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+00030 <span class="keyword">class </span><a class="code" href="classcsShaderVariable.html">csShaderVariable</a>;
+00031 <span class="keyword">struct </span><a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>;
+00032 <span class="keyword">struct </span><a class="code" href="structiStringSet.html">iStringSet</a>;
+00033 <span class="keyword">struct </span><a class="code" href="structiDocumentNode.html">iDocumentNode</a>;
+00034 <span class="keyword">struct </span>cons;
+00035 
+<a name="l00039"></a><a class="code" href="classcsShaderExpression.html">00039</a> <span class="keyword">class </span>CS_CSGFX_EXPORT <a class="code" href="classcsShaderExpression.html">csShaderExpression</a> 
+00040 {
+00041 <span class="keyword">public</span>:
+00042   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsShaderExpression.html">csShaderExpression</a>);
+00043 
+00044   <span class="keyword">struct </span>oper_arg 
+00045   { 
+00046     uint8 type;
+00047     
+00048     <span class="keyword">union </span>
+00049 <span class="keyword">    </span>{
+00050       <span class="keywordtype">float</span> num;
+00051       <a class="code" href="strhash_8h.html#a0">csStringID</a> var;
+00052       
+00053       <span class="comment">// Illegal outside of a cons cell</span>
+00054       <span class="keywordtype">int</span> oper;
+00055       cons * cell;
+00056 
+00057       <span class="comment">// Special internal values</span>
+00058       <span class="keywordtype">int</span> acc;
+00059     };
+00060     
+00061     <a class="code" href="classcsVector4.html">csVector4</a> vec4;
+00062   };
+00063 
+00064   <span class="keyword">struct </span>oper 
+00065   {
+00066     uint8 opcode, acc;
+00067     oper_arg arg1, arg2;
+00068   };
 00069 
-00070 <span class="keyword">private</span>:
-00071   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> * obj_reg;
-00073   <span class="keyword">static</span> <span class="keywordtype">bool</span> loaded;
-00075   <span class="keyword">static</span> <a class="code" href="classcsStringHash.html">csStringHash</a> xmltokens;
-00076   <span class="keyword">static</span> <a class="code" href="classcsStringHash.html">csStringHash</a> sexptokens;
-00077   <span class="keyword">static</span> <a class="code" href="classcsStringHash.html">csStringHash</a> xmltypes;
-00078   <span class="keyword">static</span> <a class="code" href="classcsStringHash.html">csStringHash</a> mnemonics;
-00080   <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a> * varContext;
-00082   <a class="code" href="classcsRef.html">csRef&lt;iStringSet&gt;</a> strset;
-00084   oper_array opcodes;
-00086   <span class="keywordtype">int</span> accstack_max;
-00088 
-00092   arg_array accstack;
-00093 
-00095   <span class="keywordtype">bool</span> parse_xml(cons *, <a class="code" href="structiDocumentNode.html">iDocumentNode</a> *);
-00097   <span class="keywordtype">bool</span> parse_xml_atom(oper_arg &amp;, <a class="code" href="strhash_8h.html#a0">csStringID</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *);
-00099   <span class="keywordtype">bool</span> parse_sexp(cons *, <a class="code" href="structiDocumentNode.html">iDocumentNode</a> *);
-00102   <span class="keywordtype">bool</span> parse_sexp_form(<span class="keyword">const</span> <span class="keywordtype">char</span> *&amp; text, cons *);
-00104   <span class="keywordtype">bool</span> parse_sexp_atom(<span class="keyword">const</span> <span class="keywordtype">char</span> *&amp; text, cons *);
-00105 
-00107   <span class="keywordtype">bool</span> compile_cons(<span class="keyword">const</span> cons *, <span class="keywordtype">int</span> &amp; acc_top);
-00109   <span class="keywordtype">bool</span> compile_make_vector(<span class="keyword">const</span> cons *, <span class="keywordtype">int</span> &amp; acc_top, <span class="keywordtype">int</span> acc);
-00110 
-00112   <span class="keywordtype">bool</span> eval_const(cons *&amp;);
-00113 
-00115   <span class="keywordtype">bool</span> eval_oper(<span class="keywordtype">int</span> oper, oper_arg arg1, oper_arg arg2, oper_arg &amp; output);
-00117   <span class="keywordtype">bool</span> eval_oper(<span class="keywordtype">int</span> oper, oper_arg arg1, oper_arg &amp; output);
-00119   <span class="keywordtype">bool</span> eval_oper(<span class="keywordtype">int</span> oper, oper_arg &amp; output);
-00120 
-00122   <span class="keywordtype">bool</span> eval_add(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00124   <span class="keywordtype">bool</span> eval_sub(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00126   <span class="keywordtype">bool</span> eval_mul(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00128   <span class="keywordtype">bool</span> eval_div(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00129   
-00131   <span class="keywordtype">bool</span> eval_elt1(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00133   <span class="keywordtype">bool</span> eval_elt2(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00135   <span class="keywordtype">bool</span> eval_elt3(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00137   <span class="keywordtype">bool</span> eval_elt4(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00138 
-00140   <span class="keywordtype">bool</span> eval_sin(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00142   <span class="keywordtype">bool</span> eval_cos(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00144   <span class="keywordtype">bool</span> eval_tan(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00145   <span class="keywordtype">bool</span> eval_dot(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00146   <span class="keywordtype">bool</span> eval_cross(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00147   <span class="keywordtype">bool</span> eval_vec_len(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00148   <span class="keywordtype">bool</span> eval_normal(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00149 
-00150   <span class="keywordtype">bool</span> eval_pow(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00151   <span class="keywordtype">bool</span> eval_min(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00152   <span class="keywordtype">bool</span> eval_max(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00153 
-00155   <span class="keywordtype">bool</span> eval_time(oper_arg &amp; output) <span class="keyword">const</span>;
-00157   <span class="keywordtype">bool</span> eval_frame(oper_arg &amp; output) <span class="keyword">const</span>;
-00158 
-00160   <span class="keywordtype">bool</span> eval_selt12(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00162   <span class="keywordtype">bool</span> eval_selt34(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
-00164   <span class="keywordtype">bool</span> eval_load(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
-00165 
-00167   <span class="keywordtype">bool</span> eval_variable(<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *, oper_arg &amp; out);
-00169   <span class="keywordtype">bool</span> eval_argument(<span class="keyword">const</span> oper_arg &amp;, <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *);
-00170 
-00172   <span class="keywordtype">void</span> destruct_cons(cons *) <span class="keyword">const</span>;
-00174   <span class="keywordtype">void</span> print_cons(<span class="keyword">const</span> cons *) <span class="keyword">const</span>;
-00176   <span class="keywordtype">void</span> print_ops(<span class="keyword">const</span> oper_array &amp;) <span class="keyword">const</span>;
-00177 
-00178   <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keywordtype">char</span> * get_type_name(<a class="code" href="strhash_8h.html#a0">csStringID</a>) <span class="keyword">const</span>;
-00179 
-00180 <span class="keyword">public</span>:
-00181   <a class="code" href="classcsShaderExpression.html">csShaderExpression</a>(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *);
-00182   ~<a class="code" href="classcsShaderExpression.html">csShaderExpression</a>();
-00183 
-00185   <span class="keywordtype">bool</span> Parse(<a class="code" href="structiDocumentNode.html">iDocumentNode</a> *, <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a> *);
-00187 
-00190   <span class="keywordtype">bool</span> Evaluate(<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *);
-00191 };
+00070   <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;oper&gt;</a> <a class="code" href="classcsArray.html">oper_array</a>;
+00071   <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;oper_arg&gt;</a> <a class="code" href="classcsArray.html">arg_array</a>;
+00072 
+00073 <span class="keyword">private</span>:
+00074   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> * obj_reg;
+00076   <span class="keyword">static</span> <span class="keywordtype">bool</span> loaded;
+00078   <span class="keyword">static</span> <a class="code" href="classcsStringHash.html">csStringHash</a> xmltokens;
+00079   <span class="keyword">static</span> <a class="code" href="classcsStringHash.html">csStringHash</a> sexptokens;
+00080   <span class="keyword">static</span> <a class="code" href="classcsStringHash.html">csStringHash</a> xmltypes;
+00081   <span class="keyword">static</span> <a class="code" href="classcsStringHash.html">csStringHash</a> mnemonics;
+00083   <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a> * varContext;
+00085   <a class="code" href="classcsRef.html">csRef&lt;iStringSet&gt;</a> strset;
+00087   oper_array opcodes;
+00092   <span class="keywordtype">int</span> accstack_max;
+00098   arg_array accstack;
+00099 
+00101   <span class="keywordtype">bool</span> parse_xml(cons *, <a class="code" href="structiDocumentNode.html">iDocumentNode</a> *);
+00103   <span class="keywordtype">bool</span> parse_xml_atom(oper_arg &amp;, <a class="code" href="strhash_8h.html#a0">csStringID</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *);
+00105   <span class="keywordtype">bool</span> parse_sexp(cons *, <a class="code" href="structiDocumentNode.html">iDocumentNode</a> *);
+00108   <span class="keywordtype">bool</span> parse_sexp_form(<span class="keyword">const</span> <span class="keywordtype">char</span> *&amp; text, cons *);
+00110   <span class="keywordtype">bool</span> parse_sexp_atom(<span class="keyword">const</span> <span class="keywordtype">char</span> *&amp; text, cons *);
+00111 
+00113   <span class="keywordtype">bool</span> compile_cons(<span class="keyword">const</span> cons *, <span class="keywordtype">int</span> &amp; acc_top);
+00115   <span class="keywordtype">bool</span> compile_make_vector(<span class="keyword">const</span> cons *, <span class="keywordtype">int</span> &amp; acc_top, <span class="keywordtype">int</span> acc);
+00116 
+00118   <span class="keywordtype">bool</span> eval_const(cons *&amp;);
+00119 
+00121   <span class="keywordtype">bool</span> eval_oper(<span class="keywordtype">int</span> oper, oper_arg arg1, oper_arg arg2, oper_arg &amp; output);
+00123   <span class="keywordtype">bool</span> eval_oper(<span class="keywordtype">int</span> oper, oper_arg arg1, oper_arg &amp; output);
+00125   <span class="keywordtype">bool</span> eval_oper(<span class="keywordtype">int</span> oper, oper_arg &amp; output);
+00126 
+00128   <span class="keywordtype">bool</span> eval_add(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2,
+00129         oper_arg &amp; output) <span class="keyword">const</span>;
+00131   <span class="keywordtype">bool</span> eval_sub(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2,
+00132         oper_arg &amp; output) <span class="keyword">const</span>;
+00134   <span class="keywordtype">bool</span> eval_mul(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2,
+00135         oper_arg &amp; output) <span class="keyword">const</span>;
+00137   <span class="keywordtype">bool</span> eval_div(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2,
+00138         oper_arg &amp; output) <span class="keyword">const</span>;
+00139   
+00141   <span class="keywordtype">bool</span> eval_elt1(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00143   <span class="keywordtype">bool</span> eval_elt2(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00145   <span class="keywordtype">bool</span> eval_elt3(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00147   <span class="keywordtype">bool</span> eval_elt4(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00148 
+00150   <span class="keywordtype">bool</span> eval_sin(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00152   <span class="keywordtype">bool</span> eval_cos(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00154   <span class="keywordtype">bool</span> eval_tan(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00155   <span class="keywordtype">bool</span> eval_dot(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2,
+00156         oper_arg &amp; output) <span class="keyword">const</span>;
+00157   <span class="keywordtype">bool</span> eval_cross(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2,
+00158         oper_arg &amp; output) <span class="keyword">const</span>;
+00159   <span class="keywordtype">bool</span> eval_vec_len(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00160   <span class="keywordtype">bool</span> eval_normal(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00161 
+00162   <span class="keywordtype">bool</span> eval_pow(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2,
+00163         oper_arg &amp; output) <span class="keyword">const</span>;
+00164   <span class="keywordtype">bool</span> eval_min(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2,
+00165         oper_arg &amp; output) <span class="keyword">const</span>;
+00166   <span class="keywordtype">bool</span> eval_max(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2,
+00167         oper_arg &amp; output) <span class="keyword">const</span>;
+00168 
+00170   <span class="keywordtype">bool</span> eval_time(oper_arg &amp; output) <span class="keyword">const</span>;
+00172   <span class="keywordtype">bool</span> eval_frame(oper_arg &amp; output) <span class="keyword">const</span>;
+00173 
+00175   <span class="keywordtype">bool</span> eval_selt12(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
+00177   <span class="keywordtype">bool</span> eval_selt34(<span class="keyword">const</span> oper_arg &amp; arg1, <span class="keyword">const</span> oper_arg &amp; arg2, oper_arg &amp; output) <span class="keyword">const</span>;
+00179   <span class="keywordtype">bool</span> eval_load(<span class="keyword">const</span> oper_arg &amp; arg1, oper_arg &amp; output) <span class="keyword">const</span>;
+00180 
+00182   <span class="keywordtype">bool</span> eval_variable(<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *, oper_arg &amp; out);
+00184   <span class="keywordtype">bool</span> eval_argument(<span class="keyword">const</span> oper_arg &amp;, <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *);
+00185 
+00187   <span class="keywordtype">void</span> destruct_cons(cons *) <span class="keyword">const</span>;
+00189   <span class="keywordtype">void</span> print_cons(<span class="keyword">const</span> cons *) <span class="keyword">const</span>;
+00191   <span class="keywordtype">void</span> print_ops(<span class="keyword">const</span> oper_array &amp;) <span class="keyword">const</span>;
 00192 
-00193 <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keywordtype">char</span> * csShaderExpression::get_type_name(<a class="code" href="strhash_8h.html#a0">csStringID</a> id)<span class="keyword"> const </span>
-00194 <span class="keyword"></span>{
-00195   <span class="keywordflow">return</span> xmltypes.<a class="code" href="classcsStringHash.html#a3">Request</a>(id);
-00196 }
-00197 
-00198 <span class="preprocessor">#endif</span>
+00193   <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keywordtype">char</span> * get_type_name(<a class="code" href="strhash_8h.html#a0">csStringID</a>) <span class="keyword">const</span>;
+00194 
+00195 <span class="keyword">public</span>:
+00196   <a class="code" href="classcsShaderExpression.html">csShaderExpression</a>(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *);
+00197   ~<a class="code" href="classcsShaderExpression.html">csShaderExpression</a>();
+00198 
+00200   <span class="keywordtype">bool</span> Parse(<a class="code" href="structiDocumentNode.html">iDocumentNode</a> *, <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a> *);
+00202 
+00205   <span class="keywordtype">bool</span> Evaluate(<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *);
+00206 };
+00207 
+00208 <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keywordtype">char</span> * csShaderExpression::get_type_name(<a class="code" href="strhash_8h.html#a0">csStringID</a> id)<span class="keyword"> const </span>
+00209 <span class="keyword"></span>{
+00210   <span class="keywordflow">return</span> xmltypes.<a class="code" href="classcsStringHash.html#a3">Request</a>(id);
+00211 }
+00212 
+00213 <span class="preprocessor">#endif</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

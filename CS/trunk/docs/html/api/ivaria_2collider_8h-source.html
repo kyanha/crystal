@@ -40,45 +40,59 @@
 00022 <span class="preprocessor"></span>
 00023 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
 00024 <span class="preprocessor">#include "<a class="code" href="vector3_8h.html">csgeom/vector3.h</a>"</span>
-00025 
-00026 <span class="keyword">struct </span><a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>;
-00027 <span class="keyword">struct </span><a class="code" href="structiMeshObject.html">iMeshObject</a>;
-00028 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
-00029 
-<a name="l00034"></a><a class="code" href="structcsCollisionPair.html">00034</a> <span class="keyword">struct </span><a class="code" href="structcsCollisionPair.html">csCollisionPair</a>
-00035 {
-00036   <a class="code" href="classcsVector3.html">csVector3</a> a1, b1, c1; <span class="comment">// First triangle</span>
-00037   <a class="code" href="classcsVector3.html">csVector3</a> a2, b2, c2; <span class="comment">// Second triangle</span>
-00038 };
-00039 
-00040 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiCollider.html">iCollider</a>, 0, 2, 0);
-00041 
-<a name="l00058"></a><a class="code" href="structiCollider.html">00058</a> <span class="keyword">struct </span><a class="code" href="structiCollider.html">iCollider</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00059 {
-00060 };
-00061 
-00062 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>, 0, 0, 4);
-00063 
-<a name="l00085"></a><a class="code" href="structiCollideSystem.html">00085</a> <span class="keyword">struct </span><a class="code" href="structiCollideSystem.html">iCollideSystem</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00086 {
-00096   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iCollider&gt;</a> <a class="code" href="structiCollideSystem.html#a0">CreateCollider</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh) = 0;
-00097   
-00119   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiCollideSystem.html#a1">Collide</a> (
-00120         <a class="code" href="structiCollider.html">iCollider</a>* collider1, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* trans1,
-00121         <a class="code" href="structiCollider.html">iCollider</a>* collider2, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* trans2) = 0;
-00130   <span class="keyword">virtual</span> <a class="code" href="structcsCollisionPair.html">csCollisionPair</a>* <a class="code" href="structiCollideSystem.html#a2">GetCollisionPairs</a> () = 0;
+00025 <span class="preprocessor">#include "csutil/array.h"</span>
+00026 
+00027 <span class="keyword">struct </span><a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>;
+00028 <span class="keyword">struct </span><a class="code" href="structiMeshObject.html">iMeshObject</a>;
+00029 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
+00030 
+<a name="l00035"></a><a class="code" href="structcsCollisionPair.html">00035</a> <span class="keyword">struct </span><a class="code" href="structcsCollisionPair.html">csCollisionPair</a>
+00036 {
+00037   <a class="code" href="classcsVector3.html">csVector3</a> a1, b1, c1; <span class="comment">// First triangle</span>
+00038   <a class="code" href="classcsVector3.html">csVector3</a> a2, b2, c2; <span class="comment">// Second triangle</span>
+00039 };
+00040 
+<a name="l00044"></a><a class="code" href="structcsIntersectingTriangle.html">00044</a> <span class="keyword">struct </span><a class="code" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a>
+00045 {
+00046   <a class="code" href="classcsVector3.html">csVector3</a> a, b, c;
+00047 };
+00048 
+00049 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiCollider.html">iCollider</a>, 0, 2, 0);
+00050 
+<a name="l00067"></a><a class="code" href="structiCollider.html">00067</a> <span class="keyword">struct </span><a class="code" href="structiCollider.html">iCollider</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00068 {
+00069 };
+00070 
+00071 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>, 0, 0, 4);
+00072 
+<a name="l00094"></a><a class="code" href="structiCollideSystem.html">00094</a> <span class="keyword">struct </span><a class="code" href="structiCollideSystem.html">iCollideSystem</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00095 {
+00105   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iCollider&gt;</a> <a class="code" href="structiCollideSystem.html#a0">CreateCollider</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh) = 0;
+00106   
+00128   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiCollideSystem.html#a1">Collide</a> (
+00129         <a class="code" href="structiCollider.html">iCollider</a>* collider1, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* trans1,
+00130         <a class="code" href="structiCollider.html">iCollider</a>* collider2, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* trans2) = 0;
 00131 
-00136   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiCollideSystem.html#a3">GetCollisionPairCount</a> () = 0;
-00137 
-00143   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCollideSystem.html#a4">ResetCollisionPairs</a> () = 0;
-00144 
-00153   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCollideSystem.html#a5">SetOneHitOnly</a> (<span class="keywordtype">bool</span> o) = 0;
+00140   <span class="keyword">virtual</span> <a class="code" href="structcsCollisionPair.html">csCollisionPair</a>* <a class="code" href="structiCollideSystem.html#a2">GetCollisionPairs</a> () = 0;
+00141 
+00146   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiCollideSystem.html#a3">GetCollisionPairCount</a> () = 0;
+00147 
+00153   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCollideSystem.html#a4">ResetCollisionPairs</a> () = 0;
 00154 
-00163   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiCollideSystem.html#a6">GetOneHitOnly</a> () = 0;
-00164 };
-00165 
-00166 <span class="preprocessor">#endif // __CS_IVARIA_COLLIDER_H__</span>
-00167 <span class="preprocessor"></span>
+00166   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiCollideSystem.html#a5">CollideRay</a> (
+00167         <a class="code" href="structiCollider.html">iCollider</a>* collider, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* trans,
+00168         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end) = 0;
+00169 
+00175   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;csIntersectingTriangle&gt;</a>&amp; <a class="code" href="structiCollideSystem.html#a6">GetIntersectingTriangles</a> ()
+00176         <span class="keyword">const</span> = 0;
+00177 
+00186   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCollideSystem.html#a7">SetOneHitOnly</a> (<span class="keywordtype">bool</span> o) = 0;
+00187 
+00196   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiCollideSystem.html#a8">GetOneHitOnly</a> () = 0;
+00197 };
+00198 
+00199 <span class="preprocessor">#endif // __CS_IVARIA_COLLIDER_H__</span>
+00200 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
