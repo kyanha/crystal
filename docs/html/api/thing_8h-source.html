@@ -55,224 +55,228 @@
 00036 <span class="keyword">struct </span><a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>;
 00037 <span class="keyword">struct </span><a class="code" href="structiThingState.html">iThingState</a>;
 00038 <span class="keyword">struct </span><a class="code" href="structiThingFactoryState.html">iThingFactoryState</a>;
-00039 
-<a name="l00043"></a><a class="code" href="structcsPolygonRange.html">00043</a> <span class="keyword">struct </span><a class="code" href="structcsPolygonRange.html">csPolygonRange</a>
-00044 {
-00045   <span class="keywordtype">int</span> start, end;
-00046   <a class="code" href="structcsPolygonRange.html">csPolygonRange</a> (<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end)
-00047   {
-00048     csPolygonRange::start = start;
-00049     csPolygonRange::end = end;
-00050   }
-00051   <span class="keywordtype">void</span> Set (<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end)
-00052   {
-00053     csPolygonRange::start = start;
-00054     csPolygonRange::end = end;
-00055   }
-00056   <span class="keywordtype">void</span> Set (<span class="keywordtype">int</span> idx)
-00057   {
-00058     csPolygonRange::start = idx;
-00059     csPolygonRange::end = idx;
-00060   }
-00061 };
-00062 
-00069 <span class="preprocessor">#define CS_POLY_LIGHTING 0x00000001</span>
-00070 <span class="preprocessor"></span>
-00074 <span class="preprocessor">#define CS_POLY_COLLDET 0x00000002</span>
-00075 <span class="preprocessor"></span>
-00079 <span class="preprocessor">#define CS_POLY_VISCULL 0x00000004</span>
-00080 <span class="preprocessor"></span>
-00088 <span class="preprocessor">#define CS_POLYRANGE(s1,s2) csPolygonRange (s1, s2)</span>
-00089 <span class="preprocessor"></span>
-00092 <span class="preprocessor">#define CS_POLYRANGE_SINGLE(idx) csPolygonRange (idx, idx)</span>
-00093 <span class="preprocessor"></span>
-00096 <span class="preprocessor">#define CS_POLYRANGE_LAST csPolygonRange (-1, -1)</span>
-00097 <span class="preprocessor"></span>
-00100 <span class="preprocessor">#define CS_POLYRANGE_ALL csPolygonRange (0, 2000000000)</span>
-00101 <span class="preprocessor"></span>
-00106 <span class="preprocessor">#define CS_POLYINDEX_LAST -1</span>
-00107 <span class="preprocessor"></span>
-00116 <span class="preprocessor">#define CS_THING_NOCOMPRESS 0x00010000</span>
-00117 <span class="preprocessor"></span>
-00125 <span class="preprocessor">#define CS_THING_MOVE_NEVER 0</span>
-00126 <span class="preprocessor"></span><span class="preprocessor">#define CS_THING_MOVE_OCCASIONAL 2</span>
-00127 <span class="preprocessor"></span>
-00129 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiPolygonHandle.html">iPolygonHandle</a>, 0, 0, 1);
-00130 
-<a name="l00150"></a><a class="code" href="structiPolygonHandle.html">00150</a> <span class="keyword">struct </span><a class="code" href="structiPolygonHandle.html">iPolygonHandle</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00151 {
-00156   <span class="keyword">virtual</span> <a class="code" href="structiThingFactoryState.html">iThingFactoryState</a>* <a class="code" href="structiPolygonHandle.html#a0">GetThingFactoryState</a> () <span class="keyword">const </span>= 0;
-00157 
-00162   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* <a class="code" href="structiPolygonHandle.html#a1">GetMeshObjectFactory</a> () <span class="keyword">const </span>= 0;
-00163 
-00168   <span class="keyword">virtual</span> <a class="code" href="structiThingState.html">iThingState</a>* <a class="code" href="structiPolygonHandle.html#a2">GetThingState</a> () <span class="keyword">const </span>= 0;
-00169 
-00174   <span class="keyword">virtual</span> <a class="code" href="structiMeshObject.html">iMeshObject</a>* <a class="code" href="structiPolygonHandle.html#a3">GetMeshObject</a> () <span class="keyword">const </span>= 0;
-00175 
-00179   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiPolygonHandle.html#a4">GetIndex</a> () <span class="keyword">const </span>= 0;
-00180 };
-00181 
+00039 <span class="keyword">struct </span><a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>;
+00040 
+<a name="l00044"></a><a class="code" href="structcsPolygonRange.html">00044</a> <span class="keyword">struct </span><a class="code" href="structcsPolygonRange.html">csPolygonRange</a>
+00045 {
+00046   <span class="keywordtype">int</span> start, end;
+00047   <a class="code" href="structcsPolygonRange.html">csPolygonRange</a> (<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end)
+00048   {
+00049     csPolygonRange::start = start;
+00050     csPolygonRange::end = end;
+00051   }
+00052   <span class="keywordtype">void</span> Set (<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end)
+00053   {
+00054     csPolygonRange::start = start;
+00055     csPolygonRange::end = end;
+00056   }
+00057   <span class="keywordtype">void</span> Set (<span class="keywordtype">int</span> idx)
+00058   {
+00059     csPolygonRange::start = idx;
+00060     csPolygonRange::end = idx;
+00061   }
+00062 };
+00063 
+00070 <span class="preprocessor">#define CS_POLY_LIGHTING 0x00000001</span>
+00071 <span class="preprocessor"></span>
+00075 <span class="preprocessor">#define CS_POLY_COLLDET 0x00000002</span>
+00076 <span class="preprocessor"></span>
+00080 <span class="preprocessor">#define CS_POLY_VISCULL 0x00000004</span>
+00081 <span class="preprocessor"></span>
+00089 <span class="preprocessor">#define CS_POLYRANGE(s1,s2) csPolygonRange (s1, s2)</span>
+00090 <span class="preprocessor"></span>
+00093 <span class="preprocessor">#define CS_POLYRANGE_SINGLE(idx) csPolygonRange (idx, idx)</span>
+00094 <span class="preprocessor"></span>
+00097 <span class="preprocessor">#define CS_POLYRANGE_LAST csPolygonRange (-1, -1)</span>
+00098 <span class="preprocessor"></span>
+00101 <span class="preprocessor">#define CS_POLYRANGE_ALL csPolygonRange (0, 2000000000)</span>
+00102 <span class="preprocessor"></span>
+00107 <span class="preprocessor">#define CS_POLYINDEX_LAST -1</span>
+00108 <span class="preprocessor"></span>
+00117 <span class="preprocessor">#define CS_THING_NOCOMPRESS 0x00010000</span>
+00118 <span class="preprocessor"></span>
+00126 <span class="preprocessor">#define CS_THING_MOVE_NEVER 0</span>
+00127 <span class="preprocessor"></span><span class="preprocessor">#define CS_THING_MOVE_OCCASIONAL 2</span>
+00128 <span class="preprocessor"></span>
+00130 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiPolygonHandle.html">iPolygonHandle</a>, 0, 0, 1);
+00131 
+<a name="l00151"></a><a class="code" href="structiPolygonHandle.html">00151</a> <span class="keyword">struct </span><a class="code" href="structiPolygonHandle.html">iPolygonHandle</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00152 {
+00157   <span class="keyword">virtual</span> <a class="code" href="structiThingFactoryState.html">iThingFactoryState</a>* <a class="code" href="structiPolygonHandle.html#a0">GetThingFactoryState</a> () <span class="keyword">const </span>= 0;
+00158 
+00163   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* <a class="code" href="structiPolygonHandle.html#a1">GetMeshObjectFactory</a> () <span class="keyword">const </span>= 0;
+00164 
+00169   <span class="keyword">virtual</span> <a class="code" href="structiThingState.html">iThingState</a>* <a class="code" href="structiPolygonHandle.html#a2">GetThingState</a> () <span class="keyword">const </span>= 0;
+00170 
+00175   <span class="keyword">virtual</span> <a class="code" href="structiMeshObject.html">iMeshObject</a>* <a class="code" href="structiPolygonHandle.html#a3">GetMeshObject</a> () <span class="keyword">const </span>= 0;
+00176 
+00180   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiPolygonHandle.html#a4">GetIndex</a> () <span class="keyword">const </span>= 0;
+00181 };
 00182 
-00183 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiThingFactoryState.html">iThingFactoryState</a>, 0, 2, 0);
-00184 
-<a name="l00204"></a><a class="code" href="structiThingFactoryState.html">00204</a> <span class="keyword">struct </span><a class="code" href="structiThingFactoryState.html">iThingFactoryState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00205 {
-00214   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a0">CompressVertices</a> () = 0;
-00215 
-00217   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a1">GetPolygonCount</a> () = 0;
-00219   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a2">RemovePolygon</a> (<span class="keywordtype">int</span> idx) = 0;
-00221   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a3">RemovePolygons</a> () = 0;
-00222 
-00224   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a4">FindPolygonByName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00225 
-00230   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a5">AddEmptyPolygon</a> () = 0;
-00231 
-00242   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a6">AddTriangle</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2,
-00243         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3) = 0;
-00255   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a7">AddQuad</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2,
-00256         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v4) = 0;
-00257 
-00268   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a8">AddPolygon</a> (<a class="code" href="classcsVector3.html">csVector3</a>* vertices, <span class="keywordtype">int</span> num) = 0;
-00269 
-00280   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a8">AddPolygon</a> (<span class="keywordtype">int</span> num, ...) = 0;
-00281 
-00292   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a10">AddOutsideBox</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmin, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmax) = 0;
-00293 
-00304   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a11">AddInsideBox</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmin, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmax) = 0;
-00305 
-00312   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a12">SetPolygonName</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00313         <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00314 
-00320   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiThingFactoryState.html#a13">GetPolygonName</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00321 
-00332   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonHandle&gt;</a> <a class="code" href="structiThingFactoryState.html#a14">CreatePolygonHandle</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00333 
-00340   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a15">SetPolygonMaterial</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00341         <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* material) = 0;
-00342 
-00348   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiThingFactoryState.html#a16">GetPolygonMaterial</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00349 
-00356   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a17">AddPolygonVertex</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00357         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vt) = 0;
-00358 
-00365   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a17">AddPolygonVertex</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range, <span class="keywordtype">int</span> vt) = 0;
-00366 
-00376   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a19">SetPolygonVertexIndices</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00377         <span class="keywordtype">int</span> num, <span class="keywordtype">int</span>* indices) = 0;
-00378 
-00384   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a20">GetPolygonVertexCount</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00385 
-00392   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiThingFactoryState.html#a21">GetPolygonVertex</a> (<span class="keywordtype">int</span> polygon_idx,
-00393         <span class="keywordtype">int</span> vertex_idx) = 0;
-00394 
-00400   <span class="keyword">virtual</span> <span class="keywordtype">int</span>* <a class="code" href="structiThingFactoryState.html#a22">GetPolygonVertexIndices</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00401 
-00413   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00414         <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
-00415 
-00425   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00426         <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv1, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv2, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv3) = 0;
-00427 
-00442   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00443         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv1,
-00444         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p2, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv2,
-00445         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p3, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv3) = 0;
-00446 
-00463   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00464         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v_orig, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keywordtype">float</span> len) = 0;
-00465 
-00484   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00485         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v_orig,
-00486         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keywordtype">float</span> len1,
-00487         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2, <span class="keywordtype">float</span> len2) = 0;
-00488 
-00504   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00505         <span class="keywordtype">float</span> len) = 0;
-00506 
-00514   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a29">GetPolygonTextureMapping</a> (<span class="keywordtype">int</span> polygon_idx,
-00515         <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
-00516 
-00524   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a30">SetPolygonTextureMappingEnabled</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00525         <span class="keywordtype">bool</span> enabled) = 0;
-00526 
-00532   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiThingFactoryState.html#a31">IsPolygonTextureMappingEnabled</a> (<span class="keywordtype">int</span> polygon_idx) <span class="keyword">const </span>= 0;
-00533 
-00541   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a32">SetPolygonFlags</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range, uint32 flags) = 0;
-00542 
-00553   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a32">SetPolygonFlags</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range, uint32 mask,
-00554         uint32 flags) = 0;
-00555 
-00563   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a34">ResetPolygonFlags</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
-00564         uint32 flags) = 0;
-00565 
-00571   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiThingFactoryState.html#a35">GetPolygonFlags</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00572 
-00578   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; <a class="code" href="structiThingFactoryState.html#a36">GetPolygonObjectPlane</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00579 
-00585   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiThingFactoryState.html#a37">IsPolygonTransparent</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00586 
-00594   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiThingFactoryState.html#a38">PointOnPolygon</a> (<span class="keywordtype">int</span> polygon_idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
-00595 
-00597   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a39">GetVertexCount</a> () <span class="keyword">const </span>= 0;
-00599   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;<a class="code" href="structiThingFactoryState.html#a40">GetVertex</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
-00601   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structiThingFactoryState.html#a41">GetVertices</a> () <span class="keyword">const </span>= 0;
-00603   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a42">CreateVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vt) = 0;
-00605   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a43">SetVertex</a> (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vt) = 0;
-00611   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a44">DeleteVertex</a> (<span class="keywordtype">int</span> idx) = 0;
-00619   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a45">DeleteVertices</a> (<span class="keywordtype">int</span> from, <span class="keywordtype">int</span> to) = 0;
-00620 
-00624   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a46">SetSmoothingFlag</a> (<span class="keywordtype">bool</span> smoothing) = 0;
-00625 
-00629   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiThingFactoryState.html#a47">GetSmoothingFlag</a> () = 0;
-00630   
-00634   <span class="keyword">virtual</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structiThingFactoryState.html#a48">GetNormals</a> () = 0;
-00635 
-00639   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiThingFactoryState.html#a49">GetCosinusFactor</a> () <span class="keyword">const </span>= 0;
-00645   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a50">SetCosinusFactor</a> (<span class="keywordtype">float</span> cosfact) = 0;
-00646 };
+00183 
+00184 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiThingFactoryState.html">iThingFactoryState</a>, 0, 2, 0);
+00185 
+<a name="l00205"></a><a class="code" href="structiThingFactoryState.html">00205</a> <span class="keyword">struct </span><a class="code" href="structiThingFactoryState.html">iThingFactoryState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00206 {
+00215   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a0">CompressVertices</a> () = 0;
+00216 
+00218   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a1">GetPolygonCount</a> () = 0;
+00220   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a2">RemovePolygon</a> (<span class="keywordtype">int</span> idx) = 0;
+00222   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a3">RemovePolygons</a> () = 0;
+00223 
+00225   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a4">FindPolygonByName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00226 
+00231   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a5">AddEmptyPolygon</a> () = 0;
+00232 
+00243   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a6">AddTriangle</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2,
+00244         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3) = 0;
+00256   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a7">AddQuad</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2,
+00257         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v4) = 0;
+00258 
+00269   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a8">AddPolygon</a> (<a class="code" href="classcsVector3.html">csVector3</a>* vertices, <span class="keywordtype">int</span> num) = 0;
+00270 
+00281   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a8">AddPolygon</a> (<span class="keywordtype">int</span> num, ...) = 0;
+00282 
+00293   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a10">AddOutsideBox</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmin, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmax) = 0;
+00294 
+00305   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a11">AddInsideBox</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmin, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; bmax) = 0;
+00306 
+00313   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a12">SetPolygonName</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00314         <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00315 
+00321   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiThingFactoryState.html#a13">GetPolygonName</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00322 
+00333   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonHandle&gt;</a> <a class="code" href="structiThingFactoryState.html#a14">CreatePolygonHandle</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00334 
+00341   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a15">SetPolygonMaterial</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00342         <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* material) = 0;
+00343 
+00349   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiThingFactoryState.html#a16">GetPolygonMaterial</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00350 
+00357   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a17">AddPolygonVertex</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00358         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vt) = 0;
+00359 
+00366   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a17">AddPolygonVertex</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range, <span class="keywordtype">int</span> vt) = 0;
+00367 
+00377   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a19">SetPolygonVertexIndices</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00378         <span class="keywordtype">int</span> num, <span class="keywordtype">int</span>* indices) = 0;
+00379 
+00385   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a20">GetPolygonVertexCount</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00386 
+00393   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiThingFactoryState.html#a21">GetPolygonVertex</a> (<span class="keywordtype">int</span> polygon_idx,
+00394         <span class="keywordtype">int</span> vertex_idx) = 0;
+00395 
+00401   <span class="keyword">virtual</span> <span class="keywordtype">int</span>* <a class="code" href="structiThingFactoryState.html#a22">GetPolygonVertexIndices</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00402 
+00414   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00415         <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
+00416 
+00426   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00427         <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv1, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv2, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv3) = 0;
+00428 
+00443   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00444         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv1,
+00445         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p2, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv2,
+00446         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p3, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv3) = 0;
+00447 
+00464   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00465         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v_orig, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keywordtype">float</span> len) = 0;
+00466 
+00485   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00486         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v_orig,
+00487         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keywordtype">float</span> len1,
+00488         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2, <span class="keywordtype">float</span> len2) = 0;
+00489 
+00505   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a23">SetPolygonTextureMapping</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00506         <span class="keywordtype">float</span> len) = 0;
+00507 
+00515   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a29">GetPolygonTextureMapping</a> (<span class="keywordtype">int</span> polygon_idx,
+00516         <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
+00517 
+00525   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a30">SetPolygonTextureMappingEnabled</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00526         <span class="keywordtype">bool</span> enabled) = 0;
+00527 
+00533   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiThingFactoryState.html#a31">IsPolygonTextureMappingEnabled</a> (<span class="keywordtype">int</span> polygon_idx) <span class="keyword">const </span>= 0;
+00534 
+00542   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a32">SetPolygonFlags</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range, uint32 flags) = 0;
+00543 
+00554   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a32">SetPolygonFlags</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range, uint32 mask,
+00555         uint32 flags) = 0;
+00556 
+00564   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a34">ResetPolygonFlags</a> (<span class="keyword">const</span> <a class="code" href="structcsPolygonRange.html">csPolygonRange</a>&amp; range,
+00565         uint32 flags) = 0;
+00566 
+00572   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiThingFactoryState.html#a35">GetPolygonFlags</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00573 
+00579   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; <a class="code" href="structiThingFactoryState.html#a36">GetPolygonObjectPlane</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00580 
+00586   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiThingFactoryState.html#a37">IsPolygonTransparent</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00587 
+00595   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiThingFactoryState.html#a38">PointOnPolygon</a> (<span class="keywordtype">int</span> polygon_idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
+00596 
+00598   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a39">GetVertexCount</a> () <span class="keyword">const </span>= 0;
+00600   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;<a class="code" href="structiThingFactoryState.html#a40">GetVertex</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
+00602   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structiThingFactoryState.html#a41">GetVertices</a> () <span class="keyword">const </span>= 0;
+00604   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingFactoryState.html#a42">CreateVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vt) = 0;
+00606   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a43">SetVertex</a> (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vt) = 0;
+00612   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a44">DeleteVertex</a> (<span class="keywordtype">int</span> idx) = 0;
+00620   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a45">DeleteVertices</a> (<span class="keywordtype">int</span> from, <span class="keywordtype">int</span> to) = 0;
+00621 
+00625   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a46">SetSmoothingFlag</a> (<span class="keywordtype">bool</span> smoothing) = 0;
+00626 
+00630   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiThingFactoryState.html#a47">GetSmoothingFlag</a> () = 0;
+00631   
+00635   <span class="keyword">virtual</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structiThingFactoryState.html#a48">GetNormals</a> () = 0;
+00636 
+00640   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiThingFactoryState.html#a49">GetCosinusFactor</a> () <span class="keyword">const </span>= 0;
+00646   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingFactoryState.html#a50">SetCosinusFactor</a> (<span class="keywordtype">float</span> cosfact) = 0;
 00647 
-00648 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiThingState.html">iThingState</a>, 0, 7, 0);
-00649 
-<a name="l00668"></a><a class="code" href="structiThingState.html">00668</a> <span class="keyword">struct </span><a class="code" href="structiThingState.html">iThingState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00669 {
-00671   <span class="keyword">virtual</span> <a class="code" href="structiThingFactoryState.html">iThingFactoryState</a>* <a class="code" href="structiThingState.html#a0">GetFactory</a> () = 0;
-00672 
-00674   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;<a class="code" href="structiThingState.html#a1">GetVertexW</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
-00676   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structiThingState.html#a2">GetVerticesW</a> () <span class="keyword">const </span>= 0;
-00677 
-00681   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingState.html#a3">GetMovingOption</a> () <span class="keyword">const </span>= 0;
-00682 
-00710   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a4">SetMovingOption</a> (<span class="keywordtype">int</span> opt) = 0;
-00711 
-00720   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a5">Prepare</a> () = 0;
-00721 
-00726   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a6">Unprepare</a> () = 0;
-00727 
-00735   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a7">ReplaceMaterial</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* oldmat,
-00736         <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* newmat) = 0;
-00737 
-00742   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a8">ClearReplacedMaterials</a> () = 0;
-00743 
-00745   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a9">SetMixMode</a> (<a class="code" href="group__util.html#ga12">uint</a> mode) = 0;
-00747   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="structiThingState.html#a10">GetMixMode</a> () <span class="keyword">const </span>= 0;
-00748 
-00758   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonHandle&gt;</a> <a class="code" href="structiThingState.html#a11">CreatePolygonHandle</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00759 
-00765   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; <a class="code" href="structiThingState.html#a12">GetPolygonWorldPlane</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
-00766 };
-00767 
-00768 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiThingEnvironment.html">iThingEnvironment</a>, 0, 3, 0);
-00769 
-<a name="l00783"></a><a class="code" href="structiThingEnvironment.html">00783</a> <span class="keyword">struct </span><a class="code" href="structiThingEnvironment.html">iThingEnvironment</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00784 {
-00788   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingEnvironment.html#a0">Clear</a> () = 0;
-00789 
-00791   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingEnvironment.html#a1">GetLightmapCellSize</a> () <span class="keyword">const </span>= 0;
-00793   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingEnvironment.html#a2">SetLightmapCellSize</a> (<span class="keywordtype">int</span> Size) = 0;
-00795   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingEnvironment.html#a3">GetDefaultLightmapCellSize</a> () <span class="keyword">const </span>= 0;
-00796 };
-00797 
-00798 <span class="preprocessor">#endif // __CS_IMESH_THING_H__</span>
+00648   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> AddPolygonRenderBuffer (<span class="keywordtype">int</span> polygon_idx, <span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00649     <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* buffer) = 0;
+00650 };
+00651 
+00652 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiThingState.html">iThingState</a>, 0, 7, 0);
+00653 
+<a name="l00672"></a><a class="code" href="structiThingState.html">00672</a> <span class="keyword">struct </span><a class="code" href="structiThingState.html">iThingState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00673 {
+00675   <span class="keyword">virtual</span> <a class="code" href="structiThingFactoryState.html">iThingFactoryState</a>* <a class="code" href="structiThingState.html#a0">GetFactory</a> () = 0;
+00676 
+00678   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;<a class="code" href="structiThingState.html#a1">GetVertexW</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
+00680   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structiThingState.html#a2">GetVerticesW</a> () <span class="keyword">const </span>= 0;
+00681 
+00685   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingState.html#a3">GetMovingOption</a> () <span class="keyword">const </span>= 0;
+00686 
+00714   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a4">SetMovingOption</a> (<span class="keywordtype">int</span> opt) = 0;
+00715 
+00724   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a5">Prepare</a> () = 0;
+00725 
+00730   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a6">Unprepare</a> () = 0;
+00731 
+00739   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a7">ReplaceMaterial</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* oldmat,
+00740         <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* newmat) = 0;
+00741 
+00746   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a8">ClearReplacedMaterials</a> () = 0;
+00747 
+00749   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingState.html#a9">SetMixMode</a> (<a class="code" href="group__util.html#ga12">uint</a> mode) = 0;
+00751   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="structiThingState.html#a10">GetMixMode</a> () <span class="keyword">const </span>= 0;
+00752 
+00762   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonHandle&gt;</a> <a class="code" href="structiThingState.html#a11">CreatePolygonHandle</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00763 
+00769   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; <a class="code" href="structiThingState.html#a12">GetPolygonWorldPlane</a> (<span class="keywordtype">int</span> polygon_idx) = 0;
+00770 };
+00771 
+00772 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiThingEnvironment.html">iThingEnvironment</a>, 0, 3, 0);
+00773 
+<a name="l00787"></a><a class="code" href="structiThingEnvironment.html">00787</a> <span class="keyword">struct </span><a class="code" href="structiThingEnvironment.html">iThingEnvironment</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00788 {
+00792   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingEnvironment.html#a0">Clear</a> () = 0;
+00793 
+00795   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingEnvironment.html#a1">GetLightmapCellSize</a> () <span class="keyword">const </span>= 0;
+00797   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiThingEnvironment.html#a2">SetLightmapCellSize</a> (<span class="keywordtype">int</span> Size) = 0;
+00799   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiThingEnvironment.html#a3">GetDefaultLightmapCellSize</a> () <span class="keyword">const </span>= 0;
+00800 };
+00801 
+00802 <span class="preprocessor">#endif // __CS_IMESH_THING_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

@@ -17,7 +17,7 @@
 <div class="qindex"><a class="qindex" href="index.html">Main&nbsp;Page</a> | <a class="qindex" href="modules.html">Modules</a> | <a class="qindex" href="hierarchy.html">Class&nbsp;Hierarchy</a> | <a class="qindex" href="classes.html">Alphabetical&nbsp;List</a> | <a class="qindex" href="annotated.html">Class&nbsp;List</a> | <a class="qindex" href="files.html">File&nbsp;List</a> | <a class="qindex" href="functions.html">Class&nbsp;Members</a> | <a class="qindex" href="globals.html">File&nbsp;Members</a> | <a class="qindex" href="pages.html">Related&nbsp;Pages</a></div>
 <div class="nav">
 <a class="el" href="dir_000005.html">csplugincommon</a>&nbsp;/&nbsp;<a class="el" href="dir_000006.html">canvas</a></div>
-<h1>draw_common.h</h1><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
+<h1>draw_common.h</h1><a href="draw__common_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
 00002 <span class="comment">    Copyright (C) 2004 by Jorrit Tyberghein</span>
 00003 <span class="comment">              (C) 2004 by Frank Richter</span>
 00004 <span class="comment"></span>
@@ -39,76 +39,76 @@
 00020 <span class="preprocessor">#ifndef __CS_CANVAS_COMMON_DRAW_COMMON_H__</span>
 00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CANVAS_COMMON_DRAW_COMMON_H__</span>
 00022 <span class="preprocessor"></span>
-00023 <span class="preprocessor">#include "<a class="code" href="csplugincommon_2canvas_2graph2d_8h.html">graph2d.h</a>"</span>
-00024 
-00025 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel&gt;
-00026 <span class="keyword">static</span> <span class="keywordtype">void</span> SplitAlpha (<span class="keyword">const</span> <span class="keywordtype">int</span> color, Tpixel&amp; colorPart, uint8&amp; alphaPart)
-00027 {
-00028   colorPart = color &amp; 0x00ffffff;
-00029   alphaPart = 255 - (color &gt;&gt; 24);
-00030 }
-00031 
-00032 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel&gt;
-00033 <span class="keyword">class </span>csPixMixerCopy
-00034 {
-00035   Tpixel color;
-00036 <span class="keyword">public</span>:
-00037   csPixMixerCopy (<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* <span class="comment">/*G2D*/</span>, Tpixel color, uint8 <span class="comment">/*alpha*/</span>)
-00038   {
-00039     csPixMixerCopy::color = color;
-00040   }
-00041   <span class="keyword">inline</span> <span class="keywordtype">void</span> Mix (Tpixel&amp; dest)
-00042   {
-00043     dest = color;
-00044   }
-00045 };
-00046 
-00047 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel&gt;
-00048 <span class="keyword">class </span>csPixMixerRGBA
-00049 {
-00050   uint32 rbMask, gaMask;
-00051   <span class="keywordtype">int</span> intAlphaInv;
-00052   uint32 intRB, intGA;
-00053   <span class="keywordtype">int</span> gShift, gShift2;
-00054   <span class="keywordtype">int</span> alphaPrec;
-00055 <span class="keyword">public</span>:
-00056   csPixMixerRGBA (<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* G2D, Tpixel color, uint8 alpha)
-00057   {
-00058     alphaPrec = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o9">GreenBits</a>;
-00059     <span class="keyword">const</span> <span class="keywordtype">int</span> alphaShift = 8 - alphaPrec;
-00060     <span class="keyword">const</span> <span class="keywordtype">int</span> intAlpha = (alpha + 1) &gt;&gt; alphaShift;
-00061     intAlphaInv = (255 - alpha + 1) &gt;&gt; alphaShift;
-00062     gShift = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o5">GreenShift</a>;
-00063     gShift2 = alphaPrec - gShift;
-00064     <span class="comment">// Makes the assumption that colors are laid out ARGB ...</span>
-00065     rbMask = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o0">RedMask</a> | G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o2">BlueMask</a>;
-00066     intRB = ((color &amp; rbMask) * intAlpha) &gt;&gt; alphaPrec;
-00067     gaMask = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o1">GreenMask</a> | G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o3">AlphaMask</a>;
-00068     intGA = (((color &amp; gaMask) &gt;&gt; gShift) * intAlpha) &gt;&gt; gShift2;
-00069   }
-00070   <span class="keyword">inline</span> <span class="keywordtype">void</span> Mix (Tpixel&amp; dest)<span class="keyword"> const</span>
-00071 <span class="keyword">  </span>{
-00072     <span class="keyword">const</span> Tpixel destCol = dest;
-00073     <span class="keyword">const</span> Tpixel newRB = 
-00074       ((intRB + (((destCol &amp; rbMask) * intAlphaInv) &gt;&gt; alphaPrec)) &amp; rbMask);
-00075     <span class="keyword">const</span> Tpixel newGA = 
-00076       ((intGA + (((((destCol &amp; gaMask) &gt;&gt; gShift) * intAlphaInv)) &gt;&gt; gShift2)) 
-00077         &amp; gaMask);
-00078     dest = newRB | newGA;
-00079   }
-00080 };
-00081 
-00082 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel&gt;
-00083 <span class="keyword">class </span>csPixMixerNoop
-00084 {
-00085 <span class="keyword">public</span>:
-00086   csPixMixerNoop (<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* <span class="comment">/*G2D*/</span>, Tpixel <span class="comment">/*color*/</span>, uint8 <span class="comment">/*alpha*/</span>)
-00087   { }
-00088   <span class="keyword">inline</span> <span class="keywordtype">void</span> Mix (Tpixel&amp; dest)
-00089   { }
-00090 };
-00091 
-00092 <span class="preprocessor">#endif // __CS_CANVAS_COMMON_DRAW_COMMON_H__</span>
+00026 <span class="preprocessor">#include "<a class="code" href="csplugincommon_2canvas_2graph2d_8h.html">graph2d.h</a>"</span>
+00027 
+00029 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel&gt;
+<a name="l00030"></a><a class="code" href="draw__common_8h.html#a0">00030</a> <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="draw__common_8h.html#a0">SplitAlpha</a> (<span class="keyword">const</span> <span class="keywordtype">int</span> color, Tpixel&amp; colorPart, uint8&amp; alphaPart)
+00031 {
+00032   colorPart = color &amp; 0x00ffffff;
+00033   alphaPart = 255 - (color &gt;&gt; 24);
+00034 }
+00035 
+00037 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel&gt;
+<a name="l00038"></a><a class="code" href="classcsPixMixerCopy.html">00038</a> <span class="keyword">class </span><a class="code" href="classcsPixMixerCopy.html">csPixMixerCopy</a>
+00039 {
+00040   Tpixel color;
+00041 <span class="keyword">public</span>:
+00042   <a class="code" href="classcsPixMixerCopy.html">csPixMixerCopy</a> (<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* <span class="comment">/*G2D*/</span>, Tpixel color, uint8 <span class="comment">/*alpha*/</span>)
+00043   {
+00044     csPixMixerCopy::color = color;
+00045   }
+00046   <span class="keyword">inline</span> <span class="keywordtype">void</span> Mix (Tpixel&amp; dest)
+00047   {
+00048     dest = color;
+00049   }
+00050 };
+00051 
+00053 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel&gt;
+<a name="l00054"></a><a class="code" href="classcsPixMixerRGBA.html">00054</a> <span class="keyword">class </span><a class="code" href="classcsPixMixerRGBA.html">csPixMixerRGBA</a>
+00055 {
+00056   uint32 rbMask, gaMask;
+00057   <span class="keywordtype">int</span> intAlphaInv;
+00058   uint32 intRB, intGA;
+00059   <span class="keywordtype">int</span> gShift, gShift2;
+00060   <span class="keywordtype">int</span> alphaPrec;
+00061 <span class="keyword">public</span>:
+00062   <a class="code" href="classcsPixMixerRGBA.html">csPixMixerRGBA</a> (<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* G2D, Tpixel color, uint8 alpha)
+00063   {
+00064     alphaPrec = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o9">GreenBits</a>;
+00065     <span class="keyword">const</span> <span class="keywordtype">int</span> alphaShift = 8 - alphaPrec;
+00066     <span class="keyword">const</span> <span class="keywordtype">int</span> intAlpha = (alpha + 1) &gt;&gt; alphaShift;
+00067     intAlphaInv = (255 - alpha + 1) &gt;&gt; alphaShift;
+00068     gShift = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o5">GreenShift</a>;
+00069     gShift2 = alphaPrec - gShift;
+00070     <span class="comment">// Makes the assumption that colors are laid out ARGB ...</span>
+00071     rbMask = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o0">RedMask</a> | G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o2">BlueMask</a>;
+00072     intRB = ((color &amp; rbMask) * intAlpha) &gt;&gt; alphaPrec;
+00073     gaMask = G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o1">GreenMask</a> | G2D-&gt;<a class="code" href="classcsGraphics2D.html#o5">pfmt</a>.<a class="code" href="structcsPixelFormat.html#o3">AlphaMask</a>;
+00074     intGA = (((color &amp; gaMask) &gt;&gt; gShift) * intAlpha) &gt;&gt; gShift2;
+00075   }
+00076   <span class="keyword">inline</span> <span class="keywordtype">void</span> Mix (Tpixel&amp; dest)<span class="keyword"> const</span>
+00077 <span class="keyword">  </span>{
+00078     <span class="keyword">const</span> Tpixel destCol = dest;
+00079     <span class="keyword">const</span> Tpixel newRB = 
+00080       ((intRB + (((destCol &amp; rbMask) * intAlphaInv) &gt;&gt; alphaPrec)) &amp; rbMask);
+00081     <span class="keyword">const</span> Tpixel newGA = 
+00082       ((intGA + (((((destCol &amp; gaMask) &gt;&gt; gShift) * intAlphaInv)) &gt;&gt; gShift2)) 
+00083         &amp; gaMask);
+00084     dest = newRB | newGA;
+00085   }
+00086 };
+00087 
+00089 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel&gt;
+<a name="l00090"></a><a class="code" href="classcsPixMixerNoop.html">00090</a> <span class="keyword">class </span><a class="code" href="classcsPixMixerNoop.html">csPixMixerNoop</a>
+00091 {
+00092 <span class="keyword">public</span>:
+00093   <a class="code" href="classcsPixMixerNoop.html">csPixMixerNoop</a> (<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* <span class="comment">/*G2D*/</span>, Tpixel <span class="comment">/*color*/</span>, uint8 <span class="comment">/*alpha*/</span>)
+00094   { }
+00095   <span class="keyword">inline</span> <span class="keywordtype">void</span> Mix (Tpixel&amp; dest)
+00096   { }
+00097 };
+00098 
+00099 <span class="preprocessor">#endif // __CS_CANVAS_COMMON_DRAW_COMMON_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
