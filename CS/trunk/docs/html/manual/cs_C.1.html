@@ -1203,22 +1203,32 @@ only relocated, not removed.
 
 Forbidding direct manipulation of an `<SAMP>iImage</SAMP>''s pixel data has the 
 following consequences:
+</P><P>
+
 <UL>
 <LI>
 The <CODE>Clone()</CODE> function was removed. The
 `<SAMP>csImageMemory</SAMP>' class provides a constructor that copies the pixel data
 from another `<SAMP>iImage</SAMP>' object, providing a functionality equal to 
 <CODE>Clone()</CODE>.
+<P>
+
 <LI>
 To edit the pixel data of an image, create a clone of an image (e.g. a
 `<SAMP>csImageMemory</SAMP>' as mentioned above) and manipulate the data in the newly
 cerated instance.
+<P>
+
 <LI>
 If the image data is needed in another
 format, as the <CODE>SetFormat()</CODE> call has been removed from the interface.
+<P>
+
 <LI>
 The image editing functionality found in methods such as <CODE>Rescale()</CODE>,
 <CODE>Sharpen()</CODE> was moved into the `<SAMP>csImageManipulate</SAMP>' class.
+<P>
+
 <LI>
 The <CODE>CopyXXX()</CODE> method that copied an image into another are now provided
 by `<SAMP>csImageMemory</SAMP>'.
@@ -1261,13 +1271,13 @@ parameters.
 </P><P>
 
 <A NAME="SEC_33"></A>
-<H3> `<SAMP>iRenderBuffer</SAMP>' Renderer Independency </H3>
+<H3> `<SAMP>iRenderBuffer</SAMP>' Generalization </H3>
 <!--docid::SEC_33::-->
 <P>
 
 The `<SAMP>iRenderBuffer</SAMP>' interface was made renderer-independant. Consequently,
 creation was moved out of `<SAMP>iGraphics3D</SAMP>' and into `<SAMP>csRenderBuffer</SAMP>'.
-The semantics of the parameters have changed, too; notably, instead of 
+The semantics of the parameters have changed too: notably, instead of 
 specifying the byte size of a buffer, the element count is specified. The same
 change has been made to <CODE>CopyToBuffer()</CODE> (which has been renamed to 
 <CODE>CopyInto()</CODE> to enforce human correction of the parameters).
@@ -1296,6 +1306,150 @@ goes out is same as the cut-off distance, but this can be changed by altering
 the first attenuation constant. See comments in
 `<TT>CS/include/iengine/light.h</TT>' for exact details of the different
 attenuation modes.
+</P><P>
+
+<A NAME="SEC_35"></A>
+<H3> <CODE>CS_DECLARE_OBJECT_ITERATOR()</CODE> Removal </H3>
+<!--docid::SEC_35::-->
+<P>
+
+The `<SAMP>iObject</SAMP>' iterator creation macro <CODE>CS_DECLARE_OBJECT_ITERATOR()</CODE>
+has been replaced by the templated class <CODE>csTypedObjectIterator&#60;&#62;</CODE>. Given
+existing code, such as:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iObject* parent = <small>...</small>;
+CS_DECLARE_OBJECT_ITERATOR(MyFooIter, iFoo);
+MyFooIter iter(parent);
+while (iter.HasNext())
+{
+  iFoo* foo = iter.Next();
+  <small>...</small>
+}
+</pre></td></tr></table></P><P>
+
+Revise the code by instantiating the new template class:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef csTypedObjectIterator&#60;iFoo&#62; MyFooIter;
+MyFooIter iter(parent);
+while (iter.HasNext())
+{
+</pre></td></tr></table></P><P>
+
+Or, even simpler without the `<SAMP>typedef</SAMP>':
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csTypedObjectIterator&#60;iFoo&#62; iter(parent);
+while (iter.HasNext())
+{
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC_36"></A>
+<H3> Reference Count Automation </H3>
+<!--docid::SEC_36::-->
+<P>
+
+For consistency with the bulk of the Crystal Space API, and in order to
+simplify reference-count management, the following methods have been changed
+to return <CODE>csRef&#60;&#62;</CODE> rather than raw pointers of which the client had to
+dispose manually via <CODE>DecRef()</CODE>.
+</P><P>
+
+<UL>
+<LI>
+<CODE>iEmitFactoryState::CreateBox()</CODE>
+<LI>
+<CODE>iEmitFactoryState::CreateCone()</CODE>
+<LI>
+<CODE>iEmitFactoryState::CreateCylinder()</CODE>
+<LI>
+<CODE>iEmitFactoryState::CreateCylinderTangent()</CODE>
+<LI>
+<CODE>iEmitFactoryState::CreateFixed()</CODE>
+<LI>
+<CODE>iEmitFactoryState::CreateLine()</CODE>
+<LI>
+<CODE>iEmitFactoryState::CreateMix()</CODE>
+<LI>
+<CODE>iEmitFactoryState::CreateSphere()</CODE>
+<LI>
+<CODE>iEmitFactoryState::CreateSphereTangent()</CODE>
+<LI>
+<CODE>iHazeHullCreation::CreateBox()</CODE>
+<LI>
+<CODE>iHazeHullCreation::CreateCone()</CODE>
+</UL>
+<P>
+
+<A NAME="SEC_37"></A>
+<H3> Render Buffer Changes </H3>
+<!--docid::SEC_37::-->
+<P>
+
+Previously meshes provided render buffers via name, and these were mapped using
+<EM>name</EM> &#60;-&#62; <EM>OpenGL</EM> name mapping. But most meshes only provided a few
+standard-named buffers (such as, `<SAMP>vertices</SAMP>', `<SAMP>texcoords</SAMP>', etc.) and
+the mapping itself took some time (5%+ per frame). This has been reworked.
+</P><P>
+
+Now, meshes can provide a set of 16 buffers in a fixed structure. Meshes can
+provide `<SAMP>index</SAMP>', `<SAMP>position</SAMP>' (vertices), `<SAMP>normal</SAMP>', `<SAMP>color</SAMP>',
+`<SAMP>color_lighting</SAMP>' (pre-lit colors), `<SAMP>texcoord0</SAMP>', `<SAMP>texcoord1</SAMP>',
+`<SAMP>texcoord2</SAMP>', `<SAMP>texcoord3</SAMP>', `<SAMP>texcoord_lightmap</SAMP>', `<SAMP>generic0</SAMP>',
+`<SAMP>generic1</SAMP>', `<SAMP>generic2</SAMP>', `<SAMP>generic3</SAMP>', `<SAMP>tangent</SAMP>' and
+`<SAMP>binormal</SAMP>' buffers.  At the very least, meshes <EM>should</EM> provide
+`<SAMP>index</SAMP>', `<SAMP>position</SAMP>', and if possible `<SAMP>texcoord<EM>n</EM></SAMP>'. The old
+system with custom named buffers is also supported.
+</P><P>
+
+Both kinds of buffers can be mapped, and the destinations for both kinds of
+buffers are the same (listed here): `<SAMP>position</SAMP>', `<SAMP>normal</SAMP>',
+`<SAMP>color</SAMP>', `<SAMP>primary color</SAMP>' (alias for `<SAMP>color</SAMP>'), `<SAMP>secondary
+color</SAMP>', `<SAMP>texture coordinate n</SAMP>' (where 0 &#60;= n &#60; texture units;
+`<SAMP>texture coordinate</SAMP>' is alias for n = 0), and `<SAMP>attribute n</SAMP>' (where 0
+&#60;= n &#60; 16).  Note that you can not map buffers of different kinds (the
+`<SAMP>normal</SAMP>' and the custom buffers) to same destination; the result is
+undefined).
+</P><P>
+
+The normal buffers are named `<SAMP>position</SAMP>', `<SAMP>normal</SAMP>', `<SAMP>color</SAMP>',
+`<SAMP>primary color</SAMP>', `<SAMP>lit color</SAMP>', `<SAMP>texture coordinate n</SAMP>' (where 0 &#60;=
+n &#60; 3), `<SAMP>texture coordinate lightmap</SAMP>', `<SAMP>generic n</SAMP>' (where 0 &#60;= n &#60;
+3), `<SAMP>binormal</SAMP>', and `<SAMP>tangent</SAMP>'. These appear in the
+`<SAMP>source="<small>...</small>"</SAMP>' tag within the XML shader description.
+</P><P>
+
+Mapping of custom buffers is accomplished as so:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;buffer
+  customsource="custombuffername"
+  destination="texture coordinate 1"
+/&#62;
+</pre></td></tr></table></P><P>
+
+And, mapping of a normal buffer is done this way:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;buffer
+  source="tangent"
+  destination="texture coordinate 2"
+/&#62;
+</pre></td></tr></table></P><P>
+
+As a convenience, three buffers are mapped automatically by default (as long as
+the mesh provides them). They are:
+</P><P>
+
+<UL>
+<LI>
+`<SAMP>position</SAMP>' => `<SAMP>position</SAMP>'
+<LI>
+`<SAMP>color</SAMP>' => `<SAMP>primary color</SAMP>'
+<LI>
+`<SAMP>texture coordinate 0</SAMP>' => `<SAMP>texture coordinate 0</SAMP>'
+</UL>
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
