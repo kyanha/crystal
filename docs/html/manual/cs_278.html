@@ -26,13 +26,13 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A NAME="SEC823"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC836"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC837"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC959"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC960"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC959">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC960">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
@@ -597,7 +597,7 @@ are also 1-based.
 </P><P>
 
 <A NAME="SEC834"></A>
-<H3> iGraphics2D Alpha Color Support </H3>
+<H3> <CODE>iGraphics2D</CODE> Alpha Color Support </H3>
 <!--docid::SEC834::-->
 <P>
 
@@ -619,19 +619,79 @@ but an alpha component of 0.
 
 The `<TT>csutil/garray.h</TT>' file, containing the class 
 <CODE>csDirtyAccessArray&#60;&#62;</CODE>, has been deprecated in favor of the more sensible
-file name `<TT>csutil/dirtyaccessarray.h</TT>'. Functional changes have not been
-made.
+file name `<TT>csutil/dirtyaccessarray.h</TT>'. No functional changes have been
+made to the class.
+</P><P>
+
+<A NAME="SEC836"></A>
+<H3> <CODE>csList&#60;&#62;::Iterator</CODE> Normalization </H3>
+<!--docid::SEC836::-->
+<P>
+
+The behavior of <CODE>csList&#60;&#62;::Iterator</CODE> has been normalized so that it
+functions identically to all other iterators in Crystal Space.  In the past, a
+newly created <CODE>csList&#60;&#62;::Iterator</CODE> already pointed at the first element in
+the container.  This differed from all other iterator implementations, in which
+the first element, like all other elements, is accessed by an invocation of
+<CODE>Next()</CODE>.
+</P><P>
+
+Old code which accessed the elements of a <CODE>csList&#60;&#62;::Iterator</CODE> required a
+non-standard idiom, such as:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csList&#60;sometype&#62; list = <small>...</small>;
+csList&#60;sometype&#62;::Iterator it(list);
+if (it.HasCurrent()) {
+  do_something(*it);         // First value.
+  while (it.HasNext()) {
+    do_something(it.Next()); // Remaining values.
+  }
+}
+</pre></td></tr></table></P><P>
+
+Or, the slightly less complicated, though still somewhat convoluted:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csList&#60;sometype&#62;::Iterator it(list);
+while (it.HasCurrent()) {
+  do_something(*it);
+  it.Next();
+}
+</pre></td></tr></table></P><P>
+
+Following normalization, <CODE>csList&#60;&#62;::Iterator</CODE> now works like all other
+iterators throughout the toolkit.  In particular, for forward iteration, all
+elements can be accessed via the standard <CODE>HasNext()</CODE> / <CODE>Next()</CODE>
+idiom:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csList&#60;sometype&#62;::Iterator it(list);
+while (it.HasNext()) {
+  do_something(it.Next());
+}
+</pre></td></tr></table></P><P>
+
+Likewise, for backward iteration, the <CODE>HasPrevious()</CODE> / <CODE>Previous()</CODE>
+idiom works in the obvious and expected inverse fashion.
+</P><P>
+
+Finally, <CODE>csList&#60;&#62;::Iterator::Next()</CODE> and <CODE>Previous()</CODE> now return
+references to contained elements, rather than pointers.  This makes the
+interface of <CODE>csList&#60;&#62;::Iterator</CODE> internally consistent, as well as
+consistent with all other iterators throughout the toolkit, in which these
+methods return references.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC836"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC837"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC822"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC959"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC960"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC959">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC960">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
