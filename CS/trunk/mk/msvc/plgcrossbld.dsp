@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\mesh\crossbld\crossbld.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\crossbld\crossbld.csplugin
+SOURCE=..\..\mk\msvc\plgcrossbld.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcrossbld.rc
+SOURCE=..\..\plugins\mesh\crossbld\crossbld.csplugin
 # End Source File
 # End Group
 # End Target

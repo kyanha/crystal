@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\snow\persist\standard\snowldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\snow\persist\standard\snowldr.csplugin
+SOURCE=..\..\mk\msvc\plgsnowldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsnowldr.rc
+SOURCE=..\..\plugins\mesh\snow\persist\standard\snowldr.csplugin
 # End Source File
 # End Group
 # End Target

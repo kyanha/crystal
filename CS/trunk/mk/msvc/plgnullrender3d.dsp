@@ -276,11 +276,11 @@ SOURCE=..\..\plugins\video\render3d\null\null_txt.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\null\nullrender3d.csplugin
+SOURCE=..\..\mk\msvc\plgnullrender3d.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgnullrender3d.rc
+SOURCE=..\..\plugins\video\render3d\null\nullrender3d.csplugin
 # End Source File
 # End Group
 # End Target

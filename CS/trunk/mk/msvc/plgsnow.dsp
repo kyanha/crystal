@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\snow\object\snow.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\snow\object\snow.csplugin
+SOURCE=..\..\mk\msvc\plgsnow.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsnow.rc
+SOURCE=..\..\plugins\mesh\snow\object\snow.csplugin
 # End Source File
 # End Group
 # End Target

@@ -272,11 +272,11 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\softshader_v
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\softshader.csplugin
+SOURCE=..\..\mk\msvc\plgsoftshader.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsoftshader.rc
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\softshader.csplugin
 # End Source File
 # End Group
 # End Target

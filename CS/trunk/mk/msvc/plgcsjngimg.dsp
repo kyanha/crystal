@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\loader\jng\jng.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\jng\csjngimg.csplugin
+SOURCE=..\..\mk\msvc\plgcsjngimg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsjngimg.rc
+SOURCE=..\..\plugins\video\loader\jng\csjngimg.csplugin
 # End Source File
 # End Group
 # End Target

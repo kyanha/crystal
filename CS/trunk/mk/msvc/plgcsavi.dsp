@@ -276,11 +276,11 @@ SOURCE=..\..\plugins\video\format\avi\iavicdec.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\format\avi\csavi.csplugin
+SOURCE=..\..\mk\msvc\plgcsavi.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsavi.rc
+SOURCE=..\..\plugins\video\format\avi\csavi.csplugin
 # End Source File
 # End Group
 # End Target

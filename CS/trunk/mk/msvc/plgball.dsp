@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\ball\object\ball.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\ball\object\ball.csplugin
+SOURCE=..\..\mk\msvc\plgball.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgball.rc
+SOURCE=..\..\plugins\mesh\ball\object\ball.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\physics\loader\physldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\physics\loader\physldr.csplugin
+SOURCE=..\..\mk\msvc\plgphysldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgphysldr.rc
+SOURCE=..\..\plugins\physics\loader\physldr.csplugin
 # End Source File
 # End Group
 # End Target

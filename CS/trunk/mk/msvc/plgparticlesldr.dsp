@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\particles\persist\standard\particlesldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\particles\persist\standard\particlesldr.csplugin
+SOURCE=..\..\mk\msvc\plgparticlesldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgparticlesldr.rc
+SOURCE=..\..\plugins\mesh\particles\persist\standard\particlesldr.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\foliage\persist\standard\foliageldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\foliage\persist\standard\foliageldr.csplugin
+SOURCE=..\..\mk\msvc\plgfoliageldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgfoliageldr.rc
+SOURCE=..\..\plugins\mesh\foliage\persist\standard\foliageldr.csplugin
 # End Source File
 # End Group
 # End Target

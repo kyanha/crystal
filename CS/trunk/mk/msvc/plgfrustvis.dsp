@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\culling\frustvis\frustvis.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\frustvis\frustvis.csplugin
+SOURCE=..\..\mk\msvc\plgfrustvis.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgfrustvis.rc
+SOURCE=..\..\plugins\culling\frustvis\frustvis.csplugin
 # End Source File
 # End Group
 # End Target

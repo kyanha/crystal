@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\canvas\wxgl\GLWXDriver2D.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\wxgl\wxgl.csplugin
+SOURCE=..\..\mk\msvc\plgwxgl.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgwxgl.rc
+SOURCE=..\..\plugins\video\canvas\wxgl\wxgl.csplugin
 # End Source File
 # End Group
 # End Target

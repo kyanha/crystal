@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\sequence\sequence.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sequence\sequence.csplugin
+SOURCE=..\..\mk\msvc\plgsequence.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsequence.rc
+SOURCE=..\..\plugins\sequence\sequence.csplugin
 # End Source File
 # End Group
 # End Target

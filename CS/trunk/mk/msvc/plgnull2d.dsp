@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\canvas\null2d\null2d.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\null2d\null2d.csplugin
+SOURCE=..\..\mk\msvc\plgnull2d.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgnull2d.rc
+SOURCE=..\..\plugins\video\canvas\null2d\null2d.csplugin
 # End Source File
 # End Group
 # End Target

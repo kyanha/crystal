@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\emit\object\emit.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\emit\object\emit.csplugin
+SOURCE=..\..\mk\msvc\plgemit.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgemit.rc
+SOURCE=..\..\plugins\mesh\emit\object\emit.csplugin
 # End Source File
 # End Group
 # End Target

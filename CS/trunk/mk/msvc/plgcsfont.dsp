@@ -272,11 +272,11 @@ SOURCE=..\..\plugins\font\server\csfont\font_tiny.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\font\server\csfont\csfont.csplugin
+SOURCE=..\..\mk\msvc\plgcsfont.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsfont.rc
+SOURCE=..\..\plugins\font\server\csfont\csfont.csplugin
 # End Source File
 # End Group
 # End Target

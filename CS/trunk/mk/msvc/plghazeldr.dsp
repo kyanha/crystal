@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\haze\persist\standard\hazeldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\haze\persist\standard\hazeldr.csplugin
+SOURCE=..\..\mk\msvc\plghazeldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plghazeldr.rc
+SOURCE=..\..\plugins\mesh\haze\persist\standard\hazeldr.csplugin
 # End Source File
 # End Group
 # End Target

@@ -284,11 +284,11 @@ SOURCE=..\..\plugins\csparser\loadtex.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\csparser\csparser.csplugin
+SOURCE=..\..\mk\msvc\plgcsparser.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsparser.rc
+SOURCE=..\..\plugins\csparser\csparser.csplugin
 # End Source File
 # End Group
 # End Target

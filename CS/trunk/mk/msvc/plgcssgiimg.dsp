@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\loader\sgi\sgiimage.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\sgi\cssgiimg.csplugin
+SOURCE=..\..\mk\msvc\plgcssgiimg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcssgiimg.rc
+SOURCE=..\..\plugins\video\loader\sgi\cssgiimg.csplugin
 # End Source File
 # End Group
 # End Target

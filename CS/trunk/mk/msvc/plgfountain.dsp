@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\fountain\object\fountain.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\fountain\object\fountain.csplugin
+SOURCE=..\..\mk\msvc\plgfountain.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgfountain.rc
+SOURCE=..\..\plugins\mesh\fountain\object\fountain.csplugin
 # End Source File
 # End Group
 # End Target

@@ -276,11 +276,11 @@ SOURCE=..\..\plugins\documentsystem\xmlread\xrpriv.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\documentsystem\xmlread\xmlread.csplugin
+SOURCE=..\..\mk\msvc\plgxmlread.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgxmlread.rc
+SOURCE=..\..\plugins\documentsystem\xmlread\xmlread.csplugin
 # End Source File
 # End Group
 # End Target

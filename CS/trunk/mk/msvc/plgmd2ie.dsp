@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\mesh\impexp\md2\md2ie.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\impexp\md2\md2ie.csplugin
+SOURCE=..\..\mk\msvc\plgmd2ie.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgmd2ie.rc
+SOURCE=..\..\plugins\mesh\impexp\md2\md2ie.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\rain\object\rain.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\rain\object\rain.csplugin
+SOURCE=..\..\mk\msvc\plgrain.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgrain.rc
+SOURCE=..\..\plugins\mesh\rain\object\rain.csplugin
 # End Source File
 # End Group
 # End Target

@@ -296,11 +296,11 @@ SOURCE=..\..\plugins\culling\dynavis\wqueue.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\dynavis\dynavis.csplugin
+SOURCE=..\..\mk\msvc\plgdynavis.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgdynavis.rc
+SOURCE=..\..\plugins\culling\dynavis\dynavis.csplugin
 # End Source File
 # End Group
 # End Target

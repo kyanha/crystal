@@ -472,11 +472,11 @@ SOURCE=..\..\plugins\engine\3d\texture.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\engine.csplugin
+SOURCE=..\..\mk\msvc\plgengine.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgengine.rc
+SOURCE=..\..\plugins\engine\3d\engine.csplugin
 # End Source File
 # End Group
 # End Target

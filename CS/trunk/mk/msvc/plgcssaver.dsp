@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\cssaver\cssaver.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\cssaver\cssaver.csplugin
+SOURCE=..\..\mk\msvc\plgcssaver.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcssaver.rc
+SOURCE=..\..\plugins\cssaver\cssaver.csplugin
 # End Source File
 # End Group
 # End Target

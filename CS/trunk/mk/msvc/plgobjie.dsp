@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\mesh\impexp\obj\objie.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\impexp\obj\objie.csplugin
+SOURCE=..\..\mk\msvc\plgobjie.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgobjie.rc
+SOURCE=..\..\plugins\mesh\impexp\obj\objie.csplugin
 # End Source File
 # End Group
 # End Target

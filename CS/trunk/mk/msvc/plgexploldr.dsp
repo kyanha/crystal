@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\explo\persist\standard\exploldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\explo\persist\standard\exploldr.csplugin
+SOURCE=..\..\mk\msvc\plgexploldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgexploldr.rc
+SOURCE=..\..\plugins\mesh\explo\persist\standard\exploldr.csplugin
 # End Source File
 # End Group
 # End Target

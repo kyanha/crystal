@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\loader\mplex\imgplex.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\mplex\imgplex.csplugin
+SOURCE=..\..\mk\msvc\plgimgplex.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgimgplex.rc
+SOURCE=..\..\plugins\video\loader\mplex\imgplex.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\canvas\memory\memory.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\memory\memory.csplugin
+SOURCE=..\..\mk\msvc\plgmemory.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgmemory.rc
+SOURCE=..\..\plugins\video\canvas\memory\memory.csplugin
 # End Source File
 # End Group
 # End Target

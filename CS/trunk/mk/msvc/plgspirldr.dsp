@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\spiral\persist\standard\spirldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\spiral\persist\standard\spirldr.csplugin
+SOURCE=..\..\mk\msvc\plgspirldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgspirldr.rc
+SOURCE=..\..\plugins\mesh\spiral\persist\standard\spirldr.csplugin
 # End Source File
 # End Group
 # End Target

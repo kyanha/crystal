@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\documentsystem\dsplex\dsplex.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\documentsystem\dsplex\dsplex.csplugin
+SOURCE=..\..\mk\msvc\plgdsplex.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgdsplex.rc
+SOURCE=..\..\plugins\documentsystem\dsplex\dsplex.csplugin
 # End Source File
 # End Group
 # End Target

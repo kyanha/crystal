@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\genmesh\anim\gmeshanim.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\genmesh\anim\gmeshanim.csplugin
+SOURCE=..\..\mk\msvc\plggmeshanim.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plggmeshanim.rc
+SOURCE=..\..\plugins\mesh\genmesh\anim\gmeshanim.csplugin
 # End Source File
 # End Group
 # End Target

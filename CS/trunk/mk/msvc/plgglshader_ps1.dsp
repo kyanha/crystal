@@ -304,11 +304,11 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_parser
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\glshader_ps1.csplugin
+SOURCE=..\..\mk\msvc\plgglshader_ps1.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgglshader_ps1.rc
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\glshader_ps1.csplugin
 # End Source File
 # End Group
 # End Target

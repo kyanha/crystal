@@ -264,11 +264,11 @@ SOURCE=..\..\plugins\console\output\standard\csconout.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\console\output\standard\csconout.csplugin
+SOURCE=..\..\mk\msvc\plgcsconout.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsconout.rc
+SOURCE=..\..\plugins\console\output\standard\csconout.csplugin
 # End Source File
 # End Group
 # End Target

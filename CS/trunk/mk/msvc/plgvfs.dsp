@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\filesys\vfs\vfs.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\filesys\vfs\vfs.csplugin
+SOURCE=..\..\mk\msvc\plgvfs.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgvfs.rc
+SOURCE=..\..\plugins\filesys\vfs\vfs.csplugin
 # End Source File
 # End Group
 # End Target

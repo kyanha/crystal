@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\ball\persist\standard\ballldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\ball\persist\standard\ballldr.csplugin
+SOURCE=..\..\mk\msvc\plgballldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgballldr.rc
+SOURCE=..\..\plugins\mesh\ball\persist\standard\ballldr.csplugin
 # End Source File
 # End Group
 # End Target

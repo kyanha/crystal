@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\terrain_brute\object\brute.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain_brute\object\bruteblock.csplugin
+SOURCE=..\..\mk\msvc\plgbruteblock.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgbruteblock.rc
+SOURCE=..\..\plugins\mesh\terrain_brute\object\bruteblock.csplugin
 # End Source File
 # End Group
 # End Target

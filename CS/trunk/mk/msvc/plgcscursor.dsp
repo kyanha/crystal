@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\cursor\cursor.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\cursor\cscursor.csplugin
+SOURCE=..\..\mk\msvc\plgcscursor.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcscursor.rc
+SOURCE=..\..\plugins\video\cursor\cscursor.csplugin
 # End Source File
 # End Group
 # End Target

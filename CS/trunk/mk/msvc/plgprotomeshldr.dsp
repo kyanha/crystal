@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\protomesh\persist\standard\protomeshldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\protomesh\persist\standard\protomeshldr.csplugin
+SOURCE=..\..\mk\msvc\plgprotomeshldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgprotomeshldr.rc
+SOURCE=..\..\plugins\mesh\protomesh\persist\standard\protomeshldr.csplugin
 # End Source File
 # End Group
 # End Target

@@ -272,11 +272,11 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_arb\glshader_a
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_arb\glshader_arb.csplugin
+SOURCE=..\..\mk\msvc\plgglshader_arb.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgglshader_arb.rc
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_arb\glshader_arb.csplugin
 # End Source File
 # End Group
 # End Target

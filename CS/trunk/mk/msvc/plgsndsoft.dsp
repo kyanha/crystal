@@ -272,11 +272,11 @@ SOURCE=..\..\plugins\sound\renderer\software\srdrsrc.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\software\sndsoft.csplugin
+SOURCE=..\..\mk\msvc\plgsndsoft.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndsoft.rc
+SOURCE=..\..\plugins\sound\renderer\software\sndsoft.csplugin
 # End Source File
 # End Group
 # End Target

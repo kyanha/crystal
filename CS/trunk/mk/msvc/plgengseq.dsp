@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\engseq\engseq.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\engseq\engseq.csplugin
+SOURCE=..\..\mk\msvc\plgengseq.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgengseq.rc
+SOURCE=..\..\plugins\engseq\engseq.csplugin
 # End Source File
 # End Group
 # End Target

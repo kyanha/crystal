@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\reporter\reporter.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\reporter\reporter.csplugin
+SOURCE=..\..\mk\msvc\plgreporter.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgreporter.rc
+SOURCE=..\..\plugins\reporter\reporter.csplugin
 # End Source File
 # End Group
 # End Target

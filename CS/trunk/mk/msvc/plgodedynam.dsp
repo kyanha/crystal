@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\physics\odedynam\odedynam.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\physics\odedynam\odedynam.csplugin
+SOURCE=..\..\mk\msvc\plgodedynam.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgodedynam.rc
+SOURCE=..\..\plugins\physics\odedynam\odedynam.csplugin
 # End Source File
 # End Group
 # End Target

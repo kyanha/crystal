@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\loader\tga\tgaimage.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\tga\cstgaimg.csplugin
+SOURCE=..\..\mk\msvc\plgcstgaimg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcstgaimg.rc
+SOURCE=..\..\plugins\video\loader\tga\cstgaimg.csplugin
 # End Source File
 # End Group
 # End Target

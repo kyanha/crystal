@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\mesh\impexp\spr\sprie.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\impexp\spr\sprie.csplugin
+SOURCE=..\..\mk\msvc\plgsprie.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsprie.rc
+SOURCE=..\..\plugins\mesh\impexp\spr\sprie.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\fire\object\fire.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\fire\object\fire.csplugin
+SOURCE=..\..\mk\msvc\plgfire.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgfire.rc
+SOURCE=..\..\plugins\mesh\fire\object\fire.csplugin
 # End Source File
 # End Group
 # End Target

@@ -280,11 +280,11 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cg
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cg.csplugin
+SOURCE=..\..\mk\msvc\plgglshader_cg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgglshader_cg.rc
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cg.csplugin
 # End Source File
 # End Group
 # End Target

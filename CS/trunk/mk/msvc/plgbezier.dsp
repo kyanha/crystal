@@ -296,11 +296,11 @@ SOURCE=..\..\plugins\mesh\bezier\object\lightpool.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\bezier\object\bezier.csplugin
+SOURCE=..\..\mk\msvc\plgbezier.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgbezier.rc
+SOURCE=..\..\plugins\mesh\bezier\object\bezier.csplugin
 # End Source File
 # End Group
 # End Target

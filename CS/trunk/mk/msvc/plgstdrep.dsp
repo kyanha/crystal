@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\stdrep\stdrep.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\stdrep\stdrep.csplugin
+SOURCE=..\..\mk\msvc\plgstdrep.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgstdrep.rc
+SOURCE=..\..\plugins\stdrep\stdrep.csplugin
 # End Source File
 # End Group
 # End Target

@@ -264,11 +264,11 @@ SOURCE=..\..\plugins\video\loader\dds\ddsloader.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\dds\csddsimg.csplugin
+SOURCE=..\..\mk\msvc\plgcsddsimg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsddsimg.rc
+SOURCE=..\..\plugins\video\loader\dds\csddsimg.csplugin
 # End Source File
 # End Group
 # End Target

@@ -264,11 +264,11 @@ SOURCE=..\..\plugins\video\canvas\openglwin\oglg2d.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\openglwin\glwin32.csplugin
+SOURCE=..\..\mk\msvc\plgglwin32.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgglwin32.rc
+SOURCE=..\..\plugins\video\canvas\openglwin\glwin32.csplugin
 # End Source File
 # End Group
 # End Target

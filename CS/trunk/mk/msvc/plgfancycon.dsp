@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\console\output\fancy\fancycon.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\console\output\fancy\fancycon.csplugin
+SOURCE=..\..\mk\msvc\plgfancycon.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgfancycon.rc
+SOURCE=..\..\plugins\console\output\fancy\fancycon.csplugin
 # End Source File
 # End Group
 # End Target

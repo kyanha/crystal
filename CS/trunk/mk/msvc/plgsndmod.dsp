@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\sound\loader\mod\moddata.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\loader\mod\sndmod.csplugin
+SOURCE=..\..\mk\msvc\plgsndmod.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndmod.rc
+SOURCE=..\..\plugins\sound\loader\mod\sndmod.csplugin
 # End Source File
 # End Group
 # End Target

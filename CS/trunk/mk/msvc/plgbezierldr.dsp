@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\bezier\persist\standard\bezierldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\bezier\persist\standard\bezierldr.csplugin
+SOURCE=..\..\mk\msvc\plgbezierldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgbezierldr.rc
+SOURCE=..\..\plugins\mesh\bezier\persist\standard\bezierldr.csplugin
 # End Source File
 # End Group
 # End Target

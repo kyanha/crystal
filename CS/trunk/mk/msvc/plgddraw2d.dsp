@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\canvas\ddraw\g2d.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\ddraw\ddraw2d.csplugin
+SOURCE=..\..\mk\msvc\plgddraw2d.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgddraw2d.rc
+SOURCE=..\..\plugins\video\canvas\ddraw\ddraw2d.csplugin
 # End Source File
 # End Group
 # End Target

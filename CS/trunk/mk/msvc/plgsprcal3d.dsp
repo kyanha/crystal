@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\sprcal3d\object\sprcal3d.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\sprcal3d\object\sprcal3d.csplugin
+SOURCE=..\..\mk\msvc\plgsprcal3d.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsprcal3d.rc
+SOURCE=..\..\plugins\mesh\sprcal3d\object\sprcal3d.csplugin
 # End Source File
 # End Group
 # End Target
