@@ -234,10 +234,6 @@ SOURCE=..\..\libs\csgeom\polymesh.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\polytree.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgeom\quaterni.cpp
 # End Source File
 # Begin Source File
@@ -403,10 +399,6 @@ SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polymesh.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polypool.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polytree.h
 # End Source File
 # Begin Source File
 
