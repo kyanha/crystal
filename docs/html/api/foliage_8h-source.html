@@ -38,28 +38,97 @@
 00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IMESH_FOLIAGEMESH_H__</span>
 00021 <span class="preprocessor"></span>
 00022 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-00023 
-00024 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
-00025 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
-00026 <span class="keyword">class </span><a class="code" href="classcsColor.html">csColor</a>;
-00027 
-00028 <span class="keyword">struct </span><a class="code" href="structcsTriangle.html">csTriangle</a>;
-00029 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
+00023 <span class="preprocessor">#include "<a class="code" href="garray_8h.html">csutil/garray.h</a>"</span>
+00024 <span class="preprocessor">#include "csutil/refarr.h"</span>
+00025 <span class="preprocessor">#include "csutil/cscolor.h"</span>
+00026 <span class="preprocessor">#include "<a class="code" href="tri_8h.html">csgeom/tri.h</a>"</span>
+00027 <span class="preprocessor">#include "<a class="code" href="vector3_8h.html">csgeom/vector3.h</a>"</span>
+00028 <span class="preprocessor">#include "<a class="code" href="vector2_8h.html">csgeom/vector2.h</a>"</span>
+00029 <span class="preprocessor">#include "<a class="code" href="box_8h.html">csgeom/box.h</a>"</span>
 00030 
-00031 <a class="code" href="group__scf.html#a66">SCF_VERSION</a> (<a class="code" href="structiFoliageFactoryState.html">iFoliageFactoryState</a>, 0, 0, 1);
-00032 
-<a name="l00054"></a><a class="code" href="structiFoliageFactoryState.html">00054</a> <span class="keyword">struct </span><a class="code" href="structiFoliageFactoryState.html">iFoliageFactoryState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00055 {
-00056 };
+00031 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
+00032 <span class="keyword">struct </span><a class="code" href="structiTerraFormer.html">iTerraFormer</a>;
+00033 
+<a name="l00037"></a><a class="code" href="structcsFoliageVertex.html">00037</a> <span class="keyword">struct </span><a class="code" href="structcsFoliageVertex.html">csFoliageVertex</a>
+00038 {
+00039   <a class="code" href="classcsVector3.html">csVector3</a> pos;
+00040   <a class="code" href="classcsVector2.html">csVector2</a> texel;
+00041   <a class="code" href="classcsColor.html">csColor</a> color;
+00042   <a class="code" href="classcsVector3.html">csVector3</a> normal;
+00043 };
+00044 
+00045 <a class="code" href="group__scf.html#a66">SCF_VERSION</a> (<a class="code" href="structiFoliageGeometry.html">iFoliageGeometry</a>, 0, 0, 1);
+00046 
+<a name="l00050"></a><a class="code" href="structiFoliageGeometry.html">00050</a> <span class="keyword">struct </span><a class="code" href="structiFoliageGeometry.html">iFoliageGeometry</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00051 {
+00055   <span class="keyword">virtual</span> size_t <a class="code" href="structiFoliageGeometry.html#a0">AddVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; texel,
+00056         <span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; normal) = 0;
 00057 
-00058 <a class="code" href="group__scf.html#a66">SCF_VERSION</a> (<a class="code" href="structiFoliageMeshState.html">iFoliageMeshState</a>, 0, 0, 1);
-00059 
-<a name="l00077"></a><a class="code" href="structiFoliageMeshState.html">00077</a> <span class="keyword">struct </span><a class="code" href="structiFoliageMeshState.html">iFoliageMeshState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00078 {
-00079 };
-00080 
-00081 <span class="preprocessor">#endif // __CS_IMESH_FOLIAGEMESH_H__</span>
-00082 <span class="preprocessor"></span>
+00061   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;csFoliageVertex&gt;</a>&amp; <a class="code" href="structiFoliageGeometry.html#a1">GetVertices</a> () <span class="keyword">const</span> = 0;
+00062 
+00066   <span class="keyword">virtual</span> size_t <a class="code" href="structiFoliageGeometry.html#a2">AddTriangle</a> (<span class="keyword">const</span> <a class="code" href="structcsTriangle.html">csTriangle</a>&amp; tri) = 0;
+00067 
+00071   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;csTriangle&gt;</a>&amp; <a class="code" href="structiFoliageGeometry.html#a3">GetTriangles</a> () <span class="keyword">const</span> = 0;
+00072 
+00076   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiFoliageGeometry.html#a4">SetMaterialWrapper</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* material) = 0;
+00077 
+00081   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiFoliageGeometry.html#a5">GetMaterialWrapper</a> () <span class="keyword">const</span> = 0;
+00082 };
+00083 
+00084 <a class="code" href="group__scf.html#a66">SCF_VERSION</a> (<a class="code" href="structiFoliageObject.html">iFoliageObject</a>, 0, 0, 1);
+00085 
+<a name="l00091"></a><a class="code" href="structiFoliageObject.html">00091</a> <span class="keyword">struct </span><a class="code" href="structiFoliageObject.html">iFoliageObject</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00092 {
+00096   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiFoliageObject.html#a0">GetName</a> () <span class="keyword">const</span> = 0;
+00097 
+00104   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iFoliageGeometry&gt;</a> <a class="code" href="structiFoliageObject.html#a1">CreateGeometry</a> (size_t lodslot) = 0;
+00105 
+00117   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iFoliageGeometry&gt;</a> <a class="code" href="structiFoliageObject.html#a2">CreateGeometryLOD</a> (size_t fromslot,
+00118       size_t toslot, <span class="keywordtype">float</span> factory) = 0;
+00119 
+00125   <span class="keyword">virtual</span> <a class="code" href="structiFoliageGeometry.html">iFoliageGeometry</a>* <a class="code" href="structiFoliageObject.html#a3">GetGeometry</a> (size_t lodslot) = 0;
+00126 
+00132   <span class="keyword">virtual</span> size_t <a class="code" href="structiFoliageObject.html#a4">GetMaxLodSlot</a> () <span class="keyword">const</span> = 0;
+00133 };
+00134 
+00135 
+00136 <a class="code" href="group__scf.html#a66">SCF_VERSION</a> (<a class="code" href="structiFoliageFactoryState.html">iFoliageFactoryState</a>, 0, 0, 1);
+00137 
+<a name="l00159"></a><a class="code" href="structiFoliageFactoryState.html">00159</a> <span class="keyword">struct </span><a class="code" href="structiFoliageFactoryState.html">iFoliageFactoryState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00160 {
+00164   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iFoliageObject&gt;</a> <a class="code" href="structiFoliageFactoryState.html#a0">CreateObject</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00165 
+00169   <span class="keyword">virtual</span> <a class="code" href="structiFoliageObject.html">iFoliageObject</a>* <a class="code" href="structiFoliageFactoryState.html#a1">FindObject</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) <span class="keyword">const</span> = 0;
+00170 
+00174   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;iFoliageObject&gt;</a>&amp; <a class="code" href="structiFoliageFactoryState.html#a2">GetObjects</a> () <span class="keyword">const</span> = 0;
+00175 
+00190   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiFoliageFactoryState.html#a3">AddPaletteEntry</a> (size_t typeidx, <span class="keyword">const</span> <span class="keywordtype">char</span>* objectname,
+00191       <span class="keywordtype">float</span> relative_density) = 0;
+00192 
+00196   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiFoliageFactoryState.html#a4">ClearPaletteType</a> (size_t typeidx) = 0;
+00197 
+00201   <span class="keyword">virtual</span> size_t <a class="code" href="structiFoliageFactoryState.html#a5">GetPaletteTypeCount</a> () <span class="keyword">const</span> = 0;
+00202 
+00207   <span class="keyword">virtual</span> size_t <a class="code" href="structiFoliageFactoryState.html#a6">GetPaletteEntryCount</a> (size_t typeidx) <span class="keyword">const</span> = 0;
+00208 
+00213   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiFoliageFactoryState.html#a7">GetPaletteEntry</a> (size_t typeidx, size_t entryidx,
+00214       <span class="keywordtype">float</span>&amp; relative_density) = 0;
+00215 
+00239   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiFoliageFactoryState.html#a8">SetTerraFormer</a> (<a class="code" href="structiTerraFormer.html">iTerraFormer</a>* form) = 0;
+00243   <span class="keyword">virtual</span> <a class="code" href="structiTerraFormer.html">iTerraFormer</a>* <a class="code" href="structiFoliageFactoryState.html#a9">GetTerraFormer</a> () = 0;
+00244 
+00249   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiFoliageFactoryState.html#a10">SetSamplerRegion</a> (<span class="keyword">const</span> <a class="code" href="classcsBox2.html">csBox2</a>&amp; region) = 0;
+00253   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsBox2.html">csBox2</a>&amp; <a class="code" href="structiFoliageFactoryState.html#a11">GetSamplerRegion</a> () <span class="keyword">const</span> = 0;
+00254 };
+00255 
+00256 <a class="code" href="group__scf.html#a66">SCF_VERSION</a> (<a class="code" href="structiFoliageMeshState.html">iFoliageMeshState</a>, 0, 0, 1);
+00257 
+<a name="l00275"></a><a class="code" href="structiFoliageMeshState.html">00275</a> <span class="keyword">struct </span><a class="code" href="structiFoliageMeshState.html">iFoliageMeshState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00276 {
+00277 };
+00278 
+00279 <span class="preprocessor">#endif // __CS_IMESH_FOLIAGEMESH_H__</span>
+00280 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
