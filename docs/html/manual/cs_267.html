@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: MacOS/X Run-Loop</TITLE>
+<TITLE>Crystal Space: Threads in CS</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: MacOS/X Run-Loop">
-<META NAME="keywords" CONTENT="Crystal Space: MacOS/X Run-Loop">
+<META NAME="description" CONTENT="Crystal Space: Threads in CS">
+<META NAME="keywords" CONTENT="Crystal Space: Threads in CS">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,76 +23,151 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC797"></A>
+<A NAME="SEC794"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_266.html#SEC796"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC798"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC794"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC795"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC799"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_266.html#SEC793"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_262.html#SEC789"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC788"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 8.1.1.2 Run-Loop </H4>
-<!--docid::SEC797::-->
+<H2> 8.2 Threads in Crystal Space </H2>
+<!--docid::SEC794::-->
 <P>
 
-The typical Crystal Space application assumes that the programmer has full
-control over the application's run-loop.  For many platforms to which Crystal
-Space has been ported, this is not a problem since the main run-loop is
-generally implemented in this fashion:
+<EM>Written by Jorrit Tyberghein.</EM>
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool csDefaultRunLoop(iObjectRegistry*)
-{
-  while (!shutdown)
-    event_queue-&#62;Process();
-}
+The Crystal Space project as such is not thread-safe. So when using
+threads in combination with Crystal Space you have to be careful. However,
+several parts of Crystal Space are thread-safe to some degree. This is
+documented in this section. However, by default you must assume that some
+Crystal Space plugin or module is not thread-safe unless it is mentioned here.
+</P><P>
+
+<A NAME="SEC795"></A>
+<H4> Threadsafe parts of Crystal Space </H4>
+<!--docid::SEC795::-->
+<P>
+
+<UL>
+<LI>
+SCF (see section <A HREF="cs_138.html#SEC350">6.2 Shared Class Facility (SCF)</A>) class loading/unloading is safe. This means that
+<CODE>SCF_CREATE_INSTANCE()</CODE> and all the routines in `<SAMP>iSCF</SAMP>' that have
+to do with loaded classes are safe.
+<P>
+
+<LI>
+The plugin manager is safe, thus macros such as <CODE>CS_LOAD_PLUGIN()</CODE>,
+<CODE>CS_LOAD_PLUGIN_ALWAYS()</CODE>, and <CODE>CS_QUERY_PLUGIN_CLASS()</CODE> are safe.
+<P>
+
+<LI>
+The object registry is safe, thus macros like <CODE>CS_QUERY_REGISTRY()</CODE>
+are safe. The <CODE>iObjectRegistryIterator</CODE> takes a copy of the data
+over which it iterates so it will not even lock.
+<P>
+
+<LI>
+VFS (see section <A HREF="cs_158.html#SEC384">7.2 Virtual File System (VFS)</A>) is thread-safe for most operations.  But do not work on
+the same `<SAMP>iFile</SAMP>' from different threads!  That is not thread-safe.  Also
+the concept of the current directory is not really valid with threads.
+<P>
+
+<LI>
+The TinyXML, XMLRead, and BinaryXML parsers are thread safe in the sense
+that it is okay to create and work on separate documents in separate threads.
+However it is <EM>not</EM> okay to work on the same document in different
+threads.
+<P>
+
+<LI>
+The syntax services plugin is safe for the basic parsing tools (vectors,
+matrices, reporting errors, etc.). For polygons and thing related objects
+this has not yet been checked for safety.
+<P>
+
+<LI>
+The `<SAMP>simpcon</SAMP>' and `<SAMP>csconout</SAMP>' output consoles are thread-safe provided
+auto-updating is disabled which you can set like this:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iConsoleOutput&#62; con = ...;
+con-&#62;AutoUpdate(false);
 </pre></td></tr></table></P><P>
 
-With Cocoa, on the other hand, the main run-loop is not accessible to the
-programmer and is essentially a black-box.  A simple-minded implementation of
-the above functionality for Cocoa might look like this:
+Note that by default auto-updating is enabled!
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool csDefaultRunLoop(iObjectRegistry*)
-{
-  [NSApp run];
-}
-</pre></td></tr></table></P><P>
+<LI>
+The reporter plugin is fully thread-safe.
+<P>
 
-This code launches the Cocoa run-loop but does not address the problem of
-periodically processing Crystal Space's event queue.  To solve this problem
-`<SAMP>OSXDelegate</SAMP>' artificially injects <EM>application-defined</EM> events into
-the Cocoa event queue and then triggers an invocation of
-<CODE>iEventQueue::Process()</CODE> for each such received event.  A single
-application-defined event is injected into the event queue in order to begin
-the process, and then an event is injected into the queue after each invocation
-of <CODE>iEventQueue::Process()</CODE>.
+<LI>
+The standard reporter listener plugin is thread-safe for basic operations
+but not for initialization. That should be done from the main thread.
+Also note that thread-safety of the standard reporter listener depends
+on thread-safety of the output console that is being used.
+<P>
+
+<LI>
+The following mesh object and factory loaders are thread-safe provided that the
+implementation of `<SAMP>iLoaderContext</SAMP>' is thread-safe.  Please note that the
+default <CODE>iLoaderContext</CODE> is <EM>not</EM> thread-safe which makes all loader
+plugins unsafe by default.
+<P>
+
+<UL>
+<LI>
+<EM>Genmesh loader</EM>: Aside from a small design mistake with streams in
+case the new renderer is used, the genmesh loader plugin is perfectly
+thread-safe.
+</UL>
+<P>
+
+</UL>
+<P>
+
+<A NAME="SEC796"></A>
+<H4> Threaded Loading </H4>
+<!--docid::SEC796::-->
+<P>
+
+One important threaded section of Crystal Space is the threaded loader.  In
+order to ensure that the threaded loader works correctly you must make sure
+that you use thread-safe versions of the following modules in Crystal Space:
 </P><P>
 
-Note that <CODE>csDefaultRunLoop()</CODE> is provided as a convenience for
-applications which do not otherwise supply their own run-loop.  Existing Cocoa
-applications which already employ the <CODE>NSApplication</CODE>'s black-box run-loop
-should not invoke <CODE>csDefaultRunLoop()</CODE>; but should instead arrange to have
-<CODE>iEventQueue::Process()</CODE> invoked on a periodic basis via some other
-mechanism.
-</P><P>
-
-<A NAME="MacOS/X Dynamic Linking"></A>
+<UL>
+<LI>
+<CODE>iReporter</CODE> (the standard reporter is okay).
+<LI>
+<CODE>iReporterListener</CODE> (the standard reporter listener is okay).
+<LI>
+<CODE>iConsoleOutput</CODE> (`<TT>simpcon</TT>' and `<TT>csconout</TT>' are okay provided
+auto-updating is disabled).
+<LI>
+<CODE>iLoaderContext</CODE> (the threaded loader provides a thread-safe version
+of this one).
+<LI>
+<CODE>iDocumentSystem</CODE> (TinyXML, XMLRead, and BinaryXML are all okay).
+</UL>
+<A NAME="Contributing"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_266.html#SEC796"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC798"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC794"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_265.html#SEC795"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC799"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_266.html#SEC793"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_262.html#SEC789"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC788"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

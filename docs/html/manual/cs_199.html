@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: XML File Format</TITLE>
+<TITLE>Crystal Space: XML World Element Section</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: XML File Format">
-<META NAME="keywords" CONTENT="Crystal Space: XML File Format">
+<META NAME="description" CONTENT="Crystal Space: XML World Element Section">
+<META NAME="keywords" CONTENT="Crystal Space: XML World Element Section">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,129 +23,161 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC489"></A>
+<A NAME="SEC498"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_200.html#SEC491"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_166.html#SEC404"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC486"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_200.html#SEC501"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC484"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC507"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.7.1 Format of Map File (XML) </H3>
-<!--docid::SEC489::-->
+<H4> 7.6.1.2 World Element Section </H4>
+<!--docid::SEC498::-->
 <P>
 
-This section describes the the Crystal Space map, which uses XML, and is a
-companion to the XML schema file residing at:
+This section describes the world element section.
 </P><P>
 
-`<TT>CS/scripts/xml/cs_world.xsd</TT>'
-</P><P>
-
-This document is not yet complete but it should give you sufficient information
-to get started.  For the format of the mesh object loaders you should look at
-the appropriate mesh object documentation (see section <A HREF="cs_208.html#SEC548">7.8 Mesh Object Plug-In System</A>).  There is also
-a HOWTO on loading a map file (see section <A HREF="cs_119.html#SEC264">5.8.10 Loading a Level</A>) and a
-HOWTO with a simple map example (see section <A HREF="cs_130.html#SEC334">5.8.21 Simple Map Example</A>).
-</P><P>
-
-The Crystal Space engine, itself, does not care about the external format of
-world data, nor does it care about how that information was obtained.  It is
-possible to create additional map loaders as plug-in modules which understand
-world data stored in other formats, such as binary.  A map loading plug-in
-module could even load maps over the network from a map file server, or
-generate worlds randomly based upon some set of input properties.  There are
-many possibilities.
-</P><P>
-
-The map file syntax described in this section, however, is that which is
-understood by the standard map file loader which accompanies Crystal Space.
-It deals strictly with plain-text XML-format files.
-</P><P>
-
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_200.html#SEC491">7.7.1.1 Initalization Section</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_201.html#SEC503">7.7.1.2 World Element Section</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_202.html#SEC506">7.7.1.3 World Definition Section</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_203.html#SEC510">7.7.1.4 Action Section</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
+<A NAME="SEC499"></A>
+<H4> Addon Section </H4>
+<!--docid::SEC499::-->
 <P>
 
-<A NAME="SEC490"></A>
-<H4> Basic Structure </H4>
-<!--docid::SEC490::-->
-<P>
-
-The basic structure of a map file for Crystal Space is as follows:
+Addons are loader plugins that can be used to extend the loading
+capabilities. Like keys, addons can also be loaded from almost any
+Crystal Space object. The difference is that the loaded information
+is not automatically attached to the object. Instead the object in which
+the addon is called is given as a <EM>context</EM> to the addon loader
+so that it can choose to do with it whatever it wants. For example, you
+could make an addon plugin for your own game that sets up a physics
+object for a mesh object. To do that you would have to create a plugin
+that implements the `<SAMP>iLoaderPlugin</SAMP>' interface. In the plugin
+implementation you can examine the context and based on that create some
+information that you can attach to that context (if it is a mesh object
+for example). The addon plugin will also get an XML node that it
+can parse for additional parameters.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;world&#62;
-  initialization part:
-    one texture specification section.
-    one material specification section.
-    one shader section.
-    one sounds section.
-    one variable section.
-    one render priority section.
-    one plugin section.
-    one settings section.
-    zero or more start locations.
-    zero or more library specifications.
-    zero or more keys.
-  world elements:
-    zero or more add-ons.
-    zero or more mesh factories.
-  world definition:
-    zero or more sectors.
-    zero or more collections.
-  action section:
-    one sequence section.
-    one trigger section.
-&#60;/world&#62;
+Crystal Space itself currently defines two addon loaders itself. The
+first one is useful for defining bezier templates that you can later use
+in a bezier curve. The second one is useful for creating named texture
+planes that can be used to define texture mapping for a number of polygons
+that are all on the same plane. Here is an example of both:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;addon&#62;
+    &#60;plugin&#62;crystalspace.mesh.loader.thing.bezier&#60;/plugin&#62;
+    &#60;params&#62;
+        &#60;name&#62;b1&#60;/name&#62;
+        &#60;material&#62;mosaic&#60;/material&#62;
+        &#60;v&#62;0&#60;/v&#62;
+        &#60;v&#62;1&#60;/v&#62;
+        &#60;v&#62;2&#60;/v&#62;
+        &#60;v&#62;8&#60;/v&#62;
+        &#60;v&#62;9&#60;/v&#62;
+        &#60;v&#62;10&#60;/v&#62;
+        &#60;v&#62;16&#60;/v&#62;
+        &#60;v&#62;17&#60;/v&#62;
+        &#60;v&#62;18&#60;/v&#62;
+    &#60;/params&#62;
+&#60;/addon&#62;
+
+&#60;addon&#62;
+    &#60;plugin&#62;crystalspace.mesh.loader.thing.plane&#60;/plugin&#62;
+    &#60;params&#62;
+        &#60;name&#62;floor_plane&#60;/name&#62;
+        &#60;orig x="-20" y="-1" z="20" /&#62;
+        &#60;first x="-19" y="-1" z="20" /&#62;
+        &#60;firstlen&#62;5&#60;/firstlen&#62;
+        &#60;second x="-20" y="-1" z="19" /&#62;
+        &#60;secondlen&#62;5&#60;/secondlen&#62;
+    &#60;/params&#62;
+&#60;/addon&#62;
 </pre></td></tr></table></P><P>
 
-The structure above divides the world into roughly four sections.  This is only
-a logical division for explanatory purposes; in reality there are no such
-divisions.
+I will only explain the second example here as bezier curves are likely
+to change in the not-too-distant future. Important in both examples is
+that the part inside the `<SAMP>params</SAMP>' block is parsed by the addon itself.
+It is also possible to specify the parameters of a plugin in another
+XML file in which case you can use `<SAMP>paramsfile</SAMP>'.
 </P><P>
 
-The initialization part contains everything that is related to
-setting up the map except for geometry-related data. The textures,
-materials, and other required parts are defined there.
+The plane addon that is used above defines a horizontal texture plane at
+location <EM>y</EM> equal to `<SAMP>-1</SAMP>'. The dimension of the texture on
+that plane will be 5x5 units. This means that in the space of a 5x5 unit
+block the texture will be shown exactly one time. If the polygons are bigger
+then that then tiling will be used. When you define `<SAMP>thing</SAMP>' mesh objects
+you can use this plane if the polygon happens to be at <EM>y</EM> equal to
+`<SAMP>-1</SAMP>'.
 </P><P>
 
-The world elements section defines objects (mesh factories) and optional
-additional features (add-on's) which will be used throughout the
-actual world definition. Thus, geometry-templates are defined here, though
-instantiated later.
+<A NAME="SEC500"></A>
+<H4> Mesh Factory Section </H4>
+<!--docid::SEC500::-->
+<P>
+
+In a map file you can define zero or more mesh factories. A mesh factory
+itself is not an object that you can see. It only defines a blue-print
+for creating mesh objects later. How a mesh factory and mesh object
+interact depends on the specific type of mesh object. For some types
+factories are required but for others you can just define the object
+directly as a mesh object (see section <A HREF="cs_206.html#SEC543">7.7 Mesh Object Plug-In System</A>).
 </P><P>
 
-In the world definition section the actual geometry is defined. At the
-highest level you have sectors. In every sector the actual objects reside
-(see later for more information about this).
+Here is an example mesh factory:
 </P><P>
 
-Finally there is the action section. In this section sequences and
-triggers are used to define interactions and other special actions on
-objects and other objects in the world.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshfact name="square"&#62;
+    &#60;plugin&#62;crystalspace.mesh.loader.factory.genmesh&#60;/plugin&#62;
+    &#60;params&#62;
+        &#60;numvt&#62;4&#60;/numvt&#62;
+        &#60;numtri&#62;4&#60;/numtri&#62;
+        &#60;v x="-2" y="0" z="-2" u="0" v="0" /&#62;
+        &#60;v x="2" y="0" z="-2" u="1" v="0" /&#62;
+        &#60;v x="2" y="0" z="2" u="1" v="1" /&#62;
+        &#60;v x="-2" y="0" z="2" u="0" v="1" /&#62;
+        &#60;t v1="3" v2="0" v3="1" /&#62;
+        &#60;t v1="1" v2="2" v3="3" /&#62;
+        &#60;t v1="1" v2="0" v3="3" /&#62;
+        &#60;t v1="3" v2="2" v3="1" /&#62;
+        &#60;autonormals /&#62;
+    &#60;/params&#62;
+&#60;/meshfact&#62;
+</pre></td></tr></table></P><P>
+
+In the example above we use the `<SAMP>genmesh</SAMP>' factory loader plugin.
+Everything inside the `<SAMP>params</SAMP>' block is specific to that loader. If
+you use other loaders you will need other stuff in there.
+It is also possible to specify the parameters of a plugin in another
+XML file in which case you can use `<SAMP>paramsfile</SAMP>'. The use
+of `<SAMP>paramsfile</SAMP>' is required if the other file is binary or not
+XML.
 </P><P>
 
-<A NAME="XML Init Section"></A>
+The example above defines a factory called `<SAMP>square</SAMP>'. When you later
+define mesh objects you can create them from that factory. In case of
+`<SAMP>genmesh</SAMP>' which is used here you must use factories.
+</P><P>
+
+Mesh factories can contain keys and addons.
+</P><P>
+
+<A NAME="XML World Definition Section"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_200.html#SEC491"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_166.html#SEC404"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC486"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_200.html#SEC501"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC484"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC507"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

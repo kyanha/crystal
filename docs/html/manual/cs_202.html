@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: XML World Definition Section</TITLE>
+<TITLE>Crystal Space: Old Map File Format</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: XML World Definition Section">
-<META NAME="keywords" CONTENT="Crystal Space: XML World Definition Section">
+<META NAME="description" CONTENT="Crystal Space: Old Map File Format">
+<META NAME="keywords" CONTENT="Crystal Space: Old Map File Format">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,201 +23,70 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC506"></A>
+<A NAME="SEC507"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_201.html#SEC503"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_203.html#SEC510"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_199.html#SEC489"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_201.html#SEC505"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_203.html#SEC508"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC484"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.7.1.3 World Definition Section </H4>
-<!--docid::SEC506::-->
-<P>
-
-This section describes the world definition section.
-</P><P>
-
-<A NAME="SEC507"></A>
-<H4> Sector Section </H4>
+<H3> 7.6.2 Old Format of Map File </H3>
 <!--docid::SEC507::-->
 <P>
 
-A map file usually contains at least one sector. A sector is an infinite
-area of space which you can populate with mesh objects and lights. Using
-portals you can connect different sectors.
+<EM>Written by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
 </P><P>
 
-Note that while a sector is in fact infinite, in practice it is usually
-bounded by some geometry. For an outside level there is usually
-a sky box or sky dome which marks the outermost geometry. In case of indoor
-type levels there are usually sector walls.
+<EM>NOTE</EM>: This document is outdated.  Map files now use XML format
+rather than the format described here.  However, some of the information here
+is still useful and has not yet been transformed to the new XML format
+documentation.  See section <A HREF="cs_197.html#SEC484">7.6.1 Format of Map File (XML)</A>.
 </P><P>
 
-Here is an example sector:
+The next couple sections of this document describe the format of the standard
+Crystal Space map file.  The first section describes the syntax of the file.
+The second section contains extra discussions and hints regarding the map file
+and the objects contained within it.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;sector name="room"&#62;
-  &#60;meshobj name="walls"&#62;
-    &#60;plugin&#62;crystalspace.mesh.loader.thing&#60;/plugin&#62;
-    &#60;zfill /&#62;
-    &#60;params&#62;
-      &#60;v x="-10" y="-1" z="10"/> &#60;v x="10" y="-1" z="10"/&#62;
-      &#60;v x="-10" y="-1" z="-10"/> &#60;v x="10" y="-1" z="-10"/&#62;
-      &#60;v x="-10" y="4" z="10"/> &#60;v x="10" y="4" z="10"/&#62;
-      &#60;v x="-10" y="4" z="-10"/> &#60;v x="10" y="4" z="-10"/&#62;
-      &#60;material&#62;wood&#60;/material&#62;
-      &#60;texlen&#62;4&#60;/texlen&#62;
-      &#60;p name="up"&#62;
-        &#60;v&#62;6&#60;/v&#62; &#60;v&#62;7&#60;/v&#62; &#60;v&#62;5&#60;/v&#62; &#60;v&#62;4&#60;/v&#62;
-      &#60;/p&#62;
-      &#60;p name="down"&#62;
-        &#60;v&#62;3&#60;/v&#62; &#60;v&#62;2&#60;/v&#62; &#60;v&#62;0&#60;/v&#62; &#60;v&#62;1&#60;/v&#62;
-      &#60;/p&#62;
-      &#60;p name="back"&#62;
-        &#60;v&#62;7&#60;/v&#62; &#60;v&#62;6&#60;/v&#62; &#60;v&#62;2&#60;/v&#62; &#60;v&#62;3&#60;/v&#62;
-      &#60;/p&#62;
-      &#60;p name="front"&#62;
-        &#60;v&#62;4&#60;/v&#62; &#60;v&#62;5&#60;/v&#62; &#60;v&#62;1&#60;/v&#62; &#60;v&#62;0&#60;/v&#62;
-      &#60;/p&#62;
-      &#60;p name="left"&#62;
-        &#60;v&#62;6&#60;/v&#62; &#60;v&#62;4&#60;/v&#62; &#60;v&#62;0&#60;/v&#62; &#60;v&#62;2&#60;/v&#62;
-      &#60;/p&#62;
-      &#60;p name="right"&#62;
-        &#60;v&#62;5&#60;/v&#62; &#60;v&#62;7&#60;/v&#62; &#60;v&#62;3&#60;/v&#62; &#60;v&#62;1&#60;/v&#62;
-      &#60;/p&#62;
-    &#60;/params&#62;
-  &#60;/meshobj&#62;
-  &#60;light&#62;
-    &#60;center x="0" y="3" z="0"/&#62;
-    &#60;radius&#62;40&#60;/radius&#62;
-    &#60;color red="1" green="1" blue="1"/&#62;
-  &#60;/light&#62;
-&#60;/sector&#62;
-</pre></td></tr></table></P><P>
-
-In the above example we create a sector called `<SAMP>room</SAMP>' which contains
-one mesh object (the outer walls of the sector) and one light. Any type
-of mesh object can be placed in a sector. In this example we use the
-`<SAMP>thing</SAMP>' mesh object.
+The Crystal Space engine, itself, does not care about the external format of
+world data, nor does it care about how that information was obtained.  It is
+possible to create additional map loaders as plug-in modules which understand
+world data stored in other formats, such as binary.  A map loading plug-in
+module could even load maps over the network from a map file server, or
+generate worlds randomly based upon some set of input properties.  There are
+many possibilities.
 </P><P>
 
-There are some other things you can specify in a sector. By default a
-sector will use the `<SAMP>frustvis</SAMP>' visibility culler. This visibility culler
-will only do frustum culling. For small sectors (i.e. a small number of
-objects) this is usually sufficient. If you have a large sector with lots
-of objects then you should probably use `<SAMP>dynavis</SAMP>' instead. Like this:
+The map file syntax described in this section, however, is that which is
+understood by the standard map file loader which accompanies Crystal Space.
+It deals strictly with plain-text files.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;cullerp&#62;crystalspace.culling.dynavis&#60;/cullerp&#62;
-</pre></td></tr></table></P><P>
-
-In addition to using `<SAMP>meshobj</SAMP>' for specifying mesh objects in a sector
-there are also some other techniques that you can use.
-</P><P>
-
-<UL>
-<LI>
-`<SAMP>meshref</SAMP>': with `<SAMP>meshref</SAMP>' you can directly create a mesh object
-from a factory. This sounds similar to `<SAMP>meshobj</SAMP>' but the main difference
-is that you can create hierarchical mesh objects from hierarchical mesh
-factories with this. The disadvantage is that it is not possible to supply
-mesh object specific parameters to the created mesh objects (i.e. you cannot
-supply a `<SAMP>params</SAMP>' or `<SAMP>paramsfile</SAMP>' with `<SAMP>meshref</SAMP>').
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_203.html#SEC508">7.6.2.1 Grammar</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_204.html#SEC509">7.6.2.2 Syntax</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_205.html#SEC542">7.6.2.3 Hints</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
 <P>
 
-<LI>
-`<SAMP>meshlib:</SAMP>' normally a library contains mesh factories. But it is possible
-to define mesh objects in libraries too. These mesh objects will be placed
-in the engine but not in any sector. To actually link such an object to
-a sector you have to use `<SAMP>meshlib</SAMP>' then. It is possible to supply
-additional parameters using `<SAMP>params</SAMP>' or `<SAMP>paramsfile</SAMP>' with
-`<SAMP>meshlib</SAMP>'. These will be used in addition to the parameters already
-supplied to the mesh object as defined in the library. Note that once you
-added an object to a sector using `<SAMP>meshlib</SAMP>' you cannot add it to other
-sectors. This technique is not an alternative for using mesh factories.
-</UL>
-<P>
-
-A sector can also contain fog like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;fog red=".5" green=".5" blue=".5" density=".01" /&#62;
-</pre></td></tr></table></P><P>
-
-Finally a sector can contain nodes. A node represents something that has
-a position. In addition a node can contain keys and addons. Crystal Space
-itself doesn't use nodes but an application using Crystal Space can use
-them for whatever purpose it needs. Here is an example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;node name="monster"&#62;
-    &#60;position x="10" y="3" z="12" /&#62;
-    &#60;key name="spawn" value="100" /&#62;
-&#60;/node&#62;
-</pre></td></tr></table></P><P>
-
-Sectors can contain keys and addons.
-</P><P>
-
-<A NAME="SEC508"></A>
-<H4> Region Specification </H4>
-<!--docid::SEC508::-->
-<P>
-
-With regions it is possible to group related objects (like textures,
-materials, mesh objects, mesh factories, sectors, sequences, triggers,
-shared variables, <small>...</small>).
-Regions are not a geometrical concept. It is possible to define a region which
-contains all wall geometry and a region which contains all moving geometry.
-Usually though, regions represent some area in the world. You can use
-regions to dynamically load/unload parts of the world. This is useful
-if you have really big worlds that don't fit in memory at once.
-</P><P>
-
-<A NAME="SEC509"></A>
-<H4> Collection Specification </H4>
-<!--docid::SEC509::-->
-<P>
-
-A collection is similar to a region in some respects but the purpose
-is different. Basically a collection is a collection of some other
-objects which you want to tie together for some reason (other than
-dynamic loading). For example, using them in a scripting setup.
-</P><P>
-
-Here is an example collection:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;collection name="carCol"&#62;
-    &#60;meshobj&#62;car&#60;/meshobj&#62;
-    &#60;meshobj&#62;tire1&#60;/meshobj&#62;
-    &#60;meshobj&#62;tire2&#60;/meshobj&#62;
-    &#60;meshobj&#62;tire3&#60;/meshobj&#62;
-    &#60;meshobj&#62;tire4&#60;/meshobj&#62;
-    &#60;light&#62;lightname&#60;/light&#62;
-&#60;/collection&#62;
-</pre></td></tr></table></P><P>
-
-Collections can also contain keys.
-</P><P>
-
-<A NAME="XML Action Section"></A>
+<A NAME="Map File Grammar"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_201.html#SEC503"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_203.html#SEC510"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_199.html#SEC489"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_201.html#SEC505"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_203.html#SEC508"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC484"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

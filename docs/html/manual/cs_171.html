@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Space Warping</TITLE>
+<TITLE>Crystal Space: Texture Mapping Conventions</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Space Warping">
-<META NAME="keywords" CONTENT="Crystal Space: Space Warping">
+<META NAME="description" CONTENT="Crystal Space: Texture Mapping Conventions">
+<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping Conventions">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,154 +23,74 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC421"></A>
+<A NAME="SEC418"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC418"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC422"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC399"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_166.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC417"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC419"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC416"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC417"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC430"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.6.5 Space Warping </H3>
-<!--docid::SEC421::-->
+<H4> 7.5.6.1 Conventions </H4>
+<!--docid::SEC418::-->
 <P>
 
-<EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.  Mathematical typesetting for
-TeX performed by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
-</P><P>
-
-A little explanation about space warping in Crystal Space and how the space
-warping matrix/vector work should be given.
-</P><P>
-
-Crystal Space always works with 3x3 matrices and one 3-element vector to
-represent transformations.  Let's say that the camera is given as <EM>Mc</EM> and
-<EM>Vc</EM> (camera matrix and camera vector, respectively).
-</P><P>
-
-When going through a warping portal (mirror for example) there is also a
-warping matrix and two vectors, <EM>Mw</EM>, <EM>Vw1</EM> and <EM>Vw2</EM>.  <EM>Vw1</EM>
-is the vector that is applied before <EM>Mw</EM> and <EM>Vw2</EM> is applied after
-<EM>Mw</EM>.  The warping transformation is a transformation in world space.  For
-example, if you have the following sector:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>       A
-  +---------+       z
-  |         |       ^
-  |         |       |
-D |    o    | B     o--&#62;x
-  |         |
-  |         |
-  +---------+
-       C
-</pre></td></tr></table></P><P>
-
-With point <EM>o</EM> at (0,0,0) and the <EM>B</EM> side a mirror.  Let's say that
-<EM>B</EM> is 2 units to the right of <EM>o</EM>.  The warping matrix/vector would
-then be:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>      /-1 0 0 \          / 2 \           / 2 \
-Mw =  | 0 1 0 |    Vw1 = | 0 |     Vw2 = | 0 |
-      \ 0 0 1 /          \ 0 /           \ 0 /
-</pre></td></tr></table></P><P>
-
-The mirror swaps along the X-axis.
-</P><P>
-
-How is this transformation then used?
-</P><P>
-
-To know how this works we should understand that
-<EM>Mc</EM> and <EM>Vc</EM>
-(the camera transformation) is a transformation from world space to camera
-space.  Since the warping transformation is in world space we first have to
-apply
-<EM>Mw / Vw</EM> before <EM>Mc / Vc</EM>.
-</P><P>
-
-So we want to make a new camera transformation matrix/vector that we are then
-going to use for the recursive rendering of the sector behind the mirror.
-Let's call this
-<EM>Mc'</EM> and <EM>Vc'</EM>.
-</P><P>
-
-The camera transformation is used like this in Crystal Space:
-</P><P>
-
-<BLOCKQUOTE>
-<TABLE>
-<TR><TD><EM>C = Mc * (W - Vc)</EM> </TD><TD> (Equation 1)</TD>
-</TR></TABLE>
-</BLOCKQUOTE>
+<UL>
+<LI>
+<EM>Ps</EM> denotes a polygon in some space.  For example, <EM>Pw</EM> is a polygon
+in world space coordinates.  The other spaces are <EM>o</EM> for object space,
+<EM>c</EM> for camera space, <EM>t</EM> for texture space, and <EM>s</EM> for screen
+space.
 <P>
 
-Where <EM>C</EM> is the camera space coordinates and <EM>W</EM> is the world space
-coordinates.
-</P><P>
-
-But first we want to transform world space using the warping transformation:
-</P><P>
-
-<BLOCKQUOTE>
-<TABLE>
-<TR><TD><EM>W' = Mw * (W - Vw1) + Vw2</EM> </TD><TD> (Equation 2)</TD>
-</TR></TABLE>
-</BLOCKQUOTE>
+<LI>
+<EM>Vs</EM> denotes a vertex in 3D.  For example, <EM>Vw</EM> is a vertex in world
+space.
 <P>
 
-It is important to realize that the
-<EM>Mw / Vwn</EM>
-transformation is used a little differently here.  The <EM>Vw1</EM> vector is
-used to translate to the warping polygon first and <EM>Vw2</EM> is used to go
-back when the matrix <EM>Mw</EM> has done its work.  This is just how Crystal
-Space does it.  One could use other matrices/vectors to express the warping
-transformations.
-</P><P>
-
-Combining equations (1) and (2), but replacing <EM>W</EM> by <EM>W'</EM> in (1),
-gives:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>C = Mc * (Mw * (W - Vw1) + Vw2 - Vc)</EM><BR>
-<EM>C = Mc * Mw * ((W - Vw1) - 1 / Mw * (Vc - Vw2))</EM><BR>
-<EM>C = Mc * Mw * (W - (Vw1 + 1 / Mw * (Vc - Vw2)))</EM>
-</BLOCKQUOTE>
+<LI>
+<EM>Mst</EM> denotes a matrix transforming space from <EM>s</EM> to <EM>t</EM>.
+For example, <EM>Mow</EM> is a matrix transforming from object to world space.
+All <EM>Mst</EM> are 3x3 matrices.
 <P>
 
-And this is the new camera transformation:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>Mc' = Mc * Mw</EM><BR>
-<EM>Vc' = Vw1 + 1 / Mw * (Vc - Vw2)</EM>
-</BLOCKQUOTE>
+<LI>
+<EM>Vst</EM> denotes the corresponding vector transforming space from <EM>s</EM> to
+<EM>t</EM>.
 <P>
 
-In summary, the warping transformation works by first transforming world space
-to a new warped world space.  The new camera transformation is made by
-combining the warping transformation with the old camera transformation.
-</P><P>
+<LI>
+<EM>Ns</EM> denotes a plane normal vector (<EM>A,B,C</EM>) in some space.
+<P>
 
-<A NAME="Texture Mapping"></A>
+<LI>
+<EM>Vs.x</EM>, <EM>Vs.y</EM>, and <EM>Vs.z</EM> are the respective <EM>x</EM>,
+<EM>y</EM>, and <EM>z</EM> components of a vector.  For example, <EM>Vw.y</EM> is
+the <EM>y</EM> component of a vector in world space.
+<P>
+
+<LI>
+<EM>Vt.u</EM> and <EM>Vt.v</EM> are the respective <EM>u</EM>, and <EM>v</EM>
+components of a vector in texture space.
+</UL>
+<P>
+
+<A NAME="Texture Mapping Concepts"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC418"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC422"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC399"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_166.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC417"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC419"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC416"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC417"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC430"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: MeshObject PartSys</TITLE>
+<TITLE>Crystal Space: MeshObject Fire</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: MeshObject PartSys">
-<META NAME="keywords" CONTENT="Crystal Space: MeshObject PartSys">
+<META NAME="description" CONTENT="Crystal Space: MeshObject Fire">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject Fire">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,79 +23,159 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC595"></A>
+<A NAME="SEC599"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_217.html#SEC589"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_219.html#SEC598"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_217.html#SEC593"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_219.html#SEC605"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC641"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.8.10 Particle Systems in General </H3>
-<!--docid::SEC595::-->
+<H3> 7.7.12 Fire Mesh Object </H3>
+<!--docid::SEC599::-->
 <P>
 
 <EM>Written by Jorrit Tyberghein,
 <A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
 </P><P>
 
-This section explains everything that is common to all particle systems.
-Go to the specific particle system section for more information about
-a particle system in particular.
+A fire is a particle system that emulates a torch or flame.  Also see the
+general particle system documentation which is valid for all particle systems.
+See section <A HREF="cs_216.html#SEC590">7.7.10 Particle Systems in General</A>.
 </P><P>
 
-<A NAME="SEC596"></A>
-<H4> Particle State Interface </H4>
-<!--docid::SEC596::-->
+<A NAME="SEC600"></A>
+<H4> Basic Structure        </H4>
+<!--docid::SEC600::-->
 <P>
 
-Use the `<SAMP>iParticleState</SAMP>' SCF interface to access settings for
-particle systems in general.  The definition of this interface can be found in
-`<TT>CS/include/imesh/partsys.h</TT>' and that's also the include file you need to
-include in your applications to use particle system plugins.  Using this
-interface you can access the material, blending mode (mixmode), color, and
-various other parameters.
+The following SCF class names are used (for <CODE>CS_LOAD_PLUGIN()</CODE>):
 </P><P>
 
-<A NAME="SEC597"></A>
-<H4> Object Loader      </H4>
-<!--docid::SEC597::-->
+<UL>
+<LI>
+Type plugin: `<SAMP>crystalspace.mesh.object.fire</SAMP>'
+<LI>
+Loader plugin: `<SAMP>crystalspace.mesh.loader.fire</SAMP>'
+<LI>
+Factory loader plugin: `<SAMP>crystalspace.mesh.loader.factory.fire</SAMP>'
+</UL>
 <P>
 
-Every particle system will at least have the following keywords in
-the loader for the object. In addition it will add particle system specific
-keywords which are explained in the respective sections.
+Objects in this plugin implement the following SCF interfaces (get
+with <CODE>SCF_QUERY_INTERFACE()</CODE>):
+</P><P>
+
+<UL>
+<LI>
+<EM>MeshObject</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObject</SAMP>'
+<LI>
+Implements `<SAMP>iParticleState</SAMP>'
+<LI>
+Implements `<SAMP>iFireState</SAMP>'
+</UL>
+<LI>
+<EM>MeshObjectFactory</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObjectFactory</SAMP>'
+</UL>
+<LI>
+<EM>MeshObjectFactory</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObjectType</SAMP>'
+</UL>
+</UL>
+<P>
+
+<A NAME="SEC601"></A>
+<H4> Factory State Interface       </H4>
+<!--docid::SEC601::-->
+<P>
+
+This plugin has no factory state interface.
+</P><P>
+
+<A NAME="SEC602"></A>
+<H4> Factory Loader       </H4>
+<!--docid::SEC602::-->
+<P>
+
+The fire mesh factory loader has no parameters.
+</P><P>
+
+<A NAME="SEC603"></A>
+<H4> Object State Interface       </H4>
+<!--docid::SEC603::-->
+<P>
+
+`<SAMP>iFireState</SAMP>' is the SCF interface that you can
+use to set/get settings for a fire object. The definition of this
+interface can be found in `<TT>CS/include/imesh/fire.h</TT>' and that's also the
+include file you need to include in your applications to use this plugin.
+Using this interface you can access the number of particles, the size
+of the particles, and various other fire parameters.
+</P><P>
+
+In addition you can use `<SAMP>iParticleState</SAMP>'.
+</P><P>
+
+<A NAME="SEC604"></A>
+<H4> Object Loader        </H4>
+<!--docid::SEC604::-->
+<P>
+
+Also see the general documentation for particle systems for other recognized
+keywords.  See section <A HREF="cs_216.html#SEC590">7.7.10 Particle Systems in General</A>.
 </P><P>
 
 <DL COMPACT>
-<DT><CODE>&#60;factory&#62;factoryName&#60;/factory&#62;</CODE>
-<DD>Name of the factory to use for creation of this instance.
-<DT><CODE>&#60;mixmode&#62;&#60;mode /&#62;&#60;/mixmode&#62;</CODE>
-<DD>Blending mode, one of `<SAMP>add</SAMP>', `<SAMP>alpha</SAMP>', `<SAMP>copy</SAMP>', `<SAMP>keycolor</SAMP>',
-`<SAMP>multiply2</SAMP>', `<SAMP>multiply</SAMP>', or `<SAMP>transparent</SAMP>'.
-<DT><CODE>&#60;material&#62;materialName&#60;/material&#62;</CODE>
-<DD>Material to use for the particle system.
-<DT><CODE>&#60;color red="" green="" blue="" /&#62;</CODE>
-<DD>Color to use for all particles.
+<DT><CODE>&#60;dropsize w="" h="" /&#62;</CODE>
+<DD>Size of the flame particles (width and height).
+<DT><CODE>&#60;origin x="" y="" z="" /&#62;</CODE>
+<DD>Origin of the flame.  Usually this is (0,0,0) and the engine is responsible for
+setting the correct position of the flame.  This works better for hierarchical
+transformations.
+<DT><CODE>&#60;originbox&#62;</CODE>
+<DD><TABLE><tr><td>&nbsp;</td><td class=example><pre>	&#60;min x="" y="" z="" /&#62;
+	&#60;min x="" y="" z="" /&#62;
+&#60;/originbox&#62;
+</pre></td></tr></table>Origin of the flame as a box. Usually this is (0,0,0, 0,0,0) and the engine
+is responsible for setting the correct position of the flame.  This works
+better for hierarchical transformations.
+<DT><CODE>&#60;direction x="" y="" z="" /&#62;</CODE>
+<DD>Direction of the flame.
+<DT><CODE>&#60;swirl&#62;swirlValue&#60;/swirl&#62;</CODE>
+<DD>Swirl.
+<DT><CODE>&#60;colorscale&#62;colorScaleValue&#60;/colorscale&#62;</CODE>
+<DD>Value for color scale.
+<DT><CODE>&#60;totaltime&#62;totalTime&#60;/totaltime&#62;</CODE>
+<DD>Total time.
+<DT><CODE>&#60;lighting&#62;yes/no&#60;/lighting&#62;</CODE>
+<DD>Disable or enable lighting for the fire particles.
+<DT><CODE>&#60;number&#62;nrParticles&#60;/number&#62;</CODE>
+<DD>Number of particles to use.
 </DL>
-<P>
-
-<A NAME="MeshObject Fountain"></A>
+<A NAME="MeshObject Snow"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_217.html#SEC589"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_219.html#SEC598"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_217.html#SEC593"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_219.html#SEC605"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC641"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

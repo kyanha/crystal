@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Map File Hints</TITLE>
+<TITLE>Crystal Space: MeshObject Concepts</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Map File Hints">
-<META NAME="keywords" CONTENT="Crystal Space: Map File Hints">
+<META NAME="description" CONTENT="Crystal Space: MeshObject Concepts">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject Concepts">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,165 +23,174 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC547"></A>
+<A NAME="SEC544"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC514"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_199.html#SEC489"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC550"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC641"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.7.2.3 Hints </H4>
-<!--docid::SEC547::-->
+<H3> 7.7.1 MeshObject Concepts </H3>
+<!--docid::SEC544::-->
 <P>
 
 <EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.  Mathematical typesetting for
-TeX performed by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
+<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
 </P><P>
 
-This section contains extra discussions and hints regarding the map file and
-the objects contained within it (this documentation is a little bit outdated
-but still useful for the general idea. However it should be moved to the
-thing mesh object description).
+In this section a general overview is given of the mesh object plug-in
+system and several of the concepts are explained.
 </P><P>
 
-First, a little explanation about `<SAMP>LEN</SAMP>' and `<SAMP>TEXLEN</SAMP>'.  With these
-you can specify the size of the texture on the polygon.  For example, let's
-say that you have a rectangular polygon which is 4 units wide and 6 units
-tall.  A texture with `<SAMP>LEN</SAMP>' set to 2 will be tiled 2 times horizontally
-and 3 times vertically.  If this texture is 128x128 (for example) then the
-final texture on the polygon will be 256x384.
+<A NAME="SEC545"></A>
+<H4> Mesh Object </H4>
+<!--docid::SEC545::-->
+<P>
+
+A <EM>Mesh Object</EM> is what this plug-in system is all about.  It is basically
+a 3D object that the engine can render.  Every mesh object knows how to render
+and light itself.  Mesh Objects don't control there own position in the engine
+though.  The engine is responsible for doing that.  Mesh Object implementations
+must implement the SCF interface `<SAMP>iMeshObject</SAMP>'.  Every visible mesh
+object in the world will implement this interface.
 </P><P>
 
-Using a `<SAMP>TEXTURE</SAMP>' statement inside a `<SAMP>POLYGON</SAMP>' or with a
-`<SAMP>PLANE</SAMP>' statement you can obtain even more control over how the texture
-should be scaled across the polygon.  This is most easily explained with an
-example.  Say that you have a polygon like this:
+Mesh Objects often also implement one or more additional type specific
+interfaces to access the characteristics of that Mesh Object.  The engine
+itself does not know about these interfaces.  It is the responsibility of the
+application writer to correctly set up the characteristics of all Mesh Objects
+that it uses.  These type specific interfaces are usually called
+`<SAMP>iSomethingState</SAMP>' (replace <EM>Something</EM> with the appropriate name).
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>VERTEX (0,2,3) VERTEX (2,2,3) VERTEX (2,0,3) VERTEX (0,0,3)
-POLYGON 'poly' (VERTICES (0,1,2,3))
-</pre></td></tr></table></P><P>
-
-Let's say that you want to align the texture so that its origin is at (2,2,3).
-You can do this as follows:
+Some Mesh Objects also implement the SCF interface `<SAMP>iPolygonMesh</SAMP>'
+which you can use for collision detection.  You can use
+<CODE>SCF_QUERY_INTERFACE()</CODE> to find out if some Mesh Object implements this
+interface.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>POLYGON 'poly' (
-  VERTICES (0,1,2,3)
-  TEXTURE (
-    ORIG (2,2,3)
-    FIRST (0,2,3)
-    SECOND (2,0,3)
-    FIRST_LEN (1)
-    SECOND_LEN (1)))
-</pre></td></tr></table></P><P>
-
-With `<SAMP>ORIG</SAMP>', `<SAMP>FIRST</SAMP>', and `<SAMP>SECOND</SAMP>' you specify how the u/v
-coordinate system is located.  The origin of u/v is at `<SAMP>ORIG</SAMP>'; the u-axis
-is at `<SAMP>FIRST-ORIG</SAMP>'; and the v-axis is at `<SAMP>SECOND-ORIG</SAMP>'.
-`<SAMP>FIRST_LEN</SAMP>' and `<SAMP>SECOND_LEN</SAMP>' are similar to `<SAMP>LEN</SAMP>' and
-`<SAMP>TEXLEN</SAMP>' except that you can control the u and v scaling separately here.
-Note that `<SAMP>ORIG</SAMP>', `<SAMP>FIRST</SAMP>', and `<SAMP>SECOND</SAMP>' need not coincide with
-vertices of the polygon.  They should just be on the same plane as the
-polygon.  That way you can also create slanted textures.
+In addition to the interfaces above, Mesh Objects also sometimes implement
+`<SAMP>iParticle</SAMP>'.  When they do so, they can be used as particles for one of
+the particle system Mesh Object plug-in modules.
 </P><P>
 
-`<SAMP>TEXLEN</SAMP>' in a `<SAMP>THING</SAMP>' or `<SAMP>SECTOR</SAMP>' is the default `<SAMP>LEN</SAMP>' for
-all polygons following the `<SAMP>TEXLEN</SAMP>' declaration.  `<SAMP>TEXNR</SAMP>' in a
-`<SAMP>THING</SAMP>' or `<SAMP>SECTOR</SAMP>' is the default `<SAMP>TEXNR</SAMP>' for all following
-polygons.  <EM>Note, however, that `<SAMP>TEXNR</SAMP>' is considered obsolete and
-its use is deprecated.</EM>
+<A NAME="SEC546"></A>
+<H4> Mesh Object Factory </H4>
+<!--docid::SEC546::-->
+<P>
+
+A <EM>Mesh Object Factory</EM> is an object from which you can generate Mesh
+Object instances.  The Mesh Objects generated from a Mesh Object Factory will
+inherit some of the characteristics from this factory.  Exactly which
+characteristics depend upon the Mesh Object Type (see below).  Roughly
+speaking, there are three possibilities:
 </P><P>
 
-Use of planes is recommended.  A `<SAMP>PLANE</SAMP>' provides a way to assign a name
-to a texture orientation.  All polygons sharing the same `<SAMP>PLANE</SAMP>' will
-have textures that fit perfectly at the borders.  Crystal Space will also be
-able to do some optimizations on polygons that share the same plane (like
-backface culling an entire set of polygons in one operation).  Note that even
-if a `<SAMP>PLANE</SAMP>' is only used by one polygon it does not hurt.  If you do not
-specify the `<SAMP>PLANE</SAMP>', Crystal Space will create one anyway.
+<OL>
+<LI>
+For some types the factory is really empty and only serves as a stub to create
+Mesh Object instances.  In that case you would only have to use one factory to
+generate all your Mesh Objects of that type.
+<P>
+
+<LI>
+In other cases the factory contains default values for some characteristics
+that are copied to all Mesh Objects created from that factory.  In that case
+you can decide to use one factory and change the settings before creating new
+instances.  Or (for convenience) you can create several factories with default
+values that you use often and create Mesh Objects from the factory of choice.
+<P>
+
+<LI>
+In still other cases the factory actually contains the characteristics used by
+all Mesh Objects created from it.  Changing the factory characteristics will
+actually modify the characteristics for all Mesh Objects instantly.  In this
+case you will have to use a separate factory for all Mesh Objects sharing the
+same characteristics.
+</OL>
+<P>
+
+Which of the possibilities is selected by some Mesh Object type depends on the
+type.  You'll have to look it up in the respective documentation for that type.
+Mesh Object Factories implement the SCF interface
+`<SAMP>iMeshObjectFactory</SAMP>'.
 </P><P>
 
-Currently Crystal Space assumes that there is a sector called `<SAMP>room</SAMP>'.  It
-will use that as a starting place, and will always start at location (0,0,0)
-unless you use an `<SAMP>ORIGIN</SAMP>' directive to instruct it otherwise.
+Mesh Object Factories often implement one or more additional type specific
+interfaces to access the characteristics of that Mesh Object Factory.  The
+engine itself does not know about these interfaces.  It is the responsibility
+of the application writer to correctly set up the characteristics of all Mesh
+Objects Factories that it uses.  These type specific interfaces are usually
+called `<SAMP>iSomethingFactoryState</SAMP>' (replace <EM>Something</EM> with the
+appropriate name).
 </P><P>
 
-Note that Sectors must be convex (unless you add a BSP tree).  Things
-need not be convex.
+<A NAME="SEC547"></A>
+<H4> Mesh Object Type </H4>
+<!--docid::SEC547::-->
+<P>
+
+The <EM>Mesh Object Type</EM> describes a specific kind of Mesh Object plug-in.
+For example, Crystal Space supports several types of Mesh Objects: snow
+particle system, fountain particle system, cube, ball, etc.  The Mesh Object
+Type corresponds directly to the plug-in itself.  It is the class' responsible
+for creating all Mesh Object Factories.  Mesh Object Types implement the
+SCF interface `<SAMP>iMeshObjectType</SAMP>'.
 </P><P>
 
-Vertices in a `<SAMP>THING</SAMP>' are specified in local object space.  You can
-translate this object space to world space with the `<SAMP>MOVE</SAMP>' directive.
+Some Mesh Object Types implement the SCF interface `<SAMP>iConfig</SAMP>'.  In
+this case, you can use this interface to query all run-time options that are
+valid for that type.
 </P><P>
 
-When a `<SAMP>THING</SAMP>' or `<SAMP>SPRITE</SAMP>' is defined in the `<SAMP>WORLD</SAMP>' statement
-and not in a `<SAMP>SECTOR</SAMP>' or `<SAMP>ROOM</SAMP>' then it defines a template.  This
-template can then be used inside a `<SAMP>SECTOR</SAMP>' or `<SAMP>ROOM</SAMP>' by providing
-another `<SAMP>THING</SAMP>' or `<SAMP>SPRITE</SAMP>' statement and using the `<SAMP>TEMPLATE</SAMP>'
-statement there.  It is also possible to define the `<SAMP>THING</SAMP>' or
-`<SAMP>SPRITE</SAMP>' inside a `<SAMP>SECTOR</SAMP>' or `<SAMP>ROOM</SAMP>' directly, but using
-templates is preferable.
+<A NAME="SEC548"></A>
+<H4> Loaders </H4>
+<!--docid::SEC548::-->
+<P>
+
+In addition to the functionality for the Mesh Objects themselves, many Mesh
+Object Types support two implementations of the SCF interface
+`<SAMP>iLoaderPlugin</SAMP>'.  By implementing this, these plug-ins can be used
+directly by the standard Crystal Space map file loader.  There is a loader for
+the Mesh Object Factory and a loader for the Mesh Object itself.  The Mesh
+Object plug-in itself doesn't know about these loader plug-ins.  In fact, you
+can even write different loader plug-ins for the same Mesh Object Type if you
+so desire.
 </P><P>
 
-With `<SAMP>WARP</SAMP>' you provide a matrix which will mirror or warp space.  For
-example, when you want to make a mirroring floor the warping matrix should
-invert the Y-axis and leave the others intact.  So the `<SAMP>WARP</SAMP>' matrix
-would be:
+<A NAME="SEC549"></A>
+<H4> Responsibilities </H4>
+<!--docid::SEC549::-->
+<P>
+
+As mentioned above Mesh Objects only know how to render themselves and how to
+update lighting information.  The engine is responsible for deciding when to
+draw and when to update.  So basically, the Mesh Objects control the <EM>how</EM>
+while the engine controls the <EM>when</EM>.  This is not completely true,
+though.  The Mesh Object implementation itself must do some parts of the
+visibility testing on its own.  For example, far plane clipping, and testing if
+the bounding box of the object is visible on screen are all the responsibility
+of the Mesh Object (but it can use the engine for help on calculating these
+things).
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 1  0 0 \
-| 0 -1 0 |
-\ 0  0 1 /
-</pre></td></tr></table></P><P>
-
-The vector should be a vector on the plane of the mirror.  It is used to
-determine exactly where mirroring should start.  For example, if the floor is
-at height -1, then (0,-1,0) is a good spot.
-</P><P>
-
-`<SAMP>MATRIX (.5)</SAMP>' is a shorthand for:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ .5  0  0 \
-|  0 .5  0 |
-\  0  0 .5 /
-</pre></td></tr></table></P><P>
-
-Portals are unidirectional.  If you need a `<SAMP>PORTAL</SAMP>' that works in two
-directions (so that you can go back) then you'll also have to specify a
-`<SAMP>PORTAL</SAMP>' in the other sector pointing back.
-</P><P>
-
-Note that even though a `<SAMP>PORTAL</SAMP>' does not require a texture (unless it
-has alpha transparency) you still need to specify one, since Crystal Space
-currently assumes that every polygon has a texture.
-</P><P>
-
-The `<SAMP>ROOM</SAMP>' and `<SAMP>SIXFACE</SAMP>' interfaces are good for human editors but
-it not suited for computer generated output.  Ignore `<SAMP>ROOM</SAMP>' and
-`<SAMP>SIXFACE</SAMP>' if you want to write an editor or converter and concentrate on
-`<SAMP>SECTOR</SAMP>' and `<SAMP>THING</SAMP>' instead.
-</P><P>
-
-<A NAME="MeshObject"></A>
+<A NAME="Using MeshObject"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC514"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_199.html#SEC489"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC550"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC641"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

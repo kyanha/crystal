@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: MeshObject Spr2D</TITLE>
+<TITLE>Crystal Space: MeshObject SprCal3D</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: MeshObject Spr2D">
-<META NAME="keywords" CONTENT="Crystal Space: MeshObject Spr2D">
+<META NAME="description" CONTENT="Crystal Space: MeshObject SprCal3D">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject SprCal3D">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,279 +23,144 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC560"></A>
+<A NAME="SEC569"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_211.html#SEC559"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_213.html#SEC567"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_211.html#SEC562"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_213.html#SEC572"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC641"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.8.4 Sprite2D Mesh Object </H3>
-<!--docid::SEC560::-->
+<H3> 7.7.6 SpriteCal3D Mesh Object </H3>
+<!--docid::SEC569::-->
 <P>
 
-<EM>Written by Jorrit Tyberghein,
-(<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>).</EM>
+`<TT>sprcal3d</TT>' is a 3D mesh that can perform skeletal animation using the
+Cal3D library.
 </P><P>
 
-A 2D Sprite is basically a polygon that always faces the camera.  There are
-some special effects that you can do with this but it is really very simple
-otherwise.
+<A HREF="http://cal3d.sourceforge.net/">http://cal3d.sourceforge.net/</A>
 </P><P>
 
-<A NAME="SEC561"></A>
-<H4> Basic Structure  </H4>
-<!--docid::SEC561::-->
-<P>
-
-The following SCF class names are used (for <CODE>CS_LOAD_PLUGIN()</CODE>):
+@@@ WRITE ME: Please cover more topics.
 </P><P>
 
-<UL>
-<LI>
-Type plugin: `<SAMP>crystalspace.mesh.object.sprite.2d</SAMP>'
-<LI>
-Loader plugin: `<SAMP>crystalspace.mesh.loader.sprite.2d</SAMP>'
-<LI>
-Factory loader plugin: `<SAMP>crystalspace.mesh.loader.factory.sprite.2d</SAMP>'
-</UL>
+<A NAME="SEC570"></A>
+<H4> Morph Animations </H4>
+<!--docid::SEC570::-->
 <P>
 
-Objects in this plugin implement the following SCF interfaces (get with
-<CODE>SCF_QUERY_INTERFACE()</CODE>):
+You can add morph target meshes to each mesh.  Remember that morph target
+meshes need to have the same number of vertices and they need to be in the same
+order.  (Do not use the progressive mesh export option!).
 </P><P>
 
-<UL>
-<LI>
-<EM>MeshObject</EM>
-<UL>
-<LI>
-Implements `<SAMP>iMeshObject</SAMP>'
-<LI>
-Implements `<SAMP>iSprite2DState</SAMP>'
-<LI>
-Implements `<SAMP>iParticle</SAMP>'
-</UL>
-<LI>
-<EM>MeshObjectFactory</EM>
-<UL>
-<LI>
-Implements `<SAMP>iMeshObjectFactory</SAMP>'
-<LI>
-Implements `<SAMP>iSprite2DFactoryState</SAMP>'
-</UL>
-<LI>
-<EM>MeshObjectFactory</EM>
-<UL>
-<LI>
-Implements `<SAMP>iMeshObjectType</SAMP>'
-</UL>
-</UL>
-<P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;mesh file="<small>...</small>" name="<small>...</small>" material="<small>...</small>"&#62;
+  &#60;morphtarget file="<small>...</small>" name="<small>...</small>"/&#62;
+  &#60;morphtarget <small>...</small>/&#62;
+  <small>...</small>
+&#60;/mesh&#62;
+</pre></td></tr></table></P><P>
 
-<A NAME="SEC562"></A>
-<H4> Factory State Interface </H4>
-<!--docid::SEC562::-->
-<P>
-
-Use the SCF interface `<SAMP>iSprite2DFactoryState</SAMP>' to access settings for
-a 2D sprite factory.  The definition of this interface can be found in
-`<TT>CS/include/imesh/sprite2d.h</TT>' and that is also the include file you need
-to include in your applications to use this plugin.  Using this interface you
-can access the material, blending mode (mixmode), and lighting settings.
+Each of the morph target meshes need to be assigned to a
+`<SAMP>morphanimnation</SAMP>'.  Do not add a `<SAMP>morphtargetmesh</SAMP>' to more than one
+`<SAMP>morphanimation</SAMP>', since the library is not designed for this, and it would
+cause problems.
 </P><P>
 
-<A NAME="SEC563"></A>
-<H4> Factory Loader </H4>
-<!--docid::SEC563::-->
-<P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;morphanimation name="<small>...</small>"&#62;
+  &#60;morphtarget mesh="meshname" morph="morphname"/&#62;
+  &#60;morphtarget <small>...</small>/&#62;
+  <small>...</small>
+&#60;/morphanimation&#62;
+</pre></td></tr></table></P><P>
 
-<DL COMPACT>
-<DT><CODE>&#60;lighting&#62;yes/no&#60;/lighting&#62;</CODE>
-<DD>Enable/disable lighting.
-<DT><CODE>&#60;material&#62;materialname&#60;/material&#62;</CODE>
-<DD>Material to use for the polygon.
-<DT><CODE>&#60;mixmode&#62;&#60;mode /&#62;&#60;/mixmode&#62;</CODE>
-<DD>Blending mode; one of `<SAMP>add</SAMP>', `<SAMP>alpha</SAMP>', `<SAMP>copy</SAMP>', `<SAMP>keycolor</SAMP>',
-`<SAMP>multiply2</SAMP>', `<SAMP>multiply</SAMP>', or `<SAMP>transparent</SAMP>'.
-<DT><CODE>&#60;uvanimation name=uvanimationname&#62;&#60;frame <small>...</small>&#62; <small>...</small></CODE>
-<DD>Define an uv animation, that is a sequence of frames which textures are all in
-one big texture.  Thus the animation is achieved by altering the (u,v)
-coordinates of the polygon defined by this sprite.
-<DT><CODE>&#60;frame&#62;&#60;duration&#62;&#60;vertices <small>...</small>&#62; <small>...</small></CODE>
-<DD>Defines a single frame within an uv animation by specifying its duration in
-milliseconds and the u,v coordinates to use.
-<UL>
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;frame name="framename"&#62;
- &#60;duration&#62;milliseconds&#60;/duration&#62;
- &#60;v u="" v="" /&#62;
- <small>...</small> u,v coo list
-&#60;/frame&#62;
-</pre></td></tr></table></UL>
-</DL>
-<P>
-
-<A NAME="SEC564"></A>
-<H4> Object State Interface </H4>
-<!--docid::SEC564::-->
-<P>
-
-`<SAMP>iSprite2DState</SAMP>' is the SCF interface that you can use to set/get
-settings for a 2D sprite object.  The definition of this interface can be found
-in `<TT>CS/include/imesh/sprite2d.h</TT>' and that is also the include file you
-need to include in your applications to use this plugin.  Using this
-interface you can access the material, blending mode (mixmode), lighting
-settings, and also the vertices of the 2D polygon controlled by this plugin.
+You can test a morphanimation if you load the Cal3D file in the `<TT>viewmesh</TT>'
+example program.
 </P><P>
 
-<A NAME="SEC565"></A>
-<H4> Object Loader </H4>
-<!--docid::SEC565::-->
-<P>
-
-<DL COMPACT>
-<DT><CODE>&#60;factory&#62;factoryname&#60;/factory&#62;</CODE>
-<DD>Name of the factory to use for creation of this instance.
-<DT><CODE>&#60;mixmode&#62;&#60;mode /&#62;&#60;/mixmode&#62;</CODE>
-<DD>Blending mode, one of `<SAMP>add</SAMP>', `<SAMP>alpha</SAMP>', `<SAMP>copy</SAMP>', `<SAMP>keycolor</SAMP>',
-`<SAMP>multiply2</SAMP>', `<SAMP>multiply</SAMP>', or `<SAMP>transparent</SAMP>'.
-<DT><CODE>&#60;material&#62;materialname&#60;/material&#62;</CODE>
-<DD>Material to use for the polygon.
-<DT><CODE>&#60;lighting&#62;yes/no&#60;/lighting&#62;</CODE>
-<DD>Enable/disable lighting.
-<DT><CODE>vertices &#60;v x="" y="" /&#62; <small>...</small></CODE>
-<DD>List of 2D vertices defining the polygon.
-<DT><CODE>&#60;uv u="" v="" /&#62;</CODE>
-<DD>List of texture mapping UV coordinates for the polygon.
-<DT><CODE>&#60;color red="" green="" blue="" /&#62;</CODE>
-<DD>List of rgb colors for the polygon.
-<DT><CODE>&#60;animate&#62; <small>...</small></CODE>
-<DD>Select an uv animation from the list of animations declared in the template
-<UL>
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;animate name="animationname"&#62;
-    &#60;timing&#62;milliseconds&#60;/timing&#62;
-    &#60;loop&#62;yes/no&#60;/loop&#62;
-&#60;/animate&#62;
-</pre></td></tr></table><UL>
-<LI>
-timing &#62; 0 : every &#60;timing&#62; milliseconds the next frame will be shown
-<LI>
-timing &#60; 0 : every &#60;-timing&#62; gameloop the next frame will be shown
-<LI>
-timing = 0 : timing attached to the frame will be used
-<LI>
-loop : loop the animation or stop after last frame (and show the last frame)
-</UL>
-</UL>
-</DL>
-<P>
-
-<A NAME="SEC566"></A>
-<H4> Example 1 </H4>
-<!--docid::SEC566::-->
-<P>
-
-This is how our world file looks:
+You can use morph animations programmatically as follows.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;world&#62;
-    &#60;textures&#62;
-        &#60;texture name="blow"&#62;
-            &#60;file&#62;blow.png&#60;/file&#62;
-        &#60;/texture&#62;
-    &#60;/textures&#62;
-    &#60;materials&#62;
-        &#60;material name="explosion"&#62;
-            &#60;texture&#62;blow&#60;/texture&#62;
-        &#60;/material&#62;
-    &#60;/materials&#62;
-    &#60;meshobj name="Explosion"&#62;
-        &#60;plugin&#62;crystalspace.mesh.loader.factory.sprite.2d&#60;/plugin&#62;
-        &#60;params&#62;
-            &#60;material&#62;explosion&#60;/material&#62;
-            &#60;uvanimation name="boom"&#62;
-                &#60;frame name="first"&#62;
-                    &#60;duration&#62;100&#60;/duration&#62;
-                    &#60;v u="0" v="0" /&#62;
-                    &#60;v u="0.5" v="0" /&#62;
-                    &#60;v u="0.5" v="0.5" /&#62;
-                    &#60;v u="0" v="0.5" /&#62;
-                &#60;/frame&#62;
-                &#60;frame name="second"&#62;
-                    &#60;duration&#62;100&#60;/duration&#62;
-                    &#60;v u="0.5" v="0" /&#62;
-                    &#60;v u="1" v="0" /&#62;
-                    &#60;v u="1" v="0.5" /&#62;
-                    &#60;v u="0.5" v="0.5" /&#62;
-                &#60;/frame&#62;
-                &#60;frame name="third"&#62;
-                    &#60;duration&#62;100&#60;/duration&#62;
-                    &#60;v u="0" v="0.5" /&#62;
-                    &#60;v u="0.5" v="0.5" /&#62;
-                    &#60;v u="0.5" v="1" /&#62;
-                    &#60;v u="0" v="1" /&#62;
-                &#60;/frame&#62;
-                &#60;frame name="fourth"&#62;
-                    &#60;duration&#62;100&#60;/duration&#62;
-                    &#60;v u="0.5" v="0.5" /&#62;
-                    &#60;v u="1" v="0.5" /&#62;
-                    &#60;v u="1" v="1" /&#62;
-                    &#60;v u="0.5" v="1" /&#62;
-                &#60;/frame&#62;
-            &#60;/uvanimation&#62;
-        &#60;/params&#62;
-    &#60;/meshobj&#62;
-    &#60;sector name="space"&#62;
-    &#60;!-- define all the stuff in space
-         <small>...</small>
-         and now one of the enemies right after we met him --&#62;
-        &#60;meshobj name="Kaboom"&#62;
-	    &#60;plugin&#62;crystalspace.mesh.loader.sprite.2d&#60;/plugin&#62;
-	    &#60;params&#62;
-		&#60;v x="-1" y="1" /&#62;
-    	        &#60;v x="1" y="1" /&#62;
-    		&#60;v x="1" y="-1" /&#62;
-	        &#60;v x="-1" y="-1" /&#62;
-		&#60;uv u="0" v="0" /&#62;
-		&#60;uv u="1" v="0" /&#62;
-	        &#60;uv u="1" v="1" /&#62;
-		&#60;uv u="0" v="1" /&#62;
-	        &#60;color red="1" green="1" blue="1" /&#62;
-		&#60;color red="1" green="1" blue="1" /&#62;
-	        &#60;color red="1" green="1" blue="1" /&#62;
-		&#60;color red="1" green="1" blue="1" /&#62;
-	        &#60;lighting&#62;no&#60;/lighting&#62;
-		&#60;!-- show the animation, use the timings attached to
-	    	     the frames, loop --&#62;
-    	    	&#60;animate name="boom"&#62;
-		    &#60;timing&#62;0&#60;/timing&#62;
-	    	    &#60;loop&#62;yes&#60;/loop&#62;
-		&#60;/animate&#62;
-	    &#60;/params&#62;
-	    &#60;move&#62;
-		&#60;v x="0" y="0" z="0"&#62;
-	    &#60;/move&#62;
-	&#60;/meshobj&#62;
-    &#60;/sector&#62;
-&#60;/world&#62;
+In this example, `<SAMP>cal3dfactorystate</SAMP>' is the Cal3D factory state object.
+Using the state object, find the `<SAMP>morphanimationid</SAMP>' with the givven name.
+</P><P>
 
-</pre></td></tr></table><A NAME="MeshObject Spr3D"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>int morphanimationid =
+  cal3dfactorystate-&#62;FindMorphAnimationName(morphanimationname);
+</pre></td></tr></table></P><P>
+
+In this example, cal3dstate is the Cal3D state object.  We instruct it to fully
+blend (1.0f) the morph animation, over a period of (10.0f) ten seconds.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cal3dstate-&#62;BlendMorphTarget(morphanimationid, 1.0f, 10.0f);
+</pre></td></tr></table></P><P>
+
+This example completely clears a morph animation, over a period of ten seconds
+(10.0f).
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cal3dstate-&#62;ClearMorphTarget(morphanimationid, 10.0f);
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC571"></A>
+<H4> Sockets </H4>
+<!--docid::SEC571::-->
+<P>
+
+Sockets enable you to <EM>attach</EM> any mesh object to a triangle.  The attached
+mesh object then follows the triangle.  Adding a socket to a Cal3D file
+(following the mesh tags) can be done as shown here.  `<SAMP>i</SAMP>', `<SAMP>j</SAMP>', and
+`<SAMP>k</SAMP>' should be numbers.  They are all indices.  The loading order of meshes
+is maintained, so you can deduce which mesh you are using.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;socket name="<small>...</small>" mesh="i" submesh="j" triangle="k"/&#62;
+</pre></td></tr></table></P><P>
+
+You can test a socket if you load the Cal3D file in the `<TT>viewmesh</TT>' example
+program.
+</P><P>
+
+You can use sockets programmatically as follows.
+</P><P>
+
+In this example, `<SAMP>cal3dstate</SAMP>' is the Cal3D state object.  Here we find a
+socket with a given name.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iSpriteCal3DSocket* socket = cal3dstate-&#62;FindSocket(name);
+</pre></td></tr></table></P><P>
+
+For this example, `<SAMP>sprite</SAMP>' is the `<SAMP>iMeshWrapper</SAMP>' of the Cal3D sprite,
+and `<SAMP>meshwrap</SAMP>' is the `<SAMP>iMeshWrapper</SAMP>' of the mesh object you want to
+add.  This adds the `<SAMP>meshwrap</SAMP>' as a hierarchical child of `<SAMP>sprite</SAMP>'.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>sprite-&#62;GetChildren()-&#62;Add(meshwrap);
+</pre></td></tr></table></P><P>
+
+Here is how you would set a socket's mesh wrapper.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>socket-&#62;SetMeshWrapper(meshwrap);
+</pre></td></tr></table><A NAME="MeshObject Genmesh"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_211.html#SEC559"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_213.html#SEC567"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_211.html#SEC562"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_213.html#SEC572"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC641"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: AWS Component Events</TITLE>
+<TITLE>Crystal Space: AWS Trigger Reference</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: AWS Component Events">
-<META NAME="keywords" CONTENT="Crystal Space: AWS Component Events">
+<META NAME="description" CONTENT="Crystal Space: AWS Trigger Reference">
+<META NAME="keywords" CONTENT="Crystal Space: AWS Trigger Reference">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,97 +23,53 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC681"></A>
+<A NAME="SEC678"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC680"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC682"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC678"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC679"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_245.html#SEC683"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC677"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC679"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC674"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC671"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC788"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.12.3.2 Events: Responding To User Actions </H4>
-<!--docid::SEC681::-->
+<H3> 7.11.4 AWS Standard Sink Trigger Reference </H3>
+<!--docid::SEC678::-->
 <P>
 
-Events are broken out into <CODE>OnBlah()</CODE> functions. The
-parameters for those events are also broken out and passed to the
-functions. At the end of any of the <CODE>OnBlah()</CODE> event
-functions (except <CODE>OnDraw()</CODE>) you should return `<SAMP>true</SAMP>' if the
-event was used by you, otherwise return `<SAMP>false</SAMP>'. You <EM>must</EM>
-override <EM>all</EM> event functions, even if you don't use them
-all. If you will not use a particular event, just return `<SAMP>false</SAMP>'.
-</P><P>
-
-It's important to note that you will only receive events that
-apply to your component. For example, if the mouse is inside
-your component, you will receive all mouse events. However, once
-the mouse leaves the confines of your borders you will no longer
-receive <EM>any</EM> mouse events. The only exception to this is
-the <CODE>OnMouseExit()</CODE> event which is sent to the component that
-just lost the mouse.
-</P><P>
-
-The following is the list of all events understood by components:
+The following table lists triggers that the `<SAMP>awsStandardSink</SAMP>' hosts.
 </P><P>
 
 <DL COMPACT>
-<DT><CODE>virtual bool OnMouseDown(int button, int x, int y)</CODE>
-<DD>Triggered when the user presses a mouse button.
+<DT><CODE>Hide</CODE>
+<DD>Hides the component that sent the signal.
 <P>
 
-<DT><CODE>virtual bool OnMouseUp(int button, int x, int y)</CODE>
-<DD>Triggered when the user releases a mouse button.
+<DT><CODE>Show</CODE>
+<DD>Shows the component that sent the signal.
 <P>
 
-<DT><CODE>virtual bool OnMouseMove(int button, int x, int y)</CODE>
-<DD>Triggered when the user moves the mouse.
+<DT><CODE>Invalidate</CODE>
+<DD>Invalidates the component that sent the signal (forces a re-draw).
 <P>
 
-<DT><CODE>virtual bool OnMouseClick(int button, int x, int y)</CODE>
-<DD>Triggered when the user clicks the mouse.
-<P>
-
-<DT><CODE>virtual bool OnMouseDoubleClick(int button, int x, int y)</CODE>
-<DD>Triggered when the user double clicks the mouse.
-<P>
-
-<DT><CODE>virtual bool OnMouseExit()</CODE>
-<DD>Triggered when this component loses mouse focus.
-<P>
-
-<DT><CODE>virtual bool OnMouseEnter()</CODE>
-<DD>Triggered when this component gains mouse focus.
-<P>
-
-<DT><CODE>virtual bool OnKeypress(int key, int modifiers)</CODE>
-<DD>Triggered when the user presses a key.
-<P>
-
-<DT><CODE>virtual bool OnLostFocus()</CODE>
-<DD>Triggered when the keyboard focus is lost.
-<P>
-
-<DT><CODE>virtual bool OnGainFocus()</CODE>
-<DD>Triggered when the keyboard focus is gained.
+<DT><CODE>HideWindow</CODE>
+<DD>Hides the window containing the component that sent the signal.
 </DL>
-<P>
-
-<A NAME="AWS Component Signals"></A>
+<A NAME="AWS Signals and Actions Reference"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC680"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC682"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC678"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC679"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_245.html#SEC683"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC677"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC679"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC674"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC671"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC788"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
