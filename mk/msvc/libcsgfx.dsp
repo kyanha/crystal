@@ -278,6 +278,10 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\shadervarcontext.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\vertexlight.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\xorpat.h
 # End Source File
 # End Group

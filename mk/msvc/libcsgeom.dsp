@@ -338,6 +338,10 @@ SOURCE=..\..\libs\csgeom\..\..\include\csgeom\kdtree.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\math.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\..\..\include\csgeom\math2d.h
 # End Source File
 # Begin Source File
