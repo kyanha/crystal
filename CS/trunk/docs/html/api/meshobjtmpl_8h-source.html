@@ -52,171 +52,174 @@
 00035 <span class="preprocessor">    name (iEngine *e, iObjectRegistry* reg) : csMeshFactory (e, reg) {}     \</span>
 00036 <span class="preprocessor">    virtual csPtr&lt;iMeshObject&gt; NewInstance ()                               \</span>
 00037 <span class="preprocessor">    { return new meshclass (Engine, this); }                                \</span>
-00038 <span class="preprocessor">  };</span>
-00039 <span class="preprocessor"></span>
-00041 <span class="preprocessor">#define CS_DECLARE_SIMPLE_MESH_PLUGIN(name,factclass)                       \</span>
-00042 <span class="preprocessor">  class name : public csMeshType {                                          \</span>
-00043 <span class="preprocessor">  public:                                                                   \</span>
-00044 <span class="preprocessor">    name (iBase *p) : csMeshType (p) {}                                     \</span>
-00045 <span class="preprocessor">    virtual csPtr&lt;iMeshObjectFactory&gt; NewFactory ()                         \</span>
-00046 <span class="preprocessor">    { return new factclass (Engine, object_reg); }                          \</span>
-00047 <span class="preprocessor">  };</span>
-00048 <span class="preprocessor"></span>
-<a name="l00062"></a><a class="code" href="classcsMeshObject.html">00062</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT <a class="code" href="classcsMeshObject.html">csMeshObject</a> : <span class="keyword">public</span> <a class="code" href="structiMeshObject.html">iMeshObject</a>
-00063 {
-00064 <span class="keyword">protected</span>:
-<a name="l00066"></a><a class="code" href="classcsMeshObject.html#n0">00066</a>   <a class="code" href="classcsRef.html">csRef&lt;iMeshObjectDrawCallback&gt;</a> VisCallback;
-00067 
-<a name="l00069"></a><a class="code" href="classcsMeshObject.html#n1">00069</a>   <a class="code" href="structiBase.html">iBase</a> *LogParent;
-00070 
-<a name="l00072"></a><a class="code" href="classcsMeshObject.html#n2">00072</a>   <a class="code" href="structiEngine.html">iEngine</a> *Engine;
-00073 
-00075   <span class="keywordtype">void</span> WantToDie ();
-00076 
-<a name="l00078"></a><a class="code" href="classcsMeshObject.html#n3">00078</a>   <a class="code" href="classcsFlags.html">csFlags</a> flags;
-00079 
-00080 <span class="keyword">public</span>:
-00081   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
-00082 
-00084   <a class="code" href="classcsMeshObject.html">csMeshObject</a> (<a class="code" href="structiEngine.html">iEngine</a> *engine);
-00085 
-00087   <span class="keyword">virtual</span> ~<a class="code" href="classcsMeshObject.html">csMeshObject</a> ();
-00088 
-00093   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* <a class="code" href="structiMeshObject.html#a0">GetFactory</a> () <span class="keyword">const</span> = 0;
-00094 
-<a name="l00098"></a><a class="code" href="classcsMeshObject.html#a3">00098</a>   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiMeshObject.html#a1">GetFlags</a> () { <span class="keywordflow">return</span> flags; }
-00099 
-00104   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a2">DrawTest</a> (<a class="code" href="structiRenderView.html">iRenderView</a>* rview, <a class="code" href="structiMovable.html">iMovable</a>* movable,
-00105         uint32 frustum_mask);
+00038 <span class="preprocessor">    virtual csPtr&lt;iMeshObjectFactory&gt; Clone () { return 0; }                \</span>
+00039 <span class="preprocessor">  };</span>
+00040 <span class="preprocessor"></span>
+00042 <span class="preprocessor">#define CS_DECLARE_SIMPLE_MESH_PLUGIN(name,factclass)                       \</span>
+00043 <span class="preprocessor">  class name : public csMeshType {                                          \</span>
+00044 <span class="preprocessor">  public:                                                                   \</span>
+00045 <span class="preprocessor">    name (iBase *p) : csMeshType (p) {}                                     \</span>
+00046 <span class="preprocessor">    virtual csPtr&lt;iMeshObjectFactory&gt; NewFactory ()                         \</span>
+00047 <span class="preprocessor">    { return new factclass (Engine, object_reg); }                          \</span>
+00048 <span class="preprocessor">  };</span>
+00049 <span class="preprocessor"></span>
+<a name="l00063"></a><a class="code" href="classcsMeshObject.html">00063</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT <a class="code" href="classcsMeshObject.html">csMeshObject</a> : <span class="keyword">public</span> <a class="code" href="structiMeshObject.html">iMeshObject</a>
+00064 {
+00065 <span class="keyword">protected</span>:
+<a name="l00067"></a><a class="code" href="classcsMeshObject.html#n0">00067</a>   <a class="code" href="classcsRef.html">csRef&lt;iMeshObjectDrawCallback&gt;</a> VisCallback;
+00068 
+<a name="l00070"></a><a class="code" href="classcsMeshObject.html#n1">00070</a>   <a class="code" href="structiBase.html">iBase</a> *LogParent;
+00071 
+<a name="l00073"></a><a class="code" href="classcsMeshObject.html#n2">00073</a>   <a class="code" href="structiEngine.html">iEngine</a> *Engine;
+00074 
+00076   <span class="keywordtype">void</span> WantToDie ();
+00077 
+<a name="l00079"></a><a class="code" href="classcsMeshObject.html#n3">00079</a>   <a class="code" href="classcsFlags.html">csFlags</a> flags;
+00080 
+00081 <span class="keyword">public</span>:
+00082   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
+00083 
+00085   <a class="code" href="classcsMeshObject.html">csMeshObject</a> (<a class="code" href="structiEngine.html">iEngine</a> *engine);
+00086 
+00088   <span class="keyword">virtual</span> ~<a class="code" href="classcsMeshObject.html">csMeshObject</a> ();
+00089 
+00094   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* <a class="code" href="structiMeshObject.html#a0">GetFactory</a> () <span class="keyword">const</span> = 0;
+00095 
+<a name="l00100"></a><a class="code" href="classcsMeshObject.html#a3">00100</a>   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshObject&gt;</a> <a class="code" href="structiMeshObject.html#a2">Clone</a> () { <span class="keywordflow">return</span> 0; }
+00101   
+<a name="l00105"></a><a class="code" href="classcsMeshObject.html#a4">00105</a>   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiMeshObject.html#a1">GetFlags</a> () { <span class="keywordflow">return</span> flags; }
 00106 
-<a name="l00113"></a><a class="code" href="classcsMeshObject.html#a5">00113</a>   <span class="keyword">virtual</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>** <a class="code" href="structiMeshObject.html#a4">GetRenderMeshes</a> (<span class="keywordtype">int</span>&amp; num, <a class="code" href="structiRenderView.html">iRenderView</a>*, <a class="code" href="structiMovable.html">iMovable</a>*,
-00114         uint32)
-00115   {
-00116     num = 0;
-00117     <span class="keywordflow">return</span> 0;
-00118   }
-00119 
-00124   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a3">Draw</a> (<a class="code" href="structiRenderView.html">iRenderView</a>* rview, <a class="code" href="structiMovable.html">iMovable</a>* movable,
-00125         <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> zbufMode) = 0;
+00111   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a3">DrawTest</a> (<a class="code" href="structiRenderView.html">iRenderView</a>* rview, <a class="code" href="structiMovable.html">iMovable</a>* movable,
+00112         uint32 frustum_mask);
+00113 
+<a name="l00120"></a><a class="code" href="classcsMeshObject.html#a6">00120</a>   <span class="keyword">virtual</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>** <a class="code" href="structiMeshObject.html#a5">GetRenderMeshes</a> (<span class="keywordtype">int</span>&amp; num, <a class="code" href="structiRenderView.html">iRenderView</a>*, <a class="code" href="structiMovable.html">iMovable</a>*,
+00121         uint32)
+00122   {
+00123     num = 0;
+00124     <span class="keywordflow">return</span> 0;
+00125   }
 00126 
-00132   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a5">SetVisibleCallback</a> (<a class="code" href="structiMeshObjectDrawCallback.html">iMeshObjectDrawCallback</a>* cb);
+00131   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a4">Draw</a> (<a class="code" href="structiRenderView.html">iRenderView</a>* rview, <a class="code" href="structiMovable.html">iMovable</a>* movable,
+00132         <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> zbufMode) = 0;
 00133 
-00138   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectDrawCallback.html">iMeshObjectDrawCallback</a>* <a class="code" href="structiMeshObject.html#a6">GetVisibleCallback</a> () <span class="keyword">const</span>;
-00139 
-00144   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a7">NextFrame</a> (<a class="code" href="group__util.html#a7">csTicks</a> current_time,<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos);
-00145 
-00150   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a8">HardTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t);
-00151 
-00156   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a9">SupportsHardTransform</a> () <span class="keyword">const</span>;
-00157 
-00162   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a10">HitBeamOutline</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start,
-00163         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end, <a class="code" href="classcsVector3.html">csVector3</a>&amp; isect, <span class="keywordtype">float</span>* pr);
+00139   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a6">SetVisibleCallback</a> (<a class="code" href="structiMeshObjectDrawCallback.html">iMeshObjectDrawCallback</a>* cb);
+00140 
+00145   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectDrawCallback.html">iMeshObjectDrawCallback</a>* <a class="code" href="structiMeshObject.html#a7">GetVisibleCallback</a> () <span class="keyword">const</span>;
+00146 
+00151   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a8">NextFrame</a> (<a class="code" href="group__util.html#a7">csTicks</a> current_time,<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos);
+00152 
+00157   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a9">HardTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t);
+00158 
+00163   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a10">SupportsHardTransform</a> () <span class="keyword">const</span>;
 00164 
-00169   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a11">HitBeamObject</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end,
-00170         <a class="code" href="classcsVector3.html">csVector3</a>&amp; isect, <span class="keywordtype">float</span>* pr, <span class="keywordtype">int</span>* polygon_idx = 0);
+00169   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a11">HitBeamOutline</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start,
+00170         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end, <a class="code" href="classcsVector3.html">csVector3</a>&amp; isect, <span class="keywordtype">float</span>* pr);
 00171 
-00176   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a12">SetLogicalParent</a> (<a class="code" href="structiBase.html">iBase</a>* logparent);
-00177 
-00182   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>* <a class="code" href="structiMeshObject.html#a13">GetLogicalParent</a> () <span class="keyword">const</span>;
-00183 
-<a name="l00187"></a><a class="code" href="classcsMeshObject.html#a16">00187</a>   <span class="keyword">virtual</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>* <a class="code" href="structiMeshObject.html#a14">GetObjectModel</a> () { <span class="keywordflow">return</span> &amp;scfiObjectModel; }
-00188 
-00193   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a15">SetColor</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color);
-00194 
-00199   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a16">GetColor</a> (<a class="code" href="classcsColor.html">csColor</a>&amp; color) <span class="keyword">const</span>;
-00200 
-00205   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a17">SetMaterialWrapper</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* material);
-00206 
-00211   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiMeshObject.html#a18">GetMaterialWrapper</a> () <span class="keyword">const</span>;
-00212 
-<a name="l00217"></a><a class="code" href="classcsMeshObject.html#a21">00217</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a19">InvalidateMaterialHandles</a> () { }
-00218 
-<a name="l00223"></a><a class="code" href="classcsMeshObject.html#a22">00223</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a20">PositionChild</a> (<a class="code" href="structiMeshObject.html">iMeshObject</a>* child,<a class="code" href="group__util.html#a7">csTicks</a> current_time) { }
-00224 
+00176   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a12">HitBeamObject</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end,
+00177         <a class="code" href="classcsVector3.html">csVector3</a>&amp; isect, <span class="keywordtype">float</span>* pr, <span class="keywordtype">int</span>* polygon_idx = 0);
+00178 
+00183   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a13">SetLogicalParent</a> (<a class="code" href="structiBase.html">iBase</a>* logparent);
+00184 
+00189   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>* <a class="code" href="structiMeshObject.html#a14">GetLogicalParent</a> () <span class="keyword">const</span>;
+00190 
+<a name="l00194"></a><a class="code" href="classcsMeshObject.html#a17">00194</a>   <span class="keyword">virtual</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>* <a class="code" href="structiMeshObject.html#a15">GetObjectModel</a> () { <span class="keywordflow">return</span> &amp;scfiObjectModel; }
+00195 
+00200   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a16">SetColor</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color);
+00201 
+00206   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a17">GetColor</a> (<a class="code" href="classcsColor.html">csColor</a>&amp; color) <span class="keyword">const</span>;
+00207 
+00212   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a18">SetMaterialWrapper</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* material);
+00213 
+00218   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiMeshObject.html#a19">GetMaterialWrapper</a> () <span class="keyword">const</span>;
+00219 
+<a name="l00224"></a><a class="code" href="classcsMeshObject.html#a22">00224</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a20">InvalidateMaterialHandles</a> () { }
 00225 
-00230   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetObjectBoundingBox (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox, <span class="keywordtype">int</span> type);
+<a name="l00230"></a><a class="code" href="classcsMeshObject.html#a23">00230</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a21">PositionChild</a> (<a class="code" href="structiMeshObject.html">iMeshObject</a>* child,<a class="code" href="group__util.html#a7">csTicks</a> current_time) { }
 00231 
-00236   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetRadius (<a class="code" href="classcsVector3.html">csVector3</a>&amp; radius, <a class="code" href="classcsVector3.html">csVector3</a>&amp; center);
-00237 
-00238   <span class="comment">// implementation of iObjectModel</span>
-00239   <span class="keyword">struct </span>CS_CSTOOL_EXPORT eiObjectModel : <span class="keyword">public</span> <a class="code" href="classcsObjectModel.html">csObjectModel</a>
-00240   {
-00241     <a class="code" href="group__scf.html#a11">SCF_DECLARE_EMBEDDED_IBASE</a> (<a class="code" href="classcsMeshObject.html">csMeshObject</a>);
-00242     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetObjectBoundingBox (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox, <span class="keywordtype">int</span> type)
-00243     {
-00244       scfParent-&gt;GetObjectBoundingBox (bbox, type);
-00245     }
-00246     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetRadius (<a class="code" href="classcsVector3.html">csVector3</a>&amp; radius, <a class="code" href="classcsVector3.html">csVector3</a>&amp; center)
-00247     {
-00248       scfParent-&gt;GetRadius (radius, center);
-00249     }
-00250   } scfiObjectModel;
-00251   <span class="keyword">friend</span> <span class="keyword">struct </span>eiObjectModel;
-00252 };
-00253 
-<a name="l00258"></a><a class="code" href="classcsMeshFactory.html">00258</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT csMeshFactory : <span class="keyword">public</span> <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>
-00259 {
-00260 <span class="keyword">protected</span>:
-<a name="l00262"></a><a class="code" href="classcsMeshFactory.html#n0">00262</a>   <a class="code" href="structiBase.html">iBase</a> *LogParent;
-00263 
-<a name="l00265"></a><a class="code" href="classcsMeshFactory.html#n1">00265</a>   <a class="code" href="structiEngine.html">iEngine</a> *Engine;
-00266 
-<a name="l00268"></a><a class="code" href="classcsMeshFactory.html#n2">00268</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-00269 
-<a name="l00271"></a><a class="code" href="classcsMeshFactory.html#n3">00271</a>   <a class="code" href="classcsFlags.html">csFlags</a> flags;
-00272 
-00273 <span class="keyword">public</span>:
-00274   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
-00275 
-00277   csMeshFactory (<a class="code" href="structiEngine.html">iEngine</a> *engine, <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
-00278 
-<a name="l00280"></a><a class="code" href="classcsMeshFactory.html#a1">00280</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* GetObjectRegistry () { <span class="keywordflow">return</span> object_reg; }
-00281 
-00283   <span class="keyword">virtual</span> ~csMeshFactory ();
-00284 
-<a name="l00288"></a><a class="code" href="classcsMeshFactory.html#a3">00288</a>   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiMeshObjectFactory.html#a0">GetFlags</a> () { <span class="keywordflow">return</span> flags; }
-00289 
-00294   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshObject&gt;</a> <a class="code" href="structiMeshObjectFactory.html#a1">NewInstance</a> () = 0;
-00295 
-00300   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObjectFactory.html#a2">HardTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t);
-00301 
-00306   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObjectFactory.html#a3">SupportsHardTransform</a> () <span class="keyword">const</span>;
-00307 
-00312   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObjectFactory.html#a4">SetLogicalParent</a> (<a class="code" href="structiBase.html">iBase</a>* logparent);
-00313 
-00318   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>* <a class="code" href="structiMeshObjectFactory.html#a5">GetLogicalParent</a> () <span class="keyword">const</span>;
-00319 
-<a name="l00323"></a><a class="code" href="classcsMeshFactory.html#a9">00323</a>   <span class="keyword">virtual</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>* <a class="code" href="structiMeshObjectFactory.html#a6">GetObjectModel</a> () { <span class="keywordflow">return</span> 0; }
-00324 
-00325 };
+00232 
+00237   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetObjectBoundingBox (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox, <span class="keywordtype">int</span> type);
+00238 
+00243   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetRadius (<a class="code" href="classcsVector3.html">csVector3</a>&amp; radius, <a class="code" href="classcsVector3.html">csVector3</a>&amp; center);
+00244 
+00245   <span class="comment">// implementation of iObjectModel</span>
+00246   <span class="keyword">struct </span>CS_CSTOOL_EXPORT eiObjectModel : <span class="keyword">public</span> <a class="code" href="classcsObjectModel.html">csObjectModel</a>
+00247   {
+00248     <a class="code" href="group__scf.html#a11">SCF_DECLARE_EMBEDDED_IBASE</a> (<a class="code" href="classcsMeshObject.html">csMeshObject</a>);
+00249     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetObjectBoundingBox (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox, <span class="keywordtype">int</span> type)
+00250     {
+00251       scfParent-&gt;GetObjectBoundingBox (bbox, type);
+00252     }
+00253     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetRadius (<a class="code" href="classcsVector3.html">csVector3</a>&amp; radius, <a class="code" href="classcsVector3.html">csVector3</a>&amp; center)
+00254     {
+00255       scfParent-&gt;GetRadius (radius, center);
+00256     }
+00257   } scfiObjectModel;
+00258   <span class="keyword">friend</span> <span class="keyword">struct </span>eiObjectModel;
+00259 };
+00260 
+<a name="l00265"></a><a class="code" href="classcsMeshFactory.html">00265</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT csMeshFactory : <span class="keyword">public</span> <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>
+00266 {
+00267 <span class="keyword">protected</span>:
+<a name="l00269"></a><a class="code" href="classcsMeshFactory.html#n0">00269</a>   <a class="code" href="structiBase.html">iBase</a> *LogParent;
+00270 
+<a name="l00272"></a><a class="code" href="classcsMeshFactory.html#n1">00272</a>   <a class="code" href="structiEngine.html">iEngine</a> *Engine;
+00273 
+<a name="l00275"></a><a class="code" href="classcsMeshFactory.html#n2">00275</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+00276 
+<a name="l00278"></a><a class="code" href="classcsMeshFactory.html#n3">00278</a>   <a class="code" href="classcsFlags.html">csFlags</a> flags;
+00279 
+00280 <span class="keyword">public</span>:
+00281   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
+00282 
+00284   csMeshFactory (<a class="code" href="structiEngine.html">iEngine</a> *engine, <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
+00285 
+<a name="l00287"></a><a class="code" href="classcsMeshFactory.html#a1">00287</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* GetObjectRegistry () { <span class="keywordflow">return</span> object_reg; }
+00288 
+00290   <span class="keyword">virtual</span> ~csMeshFactory ();
+00291 
+<a name="l00295"></a><a class="code" href="classcsMeshFactory.html#a3">00295</a>   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiMeshObjectFactory.html#a0">GetFlags</a> () { <span class="keywordflow">return</span> flags; }
+00296 
+00301   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshObject&gt;</a> <a class="code" href="structiMeshObjectFactory.html#a1">NewInstance</a> () = 0;
+00302 
+00307   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObjectFactory.html#a3">HardTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t);
+00308 
+00313   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObjectFactory.html#a4">SupportsHardTransform</a> () <span class="keyword">const</span>;
+00314 
+00319   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObjectFactory.html#a5">SetLogicalParent</a> (<a class="code" href="structiBase.html">iBase</a>* logparent);
+00320 
+00325   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>* <a class="code" href="structiMeshObjectFactory.html#a6">GetLogicalParent</a> () <span class="keyword">const</span>;
 00326 
-<a name="l00330"></a><a class="code" href="classcsMeshType.html">00330</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT csMeshType : <span class="keyword">public</span> <a class="code" href="structiMeshObjectType.html">iMeshObjectType</a>
-00331 {
-00332 <span class="keyword">protected</span>:
-<a name="l00334"></a><a class="code" href="classcsMeshType.html#n0">00334</a>   <a class="code" href="structiEngine.html">iEngine</a> *Engine;
-00335 
-<a name="l00337"></a><a class="code" href="classcsMeshType.html#n1">00337</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-00338 
-00339 <span class="keyword">public</span>:
-00340   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
-00341 
-00343   csMeshType (<a class="code" href="structiBase.html">iBase</a> *p);
-00344 
-00346   <span class="keyword">virtual</span> ~csMeshType ();
-00347 
-00351   <span class="keywordtype">bool</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg);
-00352 
-00357   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshObjectFactory&gt;</a> <a class="code" href="structiMeshObjectType.html#a0">NewFactory</a> () = 0;
-00358 
-<a name="l00362"></a><a class="code" href="structcsMeshType_1_1eiComponent.html">00362</a>   <span class="keyword">struct </span>CS_CSTOOL_EXPORT eiComponent : <span class="keyword">public</span> <a class="code" href="structiComponent.html">iComponent</a>
-00363   {
-00364     <a class="code" href="group__scf.html#a11">SCF_DECLARE_EMBEDDED_IBASE</a> (csMeshType);
-<a name="l00365"></a><a class="code" href="structcsMeshType_1_1eiComponent.html#a1">00365</a>     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* p)
-00366     { <span class="keywordflow">return</span> scfParent-&gt;Initialize (p); }
-00367   } scfiComponent;
-00368 };
-00369 
-00370 <span class="preprocessor">#endif // __CS_MESHOBJTMPL_H__</span>
+<a name="l00330"></a><a class="code" href="classcsMeshFactory.html#a9">00330</a>   <span class="keyword">virtual</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>* <a class="code" href="structiMeshObjectFactory.html#a7">GetObjectModel</a> () { <span class="keywordflow">return</span> 0; }
+00331 
+00332 };
+00333 
+<a name="l00337"></a><a class="code" href="classcsMeshType.html">00337</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT csMeshType : <span class="keyword">public</span> <a class="code" href="structiMeshObjectType.html">iMeshObjectType</a>
+00338 {
+00339 <span class="keyword">protected</span>:
+<a name="l00341"></a><a class="code" href="classcsMeshType.html#n0">00341</a>   <a class="code" href="structiEngine.html">iEngine</a> *Engine;
+00342 
+<a name="l00344"></a><a class="code" href="classcsMeshType.html#n1">00344</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+00345 
+00346 <span class="keyword">public</span>:
+00347   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
+00348 
+00350   csMeshType (<a class="code" href="structiBase.html">iBase</a> *p);
+00351 
+00353   <span class="keyword">virtual</span> ~csMeshType ();
+00354 
+00358   <span class="keywordtype">bool</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg);
+00359 
+00364   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshObjectFactory&gt;</a> <a class="code" href="structiMeshObjectType.html#a0">NewFactory</a> () = 0;
+00365 
+<a name="l00369"></a><a class="code" href="structcsMeshType_1_1eiComponent.html">00369</a>   <span class="keyword">struct </span>CS_CSTOOL_EXPORT eiComponent : <span class="keyword">public</span> <a class="code" href="structiComponent.html">iComponent</a>
+00370   {
+00371     <a class="code" href="group__scf.html#a11">SCF_DECLARE_EMBEDDED_IBASE</a> (csMeshType);
+<a name="l00372"></a><a class="code" href="structcsMeshType_1_1eiComponent.html#a1">00372</a>     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* p)
+00373     { <span class="keywordflow">return</span> scfParent-&gt;Initialize (p); }
+00374   } scfiComponent;
+00375 };
+00376 
+00377 <span class="preprocessor">#endif // __CS_MESHOBJTMPL_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

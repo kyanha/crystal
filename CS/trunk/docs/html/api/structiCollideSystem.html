@@ -43,8 +43,6 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Indicate if we are interested only in the first hit that is found.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiCollideSystem.html#a6">GetOneHitOnly</a> ()=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Return true if this CD system will only return the first hit that is found.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual int&nbsp;</td><td valign=bottom><a class="el" href="structiCollideSystem.html#a7">CollidePath</a> (<a class="el" href="structiCollider.html">iCollider</a> *collider, const <a class="el" href="classcsReversibleTransform.html">csReversibleTransform</a> *trans, <a class="el" href="classcsVector3.html">csVector3</a> &amp;newpos, int num_colliders, <a class="el" href="structiCollider.html">iCollider</a> **colliders, <a class="el" href="classcsReversibleTransform.html">csReversibleTransform</a> **transforms)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Test if an object can move to a new position.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This is the Collide plug-in.
@@ -124,91 +122,6 @@ is the second transform. </td></tr>
 </table>
 </dl><dl compact><dt><b>Returns: </b></dt><dd>
 true if there are triangles that intersect. The array with collision pairs will be updated. </dl>    </td>
-  </tr>
-</table>
-<a name="a7" doxytag="iCollideSystem::CollidePath"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> virtual int iCollideSystem::CollidePath </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structiCollider.html">iCollider</a> *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>collider</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const <a class="el" href="classcsReversibleTransform.html">csReversibleTransform</a> *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>trans</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap><a class="el" href="classcsVector3.html">csVector3</a> &amp;&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>newpos</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>num_colliders</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap><a class="el" href="structiCollider.html">iCollider</a> **&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>colliders</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap><a class="el" href="classcsReversibleTransform.html">csReversibleTransform</a> **&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>transforms</em></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"><code> [pure virtual]</code></td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Test if an object can move to a new position.
-<p>
-The new position vector will be modified to reflect the maximum new position that the object could move to without colliding with something. This function will return: <ul>
-<li>-1 if the object could not move at all (i.e. stuck at start position). <li>0 if the object could not move fully to the desired position. <li>1 if the object can move unhindered to the end position. </ul>
-
-<p>
- This function will reset the collision pair array. If there was a collision along the way the array will contain the information for the first collision preventing movement. 
-<p>
- The given transform should be the transform of the object corresponding with the old position. 'colliders' and 'transforms' should be arrays with 'num_colliders' elements for all the objects that we should test against. <dl compact><dt><b>Parameters: </b></dt><dd>
-<table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em>collider</em>&nbsp;</td><td>
-is the collider of the object that we are going to move along the path. </td></tr>
-<tr><td valign=top><em>trans</em>&nbsp;</td><td>
-is the transform of that object (see <a class="el" href="structiCollideSystem.html#a1">Collide()</a>). </td></tr>
-<tr><td valign=top><em>newpos</em>&nbsp;</td><td>
-is the new position of that object. </td></tr>
-<tr><td valign=top><em>num_colliders</em>&nbsp;</td><td>
-is the number of colliders that we are going to use to collide with. </td></tr>
-<tr><td valign=top><em>colliders</em>&nbsp;</td><td>
-is an array of colliders. Typically you can obtain such a list by doing <a class="el" href="structiEngine.html">iEngine</a>-&gt;GetNearbyMeshes() and then getting the colliders from all meshes you get (possibly using <a class="el" href="classcsColliderWrapper.html">csColliderWrapper</a>). </td></tr>
-<tr><td valign=top><em>transforms</em>&nbsp;</td><td>
-is an array of transforms that belong with the array of colliders. </td></tr>
-</table>
-</dl>    </td>
   </tr>
 </table>
 <a name="a0" doxytag="iCollideSystem::CreateCollider"></a><p>

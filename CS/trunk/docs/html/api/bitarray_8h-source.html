@@ -309,40 +309,59 @@
 00338     <span class="keywordflow">return</span> (mpStore[GetIndex(pos)] &amp; (1 &lt;&lt; GetOffset(pos))) != 0;
 00339   }
 00340 
-<a name="l00342"></a><a class="code" href="classcsBitArray.html#a21">00342</a>   <span class="keywordtype">bool</span> AllBitsFalse()<span class="keyword"> const</span>
-00343 <span class="keyword">  </span>{
-00344     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=0; i &lt; mLength; i++)
-00345       <span class="keywordflow">if</span> (mpStore[i] != 0)
-00346         <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00347     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00348   }
-00349 
-<a name="l00351"></a><a class="code" href="classcsBitArray.html#a22">00351</a>   <a class="code" href="classcsBitArray.html">csBitArray</a> &amp;FlipAllBits()
-00352   {
-00353     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=0; i &lt; mLength; i++)
-00354       mpStore[i] = ~mpStore[i];
-00355 
-00356     Trim();
-00357     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00358   }
-00359 
-<a name="l00361"></a><a class="code" href="classcsBitArray.html#a23">00361</a>   store_type* GetArrayBits()
-00362   {
-00363     <span class="keywordflow">return</span> mpStore;
-00364   }
-00365 
-<a name="l00370"></a><a class="code" href="classcsBitArray.html#a24">00370</a>   store_type GetSingleWord()
-00371   {
-00372     <span class="keywordflow">return</span> mSingleWord;
-00373   }
-00374 
-<a name="l00379"></a><a class="code" href="classcsBitArray.html#a25">00379</a>   <span class="keywordtype">void</span> SetSingleWord (store_type sw)
-00380   {
-00381     mSingleWord = sw;
-00382   }
-00383 };
-00384 
-00385 <span class="preprocessor">#endif // __CS_BITARRAY_H__</span>
+<a name="l00345"></a><a class="code" href="classcsBitArray.html#a21">00345</a>   <span class="keywordtype">bool</span> AreSomeBitsSet (size_t pos, size_t count)<span class="keyword"> const</span>
+00346 <span class="keyword">  </span>{
+00347     CS_ASSERT (pos &lt; mNumBits);
+00348     CS_ASSERT ((pos + count) &lt; mNumBits);
+00349     
+00350     <span class="keywordflow">while</span> (count &gt; 0)
+00351     {
+00352       size_t index = GetIndex (pos);
+00353       size_t offset = GetOffset (pos);
+00354       size_t checkCount = MIN(count, cell_size - offset);
+00355             
+00356       store_type mask = ((1 &lt;&lt; checkCount) - 1) &lt;&lt; offset;
+00357       <span class="keywordflow">if</span> (mpStore[index] &amp; mask) <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00358       pos += checkCount;
+00359       count -= checkCount;
+00360     }
+00361     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00362   }
+00363   
+<a name="l00365"></a><a class="code" href="classcsBitArray.html#a22">00365</a>   <span class="keywordtype">bool</span> AllBitsFalse()<span class="keyword"> const</span>
+00366 <span class="keyword">  </span>{
+00367     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=0; i &lt; mLength; i++)
+00368       <span class="keywordflow">if</span> (mpStore[i] != 0)
+00369         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00370     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00371   }
+00372 
+<a name="l00374"></a><a class="code" href="classcsBitArray.html#a23">00374</a>   <a class="code" href="classcsBitArray.html">csBitArray</a> &amp;FlipAllBits()
+00375   {
+00376     <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=0; i &lt; mLength; i++)
+00377       mpStore[i] = ~mpStore[i];
+00378 
+00379     Trim();
+00380     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00381   }
+00382 
+<a name="l00384"></a><a class="code" href="classcsBitArray.html#a24">00384</a>   store_type* GetArrayBits()
+00385   {
+00386     <span class="keywordflow">return</span> mpStore;
+00387   }
+00388 
+<a name="l00393"></a><a class="code" href="classcsBitArray.html#a25">00393</a>   store_type GetSingleWord()
+00394   {
+00395     <span class="keywordflow">return</span> mSingleWord;
+00396   }
+00397 
+<a name="l00402"></a><a class="code" href="classcsBitArray.html#a26">00402</a>   <span class="keywordtype">void</span> SetSingleWord (store_type sw)
+00403   {
+00404     mSingleWord = sw;
+00405   }
+00406 };
+00407 
+00408 <span class="preprocessor">#endif // __CS_BITARRAY_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

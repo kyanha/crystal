@@ -271,13 +271,19 @@
 <a name="l00288"></a><a class="code" href="classcsShaderVariable.html#a26">00288</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a> &amp;value)
 00289   {
 00290     Type = MATRIX;
-00291     <span class="keyword">delete</span> MatrixValuePtr;
-00292     MatrixValuePtr = <span class="keyword">new</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a> (value);
-00293     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00294   }
-00295 };
-00296 
-00297 <span class="preprocessor">#endif</span>
+00291     <span class="keywordflow">if</span> (MatrixValuePtr)
+00292     {
+00293       *MatrixValuePtr = value;
+00294     }
+00295     <span class="keywordflow">else</span>
+00296     {
+00297       MatrixValuePtr = <span class="keyword">new</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a> (value);
+00298     }
+00299     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00300   }
+00301 };
+00302 
+00303 <span class="preprocessor">#endif</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
