@@ -372,6 +372,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\inputdef.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\..\..\include\csutil\leakguard.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\..\..\include\csutil\list.h
 # End Source File
 # Begin Source File
