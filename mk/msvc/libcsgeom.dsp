@@ -352,6 +352,10 @@ SOURCE=..\..\libs\csgeom\spline.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\staticvarcleanup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\subrec.cpp
 # End Source File
 # Begin Source File
