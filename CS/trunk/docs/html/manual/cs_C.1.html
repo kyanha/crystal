@@ -858,20 +858,17 @@ domain name "crystalspace3d.org". This replaces the older package name
 <P>
 
 At initialization time, VFS now merges all `<TT>vfs.cfg</TT>' files located
-during its start-up scan. It searches for a file named `<TT>vfs.cfg</TT>' in the
-application resource directory (<CODE>csGetResourceDir()</CODE>), then in the
-directory containing the application (<CODE>csGetAppDir()</CODE>), and finally in the
-Crystal Space installation directory (<CODE>csGetConfigPath()</CODE>).  The full set
-of directories mounted by VFS following the initial configuration file
-scan is the union of the entries in all of the discovered `<TT>vfs.cfg</TT>'
-files. If there are conflicting entries, then mounts and variable assignments
-specified in configuration files discovered earlier in the scan take precedence
-over those discovered later.
-</P><P>
-
-Previously, VFS stopped searching for configuration information at the
-first directory containing a file named `<TT>vfs.cfg</TT>', and loaded only that
-file.
+during its start-up scan.  Previously, VFS stopped scanning at the first
+discovered `<TT>vfs.cfg</TT>', and loaded only that file.  During the start-up
+scan, it searches for a file named `<TT>vfs.cfg</TT>' in the application resource
+directory (<CODE>csGetResourceDir()</CODE>), then in the directory containing the
+application (<CODE>csGetAppDir()</CODE>), and finally in the Crystal Space
+installation directory (<CODE>csGetConfigPath()</CODE>).  The full set of directories
+mounted by VFS following the initial configuration file scan is the union
+of the entries in all of the discovered `<TT>vfs.cfg</TT>' files.  If there are
+conflicting entries, then mounts and variable assignments specified in
+configuration files discovered earlier in the scan take precedence over those
+discovered later.
 </P><P>
 
 <A NAME="SEC_20"></A>
@@ -952,15 +949,30 @@ provide more information.
 <!--docid::SEC_24::-->
 <P>
 
-The following additional files have been removed or renamed:
+The following files were removed:
 </P><P>
 
 <UL>
 <LI>
-`<TT>include/ivideo/vbufmgr.h</TT>' => (removed)
+<CODE>include/ivideo/vbufmgr.h</CODE>
+</UL>
+<P>
+
+The following files in `<TT>data/shader</TT>' were renamed:
+</P><P>
+
+<UL>
 <LI>
-`<TT>data/shader/or_lighting*.xml</TT>' =>
-`<TT>data/shader/std_lighting*.xml</TT>'
+<CODE>or_lighting.xml</CODE> => <CODE>std_lighting.xml</CODE>
+<LI>
+<CODE>or_lighting_detail.xml</CODE> => <CODE>std_lighting_detail.xml</CODE>
+<LI>
+<CODE>or_lighting_detail_add.xml</CODE> => <CODE>std_lighting_detail_add.xml</CODE>
+<LI>
+<CODE>or_lighting_detail_alpha.xml</CODE> =>
+<CODE>std_lighting_detail_alpha.xml</CODE>
+<LI>
+<CODE>or_lighting_portal.xml</CODE> => <CODE>std_lighting_portal.xml</CODE>
 </UL>
 <P>
 
@@ -1010,12 +1022,20 @@ Fog is now calculated within the renderer.
 </UL>
 <P>
 
-The old methods for rendering (<CODE>Draw()</CODE> and <CODE>DrawTest()</CODE>)
-have been removed from `<SAMP>iMeshObject</SAMP>' and `<SAMP>iParticle</SAMP>' interfaces.
+From `<SAMP>iMeshObject</SAMP>' and `<SAMP>iParticle</SAMP>', the following rendering-related
+methods have been removed:
 </P><P>
 
-Apart from these methods, the following classes and structs have been removed
-or have become private, and are no longer available to client code:
+<UL>
+<LI>
+<CODE>Draw()</CODE>
+<LI>
+<CODE>DrawTest()</CODE>
+</UL>
+<P>
+
+Apart from these methods, the following classes and structures have been
+removed or have become private, and are no longer available to client code:
 </P><P>
 
 <UL>
@@ -1048,6 +1068,20 @@ interface, and then asking the plugin manager to load a plugin supplying the
 desired object if it was not found in the object-registry. It also registers
 the object with the object-registry if the plugin manager loads it
 successfully.
+</P><P>
+
+<A NAME="SEC_27"></A>
+<H3> Random Number Generator Changes </H3>
+<!--docid::SEC_27::-->
+<P>
+
+The global function <CODE>csFastRandFloat()</CODE> has been retired.  In its stead is
+the new instantiable class `<SAMP>csRandomFloatGen</SAMP>', which is modeled after the
+`<SAMP>csRandomGen</SAMP>' class.  Unlike the old <CODE>csFastRandFloat()</CODE> function
+which was shared by all clients, instances of `<SAMP>csRandomFloatGen</SAMP>' can be
+controlled and seeded individually, thus making it far more flexible and
+useful.  (Note that the more general-purpose `<SAMP>csRandomGen</SAMP>' class is also
+able to vend floating point numbers.)
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
