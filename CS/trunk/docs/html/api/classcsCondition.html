@@ -40,14 +40,14 @@
 <tr><td colspan=2><br><h2>Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="classcsCondition.html">csCondition</a> &gt;&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classcsCondition.html#e0">Create</a> (<a class="el" href="group__util.html#a4">uint32</a> conditionAttributes=0)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a semaphore with specific condition attributes. </em> <a href="#e0"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a condition with specific attributes. </em> <a href="#e0"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 A condition object. 
 <p>
 
 <p>
-Definition at line <a class="el" href="thread_8h-source.html#l00230">230</a> of file <a class="el" href="thread_8h-source.html">thread.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="thread_8h-source.html#l00225">225</a> of file <a class="el" href="thread_8h-source.html">thread.h</a>.<hr><h2>Member Function Documentation</h2>
 <a name="e0" doxytag="csCondition::Create"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -74,7 +74,7 @@ Definition at line <a class="el" href="thread_8h-source.html#l00230">230</a> of 
     <td>
 
 <p>
-Create a semaphore with specific condition attributes. 
+Create a condition with specific attributes. 
 <p>
     </td>
   </tr>
@@ -179,12 +179,12 @@ Wait for some change of condition.
 <p>
 Suspends the calling thread until some other thread invokes <a class="el" href="classcsCondition.html#a0">Signal()</a> to notify a change of condition. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>mutex</em>&nbsp;</td><td>The mutex to associate with this condition. The mutex must <b>not</b> be recursive. The caller must already hold a lock on the mutex before calling <a class="el" href="classcsCondition.html#a1">Wait()</a>, and all threads waiting on the condition must be using the same mutex. When called, <a class="el" href="classcsCondition.html#a1">Wait()</a> releases the caller's lock on the mutex and suspends the caller's thread. Upon return from <a class="el" href="classcsCondition.html#a1">Wait()</a>, the caller's lock on the mutex is restored. </td></tr>
+    <tr><td valign=top><em>mutex</em>&nbsp;</td><td>The mutex to associate with this condition. The caller must already hold a lock on the mutex before calling <a class="el" href="classcsCondition.html#a1">Wait()</a>, and all threads waiting on the condition must be using the same mutex. The mutex must <b>not</b> be locked recursively within the same thread. When called, <a class="el" href="classcsCondition.html#a1">Wait()</a> releases the caller's lock on the mutex and suspends the caller's thread. Upon return from <a class="el" href="classcsCondition.html#a1">Wait()</a>, the caller's lock on the mutex is restored. </td></tr>
     <tr><td valign=top><em>timeout</em>&nbsp;</td><td>The amount of time in milliseconds to wait for the the condition's state to change. If zero, the default, then it waits for a state change without timing-out. If non-zero, and the indicated time elapses without a state change being signaled, then false is returned. </td></tr>
   </table>
 </dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Returns true if the caller was wakened normally. Returns false if the wait timed out, or if invoked with a recursive mutex, which is an invalid invocation style. </dd></dl>
-<dl compact><dt><b>Remarks:</b></dt><dd>The reason that the mutex must be non-recursive is because the implicit unlock performed by <a class="el" href="classcsCondition.html#a1">Wait()</a> <em>must</em> actually release the mutex in order for other threads to be able to satisfy the condition. With recursive mutexes, there is no guarantee that unlocking the mutex actually releases it since it might have been locked multiple times within the same thread. </dd></dl>
+<dl compact><dt><b>Remarks:</b></dt><dd>The reason that the mutex must not be locked recursively is because the implicit unlock performed by <a class="el" href="classcsCondition.html#a1">Wait()</a> <em>must</em> actually release the mutex in order for other threads to be able to satisfy the condition. With recursively locked mutexes, there is no guarantee that the one implicit unlock operation performed by <a class="el" href="classcsCondition.html#a1">Wait()</a> will actually release the mutex since it might have been locked multiple times within the same thread. </dd></dl>
     </td>
   </tr>
 </table>
