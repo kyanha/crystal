@@ -1052,6 +1052,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\zip.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\cskey_identstrs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\reftrack.h
 # End Source File
 # Begin Source File
@@ -1085,6 +1089,10 @@ SOURCE=..\..\libs\csutil\win32\shellstuff.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\win32\win32kbd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\win32kbd_identstrs.h
 # End Source File
 # Begin Source File
 

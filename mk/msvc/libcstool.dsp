@@ -376,6 +376,10 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\gentrtex.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\..\..\include\cstool\identstrings.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\..\..\include\cstool\initapp.h
 # End Source File
 # Begin Source File
