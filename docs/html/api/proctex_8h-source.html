@@ -104,7 +104,7 @@
 00095   <span class="comment">// Are we visible? Can be 'false' if animated w/ 'always animate'.</span>
 00096   <span class="keywordtype">bool</span> visible;
 00097 
-00098   <span class="keywordtype">bool</span> GetAlwaysAnimate ();
+00098   <span class="keywordtype">bool</span> GetAlwaysAnimate () <span class="keyword">const</span>;
 00099   <span class="keywordtype">void</span> SetAlwaysAnimate (<span class="keywordtype">bool</span> enable);
 00100 
 00101   <span class="keyword">struct </span>eiTextureWrapper : <span class="keyword">public</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>
@@ -117,12 +117,12 @@
 00108     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureHandle (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *tex);
 00109     <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* GetTextureHandle ();
 00110     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> red, <span class="keywordtype">int</span> green, <span class="keywordtype">int</span> blue);
-00111     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetKeyColor (<span class="keywordtype">int</span> &amp;red, <span class="keywordtype">int</span> &amp;green, <span class="keywordtype">int</span> &amp;blue);
+00111     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetKeyColor (<span class="keywordtype">int</span> &amp;red, <span class="keywordtype">int</span> &amp;green, <span class="keywordtype">int</span> &amp;blue) <span class="keyword">const</span>;
 00112     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFlags (<span class="keywordtype">int</span> flags);
-00113     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetFlags ();
+00113     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetFlags () <span class="keyword">const</span>;
 00114     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Register (<a class="code" href="structiTextureManager.html">iTextureManager</a> *txtmng);
 00115     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetUseCallback (<a class="code" href="structiTextureCallback.html">iTextureCallback</a>* callback);
-00116     <span class="keyword">virtual</span> <a class="code" href="structiTextureCallback.html">iTextureCallback</a>* GetUseCallback ();
+00116     <span class="keyword">virtual</span> <a class="code" href="structiTextureCallback.html">iTextureCallback</a>* GetUseCallback () <span class="keyword">const</span>;
 00117     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Visit ();
 00118     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsVisitRequired () <span class="keyword">const</span>;
 00119     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeepImage (<span class="keywordtype">bool</span> k);
@@ -134,7 +134,7 @@
 00125   {
 00126     <a class="code" href="group__scf.html#a22">SCF_DECLARE_EMBEDDED_IBASE</a>(csProcTexture);
 00127 
-00128     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetAlwaysAnimate ();
+00128     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetAlwaysAnimate () <span class="keyword">const</span>;
 00129     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetAlwaysAnimate (<span class="keywordtype">bool</span> enable);
 00130     <span class="keyword">virtual</span> <a class="code" href="structiTextureFactory.html">iTextureFactory</a>* GetFactory();
 00131   } scfiProcTexture;
@@ -179,8 +179,8 @@
 00202 
 00207   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Animate (csTicks current_time) = 0;
 00208 
-<a name="l00210"></a><a class="code" href="classcsProcTexture.html#a11">00210</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetDimension (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h)
-00211   { w = mat_w; h = mat_h; }
+<a name="l00210"></a><a class="code" href="classcsProcTexture.html#a11">00210</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetDimension (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h)<span class="keyword"> const</span>
+00211 <span class="keyword">  </span>{ w = mat_w; h = mat_h; }
 00212 
 00213   <span class="keyword">static</span> <span class="keywordtype">int</span> GetRandom (<span class="keywordtype">int</span> max)
 00214   {
@@ -188,13 +188,11 @@
 00216   }
 00217 
 <a name="l00219"></a><a class="code" href="classcsProcTexture.html#a12">00219</a>   <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* GetTextureWrapper ()
-00220   { <span class="keywordflow">return</span> &amp;scfiTextureWrapper; <span class="comment">/*return tex;*/</span> }
+00220   { <span class="keywordflow">return</span> &amp;scfiTextureWrapper; }
 00221 
 00222 };
 00223 
-00224 
-00225 <span class="preprocessor">#endif // __CS_PROCTEX_H__</span>
-00226 <span class="preprocessor"></span>
+00224 <span class="preprocessor">#endif // __CS_PROCTEX_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.3 
 </small></address> </div></body> </html>
