@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Makefile Variables</TITLE>
+<TITLE>Crystal Space: Writing Documentation</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Makefile Variables">
-<META NAME="keywords" CONTENT="Crystal Space: Makefile Variables">
+<META NAME="description" CONTENT="Crystal Space: Writing Documentation">
+<META NAME="keywords" CONTENT="Crystal Space: Writing Documentation">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,197 +23,226 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC807"></A>
+<A NAME="SEC809"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC806"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC808"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC798"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC805"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC809"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC814"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC818"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC943">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 8.2.2 Variable Naming Conventions </H3>
-<!--docid::SEC807::-->
+<H2> 9.1 Writing Documentation </H2>
+<!--docid::SEC809::-->
 <P>
 
-For maximum flexibility (the makefile system should be usable by any compiler
-on any platform).  `<TT>cs.mak</TT>' avoids any direct references to compiler
-switches, tool names and so on.  Instead there are a number of variables (some
-of which have default values, but can be changed by submakefiles) which should
-be used by `<TT>cs.mak</TT>' as well as by submakefiles, if possible.
+This section contains guidelines and instructions for writing documentation
+for the Crystal Space project.  Read this section if you are interested in
+contributing to the documentation project.
 </P><P>
 
-The main "tool" used to build Crystal Space is, naturally, the C++ compiler.
-The variable name for C++ compiler is `<SAMP>CXX</SAMP>'.  There are also places where
-the plain C compiler is required; it is referenced by the `<SAMP>CC</SAMP>' variable.
-The flags for the C/C++ compilers (it is assumed they both understand same
-command-line flags) are collected from a number of additional variables, as
-summarized below.
+These guidelines deal with subdivision of the documentation into files, into
+chapters and sections, and with node placing and linking.  To understand this
+document, you should know that <EM>chapters</EM> is the general division of a
+Texinfo file into several parts, and <EM>sections</EM> is the next subdivision.
+<EM>ToC</EM> means "Table of Contents".  "folder" and "directory" have the
+expected meaning.
 </P><P>
 
-<DL COMPACT>
-<DT><CODE>CFLAGS.GENERAL</CODE>
-<DD>General flags used in all compilation modes.
-<DT><CODE>CFLAGS.optimize</CODE>
-<DD>Flags used in optimize mode.
-<DT><CODE>CFLAGS.debug</CODE>
-<DD>Flags used in debug mode.
-<DT><CODE>CFLAGS.profile</CODE>
-<DD>Flags used in profile mode.
-<DT><CODE>CFLAGS.DLL</CODE>
-<DD>Flags used when compiling object files for dynamically-linked libraries (i.e.
-<CODE>-fpic</CODE>).
-</DL>
+Please follow these guidelines when writing documentation for Crystal Space.
+</P><P>
+
+<A NAME="SEC810"></A>
+<H4> General  </H4>
+<!--docid::SEC810::-->
 <P>
 
-The submakefiles also often need to know how to tell something to C/C++
-compiler.  For example the path to some system-dependent include files or
-libraries, or how to define a macro, and so on.  The GNU C++ compiler,
-for example, uses the <CODE>-I<VAR>path</VAR></CODE> form to define a include path; the
-Watcom-C compiler, on other hand, uses the <CODE>-i=<VAR>path</VAR></CODE> form.  To
-accommodate this, there are a number of variables that contain the equivalent
-of required switches for currently selected compiler.  They are summarized
-below.
+Write documentation using the Texinfo mark-up language. You can get more
+information at <A HREF="http://www.texinfo.org/">http://www.texinfo.org/</A>.
 </P><P>
 
-<DL COMPACT>
-<DT><CODE>CFLAGS.@</CODE>
-<DD>Flag to define the output file name.  The default (for Unix-like C compilers)
-is `<SAMP>-o $@</SAMP>'.
-<DT><CODE>CFLAGS.D</CODE>
-<DD>Flag to define a C-preprocessor macro. The default is `<SAMP>-D</SAMP>'.
-<DT><CODE>CFLAGS.I</CODE>
-<DD>Flag to specify an additional search path for <CODE>#include</CODE> directives.  The
-default equivalent is `<SAMP>-I</SAMP>'.
-</DL>
-<P>
-
-The linker is referenced through the variable <CODE>$(LINK)</CODE>.  There are also
-a number of variables that defines linker flags.  They are summarized below.
+The documentation is converted from Texinfo to other formats, such as
+HTML. Conversion to most important formats happens automatically within
+the CVS repository by an automated mechanism, so you only have to commit
+the Texinfo docs if you make any changes.
 </P><P>
 
-<DL COMPACT>
-<DT><CODE>LFLAGS.GENERAL</CODE>
-<DD>General linker flags.
-<DT><CODE>LFLAGS.optimize</CODE>
-<DD>Flags used in optimize mode.
-<DT><CODE>LFLAGS.debug</CODE>
-<DD>Flags used in debug mode.
-<DT><CODE>LFLAGS.profile</CODE>
-<DD>Flags used in profile mode.
-<DT><CODE>LFLAGS.DLL</CODE>
-<DD>Flags used when building a dynamically loaded plug-in module.
-<DT><CODE>LFLAGS.EXE</CODE>
-<DD>Flags used when building a executable.
-<DT><CODE>LFLAGS.CONSOLE.EXE</CODE>
-<DD>Flags used when building a console executable (for example, `<TT>map2cs</TT>').
-Some platforms, such as MacOS/X, differentiate between a "graphics"
-executable and a "console" executable.
-</DL>
-<P>
-
-Also there are variables similar to `<SAMP>CFLAGS.*</SAMP>' which tell the linker how
-to link with an additional library and so on.
+To make writing the documentation easier, `<SAMP>@node</SAMP>' and `<SAMP>@menu</SAMP>'
+directives in the Texinfo sources can be repaired, which means that the
+links to the previous, next and top nodes are generated automatically. So you
+can safely write the following line, omitting the various links which the
+`<SAMP>@node</SAMP>' directive normally requires:
 </P><P>
 
-<DL COMPACT>
-<DT><CODE>LFLAGS.@</CODE>
-<DD>Define output file name to `<SAMP>$@</SAMP>'.  The default is `<SAMP>-o $@</SAMP>'.
-<DT><CODE>LFLAGS.L</CODE>
-<DD>Define an additional library search path.  The default is `<SAMP>-L</SAMP>'.
-<DT><CODE>LFLAGS.l</CODE>
-<DD>Add a library for linking. The default is `<SAMP>-l</SAMP>'.
-</DL>
-<P>
-
-If your plugin, application, or library requires specific C/C++ compiler
-flags, linking flags, libraries, the usual naming convention is the following:
-</P><P>
-
-<DL COMPACT>
-<DT><CODE>CFLAGS.<VAR>name</VAR></CODE>
-<DD>Additional C/C++ flags.
-<DT><CODE>LFLAGS.<VAR>name</VAR></CODE>
-<DD>Additional linking flags.
-<DT><CODE>LIBS.<VAR>name</VAR></CODE>
-<DD>Additional libraries.
-<DT><CODE>DEP.<VAR>name</VAR></CODE>
-<DD>Additional dependencies.
-</DL>
-<P>
-
-For example, suppose your application, which is called Ping-Pong, requires
-specific compilation flags, as well as dependencies (it depends on several
-Crystal Space libraries) and extra libraries (suppose you link with an
-additional `<TT>libpingpong.a</TT>').  In this case the variables would be named
-like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>CFLAGS.PINGPONG = $(CFLAGS.I)/usr/local/include/pingpong
-LIBS.PINGPONG = $(LFLAGS.L)/usr/local/lib $(LFLAGS.l)pingpong
-DEP.PINGPONG = CSGEOM CSUTIL
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>@node MySection
+@section My Section Title
 </pre></td></tr></table></P><P>
 
-Another issue is that several types of files use different extensions on
-different platforms.  For example, executable files on Unix typically have no
-extension, whereas on Windows they typically have an `<TT>.exe</TT>' extension.  As
-another example, object files have an `<TT>.o</TT>' extension on Unix and an
-`<TT>.obj</TT>' extension on Windows.  To accommodate these differences, several
-variables are used where appropriate, as summarized below.
+The repair occurs automatically within the CVS repository by an automated
+mechanism, however you can also repair the files manually if you use the
+GNU makefile system by invoking the following command:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>make repairdoc
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC811"></A>
+<H4> Conversion and Maintenance via Makefile Targets </H4>
+<!--docid::SEC811::-->
+<P>
+
+If you are using the GNU makefile system, you can use the following
+makefile targets to convert the Texinfo documents to different formats.
+The output will be placed in subdirectories of `<TT>${builddir}/out/docs/</TT>'.
 </P><P>
 
 <DL COMPACT>
-<DT><CODE>EXE</CODE>
-<DD>Typical extension for executables (ex: `<SAMP>.exe</SAMP>').
-<DT><CODE>O</CODE>
-<DD>Typical extension for object files (ex: `<TT>.o</TT>'; usage: `<SAMP>pingpong$O</SAMP>').
-<DT><CODE>LIB</CODE>
-<DD>Typical extension for libraries (ex: `<SAMP>.a</SAMP>' or `<SAMP>.lib</SAMP>').
-<DT><CODE>DLL</CODE>
-<DD>Typical extension for dynamically loaded libraries (`<SAMP>.so</SAMP>' or `<SAMP>.dll</SAMP>').
+<DT><CODE>make apihtml</CODE>
+<DD>Generate HTML version of public API reference via Doxygen.  This is
+the reference manual for people using Crystal Space in their own projects.  It
+only documents public classes and functions.
+<P>
+
+<DT><CODE>make apidevhtml</CODE>
+<DD>Generate HTML version of developer API reference via Doxygen.  This
+is the reference manual for people actually working on Crystal Space itself. 
+It documents all classes and functions.
+<P>
+
+<DT><CODE>make manualhtml</CODE>
+<DD>Convert the Crystal Space manual to HTML format.
+<P>
+
+<DT><CODE>make manualdvi</CODE>
+<DD>Convert the Crystal Space manual to DVI format.
+<P>
+
+<DT><CODE>make manualps</CODE>
+<DD>Convert the Crystal Space manual to PostScript format.
+<P>
+
+<DT><CODE>make manualpdf</CODE>
+<DD>Convert the Crystal Space manual to PDF format.
+<P>
+
+<DT><CODE>make manualinfo</CODE>
+<DD>Convert the Crystal Space manual to GNU Info format.
+<P>
+
+<DT><CODE>make repairdoc</CODE>
+<DD>Repair all `<SAMP>@node</SAMP>' and `<SAMP>@menu</SAMP>' directives in the Texinfo sources.
+<P>
+
+<DT><CODE>make cleandoc</CODE>
+<DD>Delete all converted documents.
 </DL>
 <P>
 
-Also on Unix systems libraries usually have the `<SAMP>lib</SAMP>' prefix, (i.e. the
-`<SAMP>csutil</SAMP>' library would typically be named `<TT>libcsutil.a</TT>').  On other
-systems this is not the case; to resolve this problem a variable called
-`<SAMP>LIB_PREFIX</SAMP>' is used.  It is either set to `<SAMP>lib</SAMP>' or it is empty
-depending upon the environment.  Back to the example, if the submakefile
-needed to define the rule to build `<TT>libpingpong.a</TT>', it could be done in
-this fashion:
+<A NAME="SEC812"></A>
+<H4> Directory Structure </H4>
+<!--docid::SEC812::-->
+<P>
+
+The `<TT>CS/docs/texinfo</TT>' directory contains:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>PINGPONG.LIB = $(LIB_PREFIX)pingpong$(LIB)
+<UL>
+<LI>
+A table-of-contents file named `<TT>cs.txi</TT>'.  This is the platform-independent
+root of the entire documentation hierarchy.
+<P>
+
+<LI>
+Platform-dependent configuration files, such as `<TT>unixdef.txi</TT>',
+`<TT>macdef.txi</TT>', etc.
+<P>
+
+<LI>
+Platform-dependent wrapper files, such as `<TT>cs-unix.txi</TT>',
+`<TT>cs-mac.txi</TT>', etc.  These are the platform-specific root files for the
+entire documentation hierarchy.  They import the platform-dependent
+configuration (i.e. `<TT>unixdef.txi</TT>' and then the TOC file
+`<TT>cs.txi</TT>'.
+<P>
+
+<LI>
+Other configuration files, like `<TT>version.txi</TT>', `<TT>cpyright.txi</TT>', etc.,
+and helper files for conversion to other formats, like `<TT>texinfo.tex</TT>'.
+<P>
+
+<LI>
+One subdirectory for each chapter. Each chapter directory contains at least
+one file called `<TT>chapter.txi</TT>', which is the root import file for this
+chapter. The TOC file will only include `<TT>chapter.txi</TT>', which then
+includes one file in this directory for every section.
+<P>
+
+If one section in a chapter is too big for a single file, this section is split
+into several files by subsections.  These files are again often placed into a
+subdirectory.
+</UL>
+<P>
+
+<A NAME="SEC813"></A>
+<H4> Formatting Conventions </H4>
+<!--docid::SEC813::-->
+<P>
+
+Here are some general formatting conventions.
+</P><P>
+
+<UL>
+<LI>
+When creating <CODE>@itemize</CODE> lists, one blank line should separate each
+<CODE>@item</CODE> except for short lists of items with short descriptions.  Also
+remember to use the <CODE>@bullet</CODE> directive after the <CODE>@itemze</CODE>
+directive, as in <CODE>@itemize @bullet</CODE>.
+<P>
+
+<LI>
+Do not indent the text of items within <CODE>@itemize</CODE> or
+<CODE>@table</CODE> blocks.  Allow the formatting tools to perform the indentation
+automatically. This also applies to <CODE>@example</CODE> blocks, but here you
+may indent sub-blocks. For example, you may want to create a block like this:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>@example
+int Increment(int n)
+@{
+  return n + 1;
+@}
+@end example
 </pre></td></tr></table></P><P>
 
-If we wanted to build a dynamic library, the name of target would be:
+Then you may, of course, indent the `<SAMP>return</SAMP>' line, but not the other
+lines.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>PINGPONG.DLL = pingpong$(DLL)
-</pre></td></tr></table></P><P>
+<LI>
+Do not use tabs to indent code in <CODE>@example</CODE> blocks since the formatting
+tools do not faithfully reproduce the tab's indentation.  Instead, always
+indent using spaces.
+<P>
 
-As you can observe, the name of target variables also has a naming convention
-of its own.  If the target is a static library, it is typically named
-`<SAMP><VAR>NAME</VAR>.LIB</SAMP>'; if it is a dynamic library, it is called
-`<SAMP><VAR>NAME</VAR>.DLL</SAMP>'; if it is an executable, it is typically named
-`<SAMP><VAR>NAME</VAR>.EXE</SAMP>'.
-</P><P>
-
-<A NAME="Makefile Output Directory"></A>
+<LI>
+Attempt to keep the content of Texinfo source files under 80-columns in width
+if possible.  This is a general guidelines rather than a hard rule.
+</UL>
+<A NAME="Portability"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC806"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC808"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC798"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC805"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC809"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC814"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC818"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC943">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
