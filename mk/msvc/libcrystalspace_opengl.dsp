@@ -170,6 +170,10 @@ SOURCE=..\..\libs\csplugincommon\opengl\..\..\..\include\csplugincommon\opengl\g
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csplugincommon\opengl\..\..\..\include\csplugincommon\opengl\glenum_identstrs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csplugincommon\opengl\..\..\..\include\csplugincommon\opengl\glextmanager.h
 # End Source File
 # Begin Source File
