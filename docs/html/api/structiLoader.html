@@ -54,6 +54,8 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Load a Mesh Object Factory from the map file.</em> <a href="#a9"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiMeshWrapper.html">iMeshWrapper</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiLoader.html#a10">LoadMeshObject</a> (const char *fname)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Load a mesh object from a file.</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiLoader.html#a11">Load</a> (const char *fname, <a class="el" href="structiBase.html">iBase</a> *&amp;result, <a class="el" href="structiRegion.html">iRegion</a> *region=0, bool curRegOnly=true, bool checkDupes=false)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Load a file.</em> <a href="#a11"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This interface represents the map loader.
@@ -61,6 +63,69 @@ This interface represents the map loader.
 
 <p>
 Definition at line <a class="el" href="imap_2loader_8h-source.html#l00061">61</a> of file <a class="el" href="imap_2loader_8h-source.html">loader.h</a>.<hr><h2>Member Function Documentation</h2>
+<a name="a11" doxytag="iLoader::Load"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual bool iLoader::Load </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const char *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>fname</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structiBase.html">iBase</a> *&amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>result</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structiRegion.html">iRegion</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>region</em> = 0, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>curRegOnly</em> = true, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>checkDupes</em> = false</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Load a file.
+<p>
+This is a smart function that will try to recognize what kind of file it is. It recognizes the following types of files: <ul>
+<li>'world' file: in that case 'result' will be set to the engine. <li>'library' file: 'result' will be 0. <li>'meshfact' file: 'result' will be the mesh factory wrapper. <li>'meshobj' file: 'result' will be the mesh wrapper. </ul>
+Returns false on failure. <br>
+ Note! In case a world file is loaded this function will NOT clear the engine! <br>
+ Note! In case a mesh factory or mesh object is loaded this function will not actually do anything checkDupes is true and the mesh or factory is already in memory (with that name). This function will still return true in that case and set 'result' to the correct object. <br>
+ Note! Use SCF_QUERY_INTERFACE on 'result' to detect what type was loaded.     </td>
+  </tr>
+</table>
 <a name="a0" doxytag="iLoader::LoadImage"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -241,7 +306,7 @@ If 'clearEngine' is true then the current contents of the engine will be deleted
 <p>
 Load a mesh object from a file.
 <p>
-The mesh object is not automatically added to the engine and sector.     </td>
+The mesh object is not automatically added to any sector.     </td>
   </tr>
 </table>
 <a name="a9" doxytag="iLoader::LoadMeshObjectFactory"></a><p>
