@@ -1,25 +1,25 @@
-# Microsoft Developer Studio Project File - Name="plgpvsvis" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="appheightmapgen" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
+# TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=plgpvsvis - Win32 Release
+CFG=appheightmapgen - Win32 Release
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "plgpvsvis.mak".
+!MESSAGE NMAKE /f "appheightmapgen.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "plgpvsvis.mak" CFG="plgpvsvis - Win32 Release"
+!MESSAGE NMAKE /f "appheightmapgen.mak" CFG="appheightmapgen - Win32 Release"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "plgpvsvis - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "plgpvsvis - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "plgpvsvis - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "appheightmapgen - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Application")
+!MESSAGE "appheightmapgen - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "appheightmapgen - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -30,7 +30,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "plgpvsvis - Win32 Release"
+!IF  "$(CFG)" == "appheightmapgen - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -39,16 +39,16 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\out\release\build\plgpvsvis\"
-# PROP Intermediate_Dir "..\..\out\release\build\plgpvsvis\"
-# PROP Ignore_Export_Lib 1
+# PROP Output_Dir "..\..\out\release\build\appheightmapgen\"
+# PROP Intermediate_Dir "..\..\out\release\build\appheightmapgen\"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
 # ADD CPP /nologo /vmb /vms /W3 /Gm /GX /G5 /FD /c /Gy /GF /MD /Ob2 /Og /Oi /Ot /Oy /D "_MT" /D "_MBCS" /D "NDEBUG" /D "_WINDOWS" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__"  /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "NDEBUG" /D "_WINDOWS"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\release\build\plgpvsvis\plgpvsvis.res" /D "NDEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\release\build\appheightmapgen\appheightmapgen.res" /D "NDEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -57,12 +57,12 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /OPT:NOREF /dll /out:"..\..\pvsvis.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /machine:I386 /OPT:NOREF /out:"..\..\heightmapgen.exe" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "plgpvsvis - Win32 Debug"
+!ELSEIF  "$(CFG)" == "appheightmapgen - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -71,8 +71,8 @@ SOURCE="$(InputPath)"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\out\debug\build\plgpvsvis\"
-# PROP Intermediate_Dir "..\..\out\debug\build\plgpvsvis\"
+# PROP Output_Dir "..\..\out\debug\build\appheightmapgen\"
+# PROP Intermediate_Dir "..\..\out\debug\build\appheightmapgen\"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
@@ -80,7 +80,7 @@ SOURCE="$(InputPath)"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "_WINDOWS"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\plgpvsvis\plgpvsvis.res" /D "_DEBUG" /D "CS_DEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\appheightmapgen\appheightmapgen.res" /D "_DEBUG" /D "CS_DEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -89,12 +89,12 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\pvsvis.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /out:"..\..\heightmapgen.exe" /subsystem:console /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "plgpvsvis - Win32 ExtensiveMemDebug"
+!ELSEIF  "$(CFG)" == "appheightmapgen - Win32 ExtensiveMemDebug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -103,8 +103,8 @@ SOURCE="$(InputPath)"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\out\debug\build\plgpvsvis\"
-# PROP Intermediate_Dir "..\..\out\debug\build\plgpvsvis\"
+# PROP Output_Dir "..\..\out\debug\build\appheightmapgen\"
+# PROP Intermediate_Dir "..\..\out\debug\build\appheightmapgen\"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
@@ -112,7 +112,7 @@ SOURCE="$(InputPath)"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_WINDOWS"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\plgpvsvis\plgpvsvis.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\appheightmapgen\appheightmapgen.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -121,7 +121,7 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\pvsvis.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /out:"..\..\heightmapgen.exe" /subsystem:console /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -130,19 +130,15 @@ SOURCE="$(InputPath)"
 
 # Begin Target
 
-# Name "plgpvsvis - Win32 Release"
-# Name "plgpvsvis - Win32 Debug"
-# Name "plgpvsvis - Win32 ExtensiveMemDebug"
+# Name "appheightmapgen - Win32 Release"
+# Name "appheightmapgen - Win32 Debug"
+# Name "appheightmapgen - Win32 ExtensiveMemDebug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\pvsvis\pvstree.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\culling\pvsvis\pvsvis.cpp
+SOURCE=..\..\apps\tools\heightmapgen\heightmapgen.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -150,11 +146,7 @@ SOURCE=..\..\plugins\culling\pvsvis\pvsvis.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\pvsvis\pvstree.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\culling\pvsvis\pvsvis.h
+SOURCE=..\..\apps\tools\heightmapgen\heightmapgen.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -162,11 +154,7 @@ SOURCE=..\..\plugins\culling\pvsvis\pvsvis.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgpvsvis.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\culling\pvsvis\pvsvis.csplugin
+SOURCE=..\..\mk\msvc\appheightmapgen.rc
 # End Source File
 # End Group
 # End Target
