@@ -37,82 +37,61 @@
 00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IGRAPHIC_IMAGE_H__</span>
 00021 <span class="preprocessor"></span>
 00031 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-00032 
-00033 <span class="comment">/*</span>
-00034 <span class="comment"> * We can request to load image in one of several formats.</span>
-00035 <span class="comment"> * We can request from csImageLoader to load a image in several formats.</span>
-00036 <span class="comment"> * The format we should use depends on what we want to do with the image;</span>
-00037 <span class="comment"> * usually if we're going to use the image as a texture we the format we</span>
-00038 <span class="comment"> * should use is determined by querying the 3D rasterizer for the preferred</span>
-00039 <span class="comment"> * image format.</span>
-00040 <span class="comment"> */</span>
-00041 
-<a name="l00043"></a><a class="code" href="group__gfx2d.html#a2">00043</a> <span class="preprocessor">#define CS_IMGFMT_MASK          0x0000ffff</span>
-00044 <span class="preprocessor"></span>
-<a name="l00045"></a><a class="code" href="group__gfx2d.html#a3">00045</a> <span class="preprocessor">#define CS_IMGFMT_NONE          0x00000000</span>
-00046 <span class="preprocessor"></span>
-<a name="l00047"></a><a class="code" href="group__gfx2d.html#a4">00047</a> <span class="preprocessor">#define CS_IMGFMT_TRUECOLOR     0x00000001</span>
-00048 <span class="preprocessor"></span>
-<a name="l00049"></a><a class="code" href="group__gfx2d.html#a5">00049</a> <span class="preprocessor">#define CS_IMGFMT_PALETTED8     0x00000002</span>
-00050 <span class="preprocessor"></span>
-<a name="l00051"></a><a class="code" href="group__gfx2d.html#a6">00051</a> <span class="preprocessor">#define CS_IMGFMT_ANY           CS_IMGFMT_MASK</span>
-00052 <span class="preprocessor"></span>
-<a name="l00053"></a><a class="code" href="group__gfx2d.html#a7">00053</a> <span class="preprocessor">#define CS_IMGFMT_ALPHA         0x00010000</span>
-00054 <span class="preprocessor"></span>
-<a name="l00058"></a><a class="code" href="group__gfx2d.html#a8">00058</a> <span class="preprocessor">#define CS_IMGFMT_INVALID       0x80000000</span>
-00059 <span class="preprocessor"></span>
-00060 
-00061 <span class="keyword">struct </span><a class="code" href="structcsRGBpixel.html">csRGBpixel</a>;
-00062 
-00063 <a class="code" href="group__scf.html#a65">SCF_VERSION</a> (<a class="code" href="structiImage.html">iImage</a>, 1, 0, 3);
-00064 
-<a name="l00071"></a><a class="code" href="structiImage.html">00071</a> <span class="keyword">struct </span><a class="code" href="structiImage.html">iImage</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00072 {
-00080   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiImage.html#a0">GetImageData</a> () = 0;
-00082   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a1">GetWidth</a> () <span class="keyword">const</span> = 0;
-00084   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a2">GetHeight</a> () <span class="keyword">const</span> = 0;
-00086   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a3">GetSize</a> () <span class="keyword">const</span> = 0;
-00087 
-00089   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImage.html#a4">Rescale</a> (<span class="keywordtype">int</span> NewWidth, <span class="keywordtype">int</span> NewHeight) = 0;
-00090 
-00101   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiImage.html#a5">MipMap</a> (<span class="keywordtype">int</span> step, <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *transp) = 0;
-00102 
-00104   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImage.html#a6">SetName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName) = 0;
-00106   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiImage.html#a7">GetName</a> () <span class="keyword">const</span> = 0;
-00107 
-00109   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a8">GetFormat</a> () <span class="keyword">const</span> = 0;
-00111   <span class="keyword">virtual</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *<a class="code" href="structiImage.html#a9">GetPalette</a> () = 0;
-00118   <span class="keyword">virtual</span> uint8 *<a class="code" href="structiImage.html#a10">GetAlpha</a> () = 0;
-00128   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImage.html#a11">SetFormat</a> (<span class="keywordtype">int</span> iFormat) = 0;
-00129 
-00131   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiImage.html#a12">Clone</a> () <span class="keyword">const</span> = 0;
-00132 
-00137   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiImage.html#a13">Crop</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) <span class="keyword">const</span> = 0;
-00138 
-00140   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImage.html#a14">CheckAlpha</a> () = 0;
+00032 <span class="preprocessor">#include "<a class="code" href="rgbpixel_8h.html">csgfx/rgbpixel.h</a>"</span>
+00033 
+00034 <span class="comment">/*</span>
+00035 <span class="comment"> * We can request to load image in one of several formats.</span>
+00036 <span class="comment"> * We can request from csImageLoader to load a image in several formats.</span>
+00037 <span class="comment"> * The format we should use depends on what we want to do with the image;</span>
+00038 <span class="comment"> * usually if we're going to use the image as a texture we the format we</span>
+00039 <span class="comment"> * should use is determined by querying the 3D rasterizer for the preferred</span>
+00040 <span class="comment"> * image format.</span>
+00041 <span class="comment"> */</span>
+00042 
+<a name="l00044"></a><a class="code" href="group__gfx2d.html#a2">00044</a> <span class="preprocessor">#define CS_IMGFMT_MASK          0x0000ffff</span>
+00045 <span class="preprocessor"></span>
+<a name="l00046"></a><a class="code" href="group__gfx2d.html#a3">00046</a> <span class="preprocessor">#define CS_IMGFMT_NONE          0x00000000</span>
+00047 <span class="preprocessor"></span>
+<a name="l00048"></a><a class="code" href="group__gfx2d.html#a4">00048</a> <span class="preprocessor">#define CS_IMGFMT_TRUECOLOR     0x00000001</span>
+00049 <span class="preprocessor"></span>
+<a name="l00050"></a><a class="code" href="group__gfx2d.html#a5">00050</a> <span class="preprocessor">#define CS_IMGFMT_PALETTED8     0x00000002</span>
+00051 <span class="preprocessor"></span>
+<a name="l00052"></a><a class="code" href="group__gfx2d.html#a6">00052</a> <span class="preprocessor">#define CS_IMGFMT_ANY           CS_IMGFMT_MASK</span>
+00053 <span class="preprocessor"></span>
+<a name="l00054"></a><a class="code" href="group__gfx2d.html#a7">00054</a> <span class="preprocessor">#define CS_IMGFMT_ALPHA         0x00010000</span>
+00055 <span class="preprocessor"></span>
+<a name="l00059"></a><a class="code" href="group__gfx2d.html#a8">00059</a> <span class="preprocessor">#define CS_IMGFMT_INVALID       0x80000000</span>
+00060 <span class="preprocessor"></span>
+00061 
+00062 <a class="code" href="group__scf.html#a65">SCF_VERSION</a> (<a class="code" href="structiImage.html">iImage</a>, 2, 0, 0);
+00063 
+<a name="l00078"></a><a class="code" href="structiImage.html">00078</a> <span class="keyword">struct </span><a class="code" href="structiImage.html">iImage</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00079 {
+00087   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">void</span> *<a class="code" href="structiImage.html#a0">GetImageData</a> () = 0;
+00089   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a1">GetWidth</a> () <span class="keyword">const</span> = 0;
+00091   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a2">GetHeight</a> () <span class="keyword">const</span> = 0;
+00092 
+00094   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImage.html#a3">SetName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName) = 0;
+00096   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiImage.html#a4">GetName</a> () <span class="keyword">const</span> = 0;
+00097 
+00099   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a5">GetFormat</a> () <span class="keyword">const</span> = 0;
+00101   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="structiImage.html#a6">GetPalette</a> () = 0;
+00108   <span class="keyword">virtual</span> <span class="keyword">const</span> uint8* <a class="code" href="structiImage.html#a7">GetAlpha</a> () = 0;
+00109 
+00111   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiImage.html#a8">HasKeyColor</a> () <span class="keyword">const</span> = 0;
+00112 
+00117   <a class="code" href="cssysdef_8h.html#a37">CS_DEPRECATED_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiImage.html#a9">HasKeycolor</a> () <span class="keyword">const</span> = 0;
+00118 
+00120   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImage.html#a10">GetKeyColor</a> (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b) <span class="keyword">const</span> = 0;
+00121 
+00126   <a class="code" href="cssysdef_8h.html#a37">CS_DEPRECATED_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImage.html#a11">GetKeycolor</a> (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b) <span class="keyword">const</span> = 0;
+00127 
+00133   <span class="keyword">virtual</span> <a class="code" href="group__util.html#a12">uint</a> <a class="code" href="structiImage.html#a12">HasMipmaps</a> () <span class="keyword">const</span> = 0;
+00139   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> <a class="code" href="structiImage.html#a13">GetMipmap</a> (<a class="code" href="group__util.html#a12">uint</a> num) = 0;
+00140 };
 00141 
-00143   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiImage.html#a15">HasKeyColor</a> () <span class="keyword">const</span> = 0;
-00144 
-00146   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiImage.html#a16">Copy</a> (<a class="code" href="structiImage.html">iImage</a>* sImage, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y,
-00147         <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) <span class="keyword">const</span> = 0;
-00152   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiImage.html#a17">CopyScale</a> (<a class="code" href="structiImage.html">iImage</a>* sImage, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width,
-00153         <span class="keywordtype">int</span> height) <span class="keyword">const</span> = 0;
-00158   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiImage.html#a18">CopyTile</a> (<a class="code" href="structiImage.html">iImage</a>* sImage, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y,
-00159         <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) <span class="keyword">const</span> = 0;
-00160 
-00165   <a class="code" href="cssysdef_8h.html#a37">CS_DEPRECATED_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiImage.html#a19">HasKeycolor</a> () <span class="keyword">const</span> = 0;
-00166 
-00168   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImage.html#a20">GetKeyColor</a> (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b) <span class="keyword">const</span> = 0;
-00169 
-00174   <a class="code" href="cssysdef_8h.html#a37">CS_DEPRECATED_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImage.html#a21">GetKeycolor</a> (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b) <span class="keyword">const</span> = 0;
-00175 
-00182   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiImage.html#a22">Sharpen</a> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *transp, <span class="keywordtype">int</span> strength) <span class="keyword">const</span> = 0;
-00183 
-00188   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a23">HasMipmaps</a> () <span class="keyword">const</span> = 0;
-00189 };
-00190 
-00193 <span class="preprocessor">#endif // __CS_IGRAPHIC_IMAGE_H__</span>
-00194 <span class="preprocessor"></span>
+00144 <span class="preprocessor">#endif // __CS_IGRAPHIC_IMAGE_H__</span>
+00145 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.3 
 </small></address> </div></body> </html>
