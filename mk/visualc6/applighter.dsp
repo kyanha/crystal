@@ -194,7 +194,11 @@ SOURCE=..\..\apps\tools\lighter\lighter.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\tools\lighter\litmeshsel.h
+SOURCE=..\..\apps\tools\lighter\litconfig.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\litobjsel.h
 # End Source File
 # Begin Source File
 
@@ -228,7 +232,7 @@ SOURCE=..\..\apps\tools\lighter\lighter.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\tools\lighter\litmeshsel.cpp
+SOURCE=..\..\apps\tools\lighter\litobjsel.cpp
 # End Source File
 # Begin Source File
 
