@@ -26,13 +26,13 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A NAME="SEC810"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC809"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC854"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC855"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC809"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC809"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC930"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC930">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
@@ -1276,8 +1276,30 @@ the `<TT>CS/include/iengine</TT>' directory.
 </P><P>
 
 <A NAME="SEC836"></A>
-<H3> csString and iString Changes </H3>
+<H3> csAppFrame Library Removed </H3>
 <!--docid::SEC836::-->
+<P>
+
+The `<TT>csappframe</TT>' library has been merged into the `<TT>cstool</TT>' library.
+Furthermore, the <CODE>main()</CODE> function, which client application's got for
+free when linking against this library, has been removed since it proved to be
+an obstacle to making Crystal Space libraries available as <EM>shared</EM>
+libraries. Instead, you must now provide your own <CODE>main()</CODE> function, like
+this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>// main.cpp
+CS_IMPLEMENT_APPLICATION
+
+int main (int argc, char* argv[]) 
+{
+  return csApplicationFramework::Main(argc, argv);
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC837"></A>
+<H3> csString and iString Changes </H3>
+<!--docid::SEC837::-->
 <P>
 
 The <CODE>csString::strlwr()</CODE> method was renamed to <CODE>Downcase()</CODE>.  A
@@ -1314,9 +1336,9 @@ between these cases, and the user has direct (and documented) control over when
 a `<SAMP>csString</SAMP>' will represent a null-string or a zero-length string.
 </P><P>
 
-<A NAME="SEC837"></A>
+<A NAME="SEC838"></A>
 <H3> csMD5 Changes </H3>
-<!--docid::SEC837::-->
+<!--docid::SEC838::-->
 <P>
 
 A <CODE>csMD5(csString const&#38;)</CODE> constructor was added to complement the
@@ -1326,9 +1348,9 @@ the MD5 digest using lowercase hexadecimal characters.
 <CODE>csMD5::Digest::HEXString()</CODE> returns uppercase hexadecimal characters.
 </P><P>
 
-<A NAME="SEC838"></A>
+<A NAME="SEC839"></A>
 <H3> Beam Intersection Changes </H3>
-<!--docid::SEC838::-->
+<!--docid::SEC839::-->
 <P>
 
 <CODE>IntersectSegment()</CODE> for `<SAMP>iThingFactoryState</SAMP>' and `<SAMP>iThingState</SAMP>'
@@ -1357,9 +1379,9 @@ equivalent function <CODE>iSector::HitBeamPortals()</CODE>.
 instead of a portal.
 </P><P>
 
-<A NAME="SEC839"></A>
+<A NAME="SEC840"></A>
 <H3> Directory and Path Queries </H3>
-<!--docid::SEC839::-->
+<!--docid::SEC840::-->
 <P>
 
 The following low-level functions, declared in `<TT>csutil/syspath.h</TT>' can be
@@ -1407,9 +1429,9 @@ to the shared `<SAMP>iCommandLineParser</SAMP>' from the object registry,
 </UL>
 <P>
 
-<A NAME="SEC840"></A>
+<A NAME="SEC841"></A>
 <H3> VFS Changes </H3>
-<!--docid::SEC840::-->
+<!--docid::SEC841::-->
 <P>
 
 VFS (see section <A HREF="cs_158.html#SEC384">7.2 Virtual File System (VFS)</A>) now understands two new pseudo-variables, `<SAMP>$*</SAMP>' and
@@ -1461,9 +1483,9 @@ volume desired, including `<TT>/temp</TT>', by supplying a project-specific
 `<TT>vfs.cfg</TT>'.
 </P><P>
 
-<A NAME="SEC841"></A>
+<A NAME="SEC842"></A>
 <H3> Internationalization </H3>
-<!--docid::SEC841::-->
+<!--docid::SEC842::-->
 <P>
 
 Some work to improve internationalization support in Crystal Space has been
@@ -1471,18 +1493,18 @@ performed.  Crystal Space now has more complete support for Unicode input and
 output.
 </P><P>
 
-<A NAME="SEC842"></A>
+<A NAME="SEC843"></A>
 <H4> Unicode Helpers </H4>
-<!--docid::SEC842::-->
+<!--docid::SEC843::-->
 <P>
 
 The `<SAMP>csUnicodeTransform</SAMP>' class provides functions to deal with and convert
 between UTF-8, UTF-16, and UTF-32 encoded strings.
 </P><P>
 
-<A NAME="SEC843"></A>
+<A NAME="SEC844"></A>
 <H4> UTF-8 strings </H4>
-<!--docid::SEC843::-->
+<!--docid::SEC844::-->
 <P>
 
 Several portions of the CrystalSpace API now accept UTF-8-encoded
@@ -1530,9 +1552,9 @@ Native Window
 </UL>
 <P>
 
-<A NAME="SEC844"></A>
+<A NAME="SEC845"></A>
 <H3> Keyboard Events </H3>
-<!--docid::SEC844::-->
+<!--docid::SEC845::-->
 <P>
 
 Keyboard events have changed.  The event data related to keyboard events is no
@@ -1610,9 +1632,9 @@ Change to:
 }
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC845"></A>
+<A NAME="SEC846"></A>
 <H3> iGraphics2D::WriteBaseline() Deprecated </H3>
-<!--docid::SEC845::-->
+<!--docid::SEC846::-->
 <P>
 
 The functionality provided by <CODE>WriteBaseline()</CODE> is now available by 
@@ -1621,9 +1643,9 @@ specifying the `<SAMP>CS_WRITE_BASELINE</SAMP>' flag when calling
 has been deprecated.
 </P><P>
 
-<A NAME="SEC846"></A>
+<A NAME="SEC847"></A>
 <H3> csInitializer Changes </H3>
-<!--docid::SEC846::-->
+<!--docid::SEC847::-->
 <P>
 
 <CODE>csInitializer::RequestPlugins(csArray&#60;csPluginRequest&#62;)</CODE> has been added
@@ -1633,9 +1655,9 @@ be composed at run-time, whereas the older variable-argument method required
 the list be known at compile-time, which was not always convenient or possible.
 </P><P>
 
-<A NAME="SEC847"></A>
+<A NAME="SEC848"></A>
 <H3> Pollution Reduction </H3>
-<!--docid::SEC847::-->
+<!--docid::SEC848::-->
 <P>
 
 The following symbols have been renamed in order to avoid pollution of the
@@ -1654,18 +1676,18 @@ global namespace.
 </UL>
 <P>
 
-<A NAME="SEC848"></A>
+<A NAME="SEC849"></A>
 <H3> Texture manager change </H3>
-<!--docid::SEC848::-->
+<!--docid::SEC849::-->
 <P>
 
 The <CODE>iTextureManager::SetVerbose()</CODE> function has been removed. It
 was not useful.
 </P><P>
 
-<A NAME="SEC849"></A>
+<A NAME="SEC850"></A>
 <H3> Font changes </H3>
-<!--docid::SEC849::-->
+<!--docid::SEC850::-->
 <P>
 
 <CODE>iFont::SetSize()</CODE> has been removed. Instead, the font size is 
@@ -1694,9 +1716,9 @@ Should be changed to:
 g2d-&#62;Write (font, <small>...</small>);
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC850"></A>
+<A NAME="SEC851"></A>
 <H3> Mesh flag change </H3>
-<!--docid::SEC850::-->
+<!--docid::SEC851::-->
 <P>
 
 There is a new flag <CODE>CS_ENTITY_INVISIBLEMESH</CODE> which controls visibility
@@ -1711,9 +1733,9 @@ on a parent in a hierarchy will no longer make the children invisible. You
 now have to set the invisible flag manually on all children in the hierarchy.
 </P><P>
 
-<A NAME="SEC851"></A>
+<A NAME="SEC852"></A>
 <H3> Skeletal Sprites </H3>
-<!--docid::SEC851::-->
+<!--docid::SEC852::-->
 <P>
 
 Support for skeletal sprites has been removed, along with the following related
@@ -1749,9 +1771,9 @@ following related interfaces.
 </UL>
 <P>
 
-<A NAME="SEC852"></A>
+<A NAME="SEC853"></A>
 <H3> Skyboxes </H3>
-<!--docid::SEC852::-->
+<!--docid::SEC853::-->
 <P>
 
 Meshes that use the <CODE>CS_ENTITY_CAMERA</CODE> flag no longer have to be placed
@@ -1759,9 +1781,9 @@ in a render priority that has the `<SAMP>camera</SAMP>' flag set. This render
 priority flag is no longer required (but <CODE>CS_ENTITY_CAMERA</CODE> still is!).
 </P><P>
 
-<A NAME="SEC853"></A>
+<A NAME="SEC854"></A>
 <H3> CS_FX_GOURAUD removed </H3>
-<!--docid::SEC853::-->
+<!--docid::SEC854::-->
 <P>
 
 Gouraud is much more commonly used than flat shading and is thus the default 
@@ -1771,13 +1793,13 @@ now. To achieve the opposite behaviour (ie the behaviour when
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC809"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC854"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC855"> &gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC809"> &lt;&lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC809"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC930"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC930">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
