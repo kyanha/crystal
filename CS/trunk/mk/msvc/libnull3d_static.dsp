@@ -150,10 +150,6 @@ SOURCE=..\..\plugins\video\render3d\null\null_render3d.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\null\null_renderbuffer.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\null\null_txt.cpp
 # End Source File
 # End Group
@@ -163,10 +159,6 @@ SOURCE=..\..\plugins\video\render3d\null\null_txt.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\null\null_render3d.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\null\null_renderbuffer.h
 # End Source File
 # Begin Source File
 

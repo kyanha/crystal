@@ -150,10 +150,6 @@ SOURCE=..\..\plugins\video\render3d\software\halo.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\renderbuffer.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\software\scan.cpp
 # End Source File
 # Begin Source File
@@ -188,10 +184,6 @@ SOURCE=..\..\plugins\video\render3d\software\tcache.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\renderbuffer.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\software\scan.h
