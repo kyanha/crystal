@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\proctex\tlfunc\tlfunc.h
 
 SOURCE=..\..\mk\visualc6\plgtlfunc.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\proctex\tlfunc\tlfunc.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -207,10 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\common\txtmgr.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\software\renderbuffer.h
 # End Source File
 # Begin Source File
@@ -248,73 +244,13 @@ SOURCE=..\..\plugins\video\render3d\software\tcache.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\soft3d.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgsoftrender3d.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\blend.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\drawsprt.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\haloscan.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\lightmap.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\pixtype.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\scanalph.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\scanln.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\scanpi.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\scanpi2.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\scanxx.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\scanxxfx.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\softrender3d.csplugin
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\unblend.inc
 # End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\common\txtmgr.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\software\drawpmap.cpp

@@ -311,10 +311,6 @@ SOURCE=..\..\apps\import\map2cs\zipfile.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\map2cs.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\appmap2cs.rc
 # End Source File
 

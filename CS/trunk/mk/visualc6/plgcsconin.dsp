@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\console\input\standard\csconin.h
 
 SOURCE=..\..\mk\visualc6\plgcsconin.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\console\input\standard\csconin.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

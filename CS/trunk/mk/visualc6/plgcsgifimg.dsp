@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\video\loader\gif\gifimage.h
 
 SOURCE=..\..\mk\visualc6\plgcsgifimg.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\loader\gif\csgifimg.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

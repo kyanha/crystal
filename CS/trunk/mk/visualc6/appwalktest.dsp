@@ -215,14 +215,6 @@ SOURCE=..\..\apps\walktest\wentity.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\autoexec.cfg
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\data\config\walktest.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\appwalktest.rc
 # End Source File
 

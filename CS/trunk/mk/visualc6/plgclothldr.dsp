@@ -1,27 +1,27 @@
-# Microsoft Developer Studio Project File - Name="plgbcterrldr" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="plgclothldr" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=plgbcterrldr - Win32 Debug
+CFG=plgclothldr - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "plgbcterrldr.mak".
+!MESSAGE NMAKE /f "plgclothldr.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "plgbcterrldr.mak" CFG="plgbcterrldr - Win32 Debug"
+!MESSAGE NMAKE /f "plgclothldr.mak" CFG="plgclothldr - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "plgbcterrldr - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "plgbcterrldr - Win32 Debug_NR" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "plgbcterrldr - Win32 Release_NR" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "plgbcterrldr - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "plgbcterrldr - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plgclothldr - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plgclothldr - Win32 Debug_NR" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plgclothldr - Win32 Release_NR" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plgclothldr - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plgclothldr - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -32,7 +32,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "plgbcterrldr - Win32 Release"
+!IF  "$(CFG)" == "plgclothldr - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -41,8 +41,8 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "csrelease\temp\plgbcterrldr"
-# PROP Intermediate_Dir "csrelease\temp\plgbcterrldr"
+# PROP Output_Dir "csrelease\temp\plgclothldr"
+# PROP Intermediate_Dir "csrelease\temp\plgclothldr"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /Gy /GF /W3 /Gm /G5 /Ob2 /Og /Oi /Ot /Oy /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /FD /c
@@ -50,20 +50,20 @@ RSC=rc.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG" 
-# ADD RSC /l 0x409 /d "NDEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csrelease\temp\plgbcterrldr\plgbcterrldr.res"
+# ADD RSC /l 0x409 /d "NDEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csrelease\temp\plgclothldr\plgclothldr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgbcterrldr\bcterrldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgclothldr\clothldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
-TargetPath=".\csrelease\temp\plgbcterrldr\bcterrldr.dll"
+TargetPath=".\csrelease\temp\plgclothldr\clothldr.dll"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)" ..\..	echo Moving output to MSVC Release Bin.	copy "$(TargetPath)" csrelease\bin
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "plgbcterrldr - Win32 Debug"
+!ELSEIF  "$(CFG)" == "plgclothldr - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -72,8 +72,8 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)" ..\..	echo Mo
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "csdebug\temp\plgbcterrldr"
-# PROP Intermediate_Dir "csdebug\temp\plgbcterrldr"
+# PROP Output_Dir "csdebug\temp\plgclothldr"
+# PROP Intermediate_Dir "csdebug\temp\plgclothldr"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /FD /c
@@ -82,21 +82,21 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)" ..\..	echo Mo
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" 
-# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csdebug\temp\plgbcterrldr\plgbcterrldr.res"
+# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csdebug\temp\plgclothldr\plgclothldr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgbcterrldr\bcterrldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgclothldr\clothldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
-TargetPath=".\csdebug\temp\plgbcterrldr\bcterrldr.dll"
+TargetPath=".\csdebug\temp\plgclothldr\clothldr.dll"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo Moving output to MSVC Debug Bin.	copy "$(TargetPath)"  csdebug\bin
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "plgbcterrldr - Win32 ExtensiveMemDebug"
+!ELSEIF  "$(CFG)" == "plgclothldr - Win32 ExtensiveMemDebug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -105,8 +105,8 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "csmemdbg\temp\plgbcterrldr"
-# PROP Intermediate_Dir "csmemdbg\temp\plgbcterrldr"
+# PROP Output_Dir "csmemdbg\temp\plgclothldr"
+# PROP Intermediate_Dir "csmemdbg\temp\plgclothldr"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /FD /c
@@ -115,21 +115,21 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" 
-# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csmemdbg\temp\plgbcterrldr\plgbcterrldr.res"
+# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csmemdbg\temp\plgclothldr\plgclothldr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csmemdbg\temp\plgbcterrldr\bcterrldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csmemdbg\temp\plgclothldr\clothldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
-TargetPath=".\csmemdbg\temp\plgbcterrldr\bcterrldr.dll"
+TargetPath=".\csmemdbg\temp\plgclothldr\clothldr.dll"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo Moving output to MSVC Debug Bin.	copy "$(TargetPath)"  csmemdbg\bin
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "plgbcterrldr - Win32 Release_NR"
+!ELSEIF  "$(CFG)" == "plgclothldr - Win32 Release_NR"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -138,8 +138,8 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "csrelease\temp\plgbcterrldr"
-# PROP Intermediate_Dir "csrelease\temp\plgbcterrldr"
+# PROP Output_Dir "csrelease\temp\plgclothldr"
+# PROP Intermediate_Dir "csrelease\temp\plgclothldr"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /Gy /GF /W3 /Gm /G5 /Ob2 /Og /Oi /Ot /Oy /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /FD /c
@@ -147,20 +147,20 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG" 
-# ADD RSC /l 0x409 /d "NDEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csrelease\temp\plgbcterrldr\plgbcterrldr.res"
+# ADD RSC /l 0x409 /d "NDEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csrelease\temp\plgclothldr\plgclothldr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgbcterrldr\bcterrldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgclothldr\clothldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
-TargetPath=".\csrelease\temp\plgbcterrldr\bcterrldr.dll"
+TargetPath=".\csrelease\temp\plgclothldr\clothldr.dll"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)" ..\..	echo Moving output to MSVC Release Bin.	copy "$(TargetPath)" csrelease\bin
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "plgbcterrldr - Win32 Debug_NR"
+!ELSEIF  "$(CFG)" == "plgclothldr - Win32 Debug_NR"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -169,8 +169,8 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)" ..\..	echo Mo
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "csdebug\temp\plgbcterrldr"
-# PROP Intermediate_Dir "csdebug\temp\plgbcterrldr"
+# PROP Output_Dir "csdebug\temp\plgclothldr"
+# PROP Intermediate_Dir "csdebug\temp\plgclothldr"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /FD /c
@@ -179,16 +179,16 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)" ..\..	echo Mo
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" 
-# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csdebug\temp\plgbcterrldr\plgbcterrldr.res"
+# ADD RSC /l 0x409 /d "_DEBUG" /d "CS_DEBUG" /i "..\..\include\csutil\win32" /i "..\..\include\cssys\win32" /i "..\..\include" /fo".\csdebug\temp\plgclothldr\plgclothldr.res"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgbcterrldr\bcterrldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib   /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgclothldr\clothldr.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
-TargetPath=".\csdebug\temp\plgbcterrldr\bcterrldr.dll"
+TargetPath=".\csdebug\temp\plgclothldr\clothldr.dll"
 SOURCE="$(InputPath)"
 PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo Moving output to MSVC Debug Bin.	copy "$(TargetPath)"  csdebug\bin
 # End Special Build Tool
@@ -197,17 +197,17 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 
 # Begin Target
 
-# Name "plgbcterrldr - Win32 ExtensiveMemDebug"
-# Name "plgbcterrldr - Win32 Debug"
-# Name "plgbcterrldr - Win32 Release"
-# Name "plgbcterrldr - Win32 Debug_NR"
-# Name "plgbcterrldr - Win32 Release_NR"
+# Name "plgclothldr - Win32 ExtensiveMemDebug"
+# Name "plgclothldr - Win32 Debug"
+# Name "plgclothldr - Win32 Release"
+# Name "plgclothldr - Win32 Debug_NR"
+# Name "plgclothldr - Win32 Release_NR"
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\bcterr\persist\standard\bcterldr.h
+SOURCE=..\..\plugins\mesh\cloth\persist\standard\clothldr.h
 # End Source File
 
 # End Group
@@ -216,11 +216,7 @@ SOURCE=..\..\plugins\mesh\bcterr\persist\standard\bcterldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\mk\visualc6\plgbcterrldr.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\bcterr\persist\standard\bcterrldr.csplugin
+SOURCE=..\..\mk\visualc6\plgclothldr.rc
 # End Source File
 
 # End Group
@@ -229,7 +225,7 @@ SOURCE=..\..\plugins\mesh\bcterr\persist\standard\bcterrldr.csplugin
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\bcterr\persist\standard\bcterldr.cpp
+SOURCE=..\..\plugins\mesh\cloth\persist\standard\clothldr.cpp
 # End Source File
 
 # End Group

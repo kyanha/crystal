@@ -226,10 +226,6 @@ SOURCE=..\..\plugins\documentsystem\xmlread\xrpriv.h
 
 SOURCE=..\..\mk\visualc6\plgxmlread.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\documentsystem\xmlread\xmlread.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

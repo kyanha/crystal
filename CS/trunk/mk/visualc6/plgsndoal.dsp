@@ -207,14 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\common\shdl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\renderer\common\slstn.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\sound\renderer\openal\alsndhdl.h
 # End Source File
 # Begin Source File
@@ -238,23 +230,11 @@ SOURCE=..\..\plugins\sound\renderer\openal\alsndsrc.h
 
 SOURCE=..\..\mk\visualc6\plgsndoal.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\renderer\openal\sndoal.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\renderer\common\shdl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\renderer\common\slstn.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\sound\renderer\openal\alsndhdl.cpp

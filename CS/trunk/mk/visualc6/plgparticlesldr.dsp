@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\particles\persist\standard\particlesldr.h
 
 SOURCE=..\..\mk\visualc6\plgparticlesldr.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\particles\persist\standard\particlesldr.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

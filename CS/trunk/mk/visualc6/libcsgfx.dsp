@@ -180,68 +180,59 @@ PostBuild_Cmds=echo File is a lib, Copy skipped.
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\bumpmap.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\bumpmap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\csimage.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\csimage.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\csimgvec.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\csimgvec.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\csrgbvct.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\csrgbvct.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\gradient.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\gradient.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\inv_cmap.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\inv_cmap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\memimage.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\memimage.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\packrgb.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\packrgb.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\quantize.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\quantize.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\rgbpixel.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\rgbpixel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\shaderexp.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\shaderexp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\shadervar.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\shadervar.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\shadervarcontext.h
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\shadervarcontext.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgfx\xorpat.h
-# End Source File
-
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\libs\csgfx\mipmap.inc
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\xorpat.h
 # End Source File
 
 # End Group

@@ -240,15 +240,7 @@ SOURCE=..\..\plugins\movierecorder\rtjpeg.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\movierecorder.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgmovierecorder.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\movierecorder\movierecorder.csplugin
 # End Source File
 
 # End Group

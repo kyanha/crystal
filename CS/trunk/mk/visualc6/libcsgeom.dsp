@@ -180,196 +180,179 @@ PostBuild_Cmds=echo File is a lib, Copy skipped.
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\box.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\box.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\bsptree.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\bsptree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\crysball.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\crysball.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\cspoint.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\cspoint.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\csrect.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\csrect.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\csrectrg.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\csrectrg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\fastsqrt.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\fastsqrt.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\frustum.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\frustum.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\kdtree.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\kdtree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\math2d.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\math2d.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\math3d.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\math3d.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\math3d_d.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\math3d_d.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\matrix2.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\matrix2.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\matrix3.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\matrix3.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\obb.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\obb.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\objmodel.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\objmodel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\path.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\path.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\plane2.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\plane2.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\plane3.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\plane3.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\pmtools.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\pmtools.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\poly2d.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\poly2d.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\poly3d.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\poly3d.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\polyaa.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polyaa.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\polyclip.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polyclip.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\polyedge.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polyedge.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\polyidx.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polyidx.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\polymesh.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polymesh.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\polypool.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polypool.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\polytree.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\polytree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\quaterni.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\quaterni.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\segment.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\segment.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\sphere.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\sphere.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\spline.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\spline.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\subrec.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\subrec.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\subrec2.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\subrec2.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\textrans.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\textrans.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\transfrm.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\transfrm.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\tri.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\tri.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\trimesh.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\trimesh.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\trimeshlod.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\trimeshlod.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\vector2.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\vector2.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\vector3.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\vector3.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csgeom\vector4.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\vector4.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\obb_priv.h
-# End Source File
-
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\boxclip.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\edgeclip.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\polyclip.inc
 # End Source File
 
 # End Group

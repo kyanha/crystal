@@ -207,10 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\common\shaderplugin.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.h
 # End Source File
 
@@ -221,10 +217,6 @@ SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.h
 # Begin Source File
 
 SOURCE=..\..\mk\visualc6\plgshadermgr.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.csplugin
 # End Source File
 
 # End Group

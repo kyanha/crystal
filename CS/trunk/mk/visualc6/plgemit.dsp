@@ -209,14 +209,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 
 SOURCE=..\..\plugins\mesh\emit\object\emit.h
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\partgen\partgen.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\partgen\particle.h
-# End Source File
 
 # End Group
 # Begin Group "Resource Files"
@@ -226,10 +218,6 @@ SOURCE=..\..\plugins\mesh\partgen\particle.h
 
 SOURCE=..\..\mk\visualc6\plgemit.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\emit\object\emit.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
@@ -238,14 +226,6 @@ SOURCE=..\..\plugins\mesh\emit\object\emit.csplugin
 # Begin Source File
 
 SOURCE=..\..\plugins\mesh\emit\object\emit.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\partgen\partgen.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\partgen\particle.cpp
 # End Source File
 
 # End Group

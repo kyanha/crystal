@@ -207,22 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\common\fontcache.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\graph2d.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\scrshot.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\softfontcache.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\canvas\null2d\null2d.h
 # End Source File
 
@@ -234,31 +218,11 @@ SOURCE=..\..\plugins\video\canvas\null2d\null2d.h
 
 SOURCE=..\..\mk\visualc6\plgnull2d.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\null2d\null2d.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\fontcache.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\graph2d.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\scrshot.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\softfontcache.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\canvas\null2d\null2d.cpp

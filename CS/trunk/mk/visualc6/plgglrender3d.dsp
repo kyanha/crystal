@@ -207,10 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\common\txtmgr.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\opengl\gl_polyrender.h
 # End Source File
 # Begin Source File
@@ -236,29 +232,13 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\gldrivers.xml
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\data\config\r3dopengl.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgglrender3d.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\opengl\glrender3d.csplugin
 # End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\common\txtmgr.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\opengl\gl_polyrender.cpp

@@ -254,10 +254,6 @@ SOURCE=..\..\plugins\engine\iso\isoworld.h
 
 SOURCE=..\..\mk\visualc6\plgiso.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\iso\iso.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

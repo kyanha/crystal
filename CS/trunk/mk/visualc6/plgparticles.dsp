@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\particles\object\particles.h
 
 SOURCE=..\..\mk\visualc6\plgparticles.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\particles\object\particles.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\video\loader\mplex\imgplex.h
 
 SOURCE=..\..\mk\visualc6\plgimgplex.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\loader\mplex\imgplex.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -207,10 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\common\txtmgr.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\null\null_render3d.h
 # End Source File
 # Begin Source File
@@ -230,23 +226,11 @@ SOURCE=..\..\plugins\video\render3d\null\null_txt.h
 
 SOURCE=..\..\mk\visualc6\plgnullrender3d.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\null\drawsprt.inc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\null\nullrender3d.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\common\txtmgr.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\null\null_pix.cpp

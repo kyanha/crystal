@@ -180,419 +180,431 @@ PostBuild_Cmds=echo File is a lib, Copy skipped.
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\csutil\archive.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\archive.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\array.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\array.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\binder.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\binder.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\bintree.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\bintree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\bitarray.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\bitarray.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\blockallocator.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\blockallocator.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\callstack.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\callstack.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\cfgacc.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cfgacc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\cfgdoc.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cfgdoc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\cfgfile.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cfgfile.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\cfgmgr.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cfgmgr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\cmdhelp.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cmdhelp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\cmdline.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cmdline.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csbaseeventh.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csbaseeventh.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\cscolor.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cscolor.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csendian.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csendian.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csevcord.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csevcord.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csevent.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csevent.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\cseventq.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cseventq.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csinput.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csinput.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csmd5.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csmd5.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csmmap.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csmmap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csobject.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csobject.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csosdefs.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csosdefs.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\cspmeter.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\cspmeter.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csppulse.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csppulse.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csprocessorcap.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csprocessorcap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csshlib.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csshlib.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csstring.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csstring.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csuctransform.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csuctransform.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\csunicode.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\csunicode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\databuf.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\databuf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\datastrm.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\datastrm.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\debug.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\debug.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\event.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\event.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\evoutlet.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\evoutlet.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\flags.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\flags.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\fpu80x86.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\fpu80x86.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\garray.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\garray.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\getopt.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\getopt.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\hash.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\hash.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\hashhandlers.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\hashhandlers.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\hashmap.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\hashmap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\hashmapr.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\hashmapr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\hashr.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\hashr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\indprint.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\indprint.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\inpnames.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\inpnames.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\list.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\list.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\memdebug.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\macosx\OSXAssistant.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\memfile.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\macosx\csosdefs.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\mmapio.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\memdebug.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\nobjvec.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\memfile.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\nulcache.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\mmapio.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\objiter.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\nobjvec.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\objpool.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\nulcache.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\objreg.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\objiter.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\parray.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\objpool.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\physfile.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\objreg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\plugldr.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\parray.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\plugmgr.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\physfile.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\prfxcfg.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\plugldr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\radixsort.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\plugmgr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\randomgen.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\prfxcfg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\ref.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\radixsort.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\refarr.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\randomgen.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\refcount.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\ref.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\reftrackeraccess.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\refarr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\regexp.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\refcount.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\rng.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\reftrackeraccess.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\scanstr.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\regexp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\scf.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\rng.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\scfstr.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\scanstr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\scfstringarray.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\scf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\scfstrset.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\scfstr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\schedule.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\scfstringarray.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\scopedmutexlock.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\scfstrset.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\snprintf.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\schedule.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\sockets.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\scopedmutexlock.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\sparse3d.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\snprintf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\strhash.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\sockets.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\stringarray.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\sparse3d.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\stringreader.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\strhash.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\strset.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\stringarray.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\sysfunc.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\stringreader.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\syspath.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\strset.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\thread.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\sysfunc.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\timer.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\syspath.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\tree.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\thread.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\util.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\timer.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\utiltest.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\tree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\vfscache.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\unix\csosdefs.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\virtclk.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\util.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\weakref.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\utiltest.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\weakrefarr.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\vfscache.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\win32\DbgHelpAPI.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\virtclk.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\win32\callstack.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\weakref.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\win32\csosdefs.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\weakrefarr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\win32\minidump.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\DbgHelpAPI.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\win32\registrycfg.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\callstack.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\win32\volatile.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\csosdefs.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\win32\win32.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\minidump.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\win32\wintools.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\registrycfg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\xmltiny.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\volatile.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\csutil\zip.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\win32.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\wintools.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\xmltiny.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\zip.h
 # End Source File
 # Begin Source File
 
@@ -637,15 +649,6 @@ SOURCE=..\..\libs\csutil\win32\winthread.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\xmltinyp.h
-# End Source File
-
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\data\config\mouse.cfg
 # End Source File
 
 # End Group

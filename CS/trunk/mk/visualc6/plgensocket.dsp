@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\net\driver\ensocket\inet.h
 
 SOURCE=..\..\mk\visualc6\plgensocket.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\net\driver\ensocket\ensocket.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

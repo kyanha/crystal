@@ -207,10 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\spr3d\object\skel3d.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\mesh\spr3d\object\spr3d.h
 # End Source File
 
@@ -222,19 +218,11 @@ SOURCE=..\..\plugins\mesh\spr3d\object\spr3d.h
 
 SOURCE=..\..\mk\visualc6\plgspr3d.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\spr3d\object\spr3d.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\spr3d\object\skel3d.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\mesh\spr3d\object\spr3d.cpp

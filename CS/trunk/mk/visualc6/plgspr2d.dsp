@@ -222,10 +222,6 @@ SOURCE=..\..\plugins\mesh\spr2d\object\spr2duv.h
 
 SOURCE=..\..\mk\visualc6\plgspr2d.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\spr2d\object\spr2d.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

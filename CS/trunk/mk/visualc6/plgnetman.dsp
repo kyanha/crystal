@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\net\manager\netman.h
 
 SOURCE=..\..\mk\visualc6\plgnetman.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\net\manager\netman.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -216,15 +216,7 @@ SOURCE=..\..\plugins\console\output\simple\simpcon.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\simpcon.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgsimpcon.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\console\output\simple\simpcon.csplugin
 # End Source File
 
 # End Group

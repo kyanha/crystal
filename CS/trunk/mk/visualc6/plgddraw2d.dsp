@@ -56,7 +56,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib ddraw.lib  /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib dsound.lib ddraw.lib dinput.lib  /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
 TargetPath=".\csrelease\temp\plgddraw2d\ddraw2d.dll"
 SOURCE="$(InputPath)"
@@ -88,7 +88,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib ddraw.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib dsound.lib ddraw.lib dinput.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 TargetPath=".\csdebug\temp\plgddraw2d\ddraw2d.dll"
@@ -121,7 +121,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib ddraw.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csmemdbg\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib dsound.lib ddraw.lib dinput.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csmemdbg\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 TargetPath=".\csmemdbg\temp\plgddraw2d\ddraw2d.dll"
@@ -153,7 +153,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib ddraw.lib  /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib dsound.lib ddraw.lib dinput.lib  /nologo /version:4.0 /subsystem:windows /dll /machine:I386 /out:"csrelease\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
 TargetPath=".\csrelease\temp\plgddraw2d\ddraw2d.dll"
 SOURCE="$(InputPath)"
@@ -185,7 +185,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib ddraw.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib dsound.lib ddraw.lib dinput.lib  /nologo /version:1.0 /subsystem:windows /dll /profile /debug /machine:I386 /out:"csdebug\temp\plgddraw2d\ddraw2d.dll" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # SUBTRACT LINK32 /profile
 # Begin Special Build Tool
 TargetPath=".\csdebug\temp\plgddraw2d\ddraw2d.dll"
@@ -207,31 +207,7 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\common\fontcache.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\graph2d.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\scrshot.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\softfontcache.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\canvas\ddraw\g2d.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\directxcommon\directdetection.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\directxcommon\iddetect.h
 # End Source File
 
 # End Group
@@ -242,10 +218,6 @@ SOURCE=..\..\plugins\video\canvas\directxcommon\iddetect.h
 
 SOURCE=..\..\mk\visualc6\plgddraw2d.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\ddraw\ddraw2d.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
@@ -253,27 +225,7 @@ SOURCE=..\..\plugins\video\canvas\ddraw\ddraw2d.csplugin
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\common\fontcache.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\graph2d.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\scrshot.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\softfontcache.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\canvas\ddraw\g2d.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\directxcommon\directdetection.cpp
 # End Source File
 
 # End Group

@@ -207,15 +207,7 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\sound.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgsndplex.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\loader\mplex\sndplex.csplugin
 # End Source File
 
 # End Group

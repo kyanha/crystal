@@ -216,15 +216,7 @@ SOURCE=..\..\plugins\font\server\freefnt2\freefnt2.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\data\config\freetype.cfg
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\mk\visualc6\plgfreefnt2.rc
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\font\server\freefnt2\freefnt2.csplugin
 # End Source File
 
 # End Group

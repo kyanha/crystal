@@ -226,10 +226,6 @@ SOURCE=..\..\plugins\collide\rapid\rapcol.h
 
 SOURCE=..\..\mk\visualc6\plgrapid.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\rapid\rapid.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

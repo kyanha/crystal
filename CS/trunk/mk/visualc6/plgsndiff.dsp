@@ -202,19 +202,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # Name "plgsndiff - Win32 Release"
 # Name "plgsndiff - Win32 Debug_NR"
 # Name "plgsndiff - Win32 Release_NR"
-# Begin Group "Header Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\loader\common\sndload.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\loader\common\soundraw.h
-# End Source File
-
-# End Group
 # Begin Group "Resource Files"
 
 # PROP Default_Filter ""
@@ -222,23 +209,11 @@ SOURCE=..\..\plugins\sound\loader\common\soundraw.h
 
 SOURCE=..\..\mk\visualc6\plgsndiff.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\loader\iff\sndiff.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\loader\common\sndload.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\sound\loader\common\soundraw.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\sound\loader\iff\ifffile.cpp

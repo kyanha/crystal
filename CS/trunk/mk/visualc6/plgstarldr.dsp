@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\stars\persist\standard\starldr.h
 
 SOURCE=..\..\mk\visualc6\plgstarldr.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\stars\persist\standard\starldr.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

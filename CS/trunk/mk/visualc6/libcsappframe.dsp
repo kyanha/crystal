@@ -180,7 +180,7 @@ PostBuild_Cmds=echo File is a lib, Copy skipped.
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\csappframe\csapplicationframework.h
+SOURCE=..\..\libs\csappframe\..\..\include\csappframe\csapplicationframework.h
 # End Source File
 
 # End Group

@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\engseq\engseq.h
 
 SOURCE=..\..\mk\visualc6\plgengseq.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engseq\engseq.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,10 +218,6 @@ SOURCE=..\..\plugins\mesh\impexp\3ds\ie3ds.h
 
 SOURCE=..\..\mk\visualc6\plgie3ds.rc
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\mesh\impexp\3ds\ie3ds.csplugin
-# End Source File
 
 # End Group
 # Begin Group "Source Files"
