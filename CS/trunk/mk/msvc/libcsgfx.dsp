@@ -206,6 +206,10 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\gradient.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\imagebase.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\imagemanipulate.h
 # End Source File
 # Begin Source File
