@@ -38,13 +38,13 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Create a root node. This will clear the previous root node if any.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiDocumentNode.html">iDocumentNode</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a2">GetRoot</a> ()=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get the current root node.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a3">Parse</a> (<a class="el" href="structiFile.html">iFile</a> *file)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a3">Parse</a> (<a class="el" href="structiFile.html">iFile</a> *file, bool collapse=false)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Parse document file from an <a class="el" href="structiFile.html">iFile</a>.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a4">Parse</a> (<a class="el" href="structiDataBuffer.html">iDataBuffer</a> *buf)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a4">Parse</a> (<a class="el" href="structiDataBuffer.html">iDataBuffer</a> *buf, bool collapse=false)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Parse document file from an <a class="el" href="structiDataBuffer.html">iDataBuffer</a>.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a5">Parse</a> (<a class="el" href="structiString.html">iString</a> *str)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a5">Parse</a> (<a class="el" href="structiString.html">iString</a> *str, bool collapse=false)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Parse document file from an <a class="el" href="structiString.html">iString</a>.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a6">Parse</a> (const char *buf)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a6">Parse</a> (const char *buf, bool collapse=false)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Parse document file from a null-terminated C-string.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiDocument.html#a7">Write</a> (<a class="el" href="structiFile.html">iFile</a> *file)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Write out document file to an <a class="el" href="structiFile.html">iFile</a>.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
@@ -197,9 +197,18 @@ Get the current root node.
           <td class="md" nowrap valign="top"> virtual const char* iDocument::Parse </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">const char *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>buf</em>          </td>
-          <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
+          <td class="mdname" nowrap>&nbsp; <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>collapse</em> = false</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
         </tr>
 
       </table>
@@ -216,7 +225,16 @@ Get the current root node.
 <p>
 Parse document file from a null-terminated C-string.
 <p>
-This will clear the previous root node if any. Returns 0 if all is ok. Otherwise it will return an error string.     </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>buf</em>&nbsp;</td><td>
+The buffer to parse. It should contain data in whatever format is understood by the iDocument implementation receiving this invocation. </td></tr>
+<tr><td valign=top><em>collapse</em>&nbsp;</td><td>
+Some document format implementations may have the option of condensing extraneous whitespace in returned <a class="el" href="group__util.html#a130a7">CS_NODE_TEXT</a> nodes. Set this to true to enable this option. By default, whitepsace is preserved. </td></tr>
+</table>
+</dl><dl compact><dt><b>Returns: </b></dt><dd>
+0 if all is okay; otherwise an error message. </dl><dl compact><dt><b>Remarks: </b></dt><dd>
+This will clear the previous root node if any. </dl>    </td>
   </tr>
 </table>
 <a name="a5" doxytag="iDocument::Parse"></a><p>
@@ -228,9 +246,18 @@ This will clear the previous root node if any. Returns 0 if all is ok. Otherwise
           <td class="md" nowrap valign="top"> virtual const char* iDocument::Parse </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structiString.html">iString</a> *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>str</em>          </td>
-          <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
+          <td class="mdname" nowrap>&nbsp; <em>str</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>collapse</em> = false</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
         </tr>
 
       </table>
@@ -247,7 +274,16 @@ This will clear the previous root node if any. Returns 0 if all is ok. Otherwise
 <p>
 Parse document file from an <a class="el" href="structiString.html">iString</a>.
 <p>
-This will clear the previous root node if any. Returns 0 if all is ok. Otherwise it will return an error string.     </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>str</em>&nbsp;</td><td>
+The string to parse. It should contain data in whatever format is understood by the iDocument implementation receiving this invocation. </td></tr>
+<tr><td valign=top><em>collapse</em>&nbsp;</td><td>
+Some document format implementations may have the option of condensing extraneous whitespace in returned <a class="el" href="group__util.html#a130a7">CS_NODE_TEXT</a> nodes. Set this to true to enable this option. By default, whitepsace is preserved. </td></tr>
+</table>
+</dl><dl compact><dt><b>Returns: </b></dt><dd>
+0 if all is okay; otherwise an error message. </dl><dl compact><dt><b>Remarks: </b></dt><dd>
+This will clear the previous root node if any. </dl>    </td>
   </tr>
 </table>
 <a name="a4" doxytag="iDocument::Parse"></a><p>
@@ -259,9 +295,18 @@ This will clear the previous root node if any. Returns 0 if all is ok. Otherwise
           <td class="md" nowrap valign="top"> virtual const char* iDocument::Parse </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structiDataBuffer.html">iDataBuffer</a> *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>buf</em>          </td>
-          <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
+          <td class="mdname" nowrap>&nbsp; <em>buf</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>collapse</em> = false</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
         </tr>
 
       </table>
@@ -278,7 +323,16 @@ This will clear the previous root node if any. Returns 0 if all is ok. Otherwise
 <p>
 Parse document file from an <a class="el" href="structiDataBuffer.html">iDataBuffer</a>.
 <p>
-This will clear the previous root node if any. Returns 0 if all is ok. Otherwise it will return an error string.     </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>buf</em>&nbsp;</td><td>
+The buffer to parse. It should contain data in whatever format is understood by the iDocument implementation receiving this invocation. </td></tr>
+<tr><td valign=top><em>collapse</em>&nbsp;</td><td>
+Some document format implementations may have the option of condensing extraneous whitespace in returned <a class="el" href="group__util.html#a130a7">CS_NODE_TEXT</a> nodes. Set this to true to enable this option. By default, whitepsace is preserved. </td></tr>
+</table>
+</dl><dl compact><dt><b>Returns: </b></dt><dd>
+0 if all is okay; otherwise an error message. </dl><dl compact><dt><b>Remarks: </b></dt><dd>
+This will clear the previous root node if any. </dl>    </td>
   </tr>
 </table>
 <a name="a3" doxytag="iDocument::Parse"></a><p>
@@ -290,9 +344,18 @@ This will clear the previous root node if any. Returns 0 if all is ok. Otherwise
           <td class="md" nowrap valign="top"> virtual const char* iDocument::Parse </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structiFile.html">iFile</a> *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>file</em>          </td>
-          <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
+          <td class="mdname" nowrap>&nbsp; <em>file</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>collapse</em> = false</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
         </tr>
 
       </table>
@@ -309,7 +372,16 @@ This will clear the previous root node if any. Returns 0 if all is ok. Otherwise
 <p>
 Parse document file from an <a class="el" href="structiFile.html">iFile</a>.
 <p>
-This will clear the previous root node if any. Returns 0 if all is ok. Otherwise it will return an error string.     </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>file</em>&nbsp;</td><td>
+The file to parse. It should contain data in whatever format is understood by the iDocument implementation receiving this invocation. </td></tr>
+<tr><td valign=top><em>collapse</em>&nbsp;</td><td>
+Some document format implementations may have the option of condensing extraneous whitespace in returned <a class="el" href="group__util.html#a130a7">CS_NODE_TEXT</a> nodes. Set this to true to enable this option. By default, whitepsace is preserved. </td></tr>
+</table>
+</dl><dl compact><dt><b>Returns: </b></dt><dd>
+0 if all is okay; otherwise an error message. </dl><dl compact><dt><b>Remarks: </b></dt><dd>
+This will clear the previous root node if any. </dl>    </td>
   </tr>
 </table>
 <a name="a9" doxytag="iDocument::Write"></a><p>
