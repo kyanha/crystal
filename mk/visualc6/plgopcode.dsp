@@ -215,7 +215,103 @@ SOURCE=..\..\plugins\collide\opcode\CSopcodecollider.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_AABB.h
+SOURCE=..\..\plugins\collide\opcode\Ice\IceAABB.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceAxes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceBoundingSphere.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceContainer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceFPU.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceHPoint.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceIndexedTriangle.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceLSS.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix3x3.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix4x4.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMemoryMacros.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceOBB.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePairs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePlane.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePoint.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePreprocessor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRandom.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRay.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRevisitedRadix.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceSegment.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceTriangle.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceTrilist.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceTypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceUtils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\Stdafx.h
 # End Source File
 # Begin Source File
 
@@ -227,15 +323,15 @@ SOURCE=..\..\plugins\collide\opcode\OPC_AABBTree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_BVTCache.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_BoundingSphere.h
+SOURCE=..\..\plugins\collide\opcode\OPC_BaseModel.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_BoxBoxOverlap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\OPC_BoxPruning.h
 # End Source File
 # Begin Source File
 
@@ -247,35 +343,31 @@ SOURCE=..\..\plugins\collide\opcode\OPC_Common.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Container.h
+SOURCE=..\..\plugins\collide\opcode\OPC_HybridModel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_FPU.h
+SOURCE=..\..\plugins\collide\opcode\OPC_IceHook.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_HPoint.h
+SOURCE=..\..\plugins\collide\opcode\OPC_LSSAABBOverlap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Matrix3x3.h
+SOURCE=..\..\plugins\collide\opcode\OPC_LSSCollider.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Matrix4x4.h
+SOURCE=..\..\plugins\collide\opcode\OPC_LSSTriOverlap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_MemoryMacros.h
+SOURCE=..\..\plugins\collide\opcode\OPC_MeshInterface.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_Model.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_OBB.h
 # End Source File
 # Begin Source File
 
@@ -287,7 +379,7 @@ SOURCE=..\..\plugins\collide\opcode\OPC_OptimizedTree.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Plane.h
+SOURCE=..\..\plugins\collide\opcode\OPC_Picking.h
 # End Source File
 # Begin Source File
 
@@ -300,18 +392,6 @@ SOURCE=..\..\plugins\collide\opcode\OPC_PlanesCollider.h
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_PlanesTriOverlap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_Point.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_Preprocessor.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_Ray.h
 # End Source File
 # Begin Source File
 
@@ -343,6 +423,10 @@ SOURCE=..\..\plugins\collide\opcode\OPC_SphereTriOverlap.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\OPC_SweepAndPrune.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_TreeBuilders.h
 # End Source File
 # Begin Source File
@@ -356,14 +440,6 @@ SOURCE=..\..\plugins\collide\opcode\OPC_TriBoxOverlap.h
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_TriTriOverlap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_Triangle.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_Types.h
 # End Source File
 # Begin Source File
 
@@ -401,7 +477,63 @@ SOURCE=..\..\plugins\collide\opcode\CSopcodecollider.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_AABB.cpp
+SOURCE=..\..\plugins\collide\opcode\Ice\IceAABB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceContainer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceHPoint.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceIndexedTriangle.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix3x3.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix4x4.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceOBB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePlane.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePoint.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRandom.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRay.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRevisitedRadix.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceSegment.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceTriangle.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceUtils.cpp
 # End Source File
 # Begin Source File
 
@@ -413,6 +545,14 @@ SOURCE=..\..\plugins\collide\opcode\OPC_AABBTree.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\OPC_BaseModel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\OPC_BoxPruning.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_Collider.cpp
 # End Source File
 # Begin Source File
@@ -421,23 +561,19 @@ SOURCE=..\..\plugins\collide\opcode\OPC_Common.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Container.cpp
+SOURCE=..\..\plugins\collide\opcode\OPC_HybridModel.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Matrix3x3.cpp
+SOURCE=..\..\plugins\collide\opcode\OPC_LSSCollider.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Matrix4x4.cpp
+SOURCE=..\..\plugins\collide\opcode\OPC_MeshInterface.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_Model.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_OBB.cpp
 # End Source File
 # Begin Source File
 
@@ -449,19 +585,11 @@ SOURCE=..\..\plugins\collide\opcode\OPC_OptimizedTree.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Plane.cpp
+SOURCE=..\..\plugins\collide\opcode\OPC_Picking.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_PlanesCollider.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_Point.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_Ray.cpp
 # End Source File
 # Begin Source File
 
@@ -473,15 +601,15 @@ SOURCE=..\..\plugins\collide\opcode\OPC_SphereCollider.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\OPC_SweepAndPrune.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_TreeBuilders.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_TreeCollider.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_Triangle.cpp
 # End Source File
 # Begin Source File
 
