@@ -300,27 +300,7 @@ SOURCE=..\..\libs\cstool\meshobjtmpl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\cstool\prdots.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\prfire.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\cstool\proctex.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\prplasma.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\prsky.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\prwater.cpp
 # End Source File
 # Begin Source File
 
@@ -412,27 +392,7 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\meshobjtmpl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\cstool\..\..\include\cstool\prdots.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\..\..\include\cstool\prfire.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\cstool\..\..\include\cstool\proctex.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\..\..\include\cstool\prplasma.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\..\..\include\cstool\prsky.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\..\..\include\cstool\prwater.h
 # End Source File
 # Begin Source File
 

@@ -252,6 +252,26 @@ SOURCE=..\..\plugins\proctex\standard\plasma.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\proctex\standard\prdots.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\prfire.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\prplasma.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\prsky.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\prwater.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\proctex\standard\sky.cpp
 # End Source File
 # Begin Source File
@@ -277,6 +297,26 @@ SOURCE=..\..\plugins\proctex\standard\fire.h
 # Begin Source File
 
 SOURCE=..\..\plugins\proctex\standard\plasma.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\prdots.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\prfire.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\prplasma.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\prsky.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\standard\prwater.h
 # End Source File
 # Begin Source File
 
