@@ -204,6 +204,10 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\memimage.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\normalmaptools.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\packrgb.h
 # End Source File
 # Begin Source File
@@ -254,6 +258,10 @@ SOURCE=..\..\libs\csgfx\inv_cmap.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csgfx\memimage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgfx\normalmaptools.cpp
 # End Source File
 # Begin Source File
 
