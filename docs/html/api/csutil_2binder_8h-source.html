@@ -17,7 +17,7 @@
 <center>
 <a class="qindex" href="index.html">Main Page</a> &nbsp; <a class="qindex" href="modules.html">Modules</a> &nbsp; <a class="qindex" href="hierarchy.html">Class Hierarchy</a> &nbsp; <a class="qindex" href="classes.html">Alphabetical List</a> &nbsp; <a class="qindex" href="annotated.html">Compound List</a> &nbsp; <a class="qindex" href="files.html">File List</a> &nbsp; <a class="qindex" href="functions.html">Compound Members</a> &nbsp; <a class="qindex" href="globals.html">File Members</a> &nbsp; <a class="qindex" href="pages.html">Related Pages</a> &nbsp; </center>
 <hr><h1>csutil/binder.h</h1><div class="fragment"><pre>00001 <span class="comment">/*</span>
-00002 <span class="comment">    Copyright (C) 2003 by Mathew Sutcliffe &lt;oktal@gmx.co.uk&gt;</span>
+00002 <span class="comment">    Copyright (C) 2003, 04 by Mathew Sutcliffe &lt;oktal@gmx.co.uk&gt;</span>
 00003 <span class="comment"></span>
 00004 <span class="comment">    This library is free software; you can redistribute it and/or</span>
 00005 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
@@ -39,87 +39,71 @@
 00021 <span class="preprocessor"></span>
 00022 <span class="preprocessor">#include "csextern.h"</span>
 00023 <span class="preprocessor">#include "iutil/binder.h"</span>
-00024 <span class="preprocessor">#include "<a class="code" href="eventh_8h.html">iutil/eventh.h</a>"</span>
-00025 <span class="preprocessor">#include "hashmap.h"</span>
-00026 
-00031 csHashKey CS_CSUTIL_EXPORT csHashComputeEvent (<a class="code" href="structiEvent.html">iEvent</a>* <span class="keyword">const</span>);
-00032 
-<a name="l00037"></a><a class="code" href="classcsInputBinder.html">00037</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT <a class="code" href="classcsInputBinder.html">csInputBinder</a> : <span class="keyword">public</span> <a class="code" href="structiInputBinder.html">iInputBinder</a>
-00038 {
-00039 <span class="keyword">private</span>:
-00040   <a class="code" href="classcsHashMap.html">csHashMap</a> Hash;
-00041 
-00042 <span class="keyword">protected</span>:
-00043   <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a>&amp;);
-00044 
-00045 <span class="keyword">public</span>:
-00046   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
-00047 
-00052   <a class="code" href="classcsInputBinder.html">csInputBinder</a> (<a class="code" href="structiBase.html">iBase</a> *parent = 0, <span class="keywordtype">int</span> size = 127);
-00053 
-00057   <span class="keyword">virtual</span> ~<a class="code" href="classcsInputBinder.html">csInputBinder</a> ();
-00058 
-00059   <span class="keyword">struct </span>CS_CSUTIL_EXPORT eiEventHandler : <span class="keyword">public</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>
-00060   {
-00061     <a class="code" href="group__scf.html#a11">SCF_DECLARE_EMBEDDED_IBASE</a> (<a class="code" href="classcsInputBinder.html">csInputBinder</a>);
-00062     <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;ev) { <span class="keywordflow">return</span> scfParent-&gt;HandleEvent (ev); }
-00063   } scfiEventHandler;
-00064   <span class="keyword">friend</span> <span class="keyword">struct </span>eiEventHandler;
+00024 <span class="preprocessor">#include "<a class="code" href="iutil_2event_8h.html">iutil/event.h</a>"</span>
+00025 <span class="preprocessor">#include "<a class="code" href="eventh_8h.html">iutil/eventh.h</a>"</span>
+00026 <span class="preprocessor">#include "<a class="code" href="evdefs_8h.html">iutil/evdefs.h</a>"</span>
+00027 <span class="preprocessor">#include "<a class="code" href="inputdef_8h.html">csutil/inputdef.h</a>"</span>
+00028 <span class="preprocessor">#include "csutil/array.h"</span>
+00029 <span class="preprocessor">#include "csutil/hash.h"</span>
+00030 
+<a name="l00035"></a><a class="code" href="classcsInputBinder.html">00035</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT <a class="code" href="classcsInputBinder.html">csInputBinder</a> : <span class="keyword">public</span> <a class="code" href="structiInputBinder.html">iInputBinder</a>
+00036 {
+00037   <span class="keyword">struct </span>AxisCmd
+00038   {
+00039     <span class="keywordtype">unsigned</span> cmd;
+00040     <span class="keywordtype">int</span> val, sens;
+00041     <span class="keywordtype">bool</span> wrap;
+00042     AxisCmd (<span class="keywordtype">unsigned</span> cmd0, <span class="keywordtype">int</span> sens0)
+00043     : cmd (cmd0), val (0), sens (sens0) {}
+00044   };
+00045   <span class="keyword">typedef</span> <a class="code" href="classcsHash.html">csHash&lt;AxisCmd *, csInputDefinition, csInputDefinition&gt;</a> <a class="code" href="classcsHash.html">AxisHash</a>;
+00046   AxisHash axisHash;
+00047   <a class="code" href="classcsArray.html">csArray&lt;AxisCmd *&gt;</a> axisArray;
+00048 
+00049   <span class="keyword">struct </span>BtnCmd
+00050   {
+00051     <span class="keywordtype">unsigned</span> cmd;
+00052     <span class="keywordtype">bool</span> down, toggle;
+00053     BtnCmd (<span class="keywordtype">unsigned</span> cmd0, <span class="keywordtype">bool</span> toggle0)
+00054     : cmd (cmd0), down (<span class="keyword">false</span>), toggle (toggle0) {}
+00055   };
+00056   <span class="keyword">typedef</span> <a class="code" href="classcsHash.html">csHash&lt;BtnCmd *, csInputDefinition, csInputDefinition&gt;</a> <a class="code" href="classcsHash.html">BtnHash</a>;
+00057   BtnHash btnHash;
+00058   <a class="code" href="classcsArray.html">csArray&lt;BtnCmd *&gt;</a> btnArray;
+00059 
+00060 <span class="keyword">protected</span>:
+00061   <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a>&amp;);
+00062 
+00063 <span class="keyword">public</span>:
+00064   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
 00065 
-<a name="l00071"></a><a class="code" href="classcsInputBinder.html#a2">00071</a>   <span class="keyword">virtual</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>* QueryHandler () { <span class="keywordflow">return</span> &amp;scfiEventHandler; }
+00070   <a class="code" href="classcsInputBinder.html">csInputBinder</a> (<a class="code" href="structiBase.html">iBase</a> *parent = 0, <span class="keywordtype">int</span> btnSize = 127, <span class="keywordtype">int</span> axisSize = 13);
+00071   <span class="keyword">virtual</span> ~<a class="code" href="classcsInputBinder.html">csInputBinder</a> ();
 00072 
-00078   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Bind (<a class="code" href="structiEvent.html">iEvent</a>&amp;, <a class="code" href="structiInputBinderBoolean.html">iInputBinderBoolean</a>*, <span class="keywordtype">bool</span> toggle = <span class="keyword">false</span>);
+00073   <span class="keyword">struct </span>CS_CSUTIL_EXPORT eiEventHandler : <span class="keyword">public</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>
+00074   {
+00075     <a class="code" href="group__scf.html#a11">SCF_DECLARE_EMBEDDED_IBASE</a> (<a class="code" href="classcsInputBinder.html">csInputBinder</a>);
+00076     <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;ev) { <span class="keywordflow">return</span> scfParent-&gt;HandleEvent (ev); }
+00077   } scfiEventHandler;
+00078   <span class="keyword">friend</span> <span class="keyword">struct </span>eiEventHandler;
 00079 
-00083   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Bind (<a class="code" href="structiEvent.html">iEvent</a>&amp;, <a class="code" href="structiInputBinderPosition.html">iInputBinderPosition</a>*);
+<a name="l00080"></a><a class="code" href="classcsInputBinder.html#a2">00080</a>   <span class="keyword">virtual</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>* QueryHandler () { <span class="keywordflow">return</span> &amp;scfiEventHandler; }
+00081 
+00082   <span class="keyword">virtual</span> <span class="keywordtype">int</span> Axis (<span class="keywordtype">unsigned</span> cmd);
+00083   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Button (<span class="keywordtype">unsigned</span> cmd);
 00084 
-00088   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Unbind (<a class="code" href="structiEvent.html">iEvent</a>&amp;);
-00089 
-00093   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> UnbindAll();
+00085   <span class="keyword">virtual</span> <span class="keywordtype">void</span> BindAxis (<span class="keyword">const</span> <a class="code" href="classcsInputDefinition.html">csInputDefinition</a> &amp;, <span class="keywordtype">unsigned</span> cmd, <span class="keywordtype">int</span> sens);
+00086   <span class="keyword">virtual</span> <span class="keywordtype">void</span> BindButton (<span class="keyword">const</span> <a class="code" href="classcsInputDefinition.html">csInputDefinition</a> &amp;, <span class="keywordtype">unsigned</span> cmd, <span class="keywordtype">bool</span> tgl);
+00087 
+00088   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> UnbindAxis (<span class="keywordtype">unsigned</span> cmd);
+00089   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> UnbindButton (<span class="keywordtype">unsigned</span> cmd);
+00090   <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnbindAll ();
+00091 
+00092   <span class="keyword">virtual</span> <span class="keywordtype">void</span> LoadConfig (<a class="code" href="structiConfigFile.html">iConfigFile</a> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *subsection);
+00093   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SaveConfig (<a class="code" href="structiConfigFile.html">iConfigFile</a> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *subsection);
 00094 };
 00095 
-<a name="l00099"></a><a class="code" href="classcsInputBinderPosition.html">00099</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csInputBinderPosition : <span class="keyword">public</span> <a class="code" href="structiInputBinderPosition.html">iInputBinderPosition</a>
-00100 {
-00101 <span class="keyword">private</span>:
-00103   <span class="keywordtype">int</span> p;
-00104 
-00105 <span class="keyword">public</span>:
-00106   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
-00107 
-<a name="l00109"></a><a class="code" href="classcsInputBinderPosition.html#a0">00109</a>   csInputBinderPosition (<span class="keywordtype">int</span> pp) : p (pp)
-00110   { <a class="code" href="group__scf.html#a12">SCF_CONSTRUCT_IBASE</a> (0); }
-<a name="l00112"></a><a class="code" href="classcsInputBinderPosition.html#a1">00112</a>   csInputBinderPosition () : p (0)
-00113   { <a class="code" href="group__scf.html#a12">SCF_CONSTRUCT_IBASE</a> (0); }
-<a name="l00115"></a><a class="code" href="classcsInputBinderPosition.html#a2">00115</a>   csInputBinderPosition (<a class="code" href="structiInputBinderPosition.html">iInputBinderPosition</a> *pp) : p (pp-&gt;Get ())
-00116   { <a class="code" href="group__scf.html#a12">SCF_CONSTRUCT_IBASE</a> (0); }
-<a name="l00118"></a><a class="code" href="classcsInputBinderPosition.html#a3">00118</a>   <span class="keyword">virtual</span> ~csInputBinderPosition ()
-00119   { <a class="code" href="group__scf.html#a14">SCF_DESTRUCT_IBASE</a>(); }
-00120 
-<a name="l00122"></a><a class="code" href="classcsInputBinderPosition.html#a4">00122</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinderPosition.html#a0">Set</a> (<span class="keywordtype">int</span> pp) { p = pp; }
-<a name="l00124"></a><a class="code" href="classcsInputBinderPosition.html#a5">00124</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiInputBinderPosition.html#a1">Get</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> p; }
-00125 };
-00126 
-<a name="l00131"></a><a class="code" href="classcsInputBinderBoolean.html">00131</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csInputBinderBoolean : <span class="keyword">public</span> <a class="code" href="structiInputBinderBoolean.html">iInputBinderBoolean</a>
-00132 {
-00133 <span class="keyword">private</span>:
-00135   <span class="keywordtype">bool</span> s;
-00136 
-00137 <span class="keyword">public</span>:
-00138   <a class="code" href="group__scf.html#a10">SCF_DECLARE_IBASE</a>;
-00139 
-<a name="l00141"></a><a class="code" href="classcsInputBinderBoolean.html#a0">00141</a>   csInputBinderBoolean (<span class="keywordtype">bool</span> ss) : s (ss)
-00142   { <a class="code" href="group__scf.html#a12">SCF_CONSTRUCT_IBASE</a> (0); }
-<a name="l00144"></a><a class="code" href="classcsInputBinderBoolean.html#a1">00144</a>   csInputBinderBoolean () : s (0)
-00145   { <a class="code" href="group__scf.html#a12">SCF_CONSTRUCT_IBASE</a> (0); }
-<a name="l00147"></a><a class="code" href="classcsInputBinderBoolean.html#a2">00147</a>   csInputBinderBoolean (<a class="code" href="structiInputBinderBoolean.html">iInputBinderBoolean</a> *ss) : s (ss-&gt;Get ())
-00148   { <a class="code" href="group__scf.html#a12">SCF_CONSTRUCT_IBASE</a> (0); }
-<a name="l00150"></a><a class="code" href="classcsInputBinderBoolean.html#a3">00150</a>   <span class="keyword">virtual</span> ~csInputBinderBoolean ()
-00151   { <a class="code" href="group__scf.html#a14">SCF_DESTRUCT_IBASE</a>(); }
-00152 
-<a name="l00154"></a><a class="code" href="classcsInputBinderBoolean.html#a4">00154</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinderBoolean.html#a0">Set</a> (<span class="keywordtype">bool</span> ss) { s = ss; }
-<a name="l00156"></a><a class="code" href="classcsInputBinderBoolean.html#a5">00156</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiInputBinderBoolean.html#a1">Get</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> s; }
-00157 };
-00158 
-00159 <span class="preprocessor">#endif // __CS_UTIL_BINDER_H__</span>
+00096 <span class="preprocessor">#endif // __CS_UTIL_BINDER_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

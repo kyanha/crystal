@@ -17,7 +17,7 @@
 <center>
 <a class="qindex" href="index.html">Main Page</a> &nbsp; <a class="qindex" href="modules.html">Modules</a> &nbsp; <a class="qindex" href="hierarchy.html">Class Hierarchy</a> &nbsp; <a class="qindex" href="classes.html">Alphabetical List</a> &nbsp; <a class="qindex" href="annotated.html">Compound List</a> &nbsp; <a class="qindex" href="files.html">File List</a> &nbsp; <a class="qindex" href="functions.html">Compound Members</a> &nbsp; <a class="qindex" href="globals.html">File Members</a> &nbsp; <a class="qindex" href="pages.html">Related Pages</a> &nbsp; </center>
 <hr><h1>iutil/binder.h</h1><div class="fragment"><pre>00001 <span class="comment">/*</span>
-00002 <span class="comment">    Copyright (C) 2003 by Mathew Sutcliffe &lt;oktal@gmx.co.uk&gt;</span>
+00002 <span class="comment">    Copyright (C) 2003, 04 by Mathew Sutcliffe &lt;oktal@gmx.co.uk&gt;</span>
 00003 <span class="comment"></span>
 00004 <span class="comment">    This library is free software; you can redistribute it and/or</span>
 00005 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
@@ -41,39 +41,37 @@
 00023 
 00024 <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a>;
 00025 <span class="keyword">struct </span><a class="code" href="structiEventHandler.html">iEventHandler</a>;
-00026 
-00027 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiInputBinderPosition.html">iInputBinderPosition</a>, 0, 0, 1);
+00026 <span class="keyword">struct </span><a class="code" href="structiConfigFile.html">iConfigFile</a>;
+00027 <span class="keyword">class </span><a class="code" href="classcsInputDefinition.html">csInputDefinition</a>;
 00028 
-<a name="l00032"></a><a class="code" href="structiInputBinderPosition.html">00032</a> <span class="keyword">struct </span><a class="code" href="structiInputBinderPosition.html">iInputBinderPosition</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00029 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiInputBinder.html">iInputBinder</a>, 0, 1, 0);
+00030 
+<a name="l00032"></a><a class="code" href="structiInputBinder.html">00032</a> <span class="keyword">struct </span><a class="code" href="structiInputBinder.html">iInputBinder</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
 00033 {
-00035   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinderPosition.html#a0">Set</a> (<span class="keywordtype">int</span>) = 0;
-00037   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiInputBinderPosition.html#a1">Get</a> () <span class="keyword">const</span> = 0;
-00038 };
-00039 
-00040 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiInputBinderBoolean.html">iInputBinderBoolean</a>, 0, 0, 1);
+00040   <span class="keyword">virtual</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>* <a class="code" href="structiInputBinder.html#a0">QueryHandler</a> () = 0;
 00041 
-<a name="l00046"></a><a class="code" href="structiInputBinderBoolean.html">00046</a> <span class="keyword">struct </span><a class="code" href="structiInputBinderBoolean.html">iInputBinderBoolean</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00047 {
-00049   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinderBoolean.html#a0">Set</a> (<span class="keywordtype">bool</span>) = 0;
-00051   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiInputBinderBoolean.html#a1">Get</a> () <span class="keyword">const</span> = 0;
-00052 };
-00053 
-00054 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiInputBinder.html">iInputBinder</a>, 0, 0, 1);
-00055 
-<a name="l00060"></a><a class="code" href="structiInputBinder.html">00060</a> <span class="keyword">struct </span><a class="code" href="structiInputBinder.html">iInputBinder</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00061 {
-00067   <span class="keyword">virtual</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>* <a class="code" href="structiInputBinder.html#a0">QueryHandler</a> () = 0;
-00068 
-00074   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinder.html#a1">Bind</a> (<a class="code" href="structiEvent.html">iEvent</a>&amp;, <a class="code" href="structiInputBinderBoolean.html">iInputBinderBoolean</a>*, <span class="keywordtype">bool</span> toggle = <span class="keyword">false</span>) = 0;
-00075 
-00079   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinder.html#a1">Bind</a> (<a class="code" href="structiEvent.html">iEvent</a>&amp;, <a class="code" href="structiInputBinderPosition.html">iInputBinderPosition</a>*) = 0;
-00080 
-00084   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiInputBinder.html#a3">Unbind</a> (<a class="code" href="structiEvent.html">iEvent</a>&amp;) = 0;
+00043   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiInputBinder.html#a1">Button</a> (<span class="keywordtype">unsigned</span> cmd) = 0;
+00044 
+00046   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiInputBinder.html#a2">Axis</a> (<span class="keywordtype">unsigned</span> cmd) = 0;
+00047 
+00060   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinder.html#a3">BindButton</a> (<span class="keyword">const</span> <a class="code" href="classcsInputDefinition.html">csInputDefinition</a> &amp;def, <span class="keywordtype">unsigned</span> cmd,
+00061     <span class="keywordtype">bool</span> toggle = <span class="keyword">false</span>) = 0;
+00062 
+00080   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinder.html#a4">BindAxis</a> (<span class="keyword">const</span> <a class="code" href="classcsInputDefinition.html">csInputDefinition</a> &amp;def, <span class="keywordtype">unsigned</span> cmd,
+00081     <span class="keywordtype">int</span> sensitivity = 1) = 0;
+00082 
+00084   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiInputBinder.html#a5">UnbindButton</a> (<span class="keywordtype">unsigned</span> cmd) = 0;
 00085 
-00089   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiInputBinder.html#a4">UnbindAll</a>() = 0;
-00090 };
+00087   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiInputBinder.html#a6">UnbindAxis</a> (<span class="keywordtype">unsigned</span> cmd) = 0;
+00088 
+00090   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinder.html#a7">UnbindAll</a>() = 0;
 00091 
-00092 <span class="preprocessor">#endif // __CS_IUTIL_BINDER_H__</span>
+00093   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinder.html#a8">LoadConfig</a> (<a class="code" href="structiConfigFile.html">iConfigFile</a> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *subsection = 0) = 0;
+00094 
+00096   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiInputBinder.html#a9">SaveConfig</a> (<a class="code" href="structiConfigFile.html">iConfigFile</a> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *subsection = 0) = 0;
+00097 };
+00098 
+00099 <span class="preprocessor">#endif // __CS_IUTIL_BINDER_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

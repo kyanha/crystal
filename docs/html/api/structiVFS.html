@@ -66,14 +66,16 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Save current configuration back into configuration file.</em> <a href="#a15"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a16">LoadMountsFromFile</a> (<a class="el" href="structiConfigFile.html">iConfigFile</a> *file)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Loads mounts from a configuration file.</em> <a href="#a16"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a17">GetFileTime</a> (const char *FileName, <a class="el" href="structcsFileTime.html">csFileTime</a> &amp;oTime) const=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Query file date/time.</em> <a href="#a17"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a18">SetFileTime</a> (const char *FileName, const <a class="el" href="structcsFileTime.html">csFileTime</a> &amp;iTime)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Set file date/time.</em> <a href="#a18"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a19">GetFileSize</a> (const char *FileName, size_t &amp;oSize)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Query file size (without opening it).</em> <a href="#a19"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiDataBuffer.html">iDataBuffer</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a20">GetRealPath</a> (const char *FileName)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Query real-world path from given VFS path.</em> <a href="#a20"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a17">ChDirAuto</a> (const char *path, const <a class="el" href="classcsStringArray.html">csStringArray</a> *paths=0, const char *vfspath=0)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Conveniance function to set the current VFS directory to the given path.</em> <a href="#a17"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a18">GetFileTime</a> (const char *FileName, <a class="el" href="structcsFileTime.html">csFileTime</a> &amp;oTime) const=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Query file date/time.</em> <a href="#a18"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a19">SetFileTime</a> (const char *FileName, const <a class="el" href="structcsFileTime.html">csFileTime</a> &amp;iTime)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set file date/time.</em> <a href="#a19"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a20">GetFileSize</a> (const char *FileName, size_t &amp;oSize)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Query file size (without opening it).</em> <a href="#a20"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiDataBuffer.html">iDataBuffer</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiVFS.html#a21">GetRealPath</a> (const char *FileName)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Query real-world path from given VFS path.</em> <a href="#a21"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 The Virtual Filesystem Class is intended to be the only way for Crystal Space engine to access the files.
@@ -90,7 +92,7 @@ Main ways to get pointers to this interface: <ul>
 <p>
 
 <p>
-Definition at line <a class="el" href="vfs_8h-source.html#l00213">213</a> of file <a class="el" href="vfs_8h-source.html">vfs.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="vfs_8h-source.html#l00214">214</a> of file <a class="el" href="vfs_8h-source.html">vfs.h</a>.<hr><h2>Member Function Documentation</h2>
 <a name="a0" doxytag="iVFS::ChDir"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -120,6 +122,63 @@ Definition at line <a class="el" href="vfs_8h-source.html#l00213">213</a> of fil
 Set current working directory.
 <p>
     </td>
+  </tr>
+</table>
+<a name="a17" doxytag="iVFS::ChDirAuto"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual bool iVFS::ChDirAuto </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const char *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>path</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>const <a class="el" href="classcsStringArray.html">csStringArray</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>paths</em> = 0, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>const char *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>vfspath</em> = 0</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Conveniance function to set the current VFS directory to the given path.
+<p>
+The path can be any of the following: <ul>
+<li>A valid VFS path. In that case this is equivalent to calling ChDir(path). <li>A real path (using '/', '\', or '$/' for path delimiter). In this case this path will be mounted on the 'vfspath' parameter and a ChDir(vfspath) will happen. <li>A real path to a zip file. In this case the zip file will be mounted on the 'vfspath' parameter and a ChDir(vfspath) will happen. </ul>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>path</em>&nbsp;</td><td>
+is the path to mount (VFS, real, zip, ...) </td></tr>
+<tr><td valign=top><em>paths</em>&nbsp;</td><td>
+is an array of possible vfs paths to also look in for the given file. This can an empty array or 0. If not empty then this routine will first try to find the 'path' as such if it is a VFS path. Otherwise it will scan all paths here and add the path as a prefix. Only if all this fails will it try to interprete the input path as a real world dir or zip file. </td></tr>
+<tr><td valign=top><em>vfspath</em>&nbsp;</td><td>
+is the temporary name to use in case it is not a vfs path. If not given then this routine will try to use a suitable temporary name. </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a10" doxytag="iVFS::DeleteFile"></a><p>
@@ -292,7 +351,7 @@ Get current working directory.
     </td>
   </tr>
 </table>
-<a name="a19" doxytag="iVFS::GetFileSize"></a><p>
+<a name="a20" doxytag="iVFS::GetFileSize"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -333,7 +392,7 @@ Query file size (without opening it).
 True if the query succeeded, else false. </dl>    </td>
   </tr>
 </table>
-<a name="a17" doxytag="iVFS::GetFileTime"></a><p>
+<a name="a18" doxytag="iVFS::GetFileTime"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -374,7 +433,7 @@ Query file date/time.
 True if the query succeeded, else false. </dl>    </td>
   </tr>
 </table>
-<a name="a20" doxytag="iVFS::GetRealPath"></a><p>
+<a name="a21" doxytag="iVFS::GetRealPath"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -723,7 +782,7 @@ Save current configuration back into configuration file.
 True if the operation succeeded, else false. </dl>    </td>
   </tr>
 </table>
-<a name="a18" doxytag="iVFS::SetFileTime"></a><p>
+<a name="a19" doxytag="iVFS::SetFileTime"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">

@@ -111,34 +111,45 @@
 00115       candidate);
 00116   }
 00117 
-<a name="l00122"></a><a class="code" href="classcsStringArray.html#a5">00122</a>   <span class="keywordtype">char</span>* <a class="code" href="classcsStringArray.html#a5">Pop</a> ()
-00123   {
-00124     CS_ASSERT (<a class="code" href="classcsArray.html#a4">Length</a> () &gt; 0);
-00125     size_t l = <a class="code" href="classcsArray.html#a4">Length</a> () - 1;
-00126     <span class="keywordtype">char</span>* ret = (<span class="keywordtype">char</span>*)<a class="code" href="classcsArray.html#a9">Get</a> (l);
-00127     <a class="code" href="classcsArray.html#b0">InitRegion</a> (l, 1);
-00128     <a class="code" href="classcsArray.html#a7">SetLength</a> (l);
-00129     <span class="keywordflow">return</span> ret;
+00118 
+<a name="l00123"></a><a class="code" href="classcsStringArray.html#a5">00123</a>   size_t <a class="code" href="classcsStringArray.html#a5">InsertSorted</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* item, <span class="keywordtype">bool</span> case_sensitive = <span class="keyword">true</span>,
+00124     size_t* equal_index = 0)
+00125   {
+00126     int(*cf)(<span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span>&amp;, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span>&amp;) =
+00127       case_sensitive ? CaseSensitiveCompare : CaseInsensitiveCompare;
+00128     <span class="keywordflow">return</span> superclass::InsertSorted (item,
+00129         cf, equal_index);
 00130   }
 00131 
-<a name="l00136"></a><a class="code" href="classcsStringArray.html#a6">00136</a>   size_t <a class="code" href="classcsStringArray.html#a6">Find</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* what)<span class="keyword"> const</span>
-00137 <span class="keyword">  </span>{
-00138     <span class="keywordflow">for</span> (size_t i = 0; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> (); i++)
-00139       <span class="keywordflow">if</span> (! strcmp (<a class="code" href="classcsArray.html#a9">Get</a> (i), what))
-00140         <span class="keywordflow">return</span> i;
-00141     <span class="keywordflow">return</span> (size_t)-1;
-00142   }
-00143 
-<a name="l00148"></a><a class="code" href="classcsStringArray.html#a7">00148</a>   size_t <a class="code" href="classcsStringArray.html#a7">FindCaseInsensitive</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* what)<span class="keyword"> const</span>
-00149 <span class="keyword">  </span>{
-00150     <span class="keywordflow">for</span> (size_t i = 0; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> (); i++)
-00151       <span class="keywordflow">if</span> (!strcasecmp (<a class="code" href="classcsArray.html#a9">Get</a> (i), what))
-00152         <span class="keywordflow">return</span> i;
-00153     <span class="keywordflow">return</span> (size_t)-1;
-00154   }
-00155 };
-00156 
-00157 <span class="preprocessor">#endif // __CS_STRINGARRAY_H__</span>
+00132 
+<a name="l00137"></a><a class="code" href="classcsStringArray.html#a6">00137</a>   <span class="keywordtype">char</span>* <a class="code" href="classcsStringArray.html#a6">Pop</a> ()
+00138   {
+00139     CS_ASSERT (<a class="code" href="classcsArray.html#a4">Length</a> () &gt; 0);
+00140     size_t l = <a class="code" href="classcsArray.html#a4">Length</a> () - 1;
+00141     <span class="keywordtype">char</span>* ret = (<span class="keywordtype">char</span>*)<a class="code" href="classcsArray.html#a9">Get</a> (l);
+00142     <a class="code" href="classcsArray.html#b0">InitRegion</a> (l, 1);
+00143     <a class="code" href="classcsArray.html#a7">SetLength</a> (l);
+00144     <span class="keywordflow">return</span> ret;
+00145   }
+00146 
+<a name="l00151"></a><a class="code" href="classcsStringArray.html#a7">00151</a>   size_t <a class="code" href="classcsStringArray.html#a7">Find</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* what)<span class="keyword"> const</span>
+00152 <span class="keyword">  </span>{
+00153     <span class="keywordflow">for</span> (size_t i = 0; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> (); i++)
+00154       <span class="keywordflow">if</span> (! strcmp (<a class="code" href="classcsArray.html#a9">Get</a> (i), what))
+00155         <span class="keywordflow">return</span> i;
+00156     <span class="keywordflow">return</span> (size_t)-1;
+00157   }
+00158 
+<a name="l00163"></a><a class="code" href="classcsStringArray.html#a8">00163</a>   size_t <a class="code" href="classcsStringArray.html#a8">FindCaseInsensitive</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* what)<span class="keyword"> const</span>
+00164 <span class="keyword">  </span>{
+00165     <span class="keywordflow">for</span> (size_t i = 0; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> (); i++)
+00166       <span class="keywordflow">if</span> (!strcasecmp (<a class="code" href="classcsArray.html#a9">Get</a> (i), what))
+00167         <span class="keywordflow">return</span> i;
+00168     <span class="keywordflow">return</span> (size_t)-1;
+00169   }
+00170 };
+00171 
+00172 <span class="preprocessor">#endif // __CS_STRINGARRAY_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
