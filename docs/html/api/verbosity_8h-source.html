@@ -37,12 +37,13 @@
 00020 <span class="preprocessor">#ifndef __CS_CSUTIL_VERBOSITY_H__</span>
 00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_VERBOSITY_H__</span>
 00022 <span class="preprocessor"></span>
+00026 <span class="preprocessor">#include "csextern.h"</span>
 00027 <span class="preprocessor">#include "<a class="code" href="verbositymanager_8h.html">iutil/verbositymanager.h</a>"</span>
 00028 
 00029 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
 00030 <span class="preprocessor">#include "<a class="code" href="hashhandlers_8h.html">csutil/hashhandlers.h</a>"</span>
 00031 
-<a name="l00048"></a><a class="code" href="classcsVerbosityParser.html">00048</a> <span class="keyword">class </span><a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>
+<a name="l00048"></a><a class="code" href="classcsVerbosityParser.html">00048</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csVerbosityParser
 00049 {
 00050   <span class="keyword">struct </span>VerbosityFlag
 00051   {
@@ -65,33 +66,33 @@
 00072   <span class="keyword">static</span> <span class="keywordtype">int</span> VfKeyCompare (<span class="keyword">const</span> VerbosityFlag&amp; vf, <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>&amp; K);
 00073   <span class="keyword">static</span> <span class="keywordtype">int</span> VfCompare (<span class="keyword">const</span> VerbosityFlag&amp; vf1, <span class="keyword">const</span> VerbosityFlag&amp; vf2);
 00074 <span class="keyword">public</span>:
-00080   <a class="code" href="classcsVerbosityParser.html#a0">csVerbosityParser</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* flags);
+00080   csVerbosityParser (<span class="keyword">const</span> <span class="keywordtype">char</span>* flags);
 00081   
-00085   <span class="keywordtype">bool</span> <a class="code" href="classcsVerbosityParser.html#a1">CheckFlag</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgClass, <span class="keyword">const</span> <span class="keywordtype">char</span>* msgSubclass = 0);
+00085   <span class="keywordtype">bool</span> CheckFlag (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgClass, <span class="keyword">const</span> <span class="keywordtype">char</span>* msgSubclass = 0);
 00086 };
 00087 
 00094 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">bool</span> <a class="code" href="verbosity_8h.html#a0">csCheckVerbosity</a> (<span class="keywordtype">int</span> argc,
 00095   <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span> argv[], <span class="keyword">const</span> <span class="keywordtype">char</span>* msgClass,
 00096   <span class="keyword">const</span> <span class="keywordtype">char</span>* msgSubclass = 0);
 00097   
-<a name="l00102"></a><a class="code" href="classcsVerbosityManager.html">00102</a> <span class="keyword">class </span><a class="code" href="classcsVerbosityManager.html">csVerbosityManager</a> : <span class="keyword">public</span> <a class="code" href="structiVerbosityManager.html">iVerbosityManager</a>
+<a name="l00102"></a><a class="code" href="classcsVerbosityManager.html">00102</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT csVerbosityManager : <span class="keyword">public</span> <a class="code" href="structiVerbosityManager.html">iVerbosityManager</a>
 00103 {
-00104   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> vp;
+00104   csVerbosityParser vp;
 00105 <span class="keyword">public</span>:
-00106   SCF_DECLARE_IBASE;
+00106   <a class="code" href="group__scf.html#a21">SCF_DECLARE_IBASE</a>;
 00107 
-00108   <a class="code" href="classcsVerbosityManager.html">csVerbosityManager</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* flags) : vp (flags)
+00108   csVerbosityManager (<span class="keyword">const</span> <span class="keywordtype">char</span>* flags) : vp (flags)
 00109   {
 00110     <a class="code" href="group__scf.html#a23">SCF_CONSTRUCT_IBASE</a>(0);
 00111   }
-00112   <span class="keyword">virtual</span> ~<a class="code" href="classcsVerbosityManager.html">csVerbosityManager</a>()
+00112   <span class="keyword">virtual</span> ~csVerbosityManager()
 00113   {
 00114     <a class="code" href="group__scf.html#a25">SCF_DESTRUCT_IBASE</a>();
 00115   }
 00116 
-<a name="l00117"></a><a class="code" href="classcsVerbosityManager.html#a2">00117</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsVerbosityManager.html#a2">CheckFlag</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgClass, 
+<a name="l00117"></a><a class="code" href="classcsVerbosityManager.html#a2">00117</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVerbosityManager.html#a0">CheckFlag</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgClass, 
 00118     <span class="keyword">const</span> <span class="keywordtype">char</span>* msgSubclass = 0)
-00119   { <span class="keywordflow">return</span> vp.<a class="code" href="classcsVerbosityParser.html#a1">CheckFlag</a> (msgClass, msgSubclass); }
+00119   { <span class="keywordflow">return</span> vp.CheckFlag (msgClass, msgSubclass); }
 00120 };
 00121 
 00122 <span class="preprocessor">#endif // __CS_CSUTIL_VERBOSITY_H__</span>
