@@ -91,269 +91,284 @@
 00082 <span class="keyword">struct </span><a class="code" href="structiSharedVariableList.html">iSharedVariableList</a>;
 00083 <span class="keyword">struct </span><a class="code" href="structiRenderLoopManager.html">iRenderLoopManager</a>;
 00084 <span class="keyword">struct </span><a class="code" href="structiRenderLoop.html">iRenderLoop</a>;
-00085 
-<a name="l00091"></a><a class="code" href="group__engine3d.html#a0">00091</a> <span class="preprocessor">#define CS_ENGINE_CACHE_READ 1</span>
-00092 <span class="preprocessor"></span>
-<a name="l00096"></a><a class="code" href="group__engine3d.html#a1">00096</a> <span class="preprocessor">#define CS_ENGINE_CACHE_WRITE 2</span>
-00097 <span class="preprocessor"></span>
-<a name="l00101"></a><a class="code" href="group__engine3d.html#a2">00101</a> <span class="preprocessor">#define CS_ENGINE_CACHE_NOUPDATE 4</span>
-00102 <span class="preprocessor"></span>
-<a name="l00109"></a><a class="code" href="group__engine3d.html#a3">00109</a> <span class="preprocessor">#define CS_RENDPRI_NONE 0</span>
-00110 <span class="preprocessor"></span>
-<a name="l00114"></a><a class="code" href="group__engine3d.html#a4">00114</a> <span class="preprocessor">#define CS_RENDPRI_BACK2FRONT 1</span>
-00115 <span class="preprocessor"></span>
-<a name="l00119"></a><a class="code" href="group__engine3d.html#a5">00119</a> <span class="preprocessor">#define CS_RENDPRI_FRONT2BACK 2</span>
-00120 <span class="preprocessor"></span>
-00122 <a class="code" href="group__scf.html#a65">SCF_VERSION</a> (<a class="code" href="structiEngine.html">iEngine</a>, 0, 23, 0);
-00123 
-<a name="l00142"></a><a class="code" href="structiEngine.html">00142</a> <span class="keyword">struct </span><a class="code" href="structiEngine.html">iEngine</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00143 {
-00145   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *<a class="code" href="structiEngine.html#a0">QueryObject</a>() = 0;
-00146 
-00162   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a1">Prepare</a> (<a class="code" href="structiProgressMeter.html">iProgressMeter</a>* meter = 0) = 0;
-00163 
-00179   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a2">ForceRelight</a> (<a class="code" href="structiRegion.html">iRegion</a>* region = 0,
-00180         <a class="code" href="structiProgressMeter.html">iProgressMeter</a>* meter = 0) = 0;
-00181 
-00194   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a2">ForceRelight</a> (<a class="code" href="structiLight.html">iLight</a>* light, <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00195 
-00206   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a4">RemoveLight</a> (<a class="code" href="structiLight.html">iLight</a>* light) = 0;
-00207 
-00215   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a5">PrepareTextures</a> () = 0;
-00216 
-00222   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a6">PrepareMeshes</a> () = 0;
-00223 
-00234   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a7">ShineLights</a> (<a class="code" href="structiRegion.html">iRegion</a>* region = 0,
-00235         <a class="code" href="structiProgressMeter.html">iProgressMeter</a>* meter = 0) = 0;
-00236 
-00241   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a8">GetTextureFormat</a> () <span class="keyword">const</span> = 0;
-00242 
-00244   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a9">DeleteAll</a> () = 0;
+00085 <span class="keyword">struct </span><a class="code" href="structiEngine.html">iEngine</a>;
+00086 
+<a name="l00092"></a><a class="code" href="group__engine3d.html#a0">00092</a> <span class="preprocessor">#define CS_ENGINE_CACHE_READ 1</span>
+00093 <span class="preprocessor"></span>
+<a name="l00097"></a><a class="code" href="group__engine3d.html#a1">00097</a> <span class="preprocessor">#define CS_ENGINE_CACHE_WRITE 2</span>
+00098 <span class="preprocessor"></span>
+<a name="l00102"></a><a class="code" href="group__engine3d.html#a2">00102</a> <span class="preprocessor">#define CS_ENGINE_CACHE_NOUPDATE 4</span>
+00103 <span class="preprocessor"></span>
+<a name="l00110"></a><a class="code" href="group__engine3d.html#a3">00110</a> <span class="preprocessor">#define CS_RENDPRI_NONE 0</span>
+00111 <span class="preprocessor"></span>
+<a name="l00115"></a><a class="code" href="group__engine3d.html#a4">00115</a> <span class="preprocessor">#define CS_RENDPRI_BACK2FRONT 1</span>
+00116 <span class="preprocessor"></span>
+<a name="l00120"></a><a class="code" href="group__engine3d.html#a5">00120</a> <span class="preprocessor">#define CS_RENDPRI_FRONT2BACK 2</span>
+00121 <span class="preprocessor"></span>
+00124 <a class="code" href="group__scf.html#a65">SCF_VERSION</a> (<a class="code" href="structiEngineSectorCallback.html">iEngineSectorCallback</a>, 0, 0, 1);
+00125 
+<a name="l00130"></a><a class="code" href="structiEngineSectorCallback.html">00130</a> <span class="keyword">struct </span><a class="code" href="structiEngineSectorCallback.html">iEngineSectorCallback</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00131 {
+00135   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngineSectorCallback.html#a0">NewSector</a> (<a class="code" href="structiEngine.html">iEngine</a>* engine, <a class="code" href="structiSector.html">iSector</a>* sector) = 0;
+00136 
+00140   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngineSectorCallback.html#a1">RemoveSector</a> (<a class="code" href="structiEngine.html">iEngine</a>* engine, <a class="code" href="structiSector.html">iSector</a>* sector) = 0;
+00141 };
+00142 
+00143 
+00144 <a class="code" href="group__scf.html#a65">SCF_VERSION</a> (<a class="code" href="structiEngine.html">iEngine</a>, 0, 23, 0);
+00145 
+<a name="l00164"></a><a class="code" href="structiEngine.html">00164</a> <span class="keyword">struct </span><a class="code" href="structiEngine.html">iEngine</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00165 {
+00167   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *<a class="code" href="structiEngine.html#a0">QueryObject</a>() = 0;
+00168 
+00184   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a1">Prepare</a> (<a class="code" href="structiProgressMeter.html">iProgressMeter</a>* meter = 0) = 0;
+00185 
+00201   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a2">ForceRelight</a> (<a class="code" href="structiRegion.html">iRegion</a>* region = 0,
+00202         <a class="code" href="structiProgressMeter.html">iProgressMeter</a>* meter = 0) = 0;
+00203 
+00216   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a2">ForceRelight</a> (<a class="code" href="structiLight.html">iLight</a>* light, <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00217 
+00228   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a4">RemoveLight</a> (<a class="code" href="structiLight.html">iLight</a>* light) = 0;
+00229 
+00237   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a5">PrepareTextures</a> () = 0;
+00238 
+00244   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a6">PrepareMeshes</a> () = 0;
 00245 
-00267   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a10">RegisterRenderPriority</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, <span class="keywordtype">long</span> priority,
-00268         <span class="keywordtype">int</span> rendsort = <a class="code" href="group__engine3d.html#a3">CS_RENDPRI_NONE</a>) = 0;
-00269 
-00277   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a11">GetRenderPriority</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) <span class="keyword">const</span> = 0;
-00279   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a12">GetRenderPrioritySorting</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) <span class="keyword">const</span> = 0;
-00281   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a12">GetRenderPrioritySorting</a> (<span class="keywordtype">long</span> priority) <span class="keyword">const</span> = 0;
-00283   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a14">GetSkyRenderPriority</a> () = 0;
-00285   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a15">GetPortalRenderPriority</a> () = 0;
-00287   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a16">GetWallRenderPriority</a> () = 0;
-00289   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a17">GetObjectRenderPriority</a> () = 0;
-00291   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a18">GetAlphaRenderPriority</a> () = 0;
-00293   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a19">ClearRenderPriorities</a> () = 0;
-00295   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a20">GetRenderPriorityCount</a> () <span class="keyword">const</span> = 0;
-00297   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiEngine.html#a21">GetRenderPriorityName</a> (<span class="keywordtype">long</span> priority) <span class="keyword">const</span> = 0;
-00298 
-00308   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMaterial&gt;</a> <a class="code" href="structiEngine.html#a22">CreateBaseMaterial</a> (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* txt) = 0;
-00309 
-00325   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMaterial&gt;</a> <a class="code" href="structiEngine.html#a22">CreateBaseMaterial</a> (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* txt,
-00326         <span class="keywordtype">int</span> num_layers, <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>** wrappers, <a class="code" href="structcsTextureLayer.html">csTextureLayer</a>* layers) = 0;
-00327 
-00346   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiEngine.html#a24">CreateTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-00347         <span class="keyword">const</span> <span class="keywordtype">char</span> *fileName, <a class="code" href="classcsColor.html">csColor</a> *transp, <span class="keywordtype">int</span> flags) = 0;
-00348 
-00359   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiEngine.html#a25">CreateBlackTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-00360         <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <a class="code" href="classcsColor.html">csColor</a> *transp, <span class="keywordtype">int</span> flags) = 0;
-00361 
-00367   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiEngine.html#a26">CreateMaterial</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-00368         <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* texture) = 0;
-00373   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a> *<a class="code" href="structiEngine.html#a27">CreateSector</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
-00374 
-00385   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a28">CreateSectorWallsMesh</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
-00386       <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00387 
-00397   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a29">CreateThingMesh</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
-00398         <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00399 
-00401   <span class="keyword">virtual</span> <a class="code" href="structiSectorList.html">iSectorList</a>* <a class="code" href="structiEngine.html#a30">GetSectors</a> () = 0;
-00403   <span class="keyword">virtual</span> <a class="code" href="structiMeshFactoryList.html">iMeshFactoryList</a>* <a class="code" href="structiEngine.html#a31">GetMeshFactories</a> () = 0;
-00405   <span class="keyword">virtual</span> <a class="code" href="structiMeshList.html">iMeshList</a>* <a class="code" href="structiEngine.html#a32">GetMeshes</a> () = 0;
-00407   <span class="keyword">virtual</span> <a class="code" href="structiCollectionList.html">iCollectionList</a>* <a class="code" href="structiEngine.html#a33">GetCollections</a> () = 0;
-00409   <span class="keyword">virtual</span> <a class="code" href="structiCameraPositionList.html">iCameraPositionList</a>* <a class="code" href="structiEngine.html#a34">GetCameraPositions</a> () = 0;
-00411   <span class="keyword">virtual</span> <a class="code" href="structiTextureList.html">iTextureList</a>* <a class="code" href="structiEngine.html#a35">GetTextureList</a> () <span class="keyword">const</span> = 0;
-00413   <span class="keyword">virtual</span> <a class="code" href="structiMaterialList.html">iMaterialList</a>* <a class="code" href="structiEngine.html#a36">GetMaterialList</a> () <span class="keyword">const</span> = 0;
-00415   <span class="keyword">virtual</span> <a class="code" href="structiSharedVariableList.html">iSharedVariableList</a>* <a class="code" href="structiEngine.html#a37">GetVariableList</a> () <span class="keyword">const</span> = 0;
-00416 
-00421   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a38">AddMeshAndChildren</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
-00422 
-00429   <span class="keyword">virtual</span> <a class="code" href="structiRegion.html">iRegion</a>* <a class="code" href="structiEngine.html#a39">CreateRegion</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00431   <span class="keyword">virtual</span> <a class="code" href="structiRegionList.html">iRegionList</a>* <a class="code" href="structiEngine.html#a40">GetRegions</a> () = 0;
+00256   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a7">ShineLights</a> (<a class="code" href="structiRegion.html">iRegion</a>* region = 0,
+00257         <a class="code" href="structiProgressMeter.html">iProgressMeter</a>* meter = 0) = 0;
+00258 
+00263   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a8">GetTextureFormat</a> () <span class="keyword">const</span> = 0;
+00264 
+00266   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a9">DeleteAll</a> () = 0;
+00267 
+00289   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a10">RegisterRenderPriority</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, <span class="keywordtype">long</span> priority,
+00290         <span class="keywordtype">int</span> rendsort = <a class="code" href="group__engine3d.html#a3">CS_RENDPRI_NONE</a>) = 0;
+00291 
+00299   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a11">GetRenderPriority</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) <span class="keyword">const</span> = 0;
+00301   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a12">GetRenderPrioritySorting</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) <span class="keyword">const</span> = 0;
+00303   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a12">GetRenderPrioritySorting</a> (<span class="keywordtype">long</span> priority) <span class="keyword">const</span> = 0;
+00305   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a14">GetSkyRenderPriority</a> () = 0;
+00307   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a15">GetPortalRenderPriority</a> () = 0;
+00309   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a16">GetWallRenderPriority</a> () = 0;
+00311   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a17">GetObjectRenderPriority</a> () = 0;
+00313   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiEngine.html#a18">GetAlphaRenderPriority</a> () = 0;
+00315   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a19">ClearRenderPriorities</a> () = 0;
+00317   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a20">GetRenderPriorityCount</a> () <span class="keyword">const</span> = 0;
+00319   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiEngine.html#a21">GetRenderPriorityName</a> (<span class="keywordtype">long</span> priority) <span class="keyword">const</span> = 0;
+00320 
+00330   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMaterial&gt;</a> <a class="code" href="structiEngine.html#a22">CreateBaseMaterial</a> (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* txt) = 0;
+00331 
+00347   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMaterial&gt;</a> <a class="code" href="structiEngine.html#a22">CreateBaseMaterial</a> (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* txt,
+00348         <span class="keywordtype">int</span> num_layers, <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>** wrappers, <a class="code" href="structcsTextureLayer.html">csTextureLayer</a>* layers) = 0;
+00349 
+00368   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiEngine.html#a24">CreateTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+00369         <span class="keyword">const</span> <span class="keywordtype">char</span> *fileName, <a class="code" href="classcsColor.html">csColor</a> *transp, <span class="keywordtype">int</span> flags) = 0;
+00370 
+00381   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiEngine.html#a25">CreateBlackTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+00382         <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <a class="code" href="classcsColor.html">csColor</a> *transp, <span class="keywordtype">int</span> flags) = 0;
+00383 
+00389   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiEngine.html#a26">CreateMaterial</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+00390         <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* texture) = 0;
+00395   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a> *<a class="code" href="structiEngine.html#a27">CreateSector</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
+00396 
+00401   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a28">AddEngineSectorCallback</a> (<a class="code" href="structiEngineSectorCallback.html">iEngineSectorCallback</a>* cb) = 0;
+00402 
+00406   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a29">RemoveEngineSectorCallback</a> (<a class="code" href="structiEngineSectorCallback.html">iEngineSectorCallback</a>* cb) = 0;
+00407 
+00418   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a30">CreateSectorWallsMesh</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
+00419       <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00420 
+00430   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a31">CreateThingMesh</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
+00431         <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
 00432 
-00445   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiEngine.html#a41">FindMaterial</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00446         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00459   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiEngine.html#a42">FindTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00460         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00461 
-00474   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiEngine.html#a43">FindSector</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00475         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00476 
-00489   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiEngine.html#a44">FindMeshObject</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00490         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00503   <span class="keyword">virtual</span> <a class="code" href="structiMeshFactoryWrapper.html">iMeshFactoryWrapper</a>* <a class="code" href="structiEngine.html#a45">FindMeshFactory</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00504         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00517   <span class="keyword">virtual</span> <a class="code" href="structiCameraPosition.html">iCameraPosition</a>* <a class="code" href="structiEngine.html#a46">FindCameraPosition</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00518         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00531   <span class="keyword">virtual</span> <a class="code" href="structiCollection.html">iCollection</a>* <a class="code" href="structiEngine.html#a47">FindCollection</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00532         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00533 
-00547   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a48">SetLightingCacheMode</a> (<span class="keywordtype">int</span> mode) = 0;
-00548 
-00550   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a49">GetLightingCacheMode</a> () = 0;
-00551 
-00564   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a50">SetClearZBuf</a> (<span class="keywordtype">bool</span> yesno) = 0;
-00565 
-00569   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a51">GetClearZBuf</a> () <span class="keyword">const</span> = 0;
-00570 
-00572   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a52">GetDefaultClearZBuf</a> () <span class="keyword">const</span> = 0;
-00573 
-00586   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a53">SetClearScreen</a> (<span class="keywordtype">bool</span> yesno) = 0;
-00587 
-00591   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a54">GetClearScreen</a> () <span class="keyword">const</span> = 0;
-00592 
-00594   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a55">GetDefaultClearScreen</a> () <span class="keyword">const</span> = 0;
-00595 
-00602   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a56">SetMaxLightmapSize</a>(<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h) = 0;
+00434   <span class="keyword">virtual</span> <a class="code" href="structiSectorList.html">iSectorList</a>* <a class="code" href="structiEngine.html#a32">GetSectors</a> () = 0;
+00436   <span class="keyword">virtual</span> <a class="code" href="structiMeshFactoryList.html">iMeshFactoryList</a>* <a class="code" href="structiEngine.html#a33">GetMeshFactories</a> () = 0;
+00438   <span class="keyword">virtual</span> <a class="code" href="structiMeshList.html">iMeshList</a>* <a class="code" href="structiEngine.html#a34">GetMeshes</a> () = 0;
+00440   <span class="keyword">virtual</span> <a class="code" href="structiCollectionList.html">iCollectionList</a>* <a class="code" href="structiEngine.html#a35">GetCollections</a> () = 0;
+00442   <span class="keyword">virtual</span> <a class="code" href="structiCameraPositionList.html">iCameraPositionList</a>* <a class="code" href="structiEngine.html#a36">GetCameraPositions</a> () = 0;
+00444   <span class="keyword">virtual</span> <a class="code" href="structiTextureList.html">iTextureList</a>* <a class="code" href="structiEngine.html#a37">GetTextureList</a> () <span class="keyword">const</span> = 0;
+00446   <span class="keyword">virtual</span> <a class="code" href="structiMaterialList.html">iMaterialList</a>* <a class="code" href="structiEngine.html#a38">GetMaterialList</a> () <span class="keyword">const</span> = 0;
+00448   <span class="keyword">virtual</span> <a class="code" href="structiSharedVariableList.html">iSharedVariableList</a>* <a class="code" href="structiEngine.html#a39">GetVariableList</a> () <span class="keyword">const</span> = 0;
+00449 
+00454   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a40">AddMeshAndChildren</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
+00455 
+00462   <span class="keyword">virtual</span> <a class="code" href="structiRegion.html">iRegion</a>* <a class="code" href="structiEngine.html#a41">CreateRegion</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00464   <span class="keyword">virtual</span> <a class="code" href="structiRegionList.html">iRegionList</a>* <a class="code" href="structiEngine.html#a42">GetRegions</a> () = 0;
+00465 
+00478   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiEngine.html#a43">FindMaterial</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00479         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00492   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiEngine.html#a44">FindTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00493         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00494 
+00507   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiEngine.html#a45">FindSector</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00508         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00509 
+00522   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiEngine.html#a46">FindMeshObject</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00523         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00536   <span class="keyword">virtual</span> <a class="code" href="structiMeshFactoryWrapper.html">iMeshFactoryWrapper</a>* <a class="code" href="structiEngine.html#a47">FindMeshFactory</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00537         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00550   <span class="keyword">virtual</span> <a class="code" href="structiCameraPosition.html">iCameraPosition</a>* <a class="code" href="structiEngine.html#a48">FindCameraPosition</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00551         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00564   <span class="keyword">virtual</span> <a class="code" href="structiCollection.html">iCollection</a>* <a class="code" href="structiEngine.html#a49">FindCollection</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00565         <a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00566 
+00580   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a50">SetLightingCacheMode</a> (<span class="keywordtype">int</span> mode) = 0;
+00581 
+00583   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a51">GetLightingCacheMode</a> () = 0;
+00584 
+00597   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a52">SetClearZBuf</a> (<span class="keywordtype">bool</span> yesno) = 0;
+00598 
+00602   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a53">GetClearZBuf</a> () <span class="keyword">const</span> = 0;
 00603 
-00608   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a57">GetMaxLightmapSize</a>(<span class="keywordtype">int</span>&amp; w, <span class="keywordtype">int</span>&amp; h) = 0;
-00609 
-00614   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a58">GetDefaultMaxLightmapSize</a>(<span class="keywordtype">int</span>&amp; w, <span class="keywordtype">int</span>&amp; h) = 0;
-00615 
-00617   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a59">GetMaxLightmapAspectRatio</a> () <span class="keyword">const</span> = 0;
-00618   
-00626   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a60">ResetWorldSpecificSettings</a>() = 0;  
-00627 
-00632   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iCamera&gt;</a> <a class="code" href="structiEngine.html#a61">CreateCamera</a> () = 0;
-00633 
-00655   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iLight&gt;</a> <a class="code" href="structiEngine.html#a62">CreateLight</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos,
-00656         <span class="keywordtype">float</span> radius, <span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color,
-00657         <span class="keywordtype">int</span> dyntype = <a class="code" href="group__engine3d__light.html#a2">CS_LIGHT_DYNAMICTYPE_STATIC</a>) = 0;
-00658 
-00663   <span class="keyword">virtual</span> <a class="code" href="structiLight.html">iLight</a>* <a class="code" href="structiEngine.html#a63">FindLight</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Name, <span class="keywordtype">bool</span> RegionOnly = <span class="keyword">false</span>)
-00664     <span class="keyword">const</span> = 0;
-00665 
-00670   <span class="keyword">virtual</span> <a class="code" href="structiLight.html">iLight</a>* <a class="code" href="structiEngine.html#a64">FindLightID</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* light_id) <span class="keyword">const</span> = 0;
-00671 
-00678   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iLightIterator&gt;</a> <a class="code" href="structiEngine.html#a65">GetLightIterator</a> (<a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00679 
-00686   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a66">GetBeginDrawFlags</a> () <span class="keyword">const</span> = 0;
-00687 
-00691   <span class="keyword">virtual</span> <a class="code" href="structiRenderView.html">iRenderView</a>* <a class="code" href="structiEngine.html#a67">GetTopLevelClipper</a> () <span class="keyword">const</span> = 0;
-00692 
-00706   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiEngine.html#a68">CreateMeshFactory</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* classId,
-00707         <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00708 
-00716   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiEngine.html#a68">CreateMeshFactory</a> (
-00717         <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a> * factory, <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00718 
-00724   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiEngine.html#a68">CreateMeshFactory</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00605   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a54">GetDefaultClearZBuf</a> () <span class="keyword">const</span> = 0;
+00606 
+00619   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a55">SetClearScreen</a> (<span class="keywordtype">bool</span> yesno) = 0;
+00620 
+00624   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a56">GetClearScreen</a> () <span class="keyword">const</span> = 0;
+00625 
+00627   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a57">GetDefaultClearScreen</a> () <span class="keyword">const</span> = 0;
+00628 
+00635   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a58">SetMaxLightmapSize</a>(<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h) = 0;
+00636 
+00641   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a59">GetMaxLightmapSize</a>(<span class="keywordtype">int</span>&amp; w, <span class="keywordtype">int</span>&amp; h) = 0;
+00642 
+00647   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a60">GetDefaultMaxLightmapSize</a>(<span class="keywordtype">int</span>&amp; w, <span class="keywordtype">int</span>&amp; h) = 0;
+00648 
+00650   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a61">GetMaxLightmapAspectRatio</a> () <span class="keyword">const</span> = 0;
+00651   
+00659   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a62">ResetWorldSpecificSettings</a>() = 0;  
+00660 
+00665   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iCamera&gt;</a> <a class="code" href="structiEngine.html#a63">CreateCamera</a> () = 0;
+00666 
+00688   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iLight&gt;</a> <a class="code" href="structiEngine.html#a64">CreateLight</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos,
+00689         <span class="keywordtype">float</span> radius, <span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color,
+00690         <span class="keywordtype">int</span> dyntype = <a class="code" href="group__engine3d__light.html#a2">CS_LIGHT_DYNAMICTYPE_STATIC</a>) = 0;
+00691 
+00696   <span class="keyword">virtual</span> <a class="code" href="structiLight.html">iLight</a>* <a class="code" href="structiEngine.html#a65">FindLight</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Name, <span class="keywordtype">bool</span> RegionOnly = <span class="keyword">false</span>)
+00697     <span class="keyword">const</span> = 0;
+00698 
+00703   <span class="keyword">virtual</span> <a class="code" href="structiLight.html">iLight</a>* <a class="code" href="structiEngine.html#a66">FindLightID</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* light_id) <span class="keyword">const</span> = 0;
+00704 
+00711   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iLightIterator&gt;</a> <a class="code" href="structiEngine.html#a67">GetLightIterator</a> (<a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00712 
+00719   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a68">GetBeginDrawFlags</a> () <span class="keyword">const</span> = 0;
+00720 
+00724   <span class="keyword">virtual</span> <a class="code" href="structiRenderView.html">iRenderView</a>* <a class="code" href="structiEngine.html#a69">GetTopLevelClipper</a> () <span class="keyword">const</span> = 0;
 00725 
-00734   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iLoaderContext&gt;</a> <a class="code" href="structiEngine.html#a71">CreateLoaderContext</a> (
-00735         <a class="code" href="structiRegion.html">iRegion</a>* region = 0, <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>) = 0;
-00736 
-00744   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiEngine.html#a72">LoadMeshFactory</a> (
-00745         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <span class="keyword">const</span> <span class="keywordtype">char</span>* loaderClassId,
-00746         <a class="code" href="structiDataBuffer.html">iDataBuffer</a>* input) = 0;
-00747 
-00761   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a73">CreateMeshWrapper</a> (<a class="code" href="structiMeshFactoryWrapper.html">iMeshFactoryWrapper</a>* factory,
-00762         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <a class="code" href="structiSector.html">iSector</a>* sector = 0,
-00763         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos = <a class="code" href="classcsVector3.html">csVector3</a> (0, 0, 0)) = 0;
-00764 
-00777   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a73">CreateMeshWrapper</a> (<a class="code" href="structiMeshObject.html">iMeshObject</a>* meshobj,
-00778         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <a class="code" href="structiSector.html">iSector</a>* sector = 0,
-00779         <span class="keyword">const</span> csVector3&amp; pos = csVector3 (0, 0, 0)) = 0;
+00739   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiEngine.html#a70">CreateMeshFactory</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* classId,
+00740         <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00741 
+00749   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiEngine.html#a70">CreateMeshFactory</a> (
+00750         <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a> * factory, <span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00751 
+00757   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiEngine.html#a70">CreateMeshFactory</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00758 
+00767   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iLoaderContext&gt;</a> <a class="code" href="structiEngine.html#a73">CreateLoaderContext</a> (
+00768         <a class="code" href="structiRegion.html">iRegion</a>* region = 0, <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>) = 0;
+00769 
+00777   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiEngine.html#a74">LoadMeshFactory</a> (
+00778         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <span class="keyword">const</span> <span class="keywordtype">char</span>* loaderClassId,
+00779         <a class="code" href="structiDataBuffer.html">iDataBuffer</a>* input) = 0;
 00780 
-00800   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a73">CreateMeshWrapper</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* classid,
-00801         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <a class="code" href="structiSector.html">iSector</a>* sector = 0,
-00802         <span class="keyword">const</span> csVector3&amp; pos = csVector3 (0, 0, 0)) = 0;
-00803 
-00808   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a73">CreateMeshWrapper</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00809 
-00824   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a77">LoadMeshWrapper</a> (
-00825         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <span class="keyword">const</span> <span class="keywordtype">char</span>* loaderClassId,
-00826         <a class="code" href="structiDataBuffer.html">iDataBuffer</a>* input, <a class="code" href="structiSector.html">iSector</a>* sector, <span class="keyword">const</span> csVector3&amp; pos) = 0;
-00827 
-00841   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a78">CreatePortalContainer</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00842         <a class="code" href="structiSector.html">iSector</a>* sector = 0, <span class="keyword">const</span> csVector3&amp; pos = csVector3 (0, 0, 0)) = 0;
-00843 
-00863   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a79">CreatePortal</a> (
-00864         <span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00865         <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* parentMesh, <a class="code" href="structiSector.html">iSector</a>* destSector,
-00866         csVector3* vertices, <span class="keywordtype">int</span> num_vertices,
-00867         <a class="code" href="structiPortal.html">iPortal</a>*&amp; portal) = 0;
-00868 
-00888   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a79">CreatePortal</a> (
-00889         <span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00890         <a class="code" href="structiSector.html">iSector</a>* sourceSector, <span class="keyword">const</span> csVector3&amp; pos,
-00891         <a class="code" href="structiSector.html">iSector</a>* destSector,
-00892         csVector3* vertices, <span class="keywordtype">int</span> num_vertices,
-00893         <a class="code" href="structiPortal.html">iPortal</a>*&amp; portal) = 0;
-00894 
-00903   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a81">PrecacheDraw</a> (<a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
-00904 
-00912   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a82">Draw</a> (<a class="code" href="structiCamera.html">iCamera</a>* c, <a class="code" href="structiClipper2D.html">iClipper2D</a>* clipper) = 0;
-00913 
-00919   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a83">SetContext</a> (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>* ctxt) = 0;
-00921   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a> *<a class="code" href="structiEngine.html#a84">GetContext</a> () <span class="keyword">const</span> = 0;
-00922 
-00927   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a85">SetAmbientLight</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a> &amp;) = 0;
-00929   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a86">GetAmbientLight</a> (<a class="code" href="classcsColor.html">csColor</a> &amp;) <span class="keyword">const</span> = 0;
-00930 
-00942   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a87">GetNearbyLights</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <span class="keyword">const</span> csVector3&amp; pos,
-00943         <a class="code" href="structiLight.html">iLight</a>** lights, <span class="keywordtype">int</span> max_num_lights) = 0;
-00944 
-00956   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a87">GetNearbyLights</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; box,
-00957         <a class="code" href="structiLight.html">iLight</a>** lights, <span class="keywordtype">int</span> max_num_lights) = 0;
-00958 
-00964   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSectorIterator&gt;</a> <a class="code" href="structiEngine.html#a89">GetNearbySectors</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
-00965         <span class="keyword">const</span> csVector3&amp; pos, <span class="keywordtype">float</span> radius) = 0;
-00966 
-00979   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectIterator&gt;</a> <a class="code" href="structiEngine.html#a90">GetNearbyObjects</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
-00980     <span class="keyword">const</span> csVector3&amp; pos, <span class="keywordtype">float</span> radius, <span class="keywordtype">bool</span> crossPortals = <span class="keyword">true</span> ) = 0;
-00981 
-00988   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapperIterator&gt;</a> <a class="code" href="structiEngine.html#a91">GetNearbyMeshes</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
-00989     <span class="keyword">const</span> csVector3&amp; pos, <span class="keywordtype">float</span> radius, <span class="keywordtype">bool</span> crossPortals = <span class="keyword">true</span> ) = 0;
-00990 
-01000   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectIterator&gt;</a> <a class="code" href="structiEngine.html#a92">GetVisibleObjects</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
-01001     <span class="keyword">const</span> csVector3&amp; pos) = 0;
-01002 
-01009   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapperIterator&gt;</a> <a class="code" href="structiEngine.html#a93">GetVisibleMeshes</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
-01010     <span class="keyword">const</span> csVector3&amp; pos) = 0;
-01011 
-01021   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectIterator&gt;</a> <a class="code" href="structiEngine.html#a92">GetVisibleObjects</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
-01022     <span class="keyword">const</span> <a class="code" href="classcsFrustum.html">csFrustum</a>&amp; frustum) = 0;
+00794   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a75">CreateMeshWrapper</a> (<a class="code" href="structiMeshFactoryWrapper.html">iMeshFactoryWrapper</a>* factory,
+00795         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <a class="code" href="structiSector.html">iSector</a>* sector = 0,
+00796         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos = <a class="code" href="classcsVector3.html">csVector3</a> (0, 0, 0)) = 0;
+00797 
+00810   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a75">CreateMeshWrapper</a> (<a class="code" href="structiMeshObject.html">iMeshObject</a>* meshobj,
+00811         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <a class="code" href="structiSector.html">iSector</a>* sector = 0,
+00812         <span class="keyword">const</span> csVector3&amp; pos = csVector3 (0, 0, 0)) = 0;
+00813 
+00833   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a75">CreateMeshWrapper</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* classid,
+00834         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <a class="code" href="structiSector.html">iSector</a>* sector = 0,
+00835         <span class="keyword">const</span> csVector3&amp; pos = csVector3 (0, 0, 0)) = 0;
+00836 
+00841   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a75">CreateMeshWrapper</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00842 
+00857   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a79">LoadMeshWrapper</a> (
+00858         <span class="keyword">const</span> <span class="keywordtype">char</span>* name, <span class="keyword">const</span> <span class="keywordtype">char</span>* loaderClassId,
+00859         <a class="code" href="structiDataBuffer.html">iDataBuffer</a>* input, <a class="code" href="structiSector.html">iSector</a>* sector, <span class="keyword">const</span> csVector3&amp; pos) = 0;
+00860 
+00874   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a80">CreatePortalContainer</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00875         <a class="code" href="structiSector.html">iSector</a>* sector = 0, <span class="keyword">const</span> csVector3&amp; pos = csVector3 (0, 0, 0)) = 0;
+00876 
+00896   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a81">CreatePortal</a> (
+00897         <span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00898         <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* parentMesh, <a class="code" href="structiSector.html">iSector</a>* destSector,
+00899         csVector3* vertices, <span class="keywordtype">int</span> num_vertices,
+00900         <a class="code" href="structiPortal.html">iPortal</a>*&amp; portal) = 0;
+00901 
+00921   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiEngine.html#a81">CreatePortal</a> (
+00922         <span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00923         <a class="code" href="structiSector.html">iSector</a>* sourceSector, <span class="keyword">const</span> csVector3&amp; pos,
+00924         <a class="code" href="structiSector.html">iSector</a>* destSector,
+00925         csVector3* vertices, <span class="keywordtype">int</span> num_vertices,
+00926         <a class="code" href="structiPortal.html">iPortal</a>*&amp; portal) = 0;
+00927 
+00936   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a83">PrecacheDraw</a> (<a class="code" href="structiRegion.html">iRegion</a>* region = 0) = 0;
+00937 
+00945   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a84">Draw</a> (<a class="code" href="structiCamera.html">iCamera</a>* c, <a class="code" href="structiClipper2D.html">iClipper2D</a>* clipper) = 0;
+00946 
+00952   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a85">SetContext</a> (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>* ctxt) = 0;
+00954   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a> *<a class="code" href="structiEngine.html#a86">GetContext</a> () <span class="keyword">const</span> = 0;
+00955 
+00960   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a87">SetAmbientLight</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a> &amp;) = 0;
+00962   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a88">GetAmbientLight</a> (<a class="code" href="classcsColor.html">csColor</a> &amp;) <span class="keyword">const</span> = 0;
+00963 
+00975   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a89">GetNearbyLights</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <span class="keyword">const</span> csVector3&amp; pos,
+00976         <a class="code" href="structiLight.html">iLight</a>** lights, <span class="keywordtype">int</span> max_num_lights) = 0;
+00977 
+00989   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEngine.html#a89">GetNearbyLights</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; box,
+00990         <a class="code" href="structiLight.html">iLight</a>** lights, <span class="keywordtype">int</span> max_num_lights) = 0;
+00991 
+00997   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSectorIterator&gt;</a> <a class="code" href="structiEngine.html#a91">GetNearbySectors</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
+00998         <span class="keyword">const</span> csVector3&amp; pos, <span class="keywordtype">float</span> radius) = 0;
+00999 
+01012   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectIterator&gt;</a> <a class="code" href="structiEngine.html#a92">GetNearbyObjects</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
+01013     <span class="keyword">const</span> csVector3&amp; pos, <span class="keywordtype">float</span> radius, <span class="keywordtype">bool</span> crossPortals = <span class="keyword">true</span> ) = 0;
+01014 
+01021   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapperIterator&gt;</a> <a class="code" href="structiEngine.html#a93">GetNearbyMeshes</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
+01022     <span class="keyword">const</span> csVector3&amp; pos, <span class="keywordtype">float</span> radius, <span class="keywordtype">bool</span> crossPortals = <span class="keyword">true</span> ) = 0;
 01023 
-01030   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapperIterator&gt;</a> <a class="code" href="structiEngine.html#a93">GetVisibleMeshes</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
-01031     <span class="keyword">const</span> <a class="code" href="classcsFrustum.html">csFrustum</a>&amp; frustum) = 0;
-01032 
-01048   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a96">RemoveObject</a> (<a class="code" href="structiBase.html">iBase</a>* object) = 0;
-01049 
-01057   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a97">SetCacheManager</a> (<a class="code" href="structiCacheManager.html">iCacheManager</a>* cache_mgr) = 0;
-01058 
-01062   <span class="keyword">virtual</span> <a class="code" href="structiCacheManager.html">iCacheManager</a>* <a class="code" href="structiEngine.html#a98">GetCacheManager</a> () = 0;
-01063 
-01065   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a99">GetDefaultAmbientLight</a> (<a class="code" href="classcsColor.html">csColor</a> &amp;c) <span class="keyword">const</span> = 0;
-01066 
-01073   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iFrustumView&gt;</a> <a class="code" href="structiEngine.html#a100">CreateFrustumView</a> () = 0;
-01074 
-01079   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectWatcher&gt;</a> <a class="code" href="structiEngine.html#a101">CreateObjectWatcher</a> () = 0;
-01080 
-01087   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a102">WantToDie</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
-01088   
-01089   <span class="comment">// ======================================================================</span>
-01090   <span class="comment">// Render loop stuff</span>
-01091   <span class="comment">// ======================================================================</span>
-01092   
-01097   <span class="keyword">virtual</span> <a class="code" href="structiRenderLoopManager.html">iRenderLoopManager</a>* <a class="code" href="structiEngine.html#a103">GetRenderLoopManager</a> () = 0;
-01098   
-01112   <span class="keyword">virtual</span> <a class="code" href="structiRenderLoop.html">iRenderLoop</a>* <a class="code" href="structiEngine.html#a104">GetCurrentDefaultRenderloop</a> () = 0;
+01033   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectIterator&gt;</a> <a class="code" href="structiEngine.html#a94">GetVisibleObjects</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
+01034     <span class="keyword">const</span> csVector3&amp; pos) = 0;
+01035 
+01042   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapperIterator&gt;</a> <a class="code" href="structiEngine.html#a95">GetVisibleMeshes</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
+01043     <span class="keyword">const</span> csVector3&amp; pos) = 0;
+01044 
+01054   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectIterator&gt;</a> <a class="code" href="structiEngine.html#a94">GetVisibleObjects</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
+01055     <span class="keyword">const</span> <a class="code" href="classcsFrustum.html">csFrustum</a>&amp; frustum) = 0;
+01056 
+01063   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapperIterator&gt;</a> <a class="code" href="structiEngine.html#a95">GetVisibleMeshes</a> (<a class="code" href="structiSector.html">iSector</a>* sector,
+01064     <span class="keyword">const</span> <a class="code" href="classcsFrustum.html">csFrustum</a>&amp; frustum) = 0;
+01065 
+01081   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a98">RemoveObject</a> (<a class="code" href="structiBase.html">iBase</a>* object) = 0;
+01082 
+01090   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a99">SetCacheManager</a> (<a class="code" href="structiCacheManager.html">iCacheManager</a>* cache_mgr) = 0;
+01091 
+01095   <span class="keyword">virtual</span> <a class="code" href="structiCacheManager.html">iCacheManager</a>* <a class="code" href="structiEngine.html#a100">GetCacheManager</a> () = 0;
+01096 
+01098   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a101">GetDefaultAmbientLight</a> (<a class="code" href="classcsColor.html">csColor</a> &amp;c) <span class="keyword">const</span> = 0;
+01099 
+01106   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iFrustumView&gt;</a> <a class="code" href="structiEngine.html#a102">CreateFrustumView</a> () = 0;
+01107 
+01112   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectWatcher&gt;</a> <a class="code" href="structiEngine.html#a103">CreateObjectWatcher</a> () = 0;
 01113 
-01120   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a105">SetCurrentDefaultRenderloop</a> (<a class="code" href="structiRenderLoop.html">iRenderLoop</a>* loop) = 0;
-01121 
-01125   <span class="keyword">virtual</span> <a class="code" href="group__util.html#a12">uint</a> <a class="code" href="structiEngine.html#a106">GetCurrentFrameNumber</a> () <span class="keyword">const</span> = 0;
-01126 };
-01127 
-01130 <span class="preprocessor">#endif // __CS_IENGINE_ENGINE_H__</span>
+01120   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEngine.html#a104">WantToDie</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
+01121   
+01122   <span class="comment">// ======================================================================</span>
+01123   <span class="comment">// Render loop stuff</span>
+01124   <span class="comment">// ======================================================================</span>
+01125   
+01130   <span class="keyword">virtual</span> <a class="code" href="structiRenderLoopManager.html">iRenderLoopManager</a>* <a class="code" href="structiEngine.html#a105">GetRenderLoopManager</a> () = 0;
+01131   
+01145   <span class="keyword">virtual</span> <a class="code" href="structiRenderLoop.html">iRenderLoop</a>* <a class="code" href="structiEngine.html#a106">GetCurrentDefaultRenderloop</a> () = 0;
+01146 
+01153   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEngine.html#a107">SetCurrentDefaultRenderloop</a> (<a class="code" href="structiRenderLoop.html">iRenderLoop</a>* loop) = 0;
+01154 
+01158   <span class="keyword">virtual</span> <a class="code" href="group__util.html#a12">uint</a> <a class="code" href="structiEngine.html#a108">GetCurrentFrameNumber</a> () <span class="keyword">const</span> = 0;
+01159 };
+01160 
+01163 <span class="preprocessor">#endif // __CS_IENGINE_ENGINE_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.3 
 </small></address> </div></body> </html>
