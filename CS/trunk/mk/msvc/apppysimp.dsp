@@ -59,8 +59,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo 
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:windows /machine:I386 /OPT:NOREF /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:console /machine:I386 /OPT:NOREF /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -91,8 +91,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo 
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:windows /machine:I386 /debug /pdbtype:sept /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:console /machine:I386 /debug /pdbtype:sept /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -123,8 +123,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo 
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:windows /machine:I386 /OPT:NOREF /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:console /machine:I386 /OPT:NOREF /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -155,8 +155,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo 
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:windows /machine:I386 /debug /pdbtype:sept /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:console /machine:I386 /debug /pdbtype:sept /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -186,8 +186,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo 
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:windows /machine:I386  /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:console /machine:I386  /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -217,8 +217,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo 
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:windows /machine:I386  /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib zlib.lib  /nologo /version:4.0 /subsystem:console /machine:I386  /out:"..\..\pysimp.exe" /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
