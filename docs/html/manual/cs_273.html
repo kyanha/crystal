@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Makefile Output Directory</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Makefile Output Directory">
+<META NAME="keywords" CONTENT="Crystal Space: Makefile Output Directory">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC792"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC791"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC793"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC782"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC789"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC793"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_291.html#SEC926">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 8.2.3 Output Directory </H3>
+<!--docid::SEC792::-->
+<P>
+
+To avoid polluting the entire directory hierarchy with temporary and
+intermediate files, all output from the build process should be placed into a
+separate directory tree intended specifically for such transient files.  By
+default this directory is named as follows, and assigned to the makefile
+variable `<SAMP>OUT</SAMP>'.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>OUT = out/$(OS)/$(PROC)/$(MODE)$(OUTSUFX.$(MAKE_DLL))
+</pre></td></tr></table></P><P>
+
+So, if you're building a dynamic library for Linux on an Intel machine, the
+output directory would be named `<TT>out/LINUX/X86/optimize.so/</TT>'.  To
+reference to the output directory you should use the variable <CODE>$(OUT)</CODE> in
+your submakefiles.  For example, the following rule tells `<SAMP>make</SAMP>' how to
+compile `<TT>.cpp</TT>' files:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$(OUT)%$O: apps/gnipgnop/%.cpp
+        $(DO.COMPILE.CPP)
+</pre></td></tr></table></P><P>
+
+This rule says that C++ source files in the `<TT>apps/gnipgnop</TT>' directory can
+be compiled to an object file in the <CODE>$(OUT)</CODE> directory via the
+<CODE>$(DO.COMPILE.CPP)</CODE> commands.
+</P><P>
+
+On ther other hand, if you need a separate rule for just one or several
+specific files, you could do it this way:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$(OUT)file1$O: apps/gnipgnop/file1.cpp
+        $(DO.COMPILE.CPP) $(CFLAGS.FORFILE1)
+$(OUT)file2$O: apps/gnipgnop/file2.cpp
+        $(DO.COMPILE.CPP) $(CFLAGS.FORFILE2)
+</pre></td></tr></table><A NAME="Threads in CS"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC791"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC793"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC782"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC789"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC793"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_291.html#SEC926">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: HOWTO CS Project</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: HOWTO CS Project">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO CS Project">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC294"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_123.html#SEC291"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_125.html#SEC299"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC205"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC221"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC350"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_291.html#SEC926">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 5.8.15 Creating an External Crystal Space Application </H3>
+<!--docid::SEC294::-->
+<P>
+
+This section describes one way to use the Crystal Space development kit for
+your application without having to place your application within the Crystal
+Space source code tree.  Your application's source code can reside wherever you
+like.
+</P><P>
+
+<A NAME="SEC295"></A>
+<H4> External Application Requirements </H4>
+<!--docid::SEC295::-->
+<P>
+
+For this to work you need to have a sufficiently Unix-like environment.
+The environments provided by Msys/Mingw and Cygwin should work, as well.
+</P><P>
+
+<A NAME="SEC296"></A>
+<H4> The `<TT>cs-config</TT>' Script </H4>
+<!--docid::SEC296::-->
+<P>
+
+When you build and install Crystal Space, a script named `<TT>cs-config</TT>' is
+installed along with the rest of the package.  This script provides access to
+bits of information which you need to feed to the development tools in order to
+incorporate Crystal Space into your project.  For instance, if you invoke
+`<TT>cs-config</TT>' with the `<SAMP>--cxxflags</SAMP>' argument, it will return Crystal
+Space-specific C++ compiler switches with which you should invoke the C++
+compiler (in addition to whatever other switches your project requires).
+Likewise, the `<SAMP>--libs</SAMP>' argument will return the Crystal Space-specific
+linker switches and libraries with which you should like your program.
+</P><P>
+
+<A NAME="SEC297"></A>
+<H4> Makefile </H4>
+<!--docid::SEC297::-->
+<P>
+
+In the Crystal Space directory you will find the following file:
+</P><P>
+
+`<TT>CS/scripts/cs-config/Makefile.template</TT>'.
+</P><P>
+
+Copy this file to the directory where your project is located and rename it to
+`<TT>Makefile</TT>'.
+</P><P>
+
+You need to edit this file for your own project.  This template makefile is
+capable of building an executable program or a plugin module.  It is
+recommended that you change at least the following variables:
+</P><P>
+
+<UL>
+<LI>
+`<SAMP>TARGET_TYPE</SAMP>' should be set to either `<SAMP>exe</SAMP>' or `<SAMP>plugin</SAMP>',
+depending upon whether your project is an executable program or a plugin
+module.
+<P>
+
+<LI>
+`<SAMP>TARGET_NAME</SAMP>' should be the name of your executable or plugin module.  The
+file extension (`<TT>.exe</TT>', `<TT>.dll</TT>', `<TT>.so</TT>', etc.) is appended
+automatically, so do not the suffix yourself.
+<P>
+
+<LI>
+`<SAMP>SRC</SAMP>' should list all the source files in your project which comprise the
+program or plugin module.
+<P>
+
+<LI>
+`<SAMP>LINKFLAGS</SAMP>' should be modified to list all the Crystal Space libraries
+that you want to use.  The typical list is `<SAMP>cstool</SAMP>', `<SAMP>gsgfx</SAMP>',
+`<SAMP>csgeom</SAMP>', and `<SAMP>csutil</SAMP>'.
+</UL>
+<P>
+
+<A NAME="SEC298"></A>
+<H4> Using the Makefile </H4>
+<!--docid::SEC298::-->
+<P>
+
+If you installed Crystal Space in a non-standard location, then you probably
+will also need to set the `<SAMP>CRYSTAL</SAMP>' environment variable to point at the
+the location where the SDK was installed.  For instance, if you specified
+`<SAMP>--prefix=/site/sdk</SAMP>' when configuring Crystal Space, then you will need to
+set `<SAMP>CRYSTAL</SAMP>' to `<TT>/site/sdk/crystal</TT>'.  Using the Bourne shell, for
+instance, you can do this with the following commands:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>CRYSTAL=/site/sdk/crystal
+export CRYSTAL
+</pre></td></tr></table></P><P>
+
+From a C-shell or compatible, you can use:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>setenv CRYSTAL /site/sdk/crystal
+</pre></td></tr></table></P><P>
+
+The following targets are supported by this makefile:
+</P><P>
+
+<UL>
+<LI>
+`<SAMP>all</SAMP>': Builds the application or plugin module.
+<LI>
+`<SAMP>depend</SAMP>': Calculates dependency information.
+<LI>
+`<SAMP>clean</SAMP>': Removes object files and other detritus.
+</UL>
+<A NAME="HOWTO Creating External MSVC 6 Application"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_123.html#SEC291"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_125.html#SEC299"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC205"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC221"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC350"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_291.html#SEC926">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

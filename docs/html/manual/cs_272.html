@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HTML>
+<HEAD>
+<TITLE>Crystal Space: Makefile Variables</TITLE>
+
+<META NAME="description" CONTENT="Crystal Space: Makefile Variables">
+<META NAME="keywords" CONTENT="Crystal Space: Makefile Variables">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC791"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC790"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC792"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC782"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC789"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC793"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_291.html#SEC926">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<HR SIZE=1>
+<H3> 8.2.2 Variable Naming Conventions </H3>
+<!--docid::SEC791::-->
+<P>
+
+For maximum flexibility (the makefile system should be usable by any compiler
+on any platform).  `<TT>cs.mak</TT>' avoids any direct references to compiler
+switches, tool names and so on.  Instead there are a number of variables (some
+of which have default values, but can be changed by submakefiles) which should
+be used by `<TT>cs.mak</TT>' as well as by submakefiles, if possible.
+</P><P>
+
+The main "tool" used to build Crystal Space is, naturally, the C++ compiler.
+The variable name for C++ compiler is `<SAMP>CXX</SAMP>'.  There are also places where
+the plain C compiler is required; it is referenced by the `<SAMP>CC</SAMP>' variable.
+The flags for the C/C++ compilers (it is assumed they both understand same
+command-line flags) are collected from a number of additional variables, as
+summarized below.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>CFLAGS.GENERAL</CODE>
+<DD>General flags used in all compilation modes.
+<DT><CODE>CFLAGS.optimize</CODE>
+<DD>Flags used in optimize mode.
+<DT><CODE>CFLAGS.debug</CODE>
+<DD>Flags used in debug mode.
+<DT><CODE>CFLAGS.profile</CODE>
+<DD>Flags used in profile mode.
+<DT><CODE>CFLAGS.DLL</CODE>
+<DD>Flags used when compiling object files for dynamically-linked libraries (i.e.
+<CODE>-fpic</CODE>).
+</DL>
+<P>
+
+The submakefiles also often need to know how to tell something to C/C++
+compiler.  For example the path to some system-dependent include files or
+libraries, or how to define a macro, and so on.  The GNU C++ compiler,
+for example, uses the <CODE>-I<VAR>path</VAR></CODE> form to define a include path; the
+Watcom-C compiler, on other hand, uses the <CODE>-i=<VAR>path</VAR></CODE> form.  To
+accommodate this, there are a number of variables that contain the equivalent
+of required switches for currently selected compiler.  They are summarized
+below.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>CFLAGS.@</CODE>
+<DD>Flag to define the output file name.  The default (for Unix-like C compilers)
+is `<SAMP>-o $@</SAMP>'.
+<DT><CODE>CFLAGS.D</CODE>
+<DD>Flag to define a C-preprocessor macro. The default is `<SAMP>-D</SAMP>'.
+<DT><CODE>CFLAGS.I</CODE>
+<DD>Flag to specify an additional search path for <CODE>#include</CODE> directives.  The
+default equivalent is `<SAMP>-I</SAMP>'.
+</DL>
+<P>
+
+The linker is referenced through the variable <CODE>$(LINK)</CODE>.  There are also
+a number of variables that defines linker flags.  They are summarized below.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>LFLAGS.GENERAL</CODE>
+<DD>General linker flags.
+<DT><CODE>LFLAGS.optimize</CODE>
+<DD>Flags used in optimize mode.
+<DT><CODE>LFLAGS.debug</CODE>
+<DD>Flags used in debug mode.
+<DT><CODE>LFLAGS.profile</CODE>
+<DD>Flags used in profile mode.
+<DT><CODE>LFLAGS.DLL</CODE>
+<DD>Flags used when building a dynamically loaded plug-in module.
+<DT><CODE>LFLAGS.EXE</CODE>
+<DD>Flags used when building a executable.
+<DT><CODE>LFLAGS.CONSOLE.EXE</CODE>
+<DD>Flags used when building a console executable (for example, `<TT>map2cs</TT>').
+Some platforms, such as MacOS/X, differentiate between a "graphics"
+executable and a "console" executable.
+</DL>
+<P>
+
+Also there are variables similar to `<SAMP>CFLAGS.*</SAMP>' which tell the linker how
+to link with an additional library and so on.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>LFLAGS.@</CODE>
+<DD>Define output file name to `<SAMP>$@</SAMP>'.  The default is `<SAMP>-o $@</SAMP>'.
+<DT><CODE>LFLAGS.L</CODE>
+<DD>Define an additional library search path.  The default is `<SAMP>-L</SAMP>'.
+<DT><CODE>LFLAGS.l</CODE>
+<DD>Add a library for linking. The default is `<SAMP>-l</SAMP>'.
+</DL>
+<P>
+
+If your plugin, application, or library requires specific C/C++ compiler
+flags, linking flags, libraries, the usual naming convention is the following:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>CFLAGS.<VAR>name</VAR></CODE>
+<DD>Additional C/C++ flags.
+<DT><CODE>LFLAGS.<VAR>name</VAR></CODE>
+<DD>Additional linking flags.
+<DT><CODE>LIBS.<VAR>name</VAR></CODE>
+<DD>Additional libraries.
+<DT><CODE>DEP.<VAR>name</VAR></CODE>
+<DD>Additional dependencies.
+</DL>
+<P>
+
+For example, suppose your application, which is called Ping-Pong, requires
+specific compilation flags, as well as dependencies (it depends on several
+Crystal Space libraries) and extra libraries (suppose you link with an
+additional `<TT>libpingpong.a</TT>').  In this case the variables would be named
+like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>CFLAGS.PINGPONG = $(CFLAGS.I)/usr/local/include/pingpong
+LIBS.PINGPONG = $(LFLAGS.L)/usr/local/lib $(LFLAGS.l)pingpong
+DEP.PINGPONG = CSGEOM CSUTIL
+</pre></td></tr></table></P><P>
+
+Another issue is that several types of files use different extensions on
+different platforms.  For example, executable files on Unix typically have no
+extension, whereas on Windows they typically have an `<TT>.exe</TT>' extension.  As
+another example, object files have an `<TT>.o</TT>' extension on Unix and an
+`<TT>.obj</TT>' extension on Windows.  To accommodate these differences, several
+variables are used where appropriate, as summarized below.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>EXE</CODE>
+<DD>Typical extension for executables (ex: `<SAMP>.exe</SAMP>').
+<DT><CODE>O</CODE>
+<DD>Typical extension for object files (ex: `<TT>.o</TT>'; usage: `<SAMP>pingpong$O</SAMP>').
+<DT><CODE>LIB</CODE>
+<DD>Typical extension for libraries (ex: `<SAMP>.a</SAMP>' or `<SAMP>.lib</SAMP>').
+<DT><CODE>DLL</CODE>
+<DD>Typical extension for dynamically loaded libraries (`<SAMP>.so</SAMP>' or `<SAMP>.dll</SAMP>').
+</DL>
+<P>
+
+Also on Unix systems libraries usually have the `<SAMP>lib</SAMP>' prefix, (i.e. the
+`<SAMP>csutil</SAMP>' library would typically be named `<TT>libcsutil.a</TT>').  On other
+systems this is not the case; to resolve this problem a variable called
+`<SAMP>LIB_PREFIX</SAMP>' is used.  It is either set to `<SAMP>lib</SAMP>' or it is empty
+depending upon the environment.  Back to the example, if the submakefile
+needed to define the rule to build `<TT>libpingpong.a</TT>', it could be done in
+this fashion:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>PINGPONG.LIB = $(LIB_PREFIX)pingpong$(LIB)
+</pre></td></tr></table></P><P>
+
+If we wanted to build a dynamic library, the name of target would be:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>PINGPONG.DLL = pingpong$(DLL)
+</pre></td></tr></table></P><P>
+
+As you can observe, the name of target variables also has a naming convention
+of its own.  If the target is a static library, it is typically named
+`<SAMP><VAR>NAME</VAR>.LIB</SAMP>'; if it is a dynamic library, it is called
+`<SAMP><VAR>NAME</VAR>.DLL</SAMP>'; if it is an executable, it is typically named
+`<SAMP><VAR>NAME</VAR>.EXE</SAMP>'.
+</P><P>
+
+<A NAME="Makefile Output Directory"></A>
+<HR SIZE=1>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC790"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC792"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC782"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC789"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC793"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_291.html#SEC926">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated using
+<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>
