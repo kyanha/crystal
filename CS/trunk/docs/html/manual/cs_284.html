@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Release Notes</TITLE>
+<TITLE>Crystal Space: Release Notes 92</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Release Notes">
-<META NAME="keywords" CONTENT="Crystal Space: Release Notes">
+<META NAME="description" CONTENT="Crystal Space: Release Notes 92">
+<META NAME="keywords" CONTENT="Crystal Space: Release Notes 92">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,57 +23,227 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC824"></A>
+<A NAME="SEC885"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC823"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC825"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC823"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC943"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC879"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC896"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_280.html#SEC820"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_280.html#SEC820"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC943">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H1> C. Release Notes </H1>
-<!--docid::SEC824::-->
+<H2> C.4 Release Notes from 0.90 to 0.92 </H2>
+<!--docid::SEC885::-->
 <P>
 
-This document provides information to aid developers during the transition
-between versions of Crystal Space.  At this moment Crystal Space is still beta
-so changes are sometimes made to procedures and facilities, and the API
-(<EM>Application Programmer's Interface</EM>) is not completely frozen.  Even
-after version 1.0 is released, changes will still sometimes be unavoidable (but
-we will try to minimize them).  The following sections should give you a head
-start at trying to convert your application from one release of Crystal Space
-to the next.  If you have trouble with something that is not discussed here you
-should send mail to the Crystal Space mailing list and ask for help.
-See section <A HREF="cs_8.html#SEC10">1.7 Mailing Lists</A>.
+This section documents the major changes between versions 0.90 and 0.92 of of
+Crystal Space.
 </P><P>
 
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_285.html#SEC825">C.1 Release Notes from 0.96 to 0.98</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_286.html#SEC868">C.2 Release Notes from 0.94 to 0.96</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_287.html#SEC883">C.3 Release Notes from 0.92 to 0.94</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_288.html#SEC889">C.4 Release Notes from 0.90 to 0.92</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_289.html#SEC900">C.5 Release Notes from 0.18 to 0.90</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_290.html#SEC924">C.6 Release Notes from 0.17 to 0.18</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_291.html#SEC933">C.7 Release Notes from 0.16 to 0.17</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
+<A NAME="SEC886"></A>
+<H3> csInitializer changes </H3>
+<!--docid::SEC886::-->
 <P>
 
-<A NAME="Release Notes 98"></A>
+<CODE>csInitializer::CreateEnvironment()</CODE> now accepts two additional
+parameters: `<SAMP>argc</SAMP>' and `<SAMP>argv</SAMP>'.
+Consequently <CODE>csInitializer::SetupKeyboardHandler()</CODE> has been removed.
+</P><P>
+
+<A NAME="SEC887"></A>
+<H3> iCollideSystem Changes </H3>
+<!--docid::SEC887::-->
+<P>
+
+The <CODE>iCollideSystem::Collide()</CODE> function now accepts
+`<SAMP>csReversibleTransform</SAMP>' transforms instead of just `<SAMP>csTransform</SAMP>'.
+</P><P>
+
+<A NAME="SEC888"></A>
+<H3> Texture Manager Changes </H3>
+<!--docid::SEC888::-->
+<P>
+
+The following deregistration functions have been removed.  Instead, use the
+normal <CODE>DecRef()</CODE> mechanism.
+</P><P>
+
+<UL>
+<LI>
+<CODE>iTextureManager::UnregisterTexture()</CODE>
+<LI>
+<CODE>iTextureManager::UnregisterMaterial()</CODE>
+</UL>
+<P>
+
+<A NAME="SEC889"></A>
+<H3> iRegion </H3>
+<!--docid::SEC889::-->
+<P>
+
+The functions <CODE>iRegion::Find<small>...</small>()</CODE> will no longer increase
+the reference count of the returned objects.
+</P><P>
+
+<A NAME="SEC890"></A>
+<H3> GetThingState </H3>
+<!--docid::SEC890::-->
+<P>
+
+<CODE>iEngine::GetThingState()</CODE> has not been removed but this function
+is now deprecated. It is recommended that you get the `<SAMP>iMeshObjectType</SAMP>'
+for the thing mesh objects the usual way (i.e. by loading the plugin).
+</P><P>
+
+<A NAME="SEC891"></A>
+<H3> iThingState </H3>
+<!--docid::SEC891::-->
+<P>
+
+The following functions were made `<SAMP>const</SAMP>' in `<SAMP>iThingState</SAMP>':
+<UL>
+<LI>
+<CODE>CurveTexel()</CODE>
+<LI>
+<CODE>CurveVertex()</CODE>
+<LI>
+<CODE>GetCurveVertices()</CODE>
+<LI>
+<CODE>GetCurveVertexCount()</CODE>
+<LI>
+<CODE>GetCurveCount()</CODE>
+<LI>
+<CODE>GetCurvesScale()</CODE>
+<LI>
+<CODE>GetMovingOption()</CODE>
+<LI>
+<CODE>GetPortalCount()</CODE>
+<LI>
+<CODE>GetPortal()</CODE>
+<LI>
+<CODE>GetPortalPolygon()</CODE>
+<LI>
+<CODE>GetVertexCount()</CODE>
+</UL>
+<P>
+
+The following methods were renamed in `<SAMP>iThingState</SAMP>':
+</P><P>
+
+<UL>
+<LI>
+<CODE>CurveVertex()</CODE> => <CODE>GetCurveVertex()</CODE>
+<LI>
+<CODE>CurveTexel()</CODE> => <CODE>GetCuveTexel()</CODE>
+</UL>
+<P>
+
+Added several functions to `<SAMP>iThingState</SAMP>':
+</P><P>
+
+<UL>
+<LI>
+<CODE>FindPolygonIndex()</CODE>
+<LI>
+<CODE>RemovePolygon()</CODE>
+<LI>
+<CODE>RemovePolygons()</CODE>
+<LI>
+<CODE>SetVertex()</CODE>
+<LI>
+<CODE>DeleteVertex()</CODE>
+<LI>
+<CODE>DeleteVertices()</CODE>
+<LI>
+<CODE>SetCurveVertex()</CODE>
+<LI>
+<CODE>SetCurveTexel()</CODE>
+<LI>
+<CODE>ClearCurveVertices()</CODE>
+<LI>
+<CODE>FindCurveIndex()</CODE>
+<LI>
+<CODE>RemoveCurve()</CODE>
+<LI>
+<CODE>RemoveCurves()</CODE>
+</UL>
+<P>
+
+<A NAME="SEC892"></A>
+<H3> Isometric Engine </H3>
+<!--docid::SEC892::-->
+<P>
+
+Added <CODE>iIsoEngine::GetMaterialList()</CODE> and removed all other
+material functions from <CODE>iIsoEngine</CODE> except the one to create a material
+from a VFS path.
+</P><P>
+
+Added <CODE>iIsoEngine::GetMeshFactories()</CODE> and removed the following
+functions.
+</P><P>
+
+<UL>
+<LI>
+<CODE>AddMeshFactory()</CODE>
+<LI>
+<CODE>FindMeshFactory()</CODE>
+<LI>
+<CODE>RemoveMeshFactory()</CODE>
+</UL>
+<P>
+
+<A NAME="SEC893"></A>
+<H3> Terrain Mesh Object </H3>
+<!--docid::SEC893::-->
+<P>
+
+Changed <CODE>iTerrFuncState::LoadMaterialGroup()</CODE> so that the first
+parameter is now a material list, `<SAMP>iMaterialList</SAMP>', instead of
+`<SAMP>iEngine</SAMP>'.
+</P><P>
+
+<A NAME="SEC894"></A>
+<H3> Loader and Saver Plugins </H3>
+<!--docid::SEC894::-->
+<P>
+
+Changed <CODE>iLoaderPlugin::Parse()</CODE> to accept a material list and mesh
+factory list (`<SAMP>iMaterialList</SAMP>' and `<SAMP>iMeshFactoryList</SAMP>') instead of an
+`<SAMP>iEngine</SAMP>' instance.
+</P><P>
+
+Changed <CODE>iSaverPlugin::WriteDown()</CODE> so that it no longer has
+the `<SAMP>iEngine</SAMP>' parameter.
+</P><P>
+
+<A NAME="SEC895"></A>
+<H3> iMeshObject and iMeshObjectFactory Changes </H3>
+<!--docid::SEC895::-->
+<P>
+
+Added <CODE>SetLogicalParent()</CODE> and <CODE>GetLogicalParent()</CODE> to
+both `<SAMP>iMeshObject</SAMP>' and `<SAMP>iMeshObjectFactory</SAMP>'. This should
+be no issue for applications simply using mesh objects but it is an
+issue if you made your own mesh object implementation. Also beware
+that there have been some changes in the way the parser interact
+with the plugin loaders. The plugin loaders are no longer responsible
+for setting the factory pointer. The parser will now do that.
+<A NAME="Release Notes 90"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC823"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC825"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC823"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC943"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC879"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC896"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_280.html#SEC820"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_280.html#SEC820"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC943">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_288.html#SEC939">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
