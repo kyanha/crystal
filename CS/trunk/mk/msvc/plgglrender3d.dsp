@@ -254,6 +254,10 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_renderbuffer.cpp
 
 SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\opengl\normalizationcube.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -273,6 +277,10 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_renderbuffer.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\opengl\normalizationcube.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
