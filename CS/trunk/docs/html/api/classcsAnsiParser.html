@@ -26,13 +26,24 @@
 <a href="classcsAnsiParser-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Types</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsAnsiParser.html#w26">Command</a> { <a class="el" href="classcsAnsiParser.html#w26w0">cmdUnknown</a>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsAnsiParser.html#w26">Command</a> { <br>
+&nbsp;&nbsp;<a class="el" href="classcsAnsiParser.html#w26w0">cmdUnknown</a>, 
+<a class="el" href="classcsAnsiParser.html#w26w1">cmdFormatAttrReset</a>, 
+<a class="el" href="classcsAnsiParser.html#w26w2">cmdFormatAttrEnable</a>, 
+<a class="el" href="classcsAnsiParser.html#w26w3">cmdFormatAttrDisable</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="classcsAnsiParser.html#w26w4">cmdFormatAttrForeground</a>, 
+<a class="el" href="classcsAnsiParser.html#w26w5">cmdFormatAttrBackground</a>
+<br>
  }</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Identifier for the ANSI command.  <a href="#w26">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsAnsiParser.html#w27">CommandClass</a> { <a class="el" href="classcsAnsiParser.html#w27w6">classNone</a>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsAnsiParser.html#w27">CommandClass</a> { <a class="el" href="classcsAnsiParser.html#w27w6">classNone</a>, 
+<a class="el" href="classcsAnsiParser.html#w27w7">classUnknown</a>, 
+<a class="el" href="classcsAnsiParser.html#w27w8">classFormat</a>
  }</td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Classification of the command sequence.  <a href="#w27">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsAnsiParser.html#w28">FormatAttr</a> { <br>
 &nbsp;&nbsp;<a class="el" href="classcsAnsiParser.html#w28w9">attrBold</a>, 
 <a class="el" href="classcsAnsiParser.html#w28w10">attrItalics</a>, 
@@ -67,6 +78,9 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsAnsiParser.html#e0">ParseAnsi</a> (const char *str, size_t &amp;ansiCommandLen, <a class="el" href="classcsAnsiParser.html#w27">CommandClass</a> &amp;cmdClass, size_t &amp;textLen)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse a string for ANSI codes.  <a href="#e0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsAnsiParser.html#e1">DecodeCommand</a> (const char *&amp;cmd, size_t &amp;cmdLen, <a class="el" href="classcsAnsiParser.html#w26">Command</a> &amp;command, <a class="el" href="structcsAnsiParser_1_1CommandParams.html">CommandParams</a> &amp;commandParams)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Decode an ANSI code sequence.  <a href="#e1"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Helper to parse a string for ANSI codes. 
@@ -100,6 +114,16 @@ Identifier for the ANSI command.
 <table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" name="w26w0" doxytag="cmdUnknown"></a>cmdUnknown</em>&nbsp;</td><td>
 Command was unrecognized. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="w26w1" doxytag="cmdFormatAttrReset"></a>cmdFormatAttrReset</em>&nbsp;</td><td>
+Reset all attributes. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="w26w2" doxytag="cmdFormatAttrEnable"></a>cmdFormatAttrEnable</em>&nbsp;</td><td>
+'Enable attribute' </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="w26w3" doxytag="cmdFormatAttrDisable"></a>cmdFormatAttrDisable</em>&nbsp;</td><td>
+'Disable attribute' </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="w26w4" doxytag="cmdFormatAttrForeground"></a>cmdFormatAttrForeground</em>&nbsp;</td><td>
+'Set foreground color' </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="w26w5" doxytag="cmdFormatAttrBackground"></a>cmdFormatAttrBackground</em>&nbsp;</td><td>
+'Set background color' </td></tr>
 </table>
 </dl>
 
@@ -127,15 +151,21 @@ Definition at line <a class="el" href="ansiparse_8h-source.html#l00035">35</a> o
     <td>
 
 <p>
+Classification of the command sequence. 
+<p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" name="w27w6" doxytag="classNone"></a>classNone</em>&nbsp;</td><td>
 No ANSI sequence was found. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="w27w7" doxytag="classUnknown"></a>classUnknown</em>&nbsp;</td><td>
+An ANSI sequence was found, but not recognized. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="w27w8" doxytag="classFormat"></a>classFormat</em>&nbsp;</td><td>
+A formatting sequence was found. </td></tr>
 </table>
 </dl>
 
 <p>
-Definition at line <a class="el" href="ansiparse_8h-source.html#l00046">46</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
+Definition at line <a class="el" href="ansiparse_8h-source.html#l00051">51</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="w28" doxytag="csAnsiParser::FormatAttr"></a><p>
@@ -182,7 +212,7 @@ Types of attributes in the cmdFormatAttrEnable/cmdFormatAttrBackground command.
 </dl>
 
 <p>
-Definition at line <a class="el" href="ansiparse_8h-source.html#l00057">57</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
+Definition at line <a class="el" href="ansiparse_8h-source.html#l00064">64</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="w29" doxytag="csAnsiParser::FormatColor"></a><p>
@@ -231,10 +261,62 @@ White. </td></tr>
 </dl>
 
 <p>
-Definition at line <a class="el" href="ansiparse_8h-source.html#l00077">77</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
+Definition at line <a class="el" href="ansiparse_8h-source.html#l00084">84</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="e1" doxytag="csAnsiParser::DecodeCommand"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">bool csAnsiParser::DecodeCommand           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const char *&amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>cmd</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>size_t &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>cmdLen</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="classcsAnsiParser.html#w26">Command</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>command</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="structcsAnsiParser_1_1CommandParams.html">CommandParams</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>commandParams</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [static]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Decode an ANSI code sequence. 
+<p>
+Decodes a part of an ANSI code sequence, if known. Returns whether the decoding was was successful. <em>cmd</em> is updated to point to the start of the next sequence part. <dl compact><dt><b>Remarks:</b></dt><dd>Multiple sequences might occur, repeated call this function until <code>false</code> is returned. </dd></dl>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="e0" doxytag="csAnsiParser::ParseAnsi"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
