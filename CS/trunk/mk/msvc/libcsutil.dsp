@@ -214,6 +214,10 @@ SOURCE=..\..\libs\csutil\csstring.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\csuctransform.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\databuf.cpp
 # End Source File
 # Begin Source File
@@ -1003,6 +1007,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\zip.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\cskey_identstrs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\csucmappings.h
 # End Source File
 # Begin Source File
 
