@@ -58,45 +58,43 @@
 00053   ~csRenderMeshList ();
 00054 
 00058   <span class="keywordtype">void</span> AddRenderMeshes (<a class="code" href="structcsRenderMesh.html">csRenderMesh</a>** meshes, <span class="keywordtype">int</span> num, <span class="keywordtype">long</span> renderPriority,
-00059         <a class="code" href="group__gfx3d.html#ga67">csZBufMode</a> z_buf_mode, <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox);
+00059         <a class="code" href="group__gfx3d.html#ga67">csZBufMode</a> z_buf_mode, <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh);
 00060 
-00066   <span class="keywordtype">void</span> CullToSphere (<span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; sphere);
-00067 
-00072   size_t SortMeshLists ();
-00073 
-00077   <span class="keywordtype">void</span> GetSortedMeshes (<a class="code" href="structcsRenderMesh.html">csRenderMesh</a>** meshes);
-00078 
-00082   <span class="keywordtype">void</span> Empty ();
-00083 
-00084 <span class="keyword">private</span>:
-00085   <span class="keyword">struct </span>meshListEntry
-00086   {
-00087     <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>* rm;
-00088     <a class="code" href="classcsBox3.html">csBox3</a> bbox;
-00089 
-00090     meshListEntry (<a class="code" href="structcsRenderMesh.html">csRenderMesh</a>* mesh, <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bb) : 
-00091       rm(mesh), bbox(bb) {}
-00092   };
-00093 
-00095   <span class="keyword">struct </span>renderMeshListInfo 
-00096   {
-00098     <span class="keywordtype">long</span> renderPriority;
-00099 
-00101     <span class="keywordtype">int</span> sortingOption;
-00102 
-00104     <a class="code" href="classcsArray.html">csArray&lt;meshListEntry&gt;</a> meshList;
-00105 
-00106   };
-00107 
-00108   csPDelArray &lt; renderMeshListInfo &gt; renderList;
-00109   <a class="code" href="structiEngine.html">iEngine</a>* engine;
-00110 
-00111   <span class="keyword">static</span> <span class="keywordtype">int</span> SortMeshMaterial (meshListEntry <span class="keyword">const</span>&amp; me1, meshListEntry <span class="keyword">const</span>&amp; me2);
-00112   <span class="keyword">static</span> <span class="keywordtype">int</span> SortMeshBack2Front (meshListEntry <span class="keyword">const</span>&amp; me1, meshListEntry <span class="keyword">const</span>&amp; me2);
-00113   <span class="keyword">static</span> <span class="keywordtype">int</span> SortMeshFront2Back (meshListEntry <span class="keyword">const</span>&amp; me1, meshListEntry <span class="keyword">const</span>&amp; me2);
-00114 };
-00115 
-00116 <span class="preprocessor">#endif //__CS_RENDERMESHLIST_H__</span>
+00065   size_t SortMeshLists ();
+00066 
+00070   <span class="keywordtype">void</span> GetSortedMeshes (<a class="code" href="structcsRenderMesh.html">csRenderMesh</a>** meshes, <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>** imeshes);
+00071 
+00075   <span class="keywordtype">void</span> Empty ();
+00076 
+00077 <span class="keyword">private</span>:
+00078   <span class="keyword">struct </span>meshListEntry
+00079   {
+00080     <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>* rm;
+00081     <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh;
+00082 
+00083     meshListEntry (<a class="code" href="structcsRenderMesh.html">csRenderMesh</a>* mesh, <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* imesh) 
+00084       : rm(mesh), mesh(imesh) {}
+00085   };
+00086 
+00088   <span class="keyword">struct </span>renderMeshListInfo 
+00089   {
+00091     <span class="keywordtype">long</span> renderPriority;
+00092 
+00094     <span class="keywordtype">int</span> sortingOption;
+00095 
+00097     <a class="code" href="classcsArray.html">csArray&lt;meshListEntry&gt;</a> meshList;
+00098 
+00099   };
+00100 
+00101   csPDelArray &lt; renderMeshListInfo &gt; renderList;
+00102   <a class="code" href="structiEngine.html">iEngine</a>* engine;
+00103 
+00104   <span class="keyword">static</span> <span class="keywordtype">int</span> SortMeshMaterial (meshListEntry <span class="keyword">const</span>&amp; me1, meshListEntry <span class="keyword">const</span>&amp; me2);
+00105   <span class="keyword">static</span> <span class="keywordtype">int</span> SortMeshBack2Front (meshListEntry <span class="keyword">const</span>&amp; me1, meshListEntry <span class="keyword">const</span>&amp; me2);
+00106   <span class="keyword">static</span> <span class="keywordtype">int</span> SortMeshFront2Back (meshListEntry <span class="keyword">const</span>&amp; me1, meshListEntry <span class="keyword">const</span>&amp; me2);
+00107 };
+00108 
+00109 <span class="preprocessor">#endif //__CS_RENDERMESHLIST_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.6 
 </small></address> </div></body> </html>
