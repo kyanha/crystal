@@ -45,7 +45,7 @@
 00028 
 00029 <span class="preprocessor">#include &lt;stdio.h&gt;</span>
 00030 <span class="preprocessor">#include &lt;stdlib.h&gt;</span>
-00031 <span class="preprocessor">#if defined(CS_HAS_CMATH_H)</span>
+00031 <span class="preprocessor">#if defined(CS_HAVE_CMATH_H)</span>
 00032 <span class="preprocessor"></span><span class="preprocessor">#include &lt;cmath&gt;</span>
 00033 <span class="preprocessor">#else</span>
 00034 <span class="preprocessor"></span><span class="preprocessor">#include &lt;<a class="code" href="math_8h.html">math.h</a>&gt;</span>
@@ -55,7 +55,7 @@
 00038 <span class="preprocessor">#include &lt;errno.h&gt;</span>
 00039 <span class="preprocessor">#include &lt;<a class="code" href="string_8h.html">string.h</a>&gt;</span>
 00040 <span class="preprocessor">#include &lt;assert.h&gt;</span>
-00041 <span class="preprocessor">#ifdef CS_HAS_SYS_PARAM_H</span>
+00041 <span class="preprocessor">#ifdef CS_HAVE_SYS_PARAM_H</span>
 00042 <span class="preprocessor"></span><span class="preprocessor">#include &lt;sys/param.h&gt;</span>
 00043 <span class="preprocessor">#endif</span>
 00044 <span class="preprocessor"></span>
@@ -111,10 +111,10 @@
 00094 <span class="preprocessor"></span><span class="preprocessor">#define REINTERPRET_CAST(T,V) CS_REINTERPRET_CAST(T,V)</span>
 00095 <span class="preprocessor"></span><span class="preprocessor">#define CONST_CAST(T,V)       CS_CONST_CAST(T,V)</span>
 00096 <span class="preprocessor"></span>
-00097 <span class="comment">// Platforms which do not have floating-point variations of the standard math.h</span>
+00097 <span class="comment">// Platforms which have floating-point variations of the standard math.h</span>
 00098 <span class="comment">// cos(), sin(), tan(), sqrt(), etc. functions should define</span>
-00099 <span class="comment">// CS_USE_FAKE_MATH_H_FLOAT_FUNCS.</span>
-00100 <span class="preprocessor">#if defined(CS_USE_FAKE_MATH_H_FLOAT_FUNCS)</span>
+00099 <span class="comment">// CS_HAVE_MATH_H_FLOAT_FUNCS.</span>
+00100 <span class="preprocessor">#if !defined(CS_HAVE_MATH_H_FLOAT_FUNCS)</span>
 00101 <span class="preprocessor"></span><span class="preprocessor">  #define acosf(X)    CS_STATIC_CAST(float,acos(X))</span>
 00102 <span class="preprocessor"></span><span class="preprocessor">  #define asinf(X)    CS_STATIC_CAST(float,asin(X))</span>
 00103 <span class="preprocessor"></span><span class="preprocessor">  #define atan2f(X,Y) CS_STATIC_CAST(float,atan2(X,Y))</span>
@@ -134,16 +134,16 @@
 00117 <span class="preprocessor"></span><span class="preprocessor">  #define ceilf(X)    CS_STATIC_CAST(float,ceil(X))</span>
 00118 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 00119 <span class="preprocessor"></span>
-00120 <span class="comment">// Platforms with compilers which do not understand the new C++ keyword</span>
-00121 <span class="comment">// `explicit' should define CS_USE_FAKE_EXPLICIT_KEYWORD.</span>
-00122 <span class="preprocessor">#if defined(CS_USE_FAKE_EXPLICIT_KEYWORD)</span>
+00120 <span class="comment">// Platforms with compilers which understand the new C++ keyword `explicit'</span>
+00121 <span class="comment">// should define CS_HAVE_CXX_KEYWORD_EXPLICIT.</span>
+00122 <span class="preprocessor">#if !defined(CS_HAVE_CXX_KEYWORD_EXPLICIT)</span>
 00123 <span class="preprocessor"></span><span class="preprocessor">  #define explicit </span><span class="comment">/* nothing */</span>
 00124 <span class="preprocessor">#endif</span>
 00125 <span class="preprocessor"></span>
-00126 <span class="comment">// Platforms with compilers which do not understand the new C++ keyword</span>
-00127 <span class="comment">// `typename' should define CS_USE_FAKE_TYPENAME_KEYWORD. For such compilers,</span>
-00128 <span class="comment">// we fake up a `typename' keyword which can be used to declare template</span>
-00129 <span class="comment">// arguments, such as:</span>
+00126 <span class="comment">// Platforms with compilers which understand the new C++ keyword `typename'</span>
+00127 <span class="comment">// should define CS_HAVE_CXX_KEYWORD_TYPENAME. For other compilers, we fake up</span>
+00128 <span class="comment">// a `typename' keyword which can be used to declare template arguments, such</span>
+00129 <span class="comment">// as:</span>
 00130 <span class="comment">//</span>
 00131 <span class="comment">//   template&lt;typename T&gt; class A {...};</span>
 00132 <span class="comment">//</span>
@@ -156,7 +156,7 @@
 00139 <span class="comment">//   typename_qualifier C::B var;</span>
 00140 <span class="comment">//   typename_qualifier T::Functor get_functor() const;</span>
 00141 <span class="comment">// };</span>
-00142 <span class="preprocessor">#if defined(CS_USE_FAKE_TYPENAME_KEYWORD)</span>
+00142 <span class="preprocessor">#if !defined(CS_HAVE_CXX_KEYWORD_TYPENAME)</span>
 00143 <span class="preprocessor"></span><span class="preprocessor">  #define typename class</span>
 00144 <span class="preprocessor"></span><span class="preprocessor">  #define typename_qualifier</span>
 00145 <span class="preprocessor"></span><span class="preprocessor">#else</span>

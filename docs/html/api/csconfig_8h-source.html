@@ -18,76 +18,97 @@
 <div class="nav">
 <a class="el" href="dir_000022.html">csutil</a>&nbsp;/&nbsp;<a class="el" href="dir_000024.html">win32</a></div>
 <h1>csconfig.h</h1><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
-00002 <span class="comment">  This header is used by CS_COMPILER_MSVC and CS_COMPILER_BCC for</span>
-00003 <span class="comment">  CS_PLATFORM_WIN32 builds.  It is not used for CS_COMPILER_GCC builds under</span>
-00004 <span class="comment">  normal circumstances since GCC builds are performed in concert with</span>
-00005 <span class="comment">  invocation of the CS configure script which generates a suitable csconfig.h</span>
-00006 <span class="comment">  file.</span>
-00007 <span class="comment">*/</span>
-00008 <span class="preprocessor">#ifndef __CS_WIN32_CSCONFIG_H__</span>
-00009 <span class="preprocessor"></span><span class="preprocessor">#define __CS_WIN32_CSCONFIG_H__</span>
-00010 <span class="preprocessor"></span>
-00011 <span class="preprocessor">#define CS_PACKAGE_NAME "crystalspace"</span>
-00012 <span class="preprocessor"></span>
-00013 <span class="preprocessor">#define CS_PLATFORM_WIN32</span>
-00014 <span class="preprocessor"></span><span class="preprocessor">#if !defined(CS_PLATFORM_NAME)</span>
-00015 <span class="preprocessor"></span><span class="preprocessor">#  define CS_PLATFORM_NAME "Win32"</span>
-00016 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00017 <span class="preprocessor"></span>
-00018 <span class="preprocessor">#define CS_PROCESSOR_X86</span>
-00019 <span class="preprocessor"></span><span class="preprocessor">#if !defined(CS_PROCESSOR_NAME)</span>
-00020 <span class="preprocessor"></span><span class="preprocessor">#  define CS_PROCESSOR_NAME "X86"</span>
-00021 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00022 <span class="preprocessor"></span>
-00023 <span class="preprocessor">#if defined(__BORLANDC__)</span>
-00024 <span class="preprocessor"></span><span class="preprocessor">#  define CS_COMPILER_BCC</span>
-00025 <span class="preprocessor"></span><span class="preprocessor">#  if !defined(CS_COMPILER_NAME)</span>
-00026 <span class="preprocessor"></span><span class="preprocessor">#    define CS_COMPILER_NAME "Borland"</span>
-00027 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-00028 <span class="preprocessor"></span><span class="preprocessor">#  define CS_USE_CUSTOM_ISDIR</span>
-00029 <span class="preprocessor"></span><span class="preprocessor">#elif defined(__MINGW32__) || defined(__CYGWIN32__)</span>
-00030 <span class="preprocessor"></span><span class="preprocessor">#  define CS_COMPILER_GCC</span>
-00031 <span class="preprocessor"></span><span class="preprocessor">#  if !defined(CS_COMPILER_NAME)</span>
-00032 <span class="preprocessor"></span><span class="preprocessor">#    define CS_COMPILER_NAME "GCC"</span>
-00033 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-00034 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00035 <span class="preprocessor"></span><span class="preprocessor">#  define CS_COMPILER_MSVC</span>
-00036 <span class="preprocessor"></span><span class="preprocessor">#  if !defined(CS_COMPILER_NAME)</span>
-00037 <span class="preprocessor"></span><span class="preprocessor">#    define CS_COMPILER_NAME "VisualC"</span>
-00038 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-00039 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00040 <span class="preprocessor"></span>
-00041 <span class="preprocessor">#if !defined (CS_COMPILER_GCC)</span>
-00042 <span class="preprocessor"></span><span class="preprocessor">#  define CS_USE_MMX</span>
-00043 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00044 <span class="preprocessor"></span>
-00045 <span class="preprocessor">#define CS_HAS_WCHAR_H</span>
-00046 <span class="preprocessor"></span><span class="preprocessor">#define CS_WCHAR_T_SIZE 2</span>
-00047 <span class="preprocessor"></span>
-00048 <span class="preprocessor">#define CS_USE_FAKE_SOCKLEN_TYPE</span>
-00049 <span class="preprocessor"></span>
-00050 <span class="preprocessor">#define CS_EMBED_PLUGIN_META</span>
-00051 <span class="preprocessor"></span>
-00052 <span class="comment">//#define CS_BUILD_SHARED_LIBS</span>
-00053 
-00054 <span class="preprocessor">#ifdef _WIN64</span>
-00055 <span class="preprocessor"></span><span class="preprocessor">  #define CS_PROCESSOR_SIZE     64</span>
-00056 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00057 <span class="preprocessor"></span><span class="preprocessor">  #define CS_PROCESSOR_SIZE     32</span>
-00058 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00059 <span class="preprocessor"></span>
-00060 <span class="comment">//#define CS_REF_TRACKER</span>
-00061 <span class="comment">//#define CS_MEMORY_TRACKER</span>
-00062 
-00063 <span class="preprocessor">#if defined(CS_COMPILER_MSVC) &amp;&amp; (_MSC_VER &gt;= 1400)</span>
-00064 <span class="preprocessor"></span><span class="preprocessor">  #define _CRT_SECURE_NO_DEPRECATE</span>
-00065 <span class="preprocessor"></span>        <span class="comment">/* In VC8, a lot of CRT methods were marked "deprecated" b/c they're </span>
-00066 <span class="comment">           deemed "insecure". Silence those warnings. </span>
-00067 <span class="comment">           NB: This is here b/c it needs to be set before any standard headers</span>
-00068 <span class="comment">           are included. */</span>
-00069 <span class="preprocessor">#endif</span>
+00002 <span class="comment">    Copyright (C) 1998-2005 by Crystal Space Development Team</span>
+00003 <span class="comment"></span>
+00004 <span class="comment">    This library is free software; you can redistribute it and/or</span>
+00005 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
+00006 <span class="comment">    License as published by the Free Software Foundation; either</span>
+00007 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
+00008 <span class="comment"></span>
+00009 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
+00010 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+00011 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+00012 <span class="comment">    Library General Public License for more details.</span>
+00013 <span class="comment"></span>
+00014 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
+00015 <span class="comment">    License along with this library; if not, write to the Free</span>
+00016 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
+00017 <span class="comment">*/</span>
+00018 
+00019 <span class="comment">/*</span>
+00020 <span class="comment">  This header is used by CS_COMPILER_MSVC and CS_COMPILER_BCC for</span>
+00021 <span class="comment">  CS_PLATFORM_WIN32 builds.  It is not used for CS_COMPILER_GCC builds since</span>
+00022 <span class="comment">  GCC builds are performed using configuration information detected by the CS</span>
+00023 <span class="comment">  configure script, which generates a suitable csconfig.h as output.</span>
+00024 <span class="comment">*/</span>
+00025 <span class="preprocessor">#ifndef __CS_WIN32_CSCONFIG_H__</span>
+00026 <span class="preprocessor"></span><span class="preprocessor">#define __CS_WIN32_CSCONFIG_H__</span>
+00027 <span class="preprocessor"></span>
+00028 <span class="preprocessor">#define CS_PACKAGE_NAME "crystalspace"</span>
+00029 <span class="preprocessor"></span>
+00030 <span class="preprocessor">#define CS_PLATFORM_WIN32</span>
+00031 <span class="preprocessor"></span><span class="preprocessor">#if !defined(CS_PLATFORM_NAME)</span>
+00032 <span class="preprocessor"></span><span class="preprocessor">#  define CS_PLATFORM_NAME "Win32"</span>
+00033 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00034 <span class="preprocessor"></span>
+00035 <span class="preprocessor">#define CS_PROCESSOR_X86</span>
+00036 <span class="preprocessor"></span><span class="preprocessor">#if !defined(CS_PROCESSOR_NAME)</span>
+00037 <span class="preprocessor"></span><span class="preprocessor">#  define CS_PROCESSOR_NAME "X86"</span>
+00038 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00039 <span class="preprocessor"></span>
+00040 <span class="preprocessor">#if defined(__BORLANDC__)</span>
+00041 <span class="preprocessor"></span><span class="preprocessor">#  define CS_COMPILER_BCC</span>
+00042 <span class="preprocessor"></span><span class="preprocessor">#  if !defined(CS_COMPILER_NAME)</span>
+00043 <span class="preprocessor"></span><span class="preprocessor">#    define CS_COMPILER_NAME "Borland"</span>
+00044 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+00045 <span class="preprocessor"></span><span class="preprocessor">#  define CS_USE_CUSTOM_ISDIR</span>
+00046 <span class="preprocessor"></span><span class="preprocessor">#elif defined(__MINGW32__) || defined(__CYGWIN32__)</span>
+00047 <span class="preprocessor"></span><span class="preprocessor">#  define CS_COMPILER_GCC</span>
+00048 <span class="preprocessor"></span><span class="preprocessor">#  if !defined(CS_COMPILER_NAME)</span>
+00049 <span class="preprocessor"></span><span class="preprocessor">#    define CS_COMPILER_NAME "GCC"</span>
+00050 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+00051 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00052 <span class="preprocessor"></span><span class="preprocessor">#  define CS_COMPILER_MSVC</span>
+00053 <span class="preprocessor"></span><span class="preprocessor">#  if !defined(CS_COMPILER_NAME)</span>
+00054 <span class="preprocessor"></span><span class="preprocessor">#    define CS_COMPILER_NAME "VisualC"</span>
+00055 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+00056 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00057 <span class="preprocessor"></span>
+00058 <span class="preprocessor">#if !defined (CS_COMPILER_GCC)</span>
+00059 <span class="preprocessor"></span><span class="preprocessor">#  define CS_USE_MMX</span>
+00060 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00061 <span class="preprocessor"></span>
+00062 <span class="preprocessor">#undef  CS_HAVE_SOCKLEN_T</span>
+00063 <span class="preprocessor"></span><span class="preprocessor">#define CS_HAVE_MATH_H_FLOAT_FUNCS</span>
+00064 <span class="preprocessor"></span><span class="preprocessor">#define CS_HAVE_CXX_KEYWORD_EXPLICIT</span>
+00065 <span class="preprocessor"></span><span class="preprocessor">#define CS_HAVE_CXX_KEYWORD_TYPENAME</span>
+00066 <span class="preprocessor"></span><span class="preprocessor">#define CS_HAVE_WCHAR_H</span>
+00067 <span class="preprocessor"></span><span class="preprocessor">#define CS_HAVE_WCHAR_T</span>
+00068 <span class="preprocessor"></span><span class="preprocessor">#define CS_HAVE_WCSLEN</span>
+00069 <span class="preprocessor"></span><span class="preprocessor">#define CS_WCHAR_T_SIZE 2</span>
 00070 <span class="preprocessor"></span>
-00071 <span class="preprocessor">#endif // __CS_WIN32_CSCONFIG_H__</span>
+00071 <span class="preprocessor">#define CS_EMBED_PLUGIN_META</span>
+00072 <span class="preprocessor"></span>
+00073 <span class="comment">//#define CS_BUILD_SHARED_LIBS</span>
+00074 
+00075 <span class="preprocessor">#ifdef _WIN64</span>
+00076 <span class="preprocessor"></span><span class="preprocessor">#  define CS_PROCESSOR_SIZE 64</span>
+00077 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00078 <span class="preprocessor"></span><span class="preprocessor">#  define CS_PROCESSOR_SIZE 32</span>
+00079 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00080 <span class="preprocessor"></span>
+00081 <span class="comment">//#define CS_REF_TRACKER</span>
+00082 <span class="comment">//#define CS_MEMORY_TRACKER</span>
+00083 
+00084 <span class="preprocessor">#if defined(CS_COMPILER_MSVC) &amp;&amp; (_MSC_VER &gt;= 1400)</span>
+00085 <span class="preprocessor"></span><span class="preprocessor">#  define _CRT_SECURE_NO_DEPRECATE</span>
+00086 <span class="preprocessor"></span>        <span class="comment">/* In VC8, a lot of CRT methods were marked "deprecated" b/c they're </span>
+00087 <span class="comment">           deemed "insecure". Silence those warnings. </span>
+00088 <span class="comment">           NB: This is here b/c it needs to be set before any standard headers</span>
+00089 <span class="comment">           are included. */</span>
+00090 <span class="preprocessor">#endif</span>
+00091 <span class="preprocessor"></span>
+00092 <span class="preprocessor">#endif // __CS_WIN32_CSCONFIG_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

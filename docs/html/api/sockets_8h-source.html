@@ -75,15 +75,19 @@
 00070 <span class="preprocessor"></span><span class="preprocessor">#  define CS_NET_SOCKET_INVALID ((csNetworkSocket)~0)</span>
 00071 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 00072 <span class="preprocessor"></span>
-00073 <span class="comment">// Platforms which do not supply a socklen_t type should define</span>
-00074 <span class="comment">// CS_USE_FAKE_SOCKLEN_TYPE. Note that we invoke the typedef only if some other</span>
-00075 <span class="comment">// entity has not already #defined socklen_t, since the #define would cause</span>
-00076 <span class="comment">// problems (i.e. `typedef int int').</span>
-00077 <span class="preprocessor">#if defined(CS_USE_FAKE_SOCKLEN_TYPE) &amp;&amp; !defined(socklen_t)</span>
-00078 <span class="preprocessor"></span>  <span class="keyword">typedef</span> <span class="keywordtype">int</span> socklen_t;
-00079 <span class="preprocessor">#endif</span>
-00080 <span class="preprocessor"></span>
-00081 <span class="preprocessor">#endif // __CS_CSSYS_SOCKETS_H__</span>
+00073 <span class="comment">// Platforms which supply a socklen_t type should define CS_HAVE_SOCKLEN_T.</span>
+00074 <span class="comment">// Note that we invoke the typedef only if some other entity has not already</span>
+00075 <span class="comment">// #defined socklen_t, since the #define would cause problems (for example,</span>
+00076 <span class="comment">// `typedef int int'). Some system-supplied headers will #define</span>
+00077 <span class="comment">// __socklen_t_defined if the socklen_t typedef has already been setup, so we</span>
+00078 <span class="comment">// check that as well.</span>
+00079 <span class="preprocessor">#if !defined(CS_HAVE_SOCKLEN_T) &amp;&amp; \</span>
+00080 <span class="preprocessor">    !defined(socklen_t) &amp;&amp; \</span>
+00081 <span class="preprocessor">    !defined(__socklen_t_defined)</span>
+00082 <span class="preprocessor"></span>  <span class="keyword">typedef</span> <span class="keywordtype">int</span> socklen_t;
+00083 <span class="preprocessor">#endif</span>
+00084 <span class="preprocessor"></span>
+00085 <span class="preprocessor">#endif // __CS_CSSYS_SOCKETS_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
