@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Makefile Structure</TITLE>
+<TITLE>Crystal Space: Makefile How-To</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Makefile Structure">
-<META NAME="keywords" CONTENT="Crystal Space: Makefile Structure">
+<META NAME="description" CONTENT="Crystal Space: Makefile How-To">
+<META NAME="keywords" CONTENT="Crystal Space: Makefile How-To">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,213 +23,66 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC790"></A>
+<A NAME="SEC803"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC789"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC791"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC782"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC789"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC804"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC796"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC795"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC807"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_291.html#SEC926">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC941">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 8.2.1 Overall Structure </H3>
-<!--docid::SEC790::-->
+<H2> 8.2 Makefile How-To </H2>
+<!--docid::SEC803::-->
 <P>
 
-The makefile system was designed to be very modular.  This means that there are
-separate submakefiles for each unit that have to be built.  Besides, there is a
-platform-dependent submakefile (referenced through the variable
-<CODE>$(TARGET_MAKEFILE)</CODE>), user settings submakefiles (`<TT>mk/user.mak</TT>' and
-the optional `<TT>mk/local.ma</TT>'), common definitions submakefile
-(`<TT>mk/common.mak</TT>') and several other minor submakefiles.  The top-level
-`<TT>Makefile</TT>' (which is located in the root directory of Crystal Space source
-tree, `<TT>CS</TT>') takes care of including all other submakefiles as required.
+<EM>Written by Andrew Zabolotny, <A HREF="mailto:bit@eltech.ru">bit@eltech.ru</A>.</EM>
 </P><P>
 
-Initially the build system is unconfigured.  The <EM>configuration</EM> process
-identifies platform facilities and peculiarities and determines the
-platform-specific submakefile to use, as well as several other definitions
-required for building Crystal Space on a particular platform.  During
-configuration phase a submakefile called `<TT>config.mak</TT>' is created in the
-top-level build directory.  Here is a very tiny extract of a `<TT>config.mak</TT>'
-created for Unix:
+This section describes the interior of the makefile for GNU `<SAMP>make</SAMP>'.
+It will only help you if you use GNU `<SAMP>make</SAMP>', and if you intend to
+change the GNU makefiles.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre># Automatically generated file, do not edit!
-TARGET = unix
-TARGET_MAKEFILE = libs/csutil/unix/unix.mak
-MODE = optimize
-USE_PLUGINS = yes
-PROC = X86
-CXX = gcc -c
-CFLAGS.optimize += -mpentium -march=i586
-CFLAGS.SYSTEM += -fno-exceptions
-</pre></td></tr></table></P><P>
-
-As you can see, the first statement defines the `<SAMP>TARGET</SAMP>' platform and the
-second defines the platform-specific submakefile.  The `<SAMP>MODE</SAMP>' variable
-defines the build mode (optimize, debug, or profile).  `<SAMP>USE_PLUGINS</SAMP>' tells
-whenever we will or will not use dynamic-linked plugin modules, as opposed to
-linking all modules directly into the application as one monolithic entity.
-The following statements defines several minor host platform and operating
-system characteristics such as processor type, C++ compiler, and several
-optimization switches that are supported by compiler.  In practice, a real
-`<TT>config.mak</TT>' will contain a good deal more information which was
-discovered by the configuration process.
+Crystal Space has a complex and sophisticated makefile system, this
+document describes how it works and defines a set of rules that should be
+followed, if possible, to keep makefiles clean and understandable.
 </P><P>
 
-The platform-specific submakefile defines features that are common for that
-type of platform, but does not specify any peculiarities about a particular
-installation.  Instead, the configuration process figures out the pecuriarities
-of your system and sets up `<TT>config.mak</TT>' to reflect them.  The system
-submakefile is included several times; the reason is that there are
-platform-specific definitions that should be defined at the top of each
-makefile, in the middle and so on.  To differentiate between them a variable
-called `<SAMP>MAKESECTION</SAMP>' is used.  For example, early in the root makefile it
-is necessary to know which operating system, compiler, and processor we are
-running on.  For this, the root makefile does the following:
+The makefile system heavily relies on many features of GNU `<SAMP>make</SAMP>'.
+This renders them very simple, but at the same time makes it heavily depend on
+this tool; however as of today GNU `<SAMP>make</SAMP>' is available for almost
+every platform, so this is not a too big of a price for the goods it brings.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>MAKESECTION=rootdefines
-include $(SRCDIR)/mk/subs.mak
-</pre></td></tr></table></P><P>
-
-The `<TT>mk/subs.mak</TT>' makefile is a special makefile that takes care of
-including all submakefiles: platform-specific and submakefiles for all plugins,
-libraries, and applications.  In our case we care only about platform-specific
-submakefile; effectively `<SAMP>include mk/subs.mak</SAMP>' invokes:
+This document is not intended as a GNU `<SAMP>make</SAMP>' manual; refer to
+appropriate documents if you do not understand something.  The following text
+supposes you are familiar with GNU `<SAMP>make</SAMP>' extensions; with at least
+basic features if not with all.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>-include $(SRCDIR)/$(TARGET_MAKEFILE)
-</pre></td></tr></table></P><P>
-
-In <CODE>$(TARGET_MAKEFILE)</CODE> we check the `<SAMP>MAKESECTION</SAMP>' variable, and
-execute appropriate makefile statements.  In our case:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>ifeq ($(MAKESECTION),rootdefines)
-SOMEVAR=somevalue
-OTHERVAR=othervalue
-endif # ifneq (,$(findstring defines,$(MAKESECTION)))
-</pre></td></tr></table></P><P>
-
-For building something the root makefile runs a submakefile called
-`<TT>mk/cs.mak</TT>'.  Note that `<TT>cs.mak</TT>' is not <EM>included</EM> but is run as
-a separate make process via `<SAMP>$(MAKE) -f mk/cs.mak <VAR>args</VAR></SAMP>'.  This means
-that all definitions made for root makefile are ignored in `<TT>cs.mak</TT>', so
-`<TT>cs.mak</TT>' needs again to include `<TT>mk/subs.mak</TT>' in appropriate places
-with appropriate values for `<SAMP>MAKESECTION</SAMP>'.  For example, to build the
-`<TT>csutil</TT>' library, the top-level makefile executes the following command:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$(MAKE) -f mk/cs.mak csutil
-</pre></td></tr></table></P><P>
-
-Currently the following values of `<SAMP>MAKESECTION</SAMP>' are used:
-</P><P>
-
-<DL COMPACT>
-<DT><EM>Used in root `<TT>Makefile</TT>'.</EM>
-<DD><DL COMPACT>
-<DT><CODE>confighelp</CODE>
-<DD>The platform-specific submakefile is included from top-level makefile to define
-the various "help" messages which the makefile can display.
-<DT><CODE>rootdefines</CODE>
-<DD>Define all the variables required by the top-level makefile.
-<DT><CODE>roottargets</CODE>
-<DD>Define all additional targets required by the top-level makefile.
-</DL>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_272.html#SEC804">8.2.1 Overall Structure</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_273.html#SEC805">8.2.2 Variable Naming Conventions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_274.html#SEC806">8.2.3 Output Directory</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
 <P>
 
-<DT><EM>Used in `<TT>cs.mak</TT>'.</EM>
-<DD><DL COMPACT>
-<DT><CODE>defines</CODE>
-<DD>Define all variables that are required for building any targets--the C/C++
-compilers, flags and so on.
-<DT><CODE>postdefines</CODE>
-<DD>Define any variables that depend on other variables.
-<DT><CODE>targets</CODE>
-<DD>Define targets in addition to those in `<TT>cs.mak</TT>'; for instance, a library,
-a driver, an executable and so on.
-</DL>
-</DL>
-<P>
-
-Note that `<SAMP>MAKESECTION</SAMP>' variable is used not only in the platform-specific
-submakefile, but in all submakefiles; for libraries, for plugins, and so on.
-</P><P>
-
-Each platform-specific submakefile augments thee value of a variable called
-`<SAMP>PLUGINS</SAMP>' which contain references to all platform-specific plugins that
-are supported by this platform and which were not detected automatically by the
-configuration process.  The drivers are referenced by their directory name
-inside `<TT>CS/plugins</TT>' subdirectory.  For example, a `<SAMP>PLUGINS</SAMP>' variable
-that refers to the XFree86 shared-memory extension would look like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>PLUGINS += video/canvas/xextshm
-</pre></td></tr></table></P><P>
-
-To find the submakefiles for plugins, `<TT>$(SRCDIR)/plugins</TT>' is prepended to
-all components of `<SAMP>PLUGINS</SAMP>'; `<TT>/*.mak</TT>' is appended; and a wildcard
-search is performed.  A possible result of above expansion might be:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>PLUGINS_SUBMAKEFILES = video/canvas/xextshm/xextshm.mak
-</pre></td></tr></table></P><P>
-
-These submakefiles are included each time `<TT>subs.mak</TT>' is included either
-into the top-level makefile or into a submakefile.
-</P><P>
-
-To find the submakefiles for libraries, `<TT>subs.mak</TT>' looks for all
-submakefiles contained one level deep in the `<TT>CS/libs</TT>' directory (i.e.
-`<TT>libs/*/*.mak</TT>').  For example, it might find these libraries:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>(~/CS)% ls libs/*/*.mak
-libs/csappframe/csappframe.mak
-libs/csgeom/csgeom.mak
-libs/csgfx/csgfx.mak
-libs/cstool/cstool.mak
-libs/csutil/csutil.mak
-libs/csws/csws.mak
-</pre></td></tr></table></P><P>
-
-Submakefiles for applications are located using the search mask
-`<TT>apps/*/*.mak apps/*/*.mak apps/*/*/*.mak</TT>', in this fashion:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>(~/CS)% ls apps/*/*.mak
-apps/demo/demo.mak
-apps/walktest/walktest.mak
-apps/examples/cswseng/cswseng.mak
-apps/import/map2cs/map2cs.mak
-apps/tutorial/simple1/simple1.mak
-apps/tutorial/simple2/simple2.mak
-</pre></td></tr></table></P><P>
-
-The library and application submakefiles also uses the `<SAMP>MAKESECTION</SAMP>'
-variable to insert statements into different places of the makefile.  If you
-do not understand something, feel free to look through submakefiles that
-reside in all major directories of the Crystal Space source tree.
-</P><P>
-
-<A NAME="Makefile Variables"></A>
+<A NAME="Makefile Structure"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC789"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC791"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC782"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC789"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC804"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_264.html#SEC796"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC795"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC807"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_291.html#SEC926">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_292.html#SEC941">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
