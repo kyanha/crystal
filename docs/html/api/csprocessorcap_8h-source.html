@@ -56,7 +56,7 @@
 00051     <span class="keywordflow">if</span> (isInitialized)
 00052       <span class="keywordflow">return</span>;
 00053 
-00054 <span class="preprocessor">#ifdef PROC_X86</span>
+00054 <span class="preprocessor">#ifdef CS_PROCESSOR_X86</span>
 00055 <span class="preprocessor"></span>    CheckX86Processor ();
 00056 <span class="preprocessor">#else</span>
 00057 <span class="preprocessor"></span>    mmxSupported = <span class="keyword">false</span>;
@@ -91,7 +91,7 @@
 00090   
 00092   <span class="keyword">static</span> <span class="keywordtype">char</span> processorName[16];
 00093 
-00094 <span class="preprocessor">  #ifdef PROC_X86</span>
+00094 <span class="preprocessor">  #ifdef CS_PROCESSOR_X86</span>
 00095 <span class="preprocessor"></span>
 00099   <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> CheckX86Processor ()
 00100   {
@@ -102,7 +102,7 @@
 00105 
 00106     <span class="keywordtype">bool</span> have_cpuid;
 00107 
-00108 <span class="preprocessor">    #if defined(COMP_VC)</span>
+00108 <span class="preprocessor">    #if defined(CS_COMPILER_MSVC)</span>
 00109 <span class="preprocessor"></span>    __asm
 00110     {
 00111       <span class="comment">// save vars</span>
@@ -167,7 +167,7 @@
 00170         pop ebx
 00171         pop eax
 00172     }
-00173 <span class="preprocessor">    #elif defined(COMP_GCC)</span>
+00173 <span class="preprocessor">    #elif defined(CS_COMPILER_GCC)</span>
 00174 <span class="preprocessor"></span>    __asm__(
 00175     <span class="comment">//detect 386/486</span>
 00176     <span class="stringliteral">"  pushfl                           \n"</span>
@@ -218,14 +218,14 @@
 00221     : <span class="stringliteral">"g"</span> (procName), <span class="stringliteral">"2"</span> (maxEax)
 00222     : <span class="stringliteral">"eax"</span>, <span class="stringliteral">"ebx"</span>, <span class="stringliteral">"ecx"</span>, <span class="stringliteral">"edx"</span>, <span class="stringliteral">"esi"</span>);
 00223 
-00224 <span class="preprocessor">    #endif //COMP_</span>
+00224 <span class="preprocessor">    #endif //CS_COMPILER_</span>
 00225 <span class="preprocessor"></span>    mmxSupported = capFlags &amp; (1&lt;&lt;23);
 00226     sseSupported = capFlags &amp; (1&lt;&lt;25);
 00227     <span class="comment">//AMD3dnowSupported = capFlags &amp; (1&lt;&lt;31);</span>
 00228   }
-00229 <span class="preprocessor">  #else //PROC_X86</span>
+00229 <span class="preprocessor">  #else //CS_PROCESSOR_X86</span>
 00230 <span class="preprocessor"></span>  <span class="keywordtype">void</span> csProcessorCapability::CheckX86Processor () {}
-00231 <span class="preprocessor">  #endif //PROC_X86</span>
+00231 <span class="preprocessor">  #endif //CS_PROCESSOR_X86</span>
 00232 <span class="preprocessor"></span>
 00233 };
 00234 
