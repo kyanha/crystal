@@ -330,6 +330,10 @@ SOURCE=..\..\libs\csutil\prfxcfg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\profile.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\radixsort.cpp
 # End Source File
 # Begin Source File
@@ -795,6 +799,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\pooledscfclass.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\prfxcfg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\profile.h
 # End Source File
 # Begin Source File
 
