@@ -41,18 +41,18 @@
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#a3">Main</a> (int argc, char *argv[])</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Starts up the application framework, to be called from main().</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Static Public Methods</h2></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d3">Quit</a> (void)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Quit running the appliation.</em> <a href="#d3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a class="el" href="structiObjectRegistry.html">iObjectRegistry</a> *&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d4">GetObjectRegistry</a> ()</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Returns a pointer to the object registry.</em> <a href="#d4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d5">SetApplicationName</a> (char *name)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Set the application's string name identifier.</em> <a href="#d5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d6">ProcessQueue</a> ()</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Start event queue.</em> <a href="#d6"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>bool&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d7">DisplayError</a> (const char *description)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Display an error notification.</em> <a href="#d7"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d8">DisplayInfo</a> (const char *description)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Display an information notification.</em> <a href="#d8"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d0">Quit</a> ()</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Quit running the appliation.</em> <a href="#d0"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="structiObjectRegistry.html">iObjectRegistry</a> *&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d1">GetObjectRegistry</a> ()</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Returns a pointer to the object registry.</em> <a href="#d1"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d2">SetApplicationName</a> (char *name)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set the application's string name identifier.</em> <a href="#d2"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d3">Run</a> ()</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Start event queue.</em> <a href="#d3"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>bool&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d4">DisplayError</a> (const char *description)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Display an error notification.</em> <a href="#d4"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d5">DisplayInfo</a> (const char *description)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Display an information notification.</em> <a href="#d5"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Protected Methods</h2></td></tr>
 <tr><td nowrap align=right valign=top>&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#b0">csApplicationFramework</a> ()</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Constructor.</em> <a href="#b0"></a><em></em></font><br><br></td></tr>
@@ -67,50 +67,50 @@
 Application framework class.
 <p>
 <dl compact><dt><b>Remarks: </b></dt><dd>
- In order to properly use this class, you must derive a class from it and provide a constructor and implementation for the <a class="el" href="classcsApplicationFramework.html#b1">OnInitialize()</a> and <a class="el" href="classcsApplicationFramework.html#b2">Application()</a> methods. You may only have one csApplicationFramework derived object in existence at any time (and generally, you will only have one such object in your application). The library containing the implementation of this class contains an implementation of the main() function that controls the use of this class. When using the csApplicationFramework class, do not provide your own implementation of main(). In your source code create a global instance of the overridden object, as follows: <div class="fragment"><pre> <span class="comment">// Example.h</span>
- <span class="keyword">class </span>myDerivedEngine : <span class="keyword">public</span> <a class="code" href="classcsApplicationFramework.html">csApplicationFramework</a>
+ This class provides a handy object-oriented wrapper around the Crystal Space initialization and start-up functions. It encapsulates a callback paradigm which provides methods such as <a class="el" href="classcsApplicationFramework.html#b1">OnInitialize()</a> and <a class="el" href="classcsApplicationFramework.html#b3">OnExit()</a> which you can override to customize the framework's behavior. You should also consider using <a class="el" href="classcsBaseEventHandler.html">csBaseEventHandler</a> (<a class="el" href="csbaseeventh_8h.html">csutil/csbaseeventh.h</a>), which provides the same sort of object-oriented wrapper for the Crystal Space event mechanism; providing methods such as OnMouseClick(), OnKeyboard(), OnBroadcast(), etc. 
+<p>
+ In order to properly use this class, you must derive your own class from it, providing a constructor and implementation for the <a class="el" href="classcsApplicationFramework.html#b1">OnInitialize()</a> and <a class="el" href="classcsApplicationFramework.html#b2">Application()</a> methods. You may only have one csApplicationFramework derived object in existence at any time (and generally, you will only have one such object in your application). In your source code create a global instance of the overridden object, as follows:</dl><div class="fragment"><pre> <span class="comment">//--------------------------</span>
+ <span class="comment">// Example.h</span>
+ <span class="keyword">class </span>MyApp : <span class="keyword">public</span> <a class="code" href="classcsApplicationFramework.html">csApplicationFramework</a>
  {
  <span class="keyword">public</span>:
-   myDerivedEngine();
+   MyApp();
    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsApplicationFramework.html#b1">OnInitialize</a>();
    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsApplicationFramework.html#b2">Application</a>();
  };
 
- <span class="keyword">extern</span> myDerivedEngine myApp;
-
+ <span class="keyword">extern</span> MyApp myApp;
 
  <span class="comment">//--------------------------</span>
-
  <span class="comment">// Example.cpp</span>
  <span class="comment">// File scope</span>
- myDerivedEngine myApp;
+ MyApp myApp;
 
- myDerivedEngine::myDerivedEngine() : myDerivedEngine()
+ MyApp::MyApp() : <a class="code" href="classcsApplicationFramework.html">csApplicationFramework</a>()
  {
-   SetApplicationName (<span class="stringliteral">"crystal.space.example.app"</span>);
+   SetApplicationName (<span class="stringliteral">"my.example.app"</span>);
  }
 
- myDerivedEngine::OnIntialize()
+ MyApp::OnIntialize()
  {
    <span class="comment">// Request plugins, initialize any global non-CS data and structures</span>
    <span class="keywordflow">return</span> <span class="keyword">true</span>;
  }
  
- <a class="code" href="classcsApplicationFramework.html#b2">myDerivedEngine::Application</a>()
+ <a class="code" href="classcsApplicationFramework.html#b2">MyApp::Application</a>()
  {
    <span class="comment">// Perform initialization of CS data and structures, set event handler,</span>
    <span class="comment">// load world, etc.</span>
 
-   <span class="keywordflow">if</span> ( ! Open())
-   {
+   <span class="keywordflow">if</span> (!Open())
      <span class="keywordflow">return</span> <span class="keyword">false</span>;
-   }
 
-   ProcessQueue();
-
+   Run();
    <span class="keywordflow">return</span> <span class="keyword">true</span>;
  }
  
+ <span class="comment">//--------------------------</span>
+ <span class="comment">// main.cpp</span>
  <a class="code" href="cssysdef_8h.html#a20">CS_IMPLEMENT_APPLICATION</a>
  
  <span class="keywordtype">int</span> main (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) 
@@ -119,13 +119,13 @@ Application framework class.
  }
 </pre></div> 
 <p>
- This class is derived from <a class="el" href="classcsInitializer.html">csInitializer</a> for convenience, allowing overridden members to call <a class="el" href="classcsInitializer.html">csInitializer</a> methods without qualifying them with <a class="el" href="classcsInitializer.html">csInitializer</a>::. 
+ csApplicationFramework itself is derived from <a class="el" href="classcsInitializer.html">csInitializer</a> for convenience, allowing overridden members to call <a class="el" href="classcsInitializer.html">csInitializer</a> methods without qualifying them with <a class="el" href="classcsInitializer.html">csInitializer</a>::. 
 <p>
- This class is not related to <a class="el" href="classcsApp.html">csApp</a> or other classes related to the CSWS. </dl>
+ This class is not related to <a class="el" href="classcsApp.html">csApp</a> or any other class from the deprecated CSWS library. 
 <p>
 
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00108">108</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00111">111</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a name="b0" doxytag="csApplicationFramework::csApplicationFramework"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -223,7 +223,7 @@ Perform application logic.
  This method is where the user application should perform all of its main program logic, including initializing any Crystal Space variables and states, starting the event queue loop, etc. </dl>    </td>
   </tr>
 </table>
-<a name="d7" doxytag="csApplicationFramework::DisplayError"></a><p>
+<a name="d4" doxytag="csApplicationFramework::DisplayError"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -252,14 +252,14 @@ Perform application logic.
 Display an error notification.
 <p>
 <dl compact><dt><b>Remarks: </b></dt><dd>
- The error displayed with this function will be identified with the application string name identifier set with <a class="el" href="classcsApplicationFramework.html#d5">SetApplicationName()</a>. </dl>
+ The error displayed with this function will be identified with the application string name identifier set with <a class="el" href="classcsApplicationFramework.html#d2">SetApplicationName()</a>. </dl>
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00321">321</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00322">322</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
 <p>
 References <a class="el" href="reporter_8h-source.html#l00049">CS_REPORTER_SEVERITY_ERROR</a>, and <a class="el" href="reporter_8h-source.html#l00379">csReport</a>.    </td>
   </tr>
 </table>
-<a name="d8" doxytag="csApplicationFramework::DisplayInfo"></a><p>
+<a name="d5" doxytag="csApplicationFramework::DisplayInfo"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -288,14 +288,14 @@ References <a class="el" href="reporter_8h-source.html#l00049">CS_REPORTER_SEVER
 Display an information notification.
 <p>
 <dl compact><dt><b>Remarks: </b></dt><dd>
- The info displayed with this function will be identified with the application string name identifier set with <a class="el" href="classcsApplicationFramework.html#d5">SetApplicationName()</a>. </dl>
+ The info displayed with this function will be identified with the application string name identifier set with <a class="el" href="classcsApplicationFramework.html#d2">SetApplicationName()</a>. </dl>
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00335">335</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00336">336</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
 <p>
 References <a class="el" href="reporter_8h-source.html#l00061">CS_REPORTER_SEVERITY_NOTIFY</a>, and <a class="el" href="reporter_8h-source.html#l00379">csReport</a>.    </td>
   </tr>
 </table>
-<a name="d4" doxytag="csApplicationFramework::GetObjectRegistry"></a><p>
+<a name="d1" doxytag="csApplicationFramework::GetObjectRegistry"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -324,7 +324,7 @@ Returns a pointer to the object registry.
 <p>
 
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00255">255</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00256">256</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
   </tr>
 </table>
 <a name="a3" doxytag="csApplicationFramework::Main"></a><p>
@@ -394,7 +394,8 @@ Starts up the application framework, to be called from main().
 <p>
 Perform any end of program processing.
 <p>
-/remarks This method is called after the crystal space engine has been shut down, just before the framework is about to end the program. Unlike the other overridables of this class, you need not bother overriding this method. In general, this is provided to allow end of program debugging support.     </td>
+<dl compact><dt><b>Remarks: </b></dt><dd>
+This method is called after the crystal space engine has been shut down, just before the framework is about to end the program. Unlike the other overridables of this class, you need not bother overriding this method. In general, this is provided to allow end of program debugging support. </dl>    </td>
   </tr>
 </table>
 <a name="b1" doxytag="csApplicationFramework::OnInitialize"></a><p>
@@ -477,7 +478,7 @@ Open plugins and open application window.
 <p>
 
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00270">270</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00271">271</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
 <p>
 References <a class="el" href="classcsInitializer.html#d14">csInitializer::OpenApplication()</a>.    </td>
   </tr>
@@ -510,18 +511,49 @@ References <a class="el" href="classcsInitializer.html#d14">csInitializer::OpenA
 Allow a csApplicationFramework object to be used as an <a class="el" href="structiObjectRegistry.html">iObjectRegistry</a>*.
 <p>
 <dl compact><dt><b>Remarks: </b></dt><dd>
- Using this implicit cast operator is a shorthand for calling <a class="el" href="classcsApplicationFramework.html#d4">GetObjectRegistry()</a>, and allows the developer to use his derived csApplicationFramework object as a parameter to any function (and some macros) which require an <a class="el" href="structiObjectRegistry.html">iObjectRegistry</a> reference. </dl>
+ Using this implicit cast operator is a shorthand for calling <a class="el" href="classcsApplicationFramework.html#d1">GetObjectRegistry()</a>, and allows the developer to use his derived csApplicationFramework object as a parameter to any function (and some macros) which require an <a class="el" href="structiObjectRegistry.html">iObjectRegistry</a> reference. </dl>
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00265">265</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00266">266</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
   </tr>
 </table>
-<a name="d6" doxytag="csApplicationFramework::ProcessQueue"></a><p>
+<a name="d0" doxytag="csApplicationFramework::Quit"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> void csApplicationFramework::ProcessQueue </td>
+          <td class="md" nowrap valign="top"> void csApplicationFramework::Quit </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" valign="top">)&nbsp;</td>
+          <td class="md" nowrap><code> [static]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Quit running the appliation.
+<p>
+<dl compact><dt><b>Remarks: </b></dt><dd>
+ This function will send a cscmdQuit event through the event queue. If no queue has been initialized, then it will terminate the program with an exit() call. </dl>    </td>
+  </tr>
+</table>
+<a name="d3" doxytag="csApplicationFramework::Run"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> void csApplicationFramework::Run </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
           <td class="md" valign="top">)&nbsp;</td>
@@ -545,44 +577,12 @@ Start event queue.
 <dl compact><dt><b>Remarks: </b></dt><dd>
  This is a shorthand method of calling <a class="el" href="group__util.html#a53">csDefaultRunLoop()</a>. </dl>
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00294">294</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00295">295</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
 <p>
 References <a class="el" href="sysfunc_8h.html#a53">csDefaultRunLoop()</a>.    </td>
   </tr>
 </table>
-<a name="d3" doxytag="csApplicationFramework::Quit"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> void csApplicationFramework::Quit </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">void&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
-          <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap><code> [static]</code></td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Quit running the appliation.
-<p>
-<dl compact><dt><b>Remarks: </b></dt><dd>
- This function will send a cscmdQuit event through the event queue. If no queue has been initialized, then it will terminate the program with an exit call. </dl>    </td>
-  </tr>
-</table>
-<a name="d5" doxytag="csApplicationFramework::SetApplicationName"></a><p>
+<a name="d2" doxytag="csApplicationFramework::SetApplicationName"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -611,15 +611,15 @@ Quit running the appliation.
 Set the application's string name identifier.
 <p>
 <dl compact><dt><b>Remarks: </b></dt><dd>
- This string is used by <a class="el" href="classcsApplicationFramework.html#d7">DisplayError()</a> and <a class="el" href="classcsApplicationFramework.html#d8">DisplayInfo()</a> to identify the source of a message as generated by the user application (as opposed to one generated by code within the framework library or other code with the Crystal Space libraries and plugins). 
+ This string is used by <a class="el" href="classcsApplicationFramework.html#d4">DisplayError()</a> and <a class="el" href="classcsApplicationFramework.html#d5">DisplayInfo()</a> to identify the source of a message as generated by the user application (as opposed to one generated by code within the framework library or other code with the Crystal Space libraries and plugins). 
 <p>
  Generally, you will call this function once in the constructor for your derived csApplicationFramework class, but it is safe to call it any number of times. </dl>
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00284">284</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00285">285</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
-<li>csappframe/<a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a></ul>
+<li>cstool/<a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a></ul>
 <hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
