@@ -23,21 +23,21 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC226"></A>
+<A NAME="SEC231"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC218"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_112.html#SEC234"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC201"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC217"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC346"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC223"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_112.html#SEC239"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC930">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC937">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
 <H3> 5.8.2 Doing Collision Detection </H3>
-<!--docid::SEC226::-->
+<!--docid::SEC231::-->
 <P>
 
 Collision detection in CS is one of the more complicated issues. In this
@@ -45,9 +45,9 @@ section I give a quick description of all the classes and interfaces in CS
 and what you should do to use them.
 </P><P>
 
-<A NAME="SEC227"></A>
+<A NAME="SEC232"></A>
 <H4> Loading the `<SAMP>iCollideSystem</SAMP>' </H4>
-<!--docid::SEC227::-->
+<!--docid::SEC232::-->
 <P>
 
 The basis of the collision detection system is the `<SAMP>iCollideSystem</SAMP>'.
@@ -64,7 +64,7 @@ To load a collision detection system you can use the following code:
 csRef&#60;iConfigManager&#62; config =
   CS_QUERY_REGISTRY (object_reg, iConfigManager);
 const char* p = config-&#62;GetStr ("MyGame.Settings.CollDetPlugin",
-  	"crystalspace.collisiondetection.rapid");
+  	"crystalspace.collisiondetection.opcode");
 csRef&#60;iCollideSystem&#62; cd_sys =
   CS_LOAD_PLUGIN (plugmgr, p, iCollideSystem);
 if (!cd_sys)
@@ -84,9 +84,9 @@ plugin then you can also hardcode the string.  The cd_sys should be stored
 somewhere central (i.e. your application class).
 </P><P>
 
-<A NAME="SEC228"></A>
+<A NAME="SEC233"></A>
 <H4> Initializing Geometry </H4>
-<!--docid::SEC228::-->
+<!--docid::SEC233::-->
 <P>
 
 Before you can use the collision detection system you have to make
@@ -168,9 +168,9 @@ initializes all collider wrappers for all objects in the engine.
 iCollider* collider = colwrap-&#62;GetCollider();
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC229"></A>
+<A NAME="SEC234"></A>
 <H4> The Player Collider </H4>
-<!--docid::SEC229::-->
+<!--docid::SEC234::-->
 <P>
 
 Depending on the game your player might have a representation of
@@ -196,9 +196,9 @@ collider I recommend storing them somewhere in the player class or else the
 main game class.
 </P><P>
 
-<A NAME="SEC230"></A>
+<A NAME="SEC235"></A>
 <H4> Doing Collision Detection </H4>
-<!--docid::SEC230::-->
+<!--docid::SEC235::-->
 <P>
 
 When everything is set up it is time to do collision detection. To test
@@ -221,9 +221,9 @@ detection! Otherwise the internal table of collision pairs will grow
 forever.
 </P><P>
 
-<A NAME="SEC231"></A>
+<A NAME="SEC236"></A>
 <H4> Sliding Along Walls (this section is in beta) </H4>
-<!--docid::SEC231::-->
+<!--docid::SEC236::-->
 <P>
 
 For detecting collision between a mesh and the static world, it is better
@@ -281,14 +281,14 @@ This example is limited in that it will run into an infinite loop if the
 player walks into a corner, but it serves as an example.
 </P><P>
 
-<A NAME="SEC232"></A>
-<H4> Limitation of RAPID </H4>
-<!--docid::SEC232::-->
+<A NAME="SEC237"></A>
+<H4> Limitation of RAPID and OPCODE </H4>
+<!--docid::SEC237::-->
 <P>
 
-The current RAPID collision detection implementation has one
-important limitation. It assumes that the transform from object to world
-space will not change the size of the object. i.e. you cannot scale the
+The current RAPID and OPCODE collision detection implementations
+have one important limitation. They assume that the transform from object
+to world space will not change the size of the object. i.e. you cannot scale the
 object using the object to world transformation (which is kept in the
 `<SAMP>iMovable</SAMP>') and expect collision detection to be ok. The only way
 aroud this limitation is to use <CODE>HardTransform()</CODE> to transform
@@ -297,9 +297,9 @@ dynamically as you would have to recalculate the collider every time
 the object changes.
 </P><P>
 
-<A NAME="SEC233"></A>
+<A NAME="SEC238"></A>
 <H4> Include Files </H4>
-<!--docid::SEC233::-->
+<!--docid::SEC238::-->
 <P>
 
 The include files useful for this section are:
@@ -314,14 +314,14 @@ The include files useful for this section are:
 </pre></td></tr></table><A NAME="HOWTO Mesh LightAnim"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC218"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_112.html#SEC234"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC201"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC217"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC346"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC223"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_112.html#SEC239"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC930">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC937">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
