@@ -40,8 +40,8 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <!--docid::SEC7.7.6::-->
 <P>
 
-`<TT>sprcal3d</TT>' is a 3D mesh that can perform skeletal animation using the
-Cal3D library.
+`<TT>sprcal3d</TT>' is a 3D mesh plugin which can perform skeletal animation using
+the Cal3D library.
 </P><P>
 
 <A HREF="http://cal3d.sourceforge.net/">http://cal3d.sourceforge.net/</A>
@@ -56,13 +56,13 @@ This is an example of how to load and view a Cal3d file with the
 `<TT>viewmesh</TT>' program.
 </P><P>
 
-We are going to load the `<TT>cally</TT>' model. The data files of this 
-model are part of the standard Cal3d CVS repository, and can be found at
-`<TT>cal3d/data/cally</TT>'. You must copy the files from this directory
-to `<TT>CS/cally</TT>'.
+We are going to load the `<TT>cally</TT>' model. The data files of this model are
+part of the standard Cal3d CVS repository, and can be found within the
+Cal3D project at `<TT>cal3d/data/cally</TT>'. For this example, you should copy the
+files from this directory to `<TT>CS/cally</TT>'.
 </P><P>
 
-Make a new file called `<TT>test.cal3d</TT>' in the `<TT>CS</TT>' directory with
+Now, make a new file called `<TT>test.cal3d</TT>' in the `<TT>CS</TT>' directory with
 the following contents:
 </P><P>
 
@@ -220,21 +220,132 @@ the following contents:
 &#60;/meshfact&#62;
 </pre></td></tr></table></P><P>
 
-Next, you must run `<SAMP>viewmesh</SAMP>' from the `<TT>CS</TT>' directory. 
-Right click on the screen and then select <EM>Load Mesh</EM>.
-Select `<TT>test.cal3d</TT>' from the list of files.
+Next, run `<TT>viewmesh</TT>' from the `<TT>CS</TT>' directory.
+Click "Load", select the `<TT>/this</TT>' directory, and
+select `<TT>test.cal3d</TT>'.  Alternately, to load `<TT>test.cal3d</TT>' from
+the command line when you launch `<SAMP>viewmesh</SAMP>':
 </P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>./viewmesh /this/test.cal3d
+</pre></td></tr></table></P><P>
 
 You should be able to see the `<TT>cally</TT>' model, completely green.
 </P><P>
 
 <A NAME="SEC_2"></A>
-<H4> Displaying the Model </H4>
+<H4> Creating Your Own Cal3D Mesh </H4>
 <!--docid::SEC_2::-->
 <P>
 
+Although explaining how to create your own Cal3D meshes is beyond the
+scope of this document, there are several web sites and tutorials which
+describe how to do so. These include:
+</P><P>
+
+<DL COMPACT>
+<DT><A HREF="http://cal3d.sourceforge.net/modeling/tutorial.html">http://cal3d.sourceforge.net/modeling/tutorial.html</A>
+<DD>Describes how to create Cal3D meshes in 3D Studio MAX.
+<P>
+
+<DT><A HREF="http://www.cs.indiana.edu/~joellis/">http://www.cs.indiana.edu/~joellis/</A>
+<DD>Escribes how to create maps and Cal3D meshes in Blender.
+</DL>
+<P>
+
+<EM>Note</EM>: The Crystal Space Cal3D plugin requires a skeleton system to
+function properly even if the mesh is not going to be animated.  If your mesh
+does not require animation, you must still place at least one bone in the mesh,
+bind it to a part of the mesh (e.g., the body of a space ship), name it
+correctly (see <A HREF="http://www.cs.indiana.edu/~joellis/">http://www.cs.indiana.edu/~joellis/</A> for more
+information), and export the skeleton along with the mesh.  If you do not
+create the skeleton and export it.
+</P><P>
+
+<A NAME="SEC_3"></A>
+<H4> Common `<TT>viewmesh</TT>' Errors </H4>
+<!--docid::SEC_3::-->
+<P>
+
+A good way to test your Cal3d mesh is by loading it into `<TT>viewmesh</TT>'.
+Since most diagnostic output is directed to the console, it is important
+to run `<TT>viewmesh</TT>' from the command line.  See above for how to
+do so, and substitute your `<TT>.cal3d</TT>' file for `<TT>test.cal3d</TT>'.
+</P><P>
+
+Here are several errors which may occur when testing your mesh:
+</P><P>
+
+<UL>
+<LI>
+If `<TT>viewmesh</TT>' crashes or aborts with a message about missing skeleton
+immediately after loading your `<TT>.cal3d</TT>' file, make sure that you have
+included the <CODE>&#60;skeleton&#62;</CODE> tag in your `<TT>.cal3d</TT>' file.
+<P>
+
+<LI>
+If `<TT>viewmesh</TT>' pops up an error dialogue with a message such as:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>crystalspace.mesh.sprite.cal3d: Cal3d: Invalid file format...
+</pre></td></tr></table></P><P>
+
+and outputs to the console:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Error ID: crystalspace.spritecal3dfactoryloader.parse.badfile
+Description: Could not load cal3d skeleton file &#60;test.csf&#62;.
+[node: meshfact(name=test),params,skeleton]
+crystalspace.mesh.sprite.cal3d: Cal3d: Invalid file format...
+</pre></td></tr></table></P><P>
+
+You likely forgot to put a bone in your mesh before exporting it.
+Open your 3D editor, add a bone somewhere in the mesh, bind it to the mesh,
+name it correctly (see <A HREF="http://www.cs.indiana.edu/~joellis/">http://www.cs.indiana.edu/~joellis/</A>), then 
+re-export your mesh and try again.
+</P><P>
+
+<LI>
+If `<TT>viewmesh</TT>' pops up the error message:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>crystalspace.mesh.sprite.cal3d: Cal3d: No error found in...
+</pre></td></tr></table></P><P>
+
+and outputs to the console:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Error ID: crystalspace.spritecal3dfactoryloader.parse.badfile
+Description: Could not load cal3d skeleton file &#60;test.csf&#62;.
+[node: meshfact(name=test),params,skeleton]
+</pre></td></tr></table></P><P>
+
+This probably means that you entered the skeleton file name incorrectly in your
+<CODE>&#60;skeleton&#62;</CODE> tag.  Check the value of <CODE>&#60;name&#62;</CODE> in your
+<CODE>&#60;skeleton&#62;</CODE> tag and try again.
+</P><P>
+
+<LI>
+If `<TT>viewmesh</TT>' does nothing when you try to load your `<TT>.cal3d</TT>' file,
+but outputs the following message to the console:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Error ID: crystalspace.maploader.parse.plugin
+Description: Document system error for file 'test.cal3d':
+  Error reading Element value.
+</pre></td></tr></table></P><P>
+
+You probably forgot to close one of your tags properly (e.g., a missing
+"&#62;" at the end of a tag).  Check your `<TT>.cal3d</TT>' file, and try again.
+</UL>
+<P>
+
+<A NAME="SEC_4"></A>
+<H4> Displaying the Model </H4>
+<!--docid::SEC_4::-->
+<P>
+
 We now show you how to edit the `<TT>simple1</TT>' tutorial
-(see section <A HREF="cs_5.2.html#SEC5.2">5.2 Simple Tutorial 1</A>) in order to load the Cal3d model.
+(see section <A HREF="cs_5.2.html#SEC5.2">5.2 Simple Tutorial 1</A>) in order to load the Cal3d model programmatically.
 </P><P>
 
 Add the following to `<TT>simple1.cpp</TT>'
@@ -260,12 +371,12 @@ Now, build `<TT>simple1</TT>', and run it from the `<TT>CS</TT>' directory.
 You should be looking right at the model.
 </P><P>
 
-<A NAME="SEC_3"></A>
-<H4> Controling the Model </H4>
-<!--docid::SEC_3::-->
+<A NAME="SEC_5"></A>
+<H4> Controlling the Model </H4>
+<!--docid::SEC_5::-->
 <P>
 
-We can now display the model but we cannot set animations, etc.
+We can now display the model but we can not set animations, etc.
 To resolve this, insert the following code into `<TT>simple1.cpp</TT>' immediately
 after the code which you inserted to display the model:
 </P><P>
@@ -289,9 +400,9 @@ SCF interfaces `<SAMP>iSpriteCal3DState</SAMP>' and
 API documentation.
 </P><P>
 
-<A NAME="SEC_4"></A>
+<A NAME="SEC_6"></A>
 <H4> Morph Animations </H4>
-<!--docid::SEC_4::-->
+<!--docid::SEC_6::-->
 <P>
 
 You can add morph target meshes to each mesh.  Remember that morph target
@@ -319,11 +430,11 @@ cause problems.
 &#60;/morphanimation&#62;
 </pre></td></tr></table></P><P>
 
-You can test a morphanimation if you load the Cal3D file in the `<TT>viewmesh</TT>'
-example program.
+You can test a morph animation if you load the Cal3D file in the
+`<TT>viewmesh</TT>' example program.
 </P><P>
 
-You can use morph animations programmatically as follows.
+Furthermore, you can use morph animations programmatically as follows:
 </P><P>
 
 In this example, `<SAMP>cal3dfactorystate</SAMP>' is the Cal3D factory state object of
@@ -350,9 +461,9 @@ This example completely clears a morph animation, over a period of ten seconds
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>cal3dstate-&#62;ClearMorphTarget(morphanimationid, 10.0f);
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC_5"></A>
+<A NAME="SEC_7"></A>
 <H4> Sockets </H4>
-<!--docid::SEC_5::-->
+<!--docid::SEC_7::-->
 <P>
 
 Sockets enable you to <EM>attach</EM> any mesh object to a triangle.  The attached
@@ -369,7 +480,7 @@ You can test a socket if you load the Cal3D file in the `<TT>viewmesh</TT>' exam
 program.
 </P><P>
 
-You can use sockets in code as follows.
+Furthermore, you can use sockets in code as follows:
 </P><P>
 
 In this example, `<SAMP>cal3dstate</SAMP>' is the Cal3D state object of type
