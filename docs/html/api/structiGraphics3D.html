@@ -134,8 +134,8 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Add a front or back-facing fog polygon in the current fog object.</em> <a href="#a49"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics3D.html#a50">CloseFogObject</a> (<a class="el" href="group__util.html#a6">CS_ID</a> id)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Close a volumetric fog object.</em> <a href="#a50"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics3D.html#a51">OpenPortal</a> (size_t numVertices, const <a class="el" href="classcsVector2.html">csVector2</a> *vertices, const <a class="el" href="classcsPlane3.html">csPlane3</a> &amp;normal)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Enter a new clipped portal.</em> <a href="#a51"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics3D.html#a51">OpenPortal</a> (size_t numVertices, const <a class="el" href="classcsVector2.html">csVector2</a> *vertices, const <a class="el" href="classcsPlane3.html">csPlane3</a> &amp;normal, bool floating)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Enter a new portal.</em> <a href="#a51"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics3D.html#a52">ClosePortal</a> ()=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Close a portal previously opened with <a class="el" href="structiGraphics3D.html#a51">OpenPortal()</a>.</em> <a href="#a52"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="structiHalo.html">iHalo</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGraphics3D.html#a53">CreateHalo</a> (float iR, float iG, float iB, unsigned char *iAlpha, int iWidth, int iHeight)=0</td></tr>
@@ -1833,7 +1833,13 @@ This function will be called before front-facing and back-facing fog polygons ar
           <td></td>
           <td></td>
           <td class="md" nowrap>const <a class="el" href="classcsPlane3.html">csPlane3</a> &amp;&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>normal</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>normal</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>floating</em></td>
         </tr>
         <tr>
           <td></td>
@@ -1853,9 +1859,9 @@ This function will be called before front-facing and back-facing fog polygons ar
     <td>
 
 <p>
-Enter a new clipped portal.
+Enter a new portal.
 <p>
-Basically this routine will restrict all further drawing to the given 2D area and it will also respect the current contents of the Z-buffer so that geometry will only render where the Z-buffer allows it (even if zfill or znone is used). Remember to close a portal later using <a class="el" href="structiGraphics3D.html#a52">ClosePortal()</a>. Basically this represents a stacked layer of portals. Each subsequent portal must be fully contained in the previous ones.     </td>
+If 'floating' is true then this routine will restrict all further drawing to the given 2D area and it will also respect the current contents of the Z-buffer so that geometry will only render where the Z-buffer allows it (even if zfill or znone is used). Remember to close a portal later using <a class="el" href="structiGraphics3D.html#a52">ClosePortal()</a>. Basically this represents a stacked layer of portals. Each subsequent portal must be fully contained in the previous ones.     </td>
   </tr>
 </table>
 <a name="a18" doxytag="iGraphics3D::Print"></a><p>
