@@ -406,6 +406,10 @@ SOURCE=..\..\libs\csutil\strset.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\threadjobqueue.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\timer.cpp
 # End Source File
 # Begin Source File
@@ -678,6 +682,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\evoutlet.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\..\..\include\csutil\fifo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\..\..\include\csutil\flags.h
 # End Source File
 # Begin Source File
@@ -899,6 +907,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\syspath.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\thread.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\threadjobqueue.h
 # End Source File
 # Begin Source File
 
