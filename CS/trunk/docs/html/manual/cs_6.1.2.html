@@ -40,7 +40,7 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <!--docid::SEC6.1.2::-->
 <P>
 
-Crystal Space currently has several styles of typed Arrays.  These arrays grow
+Crystal Space currently has several styles of typed arrays.  These arrays grow
 as needed to accommodate additions and insertions.
 </P><P>
 
@@ -50,22 +50,21 @@ as needed to accommodate additions and insertions.
 suitable for any C++ type, including basic types (such as `<SAMP>int</SAMP>') and
 user-defined types (such as objects).  This class guarantees proper
 construction and destruction of objects as they are added to, and removed from
-the array.  Include file is `<TT>csutil/array.h</TT>'.
+the array.  See `<TT>csutil/array.h</TT>'.
 <P>
 
 <LI>
 <CODE>csDirtyAccessArray&#60;T&#62;</CODE>: Similar to <CODE>csArray&#60;T&#62;</CODE>, this array type can
-be used to store arbitrary objects, with the exception that it <EM>does not
-invoke constructors and destructors</EM> of contained objects.  Use this class at
-your own peril; <CODE>csArray&#60;T&#62;</CODE> is almost always a better choice.  The only
-conceivable instance in which use of this class might be warranted is when
-micro-optimization is required; when you need to avoid the overhead of object
-construction, but this is highly dangerous and should be avoided in almost all
-cases.  This class is mainly useful in cases where you have simple objects
-(structures) and efficiency is of utmost importance.  Also, this array provides
-read access to the actual memory vector, which can be useful if you need to
-communicate with some external API.  Include file is
-`<TT>csutil/garray.h</TT>'.
+be used to store arbitrary objects. The difference is that this array allows
+access to the raw memory block, via <CODE>GetArray()</CODE>, in which the elements
+are stored, whereas <CODE>csArray&#60;T&#62;</CODE> keeps its internal state private.
+Accessing the raw memory containing the elements is considered dangerous and
+poor practice, so use of this class should be restricted and avoided.  Its main
+use is when you absolutely need access to the internal memory containing the
+array of items.  This can be useful, for instance, if you need to interface
+with some external API (such as OpenGL) which does not understand
+<CODE>csArray&#60;&#62;</CODE>, and which expects a simple pointer to the array elements.
+See `<TT>csutil/garray.h</TT>'.
 <P>
 
 <LI>
@@ -73,26 +72,29 @@ communicate with some external API.  Include file is
 to reference-counted objects.  This array type automatically invokes each
 object's <CODE>IncRef()</CODE> method at insertion time, and <CODE>DecRef()</CODE> at
 removal time.  All SCF objects (see section <A HREF="cs_6.2.html#SEC6.2">6.2 Shared Class Facility (SCF)</A>) support these methods, as do
-objects derived from <CODE>csRefCount</CODE>.  Since <CODE>csRefArray&#60;T&#62;</CODE> is a
+objects derived from `<SAMP>csRefCount</SAMP>'.  Since <CODE>csRefArray&#60;T&#62;</CODE> is a
 templated class, it will also work with any other object which provides
-<CODE>IncRef()</CODE> and <CODE>DecRef()</CODE> methods.  Include file is
-`<TT>csutil/refarr.h</TT>'.
+<CODE>IncRef()</CODE> and <CODE>DecRef()</CODE> methods.  See `<TT>csutil/refarr.h</TT>'.
 <P>
 
 <LI>
 <CODE>csRefArrayObject&#60;T&#62;</CODE>: This is a variant of <CODE>csRefArray&#60;T&#62;</CODE> which can
 hold objects that have a method <CODE>QueryObject()</CODE> which returns something
 from which you can call <CODE>GetName()</CODE>.  In practice it means this is useful
-for all Crystal Space objects that implement <CODE>iObject</CODE>.  In addition to
+for all Crystal Space objects which implement `<SAMP>iObject</SAMP>'.  In addition to
 the features of <CODE>csRefArray&#60;T&#62;</CODE> this class adds the ability to find
-elements by name.  Include file is `<TT>csutil/nobjvec.h</TT>'.
+elements by name.  See `<TT>csutil/nobjvec.h</TT>'.
 <P>
 
 <LI>
-<CODE>csPDelArray&#60;T&#62;</CODE>: This is an array class for
-pointers only.  It will invoke `<SAMP>delete</SAMP>' for elements removed from the
-array.  Include file is
-`<TT>csutil/parray.h</TT>'.
+<CODE>csPDelArray&#60;T&#62;</CODE>: This is a convenience array class for pointers only.  It
+will invoke `<SAMP>delete</SAMP>' for elements removed from the array. This is useful
+for cases when you need to store raw pointers to objects which have been
+allocated with `<SAMP>new</SAMP>', and don't want to worry about having to
+`<SAMP>delete</SAMP>' the objects when removed from the array or when the array is
+destroyed. In other cases where you need to store raw object pointers but don't
+want them deleted upon removal from the array, just use the normal
+<CODE>csArray&#60;T*&#62;</CODE>. See `<TT>csutil/parray.h</TT>'.
 </UL>
 <A NAME="SCF"></A>
 <HR SIZE=1>
