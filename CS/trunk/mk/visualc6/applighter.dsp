@@ -192,6 +192,22 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 
 SOURCE=..\..\apps\tools\lighter\lighter.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\litmeshsel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\litparsecfg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\litpolygon.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\lmmapper.h
+# End Source File
 
 # End Group
 # Begin Group "Resource Files"
@@ -209,6 +225,22 @@ SOURCE=..\..\mk\visualc6\applighter.rc
 # Begin Source File
 
 SOURCE=..\..\apps\tools\lighter\lighter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\litmeshsel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\litparsecfg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\litpolygon.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\lmmapper.cpp
 # End Source File
 
 # End Group

@@ -368,10 +368,6 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\indprint.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\inpnames.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\..\..\include\csutil\inputdef.h
 # End Source File
 # Begin Source File
@@ -802,10 +798,6 @@ SOURCE=..\..\libs\csutil\hashmap.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\hashmapr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\inpnames.cpp
 # End Source File
 # Begin Source File
 
