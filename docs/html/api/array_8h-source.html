@@ -136,647 +136,652 @@
 <a name="l00174"></a><a class="code" href="classcsArrayElementHandler.html">00174</a> <span class="keyword">class </span><a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler</a>
 00175 {
 00176 <span class="keyword">public</span>:
-00177   <span class="keyword">static</span> <span class="keywordtype">void</span> Construct (T* address, T <span class="keyword">const</span>&amp; src)
+00177   <span class="keyword">static</span> <span class="keywordtype">void</span> Construct (T* address)
 00178   {
-00179     <span class="keyword">new</span> (CS_STATIC_CAST(<span class="keywordtype">void</span>*,address)) T(src);
+00179     <span class="keyword">new</span> (CS_STATIC_CAST(<span class="keywordtype">void</span>*,address)) T();
 00180   }
 00181 
-00182   <span class="keyword">static</span> <span class="keywordtype">void</span> Destroy (T* address)
+00182   <span class="keyword">static</span> <span class="keywordtype">void</span> Construct (T* address, T <span class="keyword">const</span>&amp; src)
 00183   {
-00184     address-&gt;~T();
+00184     <span class="keyword">new</span> (CS_STATIC_CAST(<span class="keywordtype">void</span>*,address)) T(src);
 00185   }
 00186 
-00187   <span class="keyword">static</span> <span class="keywordtype">void</span> InitRegion (T* address, size_t count)
+00187   <span class="keyword">static</span> <span class="keywordtype">void</span> Destroy (T* address)
 00188   {
-00189     <span class="keywordflow">for</span> (size_t i = 0 ; i &lt; count ; i++)
-00190       Construct (address + i, T ());
-00191   }
-00192 };
-00193 
-00197 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00198"></a><a class="code" href="classcsArrayMemoryAllocator.html">00198</a> <span class="keyword">class </span><a class="code" href="classcsArrayMemoryAllocator.html">csArrayMemoryAllocator</a>
-00199 {
-00200 <span class="keyword">public</span>:
-00201   <span class="keyword">static</span> T* Alloc (size_t count)
-00202   {
-00203     <span class="keywordflow">return</span> (T*)malloc (count * <span class="keyword">sizeof</span>(T));
-00204   }
-00205 
-00206   <span class="keyword">static</span> <span class="keywordtype">void</span> Free (T* mem)
+00189     address-&gt;~T();
+00190   }
+00191 
+00192   <span class="keyword">static</span> <span class="keywordtype">void</span> InitRegion (T* address, size_t count)
+00193   {
+00194     <span class="keywordflow">for</span> (size_t i = 0 ; i &lt; count ; i++)
+00195       Construct (address + i);
+00196   }
+00197 };
+00198 
+00202 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00203"></a><a class="code" href="classcsArrayMemoryAllocator.html">00203</a> <span class="keyword">class </span><a class="code" href="classcsArrayMemoryAllocator.html">csArrayMemoryAllocator</a>
+00204 {
+00205 <span class="keyword">public</span>:
+00206   <span class="keyword">static</span> T* Alloc (size_t count)
 00207   {
-00208     free (mem);
+00208     <span class="keywordflow">return</span> (T*)malloc (count * <span class="keyword">sizeof</span>(T));
 00209   }
 00210 
-00211   <span class="comment">// The 'relevantcount' parameter should be the number of items</span>
-00212   <span class="comment">// in the old array that are initialized.</span>
-00213   <span class="keyword">static</span> T* Realloc (T* mem, size_t relevantcount, size_t oldcount, 
-00214     size_t newcount)
-00215   {
-00216     (void)relevantcount; (void)oldcount;
-00217     <span class="keywordflow">return</span> (T*)realloc (mem, newcount * <span class="keyword">sizeof</span>(T));
-00218   }
-00219 
-00220   <span class="comment">// Move memory.</span>
-00221   <span class="keyword">static</span> <span class="keywordtype">void</span> MemMove (T* mem, size_t dest, size_t src, size_t count)
-00222   {
-00223     memmove (mem + dest, mem + src, count * <span class="keyword">sizeof</span>(T));
-00224   }
-00225 };
-00226 
-00235 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T, <span class="keyword">class</span> ElementHandler = csArrayElementHandler&lt;T&gt; &gt;
-<a name="l00236"></a><a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">00236</a> <span class="keyword">class </span><a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">csSafeCopyArrayMemoryAllocator</a>
-00237 {
-00238 <span class="keyword">public</span>:
-00239   <span class="keyword">static</span> T* Alloc (size_t count)
-00240   {
-00241     <span class="keywordflow">return</span> (T*)malloc (count * <span class="keyword">sizeof</span>(T));
-00242   }
-00243 
-00244   <span class="keyword">static</span> <span class="keywordtype">void</span> Free (T* mem)
+00211   <span class="keyword">static</span> <span class="keywordtype">void</span> Free (T* mem)
+00212   {
+00213     free (mem);
+00214   }
+00215 
+00216   <span class="comment">// The 'relevantcount' parameter should be the number of items</span>
+00217   <span class="comment">// in the old array that are initialized.</span>
+00218   <span class="keyword">static</span> T* Realloc (T* mem, size_t relevantcount, size_t oldcount, 
+00219     size_t newcount)
+00220   {
+00221     (void)relevantcount; (void)oldcount;
+00222     <span class="keywordflow">return</span> (T*)realloc (mem, newcount * <span class="keyword">sizeof</span>(T));
+00223   }
+00224 
+00225   <span class="comment">// Move memory.</span>
+00226   <span class="keyword">static</span> <span class="keywordtype">void</span> MemMove (T* mem, size_t dest, size_t src, size_t count)
+00227   {
+00228     memmove (mem + dest, mem + src, count * <span class="keyword">sizeof</span>(T));
+00229   }
+00230 };
+00231 
+00240 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T, <span class="keyword">class</span> ElementHandler = csArrayElementHandler&lt;T&gt; &gt;
+<a name="l00241"></a><a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">00241</a> <span class="keyword">class </span><a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">csSafeCopyArrayMemoryAllocator</a>
+00242 {
+00243 <span class="keyword">public</span>:
+00244   <span class="keyword">static</span> T* Alloc (size_t count)
 00245   {
-00246     free (mem);
+00246     <span class="keywordflow">return</span> (T*)malloc (count * <span class="keyword">sizeof</span>(T));
 00247   }
 00248 
-00249   <span class="keyword">static</span> T* Realloc (T* mem, size_t relevantcount, size_t oldcount, 
-00250     size_t newcount)
-00251   {
-00252     <span class="keywordflow">if</span> (newcount &lt;= oldcount)
-00253     {
-00254       <span class="comment">// Realloc is safe.</span>
-00255       T* newmem = (T*)realloc (mem, newcount * <span class="keyword">sizeof</span> (T));
-00256       CS_ASSERT (newmem == mem);
-00257       <span class="keywordflow">return</span> newmem;
-00258     }
-00259 
-00260     T* newmem = Alloc (newcount);
-00261     size_t i;
-00262     <span class="keywordflow">for</span> (i = 0 ; i &lt; relevantcount ; i++)
-00263     {
-00264       ElementHandler::Construct (newmem + i, mem[i]);
-00265       ElementHandler::Destroy (mem + i);
-00266     }
-00267     Free (mem);
-00268     <span class="keywordflow">return</span> newmem;
-00269   }
-00270 
-00271   <span class="keyword">static</span> <span class="keywordtype">void</span> MemMove (T* mem, size_t dest, size_t src, size_t count)
-00272   {
-00273     size_t i;
-00274     <span class="keywordflow">if</span> (dest &lt; src)
-00275     {
-00276       <span class="keywordflow">for</span> (i = 0 ; i &lt; count ; i++)
-00277       {
-00278         ElementHandler::Construct (mem + dest + i, mem[src + i]);
-00279         ElementHandler::Destroy (mem + src + i);
-00280       }
-00281     }
-00282     <span class="keywordflow">else</span>
-00283     {
-00284       i = count;
-00285       <span class="keywordflow">while</span> (i &gt; 0)
-00286       {
-00287         i--;
-00288         ElementHandler::Construct (mem + dest + i, mem[src + i]);
-00289         ElementHandler::Destroy (mem + src + i);
-00290       }
-00291     }
-00292   }
-00293 };
-00294 
-00299 <span class="keyword">const</span> size_t csArrayItemNotFound = (size_t)-1;
-00300 
-00308 <span class="keyword">template</span> &lt;<span class="keyword">class </span>T,
-00309         <span class="keyword">class </span>ElementHandler = <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler&lt;T&gt;</a>,
-00310         <span class="keyword">class </span>MemoryAllocator = <a class="code" href="classcsArrayMemoryAllocator.html">csArrayMemoryAllocator&lt;T&gt;</a> &gt;
-<a name="l00311"></a><a class="code" href="classcsArray.html">00311</a> <span class="keyword">class </span><a class="code" href="classcsArray.html">csArray</a>
-00312 {
-00313 <span class="keyword">private</span>:
-00314   size_t count;
-00315   size_t capacity;
-00316   size_t threshold;
-00317   T* root;
-00318 <span class="preprocessor"># ifdef CS_MEMORY_TRACKER</span>
-00319 <span class="preprocessor"></span>  MemTrackerInfo* mti;
-00320   <span class="keywordtype">void</span> UpdateMti (<span class="keywordtype">int</span> dn, <span class="keywordtype">int</span> curcapacity)
-00321   {
-00322     <span class="keywordflow">if</span> (!mti)
-00323     {
-00324       <span class="keywordflow">if</span> (!curcapacity) <span class="keywordflow">return</span>;
-00325       <span class="keywordtype">char</span> buf[255];
-00326       sprintf (buf, <span class="stringliteral">"csArray&lt;%s&gt;"</span>, <span class="keyword">typeid</span> (T).name());
-00327       mti = mtiRegisterAlloc (1 * <span class="keyword">sizeof</span> (T), buf);
-00328       <span class="keywordflow">if</span> (!mti) <span class="keywordflow">return</span>;
-00329       curcapacity--;
-00330       <span class="keywordflow">if</span> (curcapacity)
-00331         mtiUpdateAmount (mti, curcapacity, curcapacity * <span class="keyword">sizeof</span> (T));
-00332       <span class="keywordflow">return</span>;
-00333     }
-00334     mtiUpdateAmount (mti, dn, dn * <span class="keyword">sizeof</span> (T));
-00335   }
-00336 <span class="preprocessor"># endif</span>
-00337 <span class="preprocessor"></span>
-00338 <span class="keyword">protected</span>:
-<a name="l00343"></a><a class="code" href="classcsArray.html#b0">00343</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#b0">InitRegion</a> (size_t start, size_t count)
-00344   {
-00345     ElementHandler::InitRegion (root+start, count);
-00346   }
-00347 
-00348 <span class="keyword">private</span>:
-00350   <span class="keywordtype">void</span> CopyFrom (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&amp; source)
-00351   {
-00352     <span class="keywordflow">if</span> (&amp;source != <span class="keyword">this</span>)
-00353     {
-00354       DeleteAll ();
-00355       threshold = source.<a class="code" href="classcsArray.html#o2">threshold</a>;
-00356       SetLengthUnsafe (source.<a class="code" href="classcsArray.html#a4">Length</a> ());
-00357       <span class="keywordflow">for</span> (size_t i=0 ; i&lt;source.<a class="code" href="classcsArray.html#a4">Length</a>() ; i++)
-00358         ElementHandler::Construct (root + i, source[i]);
-00359     }
-00360   }
-00361 
-00362   <span class="comment">// Adjust internal capacity of this array.</span>
-00363   <span class="keywordtype">void</span> AdjustCapacity (size_t n)
-00364   {
-00365     <span class="keywordflow">if</span> (n &gt; capacity || (capacity &gt; threshold &amp;&amp; n &lt; capacity - threshold))
-00366     {
-00367       n = ((n + threshold - 1) / threshold ) * threshold;
-00368       <span class="keywordflow">if</span> (root == 0)
-00369       {
-00370         root = MemoryAllocator::Alloc (n);
-00371 <span class="preprocessor">#       ifdef CS_MEMORY_TRACKER</span>
-00372 <span class="preprocessor"></span>        UpdateMti (n, n);
-00373 <span class="preprocessor">#       endif</span>
-00374 <span class="preprocessor"></span>      }
-00375       <span class="keywordflow">else</span>
-00376       {
-00377         root = MemoryAllocator::Realloc (root, count, capacity, n);
-00378 <span class="preprocessor">#       ifdef CS_MEMORY_TRACKER</span>
-00379 <span class="preprocessor"></span>        UpdateMti (n-capacity, n);
-00380 <span class="preprocessor">#       endif</span>
-00381 <span class="preprocessor"></span>      }
-00382       capacity = n;
-00383     }
-00384   }
-00385 
-00386   <span class="comment">// Set array length.  NOTE: Do not make this public since it does not</span>
-00387   <span class="comment">// properly construct/destroy elements.  To safely truncate the array, use</span>
-00388   <span class="comment">// Truncate().  To safely set the capacity, use SetCapacity().</span>
-00389   <span class="keywordtype">void</span> SetLengthUnsafe (size_t n)
-00390   {
-00391     <span class="keywordflow">if</span> (n &gt; capacity)
-00392       AdjustCapacity (n);
-00393     count = n;
-00394   }
-00395 
-00396 <span class="keyword">public</span>:
-<a name="l00408"></a><a class="code" href="classcsArray.html#d0">00408</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsArray.html#d0">DefaultCompare</a>(T <span class="keyword">const</span>&amp; r1, T <span class="keyword">const</span>&amp; r2)
-00409   {
-00410     <span class="keywordflow">return</span> <a class="code" href="classcsOrdering.html#d0">csOrdering&lt;T,T&gt;::Compare</a>(r1,r2);
-00411   }
-00412 
-<a name="l00417"></a><a class="code" href="classcsArray.html#a0">00417</a>   <a class="code" href="classcsArray.html#a0">csArray</a> (size_t icapacity = 0, size_t ithreshold = 0)
-00418   {
-00419 <span class="preprocessor">#   ifdef CS_MEMORY_TRACKER</span>
-00420 <span class="preprocessor"></span>    mti = 0;
-00421 <span class="preprocessor">#   endif</span>
-00422 <span class="preprocessor"></span>    count = 0;
-00423     capacity = (icapacity &gt; 0 ? icapacity : 0);
-00424     threshold = (ithreshold &gt; 0 ? ithreshold : 16);
-00425     <span class="keywordflow">if</span> (capacity != 0)
-00426     {
-00427       root = MemoryAllocator::Alloc (capacity);
-00428 <span class="preprocessor">#     ifdef CS_MEMORY_TRACKER</span>
-00429 <span class="preprocessor"></span>      UpdateMti (capacity, capacity);
-00430 <span class="preprocessor">#     endif</span>
-00431 <span class="preprocessor"></span>    }
-00432     <span class="keywordflow">else</span>
-00433     {
-00434       root = 0;
-00435     }
-00436   }
-00437 
-00438   ~<a class="code" href="classcsArray.html">csArray</a> ()
-00439   {
-00440     DeleteAll ();
+00249   <span class="keyword">static</span> <span class="keywordtype">void</span> Free (T* mem)
+00250   {
+00251     free (mem);
+00252   }
+00253 
+00254   <span class="keyword">static</span> T* Realloc (T* mem, size_t relevantcount, size_t oldcount, 
+00255     size_t newcount)
+00256   {
+00257     <span class="keywordflow">if</span> (newcount &lt;= oldcount)
+00258     {
+00259       <span class="comment">// Realloc is safe.</span>
+00260       T* newmem = (T*)realloc (mem, newcount * <span class="keyword">sizeof</span> (T));
+00261       CS_ASSERT (newmem == mem);
+00262       <span class="keywordflow">return</span> newmem;
+00263     }
+00264 
+00265     T* newmem = Alloc (newcount);
+00266     size_t i;
+00267     <span class="keywordflow">for</span> (i = 0 ; i &lt; relevantcount ; i++)
+00268     {
+00269       ElementHandler::Construct (newmem + i, mem[i]);
+00270       ElementHandler::Destroy (mem + i);
+00271     }
+00272     Free (mem);
+00273     <span class="keywordflow">return</span> newmem;
+00274   }
+00275 
+00276   <span class="keyword">static</span> <span class="keywordtype">void</span> MemMove (T* mem, size_t dest, size_t src, size_t count)
+00277   {
+00278     size_t i;
+00279     <span class="keywordflow">if</span> (dest &lt; src)
+00280     {
+00281       <span class="keywordflow">for</span> (i = 0 ; i &lt; count ; i++)
+00282       {
+00283         ElementHandler::Construct (mem + dest + i, mem[src + i]);
+00284         ElementHandler::Destroy (mem + src + i);
+00285       }
+00286     }
+00287     <span class="keywordflow">else</span>
+00288     {
+00289       i = count;
+00290       <span class="keywordflow">while</span> (i &gt; 0)
+00291       {
+00292         i--;
+00293         ElementHandler::Construct (mem + dest + i, mem[src + i]);
+00294         ElementHandler::Destroy (mem + src + i);
+00295       }
+00296     }
+00297   }
+00298 };
+00299 
+00304 <span class="keyword">const</span> size_t csArrayItemNotFound = (size_t)-1;
+00305 
+00313 <span class="keyword">template</span> &lt;<span class="keyword">class </span>T,
+00314         <span class="keyword">class </span>ElementHandler = <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler&lt;T&gt;</a>,
+00315         <span class="keyword">class </span>MemoryAllocator = <a class="code" href="classcsArrayMemoryAllocator.html">csArrayMemoryAllocator&lt;T&gt;</a> &gt;
+<a name="l00316"></a><a class="code" href="classcsArray.html">00316</a> <span class="keyword">class </span><a class="code" href="classcsArray.html">csArray</a>
+00317 {
+00318 <span class="keyword">private</span>:
+00319   size_t count;
+00320   size_t capacity;
+00321   size_t threshold;
+00322   T* root;
+00323 <span class="preprocessor"># ifdef CS_MEMORY_TRACKER</span>
+00324 <span class="preprocessor"></span>  MemTrackerInfo* mti;
+00325   <span class="keywordtype">void</span> UpdateMti (<span class="keywordtype">int</span> dn, <span class="keywordtype">int</span> curcapacity)
+00326   {
+00327     <span class="keywordflow">if</span> (!mti)
+00328     {
+00329       <span class="keywordflow">if</span> (!curcapacity) <span class="keywordflow">return</span>;
+00330       <span class="keywordtype">char</span> buf[255];
+00331       sprintf (buf, <span class="stringliteral">"csArray&lt;%s&gt;"</span>, <span class="keyword">typeid</span> (T).name());
+00332       mti = mtiRegisterAlloc (1 * <span class="keyword">sizeof</span> (T), buf);
+00333       <span class="keywordflow">if</span> (!mti) <span class="keywordflow">return</span>;
+00334       curcapacity--;
+00335       <span class="keywordflow">if</span> (curcapacity)
+00336         mtiUpdateAmount (mti, curcapacity, curcapacity * <span class="keyword">sizeof</span> (T));
+00337       <span class="keywordflow">return</span>;
+00338     }
+00339     mtiUpdateAmount (mti, dn, dn * <span class="keyword">sizeof</span> (T));
+00340   }
+00341 <span class="preprocessor"># endif</span>
+00342 <span class="preprocessor"></span>
+00343 <span class="keyword">protected</span>:
+<a name="l00348"></a><a class="code" href="classcsArray.html#b0">00348</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#b0">InitRegion</a> (size_t start, size_t count)
+00349   {
+00350     ElementHandler::InitRegion (root+start, count);
+00351   }
+00352 
+00353 <span class="keyword">private</span>:
+00355   <span class="keywordtype">void</span> CopyFrom (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&amp; source)
+00356   {
+00357     <span class="keywordflow">if</span> (&amp;source != <span class="keyword">this</span>)
+00358     {
+00359       DeleteAll ();
+00360       threshold = source.<a class="code" href="classcsArray.html#o2">threshold</a>;
+00361       SetLengthUnsafe (source.<a class="code" href="classcsArray.html#a4">Length</a> ());
+00362       <span class="keywordflow">for</span> (size_t i=0 ; i&lt;source.<a class="code" href="classcsArray.html#a4">Length</a>() ; i++)
+00363         ElementHandler::Construct (root + i, source[i]);
+00364     }
+00365   }
+00366 
+00367   <span class="comment">// Adjust internal capacity of this array.</span>
+00368   <span class="keywordtype">void</span> AdjustCapacity (size_t n)
+00369   {
+00370     <span class="keywordflow">if</span> (n &gt; capacity || (capacity &gt; threshold &amp;&amp; n &lt; capacity - threshold))
+00371     {
+00372       n = ((n + threshold - 1) / threshold ) * threshold;
+00373       <span class="keywordflow">if</span> (root == 0)
+00374       {
+00375         root = MemoryAllocator::Alloc (n);
+00376 <span class="preprocessor">#       ifdef CS_MEMORY_TRACKER</span>
+00377 <span class="preprocessor"></span>        UpdateMti (n, n);
+00378 <span class="preprocessor">#       endif</span>
+00379 <span class="preprocessor"></span>      }
+00380       <span class="keywordflow">else</span>
+00381       {
+00382         root = MemoryAllocator::Realloc (root, count, capacity, n);
+00383 <span class="preprocessor">#       ifdef CS_MEMORY_TRACKER</span>
+00384 <span class="preprocessor"></span>        UpdateMti (n-capacity, n);
+00385 <span class="preprocessor">#       endif</span>
+00386 <span class="preprocessor"></span>      }
+00387       capacity = n;
+00388     }
+00389   }
+00390 
+00391   <span class="comment">// Set array length.  NOTE: Do not make this public since it does not</span>
+00392   <span class="comment">// properly construct/destroy elements.  To safely truncate the array, use</span>
+00393   <span class="comment">// Truncate().  To safely set the capacity, use SetCapacity().</span>
+00394   <span class="keywordtype">void</span> SetLengthUnsafe (size_t n)
+00395   {
+00396     <span class="keywordflow">if</span> (n &gt; capacity)
+00397       AdjustCapacity (n);
+00398     count = n;
+00399   }
+00400 
+00401 <span class="keyword">public</span>:
+<a name="l00413"></a><a class="code" href="classcsArray.html#d0">00413</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsArray.html#d0">DefaultCompare</a>(T <span class="keyword">const</span>&amp; r1, T <span class="keyword">const</span>&amp; r2)
+00414   {
+00415     <span class="keywordflow">return</span> <a class="code" href="classcsOrdering.html#d0">csOrdering&lt;T,T&gt;::Compare</a>(r1,r2);
+00416   }
+00417 
+<a name="l00422"></a><a class="code" href="classcsArray.html#a0">00422</a>   <a class="code" href="classcsArray.html#a0">csArray</a> (size_t icapacity = 0, size_t ithreshold = 0)
+00423   {
+00424 <span class="preprocessor">#   ifdef CS_MEMORY_TRACKER</span>
+00425 <span class="preprocessor"></span>    mti = 0;
+00426 <span class="preprocessor">#   endif</span>
+00427 <span class="preprocessor"></span>    count = 0;
+00428     capacity = (icapacity &gt; 0 ? icapacity : 0);
+00429     threshold = (ithreshold &gt; 0 ? ithreshold : 16);
+00430     <span class="keywordflow">if</span> (capacity != 0)
+00431     {
+00432       root = MemoryAllocator::Alloc (capacity);
+00433 <span class="preprocessor">#     ifdef CS_MEMORY_TRACKER</span>
+00434 <span class="preprocessor"></span>      UpdateMti (capacity, capacity);
+00435 <span class="preprocessor">#     endif</span>
+00436 <span class="preprocessor"></span>    }
+00437     <span class="keywordflow">else</span>
+00438     {
+00439       root = 0;
+00440     }
 00441   }
 00442 
-<a name="l00444"></a><a class="code" href="classcsArray.html#a2">00444</a>   <a class="code" href="classcsArray.html#a0">csArray</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&amp; source)
-00445   {
-00446 <span class="preprocessor">#   ifdef CS_MEMORY_TRACKER</span>
-00447 <span class="preprocessor"></span>    mti = 0;
-00448 <span class="preprocessor">#   endif</span>
-00449 <span class="preprocessor"></span>    root = 0;
-00450     capacity = 0;
-00451     count = 0;
-00452     CopyFrom (source);
-00453   }
-00454   
-<a name="l00456"></a><a class="code" href="classcsArray.html#a3">00456</a>   <a class="code" href="classcsArray.html">csArray&lt;T,ElementHandler&gt;</a>&amp; <a class="code" href="classcsArray.html#a3">operator= </a>(<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&amp; other)
-00457   {
-00458     CopyFrom (other);
-00459     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00460   }
-00461 
-<a name="l00463"></a><a class="code" href="classcsArray.html#a4">00463</a>   size_t <a class="code" href="classcsArray.html#a4">Length</a> ()<span class="keyword"> const</span>
-00464 <span class="keyword">  </span>{
-00465     <span class="keywordflow">return</span> count;
-00466   }
-00467 
-<a name="l00469"></a><a class="code" href="classcsArray.html#a5">00469</a>   size_t <a class="code" href="classcsArray.html#a5">Capacity</a> ()<span class="keyword"> const</span>
-00470 <span class="keyword">  </span>{
-00471     <span class="keywordflow">return</span> capacity;
-00472   }
-00473 
-<a name="l00480"></a><a class="code" href="classcsArray.html#a6">00480</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#a6">TransferTo</a> (<a class="code" href="classcsArray.html">csArray</a>&amp; destination)
-00481   {
-00482     <span class="keywordflow">if</span> (&amp;destination != <span class="keyword">this</span>)
-00483     {
-00484       destination.DeleteAll ();
-00485       destination.<a class="code" href="classcsArray.html#o3">root</a> = root;
-00486       destination.<a class="code" href="classcsArray.html#o0">count</a> = count;
-00487       destination.<a class="code" href="classcsArray.html#o1">capacity</a> = capacity;
-00488       destination.<a class="code" href="classcsArray.html#o2">threshold</a> = threshold;
-00489 <span class="preprocessor">#     ifdef CS_MEMORY_TRACKER</span>
-00490 <span class="preprocessor"></span>      destination.mti = mti;
-00491       mti = 0;
-00492 <span class="preprocessor">#     endif</span>
-00493 <span class="preprocessor"></span>      root = 0;
-00494       capacity = count = 0;
-00495     }
-00496   }
-00497 
-<a name="l00505"></a><a class="code" href="classcsArray.html#a7">00505</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#a7">SetLength</a> (size_t n, T <span class="keyword">const</span>&amp; what)
-00506   {
-00507     <span class="keywordflow">if</span> (n &lt;= count)
-00508     {
-00509       Truncate (n);
-00510     }
-00511     <span class="keywordflow">else</span>
-00512     {
-00513       size_t old_len = <a class="code" href="classcsArray.html#a4">Length</a> ();
-00514       SetLengthUnsafe (n);
-00515       <span class="keywordflow">for</span> (size_t i = old_len ; i &lt; n ; i++)
-00516         ElementHandler::Construct (root + i, what);
-00517     }
-00518   }
-00519 
-<a name="l00521"></a><a class="code" href="classcsArray.html#a8">00521</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#a7">SetLength</a> (size_t n)
-00522   {
-00523     <span class="keywordflow">if</span> (n &lt;= count)
-00524     {
-00525       Truncate (n);
-00526     }
-00527     <span class="keywordflow">else</span>
-00528     {
-00529       size_t old_len = <a class="code" href="classcsArray.html#a4">Length</a> ();
-00530       SetLengthUnsafe (n);
-00531       ElementHandler::InitRegion (root + old_len, n-old_len);
-00532     }
-00533   }
-00534 
-<a name="l00536"></a><a class="code" href="classcsArray.html#a9">00536</a>   T&amp; <a class="code" href="classcsArray.html#a9">Get</a> (size_t n)
-00537   {
-00538     CS_ASSERT (n &lt; count);
-00539     <span class="keywordflow">return</span> root[n];
-00540   }
-00541 
-<a name="l00543"></a><a class="code" href="classcsArray.html#a10">00543</a>   T <span class="keyword">const</span>&amp; <a class="code" href="classcsArray.html#a9">Get</a> (size_t n)<span class="keyword"> const</span>
-00544 <span class="keyword">  </span>{
-00545     CS_ASSERT (n &lt; count);
-00546     <span class="keywordflow">return</span> root[n];
-00547   }
-00548 
-<a name="l00553"></a><a class="code" href="classcsArray.html#a11">00553</a>   T&amp; <a class="code" href="classcsArray.html#a11">GetExtend</a> (size_t n)
-00554   {
-00555     <span class="keywordflow">if</span> (n &gt;= count)
-00556       <a class="code" href="classcsArray.html#a7">SetLength</a> (n+1);
-00557     <span class="keywordflow">return</span> root[n];
-00558   }
-00559 
-<a name="l00561"></a><a class="code" href="classcsArray.html#a12">00561</a>   T&amp; <a class="code" href="classcsArray.html#a12">operator [] </a>(size_t n)
-00562   {
-00563     <span class="keywordflow">return</span> <a class="code" href="classcsArray.html#a9">Get</a>(n);
-00564   }
-00565 
-<a name="l00567"></a><a class="code" href="classcsArray.html#a13">00567</a>   T <span class="keyword">const</span>&amp; <a class="code" href="classcsArray.html#a12">operator [] </a>(size_t n)<span class="keyword"> const</span>
-00568 <span class="keyword">  </span>{
-00569     <span class="keywordflow">return</span> <a class="code" href="classcsArray.html#a9">Get</a>(n);
-00570   }
-00571 
-<a name="l00573"></a><a class="code" href="classcsArray.html#a14">00573</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#a14">Put</a> (size_t n, T <span class="keyword">const</span>&amp; what)
-00574   {
-00575     <span class="keywordflow">if</span> (n &gt;= count)
-00576       <a class="code" href="classcsArray.html#a7">SetLength</a> (n+1);
-00577     ElementHandler::Destroy (root + n);
-00578     ElementHandler::Construct (root + n, what);
-00579   }
-00580 
-00584   <a class="code" href="classcsArray.html#a15">csArrayTemplate</a>(K)
-00585   size_t FindKey (csArrayCmpDecl(T,K) comparekey)<span class="keyword"> const</span>
-00586 <span class="keyword">  </span>{
-00587     <span class="keywordflow">for</span> (size_t i = 0 ; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> () ; i++)
-00588       <span class="keywordflow">if</span> (csArrayCmpInvoke(comparekey, root[i]) == 0)
-00589         <span class="keywordflow">return</span> i;
-00590     <span class="keywordflow">return</span> csArrayItemNotFound;
-00591   }
-00592 
-00594   size_t Push (T <span class="keyword">const</span>&amp; what)
-00595   {
-00596     <span class="keywordflow">if</span> (((&amp;what &gt;= root) &amp;&amp; (&amp;what &lt; root + <a class="code" href="classcsArray.html#a4">Length</a>())) &amp;&amp; 
-00597       (capacity &lt; count + 1))
-00598     {
-00599       <span class="comment">/*</span>
-00600 <span class="comment">        Special case: An element from this very array is pushed, and a </span>
-00601 <span class="comment">        reallocation is needed. This could cause the passed ref to the</span>
-00602 <span class="comment">        element to be pushed to be read from deleted memory. Work</span>
-00603 <span class="comment">        around this.</span>
-00604 <span class="comment">       */</span>
-00605       size_t whatIndex = &amp;what - root;
-00606       SetLengthUnsafe (count + 1);
-00607       ElementHandler::Construct (root + count - 1, root[whatIndex]);
-00608     }
-00609     <span class="keywordflow">else</span>
-00610     {
+00443   ~<a class="code" href="classcsArray.html">csArray</a> ()
+00444   {
+00445     DeleteAll ();
+00446   }
+00447 
+<a name="l00449"></a><a class="code" href="classcsArray.html#a2">00449</a>   <a class="code" href="classcsArray.html#a0">csArray</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&amp; source)
+00450   {
+00451 <span class="preprocessor">#   ifdef CS_MEMORY_TRACKER</span>
+00452 <span class="preprocessor"></span>    mti = 0;
+00453 <span class="preprocessor">#   endif</span>
+00454 <span class="preprocessor"></span>    root = 0;
+00455     capacity = 0;
+00456     count = 0;
+00457     CopyFrom (source);
+00458   }
+00459   
+<a name="l00461"></a><a class="code" href="classcsArray.html#a3">00461</a>   <a class="code" href="classcsArray.html">csArray&lt;T,ElementHandler&gt;</a>&amp; <a class="code" href="classcsArray.html#a3">operator= </a>(<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&amp; other)
+00462   {
+00463     CopyFrom (other);
+00464     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00465   }
+00466 
+<a name="l00468"></a><a class="code" href="classcsArray.html#a4">00468</a>   size_t <a class="code" href="classcsArray.html#a4">Length</a> ()<span class="keyword"> const</span>
+00469 <span class="keyword">  </span>{
+00470     <span class="keywordflow">return</span> count;
+00471   }
+00472 
+<a name="l00474"></a><a class="code" href="classcsArray.html#a5">00474</a>   size_t <a class="code" href="classcsArray.html#a5">Capacity</a> ()<span class="keyword"> const</span>
+00475 <span class="keyword">  </span>{
+00476     <span class="keywordflow">return</span> capacity;
+00477   }
+00478 
+<a name="l00485"></a><a class="code" href="classcsArray.html#a6">00485</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#a6">TransferTo</a> (<a class="code" href="classcsArray.html">csArray</a>&amp; destination)
+00486   {
+00487     <span class="keywordflow">if</span> (&amp;destination != <span class="keyword">this</span>)
+00488     {
+00489       destination.DeleteAll ();
+00490       destination.<a class="code" href="classcsArray.html#o3">root</a> = root;
+00491       destination.<a class="code" href="classcsArray.html#o0">count</a> = count;
+00492       destination.<a class="code" href="classcsArray.html#o1">capacity</a> = capacity;
+00493       destination.<a class="code" href="classcsArray.html#o2">threshold</a> = threshold;
+00494 <span class="preprocessor">#     ifdef CS_MEMORY_TRACKER</span>
+00495 <span class="preprocessor"></span>      destination.mti = mti;
+00496       mti = 0;
+00497 <span class="preprocessor">#     endif</span>
+00498 <span class="preprocessor"></span>      root = 0;
+00499       capacity = count = 0;
+00500     }
+00501   }
+00502 
+<a name="l00510"></a><a class="code" href="classcsArray.html#a7">00510</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#a7">SetLength</a> (size_t n, T <span class="keyword">const</span>&amp; what)
+00511   {
+00512     <span class="keywordflow">if</span> (n &lt;= count)
+00513     {
+00514       Truncate (n);
+00515     }
+00516     <span class="keywordflow">else</span>
+00517     {
+00518       size_t old_len = <a class="code" href="classcsArray.html#a4">Length</a> ();
+00519       SetLengthUnsafe (n);
+00520       <span class="keywordflow">for</span> (size_t i = old_len ; i &lt; n ; i++)
+00521         ElementHandler::Construct (root + i, what);
+00522     }
+00523   }
+00524 
+<a name="l00526"></a><a class="code" href="classcsArray.html#a8">00526</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#a7">SetLength</a> (size_t n)
+00527   {
+00528     <span class="keywordflow">if</span> (n &lt;= count)
+00529     {
+00530       Truncate (n);
+00531     }
+00532     <span class="keywordflow">else</span>
+00533     {
+00534       size_t old_len = <a class="code" href="classcsArray.html#a4">Length</a> ();
+00535       SetLengthUnsafe (n);
+00536       ElementHandler::InitRegion (root + old_len, n-old_len);
+00537     }
+00538   }
+00539 
+<a name="l00541"></a><a class="code" href="classcsArray.html#a9">00541</a>   T&amp; <a class="code" href="classcsArray.html#a9">Get</a> (size_t n)
+00542   {
+00543     CS_ASSERT (n &lt; count);
+00544     <span class="keywordflow">return</span> root[n];
+00545   }
+00546 
+<a name="l00548"></a><a class="code" href="classcsArray.html#a10">00548</a>   T <span class="keyword">const</span>&amp; <a class="code" href="classcsArray.html#a9">Get</a> (size_t n)<span class="keyword"> const</span>
+00549 <span class="keyword">  </span>{
+00550     CS_ASSERT (n &lt; count);
+00551     <span class="keywordflow">return</span> root[n];
+00552   }
+00553 
+<a name="l00558"></a><a class="code" href="classcsArray.html#a11">00558</a>   T&amp; <a class="code" href="classcsArray.html#a11">GetExtend</a> (size_t n)
+00559   {
+00560     <span class="keywordflow">if</span> (n &gt;= count)
+00561       <a class="code" href="classcsArray.html#a7">SetLength</a> (n+1);
+00562     <span class="keywordflow">return</span> root[n];
+00563   }
+00564 
+<a name="l00566"></a><a class="code" href="classcsArray.html#a12">00566</a>   T&amp; <a class="code" href="classcsArray.html#a12">operator [] </a>(size_t n)
+00567   {
+00568     <span class="keywordflow">return</span> <a class="code" href="classcsArray.html#a9">Get</a>(n);
+00569   }
+00570 
+<a name="l00572"></a><a class="code" href="classcsArray.html#a13">00572</a>   T <span class="keyword">const</span>&amp; <a class="code" href="classcsArray.html#a12">operator [] </a>(size_t n)<span class="keyword"> const</span>
+00573 <span class="keyword">  </span>{
+00574     <span class="keywordflow">return</span> <a class="code" href="classcsArray.html#a9">Get</a>(n);
+00575   }
+00576 
+<a name="l00578"></a><a class="code" href="classcsArray.html#a14">00578</a>   <span class="keywordtype">void</span> <a class="code" href="classcsArray.html#a14">Put</a> (size_t n, T <span class="keyword">const</span>&amp; what)
+00579   {
+00580     <span class="keywordflow">if</span> (n &gt;= count)
+00581       <a class="code" href="classcsArray.html#a7">SetLength</a> (n+1);
+00582     ElementHandler::Destroy (root + n);
+00583     ElementHandler::Construct (root + n, what);
+00584   }
+00585 
+00589   <a class="code" href="classcsArray.html#a15">csArrayTemplate</a>(K)
+00590   size_t FindKey (csArrayCmpDecl(T,K) comparekey)<span class="keyword"> const</span>
+00591 <span class="keyword">  </span>{
+00592     <span class="keywordflow">for</span> (size_t i = 0 ; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> () ; i++)
+00593       <span class="keywordflow">if</span> (csArrayCmpInvoke(comparekey, root[i]) == 0)
+00594         <span class="keywordflow">return</span> i;
+00595     <span class="keywordflow">return</span> csArrayItemNotFound;
+00596   }
+00597 
+00599   size_t Push (T <span class="keyword">const</span>&amp; what)
+00600   {
+00601     <span class="keywordflow">if</span> (((&amp;what &gt;= root) &amp;&amp; (&amp;what &lt; root + <a class="code" href="classcsArray.html#a4">Length</a>())) &amp;&amp; 
+00602       (capacity &lt; count + 1))
+00603     {
+00604       <span class="comment">/*</span>
+00605 <span class="comment">        Special case: An element from this very array is pushed, and a </span>
+00606 <span class="comment">        reallocation is needed. This could cause the passed ref to the</span>
+00607 <span class="comment">        element to be pushed to be read from deleted memory. Work</span>
+00608 <span class="comment">        around this.</span>
+00609 <span class="comment">       */</span>
+00610       size_t whatIndex = &amp;what - root;
 00611       SetLengthUnsafe (count + 1);
-00612       ElementHandler::Construct (root + count - 1, what);
+00612       ElementHandler::Construct (root + count - 1, root[whatIndex]);
 00613     }
-00614     <span class="keywordflow">return</span> count - 1;
-00615   }
-00616 
-00617   <span class="comment">/*</span>
-00618 <span class="comment">   * Push a element onto the tail end of the array if not already present.</span>
-00619 <span class="comment">   * Returns index of newly pushed element or index of already present element.</span>
-00620 <span class="comment">   */</span>
-00621   size_t PushSmart (T <span class="keyword">const</span>&amp; what)
-00622   {
-00623     size_t <span class="keyword">const</span> n = Find (what);
-00624     <span class="keywordflow">return</span> (n == csArrayItemNotFound) ? Push (what) : n;
-00625   }
-00626 
-00628   T Pop ()
-00629   {
-00630     CS_ASSERT (count &gt; 0);
-00631     T ret(root [count - 1]);
-00632     ElementHandler::Destroy (root + count - 1);
-00633     SetLengthUnsafe (count - 1);
-00634     <span class="keywordflow">return</span> ret;
-00635   }
-00636 
-00638   T <span class="keyword">const</span>&amp; Top ()<span class="keyword"> const</span>
-00639 <span class="keyword">  </span>{
-00640     CS_ASSERT (count &gt; 0);
-00641     <span class="keywordflow">return</span> root [count - 1];
-00642   }
-00643 
-00645   T&amp; Top ()
-00646   {
-00647     CS_ASSERT (count &gt; 0);
-00648     <span class="keywordflow">return</span> root [count - 1];
-00649   }
-00650 
-00652   <span class="keywordtype">bool</span> Insert (size_t n, T <span class="keyword">const</span>&amp; item)
-00653   {
-00654     <span class="keywordflow">if</span> (n &lt;= count)
-00655     {
-00656       SetLengthUnsafe (count + 1); <span class="comment">// Increments 'count' as a side-effect.</span>
-00657       size_t <span class="keyword">const</span> nmove = (count - n - 1);
-00658       <span class="keywordflow">if</span> (nmove &gt; 0)
-00659         MemoryAllocator::MemMove (root, n+1, n, nmove);
-00660       ElementHandler::Construct (root + n, item);
-00661       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00662     }
-00663     <span class="keywordflow">else</span>
-00664       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00665   }
-00666 
-00670   <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> Section (size_t low, size_t high)<span class="keyword"> const</span>
-00671 <span class="keyword">  </span>{
-00672     CS_ASSERT (low &gt;= 0 &amp;&amp; high &lt; count &amp;&amp; high &gt;= low);
-00673     <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> sect (high - low + 1);
-00674     <span class="keywordflow">for</span> (size_t i = low; i &lt;= high; i++) sect.Push (root[i]);
-00675     <span class="keywordflow">return</span> sect;
-00676   }
-00677 
-00683   <a class="code" href="classcsArray.html#a15">csArrayTemplate</a>(K)
-00684   size_t FindSortedKey (csArrayCmpDecl(T,K) comparekey, size_t* candidate = 0)<span class="keyword"> const</span>
-00685 <span class="keyword">  </span>{
-00686     size_t m = 0, l = 0, r = <a class="code" href="classcsArray.html#a4">Length</a> ();
-00687     <span class="keywordflow">while</span> (l &lt; r)
-00688     {
-00689       m = (l + r) / 2;
-00690       <span class="keywordtype">int</span> cmp = csArrayCmpInvoke(comparekey, root[m]);
-00691       <span class="keywordflow">if</span> (cmp == 0)
-00692       {
-00693         <span class="keywordflow">if</span> (candidate) *candidate = csArrayItemNotFound;
-00694         <span class="keywordflow">return</span> m;
-00695       }
-00696       <span class="keywordflow">else</span> <span class="keywordflow">if</span> (cmp &lt; 0)
-00697         l = m + 1;
-00698       <span class="keywordflow">else</span>
-00699         r = m;
-00700     }
-00701     <span class="keywordflow">if</span> (candidate) *candidate = m;
-00702     <span class="keywordflow">return</span> csArrayItemNotFound;
-00703   }
-00704 
-00709   size_t InsertSorted (<span class="keyword">const</span> T&amp; item,
-00710     <span class="keywordtype">int</span> (*compare)(T <span class="keyword">const</span>&amp;, T <span class="keyword">const</span>&amp;) = <a class="code" href="classcsArray.html#d0">DefaultCompare</a>,
-00711     size_t* equal_index = 0)
-00712   {
-00713     size_t m = 0, l = 0, r = <a class="code" href="classcsArray.html#a4">Length</a> ();
-00714     <span class="keywordflow">while</span> (l &lt; r)
-00715     {
-00716       m = (l + r) / 2;
-00717       <span class="keywordtype">int</span> cmp = compare (root [m], item);
-00718 
-00719       <span class="keywordflow">if</span> (cmp == 0)
-00720       {
-00721         <span class="keywordflow">if</span> (equal_index) *equal_index = m;
-00722         Insert (++m, item);
-00723         <span class="keywordflow">return</span> m;
-00724       }
-00725       <span class="keywordflow">else</span> <span class="keywordflow">if</span> (cmp &lt; 0)
-00726         l = m + 1;
-00727       <span class="keywordflow">else</span>
-00728         r = m;
-00729     }
-00730     <span class="comment">//if (m == r)</span>
-00731     <span class="comment">//  m++;</span>
-00732     <span class="keywordflow">if</span> ((m + 1) == r)
-00733       m++;
-00734     <span class="keywordflow">if</span> (equal_index) *equal_index = csArrayItemNotFound;
-00735     Insert (m, item);
-00736     <span class="keywordflow">return</span> m;
-00737   }
-00738 
-00743   size_t Find (T <span class="keyword">const</span>&amp; which)<span class="keyword"> const</span>
-00744 <span class="keyword">  </span>{
-00745     <span class="keywordflow">for</span> (size_t i = 0 ; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> () ; i++)
-00746       <span class="keywordflow">if</span> (root[i] == which)
-00747         <span class="keywordflow">return</span> i;
-00748     <span class="keywordflow">return</span> csArrayItemNotFound;
-00749   }
-00750 
-00757   size_t GetIndex (<span class="keyword">const</span> T* which)<span class="keyword"> const</span>
-00758 <span class="keyword">  </span>{
-00759     CS_ASSERT (which &gt;= root);
-00760     CS_ASSERT (which &lt; (root + count));
-00761     <span class="keywordflow">return</span> which-root;
-00762   }
-00763 
-00767   <span class="keywordtype">void</span> Sort (<span class="keywordtype">int</span> (*compare)(T <span class="keyword">const</span>&amp;, T <span class="keyword">const</span>&amp;) = <a class="code" href="classcsArray.html#d0">DefaultCompare</a>)
-00768   {
-00769     qsort (root, <a class="code" href="classcsArray.html#a4">Length</a>(), <span class="keyword">sizeof</span>(T),
-00770       (<span class="keywordtype">int</span> (*)(<span class="keywordtype">void</span> <span class="keyword">const</span>*, <span class="keywordtype">void</span> <span class="keyword">const</span>*))compare);
-00771   }
-00772 
-00776   <span class="keywordtype">void</span> DeleteAll ()
-00777   {
-00778     <span class="keywordflow">if</span> (root)
-00779     {
-00780       size_t i;
-00781       <span class="keywordflow">for</span> (i = 0 ; i &lt; count ; i++)
-00782         ElementHandler::Destroy (root + i);
-00783       MemoryAllocator::Free (root);
-00784 <span class="preprocessor">#     ifdef CS_MEMORY_TRACKER</span>
-00785 <span class="preprocessor"></span>      UpdateMti (-capacity, 0);
-00786 <span class="preprocessor">#     endif</span>
-00787 <span class="preprocessor"></span>      root = 0;
-00788       capacity = count = 0;
-00789     }
-00790   }
-00791 
-00797   <span class="keywordtype">void</span> Truncate (size_t n)
-00798   {
-00799     CS_ASSERT(n &lt;= count);
-00800     <span class="keywordflow">if</span> (n &lt; count)
-00801     {
-00802       <span class="keywordflow">for</span> (size_t i = n; i &lt; count; i++)
-00803         ElementHandler::Destroy (root + i);
-00804       SetLengthUnsafe(n);
-00805     }
-00806   }
-00807 
-00813   <span class="keywordtype">void</span> Empty ()
-00814   {
-00815     Truncate (0);
-00816   }
-00817 
-00824   <span class="keywordtype">void</span> SetCapacity (size_t n)
-00825   {
-00826     <span class="keywordflow">if</span> (n &gt; <a class="code" href="classcsArray.html#a4">Length</a> ())
-00827       AdjustCapacity (n);
-00828   }
-00829 
-00835   <span class="keywordtype">void</span> ShrinkBestFit ()
-00836   {
-00837     <span class="keywordflow">if</span> (count == 0)
-00838     {
-00839       DeleteAll ();
-00840     }
-00841     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (count != capacity)
-00842     {
-00843       root = MemoryAllocator::Realloc (root, count, capacity, count);
-00844 <span class="preprocessor">#     ifdef CS_MEMORY_TRACKER</span>
-00845 <span class="preprocessor"></span>      UpdateMti (count-capacity, count);
-00846 <span class="preprocessor">#     endif</span>
-00847 <span class="preprocessor"></span>      capacity = count;
-00848     }
-00849   }
-00850 
-00852   <span class="keywordtype">bool</span> DeleteIndex (size_t n)
-00853   {
-00854     <span class="keywordflow">if</span> (n &lt; count)
-00855     {
-00856       size_t <span class="keyword">const</span> ncount = count - 1;
-00857       size_t <span class="keyword">const</span> nmove = ncount - n;
-00858       ElementHandler::Destroy (root + n);
-00859       <span class="keywordflow">if</span> (nmove &gt; 0)
-00860         MemoryAllocator::MemMove (root, n, n+1, nmove);
-00861       SetLengthUnsafe (ncount);
-00862       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00863     }
-00864     <span class="keywordflow">else</span>
-00865       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00866   }
-00867 
-00872   <span class="keywordtype">void</span> DeleteRange (size_t start, size_t end)
-00873   {
-00874     <span class="keywordflow">if</span> (start &gt;= count) <span class="keywordflow">return</span>;
-00875     <span class="keywordflow">if</span> (end &lt; 0) <span class="keywordflow">return</span>;
-00876     <span class="keywordflow">if</span> (start &lt; 0) start = 0;
-00877     <span class="keywordflow">if</span> (end &gt;= count) end = count - 1;
-00878     size_t i;
-00879     <span class="keywordflow">for</span> (i = start ; i &lt;= end ; i++)
-00880       ElementHandler::Destroy (root + i);
-00881 
-00882     size_t <span class="keyword">const</span> range_size = end - start + 1;
-00883     size_t <span class="keyword">const</span> ncount = count - range_size;
-00884     size_t <span class="keyword">const</span> nmove = count - end - 1;
-00885     <span class="keywordflow">if</span> (nmove &gt; 0)
-00886       MemoryAllocator::MemMove (root, start, start + range_size, nmove);
-00887     SetLengthUnsafe (ncount);
-00888   }
-00889 
-00891   <span class="keywordtype">bool</span> Delete (T <span class="keyword">const</span>&amp; item)
-00892   {
-00893     size_t <span class="keyword">const</span> n = Find (item);
-00894     <span class="keywordflow">if</span> (n != csArrayItemNotFound)
-00895       <span class="keywordflow">return</span> DeleteIndex (n);
-00896     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00897   }
-00898 
-00900   <span class="keyword">class </span>Iterator
-00901   {
-00902   <span class="keyword">public</span>:
-00904     Iterator(Iterator <span class="keyword">const</span>&amp; r) :
-00905       currentelem(r.currentelem), array(r.array) {}
-00906 
-00908     Iterator&amp; <a class="code" href="classcsArray.html#a3">operator=</a>(Iterator <span class="keyword">const</span>&amp; r)
-00909     { currentelem = r.currentelem; array = r.array; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-00910 
-00912     <span class="keywordtype">bool</span> HasNext()
-00913     { <span class="keywordflow">return</span> currentelem &lt; array.Length(); }
-00914 
-00916     <span class="keyword">const</span> T&amp; Next()
-00917     { <span class="keywordflow">return</span> array.Get(currentelem++); }
-00918 
-00920     <span class="keywordtype">void</span> Reset()
-00921     { currentelem = 0; }
-00922   <span class="keyword">protected</span>:
-00923     Iterator(<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; newarray)
-00924         : currentelem(0), array(newarray)
-00925     { }
-00926     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsArray.html">csArray</a>&lt;T, ElementHandler&gt;;
-00927     
-00928   <span class="keyword">private</span>:
-00929     size_t currentelem;
-00930     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; array;
-00931   };
-00932 
-<a name="l00934"></a><a class="code" href="classcsArray.html#a16">00934</a>   Iterator <a class="code" href="classcsArray.html#a16">GetIterator</a>()<span class="keyword"> const</span>
-00935 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Iterator(*<span class="keyword">this</span>); }
-00936 };
+00614     <span class="keywordflow">else</span>
+00615     {
+00616       SetLengthUnsafe (count + 1);
+00617       ElementHandler::Construct (root + count - 1, what);
+00618     }
+00619     <span class="keywordflow">return</span> count - 1;
+00620   }
+00621 
+00622   <span class="comment">/*</span>
+00623 <span class="comment">   * Push a element onto the tail end of the array if not already present.</span>
+00624 <span class="comment">   * Returns index of newly pushed element or index of already present element.</span>
+00625 <span class="comment">   */</span>
+00626   size_t PushSmart (T <span class="keyword">const</span>&amp; what)
+00627   {
+00628     size_t <span class="keyword">const</span> n = Find (what);
+00629     <span class="keywordflow">return</span> (n == csArrayItemNotFound) ? Push (what) : n;
+00630   }
+00631 
+00633   T Pop ()
+00634   {
+00635     CS_ASSERT (count &gt; 0);
+00636     T ret(root [count - 1]);
+00637     ElementHandler::Destroy (root + count - 1);
+00638     SetLengthUnsafe (count - 1);
+00639     <span class="keywordflow">return</span> ret;
+00640   }
+00641 
+00643   T <span class="keyword">const</span>&amp; Top ()<span class="keyword"> const</span>
+00644 <span class="keyword">  </span>{
+00645     CS_ASSERT (count &gt; 0);
+00646     <span class="keywordflow">return</span> root [count - 1];
+00647   }
+00648 
+00650   T&amp; Top ()
+00651   {
+00652     CS_ASSERT (count &gt; 0);
+00653     <span class="keywordflow">return</span> root [count - 1];
+00654   }
+00655 
+00657   <span class="keywordtype">bool</span> Insert (size_t n, T <span class="keyword">const</span>&amp; item)
+00658   {
+00659     <span class="keywordflow">if</span> (n &lt;= count)
+00660     {
+00661       SetLengthUnsafe (count + 1); <span class="comment">// Increments 'count' as a side-effect.</span>
+00662       size_t <span class="keyword">const</span> nmove = (count - n - 1);
+00663       <span class="keywordflow">if</span> (nmove &gt; 0)
+00664         MemoryAllocator::MemMove (root, n+1, n, nmove);
+00665       ElementHandler::Construct (root + n, item);
+00666       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00667     }
+00668     <span class="keywordflow">else</span>
+00669       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00670   }
+00671 
+00675   <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> Section (size_t low, size_t high)<span class="keyword"> const</span>
+00676 <span class="keyword">  </span>{
+00677     CS_ASSERT (low &gt;= 0 &amp;&amp; high &lt; count &amp;&amp; high &gt;= low);
+00678     <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> sect (high - low + 1);
+00679     <span class="keywordflow">for</span> (size_t i = low; i &lt;= high; i++) sect.Push (root[i]);
+00680     <span class="keywordflow">return</span> sect;
+00681   }
+00682 
+00688   <a class="code" href="classcsArray.html#a15">csArrayTemplate</a>(K)
+00689   size_t FindSortedKey (csArrayCmpDecl(T,K) comparekey, size_t* candidate = 0)<span class="keyword"> const</span>
+00690 <span class="keyword">  </span>{
+00691     size_t m = 0, l = 0, r = <a class="code" href="classcsArray.html#a4">Length</a> ();
+00692     <span class="keywordflow">while</span> (l &lt; r)
+00693     {
+00694       m = (l + r) / 2;
+00695       <span class="keywordtype">int</span> cmp = csArrayCmpInvoke(comparekey, root[m]);
+00696       <span class="keywordflow">if</span> (cmp == 0)
+00697       {
+00698         <span class="keywordflow">if</span> (candidate) *candidate = csArrayItemNotFound;
+00699         <span class="keywordflow">return</span> m;
+00700       }
+00701       <span class="keywordflow">else</span> <span class="keywordflow">if</span> (cmp &lt; 0)
+00702         l = m + 1;
+00703       <span class="keywordflow">else</span>
+00704         r = m;
+00705     }
+00706     <span class="keywordflow">if</span> (candidate) *candidate = m;
+00707     <span class="keywordflow">return</span> csArrayItemNotFound;
+00708   }
+00709 
+00714   size_t InsertSorted (<span class="keyword">const</span> T&amp; item,
+00715     <span class="keywordtype">int</span> (*compare)(T <span class="keyword">const</span>&amp;, T <span class="keyword">const</span>&amp;) = <a class="code" href="classcsArray.html#d0">DefaultCompare</a>,
+00716     size_t* equal_index = 0)
+00717   {
+00718     size_t m = 0, l = 0, r = <a class="code" href="classcsArray.html#a4">Length</a> ();
+00719     <span class="keywordflow">while</span> (l &lt; r)
+00720     {
+00721       m = (l + r) / 2;
+00722       <span class="keywordtype">int</span> cmp = compare (root [m], item);
+00723 
+00724       <span class="keywordflow">if</span> (cmp == 0)
+00725       {
+00726         <span class="keywordflow">if</span> (equal_index) *equal_index = m;
+00727         Insert (++m, item);
+00728         <span class="keywordflow">return</span> m;
+00729       }
+00730       <span class="keywordflow">else</span> <span class="keywordflow">if</span> (cmp &lt; 0)
+00731         l = m + 1;
+00732       <span class="keywordflow">else</span>
+00733         r = m;
+00734     }
+00735     <span class="comment">//if (m == r)</span>
+00736     <span class="comment">//  m++;</span>
+00737     <span class="keywordflow">if</span> ((m + 1) == r)
+00738       m++;
+00739     <span class="keywordflow">if</span> (equal_index) *equal_index = csArrayItemNotFound;
+00740     Insert (m, item);
+00741     <span class="keywordflow">return</span> m;
+00742   }
+00743 
+00748   size_t Find (T <span class="keyword">const</span>&amp; which)<span class="keyword"> const</span>
+00749 <span class="keyword">  </span>{
+00750     <span class="keywordflow">for</span> (size_t i = 0 ; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> () ; i++)
+00751       <span class="keywordflow">if</span> (root[i] == which)
+00752         <span class="keywordflow">return</span> i;
+00753     <span class="keywordflow">return</span> csArrayItemNotFound;
+00754   }
+00755 
+00762   size_t GetIndex (<span class="keyword">const</span> T* which)<span class="keyword"> const</span>
+00763 <span class="keyword">  </span>{
+00764     CS_ASSERT (which &gt;= root);
+00765     CS_ASSERT (which &lt; (root + count));
+00766     <span class="keywordflow">return</span> which-root;
+00767   }
+00768 
+00772   <span class="keywordtype">void</span> Sort (<span class="keywordtype">int</span> (*compare)(T <span class="keyword">const</span>&amp;, T <span class="keyword">const</span>&amp;) = <a class="code" href="classcsArray.html#d0">DefaultCompare</a>)
+00773   {
+00774     qsort (root, <a class="code" href="classcsArray.html#a4">Length</a>(), <span class="keyword">sizeof</span>(T),
+00775       (<span class="keywordtype">int</span> (*)(<span class="keywordtype">void</span> <span class="keyword">const</span>*, <span class="keywordtype">void</span> <span class="keyword">const</span>*))compare);
+00776   }
+00777 
+00781   <span class="keywordtype">void</span> DeleteAll ()
+00782   {
+00783     <span class="keywordflow">if</span> (root)
+00784     {
+00785       size_t i;
+00786       <span class="keywordflow">for</span> (i = 0 ; i &lt; count ; i++)
+00787         ElementHandler::Destroy (root + i);
+00788       MemoryAllocator::Free (root);
+00789 <span class="preprocessor">#     ifdef CS_MEMORY_TRACKER</span>
+00790 <span class="preprocessor"></span>      UpdateMti (-capacity, 0);
+00791 <span class="preprocessor">#     endif</span>
+00792 <span class="preprocessor"></span>      root = 0;
+00793       capacity = count = 0;
+00794     }
+00795   }
+00796 
+00802   <span class="keywordtype">void</span> Truncate (size_t n)
+00803   {
+00804     CS_ASSERT(n &lt;= count);
+00805     <span class="keywordflow">if</span> (n &lt; count)
+00806     {
+00807       <span class="keywordflow">for</span> (size_t i = n; i &lt; count; i++)
+00808         ElementHandler::Destroy (root + i);
+00809       SetLengthUnsafe(n);
+00810     }
+00811   }
+00812 
+00818   <span class="keywordtype">void</span> Empty ()
+00819   {
+00820     Truncate (0);
+00821   }
+00822 
+00829   <span class="keywordtype">void</span> SetCapacity (size_t n)
+00830   {
+00831     <span class="keywordflow">if</span> (n &gt; <a class="code" href="classcsArray.html#a4">Length</a> ())
+00832       AdjustCapacity (n);
+00833   }
+00834 
+00840   <span class="keywordtype">void</span> ShrinkBestFit ()
+00841   {
+00842     <span class="keywordflow">if</span> (count == 0)
+00843     {
+00844       DeleteAll ();
+00845     }
+00846     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (count != capacity)
+00847     {
+00848       root = MemoryAllocator::Realloc (root, count, capacity, count);
+00849 <span class="preprocessor">#     ifdef CS_MEMORY_TRACKER</span>
+00850 <span class="preprocessor"></span>      UpdateMti (count-capacity, count);
+00851 <span class="preprocessor">#     endif</span>
+00852 <span class="preprocessor"></span>      capacity = count;
+00853     }
+00854   }
+00855 
+00857   <span class="keywordtype">bool</span> DeleteIndex (size_t n)
+00858   {
+00859     <span class="keywordflow">if</span> (n &lt; count)
+00860     {
+00861       size_t <span class="keyword">const</span> ncount = count - 1;
+00862       size_t <span class="keyword">const</span> nmove = ncount - n;
+00863       ElementHandler::Destroy (root + n);
+00864       <span class="keywordflow">if</span> (nmove &gt; 0)
+00865         MemoryAllocator::MemMove (root, n, n+1, nmove);
+00866       SetLengthUnsafe (ncount);
+00867       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00868     }
+00869     <span class="keywordflow">else</span>
+00870       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00871   }
+00872 
+00877   <span class="keywordtype">void</span> DeleteRange (size_t start, size_t end)
+00878   {
+00879     <span class="keywordflow">if</span> (start &gt;= count) <span class="keywordflow">return</span>;
+00880     <span class="keywordflow">if</span> (end &lt; 0) <span class="keywordflow">return</span>;
+00881     <span class="keywordflow">if</span> (start &lt; 0) start = 0;
+00882     <span class="keywordflow">if</span> (end &gt;= count) end = count - 1;
+00883     size_t i;
+00884     <span class="keywordflow">for</span> (i = start ; i &lt;= end ; i++)
+00885       ElementHandler::Destroy (root + i);
+00886 
+00887     size_t <span class="keyword">const</span> range_size = end - start + 1;
+00888     size_t <span class="keyword">const</span> ncount = count - range_size;
+00889     size_t <span class="keyword">const</span> nmove = count - end - 1;
+00890     <span class="keywordflow">if</span> (nmove &gt; 0)
+00891       MemoryAllocator::MemMove (root, start, start + range_size, nmove);
+00892     SetLengthUnsafe (ncount);
+00893   }
+00894 
+00896   <span class="keywordtype">bool</span> Delete (T <span class="keyword">const</span>&amp; item)
+00897   {
+00898     size_t <span class="keyword">const</span> n = Find (item);
+00899     <span class="keywordflow">if</span> (n != csArrayItemNotFound)
+00900       <span class="keywordflow">return</span> DeleteIndex (n);
+00901     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00902   }
+00903 
+00905   <span class="keyword">class </span>Iterator
+00906   {
+00907   <span class="keyword">public</span>:
+00909     Iterator(Iterator <span class="keyword">const</span>&amp; r) :
+00910       currentelem(r.currentelem), array(r.array) {}
+00911 
+00913     Iterator&amp; <a class="code" href="classcsArray.html#a3">operator=</a>(Iterator <span class="keyword">const</span>&amp; r)
+00914     { currentelem = r.currentelem; array = r.array; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+00915 
+00917     <span class="keywordtype">bool</span> HasNext()
+00918     { <span class="keywordflow">return</span> currentelem &lt; array.Length(); }
+00919 
+00921     <span class="keyword">const</span> T&amp; Next()
+00922     { <span class="keywordflow">return</span> array.Get(currentelem++); }
+00923 
+00925     <span class="keywordtype">void</span> Reset()
+00926     { currentelem = 0; }
+00927   <span class="keyword">protected</span>:
+00928     Iterator(<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; newarray)
+00929         : currentelem(0), array(newarray)
+00930     { }
+00931     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsArray.html">csArray</a>&lt;T, ElementHandler&gt;;
+00932     
+00933   <span class="keyword">private</span>:
+00934     size_t currentelem;
+00935     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; array;
+00936   };
 00937 
-00943 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00944"></a><a class="code" href="classcsSafeCopyArray.html">00944</a> <span class="keyword">class </span><a class="code" href="classcsSafeCopyArray.html">csSafeCopyArray</a>
-00945         : <span class="keyword">public</span> <a class="code" href="classcsArray.html">csArray</a>&lt;T,
-00946                 csArrayElementHandler&lt;T&gt;,
-00947                 csSafeCopyArrayMemoryAllocator&lt;T&gt; &gt;
-00948 {
-00949 <span class="keyword">public</span>:
-<a name="l00954"></a><a class="code" href="classcsSafeCopyArray.html#a0">00954</a>   <a class="code" href="classcsSafeCopyArray.html#a0">csSafeCopyArray</a> (size_t ilimit = 0, size_t ithreshold = 0)
-00955         : <a class="code" href="classcsArray.html">csArray</a>&lt;T, <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler</a>&lt;T&gt;,
-00956                      <a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">csSafeCopyArrayMemoryAllocator</a>&lt;T&gt; &gt; (ilimit, ithreshold)
-00957   {
-00958   }
-00959 };
-00960 
-00961 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
-00962 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
-00963 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00964 <span class="preprocessor"></span>
-00965 <span class="preprocessor">#endif</span>
+<a name="l00939"></a><a class="code" href="classcsArray.html#a16">00939</a>   Iterator <a class="code" href="classcsArray.html#a16">GetIterator</a>()<span class="keyword"> const</span>
+00940 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Iterator(*<span class="keyword">this</span>); }
+00941 };
+00942 
+00948 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00949"></a><a class="code" href="classcsSafeCopyArray.html">00949</a> <span class="keyword">class </span><a class="code" href="classcsSafeCopyArray.html">csSafeCopyArray</a>
+00950         : <span class="keyword">public</span> <a class="code" href="classcsArray.html">csArray</a>&lt;T,
+00951                 csArrayElementHandler&lt;T&gt;,
+00952                 csSafeCopyArrayMemoryAllocator&lt;T&gt; &gt;
+00953 {
+00954 <span class="keyword">public</span>:
+<a name="l00959"></a><a class="code" href="classcsSafeCopyArray.html#a0">00959</a>   <a class="code" href="classcsSafeCopyArray.html#a0">csSafeCopyArray</a> (size_t ilimit = 0, size_t ithreshold = 0)
+00960         : <a class="code" href="classcsArray.html">csArray</a>&lt;T, <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler</a>&lt;T&gt;,
+00961                      <a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">csSafeCopyArrayMemoryAllocator</a>&lt;T&gt; &gt; (ilimit, ithreshold)
+00962   {
+00963   }
+00964 };
+00965 
+00966 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
+00967 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
+00968 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00969 <span class="preprocessor"></span>
+00970 <span class="preprocessor">#endif</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
