@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Recording Movies</TITLE>
+<TITLE>Crystal Space: HOWTO Use custom font</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Recording Movies">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Recording Movies">
+<META NAME="description" CONTENT="Crystal Space: HOWTO Use custom font">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Use custom font">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -36,111 +36,120 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.24 Recording Movies </H3>
+<H3> 5.8.24 Using a Custom Font </H3>
 <!--docid::SEC5.8.24::-->
 <P>
 
-This section describes how to use the in-game movie recorder.
+This section describes how to use a custom font within
+Crystal Space.
+</P><P>
+
+Crystal Space has a plugin that specifies the font server to use.  The font
+server that almost all applications use is the font multiplexer, together with
+the FreeType2 and the default font server.  The SCF class names of these
+modules are:
+</P><P>
+
+<UL>
+<LI>
+<CODE>crystalspace.font.server.multiplexer</CODE>
+<LI>
+<CODE>crystalspace.font.server.freetype2</CODE>
+<LI>
+<CODE>crystalspace.font.server.default</CODE>
+</UL>
+<P>
+
+The font multiplexer not only searches both the FreeType2 and default font
+server for a font, but also can search multiple fonts for a glyph.  This is
+especially important if you plan to internationalize your applications; it
+reduces the worry that a particular font supports the glyphs for a specific
+language.  (Crystal Space ships with the GNU Unifont, which is used as a
+fallback, so it already pretty good support for internationalization
+out-of-the-box.)
 </P><P>
 
 <A NAME="SEC_1"></A>
-<H4> What is the Movie Recorder Used For? </H4>
+<H4> Standard Fonts </H4>
 <!--docid::SEC_1::-->
 <P>
 
-The movie recorder plugin lets you record a Crystal Space application's video
-output quickly into a NuppelVideo file.  NuppelVideo is a format designed for
-fast recording rather than efficient storage, so typically you would reencode
-the resulting video in DivX or a similar format.
+Every font server is expected to return a font
+given the following strings:
 </P><P>
 
-The plugin keeps Crystal Space's virtual clock in sync with the movie's frame
-rate, so you can render very complex scenes slower than real-time and play them
-back later full speed.
+<UL>
+<LI>
+<CODE>CSFONT_LARGE "*large"</CODE>
+<LI>
+<CODE>CSFONT_ITALIC "*italic"</CODE>
+<LI>
+<CODE>CSFONT_COURIER "*courier"</CODE>
+<LI>
+<CODE>CSFONT_SMALL "*small"</CODE>
+</UL>
+<P>
+
+The default font server has these 4 fonts built in.  They are as
+follows:
 </P><P>
 
-Currently this plugin does not handle audio or formats other than NuppelVideo,
-but both of these are planned for the future.
+<UL>
+<LI>
+<CODE>CSFONT_LARGE police</CODE>
+<LI>
+<CODE>CSFONT_ITALIC italic</CODE>
+<LI>
+<CODE>CSFONT_COURIER courier</CODE>
+<LI>
+<CODE>CSFONT_SMALL tiny</CODE>
+</UL>
+<P>
+
+To use these fonts simply use the LoadFont method and
+pass the font desired.
 </P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Font = G2D-&#62;GetFontServer()-&#62;LoadFont (CSFONT_LARGE);
+</pre></td></tr></table></P><P>
 
 <A NAME="SEC_2"></A>
-<H4> Preparing Up the Movie Recorder </H4>
+<H4> Loadable Fonts </H4>
 <!--docid::SEC_2::-->
 <P>
 
-The movie recorder plugin (probably `<TT>movierecorder.so</TT>' or
-`<TT>movierecorder.dll</TT>') should be compiled as part of a full Crystal Space
-build.
+The default font server will also look for a file in 
+the virtual file system with the name specified.  The
+file must be in the "csf" font format.  This format is
+pretty simple binary format that supports individual characters
+with different widths and optionally an alpha component
+to provide anti-aliasing.
 </P><P>
 
-You can also use the movie recorder with an existing binary without any
-recompilation.  Just place the movie recorder plugin in the application's
-library directory.
+To specify an alternate font simply use the LoadFont method
+with the file name (and optionally a size) such as:
 </P><P>
 
-Like the BugPlug plugin, the movie recorder can be loaded and manipulated
-explicitly by an application or it can be loaded transparently into any
-application automatically.  To load it transparently for all applications, you
-add a setting to your user-specific, application-neutral configuration
-(see section <A HREF="cs_3.3.html#SEC3.3">3.3 Configuration Domains</A>).  To do this, in the `<SAMP>CrystalSpace.Global</SAMP>'
-configuration domain, give the setting `<SAMP>System.Plugins.iMovieRecorder</SAMP>' the
-value `<SAMP>crystalspace.utilities.movierecorder</SAMP>'.  To find out how to do this
-for your particular platform, see the platform-specific intructions for
-manipulating configuration information (see  <A HREF="cs_3.3.html#Config PerUser">Config PerUser</A>).  The movie
-recorder plugin should now load automatically when your application
-initializes.  Last, but not least, you can use the command line argument
-`<SAMP>--plugin=crystalspace.utilities.movierecorder</SAMP>' to enable the recorder on
-a per-application basis.
-</P><P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>Font = G2D-&#62;GetFontServer()-&#62;LoadFont ("/fonts/ttf/Vera.ttf", 12);
+</pre></td></tr></table></P><P>
 
 <A NAME="SEC_3"></A>
-<H4> Using the Movie Recorder </H4>
+<H4> Creating New Loadable Fonts </H4>
 <!--docid::SEC_3::-->
 <P>
 
-Like the BugPlug plugin's screenshot facility, the movie recorder creates a new
-numbered file when you press the recording hotkey.  By default, this key is
-<KBD><KBD>ALT</KBD>-r</KBD>.  If you can see notice messages overlaid on your application
-or in the terminal you are running it from, you should see a "Video recorder
-started" message indicating the name of the file being recorded to.  Press the
-record hotkey again to stop the recording.
+The easiest way to create a loadable font is to
+use the `<TT>csfgen</TT>' util that comes with CS. It converts 
+a True Type font to the CSF format.
 </P><P>
 
-During recording, you can use the pause hotkey to temporarily suspend
-recording.  By default this is <KBD><KBD>ALT</KBD>-p</KBD>.  Press it again to resume
-recording to the same file.
-</P><P>
-
-<A NAME="SEC_4"></A>
-<H4> Processing the Resulting Movies </H4>
-<!--docid::SEC_4::-->
-<P>
-
-You can view the resulting NuppelVideo files using <EM>mplayer</EM>, an open
-source and cross-platform media player.  For re-distribution, you should use a
-format with a better compression ratio, like DivX.  mplayer's counterpart,
-<EM>mencoder</EM>, handles this task nicely:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>mencoder crystal000.nuv -o my_movie.avi -ovc lavc \
-    -lavcopts vcodec=mpeg4:vbitrate=1600
-</pre></td></tr></table></P><P>
-
-This creates an AVI file using FFmpeg's <EM>mpeg4</EM> codec.  See mencoder's
-manpage for more information.
-</P><P>
-
-<A NAME="SEC_5"></A>
-<H4> Configuring the Movie Recorder </H4>
-<!--docid::SEC_5::-->
-<P>
-
-The movie recorder reads its configuration from
-`<TT>data/config/movierecorder.cfg</TT>' if it exists.  This lets you change the
-recording and pause hotkeys, the filenames, and compression settings.  See the
-comments in the default `<TT>movierecorder.cfg</TT>' for a description of each
-item.
-<A NAME="HOWTO Using Procedural Textures"></A>
+Once the CSF file is created it can be included
+in the application no matter what platforms are 
+targeted.  The base font does not have to be on
+that system.  This is useful if you do not want or can not
+distribute a font with your program and can not rely upon
+it already being present on the target machine.
+<A NAME="HOWTO Recording Movies"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.23.html#SEC5.8.23"> &lt; </A>]</TD>
