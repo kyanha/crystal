@@ -49,7 +49,7 @@
 00031 <span class="keyword">struct </span><a class="code" href="structiMovable.html">iMovable</a>;
 00032 <span class="keyword">class </span><a class="code" href="classcsTransform.html">csTransform</a>;
 00033 
-00034 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiTerrainObjectState.html">iTerrainObjectState</a>, 0, 0, 1);
+00034 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiTerrainObjectState.html">iTerrainObjectState</a>, 0, 0, 2);
 00035 
 <a name="l00039"></a><a class="code" href="structiTerrainObjectState.html">00039</a> <span class="keyword">struct </span><a class="code" href="structiTerrainObjectState.html">iTerrainObjectState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
 00040 {
@@ -69,24 +69,26 @@
 00083   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> RestoreState (<span class="keyword">const</span> <span class="keywordtype">char</span> *filename) = 0;
 00084 
 00086   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiTerrainObjectState.html#a10">CollisionDetect</a> (<a class="code" href="structiMovable.html">iMovable</a> *m, <a class="code" href="classcsTransform.html">csTransform</a> *p) = 0;
-00087 };
-00088 
-00089 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiTerrainFactoryState.html">iTerrainFactoryState</a>, 0, 0, 1);
-00090 
-<a name="l00096"></a><a class="code" href="structiTerrainFactoryState.html">00096</a> <span class="keyword">struct </span><a class="code" href="structiTerrainFactoryState.html">iTerrainFactoryState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00097 {
-00099   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTerrainFactoryState.html#a0">SetScale</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; scale) = 0;
-00100   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetScale () <span class="keyword">const</span> = 0;
-00101 
-00106   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTerrainFactoryState.html#a2">SetHeightMap</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;float&gt;</a>&amp; data, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
-00107   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTerrainFactoryState.html#a2">SetHeightMap</a> (<a class="code" href="structiImage.html">iImage</a>* map) = 0;
-00108 
-00116   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTerrainFactoryState.html#a4">SaveState</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *filename) = 0;
-00117   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> RestoreState (<span class="keyword">const</span> <span class="keywordtype">char</span> *filename) = 0;
-00118 
-00119 };
-00120 
-00121 <span class="preprocessor">#endif // __CS_IMESH_TERRAIN_H__</span>
+00087 
+00091   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTerrainObjectState.html#a11">SetStaticLighting</a> (<span class="keywordtype">bool</span> enable) = 0;
+00095   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTerrainObjectState.html#a12">GetStaticLighting</a> () = 0;
+00096 };
+00097 
+00098 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiTerrainFactoryState.html">iTerrainFactoryState</a>, 0, 0, 1);
+00099 
+<a name="l00105"></a><a class="code" href="structiTerrainFactoryState.html">00105</a> <span class="keyword">struct </span><a class="code" href="structiTerrainFactoryState.html">iTerrainFactoryState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00106 {
+00108   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTerrainFactoryState.html#a0">SetScale</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; scale) = 0;
+00109   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetScale () <span class="keyword">const</span> = 0;
+00110 
+00115   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTerrainFactoryState.html#a2">SetHeightMap</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;float&gt;</a>&amp; data, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
+00116   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTerrainFactoryState.html#a2">SetHeightMap</a> (<a class="code" href="structiImage.html">iImage</a>* map) = 0;
+00117 
+00125   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTerrainFactoryState.html#a4">SaveState</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *filename) = 0;
+00126   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> RestoreState (<span class="keyword">const</span> <span class="keywordtype">char</span> *filename) = 0;
+00127 };
+00128 
+00129 <span class="preprocessor">#endif // __CS_IMESH_TERRAIN_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
