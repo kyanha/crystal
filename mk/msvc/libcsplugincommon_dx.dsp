@@ -140,6 +140,10 @@ SOURCE="$(InputPath)"
 
 SOURCE=..\..\libs\csplugincommon\directx\directdetection.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csplugincommon\directx\guids.cpp
+# End Source File
 # End Group
 # End Target
 # End Project
