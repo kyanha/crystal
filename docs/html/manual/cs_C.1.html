@@ -1120,6 +1120,24 @@ by `<SAMP>csImageMemory</SAMP>'.
 
 As a side-effect of these changes, the `<SAMP>csImageFile</SAMP>' and 
 `<SAMP>csImageMemory</SAMP>' were merged and the former removed.
+</P><P>
+
+<A NAME="SEC_29"></A>
+<H3> `<SAMP>csCondition</SAMP>' Changes </H3>
+<!--docid::SEC_29::-->
+<P>
+
+<CODE>csCondition::Wait()</CODE> now enforces the restriction that the mutex with
+which it is invoked is non-recursive.  The reason that the mutex must be
+non-recursive is because the implicit unlock performed by <CODE>Wait()</CODE>
+<EM>must</EM> actually release the mutex in order for other threads to be able to
+satisfy the condition. With recursive mutexes, there is no guarantee that
+unlocking the mutex actually releases it since it might have been locked
+multiple times within the same thread. Although many low-level
+platform-specific threading implementations have historically been lax
+regarding the incompatibility between recursive mutexes and conditions, modern
+implementations are beginning to enforce it. Consequently, Crystal Space also
+now enforces this restriction.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
