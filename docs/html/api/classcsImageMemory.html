@@ -113,7 +113,10 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Used to convert an 8-bit indexed image into requested format. </em> <a href="#a31"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classcsImageMemory.html#a32">ConvertFromPal8</a> (<a class="el" href="group__util.html#a0">uint8</a> *<a class="el" href="structiImage.html">iImage</a>, const <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> *iPalette, int nPalColors=256)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Same as above but accepts an array of csRGBcolor's as palette. </em> <a href="#a32"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Used to convert an 8-bit indexed image into requested format. </em> <a href="#a32"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classcsImageMemory.html#a33">ConvertFromPal8</a> (<a class="el" href="group__util.html#a0">uint8</a> *<a class="el" href="structiImage.html">iImage</a>, <a class="el" href="group__util.html#a0">uint8</a> *alpha, const <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> *iPalette, int nPalColors=256)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Same as above but accepts an array of csRGBcolor's as palette and an alpha mask. </em> <a href="#a33"></a><em><br><br></td></tr>
 <tr><td colspan=2><br><h2>Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classcsImageMemory.html#b0">csImageMemory</a> (int iFormat)</td></tr>
 
@@ -622,6 +625,58 @@ Remove the keycolor.
     </td>
   </tr>
 </table>
+<a name="a33" doxytag="csImageMemory::ConvertFromPal8"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> void csImageMemory::ConvertFromPal8 </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="group__util.html#a0">uint8</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>iImage</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#a0">uint8</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>const <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>iPalette</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>nPalColors</em> = 256</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Same as above but accepts an array of csRGBcolor's as palette and an alpha mask. 
+<p>
+The <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> array is never freed, so its your responsability if you did it. The image will take ownership over the alpha mask.     </td>
+  </tr>
+</table>
 <a name="a32" doxytag="csImageMemory::ConvertFromPal8"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -663,9 +718,9 @@ Remove the keycolor.
     <td>
 
 <p>
-Same as above but accepts an array of csRGBcolor's as palette. 
+Used to convert an 8-bit indexed image into requested format. 
 <p>
-The <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> array is never freed, so its your responsability if you did it.     </td>
+Pass a pointer to color indices, a pointer to the alpha mask and a pointer to the palette, and you're done. NOTE: the pointer should be allocated with new uint8 [] and you should not free it after calling this function: the function will free the buffer itself if it is appropriate (or wont if the buffer size/contents are appropriate for target format). Same about palette and alpha.     </td>
   </tr>
 </table>
 <a name="a31" doxytag="csImageMemory::ConvertFromPal8"></a><p>
@@ -711,7 +766,7 @@ The <a class="el" href="structcsRGBcolor.html">csRGBcolor</a> array is never fre
 <p>
 Used to convert an 8-bit indexed image into requested format. 
 <p>
-Pass a pointer to color indices and a pointer to palette, and you're done. NOTE: the pointer should be allocated with new uint8 [] and you should not free it after calling this function: the function will free the buffer itself if it is appropiate (or wont if the buffer size/contents are appropiate for target format). Same about palette.     </td>
+Pass a pointer to color indices and a pointer to palette, and you're done. NOTE: the pointer should be allocated with new uint8 [] and you should not free it after calling this function: the function will free the buffer itself if it is appropriate (or wont if the buffer size/contents are appropriate for target format). Same about palette.     </td>
   </tr>
 </table>
 <a name="a30" doxytag="csImageMemory::ConvertFromRGBA"></a><p>
@@ -742,7 +797,7 @@ Pass a pointer to color indices and a pointer to palette, and you're done. NOTE:
 <p>
 Used to convert an truecolor RGB image into requested format. 
 <p>
-If the image loader cannot handle conversion itself, and the image file is in a format that is different from the requested one, load the image in <a class="el" href="structcsRGBpixel.html">csRGBpixel</a> format and pass the pointer to this function which will handle the RGB -&gt; target format conversion. NOTE: the pointer should be allocated with new <a class="el" href="structcsRGBpixel.html">csRGBpixel</a> [] and you should not free it after calling this function: the function will free the buffer itself if it is appropiate (or wont if the buffer size/contents are appropiate for target format).     </td>
+If the image loader cannot handle conversion itself, and the image file is in a format that is different from the requested one, load the image in <a class="el" href="structcsRGBpixel.html">csRGBpixel</a> format and pass the pointer to this function which will handle the RGB -&gt; target format conversion. NOTE: the pointer should be allocated with new <a class="el" href="structcsRGBpixel.html">csRGBpixel</a> [] and you should not free it after calling this function: the function will free the buffer itself if it is appropriate (or wont if the buffer size/contents are appropriate for target format).     </td>
   </tr>
 </table>
 <a name="a27" doxytag="csImageMemory::Copy"></a><p>
