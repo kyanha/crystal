@@ -64,7 +64,7 @@
 00061   <a class="code" href="classcsList.html#a0">csList</a>(<span class="keyword">const</span> <a class="code" href="classcsList.html">csList</a> &amp;other);
 00062 
 <a name="l00064"></a><a class="code" href="classcsList.html#a2">00064</a>   <a class="code" href="classcsList.html#a2">~csList</a>()
-00065   { <a class="code" href="classcsList.html#a9">DeleteAll</a> (); }
+00065   { <a class="code" href="classcsList.html#a11">DeleteAll</a> (); }
 00066 
 <a name="l00068"></a><a class="code" href="classcsList_1_1Iterator.html">00068</a>   <span class="keyword">class </span><a class="code" href="classcsList_1_1Iterator.html">Iterator</a>
 00069   {
@@ -129,187 +129,257 @@
 00146         ptr = ptr-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
 00147       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
 00148     }
-00149   <span class="keyword">protected</span>:
-00150     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsList.html">csList</a>&lt;T&gt;;
-00151     <a class="code" href="classcsList_1_1Iterator.html#a0">Iterator</a> (csListElement* element) : ptr(element)
-00152     {}
-00153 
-00154   <span class="keyword">private</span>:
-00155     csListElement* ptr;
-00156     <span class="keywordtype">bool</span> reversed;
-00157   };
-00158 
-00160   <a class="code" href="classcsList.html">csList</a> &amp;<a class="code" href="classcsList.html#a3">operator=</a>(<span class="keyword">const</span> <a class="code" href="classcsList.html">csList</a>&amp; other);
-00161 
-00163   Iterator <a class="code" href="classcsList.html#a4">PushFront</a> (<span class="keyword">const</span> T &amp; item);
-00164 
-00166   Iterator <a class="code" href="classcsList.html#a5">PushBack</a> (<span class="keyword">const</span> T &amp; item);
-00167 
-00169   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a6">InsertBefore</a>(Iterator &amp;it, <span class="keyword">const</span> T &amp; item);
-00170 
-00172   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a7">InsertAfter</a>(Iterator &amp;it, <span class="keyword">const</span> T &amp; item);
-00173 
-00175   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#b0">Delete</a> (Iterator &amp;it);
+00149 
+<a name="l00154"></a><a class="code" href="classcsList_1_1Iterator.html#a18">00154</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsList_1_1Iterator.html#a18">FetchNext</a> ()<span class="keyword"> const</span>
+00155 <span class="keyword">    </span>{
+00156       <span class="keywordflow">return</span> ptr-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>;
+00157     }
+<a name="l00162"></a><a class="code" href="classcsList_1_1Iterator.html#a19">00162</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsList_1_1Iterator.html#a19">FetchPrev</a> ()<span class="keyword"> const</span>
+00163 <span class="keyword">    </span>{
+00164       <span class="keywordflow">return</span> ptr-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>;
+00165     }
+00166 
+00167   <span class="keyword">protected</span>:
+00168     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsList.html">csList</a>&lt;T&gt;;
+00169     <a class="code" href="classcsList_1_1Iterator.html#a0">Iterator</a> (csListElement* element) : ptr(element)
+00170     {}
+00171 
+00172   <span class="keyword">private</span>:
+00173     csListElement* ptr;
+00174     <span class="keywordtype">bool</span> reversed;
+00175   };
 00176 
-00178   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a9">DeleteAll</a>();
+00178   <a class="code" href="classcsList.html">csList</a> &amp;<a class="code" href="classcsList.html#a3">operator=</a>(<span class="keyword">const</span> <a class="code" href="classcsList.html">csList</a>&amp; other);
 00179 
-<a name="l00181"></a><a class="code" href="classcsList.html#a10">00181</a>   <span class="keyword">const</span> T&amp; <a class="code" href="classcsList.html#a10">Front</a> ()<span class="keyword"> const</span>
-00182 <span class="keyword">  </span>{ <span class="keywordflow">return</span> head-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>; }
-<a name="l00184"></a><a class="code" href="classcsList.html#a11">00184</a>   <span class="keyword">const</span> T&amp; <a class="code" href="classcsList.html#a11">Last</a> ()<span class="keyword"> const</span>
-00185 <span class="keyword">  </span>{ <span class="keywordflow">return</span> tail-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>; }
-00186 
-<a name="l00188"></a><a class="code" href="classcsList.html#a12">00188</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsList.html#a12">PopFront</a> ()
-00189   {
-00190     <span class="keywordflow">if</span> (!head)
-00191       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00192     <a class="code" href="classcsList.html#b0">Delete</a> (head);
-00193     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00194   }
-00195 
-<a name="l00197"></a><a class="code" href="classcsList.html#a13">00197</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsList.html#a13">PopBack</a> ()
-00198   {
-00199     <span class="keywordflow">if</span> (!tail)
-00200       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00201     <a class="code" href="classcsList.html#b0">Delete</a> (tail);
-00202     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00203   }
-00204   
-00205   <span class="keywordtype">bool</span> IsEmpty ()<span class="keyword"> const</span>
-00206 <span class="keyword">  </span>{
-00207     CS_ASSERT((head == 0 &amp;&amp; tail == 0) || (head !=0 &amp;&amp; tail != 0));
-00208     <span class="keywordflow">return</span> head == 0;
-00209   }
+00181   Iterator <a class="code" href="classcsList.html#a4">PushFront</a> (<span class="keyword">const</span> T &amp; item);
+00182 
+00184   Iterator <a class="code" href="classcsList.html#a5">PushBack</a> (<span class="keyword">const</span> T &amp; item);
+00185 
+00187   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a6">InsertBefore</a>(Iterator &amp;it, <span class="keyword">const</span> T &amp; item);
+00188 
+00190   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a7">InsertAfter</a>(Iterator &amp;it, <span class="keyword">const</span> T &amp; item);
+00191 
+00193   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a8">MoveBefore</a>(<span class="keyword">const</span> Iterator &amp;it, <span class="keyword">const</span> Iterator &amp;item);
+00194 
+00196   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a9">MoveAfter</a>(<span class="keyword">const</span> Iterator &amp;it, <span class="keyword">const</span> Iterator &amp;item);
+00197 
+00199   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#b0">Delete</a> (Iterator &amp;it);
+00200 
+00202   <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a11">DeleteAll</a>();
+00203 
+<a name="l00205"></a><a class="code" href="classcsList.html#a12">00205</a>   <span class="keyword">const</span> T&amp; <a class="code" href="classcsList.html#a12">Front</a> ()<span class="keyword"> const</span>
+00206 <span class="keyword">  </span>{ <span class="keywordflow">return</span> head-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>; }
+<a name="l00208"></a><a class="code" href="classcsList.html#a13">00208</a>   <span class="keyword">const</span> T&amp; <a class="code" href="classcsList.html#a13">Last</a> ()<span class="keyword"> const</span>
+00209 <span class="keyword">  </span>{ <span class="keywordflow">return</span> tail-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>; }
 00210 
-00211 <span class="keyword">private</span>:
-00212   <span class="keyword">friend</span> <span class="keyword">class </span>Iterator;
-00213   csListElement *head, *tail;
-00214 };
-00215 
-00217 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00218"></a><a class="code" href="classcsList.html#a1">00218</a> <span class="keyword">inline</span> <a class="code" href="classcsList.html#a0">csList&lt;T&gt;::csList</a>(<span class="keyword">const</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a> &amp;other) : head(0), tail(0)
-00219 {
-00220   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* e = other.head;
-00221   <span class="keywordflow">while</span> (e != 0)
+<a name="l00212"></a><a class="code" href="classcsList.html#a14">00212</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsList.html#a14">PopFront</a> ()
+00213   {
+00214     <span class="keywordflow">if</span> (!head)
+00215       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00216     <a class="code" href="classcsList.html#b0">Delete</a> (head);
+00217     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00218   }
+00219 
+<a name="l00221"></a><a class="code" href="classcsList.html#a15">00221</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsList.html#a15">PopBack</a> ()
 00222   {
-00223     <a class="code" href="classcsList.html#a5">PushBack</a> (e-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>);
-00224     e = e-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
-00225   }
-00226 }
-00227 
-00229 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00230"></a><a class="code" href="classcsList.html#a3">00230</a> <span class="keyword">inline</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a>&amp; <a class="code" href="classcsList.html#a3">csList&lt;T&gt;::operator= </a>(<span class="keyword">const</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a> &amp;other)
-00231 {
-00232   <a class="code" href="classcsList.html#a9">DeleteAll</a> ();
-00233   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* e = other.<a class="code" href="classcsList.html#o0">head</a>;
-00234   <span class="keywordflow">while</span> (e != 0)
-00235   {
-00236     <a class="code" href="classcsList.html#a5">PushBack</a> (e-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>);
-00237     e = e-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
-00238   }
-00239   <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00240 }
-00241 
-00243 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00244"></a><a class="code" href="classcsList.html#a9">00244</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a9">csList&lt;T&gt;::DeleteAll</a> ()
-00245 {
-00246   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> *cur = head, *next = 0;
-00247   <span class="keywordflow">while</span> (cur != 0)
-00248   {
-00249     next = cur-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
-00250     <span class="keyword">delete</span> cur;
-00251     cur = next;
-00252   }
-00253   head = tail = 0;
-00254 }
-00255 
-00257 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00258"></a><a class="code" href="classcsList.html#a5">00258</a> <span class="keyword">inline</span> <span class="keyword">typename</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a>::Iterator <a class="code" href="classcsList.html#a5">csList&lt;T&gt;::PushBack</a> (<span class="keyword">const</span> T&amp; item)
-00259 {
-00260   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = <span class="keyword">new</span> <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> (item, 0, tail);
-00261   <span class="keywordflow">if</span> (tail)
-00262     tail-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = el;
-00263   <span class="keywordflow">else</span>
-00264     head = el;
-00265   tail = el;
-00266   <span class="keywordflow">return</span> <a class="code" href="classcsList_1_1Iterator.html">Iterator</a>(el);
-00267 }
-00268 
-00270 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00271"></a><a class="code" href="classcsList.html#a4">00271</a> <span class="keyword">inline</span> <span class="keyword">typename</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a>::Iterator <a class="code" href="classcsList.html#a4">csList&lt;T&gt;::PushFront</a> (<span class="keyword">const</span> T&amp; item)
-00272 {
-00273   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = <span class="keyword">new</span> <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> (item, head, 0);
-00274   <span class="keywordflow">if</span> (head)
-00275     head-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = el;
-00276   <span class="keywordflow">else</span>
-00277     tail = el;
-00278   head = el;
-00279   <span class="keywordflow">return</span> <a class="code" href="classcsList_1_1Iterator.html">Iterator</a> (el);
-00280 }
-00281 
-00282 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00283"></a><a class="code" href="classcsList.html#a7">00283</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a7">csList&lt;T&gt;::InsertAfter</a> (<a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;it, <span class="keyword">const</span> T&amp; item)
-00284 {
-00285   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = it.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
-00286   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* next = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
-00287   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* prev = el;
-00288   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* newEl = <span class="keyword">new</span> <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> (item, next, prev);
-00289   <span class="keywordflow">if</span> (!next) <span class="comment">// this is the last element</span>
-00290     tail = newEl;
-00291   <span class="keywordflow">else</span>
-00292     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = newEl;
-00293   el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = newEl;
-00294 }
-00295 
-00296 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00297"></a><a class="code" href="classcsList.html#a6">00297</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a6">csList&lt;T&gt;::InsertBefore</a> (<a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;it, <span class="keyword">const</span> T&amp; item)
-00298 {
-00299   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = it.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
-00300   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* next = el;
-00301   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* prev = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
-00302   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* newEl = <span class="keyword">new</span> <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> (item, next, prev);
-00303   <span class="keywordflow">if</span> (!prev) <span class="comment">// this is the first element</span>
-00304     head = newEl;
-00305   <span class="keywordflow">else</span>
-00306     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = newEl;
-00307   el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = newEl;
-00308 }
-00309 
-00310 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00311"></a><a class="code" href="classcsList.html#a8">00311</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#b0">csList&lt;T&gt;::Delete</a> (<a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;it)
-00312 {
-00313   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = it.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
-00314   <span class="keywordflow">if</span> (!el)
-00315     <span class="keywordflow">return</span>;
-00316 
-00317   <span class="comment">// Advance the iterator so we can delete the data it's using</span>
-00318   <span class="keywordflow">if</span> (it.<a class="code" href="classcsList_1_1Iterator.html#a9">IsReverse</a>())
-00319       --it;
-00320   <span class="keywordflow">else</span>
-00321       ++it;
-00322 
-00323   <a class="code" href="classcsList.html#b0">Delete</a>(el);
-00324 }
-00325 
-00326 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00327"></a><a class="code" href="classcsList.html#b0">00327</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#b0">csList&lt;T&gt;::Delete</a> (<a class="code" href="structcsList_1_1csListElement.html">csListElement</a> *el)
-00328 {
-00329   CS_ASSERT(el);
-00330 
-00331   <span class="comment">// Fix the pointers of the 2 surrounding elements</span>
-00332   <span class="keywordflow">if</span> (el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>)
-00333     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
-00334   <span class="keywordflow">else</span>
-00335     head = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
-00336 
-00337   <span class="keywordflow">if</span> (el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>)
-00338     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
-00339   <span class="keywordflow">else</span>
-00340     tail = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
-00341 
-00342   <span class="keyword">delete</span> el;
-00343 }
-00344 
-00345 <span class="preprocessor">#endif //__CS_UTIL_LIST_H__</span>
+00223     <span class="keywordflow">if</span> (!tail)
+00224       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00225     <a class="code" href="classcsList.html#b0">Delete</a> (tail);
+00226     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00227   }
+00228   
+00229   <span class="keywordtype">bool</span> IsEmpty ()<span class="keyword"> const</span>
+00230 <span class="keyword">  </span>{
+00231     CS_ASSERT((head == 0 &amp;&amp; tail == 0) || (head !=0 &amp;&amp; tail != 0));
+00232     <span class="keywordflow">return</span> head == 0;
+00233   }
+00234 
+00235 <span class="keyword">private</span>:
+00236   <span class="keyword">friend</span> <span class="keyword">class </span>Iterator;
+00237   csListElement *head, *tail;
+00238 };
+00239 
+00241 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00242"></a><a class="code" href="classcsList.html#a1">00242</a> <span class="keyword">inline</span> <a class="code" href="classcsList.html#a0">csList&lt;T&gt;::csList</a>(<span class="keyword">const</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a> &amp;other) : head(0), tail(0)
+00243 {
+00244   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* e = other.head;
+00245   <span class="keywordflow">while</span> (e != 0)
+00246   {
+00247     <a class="code" href="classcsList.html#a5">PushBack</a> (e-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>);
+00248     e = e-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00249   }
+00250 }
+00251 
+00253 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00254"></a><a class="code" href="classcsList.html#a3">00254</a> <span class="keyword">inline</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a>&amp; <a class="code" href="classcsList.html#a3">csList&lt;T&gt;::operator= </a>(<span class="keyword">const</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a> &amp;other)
+00255 {
+00256   <a class="code" href="classcsList.html#a11">DeleteAll</a> ();
+00257   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* e = other.<a class="code" href="classcsList.html#o0">head</a>;
+00258   <span class="keywordflow">while</span> (e != 0)
+00259   {
+00260     <a class="code" href="classcsList.html#a5">PushBack</a> (e-&gt;<a class="code" href="structcsList_1_1csListElement.html#m2">data</a>);
+00261     e = e-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00262   }
+00263   <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00264 }
+00265 
+00267 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00268"></a><a class="code" href="classcsList.html#a11">00268</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a11">csList&lt;T&gt;::DeleteAll</a> ()
+00269 {
+00270   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> *cur = head, *next = 0;
+00271   <span class="keywordflow">while</span> (cur != 0)
+00272   {
+00273     next = cur-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00274     <span class="keyword">delete</span> cur;
+00275     cur = next;
+00276   }
+00277   head = tail = 0;
+00278 }
+00279 
+00281 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00282"></a><a class="code" href="classcsList.html#a5">00282</a> <span class="keyword">inline</span> <span class="keyword">typename</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a>::Iterator <a class="code" href="classcsList.html#a5">csList&lt;T&gt;::PushBack</a> (<span class="keyword">const</span> T&amp; item)
+00283 {
+00284   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = <span class="keyword">new</span> <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> (item, 0, tail);
+00285   <span class="keywordflow">if</span> (tail)
+00286     tail-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = el;
+00287   <span class="keywordflow">else</span>
+00288     head = el;
+00289   tail = el;
+00290   <span class="keywordflow">return</span> <a class="code" href="classcsList_1_1Iterator.html">Iterator</a>(el);
+00291 }
+00292 
+00294 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00295"></a><a class="code" href="classcsList.html#a4">00295</a> <span class="keyword">inline</span> <span class="keyword">typename</span> <a class="code" href="classcsList.html">csList&lt;T&gt;</a>::Iterator <a class="code" href="classcsList.html#a4">csList&lt;T&gt;::PushFront</a> (<span class="keyword">const</span> T&amp; item)
+00296 {
+00297   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = <span class="keyword">new</span> <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> (item, head, 0);
+00298   <span class="keywordflow">if</span> (head)
+00299     head-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = el;
+00300   <span class="keywordflow">else</span>
+00301     tail = el;
+00302   head = el;
+00303   <span class="keywordflow">return</span> <a class="code" href="classcsList_1_1Iterator.html">Iterator</a> (el);
+00304 }
+00305 
+00306 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00307"></a><a class="code" href="classcsList.html#a7">00307</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a7">csList&lt;T&gt;::InsertAfter</a> (<a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;it, <span class="keyword">const</span> T&amp; item)
+00308 {
+00309   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = it.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
+00310   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* next = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00311   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* prev = el;
+00312   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* newEl = <span class="keyword">new</span> <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> (item, next, prev);
+00313   <span class="keywordflow">if</span> (!next) <span class="comment">// this is the last element</span>
+00314     tail = newEl;
+00315   <span class="keywordflow">else</span>
+00316     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = newEl;
+00317   el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = newEl;
+00318 }
+00319 
+00320 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00321"></a><a class="code" href="classcsList.html#a6">00321</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a6">csList&lt;T&gt;::InsertBefore</a> (<a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;it, <span class="keyword">const</span> T&amp; item)
+00322 {
+00323   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = it.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
+00324   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* next = el;
+00325   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* prev = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
+00326   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* newEl = <span class="keyword">new</span> <a class="code" href="structcsList_1_1csListElement.html">csListElement</a> (item, next, prev);
+00327   <span class="keywordflow">if</span> (!prev) <span class="comment">// this is the first element</span>
+00328     head = newEl;
+00329   <span class="keywordflow">else</span>
+00330     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = newEl;
+00331   el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = newEl;
+00332 }
+00333 
+00334 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00335"></a><a class="code" href="classcsList.html#a9">00335</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a9">csList&lt;T&gt;::MoveAfter</a> (<span class="keyword">const</span> <a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;it, <span class="keyword">const</span> <a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;item)
+00336 {
+00337   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el_item = item.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
+00338 
+00339   <span class="comment">// Unlink the item.</span>
+00340   <span class="keywordflow">if</span> (el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>)
+00341     el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00342   <span class="keywordflow">else</span>
+00343     head = el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00344   <span class="keywordflow">if</span> (el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>)
+00345     el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
+00346   <span class="keywordflow">else</span>
+00347     tail = el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
+00348 
+00349   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = it.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
+00350   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* next = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00351   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* prev = el;
+00352 
+00353   el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = next;
+00354   el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = prev;
+00355   <span class="keywordflow">if</span> (!next) <span class="comment">// this is the last element</span>
+00356     tail = el_item;
+00357   <span class="keywordflow">else</span>
+00358     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = el_item;
+00359   el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = el_item;
+00360 }
+00361 
+00362 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00363"></a><a class="code" href="classcsList.html#a8">00363</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#a8">csList&lt;T&gt;::MoveBefore</a> (<span class="keyword">const</span> <a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;it, <span class="keyword">const</span> <a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;item)
+00364 {
+00365   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el_item = item.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
+00366 
+00367   <span class="comment">// Unlink the item.</span>
+00368   <span class="keywordflow">if</span> (el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>)
+00369     el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00370   <span class="keywordflow">else</span>
+00371     head = el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00372   <span class="keywordflow">if</span> (el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>)
+00373     el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
+00374   <span class="keywordflow">else</span>
+00375     tail = el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
+00376 
+00377   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = it.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
+00378   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* next = el;
+00379   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* prev = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
+00380 
+00381   el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = next;
+00382   el_item-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = prev;
+00383   <span class="keywordflow">if</span> (!prev) <span class="comment">// this is the first element</span>
+00384     head = el_item;
+00385   <span class="keywordflow">else</span>
+00386     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = el_item;
+00387   el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = el_item;
+00388 }
+00389 
+00390 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00391"></a><a class="code" href="classcsList.html#a10">00391</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#b0">csList&lt;T&gt;::Delete</a> (<a class="code" href="classcsList_1_1Iterator.html">Iterator</a> &amp;it)
+00392 {
+00393   <a class="code" href="structcsList_1_1csListElement.html">csListElement</a>* el = it.<a class="code" href="classcsList_1_1Iterator.html#o0">ptr</a>;
+00394   <span class="keywordflow">if</span> (!el)
+00395     <span class="keywordflow">return</span>;
+00396 
+00397   <span class="comment">// Advance the iterator so we can delete the data it's using</span>
+00398   <span class="keywordflow">if</span> (it.<a class="code" href="classcsList_1_1Iterator.html#a9">IsReverse</a>())
+00399       --it;
+00400   <span class="keywordflow">else</span>
+00401       ++it;
+00402 
+00403   <a class="code" href="classcsList.html#b0">Delete</a>(el);
+00404 }
+00405 
+00406 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00407"></a><a class="code" href="classcsList.html#b0">00407</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsList.html#b0">csList&lt;T&gt;::Delete</a> (<a class="code" href="structcsList_1_1csListElement.html">csListElement</a> *el)
+00408 {
+00409   CS_ASSERT(el);
+00410 
+00411   <span class="comment">// Fix the pointers of the 2 surrounding elements</span>
+00412   <span class="keywordflow">if</span> (el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>)
+00413     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a> = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00414   <span class="keywordflow">else</span>
+00415     head = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>;
+00416 
+00417   <span class="keywordflow">if</span> (el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>)
+00418     el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m0">next</a>-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a> = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
+00419   <span class="keywordflow">else</span>
+00420     tail = el-&gt;<a class="code" href="structcsList_1_1csListElement.html#m1">prev</a>;
+00421 
+00422   <span class="keyword">delete</span> el;
+00423 }
+00424 
+00425 <span class="preprocessor">#endif //__CS_UTIL_LIST_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
