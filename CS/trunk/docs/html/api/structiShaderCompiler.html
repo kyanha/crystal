@@ -31,12 +31,14 @@
 <tr><td colspan=2><br><h2>Public Methods</h2></td></tr>
 <tr><td nowrap align=right valign=top>virtual const char *&nbsp;</td><td valign=bottom><a class="el" href="structiShaderCompiler.html#a0">GetName</a> ()=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get a name identifying this compiler.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiShader.html">iShader</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiShaderCompiler.html#a1">CompileShader</a> (<a class="el" href="structiDocumentNode.html">iDocumentNode</a> *templ)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Compile a template into a shader. Will return 0 if it fails.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiShader.html">iShader</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiShaderCompiler.html#a1">CompileShader</a> (<a class="el" href="structiDocumentNode.html">iDocumentNode</a> *templ, int forcepriority=-1)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Compile a template into a shader.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShaderCompiler.html#a2">ValidateTemplate</a> (<a class="el" href="structiDocumentNode.html">iDocumentNode</a> *templ)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Validate if a template is a valid shader to this compiler.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiShaderCompiler.html#a3">IsTemplateToCompiler</a> (<a class="el" href="structiDocumentNode.html">iDocumentNode</a> *templ)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Check if template is parsable by this compiler.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiShaderPriorityList.html">iShaderPriorityList</a> &gt;&nbsp;</td><td valign=bottom><a class="el" href="structiShaderCompiler.html#a4">GetPriorities</a> (<a class="el" href="structiDocumentNode.html">iDocumentNode</a> *templ)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Return a list of all possible priorities (for techniques) for this shader.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Compiler of shaders.
@@ -45,7 +47,7 @@ Compile from a description of the shader to a  compiled shader. The exact schema
 <p>
 
 <p>
-Definition at line <a class="el" href="shader_8h-source.html#l00217">217</a> of file <a class="el" href="shader_8h-source.html">shader.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="shader_8h-source.html#l00229">229</a> of file <a class="el" href="shader_8h-source.html">shader.h</a>.<hr><h2>Member Function Documentation</h2>
 <a name="a1" doxytag="iShaderCompiler::CompileShader"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -55,9 +57,18 @@ Definition at line <a class="el" href="shader_8h-source.html#l00217">217</a> of 
           <td class="md" nowrap valign="top"> virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt;<a class="el" href="structiShader.html">iShader</a>&gt; iShaderCompiler::CompileShader </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structiDocumentNode.html">iDocumentNode</a> *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>templ</em>          </td>
-          <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
+          <td class="mdname" nowrap>&nbsp; <em>templ</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>forcepriority</em> = -1</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
         </tr>
 
       </table>
@@ -72,9 +83,9 @@ Definition at line <a class="el" href="shader_8h-source.html#l00217">217</a> of 
     <td>
 
 <p>
-Compile a template into a shader. Will return 0 if it fails.
+Compile a template into a shader.
 <p>
-    </td>
+Will return 0 if it fails. If the optional 'forcepriority' parameter is given then only the technique with the given priority will be considered. If this technique fails then the shader cannot be compiled. If no priority is forced then the highest priority technique that works will be selected.     </td>
   </tr>
 </table>
 <a name="a0" doxytag="iShaderCompiler::GetName"></a><p>
@@ -105,6 +116,37 @@ Compile a template into a shader. Will return 0 if it fails.
 Get a name identifying this compiler.
 <p>
     </td>
+  </tr>
+</table>
+<a name="a4" doxytag="iShaderCompiler::GetPriorities"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual <a class="el" href="classcsPtr.html">csPtr</a>&lt;<a class="el" href="structiShaderPriorityList.html">iShaderPriorityList</a>&gt; iShaderCompiler::GetPriorities </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiDocumentNode.html">iDocumentNode</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>templ</em>          </td>
+          <td class="md" valign="top">)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Return a list of all possible priorities (for techniques) for this shader.
+<p>
+This is a full list. It might also contain priorities for techniques that don't work on this hardware.     </td>
   </tr>
 </table>
 <a name="a3" doxytag="iShaderCompiler::IsTemplateToCompiler"></a><p>
