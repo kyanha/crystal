@@ -364,6 +364,10 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\csview.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\..\..\include\cstool\debugimagewriter.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\..\..\include\cstool\framedataholder.h
 # End Source File
 # Begin Source File
