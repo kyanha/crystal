@@ -40,56 +40,46 @@
 00022 <span class="preprocessor"></span>
 00023 <span class="preprocessor">#include &lt;math.h&gt;</span>
 00024 <span class="preprocessor">#include &lt;unistd.h&gt;</span>
-00025 
-00026 <span class="comment">// filesystem settings</span>
-00027 <span class="preprocessor">#define CS_MAXPATHLEN   256</span>
-00028 <span class="preprocessor"></span><span class="preprocessor">#define PATH_SEPARATOR  '/'</span>
-00029 <span class="preprocessor"></span><span class="preprocessor">#define PATH_DELIMITER  ':'</span>
-00030 <span class="preprocessor"></span>
-00031 <span class="preprocessor">#define CS_SOFTWARE_2D_DRIVER "crystalspace.graphics2d.x2d"</span>
-00032 <span class="preprocessor"></span>
-00033 <span class="preprocessor">#ifdef CS_SYSDEF_PROVIDE_HARDWARE_MMIO</span>
-00034 <span class="preprocessor"></span>
-00035 <span class="comment">// Defines that this platform supports hardware memory-mapped i/o</span>
-00036 <span class="preprocessor">#define CS_HAS_MEMORY_MAPPED_IO 1</span>
-00037 <span class="preprocessor"></span>
-00038 <span class="comment">// Unix specific memory mapped I/O platform dependent stuff</span>
-00039 <span class="keyword">struct </span>mmioInfo
-00040 {          
-00042     <span class="keywordtype">int</span> hMappedFile;
-00043 
-00045     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *data;
-00046     
-00048     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> file_size;
-00049 
-00051     <span class="keywordtype">bool</span> close;
-00052 };
-00053 
-00054 <span class="preprocessor">#endif // memory-mapped I/O</span>
-00055 <span class="preprocessor"></span>
-00056 <span class="comment">// The 2D graphics driver used by OpenGL renderer</span>
-00057 <span class="preprocessor">#define CS_OPENGL_2D_DRIVER "crystalspace.graphics2d.glx"</span>
-00058 <span class="preprocessor"></span>
-00059 <span class="comment">// The sound driver</span>
-00060 <span class="preprocessor">#define CS_SOUND_DRIVER "crystalspace.sound.driver.oss"</span>
-00061 <span class="preprocessor"></span>
-00062 <span class="preprocessor">#if defined (CS_SYSDEF_PROVIDE_DIR)</span>
-00063 <span class="preprocessor"></span><span class="preprocessor">#  define __NEED_GENERIC_ISDIR</span>
-00064 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00065 <span class="preprocessor"></span>
-00066 <span class="preprocessor">#if !defined(CS_STATIC_LINKED) &amp;&amp; defined(CS_UNIX_PLUGIN_REQUIRES_MAIN)</span>
-00067 <span class="preprocessor"></span><span class="comment">// Dummy main function required for plugin modules on some Unix platforms.</span>
-00068 <span class="comment">// Implementing this function ensures that global constructors in plugin</span>
-00069 <span class="comment">// modules are invoked.</span>
-00070 <span class="preprocessor">#define CS_IMPLEMENT_PLATFORM_PLUGIN \</span>
-00071 <span class="preprocessor">int main (int argc, char* argv[]) \</span>
-00072 <span class="preprocessor">{ \</span>
-00073 <span class="preprocessor">  (void)argc; (void)argv; \</span>
-00074 <span class="preprocessor">  return 0; \</span>
-00075 <span class="preprocessor">}</span>
-00076 <span class="preprocessor"></span><span class="preprocessor">#endif // !CS_STATIC_LINKED &amp;&amp; CS_UNIX_PLUGIN_REQUIRES_MAIN</span>
-00077 <span class="preprocessor"></span>
-00078 <span class="preprocessor">#endif // __CS_CSOSDEFS_H__</span>
+00025 <span class="preprocessor">#include &lt;sys/types.h&gt;</span>
+00026 <span class="preprocessor">#include &lt;sys/select.h&gt;</span>
+00027 <span class="preprocessor">#include &lt;sys/stat.h&gt;</span>
+00028 <span class="preprocessor">#include &lt;dirent.h&gt;</span>
+00029 
+00030 <span class="preprocessor">#ifndef F_OK</span>
+00031 <span class="preprocessor"></span><span class="preprocessor">#  define F_OK 0</span>
+00032 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00033 <span class="preprocessor"></span><span class="preprocessor">#ifndef R_OK</span>
+00034 <span class="preprocessor"></span><span class="preprocessor">#  define R_OK 2</span>
+00035 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00036 <span class="preprocessor"></span><span class="preprocessor">#ifndef W_OK</span>
+00037 <span class="preprocessor"></span><span class="preprocessor">#  define W_OK 4</span>
+00038 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00039 <span class="preprocessor"></span>
+00040 <span class="preprocessor">#define CS_HAS_POSIX_MMAP</span>
+00041 <span class="preprocessor"></span><span class="preprocessor">#define CS_USE_CUSTOM_ISDIR</span>
+00042 <span class="preprocessor"></span><span class="preprocessor">#define CS_MAXPATHLEN 256</span>
+00043 <span class="preprocessor"></span><span class="preprocessor">#define CS_PATH_DELIMITER ':'</span>
+00044 <span class="preprocessor"></span><span class="preprocessor">#define CS_PATH_SEPARATOR '/'</span>
+00045 <span class="preprocessor"></span>
+00046 <span class="preprocessor">#define CS_MKDIR(p) mkdir(p, 0755)</span>
+00047 <span class="preprocessor"></span>
+00048 <span class="preprocessor">#define CS_SOFTWARE_2D_DRIVER "crystalspace.graphics2d.x2d"</span>
+00049 <span class="preprocessor"></span><span class="preprocessor">#define CS_OPENGL_2D_DRIVER   "crystalspace.graphics2d.glx"</span>
+00050 <span class="preprocessor"></span><span class="preprocessor">#define CS_SOUND_DRIVER       "crystalspace.sound.driver.oss"</span>
+00051 <span class="preprocessor"></span>
+00052 <span class="preprocessor">#if !defined(CS_STATIC_LINKED) &amp;&amp; defined(CS_UNIX_PLUGIN_REQUIRES_MAIN)</span>
+00053 <span class="preprocessor"></span><span class="comment">// Dummy main function required for plugin modules on some Unix platforms.</span>
+00054 <span class="comment">// Implementing this function ensures that global constructors in plugin</span>
+00055 <span class="comment">// modules are invoked.</span>
+00056 <span class="preprocessor">#define CS_IMPLEMENT_PLATFORM_PLUGIN \</span>
+00057 <span class="preprocessor">int main (int argc, char* argv[]) \</span>
+00058 <span class="preprocessor">{ \</span>
+00059 <span class="preprocessor">  (void)argc; (void)argv; \</span>
+00060 <span class="preprocessor">  return 0; \</span>
+00061 <span class="preprocessor">}</span>
+00062 <span class="preprocessor"></span><span class="preprocessor">#endif // !CS_STATIC_LINKED &amp;&amp; CS_UNIX_PLUGIN_REQUIRES_MAIN</span>
+00063 <span class="preprocessor"></span>
+00064 <span class="preprocessor">#endif // __CS_CSOSDEFS_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
