@@ -45,7 +45,7 @@
 00026 <span class="preprocessor"></span><span class="preprocessor">#include &lt;GL/gl.h&gt;</span>
 00027 <span class="preprocessor">#endif</span>
 00028 <span class="preprocessor"></span>
-00029 <span class="preprocessor">#include "glextmanager.h"</span>
+00029 <span class="preprocessor">#include "<a class="code" href="glextmanager_8h.html">glextmanager.h</a>"</span>
 00030 
 00031 <span class="comment">// Set to 'true' to force state changing commands. For debugging.</span>
 00032 <span class="preprocessor">#define FORCE_STATE_CHANGE                        false</span><span class="comment">/*true*/</span>
@@ -374,7 +374,7 @@
 00355 <span class="keyword">class </span>csGLStateCacheContext
 00356 {
 00357 <span class="keyword">public</span>:
-00358   csGLExtensionManager* extmgr;
+00358   <a class="code" href="structcsGLExtensionManager.html">csGLExtensionManager</a>* extmgr;
 00359 
 00360   <span class="comment">// Special caches</span>
 00361   GLuint boundtexture[CS_GL_MAX_LAYER]; <span class="comment">// 32 max texture layers</span>
@@ -427,7 +427,7 @@
 00408   DECLARE_CACHED_PARAMETER_4_LAYER (glTexCoordPointer, TexCoordPointer, GLint, tsize,
 00409     GLenum, ttype, GLsizei, tstride, GLvoid*, tpointer);
 00410   
-00411   csGLStateCacheContext (csGLExtensionManager* extmgr)
+00411   csGLStateCacheContext (<a class="code" href="structcsGLExtensionManager.html">csGLExtensionManager</a>* extmgr)
 00412   {
 00413     csGLStateCacheContext::extmgr = extmgr;
 00414   }
@@ -471,12 +471,12 @@
 00453     enabled_GL_TEXTURE_GEN_R = glIsEnabled (GL_TEXTURE_GEN_R);
 00454     enabled_GL_FOG = glIsEnabled (GL_FOG);
 00455 
-00456     <span class="keywordflow">if</span> (extmgr-&gt;CS_GL_ARB_multitexture)
+00456     <span class="keywordflow">if</span> (extmgr-&gt;<a class="code" href="structcsGLExtensionFlags.html#o3">CS_GL_ARB_multitexture</a>)
 00457     {
 00458       <span class="keywordflow">for</span> (i = 0 ; i &lt; CS_GL_MAX_LAYER; i++)
 00459       {
-00460         extmgr-&gt;glActiveTextureARB (GL_TEXTURE0_ARB + i);
-00461         extmgr-&gt;glClientActiveTextureARB (GL_TEXTURE0_ARB + i);
+00460         extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z422_0">glActiveTextureARB</a> (GL_TEXTURE0_ARB + i);
+00461         extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z422_1">glClientActiveTextureARB</a> (GL_TEXTURE0_ARB + i);
 00462         enabled_GL_TEXTURE_1D[i] = glIsEnabled (GL_TEXTURE_1D);
 00463         enabled_GL_TEXTURE_2D[i] = glIsEnabled (GL_TEXTURE_2D);
 00464         enabled_GL_TEXTURE_3D[i] = glIsEnabled (GL_TEXTURE_3D);
@@ -511,10 +511,10 @@
 00493     enabled_GL_COLOR_ARRAY = glIsEnabled (GL_COLOR_ARRAY);
 00494     enabled_GL_NORMAL_ARRAY = glIsEnabled (GL_NORMAL_ARRAY);
 00495 
-00496     <span class="keywordflow">if</span> (extmgr-&gt;CS_GL_ARB_multitexture)
+00496     <span class="keywordflow">if</span> (extmgr-&gt;<a class="code" href="structcsGLExtensionFlags.html#o3">CS_GL_ARB_multitexture</a>)
 00497     {
-00498       extmgr-&gt;glActiveTextureARB (GL_TEXTURE0_ARB);
-00499       extmgr-&gt;glClientActiveTextureARB (GL_TEXTURE0_ARB);
+00498       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z422_0">glActiveTextureARB</a> (GL_TEXTURE0_ARB);
+00499       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z422_1">glClientActiveTextureARB</a> (GL_TEXTURE0_ARB);
 00500     }
 00501     memset (boundtexture, 0, CS_GL_MAX_LAYER * <span class="keyword">sizeof</span> (GLuint));
 00502     currentUnit = 0;
@@ -542,10 +542,10 @@
 <a name="l00530"></a><a class="code" href="classcsGLStateCache.html">00530</a> <span class="keyword">class </span><a class="code" href="classcsGLStateCache.html">csGLStateCache</a>
 00531 {
 00532 <span class="keyword">public</span>:
-00533   csGLExtensionManager* extmgr;
+00533   <a class="code" href="structcsGLExtensionManager.html">csGLExtensionManager</a>* extmgr;
 00534   csGLStateCacheContext* currentContext;
 00535 
-00536   <a class="code" href="classcsGLStateCache.html">csGLStateCache</a> (csGLExtensionManager* extmgr)
+00536   <a class="code" href="classcsGLStateCache.html">csGLStateCache</a> (<a class="code" href="structcsGLExtensionManager.html">csGLExtensionManager</a>* extmgr)
 00537   {
 00538     csGLStateCache::extmgr = extmgr;
 00539     currentContext = 0;
@@ -630,10 +630,10 @@
 00622   }
 00623   <span class="keywordtype">void</span> ActivateTU ()
 00624   {
-00625     <span class="keywordflow">if</span> (currentContext-&gt;activeUnit != currentContext-&gt;currentUnit &amp;&amp; extmgr-&gt;CS_GL_ARB_multitexture)
+00625     <span class="keywordflow">if</span> (currentContext-&gt;activeUnit != currentContext-&gt;currentUnit &amp;&amp; extmgr-&gt;<a class="code" href="structcsGLExtensionFlags.html#o3">CS_GL_ARB_multitexture</a>)
 00626     {
-00627       extmgr-&gt;glActiveTextureARB (GL_TEXTURE0_ARB + currentContext-&gt;currentUnit);
-00628       extmgr-&gt;glClientActiveTextureARB (GL_TEXTURE0_ARB + currentContext-&gt;currentUnit);
+00627       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z422_0">glActiveTextureARB</a> (GL_TEXTURE0_ARB + currentContext-&gt;currentUnit);
+00628       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z422_1">glClientActiveTextureARB</a> (GL_TEXTURE0_ARB + currentContext-&gt;currentUnit);
 00629     }
 00630     currentContext-&gt;activeUnit = currentContext-&gt;currentUnit;
 00631   }
@@ -645,7 +645,7 @@
 00637     {
 00638       <span class="keywordflow">if</span> (<span class="keywordtype">id</span> != currentContext-&gt;currentIndexID)
 00639       {
-00640         extmgr-&gt;glBindBufferARB (target, <span class="keywordtype">id</span>);
+00640         extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z567_0">glBindBufferARB</a> (target, <span class="keywordtype">id</span>);
 00641         currentContext-&gt;currentIndexID = id;
 00642       }
 00643     } 
@@ -653,7 +653,7 @@
 00645     {
 00646       <span class="keywordflow">if</span> (<span class="keywordtype">id</span> != currentContext-&gt;currentBufferID)
 00647       {
-00648         extmgr-&gt;glBindBufferARB (target, <span class="keywordtype">id</span>);
+00648         extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z567_0">glBindBufferARB</a> (target, <span class="keywordtype">id</span>);
 00649         currentContext-&gt;currentBufferID = id;
 00650         currentContext-&gt;parameter_vpointer = (GLvoid*)~0; <span class="comment">//invalidate vertexpointer</span>
 00651         currentContext-&gt;parameter_npointer = (GLvoid*)~0; <span class="comment">//invalidate vertexpointer</span>
