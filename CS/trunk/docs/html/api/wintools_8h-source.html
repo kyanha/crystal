@@ -43,7 +43,7 @@
 00029 <span class="preprocessor">#include &lt;winnls.h&gt;</span> <span class="comment">// contains MultiByteToWideChar()/WideCharToMultiByte()</span>
 00030 <span class="preprocessor">#include "sanity.inc"</span>
 00031 
-<a name="l00041"></a><a class="code" href="wintools_8h.html#a0">00041</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">wchar_t</span>* <a class="code" href="wintools_8h.html#a0">cswinAnsiToWide</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* ansi, 
+<a name="l00041"></a><a class="code" href="wintools_8h.html#a4">00041</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">wchar_t</span>* <a class="code" href="wintools_8h.html#a4">cswinAnsiToWide</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* ansi, 
 00042                                          UINT codePage = CP_ACP)
 00043 {
 00044   <span class="keywordtype">int</span> bufsize;
@@ -58,7 +58,7 @@
 00053   <span class="keywordflow">return</span> buf;
 00054 }
 00055 
-<a name="l00065"></a><a class="code" href="wintools_8h.html#a1">00065</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">char</span>* <a class="code" href="wintools_8h.html#a1">cswinWideToAnsi</a> (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* wide, 
+<a name="l00065"></a><a class="code" href="wintools_8h.html#a5">00065</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">char</span>* <a class="code" href="wintools_8h.html#a5">cswinWideToAnsi</a> (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* wide, 
 00066                                      UINT codePage = CP_ACP)
 00067 {
 00068   <span class="keywordtype">int</span> bufsize;
@@ -79,7 +79,7 @@
 00096   <span class="keywordtype">char</span>* s;
 00097 <span class="keyword">public</span>:
 <a name="l00099"></a><a class="code" href="structcswinWtoA.html#a0">00099</a>   <a class="code" href="structcswinWtoA.html">cswinWtoA</a> (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* ws)
-00100   { s = <a class="code" href="wintools_8h.html#a1">cswinWideToAnsi</a> (ws); }
+00100   { s = <a class="code" href="wintools_8h.html#a5">cswinWideToAnsi</a> (ws); }
 <a name="l00102"></a><a class="code" href="structcswinWtoA.html#a1">00102</a>   ~<a class="code" href="structcswinWtoA.html">cswinWtoA</a> ()
 00103   { <span class="keyword">delete</span>[] s; }
 <a name="l00105"></a><a class="code" href="structcswinWtoA.html#a2">00105</a>   operator const char* ()<span class="keyword"> const</span>
@@ -93,7 +93,7 @@
 00122 <span class="keyword">public</span>:
 <a name="l00124"></a><a class="code" href="structcswinCtoA.html#a0">00124</a>   cswinCtoA (<span class="keyword">const</span> <span class="keywordtype">char</span>* ws, UINT codePage = CP_ACP)
 00125   { 
-00126     s = <a class="code" href="wintools_8h.html#a1">cswinWideToAnsi</a> (<a class="code" href="structcsCtoW.html">csCtoW</a> (ws), codePage); 
+00126     s = <a class="code" href="wintools_8h.html#a5">cswinWideToAnsi</a> (<a class="code" href="structcsCtoW.html">csCtoW</a> (ws), codePage); 
 00127   }
 <a name="l00129"></a><a class="code" href="structcswinCtoA.html#a1">00129</a>   ~cswinCtoA ()
 00130   { <span class="keyword">delete</span>[] s; }
@@ -101,11 +101,20 @@
 00133 <span class="keyword">  </span>{ <span class="keywordflow">return</span> s; }
 00134 };
 00135 
-00147 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">char</span>* <a class="code" href="wintools_8h.html#a2">cswinGetErrorMessage</a> (HRESULT code);
-00158 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">wchar_t</span>* <a class="code" href="wintools_8h.html#a3">cswinGetErrorMessageW</a> (HRESULT code);
-00168 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">bool</span> <a class="code" href="wintools_8h.html#a4">cswinIsWinNT</a> ();
-00169 
-00170 <span class="preprocessor">#endif</span>
+00147 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">char</span>* <a class="code" href="wintools_8h.html#a6">cswinGetErrorMessage</a> (HRESULT code);
+00158 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">wchar_t</span>* <a class="code" href="wintools_8h.html#a7">cswinGetErrorMessageW</a> (HRESULT code);
+00159 
+<a name="l00161"></a><a class="code" href="wintools_8h.html#a9">00161</a> <span class="keyword">enum</span> <a class="code" href="wintools_8h.html#a9">cswinWindowsVersion</a>
+00162 {
+00164   <a class="code" href="wintools_8h.html#a9a0">cswinWin9x</a> = 30,
+00166   <a class="code" href="wintools_8h.html#a9a1">cswinWinNT</a> = 40,
+00168   <a class="code" href="wintools_8h.html#a9a2">cswinWin2K</a> = 50,
+00170   <a class="code" href="wintools_8h.html#a9a3">cswinWinXP</a> = 51
+00171 };
+00172 
+00184 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">bool</span> <a class="code" href="wintools_8h.html#a8">cswinIsWinNT</a> (<a class="code" href="wintools_8h.html#a9">cswinWindowsVersion</a>* version = 0);
+00185 
+00186 <span class="preprocessor">#endif</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
