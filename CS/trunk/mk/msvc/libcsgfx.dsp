@@ -138,15 +138,19 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\libs\csgfx\csimage.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgfx\csimgvec.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csgfx\gradient.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgfx\imagemanipulate.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgfx\imagetools.cpp
 # End Source File
 # Begin Source File
 
@@ -190,10 +194,6 @@ SOURCE=..\..\libs\csgfx\xorpat.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\libs\csgfx\..\..\include\csgfx\csimage.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\csimgvec.h
 # End Source File
 # Begin Source File
@@ -203,6 +203,14 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\csrgbvct.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\gradient.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\imagemanipulate.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\imagetools.h
 # End Source File
 # Begin Source File
 
