@@ -37,159 +37,173 @@
 00020 <span class="preprocessor">#ifndef __CS_IVIDEO_RNDBUF_H__</span>
 00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IVIDEO_RNDBUF_H__</span>
 00022 <span class="preprocessor"></span>
-00031 <span class="preprocessor">#include "<a class="code" href="csutil_2strset_8h.html">csutil/strset.h</a>"</span>
-00032 <span class="preprocessor">#include "<a class="code" href="refcount_8h.html">csutil/refcount.h</a>"</span>
-00033 
-00034 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
-00035 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
-00036 <span class="keyword">class </span><a class="code" href="classcsColor.html">csColor</a>;
-00037 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
-00038 <span class="keyword">struct </span><a class="code" href="structiTextureHandle.html">iTextureHandle</a>;
-00039 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
-00040 <span class="keyword">class </span><a class="code" href="classcsRenderBufferHolder.html">csRenderBufferHolder</a>;
-00041 
-<a name="l00047"></a><a class="code" href="group__gfx3d.html#ga73">00047</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga73">csRenderBufferType</a>
-00048 {
-00050   <a class="code" href="group__gfx3d.html#gga73a1">CS_BUF_DYNAMIC</a>,
-00052   <a class="code" href="group__gfx3d.html#gga73a2">CS_BUF_STATIC</a>,
-00054   <a class="code" href="group__gfx3d.html#gga73a3">CS_BUF_STREAM</a>
-00055 };
-00056 
-<a name="l00058"></a><a class="code" href="group__gfx3d.html#ga74">00058</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga74">csRenderBufferComponentType</a>
-00059 {
-00060   CS_BUFCOMP_BYTE = 0,
-00061   CS_BUFCOMP_UNSIGNED_BYTE,
-00062   CS_BUFCOMP_SHORT,
-00063   CS_BUFCOMP_UNSIGNED_SHORT,
-00064   CS_BUFCOMP_INT,
-00065   CS_BUFCOMP_UNSIGNED_INT,
-00066   CS_BUFCOMP_FLOAT,
-00067   CS_BUFCOMP_DOUBLE
-00068 };
+00031 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
+00032 <span class="preprocessor">#include "<a class="code" href="csutil_2strset_8h.html">csutil/strset.h</a>"</span>
+00033 <span class="preprocessor">#include "<a class="code" href="refcount_8h.html">csutil/refcount.h</a>"</span>
+00034 
+00035 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
+00036 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
+00037 <span class="keyword">class </span><a class="code" href="classcsColor.html">csColor</a>;
+00038 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
+00039 <span class="keyword">struct </span><a class="code" href="structiTextureHandle.html">iTextureHandle</a>;
+00040 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
+00041 <span class="keyword">class </span><a class="code" href="classcsRenderBufferHolder.html">csRenderBufferHolder</a>;
+00042 
+<a name="l00048"></a><a class="code" href="group__gfx3d.html#ga74">00048</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga74">csRenderBufferType</a>
+00049 {
+00051   <a class="code" href="group__gfx3d.html#gga74a2">CS_BUF_DYNAMIC</a>,
+00053   <a class="code" href="group__gfx3d.html#gga74a3">CS_BUF_STATIC</a>,
+00055   <a class="code" href="group__gfx3d.html#gga74a4">CS_BUF_STREAM</a>
+00056 };
+00057 
+<a name="l00059"></a><a class="code" href="group__gfx3d.html#ga75">00059</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga75">csRenderBufferComponentType</a>
+00060 {
+00061   CS_BUFCOMP_BYTE = 0,
+00062   CS_BUFCOMP_UNSIGNED_BYTE,
+00063   CS_BUFCOMP_SHORT,
+00064   CS_BUFCOMP_UNSIGNED_SHORT,
+00065   CS_BUFCOMP_INT,
+00066   CS_BUFCOMP_UNSIGNED_INT,
+00067   CS_BUFCOMP_FLOAT,
+00068   CS_BUFCOMP_DOUBLE,
 00069 
-<a name="l00075"></a><a class="code" href="group__gfx3d.html#ga75">00075</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga75">csRenderBufferLockType</a>
-00076 {
-00077   CS_BUF_LOCK_NOLOCK,
-00078   CS_BUF_LOCK_NORMAL,
-00079   CS_BUF_LOCK_READ
-00080 };
-00081 
-00082 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>, 0, 0, 3);
-00083 
-<a name="l00088"></a><a class="code" href="structiRenderBuffer.html">00088</a> <span class="keyword">struct </span><a class="code" href="structiRenderBuffer.html">iRenderBuffer</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00070   CS_BUFCOMP_TYPECOUNT
+00071 };
+00072 
+<a name="l00078"></a><a class="code" href="group__gfx3d.html#ga76">00078</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga76">csRenderBufferLockType</a>
+00079 {
+00080   CS_BUF_LOCK_NOLOCK,
+00081   CS_BUF_LOCK_READ,
+00082   CS_BUF_LOCK_NORMAL
+00083 };
+00084 
+<a name="l00088"></a><a class="code" href="group__gfx3d.html#ga0">00088</a> <span class="keyword">static</span> <span class="keyword">const</span> size_t <a class="code" href="group__gfx3d.html#ga0">csRenderBufferComponentSizes</a>[CS_BUFCOMP_TYPECOUNT] = 
 00089 {
-00100   <span class="keyword">virtual</span> <span class="keywordtype">void</span>* <a class="code" href="structiRenderBuffer.html#a0">Lock</a>(<a class="code" href="group__gfx3d.html#ga75">csRenderBufferLockType</a> lockType, 
-00101     <span class="keywordtype">bool</span> samePointer = <span class="keyword">false</span>) = 0;
-00102 
-00104   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a1">Release</a>() = 0;
-00105 
-00107   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a2">CopyToBuffer</a>(<span class="keyword">const</span> <span class="keywordtype">void</span> *data, size_t length) = 0;
-00108 
-00110   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a3">SetComponentCount</a> (<span class="keywordtype">int</span> count) = 0;
-00111 
-00113   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiRenderBuffer.html#a4">GetComponentCount</a> () <span class="keyword">const</span> = 0;
-00114 
-00116   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a5">SetComponentType</a> (<a class="code" href="group__gfx3d.html#ga74">csRenderBufferComponentType</a> type) = 0;
-00117 
-00119   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga74">csRenderBufferComponentType</a> <a class="code" href="structiRenderBuffer.html#a6">GetComponentType</a> () <span class="keyword">const</span> = 0;
-00120 
-00122   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga73">csRenderBufferType</a> <a class="code" href="structiRenderBuffer.html#a7">GetBufferType</a>() <span class="keyword">const</span> = 0;
-00123 
-00125   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a8">GetSize</a>() <span class="keyword">const</span> = 0;
-00126 
-00128   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a9">SetStride</a>(<span class="keywordtype">int</span> stride) = 0;
-00129 
-00131   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiRenderBuffer.html#a10">GetStride</a>() <span class="keyword">const</span> = 0;
-00132 
-00134   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a11">SetOffset</a>(<span class="keywordtype">int</span> offset) = 0;
-00135 
-00137   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="structiRenderBuffer.html#a12">GetVersion</a> () = 0;
-00138 };
-00139 
-<a name="l00144"></a><a class="code" href="group__gfx3d.html#ga76">00144</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga76">csRenderBufferName</a>
-00145 {
-00146   CS_BUFFER_NONE = -1,
-00148   <a class="code" href="group__gfx3d.html#gga76a16">CS_BUFFER_INDEX</a>,
-00150   <a class="code" href="group__gfx3d.html#gga76a17">CS_BUFFER_POSITION</a>,
-00152   <a class="code" href="group__gfx3d.html#gga76a18">CS_BUFFER_NORMAL</a>,
-00154   <a class="code" href="group__gfx3d.html#gga76a19">CS_BUFFER_COLOR</a>,
-00156   <a class="code" href="group__gfx3d.html#gga76a20">CS_BUFFER_COLOR_LIGHTING</a>,
-00158   <a class="code" href="group__gfx3d.html#gga76a21">CS_BUFFER_TEXCOORD0</a>,
-00160   <a class="code" href="group__gfx3d.html#gga76a22">CS_BUFFER_TEXCOORD1</a>,
-00162   <a class="code" href="group__gfx3d.html#gga76a23">CS_BUFFER_TEXCOORD2</a>,
-00164   <a class="code" href="group__gfx3d.html#gga76a24">CS_BUFFER_TEXCOORD3</a>,
-00166   <a class="code" href="group__gfx3d.html#gga76a25">CS_BUFFER_TEXCOORD_LIGHTMAP</a>,
-00168   <a class="code" href="group__gfx3d.html#gga76a26">CS_BUFFER_GENERIC0</a>,
-00170   <a class="code" href="group__gfx3d.html#gga76a27">CS_BUFFER_GENERIC1</a>,
-00172   <a class="code" href="group__gfx3d.html#gga76a28">CS_BUFFER_GENERIC2</a>,
-00174   <a class="code" href="group__gfx3d.html#gga76a29">CS_BUFFER_GENERIC3</a>,
-00176   <a class="code" href="group__gfx3d.html#gga76a30">CS_BUFFER_TANGENT</a>,
-00178   <a class="code" href="group__gfx3d.html#gga76a31">CS_BUFFER_BINORMAL</a>,
-00180   <a class="code" href="group__gfx3d.html#gga76a32">CS_BUFFER_COUNT</a>
-00181 };
-00182 
-00183 <span class="preprocessor">#define CS_BUFFER_MAKE_MASKABLE(x) (1&lt;&lt;(x))</span>
-00184 <span class="preprocessor"></span>
-<a name="l00186"></a><a class="code" href="group__gfx3d.html#ga77">00186</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga77">csRenderBufferNameMask</a>
-00187 {
-00189   <a class="code" href="group__gfx3d.html#gga77a33">CS_BUFFER_INDEX_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a16">CS_BUFFER_INDEX</a>,
-00191   <a class="code" href="group__gfx3d.html#gga77a34">CS_BUFFER_POSITION_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a17">CS_BUFFER_POSITION</a>,
-00193   <a class="code" href="group__gfx3d.html#gga77a35">CS_BUFFER_NORMAL_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a18">CS_BUFFER_NORMAL</a>,
-00195   <a class="code" href="group__gfx3d.html#gga77a36">CS_BUFFER_COLOR_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a19">CS_BUFFER_COLOR</a>,
-00197   <a class="code" href="group__gfx3d.html#gga77a37">CS_BUFFER_COLOR_LIGHTING_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a20">CS_BUFFER_COLOR_LIGHTING</a>,
-00199   <a class="code" href="group__gfx3d.html#gga77a38">CS_BUFFER_TEXCOORD0_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a21">CS_BUFFER_TEXCOORD0</a>,
-00201   <a class="code" href="group__gfx3d.html#gga77a39">CS_BUFFER_TEXCOORD1_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a22">CS_BUFFER_TEXCOORD1</a>,
-00203   <a class="code" href="group__gfx3d.html#gga77a40">CS_BUFFER_TEXCOORD2_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a23">CS_BUFFER_TEXCOORD2</a>,
-00205   <a class="code" href="group__gfx3d.html#gga77a41">CS_BUFFER_TEXCOORD3_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a24">CS_BUFFER_TEXCOORD3</a>,
-00207   <a class="code" href="group__gfx3d.html#gga77a42">CS_BUFFER_TEXCOORD_LIGHTMAP_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a25">CS_BUFFER_TEXCOORD_LIGHTMAP</a>,
-00209   <a class="code" href="group__gfx3d.html#gga77a43">CS_BUFFER_GENERIC0_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a26">CS_BUFFER_GENERIC0</a>,
-00211   <a class="code" href="group__gfx3d.html#gga77a44">CS_BUFFER_GENERIC1_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a27">CS_BUFFER_GENERIC1</a>,
-00213   <a class="code" href="group__gfx3d.html#gga77a45">CS_BUFFER_GENERIC2_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a28">CS_BUFFER_GENERIC2</a>,
-00215   <a class="code" href="group__gfx3d.html#gga77a46">CS_BUFFER_GENERIC3_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a29">CS_BUFFER_GENERIC3</a>,
-00217   <a class="code" href="group__gfx3d.html#gga77a47">CS_BUFFER_TANGENT_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a30">CS_BUFFER_TANGENT</a>,
-00219   <a class="code" href="group__gfx3d.html#gga77a48">CS_BUFFER_BINORMAL_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga76a31">CS_BUFFER_BINORMAL</a>,
-00221   <a class="code" href="group__gfx3d.html#gga77a49">CS_BUFFER_ALL_MASK</a> = ~0
-00222 };
-00223 
-00224 
-00225 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiRenderBufferAccessor.html">iRenderBufferAccessor</a>,0,0,1);
-<a name="l00231"></a><a class="code" href="structiRenderBufferAccessor.html">00231</a> <span class="keyword">struct </span><a class="code" href="structiRenderBufferAccessor.html">iRenderBufferAccessor</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00232 {
-00234   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBufferAccessor.html#a0">PreGetBuffer</a> (<a class="code" href="classcsRenderBufferHolder.html">csRenderBufferHolder</a>* holder, <a class="code" href="group__gfx3d.html#ga76">csRenderBufferName</a> buffer) = 0;
-00235 };
-00236 
-<a name="l00241"></a><a class="code" href="classcsRenderBufferHolder.html">00241</a> <span class="keyword">class </span><a class="code" href="classcsRenderBufferHolder.html">csRenderBufferHolder</a> : <span class="keyword">public</span> <a class="code" href="classcsRefCount.html">csRefCount</a>
-00242 {
-00243 <span class="keyword">public</span>:
-<a name="l00249"></a><a class="code" href="classcsRenderBufferHolder.html#a0">00249</a>   <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* <a class="code" href="classcsRenderBufferHolder.html#a0">GetRenderBuffer</a> (csRenderBufferName bufferName)
-00250   {
-00251     <span class="keywordflow">if</span> (bufferName &lt; <a class="code" href="group__gfx3d.html#gga76a16">CS_BUFFER_INDEX</a>) <span class="keywordflow">return</span> 0;
-00252     <span class="keywordflow">if</span> (accessor &amp;&amp; 
-00253         accessorMask &amp; CS_BUFFER_MAKE_MASKABLE(bufferName))
-00254       accessor-&gt;PreGetBuffer (<span class="keyword">this</span>, bufferName);
+00090   <span class="keyword">sizeof</span> (<span class="keywordtype">char</span>), <span class="keyword">sizeof</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>), 
+00091   <span class="keyword">sizeof</span> (<span class="keywordtype">short</span>), <span class="keyword">sizeof</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>),
+00092   <span class="keyword">sizeof</span> (<span class="keywordtype">int</span>), <span class="keyword">sizeof</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>),
+00093   <span class="keyword">sizeof</span> (<span class="keywordtype">float</span>),
+00094   <span class="keyword">sizeof</span> (<span class="keywordtype">double</span>)
+00095 };
+00096 
+00097 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>, 0, 1, 0);
+00098 
+<a name="l00110"></a><a class="code" href="structiRenderBuffer.html">00110</a> <span class="keyword">struct </span><a class="code" href="structiRenderBuffer.html">iRenderBuffer</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00111 {
+00122   <span class="keyword">virtual</span> <span class="keywordtype">void</span>* <a class="code" href="structiRenderBuffer.html#a0">Lock</a>(<a class="code" href="group__gfx3d.html#ga76">csRenderBufferLockType</a> lockType<span class="comment">/*, </span>
+00123 <span class="comment">    bool samePointer = false*/</span>) = 0;
+00124 
+00126   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a1">Release</a>() = 0;
+00127 
+00133   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a2">CopyInto</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *data, size_t elementCount) = 0;
+00134 
+00136   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiRenderBuffer.html#a3">GetComponentCount</a> () <span class="keyword">const</span> = 0;
+00137 
+00139   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga75">csRenderBufferComponentType</a> <a class="code" href="structiRenderBuffer.html#a4">GetComponentType</a> () <span class="keyword">const</span> = 0;
+00140 
+00142   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga74">csRenderBufferType</a> <a class="code" href="structiRenderBuffer.html#a5">GetBufferType</a>() <span class="keyword">const</span> = 0;
+00143 
+00145   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a6">GetSize</a>() <span class="keyword">const</span> = 0;
+00146 
+00148   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a7">GetStride</a>() <span class="keyword">const</span> = 0;
+00149 
+00151   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a8">GetElementDistance</a>() <span class="keyword">const</span> = 0;
+00152 
+00154   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a9">GetOffset</a>() <span class="keyword">const</span> = 0;
+00155 
+00157   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="structiRenderBuffer.html#a10">GetVersion</a> () = 0;
+00158 
+00165   <span class="keyword">virtual</span> <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* <a class="code" href="structiRenderBuffer.html#a11">GetMasterBuffer</a> () <span class="keyword">const</span> = 0;
+00166 
+00167   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsIndexBuffer() <span class="keyword">const</span> = 0;
+00168   <span class="keyword">virtual</span> size_t GetRangeStart() <span class="keyword">const</span> = 0;
+00169   <span class="keyword">virtual</span> size_t GetRangeEnd() <span class="keyword">const</span> = 0;
+00170 };
+00171 
+<a name="l00176"></a><a class="code" href="group__gfx3d.html#ga77">00176</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga77">csRenderBufferName</a>
+00177 {
+00178   CS_BUFFER_NONE = -1,
+00180   <a class="code" href="group__gfx3d.html#gga77a18">CS_BUFFER_INDEX</a>,
+00182   <a class="code" href="group__gfx3d.html#gga77a19">CS_BUFFER_POSITION</a>,
+00184   <a class="code" href="group__gfx3d.html#gga77a20">CS_BUFFER_NORMAL</a>,
+00186   <a class="code" href="group__gfx3d.html#gga77a21">CS_BUFFER_COLOR</a>,
+00188   <a class="code" href="group__gfx3d.html#gga77a22">CS_BUFFER_COLOR_LIGHTING</a>,
+00190   <a class="code" href="group__gfx3d.html#gga77a23">CS_BUFFER_TEXCOORD0</a>,
+00192   <a class="code" href="group__gfx3d.html#gga77a24">CS_BUFFER_TEXCOORD1</a>,
+00194   <a class="code" href="group__gfx3d.html#gga77a25">CS_BUFFER_TEXCOORD2</a>,
+00196   <a class="code" href="group__gfx3d.html#gga77a26">CS_BUFFER_TEXCOORD3</a>,
+00198   <a class="code" href="group__gfx3d.html#gga77a27">CS_BUFFER_TEXCOORD_LIGHTMAP</a>,
+00200   <a class="code" href="group__gfx3d.html#gga77a28">CS_BUFFER_GENERIC0</a>,
+00202   <a class="code" href="group__gfx3d.html#gga77a29">CS_BUFFER_GENERIC1</a>,
+00204   <a class="code" href="group__gfx3d.html#gga77a30">CS_BUFFER_GENERIC2</a>,
+00206   <a class="code" href="group__gfx3d.html#gga77a31">CS_BUFFER_GENERIC3</a>,
+00208   <a class="code" href="group__gfx3d.html#gga77a32">CS_BUFFER_TANGENT</a>,
+00210   <a class="code" href="group__gfx3d.html#gga77a33">CS_BUFFER_BINORMAL</a>,
+00212   <a class="code" href="group__gfx3d.html#gga77a34">CS_BUFFER_COUNT</a>
+00213 };
+00214 
+00215 <span class="preprocessor">#define CS_BUFFER_MAKE_MASKABLE(x) (1&lt;&lt;(x))</span>
+00216 <span class="preprocessor"></span>
+<a name="l00218"></a><a class="code" href="group__gfx3d.html#ga78">00218</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#ga78">csRenderBufferNameMask</a>
+00219 {
+00221   <a class="code" href="group__gfx3d.html#gga78a35">CS_BUFFER_INDEX_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a18">CS_BUFFER_INDEX</a>,
+00223   <a class="code" href="group__gfx3d.html#gga78a36">CS_BUFFER_POSITION_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a19">CS_BUFFER_POSITION</a>,
+00225   <a class="code" href="group__gfx3d.html#gga78a37">CS_BUFFER_NORMAL_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a20">CS_BUFFER_NORMAL</a>,
+00227   <a class="code" href="group__gfx3d.html#gga78a38">CS_BUFFER_COLOR_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a21">CS_BUFFER_COLOR</a>,
+00229   <a class="code" href="group__gfx3d.html#gga78a39">CS_BUFFER_COLOR_LIGHTING_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a22">CS_BUFFER_COLOR_LIGHTING</a>,
+00231   <a class="code" href="group__gfx3d.html#gga78a40">CS_BUFFER_TEXCOORD0_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a23">CS_BUFFER_TEXCOORD0</a>,
+00233   <a class="code" href="group__gfx3d.html#gga78a41">CS_BUFFER_TEXCOORD1_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a24">CS_BUFFER_TEXCOORD1</a>,
+00235   <a class="code" href="group__gfx3d.html#gga78a42">CS_BUFFER_TEXCOORD2_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a25">CS_BUFFER_TEXCOORD2</a>,
+00237   <a class="code" href="group__gfx3d.html#gga78a43">CS_BUFFER_TEXCOORD3_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a26">CS_BUFFER_TEXCOORD3</a>,
+00239   <a class="code" href="group__gfx3d.html#gga78a44">CS_BUFFER_TEXCOORD_LIGHTMAP_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a27">CS_BUFFER_TEXCOORD_LIGHTMAP</a>,
+00241   <a class="code" href="group__gfx3d.html#gga78a45">CS_BUFFER_GENERIC0_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a28">CS_BUFFER_GENERIC0</a>,
+00243   <a class="code" href="group__gfx3d.html#gga78a46">CS_BUFFER_GENERIC1_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a29">CS_BUFFER_GENERIC1</a>,
+00245   <a class="code" href="group__gfx3d.html#gga78a47">CS_BUFFER_GENERIC2_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a30">CS_BUFFER_GENERIC2</a>,
+00247   <a class="code" href="group__gfx3d.html#gga78a48">CS_BUFFER_GENERIC3_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a31">CS_BUFFER_GENERIC3</a>,
+00249   <a class="code" href="group__gfx3d.html#gga78a49">CS_BUFFER_TANGENT_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a32">CS_BUFFER_TANGENT</a>,
+00251   <a class="code" href="group__gfx3d.html#gga78a50">CS_BUFFER_BINORMAL_MASK</a> = 1 &lt;&lt; <a class="code" href="group__gfx3d.html#gga77a33">CS_BUFFER_BINORMAL</a>,
+00253   <a class="code" href="group__gfx3d.html#gga78a51">CS_BUFFER_ALL_MASK</a> = ~0
+00254 };
 00255 
-00256     <span class="keywordflow">return</span> buffers[bufferName];
-00257   }
-00258 
-<a name="l00262"></a><a class="code" href="classcsRenderBufferHolder.html#a1">00262</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferHolder.html#a1">SetRenderBuffer</a> (csRenderBufferName bufferName, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* buffer)
-00263   {
-00264     CS_ASSERT(bufferName &gt;= 0 &amp;&amp; bufferName &lt; <a class="code" href="group__gfx3d.html#gga76a32">CS_BUFFER_COUNT</a>);
-00265     buffers[bufferName] = buffer;
-00266   }
-00267 
-<a name="l00271"></a><a class="code" href="classcsRenderBufferHolder.html#a2">00271</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferHolder.html#a2">SetAccessor</a> (<a class="code" href="structiRenderBufferAccessor.html">iRenderBufferAccessor</a>* a, <a class="code" href="group__util.html#ga4">uint32</a> mask)
-00272   {
-00273     accessorMask = mask;
-00274     accessor = a;
-00275   }
-00276 
-00277 <span class="keyword">protected</span>:
-00278   <a class="code" href="group__util.html#ga4">uint32</a> accessorMask;
-00279   <a class="code" href="classcsRef.html">csRef&lt;iRenderBufferAccessor&gt;</a> accessor;
-00280   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> buffers[<a class="code" href="group__gfx3d.html#gga76a32">CS_BUFFER_COUNT</a>];
-00281 };
-00282 
-00285 <span class="preprocessor">#endif // __CS_IVIDEO_RNDBUF_H__</span>
+00256 
+00257 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiRenderBufferAccessor.html">iRenderBufferAccessor</a>,0,0,1);
+<a name="l00263"></a><a class="code" href="structiRenderBufferAccessor.html">00263</a> <span class="keyword">struct </span><a class="code" href="structiRenderBufferAccessor.html">iRenderBufferAccessor</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00264 {
+00266   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBufferAccessor.html#a0">PreGetBuffer</a> (<a class="code" href="classcsRenderBufferHolder.html">csRenderBufferHolder</a>* holder, <a class="code" href="group__gfx3d.html#ga77">csRenderBufferName</a> buffer) = 0;
+00267 };
+00268 
+<a name="l00273"></a><a class="code" href="classcsRenderBufferHolder.html">00273</a> <span class="keyword">class </span><a class="code" href="classcsRenderBufferHolder.html">csRenderBufferHolder</a> : <span class="keyword">public</span> <a class="code" href="classcsRefCount.html">csRefCount</a>
+00274 {
+00275 <span class="keyword">public</span>:
+<a name="l00281"></a><a class="code" href="classcsRenderBufferHolder.html#a0">00281</a>   <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* <a class="code" href="classcsRenderBufferHolder.html#a0">GetRenderBuffer</a> (csRenderBufferName bufferName)
+00282   {
+00283     <span class="keywordflow">if</span> (bufferName &lt; <a class="code" href="group__gfx3d.html#gga77a18">CS_BUFFER_INDEX</a>) <span class="keywordflow">return</span> 0;
+00284     <span class="keywordflow">if</span> (accessor &amp;&amp; 
+00285         accessorMask &amp; CS_BUFFER_MAKE_MASKABLE(bufferName))
+00286       accessor-&gt;PreGetBuffer (<span class="keyword">this</span>, bufferName);
+00287 
+00288     <span class="keywordflow">return</span> buffers[bufferName];
+00289   }
+00290 
+<a name="l00294"></a><a class="code" href="classcsRenderBufferHolder.html#a1">00294</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferHolder.html#a1">SetRenderBuffer</a> (csRenderBufferName bufferName, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* buffer)
+00295   {
+00296     CS_ASSERT(bufferName &gt;= 0 &amp;&amp; bufferName &lt; <a class="code" href="group__gfx3d.html#gga77a34">CS_BUFFER_COUNT</a>);
+00297     buffers[bufferName] = buffer;
+00298   }
+00299 
+<a name="l00303"></a><a class="code" href="classcsRenderBufferHolder.html#a2">00303</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferHolder.html#a2">SetAccessor</a> (<a class="code" href="structiRenderBufferAccessor.html">iRenderBufferAccessor</a>* a, <a class="code" href="group__util.html#ga4">uint32</a> mask)
+00304   {
+00305     accessorMask = mask;
+00306     accessor = a;
+00307   }
+00308 
+00309 <span class="keyword">protected</span>:
+00310   <a class="code" href="group__util.html#ga4">uint32</a> accessorMask;
+00311   <a class="code" href="classcsRef.html">csRef&lt;iRenderBufferAccessor&gt;</a> accessor;
+00312   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> buffers[<a class="code" href="group__gfx3d.html#gga77a34">CS_BUFFER_COUNT</a>];
+00313 };
+00314 
+00317 <span class="preprocessor">#endif // __CS_IVIDEO_RNDBUF_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.6 
 </small></address> </div></body> </html>

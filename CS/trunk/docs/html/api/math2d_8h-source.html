@@ -60,8 +60,8 @@
 <a name="l00059"></a><a class="code" href="classcsMath2.html#e0">00059</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> WhichSide2D (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
 00060                           <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; s1, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; s2)
 00061   {
-00062     <span class="keywordtype">float</span> k  = (s1.<a class="code" href="classcsVector2.html#o1">y</a> - v.<a class="code" href="classcsVector2.html#o1">y</a>)*(s2.<a class="code" href="classcsVector2.html#o0">x</a> - s1.<a class="code" href="classcsVector2.html#o0">x</a>);
-00063     <span class="keywordtype">float</span> k1 = (s1.<a class="code" href="classcsVector2.html#o0">x</a> - v.<a class="code" href="classcsVector2.html#o0">x</a>)*(s2.<a class="code" href="classcsVector2.html#o1">y</a> - s1.<a class="code" href="classcsVector2.html#o1">y</a>);
+00062     <span class="keywordtype">float</span> k  = (s1.<a class="code" href="classcsVector2.html#o1">y</a> - v.y)*(s2.<a class="code" href="classcsVector2.html#o0">x</a> - s1.<a class="code" href="classcsVector2.html#o0">x</a>);
+00063     <span class="keywordtype">float</span> k1 = (s1.<a class="code" href="classcsVector2.html#o0">x</a> - v.x)*(s2.<a class="code" href="classcsVector2.html#o1">y</a> - s1.<a class="code" href="classcsVector2.html#o1">y</a>);
 00064     <span class="keywordflow">if</span> (k &lt; k1) <span class="keywordflow">return</span> -1;
 00065     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (k &gt; k1) <span class="keywordflow">return</span> 1;
 00066     <span class="keywordflow">else</span> <span class="keywordflow">return</span> 0;
@@ -70,7 +70,7 @@
 <a name="l00075"></a><a class="code" href="classcsMath2.html#e1">00075</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> WhichSide2D (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
 00076                           <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; s)
 00077   {
-00078     <span class="keywordflow">return</span> WhichSide2D (v, s.<a class="code" href="classcsSegment2.html#a6">Start</a> (), s.<a class="code" href="classcsSegment2.html#a7">End</a> ());
+00078     <span class="keywordflow">return</span> WhichSide2D (v, s.Start (), s.End ());
 00079   }
 00080 
 00088   <span class="keyword">static</span> <span class="keywordtype">int</span> InPoly2D (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
@@ -81,9 +81,9 @@
 00098                       <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; c)
 00099   {
 00100     <span class="keywordflow">return</span>
-00101       a.<a class="code" href="classcsVector2.html#o0">x</a> * b.<a class="code" href="classcsVector2.html#o1">y</a> - a.<a class="code" href="classcsVector2.html#o1">y</a> * b.<a class="code" href="classcsVector2.html#o0">x</a> +
-00102       a.<a class="code" href="classcsVector2.html#o1">y</a> * c.<a class="code" href="classcsVector2.html#o0">x</a> - a.<a class="code" href="classcsVector2.html#o0">x</a> * c.<a class="code" href="classcsVector2.html#o1">y</a> +
-00103       b.<a class="code" href="classcsVector2.html#o0">x</a> * c.<a class="code" href="classcsVector2.html#o1">y</a> - c.<a class="code" href="classcsVector2.html#o0">x</a> * b.<a class="code" href="classcsVector2.html#o1">y</a>;
+00101       a.x * b.y - a.y * b.x +
+00102       a.y * c.x - a.x * c.y +
+00103       b.x * c.y - c.x * b.y;
 00104   }
 00105 
 <a name="l00111"></a><a class="code" href="classcsMath2.html#e4">00111</a>   <span class="keyword">static</span> <span class="keywordtype">float</span> Right (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; a,
@@ -151,9 +151,9 @@
 00239                      <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p, <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect, <span class="keywordtype">float</span>&amp; dist)
 00240   {
 00241     <span class="keywordtype">float</span> x,y, denom;
-00242     x = v.<a class="code" href="classcsVector2.html#o0">x</a>-u.<a class="code" href="classcsVector2.html#o0">x</a>;  y = v.<a class="code" href="classcsVector2.html#o1">y</a>-u.<a class="code" href="classcsVector2.html#o1">y</a>;
-00243     denom = p.<a class="code" href="classcsPlane2.html#o0">norm</a>.<a class="code" href="classcsVector2.html#o0">x</a>*x + p.<a class="code" href="classcsPlane2.html#o0">norm</a>.<a class="code" href="classcsVector2.html#o1">y</a>*y;
-00244     dist = -(p.<a class="code" href="classcsPlane2.html#o0">norm</a>*u + p.<a class="code" href="classcsPlane2.html#o1">CC</a>) / denom;
+00242     x = v.x-u.<a class="code" href="classcsVector2.html#o0">x</a>;  y = v.y-u.<a class="code" href="classcsVector2.html#o1">y</a>;
+00243     denom = p.norm.x*x + p.norm.y*y;
+00244     dist = -(p.norm*u + p.CC) / denom;
 00245     isect.<a class="code" href="classcsVector2.html#o0">x</a> = u.<a class="code" href="classcsVector2.html#o0">x</a> + dist*x;  isect.<a class="code" href="classcsVector2.html#o1">y</a> = u.<a class="code" href="classcsVector2.html#o1">y</a> + dist*y;
 00246   }
 00247 
