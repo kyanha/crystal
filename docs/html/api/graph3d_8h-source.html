@@ -284,385 +284,390 @@
 00388   G3D_FOGMETHOD fog;
 00389   <span class="keywordtype">bool</span> NeedsPO2Maps;
 00390   <span class="keywordtype">int</span> MaxAspectRatio;
-00391   <span class="keywordtype">bool</span> SupportsPointSprites;
-00392 };
+00391 
+00392   <span class="comment">// The following caps are only used by NR</span>
 00393 
-00394 <span class="comment">//===========================================================================</span>
-00395 <span class="comment">// Not for new renderer! @@@NR@@@</span>
-00396 <span class="comment">// The stuff below is either to be ported to new renderer or else</span>
-00397 <span class="comment">// it will be removed.</span>
-00398 <span class="comment">//===========================================================================</span>
-00399 
-00400 <span class="preprocessor">#define CS_FOG_FRONT  0</span>
-00401 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOG_BACK   1</span>
-00402 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOG_VIEW   2</span>
-00403 <span class="preprocessor"></span>
-00404 <span class="comment">//======================================================================</span>
-00405 <span class="comment">// For vertex based fog the following defines are used:</span>
-00406 <span class="preprocessor">#define CS_FOGTABLE_SIZE 64</span>
-00407 <span class="preprocessor"></span>
-00408 <span class="comment">// Each texel in the fog table holds the fog alpha value at a certain</span>
-00409 <span class="comment">// (distance*density).  The median distance parameter determines the</span>
-00410 <span class="comment">// (distance*density) value represented by the texel at the center of</span>
-00411 <span class="comment">// the fog table.  The fog calculation is:</span>
-00412 <span class="comment">// alpha = 1.0 - exp( -(density*distance) / CS_FOGTABLE_MEDIANDISTANCE)</span>
-00413 <span class="preprocessor">#define CS_FOGTABLE_MEDIANDISTANCE 10.0f</span>
-00414 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOGTABLE_MAXDISTANCE (CS_FOGTABLE_MEDIANDISTANCE * 2.0f)</span>
-00415 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOGTABLE_DISTANCESCALE (1.0f / CS_FOGTABLE_MAXDISTANCE)</span>
-00416 <span class="preprocessor"></span>
-00417 <span class="comment">// Fog (distance*density) is mapped to a texture coordinate and then</span>
-00418 <span class="comment">// clamped.  This determines the clamp value.  Some drivers don't</span>
-00419 <span class="comment">// like clamping textures so we must do it ourself</span>
-00420 <span class="preprocessor">#define CS_FOGTABLE_CLAMPVALUE 0.85f</span>
-00421 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOG_MAXVALUE (CS_FOGTABLE_MAXDISTANCE * CS_FOGTABLE_CLAMPVALUE)</span>
-00422 <span class="preprocessor"></span><span class="comment">//======================================================================</span>
-00423 
-<a name="l00425"></a><a class="code" href="classG3DFogInfo.html">00425</a> <span class="keyword">class </span><a class="code" href="classG3DFogInfo.html">G3DFogInfo</a>
-00426 {
-00427 <span class="keyword">public</span>:
-<a name="l00429"></a><a class="code" href="classG3DFogInfo.html#m0">00429</a>   <span class="keywordtype">float</span> <a class="code" href="classG3DFogInfo.html#m0">r</a>, <a class="code" href="classG3DFogInfo.html#m1">g</a>, <a class="code" href="classG3DFogInfo.html#m2">b</a>;
-<a name="l00436"></a><a class="code" href="classG3DFogInfo.html#m3">00436</a>   <span class="keywordtype">float</span> <a class="code" href="classG3DFogInfo.html#m3">intensity</a>;
-00437   <span class="keywordtype">float</span> intensity2;
-00438 };
-00439 
-<a name="l00441"></a><a class="code" href="classG3DCam2TextureTransform.html">00441</a> <span class="keyword">class </span><a class="code" href="classG3DCam2TextureTransform.html">G3DCam2TextureTransform</a>
-00442 {
-00443 <span class="keyword">public</span>:
-<a name="l00445"></a><a class="code" href="classG3DCam2TextureTransform.html#m0">00445</a>   <a class="code" href="classcsMatrix3.html">csMatrix3</a>* <a class="code" href="classG3DCam2TextureTransform.html#m0">m_cam2tex</a>;
-<a name="l00447"></a><a class="code" href="classG3DCam2TextureTransform.html#m1">00447</a>   <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="classG3DCam2TextureTransform.html#m1">v_cam2tex</a>;
-00448 };
-00449 
-<a name="l00451"></a><a class="code" href="structG3DPolygonDPFX.html">00451</a> <span class="keyword">struct </span><a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a>
-00452 {
-<a name="l00454"></a><a class="code" href="structG3DPolygonDPFX.html#m0">00454</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonDPFX.html#m0">num</a>;
-<a name="l00456"></a><a class="code" href="structG3DPolygonDPFX.html#m1">00456</a>   <a class="code" href="classcsVector2.html">csVector2</a> <a class="code" href="structG3DPolygonDPFX.html#m1">vertices</a>[100];
-<a name="l00458"></a><a class="code" href="structG3DPolygonDPFX.html#m2">00458</a>   <span class="keywordtype">float</span> <a class="code" href="structG3DPolygonDPFX.html#m2">z</a>[100];
-<a name="l00460"></a><a class="code" href="structG3DPolygonDPFX.html#m3">00460</a>   <a class="code" href="classcsVector2.html">csVector2</a> <a class="code" href="structG3DPolygonDPFX.html#m3">texels</a>[100];
-<a name="l00462"></a><a class="code" href="structG3DPolygonDPFX.html#m4">00462</a>   <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="structG3DPolygonDPFX.html#m4">colors</a>[100];
-00463 
-<a name="l00465"></a><a class="code" href="structG3DPolygonDPFX.html#m5">00465</a>   <a class="code" href="classG3DFogInfo.html">G3DFogInfo</a> <a class="code" href="structG3DPolygonDPFX.html#m5">fog_info</a>[100];
-<a name="l00467"></a><a class="code" href="structG3DPolygonDPFX.html#m6">00467</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DPolygonDPFX.html#m6">use_fog</a>;
-00468 
-<a name="l00470"></a><a class="code" href="structG3DPolygonDPFX.html#m7">00470</a>   <a class="code" href="structiMaterialHandle.html">iMaterialHandle</a> *<a class="code" href="structG3DPolygonDPFX.html#m7">mat_handle</a>;
-<a name="l00472"></a><a class="code" href="structG3DPolygonDPFX.html#m8">00472</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structG3DPolygonDPFX.html#m8">mixmode</a>;
-00473 
-00475 
-<a name="l00476"></a><a class="code" href="structG3DPolygonDPFX.html#z115_0">00476</a>   uint8 <a class="code" href="structG3DPolygonDPFX.html#z115_0">flat_color_r</a>;
-<a name="l00477"></a><a class="code" href="structG3DPolygonDPFX.html#z115_1">00477</a>   uint8 <a class="code" href="structG3DPolygonDPFX.html#z115_1">flat_color_g</a>;
-<a name="l00478"></a><a class="code" href="structG3DPolygonDPFX.html#z115_2">00478</a>   uint8 <a class="code" href="structG3DPolygonDPFX.html#z115_2">flat_color_b</a>;
-00480 
-00481   <span class="comment">// A dummy constructor to appease NextStep compiler which otherwise</span>
-00482   <span class="comment">// complains that it is unable to create this object.  This happens when</span>
-00483   <span class="comment">// a subcomponent such as csVector2 has a constructor.</span>
-00484   <a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a>() {}
-00485 };
-00486 
-<a name="l00488"></a><a class="code" href="structG3DPolygonDFP.html">00488</a> <span class="keyword">struct </span><a class="code" href="structG3DPolygonDFP.html">G3DPolygonDFP</a>
-00489 {
-<a name="l00491"></a><a class="code" href="structG3DPolygonDFP.html#m0">00491</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonDFP.html#m0">num</a>;
-<a name="l00493"></a><a class="code" href="structG3DPolygonDFP.html#m1">00493</a>   <a class="code" href="classcsVector2.html">csVector2</a> <a class="code" href="structG3DPolygonDFP.html#m1">vertices</a>[100];
-00494 
-<a name="l00496"></a><a class="code" href="structG3DPolygonDFP.html#m2">00496</a>   <a class="code" href="classcsPlane3.html">csPlane3</a> <a class="code" href="structG3DPolygonDFP.html#m2">normal</a>;
-00497 };
-00498 
-<a name="l00500"></a><a class="code" href="structG3DPolygonDP.html">00500</a> <span class="keyword">struct </span><a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a> : <span class="keyword">public</span> <a class="code" href="structG3DPolygonDFP.html">G3DPolygonDFP</a>
-00501 {
-<a name="l00503"></a><a class="code" href="structG3DPolygonDP.html#m0">00503</a>   <a class="code" href="classG3DFogInfo.html">G3DFogInfo</a> <a class="code" href="structG3DPolygonDP.html#m0">fog_info</a>[100];
-<a name="l00505"></a><a class="code" href="structG3DPolygonDP.html#m1">00505</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DPolygonDP.html#m1">use_fog</a>;
-00506 
-<a name="l00508"></a><a class="code" href="structG3DPolygonDP.html#m2">00508</a>   <a class="code" href="structiMaterialHandle.html">iMaterialHandle</a>* <a class="code" href="structG3DPolygonDP.html#m2">mat_handle</a>;
+<a name="l00398"></a><a class="code" href="structcsGraphics3DCaps.html#m8">00398</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsGraphics3DCaps.html#m8">SupportsPointSprites</a>;
+<a name="l00402"></a><a class="code" href="structcsGraphics3DCaps.html#m9">00402</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsGraphics3DCaps.html#m9">DestinationAlpha</a>;
+<a name="l00406"></a><a class="code" href="structcsGraphics3DCaps.html#m10">00406</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsGraphics3DCaps.html#m10">StencilShadows</a>;
+00407 };
+00408 
+00409 <span class="comment">//===========================================================================</span>
+00410 <span class="comment">// Not for new renderer! @@@NR@@@</span>
+00411 <span class="comment">// The stuff below is either to be ported to new renderer or else</span>
+00412 <span class="comment">// it will be removed.</span>
+00413 <span class="comment">//===========================================================================</span>
+00414 
+00415 <span class="preprocessor">#define CS_FOG_FRONT  0</span>
+00416 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOG_BACK   1</span>
+00417 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOG_VIEW   2</span>
+00418 <span class="preprocessor"></span>
+00419 <span class="comment">//======================================================================</span>
+00420 <span class="comment">// For vertex based fog the following defines are used:</span>
+00421 <span class="preprocessor">#define CS_FOGTABLE_SIZE 64</span>
+00422 <span class="preprocessor"></span>
+00423 <span class="comment">// Each texel in the fog table holds the fog alpha value at a certain</span>
+00424 <span class="comment">// (distance*density).  The median distance parameter determines the</span>
+00425 <span class="comment">// (distance*density) value represented by the texel at the center of</span>
+00426 <span class="comment">// the fog table.  The fog calculation is:</span>
+00427 <span class="comment">// alpha = 1.0 - exp( -(density*distance) / CS_FOGTABLE_MEDIANDISTANCE)</span>
+00428 <span class="preprocessor">#define CS_FOGTABLE_MEDIANDISTANCE 10.0f</span>
+00429 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOGTABLE_MAXDISTANCE (CS_FOGTABLE_MEDIANDISTANCE * 2.0f)</span>
+00430 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOGTABLE_DISTANCESCALE (1.0f / CS_FOGTABLE_MAXDISTANCE)</span>
+00431 <span class="preprocessor"></span>
+00432 <span class="comment">// Fog (distance*density) is mapped to a texture coordinate and then</span>
+00433 <span class="comment">// clamped.  This determines the clamp value.  Some drivers don't</span>
+00434 <span class="comment">// like clamping textures so we must do it ourself</span>
+00435 <span class="preprocessor">#define CS_FOGTABLE_CLAMPVALUE 0.85f</span>
+00436 <span class="preprocessor"></span><span class="preprocessor">#define CS_FOG_MAXVALUE (CS_FOGTABLE_MAXDISTANCE * CS_FOGTABLE_CLAMPVALUE)</span>
+00437 <span class="preprocessor"></span><span class="comment">//======================================================================</span>
+00438 
+<a name="l00440"></a><a class="code" href="classG3DFogInfo.html">00440</a> <span class="keyword">class </span><a class="code" href="classG3DFogInfo.html">G3DFogInfo</a>
+00441 {
+00442 <span class="keyword">public</span>:
+<a name="l00444"></a><a class="code" href="classG3DFogInfo.html#m0">00444</a>   <span class="keywordtype">float</span> <a class="code" href="classG3DFogInfo.html#m0">r</a>, <a class="code" href="classG3DFogInfo.html#m1">g</a>, <a class="code" href="classG3DFogInfo.html#m2">b</a>;
+<a name="l00451"></a><a class="code" href="classG3DFogInfo.html#m3">00451</a>   <span class="keywordtype">float</span> <a class="code" href="classG3DFogInfo.html#m3">intensity</a>;
+00452   <span class="keywordtype">float</span> intensity2;
+00453 };
+00454 
+<a name="l00456"></a><a class="code" href="classG3DCam2TextureTransform.html">00456</a> <span class="keyword">class </span><a class="code" href="classG3DCam2TextureTransform.html">G3DCam2TextureTransform</a>
+00457 {
+00458 <span class="keyword">public</span>:
+<a name="l00460"></a><a class="code" href="classG3DCam2TextureTransform.html#m0">00460</a>   <a class="code" href="classcsMatrix3.html">csMatrix3</a>* <a class="code" href="classG3DCam2TextureTransform.html#m0">m_cam2tex</a>;
+<a name="l00462"></a><a class="code" href="classG3DCam2TextureTransform.html#m1">00462</a>   <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="classG3DCam2TextureTransform.html#m1">v_cam2tex</a>;
+00463 };
+00464 
+<a name="l00466"></a><a class="code" href="structG3DPolygonDPFX.html">00466</a> <span class="keyword">struct </span><a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a>
+00467 {
+<a name="l00469"></a><a class="code" href="structG3DPolygonDPFX.html#m0">00469</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonDPFX.html#m0">num</a>;
+<a name="l00471"></a><a class="code" href="structG3DPolygonDPFX.html#m1">00471</a>   <a class="code" href="classcsVector2.html">csVector2</a> <a class="code" href="structG3DPolygonDPFX.html#m1">vertices</a>[100];
+<a name="l00473"></a><a class="code" href="structG3DPolygonDPFX.html#m2">00473</a>   <span class="keywordtype">float</span> <a class="code" href="structG3DPolygonDPFX.html#m2">z</a>[100];
+<a name="l00475"></a><a class="code" href="structG3DPolygonDPFX.html#m3">00475</a>   <a class="code" href="classcsVector2.html">csVector2</a> <a class="code" href="structG3DPolygonDPFX.html#m3">texels</a>[100];
+<a name="l00477"></a><a class="code" href="structG3DPolygonDPFX.html#m4">00477</a>   <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="structG3DPolygonDPFX.html#m4">colors</a>[100];
+00478 
+<a name="l00480"></a><a class="code" href="structG3DPolygonDPFX.html#m5">00480</a>   <a class="code" href="classG3DFogInfo.html">G3DFogInfo</a> <a class="code" href="structG3DPolygonDPFX.html#m5">fog_info</a>[100];
+<a name="l00482"></a><a class="code" href="structG3DPolygonDPFX.html#m6">00482</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DPolygonDPFX.html#m6">use_fog</a>;
+00483 
+<a name="l00485"></a><a class="code" href="structG3DPolygonDPFX.html#m7">00485</a>   <a class="code" href="structiMaterialHandle.html">iMaterialHandle</a> *<a class="code" href="structG3DPolygonDPFX.html#m7">mat_handle</a>;
+<a name="l00487"></a><a class="code" href="structG3DPolygonDPFX.html#m8">00487</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structG3DPolygonDPFX.html#m8">mixmode</a>;
+00488 
+00490 
+<a name="l00491"></a><a class="code" href="structG3DPolygonDPFX.html#z115_0">00491</a>   uint8 <a class="code" href="structG3DPolygonDPFX.html#z115_0">flat_color_r</a>;
+<a name="l00492"></a><a class="code" href="structG3DPolygonDPFX.html#z115_1">00492</a>   uint8 <a class="code" href="structG3DPolygonDPFX.html#z115_1">flat_color_g</a>;
+<a name="l00493"></a><a class="code" href="structG3DPolygonDPFX.html#z115_2">00493</a>   uint8 <a class="code" href="structG3DPolygonDPFX.html#z115_2">flat_color_b</a>;
+00495 
+00496   <span class="comment">// A dummy constructor to appease NextStep compiler which otherwise</span>
+00497   <span class="comment">// complains that it is unable to create this object.  This happens when</span>
+00498   <span class="comment">// a subcomponent such as csVector2 has a constructor.</span>
+00499   <a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a>() {}
+00500 };
+00501 
+<a name="l00503"></a><a class="code" href="structG3DPolygonDFP.html">00503</a> <span class="keyword">struct </span><a class="code" href="structG3DPolygonDFP.html">G3DPolygonDFP</a>
+00504 {
+<a name="l00506"></a><a class="code" href="structG3DPolygonDFP.html#m0">00506</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonDFP.html#m0">num</a>;
+<a name="l00508"></a><a class="code" href="structG3DPolygonDFP.html#m1">00508</a>   <a class="code" href="classcsVector2.html">csVector2</a> <a class="code" href="structG3DPolygonDFP.html#m1">vertices</a>[100];
 00509 
-<a name="l00511"></a><a class="code" href="structG3DPolygonDP.html#m3">00511</a>   <a class="code" href="classG3DCam2TextureTransform.html">G3DCam2TextureTransform</a> <a class="code" href="structG3DPolygonDP.html#m3">cam2tex</a>;
-00512 
-<a name="l00514"></a><a class="code" href="structG3DPolygonDP.html#m4">00514</a>   <a class="code" href="structcsPolyTextureMapping.html">csPolyTextureMapping</a>* <a class="code" href="structG3DPolygonDP.html#m4">texmap</a>;
-00515   <a class="code" href="structiRendererLightmap.html">iRendererLightmap</a>* rlm;
-00516   
-<a name="l00518"></a><a class="code" href="structG3DPolygonDP.html#m6">00518</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DPolygonDP.html#m6">do_fullbright</a>;
-00519 
-<a name="l00521"></a><a class="code" href="structG3DPolygonDP.html#m7">00521</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structG3DPolygonDP.html#m7">mixmode</a>;
-00522 
-<a name="l00524"></a><a class="code" href="structG3DPolygonDP.html#m8">00524</a>   <span class="keywordtype">float</span> <a class="code" href="structG3DPolygonDP.html#m8">z_value</a>;
-00525 
-00526   <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* txt_handle;
-00527 };
-00528 
-<a name="l00530"></a><a class="code" href="group__gfx3d.html#a0">00530</a> <span class="keyword">typedef</span> <a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a> <a class="code" href="structG3DPolygonDP.html">G3DPolygonDPF</a>;
-00531 
-<a name="l00543"></a><a class="code" href="structG3DTriangleMesh.html">00543</a> <span class="keyword">struct </span><a class="code" href="structG3DTriangleMesh.html">G3DTriangleMesh</a>
-00544 {
-00545   <span class="keyword">enum</span>
-00546   {
-00548     <a class="code" href="structG3DTriangleMesh.html#s3s0">MAX_VERTEXPOOL</a> = 2
-00549   };
-00550 
-<a name="l00552"></a><a class="code" href="structG3DTriangleMesh.html#m0">00552</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m0">num_vertices_pool</a>;
-00553 
-<a name="l00555"></a><a class="code" href="structG3DTriangleMesh.html#m1">00555</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m1">num_triangles</a>;
-<a name="l00557"></a><a class="code" href="structG3DTriangleMesh.html#m2">00557</a>   <a class="code" href="structcsTriangle.html">csTriangle</a>* <a class="code" href="structG3DTriangleMesh.html#m2">triangles</a>;
-00558 
-<a name="l00560"></a><a class="code" href="structG3DTriangleMesh.html#m3">00560</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m3">clip_portal</a>;
-<a name="l00562"></a><a class="code" href="structG3DTriangleMesh.html#m4">00562</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m4">clip_plane</a>;
-<a name="l00564"></a><a class="code" href="structG3DTriangleMesh.html#m5">00564</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m5">clip_z_plane</a>;
+<a name="l00511"></a><a class="code" href="structG3DPolygonDFP.html#m2">00511</a>   <a class="code" href="classcsPlane3.html">csPlane3</a> <a class="code" href="structG3DPolygonDFP.html#m2">normal</a>;
+00512 };
+00513 
+<a name="l00515"></a><a class="code" href="structG3DPolygonDP.html">00515</a> <span class="keyword">struct </span><a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a> : <span class="keyword">public</span> <a class="code" href="structG3DPolygonDFP.html">G3DPolygonDFP</a>
+00516 {
+<a name="l00518"></a><a class="code" href="structG3DPolygonDP.html#m0">00518</a>   <a class="code" href="classG3DFogInfo.html">G3DFogInfo</a> <a class="code" href="structG3DPolygonDP.html#m0">fog_info</a>[100];
+<a name="l00520"></a><a class="code" href="structG3DPolygonDP.html#m1">00520</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DPolygonDP.html#m1">use_fog</a>;
+00521 
+<a name="l00523"></a><a class="code" href="structG3DPolygonDP.html#m2">00523</a>   <a class="code" href="structiMaterialHandle.html">iMaterialHandle</a>* <a class="code" href="structG3DPolygonDP.html#m2">mat_handle</a>;
+00524 
+<a name="l00526"></a><a class="code" href="structG3DPolygonDP.html#m3">00526</a>   <a class="code" href="classG3DCam2TextureTransform.html">G3DCam2TextureTransform</a> <a class="code" href="structG3DPolygonDP.html#m3">cam2tex</a>;
+00527 
+<a name="l00529"></a><a class="code" href="structG3DPolygonDP.html#m4">00529</a>   <a class="code" href="structcsPolyTextureMapping.html">csPolyTextureMapping</a>* <a class="code" href="structG3DPolygonDP.html#m4">texmap</a>;
+00530   <a class="code" href="structiRendererLightmap.html">iRendererLightmap</a>* rlm;
+00531   
+<a name="l00533"></a><a class="code" href="structG3DPolygonDP.html#m6">00533</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DPolygonDP.html#m6">do_fullbright</a>;
+00534 
+<a name="l00536"></a><a class="code" href="structG3DPolygonDP.html#m7">00536</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structG3DPolygonDP.html#m7">mixmode</a>;
+00537 
+<a name="l00539"></a><a class="code" href="structG3DPolygonDP.html#m8">00539</a>   <span class="keywordtype">float</span> <a class="code" href="structG3DPolygonDP.html#m8">z_value</a>;
+00540 
+00541   <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* txt_handle;
+00542 };
+00543 
+<a name="l00545"></a><a class="code" href="group__gfx3d.html#a0">00545</a> <span class="keyword">typedef</span> <a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a> <a class="code" href="structG3DPolygonDP.html">G3DPolygonDPF</a>;
+00546 
+<a name="l00558"></a><a class="code" href="structG3DTriangleMesh.html">00558</a> <span class="keyword">struct </span><a class="code" href="structG3DTriangleMesh.html">G3DTriangleMesh</a>
+00559 {
+00560   <span class="keyword">enum</span>
+00561   {
+00563     <a class="code" href="structG3DTriangleMesh.html#s3s0">MAX_VERTEXPOOL</a> = 2
+00564   };
 00565 
-<a name="l00567"></a><a class="code" href="structG3DTriangleMesh.html#m6">00567</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m6">use_vertex_color</a>;
+<a name="l00567"></a><a class="code" href="structG3DTriangleMesh.html#m0">00567</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m0">num_vertices_pool</a>;
 00568 
-<a name="l00570"></a><a class="code" href="structG3DTriangleMesh.html#m7">00570</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m7">do_fog</a>;
-<a name="l00572"></a><a class="code" href="structG3DTriangleMesh.html#m8">00572</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m8">do_mirror</a>;
-<a name="l00574"></a><a class="code" href="structG3DTriangleMesh.html#m9">00574</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m9">do_morph_texels</a>;
-<a name="l00576"></a><a class="code" href="structG3DTriangleMesh.html#m10">00576</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m10">do_morph_colors</a>;
-00577 
-<a name="l00579"></a><a class="code" href="structG3DTriangleMesh.html#s4">00579</a>   <span class="keyword">enum</span> <a class="code" href="structG3DTriangleMesh.html#s4">VertexMode</a>
-00580   {
-00582     <a class="code" href="structG3DTriangleMesh.html#s4s1">VM_WORLDSPACE</a>,
-00584     <a class="code" href="structG3DTriangleMesh.html#s4s2">VM_VIEWSPACE</a>
-00585   };
-00586   
-<a name="l00588"></a><a class="code" href="structG3DTriangleMesh.html#m11">00588</a>   <a class="code" href="structG3DTriangleMesh.html#s4">VertexMode</a> <a class="code" href="structG3DTriangleMesh.html#m11">vertex_mode</a>;
-00589 
-<a name="l00591"></a><a class="code" href="structG3DTriangleMesh.html#m12">00591</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structG3DTriangleMesh.html#m12">mixmode</a>;
-00592   <span class="keywordtype">float</span> morph_factor;
-<a name="l00597"></a><a class="code" href="structG3DTriangleMesh.html#m14">00597</a>   <a class="code" href="structiVertexBuffer.html">iVertexBuffer</a>* <a class="code" href="structG3DTriangleMesh.html#m14">buffers</a>[<a class="code" href="structG3DTriangleMesh.html#s3s0">MAX_VERTEXPOOL</a>];
-00598   <a class="code" href="structiMaterialHandle.html">iMaterialHandle</a>* mat_handle;
-<a name="l00600"></a><a class="code" href="structG3DTriangleMesh.html#m16">00600</a>   <a class="code" href="classG3DFogInfo.html">G3DFogInfo</a>* <a class="code" href="structG3DTriangleMesh.html#m16">vertex_fog</a>;
-00601 
-00602   <span class="comment">// TODO : store information required for lighting calculation</span>
-00603 };
+<a name="l00570"></a><a class="code" href="structG3DTriangleMesh.html#m1">00570</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m1">num_triangles</a>;
+<a name="l00572"></a><a class="code" href="structG3DTriangleMesh.html#m2">00572</a>   <a class="code" href="structcsTriangle.html">csTriangle</a>* <a class="code" href="structG3DTriangleMesh.html#m2">triangles</a>;
+00573 
+<a name="l00575"></a><a class="code" href="structG3DTriangleMesh.html#m3">00575</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m3">clip_portal</a>;
+<a name="l00577"></a><a class="code" href="structG3DTriangleMesh.html#m4">00577</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m4">clip_plane</a>;
+<a name="l00579"></a><a class="code" href="structG3DTriangleMesh.html#m5">00579</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DTriangleMesh.html#m5">clip_z_plane</a>;
+00580 
+<a name="l00582"></a><a class="code" href="structG3DTriangleMesh.html#m6">00582</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m6">use_vertex_color</a>;
+00583 
+<a name="l00585"></a><a class="code" href="structG3DTriangleMesh.html#m7">00585</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m7">do_fog</a>;
+<a name="l00587"></a><a class="code" href="structG3DTriangleMesh.html#m8">00587</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m8">do_mirror</a>;
+<a name="l00589"></a><a class="code" href="structG3DTriangleMesh.html#m9">00589</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m9">do_morph_texels</a>;
+<a name="l00591"></a><a class="code" href="structG3DTriangleMesh.html#m10">00591</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DTriangleMesh.html#m10">do_morph_colors</a>;
+00592 
+<a name="l00594"></a><a class="code" href="structG3DTriangleMesh.html#s4">00594</a>   <span class="keyword">enum</span> <a class="code" href="structG3DTriangleMesh.html#s4">VertexMode</a>
+00595   {
+00597     <a class="code" href="structG3DTriangleMesh.html#s4s1">VM_WORLDSPACE</a>,
+00599     <a class="code" href="structG3DTriangleMesh.html#s4s2">VM_VIEWSPACE</a>
+00600   };
+00601   
+<a name="l00603"></a><a class="code" href="structG3DTriangleMesh.html#m11">00603</a>   <a class="code" href="structG3DTriangleMesh.html#s4">VertexMode</a> <a class="code" href="structG3DTriangleMesh.html#m11">vertex_mode</a>;
 00604 
-<a name="l00615"></a><a class="code" href="structG3DPolygonMesh.html">00615</a> <span class="keyword">struct </span><a class="code" href="structG3DPolygonMesh.html">G3DPolygonMesh</a>
-00616 {
-<a name="l00618"></a><a class="code" href="structG3DPolygonMesh.html#m0">00618</a>   <a class="code" href="structiPolygonBuffer.html">iPolygonBuffer</a>* <a class="code" href="structG3DPolygonMesh.html#m0">polybuf</a>;
+<a name="l00606"></a><a class="code" href="structG3DTriangleMesh.html#m12">00606</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structG3DTriangleMesh.html#m12">mixmode</a>;
+00607   <span class="keywordtype">float</span> morph_factor;
+<a name="l00612"></a><a class="code" href="structG3DTriangleMesh.html#m14">00612</a>   <a class="code" href="structiVertexBuffer.html">iVertexBuffer</a>* <a class="code" href="structG3DTriangleMesh.html#m14">buffers</a>[<a class="code" href="structG3DTriangleMesh.html#s3s0">MAX_VERTEXPOOL</a>];
+00613   <a class="code" href="structiMaterialHandle.html">iMaterialHandle</a>* mat_handle;
+<a name="l00615"></a><a class="code" href="structG3DTriangleMesh.html#m16">00615</a>   <a class="code" href="classG3DFogInfo.html">G3DFogInfo</a>* <a class="code" href="structG3DTriangleMesh.html#m16">vertex_fog</a>;
+00616 
+00617   <span class="comment">// TODO : store information required for lighting calculation</span>
+00618 };
 00619 
-00620   <span class="comment">// Apply fogging?</span>
-00621   <span class="keywordtype">bool</span> do_fog;
-00622 
-<a name="l00624"></a><a class="code" href="structG3DPolygonMesh.html#m2">00624</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structG3DPolygonMesh.html#m2">mixmode</a>;
-00625 
-<a name="l00627"></a><a class="code" href="structG3DPolygonMesh.html#m3">00627</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonMesh.html#m3">clip_portal</a>;
-<a name="l00629"></a><a class="code" href="structG3DPolygonMesh.html#m4">00629</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonMesh.html#m4">clip_plane</a>;
-<a name="l00631"></a><a class="code" href="structG3DPolygonMesh.html#m5">00631</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonMesh.html#m5">clip_z_plane</a>;
-00632 
-<a name="l00634"></a><a class="code" href="structG3DPolygonMesh.html#m6">00634</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DPolygonMesh.html#m6">do_mirror</a>;
-00635 
-<a name="l00637"></a><a class="code" href="structG3DPolygonMesh.html#s2">00637</a>   <span class="keyword">enum</span> <a class="code" href="structG3DPolygonMesh.html#s2">VertexMode</a>
-00638   {
-00640     <a class="code" href="structG3DPolygonMesh.html#s2s0">VM_WORLDSPACE</a>,
-00642     <a class="code" href="structG3DPolygonMesh.html#s2s1">VM_VIEWSPACE</a>
-00643   };
-00644   
-<a name="l00646"></a><a class="code" href="structG3DPolygonMesh.html#m7">00646</a>   <a class="code" href="structG3DPolygonMesh.html#s2">VertexMode</a> <a class="code" href="structG3DPolygonMesh.html#m7">vertex_mode</a>;
+<a name="l00630"></a><a class="code" href="structG3DPolygonMesh.html">00630</a> <span class="keyword">struct </span><a class="code" href="structG3DPolygonMesh.html">G3DPolygonMesh</a>
+00631 {
+<a name="l00633"></a><a class="code" href="structG3DPolygonMesh.html#m0">00633</a>   <a class="code" href="structiPolygonBuffer.html">iPolygonBuffer</a>* <a class="code" href="structG3DPolygonMesh.html#m0">polybuf</a>;
+00634 
+00635   <span class="comment">// Apply fogging?</span>
+00636   <span class="keywordtype">bool</span> do_fog;
+00637 
+<a name="l00639"></a><a class="code" href="structG3DPolygonMesh.html#m2">00639</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structG3DPolygonMesh.html#m2">mixmode</a>;
+00640 
+<a name="l00642"></a><a class="code" href="structG3DPolygonMesh.html#m3">00642</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonMesh.html#m3">clip_portal</a>;
+<a name="l00644"></a><a class="code" href="structG3DPolygonMesh.html#m4">00644</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonMesh.html#m4">clip_plane</a>;
+<a name="l00646"></a><a class="code" href="structG3DPolygonMesh.html#m5">00646</a>   <span class="keywordtype">int</span> <a class="code" href="structG3DPolygonMesh.html#m5">clip_z_plane</a>;
 00647 
-<a name="l00649"></a><a class="code" href="structG3DPolygonMesh.html#m8">00649</a>   <a class="code" href="classG3DFogInfo.html">G3DFogInfo</a>* <a class="code" href="structG3DPolygonMesh.html#m8">vertex_fog</a>;
-00650 };
-00651 
-<a name="l00653"></a><a class="code" href="group__gfx3d.html#a79">00653</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#a79">csRenderMeshType</a>
-00654 {
-00656   <a class="code" href="group__gfx3d.html#a79a111">CS_MESHTYPE_TRIANGLES</a>,
-00658   <a class="code" href="group__gfx3d.html#a79a112">CS_MESHTYPE_QUADS</a>,
-00668   <a class="code" href="group__gfx3d.html#a79a113">CS_MESHTYPE_TRIANGLESTRIP</a>,
-00674   <a class="code" href="group__gfx3d.html#a79a114">CS_MESHTYPE_TRIANGLEFAN</a>,
-00678   <a class="code" href="group__gfx3d.html#a79a115">CS_MESHTYPE_POINTS</a>,
-00684   <a class="code" href="group__gfx3d.html#a79a116">CS_MESHTYPE_POINT_SPRITES</a>,
-00688   <a class="code" href="group__gfx3d.html#a79a117">CS_MESHTYPE_LINES</a>,
-00693   <a class="code" href="group__gfx3d.html#a79a118">CS_MESHTYPE_LINESTRIP</a>,
-00700   <a class="code" href="group__gfx3d.html#a79a119">CS_MESHTYPE_POLYGON</a>,
-00701 };
-00702 
-<a name="l00706"></a><a class="code" href="group__gfx3d.html#a80">00706</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#a80">csSimpleMeshFlags</a>
-00707 {
-00713   <a class="code" href="group__gfx3d.html#a80a120">csSimpleMeshScreenspace</a>     = 0x01,
-00714 };
-00715 
-<a name="l00719"></a><a class="code" href="structcsSimpleRenderMesh.html">00719</a> <span class="keyword">struct </span><a class="code" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a>
-00720 {
-<a name="l00722"></a><a class="code" href="structcsSimpleRenderMesh.html#m0">00722</a>   <a class="code" href="group__gfx3d.html#a79">csRenderMeshType</a> <a class="code" href="structcsSimpleRenderMesh.html#m0">meshtype</a>;
-00723 
-<a name="l00725"></a><a class="code" href="structcsSimpleRenderMesh.html#m1">00725</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsSimpleRenderMesh.html#m1">indexCount</a>;
-<a name="l00727"></a><a class="code" href="structcsSimpleRenderMesh.html#m2">00727</a>   <span class="keyword">const</span> <a class="code" href="group__util.html#a8">uint</a>* <a class="code" href="structcsSimpleRenderMesh.html#m2">indices</a>;
-00728 
-<a name="l00730"></a><a class="code" href="structcsSimpleRenderMesh.html#m3">00730</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsSimpleRenderMesh.html#m3">vertexCount</a>;
-<a name="l00736"></a><a class="code" href="structcsSimpleRenderMesh.html#m4">00736</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structcsSimpleRenderMesh.html#m4">vertices</a>;
-<a name="l00738"></a><a class="code" href="structcsSimpleRenderMesh.html#m5">00738</a>   <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>* <a class="code" href="structcsSimpleRenderMesh.html#m5">texcoords</a>;
-<a name="l00744"></a><a class="code" href="structcsSimpleRenderMesh.html#m6">00744</a>   <span class="keyword">const</span> <a class="code" href="classcsVector4.html">csVector4</a>* <a class="code" href="structcsSimpleRenderMesh.html#m6">colors</a>;
-<a name="l00749"></a><a class="code" href="structcsSimpleRenderMesh.html#m7">00749</a>   <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* <a class="code" href="structcsSimpleRenderMesh.html#m7">texture</a>;
-00750 
-<a name="l00752"></a><a class="code" href="structcsSimpleRenderMesh.html#m8">00752</a>   <a class="code" href="structiShader.html">iShader</a>* <a class="code" href="structcsSimpleRenderMesh.html#m8">shader</a>;
-<a name="l00754"></a><a class="code" href="structcsSimpleRenderMesh.html#m9">00754</a>   <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>* <a class="code" href="structcsSimpleRenderMesh.html#m9">dynDomain</a>;
-<a name="l00756"></a><a class="code" href="structcsSimpleRenderMesh.html#m10">00756</a>   <a class="code" href="structcsAlphaMode.html">csAlphaMode</a> <a class="code" href="structcsSimpleRenderMesh.html#m10">alphaType</a>;
-<a name="l00758"></a><a class="code" href="structcsSimpleRenderMesh.html#m11">00758</a>   <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> <a class="code" href="structcsSimpleRenderMesh.html#m11">z_buf_mode</a>;
-<a name="l00760"></a><a class="code" href="structcsSimpleRenderMesh.html#m12">00760</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsSimpleRenderMesh.html#m12">mixmode</a>;
-<a name="l00769"></a><a class="code" href="structcsSimpleRenderMesh.html#m13">00769</a>   <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> <a class="code" href="structcsSimpleRenderMesh.html#m13">object2camera</a>;
-00770 
-00771   <a class="code" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a> () : colors(0), texture (0), shader (0), dynDomain (0), 
-00772     <a class="code" href="structcsSimpleRenderMesh.html#m11">z_buf_mode</a> (<a class="code" href="group__gfx3d.html#a75a53">CS_ZBUF_NONE</a>), <a class="code" href="structcsSimpleRenderMesh.html#m12">mixmode</a> (<a class="code" href="group__gfx3d.html#a18">CS_FX_COPY</a>)
-00773   {  
-00774     alphaType.<a class="code" href="structcsAlphaMode.html#m0">autoAlphaMode</a> = <span class="keyword">true</span>;
-00775     alphaType.<a class="code" href="structcsAlphaMode.html#m2">autoModeTexture</a> = <a class="code" href="strhash_8h.html#a1">csInvalidStringID</a>;
-00776   };
-00777 };
-00778 
-00779 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>, 5, 5, 0);
-00780 
-<a name="l00798"></a><a class="code" href="structiGraphics3D.html">00798</a> <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00799 {
-00801   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a0">Open</a> () = 0;
-00803   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a1">Close</a> () = 0;
-00804 
-00812   <span class="keyword">virtual</span> <a class="code" href="structiGraphics2D.html">iGraphics2D</a> *<a class="code" href="structiGraphics3D.html#a2">GetDriver2D</a> () = 0;
-00813 
-00820   <span class="keyword">virtual</span> <a class="code" href="structiTextureManager.html">iTextureManager</a> *<a class="code" href="structiGraphics3D.html#a3">GetTextureManager</a> () = 0;
-00821 
-00823   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a4">SetDimensions</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) = 0;
-00825   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiGraphics3D.html#a5">GetWidth</a> () <span class="keyword">const</span> = 0;
-00827   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiGraphics3D.html#a6">GetHeight</a> () <span class="keyword">const</span> = 0;
+<a name="l00649"></a><a class="code" href="structG3DPolygonMesh.html#m6">00649</a>   <span class="keywordtype">bool</span> <a class="code" href="structG3DPolygonMesh.html#m6">do_mirror</a>;
+00650 
+<a name="l00652"></a><a class="code" href="structG3DPolygonMesh.html#s2">00652</a>   <span class="keyword">enum</span> <a class="code" href="structG3DPolygonMesh.html#s2">VertexMode</a>
+00653   {
+00655     <a class="code" href="structG3DPolygonMesh.html#s2s0">VM_WORLDSPACE</a>,
+00657     <a class="code" href="structG3DPolygonMesh.html#s2s1">VM_VIEWSPACE</a>
+00658   };
+00659   
+<a name="l00661"></a><a class="code" href="structG3DPolygonMesh.html#m7">00661</a>   <a class="code" href="structG3DPolygonMesh.html#s2">VertexMode</a> <a class="code" href="structG3DPolygonMesh.html#m7">vertex_mode</a>;
+00662 
+<a name="l00664"></a><a class="code" href="structG3DPolygonMesh.html#m8">00664</a>   <a class="code" href="classG3DFogInfo.html">G3DFogInfo</a>* <a class="code" href="structG3DPolygonMesh.html#m8">vertex_fog</a>;
+00665 };
+00666 
+<a name="l00668"></a><a class="code" href="group__gfx3d.html#a79">00668</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#a79">csRenderMeshType</a>
+00669 {
+00671   <a class="code" href="group__gfx3d.html#a79a111">CS_MESHTYPE_TRIANGLES</a>,
+00673   <a class="code" href="group__gfx3d.html#a79a112">CS_MESHTYPE_QUADS</a>,
+00683   <a class="code" href="group__gfx3d.html#a79a113">CS_MESHTYPE_TRIANGLESTRIP</a>,
+00689   <a class="code" href="group__gfx3d.html#a79a114">CS_MESHTYPE_TRIANGLEFAN</a>,
+00693   <a class="code" href="group__gfx3d.html#a79a115">CS_MESHTYPE_POINTS</a>,
+00699   <a class="code" href="group__gfx3d.html#a79a116">CS_MESHTYPE_POINT_SPRITES</a>,
+00703   <a class="code" href="group__gfx3d.html#a79a117">CS_MESHTYPE_LINES</a>,
+00708   <a class="code" href="group__gfx3d.html#a79a118">CS_MESHTYPE_LINESTRIP</a>,
+00715   <a class="code" href="group__gfx3d.html#a79a119">CS_MESHTYPE_POLYGON</a>,
+00716 };
+00717 
+<a name="l00721"></a><a class="code" href="group__gfx3d.html#a80">00721</a> <span class="keyword">enum</span> <a class="code" href="group__gfx3d.html#a80">csSimpleMeshFlags</a>
+00722 {
+00728   <a class="code" href="group__gfx3d.html#a80a120">csSimpleMeshScreenspace</a>     = 0x01,
+00729 };
+00730 
+<a name="l00734"></a><a class="code" href="structcsSimpleRenderMesh.html">00734</a> <span class="keyword">struct </span><a class="code" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a>
+00735 {
+<a name="l00737"></a><a class="code" href="structcsSimpleRenderMesh.html#m0">00737</a>   <a class="code" href="group__gfx3d.html#a79">csRenderMeshType</a> <a class="code" href="structcsSimpleRenderMesh.html#m0">meshtype</a>;
+00738 
+<a name="l00740"></a><a class="code" href="structcsSimpleRenderMesh.html#m1">00740</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsSimpleRenderMesh.html#m1">indexCount</a>;
+<a name="l00742"></a><a class="code" href="structcsSimpleRenderMesh.html#m2">00742</a>   <span class="keyword">const</span> <a class="code" href="group__util.html#a8">uint</a>* <a class="code" href="structcsSimpleRenderMesh.html#m2">indices</a>;
+00743 
+<a name="l00745"></a><a class="code" href="structcsSimpleRenderMesh.html#m3">00745</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsSimpleRenderMesh.html#m3">vertexCount</a>;
+<a name="l00751"></a><a class="code" href="structcsSimpleRenderMesh.html#m4">00751</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structcsSimpleRenderMesh.html#m4">vertices</a>;
+<a name="l00753"></a><a class="code" href="structcsSimpleRenderMesh.html#m5">00753</a>   <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>* <a class="code" href="structcsSimpleRenderMesh.html#m5">texcoords</a>;
+<a name="l00759"></a><a class="code" href="structcsSimpleRenderMesh.html#m6">00759</a>   <span class="keyword">const</span> <a class="code" href="classcsVector4.html">csVector4</a>* <a class="code" href="structcsSimpleRenderMesh.html#m6">colors</a>;
+<a name="l00764"></a><a class="code" href="structcsSimpleRenderMesh.html#m7">00764</a>   <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* <a class="code" href="structcsSimpleRenderMesh.html#m7">texture</a>;
+00765 
+<a name="l00767"></a><a class="code" href="structcsSimpleRenderMesh.html#m8">00767</a>   <a class="code" href="structiShader.html">iShader</a>* <a class="code" href="structcsSimpleRenderMesh.html#m8">shader</a>;
+<a name="l00769"></a><a class="code" href="structcsSimpleRenderMesh.html#m9">00769</a>   <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>* <a class="code" href="structcsSimpleRenderMesh.html#m9">dynDomain</a>;
+<a name="l00771"></a><a class="code" href="structcsSimpleRenderMesh.html#m10">00771</a>   <a class="code" href="structcsAlphaMode.html">csAlphaMode</a> <a class="code" href="structcsSimpleRenderMesh.html#m10">alphaType</a>;
+<a name="l00773"></a><a class="code" href="structcsSimpleRenderMesh.html#m11">00773</a>   <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> <a class="code" href="structcsSimpleRenderMesh.html#m11">z_buf_mode</a>;
+<a name="l00775"></a><a class="code" href="structcsSimpleRenderMesh.html#m12">00775</a>   <a class="code" href="group__util.html#a8">uint</a> <a class="code" href="structcsSimpleRenderMesh.html#m12">mixmode</a>;
+<a name="l00784"></a><a class="code" href="structcsSimpleRenderMesh.html#m13">00784</a>   <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> <a class="code" href="structcsSimpleRenderMesh.html#m13">object2camera</a>;
+00785 
+00786   <a class="code" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a> () : colors(0), texture (0), shader (0), dynDomain (0), 
+00787     <a class="code" href="structcsSimpleRenderMesh.html#m11">z_buf_mode</a> (<a class="code" href="group__gfx3d.html#a75a53">CS_ZBUF_NONE</a>), <a class="code" href="structcsSimpleRenderMesh.html#m12">mixmode</a> (<a class="code" href="group__gfx3d.html#a18">CS_FX_COPY</a>)
+00788   {  
+00789     alphaType.<a class="code" href="structcsAlphaMode.html#m0">autoAlphaMode</a> = <span class="keyword">true</span>;
+00790     alphaType.<a class="code" href="structcsAlphaMode.html#m2">autoModeTexture</a> = <a class="code" href="strhash_8h.html#a1">csInvalidStringID</a>;
+00791   };
+00792 };
+00793 
+00794 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>, 5, 5, 0);
+00795 
+<a name="l00813"></a><a class="code" href="structiGraphics3D.html">00813</a> <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00814 {
+00816   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a0">Open</a> () = 0;
+00818   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a1">Close</a> () = 0;
+00819 
+00827   <span class="keyword">virtual</span> <a class="code" href="structiGraphics2D.html">iGraphics2D</a> *<a class="code" href="structiGraphics3D.html#a2">GetDriver2D</a> () = 0;
 00828 
-00833   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsGraphics3DCaps.html">csGraphics3DCaps</a> *<a class="code" href="structiGraphics3D.html#a7">GetCaps</a> () <span class="keyword">const</span> = 0;
-00834 
-00839   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a8">SetPerspectiveCenter</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
-00840 
-00842   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a9">GetPerspectiveCenter</a> (<span class="keywordtype">int</span>&amp; x, <span class="keywordtype">int</span>&amp; y) <span class="keyword">const</span> = 0;
+00835   <span class="keyword">virtual</span> <a class="code" href="structiTextureManager.html">iTextureManager</a> *<a class="code" href="structiGraphics3D.html#a3">GetTextureManager</a> () = 0;
+00836 
+00838   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a4">SetDimensions</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) = 0;
+00840   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiGraphics3D.html#a5">GetWidth</a> () <span class="keyword">const</span> = 0;
+00842   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiGraphics3D.html#a6">GetHeight</a> () <span class="keyword">const</span> = 0;
 00843 
-00847   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a10">SetPerspectiveAspect</a> (<span class="keywordtype">float</span> aspect) = 0;
-00848 
-00850   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiGraphics3D.html#a11">GetPerspectiveAspect</a> () <span class="keyword">const</span> = 0;
-00851 
-00856   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a12">SetObjectToCamera</a> (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* o2c) = 0;
-00857 
-00861   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; <a class="code" href="structiGraphics3D.html#a13">GetObjectToCamera</a> () = 0;
-00862   
-00876   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a14">SetRenderTarget</a> (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>* handle,
-00877         <span class="keywordtype">bool</span> persistent = <span class="keyword">false</span>) = 0;
-00878 
-00882   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* <a class="code" href="structiGraphics3D.html#a15">GetRenderTarget</a> () <span class="keyword">const</span> = 0;
-00883 
-00885   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a16">BeginDraw</a> (<span class="keywordtype">int</span> DrawFlags) = 0;
-00886 
-00888   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a17">FinishDraw</a> () = 0;
-00889 
-00895   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a18">Print</a> (<a class="code" href="classcsRect.html">csRect</a> <span class="keyword">const</span>* area) = 0;
-00896 
-00911   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a19">DrawPixmap</a> (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *hTex, <span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy,
-00912     <span class="keywordtype">int</span> sw, <span class="keywordtype">int</span> sh, <span class="keywordtype">int</span> tx, <span class="keywordtype">int</span> ty, <span class="keywordtype">int</span> tw, <span class="keywordtype">int</span> th, uint8 Alpha = 0) = 0;
-00913 
-00918   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a20">DrawLine</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2,
-00919     <span class="keywordtype">float</span> fov, <span class="keywordtype">int</span> color) = 0;
-00920 
-00926   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a21">SetClipper</a> (<a class="code" href="structiClipper2D.html">iClipper2D</a>* clipper, <span class="keywordtype">int</span> cliptype) = 0;
-00927 
-00931   <span class="keyword">virtual</span> <a class="code" href="structiClipper2D.html">iClipper2D</a>* <a class="code" href="structiGraphics3D.html#a22">GetClipper</a> () = 0;
-00932 
-00936   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiGraphics3D.html#a23">GetClipType</a> () <span class="keyword">const</span> = 0;
-00937 
-00942   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a24">SetNearPlane</a> (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl) = 0;
-00943 
-00947   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a25">ResetNearPlane</a> () = 0;
-00948 
-00952   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; <a class="code" href="structiGraphics3D.html#a26">GetNearPlane</a> () <span class="keyword">const</span> = 0;
-00953 
-00957   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a27">HasNearPlane</a> () <span class="keyword">const</span> = 0;
+00848   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsGraphics3DCaps.html">csGraphics3DCaps</a> *<a class="code" href="structiGraphics3D.html#a7">GetCaps</a> () <span class="keyword">const</span> = 0;
+00849 
+00854   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a8">SetPerspectiveCenter</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
+00855 
+00857   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a9">GetPerspectiveCenter</a> (<span class="keywordtype">int</span>&amp; x, <span class="keywordtype">int</span>&amp; y) <span class="keyword">const</span> = 0;
+00858 
+00862   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a10">SetPerspectiveAspect</a> (<span class="keywordtype">float</span> aspect) = 0;
+00863 
+00865   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiGraphics3D.html#a11">GetPerspectiveAspect</a> () <span class="keyword">const</span> = 0;
+00866 
+00871   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a12">SetObjectToCamera</a> (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* o2c) = 0;
+00872 
+00876   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; <a class="code" href="structiGraphics3D.html#a13">GetObjectToCamera</a> () = 0;
+00877   
+00891   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a14">SetRenderTarget</a> (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>* handle,
+00892         <span class="keywordtype">bool</span> persistent = <span class="keyword">false</span>) = 0;
+00893 
+00897   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* <a class="code" href="structiGraphics3D.html#a15">GetRenderTarget</a> () <span class="keyword">const</span> = 0;
+00898 
+00900   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a16">BeginDraw</a> (<span class="keywordtype">int</span> DrawFlags) = 0;
+00901 
+00903   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a17">FinishDraw</a> () = 0;
+00904 
+00910   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a18">Print</a> (<a class="code" href="classcsRect.html">csRect</a> <span class="keyword">const</span>* area) = 0;
+00911 
+00926   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a19">DrawPixmap</a> (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *hTex, <span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy,
+00927     <span class="keywordtype">int</span> sw, <span class="keywordtype">int</span> sh, <span class="keywordtype">int</span> tx, <span class="keywordtype">int</span> ty, <span class="keywordtype">int</span> tw, <span class="keywordtype">int</span> th, uint8 Alpha = 0) = 0;
+00928 
+00933   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a20">DrawLine</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2,
+00934     <span class="keywordtype">float</span> fov, <span class="keywordtype">int</span> color) = 0;
+00935 
+00941   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a21">SetClipper</a> (<a class="code" href="structiClipper2D.html">iClipper2D</a>* clipper, <span class="keywordtype">int</span> cliptype) = 0;
+00942 
+00946   <span class="keyword">virtual</span> <a class="code" href="structiClipper2D.html">iClipper2D</a>* <a class="code" href="structiGraphics3D.html#a22">GetClipper</a> () = 0;
+00947 
+00951   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiGraphics3D.html#a23">GetClipType</a> () <span class="keyword">const</span> = 0;
+00952 
+00957   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a24">SetNearPlane</a> (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl) = 0;
 00958 
-00960   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a28">SetRenderState</a> (<a class="code" href="group__gfx3d.html#a78">G3D_RENDERSTATEOPTION</a> op, <span class="keywordtype">long</span> val) = 0;
-00961 
-00963   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiGraphics3D.html#a29">GetRenderState</a> (<a class="code" href="group__gfx3d.html#a78">G3D_RENDERSTATEOPTION</a> op) <span class="keyword">const</span> = 0;
-00964 
-00969   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a30">SetOption</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>*, <span class="keyword">const</span> <span class="keywordtype">char</span>*) = 0;
-00970 
-00979   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iRenderBuffer&gt;</a> <a class="code" href="structiGraphics3D.html#a31">CreateRenderBuffer</a> (size_t size, 
-00980     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <a class="code" href="group__gfx3d.html#a82">csRenderBufferComponentType</a> componentType, 
-00981     <span class="keywordtype">int</span> componentCount) = 0;
-00993   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iRenderBuffer&gt;</a> <a class="code" href="structiGraphics3D.html#a32">CreateIndexRenderBuffer</a> (size_t size, 
-00994     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <a class="code" href="group__gfx3d.html#a82">csRenderBufferComponentType</a> componentType,
-00995     size_t rangeStart, size_t rangeEnd) = 0;
-00996 
-01003   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a33">CreateInterleavedRenderBuffers</a> (size_t size, 
-01004     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <span class="keywordtype">int</span> count, <a class="code" href="classcsRefArray.html">csRefArray&lt;iRenderBuffer&gt;</a>&amp; buffers) = 0;
-01005 
-01010   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a34">SetBufferState</a> (<a class="code" href="group__gfx3d.html#a76">csVertexAttrib</a>* attribs,
-01011         <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>** buffers, <span class="keywordtype">int</span> count) = 0;
-01012 
-01017   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a35">SetTextureState</a> (<span class="keywordtype">int</span>* units, <a class="code" href="structiTextureHandle.html">iTextureHandle</a>** textures,
-01018         <span class="keywordtype">int</span> count) = 0;
-01019 
-01021   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a36">DrawMesh</a> (<span class="keyword">const</span> <a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a>* mymesh,
-01022     <span class="keyword">const</span> <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>&amp; modes,
-01023     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&lt; <a class="code" href="classcsArray.html">csArray&lt;csShaderVariable*&gt;</a> &gt; &amp;stacks) = 0;
-01024 
-01026   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a37">SetWriteMask</a> (<span class="keywordtype">bool</span> red, <span class="keywordtype">bool</span> green, <span class="keywordtype">bool</span> blue, <span class="keywordtype">bool</span> alpha) = 0;
+00962   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a25">ResetNearPlane</a> () = 0;
+00963 
+00967   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; <a class="code" href="structiGraphics3D.html#a26">GetNearPlane</a> () <span class="keyword">const</span> = 0;
+00968 
+00972   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a27">HasNearPlane</a> () <span class="keyword">const</span> = 0;
+00973 
+00975   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a28">SetRenderState</a> (<a class="code" href="group__gfx3d.html#a78">G3D_RENDERSTATEOPTION</a> op, <span class="keywordtype">long</span> val) = 0;
+00976 
+00978   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiGraphics3D.html#a29">GetRenderState</a> (<a class="code" href="group__gfx3d.html#a78">G3D_RENDERSTATEOPTION</a> op) <span class="keyword">const</span> = 0;
+00979 
+00984   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a30">SetOption</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>*, <span class="keyword">const</span> <span class="keywordtype">char</span>*) = 0;
+00985 
+00994   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iRenderBuffer&gt;</a> <a class="code" href="structiGraphics3D.html#a31">CreateRenderBuffer</a> (size_t size, 
+00995     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <a class="code" href="group__gfx3d.html#a82">csRenderBufferComponentType</a> componentType, 
+00996     <span class="keywordtype">int</span> componentCount) = 0;
+01008   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iRenderBuffer&gt;</a> <a class="code" href="structiGraphics3D.html#a32">CreateIndexRenderBuffer</a> (size_t size, 
+01009     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <a class="code" href="group__gfx3d.html#a82">csRenderBufferComponentType</a> componentType,
+01010     size_t rangeStart, size_t rangeEnd) = 0;
+01011 
+01018   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a33">CreateInterleavedRenderBuffers</a> (size_t size, 
+01019     <a class="code" href="group__gfx3d.html#a81">csRenderBufferType</a> type, <span class="keywordtype">int</span> count, <a class="code" href="classcsRefArray.html">csRefArray&lt;iRenderBuffer&gt;</a>&amp; buffers) = 0;
+01020 
+01025   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a34">SetBufferState</a> (<a class="code" href="group__gfx3d.html#a76">csVertexAttrib</a>* attribs,
+01026         <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>** buffers, <span class="keywordtype">int</span> count) = 0;
 01027 
-01029   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a38">GetWriteMask</a> (<span class="keywordtype">bool</span> &amp;red, <span class="keywordtype">bool</span> &amp;green, <span class="keywordtype">bool</span> &amp;blue,
-01030         <span class="keywordtype">bool</span> &amp;alpha) <span class="keyword">const</span> = 0;
-01031 
-01033   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a39">SetZMode</a> (<a class="code" href="group__gfx3d.html#a75">csZBufMode</a> mode) = 0;
+01032   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a35">SetTextureState</a> (<span class="keywordtype">int</span>* units, <a class="code" href="structiTextureHandle.html">iTextureHandle</a>** textures,
+01033         <span class="keywordtype">int</span> count) = 0;
 01034 
-01036   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a40">EnableZOffset</a> () = 0;
-01037 
-01039   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a41">DisableZOffset</a> () = 0;
-01040 
-01042   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a42">SetShadowState</a> (<span class="keywordtype">int</span> state) = 0;
-01043 
-01044   <span class="comment">//=========================================================================</span>
-01045   <span class="comment">// Below this line are all functions that are not yet implemented by</span>
-01046   <span class="comment">// the new renderer or are not going to be implemented ever. In the</span>
-01047   <span class="comment">// last case they will be removed as soon as we permanently switch</span>
-01048   <span class="comment">// to the new renderer. @@@NR@@@</span>
-01049   <span class="comment">//=========================================================================</span>
-01051 <span class="comment">  virtual uint32 *GetZBuffAt (int x, int y) = 0;</span>
+01036   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a36">DrawMesh</a> (<span class="keyword">const</span> <a class="code" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a>* mymesh,
+01037     <span class="keyword">const</span> <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>&amp; modes,
+01038     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&lt; <a class="code" href="classcsArray.html">csArray&lt;csShaderVariable*&gt;</a> &gt; &amp;stacks) = 0;
+01039 
+01041   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a37">SetWriteMask</a> (<span class="keywordtype">bool</span> red, <span class="keywordtype">bool</span> green, <span class="keywordtype">bool</span> blue, <span class="keywordtype">bool</span> alpha) = 0;
+01042 
+01044   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a38">GetWriteMask</a> (<span class="keywordtype">bool</span> &amp;red, <span class="keywordtype">bool</span> &amp;green, <span class="keywordtype">bool</span> &amp;blue,
+01045         <span class="keywordtype">bool</span> &amp;alpha) <span class="keyword">const</span> = 0;
+01046 
+01048   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a39">SetZMode</a> (<a class="code" href="group__gfx3d.html#a75">csZBufMode</a> mode) = 0;
+01049 
+01051   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a40">EnableZOffset</a> () = 0;
 01052 
-01054   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiGraphics3D.html#a44">GetZBuffValue</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
+01054   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a41">DisableZOffset</a> () = 0;
 01055 
-01057   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a45">DrawPolygon</a> (<a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a>&amp; poly) = 0;
+01057   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a42">SetShadowState</a> (<span class="keywordtype">int</span> state) = 0;
 01058 
-01065   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a46">DrawPolygonDebug</a> (<a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a>&amp; poly) = 0;
-01066 
-01085   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a47">DrawPolygonFX</a> (<a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a>&amp; poly) = 0;
-01086 
-01090   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a48">DrawTriangleMesh</a> (<a class="code" href="structG3DTriangleMesh.html">G3DTriangleMesh</a>&amp; mesh) = 0;
-01091 
-01095   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a49">DrawPolygonMesh</a> (<a class="code" href="structG3DPolygonMesh.html">G3DPolygonMesh</a>&amp; mesh) = 0;
-01096 
-01104   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a50">OpenFogObject</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id, <a class="code" href="structcsFog.html">csFog</a>* fog) = 0;
-01105 
-01117   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a51">DrawFogPolygon</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id, <a class="code" href="structG3DPolygonDFP.html">G3DPolygonDFP</a>&amp; poly, <span class="keywordtype">int</span> fogtype) = 0;
-01118 
-01124   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a52">CloseFogObject</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id) = 0;
-01125 
-01135   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a53">OpenPortal</a> (size_t numVertices, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>* vertices,
-01136     <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; normal, <span class="keywordtype">bool</span> floating) = 0;
-01137 
-01142   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a54">ClosePortal</a> (<span class="keywordtype">bool</span> zfill_portal) = 0;
-01143 
-01145   <span class="keyword">virtual</span> <a class="code" href="structiHalo.html">iHalo</a> *<a class="code" href="structiGraphics3D.html#a55">CreateHalo</a> (<span class="keywordtype">float</span> iR, <span class="keywordtype">float</span> iG, <span class="keywordtype">float</span> iB,
-01146     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *iAlpha, <span class="keywordtype">int</span> iWidth, <span class="keywordtype">int</span> iHeight) = 0;
-01147 
-01149   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a56">DumpCache</a> () = 0;
-01150 
-01152   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a57">ClearCache</a> () = 0;
-01153 
-01159   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a58">RemoveFromCache</a> (<a class="code" href="structiRendererLightmap.html">iRendererLightmap</a>* rlm) = 0;
-01160 
-01165   <span class="keyword">virtual</span> <a class="code" href="structiVertexBufferManager.html">iVertexBufferManager</a>* <a class="code" href="structiGraphics3D.html#a59">GetVertexBufferManager</a> () = 0;
-01166   
-01167   <span class="comment">//=========================================================================</span>
-01168   <span class="comment">// Here ends the zone of unimplemented methods.</span>
-01169   <span class="comment">//=========================================================================</span>
-01170 
-01175   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a60">IsLightmapOK</a> (<span class="keywordtype">int</span> lmw, <span class="keywordtype">int</span> lmh, 
-01176     <span class="keywordtype">int</span> lightCellSize) = 0;
-01177     
-01178   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonRenderer&gt;</a> CreatePolygonRenderer () = 0;
-01179 
-01180   <span class="comment">/*</span>
-01181 <span class="comment">    @@@ Needed for SW poly drawing ATM.</span>
-01182 <span class="comment">   */</span>
-01183   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetWorldToCamera (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* w2c) = 0;
-01184 
-01196   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a63">DrawSimpleMesh</a> (<span class="keyword">const</span> <a class="code" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a>&amp; mesh,
-01197     <a class="code" href="group__util.html#a8">uint</a> flags = 0) = 0;
-01198 
-01200   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> <a class="code" href="structiGraphics3D.html#a64">GetZMode</a> () = 0;
-01201 };
-01202 
-01205 <span class="preprocessor">#endif // __CS_IVIDEO_GRAPH3D_H__</span>
-01206 <span class="preprocessor"></span>
+01059   <span class="comment">//=========================================================================</span>
+01060   <span class="comment">// Below this line are all functions that are not yet implemented by</span>
+01061   <span class="comment">// the new renderer or are not going to be implemented ever. In the</span>
+01062   <span class="comment">// last case they will be removed as soon as we permanently switch</span>
+01063   <span class="comment">// to the new renderer. @@@NR@@@</span>
+01064   <span class="comment">//=========================================================================</span>
+01066 <span class="comment">  virtual uint32 *GetZBuffAt (int x, int y) = 0;</span>
+01067 
+01069   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiGraphics3D.html#a44">GetZBuffValue</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
+01070 
+01072   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a45">DrawPolygon</a> (<a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a>&amp; poly) = 0;
+01073 
+01080   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a46">DrawPolygonDebug</a> (<a class="code" href="structG3DPolygonDP.html">G3DPolygonDP</a>&amp; poly) = 0;
+01081 
+01100   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a47">DrawPolygonFX</a> (<a class="code" href="structG3DPolygonDPFX.html">G3DPolygonDPFX</a>&amp; poly) = 0;
+01101 
+01105   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a48">DrawTriangleMesh</a> (<a class="code" href="structG3DTriangleMesh.html">G3DTriangleMesh</a>&amp; mesh) = 0;
+01106 
+01110   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a49">DrawPolygonMesh</a> (<a class="code" href="structG3DPolygonMesh.html">G3DPolygonMesh</a>&amp; mesh) = 0;
+01111 
+01119   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a50">OpenFogObject</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id, <a class="code" href="structcsFog.html">csFog</a>* fog) = 0;
+01120 
+01132   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a51">DrawFogPolygon</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id, <a class="code" href="structG3DPolygonDFP.html">G3DPolygonDFP</a>&amp; poly, <span class="keywordtype">int</span> fogtype) = 0;
+01133 
+01139   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a52">CloseFogObject</a> (<a class="code" href="group__util.html#a6">CS_ID</a> id) = 0;
+01140 
+01150   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a53">OpenPortal</a> (size_t numVertices, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>* vertices,
+01151     <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; normal, <span class="keywordtype">bool</span> floating) = 0;
+01152 
+01157   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a54">ClosePortal</a> (<span class="keywordtype">bool</span> zfill_portal) = 0;
+01158 
+01160   <span class="keyword">virtual</span> <a class="code" href="structiHalo.html">iHalo</a> *<a class="code" href="structiGraphics3D.html#a55">CreateHalo</a> (<span class="keywordtype">float</span> iR, <span class="keywordtype">float</span> iG, <span class="keywordtype">float</span> iB,
+01161     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *iAlpha, <span class="keywordtype">int</span> iWidth, <span class="keywordtype">int</span> iHeight) = 0;
+01162 
+01164   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a56">DumpCache</a> () = 0;
+01165 
+01167   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a57">ClearCache</a> () = 0;
+01168 
+01174   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a58">RemoveFromCache</a> (<a class="code" href="structiRendererLightmap.html">iRendererLightmap</a>* rlm) = 0;
+01175 
+01180   <span class="keyword">virtual</span> <a class="code" href="structiVertexBufferManager.html">iVertexBufferManager</a>* <a class="code" href="structiGraphics3D.html#a59">GetVertexBufferManager</a> () = 0;
+01181   
+01182   <span class="comment">//=========================================================================</span>
+01183   <span class="comment">// Here ends the zone of unimplemented methods.</span>
+01184   <span class="comment">//=========================================================================</span>
+01185 
+01190   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGraphics3D.html#a60">IsLightmapOK</a> (<span class="keywordtype">int</span> lmw, <span class="keywordtype">int</span> lmh, 
+01191     <span class="keywordtype">int</span> lightCellSize) = 0;
+01192     
+01193   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonRenderer&gt;</a> CreatePolygonRenderer () = 0;
+01194 
+01195   <span class="comment">/*</span>
+01196 <span class="comment">    @@@ Needed for SW poly drawing ATM.</span>
+01197 <span class="comment">   */</span>
+01198   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetWorldToCamera (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* w2c) = 0;
+01199 
+01211   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGraphics3D.html#a63">DrawSimpleMesh</a> (<span class="keyword">const</span> <a class="code" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a>&amp; mesh,
+01212     <a class="code" href="group__util.html#a8">uint</a> flags = 0) = 0;
+01213 
+01215   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#a75">csZBufMode</a> <a class="code" href="structiGraphics3D.html#a64">GetZMode</a> () = 0;
+01216 };
+01217 
+01220 <span class="preprocessor">#endif // __CS_IVIDEO_GRAPH3D_H__</span>
+01221 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
