@@ -89,114 +89,115 @@
 00078   <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* tex;
 00079   <span class="comment">// Dimensions of texture.</span>
 00080   <span class="keywordtype">int</span> mat_w, mat_h;
-00081   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
-00082   <a class="code" href="classcsRef.html">csRef&lt;iGraphics2D&gt;</a> g2d;
-00083   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-00084   <span class="keywordtype">bool</span> anim_prepared;
-00085 
-00086   <span class="keywordtype">bool</span> key_color;
-00087   <span class="keywordtype">int</span> key_red, key_green, key_blue;
-00088 
-00089   <span class="comment">// If true (default) then proc texture will register a callback</span>
-00090   <span class="comment">// so that the texture is automatically updated (Animate is called)</span>
-00091   <span class="comment">// whenever it is used.</span>
-00092   <span class="keywordtype">bool</span> use_cb;
-00093   <span class="comment">// always animate, even if not visible</span>
-00094   <span class="keywordtype">bool</span> always_animate;
-00095   <span class="comment">// Are we visible? Can be 'false' if animated w/ 'always animate'.</span>
-00096   <span class="keywordtype">bool</span> visible;
-00097 
-00098   <span class="keywordtype">bool</span> GetAlwaysAnimate () <span class="keyword">const</span>;
-00099   <span class="keywordtype">void</span> SetAlwaysAnimate (<span class="keywordtype">bool</span> enable);
-00100 
-00101   <span class="keyword">struct </span>eiTextureWrapper : <span class="keyword">public</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>
-00102   {
-00103     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a>(csProcTexture);
-00104     <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *QueryObject();
-00105     <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a> *Clone () <span class="keyword">const</span>;
-00106     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetImageFile (<a class="code" href="structiImage.html">iImage</a> *Image);
-00107     <span class="keyword">virtual</span> <a class="code" href="structiImage.html">iImage</a>* GetImageFile ();
-00108     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureHandle (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *tex);
-00109     <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* GetTextureHandle ();
-00110     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> red, <span class="keywordtype">int</span> green, <span class="keywordtype">int</span> blue);
-00111     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetKeyColor (<span class="keywordtype">int</span> &amp;red, <span class="keywordtype">int</span> &amp;green, <span class="keywordtype">int</span> &amp;blue) <span class="keyword">const</span>;
-00112     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFlags (<span class="keywordtype">int</span> flags);
-00113     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetFlags () <span class="keyword">const</span>;
-00114     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Register (<a class="code" href="structiTextureManager.html">iTextureManager</a> *txtmng);
-00115     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetUseCallback (<a class="code" href="structiTextureCallback.html">iTextureCallback</a>* callback);
-00116     <span class="keyword">virtual</span> <a class="code" href="structiTextureCallback.html">iTextureCallback</a>* GetUseCallback () <span class="keyword">const</span>;
-00117     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Visit ();
-00118     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsVisitRequired () <span class="keyword">const</span>;
-00119     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeepImage (<span class="keywordtype">bool</span> k);
-00120     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> KeepImage () <span class="keyword">const</span>;
-00121     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureClass (<span class="keyword">const</span> <span class="keywordtype">char</span>* className);
-00122     <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetTextureClass ();
-00123   } scfiTextureWrapper;
-00124   <span class="keyword">friend</span> <span class="keyword">struct </span>eiTextureWrapper;
-00125 
-00126   <span class="keyword">struct </span>eiProcTexture : <span class="keyword">public</span> <a class="code" href="structiProcTexture.html">iProcTexture</a>
-00127   {
-00128     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a>(csProcTexture);
-00129 
-00130     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetAlwaysAnimate () <span class="keyword">const</span>;
-00131     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetAlwaysAnimate (<span class="keywordtype">bool</span> enable);
-00132     <span class="keyword">virtual</span> <a class="code" href="structiTextureFactory.html">iTextureFactory</a>* GetFactory();
-00133   } scfiProcTexture;
-00134   <span class="keyword">friend</span> <span class="keyword">struct </span>eiProcTexture;
-00135 
-00136 <span class="keyword">public</span>:
-00137   <span class="comment">// The current time the previous time the callback was called.</span>
-00138   <span class="comment">// This is used to detect if the callback is called multiple times</span>
-00139   <span class="comment">// in one frame.</span>
-00140   <a class="code" href="group__util.html#ga15">csTicks</a> last_cur_time;
-00141 
-00142 <span class="keyword">private</span>:
-00143   <span class="keyword">static</span> <span class="keywordtype">void</span> ProcCallback (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* txt, <span class="keywordtype">void</span>* data);
-00144 
-00146   <a class="code" href="classcsRef.html">csRef&lt;iTextureFactory&gt;</a> parent;
-00147 
-00148 <span class="keyword">public</span>:
-00149   <a class="code" href="group__scf.html#ga49">SCF_DECLARE_IBASE_EXT</a> (<a class="code" href="classcsObject.html">csObject</a>);
-00150 
-00151   csProcTexture (<a class="code" href="structiTextureFactory.html">iTextureFactory</a>* p = 0);
-00152   <span class="keyword">virtual</span> ~csProcTexture ();
-00153 
-00154   <a class="code" href="structiGraphics3D.html">iGraphics3D</a>* GetG3D () { <span class="keywordflow">return</span> g3d; }
-00155   <a class="code" href="structiGraphics2D.html">iGraphics2D</a>* GetG2D () { <span class="keywordflow">return</span> g2d; }
-00156 
-<a name="l00164"></a><a class="code" href="classcsProcTexture.html#a5">00164</a>   <span class="keywordtype">void</span> DisableAutoUpdate () { use_cb = <span class="keyword">false</span>; }
-00165 
-00178   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
-00179 
-00188   <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <a class="code" href="structiEngine.html">iEngine</a>* engine,
-00189         <a class="code" href="structiTextureManager.html">iTextureManager</a>* txtmgr, <span class="keyword">const</span> <span class="keywordtype">char</span>* name);
-00190 
-00194   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PrepareAnim ();
-00195 
-<a name="l00197"></a><a class="code" href="classcsProcTexture.html#a9">00197</a>   <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> red, <span class="keywordtype">int</span> green, <span class="keywordtype">int</span> blue)
-00198   {
-00199     key_color = <span class="keyword">true</span>;
-00200     key_red = red;
-00201     key_green = green;
-00202     key_blue = blue;
-00203   }
-00204 
-00209   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Animate (csTicks current_time) = 0;
-00210 
-<a name="l00212"></a><a class="code" href="classcsProcTexture.html#a11">00212</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetDimension (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h)<span class="keyword"> const</span>
-00213 <span class="keyword">  </span>{ w = mat_w; h = mat_h; }
-00214 
-00215   <span class="keyword">static</span> <span class="keywordtype">int</span> GetRandom (<span class="keywordtype">int</span> max)
-00216   {
-00217     <span class="keywordflow">return</span> int ((<span class="keywordtype">float</span>(max)*rand()/(RAND_MAX+1.0)));
-00218   }
-00219 
-<a name="l00221"></a><a class="code" href="classcsProcTexture.html#a12">00221</a>   <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* GetTextureWrapper ()
-00222   { <span class="keywordflow">return</span> &amp;scfiTextureWrapper; }
-00223 
-00224 };
-00225 
-00226 <span class="preprocessor">#endif // __CS_PROCTEX_H__</span>
+00081   <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> proc_image;
+00082   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
+00083   <a class="code" href="classcsRef.html">csRef&lt;iGraphics2D&gt;</a> g2d;
+00084   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+00085   <span class="keywordtype">bool</span> anim_prepared;
+00086 
+00087   <span class="keywordtype">bool</span> key_color;
+00088   <span class="keywordtype">int</span> key_red, key_green, key_blue;
+00089 
+00090   <span class="comment">// If true (default) then proc texture will register a callback</span>
+00091   <span class="comment">// so that the texture is automatically updated (Animate is called)</span>
+00092   <span class="comment">// whenever it is used.</span>
+00093   <span class="keywordtype">bool</span> use_cb;
+00094   <span class="comment">// always animate, even if not visible</span>
+00095   <span class="keywordtype">bool</span> always_animate;
+00096   <span class="comment">// Are we visible? Can be 'false' if animated w/ 'always animate'.</span>
+00097   <span class="keywordtype">bool</span> visible;
+00098 
+00099   <span class="keywordtype">bool</span> GetAlwaysAnimate () <span class="keyword">const</span>;
+00100   <span class="keywordtype">void</span> SetAlwaysAnimate (<span class="keywordtype">bool</span> enable);
+00101 
+00102   <span class="keyword">struct </span>eiTextureWrapper : <span class="keyword">public</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>
+00103   {
+00104     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a>(csProcTexture);
+00105     <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *QueryObject();
+00106     <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a> *Clone () <span class="keyword">const</span>;
+00107     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetImageFile (<a class="code" href="structiImage.html">iImage</a> *Image);
+00108     <span class="keyword">virtual</span> <a class="code" href="structiImage.html">iImage</a>* GetImageFile ();
+00109     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureHandle (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *tex);
+00110     <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* GetTextureHandle ();
+00111     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> red, <span class="keywordtype">int</span> green, <span class="keywordtype">int</span> blue);
+00112     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetKeyColor (<span class="keywordtype">int</span> &amp;red, <span class="keywordtype">int</span> &amp;green, <span class="keywordtype">int</span> &amp;blue) <span class="keyword">const</span>;
+00113     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFlags (<span class="keywordtype">int</span> flags);
+00114     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetFlags () <span class="keyword">const</span>;
+00115     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Register (<a class="code" href="structiTextureManager.html">iTextureManager</a> *txtmng);
+00116     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetUseCallback (<a class="code" href="structiTextureCallback.html">iTextureCallback</a>* callback);
+00117     <span class="keyword">virtual</span> <a class="code" href="structiTextureCallback.html">iTextureCallback</a>* GetUseCallback () <span class="keyword">const</span>;
+00118     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Visit ();
+00119     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsVisitRequired () <span class="keyword">const</span>;
+00120     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeepImage (<span class="keywordtype">bool</span> k);
+00121     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> KeepImage () <span class="keyword">const</span>;
+00122     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureClass (<span class="keyword">const</span> <span class="keywordtype">char</span>* className);
+00123     <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetTextureClass ();
+00124   } scfiTextureWrapper;
+00125   <span class="keyword">friend</span> <span class="keyword">struct </span>eiTextureWrapper;
+00126 
+00127   <span class="keyword">struct </span>eiProcTexture : <span class="keyword">public</span> <a class="code" href="structiProcTexture.html">iProcTexture</a>
+00128   {
+00129     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a>(csProcTexture);
+00130 
+00131     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetAlwaysAnimate () <span class="keyword">const</span>;
+00132     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetAlwaysAnimate (<span class="keywordtype">bool</span> enable);
+00133     <span class="keyword">virtual</span> <a class="code" href="structiTextureFactory.html">iTextureFactory</a>* GetFactory();
+00134   } scfiProcTexture;
+00135   <span class="keyword">friend</span> <span class="keyword">struct </span>eiProcTexture;
+00136 
+00137 <span class="keyword">public</span>:
+00138   <span class="comment">// The current time the previous time the callback was called.</span>
+00139   <span class="comment">// This is used to detect if the callback is called multiple times</span>
+00140   <span class="comment">// in one frame.</span>
+00141   <a class="code" href="group__util.html#ga15">csTicks</a> last_cur_time;
+00142 
+00143 <span class="keyword">private</span>:
+00144   <span class="keyword">static</span> <span class="keywordtype">void</span> ProcCallback (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* txt, <span class="keywordtype">void</span>* data);
+00145 
+00147   <a class="code" href="classcsRef.html">csRef&lt;iTextureFactory&gt;</a> parent;
+00148 
+00149 <span class="keyword">public</span>:
+00150   <a class="code" href="group__scf.html#ga49">SCF_DECLARE_IBASE_EXT</a> (<a class="code" href="classcsObject.html">csObject</a>);
+00151 
+00152   csProcTexture (<a class="code" href="structiTextureFactory.html">iTextureFactory</a>* p = 0, <a class="code" href="structiImage.html">iImage</a>* image = 0);
+00153   <span class="keyword">virtual</span> ~csProcTexture ();
+00154 
+00155   <a class="code" href="structiGraphics3D.html">iGraphics3D</a>* GetG3D () { <span class="keywordflow">return</span> g3d; }
+00156   <a class="code" href="structiGraphics2D.html">iGraphics2D</a>* GetG2D () { <span class="keywordflow">return</span> g2d; }
+00157 
+<a name="l00165"></a><a class="code" href="classcsProcTexture.html#a5">00165</a>   <span class="keywordtype">void</span> DisableAutoUpdate () { use_cb = <span class="keyword">false</span>; }
+00166 
+00179   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
+00180 
+00189   <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <a class="code" href="structiEngine.html">iEngine</a>* engine,
+00190         <a class="code" href="structiTextureManager.html">iTextureManager</a>* txtmgr, <span class="keyword">const</span> <span class="keywordtype">char</span>* name);
+00191 
+00195   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PrepareAnim ();
+00196 
+<a name="l00198"></a><a class="code" href="classcsProcTexture.html#a9">00198</a>   <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> red, <span class="keywordtype">int</span> green, <span class="keywordtype">int</span> blue)
+00199   {
+00200     key_color = <span class="keyword">true</span>;
+00201     key_red = red;
+00202     key_green = green;
+00203     key_blue = blue;
+00204   }
+00205 
+00210   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Animate (csTicks current_time) = 0;
+00211 
+<a name="l00213"></a><a class="code" href="classcsProcTexture.html#a11">00213</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetDimension (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h)<span class="keyword"> const</span>
+00214 <span class="keyword">  </span>{ w = mat_w; h = mat_h; }
+00215 
+00216   <span class="keyword">static</span> <span class="keywordtype">int</span> GetRandom (<span class="keywordtype">int</span> max)
+00217   {
+00218     <span class="keywordflow">return</span> int ((<span class="keywordtype">float</span>(max)*rand()/(RAND_MAX+1.0)));
+00219   }
+00220 
+<a name="l00222"></a><a class="code" href="classcsProcTexture.html#a12">00222</a>   <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* GetTextureWrapper ()
+00223   { <span class="keywordflow">return</span> &amp;scfiTextureWrapper; }
+00224 
+00225 };
+00226 
+00227 <span class="preprocessor">#endif // __CS_PROCTEX_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
