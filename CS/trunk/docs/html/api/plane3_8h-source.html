@@ -75,43 +75,47 @@
 <a name="l00098"></a><a class="code" href="classcsPlane3.html#a13">00098</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span>&amp; <a class="code" href="classcsPlane3.html#a9">C</a> () { <span class="keywordflow">return</span> <a class="code" href="classcsPlane3.html#o0">norm</a>.<a class="code" href="classcsVector3.html#o2">z</a>; }
 <a name="l00100"></a><a class="code" href="classcsPlane3.html#a14">00100</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span>&amp; <a class="code" href="classcsPlane3.html#a10">D</a> () { <span class="keywordflow">return</span> DD; }
 00101 
-<a name="l00103"></a><a class="code" href="classcsPlane3.html#a15">00103</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a15">Set</a> (<span class="keywordtype">float</span> a, <span class="keywordtype">float</span> b, <span class="keywordtype">float</span> c, <span class="keywordtype">float</span> d)
-00104   { <a class="code" href="classcsPlane3.html#o0">norm</a>.<a class="code" href="classcsVector3.html#o0">x</a> = a; <a class="code" href="classcsPlane3.html#o0">norm</a>.<a class="code" href="classcsVector3.html#o1">y</a> = b; <a class="code" href="classcsPlane3.html#o0">norm</a>.<a class="code" href="classcsVector3.html#o2">z</a> = c; <a class="code" href="classcsPlane3.html#o1">DD</a> = d; }
-00105 
-<a name="l00107"></a><a class="code" href="classcsPlane3.html#a16">00107</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a15">Set</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; normal, <span class="keywordtype">float</span> d)
-00108   { <a class="code" href="classcsPlane3.html#o0">norm</a> = normal; <a class="code" href="classcsPlane3.html#o1">DD</a> = d; }
-00109 
-00116   <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a15">Set</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3);
-00117 
-<a name="l00123"></a><a class="code" href="classcsPlane3.html#a18">00123</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a15">Set</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3)
-00124   {
-00125     <a class="code" href="classcsPlane3.html#o0">norm</a> = v2 % v3; <a class="code" href="classcsPlane3.html#o1">DD</a> = 0;
-00126   }
-00127 
-<a name="l00138"></a><a class="code" href="classcsPlane3.html#a19">00138</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classcsPlane3.html#a19">Classify</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pt)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsPlane3.html#o0">norm</a>*pt+DD; }
-00139 
-<a name="l00144"></a><a class="code" href="classcsPlane3.html#e0">00144</a>   <span class="keyword">static</span> <span class="keywordtype">float</span> <a class="code" href="classcsPlane3.html#a19">Classify</a> (<span class="keywordtype">float</span> A, <span class="keywordtype">float</span> B, <span class="keywordtype">float</span> C, <span class="keywordtype">float</span> D,
-00145                          <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pt)
-00146   {
-00147     <span class="keywordflow">return</span> A*pt.<a class="code" href="classcsVector3.html#o0">x</a> + B*pt.<a class="code" href="classcsVector3.html#o1">y</a> + C*pt.<a class="code" href="classcsVector3.html#o2">z</a> + D;
-00148   }
-00149 
-<a name="l00156"></a><a class="code" href="classcsPlane3.html#a20">00156</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classcsPlane3.html#a20">Distance</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pt)<span class="keyword"> const</span>
-00157 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ABS (<a class="code" href="classcsPlane3.html#a19">Classify</a> (pt)); }
-00158 
-<a name="l00163"></a><a class="code" href="classcsPlane3.html#a21">00163</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a21">Invert</a> () { <a class="code" href="classcsPlane3.html#o0">norm</a> = -norm;  <a class="code" href="classcsPlane3.html#o1">DD</a> = -DD; }
-00164 
-<a name="l00168"></a><a class="code" href="classcsPlane3.html#a22">00168</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a22">Normalize</a> ()
-00169   {
-00170     <span class="keywordtype">float</span> f = <a class="code" href="classcsPlane3.html#o0">norm</a>.<a class="code" href="classcsVector3.html#a20">Norm</a> ();
-00171     <span class="keywordflow">if</span> (f) { <a class="code" href="classcsPlane3.html#o0">norm</a> /= f;  <a class="code" href="classcsPlane3.html#o1">DD</a> /= f; }
-00172   }
-00173 
-00184   <span class="keywordtype">bool</span> <a class="code" href="classcsPlane3.html#a23">ClipPolygon</a> (<a class="code" href="classcsVector3.html">csVector3</a>*&amp; pverts, <span class="keywordtype">int</span>&amp; num_verts, <span class="keywordtype">bool</span> reversed = <span class="keyword">false</span>);
-00185 };
-00186 
-00189 <span class="preprocessor">#endif // __CS_PLANE3_H__</span>
-00190 <span class="preprocessor"></span>
+<a name="l00103"></a><a class="code" href="classcsPlane3.html#a15">00103</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="classcsPlane3.html#a15">GetNormal</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> norm; }
+00104 
+<a name="l00106"></a><a class="code" href="classcsPlane3.html#a16">00106</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a16">Set</a> (<span class="keywordtype">float</span> a, <span class="keywordtype">float</span> b, <span class="keywordtype">float</span> c, <span class="keywordtype">float</span> d)
+00107   { <a class="code" href="classcsPlane3.html#o0">norm</a>.<a class="code" href="classcsVector3.html#o0">x</a> = a; <a class="code" href="classcsPlane3.html#o0">norm</a>.<a class="code" href="classcsVector3.html#o1">y</a> = b; <a class="code" href="classcsPlane3.html#o0">norm</a>.<a class="code" href="classcsVector3.html#o2">z</a> = c; <a class="code" href="classcsPlane3.html#o1">DD</a> = d; }
+00108 
+<a name="l00110"></a><a class="code" href="classcsPlane3.html#a17">00110</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a16">Set</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; normal, <span class="keywordtype">float</span> d)
+00111   { <a class="code" href="classcsPlane3.html#o0">norm</a> = normal; <a class="code" href="classcsPlane3.html#o1">DD</a> = d; }
+00112 
+00119   <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a16">Set</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3);
+00120 
+<a name="l00126"></a><a class="code" href="classcsPlane3.html#a19">00126</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a16">Set</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3)
+00127   {
+00128     <a class="code" href="classcsPlane3.html#o0">norm</a> = v2 % v3; <a class="code" href="classcsPlane3.html#o1">DD</a> = 0;
+00129   }
+00130 
+<a name="l00141"></a><a class="code" href="classcsPlane3.html#a20">00141</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classcsPlane3.html#a20">Classify</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pt)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsPlane3.html#o0">norm</a>*pt+DD; }
+00142 
+<a name="l00147"></a><a class="code" href="classcsPlane3.html#e0">00147</a>   <span class="keyword">static</span> <span class="keywordtype">float</span> <a class="code" href="classcsPlane3.html#a20">Classify</a> (<span class="keywordtype">float</span> A, <span class="keywordtype">float</span> B, <span class="keywordtype">float</span> C, <span class="keywordtype">float</span> D,
+00148                          <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pt)
+00149   {
+00150     <span class="keywordflow">return</span> A*pt.<a class="code" href="classcsVector3.html#o0">x</a> + B*pt.<a class="code" href="classcsVector3.html#o1">y</a> + C*pt.<a class="code" href="classcsVector3.html#o2">z</a> + D;
+00151   }
+00152 
+<a name="l00159"></a><a class="code" href="classcsPlane3.html#a21">00159</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classcsPlane3.html#a21">Distance</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pt)<span class="keyword"> const</span>
+00160 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ABS (<a class="code" href="classcsPlane3.html#a20">Classify</a> (pt)); }
+00161 
+<a name="l00166"></a><a class="code" href="classcsPlane3.html#a22">00166</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a22">Invert</a> () { <a class="code" href="classcsPlane3.html#o0">norm</a> = -norm;  <a class="code" href="classcsPlane3.html#o1">DD</a> = -DD; }
+00167 
+<a name="l00171"></a><a class="code" href="classcsPlane3.html#a23">00171</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPlane3.html#a23">Normalize</a> ()
+00172   {
+00173     <span class="keywordtype">float</span> f = <a class="code" href="classcsPlane3.html#o0">norm</a>.<a class="code" href="classcsVector3.html#a20">Norm</a> ();
+00174     <span class="keywordflow">if</span> (f) { <a class="code" href="classcsPlane3.html#o0">norm</a> /= f;  <a class="code" href="classcsPlane3.html#o1">DD</a> /= f; }
+00175   }
+00176 
+00180   <a class="code" href="classcsVector3.html">csVector3</a> <a class="code" href="classcsPlane3.html#a24">FindPoint</a> () <span class="keyword">const</span>;
+00181 
+00192   <span class="keywordtype">bool</span> <a class="code" href="classcsPlane3.html#a25">ClipPolygon</a> (<a class="code" href="classcsVector3.html">csVector3</a>*&amp; pverts, <span class="keywordtype">int</span>&amp; num_verts, <span class="keywordtype">bool</span> reversed = <span class="keyword">false</span>);
+00193 };
+00194 
+00197 <span class="preprocessor">#endif // __CS_PLANE3_H__</span>
+00198 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

@@ -47,7 +47,7 @@
 00034 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
 00035 <span class="preprocessor">#include "csgeom/polymesh.h"</span>
 00036 
-<a name="l00040"></a><a class="code" href="structcsPolygonMeshEdge.html">00040</a> <span class="keyword">struct </span><a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>
+<a name="l00040"></a><a class="code" href="structcsPolygonMeshEdge.html">00040</a> <span class="keyword">struct </span>CS_CSGEOM_EXPORT csPolygonMeshEdge
 00041 {
 00042   <span class="comment">// Indices of the two vertices forming the edge.</span>
 00043   <span class="comment">// vt1 &lt; vt2.</span>
@@ -63,41 +63,69 @@
 00053   <span class="keywordtype">bool</span> active;
 00054 };
 00055 
-<a name="l00059"></a><a class="code" href="classcsPolygonMeshTools.html">00059</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csPolygonMeshTools
+<a name="l00059"></a><a class="code" href="structcsTriangleMinMax.html">00059</a> <span class="keyword">struct </span>CS_CSGEOM_EXPORT csTriangleMinMax : <span class="keyword">public</span> <a class="code" href="structcsTriangle.html">csTriangle</a>
 00060 {
-00061 <span class="keyword">public</span>:
-00067   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e0">CalculateNormals</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh, <a class="code" href="classcsVector3.html">csVector3</a>* normals);
-00068 
-00074   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e1">CalculatePlanes</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
-00075 
-00083   <span class="keyword">static</span> <a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>* <a class="code" href="classcsPolygonMeshTools.html#e2">CalculateEdges</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>*, <span class="keywordtype">int</span>&amp; num_edges);
-00084 
-00090   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsPolygonMeshTools.html#e3">CheckActiveEdges</a> (<a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>* edges, <span class="keywordtype">int</span> num_edges,
-00091         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
-00092 
-00114   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e4">CalculateOutline</a> (<a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>* edges, <span class="keywordtype">int</span> num_edges,
-00115         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes, <span class="keywordtype">int</span> num_vertices,
-00116         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos,
-00117         <span class="keywordtype">int</span>* outline_edges, <span class="keywordtype">int</span>&amp; num_outline_edges,
-00118         <span class="keywordtype">bool</span>* outline_verts,
-00119         <span class="keywordtype">float</span>&amp; valid_radius);
-00120 
-00125   <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcsPolygonMeshTools.html#e5">IsMeshClosed</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh);
-00126 
-00132   <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcsPolygonMeshTools.html#e6">IsMeshConvex</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh);
-00133 
-00140   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e7">CloseMesh</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh, 
-00141     <a class="code" href="classcsArray.html">csArray&lt;csMeshedPolygon&gt;</a>&amp; newPolys, <span class="keywordtype">int</span>*&amp; vertidx, <span class="keywordtype">int</span>&amp; vertidx_len);
-00142 
-00147   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e8">Triangulate</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
-00148         <a class="code" href="structcsTriangle.html">csTriangle</a>*&amp; tris, <span class="keywordtype">int</span>&amp; tri_count);
-00149 
-00155   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e9">Polygonize</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
-00156         <a class="code" href="structcsMeshedPolygon.html">csMeshedPolygon</a>*&amp; polygons, <span class="keywordtype">int</span>&amp; poly_count);
-00157 };
-00158 
-00161 <span class="preprocessor">#endif // __CS_PMTOOLS_H__</span>
-00162 <span class="preprocessor"></span>
+00061   <span class="keywordtype">float</span> minx, maxx;
+00062 };
+00063 
+<a name="l00067"></a><a class="code" href="classcsPolygonMeshTools.html">00067</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT csPolygonMeshTools
+00068 {
+00069 <span class="keyword">private</span>:
+00070   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e1">CalculatePlanes</a> (<a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+00071         csTriangleMinMax* tris, <span class="keywordtype">int</span> num_tris, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+00072 
+00073 <span class="keyword">public</span>:
+00079   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e0">CalculateNormals</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh, <a class="code" href="classcsVector3.html">csVector3</a>* normals);
+00080 
+00086   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e1">CalculatePlanes</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+00087 
+00095   <span class="keyword">static</span> csPolygonMeshEdge* <a class="code" href="classcsPolygonMeshTools.html#e2">CalculateEdges</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>*, <span class="keywordtype">int</span>&amp; num_edges);
+00096 
+00102   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsPolygonMeshTools.html#e3">CheckActiveEdges</a> (csPolygonMeshEdge* edges, <span class="keywordtype">int</span> num_edges,
+00103         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+00104 
+00126   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e4">CalculateOutline</a> (csPolygonMeshEdge* edges, <span class="keywordtype">int</span> num_edges,
+00127         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes, <span class="keywordtype">int</span> num_vertices,
+00128         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos,
+00129         <span class="keywordtype">int</span>* outline_edges, <span class="keywordtype">int</span>&amp; num_outline_edges,
+00130         <span class="keywordtype">bool</span>* outline_verts,
+00131         <span class="keywordtype">float</span>&amp; valid_radius);
+00132 
+00137   <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcsPolygonMeshTools.html#e5">IsMeshClosed</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh);
+00138 
+00144   <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcsPolygonMeshTools.html#e6">IsMeshConvex</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh);
+00145 
+00152   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e7">CloseMesh</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh, 
+00153     <a class="code" href="classcsArray.html">csArray&lt;csMeshedPolygon&gt;</a>&amp; newPolys, <span class="keywordtype">int</span>*&amp; vertidx, <span class="keywordtype">int</span>&amp; vertidx_len);
+00154 
+00162   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e8">Triangulate</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
+00163         <a class="code" href="structcsTriangle.html">csTriangle</a>*&amp; tris, <span class="keywordtype">int</span>&amp; tri_count);
+00164 
+00170   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e9">Polygonize</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
+00171         <a class="code" href="structcsMeshedPolygon.html">csMeshedPolygon</a>*&amp; polygons, <span class="keywordtype">int</span>&amp; poly_count);
+00172 
+00181   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classcsPolygonMeshTools.html#e10">SortTrianglesX</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
+00182         csTriangleMinMax*&amp; tris, <span class="keywordtype">int</span>&amp; tri_count,
+00183         <a class="code" href="classcsPlane3.html">csPlane3</a>*&amp; planes);
+00184 
+00192   <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcsPolygonMeshTools.html#e11">PointInClosedMesh</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point,
+00193         <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+00194         csTriangleMinMax* tris, <span class="keywordtype">int</span> tri_count,
+00195         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+00196 
+00209   <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcsPolygonMeshTools.html#e12">LineInClosedMesh</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p2,
+00210         <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+00211         csTriangleMinMax* tris, <span class="keywordtype">int</span> tri_count,
+00212         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+00213 
+00226   <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcsPolygonMeshTools.html#e13">BoxInClosedMesh</a> (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; box,
+00227         <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+00228         csTriangleMinMax* tris, <span class="keywordtype">int</span> tri_count,
+00229         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+00230 };
+00231 
+00234 <span class="preprocessor">#endif // __CS_PMTOOLS_H__</span>
+00235 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

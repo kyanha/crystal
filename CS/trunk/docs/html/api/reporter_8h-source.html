@@ -42,200 +42,201 @@
 00023 <span class="preprocessor">#include "<a class="code" href="ansicolor_8h.html">csutil/ansicolor.h</a>"</span>
 00024 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
 00025 <span class="preprocessor">#include "<a class="code" href="sysfunc_8h.html">csutil/sysfunc.h</a>"</span>
-00026 <span class="preprocessor">#include "<a class="code" href="iutil_2objreg_8h.html">iutil/objreg.h</a>"</span>
-00027 
-00034 <span class="keyword">struct </span><a class="code" href="structiReporter.html">iReporter</a>;
-00035 
-<a name="l00043"></a><a class="code" href="group__util.html#ga139">00043</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_BUG 0</span>
-00044 <span class="preprocessor"></span>
-<a name="l00050"></a><a class="code" href="group__util.html#ga140">00050</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_ERROR 1</span>
-00051 <span class="preprocessor"></span>
-<a name="l00056"></a><a class="code" href="group__util.html#ga141">00056</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_WARNING 2</span>
-00057 <span class="preprocessor"></span>
-<a name="l00062"></a><a class="code" href="group__util.html#ga142">00062</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_NOTIFY 3</span>
-00063 <span class="preprocessor"></span>
-<a name="l00069"></a><a class="code" href="group__util.html#ga143">00069</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_DEBUG 4</span>
-00070 <span class="preprocessor"></span>
-00072 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiReporterListener.html">iReporterListener</a>, 0, 0, 1);
-00073 
-<a name="l00088"></a><a class="code" href="structiReporterListener.html">00088</a> <span class="keyword">struct </span><a class="code" href="structiReporterListener.html">iReporterListener</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00089 {
-00095   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiReporterListener.html#a0">Report</a> (<a class="code" href="structiReporter.html">iReporter</a>* reporter, <span class="keywordtype">int</span> severity, <span class="keyword">const</span> <span class="keywordtype">char</span>* msgId,
-00096         <span class="keyword">const</span> <span class="keywordtype">char</span>* description) = 0;
-00097 };
-00098 
-00099 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiReporterIterator.html">iReporterIterator</a>, 0, 0, 1);
-00100 
-<a name="l00109"></a><a class="code" href="structiReporterIterator.html">00109</a> <span class="keyword">struct </span><a class="code" href="structiReporterIterator.html">iReporterIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00110 {
-00112   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiReporterIterator.html#a0">HasNext</a> () = 0;
-00117   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporterIterator.html#a1">Next</a> () = 0;
-00118 
-00122   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiReporterIterator.html#a2">GetMessageSeverity</a> () <span class="keyword">const </span>= 0;
-00123 
-00127   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiReporterIterator.html#a3">GetMessageId</a> () <span class="keyword">const </span>= 0;
-00128 
-00132   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiReporterIterator.html#a4">GetMessageDescription</a> () <span class="keyword">const </span>= 0;
-00133 };
-00134 
-00135 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiReporter.html">iReporter</a>, 0, 1, 0);
-00136 
-<a name="l00160"></a><a class="code" href="structiReporter.html">00160</a> <span class="keyword">struct </span><a class="code" href="structiReporter.html">iReporter</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00161 {
-00167   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a0">Report</a> (<span class="keywordtype">int</span> severity, <span class="keyword">const</span> <span class="keywordtype">char</span>* msgId,
-00168         <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...) CS_GNUC_PRINTF(4, 5) = 0;
-00169 
-00173   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a1">ReportV</a> (<span class="keywordtype">int</span> severity, <span class="keyword">const</span> <span class="keywordtype">char</span>* msgId,
-00174         <span class="keyword">const</span> <span class="keywordtype">char</span>* description, va_list) CS_GNUC_PRINTF(4, 0) = 0;
-00175 
-00181   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a2">Clear</a> (<span class="keywordtype">int</span> severity = -1) = 0;
-00182 
-00189   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a2">Clear</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* mask) = 0;
-00190 
-00195   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iReporterIterator&gt;</a> <a class="code" href="structiReporter.html#a4">GetMessageIterator</a> () = 0;
-00196 
-00203   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a5">AddReporterListener</a> (<a class="code" href="structiReporterListener.html">iReporterListener</a>* listener) = 0;
-00204 
-00211   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a6">RemoveReporterListener</a> (<a class="code" href="structiReporterListener.html">iReporterListener</a>* listener) = 0;
-00212 
-00216   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiReporter.html#a7">FindReporterListener</a> (<a class="code" href="structiReporterListener.html">iReporterListener</a>* listener) = 0;
-00217 
-00218   <span class="comment">//----------------------------------------------------------------------</span>
-00219   <span class="comment">// Convenience functions, these are not to be implemented in the plugin.</span>
-00220   <span class="comment">//----------------------------------------------------------------------</span>
-00221 
-00225   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga149">ReportError</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00226     CS_GNUC_PRINTF (3, 4);
-00227 
-00231   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga150">ReportWarning</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00232     CS_GNUC_PRINTF (3, 4);
-00233 
-00237   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga151">ReportNotify</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00238     CS_GNUC_PRINTF (3, 4);
-00239 
-00243   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga152">ReportBug</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00244     CS_GNUC_PRINTF (3, 4);
-00245 
-00249   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga153">ReportDebug</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00250     CS_GNUC_PRINTF (3, 4);
-00251 };
-00252 
-00253 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportError
-<a name="l00254"></a><a class="code" href="group__util.html#ga149">00254</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00255 {
-00256   va_list arg;
-00257   va_start (arg, description);
-00258   ReportV (<a class="code" href="group__util.html#ga140">CS_REPORTER_SEVERITY_ERROR</a>, msgId, description, arg);
-00259   va_end (arg);
-00260 }
-00261 
-00262 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportWarning
-<a name="l00263"></a><a class="code" href="group__util.html#ga150">00263</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00264 {
-00265   va_list arg;
-00266   va_start (arg, description);
-00267   ReportV (<a class="code" href="group__util.html#ga141">CS_REPORTER_SEVERITY_WARNING</a>, msgId, description, arg);
-00268   va_end (arg);
-00269 }
-00270 
-00271 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportNotify
-<a name="l00272"></a><a class="code" href="group__util.html#ga151">00272</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00273 {
-00274   va_list arg;
-00275   va_start (arg, description);
-00276   ReportV (<a class="code" href="group__util.html#ga142">CS_REPORTER_SEVERITY_NOTIFY</a>, msgId, description, arg);
-00277   va_end (arg);
-00278 }
-00279 
-00280 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportBug
-<a name="l00281"></a><a class="code" href="group__util.html#ga152">00281</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00282 {
-00283   va_list arg;
-00284   va_start (arg, description);
-00285   ReportV (<a class="code" href="group__util.html#ga139">CS_REPORTER_SEVERITY_BUG</a>, msgId, description, arg);
-00286   va_end (arg);
-00287 }
-00288 
-00289 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportDebug
-<a name="l00290"></a><a class="code" href="group__util.html#ga153">00290</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00291 {
-00292   va_list arg;
-00293   va_start (arg, description);
-00294   ReportV (<a class="code" href="group__util.html#ga143">CS_REPORTER_SEVERITY_DEBUG</a>, msgId, description, arg);
-00295   va_end (arg);
-00296 }
-00297 
+00026 <span class="preprocessor">#include "<a class="code" href="util_8h.html">csutil/util.h</a>"</span>
+00027 <span class="preprocessor">#include "<a class="code" href="iutil_2objreg_8h.html">iutil/objreg.h</a>"</span>
+00028 
+00035 <span class="keyword">struct </span><a class="code" href="structiReporter.html">iReporter</a>;
+00036 
+<a name="l00044"></a><a class="code" href="group__util.html#ga141">00044</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_BUG 0</span>
+00045 <span class="preprocessor"></span>
+<a name="l00051"></a><a class="code" href="group__util.html#ga142">00051</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_ERROR 1</span>
+00052 <span class="preprocessor"></span>
+<a name="l00057"></a><a class="code" href="group__util.html#ga143">00057</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_WARNING 2</span>
+00058 <span class="preprocessor"></span>
+<a name="l00063"></a><a class="code" href="group__util.html#ga144">00063</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_NOTIFY 3</span>
+00064 <span class="preprocessor"></span>
+<a name="l00070"></a><a class="code" href="group__util.html#ga145">00070</a> <span class="preprocessor">#define CS_REPORTER_SEVERITY_DEBUG 4</span>
+00071 <span class="preprocessor"></span>
+00073 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiReporterListener.html">iReporterListener</a>, 0, 0, 1);
+00074 
+<a name="l00089"></a><a class="code" href="structiReporterListener.html">00089</a> <span class="keyword">struct </span><a class="code" href="structiReporterListener.html">iReporterListener</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00090 {
+00096   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiReporterListener.html#a0">Report</a> (<a class="code" href="structiReporter.html">iReporter</a>* reporter, <span class="keywordtype">int</span> severity, <span class="keyword">const</span> <span class="keywordtype">char</span>* msgId,
+00097         <span class="keyword">const</span> <span class="keywordtype">char</span>* description) = 0;
+00098 };
+00099 
+00100 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiReporterIterator.html">iReporterIterator</a>, 0, 0, 1);
+00101 
+<a name="l00110"></a><a class="code" href="structiReporterIterator.html">00110</a> <span class="keyword">struct </span><a class="code" href="structiReporterIterator.html">iReporterIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00111 {
+00113   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiReporterIterator.html#a0">HasNext</a> () = 0;
+00118   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporterIterator.html#a1">Next</a> () = 0;
+00119 
+00123   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiReporterIterator.html#a2">GetMessageSeverity</a> () <span class="keyword">const </span>= 0;
+00124 
+00128   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiReporterIterator.html#a3">GetMessageId</a> () <span class="keyword">const </span>= 0;
+00129 
+00133   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiReporterIterator.html#a4">GetMessageDescription</a> () <span class="keyword">const </span>= 0;
+00134 };
+00135 
+00136 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiReporter.html">iReporter</a>, 0, 1, 0);
+00137 
+<a name="l00161"></a><a class="code" href="structiReporter.html">00161</a> <span class="keyword">struct </span><a class="code" href="structiReporter.html">iReporter</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00162 {
+00168   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a0">Report</a> (<span class="keywordtype">int</span> severity, <span class="keyword">const</span> <span class="keywordtype">char</span>* msgId,
+00169         <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...) CS_GNUC_PRINTF(4, 5) = 0;
+00170 
+00174   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a1">ReportV</a> (<span class="keywordtype">int</span> severity, <span class="keyword">const</span> <span class="keywordtype">char</span>* msgId,
+00175         <span class="keyword">const</span> <span class="keywordtype">char</span>* description, va_list) CS_GNUC_PRINTF(4, 0) = 0;
+00176 
+00182   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a2">Clear</a> (<span class="keywordtype">int</span> severity = -1) = 0;
+00183 
+00190   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a2">Clear</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* mask) = 0;
+00191 
+00196   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iReporterIterator&gt;</a> <a class="code" href="structiReporter.html#a4">GetMessageIterator</a> () = 0;
+00197 
+00204   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a5">AddReporterListener</a> (<a class="code" href="structiReporterListener.html">iReporterListener</a>* listener) = 0;
+00205 
+00212   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiReporter.html#a6">RemoveReporterListener</a> (<a class="code" href="structiReporterListener.html">iReporterListener</a>* listener) = 0;
+00213 
+00217   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiReporter.html#a7">FindReporterListener</a> (<a class="code" href="structiReporterListener.html">iReporterListener</a>* listener) = 0;
+00218 
+00219   <span class="comment">//----------------------------------------------------------------------</span>
+00220   <span class="comment">// Convenience functions, these are not to be implemented in the plugin.</span>
+00221   <span class="comment">//----------------------------------------------------------------------</span>
+00222 
+00226   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga151">ReportError</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00227     CS_GNUC_PRINTF (3, 4);
+00228 
+00232   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga152">ReportWarning</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00233     CS_GNUC_PRINTF (3, 4);
+00234 
+00238   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga153">ReportNotify</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00239     CS_GNUC_PRINTF (3, 4);
+00240 
+00244   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga154">ReportBug</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00245     CS_GNUC_PRINTF (3, 4);
+00246 
+00250   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga155">ReportDebug</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00251     CS_GNUC_PRINTF (3, 4);
+00252 };
+00253 
+00254 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportError
+<a name="l00255"></a><a class="code" href="group__util.html#ga151">00255</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00256 {
+00257   va_list arg;
+00258   va_start (arg, description);
+00259   ReportV (<a class="code" href="group__util.html#ga142">CS_REPORTER_SEVERITY_ERROR</a>, msgId, description, arg);
+00260   va_end (arg);
+00261 }
+00262 
+00263 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportWarning
+<a name="l00264"></a><a class="code" href="group__util.html#ga152">00264</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00265 {
+00266   va_list arg;
+00267   va_start (arg, description);
+00268   ReportV (<a class="code" href="group__util.html#ga143">CS_REPORTER_SEVERITY_WARNING</a>, msgId, description, arg);
+00269   va_end (arg);
+00270 }
+00271 
+00272 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportNotify
+<a name="l00273"></a><a class="code" href="group__util.html#ga153">00273</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00274 {
+00275   va_list arg;
+00276   va_start (arg, description);
+00277   ReportV (<a class="code" href="group__util.html#ga144">CS_REPORTER_SEVERITY_NOTIFY</a>, msgId, description, arg);
+00278   va_end (arg);
+00279 }
+00280 
+00281 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportBug
+<a name="l00282"></a><a class="code" href="group__util.html#ga154">00282</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00283 {
+00284   va_list arg;
+00285   va_start (arg, description);
+00286   ReportV (<a class="code" href="group__util.html#ga141">CS_REPORTER_SEVERITY_BUG</a>, msgId, description, arg);
+00287   va_end (arg);
+00288 }
+00289 
+00290 <span class="keyword">inline</span> <span class="keywordtype">void</span> iReporter::ReportDebug
+<a name="l00291"></a><a class="code" href="group__util.html#ga155">00291</a>   (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgId, <span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00292 {
+00293   va_list arg;
+00294   va_start (arg, description);
+00295   ReportV (<a class="code" href="group__util.html#ga145">CS_REPORTER_SEVERITY_DEBUG</a>, msgId, description, arg);
+00296   va_end (arg);
+00297 }
 00298 
-<a name="l00305"></a><a class="code" href="classcsReporterHelper.html">00305</a> <span class="keyword">class </span><a class="code" href="classcsReporterHelper.html">csReporterHelper</a>
-00306 {
-00307 <span class="keyword">public</span>:
-00313   <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> ReportV(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg, <span class="keywordtype">int</span> severity,
-00314     <span class="keywordtype">char</span> <span class="keyword">const</span>* msgId, <span class="keywordtype">char</span> <span class="keyword">const</span>* description, va_list args)
-00315     CS_GNUC_PRINTF (4, 0);
-00316 
-00322   <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> Report(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg, <span class="keywordtype">int</span> severity,
-00323     <span class="keywordtype">char</span> <span class="keyword">const</span>* msgId, <span class="keywordtype">char</span> <span class="keyword">const</span>* description, ...)
-00324     CS_GNUC_PRINTF (4, 5);
-00325 };
-00326 
-<a name="l00327"></a><a class="code" href="group__util.html#ga154">00327</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga154">csReporterHelper::ReportV</a>(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg, <span class="keywordtype">int</span> severity,
-00328   <span class="keywordtype">char</span> <span class="keyword">const</span>* msgId, <span class="keywordtype">char</span> <span class="keyword">const</span>* description, va_list args)
-00329 {
-00330   <a class="code" href="classcsRef.html">csRef&lt;iReporter&gt;</a> reporter;
-00331   <span class="keywordflow">if</span> (reg &amp;&amp; (reporter = CS_QUERY_REGISTRY (reg, <a class="code" href="structiReporter.html">iReporter</a>)))
-00332     reporter-&gt;ReportV (severity, msgId, description, args);
-00333   <span class="keywordflow">else</span>
-00334   {
-00335     <span class="comment">/*</span>
-00336 <span class="comment">      @@@ The strncasecmp()s are there because sometimes reported messages</span>
-00337 <span class="comment">      start with "Warning", and a "Warning: Warning" output looks rather</span>
-00338 <span class="comment">      crappy. The correct fix is obviously to remove "Warning" prefixes</span>
-00339 <span class="comment">      when the reporter is used.</span>
-00340 <span class="comment">     */</span>
-00341     <span class="keywordflow">switch</span> (severity)
-00342     {
-00343       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga139">CS_REPORTER_SEVERITY_BUG</a>:
-00344         <a class="code" href="group__util.html#ga68">csPrintf</a>(<a class="code" href="ansicolor_8h.html#a11">CS_ANSI_BK</a> <a class="code" href="ansicolor_8h.html#a6">CS_ANSI_FM</a> <a class="code" href="ansicolor_8h.html#a9">CS_ANSI_FI</a> <span class="stringliteral">"BUG: "</span> <a class="code" href="ansicolor_8h.html#a0">CS_ANSI_RST</a>);
-00345         <span class="keywordflow">break</span>;
-00346       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga140">CS_REPORTER_SEVERITY_ERROR</a>:
-00347         <span class="keywordflow">if</span> (strncasecmp (description, <span class="stringliteral">"error"</span>, 5) != 0)
-00348           <a class="code" href="group__util.html#ga68">csPrintf</a>(<a class="code" href="ansicolor_8h.html#a11">CS_ANSI_BK</a> <a class="code" href="ansicolor_8h.html#a2">CS_ANSI_FR</a> <a class="code" href="ansicolor_8h.html#a9">CS_ANSI_FI</a> <span class="stringliteral">"ERROR: "</span> <a class="code" href="ansicolor_8h.html#a0">CS_ANSI_RST</a>);
-00349         <span class="keywordflow">break</span>;
-00350       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga141">CS_REPORTER_SEVERITY_WARNING</a>:
-00351         <span class="keywordflow">if</span> (strncasecmp (description, <span class="stringliteral">"warning"</span>, 7) != 0)
-00352           <a class="code" href="group__util.html#ga68">csPrintf</a>(<a class="code" href="ansicolor_8h.html#a11">CS_ANSI_BK</a> <a class="code" href="ansicolor_8h.html#a4">CS_ANSI_FY</a> <a class="code" href="ansicolor_8h.html#a9">CS_ANSI_FI</a> <span class="stringliteral">"WARNING: "</span> <a class="code" href="ansicolor_8h.html#a0">CS_ANSI_RST</a>);
-00353         <span class="keywordflow">break</span>;
-00354       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga142">CS_REPORTER_SEVERITY_NOTIFY</a>:
-00355         <a class="code" href="group__util.html#ga68">csPrintf</a> (<span class="stringliteral">"NOTIFY: "</span>);
-00356         <span class="keywordflow">break</span>;
-00357       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga143">CS_REPORTER_SEVERITY_DEBUG</a>:
-00358         <a class="code" href="group__util.html#ga68">csPrintf</a>(<a class="code" href="ansicolor_8h.html#a11">CS_ANSI_BK</a> <a class="code" href="ansicolor_8h.html#a8">CS_ANSI_FW</a> <a class="code" href="ansicolor_8h.html#a9">CS_ANSI_FI</a> <span class="stringliteral">"DEBUG: "</span> <a class="code" href="ansicolor_8h.html#a0">CS_ANSI_RST</a>);
-00359         <span class="keywordflow">break</span>;
-00360     }
-00361     <a class="code" href="group__util.html#ga69">csPrintfV</a>(description, args);
-00362     <a class="code" href="group__util.html#ga68">csPrintf</a>(<span class="stringliteral">"\n"</span>);
-00363   }
-00364 }
-00365 
-<a name="l00366"></a><a class="code" href="group__util.html#ga155">00366</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga155">csReporterHelper::Report</a>(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg, <span class="keywordtype">int</span> severity,
-00367   <span class="keywordtype">char</span> <span class="keyword">const</span>* msgId, <span class="keywordtype">char</span> <span class="keyword">const</span>* description, ...)
-00368 {
-00369   va_list arg;
-00370   va_start(arg, description);
-00371 
-00372   <a class="code" href="group__util.html#ga154">ReportV</a>(reg,severity,msgId,description,arg);
-00373 
-00374   va_end (arg);
-00375 }
-00376 
-<a name="l00380"></a><a class="code" href="group__util.html#ga144">00380</a> <span class="preprocessor">#define csReport csReporterHelper::Report</span>
-00381 <span class="preprocessor"></span>
-<a name="l00384"></a><a class="code" href="group__util.html#ga145">00384</a> <span class="preprocessor">#define csReportV csReporterHelper::ReportV</span>
-00385 <span class="preprocessor"></span>
-00386 <span class="comment">/* @} */</span>
-00387 
-00388 <span class="preprocessor">#endif // __CS_IVARIA_REPORTER_H__</span>
-00389 <span class="preprocessor"></span>
+00299 
+<a name="l00306"></a><a class="code" href="classcsReporterHelper.html">00306</a> <span class="keyword">class </span><a class="code" href="classcsReporterHelper.html">csReporterHelper</a>
+00307 {
+00308 <span class="keyword">public</span>:
+00314   <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> ReportV(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg, <span class="keywordtype">int</span> severity,
+00315     <span class="keywordtype">char</span> <span class="keyword">const</span>* msgId, <span class="keywordtype">char</span> <span class="keyword">const</span>* description, va_list args)
+00316     CS_GNUC_PRINTF (4, 0);
+00317 
+00323   <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> Report(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg, <span class="keywordtype">int</span> severity,
+00324     <span class="keywordtype">char</span> <span class="keyword">const</span>* msgId, <span class="keywordtype">char</span> <span class="keyword">const</span>* description, ...)
+00325     CS_GNUC_PRINTF (4, 5);
+00326 };
+00327 
+<a name="l00328"></a><a class="code" href="group__util.html#ga156">00328</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga156">csReporterHelper::ReportV</a>(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg, <span class="keywordtype">int</span> severity,
+00329   <span class="keywordtype">char</span> <span class="keyword">const</span>* msgId, <span class="keywordtype">char</span> <span class="keyword">const</span>* description, va_list args)
+00330 {
+00331   <a class="code" href="classcsRef.html">csRef&lt;iReporter&gt;</a> reporter;
+00332   <span class="keywordflow">if</span> (reg &amp;&amp; (reporter = CS_QUERY_REGISTRY (reg, <a class="code" href="structiReporter.html">iReporter</a>)))
+00333     reporter-&gt;ReportV (severity, msgId, description, args);
+00334   <span class="keywordflow">else</span>
+00335   {
+00336     <span class="comment">/*</span>
+00337 <span class="comment">      @@@ The csStrNCaseCmp()s are there because sometimes reported messages</span>
+00338 <span class="comment">      start with "Warning", and a "Warning: Warning" output looks rather</span>
+00339 <span class="comment">      crappy. The correct fix is obviously to remove "Warning" prefixes</span>
+00340 <span class="comment">      when the reporter is used.</span>
+00341 <span class="comment">     */</span>
+00342     <span class="keywordflow">switch</span> (severity)
+00343     {
+00344       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga141">CS_REPORTER_SEVERITY_BUG</a>:
+00345         <a class="code" href="group__util.html#ga68">csPrintf</a>(<a class="code" href="ansicolor_8h.html#a11">CS_ANSI_BK</a> <a class="code" href="ansicolor_8h.html#a6">CS_ANSI_FM</a> <a class="code" href="ansicolor_8h.html#a9">CS_ANSI_FI</a> <span class="stringliteral">"BUG: "</span> <a class="code" href="ansicolor_8h.html#a0">CS_ANSI_RST</a>);
+00346         <span class="keywordflow">break</span>;
+00347       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga142">CS_REPORTER_SEVERITY_ERROR</a>:
+00348         <span class="keywordflow">if</span> (<a class="code" href="group__util.html#ga91">csStrNCaseCmp</a> (description, <span class="stringliteral">"error"</span>, 5) != 0)
+00349           <a class="code" href="group__util.html#ga68">csPrintf</a>(<a class="code" href="ansicolor_8h.html#a11">CS_ANSI_BK</a> <a class="code" href="ansicolor_8h.html#a2">CS_ANSI_FR</a> <a class="code" href="ansicolor_8h.html#a9">CS_ANSI_FI</a> <span class="stringliteral">"ERROR: "</span> <a class="code" href="ansicolor_8h.html#a0">CS_ANSI_RST</a>);
+00350         <span class="keywordflow">break</span>;
+00351       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga143">CS_REPORTER_SEVERITY_WARNING</a>:
+00352         <span class="keywordflow">if</span> (<a class="code" href="group__util.html#ga91">csStrNCaseCmp</a> (description, <span class="stringliteral">"warning"</span>, 7) != 0)
+00353           <a class="code" href="group__util.html#ga68">csPrintf</a>(<a class="code" href="ansicolor_8h.html#a11">CS_ANSI_BK</a> <a class="code" href="ansicolor_8h.html#a4">CS_ANSI_FY</a> <a class="code" href="ansicolor_8h.html#a9">CS_ANSI_FI</a> <span class="stringliteral">"WARNING: "</span> <a class="code" href="ansicolor_8h.html#a0">CS_ANSI_RST</a>);
+00354         <span class="keywordflow">break</span>;
+00355       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga144">CS_REPORTER_SEVERITY_NOTIFY</a>:
+00356         <a class="code" href="group__util.html#ga68">csPrintf</a> (<span class="stringliteral">"NOTIFY: "</span>);
+00357         <span class="keywordflow">break</span>;
+00358       <span class="keywordflow">case</span> <a class="code" href="group__util.html#ga145">CS_REPORTER_SEVERITY_DEBUG</a>:
+00359         <a class="code" href="group__util.html#ga68">csPrintf</a>(<a class="code" href="ansicolor_8h.html#a11">CS_ANSI_BK</a> <a class="code" href="ansicolor_8h.html#a8">CS_ANSI_FW</a> <a class="code" href="ansicolor_8h.html#a9">CS_ANSI_FI</a> <span class="stringliteral">"DEBUG: "</span> <a class="code" href="ansicolor_8h.html#a0">CS_ANSI_RST</a>);
+00360         <span class="keywordflow">break</span>;
+00361     }
+00362     <a class="code" href="group__util.html#ga69">csPrintfV</a>(description, args);
+00363     <a class="code" href="group__util.html#ga68">csPrintf</a>(<span class="stringliteral">"\n"</span>);
+00364   }
+00365 }
+00366 
+<a name="l00367"></a><a class="code" href="group__util.html#ga157">00367</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga157">csReporterHelper::Report</a>(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* reg, <span class="keywordtype">int</span> severity,
+00368   <span class="keywordtype">char</span> <span class="keyword">const</span>* msgId, <span class="keywordtype">char</span> <span class="keyword">const</span>* description, ...)
+00369 {
+00370   va_list arg;
+00371   va_start(arg, description);
+00372 
+00373   <a class="code" href="group__util.html#ga156">ReportV</a>(reg,severity,msgId,description,arg);
+00374 
+00375   va_end (arg);
+00376 }
+00377 
+<a name="l00381"></a><a class="code" href="group__util.html#ga146">00381</a> <span class="preprocessor">#define csReport csReporterHelper::Report</span>
+00382 <span class="preprocessor"></span>
+<a name="l00385"></a><a class="code" href="group__util.html#ga147">00385</a> <span class="preprocessor">#define csReportV csReporterHelper::ReportV</span>
+00386 <span class="preprocessor"></span>
+00387 <span class="comment">/* @} */</span>
+00388 
+00389 <span class="preprocessor">#endif // __CS_IVARIA_REPORTER_H__</span>
+00390 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
