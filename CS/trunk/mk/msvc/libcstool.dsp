@@ -324,6 +324,10 @@ SOURCE=..\..\libs\cstool\sprbuild.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\staticvarcleanup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\vidprefs.cpp
 # End Source File
 # End Group

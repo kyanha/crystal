@@ -414,6 +414,10 @@ SOURCE=..\..\libs\csws\skins\default\sdttlbar.cpp
 
 SOURCE=..\..\libs\csws\skins\default\sdwindow.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csws\staticvarcleanup.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 

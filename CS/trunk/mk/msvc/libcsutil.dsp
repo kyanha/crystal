@@ -480,7 +480,7 @@ SOURCE=..\..\libs\csutil\sparse3d.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\statvar.cpp
+SOURCE=..\..\libs\csutil\staticvarcleanup.cpp
 # End Source File
 # Begin Source File
 

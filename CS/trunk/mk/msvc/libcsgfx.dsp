@@ -280,6 +280,10 @@ SOURCE=..\..\libs\csgfx\shadervarcontext.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\staticvarcleanup.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\xorpat.cpp
 # End Source File
 # End Group
