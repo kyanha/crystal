@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib  /nologo /subsystem:console /machine:I386 /out:"csrelease\temp\appsimpcd\simpcd.exe" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /machine:I386 /out:"csrelease\temp\appsimpcd\simpcd.exe" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
 TargetPath".\csrelease\temp\appsimpcd\simpcd.exe"
 SOURCE="$(InputPath)"
@@ -82,7 +82,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib  /nologo /subsystem:console /debug /machine:I386 /out:"csdebug\temp\appsimpcd\simpcd.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /debug /machine:I386 /out:"csdebug\temp\appsimpcd\simpcd.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # Begin Special Build Tool
 TargetPath=".\csdebug\temp\appsimpcd\simpcd.exe"
 SOURCE="$(InputPath)"
@@ -111,7 +111,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib  /nologo /subsystem:console /debug /machine:I386 /out:"csmemdbg\temp\appsimpcd\simpcd.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /debug /machine:I386 /out:"csmemdbg\temp\appsimpcd\simpcd.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # Begin Special Build Tool
 TargetPath=".\csmemdbg\temp\appsimpcd\simpcd.exe"
 SOURCE="$(InputPath)"
@@ -140,7 +140,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib  /nologo /subsystem:console /machine:I386 /out:"csrelease\temp\appsimpcd\simpcd.exe" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /machine:I386 /out:"csrelease\temp\appsimpcd\simpcd.exe" /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs"  /OPT:NOREF
 # Begin Special Build Tool
 TargetPath".\csrelease\temp\appsimpcd\simpcd.exe"
 SOURCE="$(InputPath)"
@@ -169,7 +169,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib advapi32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib  /nologo /subsystem:console /debug /machine:I386 /out:"csdebug\temp\appsimpcd\simpcd.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
+# ADD LINK32 shell32.lib gdi32.lib user32.lib advapi32.lib zlib.lib /nologo /subsystem:console /debug /machine:I386 /out:"csdebug\temp\appsimpcd\simpcd.exe" /pdbtype:sept /libpath:"..\..\libs\csutil\win32\libs" /libpath:"..\..\libs\cssys\win32\libs" 
 # Begin Special Build Tool
 TargetPath=".\csdebug\temp\appsimpcd\simpcd.exe"
 SOURCE="$(InputPath)"
