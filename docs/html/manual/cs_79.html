@@ -47,32 +47,30 @@ easier.  Now edit `<TT>simple.h</TT>' to make use of `<SAMP>iView</SAMP>':
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre><small>...</small>
-struct iView;
-<small>...</small>
-
 class Simple
 {
 private:
   <small>...</small>
   csRef&#60;iView&#62; view;
   <small>...</small>
-  void SetupFrame ();
+  void ProcessFrame ();
   void FinishFrame ();
   <small>...</small>
 </pre></td></tr></table></P><P>
 
 Then edit `<TT>simple.cpp</TT>' and make the following changes at the end of
-our <CODE>Initialize()</CODE> function:
+our <CODE>Application()</CODE> function:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize ()
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Application ()
 {
   <small>...</small>
   view = csPtr&#60;iView&#62; (new csView (engine, g3d));
-  view-&#62;GetCamera ()-&#62;SetSector (room);
-  view-&#62;GetCamera ()-&#62;GetTransform ().SetOrigin (csVector3 (0, 5, -3));
   iGraphics2D* g2d = g3d-&#62;GetDriver2D ();
   view-&#62;SetRectangle (0, 0, g2d-&#62;GetWidth (), g2d-&#62;GetHeight ());
+  <small>...</small>
+  view-&#62;GetCamera ()-&#62;SetSector (room);
+  view-&#62;GetCamera ()-&#62;GetTransform ().SetOrigin (csVector3 (0, 5, -3));
 
   return true;
 }
@@ -96,12 +94,12 @@ on smart pointers for a full info (see section <A HREF="cs_111.html#SEC227">5.8.
 
 Now, this still isn't enough.  We have a camera but the camera is not used.
 We still have to write code that actually draws the screen. We will do this
-in the functions <CODE>SetupFrame()</CODE> and <CODE>FinishFrame()</CODE>. Note that
+in the functions <CODE>ProcessFrame()</CODE> and <CODE>FinishFrame()</CODE>. Note that
 Crystal Space is event driven so the actual drawing needs to be triggered
 by the event handler. Add the following code somewhere in the source file:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>void Simple::SetupFrame ()
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>void Simple::ProcessFrame ()
 {
   // Tell 3D driver we're going to display 3D things.
   if (!g3d-&#62;BeginDraw(
@@ -119,33 +117,13 @@ void Simple::FinishFrame ()
 }
 </pre></td></tr></table></P><P>
 
-Modify the event handler like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::HandleEvent (iEvent&#38; ev)
-{
-  if (ev.Type == csevBroadcast &#38;&#38; ev.Command.Code == cscmdProcess)
-  {
-    SetupFrame ();
-    return true;
-  }
-  else if (ev.Type == csevBroadcast &#38;&#38;
-    ev.Command.Code == cscmdFinalProcess)
-  {
-    FinishFrame ();
-    return true;
-  }
-  else if (ev.Type == csevKeyDown &#38;&#38; ev.Key.Code == CSKEY_ESC)
-  <small>...</small>
-</pre></td></tr></table></P><P>
-
 Drawing the screen is split in two parts. First there is the part that
-is done in <CODE>SetupFrame()</CODE>. Here we will actually fill the display.
+is done in <CODE>ProcessFrame()</CODE>. Here we will actually fill the display.
 In this case we let the engine do most of that work by calling
 <CODE>view-&#62;Draw()</CODE>. But in principle you can do any kind of drawing here.
 </P><P>
 
-In <CODE>SetupFrame()</CODE> we first have to indicate to the 3D rasterizer that
+In <CODE>ProcessFrame()</CODE> we first have to indicate to the 3D rasterizer that
 we want to start drawing 3D graphics.  This call makes sure that the
 needed buffers are set up and
 performs all necessary initialization. The engine often needs extra settings
@@ -156,7 +134,7 @@ get these flags and or them with the ones that you want.
 The second part is in <CODE>FinishFrame()</CODE> where we actually dump the
 frame to the screen. The reason this is split is that other components
 (plugins) in Crystal Space may choose to listen to events to draw additional
-things on top of the 3D view rendered in <CODE>SetupFrame()</CODE>. When a frame
+things on top of the 3D view rendered in <CODE>ProcessFrame()</CODE>. When a frame
 needs to be rendered the Crystal Space framework will send four messages:
 </P><P>
 

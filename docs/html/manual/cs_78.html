@@ -45,9 +45,10 @@ for the <KBD>ESC</KBD> key to quit.  We assume this is the application you alway
 wanted to have?  No?  Ok then, let's create some 3D stuff.
 </P><P>
 
-We'll add a texture manager, a room (technically called a <EM>sector</EM>) and
-some lights.  First, add a pointer to our main sector to the `<SAMP>Simple</SAMP>'
-class header file:
+We'll add a texture manager, a room (technically called a
+<EM>sector</EM>) and some lights.  First, add a pointer to our main
+sector and a function <CODE>CreateRoom()</CODE> to the `<SAMP>Simple</SAMP>' class
+header file:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre><small>...</small>
@@ -59,39 +60,38 @@ private:
   <small>...</small>
   iSector* room;
   <small>...</small>
+  void CreateRoom ();
+  <small>...</small>
 </pre></td></tr></table></P><P>
 
 Now add these chunks of code (texture manager, room, lights) to
 `<TT>simple.cpp</TT>':
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize ()
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Application ()
 {
-  <small>...</small>
-  csReport (object_reg, CS_REPORTER_SEVERITY_NOTIFY,
-        "crystalspace.application.simple",
-        "Simple Crystal Space Application version 0.1.");
-
   <small>...</small>
   // First disable the lighting cache. Our app is simple enough
   // not to need this.
   engine-&#62;SetLightingCacheMode (0);
-
+  <small>...</small>
+  // these are used store the current orientation of the camera
+  rotY = rotX = 0;
+  <small>...</small>
+  CreateRoom ()
+  <small>...</small>
+}
+<small>...</small>
+void Simple::CreateRoom ()
+{
   // Load the texture from the standard library.  This is located in
   // CS/data/standard.zip and mounted as /lib/std using the Virtual
   // File System (VFS) plugin.
   if (!loader-&#62;LoadTexture ("stone", "/lib/std/stone4.gif"))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Error loading 'stone4' texture!");
-    return false;
-  }
+    ReportError("Error loading 'stone4' texture!");
+
   iMaterialWrapper* tm =
     engine-&#62;GetMaterialList ()-&#62;FindByName ("stone");
-
-  // these are used store the current orientation of the camera
-  rotY = rotX = 0;
 
   room = engine-&#62;CreateSector ("room");
   csRef&#60;iMeshWrapper&#62; walls (
@@ -120,7 +120,6 @@ Now add these chunks of code (texture manager, room, lights) to
   ll-&#62;Add (light);
 
   engine-&#62;Prepare ();
-  return true;
 }
 </pre></td></tr></table></P><P>
 
@@ -146,7 +145,7 @@ tutorial we are only going to use the 'thing' mesh object type. This mesh
 object type is very useful for walls of indoor type levels or buildings.
 </P><P>
 
-Now we want create the six walls of our room. First we make our thing mesh
+Now we want to create the six walls of our room. First we make our thing mesh
 object. Because this is a very common case there is a convenience function
 in the engine (called <CODE>CreateSectorWallsMesh()</CODE>) which will create a
 thing mesh and add it to the given sector. The only thing that has to be

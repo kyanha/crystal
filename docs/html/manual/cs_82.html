@@ -44,27 +44,39 @@ To make this example a little more interesting the material is going to be
 loaded <EM>after</EM> the other setup of the texture manager has been done.
 This is not really needed but it illustrates how a game might load materials
 dynamically later when the application is already running.  So first we edit
-`<TT>simple.cpp</TT>' and add the following in <CODE>Simple::Initialize()</CODE>
+`<TT>simple.h</TT>':
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><small>...</small>
+class Simple
+{
+private:
+  <small>...</small>
+  void CreateSprites ();
+  <small>...</small>
+</pre></td></tr></table></P><P>
+
+Then we edit `<TT>simple.cpp</TT>' and add the following in
+<CODE>Simple::Application()</CODE> and <CODE>Simple::CreateSprites()</CODE>
 (before `<SAMP>return true</SAMP>'):
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize()
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Application()
 {
   <small>...</small>
+  CreateSprites();
+  <small>...</small>
+  return true;
+}
 
+<small>...</small>
+
+void Simple::CreateSprites()
+{
   // Load a texture for our sprite.
   iTextureManager* txtmgr = g3d-&#62;GetTextureManager ();
   iTextureWrapper* txt = loader-&#62;LoadTexture ("spark",
         "/lib/std/spark.png", CS_TEXTURE_3D, txtmgr, true);
   if (txt == 0)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Error loading texture!");
-    return false;
-  }
-
-  return true;
+    ReportError("Error loading texture!");
 }
 </pre></td></tr></table></P><P>
 

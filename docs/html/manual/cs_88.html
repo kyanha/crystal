@@ -74,12 +74,8 @@ add after <CODE>engine-&#62;Prepare()</CODE> in <CODE>LoadMap()</CODE>:
     room = engine-&#62;GetSectors ()-&#62;FindByName ("room");
   }
   if (!room)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Can't find a valid starting position!");
-    return false;
-  }
+    ReportError("Can't find a valid starting position!");
+
   view-&#62;GetCamera ()-&#62;SetSector (room);
   view-&#62;GetCamera ()-&#62;GetTransform ().SetOrigin (pos);
 
