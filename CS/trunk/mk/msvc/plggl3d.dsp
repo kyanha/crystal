@@ -142,6 +142,14 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_polyrender.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\opengl\gl_r2t_backend.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\opengl\gl_r2t_framebuf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\opengl\gl_render3d.cpp
 # End Source File
 # Begin Source File
@@ -159,6 +167,14 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\opengl\gl_polyrender.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\opengl\gl_r2t_backend.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\opengl\gl_r2t_framebuf.h
 # End Source File
 # Begin Source File
 
