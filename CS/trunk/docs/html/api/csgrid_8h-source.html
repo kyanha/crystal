@@ -134,12 +134,12 @@
 <a name="l00154"></a><a class="code" href="classcsSparseGrid.html#a1">00154</a>   <span class="keywordtype">void</span>* <a class="code" href="classcsSparseGrid.html#a1">GetAt</a> (<span class="keywordtype">int</span> row, <span class="keywordtype">int</span> col)
 00155   {
 00156     <span class="keywordtype">void</span>* result = 0;
-00157     <span class="keywordtype">int</span> idx1 = rows.FindSortedKey (rows.KeyCmp(row));
-00158     <span class="keywordflow">if</span> (idx1 != -1)
+00157     size_t idx1 = rows.FindSortedKey (rows.KeyCmp(row));
+00158     <span class="keywordflow">if</span> (idx1 != (size_t)-1)
 00159     {
-00160       <span class="keywordtype">int</span> idx2 = ((csGridRow *)rows.<a class="code" href="classcsArray.html#a9">Get</a> (idx1)-&gt;data)-&gt;FindSortedKey (
+00160       size_t idx2 = ((csGridRow *)rows.<a class="code" href="classcsArray.html#a9">Get</a> (idx1)-&gt;data)-&gt;FindSortedKey (
 00161         rows.KeyCmp(col));
-00162       <span class="keywordflow">if</span> (idx2 != -1)
+00162       <span class="keywordflow">if</span> (idx2 != (size_t)-1)
 00163         result = ((csGridRow *)rows.<a class="code" href="classcsArray.html#a9">Get</a> (idx1)-&gt;data)-&gt;<a class="code" href="classcsArray.html#a9">Get</a> (idx2)-&gt;data;
 00164     }
 00165     <span class="keywordflow">return</span> result;
@@ -148,8 +148,8 @@
 00168   <span class="comment">// Set the data at given row/column</span>
 00169   <span class="keywordtype">void</span> SetAt (<span class="keywordtype">int</span> row, <span class="keywordtype">int</span> col, <span class="keywordtype">void</span>* data)
 00170   {
-00171     <span class="keywordtype">int</span> idx = rows.FindSortedKey (rows.KeyCmp(row));
-00172     <span class="keywordflow">if</span> (idx == -1)
+00171     size_t idx = rows.FindSortedKey (rows.KeyCmp(row));
+00172     <span class="keywordflow">if</span> (idx == (size_t)-1)
 00173       idx = rows.InsertSorted (<span class="keyword">new</span> csGridRowEntry (row, <span class="keyword">new</span> csGridRow (row)),
 00174         rows.Compare);
 00175     ((csGridRow *)rows.<a class="code" href="classcsArray.html#a9">Get</a> (idx)-&gt;data)-&gt;SetAt (col, data);

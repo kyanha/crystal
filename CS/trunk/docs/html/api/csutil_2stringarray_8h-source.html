@@ -56,7 +56,7 @@
 00038     <span class="keyword">delete</span>[] (<span class="keywordtype">char</span>*)*address;
 00039   }
 00040 
-00041   <span class="keyword">static</span> <span class="keywordtype">void</span> InitRegion (<span class="keyword">const</span> <span class="keywordtype">char</span>** address, <span class="keywordtype">int</span> count)
+00041   <span class="keyword">static</span> <span class="keywordtype">void</span> InitRegion (<span class="keyword">const</span> <span class="keywordtype">char</span>** address, size_t count)
 00042   {
 00043     memset (address, 0, count*<span class="keyword">sizeof</span> (<span class="keyword">const</span> <span class="keywordtype">char</span>*));
 00044   }
@@ -96,14 +96,14 @@
 00092       <a class="code" href="classcsStringArray.html#a1">Sort</a> (CaseInsensitiveCompare);
 00093   }
 00094 
-<a name="l00099"></a><a class="code" href="classcsStringArray.html#a3">00099</a>   <span class="keywordtype">int</span> <a class="code" href="classcsStringArray.html#a3">FindSortedKey</a> (csArrayCmpDecl(<span class="keywordtype">char</span> <span class="keyword">const</span>*, <span class="keywordtype">char</span> <span class="keyword">const</span>*) comparekey,
-00100     <span class="keywordtype">int</span>* candidate = 0)<span class="keyword"> const</span>
+<a name="l00099"></a><a class="code" href="classcsStringArray.html#a3">00099</a>   size_t <a class="code" href="classcsStringArray.html#a3">FindSortedKey</a> (csArrayCmpDecl(<span class="keywordtype">char</span> <span class="keyword">const</span>*, <span class="keywordtype">char</span> <span class="keyword">const</span>*) comparekey,
+00100     size_t* candidate = 0)<span class="keyword"> const</span>
 00101 <span class="keyword">  </span>{
 00102     <span class="keywordflow">return</span> superclass::FindSortedKey(comparekey, candidate);
 00103   }
 00104 
-<a name="l00109"></a><a class="code" href="classcsStringArray.html#a4">00109</a>   <span class="keywordtype">int</span> <a class="code" href="classcsStringArray.html#a3">FindSortedKey</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* key, <span class="keywordtype">bool</span> case_sensitive = <span class="keyword">true</span>,
-00110     <span class="keywordtype">int</span>* candidate = 0)<span class="keyword"> const</span>
+<a name="l00109"></a><a class="code" href="classcsStringArray.html#a4">00109</a>   size_t <a class="code" href="classcsStringArray.html#a3">FindSortedKey</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* key, <span class="keywordtype">bool</span> case_sensitive = <span class="keyword">true</span>,
+00110     size_t* candidate = 0)<span class="keyword"> const</span>
 00111 <span class="keyword">  </span>{
 00112     int(*cf)(<span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span>&amp;, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span>&amp;) =
 00113       case_sensitive ? CaseSensitiveCompare : CaseInsensitiveCompare;
@@ -114,27 +114,27 @@
 <a name="l00122"></a><a class="code" href="classcsStringArray.html#a5">00122</a>   <span class="keywordtype">char</span>* <a class="code" href="classcsStringArray.html#a5">Pop</a> ()
 00123   {
 00124     CS_ASSERT (<a class="code" href="classcsArray.html#a4">Length</a> () &gt; 0);
-00125     <span class="keywordtype">int</span> l = <a class="code" href="classcsArray.html#a4">Length</a> () - 1;
+00125     size_t l = <a class="code" href="classcsArray.html#a4">Length</a> () - 1;
 00126     <span class="keywordtype">char</span>* ret = (<span class="keywordtype">char</span>*)<a class="code" href="classcsArray.html#a9">Get</a> (l);
 00127     <a class="code" href="classcsArray.html#b0">InitRegion</a> (l, 1);
 00128     <a class="code" href="classcsArray.html#a7">SetLength</a> (l);
 00129     <span class="keywordflow">return</span> ret;
 00130   }
 00131 
-<a name="l00136"></a><a class="code" href="classcsStringArray.html#a6">00136</a>   <span class="keywordtype">int</span> <a class="code" href="classcsStringArray.html#a6">Find</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* what)<span class="keyword"> const</span>
+<a name="l00136"></a><a class="code" href="classcsStringArray.html#a6">00136</a>   size_t <a class="code" href="classcsStringArray.html#a6">Find</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* what)<span class="keyword"> const</span>
 00137 <span class="keyword">  </span>{
-00138     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> (); i++)
+00138     <span class="keywordflow">for</span> (size_t i = 0; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> (); i++)
 00139       <span class="keywordflow">if</span> (! strcmp (<a class="code" href="classcsArray.html#a9">Get</a> (i), what))
 00140         <span class="keywordflow">return</span> i;
-00141     <span class="keywordflow">return</span> -1;
+00141     <span class="keywordflow">return</span> (size_t)-1;
 00142   }
 00143 
-<a name="l00148"></a><a class="code" href="classcsStringArray.html#a7">00148</a>   <span class="keywordtype">int</span> <a class="code" href="classcsStringArray.html#a7">FindCaseInsensitive</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* what)<span class="keyword"> const</span>
+<a name="l00148"></a><a class="code" href="classcsStringArray.html#a7">00148</a>   size_t <a class="code" href="classcsStringArray.html#a7">FindCaseInsensitive</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* what)<span class="keyword"> const</span>
 00149 <span class="keyword">  </span>{
-00150     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> (); i++)
+00150     <span class="keywordflow">for</span> (size_t i = 0; i &lt; <a class="code" href="classcsArray.html#a4">Length</a> (); i++)
 00151       <span class="keywordflow">if</span> (!strcasecmp (<a class="code" href="classcsArray.html#a9">Get</a> (i), what))
 00152         <span class="keywordflow">return</span> i;
-00153     <span class="keywordflow">return</span> -1;
+00153     <span class="keywordflow">return</span> (size_t)-1;
 00154   }
 00155 };
 00156 
