@@ -918,6 +918,75 @@ The same improvements have been made to <CODE>csIntersect2</CODE>:
 </UL>
 <P>
 
+The following configuration control macros (most of which are emitted to
+`<TT>csconfig.h</TT>' by the Crystal Space `<TT>configure</TT>' script) have been
+renamed in order to improve internal naming consistency, and to conform more
+closely to naming scheme used by Autoconf.
+</P><P>
+
+<UL>
+<LI>
+<CODE>CS_HAS_CAL3D</CODE> => <CODE>CS_HAVE_CAL3D</CODE>
+<LI>
+<CODE>CS_HAS_CMATH_H</CODE> => <CODE>CS_HAVE_CMATH_H</CODE>
+<LI>
+<CODE>CS_HAS_GLHANDLEARB_T</CODE> => <CODE>CS_HAVE_GLHANDLEARB_T</CODE>
+<LI>
+<CODE>CS_HAS_INT64_C</CODE> => <CODE>CS_HAVE_INT64_C</CODE>
+<LI>
+<CODE>CS_HAS_INTMAX_T</CODE> => <CODE>CS_HAVE_INTMAX_T</CODE>
+<LI>
+<CODE>CS_HAS_INTPTR_T</CODE> => <CODE>CS_HAVE_INTPTR_T</CODE>
+<LI>
+<CODE>CS_HAS_INTTYPES_H</CODE> => <CODE>CS_HAVE_INTTYPES_H</CODE>
+<LI>
+<CODE>CS_HAS_MACHINE_SOUNDCARD_H</CODE> => <CODE>CS_HAVE_MACHINE_SOUNDCARD_H</CODE>
+<LI>
+<CODE>CS_HAS_MEMORY_MAPPED_IO</CODE> => <CODE>CS_HAVE_MEMORY_MAPPED_IO</CODE>
+<LI>
+<CODE>CS_HAS_POSIX_MMAP</CODE> => <CODE>CS_HAVE_POSIX_MMAP</CODE>
+<LI>
+<CODE>CS_HAS_REGEX</CODE> => <CODE>CS_HAVE_REGEX</CODE>
+<LI>
+<CODE>CS_HAS_SOUNDCARD_H</CODE> => <CODE>CS_HAVE_SOUNDCARD_H</CODE>
+<LI>
+<CODE>CS_HAS_STDINT_H</CODE> => <CODE>CS_HAVE_STDINT_H</CODE>
+<LI>
+<CODE>CS_HAS_SYS_PARAM_H</CODE> => <CODE>CS_HAVE_SYS_PARAM_H</CODE>
+<LI>
+<CODE>CS_HAS_SYS_SOUNDCARD_H</CODE> => <CODE>CS_HAVE_SYS_SOUNDCARD_H</CODE>
+<LI>
+<CODE>CS_HAS_WCHAR_H</CODE> => <CODE>CS_HAVE_WCHAR_H</CODE>
+<LI>
+<CODE>CS_RTLD_NOW_AVAILABLE</CODE> => <CODE>CS_HAVE_RTLD_NOW</CODE>
+</UL>
+<P>
+
+Likewise, the same normalization has been applied to the
+`<SAMP>CS_USE_FAKE_feature</SAMP>' macros published by the `<TT>configure</TT>' script, and
+the boolean sense of these control macros has been reversed to account for the
+name change.
+</P><P>
+
+<UL>
+<LI>
+<CODE>CS_USE_FAKE_EXPLICIT_KEYWORD</CODE> =>
+<CODE>CS_HAVE_CXX_KEYWORD_EXPLICIT</CODE>
+<LI>
+<CODE>CS_USE_FAKE_MATH_H_FLOAT_FUNCS</CODE> =>
+<CODE>CS_HAVE_MATH_H_FLOAT_FUNCS</CODE>
+<LI>
+<CODE>CS_USE_FAKE_SOCKLEN_TYPE</CODE> => <CODE>CS_HAVE_SOCKLEN_T</CODE>
+<LI>
+<CODE>CS_USE_FAKE_TYPENAME_KEYWORD</CODE> =>
+<CODE>CS_HAVE_CXX_KEYWORD_TYPENAME</CODE>
+<LI>
+<CODE>CS_USE_FAKE_WCHAR_TYPE</CODE> => <CODE>CS_HAVE_WCHAR_T</CODE>
+<LI>
+<CODE>CS_USE_FAKE_WCSLEN</CODE> => <CODE>CS_HAVE_WCSLEN</CODE>
+</UL>
+<P>
+
 <A NAME="SEC_17"></A>
 <H3> Default <CODE>csHash&#60;&#62;</CODE> (and <CODE>csHashReversible&#60;&#62;</CODE>) Table Size </H3>
 <!--docid::SEC_17::-->
@@ -1271,21 +1340,8 @@ parameters.
 </P><P>
 
 <A NAME="SEC_33"></A>
-<H3> `<SAMP>iRenderBuffer</SAMP>' Generalization </H3>
-<!--docid::SEC_33::-->
-<P>
-
-The `<SAMP>iRenderBuffer</SAMP>' interface was made renderer-independant. Consequently,
-creation was moved out of `<SAMP>iGraphics3D</SAMP>' and into `<SAMP>csRenderBuffer</SAMP>'.
-The semantics of the parameters have changed too: notably, instead of 
-specifying the byte size of a buffer, the element count is specified. The same
-change has been made to <CODE>CopyToBuffer()</CODE> (which has been renamed to 
-<CODE>CopyInto()</CODE> to enforce human correction of the parameters).
-</P><P>
-
-<A NAME="SEC_34"></A>
 <H3> `<SAMP>iLight</SAMP>' Changes </H3>
-<!--docid::SEC_34::-->
+<!--docid::SEC_33::-->
 <P>
 
 The `<SAMP>iLight</SAMP>' and its implementation (`<SAMP>csLight</SAMP>') have been extended to
@@ -1308,9 +1364,9 @@ the first attenuation constant. See comments in
 attenuation modes.
 </P><P>
 
-<A NAME="SEC_35"></A>
+<A NAME="SEC_34"></A>
 <H3> <CODE>CS_DECLARE_OBJECT_ITERATOR()</CODE> Removal </H3>
-<!--docid::SEC_35::-->
+<!--docid::SEC_34::-->
 <P>
 
 The `<SAMP>iObject</SAMP>' iterator creation macro <CODE>CS_DECLARE_OBJECT_ITERATOR()</CODE>
@@ -1345,9 +1401,9 @@ while (iter.HasNext())
 {
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC_36"></A>
+<A NAME="SEC_35"></A>
 <H3> Reference Count Automation </H3>
-<!--docid::SEC_36::-->
+<!--docid::SEC_35::-->
 <P>
 
 For consistency with the bulk of the Crystal Space API, and in order to
@@ -1382,14 +1438,24 @@ dispose manually via <CODE>DecRef()</CODE>.
 </UL>
 <P>
 
-<A NAME="SEC_37"></A>
+<A NAME="SEC_36"></A>
 <H3> Render Buffer Changes </H3>
-<!--docid::SEC_37::-->
+<!--docid::SEC_36::-->
 <P>
 
+The `<SAMP>iRenderBuffer</SAMP>' interface was made renderer-independant. Consequently,
+creation was moved out of `<SAMP>iGraphics3D</SAMP>' and into `<SAMP>csRenderBuffer</SAMP>' in
+the `<TT>csgfx</TT>' library (see `<TT>csgfx/renderbuffer.h</TT>').  The semantics of
+the parameters have changed too: notably, instead of specifying the byte size
+of a buffer, the element count is specified. The same change has been made to
+<CODE>CopyToBuffer()</CODE> (which has been renamed to <CODE>CopyInto()</CODE> to enforce
+human correction of the arguments).
+</P><P>
+
+More serious changes involve the publication of render buffers by renderers.
 Previously meshes provided render buffers via name, and these were mapped using
 <EM>name</EM> &#60;-&#62; <EM>OpenGL</EM> name mapping. But most meshes only provided a few
-standard-named buffers (such as, `<SAMP>vertices</SAMP>', `<SAMP>texcoords</SAMP>', etc.) and
+standard-named buffers (such as, `<SAMP>vertices</SAMP>', `<SAMP>texcoords</SAMP>', etc.), and
 the mapping itself took some time (5%+ per frame). This has been reworked.
 </P><P>
 
