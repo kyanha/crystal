@@ -432,46 +432,62 @@
 00834 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
 <a name="l00841"></a><a class="code" href="classcsString.html#a65">00841</a>   <span class="keywordtype">bool</span> operator == (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
 00842 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
-<a name="l00849"></a><a class="code" href="classcsString.html#a66">00849</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str)<span class="keyword"> const</span>
-00850 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
-<a name="l00857"></a><a class="code" href="classcsString.html#a67">00857</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
-00858 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
-00859 
-00864   <a class="code" href="classcsString.html">csString</a>&amp; Downcase();
-00869   <a class="code" href="classcsString.html">csString</a>&amp; Upcase();
-00870 
-<a name="l00881"></a><a class="code" href="classcsString.html#a70">00881</a>   <span class="keywordtype">char</span>* Detach ()
-00882   { <span class="keywordtype">char</span>* d = Data; Data = 0; Size = 0; MaxSize = 0; <span class="keywordflow">return</span> d; }
-00883 };
-00884 
-<a name="l00886"></a><a class="code" href="csstring_8h.html#a11">00886</a> <span class="keyword">inline</span> <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr1, <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a> &amp;iStr2)
-00887 {
-00888   <span class="keywordflow">return</span> <a class="code" href="classcsString.html">csString</a> (iStr1).<a class="code" href="classcsString.html#a24">Append</a> (iStr2);
-00889 }
-00890 
-<a name="l00892"></a><a class="code" href="csstring_8h.html#a12">00892</a> <span class="keyword">inline</span> <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; iStr1, <span class="keyword">const</span> <span class="keywordtype">char</span>* iStr2)
-00893 {
-00894   <span class="keywordflow">return</span> iStr1.<a class="code" href="classcsString.html#a49">Clone</a> ().<a class="code" href="classcsString.html#a24">Append</a> (iStr2);
-00895 }
-00896 
-00897 <span class="preprocessor">#define STR_SHIFT(TYPE) \</span>
-00898 <span class="preprocessor">  inline csString &amp;operator &lt;&lt; (csString &amp;s, TYPE v) { return s.Append (v); }</span>
-00899 <span class="preprocessor"></span>
-<a name="l00907"></a><a class="code" href="csstring_8h.html#a13">00907</a> STR_SHIFT(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
-<a name="l00908"></a><a class="code" href="csstring_8h.html#a14">00908</a> STR_SHIFT(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
-<a name="l00909"></a><a class="code" href="csstring_8h.html#a15">00909</a> STR_SHIFT(<span class="keywordtype">char</span>)
-<a name="l00910"></a><a class="code" href="csstring_8h.html#a16">00910</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
-<a name="l00911"></a><a class="code" href="csstring_8h.html#a17">00911</a> STR_SHIFT(<span class="keywordtype">short</span>)
-<a name="l00912"></a><a class="code" href="csstring_8h.html#a18">00912</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
-<a name="l00913"></a><a class="code" href="csstring_8h.html#a19">00913</a> STR_SHIFT(<span class="keywordtype">int</span>)
-<a name="l00914"></a><a class="code" href="csstring_8h.html#a20">00914</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
-<a name="l00915"></a><a class="code" href="csstring_8h.html#a21">00915</a> STR_SHIFT(<span class="keywordtype">long</span>);
-<a name="l00916"></a><a class="code" href="csstring_8h.html#a22">00916</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
-<a name="l00917"></a><a class="code" href="csstring_8h.html#a23">00917</a> STR_SHIFT(<span class="keywordtype">float</span>)
-<a name="l00918"></a><a class="code" href="csstring_8h.html#a24">00918</a> STR_SHIFT(<span class="keywordtype">double</span>)
-<a name="l00919"></a><a class="code" href="csstring_8h.html#a25">00919</a> STR_SHIFT(<span class="keywordtype">bool</span>)
-00920 #undef STR_SHIFT
-00923 <span class="preprocessor">#endif // __CS_CSSTRING_H__</span>
+<a name="l00849"></a><a class="code" href="classcsString.html#a66">00849</a>   <span class="keywordtype">bool</span> operator &lt; (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str)<span class="keyword"> const</span>
+00850 <span class="keyword">  </span>{
+00851     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str.<a class="code" href="classcsString.html#a12">GetDataSafe</a> ()) &lt; 0;
+00852   }
+<a name="l00859"></a><a class="code" href="classcsString.html#a67">00859</a>   <span class="keywordtype">bool</span> operator &lt; (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
+00860 <span class="keyword">  </span>{
+00861     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str) &lt; 0;
+00862   }
+<a name="l00869"></a><a class="code" href="classcsString.html#a68">00869</a>   <span class="keywordtype">bool</span> operator &gt; (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str)<span class="keyword"> const</span>
+00870 <span class="keyword">  </span>{
+00871     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str.<a class="code" href="classcsString.html#a12">GetDataSafe</a> ()) &gt; 0;
+00872   }
+<a name="l00879"></a><a class="code" href="classcsString.html#a69">00879</a>   <span class="keywordtype">bool</span> operator &gt; (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
+00880 <span class="keyword">  </span>{
+00881     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str) &gt; 0;
+00882   }
+<a name="l00889"></a><a class="code" href="classcsString.html#a70">00889</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; Str)<span class="keyword"> const</span>
+00890 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
+<a name="l00897"></a><a class="code" href="classcsString.html#a71">00897</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
+00898 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
+00899 
+00904   <a class="code" href="classcsString.html">csString</a>&amp; Downcase();
+00909   <a class="code" href="classcsString.html">csString</a>&amp; Upcase();
+00910 
+<a name="l00921"></a><a class="code" href="classcsString.html#a74">00921</a>   <span class="keywordtype">char</span>* Detach ()
+00922   { <span class="keywordtype">char</span>* d = Data; Data = 0; Size = 0; MaxSize = 0; <span class="keywordflow">return</span> d; }
+00923 };
+00924 
+<a name="l00926"></a><a class="code" href="csstring_8h.html#a11">00926</a> <span class="keyword">inline</span> <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr1, <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a> &amp;iStr2)
+00927 {
+00928   <span class="keywordflow">return</span> <a class="code" href="classcsString.html">csString</a> (iStr1).<a class="code" href="classcsString.html#a24">Append</a> (iStr2);
+00929 }
+00930 
+<a name="l00932"></a><a class="code" href="csstring_8h.html#a12">00932</a> <span class="keyword">inline</span> <a class="code" href="classcsString.html">csString</a> <a class="code" href="csstring_8h.html#a12">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; iStr1, <span class="keyword">const</span> <span class="keywordtype">char</span>* iStr2)
+00933 {
+00934   <span class="keywordflow">return</span> iStr1.<a class="code" href="classcsString.html#a49">Clone</a> ().<a class="code" href="classcsString.html#a24">Append</a> (iStr2);
+00935 }
+00936 
+00937 <span class="preprocessor">#define STR_SHIFT(TYPE) \</span>
+00938 <span class="preprocessor">  inline csString &amp;operator &lt;&lt; (csString &amp;s, TYPE v) { return s.Append (v); }</span>
+00939 <span class="preprocessor"></span>
+<a name="l00947"></a><a class="code" href="csstring_8h.html#a13">00947</a> STR_SHIFT(<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp;)
+<a name="l00948"></a><a class="code" href="csstring_8h.html#a14">00948</a> STR_SHIFT(<span class="keyword">const</span> <span class="keywordtype">char</span>*)
+<a name="l00949"></a><a class="code" href="csstring_8h.html#a15">00949</a> STR_SHIFT(<span class="keywordtype">char</span>)
+<a name="l00950"></a><a class="code" href="csstring_8h.html#a16">00950</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>)
+<a name="l00951"></a><a class="code" href="csstring_8h.html#a17">00951</a> STR_SHIFT(<span class="keywordtype">short</span>)
+<a name="l00952"></a><a class="code" href="csstring_8h.html#a18">00952</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span>)
+<a name="l00953"></a><a class="code" href="csstring_8h.html#a19">00953</a> STR_SHIFT(<span class="keywordtype">int</span>)
+<a name="l00954"></a><a class="code" href="csstring_8h.html#a20">00954</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)
+<a name="l00955"></a><a class="code" href="csstring_8h.html#a21">00955</a> STR_SHIFT(<span class="keywordtype">long</span>);
+<a name="l00956"></a><a class="code" href="csstring_8h.html#a22">00956</a> STR_SHIFT(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)
+<a name="l00957"></a><a class="code" href="csstring_8h.html#a23">00957</a> STR_SHIFT(<span class="keywordtype">float</span>)
+<a name="l00958"></a><a class="code" href="csstring_8h.html#a24">00958</a> STR_SHIFT(<span class="keywordtype">double</span>)
+<a name="l00959"></a><a class="code" href="csstring_8h.html#a25">00959</a> STR_SHIFT(<span class="keywordtype">bool</span>)
+00960 #undef STR_SHIFT
+00963 <span class="preprocessor">#endif // __CS_CSSTRING_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
