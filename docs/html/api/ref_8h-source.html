@@ -103,157 +103,160 @@
 00095     <span class="comment">// a function that returns a csPtr and not using the result</span>
 00096     <span class="comment">// (or at least not assigning it to a csRef). This is a memory</span>
 00097     <span class="comment">// leak and you should fix that.</span>
-00098     CS_ASSERT (obj == (T*)CS_VOIDED_PTR);
-00099   }
-00100 <span class="preprocessor">#endif</span>
-00101 <span class="preprocessor"></span>
-00102   <a class="code" href="classcsPtr.html">csPtr</a> (<span class="keyword">const</span> <a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp; copy)
-00103   {
-00104     obj = copy.<a class="code" href="classcsPtr.html#o0">obj</a>;
-00105 <span class="preprocessor">#ifdef CS_TEST_VOIDPTRUSAGE</span>
-00106 <span class="preprocessor"></span>    ((<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp;)copy).obj = (T*)CS_VOIDED_PTR;
-00107 <span class="preprocessor">#endif</span>
-00108 <span class="preprocessor"></span>  }
-00109 };
-00110 
-00117 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00118"></a><a class="code" href="classcsRef.html">00118</a> <span class="keyword">class  </span><a class="code" href="classcsRef.html">csRef</a>
-00119 {
-00120 <span class="keyword">private</span>:
-00121   T* obj;
-00122 
-00123 <span class="keyword">public</span>:
-<a name="l00129"></a><a class="code" href="classcsRef.html#a0">00129</a>   <a class="code" href="classcsRef.html#a0">csRef</a> () : obj (0) {}
-00130 
-<a name="l00136"></a><a class="code" href="classcsRef.html#a1">00136</a>   <a class="code" href="classcsRef.html#a0">csRef</a> (<span class="keyword">const</span> <a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp; newobj)
-00137   {
-00138     obj = newobj.<a class="code" href="classcsPtr.html#o0">obj</a>;
-00139 <span class="preprocessor">#   ifdef CS_TEST_VOIDPTRUSAGE</span>
-00140 <span class="preprocessor"></span>    CS_ASSERT (newobj.<a class="code" href="classcsPtr.html#o0">obj</a> != (T*)CS_VOIDED_PTR);
-00141 <span class="preprocessor">#   endif</span>
-00142 <span class="preprocessor"></span>    <span class="comment">// The following line is outside the ifdef to make sure</span>
-00143     <span class="comment">// we have binary compatibility.</span>
-00144     ((<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp;)newobj).obj = (T*)CS_VOIDED_PTR;
-00145   }
-00146 
-<a name="l00151"></a><a class="code" href="classcsRef.html#a2">00151</a>   <a class="code" href="classcsRef.html#a0">csRef</a> (T* newobj) : obj (newobj)
-00152   {
-00153     CSREF_TRACK_INCREF (obj, <span class="keyword">this</span>);
-00154   }
-00155   
-00159   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T2&gt;
-<a name="l00160"></a><a class="code" href="classcsRef.html#a3">00160</a>   <a class="code" href="classcsRef.html#a0">csRef</a> (<a class="code" href="classcsRef.html">csRef&lt;T2&gt;</a> <span class="keyword">const</span>&amp; other) : obj ((T2*)other)
-00161   {
-00162     CSREF_TRACK_INCREF (obj, <span class="keyword">this</span>);
-00163   }
-00164 
-<a name="l00168"></a><a class="code" href="classcsRef.html#a4">00168</a>   <a class="code" href="classcsRef.html#a0">csRef</a> (<a class="code" href="classcsRef.html">csRef</a> <span class="keyword">const</span>&amp; other) : obj (other.obj)
-00169   {
-00170     CSREF_TRACK_INCREF (obj, <span class="keyword">this</span>);
-00171   }
-00172 
-<a name="l00176"></a><a class="code" href="classcsRef.html#a5">00176</a>   <a class="code" href="classcsRef.html#a5">~csRef</a> ()
-00177   {
-00178     CSREF_TRACK_DECREF (obj, <span class="keyword">this</span>);
-00179   }
-00180 
-<a name="l00190"></a><a class="code" href="classcsRef.html#a6">00190</a>   <a class="code" href="classcsRef.html">csRef</a>&amp; <a class="code" href="classcsRef.html#a6">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp; newobj)
-00191   {
-00192     T* oldobj = obj;
-00193     <span class="comment">// First assign and then DecRef() of old object!</span>
-00194     obj = newobj.<a class="code" href="classcsPtr.html#o0">obj</a>;
-00195 <span class="preprocessor">#   ifdef CS_TEST_VOIDPTRUSAGE</span>
-00196 <span class="preprocessor"></span>    CS_ASSERT (newobj.<a class="code" href="classcsPtr.html#o0">obj</a> != (T*)CS_VOIDED_PTR);
-00197 <span class="preprocessor">#   endif</span>
-00198 <span class="preprocessor"></span>    <span class="comment">// The following line is outside the ifdef to make sure</span>
-00199     <span class="comment">// we have binary compatibility.</span>
-00200     ((<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp;)newobj).obj = (T*)CS_VOIDED_PTR;
-00201     CSREF_TRACK_DECREF (oldobj, <span class="keyword">this</span>);
-00202     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00203   }
-00204 
-<a name="l00217"></a><a class="code" href="classcsRef.html#a7">00217</a>   <a class="code" href="classcsRef.html">csRef</a>&amp; <a class="code" href="classcsRef.html#a6">operator = </a>(T* newobj)
-00218   {
-00219     <span class="keywordflow">if</span> (obj != newobj)
-00220     {
-00221       T* oldobj = obj;
-00222       <span class="comment">// It is very important to first assign the new value to</span>
-00223       <span class="comment">// 'obj' BEFORE calling DecRef() on the old object. Otherwise</span>
-00224       <span class="comment">// it is easy to get in infinite loops with objects being</span>
-00225       <span class="comment">// destructed forever (when ref=0 is used for example).</span>
-00226       obj = newobj;
-00227       CSREF_TRACK_INCREF (newobj, <span class="keyword">this</span>);
-00228       CSREF_TRACK_DECREF (oldobj, <span class="keyword">this</span>);
-00229     }
-00230     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00231   }
-00232 
-<a name="l00255"></a><a class="code" href="classcsRef.html#a8">00255</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRef.html#a8">AttachNew</a> (<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a> newObj)
-00256   {
-00257     <span class="comment">// Note: The parameter usage of csPtr&lt;T&gt; instead of csPtr&lt;T&gt;&amp; is</span>
-00258     <span class="comment">// deliberate and not to be considered a bug.</span>
-00259 
-00260     <span class="comment">// Just Re-use csPtr assignment logic</span>
-00261     *<span class="keyword">this</span> = newObj;
-00262   }
-00263 
-00265   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T2&gt;
-<a name="l00266"></a><a class="code" href="classcsRef.html#a9">00266</a>   <a class="code" href="classcsRef.html">csRef</a>&amp; <a class="code" href="classcsRef.html#a6">operator = </a>(<a class="code" href="classcsRef.html">csRef&lt;T2&gt;</a> <span class="keyword">const</span>&amp; other)
-00267   {
-00268     T* p = (T2*)other;
-00269     this-&gt;<a class="code" href="classcsRef.html#a6">operator=</a>(p);
-00270     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00271   }
-00272 
-<a name="l00274"></a><a class="code" href="classcsRef.html#a10">00274</a>   <a class="code" href="classcsRef.html">csRef</a>&amp; <a class="code" href="classcsRef.html#a6">operator = </a>(<a class="code" href="classcsRef.html">csRef</a> <span class="keyword">const</span>&amp; other)
-00275   {
-00276     this-&gt;<a class="code" href="classcsRef.html#a6">operator=</a>(other.<a class="code" href="classcsRef.html#o0">obj</a>);
-00277     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00278   }
-00279 
-<a name="l00281"></a><a class="code" href="classcsRef.html#l0">00281</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l0">operator == </a>(<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r2)
-00282   {
-00283     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> == r2.<a class="code" href="classcsRef.html#o0">obj</a>;
-00284   }
-<a name="l00286"></a><a class="code" href="classcsRef.html#l1">00286</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l1">operator != </a>(<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r2)
-00287   {
-00288     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> != r2.<a class="code" href="classcsRef.html#o0">obj</a>;
-00289   }
-<a name="l00291"></a><a class="code" href="classcsRef.html#l2">00291</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l0">operator == </a>(<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1, T* obj)
-00292   {
-00293     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> == obj;
-00294   }
-<a name="l00296"></a><a class="code" href="classcsRef.html#l3">00296</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l1">operator != </a>(<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1, T* obj)
-00297   {
-00298     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> != obj;
-00299   }
-<a name="l00301"></a><a class="code" href="classcsRef.html#l4">00301</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l0">operator == </a>(T* obj, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1)
-00302   {
-00303     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> == obj;
-00304   }
-<a name="l00306"></a><a class="code" href="classcsRef.html#l5">00306</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l1">operator != </a>(T* obj, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1)
-00307   {
-00308     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> != obj;
-00309   }
-00310 
-<a name="l00312"></a><a class="code" href="classcsRef.html#a11">00312</a>   T* <a class="code" href="classcsRef.html#a11">operator -&gt; </a>()<span class="keyword"> const</span>
-00313 <span class="keyword">  </span>{ <span class="keywordflow">return</span> obj; }
-00314   
-<a name="l00316"></a><a class="code" href="classcsRef.html#a12">00316</a>   <a class="code" href="classcsRef.html#a12">operator T* </a>()<span class="keyword"> const</span>
-00317 <span class="keyword">  </span>{ <span class="keywordflow">return</span> obj; }
-00318   
-<a name="l00320"></a><a class="code" href="classcsRef.html#a13">00320</a>   T&amp; <a class="code" href="classcsRef.html#a13">operator* </a>()<span class="keyword"> const</span>
-00321 <span class="keyword">  </span>{ <span class="keywordflow">return</span> *obj; }
-00322 
-<a name="l00327"></a><a class="code" href="classcsRef.html#a14">00327</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#a14">IsValid</a> ()<span class="keyword"> const</span>
-00328 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (obj != 0); }
-00329 };
-00330 
-00331 <span class="preprocessor">#undef CSREF_TRACK_INCREF</span>
-00332 <span class="preprocessor"></span><span class="preprocessor">#undef CSREF_TRACK_DECREF</span>
-00333 <span class="preprocessor"></span><span class="preprocessor">#undef CSREF_TRACK_ASSIGN</span>
-00334 <span class="preprocessor"></span>
-00335 <span class="preprocessor">#endif // __CS_REF_H__</span>
+00098     CS_ASSERT_MSG (<span class="stringliteral">"csPtr&lt;&gt; was not assigned to a csRef&lt;&gt; prior destruction"</span>, 
+00099       obj == (T*)CS_VOIDED_PTR);
+00100   }
+00101 <span class="preprocessor">#endif</span>
+00102 <span class="preprocessor"></span>
+00103   <a class="code" href="classcsPtr.html">csPtr</a> (<span class="keyword">const</span> <a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp; copy)
+00104   {
+00105     obj = copy.<a class="code" href="classcsPtr.html#o0">obj</a>;
+00106 <span class="preprocessor">#ifdef CS_TEST_VOIDPTRUSAGE</span>
+00107 <span class="preprocessor"></span>    ((<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp;)copy).obj = (T*)CS_VOIDED_PTR;
+00108 <span class="preprocessor">#endif</span>
+00109 <span class="preprocessor"></span>  }
+00110 };
+00111 
+00118 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00119"></a><a class="code" href="classcsRef.html">00119</a> <span class="keyword">class  </span><a class="code" href="classcsRef.html">csRef</a>
+00120 {
+00121 <span class="keyword">private</span>:
+00122   T* obj;
+00123 
+00124 <span class="keyword">public</span>:
+<a name="l00130"></a><a class="code" href="classcsRef.html#a0">00130</a>   <a class="code" href="classcsRef.html#a0">csRef</a> () : obj (0) {}
+00131 
+<a name="l00137"></a><a class="code" href="classcsRef.html#a1">00137</a>   <a class="code" href="classcsRef.html#a0">csRef</a> (<span class="keyword">const</span> <a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp; newobj)
+00138   {
+00139     obj = newobj.<a class="code" href="classcsPtr.html#o0">obj</a>;
+00140 <span class="preprocessor">#   ifdef CS_TEST_VOIDPTRUSAGE</span>
+00141 <span class="preprocessor"></span>    CS_ASSERT_MSG (<span class="stringliteral">"csPtr&lt;&gt; was already assigned to a csRef&lt;&gt;"</span>,
+00142       newobj.<a class="code" href="classcsPtr.html#o0">obj</a> != (T*)CS_VOIDED_PTR);
+00143 <span class="preprocessor">#   endif</span>
+00144 <span class="preprocessor"></span>    <span class="comment">// The following line is outside the ifdef to make sure</span>
+00145     <span class="comment">// we have binary compatibility.</span>
+00146     ((<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp;)newobj).obj = (T*)CS_VOIDED_PTR;
+00147   }
+00148 
+<a name="l00153"></a><a class="code" href="classcsRef.html#a2">00153</a>   <a class="code" href="classcsRef.html#a0">csRef</a> (T* newobj) : obj (newobj)
+00154   {
+00155     CSREF_TRACK_INCREF (obj, <span class="keyword">this</span>);
+00156   }
+00157   
+00161   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T2&gt;
+<a name="l00162"></a><a class="code" href="classcsRef.html#a3">00162</a>   <a class="code" href="classcsRef.html#a0">csRef</a> (<a class="code" href="classcsRef.html">csRef&lt;T2&gt;</a> <span class="keyword">const</span>&amp; other) : obj ((T2*)other)
+00163   {
+00164     CSREF_TRACK_INCREF (obj, <span class="keyword">this</span>);
+00165   }
+00166 
+<a name="l00170"></a><a class="code" href="classcsRef.html#a4">00170</a>   <a class="code" href="classcsRef.html#a0">csRef</a> (<a class="code" href="classcsRef.html">csRef</a> <span class="keyword">const</span>&amp; other) : obj (other.obj)
+00171   {
+00172     CSREF_TRACK_INCREF (obj, <span class="keyword">this</span>);
+00173   }
+00174 
+<a name="l00178"></a><a class="code" href="classcsRef.html#a5">00178</a>   <a class="code" href="classcsRef.html#a5">~csRef</a> ()
+00179   {
+00180     CSREF_TRACK_DECREF (obj, <span class="keyword">this</span>);
+00181   }
+00182 
+<a name="l00192"></a><a class="code" href="classcsRef.html#a6">00192</a>   <a class="code" href="classcsRef.html">csRef</a>&amp; <a class="code" href="classcsRef.html#a6">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp; newobj)
+00193   {
+00194     T* oldobj = obj;
+00195     <span class="comment">// First assign and then DecRef() of old object!</span>
+00196     obj = newobj.<a class="code" href="classcsPtr.html#o0">obj</a>;
+00197 <span class="preprocessor">#   ifdef CS_TEST_VOIDPTRUSAGE</span>
+00198 <span class="preprocessor"></span>    CS_ASSERT_MSG (<span class="stringliteral">"csPtr&lt;&gt; was already assigned to a csRef&lt;&gt;"</span>,
+00199       newobj.<a class="code" href="classcsPtr.html#o0">obj</a> != (T*)CS_VOIDED_PTR);
+00200 <span class="preprocessor">#   endif</span>
+00201 <span class="preprocessor"></span>    <span class="comment">// The following line is outside the ifdef to make sure</span>
+00202     <span class="comment">// we have binary compatibility.</span>
+00203     ((<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>&amp;)newobj).obj = (T*)CS_VOIDED_PTR;
+00204     CSREF_TRACK_DECREF (oldobj, <span class="keyword">this</span>);
+00205     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00206   }
+00207 
+<a name="l00220"></a><a class="code" href="classcsRef.html#a7">00220</a>   <a class="code" href="classcsRef.html">csRef</a>&amp; <a class="code" href="classcsRef.html#a6">operator = </a>(T* newobj)
+00221   {
+00222     <span class="keywordflow">if</span> (obj != newobj)
+00223     {
+00224       T* oldobj = obj;
+00225       <span class="comment">// It is very important to first assign the new value to</span>
+00226       <span class="comment">// 'obj' BEFORE calling DecRef() on the old object. Otherwise</span>
+00227       <span class="comment">// it is easy to get in infinite loops with objects being</span>
+00228       <span class="comment">// destructed forever (when ref=0 is used for example).</span>
+00229       obj = newobj;
+00230       CSREF_TRACK_INCREF (newobj, <span class="keyword">this</span>);
+00231       CSREF_TRACK_DECREF (oldobj, <span class="keyword">this</span>);
+00232     }
+00233     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00234   }
+00235 
+<a name="l00258"></a><a class="code" href="classcsRef.html#a8">00258</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRef.html#a8">AttachNew</a> (<a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a> newObj)
+00259   {
+00260     <span class="comment">// Note: The parameter usage of csPtr&lt;T&gt; instead of csPtr&lt;T&gt;&amp; is</span>
+00261     <span class="comment">// deliberate and not to be considered a bug.</span>
+00262 
+00263     <span class="comment">// Just Re-use csPtr assignment logic</span>
+00264     *<span class="keyword">this</span> = newObj;
+00265   }
+00266 
+00268   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T2&gt;
+<a name="l00269"></a><a class="code" href="classcsRef.html#a9">00269</a>   <a class="code" href="classcsRef.html">csRef</a>&amp; <a class="code" href="classcsRef.html#a6">operator = </a>(<a class="code" href="classcsRef.html">csRef&lt;T2&gt;</a> <span class="keyword">const</span>&amp; other)
+00270   {
+00271     T* p = (T2*)other;
+00272     this-&gt;<a class="code" href="classcsRef.html#a6">operator=</a>(p);
+00273     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00274   }
+00275 
+<a name="l00277"></a><a class="code" href="classcsRef.html#a10">00277</a>   <a class="code" href="classcsRef.html">csRef</a>&amp; <a class="code" href="classcsRef.html#a6">operator = </a>(<a class="code" href="classcsRef.html">csRef</a> <span class="keyword">const</span>&amp; other)
+00278   {
+00279     this-&gt;<a class="code" href="classcsRef.html#a6">operator=</a>(other.<a class="code" href="classcsRef.html#o0">obj</a>);
+00280     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00281   }
+00282 
+<a name="l00284"></a><a class="code" href="classcsRef.html#l0">00284</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l0">operator == </a>(<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r2)
+00285   {
+00286     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> == r2.<a class="code" href="classcsRef.html#o0">obj</a>;
+00287   }
+<a name="l00289"></a><a class="code" href="classcsRef.html#l1">00289</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l1">operator != </a>(<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r2)
+00290   {
+00291     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> != r2.<a class="code" href="classcsRef.html#o0">obj</a>;
+00292   }
+<a name="l00294"></a><a class="code" href="classcsRef.html#l2">00294</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l0">operator == </a>(<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1, T* obj)
+00295   {
+00296     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> == obj;
+00297   }
+<a name="l00299"></a><a class="code" href="classcsRef.html#l3">00299</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l1">operator != </a>(<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1, T* obj)
+00300   {
+00301     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> != obj;
+00302   }
+<a name="l00304"></a><a class="code" href="classcsRef.html#l4">00304</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l0">operator == </a>(T* obj, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1)
+00305   {
+00306     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> == obj;
+00307   }
+<a name="l00309"></a><a class="code" href="classcsRef.html#l5">00309</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#l1">operator != </a>(T* obj, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef</a>&amp; r1)
+00310   {
+00311     <span class="keywordflow">return</span> r1.<a class="code" href="classcsRef.html#o0">obj</a> != obj;
+00312   }
+00313 
+<a name="l00315"></a><a class="code" href="classcsRef.html#a11">00315</a>   T* <a class="code" href="classcsRef.html#a11">operator -&gt; </a>()<span class="keyword"> const</span>
+00316 <span class="keyword">  </span>{ <span class="keywordflow">return</span> obj; }
+00317   
+<a name="l00319"></a><a class="code" href="classcsRef.html#a12">00319</a>   <a class="code" href="classcsRef.html#a12">operator T* </a>()<span class="keyword"> const</span>
+00320 <span class="keyword">  </span>{ <span class="keywordflow">return</span> obj; }
+00321   
+<a name="l00323"></a><a class="code" href="classcsRef.html#a13">00323</a>   T&amp; <a class="code" href="classcsRef.html#a13">operator* </a>()<span class="keyword"> const</span>
+00324 <span class="keyword">  </span>{ <span class="keywordflow">return</span> *obj; }
+00325 
+<a name="l00330"></a><a class="code" href="classcsRef.html#a14">00330</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsRef.html#a14">IsValid</a> ()<span class="keyword"> const</span>
+00331 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (obj != 0); }
+00332 };
+00333 
+00334 <span class="preprocessor">#undef CSREF_TRACK_INCREF</span>
+00335 <span class="preprocessor"></span><span class="preprocessor">#undef CSREF_TRACK_DECREF</span>
+00336 <span class="preprocessor"></span><span class="preprocessor">#undef CSREF_TRACK_ASSIGN</span>
+00337 <span class="preprocessor"></span>
+00338 <span class="preprocessor">#endif // __CS_REF_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
