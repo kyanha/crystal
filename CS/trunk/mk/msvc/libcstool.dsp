@@ -170,6 +170,10 @@ SOURCE=..\..\libs\cstool\csview.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\enginetools.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\gentrtex.cpp
 # End Source File
 # Begin Source File
@@ -267,6 +271,10 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\csview.h
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\..\..\include\cstool\debugimagewriter.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\..\..\include\cstool\enginetools.h
 # End Source File
 # Begin Source File
 
