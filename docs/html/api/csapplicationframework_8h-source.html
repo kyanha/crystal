@@ -44,106 +44,106 @@
 00033 <span class="preprocessor">#include "<a class="code" href="iutil_2objreg_8h.html">iutil/objreg.h</a>"</span>
 00034 <span class="preprocessor">#include "<a class="code" href="reporter_8h.html">ivaria/reporter.h</a>"</span>
 00035 
-<a name="l00110"></a><a class="code" href="classcsApplicationFramework.html">00110</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csApplicationFramework : <span class="keyword">public</span> <a class="code" href="classcsInitializer.html">csInitializer</a>
-00111 {
-00112 <span class="keyword">private</span>:
-00124   <span class="keyword">static</span> csApplicationFramework* m_Ptr;
-00125 
-00132   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* m_FoundationStringName;
-00133 
-00140   <span class="keyword">static</span> <span class="keywordtype">char</span>* m_ApplicationStringName;
-00141 
-00142 <span class="keyword">protected</span>:
-00152   csApplicationFramework ();
-00153 
-00167   <span class="keyword">static</span> <span class="keywordtype">bool</span> Initialize (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-00168 
-00178   <span class="keyword">static</span> <span class="keywordtype">bool</span> Start ();
-00179 
-00188   <span class="keyword">static</span> <span class="keywordtype">void</span> End ();
-00189 <span class="keyword">public</span>:
-00193   <span class="keyword">virtual</span> ~csApplicationFramework ();
-00194 
-00202   <span class="keyword">static</span> <span class="keywordtype">void</span> Quit ();
-00203 
-00204 <span class="keyword">protected</span>:
-<a name="l00208"></a><a class="code" href="classcsApplicationFramework.html#t0">00208</a>   <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-00209   
-00224   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnInitialize (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) = 0;
-00225 
-00237   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Application () = 0;
-00238 
-00247   <span class="keyword">virtual</span> <span class="keywordtype">void</span> OnExit ();
-00248 <span class="keyword">public</span>:
-00249   <span class="comment">// Inline Helper Functions</span>
-<a name="l00253"></a><a class="code" href="classcsApplicationFramework.html#e1">00253</a> <span class="comment"></span>  <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* GetObjectRegistry () { <span class="keywordflow">return</span> object_reg; };
-00254 
-<a name="l00263"></a><a class="code" href="classcsApplicationFramework.html#a1">00263</a>   operator iObjectRegistry* () { <span class="keywordflow">return</span> object_reg; }
-00264 
-<a name="l00268"></a><a class="code" href="classcsApplicationFramework.html#a2">00268</a>   <span class="keywordtype">bool</span> Open () { <span class="keywordflow">return</span> <a class="code" href="classcsInitializer.html#e16">OpenApplication</a> (object_reg); }
-00269 
-<a name="l00285"></a><a class="code" href="classcsApplicationFramework.html#e2">00285</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> SetApplicationName (<span class="keywordtype">char</span> *name)
-00286   {
-00287     m_ApplicationStringName = name;
-00288   }
-00289 
-<a name="l00296"></a><a class="code" href="classcsApplicationFramework.html#e3">00296</a>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetApplicationName ()
-00297   {
-00298     <span class="keywordflow">return</span> m_ApplicationStringName;
-00299   }
-00300 
-<a name="l00306"></a><a class="code" href="classcsApplicationFramework.html#e4">00306</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> Run ()
-00307   {
-00308     <a class="code" href="group__util.html#ga72">csDefaultRunLoop</a> (object_reg);
-00309   }
-00310 <span class="keyword">private</span>:
-00317   <span class="keyword">static</span> <span class="keywordtype">bool</span> ReportLibError (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00318   {
-00319     va_list args;
-00320     va_start (args, description);
-00321     <a class="code" href="group__util.html#ga161">csReportV</a> (object_reg, CS_REPORTER_SEVERITY_ERROR,
-00322       m_FoundationStringName,
-00323       description, args);
-00324     va_end (args);
-00325     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00326   }
-00327 
-00328 <span class="keyword">public</span>:
-<a name="l00335"></a><a class="code" href="classcsApplicationFramework.html#e5">00335</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> ReportError (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00336   {
-00337     va_list args;
-00338     va_start (args, description);
-00339     <a class="code" href="group__util.html#ga161">csReportV</a> (object_reg, <a class="code" href="group__util.html#ga156">CS_REPORTER_SEVERITY_ERROR</a>,
-00340       m_ApplicationStringName,
-00341       description, args);
-00342     va_end (args);
-00343     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00344   }
-00345 
-<a name="l00352"></a><a class="code" href="classcsApplicationFramework.html#e6">00352</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> ReportWarning (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00353   {
-00354     va_list args;
-00355     va_start (args, description);
-00356     <a class="code" href="group__util.html#ga161">csReportV</a> (object_reg, <a class="code" href="group__util.html#ga157">CS_REPORTER_SEVERITY_WARNING</a>,
-00357       m_ApplicationStringName,
-00358       description, args);
-00359     va_end (args);
-00360   }
-00361   
-<a name="l00368"></a><a class="code" href="classcsApplicationFramework.html#e7">00368</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> ReportInfo (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-00369   {
-00370     va_list args;
-00371     va_start (args, description);
-00372     <a class="code" href="group__util.html#ga161">csReportV</a> (object_reg, <a class="code" href="group__util.html#ga158">CS_REPORTER_SEVERITY_NOTIFY</a>,
-00373       m_ApplicationStringName,
-00374       description, args);
-00375     va_end (args);
-00376   }
-00377   
-00381   <span class="keywordtype">int</span> Main (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-00382 };
-00383 
-00386 <span class="preprocessor">#endif //__CS_CSAPPLICATIONFRAMEWORK_H__</span>
+<a name="l00107"></a><a class="code" href="classcsApplicationFramework.html">00107</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csApplicationFramework : <span class="keyword">public</span> <a class="code" href="classcsInitializer.html">csInitializer</a>
+00108 {
+00109 <span class="keyword">private</span>:
+00121   <span class="keyword">static</span> csApplicationFramework* m_Ptr;
+00122 
+00129   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* m_FoundationStringName;
+00130 
+00137   <span class="keyword">static</span> <span class="keywordtype">char</span>* m_ApplicationStringName;
+00138 
+00139 <span class="keyword">protected</span>:
+00149   csApplicationFramework ();
+00150 
+00164   <span class="keyword">static</span> <span class="keywordtype">bool</span> Initialize (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
+00165 
+00175   <span class="keyword">static</span> <span class="keywordtype">bool</span> Start ();
+00176 
+00185   <span class="keyword">static</span> <span class="keywordtype">void</span> End ();
+00186 <span class="keyword">public</span>:
+00190   <span class="keyword">virtual</span> ~csApplicationFramework ();
+00191 
+00199   <span class="keyword">static</span> <span class="keywordtype">void</span> Quit ();
+00200 
+00201 <span class="keyword">protected</span>:
+<a name="l00205"></a><a class="code" href="classcsApplicationFramework.html#t0">00205</a>   <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+00206   
+00221   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnInitialize (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) = 0;
+00222 
+00234   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Application () = 0;
+00235 
+00244   <span class="keyword">virtual</span> <span class="keywordtype">void</span> OnExit ();
+00245 <span class="keyword">public</span>:
+00246   <span class="comment">// Inline Helper Functions</span>
+<a name="l00250"></a><a class="code" href="classcsApplicationFramework.html#e1">00250</a> <span class="comment"></span>  <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* GetObjectRegistry () { <span class="keywordflow">return</span> object_reg; };
+00251 
+<a name="l00260"></a><a class="code" href="classcsApplicationFramework.html#a1">00260</a>   operator iObjectRegistry* () { <span class="keywordflow">return</span> object_reg; }
+00261 
+<a name="l00265"></a><a class="code" href="classcsApplicationFramework.html#a2">00265</a>   <span class="keywordtype">bool</span> Open () { <span class="keywordflow">return</span> <a class="code" href="classcsInitializer.html#e16">OpenApplication</a> (object_reg); }
+00266 
+<a name="l00282"></a><a class="code" href="classcsApplicationFramework.html#e2">00282</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> SetApplicationName (<span class="keywordtype">char</span> *name)
+00283   {
+00284     m_ApplicationStringName = name;
+00285   }
+00286 
+<a name="l00293"></a><a class="code" href="classcsApplicationFramework.html#e3">00293</a>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetApplicationName ()
+00294   {
+00295     <span class="keywordflow">return</span> m_ApplicationStringName;
+00296   }
+00297 
+<a name="l00303"></a><a class="code" href="classcsApplicationFramework.html#e4">00303</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> Run ()
+00304   {
+00305     <a class="code" href="group__util.html#ga72">csDefaultRunLoop</a> (object_reg);
+00306   }
+00307 <span class="keyword">private</span>:
+00314   <span class="keyword">static</span> <span class="keywordtype">bool</span> ReportLibError (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00315   {
+00316     va_list args;
+00317     va_start (args, description);
+00318     <a class="code" href="group__util.html#ga161">csReportV</a> (object_reg, CS_REPORTER_SEVERITY_ERROR,
+00319       m_FoundationStringName,
+00320       description, args);
+00321     va_end (args);
+00322     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00323   }
+00324 
+00325 <span class="keyword">public</span>:
+<a name="l00332"></a><a class="code" href="classcsApplicationFramework.html#e5">00332</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> ReportError (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00333   {
+00334     va_list args;
+00335     va_start (args, description);
+00336     <a class="code" href="group__util.html#ga161">csReportV</a> (object_reg, <a class="code" href="group__util.html#ga156">CS_REPORTER_SEVERITY_ERROR</a>,
+00337       m_ApplicationStringName,
+00338       description, args);
+00339     va_end (args);
+00340     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00341   }
+00342 
+<a name="l00349"></a><a class="code" href="classcsApplicationFramework.html#e6">00349</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> ReportWarning (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00350   {
+00351     va_list args;
+00352     va_start (args, description);
+00353     <a class="code" href="group__util.html#ga161">csReportV</a> (object_reg, <a class="code" href="group__util.html#ga157">CS_REPORTER_SEVERITY_WARNING</a>,
+00354       m_ApplicationStringName,
+00355       description, args);
+00356     va_end (args);
+00357   }
+00358   
+<a name="l00365"></a><a class="code" href="classcsApplicationFramework.html#e7">00365</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> ReportInfo (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+00366   {
+00367     va_list args;
+00368     va_start (args, description);
+00369     <a class="code" href="group__util.html#ga161">csReportV</a> (object_reg, <a class="code" href="group__util.html#ga158">CS_REPORTER_SEVERITY_NOTIFY</a>,
+00370       m_ApplicationStringName,
+00371       description, args);
+00372     va_end (args);
+00373   }
+00374   
+00378   <span class="keywordtype">int</span> Main (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
+00379 };
+00380 
+00383 <span class="preprocessor">#endif //__CS_CSAPPLICATIONFRAMEWORK_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
