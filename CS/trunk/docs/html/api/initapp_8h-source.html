@@ -62,143 +62,146 @@
 00053 <span class="keyword">struct </span><a class="code" href="structiVirtualClock.html">iVirtualClock</a>;
 00054 <span class="keyword">struct </span><a class="code" href="structiCommandLineParser.html">iCommandLineParser</a>;
 00055 <span class="keyword">struct </span><a class="code" href="structiConfigManager.html">iConfigManager</a>;
-00056 
-00060 
-<a name="l00061"></a><a class="code" href="group__appframe.html#a1">00061</a> <span class="preprocessor">#define CS_REQUEST_PLUGIN(Name,Interface) Name, #Interface, \</span>
-00062 <span class="preprocessor">  scfInterface&lt;Interface&gt;::GetID(), scfInterface&lt;Interface&gt;::GetVersion()</span>
-00063 <span class="preprocessor"></span>
-00064 <span class="comment">// !!! NOTE !!!</span>
-00065 <span class="comment">// When editing this list, you *must* ensure that initapp.h #include the</span>
-00066 <span class="comment">// appropriate header for each SCF interface mentioned by a CS_REQUEST_PLUGIN()</span>
-00067 <span class="comment">// invocation. This is necessary to guarantee that the interface-specialized</span>
-00068 <span class="comment">// version of scfInterface&lt;&gt; is seen by clients rather than the non-specialized</span>
-00069 <span class="comment">// template.</span>
-00070 
-<a name="l00072"></a><a class="code" href="group__appframe.html#a2">00072</a> <span class="preprocessor">#define CS_REQUEST_END \</span>
-00073 <span class="preprocessor">  (const char*)0</span>
-00074 <span class="preprocessor"></span>
-<a name="l00075"></a><a class="code" href="group__appframe.html#a3">00075</a> <span class="preprocessor">#define CS_REQUEST_VFS \</span>
-00076 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.kernel.vfs", iVFS)</span>
-00077 <span class="preprocessor"></span>
-<a name="l00078"></a><a class="code" href="group__appframe.html#a4">00078</a> <span class="preprocessor">#define CS_REQUEST_FONTSERVER \</span>
-00079 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.font.server.default", iFontServer)</span>
-00080 <span class="preprocessor"></span>
-<a name="l00081"></a><a class="code" href="group__appframe.html#a5">00081</a> <span class="preprocessor">#define CS_REQUEST_IMAGELOADER \</span>
-00082 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.graphic.image.io.multiplex", iImageIO)</span>
-00083 <span class="preprocessor"></span>
-<a name="l00084"></a><a class="code" href="group__appframe.html#a6">00084</a> <span class="preprocessor">#define CS_REQUEST_NULL3D \</span>
-00085 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.graphics3d.null",iGraphics3D)</span>
-00086 <span class="preprocessor"></span>
-<a name="l00087"></a><a class="code" href="group__appframe.html#a7">00087</a> <span class="preprocessor">#define CS_REQUEST_SOFTWARE3D \</span>
-00088 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.graphics3d.software",iGraphics3D)</span>
-00089 <span class="preprocessor"></span>
-<a name="l00090"></a><a class="code" href="group__appframe.html#a8">00090</a> <span class="preprocessor">#define CS_REQUEST_OPENGL3D \</span>
-00091 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.graphics3d.opengl", iGraphics3D)</span>
-00092 <span class="preprocessor"></span>
-<a name="l00093"></a><a class="code" href="group__appframe.html#a9">00093</a> <span class="preprocessor">#define CS_REQUEST_ENGINE \</span>
-00094 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.engine.3d", iEngine)</span>
-00095 <span class="preprocessor"></span>
-<a name="l00096"></a><a class="code" href="group__appframe.html#a10">00096</a> <span class="preprocessor">#define CS_REQUEST_LEVELLOADER \</span>
-00097 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.level.loader", iLoader)</span>
-00098 <span class="preprocessor"></span>
-<a name="l00099"></a><a class="code" href="group__appframe.html#a11">00099</a> <span class="preprocessor">#define CS_REQUEST_LEVELSAVER \</span>
-00100 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.level.saver", iSaver)</span>
-00101 <span class="preprocessor"></span>
-<a name="l00102"></a><a class="code" href="group__appframe.html#a12">00102</a> <span class="preprocessor">#define CS_REQUEST_REPORTER \</span>
-00103 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.utilities.reporter", iReporter)</span>
-00104 <span class="preprocessor"></span>
-<a name="l00105"></a><a class="code" href="group__appframe.html#a13">00105</a> <span class="preprocessor">#define CS_REQUEST_REPORTERLISTENER \</span>
-00106 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.utilities.stdrep", iStandardReporterListener)</span>
-00107 <span class="preprocessor"></span>
-<a name="l00108"></a><a class="code" href="group__appframe.html#a14">00108</a> <span class="preprocessor">#define CS_REQUEST_CONSOLEOUT \</span>
-00109 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.console.output.simple", iConsoleOutput)</span>
-00110 <span class="preprocessor"></span>
-<a name="l00115"></a><a class="code" href="group__appframe.html#a0">00115</a> <span class="keyword">typedef</span> bool (*csEventHandlerFunc) (<a class="code" href="structiEvent.html">iEvent</a>&amp;);
-00116 
+00056 <span class="keyword">struct </span><a class="code" href="structiVerbosityManager.html">iVerbosityManager</a>;
+00057 
+00061 
+<a name="l00062"></a><a class="code" href="group__appframe.html#a1">00062</a> <span class="preprocessor">#define CS_REQUEST_PLUGIN(Name,Interface) Name, #Interface, \</span>
+00063 <span class="preprocessor">  scfInterface&lt;Interface&gt;::GetID(), scfInterface&lt;Interface&gt;::GetVersion()</span>
+00064 <span class="preprocessor"></span>
+00065 <span class="comment">// !!! NOTE !!!</span>
+00066 <span class="comment">// When editing this list, you *must* ensure that initapp.h #include the</span>
+00067 <span class="comment">// appropriate header for each SCF interface mentioned by a CS_REQUEST_PLUGIN()</span>
+00068 <span class="comment">// invocation. This is necessary to guarantee that the interface-specialized</span>
+00069 <span class="comment">// version of scfInterface&lt;&gt; is seen by clients rather than the non-specialized</span>
+00070 <span class="comment">// template.</span>
+00071 
+<a name="l00073"></a><a class="code" href="group__appframe.html#a2">00073</a> <span class="preprocessor">#define CS_REQUEST_END \</span>
+00074 <span class="preprocessor">  (const char*)0</span>
+00075 <span class="preprocessor"></span>
+<a name="l00076"></a><a class="code" href="group__appframe.html#a3">00076</a> <span class="preprocessor">#define CS_REQUEST_VFS \</span>
+00077 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.kernel.vfs", iVFS)</span>
+00078 <span class="preprocessor"></span>
+<a name="l00079"></a><a class="code" href="group__appframe.html#a4">00079</a> <span class="preprocessor">#define CS_REQUEST_FONTSERVER \</span>
+00080 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.font.server.default", iFontServer)</span>
+00081 <span class="preprocessor"></span>
+<a name="l00082"></a><a class="code" href="group__appframe.html#a5">00082</a> <span class="preprocessor">#define CS_REQUEST_IMAGELOADER \</span>
+00083 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.graphic.image.io.multiplex", iImageIO)</span>
+00084 <span class="preprocessor"></span>
+<a name="l00085"></a><a class="code" href="group__appframe.html#a6">00085</a> <span class="preprocessor">#define CS_REQUEST_NULL3D \</span>
+00086 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.graphics3d.null",iGraphics3D)</span>
+00087 <span class="preprocessor"></span>
+<a name="l00088"></a><a class="code" href="group__appframe.html#a7">00088</a> <span class="preprocessor">#define CS_REQUEST_SOFTWARE3D \</span>
+00089 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.graphics3d.software",iGraphics3D)</span>
+00090 <span class="preprocessor"></span>
+<a name="l00091"></a><a class="code" href="group__appframe.html#a8">00091</a> <span class="preprocessor">#define CS_REQUEST_OPENGL3D \</span>
+00092 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.graphics3d.opengl", iGraphics3D)</span>
+00093 <span class="preprocessor"></span>
+<a name="l00094"></a><a class="code" href="group__appframe.html#a9">00094</a> <span class="preprocessor">#define CS_REQUEST_ENGINE \</span>
+00095 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.engine.3d", iEngine)</span>
+00096 <span class="preprocessor"></span>
+<a name="l00097"></a><a class="code" href="group__appframe.html#a10">00097</a> <span class="preprocessor">#define CS_REQUEST_LEVELLOADER \</span>
+00098 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.level.loader", iLoader)</span>
+00099 <span class="preprocessor"></span>
+<a name="l00100"></a><a class="code" href="group__appframe.html#a11">00100</a> <span class="preprocessor">#define CS_REQUEST_LEVELSAVER \</span>
+00101 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.level.saver", iSaver)</span>
+00102 <span class="preprocessor"></span>
+<a name="l00103"></a><a class="code" href="group__appframe.html#a12">00103</a> <span class="preprocessor">#define CS_REQUEST_REPORTER \</span>
+00104 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.utilities.reporter", iReporter)</span>
+00105 <span class="preprocessor"></span>
+<a name="l00106"></a><a class="code" href="group__appframe.html#a13">00106</a> <span class="preprocessor">#define CS_REQUEST_REPORTERLISTENER \</span>
+00107 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.utilities.stdrep", iStandardReporterListener)</span>
+00108 <span class="preprocessor"></span>
+<a name="l00109"></a><a class="code" href="group__appframe.html#a14">00109</a> <span class="preprocessor">#define CS_REQUEST_CONSOLEOUT \</span>
+00110 <span class="preprocessor">  CS_REQUEST_PLUGIN("crystalspace.console.output.simple", iConsoleOutput)</span>
+00111 <span class="preprocessor"></span>
+<a name="l00116"></a><a class="code" href="group__appframe.html#a0">00116</a> <span class="keyword">typedef</span> bool (*csEventHandlerFunc) (<a class="code" href="structiEvent.html">iEvent</a>&amp;);
 00117 
-<a name="l00128"></a><a class="code" href="classcsPluginRequest.html">00128</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT csPluginRequest
-00129 {
-00130 <span class="keyword">private</span>:
-00131   <a class="code" href="classcsString.html">csString</a> class_name;
-00132   <a class="code" href="classcsString.html">csString</a> interface_name;
-00133   <a class="code" href="group__scf.html#a0">scfInterfaceID</a> interface_id;
-00134   <span class="keywordtype">int</span> interface_version;
-00135   <span class="keywordtype">void</span> set(csPluginRequest <span class="keyword">const</span>&amp;);
-00136 <span class="keyword">public</span>:
-00137   csPluginRequest(<a class="code" href="classcsString.html">csString</a> class_name, <a class="code" href="classcsString.html">csString</a> interface_name,
-00138     <a class="code" href="group__scf.html#a0">scfInterfaceID</a> interface_id, <span class="keywordtype">int</span> interface_version);
-00139   csPluginRequest(csPluginRequest <span class="keyword">const</span>&amp; r) { set(r); }
-00140   csPluginRequest&amp; operator=(csPluginRequest <span class="keyword">const</span>&amp; r) {set(r); <span class="keywordflow">return</span> *<span class="keyword">this</span>;}
-00141   <span class="keywordtype">bool</span> operator==(csPluginRequest <span class="keyword">const</span>&amp;) <span class="keyword">const</span>;
-00142   <span class="keywordtype">bool</span> operator!=(csPluginRequest <span class="keyword">const</span>&amp; r)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !operator==(r); }
-00143   <a class="code" href="classcsString.html">csString</a> GetClassName()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> class_name; }
-00144   <a class="code" href="classcsString.html">csString</a> GetInterfaceName()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> interface_name; }
-00145   <a class="code" href="group__scf.html#a0">scfInterfaceID</a> GetInterfaceID()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> interface_id; }
-00146   <span class="keywordtype">int</span> GetInterfaceVersion()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> interface_version; }
-00147 };
-00148 
+00118 
+<a name="l00129"></a><a class="code" href="classcsPluginRequest.html">00129</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT csPluginRequest
+00130 {
+00131 <span class="keyword">private</span>:
+00132   <a class="code" href="classcsString.html">csString</a> class_name;
+00133   <a class="code" href="classcsString.html">csString</a> interface_name;
+00134   <a class="code" href="group__scf.html#a0">scfInterfaceID</a> interface_id;
+00135   <span class="keywordtype">int</span> interface_version;
+00136   <span class="keywordtype">void</span> set(csPluginRequest <span class="keyword">const</span>&amp;);
+00137 <span class="keyword">public</span>:
+00138   csPluginRequest(<a class="code" href="classcsString.html">csString</a> class_name, <a class="code" href="classcsString.html">csString</a> interface_name,
+00139     <a class="code" href="group__scf.html#a0">scfInterfaceID</a> interface_id, <span class="keywordtype">int</span> interface_version);
+00140   csPluginRequest(csPluginRequest <span class="keyword">const</span>&amp; r) { set(r); }
+00141   csPluginRequest&amp; operator=(csPluginRequest <span class="keyword">const</span>&amp; r) {set(r); <span class="keywordflow">return</span> *<span class="keyword">this</span>;}
+00142   <span class="keywordtype">bool</span> operator==(csPluginRequest <span class="keyword">const</span>&amp;) <span class="keyword">const</span>;
+00143   <span class="keywordtype">bool</span> operator!=(csPluginRequest <span class="keyword">const</span>&amp; r)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !operator==(r); }
+00144   <a class="code" href="classcsString.html">csString</a> GetClassName()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> class_name; }
+00145   <a class="code" href="classcsString.html">csString</a> GetInterfaceName()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> interface_name; }
+00146   <a class="code" href="group__scf.html#a0">scfInterfaceID</a> GetInterfaceID()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> interface_id; }
+00147   <span class="keywordtype">int</span> GetInterfaceVersion()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> interface_version; }
+00148 };
 00149 
-<a name="l00155"></a><a class="code" href="classcsInitializer.html">00155</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT csInitializer
-00156 {
-00157 <span class="keyword">public</span>:
-00185   <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* CreateEnvironment(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[]);
-00186 
-00191   <span class="keyword">static</span> <span class="keywordtype">bool</span> InitializeSCF (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[]);
-00192 
-00198   <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* CreateObjectRegistry ();
-00199 
-00206   <span class="keyword">static</span> <a class="code" href="structiPluginManager.html">iPluginManager</a>* CreatePluginManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00207 
-00214   <span class="keyword">static</span> <a class="code" href="structiEventQueue.html">iEventQueue</a>* CreateEventQueue (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00215 
-00222   <span class="keyword">static</span> <a class="code" href="structiVirtualClock.html">iVirtualClock</a>* CreateVirtualClock (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00223 
-00229   <span class="keyword">static</span> <a class="code" href="structiCommandLineParser.html">iCommandLineParser</a>* CreateCommandLineParser (
-00230     <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[]);
-00231 
-00237   <span class="keyword">static</span> <a class="code" href="structiConfigManager.html">iConfigManager</a>* CreateConfigManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00238 
-00245   <span class="keyword">static</span> <span class="keywordtype">bool</span> CreateInputDrivers (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00150 
+<a name="l00156"></a><a class="code" href="classcsInitializer.html">00156</a> <span class="keyword">class </span>CS_CSTOOL_EXPORT csInitializer
+00157 {
+00158 <span class="keyword">public</span>:
+00187   <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* CreateEnvironment(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[]);
+00188 
+00193   <span class="keyword">static</span> <span class="keywordtype">bool</span> InitializeSCF (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[]);
+00194 
+00200   <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* CreateObjectRegistry ();
+00201 
+00208   <span class="keyword">static</span> <a class="code" href="structiPluginManager.html">iPluginManager</a>* CreatePluginManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00209 
+00216   <span class="keyword">static</span> <a class="code" href="structiEventQueue.html">iEventQueue</a>* CreateEventQueue (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00217 
+00224   <span class="keyword">static</span> <a class="code" href="structiVirtualClock.html">iVirtualClock</a>* CreateVirtualClock (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00225 
+00231   <span class="keyword">static</span> <a class="code" href="structiCommandLineParser.html">iCommandLineParser</a>* CreateCommandLineParser (
+00232     <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[]);
+00233 
+00238   <span class="keyword">static</span> <a class="code" href="structiVerbosityManager.html">iVerbosityManager</a>* CreateVerbosityManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00239 
+00245   <span class="keyword">static</span> <a class="code" href="structiConfigManager.html">iConfigManager</a>* CreateConfigManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
 00246 
-00256   <span class="keyword">static</span> <span class="keywordtype">bool</span> CreateStringSet (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00257 
-00269   <span class="keyword">static</span> <span class="keywordtype">bool</span> SetupConfigManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, <span class="keyword">const</span> <span class="keywordtype">char</span>* configName,
-00270     <span class="keyword">const</span> <span class="keywordtype">char</span> *ApplicationID = <span class="stringliteral">"CrystalSpace.Noname"</span>);
-00271 
-00283   <span class="keyword">static</span> <a class="code" href="structiVFS.html">iVFS</a>* SetupVFS(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* objectReg, 
-00284           <span class="keyword">const</span> <span class="keywordtype">char</span>* pluginID = <span class="stringliteral">"crystalspace.kernel.vfs"</span>);
-00285 
-00297   <span class="keyword">static</span> <span class="keywordtype">bool</span> RequestPlugins (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, ...);
-00298 
-00304   <span class="keyword">static</span> <span class="keywordtype">bool</span> RequestPluginsV (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, va_list);
-00305 
-00325   <span class="keyword">static</span> <span class="keywordtype">bool</span> RequestPlugins(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*,<a class="code" href="classcsArray.html">csArray&lt;csPluginRequest&gt;</a> <span class="keyword">const</span>&amp;);
-00326 
-00331   <span class="keyword">static</span> <span class="keywordtype">bool</span> OpenApplication (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00332 
-00336   <span class="keyword">static</span> <span class="keywordtype">void</span> CloseApplication (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00337 
-00346   <span class="keyword">static</span> <span class="keywordtype">bool</span> SetupEventHandler (
-00347     <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, <a class="code" href="structiEventHandler.html">iEventHandler</a>*, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> eventmask);
-00348 
-00355   <span class="keyword">static</span> <span class="keywordtype">bool</span> SetupEventHandler (
-00356     <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, <a class="code" href="group__appframe.html#a0">csEventHandlerFunc</a>, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> eventmask =
-00357       <a class="code" href="group__event__handling.html#a11">CSMASK_Nothing</a>          |
-00358       <a class="code" href="group__event__handling.html#a23">CSMASK_Broadcast</a>        |
-00359       <a class="code" href="group__event__handling.html#a16">CSMASK_MouseUp</a>          |
-00360       <a class="code" href="group__event__handling.html#a15">CSMASK_MouseDown</a>        |
-00361       <a class="code" href="group__event__handling.html#a14">CSMASK_MouseMove</a>        |
-00362       <a class="code" href="group__event__handling.html#a13">CSMASK_Keyboard</a>         |
-00363       <a class="code" href="group__event__handling.html#a17">CSMASK_MouseClick</a>       |
-00364       <a class="code" href="group__event__handling.html#a18">CSMASK_MouseDoubleClick</a> |
-00365       <a class="code" href="group__event__handling.html#a19">CSMASK_JoystickMove</a>     |
-00366       <a class="code" href="group__event__handling.html#a20">CSMASK_JoystickDown</a>     |
-00367       <a class="code" href="group__event__handling.html#a21">CSMASK_JoystickUp</a>);
-00368 
-00397   <span class="keyword">static</span> <span class="keywordtype">void</span> DestroyApplication (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00398 };
-00399 
-00402 <span class="preprocessor">#endif // __CS_INITAPP_H__</span>
+00253   <span class="keyword">static</span> <span class="keywordtype">bool</span> CreateInputDrivers (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00254 
+00264   <span class="keyword">static</span> <span class="keywordtype">bool</span> CreateStringSet (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00265 
+00277   <span class="keyword">static</span> <span class="keywordtype">bool</span> SetupConfigManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, <span class="keyword">const</span> <span class="keywordtype">char</span>* configName,
+00278     <span class="keyword">const</span> <span class="keywordtype">char</span> *ApplicationID = <span class="stringliteral">"CrystalSpace.Noname"</span>);
+00279 
+00291   <span class="keyword">static</span> <a class="code" href="structiVFS.html">iVFS</a>* SetupVFS(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* objectReg, 
+00292           <span class="keyword">const</span> <span class="keywordtype">char</span>* pluginID = <span class="stringliteral">"crystalspace.kernel.vfs"</span>);
+00293 
+00305   <span class="keyword">static</span> <span class="keywordtype">bool</span> RequestPlugins (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, ...);
+00306 
+00312   <span class="keyword">static</span> <span class="keywordtype">bool</span> RequestPluginsV (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, va_list);
+00313 
+00333   <span class="keyword">static</span> <span class="keywordtype">bool</span> RequestPlugins(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*,<a class="code" href="classcsArray.html">csArray&lt;csPluginRequest&gt;</a> <span class="keyword">const</span>&amp;);
+00334 
+00339   <span class="keyword">static</span> <span class="keywordtype">bool</span> OpenApplication (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00340 
+00344   <span class="keyword">static</span> <span class="keywordtype">void</span> CloseApplication (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00345 
+00354   <span class="keyword">static</span> <span class="keywordtype">bool</span> SetupEventHandler (
+00355     <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, <a class="code" href="structiEventHandler.html">iEventHandler</a>*, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> eventmask);
+00356 
+00363   <span class="keyword">static</span> <span class="keywordtype">bool</span> SetupEventHandler (
+00364     <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, <a class="code" href="group__appframe.html#a0">csEventHandlerFunc</a>, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> eventmask =
+00365       <a class="code" href="group__event__handling.html#a11">CSMASK_Nothing</a>          |
+00366       <a class="code" href="group__event__handling.html#a23">CSMASK_Broadcast</a>        |
+00367       <a class="code" href="group__event__handling.html#a16">CSMASK_MouseUp</a>          |
+00368       <a class="code" href="group__event__handling.html#a15">CSMASK_MouseDown</a>        |
+00369       <a class="code" href="group__event__handling.html#a14">CSMASK_MouseMove</a>        |
+00370       <a class="code" href="group__event__handling.html#a13">CSMASK_Keyboard</a>         |
+00371       <a class="code" href="group__event__handling.html#a17">CSMASK_MouseClick</a>       |
+00372       <a class="code" href="group__event__handling.html#a18">CSMASK_MouseDoubleClick</a> |
+00373       <a class="code" href="group__event__handling.html#a19">CSMASK_JoystickMove</a>     |
+00374       <a class="code" href="group__event__handling.html#a20">CSMASK_JoystickDown</a>     |
+00375       <a class="code" href="group__event__handling.html#a21">CSMASK_JoystickUp</a>);
+00376 
+00405   <span class="keyword">static</span> <span class="keywordtype">void</span> DestroyApplication (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00406 };
+00407 
+00410 <span class="preprocessor">#endif // __CS_INITAPP_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.3 
 </small></address> </div></body> </html>
