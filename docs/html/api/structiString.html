@@ -40,22 +40,23 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the current capacity.  <a href="#a1"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a2">SetGrowsBy</a> (size_t)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Advise the string that it should grow by approximately this many bytes when more space is required.  <a href="#a2"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Advise the string that it should grow its allocated buffer by approximately this many bytes when more space is required.  <a href="#a2"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a3">GetGrowsBy</a> () const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the number of bytes by which the string grows.  <a href="#a3"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a4">SetGrowsExponentially</a> (bool)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a4">Truncate</a> (size_t Len)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Tell the string to re-size its buffer exponentially as needed.  <a href="#a4"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a5">GetGrowsExponentially</a> () const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Truncate the string.  <a href="#a4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a5">ShrinkBestFit</a> ()=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns true if exponential growth is enabled.  <a href="#a5"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a6">Truncate</a> (size_t Len)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set string buffer capacity to hold exactly the current content.  <a href="#a5"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual CS_DEPRECATED_METHOD <br>
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a6">Reclaim</a> ()=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Truncate the string.  <a href="#a6"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a7">Reclaim</a> ()=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set string buffer capacity to hold exactly the current content.  <a href="#a6"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a7">Empty</a> ()=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set string buffer capacity to hold exactly the current content.  <a href="#a7"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear the string (so that it contains only a null terminator).  <a href="#a7"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a8">Clear</a> ()=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear the string (so that it contains only a null terminator).  <a href="#a8"></a><br></td></tr>
@@ -110,45 +111,51 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a25">FindLast</a> (const char c, size_t p=(size_t)-1) const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Find the last occurrence of a character in the string.  <a href="#a25"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a26">Format</a> (const char *format,...)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a26">Find</a> (const char *search, size_t pos=0) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Format this string using sprintf()-style formatting directives.  <a href="#a26"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a27">FormatV</a> (const char *format, va_list args)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Find the first occurrence of <code>search</code> in this string starting at <code>pos</code>.  <a href="#a26"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a27">ReplaceAll</a> (const char *search, const char *replacement)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Format this string using sprintf() formatting directives in a va_list.  <a href="#a27"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a28">Replace</a> (const <a class="el" href="structiString.html">iString</a> *str, size_t count=(size_t)-1)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Find all occurrences of <code>search</code> in this string and replace them with <code>replacement</code>.  <a href="#a27"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a28">Format</a> (const char *format,...)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Replace contents of this string with the contents of another.  <a href="#a28"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a29">Compare</a> (const <a class="el" href="structiString.html">iString</a> *Str) const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Format this string using sprintf()-style formatting directives.  <a href="#a28"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a29">FormatV</a> (const char *format, va_list args)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if another string is equal to this one.  <a href="#a29"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a30">CompareNoCase</a> (const <a class="el" href="structiString.html">iString</a> *Str) const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Format this string using sprintf() formatting directives in a va_list.  <a href="#a29"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a30">Replace</a> (const <a class="el" href="structiString.html">iString</a> *str, size_t count=(size_t)-1)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if another string is equal to this one.  <a href="#a30"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a31">operator+=</a> (const <a class="el" href="structiString.html">iString</a> &amp;iStr)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Replace contents of this string with the contents of another.  <a href="#a30"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a31">Compare</a> (const <a class="el" href="structiString.html">iString</a> *Str) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Append another string to this one.  <a href="#a31"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a32">operator+=</a> (const char *iStr)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if another string is equal to this one.  <a href="#a31"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a32">CompareNoCase</a> (const <a class="el" href="structiString.html">iString</a> *Str) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Append a null-terminated C-string to this string.  <a href="#a32"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiString.html">iString</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a33">operator+</a> (const <a class="el" href="structiString.html">iString</a> &amp;iStr) const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if another string is equal to this one.  <a href="#a32"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a33">operator+=</a> (const <a class="el" href="structiString.html">iString</a> &amp;iStr)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Concatenate two strings and return a third one.  <a href="#a33"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a34">operator char const *</a> () const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Append another string to this one.  <a href="#a33"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a34">operator+=</a> (const char *iStr)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a pointer to the null-terminated character array.  <a href="#a34"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a35">operator==</a> (const <a class="el" href="structiString.html">iString</a> &amp;Str) const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Append a null-terminated C-string to this string.  <a href="#a34"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiString.html">iString</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a35">operator+</a> (const <a class="el" href="structiString.html">iString</a> &amp;iStr) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if another string is equal to this one.  <a href="#a35"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a36">operator!=</a> (const <a class="el" href="structiString.html">iString</a> &amp;Str) const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Concatenate two strings and return a third one.  <a href="#a35"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a36">operator char const *</a> () const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if another string is not equal to this one.  <a href="#a36"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a37">Downcase</a> ()=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a pointer to the null-terminated character array.  <a href="#a36"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a37">operator==</a> (const <a class="el" href="structiString.html">iString</a> &amp;Str) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Convert string to lowercase.  <a href="#a37"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a38">Upcase</a> ()=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if another string is equal to this one.  <a href="#a37"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a38">operator!=</a> (const <a class="el" href="structiString.html">iString</a> &amp;Str) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Convert string to uppercase.  <a href="#a38"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if another string is not equal to this one.  <a href="#a38"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a39">Downcase</a> ()=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Convert string to lowercase.  <a href="#a39"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiString.html#a40">Upcase</a> ()=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Convert string to uppercase.  <a href="#a40"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This is a SCF-compatible interface for <a class="el" href="classcsString.html">csString</a>. 
@@ -277,6 +284,7 @@ Implemented in <a class="el" href="classscfString.html#a27">scfString</a>.    </
 Clear the string (so that it contains only a null terminator). 
 <p>
 <dl compact><dt><b>Remarks:</b></dt><dd>This is typically shorthand for Truncate(0), but more idiomatic in terms of human language. </dd></dl>
+<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000015">Deprecated:</a></b></dt><dd>Use <a class="el" href="structiString.html#a7">Empty()</a> instead. </dd></dl>
 
 <p>
 Implemented in <a class="el" href="classscfString.html#a15">scfString</a>.    </td>
@@ -313,7 +321,7 @@ Get a copy of this string.
 Implemented in <a class="el" href="classscfString.html#a16">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a29" doxytag="iString::Compare"></a><p>
+<a class="anchor" name="a31" doxytag="iString::Compare"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -349,10 +357,10 @@ Check if another string is equal to this one.
 <dl compact><dt><b>Remarks:</b></dt><dd>The comparison is case-sensitive. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a36">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a38">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a30" doxytag="iString::CompareNoCase"></a><p>
+<a class="anchor" name="a32" doxytag="iString::CompareNoCase"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -388,10 +396,10 @@ Check if another string is equal to this one.
 <dl compact><dt><b>Remarks:</b></dt><dd>The comparison is case-insensitive. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a37">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a39">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a37" doxytag="iString::Downcase"></a><p>
+<a class="anchor" name="a39" doxytag="iString::Downcase"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -419,7 +427,89 @@ Convert string to lowercase.
 <p>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a44">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a46">scfString</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a7" doxytag="iString::Empty"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual void iString::Empty           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Clear the string (so that it contains only a null terminator). 
+<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>This is typically shorthand for Truncate(0), but more idiomatic in terms of human language. </dd></dl>
+
+<p>
+Implemented in <a class="el" href="classscfString.html#a14">scfString</a>.
+<p>
+Referenced by <a class="el" href="scfstr_8h-source.html#l00090">scfString::Clear()</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a26" doxytag="iString::Find"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual size_t iString::Find           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const char *&nbsp;</td>
+          <td class="mdname" nowrap> <em>search</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>size_t&nbsp;</td>
+          <td class="mdname" nowrap> <em>pos</em> = <code>0</code></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"> const<code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Find the first occurrence of <code>search</code> in this string starting at <code>pos</code>. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>search</em>&nbsp;</td><td>String to locate. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>pos</em>&nbsp;</td><td>Start position of search (default 0). </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>First position of <code>search</code>, or (size_t)-1 if not found. </dd></dl>
+
+<p>
+Implemented in <a class="el" href="classscfString.html#a33">scfString</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a24" doxytag="iString::FindFirst"></a><p>
@@ -518,7 +608,7 @@ Find the last occurrence of a character in the string.
 Implemented in <a class="el" href="classscfString.html#a32">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a26" doxytag="iString::Format"></a><p>
+<a class="anchor" name="a28" doxytag="iString::Format"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -557,10 +647,10 @@ Format this string using sprintf()-style formatting directives.
 <dl compact><dt><b>Remarks:</b></dt><dd>Automatically allocates sufficient memory to hold result. Newly formatted string replaces previous string value. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a33">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a35">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a27" doxytag="iString::FormatV"></a><p>
+<a class="anchor" name="a29" doxytag="iString::FormatV"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -600,7 +690,7 @@ Format this string using sprintf() formatting directives in a va_list.
 <dl compact><dt><b>Remarks:</b></dt><dd>Automatically allocates sufficient memory to hold result. Newly formatted string replaces previous string value. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a34">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a36">scfString</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a17" doxytag="iString::GetAt"></a><p>
@@ -694,7 +784,7 @@ Get a pointer to the null-terminated character array.
 <p>
 <dl compact><dt><b>Returns:</b></dt><dd>A C-string pointer to the null-terminated character array; or zero if the string represents a null-pointer. </dd></dl>
 <dl compact><dt><b>Warning:</b></dt><dd>This returns a non-const pointer, so use this function with care! </dd></dl>
-<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated:</a></b></dt><dd>Use the 'const' version of <a class="el" href="structiString.html#a11">GetData()</a> instead. </dd></dl>
+<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated:</a></b></dt><dd>Use the 'const' version of <a class="el" href="structiString.html#a11">GetData()</a> instead. </dd></dl>
 
 <p>
 Implemented in <a class="el" href="classscfString.html#a18">scfString</a>.    </td>
@@ -758,40 +848,10 @@ Implemented in <a class="el" href="classscfString.html#a17">scfString</a>.    </
 <p>
 Return the number of bytes by which the string grows. 
 <p>
+<dl compact><dt><b>Remarks:</b></dt><dd>If the return value is zero, then the internal buffer grows exponentially by doubling its size, rather than by fixed increments. </dd></dl>
 
 <p>
 Implemented in <a class="el" href="classscfString.html#a10">scfString</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a5" doxytag="iString::GetGrowsExponentially"></a><p>
-<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">virtual bool iString::GetGrowsExponentially           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap> const<code> [pure virtual]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Returns true if exponential growth is enabled. 
-<p>
-
-<p>
-Implemented in <a class="el" href="classscfString.html#a12">scfString</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a18" doxytag="iString::Insert"></a><p>
@@ -907,7 +967,7 @@ Query string length.
 Implemented in <a class="el" href="classscfString.html#a19">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a34" doxytag="iString::operator char const *"></a><p>
+<a class="anchor" name="a36" doxytag="iString::operator char const *"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -936,10 +996,10 @@ Get a pointer to the null-terminated character array.
 <dl compact><dt><b>Returns:</b></dt><dd>A C-string pointer to the null-terminated character array; or zero if the string represents a null-pointer. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a41">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a43">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a36" doxytag="iString::operator!="></a><p>
+<a class="anchor" name="a38" doxytag="iString::operator!="></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -975,10 +1035,10 @@ Check if another string is not equal to this one.
 <dl compact><dt><b>Remarks:</b></dt><dd>The comparison is case-sensitive. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a43">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a45">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a33" doxytag="iString::operator+"></a><p>
+<a class="anchor" name="a35" doxytag="iString::operator+"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1007,10 +1067,10 @@ Concatenate two strings and return a third one.
 <p>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a40">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a42">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a32" doxytag="iString::operator+="></a><p>
+<a class="anchor" name="a34" doxytag="iString::operator+="></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1039,10 +1099,10 @@ Append a null-terminated C-string to this string.
 <p>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a39">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a41">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a31" doxytag="iString::operator+="></a><p>
+<a class="anchor" name="a33" doxytag="iString::operator+="></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1071,10 +1131,10 @@ Append another string to this one.
 <p>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a38">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a40">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a35" doxytag="iString::operator=="></a><p>
+<a class="anchor" name="a37" doxytag="iString::operator=="></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1110,7 +1170,7 @@ Check if another string is equal to this one.
 <dl compact><dt><b>Remarks:</b></dt><dd>The comparison is case-sensitive. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a42">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a44">scfString</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a15" doxytag="iString::operator[]"></a><p>
@@ -1225,13 +1285,13 @@ Overlay another string onto a part of this string.
 Implemented in <a class="el" href="classscfString.html#a26">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a7" doxytag="iString::Reclaim"></a><p>
+<a class="anchor" name="a6" doxytag="iString::Reclaim"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">virtual void iString::Reclaim           </td>
+          <td class="md" nowrap valign="top">virtual CS_DEPRECATED_METHOD void iString::Reclaim           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
@@ -1252,12 +1312,13 @@ Implemented in <a class="el" href="classscfString.html#a26">scfString</a>.    </
 Set string buffer capacity to hold exactly the current content. 
 <p>
 <dl compact><dt><b>Remarks:</b></dt><dd>If the string length is greater than zero, then the buffer's capacity will be adjusted to exactly that size. If the string length is zero, then the implementation may shrink the allocation so that it only holds the implicit null terminator, or it may free the string's memory completely. </dd></dl>
+<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000014">Deprecated:</a></b></dt><dd>Use <a class="el" href="structiString.html#a5">ShrinkBestFit()</a> instead. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a14">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a13">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a28" doxytag="iString::Replace"></a><p>
+<a class="anchor" name="a30" doxytag="iString::Replace"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1301,7 +1362,48 @@ Replace contents of this string with the contents of another.
 </dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a35">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a37">scfString</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a27" doxytag="iString::ReplaceAll"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual void iString::ReplaceAll           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const char *&nbsp;</td>
+          <td class="mdname" nowrap> <em>search</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>const char *&nbsp;</td>
+          <td class="mdname" nowrap> <em>replacement</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Find all occurrences of <code>search</code> in this string and replace them with <code>replacement</code>. 
+<p>
+
+<p>
+Implemented in <a class="el" href="classscfString.html#a34">scfString</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a16" doxytag="iString::SetAt"></a><p>
@@ -1373,7 +1475,7 @@ Implemented in <a class="el" href="classscfString.html#a23">scfString</a>.    </
 <p>
 Advise the string that it should allocate enough space to hold up to NewSize characters. 
 <p>
-<dl compact><dt><b>Remarks:</b></dt><dd>After calling this method, the string's capacity will be at least NewSize + 1 (one for the implicit null terminator). Never shrinks capacity. If you need to actually reclaim memory, then use Free() or <a class="el" href="structiString.html#a7">Reclaim()</a>. </dd></dl>
+<dl compact><dt><b>Remarks:</b></dt><dd>After calling this method, the string's capacity will be at least NewSize + 1 (one for the implicit null terminator). Never shrinks capacity. If you need to actually reclaim memory, then use Free() or <a class="el" href="structiString.html#a6">Reclaim()</a>. </dd></dl>
 
 <p>
 Implemented in <a class="el" href="classscfString.html#a7">scfString</a>.    </td>
@@ -1404,23 +1506,23 @@ Implemented in <a class="el" href="classscfString.html#a7">scfString</a>.    </t
     <td>
 
 <p>
-Advise the string that it should grow by approximately this many bytes when more space is required. 
+Advise the string that it should grow its allocated buffer by approximately this many bytes when more space is required. 
 <p>
-<dl compact><dt><b>Remarks:</b></dt><dd>This value is only a suggestion. The actual value by which it grows may be rounded up or down to an implementation-dependent allocation multiple. This method turns off exponential growth. </dd></dl>
+This is an optimization to avoid excessive memory reallocation and heap management, which can be quite slow. <dl compact><dt><b>Remarks:</b></dt><dd>This value is only a suggestion. The actual value by which it grows may be rounded up or down to an implementation-dependent allocation multiple. <p>
+If the value is zero, then the internal buffer grows exponentially by doubling its size, rather than by fixed increments. </dd></dl>
 
 <p>
 Implemented in <a class="el" href="classscfString.html#a9">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a4" doxytag="iString::SetGrowsExponentially"></a><p>
+<a class="anchor" name="a5" doxytag="iString::ShrinkBestFit"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">virtual void iString::SetGrowsExponentially           </td>
+          <td class="md" nowrap valign="top">virtual void iString::ShrinkBestFit           </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">bool&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap><code> [pure virtual]</code></td>
@@ -1437,12 +1539,14 @@ Implemented in <a class="el" href="classscfString.html#a9">scfString</a>.    </t
     <td>
 
 <p>
-Tell the string to re-size its buffer exponentially as needed. 
+Set string buffer capacity to hold exactly the current content. 
 <p>
-<dl compact><dt><b>Remarks:</b></dt><dd>If set to true, the <a class="el" href="structiString.html#a3">GetGrowsBy()</a> setting is ignored. </dd></dl>
+<dl compact><dt><b>Remarks:</b></dt><dd>If the string length is greater than zero, then the buffer's capacity will be adjusted to exactly that size. If the string length is zero, then the implementation may shrink the allocation so that it only holds the implicit null terminator, or it may free the string's memory completely. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a11">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a12">scfString</a>.
+<p>
+Referenced by <a class="el" href="scfstr_8h-source.html#l00080">scfString::Reclaim()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a22" doxytag="iString::Slice"></a><p>
@@ -1548,7 +1652,7 @@ Copy a portion of this string.
 Implemented in <a class="el" href="classscfString.html#a30">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a6" doxytag="iString::Truncate"></a><p>
+<a class="anchor" name="a4" doxytag="iString::Truncate"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1580,13 +1684,13 @@ Truncate the string.
     <tr><td valign="top"></td><td valign="top"><em>Len</em>&nbsp;</td><td>The number of characters to which the string should be truncated (possibly 0). </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Remarks:</b></dt><dd>Will only make a string shorter; will never extend it. This method may or may not reclaim memory depending upon the implementation. If you positively need to reclaim memory after truncating the string, then invoke <a class="el" href="structiString.html#a7">Reclaim()</a>. </dd></dl>
+<dl compact><dt><b>Remarks:</b></dt><dd>Will only make a string shorter; will never extend it. This method may or may not reclaim memory depending upon the implementation. If you positively need to reclaim memory after truncating the string, then invoke <a class="el" href="structiString.html#a6">Reclaim()</a>. </dd></dl>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a13">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a11">scfString</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a38" doxytag="iString::Upcase"></a><p>
+<a class="anchor" name="a40" doxytag="iString::Upcase"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1614,7 +1718,7 @@ Convert string to uppercase.
 <p>
 
 <p>
-Implemented in <a class="el" href="classscfString.html#a45">scfString</a>.    </td>
+Implemented in <a class="el" href="classscfString.html#a47">scfString</a>.    </td>
   </tr>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
