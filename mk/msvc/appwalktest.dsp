@@ -238,11 +238,11 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\apps\walktest\command.cpp
+SOURCE=..\..\apps\walktest\bot.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\walktest\bot.cpp
+SOURCE=..\..\apps\walktest\command.cpp
 # End Source File
 # Begin Source File
 

@@ -252,11 +252,11 @@ SOURCE=..\..\plugins\video\loader\dds\ddsloader.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\dds\ddsloader.h
+SOURCE=..\..\plugins\video\loader\dds\dds.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\dds\dds.h
+SOURCE=..\..\plugins\video\loader\dds\ddsloader.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

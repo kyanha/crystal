@@ -272,11 +272,11 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_parser
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_1xto14.h
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\glshader_ps1.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\glshader_ps1.h
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_1xto14.h
 # End Source File
 # Begin Source File
 

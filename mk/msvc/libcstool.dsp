@@ -240,15 +240,15 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\libs\cstool\collider.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\cstool\anonrndbuf.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\basetexfact.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\collider.cpp
 # End Source File
 # Begin Source File
 

@@ -264,10 +264,6 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\opengl\gl_polyrender.h
 # End Source File
 # Begin Source File
@@ -281,6 +277,10 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_renderbuffer.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\opengl\gl_txtcache.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -336,6 +336,38 @@ SOURCE=..\..\libs\csutil\evoutlet.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\generic\appdir.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\generic\csprocessorcap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\generic\findlib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\generic\getopt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\generic\pluginpaths.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\generic\regex.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\generic\resdir.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\generic\runloop.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\hash.cpp
 # End Source File
 # Begin Source File
@@ -496,15 +528,11 @@ SOURCE=..\..\libs\csutil\virtclk.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\xmltiny.cpp
+SOURCE=..\..\libs\csutil\win32\callstack.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\win32\DbgHelpAPI.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\callstack.cpp
 # End Source File
 # Begin Source File
 
@@ -576,84 +604,12 @@ SOURCE=..\..\libs\csutil\win32\wintools.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\generic\appdir.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\generic\csprocessorcap.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\generic\findlib.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\generic\getopt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\generic\pluginpaths.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\generic\resdir.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\generic\runloop.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\generic\regex.c
+SOURCE=..\..\libs\csutil\xmltiny.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\reftrack.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\regex_wrapper.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\tinystr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\tinywrap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\tinyxml.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\xmltinyp.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\cachedll.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\callstack.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\shellstuff.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\win32kbd.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\win32\winthread.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\archive.h
@@ -856,6 +812,14 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\list.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\..\..\include\csutil\macosx\csosdefs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\macosx\OSXAssistant.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\..\..\include\csutil\memdebug.h
 # End Source File
 # Begin Source File
@@ -1016,6 +980,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\tree.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\..\..\include\csutil\unix\csosdefs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\..\..\include\csutil\util.h
 # End Source File
 # Begin Source File
@@ -1040,26 +1008,6 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\weakrefarr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\xmltiny.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\zip.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\macosx\OSXAssistant.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\macosx\csosdefs.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\DbgHelpAPI.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\callstack.h
 # End Source File
 # Begin Source File
@@ -1069,6 +1017,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\csconfig.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\csosdefs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\DbgHelpAPI.h
 # End Source File
 # Begin Source File
 
@@ -1088,7 +1040,55 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\win32\wintools.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\..\..\include\csutil\unix\csosdefs.h
+SOURCE=..\..\libs\csutil\..\..\include\csutil\xmltiny.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\zip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\reftrack.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\regex_wrapper.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\tinystr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\tinywrap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\tinyxml.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\cachedll.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\callstack.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\shellstuff.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\win32kbd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\winthread.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\xmltinyp.h
 # End Source File
 # End Group
 # End Target

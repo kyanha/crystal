@@ -248,26 +248,6 @@ SOURCE=..\..\plugins\aws\aws3dfrm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\aws\awsControlBar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsEngineView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsMenu.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsPanel.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsTabCtrl.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\aws\awsadler.cpp
 # End Source File
 # Begin Source File
@@ -289,6 +269,14 @@ SOURCE=..\..\plugins\aws\awscmdbt.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\awscomp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsControlBar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsEngineView.cpp
 # End Source File
 # Begin Source File
 
@@ -324,6 +312,10 @@ SOURCE=..\..\plugins\aws\awslstbx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws\awsMenu.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws\awsmgr.cpp
 # End Source File
 # Begin Source File
@@ -333,6 +325,10 @@ SOURCE=..\..\plugins\aws\awsmled.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\awsntbk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsPanel.cpp
 # End Source File
 # Begin Source File
 
@@ -365,6 +361,10 @@ SOURCE=..\..\plugins\aws\awsstbar.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\awsstdsk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsTabCtrl.cpp
 # End Source File
 # Begin Source File
 
@@ -404,26 +404,6 @@ SOURCE=..\..\plugins\aws\aws3dfrm.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\aws\awsControlBar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsEngineView.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsMenu.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsPanel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsTabCtrl.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\aws\awsadler.h
 # End Source File
 # Begin Source File
@@ -448,7 +428,15 @@ SOURCE=..\..\plugins\aws\awscomp.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws\awsControlBar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws\awscscr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsEngineView.h
 # End Source File
 # Begin Source File
 
@@ -488,11 +476,19 @@ SOURCE=..\..\plugins\aws\awslstbx.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws\awsMenu.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws\awsmled.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\awsntbk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsPanel.h
 # End Source File
 # Begin Source File
 
@@ -525,6 +521,10 @@ SOURCE=..\..\plugins\aws\awsstbar.h
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\awsstdsk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsTabCtrl.h
 # End Source File
 # Begin Source File
 
