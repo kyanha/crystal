@@ -38,48 +38,50 @@
 00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_BSPTREE_H__</span>
 00021 <span class="preprocessor"></span>
 00022 <span class="preprocessor">#include "csextern.h"</span>
-00023 <span class="preprocessor">#include "csutil/array.h"</span>
-00024 <span class="preprocessor">#include "<a class="code" href="garray_8h.html">csutil/garray.h</a>"</span>
-00025 <span class="preprocessor">#include "csutil/hash.h"</span>
-00026 <span class="preprocessor">#include "csutil/blockallocator.h"</span>
-00027 
-00028 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
-00029 <span class="keyword">class </span><a class="code" href="classcsBSPTree.html">csBSPTree</a>;
-00030 
-<a name="l00036"></a><a class="code" href="classcsBSPTree.html">00036</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT <a class="code" href="classcsBSPTree.html">csBSPTree</a>
-00037 {
-00038 <span class="keyword">private</span>:
-00039   <span class="keyword">static</span> <a class="code" href="classcsBlockAllocator.html">csBlockAllocator&lt;csBSPTree&gt;</a> tree_nodes;
-00040   <span class="keyword">static</span> <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;int&gt;</a> b2f_array;
-00041 
-00042   <a class="code" href="classcsBSPTree.html">csBSPTree</a>* child1;            <span class="comment">// If child1 is not 0 then child2 will</span>
-00043   <a class="code" href="classcsBSPTree.html">csBSPTree</a>* child2;            <span class="comment">// also be not 0.</span>
-00044 
-00045   <a class="code" href="classcsPlane3.html">csPlane3</a> split_plane;
-00046   <a class="code" href="classcsArray.html">csArray&lt;int&gt;</a> splitters;
-00047 
-00048   size_t FindBestSplitter (<a class="code" href="structcsTriangle.html">csTriangle</a>* triangles, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes,
-00049         <span class="keywordtype">int</span> num_triangles, <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
-00050         <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;int&gt;</a>&amp; triidx);
-00051   <span class="keywordtype">void</span> Build (<a class="code" href="structcsTriangle.html">csTriangle</a>* triangles, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes,
-00052         <span class="keywordtype">int</span> num_triangles, <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
-00053         <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;int&gt;</a>&amp; triidx);
-00054   <span class="keywordtype">void</span> Back2Front (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos, <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;int&gt;</a>&amp; arr,
-00055         <a class="code" href="classcsSet.html">csSet&lt;int&gt;</a>&amp; used_indices);
-00056 <span class="keyword">public</span>:
-00058   <a class="code" href="classcsBSPTree.html">csBSPTree</a> ();
-00060   ~<a class="code" href="classcsBSPTree.html">csBSPTree</a> ();
-00061 
-00063   <span class="keywordtype">void</span> Clear ();
-00064 
-00068   <span class="keywordtype">void</span> Build (<a class="code" href="structcsTriangle.html">csTriangle</a>* triangles, <span class="keywordtype">int</span> num_triangles,
-00069         <a class="code" href="classcsVector3.html">csVector3</a>* vertices);
-00070 
-00076   <span class="keyword">const</span> <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;int&gt;</a>&amp; Back2Front (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos);
-00077 };
-00078 
-00079 <span class="preprocessor">#endif // __CS_BSPTREE_H__</span>
-00080 <span class="preprocessor"></span>
+00023 <span class="preprocessor">#include "<a class="code" href="plane3_8h.html">plane3.h</a>"</span>
+00024 <span class="preprocessor">#include "csutil/array.h"</span>
+00025 <span class="preprocessor">#include "<a class="code" href="garray_8h.html">csutil/garray.h</a>"</span>
+00026 <span class="preprocessor">#include "csutil/hash.h"</span>
+00027 <span class="preprocessor">#include "csutil/blockallocator.h"</span>
+00028 
+00029 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
+00030 <span class="keyword">struct </span><a class="code" href="structcsTriangle.html">csTriangle</a>;
+00031 <span class="keyword">class </span><a class="code" href="classcsBSPTree.html">csBSPTree</a>;
+00032 
+<a name="l00038"></a><a class="code" href="classcsBSPTree.html">00038</a> <span class="keyword">class </span>CS_CSGEOM_EXPORT <a class="code" href="classcsBSPTree.html">csBSPTree</a>
+00039 {
+00040 <span class="keyword">private</span>:
+00041   <span class="keyword">static</span> <a class="code" href="classcsBlockAllocator.html">csBlockAllocator&lt;csBSPTree&gt;</a> tree_nodes;
+00042   <span class="keyword">static</span> <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;int&gt;</a> b2f_array;
+00043 
+00044   <a class="code" href="classcsBSPTree.html">csBSPTree</a>* child1;            <span class="comment">// If child1 is not 0 then child2 will</span>
+00045   <a class="code" href="classcsBSPTree.html">csBSPTree</a>* child2;            <span class="comment">// also be not 0.</span>
+00046 
+00047   <a class="code" href="classcsPlane3.html">csPlane3</a> split_plane;
+00048   <a class="code" href="classcsArray.html">csArray&lt;int&gt;</a> splitters;
+00049 
+00050   size_t FindBestSplitter (<a class="code" href="structcsTriangle.html">csTriangle</a>* triangles, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes,
+00051         <span class="keywordtype">int</span> num_triangles, <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+00052         <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;int&gt;</a>&amp; triidx);
+00053   <span class="keywordtype">void</span> Build (<a class="code" href="structcsTriangle.html">csTriangle</a>* triangles, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes,
+00054         <span class="keywordtype">int</span> num_triangles, <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+00055         <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;int&gt;</a>&amp; triidx);
+00056   <span class="keywordtype">void</span> Back2Front (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos, <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;int&gt;</a>&amp; arr,
+00057         <a class="code" href="classcsSet.html">csSet&lt;int&gt;</a>&amp; used_indices);
+00058 <span class="keyword">public</span>:
+00060   <a class="code" href="classcsBSPTree.html">csBSPTree</a> ();
+00062   ~<a class="code" href="classcsBSPTree.html">csBSPTree</a> ();
+00063 
+00065   <span class="keywordtype">void</span> Clear ();
+00066 
+00070   <span class="keywordtype">void</span> Build (<a class="code" href="structcsTriangle.html">csTriangle</a>* triangles, <span class="keywordtype">int</span> num_triangles,
+00071         <a class="code" href="classcsVector3.html">csVector3</a>* vertices);
+00072 
+00078   <span class="keyword">const</span> <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;int&gt;</a>&amp; Back2Front (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos);
+00079 };
+00080 
+00081 <span class="preprocessor">#endif // __CS_BSPTREE_H__</span>
+00082 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

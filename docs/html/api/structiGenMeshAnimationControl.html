@@ -37,13 +37,13 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Returns true if this control animates normals.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiGenMeshAnimationControl.html#a3">AnimatesColors</a> () const=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Returns true if this control animates colors.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual const <a class="el" href="classcsVector3.html">csVector3</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGenMeshAnimationControl.html#a4">UpdateVertices</a> (<a class="el" href="group__util.html#a11">csTicks</a> current, const <a class="el" href="classcsVector3.html">csVector3</a> *verts, int num_verts)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual const <a class="el" href="classcsVector3.html">csVector3</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGenMeshAnimationControl.html#a4">UpdateVertices</a> (<a class="el" href="group__util.html#a11">csTicks</a> current, const <a class="el" href="classcsVector3.html">csVector3</a> *verts, int num_verts, <a class="el" href="group__util.html#a4">uint32</a> version_id)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Given the factory vertex data, return the animated data.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual const <a class="el" href="classcsVector2.html">csVector2</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGenMeshAnimationControl.html#a5">UpdateTexels</a> (<a class="el" href="group__util.html#a11">csTicks</a> current, const <a class="el" href="classcsVector2.html">csVector2</a> *texels, int num_texels)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual const <a class="el" href="classcsVector2.html">csVector2</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGenMeshAnimationControl.html#a5">UpdateTexels</a> (<a class="el" href="group__util.html#a11">csTicks</a> current, const <a class="el" href="classcsVector2.html">csVector2</a> *texels, int num_texels, <a class="el" href="group__util.html#a4">uint32</a> version_id)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Given the factory texel data, return the animated data.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual const <a class="el" href="classcsVector3.html">csVector3</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGenMeshAnimationControl.html#a6">UpdateNormals</a> (<a class="el" href="group__util.html#a11">csTicks</a> current, const <a class="el" href="classcsVector3.html">csVector3</a> *normals, int num_normals)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual const <a class="el" href="classcsVector3.html">csVector3</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGenMeshAnimationControl.html#a6">UpdateNormals</a> (<a class="el" href="group__util.html#a11">csTicks</a> current, const <a class="el" href="classcsVector3.html">csVector3</a> *normals, int num_normals, <a class="el" href="group__util.html#a4">uint32</a> version_id)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Given the factory normal data, return the animated data.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual const <a class="el" href="classcsColor.html">csColor</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGenMeshAnimationControl.html#a7">UpdateColors</a> (<a class="el" href="group__util.html#a11">csTicks</a> current, const <a class="el" href="classcsColor.html">csColor</a> *colors, int num_colors)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual const <a class="el" href="classcsColor.html">csColor</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiGenMeshAnimationControl.html#a7">UpdateColors</a> (<a class="el" href="group__util.html#a11">csTicks</a> current, const <a class="el" href="classcsColor.html">csColor</a> *colors, int num_colors, <a class="el" href="group__util.html#a4">uint32</a> version_id)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Given the factory color data, return the animated data.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -203,7 +203,13 @@ Returns true if this control animates vertices.
           <td></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>num_colors</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>num_colors</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#a4">uint32</a>&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>version_id</em></td>
         </tr>
         <tr>
           <td></td>
@@ -225,7 +231,7 @@ Returns true if this control animates vertices.
 <p>
 Given the factory color data, return the animated data.
 <p>
-If this control doesn't animate colors then it will return the source array unchanged.     </td>
+If this control doesn't animate colors then it will return the source array unchanged. The 'version_id' is a number that changes whenever the input array changes. The animation control can use this to optimize the animation calculation by caching the animated version of the array and returning that one.     </td>
   </tr>
 </table>
 <a name="a6" doxytag="iGenMeshAnimationControl::UpdateNormals"></a><p>
@@ -249,7 +255,13 @@ If this control doesn't animate colors then it will return the source array unch
           <td></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>num_normals</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>num_normals</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#a4">uint32</a>&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>version_id</em></td>
         </tr>
         <tr>
           <td></td>
@@ -271,7 +283,7 @@ If this control doesn't animate colors then it will return the source array unch
 <p>
 Given the factory normal data, return the animated data.
 <p>
-If this control doesn't animate normals then it will return the source array unchanged.     </td>
+If this control doesn't animate normals then it will return the source array unchanged. The 'version_id' is a number that changes whenever the input array changes. The animation control can use this to optimize the animation calculation by caching the animated version of the array and returning that one.     </td>
   </tr>
 </table>
 <a name="a5" doxytag="iGenMeshAnimationControl::UpdateTexels"></a><p>
@@ -295,7 +307,13 @@ If this control doesn't animate normals then it will return the source array unc
           <td></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>num_texels</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>num_texels</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#a4">uint32</a>&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>version_id</em></td>
         </tr>
         <tr>
           <td></td>
@@ -317,7 +335,7 @@ If this control doesn't animate normals then it will return the source array unc
 <p>
 Given the factory texel data, return the animated data.
 <p>
-If this control doesn't animate texels then it will return the source array unchanged.     </td>
+If this control doesn't animate texels then it will return the source array unchanged. The 'version_id' is a number that changes whenever the input array changes. The animation control can use this to optimize the animation calculation by caching the animated version of the array and returning that one.     </td>
   </tr>
 </table>
 <a name="a4" doxytag="iGenMeshAnimationControl::UpdateVertices"></a><p>
@@ -341,7 +359,13 @@ If this control doesn't animate texels then it will return the source array unch
           <td></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>num_verts</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>num_verts</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#a4">uint32</a>&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>version_id</em></td>
         </tr>
         <tr>
           <td></td>
@@ -363,7 +387,7 @@ If this control doesn't animate texels then it will return the source array unch
 <p>
 Given the factory vertex data, return the animated data.
 <p>
-If this control doesn't animate vertices then it will return the source array unchanged.     </td>
+If this control doesn't animate vertices then it will return the source array unchanged. The 'version_id' is a number that changes whenever the input array changes. The animation control can use this to optimize the animation calculation by caching the animated version of the array and returning that one.     </td>
   </tr>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
