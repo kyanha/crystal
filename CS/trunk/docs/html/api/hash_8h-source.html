@@ -114,7 +114,7 @@
 00116     Modulo = *p;
 00117     CS_ASSERT (Modulo);
 00118 
-00119     Elements.<a class="code" href="classcsArray.html#a7">SetLength</a> (Modulo);
+00119     Elements.<a class="code" href="classcsArray.html#a7">SetLength</a> (Modulo, <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> (0, MIN (Modulo / GrowRate, 8)));
 00120 
 00121     <span class="keywordflow">for</span> (size_t i = 0; i &lt; elen; i++)
 00122     {
@@ -135,11 +135,11 @@
 00137   }
 00138 
 00139 <span class="keyword">public</span>:
-<a name="l00153"></a><a class="code" href="classcsHash.html#a0">00153</a>   <a class="code" href="classcsHash.html#a0">csHash</a> (<span class="keywordtype">int</span> size = 257, <span class="keywordtype">int</span> grow_rate = 64, <span class="keywordtype">int</span> max_size = 20000)
+<a name="l00153"></a><a class="code" href="classcsHash.html#a0">00153</a>   <a class="code" href="classcsHash.html#a0">csHash</a> (<span class="keywordtype">int</span> size = 23, <span class="keywordtype">int</span> grow_rate = 5, <span class="keywordtype">int</span> max_size = 20000)
 00154     : Elements (size), Modulo (size), InitModulo (size),
-00155       GrowRate (grow_rate), MaxSize (max_size), Size (0)
+00155       GrowRate (MIN (grow_rate, size)), MaxSize (max_size), Size (0)
 00156   {
-00157     Elements.<a class="code" href="classcsArray.html#a7">SetLength</a> (size, <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> (0, 8));
+00157     Elements.<a class="code" href="classcsArray.html#a7">SetLength</a> (size, <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> (0, MIN (size / GrowRate, 8)));
 00158   }
 00159 
 <a name="l00161"></a><a class="code" href="classcsHash.html#a1">00161</a>   <a class="code" href="classcsHash.html#a0">csHash</a> (<span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T&gt;</a> &amp;o) : Elements (o.Elements),
