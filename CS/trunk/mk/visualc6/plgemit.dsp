@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\emit\object\emit.h
 
 SOURCE=..\..\mk\visualc6\plgemit.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\emit\object\emit.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\null\persist\standard\nmeshldr.h
 
 SOURCE=..\..\mk\visualc6\plgnullmeshldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\null\persist\standard\nullmeshldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

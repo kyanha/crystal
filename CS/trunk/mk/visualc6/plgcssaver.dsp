@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\cssaver\cssaver.h
 
 SOURCE=..\..\mk\visualc6\plgcssaver.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\cssaver\cssaver.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

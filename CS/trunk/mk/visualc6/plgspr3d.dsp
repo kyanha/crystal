@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\spr3d\object\spr3d.h
 
 SOURCE=..\..\mk\visualc6\plgspr3d.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\spr3d\object\spr3d.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

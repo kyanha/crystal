@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\canvas\null2d\null2d.h
 
 SOURCE=..\..\mk\visualc6\plgnull2d.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\null2d\null2d.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

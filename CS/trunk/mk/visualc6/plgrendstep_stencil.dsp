@@ -222,6 +222,10 @@ SOURCE=..\..\plugins\engine\renderloop\shadow\stencil\stencil.h
 
 SOURCE=..\..\mk\visualc6\plgrendstep_stencil.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\renderloop\shadow\stencil\rendstep_stencil.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

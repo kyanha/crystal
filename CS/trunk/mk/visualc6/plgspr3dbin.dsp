@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\spr3d\persist\binary\spr3dbin.h
 
 SOURCE=..\..\mk\visualc6\plgspr3dbin.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\spr3d\persist\binary\spr3dbin.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -222,6 +222,10 @@ SOURCE=..\..\plugins\documentsystem\binary\bindoc.h
 
 SOURCE=..\..\mk\visualc6\plgbindoc.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\documentsystem\binary\bindoc.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

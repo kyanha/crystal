@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\physics\odedynam\odedynam.h
 
 SOURCE=..\..\mk\visualc6\plgodedynam.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\physics\odedynam\odedynam.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\sound\driver\waveoutsd\wodrv.h
 
 SOURCE=..\..\mk\visualc6\plgsndwaveout.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sound\driver\waveoutsd\sndwaveout.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -226,6 +226,10 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_arb\glshader_a
 
 SOURCE=..\..\mk\visualc6\plgglshader_arb.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_arb\glshader_arb.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -209,6 +209,10 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 
 SOURCE=..\..\mk\visualc6\plgsndaiff.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sound\loader\aiff\sndaiff.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -234,6 +234,10 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.h
 
 SOURCE=..\..\mk\visualc6\plgglrender3d.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\opengl\glrender3d.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

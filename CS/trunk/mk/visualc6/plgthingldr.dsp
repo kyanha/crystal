@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\thing\persist\standard\thingldr.h
 
 SOURCE=..\..\mk\visualc6\plgthingldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\thing\persist\standard\thingldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

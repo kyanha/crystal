@@ -230,6 +230,10 @@ SOURCE=..\..\plugins\video\format\avi\iavicdec.h
 
 SOURCE=..\..\mk\visualc6\plgcsavi.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\format\avi\csavi.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

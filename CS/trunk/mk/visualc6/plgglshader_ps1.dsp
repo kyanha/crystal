@@ -242,6 +242,10 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\ps1_parser
 
 SOURCE=..\..\mk\visualc6\plgglshader_ps1.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_ps1\glshader_ps1.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

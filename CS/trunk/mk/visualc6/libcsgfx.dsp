@@ -180,10 +180,6 @@ PostBuild_Cmds=echo File is a lib, Copy skipped.
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\libs\csgfx\..\..\include\csgfx\bumpmap.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\csimage.h
 # End Source File
 # Begin Source File
@@ -239,10 +235,6 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\xorpat.h
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\libs\csgfx\bumpmap.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csgfx\csimage.cpp

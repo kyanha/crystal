@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\fountain\persist\standard\fountldr.h
 
 SOURCE=..\..\mk\visualc6\plgfountldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\fountain\persist\standard\fountldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\filesys\vfs\vfs.h
 
 SOURCE=..\..\mk\visualc6\plgvfs.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\filesys\vfs\vfs.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

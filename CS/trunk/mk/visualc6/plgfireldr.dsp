@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\fire\persist\standard\fireldr.h
 
 SOURCE=..\..\mk\visualc6\plgfireldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\fire\persist\standard\fireldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

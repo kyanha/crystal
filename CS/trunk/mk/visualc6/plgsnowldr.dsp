@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\snow\persist\standard\snowldr.h
 
 SOURCE=..\..\mk\visualc6\plgsnowldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\snow\persist\standard\snowldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

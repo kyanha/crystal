@@ -226,6 +226,10 @@ SOURCE=..\..\plugins\bugplug\spider.h
 
 SOURCE=..\..\mk\visualc6\plgbugplug.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\bugplug\bugplug.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

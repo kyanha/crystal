@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\sound\loader\mod\moddata.h
 
 SOURCE=..\..\mk\visualc6\plgsndmod.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\sound\loader\mod\sndmod.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

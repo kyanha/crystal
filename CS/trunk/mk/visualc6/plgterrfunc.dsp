@@ -226,6 +226,10 @@ SOURCE=..\..\plugins\mesh\terrfunc\object\terrvis.h
 
 SOURCE=..\..\mk\visualc6\plgterrfunc.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\terrfunc\object\terrfunc.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

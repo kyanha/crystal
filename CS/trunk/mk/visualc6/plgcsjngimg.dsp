@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\loader\jng\jng.h
 
 SOURCE=..\..\mk\visualc6\plgcsjngimg.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\jng\csjngimg.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

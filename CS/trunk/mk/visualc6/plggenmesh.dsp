@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\genmesh\object\genmesh.h
 
 SOURCE=..\..\mk\visualc6\plggenmesh.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\genmesh\object\genmesh.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\console\output\fancy\fancycon.h
 
 SOURCE=..\..\mk\visualc6\plgfancycon.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\console\output\fancy\fancycon.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\fire\object\fire.h
 
 SOURCE=..\..\mk\visualc6\plgfire.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\fire\object\fire.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

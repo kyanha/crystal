@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\sprcal3d\persist\sprcal3dldr.h
 
 SOURCE=..\..\mk\visualc6\plgsprcal3dldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\sprcal3d\persist\sprcal3dldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

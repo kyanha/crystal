@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\loader\bmp\bmpimage.h
 
 SOURCE=..\..\mk\visualc6\plgcsbmpimg.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\bmp\csbmpimg.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.h
 
 SOURCE=..\..\mk\visualc6\plgshadermgr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

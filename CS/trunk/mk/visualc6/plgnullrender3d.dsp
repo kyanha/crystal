@@ -226,6 +226,10 @@ SOURCE=..\..\plugins\video\render3d\null\null_txt.h
 
 SOURCE=..\..\mk\visualc6\plgnullrender3d.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\null\nullrender3d.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

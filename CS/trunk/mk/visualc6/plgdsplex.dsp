@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\documentsystem\dsplex\dsplex.h
 
 SOURCE=..\..\mk\visualc6\plgdsplex.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\documentsystem\dsplex\dsplex.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

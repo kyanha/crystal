@@ -238,6 +238,10 @@ SOURCE=..\..\plugins\mesh\bezier\object\lightpool.h
 
 SOURCE=..\..\mk\visualc6\plgbezier.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\bezier\object\bezier.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

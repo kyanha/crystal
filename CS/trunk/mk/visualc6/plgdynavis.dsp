@@ -238,6 +238,10 @@ SOURCE=..\..\plugins\culling\dynavis\wqueue.h
 
 SOURCE=..\..\mk\visualc6\plgdynavis.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\culling\dynavis\dynavis.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

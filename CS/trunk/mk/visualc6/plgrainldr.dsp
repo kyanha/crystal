@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\rain\persist\standard\rainldr.h
 
 SOURCE=..\..\mk\visualc6\plgrainldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\rain\persist\standard\rainldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

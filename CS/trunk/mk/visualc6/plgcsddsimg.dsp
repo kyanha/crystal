@@ -222,6 +222,10 @@ SOURCE=..\..\plugins\video\loader\dds\ddsloader.h
 
 SOURCE=..\..\mk\visualc6\plgcsddsimg.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\csddsimg.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

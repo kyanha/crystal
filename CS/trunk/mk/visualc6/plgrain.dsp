@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\rain\object\rain.h
 
 SOURCE=..\..\mk\visualc6\plgrain.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\rain\object\rain.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

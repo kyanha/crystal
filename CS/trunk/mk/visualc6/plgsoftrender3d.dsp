@@ -246,6 +246,10 @@ SOURCE=..\..\plugins\video\render3d\software\tcache.h
 
 SOURCE=..\..\mk\visualc6\plgsoftrender3d.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\software\softrender3d.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

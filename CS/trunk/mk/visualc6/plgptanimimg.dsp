@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\proctex\ptanimimg\ptanimimg.h
 
 SOURCE=..\..\mk\visualc6\plgptanimimg.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\proctex\ptanimimg\ptanimimg.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\spiral\object\spiral.h
 
 SOURCE=..\..\mk\visualc6\plgspiral.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\spiral\object\spiral.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

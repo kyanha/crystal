@@ -207,10 +207,6 @@ PostBuild_Cmds=echo Moving output to CS root.	copy "$(TargetPath)"  ..\..	echo M
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\opengl\csglext.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\renderer\opengl\effectdata.h
 # End Source File
 # Begin Source File
@@ -239,10 +235,6 @@ SOURCE=..\..\plugins\video\renderer\opengl\effects\statehdr.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\opengl\extstat.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3d.h
 # End Source File
 # Begin Source File
@@ -251,15 +243,7 @@ SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3dcom.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_initext.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\renderer\opengl\ogl_polybuf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_suppext.h
 # End Source File
 # Begin Source File
 
@@ -277,6 +261,10 @@ SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtmgr.h
 # Begin Source File
 
 SOURCE=..\..\mk\visualc6\plggl3d.rc
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\gl3d.csplugin
 # End Source File
 
 # End Group
@@ -318,10 +306,6 @@ SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3dcom.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\video\renderer\opengl\ogl_halo.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_initext.cpp
 # End Source File
 # Begin Source File
 

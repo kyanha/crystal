@@ -226,6 +226,10 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\softshader_v
 
 SOURCE=..\..\mk\visualc6\plgsoftshader.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\softshader.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"

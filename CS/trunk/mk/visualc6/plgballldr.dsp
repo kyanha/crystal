@@ -218,6 +218,10 @@ SOURCE=..\..\plugins\mesh\ball\persist\standard\ballldr.h
 
 SOURCE=..\..\mk\visualc6\plgballldr.rc
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\ball\persist\standard\ballldr.csplugin
+# End Source File
 
 # End Group
 # Begin Group "Source Files"
