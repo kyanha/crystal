@@ -827,9 +827,9 @@ different return value semantics. Rather than returning a mere boolean result,
 it now returns one of the `<SAMP>csEventError) enumeration constants.  Of
 particular note, in the case of success, <CODE>csEventErrNone</CODE> is returned,
 which has a value of 0. This success value could be misinterpreted as "false"
-by the unwary when changing code to deal with this change. Conditionals which
-test if retrieval of an attribute succeeded must be changed to take this new
-semantic into account. For instance, code such as the following:
+by the unwary when fixing code to deal with this semantic change. Conditionals
+which test if retrieval of an attribute succeeded must be changed to take this
+new semantic into account. For instance, code such as the following:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>iEvent* ev = <small>...</small>;
@@ -847,7 +847,137 @@ must be changed to perform an explicit test on the return value of
 {
   <small>...</small>
 }
-</pre></td></tr></table><A NAME="Release Notes 98"></A>
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC_21"></A>
+<H3> Old Renderer Architecture Removed </H3>
+<!--docid::SEC_21::-->
+<P>
+
+The old rendering architecture along with the old renderer plugins have been
+removed. Additionally, a few plugins, applications, classes, and methods have
+been deprecated because they are not applicable to the new rendering
+architecture. The results of the old renderer removal are summarized below.
+</P><P>
+
+<A NAME="SEC_22"></A>
+<H4> Removed plugins </H4>
+<!--docid::SEC_22::-->
+<P>
+
+The following plugin modules have been removed:
+</P><P>
+
+<UL>
+<LI>
+<CODE>terrfunc</CODE> (<CODE>crystalspace.mesh.object.terrfunc</CODE>)
+<LI>
+Old <CODE>gl3d</CODE> (`<TT>plugins/video/renderer/opengl</TT>')
+<LI>
+Old <CODE>soft3d</CODE> (`<TT>plugins/video/renderer/software</TT>')
+<LI>
+Old <CODE>null3d</CODE> (`<TT>plugins/video/renderer/null</TT>')
+</UL>
+<P>
+
+<A NAME="SEC_23"></A>
+<H4> Removed Application </H4>
+<!--docid::SEC_23::-->
+<P>
+
+The `<SAMP>perftest</SAMP>' application has been removed, since it is no longer has any
+purpose.  For the future the `<SAMP>csbench</SAMP>' application should be extended to
+provide more information.
+</P><P>
+
+<A NAME="SEC_24"></A>
+<H4> Removed and Renamed Files </H4>
+<!--docid::SEC_24::-->
+<P>
+
+The following additional files have been removed or renamed:
+</P><P>
+
+<UL>
+<LI>
+`<TT>include/ivideo/vbufmgr.h</TT>' => (removed)
+<LI>
+`<TT>data/shader/or_lighting*.xml</TT>' =>
+`<TT>data/shader/std_lighting*.xml</TT>'
+</UL>
+<P>
+
+<A NAME="SEC_25"></A>
+<H4> Removed Methods and Classes </H4>
+<!--docid::SEC_25::-->
+<P>
+
+The following methods have been removed from the `<SAMP>iGraphics3D</SAMP>' interface:
+</P><P>
+
+<UL>
+<LI>
+<CODE>GetZBuffAt()</CODE>
+<LI>
+<CODE>DrawPolygonDebug()</CODE>
+<LI>
+<CODE>DrawPolygonFX()</CODE>
+<LI>
+<CODE>DrawTriangleMesh()</CODE>
+<LI>
+<CODE>DrawPolygonMesh()</CODE>
+<LI>
+<CODE>OpenFogObject()</CODE>
+<LI>
+<CODE>DrawFogPolygon()</CODE>
+<LI>
+<CODE>CloseFogObject()</CODE>
+<LI>
+<CODE>DumpCache()</CODE>
+<LI>
+<CODE>ClearCache()</CODE>
+<LI>
+<CODE>GetVertexBufferManager()</CODE>
+</UL>
+<P>
+
+From `<SAMP>iRenderView</SAMP>' following fog-related methods have been removed.
+Fog is now calculated within the renderer.
+</P><P>
+
+<UL>
+<LI>
+<CODE>CalculateFogPolygon()</CODE>
+<LI>
+<CODE>CalculateFogMesh()</CODE>
+</UL>
+<P>
+
+The old methods for rendering (<CODE>Draw()</CODE> and <CODE>DrawTest()</CODE>)
+have been removed from `<SAMP>iMeshObject</SAMP>' and `<SAMP>iParticle</SAMP>' interfaces.
+</P><P>
+
+Apart from these methods, the following classes and structs have been removed
+or have become private, and are no longer available to client code:
+</P><P>
+
+<UL>
+<LI>
+<CODE>G3DFogInfo</CODE>
+<LI>
+<CODE>G3DPolygonDPFX</CODE>
+<LI>
+<CODE>G3DPolygonDFP</CODE>
+<LI>
+<CODE>G3DPolygonDP</CODE>
+<LI>
+<CODE>G3DPolygonDPF</CODE>
+<LI>
+<CODE>G3DTriangleMesh</CODE>
+<LI>
+<CODE>G3DPolygonMesh</CODE>
+</UL>
+<A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_C.html#SECC"> &lt; </A>]</TD>
