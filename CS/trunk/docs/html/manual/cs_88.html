@@ -52,19 +52,13 @@ that can only read one level, but that's not very flexible) and we
 also don't know where we can safely put our camera. In the map files
 it is possible to specify one or more starting positions. We will
 query the engine for such a starting position and initialize our
-view (camera) to that. This happens with the following code:
+view (camera) to that. This happens with the following code which you should
+add after <CODE>engine-&#62;Prepare()</CODE> in <CODE>LoadMap()</CODE>:
 </P><P>
 
-First add the following to the include section:
-</P><P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  <small>...</small>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "iengine/campos.h"
-</pre></td></tr></table></P><P>
-
-Then add the following after <CODE>engine-&#62;Prepare()</CODE> in <CODE>LoadMap()</CODE>:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  // Find the starting position in this level.
+  // Find the starting position in this level.
   csVector3 pos (0, 0, 0);
   if (engine-&#62;GetCameraPositions ()-&#62;GetCount () &#62; 0)
   {
@@ -82,8 +76,8 @@ Then add the following after <CODE>engine-&#62;Prepare()</CODE> in <CODE>LoadMap
   if (!room)
   {
     csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-    	"crystalspace.application.simple",
-      	"Can't find a valid starting position!");
+        "crystalspace.application.simple",
+        "Can't find a valid starting position!");
     return false;
   }
   view-&#62;GetCamera ()-&#62;SetSector (room);
@@ -93,7 +87,7 @@ Then add the following after <CODE>engine-&#62;Prepare()</CODE> in <CODE>LoadMap
 }
 </pre></td></tr></table></P><P>
 
-First we see how many camera positions there were defined in the
+First, we see how many camera positions there were defined in the
 map by using <CODE>iEngine::GetCameraPositionCount()</CODE>. If this is 0
 then the map didn't define a starting position. In that case we will
 assume there is a sector called 'room' and we will start the camera
@@ -102,7 +96,7 @@ starting position defined in the map.
 </P><P>
 
 This is all. After adding this code this application will now load
-the 'flarge' map and display it so you can run around in this level.
+the `<SAMP>flarge</SAMP>' map and display it so you can run around in this level.
 <A NAME="map2cs Tutorial"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>

@@ -40,14 +40,8 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <!--docid::SEC182::-->
 <P>
 
-First we need to add an additional include to the include section:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "imesh/sprite3d.h"
-</pre></td></tr></table></P><P>
-
 To create a mesh just add the following code in
-<CODE>Simple::Initialize</CODE> (before <CODE>return true</CODE> and after
+<CODE>Simple::Initialize()</CODE> (before `<SAMP>return true</SAMP>' and after
 the code we just added to load the mesh factory):
 </P><P>
 
@@ -87,7 +81,8 @@ particular case we use the identity matrix as a transform and scale it with
 five to make the sprite five times bigger.
 After doing movement (either updating the sectors or the position) you
 <EM>must</EM> call <CODE>movable-&#62;UpdateMove()</CODE> to change internal data
-structures (i.e. the engine may use this to recalculate visibility information).
+structures (i.e. the engine may use this to recalculate visibility
+information).
 </P><P>
 
 <EM>WARNING:</EM> The code above actually scaled the object by giving it
@@ -95,14 +90,14 @@ a transformation matrix which is multiplied with 5. Don't do this in your
 own code. Many subsystems in Crystal Space (like the collision detection
 system, the visibility culling system and the lighting system) don't work
 properly with scaled objects. Instead scale your object using
-<CODE>HardTransform</CODE>.
+<CODE>HardTransform()</CODE>.
 </P><P>
 
 If you read the mesh object documentation (see see section <A HREF="cs_207.html#SEC552">7.7 Mesh Object Plug-In System</A>)
 carefully you will see that in order to control visual attributes
 of mesh objects you will have to get the <EM>state</EM> interface for
 either the object or the factory. In this example we query
-<CODE>iSprite3DState</CODE> from the mesh in order to set the default action.
+`<SAMP>iSprite3DState</SAMP>' from the mesh in order to set the default action.
 An action is a set of frames and is used to control animation. In our
 simple example the sprite has only one frame so there is not much animation
 to see.
@@ -112,25 +107,25 @@ The calls to <CODE>SetZBufMode()</CODE> and <CODE>SetRenderPriority()</CODE> are
 strictly required since the values set here are default for meshes anyway.
 But the two lines serve as an example on how to set other values for these.
 <CODE>SetZBufMode()</CODE> sets the Z-buffer mode that the engine will use to
-render this object. With <CODE>CS_ZBUF_USE</CODE> this means that the Z-buffer
-will be used fully. Other values are <CODE>CS_ZBUF_FILL</CODE> (only fill the
-Z-buffer), <CODE>CS_ZBUF_TEST</CODE> (only test the Z-buffer), or <CODE>CS_ZBUF_NONE</CODE>
-(ignore the Z-buffer). <CODE>CS_ZBUF_USE</CODE> is a good default for objects
-in a room. <CODE>CS_ZBUF_FILL</CODE> is usually used for the outside walls of
+render this object. With `<SAMP>CS_ZBUF_USE</SAMP>' this means that the Z-buffer
+will be used fully. Other values are `<SAMP>CS_ZBUF_FILL</SAMP>' (only fill the
+Z-buffer), `<SAMP>CS_ZBUF_TEST</SAMP>' (only test the Z-buffer), or `<SAMP>CS_ZBUF_NONE</SAMP>'
+(ignore the Z-buffer). `<SAMP>CS_ZBUF_USE</SAMP>' is a good default for objects
+in a room. `<SAMP>CS_ZBUF_FILL</SAMP>' is usually used for the outside walls of
 a sector.
 </P><P>
 
 <CODE>SetRenderPriority()</CODE> controls when this object is rendered in this
-sector. By default there are four render priorities: `<SAMP>sky</SAMP>', `<SAMP>wall</SAMP>',
-`<SAMP>object</SAMP>', and `<SAMP>alpha</SAMP>'. Every object can be put in a render
+sector. By default there are four render priorities: <EM>sky</EM>, <EM>wall</EM>,
+<EM>object</EM>, and <EM>alpha</EM>. Every object can be put in a render
 priority queue. Objects in prior render priorities will be rendered before
 objects in later render priorities. In addition some render priority queues
 sort objects internally based on some other criteria. For example, the
 `<SAMP>alpha</SAMP>' render priority will render all objects in that queue
 from back to front. You can create your own additional render queues if
-you want. The default render priority is `<SAMP>object</SAMP>' which you can
+you want. The default render priority is <EM>object</EM> which you can
 get with the call <CODE>engine-&#62;GetObjectRenderPriority()</CODE>. Most objects
-with Z-buffer mode equal to <CODE>CS_ZBUF_USE</CODE> are placed in the
+with Z-buffer mode equal to `<SAMP>CS_ZBUF_USE</SAMP>' are placed in the
 `<SAMP>object</SAMP>' render priority queue.
 </P><P>
 
