@@ -90,7 +90,7 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Get the <a class="el" href="structiGraphics3D.html">iGraphics3D</a> interface so that components can use it.</em> <a href="#a27"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="structiAwsComponent.html">iAwsComponent</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiAws.html#a28">CreateWindowFrom</a> (const char *defname)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Instantiates a window based on a window definition.</em> <a href="#a28"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="structiAwsComponent.html">iAwsComponent</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiAws.html#a29">CreateEmbeddableComponent</a> ()=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="structiAwsComponent.html">iAwsComponent</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiAws.html#a29">CreateEmbeddableComponent</a> (<a class="el" href="structiAwsComponent.html">iAwsComponent</a> *covercomp)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Creates a new embeddable component.</em> <a href="#a29"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="structiAwsParmList.html">iAwsParmList</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiAws.html#a30">CreateParmList</a> ()=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Creates a new parameter list.</em> <a href="#a30"></a><em></em></font><br><br></td></tr>
@@ -110,6 +110,8 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Returns true if all windows are presently hidden.</em> <a href="#a37"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiAws.html#a38">ComponentIsInTransition</a> (<a class="el" href="structiAwsComponent.html">iAwsComponent</a> *win)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Checks if the specified component is currently going through a transition.</em> <a href="#a38"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiAws.html#a39">ComponentDestroyed</a> (<a class="el" href="structiAwsComponent.html">iAwsComponent</a> *comp)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Notify the manager about component destruction.</em> <a href="#a39"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Interface for the window manager.
@@ -250,6 +252,37 @@ Finds the smallest visible component which contains the point (x,y).
     </td>
   </tr>
 </table>
+<a name="a39" doxytag="iAws::ComponentDestroyed"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual void iAws::ComponentDestroyed </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiAwsComponent.html">iAwsComponent</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>comp</em>          </td>
+          <td class="md" valign="top">)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Notify the manager about component destruction.
+<p>
+    </td>
+  </tr>
+</table>
 <a name="a38" doxytag="iAws::ComponentIsInTransition"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -289,7 +322,8 @@ Checks if the specified component is currently going through a transition.
         <tr>
           <td class="md" nowrap valign="top"> virtual <a class="el" href="structiAwsComponent.html">iAwsComponent</a>* iAws::CreateEmbeddableComponent </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiAwsComponent.html">iAwsComponent</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp; <em>covercomp</em>          </td>
           <td class="md" valign="top">)&nbsp;</td>
           <td class="md" nowrap><code> [pure virtual]</code></td>
         </tr>
@@ -774,7 +808,7 @@ Get a pointer to the preference manager.
 <p>
 
 <p>
-Referenced by <a class="el" href="awsecomp_8h-source.html#l00609">awsEmbeddedComponentFactory::RegisterConstant()</a>.    </td>
+Referenced by <a class="el" href="awsecomp_8h-source.html#l00517">awsEmbeddedComponentFactory::RegisterConstant()</a>.    </td>
   </tr>
 </table>
 <a name="a1" doxytag="iAws::GetSinkMgr"></a><p>
@@ -834,9 +868,7 @@ Get a pointer to the sink manager.
 <p>
 Get the top component.
 <p>
-
-<p>
-Referenced by <a class="el" href="awsecomp_8h-source.html#l00091">awsEmbeddedComponent::Create()</a>.    </td>
+    </td>
   </tr>
 </table>
 <a name="a23" doxytag="iAws::HandleEvent"></a><p>
@@ -1111,7 +1143,7 @@ Allows a component to register itself for dynamic template instatiation via defi
 <p>
 
 <p>
-Referenced by <a class="el" href="awsecomp_8h-source.html#l00603">awsEmbeddedComponentFactory::Register()</a>.    </td>
+Referenced by <a class="el" href="awsecomp_8h-source.html#l00511">awsEmbeddedComponentFactory::Register()</a>.    </td>
   </tr>
 </table>
 <a name="a20" doxytag="iAws::ReleaseMouse"></a><p>
@@ -1297,9 +1329,7 @@ Set the preference manager used by the window system.
 <p>
 Set the top component.
 <p>
-
-<p>
-Referenced by <a class="el" href="awsecomp_8h-source.html#l00091">awsEmbeddedComponent::Create()</a>.    </td>
+    </td>
   </tr>
 </table>
 <a name="a24" doxytag="iAws::SetupCanvas"></a><p>
