@@ -321,28 +321,32 @@
 00414 
 <a name="l00416"></a><a class="code" href="classcsVector4.html#a15">00416</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Set (<span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <span class="keywordtype">float</span> sz, <span class="keywordtype">float</span> sw) { x = sx; y = sy; z = sz; w = sw; }
 00417 
-<a name="l00419"></a><a class="code" href="classcsVector4.html#a16">00419</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Set (<span class="keyword">const</span> csVector4&amp; v) { x = v.<a class="code" href="classcsVector4.html#m0">x</a>; y = v.<a class="code" href="classcsVector4.html#m1">y</a>; z = v.<a class="code" href="classcsVector4.html#m2">z</a>; w = v.<a class="code" href="classcsVector4.html#m3">w</a>; }
+<a name="l00419"></a><a class="code" href="classcsVector4.html#a16">00419</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Set (csVector4 <span class="keyword">const</span>&amp; v) { x = v.<a class="code" href="classcsVector4.html#m0">x</a>; y = v.<a class="code" href="classcsVector4.html#m1">y</a>; z = v.<a class="code" href="classcsVector4.html#m2">z</a>; w = v.<a class="code" href="classcsVector4.html#m3">w</a>; }
 00420 
-00422   <span class="keywordtype">float</span> Norm () <span class="keyword">const</span>;
+<a name="l00422"></a><a class="code" href="classcsVector4.html#a17">00422</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Set (<span class="keywordtype">float</span> <span class="keyword">const</span>* v) { x = v[0]; y = v[1]; z = v[2]; w = v[3]; }
 00423 
-<a name="l00425"></a><a class="code" href="classcsVector4.html#a18">00425</a>   <span class="keywordtype">float</span> SquaredNorm ()<span class="keyword"> const</span>
-00426 <span class="keyword">  </span>{ <span class="keywordflow">return</span> x * x + y * y + z * z + w * w; }
-00427 
-<a name="l00433"></a><a class="code" href="classcsVector4.html#a19">00433</a>   csVector4 Unit ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (*this)/(this-&gt;Norm()); }
-00434 
-<a name="l00436"></a><a class="code" href="classcsVector4.html#d0">00436</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">float</span> Norm (<span class="keyword">const</span> csVector4&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsVector4.html#a17">Norm</a>(); }
-00437 
-<a name="l00439"></a><a class="code" href="classcsVector4.html#d1">00439</a>   <span class="keyword">inline</span> <span class="keyword">static</span> csVector4 Unit (<span class="keyword">const</span> csVector4&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsVector4.html#a19">Unit</a>(); }
+<a name="l00425"></a><a class="code" href="classcsVector4.html#a18">00425</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Get (<span class="keywordtype">float</span>* v) { v[0] = x; v[1] = y; v[2] = z; v[3] = w; }
+00426 
+00428   <span class="keywordtype">float</span> Norm () <span class="keyword">const</span>;
+00429 
+<a name="l00431"></a><a class="code" href="classcsVector4.html#a20">00431</a>   <span class="keywordtype">float</span> SquaredNorm ()<span class="keyword"> const</span>
+00432 <span class="keyword">  </span>{ <span class="keywordflow">return</span> x * x + y * y + z * z + w * w; }
+00433 
+<a name="l00439"></a><a class="code" href="classcsVector4.html#a21">00439</a>   csVector4 Unit ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (*this)/(this-&gt;Norm()); }
 00440 
-00442   <span class="keywordtype">void</span> Normalize ();
+<a name="l00442"></a><a class="code" href="classcsVector4.html#d0">00442</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">float</span> Norm (<span class="keyword">const</span> csVector4&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsVector4.html#a19">Norm</a>(); }
 00443 
-<a name="l00445"></a><a class="code" href="classcsVector4.html#a21">00445</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsZero (<span class="keywordtype">float</span> precision = SMALL_EPSILON)<span class="keyword"> const</span>
-00446 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (ABS(x) &lt; precision) &amp;&amp; (ABS(y) &lt; precision)
-00447             &amp;&amp; (ABS(z) &lt; precision) &amp;&amp;  (ABS(w) &lt; precision);
-00448   }
-00449 };
-00450 
-00453 <span class="preprocessor">#endif // __CS_VECTOR3_H__</span>
+<a name="l00445"></a><a class="code" href="classcsVector4.html#d1">00445</a>   <span class="keyword">inline</span> <span class="keyword">static</span> csVector4 Unit (<span class="keyword">const</span> csVector4&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsVector4.html#a21">Unit</a>(); }
+00446 
+00448   <span class="keywordtype">void</span> Normalize ();
+00449 
+<a name="l00451"></a><a class="code" href="classcsVector4.html#a23">00451</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsZero (<span class="keywordtype">float</span> precision = SMALL_EPSILON)<span class="keyword"> const</span>
+00452 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (ABS(x) &lt; precision) &amp;&amp; (ABS(y) &lt; precision)
+00453             &amp;&amp; (ABS(z) &lt; precision) &amp;&amp;  (ABS(w) &lt; precision);
+00454   }
+00455 };
+00456 
+00459 <span class="preprocessor">#endif // __CS_VECTOR3_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
