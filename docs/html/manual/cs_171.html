@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Texture Mapping Conventions</TITLE>
+<TITLE>Crystal Space: Texture Mapping</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Texture Mapping Conventions">
-<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping Conventions">
+<META NAME="description" CONTENT="Crystal Space: Texture Mapping">
+<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,74 +23,56 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC423"></A>
+<A NAME="SEC426"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC424"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC421"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC425"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC427"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_165.html#SEC408"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.5.6.1 Conventions </H4>
-<!--docid::SEC423::-->
+<H3> 7.5.6 Texture Mapping </H3>
+<!--docid::SEC426::-->
 <P>
 
-<UL>
-<LI>
-<EM>Ps</EM> denotes a polygon in some space.  For example, <EM>Pw</EM> is a polygon
-in world space coordinates.  The other spaces are <EM>o</EM> for object space,
-<EM>c</EM> for camera space, <EM>t</EM> for texture space, and <EM>s</EM> for screen
-space.
+<EM>Written by Jorrit Tyberghein,
+<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A> with additions by Samuel Humphreys.
+Mathematical typesetting for
+TeX performed by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
+</P><P>
+
+This document explains the formulas that are used to perform texture mapping
+for a polygon.  This text assumes that you know about portals, different
+coordinate systems Crystal Space uses, and about cameras and matrix
+transformations.  See section <A HREF="cs_169.html#SEC422">7.5.4 Cameras and Matrices</A>.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_172.html#SEC427">7.5.6.1 Conventions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_173.html#SEC428">7.5.6.2 General Concepts</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_174.html#SEC432">7.5.6.3 Perspective Correction</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_175.html#SEC433">7.5.6.4 Bringing it All Together</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_176.html#SEC434">7.5.6.5 Instructions for Texture Mapper</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_177.html#SEC435">7.5.6.6 Procedural, Dynamic and Animated Textures</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
 <P>
 
-<LI>
-<EM>Vs</EM> denotes a vertex in 3D.  For example, <EM>Vw</EM> is a vertex in world
-space.
-<P>
-
-<LI>
-<EM>Mst</EM> denotes a matrix transforming space from <EM>s</EM> to <EM>t</EM>.
-For example, <EM>Mow</EM> is a matrix transforming from object to world space.
-All <EM>Mst</EM> are 3x3 matrices.
-<P>
-
-<LI>
-<EM>Vst</EM> denotes the corresponding vector transforming space from <EM>s</EM> to
-<EM>t</EM>.
-<P>
-
-<LI>
-<EM>Ns</EM> denotes a plane normal vector (<EM>A,B,C</EM>) in some space.
-<P>
-
-<LI>
-<EM>Vs.x</EM>, <EM>Vs.y</EM>, and <EM>Vs.z</EM> are the respective <EM>x</EM>,
-<EM>y</EM>, and <EM>z</EM> components of a vector.  For example, <EM>Vw.y</EM> is
-the <EM>y</EM> component of a vector in world space.
-<P>
-
-<LI>
-<EM>Vt.u</EM> and <EM>Vt.v</EM> are the respective <EM>u</EM>, and <EM>v</EM>
-components of a vector in texture space.
-</UL>
-<P>
-
-<A NAME="Texture Mapping Concepts"></A>
+<A NAME="Texture Mapping Conventions"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC424"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC421"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC425"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC427"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_165.html#SEC408"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

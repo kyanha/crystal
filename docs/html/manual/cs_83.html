@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Simple Creating Mesh</TITLE>
+<TITLE>Crystal Space: Simple Loading Mesh Factory</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Simple Creating Mesh">
-<META NAME="keywords" CONTENT="Crystal Space: Simple Creating Mesh">
+<META NAME="description" CONTENT="Crystal Space: Simple Loading Mesh Factory">
+<META NAME="keywords" CONTENT="Crystal Space: Simple Loading Mesh Factory">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,136 +23,68 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC178"></A>
+<A NAME="SEC181"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_82.html#SEC177"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_82.html#SEC180"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC182"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.3.3 Creating a Mesh from a Factory </H3>
-<!--docid::SEC178::-->
+<H3> 5.3.2 Loading a Mesh Factory in Memory </H3>
+<!--docid::SEC181::-->
 <P>
 
-First we need to add an additional include to the include section:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "imesh/sprite3d.h"
-</pre></td></tr></table></P><P>
-
-To create a mesh just add the following code in
-<CODE>Simple::Initialize</CODE> (before <CODE>return true</CODE> and after
-the code we just added to load the mesh factory):
+Now that we have our material we can use it to load the mesh factory.
+Edit `<TT>simple.cpp</TT>' and add the following code in
+<CODE>Simple::Initialize()</CODE> (before `<SAMP>return true</SAMP>' and after
+the code we just added to load the material):
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize ()
 {
   <small>...</small>
-
-  // Add the sprite to the engine.
-  csRef&#60;iMeshWrapper&#62; sprite (engine-&#62;CreateMeshWrapper (
-        imeshfact, "MySprite", room,
-        csVector3 (-3, 5, 3)));
-  csMatrix3 m; m.Identity (); m *= 5.;
-  sprite-&#62;GetMovable ()-&#62;SetTransform (m);
-  sprite-&#62;GetMovable ()-&#62;UpdateMove ();
-  csRef&#60;iSprite3DState&#62; spstate (
-    SCF_QUERY_INTERFACE (sprite-&#62;GetMeshObject (), iSprite3DState));
-  spstate-&#62;SetAction ("default");
-  sprite-&#62;SetZBufMode (CS_ZBUF_USE);
-  sprite-&#62;SetRenderPriority (engine-&#62;GetObjectRenderPriority ());
+  // Load a sprite template from disk.
+  csRef&#60;iMeshFactoryWrapper&#62; imeshfact (loader-&#62;LoadMeshObjectFactory (
+        "/lib/std/sprite1"));
+  if (imeshfact == 0)
+  {
+    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+        "crystalspace.application.simple1",
+        "Error loading mesh object factory!");
+    return false;
+  }
 
   return true;
 }
 </pre></td></tr></table></P><P>
 
-The easiest way to create a mesh is to use <CODE>engine-&#62;CreateMeshWrapper()</CODE>.
-This will take care of using the given mesh factory to create the mesh, give
-it a name, and correctly place it at the given position in the world.
-The name of a mesh can be useful for scripting so that a script can refer
-to objects with their names.
+This example uses <CODE>iLoader::LoadMeshObjectFactory()</CODE> to load the
+mesh factory from the given location. The name of the mesh factory
+will be 'box' as that is the name given in the file `<TT>sprite1</TT>' itself.
 </P><P>
 
-Moving meshes (and things) is done through the <CODE>iMovable</CODE> interface to
-which you can get a reference by doing <CODE>sprite-&#62;GetMovable()</CODE>.  The calls
-to <CODE>SetTransform()</CODE> and <CODE>SetPosition()</CODE> set up a transformation
-matrix and vector to correctly place the mesh in the room.  In this
-particular case we use the identity matrix as a transform and scale it with
-five to make the sprite five times bigger.
-After doing movement (either updating the sectors or the position) you
-<EM>must</EM> call <CODE>movable-&#62;UpdateMove()</CODE> to change internal data
-structures (i.e. the engine may use this to recalculate visibility information).
+This is all there is to it. After this call the mesh factory is loaded
+in the engine and can be used to create meshes. This is what we'll do
+in the next section.
 </P><P>
 
-<EM>WARNING:</EM> The code above actually scaled the object by giving it
-a transformation matrix which is multiplied with 5. Don't do this in your
-own code. Many subsystems in Crystal Space (like the collision detection
-system, the visibility culling system and the lighting system) don't work
-properly with scaled objects. Instead scale your object using
-<CODE>HardTransform</CODE>.
-</P><P>
-
-If you read the mesh object documentation (see see section <A HREF="cs_206.html#SEC548">7.7 Mesh Object Plug-In System</A>)
-carefully you will see that in order to control visual attributes
-of mesh objects you will have to get the <EM>state</EM> interface for
-either the object or the factory. In this example we query
-<CODE>iSprite3DState</CODE> from the mesh in order to set the default action.
-An action is a set of frames and is used to control animation. In our
-simple example the sprite has only one frame so there is not much animation
-to see.
-</P><P>
-
-The calls to <CODE>SetZBufMode()</CODE> and <CODE>SetRenderPriority()</CODE> are not
-strictly required since the values set here are default for meshes anyway.
-But the two lines serve as an example on how to set other values for these.
-<CODE>SetZBufMode()</CODE> sets the Z-buffer mode that the engine will use to
-render this object. With <CODE>CS_ZBUF_USE</CODE> this means that the Z-buffer
-will be used fully. Other values are <CODE>CS_ZBUF_FILL</CODE> (only fill the
-Z-buffer), <CODE>CS_ZBUF_TEST</CODE> (only test the Z-buffer), or <CODE>CS_ZBUF_NONE</CODE>
-(ignore the Z-buffer). <CODE>CS_ZBUF_USE</CODE> is a good default for objects
-in a room. <CODE>CS_ZBUF_FILL</CODE> is usually used for the outside walls of
-a sector.
-</P><P>
-
-<CODE>SetRenderPriority()</CODE> controls when this object is rendered in this
-sector. By default there are four render priorities: `<SAMP>sky</SAMP>', `<SAMP>wall</SAMP>',
-`<SAMP>object</SAMP>', and `<SAMP>alpha</SAMP>'. Every object can be put in a render
-priority queue. Objects in prior render priorities will be rendered before
-objects in later render priorities. In addition some render priority queues
-sort objects internally based on some other criteria. For example, the
-`<SAMP>alpha</SAMP>' render priority will render all objects in that queue
-from back to front. You can create your own additional render queues if
-you want. The default render priority is `<SAMP>object</SAMP>' which you can
-get with the call <CODE>engine-&#62;GetObjectRenderPriority()</CODE>. Most objects
-with Z-buffer mode equal to <CODE>CS_ZBUF_USE</CODE> are placed in the
-`<SAMP>object</SAMP>' render priority queue.
-</P><P>
-
-For more information on render priorities and Z-buffer mode you can look
-at the HOWTO on this subject (see section <A HREF="cs_121.html#SEC279">5.8.12 Render Priorities and Objects in Sectors</A>).
-</P><P>
-
-This concludes the second Simple tutorial.
-You can now go on to the next tutorial (see section <A HREF="cs_84.html#SEC179">5.4 Simple Tutorial 3: Map Loading</A>)) to learn
-how you can load a level from a file instead of creating your rooms in
-the code.
-<A NAME="Tutorial Simple Map"></A>
+<A NAME="Simple Creating Mesh"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_82.html#SEC177"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_82.html#SEC180"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC182"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

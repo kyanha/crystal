@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Sequence Manager</TITLE>
+<TITLE>Crystal Space: Level of Detail</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Sequence Manager">
-<META NAME="keywords" CONTENT="Crystal Space: Sequence Manager">
+<META NAME="description" CONTENT="Crystal Space: Level of Detail">
+<META NAME="keywords" CONTENT="Crystal Space: Level of Detail">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -25,527 +25,220 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <A NAME="SEC460"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_192.html#SEC456"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_194.html#SEC466"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_192.html#SEC459"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_194.html#SEC464"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_165.html#SEC408"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.5.12 Sequence Manager </H3>
+<H3> 7.5.11 Level of Detail </H3>
 <!--docid::SEC460::-->
 <P>
 
 <EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>. Last updated 16 August 2003.</EM>
+<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>. Last updated 13 August 2003.</EM>
 </P><P>
 
-When you define geometry in a map file this usually define a static
-representation of the world. Using the sequence manager it is possible
-to define specific events that trigger on certain conditions. Using these
-events (sequences) you can move or animate objects, control lights, fog,
-<small>...</small>.
+In a 3D engine there are typically two major ways that can be used to
+optimize performance (aside from getting better hardware and making better
+use of hardware). Those two ways are Visibility Culling
+(see section <A HREF="cs_178.html#SEC439">7.5.7 Visibility Culling In Detail</A>) and Level of Detail. In this section we will
+talk about the latter.
 </P><P>
 
-The sequence manager is actually divided in two plugins. First there is
-the basic sequence manager itself. This is nothing more then a schedular
-that can schedule certain actions that should happen at certain times.
-Applications can use this sequence manager for their own purposes if they
-want.
+Level of Detail (or LOD) is the technique of reducing high polygon
+models with a simpler representation that renders faster. In contrast with
+visibility culling, level of detail can performance even if there are
+a lot of objects visible at the same time. Level of Detail is practically
+the only way to improve performance in situations where there is not much
+culling opportunity (like in a space game).
 </P><P>
 
-On top of the sequence manager there runs the engine sequence manager. This
-plugin predefines several operations and triggers which make it a lot easier
-to do engine related things like moving objects, controlling lights, <small>...</small>.
-We will discuss mainly the engine sequence manager in this section.
+Crystal Space currently supports two kinds of LOD:
 </P><P>
 
-A sequence represents a small script with commands that operate on objects
-in the world. A trigger represents a series of conditions which will cause
-the sequence to be executed. The important thing of the sequence manager
-is that it is very time based. Operations don't all execute at once but
-at specific times relative to the start of the sequence. Note that all times
-in the sequence manager are specified in milli-seconds.
+<UL>
+<LI>
+Static LOD. With this kind of LOD you can let the engine
+automatically select between different versions of the same model based
+on distance.
+<LI>
+Progressive LOD. This kind of LOD is supported by 3D sprites and
+is also based on distance. The major difference is that this kind of LOD
+doesn't use discrete lod levels but instead allows the engine to select
+as many triangles from the original model as needed (while still preserving the
+original model as much as possible).
+</UL>
+<P>
+
+In future we will also support other kinds of LOD like imposters.
+Also some of the landscape engines support LOD internally.
+</P><P>
+
+Also in future there will be a LOD manager. At this moment LOD
+is purely distance based but for a given distance the level of detail will
+not change. A LOD manager can decide to reduce the lod levels for
+certain objects in order to improve overall performance.
 </P><P>
 
 <A NAME="SEC461"></A>
-<H4> Basic Example </H4>
+<H4> Static LOD From Map File </H4>
 <!--docid::SEC461::-->
 <P>
 
-The easiest way to explain the engine sequence manager is to look at a simple
-example as how it can be used from a map file:
+Using static LOD from a map file is fairly easy. Here is an example:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;world&#62;
-  <small>...</small>
-  &#60;sector name="hall"&#62;
-    &#60;light name="roomlight"&#62;
-      &#60;center x="10" y="4" z="10" /&#62;
-      &#60;radius&#62;20&#60;/radius&#62;
-      &#60;color red="0" green="0" blue="0" /&#62;
-      &#60;dynamic /&#62;
-    &#60;/light&#62;
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshobj name="loddy"&#62;
+    &#60;nullmesh&#62;
+	&#60;min x="-1" y="0" z="-1" /&#62;
+	&#60;max x="1" y="2" z="1" /&#62;
+    &#60;/nullmesh&#62;
+    &#60;staticlod&#62;
+	&#60;distance d0="100" d1="10" /&#62;
+    &#60;/staticlod&#62;
+    &#60;meshobj name="loddy_lowdetail"&#62;
+        &#60;lodlevel&#62;0&#60;/lodlevel&#62;
+	<small>...</small>
+    &#60;/meshobj&#62;
+    &#60;meshobj name="loddy_mediumdetail"&#62;
+        &#60;lodlevel&#62;1&#60;/lodlevel&#62;
+	<small>...</small>
+    &#60;/meshobj&#62;
+    &#60;meshobj name="loddy_highdetail_upper"&#62;
+        &#60;lodlevel&#62;2&#60;/lodlevel&#62;
+	<small>...</small>
+    &#60;/meshobj&#62;
+    &#60;meshobj name="loddy_highdetail_lower"&#62;
+        &#60;lodlevel&#62;2&#60;/lodlevel&#62;
+	<small>...</small>
+    &#60;/meshobj&#62;
+    &#60;move&#62;
+        <small>...</small>
+    &#60;/move&#62;
+&#60;/meshobj&#62;
+</pre></td></tr></table></P><P>
+
+Let's explain what this example does in more detail. First we
+define a mesh object called `<SAMP>loddy</SAMP>'. This is the parent mesh
+which represents the actual model but on itself contains no geometry.
+So that's why we use `<SAMP>nullmesh</SAMP>'. The box given in the nullmesh
+is important as it is used for visibility culling. So you should
+make the box larger then any of the objects inside it. Also the center
+of the box is used for calculating the distance between the box and
+the camera.
+</P><P>
+
+Internally LOD uses a function to calculate a detail value betwen
+0 and 1 (0 meaning lowest detail, 1 meaning highest):
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  float lod = m * distance + a;
+</pre></td></tr></table>The result of this function is capped so it is always between 0 and 1.
+</P><P>
+
+Inside the `<SAMP>staticlod</SAMP>' block you can directly specify the `<SAMP>m</SAMP>'
+and `<SAMP>a</SAMP>' values but it is often easier to use a short-cut and specify
+`<SAMP>d0</SAMP>' and `<SAMP>d1</SAMP>' instead. In the example above we set `<SAMP>d0</SAMP>' equal
+to 100 which means that at distance 100 and beyond we will go to lowest possible
+detail. We also set `<SAMP>d1</SAMP>' equal to 10 which means that at distance 10
+or less the object will use highest detail. Internally `<SAMP>d0</SAMP>' and `<SAMP>d1</SAMP>'
+are transformed to `<SAMP>m</SAMP>' and `<SAMP>a</SAMP>' using the following equation:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  float m = 1.0 / (d1-d0);
+  float a = -m * d0;
+</pre></td></tr></table></P><P>
+
+After this we have four child meshes representing the different detail
+levels. Using the `<SAMP>lodlevel</SAMP>' keyword one can place a child mesh at
+a LOD index. These indices always start at 0 for lowest detail and
+can go as high as you want. The maximum index that is used will be
+represented by detail level equal to 1.
+</P><P>
+
+Interesting in the example above is that there are two meshes for level
+2. This means that at the highest detail level we actually use two sub-meshes
+to represent our mesh. Using this trick one can also use static lod to replace
+individual trees with collections of trees.
+</P><P>
+
+Note that it is also possible to define static LOD on a hierarchical
+mesh factory using the same syntax as described above. In that case one can
+use `<SAMP>meshref</SAMP>' to make an instance of that hierarchical factory
+(or use <CODE>iMeshFactoryWrapper-&#62;CreateMeshWrapper()</CODE>).
+</P><P>
+
+Note that it is also possible to use variables for `<SAMP>m</SAMP>' and `<SAMP>v</SAMP>'.
+One can do that like this:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>    &#60;variables&#62;
+        &#60;variable name="Lod M" value="-.1" /&#62;
+        &#60;variable name="Lod A" value=".5" /&#62;
+    &#60;/variables&#62;
     <small>...</small>
-  &#60;/sector&#62;
-  <small>...</small>
-  &#60;sequences&#62;
-
-    &#60;sequence name="turn_on_light"&#62;
-      &#60;setlight light="roomlight" red="1" green="1" blue="1" /&#62;
-      &#60;delay time="50" /&#62;
-      &#60;setlight light="roomlight" red="0" green="0" blue="0" /&#62;
-      &#60;delay time="80" /&#62;
-      &#60;setlight light="roomlight" red="1" green="1" blue="1" /&#62;
-    &#60;/sequence&#62;
-
-  &#60;/sequences&#62;
-
-  &#60;triggers&#62;
-
-    &#60;trigger name="trig_turn_on_light"&#62;
-      &#60;sectorvis sector="hall"&#62;
-        &#60;sphere x="10" y="4" z="10" radius="5" /&#62;
-      &#60;/sectorvis&#62;
-      &#60;fire delay="0" sequence="turn_on_light" /&#62;
-    &#60;/trigger&#62;
-
-  &#60;/triggers&#62;
-&#60;/world&#62;
-</pre></td></tr></table></P><P>
-
-This is a simple example where we turn on a light as soon as we are
-in a certain radius of the light. Let's explain how it works. First we
-define a sequence which is called `<SAMP>turn_on_light</SAMP>'. This sequence
-has three `<SAMP>setlight</SAMP>' operations and two delays. Internally this is
-compiled to something which looks like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>time 0ms: setlight 'roomlight',1,1,1
-time 50ms: setlight 'roomlight',0,0,0
-time 130ms: setlight 'roomlight',1,1,1
-</pre></td></tr></table></P><P>
-
-Basically there are three operations here and the delays are only used to
-indicate when these operations are executed relative to the start of the
-entire sequence. So for example, if the sequence is fired at time 10050 then
-immediatelly at that point the first operation is executed. 50 milliseconds
-later the second operation is executed and finally, 130 milliseconds later
-the last operation is exexuted.
-</P><P>
-
-There are a few important observations to be made about this. First, as soon
-as a sequence is executed or fired ALL operations in that sequence will
-execute at the correct relative time no matter what happens otherwise. This
-also means that if you fire another sequence then that sequence will also get
-fired at the same time and depending on the relative timing of the operations
-some of those operations might happen at the same time.
-</P><P>
-
-Also note that there are operations that themselves have a duration. For
-example, there is a `<SAMP>fadelight</SAMP>' operation which fades a light to some
-color. It has a `<SAMP>duration</SAMP>' parameter. But this duration does NOT influence
-the relative timing in the sequence itself. So for example if you have this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;fadelight light="somelight" red="0" green="0" blue="0"
-    duration="1000" /&#62;
-&#60;fadelight light="somelight" red="1" green="1" blue="1"
-    duration="1000" /&#62;
-</pre></td></tr></table></P><P>
-
-Then this will execute two fade operations on the same light at exactly
-the same time which is probably not what you want. This example is probably
-better written as:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;fadelight light="somelight" red="0" green="0" blue="0"
-    duration="1000" /&#62;
-&#60;delay time="1000" /&#62;
-&#60;fadelight light="somelight" red="1" green="1" blue="1"
-    duration="1000" /&#62;
-</pre></td></tr></table></P><P>
-
-This will place the two operations at a time distance of 1000 milliseconds.
-</P><P>
-
-The reason that using `<SAMP>duration</SAMP>' does not automatically advance the
-internal relative time is that it is sometimes useful to start several
-fade operations (or other operations that have a duration) at the same time.
-For example, two fade operations on two different lights.
-</P><P>
-
-A sequence as such is not useful. It needs to be fired at some point.
-You can fire sequences manually from code or you can define a trigger
-to fire the sequence if a certain condition is true. In this case we
-have a trigger which is called `<SAMP>trig_turn_on_light</SAMP>'. This trigger
-will fire if the sector `<SAMP>hall</SAMP>' is visible and the camera is in the
-sphere defined by the center `<SAMP>10,4,10</SAMP>' and radius `<SAMP>5</SAMP>'. As soon
-as this condition is valid the `<SAMP>turn_on_light</SAMP>' sequence will be
-fired immediatelly. Note that this automatically implies that the trigger
-is disabled. This is to prevent the sequence from being fired several times
-while the trigger condition remains valid. If you want a trigger that keeps
-firing you have to re-enable it in the sequence.
+    &#60;staticlod&#62;
+	&#60;distance varm="Lod M" vara="Lod A" /&#62;
+    &#60;/staticlod&#62;
+</pre></td></tr></table>The advantage of this technique is that one can then use the same
+LOD values for different objects and modify them easily. Also one
+can modify the variables at runtime too with an immediate effect.
 </P><P>
 
 <A NAME="SEC462"></A>
-<H4> Second Example </H4>
+<H4> Static LOD From Code </H4>
 <!--docid::SEC462::-->
 <P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;sequences&#62;
-    &#60;sequence name="animlight"&#62;
-        &#60;fadelight light="l1" red="0" green="0" blue="0"
-            duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;fadelight light="l1" red="1" green="1" blue="1"
-            duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;fadelight light="l1" red="1" green="0" blue="0"
-            duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;fadelight light="l1" red="0" green="1" blue="0"
-            duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;fadelight light="l1" red="0" green="0" blue="1"
-            duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;enable trigger="animlight" /&#62;
-    &#60;/sequence&#62;
-&#60;/sequences&#62;
-&#60;triggers&#62;
-    &#60;trigger name="animlight"&#62;
-        &#60;sectorvis sector="large" /&#62;
-        &#60;fire sequence="animlight" /&#62;
-    &#60;/trigger&#62;
-&#60;/triggers&#62;
+Using static LOD from code is very easy. One basically has to create
+a hierarchical mesh, followed by a static LOD object and then the
+children which should be added to the right LOD level. Here follows
+an example which roughly does the same as our map example in the previous
+section:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  csRef&#60;iMeshWrapper&#62; loddy_mesh = Engine-&#62;CreateMeshWrapper (
+	"crystalspace.mesh.object.nullmesh", "loddy");
+  csRef&#60;iNullMeshState&#62; nullmesh = SCF_QUERY_INTERFACE (
+    	loddy_mesh-&#62;GetMeshObject (), iNullMeshState);
+  nullmesh-&#62;SetBoundingBox (csBox3 (
+	csVector3 (-1, 0, -1), csVector3 (1, 2, 1)));
+
+  iLODControl* lodctrl = loddy_mesh-&#62;CreateStaticLOD ();
+  float d0 = 100;
+  float d1 = 10;
+  float m = 1.0 / (d1-d0);
+  float a = -m * d0;
+  lodctrl-&#62;SetLOD (m, a);
+
+  csRef&#60;iMeshWrapper&#62; loddy_lowdetail = <small>...</small>
+  loddy_mesh-&#62;GetChildren ()-&#62;Add (loddy_lowdetail);
+  loddy_mesh-&#62;AddMeshToStaticLOD (0, loddy_lowdetail);
+  <small>...</small>
+  csRef&#60;iMeshWrapper&#62; loddy_meddetail = <small>...</small>
+  loddy_mesh-&#62;GetChildren ()-&#62;Add (loddy_meddetail);
+  loddy_mesh-&#62;AddMeshToStaticLOD (1, loddy_meddetail);
+  <small>...</small>
 </pre></td></tr></table></P><P>
 
-In this example there is a trigger called `<SAMP>animlight</SAMP>' that fires as
-soon as the sector named `<SAMP>large</SAMP>' is visible. Here is what happens
-as soon as the condition of the trigger (in this case `<SAMP>sectorvis</SAMP>')
-is true:
-</P><P>
-
-<OL>
-<LI>
-First the firing of the trigger will cause the trigger itself to be
-disabled. This is to avoid the trigger firing again next frame.
-<LI>
-Then the `<SAMP>animlight</SAMP>' sequence will be executed. What this basically
-means is that all operations of that sequence are scheduled in the engine
-sequence manager at the appropriate times relative to the current time.
-The `<SAMP>delay</SAMP>' operation in the sequence is responsible for tagging
-every operation with the specified time. So in this particular example six
-operations will be scheduled: five `<SAMP>fadelight</SAMP>' operations (of which
-one is scheduled to execute immediatelly) and one `<SAMP>enable</SAMP>' operation.
-<LI>
-The first operation that is executed is `<SAMP>fadelight</SAMP>'. This operation
-will fade the light color of the light named `<SAMP>l1</SAMP>' from whatever
-color it has now to black. `<SAMP>l1</SAMP>' must be a pseudo-dynamic light for
-this to work.
-<LI>
-One second later (due to the `<SAMP>delay</SAMP>') the second `<SAMP>fadelight</SAMP>'
-gets executed. And so on.
-<LI>
-Finally the `<SAMP>enable</SAMP>' operation will execute which means that the
-`<SAMP>animlight</SAMP>' trigger is enabled again. If the `<SAMP>large</SAMP>' sector
-is still visible this will cause the trigger to fire immediatelly again.
-</OL>
-<P>
-
-It is important to note that the `<SAMP>duration</SAMP>' parameter that is given
-in some of the operations does NOT imply that the next operation will
-execute after that operation has finished. The `<SAMP>duration</SAMP>' parameter
-has no effect on the internal relative time that is maintained for the
-sequence operations. To influence that you must use `<SAMP>delay</SAMP>'.
-</P><P>
-
 <A NAME="SEC463"></A>
-<H4> Last Example: Using Parameters </H4>
+<H4> Progressive LOD </H4>
 <!--docid::SEC463::-->
 <P>
 
-If you want to use the same sequence for different lights you can
-use parameters like in the following example:
-</P><P>
+Todo... @&nbsp;</P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;sequences&#62;
-    &#60;sequence name="animlight"&#62;
-        &#60;args&#62;
-            &#60;arg name="l" /&#62;
-            &#60;arg name="trig" /&#62;
-        &#60;/args&#62;
-        &#60;fadelight light_par="l" red="0" green="0" blue="0"
-	    duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;fadelight light_par="l" red="1" green="1" blue="1"
-	    duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;fadelight light_par="l" red="1" green="0" blue="0"
-	    duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;fadelight light_par="l" red="0" green="1" blue="0"
-	    duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;fadelight light_par="l" red="0" green="0" blue="1"
-	    duration="1000" /&#62;
-        &#60;delay time="1000" /&#62;
-        &#60;enable trigger_par="trig" /&#62;
-    &#60;/sequence&#62;
-&#60;/sequences&#62;
-&#60;triggers&#62;
-    &#60;trigger name="animlight_l1"&#62;
-        &#60;sectorvis sector="large" /&#62;
-        &#60;fire sequence="animlight"&#62;
-            &#60;light name="l" light="l1" /&#62;
-            &#60;light name="trig" light="animlight_l1" /&#62;
-        &#60;/fire&#62;
-    &#60;/trigger&#62;
-    &#60;trigger name="animlight_l2"&#62;
-        &#60;sectorvis sector="large" /&#62;
-        &#60;fire sequence="animlight"&#62;
-            &#60;light name="l" light="l2" /&#62;
-            &#60;light name="trig" light="animlight_l2" /&#62;
-        &#60;/fire&#62;
-    &#60;/trigger&#62;
-&#60;/triggers&#62;
-</pre></td></tr></table></P><P>
-
-Here you see how the same sequence (`<SAMP>animlight</SAMP>') is used by
-two different triggers for two different lights. It is not only the
-light that has to be given as a parameter but also the trigger that
-needs to be enabled again. That's why two parameters are used.
-</P><P>
-
-A lot more is possible here. I will give a short summary of all commands
-(that are not operations) that are supported in sequences here:
-</P><P>
-
-<DL COMPACT>
-<DT><CODE>args</CODE>
-<DD>Use this to enumerate all arguments to this sequence. You
-only have to specify the name of the arguments here.
-<P>
-
-<DT><CODE>delay</CODE>
-<DD>Increase the relative time for following operations. The
-relative time starts at 0 in the beginning of the sequence. Using `<SAMP>delay</SAMP>'
-you can increase relative time. If you don't use `<SAMP>delay</SAMP>' between two
-consecutive operations then they will execute at the same time. You can
-use `<SAMP>delay</SAMP>' with the `<SAMP>time</SAMP>' parameter in which case a constant
-amount will be added. Or you can use `<SAMP>delay</SAMP>' with the `<SAMP>min</SAMP>' and
-`<SAMP>max</SAMP>' parameters in which case a random amount between the two given
-values will be added. This amount is truely random in the sense that it will
-be reevaluated every time the sequence fires.
-<P>
-
-</DL>
-<P>
-
-<A NAME="SEC464"></A>
-<H4> Supported Operations </H4>
-<!--docid::SEC464::-->
-<P>
-
-Here is a list of all operations that you can use in a sequence. Note that
-every operation is tagged with a relative time (relative to the start
-of the sequence). If you want to use a parameter for an operation that
-uses an argument to the sequence then you have to add `<SAMP>_par</SAMP>' to the
-parameter name like this: `<SAMP>light_par</SAMP>'.
-</P><P>
-
-<DL COMPACT>
-<DT><CODE>run</CODE>
-<DD>This operation will run the given sequence. Parameter is
-`<SAMP>sequence</SAMP>'.
-<P>
-
-<DT><CODE>move</CODE>
-<DD>Move the specified object from the current position to the
-specified position in the given time (duration). Parameters are
-`<SAMP>mesh</SAMP>', `<SAMP>duration</SAMP>', `<SAMP>x</SAMP>', `<SAMP>y</SAMP>', and `<SAMP>z</SAMP>'.
-<P>
-
-<DT><CODE>rotate</CODE>
-<DD>Rotate the specified object from the current orientation
-to the new orientation in the given time (duration). Parameters are
-`<SAMP>mesh</SAMP>' and `<SAMP>duration</SAMP>'. As children you can specify rotation
-matrix and vector using `<SAMP>rotx</SAMP>', `<SAMP>roty</SAMP>', `<SAMP>rotz</SAMP>', and
-`<SAMP>v</SAMP>'.
-<P>
-
-<DT><CODE>material</CODE>
-<DD>Change the material on some object. Parameters are
-`<SAMP>mesh</SAMP>', `<SAMP>material</SAMP>', and optionally a `<SAMP>polygon</SAMP>' parameter
-if you only want to change the material for one polygon.
-<P>
-
-<DT><CODE>fadecolor</CODE>
-<DD>Fade the color of a mesh from the current value to the
-new value. This only works on some types of meshes. Parameters are
-`<SAMP>mesh</SAMP>', `<SAMP>red</SAMP>', `<SAMP>green</SAMP>', `<SAMP>blue</SAMP>', and `<SAMP>duration</SAMP>'.
-<P>
-
-<DT><CODE>setcolor</CODE>
-<DD>Set the color of a mesh. This only works on some types of
-meshes. Parameters are `<SAMP>mesh</SAMP>', `<SAMP>red</SAMP>', `<SAMP>green</SAMP>', and `<SAMP>blue</SAMP>'.
-<P>
-
-<DT><CODE>fadelight</CODE>
-<DD>Fade the color of a light from the current value to the
-new value. Parameters are
-`<SAMP>light</SAMP>', `<SAMP>red</SAMP>', `<SAMP>green</SAMP>', `<SAMP>blue</SAMP>', and `<SAMP>duration</SAMP>'.
-<P>
-
-<DT><CODE>setlight</CODE>
-<DD>Set the color of a light.
-Parameters are `<SAMP>light</SAMP>', `<SAMP>red</SAMP>', `<SAMP>green</SAMP>', and `<SAMP>blue</SAMP>'.
-<P>
-
-<DT><CODE>fadeambient</CODE>
-<DD>Fade the color of a dynamic ambient from the current value
-to the new value. Parameters are
-`<SAMP>sector</SAMP>', `<SAMP>red</SAMP>', `<SAMP>green</SAMP>', `<SAMP>blue</SAMP>', and `<SAMP>duration</SAMP>'.
-<P>
-
-<DT><CODE>setambient</CODE>
-<DD>Set the color of dynamic ambient.
-Parameters are `<SAMP>sector</SAMP>', `<SAMP>red</SAMP>', `<SAMP>green</SAMP>', and `<SAMP>blue</SAMP>'.
-<P>
-
-<DT><CODE>fadefog</CODE>
-<DD>Fade the color and density of fog from the current value
-to the new value. Parameters are
-`<SAMP>sector</SAMP>', `<SAMP>red</SAMP>', `<SAMP>green</SAMP>', `<SAMP>blue</SAMP>', `<SAMP>density</SAMP>',
-and `<SAMP>duration</SAMP>'.
-<P>
-
-<DT><CODE>setfog</CODE>
-<DD>Set the color and density of fog.
-Parameters are `<SAMP>sector</SAMP>', `<SAMP>red</SAMP>', `<SAMP>green</SAMP>', `<SAMP>blue</SAMP>',
-and `<SAMP>density</SAMP>'.
-<P>
-
-<DT><CODE>enable</CODE>
-<DD>Enable the given trigger. Parameter is `<SAMP>trigger</SAMP>'.
-<P>
-
-<DT><CODE>disable</CODE>
-<DD>Disable the given trigger. Parameter is `<SAMP>trigger</SAMP>'.
-<P>
-
-<DT><CODE>check</CODE>
-<DD>Enable checking of trigger state every `<SAMP>delay</SAMP>' milliseconds
-(or disable if 0). Use this in combination with `<SAMP>test</SAMP>' below. Parameters
-are `<SAMP>trigger</SAMP>' and `<SAMP>delay</SAMP>'.
-<P>
-
-<DT><CODE>test</CODE>
-<DD>Test the stated of the given trigger and execute the right
-sequence depending on the result. For this to work you should use `<SAMP>check</SAMP>'
-to enable testing of the trigger at regular times. Parameters are
-`<SAMP>trigger</SAMP>', `<SAMP>truesequence</SAMP>', and `<SAMP>falsesequence</SAMP>'. Both
-`<SAMP>truesequence</SAMP>' and `<SAMP>falsesequence</SAMP>' are optional. Warning! This
-operation does not cause the current sequence to stop. All operations that
-follow this test operation will still execute at their dedicated times
-regardless of the outcome of this test!
-<P>
-
-<DT><CODE>setvar</CODE>
-<DD>Set a shared variable to some value. The only required parameter is `<SAMP>var</SAMP>'
-which is the name of the variable you want to set. Then there are various
-other parameters that you can use to set the variable:
-<UL>
-<LI>
-`<SAMP>value</SAMP>': set the variable to the given floating point value.
-<LI>
-`<SAMP>add</SAMP>': add the given floating point value to the variable.
-<LI>
-`<SAMP>value_var</SAMP>': set the variable to the value in the given other variable.
-The other variable doesn't have to be a float.
-<LI>
-`<SAMP>add_var</SAMP>': add the other variable to this variable.
-<LI>
-`<SAMP>x</SAMP>', `<SAMP>y</SAMP>', `<SAMP>z</SAMP>': set the variable to the given vector.
-<LI>
-`<SAMP>red</SAMP>', `<SAMP>green</SAMP>', `<SAMP>blue</SAMP>': set the variable to the given color.
-</UL>
-<P>
-
-</DL>
-<P>
-
-<A NAME="SEC465"></A>
-<H4> Supported Conditions </H4>
-<!--docid::SEC465::-->
-<P>
-
-Here is a list of all conditions that are supported in a trigger:
-</P><P>
-
-<DL COMPACT>
-<DT><CODE>onclick</CODE>
-<DD>True when the given mesh is clicked on. Parameter is
-`<SAMP>mesh</SAMP>'.
-<P>
-
-<DT><CODE>lightvalue</CODE>
-<DD>True when the given light has a color which satisfies
-some condition. Parameters are `<SAMP>light</SAMP>', `<SAMP>operator</SAMP>', `<SAMP>red</SAMP>',
-`<SAMP>green</SAMP>', and `<SAMP>blue</SAMP>'. `<SAMP>operator</SAMP>' can be `<SAMP>less</SAMP>'
-or `<SAMP>greater</SAMP>'.
-<P>
-
-<DT><CODE>manual</CODE>
-<DD>For manual trigger (from application code). No parameters.
-<P>
-
-<DT><CODE>sectorvis</CODE>
-<DD>True when the sector is visible. Parameter is `<SAMP>sector</SAMP>'.
-There are also some optional children that this trigger supports:
-<UL>
-<LI>
-`<SAMP>insideonly</SAMP>': only trigger when camera is inside the sector as opposed
-to the sector being visible.
-<LI>
-`<SAMP>box</SAMP>': only trigger if camera is in box. This has two children:
-a `<SAMP>min</SAMP>' and a `<SAMP>max</SAMP>' vector.
-<LI>
-`<SAMP>sphere</SAMP>': only trigger if camera is in the sphere. Parameters are
-`<SAMP>x</SAMP>', `<SAMP>y</SAMP>', `<SAMP>z</SAMP>', and `<SAMP>radius</SAMP>'.
-</UL>
-<P>
-
-<DT><CODE>fire</CODE>
-<DD>This is not a trigger. It just indicates the sequence
-that will be executed when the trigger is valid. Parameters are `<SAMP>sequence</SAMP>'
-and `<SAMP>delay</SAMP>' (optional). In addition you can also specify parameters
-for the called sequence.
-<P>
-
-<DT><CODE>disable</CODE>
-<DD>Normally a trigger is enabled by default. With this keyword
-you can disable the trigger initially and let some other sequence (or the
-application) enable the trigger.
-<P>
-
-</DL>
-<A NAME="Map Creation"></A>
+<A NAME="Sequence Manager"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_192.html#SEC456"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_194.html#SEC466"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_192.html#SEC459"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_194.html#SEC464"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_165.html#SEC408"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: VFS Details</TITLE>
+<TITLE>Crystal Space: VFS</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: VFS Details">
-<META NAME="keywords" CONTENT="Crystal Space: VFS Details">
+<META NAME="description" CONTENT="Crystal Space: VFS">
+<META NAME="keywords" CONTENT="Crystal Space: VFS">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,84 +23,64 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC390"></A>
+<A NAME="SEC393"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC389"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_160.html#SEC391"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC388"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC389"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC392"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_160.html#SEC394"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC396"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.2.1 Details </H3>
-<!--docid::SEC390::-->
+<H2> 7.2 Virtual File System (VFS) </H2>
+<!--docid::SEC393::-->
 <P>
 
-To make difference between ZIP archives and physical disk directories
-VFS uses a simple convention: directories end with a path separator
-character (`<SAMP>$/</SAMP>') while archives do not. `<SAMP>$/</SAMP>' is a special
-configuration file variable which represents the path separator on any
-particular platform (see section <A HREF="cs_160.html#SEC391">7.2.2 Configuration File (`<TT>vfs.cfg</TT>')</A>). For example
-`<SAMP>$/data</SAMP>' refers to an archive, while `<SAMP>$/data$/</SAMP>' refers to an actual
-directory named `<TT>data</TT>'.  Failure to understand this distinction is often
-the major cause of errors; so if you're getting unexpected results check in
-the first place if directories have trailing path separators.
+<EM>Written by Andrew Zabolotny, <A HREF="mailto:bit@eltech.ru">bit@eltech.ru</A>.</EM>
 </P><P>
 
-There are several differences between filesystems between operating systems
-that you should always keep in mind because VFS doesn't hide these
-details from you. To avoid inconsistencies between different file systems you
-should follow this list of guidelines:
+Since many even basic concepts in file systems on different operating systems
+often differ, you often should take care to use the right path separators on
+the right platform, search on different "drives", "mounts" and so on for
+required files.  This library achieves the goal of making the file system
+appear "the same" on various operating systems, and adds many bonus
+features such as archive support and overlaid directories.
 </P><P>
 
-<UL>
-<LI>
-Choose filenames that are well suited for all operating systems you are
-targeting.  As of today DOS has the most restricted rules for naming
-files (ASCII7 characters except `<SAMP>?</SAMP>', `<SAMP>*</SAMP>', `<SAMP>+</SAMP>', and space,
-and with only one dot per filename).
-The part of VFS that is located in archives support virtually any
-filenames, so if you are sure that you will never have to place some file on a
-"real" filesystem, you can give it any name you desire.
+Each "directory" on the VFS <EM>virtual volume</EM> is mapped to some
+<EM>real-world</EM> directory or ZIP archive. Additionally, you can make
+one "virtual directory" map to several real-world directories (and/or
+ZIP files) at one time, thus covering such cases as having files either
+on compact disc (CD) or hard disk (depending upon the user's choice),
+distributing data file updates (thus overriding some files on write-only
+media) and so on.
+</P><P>
+
+The Virtual File System is driven by a configuration file.
+See section <A HREF="cs_161.html#SEC395">7.2.2 Configuration File (`<TT>vfs.cfg</TT>')</A>.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_160.html#SEC394">7.2.1 Details</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_161.html#SEC395">7.2.2 Configuration File (`<TT>vfs.cfg</TT>')</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
 <P>
 
-<LI>
-Different platforms use different filename comparison criteria.  On Unix and
-MacOS/X UFS filesystems, filenames are case-sensitive, while on Windows,
-DOS, and Macintosh HFS filesystems, they are case-insensitive.  To
-avoid problems always refer to files by their exact names.  For example, if you
-have a file on VFS called `<TT>GaMe.DaT</TT>' you should open it exactly as
-`<TT>GaMe.DaT</TT>' and not as `<TT>game.dat</TT>' or `<TT>GAME.DAT</TT>'.  On DOS,
-the file will appear to be entirely upper-case `<TT>GAME.DAT</TT>', but you should
-still use the correct name, `<TT>GaMe.DaT</TT>', when opening it.
-<P>
-
-<LI>
-Keep in mind that Unix <EM>can</EM> delete files which are actively open, whereas
-Windows, DOS, and possibly other platforms can not.  Therefore, you should
-avoid deleting open files.  (<EM>Technical Note</EM>: Actually, this should work
-for files which are located in archives but is not advisable to do so, because
-in general, program code will not know if a file resides within an archive or
-within the physical filesystem.  Furthermore, deleting open files from an
-archive not been tested.
-</UL>
-<P>
-
-<A NAME="VFS Configuration File"></A>
+<A NAME="VFS Details"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC389"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_160.html#SEC391"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC388"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC389"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC392"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_160.html#SEC394"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC396"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: mdl2spr</TITLE>
+<TITLE>Crystal Space: map2cs.cfg Game-Specific Data</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: mdl2spr">
-<META NAME="keywords" CONTENT="Crystal Space: mdl2spr">
+<META NAME="description" CONTENT="Crystal Space: map2cs.cfg Game-Specific Data">
+<META NAME="keywords" CONTENT="Crystal Space: map2cs.cfg Game-Specific Data">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -25,126 +25,162 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <A NAME="SEC151"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_67.html#SEC147"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC154"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_63.html#SEC141"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_45.html#SEC123"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC154"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_67.html#SEC150"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC155"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_48.html#SEC129"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_64.html#SEC145"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC155"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 4.4 Quake Model Converter (<CODE>mdl2spr</CODE>) </H2>
+<H3> 4.3.4 Game-Specific Data </H3>
 <!--docid::SEC151::-->
 <P>
 
-<EM>By Nathaniel Saint Martin, <A HREF="mailto:noote@bigfoot.com">noote@bigfoot.com</A>.
-Back seam fix and skin resizing by Seth Galbraith,
-<A HREF="mailto:sgalbrai@linknet.kitsap.lib.wa.us">sgalbrai@linknet.kitsap.lib.wa.us</A>.
-Project overhauled by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
-</P><P>
-
-`<TT>mdl2spr</TT>' is a model converter for Quake1 MDL and Quake2 MD2
-files.  It converts these files into Crystal Space's sprite format.  If the
-Quake1 MDL contains skins, they are extracted and saved as PNG image
-files.  If skin height or width is not a power of two, it will be resized.
+This section describes how to access game-specific data from the Crystal Space
+engine.
 </P><P>
 
 <A NAME="SEC152"></A>
-<H3> Usage </H3>
+<H4> Support in the Crystal Space "map format" </H4>
 <!--docid::SEC152::-->
 <P>
 
-`<TT>mdl2spr</TT>' is invoked from the command line, and is given the name of an
-input `<TT>.mdl</TT>' or `<TT>.md2</TT>' model file, as well as the name of the
-desired output sprite file.
+To support game-specific data, the Crystal Space map format has been
+extended, thus allowing you to embed the required data directly in the map
+file.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>mdl2spr [<VAR>options</VAR>] <VAR>model-file</VAR> <VAR>output-sprite-name</VAR>
+You can add key / value pairs to the map file itself; both to <EM>things</EM>
+and <EM>sectors</EM>.  To do this, just add `<SAMP>&#60;key name="<VAR>keyname</VAR>"
+value="<VAR>keyvalue</VAR>" /&#62;</SAMP>' to the appropriate sections.  You can use any
+number of keys.  Because not all game-specific information can be bound to
+actual geometry, (like `<SAMP>info_deathmatchstart</SAMP>', for example) there is
+also an element called `<SAMP>node</SAMP>'.
+</P><P>
+
+A node looks like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;node name="nodeName"&#62;
+	&#60;position x="" y="" z="" /&#62;
+	&#60;key name="keyName1" value="keyValue1" /&#62;
+	&#60;key name="keyName2" value="keyValue2" /&#62;
+	&#60;key name="keyName3" value="keyValue3" /&#62;
+&#60;/node&#62;
 </pre></td></tr></table></P><P>
 
-Both `<SAMP><VAR>model-file</VAR></SAMP>' and `<SAMP><VAR>output-sprite-name</VAR></SAMP>' are required.
-`<SAMP><VAR>model-file</VAR></SAMP>' is the filename of the input `<TT>.mdl</TT>' or
-`<TT>.md2</TT>' model file, and `<SAMP><VAR>output-sprite-name</VAR></SAMP>' is the name of the
-output sprite without the trailing `<TT>.spr</TT>' extension (which will be
-appended automatically by `<TT>mdl2spr</TT>').
-</P><P>
-
-If a skin is extracted from a MDL file, then it will be written to a file
-named `<TT><VAR>output-srite-name</VAR>.png</TT>'.  If more than one skin exists within
-the model, then each skin will be placed in its own PNG file and a number
-(and possibly letter) will be appended to the sprite name before the
-`<TT>.png</TT>' extension.
-</P><P>
-
-Here is a summary of the options understood by `<TT>mdl2spr</TT>':
-</P><P>
-
-<DL COMPACT>
-<DT><CODE>-h</CODE>
-<DD>Display usage and option summary.
-<P>
-
-<DT><CODE>-s &#60;<VAR>float</VAR>&#62;</CODE>
-<DD>Set the global scale of model based upon the floating point number
-`<SAMP><VAR>float</VAR></SAMP>'.  Default is 0.025.
-<P>
-
-<DT><CODE>-d &#60;<VAR>int</VAR>&#62;</CODE>
-<DD>Specify the frame delay in Quake ticks from `<SAMP><VAR>int</VAR></SAMP>' for frames which
-don't otherwise have a built-in delay.  Default is 100.
-<P>
-
-<DT><CODE>-n</CODE>
-<DD>Disable automatic naming of action frame sets.  Enabled by default.
-<P>
-
-<DT><CODE>-x &#60;<VAR>float</VAR>&#62;</CODE>
-<DD>Set center of sprite on X axis from `<SAMP><VAR>float</VAR></SAMP>'.  Default is 0.0.
-<P>
-
-<DT><CODE>-y &#60;<VAR>float</VAR>&#62;</CODE>
-<DD>Set center of sprite on Y axis from `<SAMP><VAR>float</VAR></SAMP>'.  Default is 0.0.
-<P>
-
-<DT><CODE>-z &#60;<VAR>float</VAR>&#62;</CODE>
-<DD>Set center of sprite on Z axis from `<SAMP><VAR>float</VAR></SAMP>'.  Default is 0.0.
-<P>
-
-<DT><CODE>-r</CODE>
-<DD>Disable automatic power-of-2 skin resizing.  Enabled by default.  This option
-only applies to Quake1 MDL files (not Quake2 MD2 files).
-</DL>
-<P>
-
 <A NAME="SEC153"></A>
-<H3> Future Plans </H3>
+<H4> How Does `<TT>map2cs</TT>' Support Game-Specific Data? </H4>
 <!--docid::SEC153::-->
 <P>
 
-This is a list of planned future enhancements to `<TT>mdl2spr</TT>'.
+`<TT>map2cs</TT>' takes all key / value pairs found in the original map and
+attaches them to the appropriate Crystal Space object.  So if you have a brush
+based entity, `<TT>map2cs</TT>' will store the data with the "thing" that is
+generated from the entity.  (Every entity corresponds to exactly one
+"thing".  If there are several sectors, the entity will be split and the
+appropriate "things" all get the same data.)
 </P><P>
 
-<UL>
-<LI>
-Add a command-line option so user can manually specify a replacement
-`<TT>palette.lmp</TT>' file rather than using the built-in one.
-</UL>
+If you have a point based entity (lights for example), `<TT>map2cs</TT>' will
+generate a node in the appropriate sector, and store all data there.
+</P><P>
+
+If you have a manual sector, all data stored with the defining brush gets
+stored in the sector.
+</P><P>
+
+For informational purposes, `<TT>map2cs</TT>' stores the scaling factor in the
+Crystal Space world.  (Because otherwise a game could not interpret
+positions.)
+</P><P>
+
+<A NAME="SEC154"></A>
+<H4> How Does Crystal Space Support Game-Specific Data? </H4>
+<!--docid::SEC154::-->
 <P>
 
-<A NAME="Tutorials"></A>
+`<SAMP>csLoader</SAMP>' generates an instance of `<SAMP>csKeyValuePair</SAMP>' for every
+<EM>key</EM> found in the map file and attaches it to the appropriate Crystal
+Space object by calling <CODE>ObjAdd()</CODE>.  Each nodes generates an instance of
+`<SAMP>csMapNode</SAMP>', and this is added to the sector with <CODE>ObjAdd()</CODE> as
+well.
+</P><P>
+
+To make access to game-specific data simpler, there are some convenience
+classes and some convenience functions.
+</P><P>
+
+To get the value of a game-specific key you can call:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csKeyValuePair::GetValue(csObject* pObject, char const* key);
+</pre></td></tr></table></P><P>
+
+For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSector* pSector = GetCurrentSector();
+char const* gravitystr =
+    csKeyValuePair::GetValue(pSector, "gravity");
+int gravity = atoi(gravitystr);
+</pre></td></tr></table></P><P>
+
+Please note that these operations are pretty expensive, so you should
+<EM>not</EM> invoke them every frame.  For frequently needed data, you should
+read the values once, and store them in some game-specific data fields.  (But
+it is still okay, to read the values once in a while; for example reading a
+message to be printed, when the user tries to open a locked door without
+having first unlocked it.)
+</P><P>
+
+To get a specific node you can call:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csMapNode::GetNode(csSector* pSector, char const* name,
+    char const* classname=0);
+</pre></td></tr></table></P><P>
+
+For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSector* pSector = GetCurrentSector();
+csMapNode* pNode = csMapNode::GetNode(
+    pSector, "central", "cs_dynlight");
+csVector3 pos = pNode-&#62;GetPosition();
+CreateDynLight(<small>...</small>);
+</pre></td></tr></table></P><P>
+
+A more frequent case for nodes will be to iterate over all nodes in a sector
+(for example to place monsters or weapons).
+</P><P>
+
+For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSector* pSector = GetCurrentSector();
+csNodeIterator iter (pSector,"cs_medikit");
+while (iter.HasNext ())
+{
+  csMapNode* pNode = iter.Next();
+  csVector3 pos = pNode-&#62;GetPosition();
+  CreateMedikit(pos);
+}
+</pre></td></tr></table><A NAME="mdl2spr"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_67.html#SEC147"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC154"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_63.html#SEC141"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_45.html#SEC123"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC154"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_67.html#SEC150"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC155"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_48.html#SEC129"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_64.html#SEC145"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC155"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

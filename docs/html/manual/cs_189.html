@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: 3D Sprites Example 2</TITLE>
+<TITLE>Crystal Space: 3D Sprites Example 1</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: 3D Sprites Example 2">
-<META NAME="keywords" CONTENT="Crystal Space: 3D Sprites Example 2">
+<META NAME="description" CONTENT="Crystal Space: 3D Sprites Example 1">
+<META NAME="keywords" CONTENT="Crystal Space: 3D Sprites Example 1">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,66 +23,87 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC453"></A>
+<A NAME="SEC456"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_188.html#SEC452"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_190.html#SEC454"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC451"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_191.html#SEC455"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_188.html#SEC455"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_190.html#SEC457"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC452"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_188.html#SEC455"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_192.html#SEC459"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.5.9.2 Texturing </H4>
-<!--docid::SEC453::-->
+<H4> 7.5.9.1 A Simple 3D Sprite </H4>
+<!--docid::SEC456::-->
 <P>
 
-Our next challenge is texturing the sprite.  To apply a two dimensional
-texture to the 3D sprite we need to flatten it.  If we have 288 separate
-vertices (see section <A HREF="cs_188.html#SEC452">7.5.9.1 A Simple 3D Sprite</A>), we can flatten the sprite any way we
-want, but when the triangles are sharing vertices we cannot separate them,
-and a flattened cylinder is sometimes difficult to texture.  Either the sides
-will be curved or the ends will be flattened.
+Let us consider a simple 3D sprite--a 24 sided prism meant to look like a
+cylinder.  Each side is made from two triangles, and the ends are made
+from 24 polygons (you could make the ends from 23 polygons, but that's not
+how artists do things :-).
 </P><P>
 
-We probably want to texture the sides as a single rectangular area and
-each end as a rough circle.  So we separate the ends from the sides.  This
-doubles the number of vertices.  Cutting one edge of the sides so it can be
-unwrapped adds two more vertices.
+<CENTER><IMG SRC="plugins/engine/cylinder.jpg" ALT="plugins/engine/cylinder"></CENTER>
 </P><P>
 
-<CENTER><IMG SRC="plugins/engine/skin.jpg" ALT="plugins/engine/skin"></CENTER>
+This sprite has 96 triangles.  If we treat each triangle as a separate
+object, it has 288 vertices.  Every frame each of those 288 vertices has
+to be transformed from local coordinates to screen space coordinates.
 </P><P>
 
-Now we have 98 vertices instead of 48.  This is a big hit, but it may be
-necessary to get the artwork done fast and well.  Fortunately, we still have
-only 98 vertices instead of 288, but can we do better than that?  Do we have
-to duplicate the 3D coordinates just because we need more texture coordinates?
+Each vertex is also consuming some memory.  If each vertex only has
+three 32 bit float coordinates, then the sprite uses 3456 bytes of memory,
+but in practice each vertex also has texture alignment, color, and
+surface normal data, and if the sprite has precalculated animation, that
+data is multiplied by the number of frames.
 </P><P>
 
-We experimented with a system where the sprite had a different set of 3D
-coordinates (vertices), texture coordinates (texels) and vertex normals (for
-shading).  For example: our cylinder could have each triangle connected to
-any 3 of the 48 unique vertices and any 3 of the 98 texels, instead of the
-current system where the triangle has 3 indices used for both vertices and
-texels.  Unfortunately our approach proved awkward, slow and difficult to
-optimize.
+However, the 3D sprite structure is compressed so that triangles can share
+vertices.  Instead of 288 vertices, the cylinder sprite has 48 vertices
+shared by the 96 triangles.  Each triangle is simply three indices to
+to the vertex list.
 </P><P>
 
-<A NAME="3D Sprites Example 3"></A>
+<UL>
+<LI>
+Vertices
+<UL>
+<LI>
+3D Coordinates (X, Y, Z)
+<LI>
+Texture Coordinates (U, V)
+<LI>
+Color (R, G, B)
+<LI>
+Surface Normal (X, Y, Z)
+</UL>
+<LI>
+Triangles
+<UL>
+<LI>
+First Vertex Index
+<LI>
+Second Vertex Index
+<LI>
+Third Vertex Index
+</UL>
+</UL>
+<P>
+
+<A NAME="3D Sprites Example 2"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_188.html#SEC452"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_190.html#SEC454"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC451"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_191.html#SEC455"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_188.html#SEC455"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_190.html#SEC457"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC452"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_188.html#SEC455"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_192.html#SEC459"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

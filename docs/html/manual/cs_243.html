@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: AWS Trigger Reference</TITLE>
+<TITLE>Crystal Space: AWS Component Signals</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: AWS Trigger Reference">
-<META NAME="keywords" CONTENT="Crystal Space: AWS Trigger Reference">
+<META NAME="description" CONTENT="Crystal Space: AWS Component Signals">
+<META NAME="keywords" CONTENT="Crystal Space: AWS Component Signals">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,53 +23,101 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC683"></A>
+<A NAME="SEC686"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC682"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC684"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC679"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC676"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC685"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC687"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC682"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC683"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC687"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.11.4 AWS Standard Sink Trigger Reference </H3>
-<!--docid::SEC683::-->
+<H4> 7.11.3.3 Sending and Receiving Signals </H4>
+<!--docid::SEC686::-->
 <P>
 
-The following table lists triggers that the `<SAMP>awsStandardSink</SAMP>' hosts.
+AWS supports signal sources and sinks. A signal is simply a
+bit of information that lets someone know that something
+happened. A signal source is an object that gives out signals.
+A signal sink is an object that receives them. A signal slot is
+a conduit that manages a connection between sources and sinks.
+All AWS components are signal sources. They are derived
+from `<SAMP>awsSource</SAMP>', and thus support all the functionality of
+that class.
 </P><P>
 
-<DL COMPACT>
-<DT><CODE>Hide</CODE>
-<DD>Hides the component that sent the signal.
-<P>
+Signals are very distinct from Events. Signals are usually not
+sent for vents like `<SAMP>MouseDown</SAMP>', etc. A signal usually
+indicates that something important happened to the source. Good
+examples of signals are `<SAMP>TextChanged</SAMP>' for a text-box or
+`<SAMP>ButtonClicked</SAMP>' for a command button. These indicate that
+the user has gone through a series of complex motions, and has
+triggered the component to do something that it was programmed
+for. Signals do not include extra parameter information, simply a
+32-bit value that indicates what happened.
+</P><P>
 
-<DT><CODE>Show</CODE>
-<DD>Shows the component that sent the signal.
-<P>
+Signals are unique to each component. Therefore, you never have
+to worry about namespace conflicts. For instance, if you want notification
+when a command button is clicked, you can connect your "button clicked"
+handler to the button like this:
+</P><P>
 
-<DT><CODE>Invalidate</CODE>
-<DD>Invalidates the component that sent the signal (forces a re-draw).
-<P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>awsSlot slot(mySink);
+slot.Connect(cmdbutton,
+  awsButton::sButtonClicked,
+  doSomethingUsefulTrigger);
+</pre></td></tr></table></P><P>
 
-<DT><CODE>HideWindow</CODE>
-<DD>Hides the window containing the component that sent the signal.
-</DL>
-<A NAME="AWS Signals and Actions Reference"></A>
+The parameter to the slot is the class that contains your sink.
+This can be any class derived from `<SAMP>iAwsSink</SAMP>'. For the connect
+call, the first parameter is the signal source that you are
+connecting to, the second is the signal you want notification of, and
+the final parameter is the identifier of the trigger you want activated
+on the sink when signaled. A single slot can map between a
+number of sources, signals, and triggers. To get the trigger identifier
+(which may change every time your application is run) you merely
+need to call <CODE>GetTriggerID()</CODE> on the sink with the name of the
+trigger that you want.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>unsigned long trigger = mySink-&#62;GetTriggerID("LoginUser");
+</pre></td></tr></table></P><P>
+
+What this means is that you don't have to override the `<SAMP>awsButton</SAMP>'
+class to find out what's going on. In fact, you don't even have
+to know about the button. All you need to know is that it
+supports the signal. If it doesn't support the signal, by the
+way, you will simply never get any information about it. Your slot will
+never become active.
+</P><P>
+
+A slot maps back to a sink's trigger. A single slot is <EM>always</EM>
+bound to a single sink, but there may be other slots bound to the
+same sink. When a trigger gets activated, it's passed in a
+reference to the source of the signal. That way it can get any
+information that it needs out of that source. A trigger could use
+this information to find out what type of component the source is
+and cast it to the correct type. The primary means for doing that
+resides in the <CODE>GetProperty()</CODE> and <CODE>SetProperty</CODE> methods. These
+allow you to request a property by name from a random component.
+If the component does not support the property, the call will
+fail in a graceful manner.
+<A NAME="AWS Trigger Reference"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC682"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC684"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC679"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC676"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC685"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC687"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC682"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC683"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC687"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: map2cs.cfg Game-Specific Data</TITLE>
+<TITLE>Crystal Space: map2cs Invoking</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: map2cs.cfg Game-Specific Data">
-<META NAME="keywords" CONTENT="Crystal Space: map2cs.cfg Game-Specific Data">
+<META NAME="description" CONTENT="Crystal Space: map2cs Invoking">
+<META NAME="keywords" CONTENT="Crystal Space: map2cs Invoking">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,164 +23,54 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC147"></A>
+<A NAME="SEC150"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_66.html#SEC146"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_66.html#SEC149"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_68.html#SEC151"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_47.html#SEC125"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_63.html#SEC141"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_68.html#SEC151"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_48.html#SEC129"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_64.html#SEC145"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC155"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 4.3.4 Game-Specific Data </H3>
-<!--docid::SEC147::-->
-<P>
-
-This section describes how to access game-specific data from the Crystal Space
-engine.
-</P><P>
-
-<A NAME="SEC148"></A>
-<H4> Support in the Crystal Space "map format" </H4>
-<!--docid::SEC148::-->
-<P>
-
-To support game-specific data, the Crystal Space map format has been
-extended, thus allowing you to embed the required data directly in the map
-file.
-</P><P>
-
-You can add key / value pairs to the map file itself; both to <EM>things</EM>
-and <EM>sectors</EM>.  To do this, just add `<SAMP>&#60;key name="<VAR>keyname</VAR>"
-value="<VAR>keyvalue</VAR>" /&#62;</SAMP>' to the appropriate sections.  You can use any
-number of keys.  Because not all game-specific information can be bound to
-actual geometry, (like `<SAMP>info_deathmatchstart</SAMP>', for example) there is
-also an element called `<SAMP>node</SAMP>'.
-</P><P>
-
-A node looks like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;node name="nodeName"&#62;
-	&#60;position x="" y="" z="" /&#62;
-	&#60;key name="keyName1" value="keyValue1" /&#62;
-	&#60;key name="keyName2" value="keyValue2" /&#62;
-	&#60;key name="keyName3" value="keyValue3" /&#62;
-&#60;/node&#62;
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC149"></A>
-<H4> How Does `<TT>map2cs</TT>' Support Game-Specific Data? </H4>
-<!--docid::SEC149::-->
-<P>
-
-`<TT>map2cs</TT>' takes all key / value pairs found in the original map and
-attaches them to the appropriate Crystal Space object.  So if you have a brush
-based entity, `<TT>map2cs</TT>' will store the data with the "thing" that is
-generated from the entity.  (Every entity corresponds to exactly one
-"thing".  If there are several sectors, the entity will be split and the
-appropriate "things" all get the same data.)
-</P><P>
-
-If you have a point based entity (lights for example), `<TT>map2cs</TT>' will
-generate a node in the appropriate sector, and store all data there.
-</P><P>
-
-If you have a manual sector, all data stored with the defining brush gets
-stored in the sector.
-</P><P>
-
-For informational purposes, `<TT>map2cs</TT>' stores the scaling factor in the
-Crystal Space world.  (Because otherwise a game could not interpret
-positions.)
-</P><P>
-
-<A NAME="SEC150"></A>
-<H4> How Does Crystal Space Support Game-Specific Data? </H4>
+<H3> 4.3.3 Invoking </H3>
 <!--docid::SEC150::-->
 <P>
 
-`<SAMP>csLoader</SAMP>' generates an instance of `<SAMP>csKeyValuePair</SAMP>' for every
-<EM>key</EM> found in the map file and attaches it to the appropriate Crystal
-Space object by calling <CODE>ObjAdd()</CODE>.  Each nodes generates an instance of
-`<SAMP>csMapNode</SAMP>', and this is added to the sector with <CODE>ObjAdd()</CODE> as
-well.
+`<TT>map2cs</TT>' doesn't really have many options, but they should be mentioned
+anyway:
 </P><P>
 
-To make access to game-specific data simpler, there are some convenience
-classes and some convenience functions.
-</P><P>
-
-To get the value of a game-specific key you can call:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csKeyValuePair::GetValue(csObject* pObject, char const* key);
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>map2cs <VAR>mapfile</VAR> <VAR>worldfile</VAR> [<VAR>configfile</VAR>]
 </pre></td></tr></table></P><P>
 
-For example:
+You must specify the name of the <CODE><VAR>mapfile</VAR></CODE> and the
+<CODE><VAR>worldfile</VAR></CODE>.  (You can use relative paths here if you want.)
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSector* pSector = GetCurrentSector();
-char const* gravitystr =
-    csKeyValuePair::GetValue(pSector, "gravity");
-int gravity = atoi(gravitystr);
-</pre></td></tr></table></P><P>
-
-Please note that these operations are pretty expensive, so you should
-<EM>not</EM> invoke them every frame.  For frequently needed data, you should
-read the values once, and store them in some game-specific data fields.  (But
-it is still okay, to read the values once in a while; for example reading a
-message to be printed, when the user tries to open a locked door without
-having first unlocked it.)
+You can optionally override the configuration file by specifying
+<CODE><VAR>configfile</VAR></CODE>.  If you don't specify an alternate configuration
+file, `<TT>map2cs.cfg</TT>' is being used.
 </P><P>
 
-To get a specific node you can call:
+Example:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csMapNode::GetNode(csSector* pSector, char const* name,
-    char const* classname=0);
-</pre></td></tr></table></P><P>
-
-For example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSector* pSector = GetCurrentSector();
-csMapNode* pNode = csMapNode::GetNode(
-    pSector, "central", "cs_dynlight");
-csVector3 pos = pNode-&#62;GetPosition();
-CreateDynLight(<small>...</small>);
-</pre></td></tr></table></P><P>
-
-A more frequent case for nodes will be to iterate over all nodes in a sector
-(for example to place monsters or weapons).
-</P><P>
-
-For example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSector* pSector = GetCurrentSector();
-csNodeIterator iter (pSector,"cs_medikit");
-while (iter.HasNext ())
-{
-  csMapNode* pNode = iter.Next();
-  csVector3 pos = pNode-&#62;GetPosition();
-  CreateMedikit(pos);
-}
-</pre></td></tr></table><A NAME="mdl2spr"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>map2cs ..\maps\mymap.map data\mymap.map mymyp.cfg
+</pre></td></tr></table><A NAME="map2cs.cfg Game-Specific Data"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_66.html#SEC146"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_66.html#SEC149"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_68.html#SEC151"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_47.html#SEC125"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_63.html#SEC141"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_68.html#SEC151"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_48.html#SEC129"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_64.html#SEC145"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC155"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

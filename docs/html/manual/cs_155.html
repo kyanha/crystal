@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: CSWS Tutorial</TITLE>
+<TITLE>Crystal Space: CSWS Clipping</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: CSWS Tutorial">
-<META NAME="keywords" CONTENT="Crystal Space: CSWS Tutorial">
+<META NAME="description" CONTENT="Crystal Space: CSWS Clipping">
+<META NAME="keywords" CONTENT="Crystal Space: CSWS Clipping">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,141 +23,97 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC385"></A>
+<A NAME="SEC386"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_154.html#SEC382"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC372"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_154.html#SEC385"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC389"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_151.html#SEC376"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 6.4.5 Quick Tutorial </H3>
-<!--docid::SEC385::-->
-<P>
-
-In the following discussion I will try to explain how to build simple
-applications using the Crystal Space Windowing System.  I hope you will
-understand enough to start writing your own applications; I also hope you will
-get a deeper knowledge of CSWS during your development (or lab) sessions.
-In fact, I highly recommend perusing the CSWS header files (or
-alternatively at the HTML documentation generated from the header files)
-as they contain a lot of useful information which is not present here.
-</P><P>
-
-<A NAME="SEC386"></A>
-<H4> A Simple Application </H4>
+<H3> 6.4.4 Clipping </H3>
 <!--docid::SEC386::-->
 <P>
 
-The simplest possible application should do the following:
+Clipping is the process of removing parts of output covered by other
+components.  CSWS has full clipping implemented for all existing graphics
+primitives.  There is no drawing operation that can influence other
+component's image except transparent windows.  Clipping is performed in the
+following fashion.  First primitive is clipped against <EM>dirty</EM> rectangle
+(to cut off excessive output), then it is clipped against all its neighbors,
+then against `<SAMP>clip parent</SAMP>' window and all its neighbors and so on.
 </P><P>
 
-<UL>
-<LI>
-Start up the typical facilities required by a CSWS application.
-<LI>
-Run the application; meaning run the main event processing loop.
-<LI>
-Finish the application; that is, shut down.
-</UL>
+<A NAME="SEC387"></A>
+<H4> Clip Parents </H4>
+<!--docid::SEC387::-->
 <P>
 
-Let's try:
+All components have a `<SAMP>parent</SAMP>' component and a `<SAMP>clipparent</SAMP>'
+component.  What they are used for? Usually `<SAMP>clipparent</SAMP>' is equal to
+`<SAMP>parent</SAMP>' so there is no difference between them.  But in some rare cases
+there is a need to perform clipping in a different way.  For example, popup
+menus that belong to a window usually should not be clipped against that
+window, but rather to the parent of parent window or even clipped only to
+desktop.  In this case you should assign a different clip parent to that
+component.  This can be performed by using <CODE>InsertClipChild()</CODE> method.
+For example, to make a menu clip to application's bounds, you should call:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "csws/csws.h"
-
-int main(int argc, char const* const argv[])
-{
-  iObjectRegistry* object_reg =
-    csInitializer::CreateEnvironment (argc, argv);
-  if (!object_reg) return -1;
-
-  if (!csInitializer::SetupConfigManager (object_reg,
-    "/config/cswstest.cfg")) return -1;
-
-  if (!csInitializer::RequestPlugins (object_reg, CS_REQUEST_END))
-    return -1;
-
-  csApp* app = new csApp(object_reg);
-  if (app.Initialize())
-    csDefaultRunLoop(object_reg);
-
-  delete app;
-  csInitializer::DestroyApplication (object_reg);
-}
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>app-&#62;InsertClipChild(menu);
 </pre></td></tr></table></P><P>
 
-Pretty simple, eh?  So the result is simple as well.  We got a gray background,
-a mouse and nothing more.  What the program does is:
+You should not assign directly to `<SAMP>clipparent</SAMP>' variable since
+<CODE>InsertClipChild()</CODE> does much extra work.  For example it inserts the
+so-called "clip children" into component's clip child list, removes
+component from former <CODE>clipparent</CODE>'s "clip children" list and so on.
+</P><P>
+
+<A NAME="SEC388"></A>
+<H4> Partially Transparent Components </H4>
+<!--docid::SEC388::-->
+<P>
+
+You can set a state flag called `<SAMP>CSS_TRANSPARENT</SAMP>' to mark
+semi-transparent components.  Transparent components works differently in the
+following ways:
 </P><P>
 
 <UL>
 <LI>
-First of all, it sets up an environment which hosts the Crystal Space and
-CSWS facilities.  These are all referenced by the object registry which
-is returned from <CODE>CreateEnvironment()</CODE>.
+When a part of such a component is invalidated, the same area of parent
+component is invalidated as well.
 <P>
 
 <LI>
-The configuration facility is then set up and instructed to use a particular
-configuration file for this application.  The configuration file which contains
-the list of all plugins to be loaded, in addition to other things, such as
-which textures to use for windowing system components; where on the textures
-the respective pictures are placed; and other skin-dependent information.  You
-can use the `<TT>cswstest.cfg</TT>' file as a template.  You can also pass `<SAMP>0</SAMP>'
-as the file name, in which case you will have to manually tell to the plugin
-manager which plug-ins to load (via the <CODE>csInitializer::RequestPlugin()</CODE>
-method).  In our case, since we used a configuration file, we do not have to
-ask for any additional plugins in the call to <CODE>RequestPlugin()</CODE>, since it
-will load all of the ones mentioned by the configuration file.
+Mouse events for such components are considered "eaten" only if component's
+<CODE>HandleEvent()</CODE> method returned `<SAMP>true</SAMP>'.  Otherwise, the event is
+sent to the component placed below the transparent component.
 <P>
 
 <LI>
-Second, it creates a `<SAMP>csApp</SAMP>' object called `<SAMP>app</SAMP>'.  To initialize the
-application you pass a pointer to the object registry.
-<P>
-
-<LI>
-The next step is to call <CODE>csApp::Initialize()</CODE>.  You may want to override
-this method to initialize your application here (after calling the parent's
-<CODE>Initialize()</CODE>).  For instance, create a popup menu, insert it onto the
-desktop, add some windows, etc.
-<P>
-
-<LI>
-And finally we run the main application loop.  The event consuming loop does
-the following.  While there are events in input queue it read an event and
-dispatches it to interested listeners.  If there were not any events in the
-loop, it calls <CODE>Idle()</CODE> method to give some time slices to other running
-applications.  If some window needs redrawing, it is redrawn.  After this the
-screen is updated and everything starts again from the beginning.
+The output of windows below transparent components is not clipped.  Instead
+the area of transparent component covered by output is invalidated so that it
+gets redrawn at the end of frame.
 </UL>
 <P>
 
-If you observe, the above program allocates the `<SAMP>csApp</SAMP>' object on the
-heap, rather than on the stack as an automatic variable.  This is done so that
-we can manually destroy that object before <CODE>DestroyApplication()</CODE> is
-called.  This is important, because no Crystal Space or CSWS functionality
-should be invoked after <CODE>DestroyApplication()</CODE> has been called.  By
-destroying <CODE>csApp</CODE> first, we ensure that code in its destructor is invoked
-early enough.
-<A NAME="Plug-In Drivers"></A>
+<A NAME="CSWS Tutorial"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_154.html#SEC382"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC372"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_154.html#SEC385"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC389"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_151.html#SEC376"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

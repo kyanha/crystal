@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Release Notes 100</TITLE>
+<TITLE>Crystal Space: Release Notes</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Release Notes 100">
-<META NAME="keywords" CONTENT="Crystal Space: Release Notes 100">
+<META NAME="description" CONTENT="Crystal Space: Release Notes">
+<META NAME="keywords" CONTENT="Crystal Space: Release Notes">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,185 +23,58 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC815"></A>
+<A NAME="SEC818"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC817"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC819"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC817"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> C.1 Release Notes from 0.98 to 1.00 </H2>
-<!--docid::SEC815::-->
-<P>
-
-This section documents the major changes between versions 0.98 and 1.00 of
-Crystal Space.
-</P><P>
-
-<A NAME="SEC816"></A>
-<H3> <CODE>csArray&#60;&#62;</CODE> Index and Size Type Change </H3>
-<!--docid::SEC816::-->
-<P>
-
-<CODE>csArray&#60;&#62;</CODE> has been changed to use the <CODE>size_t</CODE> instead of
-`<SAMP>int</SAMP>' for array sizes and indices.  Probably, the most significant
-semantic difference of this change is that `<SAMP>size_t</SAMP>' is <EM>unsigned</EM> as
-opposed to `<SAMP>int</SAMP>' which is <EM>signed</EM>.
-</P><P>
-
-<STRONG>Read this paragraph carefully.</STRONG> In actual code, this change may result
-in nothing more than simple-looking compiler warnings. However, it may have
-caused <EM>semantics</EM> to change subtly.
-</P><P>
-
-This has the greatest impact in the following areas:
-</P><P>
-
-<A NAME="SEC817"></A>
-<H4> Iterating Over <CODE>csArray&#60;&#62;</CODE> Contents </H4>
-<!--docid::SEC817::-->
-<P>
-
-For this purpose, usually, `<SAMP>int</SAMP>' typed variables were used for keeping
-track of the index of the current item of an array iteration.  Fixing forward
-iteration over a <CODE>csArray&#60;&#62;</CODE> to instead use `<SAMP>size_t</SAMP>' is simple:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csArray&#60;<small>...</small>&#62; someArray;
-for (int i = 0, n = someArray.Length(); i &#60; n; i++)
-{
-  <small>...</small>
-}
-</pre></td></tr></table></P><P>
-
-Is changed to:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre><small>...</small>
-for (size_t i = 0, n = someArray.Length(); i &#60; n; i++)
-<small>...</small>
-</pre></td></tr></table></P><P>
-
-Backward iteration is a bit more problematic. As mentioned before, 
-`<SAMP>size_t</SAMP>' is unsigned, so you do not have negative values. This can be a
-problem in constructs like:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csArray&#60;<small>...</small>&#62; someArray;
-for (int i = someArray.Length() - 1; i &#62;= 0; i--)
-{
-  <small>...</small>
-}
-</pre></td></tr></table></P><P>
-
-If the `<SAMP>int</SAMP>' is changed simply to a `<SAMP>size_t</SAMP>', this 
-<CODE>for</CODE>-loop misbehaves unexpectedly. When `<SAMP>i</SAMP>' becomes 0, the body 
-of the loop is executed correctly. However, decrementing `<SAMP>i</SAMP>' will 
-<STRONG>not</STRONG> cause `<SAMP>i</SAMP>' to have a negative value--after all, `<SAMP>size_t</SAMP>'
-is unsigned. Instead, decreasing will make `<SAMP>i</SAMP>' wrap around from 0 to
-something like 0xffffffff (on 32-bit machines). Clearly, this is greater
-than 0, effectively causing an infinite loop. The same thing also happens when
-`<SAMP>someArray</SAMP>' has no items (i.e. `<SAMP>someArray.Length() == 0</SAMP>'). Here the
--1 in the initialization of `<SAMP>i</SAMP>' causes wrap-around.
-</P><P>
-
-Possible solutions include:
-</P><P>
-
-<UL>
-<LI>
-Use an <CODE>int</CODE>-typed counter variable and cast the array length to
-`<SAMP>int</SAMP>'.  This is not entirely elegant, but it does the job in most cases.
-<P>
-
-<LI>
-Re-write the loop to deal properly with the unsigned nature of `<SAMP>size_t</SAMP>':
-<P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csArray&#60;<small>...</small>&#62; someArray;
-for (size_t i = someArray.Length(); i-- &#62; 0;)
-{
-  <small>...</small>
-}
-</pre></td></tr></table></P><P>
-
-This code does the same as the `<SAMP>int</SAMP>' version above, iterating from 
-`<SAMP>someArray.Length() - 1</SAMP>' to 0, inclusively. It also correctly works
-in the case `<SAMP>someArray.Length() == 0</SAMP>'. The "trick" is to place the 
-modification of `<SAMP>i</SAMP>' as a post-decrement in the loop condition. This 
-way, as soon as `<SAMP>i</SAMP>' becomes 0, the loop is terminated. The 
-post-decrement ensures that `<SAMP>i</SAMP>' has the expected value in the loop body.
-</P><P>
-
-</UL>
-<P>
-
-<A NAME="SEC818"></A>
-<H4> Searching </H4>
+<H1> C. Release Notes </H1>
 <!--docid::SEC818::-->
 <P>
 
-Functions like <CODE>csArray&#60;&#62;::FindSortedKey()</CODE> and <CODE>csArray&#60;&#62;::Find()</CODE>
-used to return -1 to signify that an item was not found.  This is still the
-case, but with a twist.  Now, `<SAMP>(size_t)-1</SAMP>' is returned.  For convenience,
-a constant, `<SAMP>csArrayItemNotFound</SAMP>', has been added, which has this exact
-value.  It can be used in comparions to make it clear what is actually being
-checked.
+This document provides information to aid developers during the transition
+between versions of Crystal Space.  At this moment Crystal Space is still beta
+so changes are sometimes made to procedures and facilities, and the API
+(<EM>Application Programmer's Interface</EM>) is not completely frozen.  Even
+after version 1.0 is released, changes will still sometimes be unavoidable (but
+we will try to minimize them).  The following sections should give you a head
+start at trying to convert your application from one release of Crystal Space
+to the next.  If you have trouble with something that is not discussed here you
+should send mail to the Crystal Space mailing list and ask for help.
+See section <A HREF="cs_8.html#SEC10">1.7 Mailing Lists</A>.
 </P><P>
 
-Apropros comparisons: Recall that `<SAMP>size_t</SAMP>' is <EM>unsigned</EM>, so checking
-whether an index returned by `<SAMP>FindSortedKey()</SAMP>' or `<SAMP>Find()</SAMP>' is 
-actually a valid index by testing with `<SAMP>&#62;= 0</SAMP>' no longer works since
-`<SAMP>(size_t)-1</SAMP>' is always <CODE>&#62;= 0</CODE>. Replace such checks with tests of
-equality against `<SAMP>csArrayItemNotFound</SAMP>':
-</P><P>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_278.html#SEC819">C.1 Release Notes from 0.98 to 1.00</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_279.html#SEC823">C.2 Release Notes from 0.96 to 0.98</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_280.html#SEC871">C.3 Release Notes from 0.94 to 0.96</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_281.html#SEC886">C.4 Release Notes from 0.92 to 0.94</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_282.html#SEC892">C.5 Release Notes from 0.90 to 0.92</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_283.html#SEC903">C.6 Release Notes from 0.18 to 0.90</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_284.html#SEC927">C.7 Release Notes from 0.17 to 0.18</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_285.html#SEC936">C.8 Release Notes from 0.16 to 0.17</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csArray&#60;<small>...</small>&#62; someArray;
-int index = someArray.Find (<small>...</small>);
-if (i &#62;= 0)
-{
-  /* Item found */
-  <small>...</small>
-}
-else
-{
-  /* Item not found */
-  <small>...</small>
-}
-</pre></td></tr></table></P><P>
-
-Has to be replaced with:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csArray&#60;<small>...</small>&#62; someArray;
-size_t index = someArray.Find (<small>...</small>);
-if (i != csArrayItemNotFound)
-{
-  /* Item found */
-  <small>...</small>
-}
-else
-{
-  /* Item not found */
-  <small>...</small>
-}
-</pre></td></tr></table><A NAME="Release Notes 98"></A>
+<A NAME="Release Notes 100"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC817"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_278.html#SEC819"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC817"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

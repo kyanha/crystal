@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: AWS Component Events</TITLE>
+<TITLE>Crystal Space: AWS Component Parameter Delivery</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: AWS Component Events">
-<META NAME="keywords" CONTENT="Crystal Space: AWS Component Events">
+<META NAME="description" CONTENT="Crystal Space: AWS Component Parameter Delivery">
+<META NAME="keywords" CONTENT="Crystal Space: AWS Component Parameter Delivery">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,97 +23,147 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC681"></A>
+<A NAME="SEC684"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC680"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC682"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC678"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC679"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_243.html#SEC683"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC683"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC685"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC682"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC683"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC687"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.11.3.2 Events: Responding To User Actions </H4>
-<!--docid::SEC681::-->
+<H4> 7.11.3.1 Parameter Delivery </H4>
+<!--docid::SEC684::-->
 <P>
 
-Events are broken out into <CODE>OnBlah()</CODE> functions. The
-parameters for those events are also broken out and passed to the
-functions. At the end of any of the <CODE>OnBlah()</CODE> event
-functions (except <CODE>OnDraw()</CODE>) you should return `<SAMP>true</SAMP>' if the
-event was used by you, otherwise return `<SAMP>false</SAMP>'. You <EM>must</EM>
-override <EM>all</EM> event functions, even if you don't use them
-all. If you will not use a particular event, just return `<SAMP>false</SAMP>'.
+This section describes automatic <EM>parameter delivery</EM>, which provides a
+mechanism for extracting component parameters from a window definition.
 </P><P>
 
-It's important to note that you will only receive events that
-apply to your component. For example, if the mouse is inside
-your component, you will receive all mouse events. However, once
-the mouse leaves the confines of your borders you will no longer
-receive <EM>any</EM> mouse events. The only exception to this is
-the <CODE>OnMouseExit()</CODE> event which is sent to the component that
-just lost the mouse.
+In AWS, all windows are defined by a window definition.
+There may be multiple definitions in a file, or you may have
+multiple files. That's all up to the end user. For a component
+writer, however, you need to be able to get at this information.
+Furthermore, you need to be able to get the information for the
+window that's being created, and for the current instance of the
+component. How does that happen?
 </P><P>
 
-The following is the list of all events understood by components:
+It's very easy, actually. The window manager knows everything about everything,
+and it particularly knows where the component is in the window's setup process.
+You should only need to get your parameters once per creation of a window, and
+that happens at setup time.
 </P><P>
 
-<DL COMPACT>
-<DT><CODE>virtual bool OnMouseDown(int button, int x, int y)</CODE>
-<DD>Triggered when the user presses a mouse button.
+Each component <STRONG>must</STRONG> override a function called <CODE>Setup()</CODE> in
+`<SAMP>awsComponent</SAMP>'. You should always called the base
+<CODE>awsComponent::Setup()</CODE> first, because there is some important work for it
+to do. You must never release or delete the parameters passed in to you,
+because they are not yours. You should never store the settings parameter,
+because it is only on loan and strange things may happen to it. Next, you are
+free to do whatever setup your component needs. This is primarily accomplished
+by using the <CODE>GetBlah()</CODE> functions of the preference manager. The
+<CODE>Setup()</CODE>
+function is passed two important parameters: a pointer to the window manager,
+and a pointer to the current settings container that contains all the settings
+for this instance of this component. The prototype for the setup function is
+as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool awsComponent::Setup(iAws* wmgr, awsComponentNode *settings)
+</pre></td></tr></table></P><P>
+
+The default <CODE>Setup()</CODE> in `<SAMP>awsComponent</SAMP>' sets an internal variable
+that stores the pointer to the window manager, which may then be retrieved
+afterward from the accessor function <CODE>WindowManager()</CODE>.  The first
+statement in a setup function should always be:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (!awsComponent::Setup(wmgr, settings))
+  return false;
+</pre></td></tr></table></P><P>
+
+This lets the lower level setup code do some important initialization, and also
+keeps us from proceeding if something cataclysmic happens during initial setup.
+Returning `<SAMP>false</SAMP>' from the <CODE>Setup()</CODE> function at any time gracefully
+aborts construction of the component.  It does not, however, abort construction
+of the entire container or window.  It <EM>does</EM> abort construction of any
+children this component may have.
+</P><P>
+
+After the initial call to the base version of <CODE>Setup()</CODE>, you may do
+whatever you like. It is common to retrieve any important settings for your
+component here. For example, the base `<SAMP>awsComponent</SAMP>' retrieves the
+component's frame rectangle by performing the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iAwsPrefs *pm = WindowManager()-&#62;GetPrefMgr();
+pm-&#62;GetRect(settings, "Frame", frame);
+</pre></td></tr></table></P><P>
+
+The preference manager supports two other versions of this
+command, altogether providing <CODE>GetInt()</CODE>, <CODE>GetRect()</CODE>,
+and <CODE>GetString()</CODE>. The first parameter is always provided
+for you: it is the settings container passed as a parameter. The
+second parameter is the text name of the attribute you wish to
+query, like `<SAMP>Frame</SAMP>' or `<SAMP>Style</SAMP>', etc. The final
+parameter is a variable of the type corresponding to the
+function, in which the results will be stored. For
+<CODE>GetInt()</CODE> this is always a signed integer, for
+<CODE>GetRect()</CODE> this is a `<SAMP>csRect</SAMP>' structure, and for
+<CODE>GetString()</CODE> this is an `<SAMP>iString</SAMP>' pointer.
+</P><P>
+
+If your component needs to get information about the default
+skin, it can do so using some other, very similar functions for
+the skin definition:
+</P><P>
+
+<UL>
+<LI>
+<CODE>LookupIntKey()</CODE>
+<LI>
+<CODE>LookupRectKey()</CODE>
+<LI>
+<CODE>LookupStringKey()</CODE>
+<LI>
+<CODE>LookupRGBKey()</CODE>
+</UL>
 <P>
 
-<DT><CODE>virtual bool OnMouseUp(int button, int x, int y)</CODE>
-<DD>Triggered when the user releases a mouse button.
-<P>
+These functions operate in a fashion identical to the
+<CODE>GetBlah()</CODE> functions, except that they know where their
+information is coming from, so they don't need a settings
+parameter. Also, <CODE>LookupRGBKey()</CODE> requires a reference to
+three value parameters: red, green, and blue in that order. Each
+is an unsigned character. Note that the preference manager also
+supports a <CODE>Get()</CODE> for colors, textures, and fonts. It is
+preferred to use these functions for actually getting those
+resources for use. Please consult the API reference for
+`<SAMP>awsPreferenceManager</SAMP>' for further information on those
+functions.
+</P><P>
 
-<DT><CODE>virtual bool OnMouseMove(int button, int x, int y)</CODE>
-<DD>Triggered when the user moves the mouse.
-<P>
+Once you have finished your setup process, you should always
+exit by returning `<SAMP>true</SAMP>'. This means that everything went well and
+you are ready to work.
+</P><P>
 
-<DT><CODE>virtual bool OnMouseClick(int button, int x, int y)</CODE>
-<DD>Triggered when the user clicks the mouse.
-<P>
-
-<DT><CODE>virtual bool OnMouseDoubleClick(int button, int x, int y)</CODE>
-<DD>Triggered when the user double clicks the mouse.
-<P>
-
-<DT><CODE>virtual bool OnMouseExit()</CODE>
-<DD>Triggered when this component loses mouse focus.
-<P>
-
-<DT><CODE>virtual bool OnMouseEnter()</CODE>
-<DD>Triggered when this component gains mouse focus.
-<P>
-
-<DT><CODE>virtual bool OnKeypress(int key, int modifiers)</CODE>
-<DD>Triggered when the user presses a key.
-<P>
-
-<DT><CODE>virtual bool OnLostFocus()</CODE>
-<DD>Triggered when the keyboard focus is lost.
-<P>
-
-<DT><CODE>virtual bool OnGainFocus()</CODE>
-<DD>Triggered when the keyboard focus is gained.
-</DL>
-<P>
-
-<A NAME="AWS Component Signals"></A>
+<A NAME="AWS Component Events"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC680"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC682"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC678"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC679"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_243.html#SEC683"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC683"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC685"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC682"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC683"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC687"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO User Objects in Maps</TITLE>
+<TITLE>Crystal Space: HOWTO User Objects</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO User Objects in Maps">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO User Objects in Maps">
+<META NAME="description" CONTENT="Crystal Space: HOWTO User Objects">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO User Objects">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,76 +23,145 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC292"></A>
+<A NAME="SEC289"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_122.html#SEC285"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_124.html#SEC295"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_122.html#SEC283"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_124.html#SEC296"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.14 Attaching User Objects to CS Objects in a map file </H3>
+<H3> 5.8.13 Attaching User Objects to CS Objects </H3>
+<!--docid::SEC289::-->
+<P>
+
+This section explains how you can assign your own game specific data
+to Crystal Space objects (i.e. like meshes and sectors). In this section
+we explain how to do it from within code. In the next howto
+(see section <A HREF="cs_124.html#SEC296">5.8.14 Attaching User Objects to CS Objects in a map file</A>) we explain how you can do this from
+a map file.
+</P><P>
+
+<A NAME="SEC290"></A>
+<H4> The Crystal Space Object System </H4>
+<!--docid::SEC290::-->
+<P>
+
+Almost all objects in the Crystal Space engine implement the
+<CODE>iObject</CODE> interface. Because of this you can attach your own
+objects to them. This can be very useful to attach game specific
+data to Crystal Space objects. For example, you may want to attach
+the state of an actor to the mesh object representing that actor (like
+current amount of ammunition, health, <small>...</small>).
+</P><P>
+
+<A NAME="SEC291"></A>
+<H4> Defining Game Data </H4>
+<!--docid::SEC291::-->
+<P>
+
+To define data that you can attach to any other Crystal Space
+object (or any object implementing <CODE>iObject</CODE>) you also have to
+create an object that implements <CODE>iObject</CODE>. The easiest way to do
+that is to inherit from <CODE>csObject</CODE> which implements <CODE>iObject</CODE>
+for you. Here is an example on how you can do this easily:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_VERSION (MyOwnData, 0, 0, 1);
+class MyOwnData : public csObject
+{
+public:
+  int my_data_int;
+  <small>...</small>
+
+  SCF_DECLARE_IBASE_EXT (csObject);
+};
+
+SCF_IMPLEMENT_IBASE_EXT (MyOwnData)
+  SCF_IMPLEMENTS_INTERFACE (MyOwnData)
+SCF_IMPLEMENT_IBASE_EXT_END
+</pre></td></tr></table></P><P>
+
+Basically you create a class called `<SAMP>MyOwnData</SAMP>' which inherits
+from <CODE>csObject</CODE>. In that class you can do whatever you want
+with respect to your own game data. In the example above we only
+have a variable `<SAMP>my_data_int</SAMP>' but of course you can do whatever
+you want. The SCF macros make sure that you can later query for
+that object (using <CODE>SCF_QUERY_INTERFACE()</CODE> for example).
+</P><P>
+
+<A NAME="SEC292"></A>
+<H4> Attaching Game Data </H4>
 <!--docid::SEC292::-->
 <P>
 
-In the previous howto (see section <A HREF="cs_122.html#SEC285">5.8.13 Attaching User Objects to CS Objects</A>) you could see how
-you can attach game data to Crystal Space objects at runtime (i.e. from
-within code). It is also possible to attach game data to objects through
-the map file. Here we explain how.
+To attach your own data to some Crystal Space object you can use
+<CODE>iObject::ObjAdd()</CODE>. The example below shows how you can attach
+an instance of <CODE>MyOwnData</CODE> to a mesh:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>MyOwnData* mydata = new MyOwnData ();
+mydata-&#62;my_data_int = <small>...</small>;
+iMeshWrapper* mesh = <small>...</small>;
+mesh-&#62;QueryObject ()-&#62;ObjAdd (mydata);
+mydata-&#62;DecRef ();
+</pre></td></tr></table></P><P>
+
+<CODE>mesh-&#62;QueryObject()</CODE> is interesting. Many Crystal Space objects
+that implement <CODE>iObject</CODE> have a convenience function called
+<CODE>QueryObject()</CODE> which will return a reference to the <CODE>iObject</CODE>
+implementation. This code is equivalent to:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iObject&#62; obj = SCF_QUERY_INTERFACE (mesh, iObject);
+</pre></td></tr></table></P><P>
+
+with the important difference that <CODE>QueryObject()</CODE> does not increment
+the reference count. If an object doesn't have this convenience function you
+must use <CODE>SCF_QUERY_INTERFACE()</CODE> instead.
 </P><P>
 
 <A NAME="SEC293"></A>
-<H4> Using Key/Value Pairs </H4>
+<H4> Finding Game Data </H4>
 <!--docid::SEC293::-->
 <P>
 
-Crystal Space doesn't do anything with the keys you specify in a map file.
-The only thing it does is store them so you can use them later. Here is
-how you would fetch all keys from a mesh object:
+To find if some object has your data attached to it you can use the
+following code:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>void MyGame::ProcessKeys (iMeshWrapper* mesh)
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;MyOwnData&#62; mydata =
+  CS_GET_CHILD_OBJECT(mesh-&#62;QueryObject(), MyOwnData);
+if (mydata)
 {
-  csRef&#60;iObjectIterator&#62; it = mesh-&#62;QueryObject ()-&#62;GetIterator ();
-  while (it-&#62;HasNext ())
-  {
-    iObject* obj = it-&#62;Next ();
-    csRef&#60;iKeyValuePair&#62; key = SCF_QUERY_INTERFACE (obj, iKeyValuePair);
-    if (key)
-    {
-      if (!strcmp (key-&#62;GetKey (), "monsterAI"))
-      {
-        // Process key-&#62;GetValue ()
-        <small>...</small>
-      }
-      else if (!strcmp (key-&#62;GetKey (), "monsterLive"))
-      {
-        // Process key-&#62;GetValue ()
-        <small>...</small>
-      }
-    }
-  }
+  <small>...</small> (use mydata)
 }
 </pre></td></tr></table></P><P>
 
-This is only an example. You can call <CODE>QueryObject</CODE> on almost every
-Crystal Space object and loop over all keys (or other <CODE>iObject</CODE>
-implementing objects) with the code above.
-</P><P>
-
-To actually process the key you could check out the previous
-tutorial (see section <A HREF="cs_122.html#SEC285">5.8.13 Attaching User Objects to CS Objects</A>) and make your own game data object
-that contains all the collected values and attach that to the mesh too.
-</P><P>
-
 <A NAME="SEC294"></A>
-<H4> Include Files            </H4>
+<H4> Removing Game Data </H4>
 <!--docid::SEC294::-->
+<P>
+
+To remove your data you can use:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;MyOwnData&#62; mydata =
+  CS_GET_CHILD_OBJECT(mesh-&#62;QueryObject(), MyOwnData);
+if (mydata)
+{
+  mesh-&#62;QueryObject ()-&#62;ObjRemove (mydata);
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC295"></A>
+<H4> Include Files           </H4>
+<!--docid::SEC295::-->
 <P>
 
 The include files useful for this section are:
@@ -100,20 +169,19 @@ The include files useful for this section are:
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>  #include "iutil/object.h"
   #include "csutil/csobject.h"
-  #include "cstool/keyval.h"
 </pre></td></tr></table></P><P>
 
-<A NAME="HOWTO CS Project"></A>
+<A NAME="HOWTO User Objects in Maps"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_122.html#SEC285"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_124.html#SEC295"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_122.html#SEC283"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_124.html#SEC296"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

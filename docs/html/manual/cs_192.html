@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Level of Detail</TITLE>
+<TITLE>Crystal Space: Dynamic Worlds</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Level of Detail">
-<META NAME="keywords" CONTENT="Crystal Space: Level of Detail">
+<META NAME="description" CONTENT="Crystal Space: Dynamic Worlds">
+<META NAME="keywords" CONTENT="Crystal Space: Dynamic Worlds">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,222 +23,225 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC456"></A>
+<A NAME="SEC459"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_191.html#SEC455"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_191.html#SEC458"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_193.html#SEC460"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_188.html#SEC455"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_165.html#SEC408"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.5.11 Level of Detail </H3>
-<!--docid::SEC456::-->
+<H3> 7.5.10 Dynamic Worlds </H3>
+<!--docid::SEC459::-->
 <P>
 
 <EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>. Last updated 13 August 2003.</EM>
+<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>. Last updated 28 September 1998.</EM>
 </P><P>
 
-In a 3D engine there are typically two major ways that can be used to
-optimize performance (aside from getting better hardware and making better
-use of hardware). Those two ways are Visibility Culling
-(see section <A HREF="cs_177.html#SEC435">7.5.7 Visibility Culling In Detail</A>) and Level of Detail. In this section we will
-talk about the latter.
+Normally the portal approach lends itself very well for dynamic worlds.
+However, the big problem is lighting.  Static lightmaps are very static (as
+you can imagine) and are difficult to scale and recompute.  This severely
+restricts what you can do dynamically in general.  However, in many specific
+cases you can do a lot.  Following is a summary of these cases.
 </P><P>
 
-Level of Detail (or LOD) is the technique of reducing high polygon
-models with a simpler representation that renders faster. In contrast with
-visibility culling, level of detail can performance even if there are
-a lot of objects visible at the same time. Level of Detail is practically
-the only way to improve performance in situations where there is not much
-culling opportunity (like in a space game).
+First a small definition.  The <EM>sector-lights</EM> is the list of lights that
+affect some sector.  Every sector will have a sector-lights list containing
+not only the lights in that sector but every light that shines through the
+sector.  It will contain dynamic, pseudo-dynamic and static lights.
 </P><P>
 
-Crystal Space currently supports two kinds of LOD:
+Another small note about lighting.  Crystal Space currently has static lights,
+pseudo-dynamic lights and dynamic lights.  The pseudo-dynamic lights are an
+extension on the static lights which allow the static light to change color or
+intensity but not move.  The advantage of pseudo-dynamic lights compared to
+real dynamic lights is that shadows are computed more correctly.
+Pseudo-radiosity will also work correctly and there is no run-time
+view-frustum calculation as with dynamic lights.  Their only disadvantage is
+that they cannot move.
+</P><P>
+
+Now on to the cases for dealing with lights:
 </P><P>
 
 <UL>
 <LI>
-Static LOD. With this kind of LOD you can let the engine
-automatically select between different versions of the same model based
-on distance.
+Creating a New Thing
+<P>
+
+When you create a new <EM>thing</EM> it is easy to update the static lightmaps
+for that thing.  This involves taking all lights in the sector-lights list and
+doing a view frustum calculation for all the static lights and only for the
+new thing.  This only means that lighting on the Thing itself will be correct
+but it will not mean that the Thing will cast shadows for static lights.
+Calculating correct shadows is more complicated and time consuming.  We cannot
+just update the lightmaps of the polygons that will become shadowed since
+there is no way to know how much light we should remove.  The problem is that
+there is an upper light-level.  If many lights affect the same lumel then it
+will be capped.  When that happens you cannot just subtract a light because it
+will then not correspond with the real amount of light still reaching the
+lumel.  The only way to correct this would be to redo all static lighting
+precalculation for those polygons.  This is time-consuming.
+</P><P>
+
 <LI>
-Progressive LOD. This kind of LOD is supported by 3D sprites and
-is also based on distance. The major difference is that this kind of LOD
-doesn't use discrete lod levels but instead allows the engine to select
-as many triangles from the original model as needed (while still preserving the
-original model as much as possible).
+Destroying a Thing
+<P>
+
+In this case it would be easier to remove the shadows.  You can redo the
+needed static lighting precalculations.  However you have to be careful here.
+If you remove a Thing which was added without doing shadows (previous
+paragraph) then you should not remove shadows! So we have to remember if a
+Thing has casted shadows or not so that we can remove them.
+</P><P>
+
+<LI>
+Moving a Thing
+<P>
+
+This basically boils down to first destroying it and then recreating it at
+another position.  There is an optimization possible.  If we know that a Thing
+is meant to move from one position to another without interruption then we can
+calculate the lightmaps as they will become finally (at the last position) and
+just linearly interpolate the lightmaps in between.
+</P><P>
+
+<LI>
+Opening a Predefined Portal
+<P>
+
+In future it will be possible to flag polygons as having a portal which is
+closed.  When you open this portal you'll have to recalculate all lighting
+that goes through the new portal.  If you know in advance that some polygon is
+going to be opened in the future you can already store a lot of helpful
+information together with this portal to make calculation easier.  One
+possibility would be to store the light-patches combined with view-frustum for
+every light that hits the polygon.  We can then just continue the static
+lighting precalculation when the portal opens.  This would be useful for doors
+that open and when opened let through the light: the door would be a Thing.
+When closed the portal is also closed and blocks the light.  As soon as the
+door opens the portal opens and let's the light come through.  A disadvantage
+is that this will be sudden and not gradual (as the door opens).  But I think
+this is better than not relighting at all.  But see the discussion in the next
+paragraph.
+</P><P>
+
+<LI>
+Closing a Predefined Portal
+<P>
+
+The problem with the previous approach is that you cannot in general use it
+for closing a portal again.  The problem is that while it is easy to add light
+to a static lightmap you cannot easily remove light (since lightvalues are
+capped to a maximum).  So the above solution would really only be useful for
+doors that once opened, remain open for the rest of the game.  But maybe we
+have another solution.  When the engine knows that a portal can open/close we
+can do the static lighting calculations as usual but store all lighting
+information that came through that portal in separate static lightmaps.  That
+would be surprisingly easy to do.  What this means is that polygons may have
+several series of static lightmaps which are conditionally used depending on
+the state of nearby portals.  Another big advantage of this approach is that
+you can then use linear interpolation to interpolate between the two static
+lightmaps when a door is opening.  For example, when a door is 50% open you
+show 50% of the first static lightmap and 50% of the second.
+</P><P>
+
+<LI>
+Opening an Arbitrary Portal
+<P>
+
+In principle it is possible to open portals everywhere you want, to anywhere
+you want.  In this case however it is more difficult to adjust the lighting.
+You can still do it but more slowly.  Opening arbitrary portals is going to be
+useful when you create new sectors to simulate destroying a wall.  For
+example, when you shoot a missile at a wall you could create a new portal on
+that wall which simulates a hole.  You could also create a whole new sector
+behind the wall.  Note that this is getting a little complicated.  Calculating
+the lighting is relatively easy as the sector is brand new and you can just
+calculate the lighting.  Also see <EM>Breaking Through</EM> below.
+</P><P>
+
+<LI>
+Closing an Arbitrary Portal
+<P>
+
+No problem but you'll not be able to remove the lighting easily without
+recomputing a <EM>lot</EM>.  Note that in the current version of Crystal Space
+portals also have correctly lighted lightmaps so closing a portal will yield a
+polygon which is correctly lighted.
+</P><P>
+
+<LI>
+Breaking Through
+<P>
+
+When you fire a missile at a wall you may expect to be able to break through
+to the sector that is behind that wall.  Aside from the portal and lighting
+problems there is an additional problem here.  The portal world does not in
+itself have spatial information like this.  It does <EM>not</EM> know that there
+is a sector behind that polygon.  In fact there really is no concept of
+"behind a polygon" unless the polygon happens to be a portal.  This would of
+course be a solution.  If you make breakable walls state-portals (portals
+which can be closed and opened on demand like explained earlier) then there is
+no problem.  But if you want to support this in general then we'll need to
+find a way to calculate spatial information like this.  Calculating this at
+run-time is probably too expensive (you have to traverse every sector in the
+world and see which one you're arriving in).  One way to solve this would be
+with a sparse 3D matrix which contains all sectors that intersect with a given
+3D cube.  This could be precalculated and would greatly improve the speed of
+testing in which sector a given 3D location falls.  This of course only works
+with worlds which are <EM>standard</EM> and contain no special space-warping
+features (like overlapping sectors).  Mirrors and reflecting surfaces would be
+ok as they can be flagged as not defining extra geometry but only reflecting
+existing geometry.
+</P><P>
+
+<LI>
+Adding a Static Light
+<P>
+
+In some cases it may be a good option to have the ability to add a static
+light.  Static lights have the advantage that there is no run-time overhead as
+soon as they are merged with the other static lights.  So if you want to be
+able to put a light at an arbitrary position which is never going to be
+removed again then you should be able to create new static lights.  Note that
+you can (and should) use pseudo-dynamic lights when you know in advance where
+the light is going to be.  A good option would probably be the ability to
+merge a pseudo-dynamic light with the static lights.  When you know that a
+pseudo-dynamic light is never going to change then this would be a very good
+idea.  So converting a pseudo-dynamic light to a static light should be
+possible.
+</P><P>
+
+<LI>
+Removing a Static Light
+<P>
+
+This is more complicated.  In general you should use pseudo-dynamic lights for
+this.  The pseudo-dynamic light can be on by default.  When you want the light
+to be removed (for example because it is destroyed by a missile or something).
+You can set the intensity of the pseudo-dynamic light to black and then remove
+it from the world.
 </UL>
 <P>
 
-In future we will also support other kinds of LOD like imposters.
-Also some of the landscape engines support LOD internally.
-</P><P>
-
-Also in future there will be a LOD manager. At this moment LOD
-is purely distance based but for a given distance the level of detail will
-not change. A LOD manager can decide to reduce the lod levels for
-certain objects in order to improve overall performance.
-</P><P>
-
-<A NAME="SEC457"></A>
-<H4> Static LOD From Map File </H4>
-<!--docid::SEC457::-->
-<P>
-
-Using static LOD from a map file is fairly easy. Here is an example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshobj name="loddy"&#62;
-    &#60;nullmesh&#62;
-	&#60;min x="-1" y="0" z="-1" /&#62;
-	&#60;max x="1" y="2" z="1" /&#62;
-    &#60;/nullmesh&#62;
-    &#60;staticlod&#62;
-	&#60;distance d0="100" d1="10" /&#62;
-    &#60;/staticlod&#62;
-    &#60;meshobj name="loddy_lowdetail"&#62;
-        &#60;lodlevel&#62;0&#60;/lodlevel&#62;
-	<small>...</small>
-    &#60;/meshobj&#62;
-    &#60;meshobj name="loddy_mediumdetail"&#62;
-        &#60;lodlevel&#62;1&#60;/lodlevel&#62;
-	<small>...</small>
-    &#60;/meshobj&#62;
-    &#60;meshobj name="loddy_highdetail_upper"&#62;
-        &#60;lodlevel&#62;2&#60;/lodlevel&#62;
-	<small>...</small>
-    &#60;/meshobj&#62;
-    &#60;meshobj name="loddy_highdetail_lower"&#62;
-        &#60;lodlevel&#62;2&#60;/lodlevel&#62;
-	<small>...</small>
-    &#60;/meshobj&#62;
-    &#60;move&#62;
-        <small>...</small>
-    &#60;/move&#62;
-&#60;/meshobj&#62;
-</pre></td></tr></table></P><P>
-
-Let's explain what this example does in more detail. First we
-define a mesh object called `<SAMP>loddy</SAMP>'. This is the parent mesh
-which represents the actual model but on itself contains no geometry.
-So that's why we use `<SAMP>nullmesh</SAMP>'. The box given in the nullmesh
-is important as it is used for visibility culling. So you should
-make the box larger then any of the objects inside it. Also the center
-of the box is used for calculating the distance between the box and
-the camera.
-</P><P>
-
-Internally LOD uses a function to calculate a detail value betwen
-0 and 1 (0 meaning lowest detail, 1 meaning highest):
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  float lod = m * distance + a;
-</pre></td></tr></table>The result of this function is capped so it is always between 0 and 1.
-</P><P>
-
-Inside the `<SAMP>staticlod</SAMP>' block you can directly specify the `<SAMP>m</SAMP>'
-and `<SAMP>a</SAMP>' values but it is often easier to use a short-cut and specify
-`<SAMP>d0</SAMP>' and `<SAMP>d1</SAMP>' instead. In the example above we set `<SAMP>d0</SAMP>' equal
-to 100 which means that at distance 100 and beyond we will go to lowest possible
-detail. We also set `<SAMP>d1</SAMP>' equal to 10 which means that at distance 10
-or less the object will use highest detail. Internally `<SAMP>d0</SAMP>' and `<SAMP>d1</SAMP>'
-are transformed to `<SAMP>m</SAMP>' and `<SAMP>a</SAMP>' using the following equation:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  float m = 1.0 / (d1-d0);
-  float a = -m * d0;
-</pre></td></tr></table></P><P>
-
-After this we have four child meshes representing the different detail
-levels. Using the `<SAMP>lodlevel</SAMP>' keyword one can place a child mesh at
-a LOD index. These indices always start at 0 for lowest detail and
-can go as high as you want. The maximum index that is used will be
-represented by detail level equal to 1.
-</P><P>
-
-Interesting in the example above is that there are two meshes for level
-2. This means that at the highest detail level we actually use two sub-meshes
-to represent our mesh. Using this trick one can also use static lod to replace
-individual trees with collections of trees.
-</P><P>
-
-Note that it is also possible to define static LOD on a hierarchical
-mesh factory using the same syntax as described above. In that case one can
-use `<SAMP>meshref</SAMP>' to make an instance of that hierarchical factory
-(or use <CODE>iMeshFactoryWrapper-&#62;CreateMeshWrapper()</CODE>).
-</P><P>
-
-Note that it is also possible to use variables for `<SAMP>m</SAMP>' and `<SAMP>v</SAMP>'.
-One can do that like this:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>    &#60;variables&#62;
-        &#60;variable name="Lod M" value="-.1" /&#62;
-        &#60;variable name="Lod A" value=".5" /&#62;
-    &#60;/variables&#62;
-    <small>...</small>
-    &#60;staticlod&#62;
-	&#60;distance varm="Lod M" vara="Lod A" /&#62;
-    &#60;/staticlod&#62;
-</pre></td></tr></table>The advantage of this technique is that one can then use the same
-LOD values for different objects and modify them easily. Also one
-can modify the variables at runtime too with an immediate effect.
-</P><P>
-
-<A NAME="SEC458"></A>
-<H4> Static LOD From Code </H4>
-<!--docid::SEC458::-->
-<P>
-
-Using static LOD from code is very easy. One basically has to create
-a hierarchical mesh, followed by a static LOD object and then the
-children which should be added to the right LOD level. Here follows
-an example which roughly does the same as our map example in the previous
-section:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  csRef&#60;iMeshWrapper&#62; loddy_mesh = Engine-&#62;CreateMeshWrapper (
-	"crystalspace.mesh.object.nullmesh", "loddy");
-  csRef&#60;iNullMeshState&#62; nullmesh = SCF_QUERY_INTERFACE (
-    	loddy_mesh-&#62;GetMeshObject (), iNullMeshState);
-  nullmesh-&#62;SetBoundingBox (csBox3 (
-	csVector3 (-1, 0, -1), csVector3 (1, 2, 1)));
-
-  iLODControl* lodctrl = loddy_mesh-&#62;CreateStaticLOD ();
-  float d0 = 100;
-  float d1 = 10;
-  float m = 1.0 / (d1-d0);
-  float a = -m * d0;
-  lodctrl-&#62;SetLOD (m, a);
-
-  csRef&#60;iMeshWrapper&#62; loddy_lowdetail = <small>...</small>
-  loddy_mesh-&#62;GetChildren ()-&#62;Add (loddy_lowdetail);
-  loddy_mesh-&#62;AddMeshToStaticLOD (0, loddy_lowdetail);
-  <small>...</small>
-  csRef&#60;iMeshWrapper&#62; loddy_meddetail = <small>...</small>
-  loddy_mesh-&#62;GetChildren ()-&#62;Add (loddy_meddetail);
-  loddy_mesh-&#62;AddMeshToStaticLOD (1, loddy_meddetail);
-  <small>...</small>
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC459"></A>
-<H4> Progressive LOD </H4>
-<!--docid::SEC459::-->
-<P>
-
-Todo... @&nbsp;</P><P>
-
-<A NAME="Sequence Manager"></A>
+<A NAME="Level of Detail"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_191.html#SEC455"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_191.html#SEC458"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_193.html#SEC460"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_188.html#SEC455"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_165.html#SEC408"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

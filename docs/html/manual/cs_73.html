@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: TutIntro Compilation</TITLE>
+<TITLE>Crystal Space: TutIntro Minimum Requirements</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: TutIntro Compilation">
-<META NAME="keywords" CONTENT="Crystal Space: TutIntro Compilation">
+<META NAME="description" CONTENT="Crystal Space: TutIntro Minimum Requirements">
+<META NAME="keywords" CONTENT="Crystal Space: TutIntro Minimum Requirements">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,44 +23,64 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC168"></A>
+<A NAME="SEC171"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_72.html#SEC167"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC154"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC155"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_72.html#SEC160"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC172"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC158"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.1.3 Compiling the Application </H3>
-<!--docid::SEC168::-->
+<H3> 5.1.2 Minimum Application Requirements </H3>
+<!--docid::SEC171::-->
 <P>
 
-In order to compile a Crystal Space application I recommend you look at the
-howto on compiling an external application. For MSVC 6 this tutorial
-can be found at See section <A HREF="cs_125.html#SEC300">5.8.16 Creating an External MSVC 6 Application</A>, for
-other environments based on GNU make you can look at
-See section <A HREF="cs_124.html#SEC295">5.8.15 Creating an External Crystal Space Application</A>.
+For an application to be considered a proper "Crystal Space application",
+there are a few requirements.  These are:
 </P><P>
 
-Additionally note that the source for some of these tutorials can be
-found in the `<TT>CS/apps/tutorials</TT>' directory. There are also a few
-additional tutorials there that are not (yet) covered in the documentation.
-<A NAME="Tutorial Simple"></A>
+<UL>
+<LI>
+Each and every source file (`<TT>.cpp</TT>') must import `<TT>cssysdef.h</TT>' as the
+very first included Crystal Space header files.  `<TT>cssysdef.h</TT>' should never
+be included by a header file. The reason for this is that `<TT>cssysdef.h</TT>'
+has modifiers which control what should be defined and what not. If a header
+file would include `<TT>cssysdef.h</TT>' on its own the cpp file would not be
+able to include it again (due to header protection) and would then not be
+able to add the additional stuff that it may need.
+<P>
+
+<LI>
+<CODE>CS_IMPLEMENT_APPLICATION</CODE> needs to be put in the beginning of
+the file (<EM>after</EM> the includes).
+<P>
+
+<LI>
+The <CODE>main()</CODE> function must be declared with the following prototype:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>int main(int argc, char const* argv[]);
+</pre></td></tr></table></UL>
+<P>
+
+Following these guidelines will help to ensure that your application builds
+and runs on all platforms supported by Crystal Space.
+</P><P>
+
+<A NAME="TutIntro Compilation"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_72.html#SEC167"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC154"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC155"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_72.html#SEC160"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC172"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC158"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

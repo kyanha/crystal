@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Visibility Culling</TITLE>
+<TITLE>Crystal Space: Texture Mapping Animations</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Visibility Culling">
-<META NAME="keywords" CONTENT="Crystal Space: Visibility Culling">
+<META NAME="description" CONTENT="Crystal Space: Texture Mapping Animations">
+<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping Animations">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -25,56 +25,76 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <A NAME="SEC435"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_176.html#SEC431"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC436"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_176.html#SEC434"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC425"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.5.7 Visibility Culling In Detail </H3>
+<H4> 7.5.6.6 Procedural, Dynamic and Animated Textures </H4>
 <!--docid::SEC435::-->
 <P>
 
-<EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
+OK so we have the texture mapped onto the polygon, now the fun stuff starts.
+There are several ways to introduce movement into textures. Here is the
+terminology used in crystal space to describe these methods and brief
+explanations of what they entail:
 </P><P>
 
-<EM>Note</EM>: This section describes in detail how visibility culling in
-Crystal Space works or will work in the not-to-distant future.
-Not all that is described in this document is actually implemented. It
-only represents of the ideal implementation which lives in my head right
-now and which I'm planning to implement in the near future. Parts of the
-system are implemented though.
-</P><P>
-
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_178.html#SEC436">7.5.7.1 Sectors and Portals</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_179.html#SEC437">7.5.7.2 Visibility Cullers</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_180.html#SEC438">7.5.7.3 Entities</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_181.html#SEC443">7.5.7.4 Sector Structure</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_182.html#SEC444">7.5.7.5 Visibility Culling</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_183.html#SEC445">7.5.7.6 View Frustum Culling</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_184.html#SEC446">7.5.7.7 Portal/Sector Visibility</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_185.html#SEC447">7.5.7.8 In-sector Visibility</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
+<A NAME="SEC436"></A>
+<H4> Animated Textures </H4>
+<!--docid::SEC436::-->
+ 
+Lets say we have several precomputed texture images, which when taken in 
+sequence form an animation. An Animated texture is simply when you swap
+the texture image mapped on to the polygon between the precomputed texture
+images. This is the simplest, cheapest and most common method.
 <P>
 
-<A NAME="VIS sectors and portals"></A>
+<A NAME="SEC437"></A>
+<H4> Dynamic Textures </H4>
+<!--docid::SEC437::-->
+<P>
+
+Dynamic textures are when you manipulate the texture mapping transformation, or 
+the texture co-ordinates directly. This way you can rotate/scroll for example
+the texture on the polygon while it remains static.
+</P><P>
+
+<A NAME="SEC438"></A>
+<H4> Procedural Textures </H4>
+<!--docid::SEC438::-->
+<P>
+
+If you still can't produce the effect you want with animated and or dynamic
+textures then you can resort to procedural textures. Another less common name
+for procedural textures is programmatic textures. This is when you write the
+texture on the fly. The texture is typically a buffer you render to in the
+same way as you would render to the main screen. Good procedural texture
+implementations gives you full blown 3d capable facilities to render to the
+texture. Fortunately Crystal Space has this :)
+Typical uses for procedural textures is when the content of the texture responds
+uniquely to user input or behavior. A good example is having a computer terminal
+within the virtual world which the user can type on and can see what they type
+come up on the virtual screen. (see section <A HREF="cs_163.html#SEC397">7.3.1 Procedural Texture System</A>).
+</P><P>
+
+<A NAME="Visibility Culling"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_176.html#SEC431"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC436"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_176.html#SEC434"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC425"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

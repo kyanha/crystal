@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: SCF Meta Info Embedding</TITLE>
+<TITLE>Crystal Space: SCF Meta Info</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: SCF Meta Info Embedding">
-<META NAME="keywords" CONTENT="Crystal Space: SCF Meta Info Embedding">
+<META NAME="description" CONTENT="Crystal Space: SCF Meta Info">
+<META NAME="keywords" CONTENT="Crystal Space: SCF Meta Info">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,84 +23,155 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC364"></A>
+<A NAME="SEC367"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_144.html#SEC363"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_146.html#SEC365"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_144.html#SEC366"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_146.html#SEC368"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 6.2.7 Meta-Information Embedding </H3>
-<!--docid::SEC364::-->
+<H3> 6.2.6 Plugin Meta-Information </H3>
+<!--docid::SEC367::-->
 <P>
 
-The Crystal Space `<TT>configure</TT>' script option
-`<SAMP>--enable-meta-info-embedding</SAMP>' controls whether or not the build system
-embeds the plugin meta-information into plugin modules (if supported by the
-platform), and whether or not the plugin loader looks for embedded
-meta-information.  If this option is disabled, or if embedding is not supported
-by the platform, then the meta-information is laid down alongside the built
-plugin module (`<TT>.so</TT>' or `<TT>.dll</TT>') in a text file with the same name as
-the plugin module, except with extension `<TT>.csplugin</TT>'.  The
-meta-information embedding option is enabled, by default.
+It is possible and common to use SCF interfaces and objects directly via
+the C++ class names, via creation functions, or via facilities which return
+pointers to pure SCF interfaces.  However, when an external plugin modules
+publishes a class implementing an SCF interface, the client of that plugin
+can not access the object directly via C++.  This is where the SCF
+<EM>class name</EM> comes into play.  An SCF class name is an abitrary string
+assigned to the implementation.  The string is passed to
+<CODE>SCF_CREATE_INSTANCE()</CODE> in order to create an instance of the named
+object.  If necessary, SCF will load the plugin which implements the named
+object in order to satisfy the request.  The SCF class name can be
+anything you like, though it is often useful to impose a hierarchical
+interpretation on the name.  For instance,
+`<SAMP>crystalspace.graphics3d.opengl</SAMP>'.
 </P><P>
 
-The platform-specific plugin loaders are capable of reading plugin
-meta-information when it is embedded and when it exists in a stand-alone
-`<TT>.csplugin</TT>' resource.  Even when configured for embedding, the plugin
-loaders will still be able to recognize and utilize external `<TT>.csplugin</TT>'
-resource.  This means that Crystal Space-based projects with unsophisticated
-build systems, which are incapable of embedding meta-information into the
-plugin module, can still create usable plugins by simply placing a copy of the
-`<TT>.csplugin</TT>' file alongside the plugin executable (`<TT>.so</TT>' or
-`<TT>.dll</TT>').
+The data which describes a plugin module, such as the SCF class names
+and C++ implementations which the plugin exports, is known as
+<EM>meta-information</EM>.  Each plugin has an associated meta-information
+resource which describes the plugin module.  This information can be accessed
+without even loading the plugin module.  At development time, the
+meta-information is maintained in an XML-format text file which has
+the same name as the plugin module, but with extension `<TT>.csplugin</TT>'.  Here
+is a sample meta-information resource for a plugin named `<TT>myplugin</TT>'
+(`<TT>myplugin.so</TT>' on Unix, `<TT>myplugin.dll</TT>' on Windows):
 </P><P>
 
-External projects which are based upon Crystal Space's Jam build system
-(`<TT>CS/mk/jam</TT>') inherit, for free, the capability of embedding
-meta-information within plugin modules (if supported by the platform).  Simply
-grab the newer `<TT>.jam</TT>' files from `<TT>CS/mk/jam</TT>', and add a few
-definitions to the project's `<TT>Jamconfig</TT>' file.  The exact set of
-definitions is platform-specific, so consult the appropriate Jam file
-(`<TT>unix.jam</TT>', `<TT>win32.jam</TT>', or `<TT>macosx.jam</TT>') to determine
-precisely which which definitions are required.  Here is a list of definitions
-required at the time of writing:
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;?xml version="1.0"?&#62;
+&#60;!-- myplugin.csplugin --&#62;
+&#60;plugin&#62;
+  &#60;scf&#62;
+    &#60;classes&#62;
+      &#60;class&#62;
+        &#60;name&#62;myproj.myplugin.foo1&#60;/name&#62;
+        &#60;implementation&#62;MyClass1&#60;/implementation&#62;
+        &#60;description&#62;My first custom foo class&#60;/description&#62;
+      &#60;/class&#62;
+      &#60;class&#62;
+        &#60;name&#62;myproj.myplugin.foo2&#60;/name&#62;
+        &#60;implementation&#62;MyClass2&#60;/implementation&#62;
+        &#60;description&#62;My second custom foo class&#60;/description&#62;
+        &#60;requires&#62;
+          &#60;class&#62;myproj.myplugin.bar1&#60;/class&#62;
+          &#60;class&#62;myproj.myplugin.bar2&#60;/class&#62;
+        &#60;/requires&#62;
+      &#60;/class&#62;
+    &#60;/classes&#62;
+  &#60;/scf&#62;
+&#60;/plugin&#62;
+</pre></td></tr></table></P><P>
+
+The top-level node of a meta-information file is named <CODE>&#60;plugin&#62;</CODE>.  All
+SCF-related information is contained within an <CODE>&#60;scf&#62;</CODE> child node.
+Plugin modules can export multiple named SCF classes.  Each exported class
+is represented by a <CODE>&#60;class&#62;</CODE> node within the <CODE>&#60;classes&#62;</CODE> group.  The
+<CODE>&#60;name&#62;</CODE> node of a <CODE>&#60;class&#62;</CODE> is the class' SCF name.  The
+<CODE>&#60;implementation&#62;</CODE> node references the C++ class which actually implements
+the named SCF class.  This is the same name that is privided as an
+argument to the <CODE>SCF_IMPLEMENT_FACTORY()</CODE> macro.  When an SCF class
+depends upon other SCF classes, the dependencies are indicated via the
+optional <CODE>&#60;requires&#62;</CODE> group, which contains one <CODE>&#60;class&#62;</CODE> node per
+dependency.
 </P><P>
 
-<DL COMPACT>
-<DT>Unix
-<DD><CODE>EMBED_META = yes</CODE><BR>
-<CODE>LIBBFD.AVAILABLE = yes</CODE><BR>
-<CODE>OBJCOPY.AVAILABLE = yes</CODE><BR>
-<CODE>CMD.OBJCOPY = objcopy</CODE>
+The above example meta-information resource indicates that the plugin exports
+two C++ classes, `<SAMP>MyClass1</SAMP>' and `<SAMP>MyClass2</SAMP>' under the SCF class
+names `<SAMP>myproj.myplugin.foo1</SAMP>' and `<SAMP>myproj.myplugin.foo2</SAMP>',
+respectively.  Furthermore, the second exported class has a dependency upon two
+other SCF classes, `<SAMP>myproj.myplugin.bar1</SAMP>' and
+`<SAMP>myproj.myplugin.bar2</SAMP>'.  SCF will ensure that these other classes are
+loaded before it instantiates `<SAMP>MyClass2</SAMP>'.
+</P><P>
+
+Meta-information in the `<TT>.csplugin</TT>' file is extensible; it is not
+restricted to SCF-only usage.  Plugin authors can choose to publish
+supplementary information about plugins in addition to the SCF information
+already published.  As a hypothetical example, image loading plugins might
+desire to publish <EM>image indentification</EM> information which would allow the
+image loading multiplexor to selectively request image loading plugins
+<EM>on-demand</EM>, rather than requesting all plugins unconditionally, even if
+they are not needed.  Here is a possible meta-information table for a PNG
+image loader (with the <CODE>&#60;scf&#62;</CODE> node collapsed to `<SAMP><small>...</small></SAMP>' for the
+sake of illustration):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;?xml version="1.0"?&#62;
+&#60;!-- cspngimg.csplugin --&#62;
+&#60;plugin&#62;
+  &#60;scf&#62;...&#60;/scf&#62;
+  &#60;imageloader&#62;
+    &#60;imagetype&#62;
+      &#60;class&#62;crystalspace.graphic.image.io.png&#60;/class&#62;
+      &#60;identify&#62;
+        &#60;mimetype&#62;image/png&#60;/mimetype&#62;
+        &#60;extension&#62;png&#60;/extension&#62;
+        &#60;extension&#62;PNG&#60;/extension&#62;
+        &#60;scan length="4" bytes="\0x89PNG"/&#62;
+     &#60;/identify&#62;
+    &#60;/imagetype&#62;
+  &#60;/imageloader&#62;
+&#60;/plugin&#62;
+</pre></td></tr></table></P><P>
+
+In this example, the PNG loader meta-information tells the multiplexor
+several different ways to identify a PNG image:
+</P><P>
+
+<UL>
+<LI>
+By checking MIME type, if available.
+<LI>
+By checking file extension, if available.
+<LI>
+By checking for the <EM>magic</EM> identification string `<SAMP>\0x89PNG</SAMP>' in the
+raw image data.
+</UL>
 <P>
 
-<DT>Windows
-<DD><CODE>EMBED_META = yes</CODE>
-<P>
+If the multiplexor identifies the image as PNG, only then will it actually
+request the PNG loader plugin.
+</P><P>
 
-<DT>MacOS/X
-<DD><CODE>EMBED_META = yes</CODE>
-</DL>
-<P>
-
-<A NAME="SCF Plugin Discovery"></A>
+<A NAME="SCF Meta Info Embedding"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_144.html#SEC363"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_146.html#SEC365"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_144.html#SEC366"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_146.html#SEC368"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

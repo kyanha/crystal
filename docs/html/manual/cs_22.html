@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: MSVC</TITLE>
+<TITLE>Crystal Space: RPM</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: MSVC">
-<META NAME="keywords" CONTENT="Crystal Space: MSVC">
+<META NAME="description" CONTENT="Crystal Space: RPM">
+<META NAME="keywords" CONTENT="Crystal Space: RPM">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -26,40 +26,136 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A NAME="SEC40"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_21.html#SEC36"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_23.html#SEC41"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_19.html#SEC26"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_20.html#SEC35"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_25.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_23.html#SEC44"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_20.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_21.html#SEC36"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_23.html#SEC44"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 2.4.2 Windows using Microsoft Visual C++ </H3>
+<H4> 2.4.1.1 Unix using RPM packages </H4>
 <!--docid::SEC40::-->
 <P>
 
-Crystal Space can be built with Microsoft Visual C++ 6 and 7.
-</P><P>
-
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_23.html#SEC41">2.4.2.1 Microsoft Visual C++ 6</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_24.html#SEC58">2.4.2.2 Microsoft Visual C++ 7</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
+<A NAME="SEC41"></A>
+<H3> Getting RPMs packages </H3>
+<!--docid::SEC41::-->
 <P>
 
-<A NAME="MSVC6"></A>
+Building your own RPMs is probably the best option. This way you won't
+have to find distribution specific package, and you'll be able to set building
+options. For this purpose, `<TT>CS/scripts/rpm/cs.spec</TT>' file is provided with
+Crystal Space.
+</P><P>
+
+<A NAME="SEC42"></A>
+<H3> Configure your system to build RPMs packages </H3>
+<!--docid::SEC42::-->
+<P>
+
+Building RPMs packages involves a few settings, which are covered in
+the following page:
+<A HREF="http://qa.mandrakesoft.com/twiki/bin/view/Main/RpmHowTo#Preliminary_tasks">http://qa.mandrakesoft.com/twiki/bin/view/Main/RpmHowTo#Preliminary_tasks</A>
+</P><P>
+
+<A NAME="SEC43"></A>
+<H3> Building your own RPMs packages from Crystal Space source archive </H3>
+<!--docid::SEC43::-->
+<P>
+
+Once you've set your system to build RPM packages as a regular user:
+</P><P>
+
+<OL>
+<LI>
+Get Crystal Space sources archive (see section <A HREF="cs_7.html#SEC7">1.6 Where to Get Crystal Space</A>) and put it in your
+`<TT>rpm/SOURCES/</TT>' directory.
+<P>
+
+<LI>
+Go into your `<TT>rpm/SPECS</TT>' directory.
+<P>
+
+<LI>
+Extract the `<TT>CS/scripts/rpm/cs.spec</TT>' file, and put it in your
+`<TT>rpm/SPECS/</TT>' directory.
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cd /home/user/rpm/SPECS
+tar xvjf /home/user/rpm/SOURCES/cs-current-snapshot.tar.bz2 \
+     CS/scripts/rpm/cs.spec
+mv CS/scripts/rpm/cs.spec /home/user/rpm/SPECS
+rm -rf CS/
+</pre></td></tr></table></P><P>
+
+<LI>
+Verify the source archive filename you downloaded is set in accordance with the
+filename part of the URL in `<SAMP>Source:</SAMP>' line of `<TT>cs.spec</TT>',
+otherwise <CODE>rpm</CODE> won't be able to do his job.
+</OL>
+<P>
+
+<UL>
+<LI>To build binary RPMs only, use <CODE>rpm -bb cs.spec</CODE>
+<LI>To build source RPMs as well, use <CODE>rpm -ba cs.spec</CODE>
+</UL>
+<P>
+
+Build options are specified by using <CODE>--with</CODE> switch. The following
+values are supported:
+</P><P>
+
+<UL>
+<LI>
+<CODE>--with newrenderer</CODE> to build with New Renderer support.
+<LI>
+<CODE>--with perl</CODE> to build with Perl support.
+<LI>
+<CODE>--with debug</CODE>. This option may be useless since <CODE>rpm</CODE>
+strips files before packaging.
+</UL>
+<P>
+
+So, to build all packages, with New Renderer and Perl support, use:
+</P><P>
+
+<CODE>rpm -ba cs.spec --with newrenderer --with perl</CODE>
+</P><P>
+
+The binary RPMs should be under `<TT>rpm/RPMS/</TT>', and the source RPM
+in `<TT>rpm/SRPMS/</TT>'.
+</P><P>
+
+The process builds three Crystal Space binary RPMs packages :
+</P><P>
+
+<OL>
+<LI>
+`<SAMP>crystalspace</SAMP>' base package. It provides executables, plugins, data and
+configuration files.
+<LI>
+`<SAMP>crystalspace-devel</SAMP>' development package. It provides headers and static
+libraries needed for development.
+<LI>
+`<SAMP>crystalspace-doc</SAMP>' documentation package. It provides api and user manual
+documentation in HTML format.
+</OL>
+<P>
+
+<A NAME="MSVC"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_21.html#SEC36"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_23.html#SEC41"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_19.html#SEC26"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_20.html#SEC35"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_25.html#SEC73"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_23.html#SEC44"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_20.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_21.html#SEC36"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_23.html#SEC44"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

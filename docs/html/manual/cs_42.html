@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Config Sound</TITLE>
+<TITLE>Crystal Space: Config Engine</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Config Sound">
-<META NAME="keywords" CONTENT="Crystal Space: Config Sound">
+<META NAME="description" CONTENT="Crystal Space: Config Engine">
+<META NAME="keywords" CONTENT="Crystal Space: Config Engine">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,94 +23,149 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC117"></A>
+<A NAME="SEC118"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_41.html#SEC114"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_41.html#SEC117"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_43.html#SEC121"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_37.html#SEC102"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_38.html#SEC109"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_45.html#SEC123"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_38.html#SEC106"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_39.html#SEC113"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_46.html#SEC127"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 3.4.4 Sound Configuration </H3>
-<!--docid::SEC117::-->
-<P>
-
-The following options can be used to configure the sound modules.
-The default values are stored in `<TT>CS/data/config/sound.cfg</TT>'.
-</P><P>
-
-<A NAME="SEC118"></A>
-<H4> General Sound Configuration </H4>
+<H3> 3.4.3 Engine Configuration </H3>
 <!--docid::SEC118::-->
 <P>
 
-These options apply to all sound renderers:
+This section describes the configuration keys used by the 3D engine.
+The default values are stored in `<TT>CS/data/config/engine.cfg</TT>'.
 </P><P>
 
-<DL COMPACT>
-<DT><CODE>Sound.Volume = [0..1]</CODE>
-<DD>Set the global volume. A value of 0 means silence, 1 means as loud as
-possible. Default is 1.
-</DL>
-<P>
-
 <A NAME="SEC119"></A>
-<H4> Software Sound Configuration </H4>
+<H4> Lighting Options </H4>
 <!--docid::SEC119::-->
 <P>
 
-These options only apply to the software sound renderer:
-</P><P>
-
 <DL COMPACT>
-<DT><CODE>Sound.Software.Frequency = &#60;frequency&#62;</CODE>
-<DD>This sets the output frequency. Possible values depend on your system and
-sound card, but divisors of 44100 (e.g. 22050 or 11025) usually work.
-Default is 44100 (optimal).
+<DT><CODE>Engine.Lighting.Ambient.Red = [0..255]</CODE>
+<DD><DT><CODE>Engine.Lighting.Ambient.Green = [0..255]</CODE>
+<DD><DT><CODE>Engine.Lighting.Ambient.Blue = [0..255]</CODE>
+<DD>These keys set the amount of ambient light that is used when lighting is
+calculated. This amount of light is present on all textures even if no light
+source shines on them.  Default values are 20 luminosity units.
 <P>
 
-<DT><CODE>Sound.Software.16Bits = &#60;yes/no&#62;</CODE>
-<DD>Enables 16 bit sound output. Default is yes.
+<DT><CODE>Engine.Lighting.CosinusFactor = [-1..1]</CODE>
+<DD>Control how much the angle of the light with the polygon it hits affects
+the final light value. Values ranges from -1 to 1. With -1 the polygons
+will get no light at all. With 0 it will be perfect cosine rule. With 1 the
+cosine is ignored and it will be like CrystalSpace was in the past. Note
+that changing this value at runtime only has an effect on dynamic lights.
+This option corresponds to the <CODE>-cosfact</CODE> commandline option and the
+`<SAMP>cosfact</SAMP>' console command. (default: 0)
 <P>
 
-<DT><CODE>Sound.Software.Stereo = &#60;yes/no&#62;</CODE>
-<DD>Enables stereo sound output. Default is yes.
+<DT><CODE>Engine.Lighting.Radiosity = &#60;yes/no&#62;</CODE>
+<DD>If this option is set to yes, the pseudo-radiosity system will be enabled.
+This means that the precalculated lighting routines will also reflect light on
+normal polygons (and not only on mirrors). The number of allowed
+reflections depends on the `<SAMP>Engine.Lighting.Reflections</SAMP>' variable. Using
+this flag you get a sort of simulation of radiosity. Note that it greatly
+increases the time needed for precalculated lighting. This option only has
+effect in combination with the <CODE>-relight</CODE> commandline option. Also note
+that this option is currently broken (i.e. crashes CS).
+<P>
+
+<DT><CODE>Engine.Lighting.Reflections = &#60;number&#62;</CODE>
+<DD>This sets the maximum number of reflections for a light beam. More exactly,
+it sets how often a beam of light may hit a polygon in the same sector.
+Setting this to 0 would produce totally dark polygons (apart from ambient
+light). A value of 1 means that light may hit polygons but is not reflected
+to other polygons. Higher values allow more reflections. This is especially
+useful in combination with mirrors. If pseudo-radiosity is enabled with the
+`<SAMP>Engine.Lighting.Radiosity</SAMP>' key, light is also reflected from non-mirror
+polygons. (default: 1)
 </DL>
 <P>
 
 <A NAME="SEC120"></A>
-<H4> Wave-Out Configuration </H4>
+<H4> Radiosity Options </H4>
 <!--docid::SEC120::-->
 <P>
 
-These options only apply to the Wave-Out sound driver under Windows:
-</P><P>
-
 <DL COMPACT>
-<DT><CODE>Sound.WaveOut.Refresh = &#60;rate&#62;</CODE>
-<DD>Sets the refresh rate of the sound output as a per-second rate. The lower
-this rate, the more time passes between your application starting to play a
-sound and the sound actually being audible. Because the Wave-Out driver uses
-a triple buffering system, this delay is 2 to 3 seconds divided by the
-refresh rate. So you should set a rate of at least 10 to prevent serious
-delays. Default is 5.
+<DT><CODE>Engine.Lighting.Radiosity.Enable = &#60;yes/no&#62;</CODE>
+<DD>This option activates the new radiosity system. To recalculate
+radiosity run walktest -relight on the level. (default: no)
+<P>
+
+<DT><CODE>Engine.Lighting.Radiosity.StopPriority = &#60;float&#62;</CODE>
+<DD>Internally radiosity computes a priority for each
+polygon. The priority is in the range of 0..256, where 0 means nothing
+to do. When the highest priority become lower then the stoppriority,
+radiosity calculation will stop. (Default: 0.1)
+<P>
+
+<DT><CODE>Engine.Lighting.Radiosity.StopImprovement = &#60;float&#62;</CODE>
+<DD>When the highest priority becomes lower than
+the highest priority at the start of calculation divided by this value
+calculation will stop. (Default: 100.0)
+<P>
+
+<DT><CODE>Engine.Lighting.Radiosity.StopIterations = &#60;number&#62;</CODE>
+<DD>After processing this many polygons the radiosity
+calculation will stop. This will prevent endless loops. If your level has 
+many polygons you may need to increase the value. (Default: 10000)
+<P>
+
+<DT><CODE>Engine.Lighting.Radiosity.SourcePatchSize = &#60;number&#62;</CODE>
+<DD>This value will make radiosity calculation use
+the average of NxN size patches on source polygons when shooting light 
+from one polygon to another (but not on destination polygons). Increasing
+the value will speed up computation considerably, while reducing quality
+only slightly. Try values of 1..256, depending on the LightmapSize. 
+Use only powers of two. (Default: 16)
+<P>
+
+<DT><CODE>Engine.Lighting.Radiosity.ColourBleed = &#60;float&#62;</CODE>
+<DD>This variable controls the amount of color emitted
+by a polygon. The colour is taken by examining the texture of the polygon.
+Thus a blue texture will reflect blueishly. So 0.0 will remove texture
+influence, making the level render as if all white. And high values will
+make colour more important. Try 0.0-4.0. 
+(Default: 1.0)
+<P>
+
+<DT><CODE>Engine.Lighting.Radiosity.DoStaticSpecular = &#60;yesno&#62;</CODE>
+<DD>yes will turn on specular lighting using
+radiosity. Since this is precalculation, only a static 'fake' specular
+effect can be given. Does not seem to give huge effects, but I left
+in the code so you can play with it :-). (Default: no)
+<P>
+
+<DT><CODE>Engine.Lighting.Radiosity.StaticSpecularAmount = &#60;float&#62;</CODE>
+<DD>The amount of specular lighting to add
+when lighting. Try between 0 and 1. (Default: 0.70)
+<P>
+
+<DT><CODE>Engine.Lighting.Radiosity.StaticSpecularTightness = &#60;number&#62;</CODE>
+<DD>tightness of the specular highlight.  a power of 2 of this variable is 
+used for speed. Thus try 0-10. (Default: 4)
 </DL>
-<A NAME="Config Console"></A>
+<A NAME="Config Sound"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_41.html#SEC114"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_41.html#SEC117"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_43.html#SEC121"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_37.html#SEC102"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_38.html#SEC109"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_45.html#SEC123"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_38.html#SEC106"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_39.html#SEC113"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_46.html#SEC127"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

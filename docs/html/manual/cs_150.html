@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: CSWS</TITLE>
+<TITLE>Crystal Space: csGeom</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: CSWS">
-<META NAME="keywords" CONTENT="Crystal Space: CSWS">
+<META NAME="description" CONTENT="Crystal Space: csGeom">
+<META NAME="keywords" CONTENT="Crystal Space: csGeom">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,55 +23,165 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC372"></A>
+<A NAME="SEC375"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_151.html#SEC373"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_151.html#SEC376"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 6.4 Crystal Space Windowing System (CSWS) </H2>
-<!--docid::SEC372::-->
+<H2> 6.3 Geometry Library (<CODE>csGeom</CODE>) </H2>
+<!--docid::SEC375::-->
 <P>
 
-<EM>Written by Andrew Zabolotny, <A HREF="mailto:bit@eltech.ru">bit@eltech.ru</A>.</EM>
+This library is used to perform any calculations dealing with 2D or 3D
+geometry. It contains several more or less independent classes. The most
+important classes are:
 </P><P>
 
-The main goal of Crystal Space Windowing System (CSWS) is to provide a
-clean, effective and cross-platform base for creating Crystal Space-related
-utilities.  The goal for writing this manual is not to give a extensive overview
-of the windowing system, but rather to give the basic concepts so that you have
-something to start with.  Currently, the windowing system API changes too
-quickly to keep an extensive overview complete and up-to-date; however the
-basic concepts are not likely to change.
-</P><P>
-
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_151.html#SEC373">6.4.1 Concepts</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_152.html#SEC377">6.4.2 Components</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_153.html#SEC381">6.4.3 Events</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_154.html#SEC382">6.4.4 Clipping</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_155.html#SEC385">6.4.5 Quick Tutorial</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
+<UL>
+<LI>
+<EM>Geometric Functionality</EM>
 <P>
 
-<A NAME="CSWS Concepts"></A>
+These are functions that do not fit in one of the following classes, for
+example to calculate intersections. They are grouped as static member
+functions of one class. (It does not make sense to create objects of this
+class, as it only contains these static member functions).
+</P><P>
+
+<LI>
+<EM>Vectors</EM>
+<P>
+
+These classes represent 2D and 3D vectors.  There is also a variant of the 3D
+vector class which uses double precision numbers to represent its elements,
+rather than the single precision numbers used by the standard 3D vector class.
+These classes supply specially overloaded operators so you can use them in
+calculations as you can use integer or float values.  The possible operators
+are:
+</P><P>
+
+<UL>
+<LI>
+Add two vectors
+<LI>
+Subtract two vectors
+<LI>
+Multiply a vector and a scalar
+<LI>
+Divide a vector by a scalar
+<LI>
+Dot product (uses `<SAMP>*</SAMP>' operator)
+<LI>
+Cross product (uses `<SAMP>%</SAMP>' operator)
+<LI>
+Comparison of two vectors (`<SAMP>==</SAMP>' and `<SAMP>!=</SAMP>')
+<LI>
+Projecting one vector on another (`<SAMP>&#60;&#60;</SAMP>' and `<SAMP>&#62;&#62;</SAMP>')
+<LI>
+Inverting a vector (`<SAMP>-</SAMP>' operator)
+<LI>
+Comparing all components with a small epsilon value (`<SAMP>&#60;</SAMP>' and `<SAMP>&#62;</SAMP>')
+</UL>
+<P>
+
+They also contain some functions to normalize the vector or return its length.
+Single and double precision vectors can be mixed in calculations.
+</P><P>
+
+<LI>
+<EM>Matrices</EM>
+<P>
+
+These are 2D and 3D matrices. They are used to transform (rotate, scale etc.)
+vectors. They also use their own operators for easier usage (for example to
+multiply a matrix and a vector).
+</P><P>
+
+<LI>
+<EM>Transforms</EM>
+<P>
+
+A transformation consists of a matrix and a vector. In contrast to just a
+matrix you can also include movement in a transform. It also uses its own
+operators.
+</P><P>
+
+<LI>
+<EM>Quaternions</EM>
+<P>
+
+Encapsulation of quaternion functionality.
+</P><P>
+
+<LI>
+<EM>Planes</EM>
+<P>
+
+These classes represent 2D and 3D planes. They can, for example, be used to
+split polygons or to calculate the distance of a point from a polygon (or
+line segments instead of polygons for 2D planes).
+</P><P>
+
+<LI>
+<EM>Line Segments</EM>
+<P>
+
+A line segment is a straight line between two points, which ends at these
+points. It could for example be used to define start and finish point of
+straight movement. There are 2D and 3D segments.
+</P><P>
+
+<LI>
+<EM>Polygons</EM>
+<P>
+
+Polygons are an important class used heavily in the 3D engine. A polygon is
+built from at least three points, called <EM>vertices</EM>. All vertices must
+be on the same plane in space. The polygons outline consists of all line
+segments from one vertex to the next one, including the segment from the last
+vertex to the first one. These segments may not cross. Also, the polygon
+must be convex, which means that if you take two arbitrary points inside the
+polygon and draw a straight line between them, it may not cross any of the
+polygon's edges.  A polygon has two faces, defined by the order of the
+vertices: If you count through all vertices, and from your position they appear
+in clockwise order, then you are viewing the front face, otherwise you are
+viewing the back face.  The <EM>normal</EM> vector of the polygon always points
+out perpendicular from the front face.
+</P><P>
+
+There are different types of polygons concerning management of the vertices
+and how they can be used. First, there are the basic 2D and 3D polygons that
+store their vertices as 3D vectors. The clippers are similar to this but
+they are specialized on clipping other polygons (you lay the clipper somewhere
+on a polygon and cut everything away of the polygon that is outside the
+clipper, resulting in a new, smaller polygon). Then there is a 2D polygon
+that stores its sides as line segments, not its vertices as vectors.
+The most important type for the engine is the indexed polygon, which does not
+store its vertices as 3D vectors but only as indices in a table.
+</UL>
+<P>
+
+There are also other classes that are mostly used inside the engine, such as
+bounding boxes, frustums, polygon pools, etc.
+<A NAME="CSWS"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_151.html#SEC373"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_151.html#SEC376"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

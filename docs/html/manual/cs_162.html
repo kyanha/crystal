@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: ProcTextures</TITLE>
+<TITLE>Crystal Space: Graphics Drivers</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: ProcTextures">
-<META NAME="keywords" CONTENT="Crystal Space: ProcTextures">
+<META NAME="description" CONTENT="Crystal Space: Graphics Drivers">
+<META NAME="keywords" CONTENT="Crystal Space: Graphics Drivers">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,158 +23,80 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC393"></A>
+<A NAME="SEC396"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC389"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC395"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC397"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC393"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.3.1 Procedural Texture System </H3>
-<!--docid::SEC393::-->
+<H2> 7.3 Graphics Drivers </H2>
+<!--docid::SEC396::-->
 <P>
 
-Crystal Space supports procedural textures. These are textures that you can
-change dynamically (at runtime) so that you get the appearance of an
-animated texture.
+The graphics system consists of two or three drivers:
 </P><P>
 
-The current implementation of procedural textures works by rendering
-the contents of the texture on screen and then doing a copy to the
-texture memory. This means that procedural textures must be updated before
-the 3D view starts rendering and it also means that the 3D view must make
-sure that that part of the screen is changed (i.e. either put geometry
-there or manually clear screen every frame). Note that all textures
-can be updated with this technique. i.e. you don't need to mark a texture
-as being procedural.
-</P><P>
-
-<A NAME="SEC394"></A>
-<H4> Updating a Texture Image </H4>
-<!--docid::SEC394::-->
+<UL>
+<LI>
+2D Driver or Canvas
 <P>
 
-The following code demonstrates how you can update a texture image:
+This component manages the low-level access to the screen.  It supports
+primitive functions such as drawing pixels and lines, text output and direct
+access to the video memory.  There are several implementations of this
+component.  All are specific to some 3D Rasterizer (for example, the OpenGL 3D
+Rasterizer on Unix requires the OpenGL 2D XLib Driver).
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  bool UpdateTexture (iTextureWrapper* tex)
-  {
-    g3d-&#62;SetRenderTarget (tex-&#62;GetTextureHandle ());
-    if (!g3d-&#62;BeginDraw (CDRAW_2DGRAPHICS)) return false;
-    <small>...</small>
-    // Do various operations on g2d.
-    <small>...</small>
-    g3d-&#62;FinishDraw ();
-    return true;
-  }
-</pre></td></tr></table></P><P>
-
-It is also possible to do 3D graphics on a procedural texture. Note that
-the code above overwrites what is currently displayed on screen! So make
-sure to do it before anything you need is rendered.
+<EM>Note</EM>: You need not load the 2D driver yourself.  It is loaded
+automatically by the according 3D driver.
 </P><P>
 
-A useful function with procedural textures is <CODE>iGraphics2D-&#62;Blit()</CODE>
-which can copy a RGB buffer from memory directly to the screen. This
-is often useful for procedural textures.
-</P><P>
-
-<CODE>SetRenderTarget</CODE> also has a second parameter which is called
-`<SAMP>persistant</SAMP>' and which is set to false by default. If you set this to
-true then the previous contents of the texture is copied on screen first.
-That means you can make modifications to an existing texture. With this
-parameter set to false (default) you have to create the entire texture
-again. Note that setting `<SAMP>persistant</SAMP>' to true is slower if you intend
-to update the entire texture area anyway.
-</P><P>
-
-<A NAME="SEC395"></A>
-<H4> Using csProcTexture </H4>
-<!--docid::SEC395::-->
+<LI>
+3D Rasterizer
 <P>
 
-In the `<SAMP>cstool</SAMP>' library there is a convenience class you can use
-to make updating of procedural textures easier. This class is called
-<CODE>csProcTexture</CODE>. Basically you make a subclass of this class like this:
+This component is required by the 3D Engine but is also useful standalone.
+This driver is used to draw 3d graphics and also 2D bitmaps on screen.  It
+automatically loads a 2D driver on startup.  There are currently several
+implementations of this component: Software, OpenGL, and Null (for applications
+that don't need 3D rendering but still want to use Crystal Space). Additionally
+there is also a new OpenGL renderer that is in development right now.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "cstool/proctex.h"
-class MyProcTexture : public csProcTexture
-{
-public:
-  MyProcTexture () { }
-  virtual ~MyProcTexture () { }
-  virtual bool PrepareAnim ();
-  virtual void Animate (csTicks current_time);
-};
+<LI>
+Shader System
+<P>
 
-bool MyProcTexture::PrepareAnim ()
-{
-  if (anim_prepared) return true;
-  if (!csProcTexture::PrepareAnim ()) return false;
-  <small>...</small>
-  // Do your stuff.
-  return true;
-}
+Some of the renderers (currently the OpenGL renderer) also require an
+additional shader system. When this is present it is possible
+to make more advanced texture effects using shaders.
+</UL>
+<P>
 
-void MyProcTexture::Animate (csTicks current_time)
-{
-  g3d-&#62;SetRenderTarget (<small>...</small>);
-  <small>...</small>
-  g3d-&#62;FinishDraw ();
-}
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_163.html#SEC397">7.3.1 Procedural Texture System</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
 
-</pre></td></tr></table></P><P>
-
-To use this procedural texture you must do the following:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  MyProcTexture* proctex = new MyProcTexture ();
-  if (proctex-&#62;Initialize (object_reg))
-  {
-    iTextureWrapper* txt = proctex-&#62;GetTextureWrapper ();
-    iMaterialWrapper* mat = engine-&#62;CreateMaterial ("mymaterial", txt);
-    <small>...</small>
-  }
-</pre></td></tr></table></P><P>
-
-<CODE>csProcTexture</CODE> will make sure that your <CODE>Animate</CODE> routine
-is called when needed. In practice this means that your animate routine
-will be called AFTER the first time the texture was needed. This is because
-<CODE>Animate</CODE> will change the display (because procedural textures
-render on screen) so it can't be done while rendering other objects. In
-general this is not really a problem since typically the material will be
-needed as soon as only a tiny part of the object is visible and this will
-only be visible for one frame.
-</P><P>
-
-To minimize the impact of this effect you can make sure that the initial
-contents of the procedural texture is reasonable. You can do that by
-manually calling <CODE>Animate</CODE> for example.
-</P><P>
-
-Another way to fix this is by letting your procedural texture subclass
-set the `<SAMP>always_animate</SAMP>' flag to true. Of course this will make
-things slower.
-</P><P>
-
-<A NAME="Sound Drivers"></A>
+<A NAME="ProcTextures"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC389"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC395"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC397"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC393"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

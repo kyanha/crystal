@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Configuration File</TITLE>
+<TITLE>Crystal Space: Common Command Line Options</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Configuration File">
-<META NAME="keywords" CONTENT="Crystal Space: Configuration File">
+<META NAME="description" CONTENT="Crystal Space: Common Command Line Options">
+<META NAME="keywords" CONTENT="Crystal Space: Common Command Line Options">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,63 +23,79 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC101"></A>
+<A NAME="SEC104"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC100"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_37.html#SEC102"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_34.html#SEC99"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_34.html#SEC99"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_45.html#SEC123"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_37.html#SEC105"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_46.html#SEC127"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 3.2 Configuration File </H2>
-<!--docid::SEC101::-->
+<H2> 3.1 Common Command Line Options </H2>
+<!--docid::SEC104::-->
 <P>
 
-Many applications have an accompanying configuration file which describes
-configuration options specific to that application.  Similarly, plug-in
-modules can have configuration files.  Configuration files are named with the
-file extension `<TT>.cfg</TT>' and are typically located within the VFS
-virtual directory `<TT>/config/</TT>' (see section <A HREF="cs_158.html#SEC389">7.2 Virtual File System (VFS)</A>) which is often mounted at the
-physical location `<TT>CS/data/config</TT>' for Crystal Space sample applications.
+All Crystal Space applications respond to a common set of command line
+options.  Many applications define additional options which are specific
+to that particular application.
 </P><P>
 
-The format of these files is simple. They consist of a number of <EM>keys</EM>,
-each of which consists of a name, a <EM>value</EM> and an optional comment.  Key
-names contain dots to create a pseudo-hierarchy, similar to a file system; for
-example: `<SAMP>Video.OpenGL.EnableDither</SAMP>'.  This should be interpreted as the
-`<SAMP>EnableDither</SAMP>' option in the sub-section `<SAMP>OpenGL.</SAMP>', which resides in
-section `<SAMP>Video.</SAMP>' (note that the dots are part of the key name).
+The most immediately useful command line option which all applications
+respond to is `<SAMP>-help</SAMP>'.  This command list all of the other options to
+which an application responds.
 </P><P>
 
-The file itself looks something like this:
+The default setting for each command line option is set internally in the 
+program unless there is a corresponding line for it in the configuration file.  
+For example, normally the default for <CODE>-gamma</CODE> is <CODE>1.0</CODE> (the default 
+brightness level).  But when <CODE>GAMMA=2.0</CODE> is set in configuration file 
+`<TT>soft3d.cfg</TT>' the default will be <CODE>2.0</CODE> instead.  Command line 
+options always override default values.  
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>; This is the comment for the first batch of keys.
-Section.Keyname = Value
-; Comments may be
-; several lines long
-; The option 'Section.TestOption' (below) has no attached comment.
-Video.OpenGL.EnableDither = true
-Section.TestOption = false
-; Comments at the end of the file do not belong to any configuration
-; key. When a config file is loaded and saved again later this
-; end-of-file comment is retained at the end of the file.
-</pre></td></tr></table><A NAME="Config Domains"></A>
+Some interesting options to play with are:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-mode=640x480</CODE>
+<DD>Use this option to set the size of the display.
+<P>
+
+<DT><CODE>-canvas=sdl2d</CODE>
+<DD>Use this option to select the type of 2D canvas to use.
+<P>
+
+<DT><CODE>-video=opengl</CODE>
+<DD>(or software, ...).
+Use this option to select type of display driver to use.  Other options
+are <CODE>software</CODE>, <CODE>null</CODE>, etc.
+<P>
+
+<DT><CODE>-relight</CODE>
+<DD>Use this option to recalculate all lightmaps after you changed lighting
+or geometry in a level that you're trying. If you don't do this you either
+get the old lightmaps or no lightmaps at all.
+<P>
+
+<DT><CODE><EM>@@@FIXME</EM></CODE>
+<DD>Document the remaining common command line options.
+</DL>
+<A NAME="Configuration File"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC100"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_37.html#SEC102"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_34.html#SEC99"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_34.html#SEC99"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_45.html#SEC123"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_37.html#SEC105"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_46.html#SEC127"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

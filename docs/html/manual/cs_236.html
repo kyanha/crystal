@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: AWS</TITLE>
+<TITLE>Crystal Space: Model Data Structure</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: AWS">
-<META NAME="keywords" CONTENT="Crystal Space: AWS">
+<META NAME="description" CONTENT="Crystal Space: Model Data Structure">
+<META NAME="keywords" CONTENT="Crystal Space: Model Data Structure">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,61 +23,115 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC676"></A>
+<A NAME="SEC679"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC675"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC677"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC674"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC678"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC680"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC665"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC678"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC680"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 7.11 Alternate Windowing System (AWS) </H2>
-<!--docid::SEC676::-->
+<H3> 7.10.1 Common Model Data Structure (<CODE>iModelData</CODE>) </H3>
+<!--docid::SEC679::-->
 <P>
 
-<EM>Written by Christopher Nelson, <A HREF="mailto:paradox@bbhc.org">paradox@bbhc.org</A>.
-Conversion to Texinfo by F. Richter, <A HREF="mailto:resqu@gmx.ch">resqu@gmx.ch</A>.</EM>
+The IDS is built by a simple concept. All components implement
+<CODE>iObject</CODE>. Except a few cases, the structure is built using the
+<CODE>iObject</CODE> hierarchy. The following components are currently used:
 </P><P>
 
-The Alternate Windowing System is a plugin designed to replace
-the old monolithic Crystal Space Windowing System (CSWS). It utilizes an
-region optimal frame-thrower and can draw to either the default context,
-or to any user-supplied context (such as a procedural texture).
-AWS also supports a definition system and access to
-components via a <EM>signal</EM>/<EM>slot</EM> mechanism. All GUI aspects can be
-modified by the GUI designer in definition files without the
-need to recompile the base application. This allows game interfaces to be
-easily <EM>skinned</EM> by non-programmers.  For example code, see 
-<CODE>apps/tutorial/awstut</CODE> and <CODE>apps/tests/awstest</CODE>.
-</P><P>
-
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_237.html#SEC677">7.11.1 Quick Start</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_238.html#SEC678">7.11.2 Signals: Responding To User Input</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_239.html#SEC679">7.11.3 Creating Custom AWS Components</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_243.html#SEC683">7.11.4 AWS Standard Sink Trigger Reference</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_244.html#SEC684">7.11.5 AWS Standard Component Signal and Action Reference</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_259.html#SEC784">7.11.6 In-Depth Explanation of AWS Architecture</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_260.html#SEC786">7.11.7 Using QT Designer To Create AWS Definition Files</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
+<DL COMPACT>
+<DT><EM>Scene</EM>
+<DD>This is the main object. It contains any number of <EM>objects</EM>,
+<EM>light sources</EM>, <EM>cameras</EM>, <EM>materials</EM> and <EM>textures</EM>.
 <P>
 
-<A NAME="AWS Quick Start"></A>
+<DT><EM>Texture</EM>
+<DD>An image, which can be stored as an <CODE>iImage</CODE>, an <CODE>iTextureWrapper</CODE>,
+or a filename.
+<P>
+
+<DT><EM>Material</EM>
+<DD>A material, which can be stored as an <CODE>iMaterial</CODE> or an
+<CODE>iMaterialWrapper</CODE>.
+<P>
+
+<DT><EM>Camera</EM>
+<DD>A camera that looks into the scene. It currently contains a position and
+up, front and right vectors.
+<P>
+
+<DT><EM>Light Source</EM>
+<DD>A light source, consisting of position, brightness and color.
+<P>
+
+<DT><EM>Vertex Frame</EM>
+<DD>This is a collection of any number of vertex positions, any number of normal
+vectors, of color values and of texture coordinates (also called
+<EM>texels</EM>).
+<P>
+
+<DT><EM>Polygon</EM>
+<DD>A list of quadruples of index values. Every entry in the list contains an
+index for a vertex table, an index for a normal table, one for a color table
+and one for a texel table. To produce meaningful output, a polygon has to be
+used together with a vertex frame object.
+<P>
+
+<DT><EM>Object</EM>
+<DD>This is what model importing is usually about. An object can be as much as
+a complete level or as few as one polygon. It is simply something that you
+can build a mesh object from. This means that it doesn't even have to use
+polygons (it could use curves instead). This object itself is hardly more
+than a node in the <CODE>iObject</CODE> hierarchy.
+<P>
+
+Sub-objects are currently organized in a way that is closely related to the
+<EM>thing</EM> and <EM>sprite</EM> meshes used in CS: Every object contains a
+<EM>Default Vertex Frame</EM>, which is (of course) a vertex frame object. Also,
+an object contains any number of <EM>polygon</EM> objects. Take these together
+and you have the static shape of an object (and also the shape that is used
+when you build a thing mesh from it).
+</P><P>
+
+<DT><EM>Action</EM>
+<DD>For sprites, it is more difficult as you also want animation. An IDS
+object can also contain any number of <EM>action</EM> objects. An action is
+a list of frames and time values. Frames are also handled as generic IDS
+objects. However, they are special in the way that they are not contained in
+the action as <CODE>iObject</CODE> children but rather directly though the
+<CODE>iModelDataAction</CODE> interface. Currently the only types of frames that are
+allowed are vertex frames.
+<P>
+
+Finally, the time value system has to be explained. Time values are stored in
+a rather unusual way: The time that is stored with each frame is the point
+in time when the frame ends. For example, if the first frame lasts 50 msec,
+then the time value stored with it is 50 msec. If the second frame lasts 30
+msec, its time value is 80 (50+30). The last time value is also the total
+length of one animation cycle. Note that for interpolated animation this
+produces another effect: At the point <EM>zero</EM> in time, the frame to show
+is equal to the last stored frame. The animation then moves on to the first
+time value, shifting the frame to show over to the first stored frame.
+</DL>
+<P>
+
+<A NAME="AWS"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC675"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC677"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_234.html#SEC674"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC678"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC680"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC665"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC678"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC680"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Portability</TITLE>
+<TITLE>Crystal Space: Writing Documentation</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Portability">
-<META NAME="keywords" CONTENT="Crystal Space: Portability">
+<META NAME="description" CONTENT="Crystal Space: Writing Documentation">
+<META NAME="keywords" CONTENT="Crystal Space: Writing Documentation">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,331 +23,226 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC808"></A>
+<A NAME="SEC807"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC803"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC809"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC812"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC812"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC816"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 9.2 Portability </H2>
+<H2> 9.1 Writing Documentation </H2>
+<!--docid::SEC807::-->
+<P>
+
+This section contains guidelines and instructions for writing documentation
+for the Crystal Space project.  Read this section if you are interested in
+contributing to the documentation project.
+</P><P>
+
+These guidelines deal with subdivision of the documentation into files, into
+chapters and sections, and with node placing and linking.  To understand this
+document, you should know that <EM>chapters</EM> is the general division of a
+Texinfo file into several parts, and <EM>sections</EM> is the next subdivision.
+<EM>ToC</EM> means "Table of Contents".  "folder" and "directory" have the
+expected meaning.
+</P><P>
+
+Please follow these guidelines when writing documentation for Crystal Space.
+</P><P>
+
+<A NAME="SEC808"></A>
+<H4> General  </H4>
 <!--docid::SEC808::-->
 <P>
 
-<EM>Written by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>, with
-contributions by others.</EM>
+Write documentation using the Texinfo mark-up language. You can get more
+information at <A HREF="http://www.texinfo.org/">http://www.texinfo.org/</A>.
 </P><P>
 
-Crystal Space is a highly portable cross-platform 3D engine and toolkit.  As a
-contributor to the project, you should familiarize yourself with the issues
-discussed in this section in order to ensure maximum portability of code which
-you write and resources which you create.
+The documentation is converted from Texinfo to other formats, such as
+HTML. Conversion to most important formats happens automatically within
+the CVS repository by an automated mechanism, so you only have to commit
+the Texinfo docs if you make any changes.
 </P><P>
 
-<OL>
-<LI>
-<EM>Endian-ness</EM>
-<P>
-
-Beware of code that is endian-specific.  To facilitate writing portable code,
-key off of the `<SAMP>CS_BIG_ENDIAN</SAMP>' or `<SAMP>CS_LITTLE_ENDIAN</SAMP>' macros if
-necessary.
+To make writing the documentation easier, `<SAMP>@node</SAMP>' and `<SAMP>@menu</SAMP>'
+directives in the Texinfo sources can be repaired, which means that the
+links to the previous, next and top nodes are generated automatically. So you
+can safely write the following line, omitting the various links which the
+`<SAMP>@node</SAMP>' directive normally requires:
 </P><P>
 
-Avoid casting a `<SAMP>long*</SAMP>' or `<SAMP>int*</SAMP>' to a `<SAMP>short*</SAMP>' or `<SAMP>char*</SAMP>'
-as a slick way of checking the value of a particular sub-byte of the number
-since this trick will fail on platforms with different endian-ness.  In other
-words, given the declaration `<SAMP>long n = 1</SAMP>', and the expression `<SAMP>short
-p = *((short*)&#38;n)</SAMP>', on a little-endian platform, `<SAMP>p</SAMP>' will equal 1, but on
-a big-endian platform, `<SAMP>p</SAMP>' will equal 0.
-</P><P>
-
-Avoid using C "unions" to represent bit-sets since they can result in
-endian-related problems if improperly used or stored as persistent data.
-Using bit-masks is a much better and far more portable solution.
-</P><P>
-
-Beware of reading and writing data to binary format files and sending such
-information over the network.  Unless special care is taken to ensure
-portability, these files and network related facilities will suffer
-endian-related problems.  Use the network functions <CODE>ntohl()</CODE>,
-<CODE>ntohs()</CODE>, <CODE>htonl()</CODE>, and <CODE>htons()</CODE> to convert numbers to
-canonical format before transmitting them over the network.  You can also make
-use of the Crystal Space endian-related conversion functions found in
-`<TT>CS/include/csutil/csendian.h</TT>'.
-</P><P>
-
-<LI>
-<EM>Data Alignment</EM>
-<P>
-
-Some platforms require data values to be strictly aligned in memory.  For
-instance, some processors can not access a `<SAMP>long</SAMP>' value at an odd memory
-address or at an address which is not a multiple of four (which is the size in
-bytes of the `<SAMP>long</SAMP>' data type).  In such cases, the program may crash.
-Other processors may be able to access misaligned values, but at greatly
-reduced speed, which can slow down program execution significantly if done
-frequently enough.
-</P><P>
-
-In most cases, the compiler ensures that values are properly aligned for the
-given processor, but this problem can crop up when reading byte-streams from
-external sources such as binary files or network connections.  In such cases,
-it is up to you to ensure the proper alignment of the data before accessing
-it.
-</P><P>
-
-For instance, if you are reading elements from a byte-stream and the next
-element to be read is a `<SAMP>long</SAMP>', then the following code to extract the
-value is <EM>incorrect</EM> and <EM>non-portable</EM> since it does not ensure
-that the data is aligned properly for `<SAMP>long</SAMP>' access:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>long extract_long(unsigned char const* stream)
-{
-  return *((long*)stream);
-}
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>@node MySection
+@section My Section Title
 </pre></td></tr></table></P><P>
 
-The correct way to code this example would be as follows:
+The repair occurs automatically within the CVS repository by an automated
+mechanism, however you can also repair the files manually if you use the
+GNU makefile system by invoking the following command:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>long extract_long(unsigned char const* stream)
-{
-  long n;
-  memcpy(&#38;n, stream, sizeof(n));
-  return n;
-}
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>make repairdoc
 </pre></td></tr></table></P><P>
 
-<LI>
-<EM>Data type sizes</EM>
+<A NAME="SEC809"></A>
+<H4> Conversion and Maintenance via Makefile Targets </H4>
+<!--docid::SEC809::-->
 <P>
 
-Don't make any assumptions about the size of `<SAMP>int</SAMP>', `<SAMP>long</SAMP>', 
-`<SAMP>size_t</SAMP>', `<SAMP>void*</SAMP>' etc such as <CODE>sizeof(int)==4</CODE>, 
-<CODE>sizeof(int)==sizeof(void*)</CODE>, <CODE>sizeof(long)==sizeof(void*)</CODE> and so 
-on. If a specifically sized type is needed (for example, when reading a file
-and the format specification dictates a certain word size) use the sized types
-from `<TT>cstypes.h</TT>' (e.g. `<SAMP>int32</SAMP>', `<SAMP>uint8</SAMP>'). Consequently, also 
-avoid constructs such as casting pointers to `<SAMP>int</SAMP>'s. If there's a rare 
-case that no other way than casting a pointer to/from an integral type, use the 
-value of the `<SAMP>CS_PROCSIZE</SAMP>' macro (usually 32 or 64) to determine an 
-appropriate sized type.
+If you are using the GNU makefile system, you can use the following
+makefile targets to convert the Texinfo documents to different formats.
+The output will be placed in subdirectories of `<TT>${builddir}/out/docs/</TT>'.
 </P><P>
 
-<LI>
-<EM>Floating Points</EM>
+<DL COMPACT>
+<DT><CODE>make apihtml</CODE>
+<DD>Generate HTML version of public API reference via Doxygen.  This is
+the reference manual for people using Crystal Space in their own projects.  It
+only documents public classes and functions.
 <P>
 
-Depending upon the accuracy and representation of floating point values on
-some platforms, a number may successfully compare to (and equal) 0.0 on one
-platform or processor but fail on another.  In order to avoid such problems,
-compare numbers to a small value such as `<SAMP>EPSILON</SAMP>'.  In other words, if
-`<SAMP>EPSILON</SAMP>' is defined as a very small value, use `<SAMP>(val &#60; EPSILON)</SAMP>'
-rather than `<SAMP>(val == 0.0)</SAMP>'.
-</P><P>
-
-As a corollary.  when comparing two floating point values, employ the
-`<SAMP>EPSILON</SAMP>' trick to ensure that they compare properly over a wide variety
-of platforms.  In other words, instead of `<SAMP>(float1 &#60; float2)</SAMP>', use
-`<SAMP>(float1 &#60; float2 + EPSILON)</SAMP>'.
-</P><P>
-
-<LI>
-<EM>Scope of `<SAMP>for</SAMP>' Statements</EM>
+<DT><CODE>make apidevhtml</CODE>
+<DD>Generate HTML version of developer API reference via Doxygen.  This
+is the reference manual for people actually working on Crystal Space itself. 
+It documents all classes and functions.
 <P>
 
-Some compilers do not properly scope a variable declared in a <CODE>for(;;)</CODE>
-statement to the loop itself.  In other words, some compilers treat the
-following code:
+<DT><CODE>make manualhtml</CODE>
+<DD>Convert the Crystal Space manual to HTML format.
+<P>
+
+<DT><CODE>make manualdvi</CODE>
+<DD>Convert the Crystal Space manual to DVI format.
+<P>
+
+<DT><CODE>make manualps</CODE>
+<DD>Convert the Crystal Space manual to PostScript format.
+<P>
+
+<DT><CODE>make manualpdf</CODE>
+<DD>Convert the Crystal Space manual to PDF format.
+<P>
+
+<DT><CODE>make manualinfo</CODE>
+<DD>Convert the Crystal Space manual to GNU Info format.
+<P>
+
+<DT><CODE>make repairdoc</CODE>
+<DD>Repair all `<SAMP>@node</SAMP>' and `<SAMP>@menu</SAMP>' directives in the Texinfo sources.
+<P>
+
+<DT><CODE>make cleandoc</CODE>
+<DD>Delete all converted documents.
+</DL>
+<P>
+
+<A NAME="SEC810"></A>
+<H4> Directory Structure </H4>
+<!--docid::SEC810::-->
+<P>
+
+The `<TT>CS/docs/texinfo</TT>' directory contains:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>for (int i = 0; <small>...</small>) <small>...</small>
+<UL>
+<LI>
+A table-of-contents file named `<TT>cs.txi</TT>'.  This is the platform-independent
+root of the entire documentation hierarchy.
+<P>
+
+<LI>
+Platform-dependent configuration files, such as `<TT>unixdef.txi</TT>',
+`<TT>macdef.txi</TT>', etc.
+<P>
+
+<LI>
+Platform-dependent wrapper files, such as `<TT>cs-unix.txi</TT>',
+`<TT>cs-mac.txi</TT>', etc.  These are the platform-specific root files for the
+entire documentation hierarchy.  They import the platform-dependent
+configuration (i.e. `<TT>unixdef.txi</TT>' and then the TOC file
+`<TT>cs.txi</TT>'.
+<P>
+
+<LI>
+Other configuration files, like `<TT>version.txi</TT>', `<TT>cpyright.txi</TT>', etc.,
+and helper files for conversion to other formats, like `<TT>texinfo.tex</TT>'.
+<P>
+
+<LI>
+One subdirectory for each chapter. Each chapter directory contains at least
+one file called `<TT>chapter.txi</TT>', which is the root import file for this
+chapter. The TOC file will only include `<TT>chapter.txi</TT>', which then
+includes one file in this directory for every section.
+<P>
+
+If one section in a chapter is too big for a single file, this section is split
+into several files by subsections.  These files are again often placed into a
+subdirectory.
+</UL>
+<P>
+
+<A NAME="SEC811"></A>
+<H4> Formatting Conventions </H4>
+<!--docid::SEC811::-->
+<P>
+
+Here are some general formatting conventions.
+</P><P>
+
+<UL>
+<LI>
+When creating <CODE>@itemize</CODE> lists, one blank line should separate each
+<CODE>@item</CODE> except for short lists of items with short descriptions.  Also
+remember to use the <CODE>@bullet</CODE> directive after the <CODE>@itemze</CODE>
+directive, as in <CODE>@itemize @bullet</CODE>.
+<P>
+
+<LI>
+Do not indent the text of items within <CODE>@itemize</CODE> or
+<CODE>@table</CODE> blocks.  Allow the formatting tools to perform the indentation
+automatically. This also applies to <CODE>@example</CODE> blocks, but here you
+may indent sub-blocks. For example, you may want to create a block like this:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>@example
+int Increment(int n)
+@{
+  return n + 1;
+@}
+@end example
 </pre></td></tr></table></P><P>
 
-As though `<SAMP>i</SAMP>' was declared outside of the `<SAMP>for</SAMP>' statement, as in:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>int i;
-for (i = 0; <small>...</small>) <small>...</small>
-</pre></td></tr></table></P><P>
-
-This can be a problem when several `<SAMP>for</SAMP>' loops exists at the same scoping
-level in a single block since some compilers will complain that `<SAMP>i</SAMP>' is
-being redeclared by all `<SAMP>for</SAMP>' loops following the first one.  In other
-words, the following code will generate a "variable redeclaration" warning
-with some compilers:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>for (int i = 0; <small>...</small>) <small>...</small>
-<small>...</small> other code <small>...</small>
-for (int i = 5; <small>...</small>) <small>...</small>
-</pre></td></tr></table></P><P>
-
-In cases where the variable appears in only a single `<SAMP>for</SAMP>' loop, declaring
-it directly in the `<SAMP>for</SAMP>' statement is perfectly safe, but in cases where
-many such loops may want to use the same variable name, the variable should
-be declared once outside of all loops, as in the following example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>int i;
-for (i = 0; <small>...</small>) <small>...</small>
-<small>...</small> other code <small>...</small>
-for (i = 5; <small>...</small>) <small>...</small>
-</pre></td></tr></table></P><P>
-
-The Microsoft Visual C++ compiler is known to suffer from this problem,
-however most modern C++ compilers properly scope variables declared in the
-`<SAMP>for</SAMP>' statement.
+Then you may, of course, indent the `<SAMP>return</SAMP>' line, but not the other
+lines.
 </P><P>
 
 <LI>
-<EM>Avoid Global Objects With Constructors in Plug-In Modules</EM>
+Do not use tabs to indent code in <CODE>@example</CODE> blocks since the formatting
+tools do not faithfully reproduce the tab's indentation.  Instead, always
+indent using spaces.
 <P>
-
-Avoid placing global objects which require automatic construction in
-dynamically loaded libraries (plug-in modules).  Some platforms fail to call
-the object's constructor at the time the library is loaded.  Therefore it is
-unsafe to rely on such objects.
-</P><P>
 
 <LI>
-<EM>Avoid Initializing Global Variables via Functions in Plug-In Modules</EM>
-<P>
-
-Avoid initializing global variables within a plug-in module via function
-call.  In other words, in the following example, the function <CODE>foo()</CODE>
-should not rely upon the variable `<SAMP>angle</SAMP>' as having been properly
-initialized, assuming that this code fragment appears in a plug-in module.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>static float angle = cos(0.23);
-void foo() { printf("angle=%g\n", angle); }
-</pre></td></tr></table></P><P>
-
-Instead, you should arrange for such variables to be initialized manually by
-some other mechanism.  Here is one possible (though not ideal) way to ensure
-that `<SAMP>angle</SAMP>' is initialized before it is accessed.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>static float angle = 0;
-void foo()
-{
-  static bool angle_ok = false;
-  if (!angle_ok)
-  {
-    angle = cos(0.23);
-    angle_ok = true;
-  }
-  printf("angle=%g\n", angle);
-}
-</pre></td></tr></table></P><P>
-
-An even better solution is to utilize the initialization hooks provided by the
-SCF system to initialize global variables at the time that the plug-in
-module is loaded.  See section <A HREF="cs_138.html#SEC355">6.2 Shared Class Facility (SCF)</A>.
-</P><P>
-
-<LI>
-<EM>Pathname Syntax</EM>
-<P>
-
-Pathname syntax varies widely from platform to platform.  For instance, a
-Unix-style pathname such as `<TT>/mnt/home/zoop.c</TT>' might appear as
-`<TT>C:\home\zoop.c</TT>' on DOS and Windows, and `<TT>vol:home:zoop.c</TT>' on
-Macintosh.
-</P><P>
-
-When programming you should always use Unix-style pathname syntax in your
-<CODE>#include</CODE> directives; that is, always use the forward slash `<SAMP>/</SAMP>', as
-in <CODE>#include "csutil/scf.h"</CODE>.  The forward slash is understood by
-compilers on all platforms including Unix, Windows, and Macintosh.  Never use
-`<SAMP>\</SAMP>' or `<SAMP>:</SAMP>' in filenames mentioned by an <CODE>#include</CODE> directive.
-Even though your Windows or Macintosh compiler might accept these characters,
-the Unix compilers will not.  The obvious exception to this rule is for source
-files which are intended only for a specific platform.  Such files may use the
-prohibited characters, but in general there is no reason to do so.
-</P><P>
-
-At the application level, when writing a program or library which utilizes
-Crystal Space you should make use of the VFS facility which provides a
-unified way of referring to files by hiding platform-specific pathname syntax
-details.  Under VFS's unified naming scheme, all pathnames use the
-Unix-style syntax and VFS translates such pathnames to a form appropriate
-for the host platform.  See section <A HREF="cs_158.html#SEC389">7.2 Virtual File System (VFS)</A>.
-</P><P>
-
-<LI>
-<EM>Filesystem Case Sensitivity</EM>
-<P>
-
-Some operating systems have case sensitive filenames, whereas others do not.
-Undesirable things happen if you capitalize a file one way in an
-<CODE>#include</CODE> directive and a different way for the actual filename.  This
-problem may not even be apparent on your platform if you are using a
-case-insensitive file system such as DOS, Windows, or Macintosh (HFS).  In
-general, it is preferable to use entirely lower-case filenames for files which
-are shared between ports.
-</P><P>
-
-<STRONG>Warning</STRONG>: `<TT>WinCVS</TT>' has been reported to botch capitalization of
-files.  Please be aware of this potential problem.
-</P><P>
-
-<LI>
-<EM>Makefiles and Project Files</EM>
-<P>
-
-Some platforms use custom project files, whereas other platforms use the
-Crystal Space makefile system.  If you change a makefile and then change the
-code so that it depends on this change, ports for other platforms will
-probably break.  This may be unavoidable to some extent, but try to minimize
-the breakage.  For example, wrap the dependent code in an <CODE>#ifdef</CODE> and
-check for operating systems that <EM>do</EM> support the change.  This will
-allow other systems to continue to work without your change.  After committing
-your change to the CVS repository, be sure to inform port maintainers
-that their projects may need to be updated in order to support your
-modifications.
-</P><P>
-
-<LI>
-<EM>Ensuring Rendering</EM>
-<P>
-
-Some renderers and video drivers depend on the <CODE>BeginDraw()</CODE> and
-<CODE>FinishDraw()</CODE> calls to `<SAMP>iGraphics3D</SAMP>' or `<SAMP>iGraphics2D</SAMP>'.  Thus
-every <CODE>BeginDraw()</CODE> must be followed by a <CODE>FinishDraw()</CODE> or nothing
-will be rendered.  Microsoft's DirectX renderer is known to have this
-requirement, so be sure to follow this guideline for maximum portability.
-</P><P>
-
-<LI>
-<EM>Template precautions</EM>
-<P>
-
-These days, C++ compilers used with Crystal Space support templates, and the
-project makes use of templates for several utility classes.  For portability
-reasons, however, the entire template implementation should be placed into the
-header file.  There should be no associated source code file.
-</OL>
-<A NAME="Coding Style"></A>
+Attempt to keep the content of Texinfo source files under 80-columns in width
+if possible.  This is a general guidelines rather than a hard rule.
+</UL>
+<A NAME="Portability"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC803"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC809"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC812"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC812"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC816"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

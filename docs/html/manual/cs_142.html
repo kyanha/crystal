@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: SCF Versions</TITLE>
+<TITLE>Crystal Space: SCF Multiple Interfaces</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: SCF Versions">
-<META NAME="keywords" CONTENT="Crystal Space: SCF Versions">
+<META NAME="description" CONTENT="Crystal Space: SCF Multiple Interfaces">
+<META NAME="keywords" CONTENT="Crystal Space: SCF Multiple Interfaces">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,111 +23,200 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC361"></A>
+<A NAME="SEC362"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_141.html#SEC358"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_143.html#SEC362"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_141.html#SEC361"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_143.html#SEC365"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 6.2.4 Interface Versions </H3>
-<!--docid::SEC361::-->
+<H3> 6.2.3 Classes Implementing Multiple Interfaces </H3>
+<!--docid::SEC362::-->
 <P>
 
-Unlike COM, SCF supports interface versions.  That is, a shared class
-could implement version 0.3.6 of given interface, and if client requests that
-interface of a version lower or equal than 0.3.6, a correct interface pointer
-is returned.  For this to work you need to define inside each interface header
-file a specialization of the <CODE>scfInterface&#60;&#62;</CODE> template class for each
-interface.  This specialization must provide the interface's version number as
-the result of its <CODE>GetVersion()</CODE> method.  To correctly support different
-versions of interfaces you should follow these guidelines:
+Sometimes we will want one object to implement several interfaces.  For
+example, the 3D graphics driver could provide a basic `<SAMP>iGraphics3D</SAMP>'
+interface and several additional optional interfaces such as `<SAMP>iHalo</SAMP>',
+`<SAMP>iBumpMap</SAMP>', and so on.  There are two ways to do this:
 </P><P>
 
 <UL>
 <LI>
-Do not insert new methods into existing interfaces.  Instead, you should
-append them after last defined method.
+Via C++ multiple inheritance.
 <P>
 
 <LI>
-If your change made the interface invalid for clients that expect older
-versions of interfaces (for example, you broke the previous rule), increase
-the major version number, and set minor and micro versions to zero.
-<P>
-
-<LI>
-If your changes are relatively minor, but you do a major release, increase the
-minor version number and drop the micro version to zero.
-<P>
-
-<LI>
-If you are in the development process, and did a minor change to the
-interface, increase the micro version.
+Via object embedding, in which an object that implements another interface is
+embedded within the "carrier" object.
 </UL>
 <P>
 
-The possible range for major and minor version numbers is 0..255, and the
-range for micro version number is 0..65535.
+To simplify the following discussion we'll refer them as <EM>multiple
+interface</EM> and <EM>embedded interface</EM> schemes.
 </P><P>
 
-When you query an interface, you should always tell it what interface version
-are you looking for.  If a module cannot provide an interface compatible with
-the requested version, then <CODE>QueryInterface()</CODE> will return `<SAMP>NULL</SAMP>'
-(same as if interface wasn't available at all).  You can use
-<CODE>scfCompatibleVersion()</CODE> to check whether the requested version is
-compatible with interface version.  In fact, the
-<CODE>SCF_IMPLEMENTS_INTERFACE()</CODE> and
-<CODE>SCF_IMPLEMENTS_EMBEDDED_INTERFACE()</CODE> macros employ this function
-automatically.
+<A NAME="SEC363"></A>
+<H4> Multiple Interfacing </H4>
+<!--docid::SEC363::-->
+<P>
+
+You can declare a class to inherit from several interfaces at once.  This is
+useful if all implemented interfaces will need to access often same member
+variables.  For example, both the `<SAMP>iHalo</SAMP>' and `<SAMP>iBumpMap</SAMP>'
+implementations will need to access many member variables from
+`<SAMP>iGraphics3D</SAMP>' such as pixel format, screen dimensions and so on.  You
+declare such classes this way:
 </P><P>
 
-Since specializing the <CODE>scfInterface&#60;&#62;</CODE> template for each interface is an
-onerous task, you can instead automate the task via use of the
-<CODE>SCF_VERSION()</CODE> macro.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_VERSION(iMyGraphics3D, 0, 0, 1);
-
-struct iMyGraphics3D : public iBase
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>class MyGraphics3D :
+    public iGraphics3D, public iHalo, public iBumpMap
 {
+public:
   <small>...</small>
 };
 </pre></td></tr></table></P><P>
 
-If you are placing your interfaces in your project's own namespace, then you
-must invoke the <CODE>SCF_VERSION()</CODE> macro outside your namespace.  For
-instance:
+When implementing the methods imposed by the `<SAMP>iBase</SAMP>' interface you should
+use the <CODE>IMPLEMENT_INTERFACE()</CODE> macro once for each implemented
+interface:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>namespace MyProject
-{
-  struct iMyGraphics3D : public iBase
-  {
-    <small>...</small>
-  };
-}
-
-SCF_VERSION(MyProject::iMyGraphics3D, 0, 0, 1);
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_IMPLEMENT_IBASE(MyGraphics3D)
+  SCF_IMPLEMENTS_INTERFACE(iGraphics3D)
+  SCF_IMPLEMENTS_INTERFACE(iHalo)
+  SCF_IMPLEMENTS_INTERFACE(iBumpMap)
+SCF_IMPLEMENT_IBASE_END
 </pre></td></tr></table></P><P>
 
-<A NAME="SCF Client"></A>
+<A NAME="SCF Embedded Interfaces"></A>
+<A NAME="SEC364"></A>
+<H4> Embedded Interfaces </H4>
+<!--docid::SEC364::-->
+<P>
+
+Another way to implement several interfaces in one object is to embed an
+object that implements some interface into another object, known as the
+"carrier" object.  This method is preferable when a secondary interface
+seldom needs access to the carrier object's members, since you will need to
+access them through the `<SAMP>scfParent</SAMP>' pointer.  Here is an example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>class MyGraphics3D : public iGraphics3D
+{
+  // Declare the iHalo embedded interface.
+  class MyHalo : public iHalo
+  {
+    SCF_DECLARE_EMBEDDED_IBASE(MyGraphics3D);
+    <small>...</small>
+  } scfiHalo;
+  friend MyHalo;
+
+  // Declare the iBumpMap embedded interface.
+  class MyBumpMap : public iBumpMap
+  {
+    SCF_DECLARE_EMBEDDED_IBASE(MyGraphics3D);
+    <small>...</small>
+  } scfiBumpMap;
+  friend MyBumpMap
+
+public:
+  SCF_DECLARE_IBASE;
+  <small>...</small>
+};
+</pre></td></tr></table></P><P>
+
+Note that you don't need to use special names for classes; use anything you
+want (that is, the `<SAMP>My</SAMP>' prefix is not required; you could name the above
+class `<SAMP>GraphixThreeDeeImplementation</SAMP>' if you like; this is true for
+embedded classes as well). But most SCF macros that have the word
+`<SAMP>EMBEDDED</SAMP>' within their names expect embedded object names to follow the
+form `<SAMP>scf<VAR>InterfaceName</VAR></SAMP>'. For instance, `<SAMP>scfiBase</SAMP>',
+`<SAMP>scfiTest</SAMP>', `<SAMP>scfiGraphics3D</SAMP>', and so on.
+</P><P>
+
+When you declare the `<SAMP>iBase</SAMP>' methods within an embedded class, you can
+use the <CODE>SCF_DECLARE_EMBEDDED_IBASE(<VAR>OuterClass</VAR>)</CODE> macro instead of
+`<SAMP>SCF_DECLARE_IBASE</SAMP>'. In this case the `<SAMP>scfParent</SAMP>' member will be of
+type <CODE><VAR>OuterClass</VAR>*</CODE> rather than of type <CODE>iBase*</CODE>; this will
+allow the member class to talk with its parent directly, thus allowing for
+direct member variables and functions access. In fact, the
+`<SAMP>SCF_DECLARE_IBASE</SAMP>' macro uses <CODE>SCF_DECLARE_EMBEDDED_IBASE(iBase)</CODE>.
+`<SAMP>SCF_DECLARE_EMBEDDED_IBASE</SAMP>' itself, and has another special
+characteristic: It does not use a reference count, as embedded interfaces may
+never delete themselves.  <CODE>IncRef()</CODE> and <CODE>DecRef()</CODE> of embedded
+objects simply call the corresponding function of their `<SAMP>scfParent</SAMP>', which
+is the object in which they are embedded.
+</P><P>
+
+When using <CODE>SCF_DECLARE_EMBEDDED_IBASE()</CODE>, you should implement the
+methods with the <CODE>SCF_IMPLEMENT_EMBEDDED_IBASE()</CODE> macro instead of
+<CODE>SCF_IMPLEMENT_IBASE()</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_IMPLEMENT_IBASE(MyGraphics3D)
+  SCF_IMPLEMENTS_INTERFACE (iGraphics3D)
+  SCF_IMPLEMENTS_EMBEDDED_INTERFACE(iHalo)
+  SCF_IMPLEMENTS_EMBEDDED_INTERFACE(iBumpMap)
+SCF_IMPLEMENT_IBASE_END
+
+SCF_IMPLEMENT_EMBEDDED_IBASE (MyGraphics3D::MyHalo)
+  SCF_IMPLEMENTS_INTERFACE (iHalo)
+SCF_IMPLEMENT_EMBEDDED_IBASE_END
+
+SCF_IMPLEMENT_IBASE (MyGraphics3D::MyBumpMap)
+  SCF_IMPLEMENTS_INTERFACE (iBumpMap)
+SCF_IMPLEMENT_IBASE_END
+</pre></td></tr></table></P><P>
+
+And, finally, in the parent object's constructor you should initialize all
+embedded interface objects with the
+<CODE>SCF_CONSTRUCT_EMBEDDED_IBASE(<VAR>InterfaceName</VAR>)</CODE> macro.  This will
+initialize `<SAMP>scfRefCount</SAMP>' and `<SAMP>scfParent</SAMP>' fields within
+`<SAMP>scf<VAR>InterfaceName</VAR></SAMP>' member variables to appropriate values (zero and
+`<SAMP>this</SAMP>').  Likewise, you should destroy embedded interfaces with the
+<CODE>SCF_DESTRUCT_EMBEDDED_IBASE()</CODE> macro.  Here is how to do it:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>MyGraphics3D::MyGraphics3D(iBase* iParent)
+{
+  SCF_CONSTRUCT_IBASE(iParent);
+  SCF_CONSTRUCT_EMBEDDED_IBASE(scfiHalo);
+  SCF_CONSTRUCT_EMBEDDED_IBASE(scfiBumpMap);
+  <small>...</small>
+}
+
+MyGraphics3D::~MyGraphics3D()
+{
+  <small>...</small>
+  SCF_DESTRUCT_EMBEDDED_IBASE(scfiBumpMap);
+  SCF_DESTRUCT_EMBEDDED_IBASE(scfiHalo);
+  SCF_DESTRUCT_IBASE();
+}
+</pre></td></tr></table></P><P>
+
+You should not call <CODE>SCF_CONSTRUCT_IBASE()</CODE> within embedded object's
+constructor since all work needed to initialize `<SAMP>iBase</SAMP>' fields is done in
+the carrier object's constructor.  Likewise, you should not call
+<CODE>SCF_DESTRUCT_IBASE()</CODE> within the embedded object's destructor.
+</P><P>
+
+<A NAME="SCF Versions"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_141.html#SEC358"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_143.html#SEC362"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_141.html#SEC361"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_143.html#SEC365"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

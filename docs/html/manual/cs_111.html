@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Collision Detection</TITLE>
+<TITLE>Crystal Space: HOWTO Smart Pointers</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Collision Detection">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Collision Detection">
+<META NAME="description" CONTENT="Crystal Space: HOWTO Smart Pointers">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Smart Pointers">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,305 +23,459 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC231"></A>
+<A NAME="SEC227"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC223"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_112.html#SEC239"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_112.html#SEC235"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.2 Doing Collision Detection </H3>
+<H3> 5.8.1 Correctly Using Smart Pointers </H3>
+<!--docid::SEC227::-->
+<P>
+
+<EM>Written by Jorrit Tyberghein,
+<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.  Updated and expanded
+significantly by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
+</P><P>
+
+Smart pointers were introduced in Crystal Space stable version 0.96
+(developmental version 0.95).  The purpose of smart pointers is to make it
+easier to manage reference counting.  Instead of manually calling
+<CODE>IncRef()</CODE> and <CODE>DecRef()</CODE> on an object, you use a smart pointer
+(<CODE>csRef&#60;&#62;</CODE>) and let it manage the reference count automatically.  The
+<CODE>csRef&#60;&#62;</CODE> smart pointer template works with any class which provides
+<CODE>IncRef()</CODE> and <CODE>DecRef()</CODE> methods, such as `<SAMP>csRefCount</SAMP>', as well
+as all SCF classes.  The <CODE>csRef&#60;&#62;</CODE> template is defined in
+`<TT>CS/include/csutil/ref.h</TT>'.
+</P><P>
+
+<A NAME="SEC228"></A>
+<H4> How to Use Smart Pointers </H4>
+<!--docid::SEC228::-->
+<P>
+
+This is easy. For example, often you want to keep track of a few
+common objects in your main class (such as the pointer to the engine and
+so on). To do this you just declare in your main class:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>class MyClass
+{
+  csRef&#60;iEngine&#62; engine;
+  <small>...</small>
+}
+</pre></td></tr></table></P><P>
+
+Smart pointers do not need to be initialized, so there is no need to write
+`<SAMP>engine = 0</SAMP>' in the constructor of your class.  There is also no need to
+clean them up.  The reference to the engine, in the example, will be cleaned up
+automatically when the instance of <CODE>MyClass</CODE> is destroyed.
+</P><P>
+
+Here is an example of assigning a valid object to the `<SAMP>engine</SAMP>' smart
+pointer and then utilizing that pointer (assuming the engine plugin is loaded):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iObjectRegistry* object_reg = <small>...</small>;
+engine = CS_QUERY_REGISTRY (object_reg, iEngine);
+engine-&#62;CreateSector ();
+</pre></td></tr></table></P><P>
+
+That is all there is to it.  For contrast, here is an example of how the same
+operations would have been performed before the introduction of smart pointers:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>class MyClass
+{
+  iEngine* engine;
+  <small>...</small>
+}
+
+MyClass::MyClass ()
+{
+  engine = 0;
+}
+
+MyClass::~MyClass ()
+{
+  if (engine != 0)
+    engine-&#62;DecRef ();
+}
+
+<small>...</small>
+engine = CS_QUERY_REGISTRY (object_reg, iEngine);
+engine-&#62;CreateSector (); <small>...</small>
+<small>...</small>
+</pre></td></tr></table></P><P>
+
+The advantage might not seem huge but, in general, it is a <EM>lot</EM> easier to
+use smart pointers than to manually manipulate reference counts.  The nice
+thing about smart pointers is that you can use them exactly like you would use
+a normal pointer (i.e. you can do things like <CODE>engine-&#62;CreateSector()</CODE>).
+</P><P>
+
+Here is another example illustrating smart pointers:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iMeshWrapper&#62; sprite(engine-&#62;CreateMeshWrapper(<small>...</small>));
+csRef&#60;iSprite3DState&#62; state (SCF_QUERY_INTERFACE (
+    sprite-&#62;GetMeshObject (), iSprite3DState));
+state-&#62;SetAction ("default");
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC229"></A>
+<H4> When to Use csRef&#60;&#62;? </H4>
+<!--docid::SEC229::-->
+<P>
+
+Use <CODE>csRef&#60;&#62;</CODE> wherever you need to own a reference to a reference-counted
+object.  The above examples illustrate a few cases in which <CODE>csRef&#60;&#62;</CODE> is
+warranted.  If you do not need to own a reference to a reference-counted
+object, and you know positively that the object will exist for the duration of
+a piece of code, then you can use a plain pointer rather than a smart pointer.
+However, for complete safety, using <CODE>csRef&#60;&#62;</CODE> will ensure that a
+reference-counted object will remain valid for as long as the <CODE>csRef&#60;&#62;</CODE>
+remains alive.  For this reason, it is often simplest to utilize <CODE>csRef&#60;&#62;</CODE>
+when dealing with reference-counted objects, rather than plain pointers.
+</P><P>
+
+<CODE>csRef&#60;&#62;</CODE> is also a very handy and 100% safe mechanism for transferring
+object ownership from a function back to its caller.  This is useful in cases
+when the caller of a function wants to take ownership of a brand new object
+created by the function on the caller's behalf.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iFoo&#62; MyFunction ()
+{
+  csRef&#60;iFoo&#62; foo;
+  foo.AttachNew(new Foo(<small>...</small>));
+  foo-&#62;FooMethod(<small>...</small>);
+  <small>...</small>
+  return foo;
+}
+</pre></td></tr></table></P><P>
+
+The reason that this is 100% safe is that the newly created object is correctly
+destroyed (not leaked) even if the caller of <CODE>MyFunction()</CODE> forgets or
+neglects to assign it to a variable.
+</P><P>
+
+<A NAME="SEC230"></A>
+<H4> What About csPtr&#60;&#62;? </H4>
+<!--docid::SEC230::-->
+<P>
+
+<CODE>csPtr&#60;&#62;</CODE> is a companion class.  Originally, it aided in the transition
+from the old (pre-smart pointer) API to the new one.  The idea was that
+all functions that used to return a pointer, upon which the caller had to
+invoke <CODE>DecRef()</CODE>, now return a <CODE>csPtr&#60;&#62;</CODE>.  These days,
+<CODE>csPtr&#60;&#62;</CODE> is usually used as a micro-optimization when transferring object
+ownership from a function to its caller, and as an ugly shortcut when assigning
+a new object to a <CODE>csRef&#60;&#62;</CODE> (instead of the more obvious
+<CODE>csRef&#60;&#62;::AttachNew()</CODE> method).
+</P><P>
+
+<CODE>csPtr&#60;&#62;</CODE> represents a single, owned, one-time-transferable reference to
+an object and should be used only as the return value of a function, or when
+creating a brand new object which is assigned directly to a <CODE>csRef&#60;&#62;</CODE>.
+<CODE>csPtr&#60;&#62;</CODE> never invokes <CODE>IncRef()</CODE> or <CODE>DecRef()</CODE>.  It simply
+stores the pointer.  <CODE>csPtr&#60;&#62;</CODE> is very specialized, and exists solely as a
+mechanism for transferring an existing reference into a <CODE>csRef&#60;&#62;</CODE>.
+</P><P>
+
+Although it is safest and cleanest for a function to transfer ownership of a
+new object back to its caller by returning a <CODE>csRef&#60;&#62;</CODE>, it is also
+possible to utilize <CODE>csPtr&#60;&#62;</CODE> for this purpose.  This can be done as a
+micro-optimization in order to avoid the very minor overhead of the extra
+reference-count manipulation incurred when returning a <CODE>csRef&#60;&#62;</CODE> from a
+function.  <EM>Note</EM> carefully, however, that you should never return a
+<CODE>csPtr&#60;&#62;</CODE> from a function if there is any chance that the caller might
+ignore the returned value since that would result in a resource leak.
+Returning a <CODE>csRef&#60;&#62;</CODE> ensures that the returned object can never be
+leaked, even if the caller neglects to assign it to a variable.
+</P><P>
+
+There is only one valid way to use the result of a function which returns a
+<CODE>csPtr&#60;&#62;</CODE>: assign it to a <CODE>csRef&#60;&#62;</CODE>.  For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>// An example interface and method.
+struct iEngine
+{
+  virtual csPtr&#60;iLight&#62; CreateLight (<small>...</small>) = 0;
+  <small>...</small>
+}
+
+// Assignment of csPtr&#60;&#62; to csRef&#60;&#62;.
+csRef&#60;iLight&#62; light (engine-&#62;CreateLight (<small>...</small>));
+// or...
+csRef&#60;iLight&#62; light = engine-&#62;CreateLight (<small>...</small>);
+// or...
+csRef&#60;iLight&#62; light;
+<small>...</small>
+light = engine-&#62;CreateLight (<small>...</small>);
+</pre></td></tr></table></P><P>
+
+When a <CODE>csPtr&#60;&#62;</CODE> is assigned to a <CODE>csRef&#60;&#62;</CODE>, the reference owned by
+the <CODE>csPtr&#60;&#62;</CODE> is transferred to the <CODE>csRef&#60;&#62;</CODE> without an additional
+<CODE>IncRef()</CODE>; that is, <CODE>csRef&#60;&#62;</CODE> inherits, steals, or hijacks the
+reference owned by the <CODE>csPtr&#60;&#62;</CODE>.
+</P><P>
+
+To make it easier for functions to actually return a <CODE>csPtr&#60;&#62;</CODE> even though
+they are working internally with a <CODE>csRef&#60;&#62;</CODE> there is also an
+<EM>explicit</EM> conversion from <CODE>csRef&#60;&#62;</CODE> to <CODE>csPtr&#60;&#62;</CODE>; which means
+that a <CODE>csPtr&#60;&#62;</CODE> can be constructed from a <CODE>csRef&#60;&#62;</CODE> if the
+<CODE>csPtr&#60;&#62;</CODE> constructor is called explicitly with a <CODE>csRef&#60;&#62;</CODE> as its
+sole argument.  This means that the following code is valid:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csPtr&#60;iFoo&#62; MyFunction ()
+{
+  csRef&#60;iFoo&#62; foo = <small>...</small>;
+  <small>...</small>
+  return csPtr&#60;iFoo&#62; (foo);
+}
+</pre></td></tr></table></P><P>
+
+What happens, in this case, is that the <CODE>csPtr&#60;&#62;</CODE> constructor which
+accepts a <CODE>csRef&#60;&#62;</CODE> will call <CODE>IncRef()</CODE> on the object.  This is
+necessary because when the <CODE>csRef&#60;&#62;</CODE> inside <CODE>MyFunction()</CODE> goes out
+of scope it will call <CODE>DecRef()</CODE> automatically; potentially destroying the
+object.
+</P><P>
+
+The following usage, however, is incorrect:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iFoo* MyFunction ()
+{
+  csRef&#60;iFoo&#62; foo = <small>...</small>;
+  <small>...</small>
+  return foo;
+}
+</pre></td></tr></table></P><P>
+
+This is incorrect because here nothing calls <CODE>IncRef()</CODE> on the returned
+pointer, yet the <CODE>csRef&#60;&#62;</CODE> will still call <CODE>DecRef()</CODE> upon
+destruction, which means, at best, the function is returning ownership of an
+object even though it does not hold ownership, and, at worst, it is potentially
+returning a destroyed object.
+</P><P>
+
+As noted above, the transfer of object ownership
+to the caller of a function should almost always be handled by returning a
+<CODE>csRef&#60;&#62;</CODE> or a <CODE>csPtr&#60;&#62;</CODE> rather than a bare <CODE>iFoo*</CODE>.  However,
+if you really must return a normal pointer, then you have to ensure that you
+actually own a reference which you can return to the caller.  Here is how the
+above example can be re-written so that it works correctly:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iFoo* MyFunction ()
+{
+  csRef&#60;iFoo&#62; foo = <small>...</small>;
+  <small>...</small>
+  foo-&#62;IncRef();
+  return foo;
+}
+</pre></td></tr></table></P><P>
+
+If you prefer obscurity and brevity over clarity, you can also use
+<CODE>csPtr&#60;&#62;</CODE> as a shortcut, in place of <CODE>csRef&#60;&#62;::AttachNew()</CODE>, when
+assigning a newly allocated object to a <CODE>csRef&#60;&#62;</CODE>.  The following idiom
+ensures that the reference count of the new object is correctly maintained.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iView&#62; view = csPtr&#60;iView&#62; (new csView (<small>...</small>));
+</pre></td></tr></table></P><P>
+
+This works
+correctly because the new object (`<SAMP>new csView</SAMP>') already automatically has
+a reference-count of 1 at construction time.  By encapsulating the new object
+pointer in a <CODE>csPtr&#60;&#62;</CODE>, <CODE>csRef&#60;&#62;</CODE> is instructed to <EM>not</EM> invoke
+<CODE>IncRef()</CODE> on the incoming object, but rather to simply inherit the
+reference already owned by the <CODE>csPtr&#60;&#62;</CODE>.  By contrast, the following code
+is incorrect and will result in a resource leak since the object's
+reference-count will be 2, rather than one; one reference from the `<SAMP>new</SAMP>'
+operation, and one from the <CODE>IncRef()</CODE> invocation performed by the
+<CODE>csRef&#60;&#62;</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>// Do not do this! It will cause a resource leak.
+csRef&#60;iView&#62; view = new csView (<small>...</small>);
+</pre></td></tr></table></P><P>
+
+<EM>WARNING</EM>: Only use <CODE>csPtr&#60;&#62;</CODE> in the situations described above!
+<EM>Never</EM> use a <CODE>csPtr&#60;&#62;</CODE> to store an object.  <EM>Never</EM> pass
+<CODE>csPtr&#60;&#62;</CODE> instances as arguments to other functions.
+</P><P>
+
+<A NAME="SEC231"></A>
+<H4> What to do With a Function Return Value? </H4>
 <!--docid::SEC231::-->
 <P>
 
-Collision detection in CS is one of the more complicated issues. In this
-section I give a quick description of all the classes and interfaces in CS
-and what you should do to use them.
+In the Crystal Space API there are three possible modes by which
+reference-counted object pointers are returned:
 </P><P>
 
+<UL>
+<LI>
+The function returns a normal pointer.  This mode is used when the function is
+simply returning a pointer to an existing object; and moreover an object to
+which the function is <EM>not</EM> transferring ownership to the caller.  In this
+case you can assign the return value to a normal pointer or to a
+<CODE>csRef&#60;&#62;</CODE>.  If you assign the return value to a normal pointer, then you
+will not own a reference to the returned object.  If you assign it to a
+<CODE>csRef&#60;&#62;</CODE>, then the <CODE>csRef&#60;&#62;</CODE> will increment the reference count at
+assignment time, and decrement it again when the <CODE>csRef&#60;&#62;</CODE> destroyed.
+<P>
+
+<LI>
+The function returns a <CODE>csRef&#60;&#62;</CODE>.  In this case the function is
+<EM>requesting</EM> that you take ownership of the returned object because it
+(the function) will be giving up ownership.  By taking ownership, you ensure
+that the object does not get destroyed prematurely.  You can assign the
+returned <CODE>csRef&#60;&#62;</CODE> to another <CODE>csRef&#60;&#62;</CODE>.  It may also be safe to not
+store the pointer but instead directly use it like this,
+<CODE>Function()-&#62;DoSomething()</CODE> (however, some older compilers might destroy
+the <CODE>csRef&#60;&#62;</CODE> before <CODE>DoSomething()</CODE> is actually called, so be
+careful).  It is <EM>not</EM> safe to assign the result of a function returning a
+<CODE>csRef&#60;&#62;</CODE> to a normal pointer because doing so will result in a resource
+leak since, after assignment, an immediate <CODE>DecRef()</CODE> will occur which may
+cause destruction of the object.  Finally, it is safe to ignore the return
+value from a function returning a <CODE>csRef&#60;&#62;</CODE> since the <CODE>csRef&#60;&#62;</CODE> will
+ensure that the owned reference is properly cleaned up even if you neglect to
+assign it to a variable or use it directly.
+<P>
+
+<LI>
+The function returns a <CODE>csPtr&#60;&#62;</CODE>.  In this case the function is
+<EM>demanding</EM> that you take ownership of the returned object because it (the
+function) will be giving up ownership.  You must assign the returned
+<CODE>csPtr&#60;&#62;</CODE> to a <CODE>csRef&#60;&#62;</CODE> in order to utilize it.  The <CODE>csRef&#60;&#62;</CODE>
+will inherit the reference from the <CODE>csPtr&#60;&#62;</CODE>.  When the <CODE>csRef&#60;&#62;</CODE>,
+to which the <CODE>csPtr&#60;&#62;</CODE> was assigned, is finally destroyed, the reference
+count will be decremented properly.  It is <EM>never</EM> safe to ignore the
+return value from a function returning a <CODE>csPtr&#60;&#62;</CODE> since doing so would
+result in a resource leak.
+</UL>
+<P>
+
 <A NAME="SEC232"></A>
-<H4> Loading the `<SAMP>iCollideSystem</SAMP>' </H4>
+<H4> Warnings About csPtr&#60;&#62;! </H4>
 <!--docid::SEC232::-->
 <P>
 
-The basis of the collision detection system is the `<SAMP>iCollideSystem</SAMP>'.
-This is an interface which is implemented by some collision detection plugin.
-At this moment we have implementations of RAPID and OPCODE collision
-detection systems.
+As noted above, only use <CODE>csPtr&#60;&#62;</CODE> for returning already incremented
+object references, and for wrapping a new object before storing it in a
+<CODE>csRef&#60;&#62;</CODE>.  Do <EM>not</EM> use <CODE>csPtr&#60;&#62;</CODE> for any other purpose.
 </P><P>
 
-To load a collision detection system you can use the following code:
+Also, when a function returns a <CODE>csPtr</CODE> you <EM>must</EM> assign the result
+to a <CODE>csRef&#60;&#62;</CODE>.  You must not ignore the returned value.  If you ignore
+it, then that will result in a resource leak because <CODE>DecRef()</CODE> will never
+be invoked for the reference owned by the returned <CODE>csPtr&#60;&#62;</CODE>.  For
+example, the following code is illegal and should be avoided because it ignores
+the returned object:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iPluginManager&#62; plugmgr =
-  CS_QUERY_REGISTRY (object_reg, iPluginManager);
-csRef&#60;iConfigManager&#62; config =
-  CS_QUERY_REGISTRY (object_reg, iConfigManager);
-const char* p = config-&#62;GetStr ("MyGame.Settings.CollDetPlugin",
-  	"crystalspace.collisiondetection.opcode");
-csRef&#60;iCollideSystem&#62; cd_sys =
-  CS_LOAD_PLUGIN (plugmgr, p, iCollideSystem);
-if (!cd_sys)
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>// An example interface and method.
+struct iEngine
 {
-  csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-	"crystalspace.application.myapp",
-  	"No Collision Detection plugin found!");
-  return false;
+  virtual csPtr&#60;iLight&#62; CreateLight (<small>...</small>) = 0;
+  <small>...</small>
 }
+
+// Do not do this!  It will cause a resource leak.
+engine-&#62;CreateLight (<small>...</small>);
 </pre></td></tr></table></P><P>
 
-This is a very general example.  It will first get the preferred collision
-detection plugin from the config file.  If the config file doesn't specify it
-then it will use 'crystalspace.collisiondetection.rapid' which is the only one
-we have at the moment.  If you don't want to let the users choose another
-plugin then you can also hardcode the string.  The cd_sys should be stored
-somewhere central (i.e. your application class).
+Note that if you build the project in debug mode, then Crystal Space will add a
+run-time test for this incorrect usage, and will throw an exception if you
+neglect to assign a returned <CODE>csPtr&#60;&#62;</CODE> to a <CODE>csRef&#60;&#62;</CODE>.
 </P><P>
 
 <A NAME="SEC233"></A>
-<H4> Initializing Geometry </H4>
+<H4> Warning About IncRef() and DecRef()! </H4>
 <!--docid::SEC233::-->
 <P>
 
-Before you can use the collision detection system you have to make
-instances of `<SAMP>iCollider</SAMP>'. Only the collide system can do that. To
-create an `<SAMP>iCollider</SAMP>' you have to give an instance of `<SAMP>iPolygonMesh</SAMP>'.
-Several meshes in CS implement `<SAMP>iPolygonMesh</SAMP>'. If you have special
-geometry on your own you can make your own classes to implement
-`<SAMP>iPolygonMesh</SAMP>'. Here is some code on how to initialize the collider
-for a mesh:
+When using smart pointers (<CODE>csRef&#60;&#62;</CODE>) correctly you should avoid invoking
+<CODE>IncRef()</CODE> and <CODE>DecRef()</CODE> on the managed pointer, except in very
+specialized cases, and only when you know exactly what you are doing and why
+you are doing it.  Avoid constructs like this:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iCollider&#62; MyGame::InitCollider (iMeshWrapper* mesh)
-{
-  iPolygonMesh* polmesh = mesh-&#62;GetMeshObject ()-&#62;GetObjectModel ()
-	-&#62;GetPolygonMeshColldet ();
-  if (polmesh)
-  {
-    csRef&#60;iCollider&#62; cd = cd_sys-&#62;CreateCollider (polmesh);
-    return cd;
-  }
-  else
-  {
-    return 0;
-  }
-}
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iMeshWrapper&#62; mesh = <small>...</small>;
+<small>...</small>
+mesh-&#62;DecRef ();
+mesh = 0;
 </pre></td></tr></table></P><P>
 
-After that you need to store the returned collider somewhere so you
-can easily retrieve it later when you want to do the collision detection.
-Usually in a game you have entity classes which will have a pointer to the
-mesh. In that case you can easily store the collider in that entity class.
+The bogus code in this example will cause the reference-count to be decremented
+<EM>twice</EM>---once when <CODE>DecRef()</CODE> is invoked explicitly, and once when 0
+is assigned to `<SAMP>mesh</SAMP>')--which is almost certainly not what was intended.
 </P><P>
-
-However, you can also use the `<SAMP>iObject</SAMP>' system to attach your collider
-to the mesh itself. An easy way to do this is to use the
-<CODE>csColliderWrapper</CODE> class that you can find in the <CODE>cstool</CODE>
-library. <CODE>csColliderWrapper</CODE> is a subclass of <CODE>csObject</CODE> which
-means that you can attach this object to any other <CODE>csObject</CODE>.
-<CODE>csColliderWrapper</CODE> additionally holds a pointer to an <CODE>iCollider</CODE>.
-This means that you can create a <CODE>csColliderWrapper</CODE> to hold your
-<CODE>iCollider</CODE> for some mesh object and then you can attach
-that <CODE>csColliderWrapper</CODE> to the mesh object itself. To do this
-use the following code instead of the <CODE>InitCollider()</CODE> routine
-above:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool MyGame::InitCollider (iMeshWrapper* mesh)
-{
-  iPolygonMesh* polmesh = mesh-&#62;GetMeshObject ()-&#62;GetObjectModel ()
-	-&#62;GetPolygonMeshColldet ();
-  if (polmesh)
-  {
-    new csColliderWrapper(mesh-&#62;QueryObject(), cd_sys, polmesh);
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-</pre></td></tr></table></P><P>
-
-This example creates a new instance of <CODE>csColliderWrapper</CODE> which
-is automatically stored with the <CODE>iObject</CODE> that belongs
-with the given mesh. So there is no need to store it otherwise. Later
-on you can retrieve the collider for some mesh by doing:
-</P><P>
-
-The function <CODE>csColliderHelper::InitializeCollisionWrapper()</CODE>
-does this work for you and also takes care of a lot of finer details
-that are ignored in the example above (like improved memory usage and
-performance by sharing the colliders if a factory mesh is used). In addition
-<CODE>csColliderHelper::InitializeCollisionWrappers()</CODE>
-initializes all collider wrappers for all objects in the engine.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csColliderWrapper* colwrap = 
-  csColliderWrapper::GetColliderWrapper(mesh-&#62;QueryObject ());
-iCollider* collider = colwrap-&#62;GetCollider();
-</pre></td></tr></table></P><P>
 
 <A NAME="SEC234"></A>
-<H4> The Player Collider </H4>
+<H4> Warning About DestroyApplication()! </H4>
 <!--docid::SEC234::-->
 <P>
 
-Depending on the game your player might have a representation of
-geometry or not. If it doesn't you will have to make your own version
-of `<SAMP>iPolygonMesh</SAMP>' to create a collider for the player. Even if
-your player has geometry (i.e. a 3D sprite) it is sometimes still preferable
-to create your own special geometry for the player. The reason is
-gravity. When you would just use one collider for the player you can have
-problems moving around because the player would not be able to jump over
-even the tiniest elevation in height. Sometimes the edge between adjacent
-polygons can even cause the player to collide with that other polygon due
-to numerical inprecision. To solve this problem it is best to make one
-collider that is used for gravity only and another collider that is used
-to test if you can move around. The gravity collider will be used only
-to test if the player can go downwards or upwards. To avoid not being able
-to go over small height elevations, the player collider should float slightly
-above the ground.
+Due to the way the current implementation of
+<CODE>csInitializer::DestroyApplication()</CODE> works, you <EM>must</EM> ensure that
+all of your references to Crystal Space objects are released <EM>before</EM>
+invoking <CODE>DestroyApplication()</CODE>.  Therefore, the following code is
+<EM>not</EM> legal:
 </P><P>
 
-The best way to make the gravity collider is to make your own implementation
-of `<SAMP>iPolygonMesh</SAMP>'. This is very efficient. To keep the returned
-collider I recommend storing them somewhere in the player class or else the
-main game class.
-</P><P>
-
-<A NAME="SEC235"></A>
-<H4> Doing Collision Detection </H4>
-<!--docid::SEC235::-->
-<P>
-
-When everything is set up it is time to do collision detection. To test
-for collisions you use the <CODE>Collide</CODE> function in `<SAMP>iCollideSystem</SAMP>'.
-This will test the collisions between two colliders. The result of this
-will be true or false and in addition the collide system will keep a list
-of all triangle pairs for the hits. Those triangle pairs can be used to
-decide what to do on collision (i.e. slide on a wall for example).
-</P><P>
-
-Because collision detection works on two objects at a time it is a good
-idea to have some system on top of the collision detection system that
-detects when it is useful to do collision detection. You can use a bounding
-sphere for that. Also you should only do collision detection if the object
-moves.
-</P><P>
-
-Note! Don't forget to call <CODE>ResetCollisionPairs</CODE> before doing collision
-detection! Otherwise the internal table of collision pairs will grow
-forever.
-</P><P>
-
-<A NAME="SEC236"></A>
-<H4> Sliding Along Walls (this section is in beta) </H4>
-<!--docid::SEC236::-->
-<P>
-
-For detecting collision between a mesh and the static world, it is better
-to use the <CODE>CollidePath</CODE> method of `<SAMP>iCollideSystem</SAMP>'. Its use
-is similar to <CODE>Collide</CODE> but it takes arrays of `<SAMP>iCollider</SAMP>''s
-and `<SAMP>csReversibleTransform</SAMP>''s. It also takes a `<SAMP>csVector3</SAMP>'
-(passed by reference). This is the translation vector of the movement
-that the mesh wants to take (<CODE>CollidePath</CODE> is called before the
-movement occurs). The interface is detailed further in the public API docs.
-</P><P>
-
-The translation vector is modified to reflect the distance that the mesh
-was able to move before it collided with the world. So you should move
-the mesh that far, and subtract the new vector from the original vector,
-to get the distance still to go. We will call this <CODE>V</CODE>.
-</P><P>
-
-Use <CODE>GetCollisionPairs</CODE> to get the triangle that was collided with.
-It is described by the points <CODE>a2, b2, c2</CODE> in the
-`<SAMP>csCollisionPair</SAMP>' structure. Then use those points to create a
-`<SAMP>csPlane3</SAMP>'. We will call this <CODE>P</CODE>.
-</P><P>
-
-We want to give our vector a new direction so that it is on <CODE>P</CODE>.
-The cross-product (<CODE>V % P.Normal()</CODE>) of the two will give a vector
-which is on the plane, but perpendicular to the vector that we want.
-Taking the cross-product again (now <CODE>(V % P.Normal()) % P.Normal()</CODE>)
-will give the vector we want.
-</P><P>
-
-Now we try to move the mesh along this new vector. Hopefully there will be
-no collision this time, but if there is we must do the whole thing over
-again. Example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>void Player::Move (csVector3 move)
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>int main (int argc, char* argv[])
 {
-  csVector3 old (move);
-  while (collsys-&#62;CollidePath (player_collider, player_transform, move,
-         world_colliders, world_transforms) != 1)
-  {
-    player_transform-&#62;Translate (move);
-    csCollisionPair *pair = collsys-&#62;GetCollisionPairs ();
-    csPlane3 wall (pair-&#62;a2, pair-&#62;b2, pair-&#62;c2);
-    csVector3 newmove (old - move);
-    old = move; move = newmove;
-    move %= wall.Normal();
-    move %= wall.Normal();
-  }
-  player_transform-&#62;Translate (move);
+  iObjectRegistry* object_reg =
+    csInitializer::CreateEnvironment(argc, argv);
+  <small>...</small>
+  csRef&#60;iPluginManager&#62; plugin_mgr =
+    (CS_QUERY_REGISTRY (object_reg, iPluginManager));
+  <small>...</small>
+  csInitializer::DestroyApplication (object_reg);
+  return 0;
 }
 </pre></td></tr></table></P><P>
 
-This example is limited in that it will run into an infinite loop if the
-player walks into a corner, but it serves as an example.
+The reason this doesn't work correctly is that the `<SAMP>plugin_mgr</SAMP>' reference
+will be cleaned up at the end of <CODE>main()</CODE>, which occurs after
+<CODE>DestroyApplication()</CODE> is invoked.  To fix this you can use several
+techniques.  Manually setting `<SAMP>plugin_mgr</SAMP>' to 0 just before calling
+<CODE>DestroyApplication()</CODE> is one method.  Another technique is to put the
+initialization into another routine so that `<SAMP>plugin_mgr</SAMP>' is created in
+another scope; a scope which is destroyed before <CODE>DestroyApplication()</CODE> is
+invoked.
 </P><P>
 
-<A NAME="SEC237"></A>
-<H4> Limitation of RAPID and OPCODE </H4>
-<!--docid::SEC237::-->
-<P>
-
-The current RAPID and OPCODE collision detection implementations
-have one important limitation. They assume that the transform from object
-to world space will not change the size of the object. i.e. you cannot scale the
-object using the object to world transformation (which is kept in the
-`<SAMP>iMovable</SAMP>') and expect collision detection to be ok. The only way
-aroud this limitation is to use <CODE>HardTransform()</CODE> to transform
-the object space vertices itself. But this can of course not be used
-dynamically as you would have to recalculate the collider every time
-the object changes.
-</P><P>
-
-<A NAME="SEC238"></A>
-<H4> Include Files </H4>
-<!--docid::SEC238::-->
-<P>
-
-The include files useful for this section are:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "iutil/object.h"
-#include "iutil/plugin.h"
-#include "igeom/collider.h"
-#include "igeom/polymesh.h"
-#include "iengine/mesh.h"
-#include "cstool/collider.h"
-</pre></td></tr></table><A NAME="HOWTO Mesh LightAnim"></A>
+For the same reason it also is not wise to call <CODE>DestroyApplication()</CODE>
+from within the destructor of your main class.  This is because any
+<CODE>csRef&#60;&#62;</CODE> instance variables of your main class will not be destroyed
+until the very end of the destructor, which is <EM>after</EM> the invocation of
+<CODE>DestroyApplication()</CODE> in the body of the destructor.
+<A NAME="HOWTO Collision Detection"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC223"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_112.html#SEC239"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_112.html#SEC235"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

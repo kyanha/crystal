@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Texture Mapping Concepts</TITLE>
+<TITLE>Crystal Space: Texture Mapping Conventions</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Texture Mapping Concepts">
-<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping Concepts">
+<META NAME="description" CONTENT="Crystal Space: Texture Mapping Conventions">
+<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping Conventions">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,177 +23,74 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC424"></A>
+<A NAME="SEC427"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC423"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_173.html#SEC428"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC421"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC425"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.5.6.2 General Concepts </H4>
-<!--docid::SEC424::-->
-<P>
-
-This section describes general core concepts which are used by following
-discussions.
-</P><P>
-
-<A NAME="SEC425"></A>
-<H4> Polygon </H4>
-<!--docid::SEC425::-->
-<P>
-
-A polygon is represented as a set of 3D vertices oriented in clockwise order
-(if the orientation is different, the polygon is not visible on screen).
-There are three versions of any polygon:
-</P><P>
-
-<OL>
-<LI>
-<EM>Po</EM> is the polygon in object space.  Here the vertices of the polygon are
-given in object space coordinates.
-<P>
-
-<LI>
-<EM>Pw</EM> is the polygon in world space.  For a sector world space is equal to
-object space but for a thing there is a transformation from object space to
-world space given as:
-<P>
-
-<BLOCKQUOTE>
-<EM>Vw = Mow * Vo - Vow</EM>
-</BLOCKQUOTE>
-<P>
-
-This means that the vertex in world space coordinates (<EM>Vw</EM>) is given as
-the vertex in object space coordinates (<EM>Vo</EM>) transformed by the matrix
-from object to world space (<EM>Mow</EM>) and the vector from object to world
-space (<EM>Vow</EM>).
-</P><P>
-
-This transformation is recomputed whenever a thing moves.
-</P><P>
-
-<LI>
-<EM>Pc</EM> is the polygon in camera space.  Before viewing, every relevant
-vertex is transformed from world space to camera space using the following
-equation:
-<P>
-
-<BLOCKQUOTE>
-<EM>Vc = Mwc * (Vw - Vwc)</EM>
-</BLOCKQUOTE>
-</OL>
-<P>
-
-Note, all three versions of a polygon are represented by the same
-`<SAMP>csPolygon3D</SAMP>' object.  The change from object to world and world to
-camera space happens inside the Vertex class that is referenced by
-`<SAMP>csPolygon3D</SAMP>'.
-</P><P>
-
-Associated with every polygon there is also a plane normal or plane equation:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>N: A * x + B * y + C * z + D = 0</EM>
-</BLOCKQUOTE>
-<P>
-
-There are also three versions of this plane equation; one for object space,
-one for world space, and one for camera space:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>No: Ao * x + Bo * y + Co * z + Do = 0</EM><BR>
-<EM>Nw: Aw * x + Bw * y + Cw * z + Dw = 0</EM><BR>
-<EM>Nc: Ac * x + Bc * y + Cc * z + Dc = 0</EM>
-</BLOCKQUOTE>
-<P>
-
-<A NAME="SEC426"></A>
-<H4> Camera </H4>
-<!--docid::SEC426::-->
-<P>
-
-A camera is represented as a matrix (<EM>Mwc</EM>) and a vector (<EM>Vwc</EM>).  In
-fact the camera describes the transformation between world and camera space.
-The inverse transformation (<EM>Mcw</EM>) from camera space to world space is
-also kept inside a `<SAMP>csCamera</SAMP>' object because it can be used for movement
-(for example, to move forward one would want to move forward along the Z-axis
-in camera space and not in world space).
-</P><P>
-
-<A NAME="SEC427"></A>
-<H4> Texture </H4>
+<H4> 7.5.6.1 Conventions </H4>
 <!--docid::SEC427::-->
 <P>
 
-There is also a texture associated with every polygon (unless it is a portal
-with no overlay).  The texture represents a 2-dimensional rectangular space
-where (0,0) is one corner of the texture and (1,1) is the opposite corner.  If
-a texture is overlayed onto a rectangular polygon such that one corner is
-mapped onto (0,0) in texture space and the opposite corner is mapped onto
-(2,2) then the texture will be tiled four times across the surface of the
-polygon.
-</P><P>
-
-To transform object to texture space we have the following equation:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>Vt = Mot * (Vo - Vot)</EM>
-</BLOCKQUOTE>
+<UL>
+<LI>
+<EM>Ps</EM> denotes a polygon in some space.  For example, <EM>Pw</EM> is a polygon
+in world space coordinates.  The other spaces are <EM>o</EM> for object space,
+<EM>c</EM> for camera space, <EM>t</EM> for texture space, and <EM>s</EM> for screen
+space.
 <P>
 
-Similarly for world space:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>Vt = Mwt * (Vw - Vwt)</EM>
-</BLOCKQUOTE>
+<LI>
+<EM>Vs</EM> denotes a vertex in 3D.  For example, <EM>Vw</EM> is a vertex in world
+space.
 <P>
 
-And for camera space:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>Vt = Mct * (Vc - Vct)</EM>
-</BLOCKQUOTE>
+<LI>
+<EM>Mst</EM> denotes a matrix transforming space from <EM>s</EM> to <EM>t</EM>.
+For example, <EM>Mow</EM> is a matrix transforming from object to world space.
+All <EM>Mst</EM> are 3x3 matrices.
 <P>
 
-So, just as there are three versions of the polygon (<EM>Po</EM>, <EM>Pw</EM>, and
-<EM>Pc</EM>) and three plane equations, we also have three equations transforming
-the various spaces to the texture.  <EM>Mot</EM> and <EM>Vot</EM> (object to texture
-space) are fixed (calculated at load time).  <EM>Mwt</EM> and <EM>Vwt</EM> (world to
-texture space) are the same for sectors but for things they are calculated
-whenever a thing moves.  <EM>Mct</EM> and <EM>Vct</EM> (camera to texture space) are
-calculated every time the corresponding polygon is visible and needs to be
-drawn on screen.
-</P><P>
+<LI>
+<EM>Vst</EM> denotes the corresponding vector transforming space from <EM>s</EM> to
+<EM>t</EM>.
+<P>
 
-Note that the texture transformation matrix is actually a transformation from
-3D to 3D.  We simply don't use the Z component in texture space (it is just
-ignored).
-</P><P>
+<LI>
+<EM>Ns</EM> denotes a plane normal vector (<EM>A,B,C</EM>) in some space.
+<P>
 
-<A NAME="Texture Mapping Perspective Correction"></A>
+<LI>
+<EM>Vs.x</EM>, <EM>Vs.y</EM>, and <EM>Vs.z</EM> are the respective <EM>x</EM>,
+<EM>y</EM>, and <EM>z</EM> components of a vector.  For example, <EM>Vw.y</EM> is
+the <EM>y</EM> component of a vector in world space.
+<P>
+
+<LI>
+<EM>Vt.u</EM> and <EM>Vt.v</EM> are the respective <EM>u</EM>, and <EM>v</EM>
+components of a vector in texture space.
+</UL>
+<P>
+
+<A NAME="Texture Mapping Concepts"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC423"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_173.html#SEC428"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC421"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC425"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

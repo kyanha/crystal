@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: SCF Using</TITLE>
+<TITLE>Crystal Space: SCF Explained</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: SCF Using">
-<META NAME="keywords" CONTENT="Crystal Space: SCF Using">
+<META NAME="description" CONTENT="Crystal Space: SCF Explained">
+<META NAME="keywords" CONTENT="Crystal Space: SCF Explained">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,189 +23,169 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC357"></A>
+<A NAME="SEC360"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC356"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_141.html#SEC358"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_141.html#SEC361"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 6.2.2 Using SCF </H3>
-<!--docid::SEC357::-->
+<H3> 6.2.1 How it Works </H3>
+<!--docid::SEC360::-->
 <P>
 
-The only include header file you need to include to utilize SCF
-functionality is `<TT>scf.h</TT>'.  It contains a number of macros and functions
-that you will need for easier use of SCF.  If you plan to use SCF in
-your own project without utilizing Crystal Space, you will also need to include
-`<TT>scf.cpp</TT>' in your main application, and `<TT>scfimp.cpp</TT>' in both your
-main application and each plugin module.  However, projects based upon Crystal
-Space can simply link with the `<TT>csutil</TT>' library which contains the
-SCF implementation.
+This section contains technical details about SCF. If you're not
+interested in details, you can skip directly to the next section which
+explains how SCF should be used from the end-user's point of view.
 </P><P>
 
-Much basic functionality of SCF is provided by a central object.  It can
-be accessed as `<SAMP>iSCF::SCF</SAMP>' and is of type `<SAMP>iSCF*</SAMP>' (which is also a
-valid SCF interface).  This object is global and can be accessed from
-<EM>anywhere</EM>, even from dynamic libraries (plugin modules).  It is used by
-several parts of SCF.  Note that this object is only available after
-calling <CODE>scfInitialize()</CODE>, the main initialization function of SCF.
-In typical use, howerver, you rarely need to interact directly with
-`<SAMP>iSCF::SCF</SAMP>'.  Instead, you invoke several convenient SCF macros which
-interact with `<SAMP>iSCF::SCF</SAMP>' on your behalf.
+SCF is somewhat similar to COM. This is because historically
+Crystal Space initially used COM for inter-module communication. Thanks
+to Dan Ogles for the initial implementation of a cross-platform COM
+library; his implementation was a good test-bed for this SCF
+implementation.
 </P><P>
 
-All SCF classes should be derived from the basic interface `<SAMP>iBase</SAMP>'.
-This interface declares the bare minimum set of methods which all SCF
-classes should provide:
+The differences between COM and SCF are due to the increased need for
+an easier-to-use and more lightweight mechanism than COM.  The COM
+implementation caused some problems (because of historic bugs in EGCS
+1.1.x and incompatibilities with platforms to which Crystal Space has ported).
+Also it has some problems due to the native Windows types used in COM;
+this experience was taken into account while developing SCF.
 </P><P>
 
-<DL COMPACT>
-<DT><CODE>void IncRef()</CODE>
-<DD>This function should be called each time you get a new reference to a object
-and store it for a long-time usage.  Rather than invoking this method manually,
-you can use a smart-pointer to automate reference counting
-(see section <A HREF="cs_110.html#SEC223">5.8.1 Correctly Using Smart Pointers</A>).
-<P>
-
-<DT><CODE>void DecRef()</CODE>
-<DD>Call this function to decrement the object's reference count.  When the
-reference count reaches zero, the object is deleted automatically, provided
-that it is not an interface embedded within another object,  <A HREF="cs_141.html#SCF Embedded Interfaces">SCF Embedded Interfaces</A>.  There should be one matching <CODE>DecRef()</CODE> for each
-<CODE>IncRef()</CODE> invocation.
-<P>
-
-<DT><CODE>void AddRefOwner(iBase**)</CODE>
-<DD>Call this function to set up a <EM>weak reference</EM> to the object .  A weak
-reference is one which is invalidated automatically when the referenced object
-is destroyed.  This is useful in cases when some object wants to hold a pointer
-to an SCF object without actually owning a reference to the SCF
-object.  Owning a reference prevents the SCF object from being destroyed,
-whereas holding a weak reference merely says that you are interested in this
-object as long as it is alive, but that you don't want to forcibly keep it
-alive.  The argument to this method is a pointer to a variable which can hold a
-pointer to an SCF object.  Rather than invoking this method manually, you
-typically would use a weak-reference template to automate the reference
-management (`<TT>CS/include/csutil/weakref.h</TT>').
-<P>
-
-<DT><CODE>void RemoveRefOwner(iBase**)</CODE>
-<DD>Call this function to remove a weak reference to the object.
-<P>
-
-<DT><CODE>iBase* QueryInterface(scfInterfaceID InterfaceID, int Version); This</CODE>
-<DD>method will return a pointer to an interface or to an embedded interface,
-(see  <A HREF="cs_141.html#SCF Embedded Interfaces">SCF Embedded Interfaces</A>).  The <EM>Interface ID</EM> is synonymous to
-the name of the interface.  In previous versions of SCF this method used
-to accept a string containing the name of the interface.  This has been
-replaced by the <EM>ID</EM> for performance reasons.  You can get the ID of
-an interface by invoking <CODE>iSCF::SCF-&#62;GetInterfaceID(name)</CODE>.
-</DL>
-<P>
-
-To simplify things even further, `<TT>scf.h</TT>' provides several macros that
-provide default declarations and default implementations of these
-methods.  The `<SAMP>SCF_DECLARE_IBASE</SAMP>' macro will declare these methods
-within any class definition that is derived from `<SAMP>iBase</SAMP>'.  The
-<CODE>SCF_IMPLEMENT_IBASE()</CODE> macro will add the default implementation of these
-methods to your module.  Finally, the <CODE>SCF_IMPLEMENT_FACTORY()</CODE> macro will
-implement the factory function for your class which returns new instances of
-the class to callers.
+The main paradigm of SCF, as in COM/CORBA/Java/etc. is the
+<EM>interface</EM>.  You define an <EM>interface</EM>, that is, a set of abstract
+methods that you want to access within some object.  SCF interfaces are
+plain C++ structs (or classes, it doesn't matter much except that if you're
+using classes to which you will have to add the `<SAMP>public:</SAMP>' keyword).
+Theoretically, interfaces can contain member variables and inline methods
+(though not non-virtual methods or constructors), <EM>but</EM> this practice is
+not encouraged because later someone may want to add a COM, CORBA,
+etc.  layer between the client and the actual object, and this will not be
+possible if the interfaces contains variables, inline methods, or non-virtual
+methods.  If you don't plan to use COM or CORBA later, then you can
+use variables and inline functions as much as you like in your own code, but
+their use in Crystal Space code is highly discouraged.
 </P><P>
 
-Example:
+Here is an example of an interface in a file named `<TT>idog.h</TT>':
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>// Abstract interface file (itest.h)
-struct iTest : public iBase
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>struct iDog
 {
-  <small>...</small>
+  virtual bool IsAlive() = 0;
+  virtual char const* GetName() = 0;
+  virtual void SetName (char const*) = 0;
+  virtual void Shout(int Volume) = 0;
+  virtual void Run(int Speed, float Direction) = 0;
+  virtual bool GetChildren(iObjVector* oBrood) = 0;
 };
+</pre></td></tr></table></P><P>
 
-// Concrete implementation header (test.h)
-class Test : public iTest
+Note the last method that gets a pointer of `<SAMP>iObjVector</SAMP>' type.
+`<SAMP>iObjVector</SAMP>' is yet another interface.  We could pass a pointer to a
+`<SAMP>csObjVector</SAMP>' (the implementation of that interface) as well, but this
+will mean both modules (caller and callee) should have same idea about what a
+`<SAMP>csObjVector</SAMP>' is, and if it happened that you compiled the shared library
+with a slightly different version of `<SAMP>csObjVector</SAMP>' (that, say, had one
+member variable fewer) you will end up with a SIGSEGV crash.  By instead
+specifying the abstract `<SAMP>iObjVector</SAMP>', there is no need to link the
+`<SAMP>csObjVector</SAMP>' class into both the caller and the callee.
+</P><P>
+
+Now let's write a particular <EM>implementation</EM> of the above interface.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "idog.h"
+
+class MyDog : public iDog
 {
+private:
+  // private member functions &#38; variables <small>...</small>
+  char* Name;
 public:
-  SCF_DECLARE_IBASE;
+  virtual bool IsAlive();
+  virtual char const* GetName();
+  virtual void SetName(char const*);
+  virtual void Shout(int Volume);
+  virtual void Run(int Speed, float Direction);
+  virtual bool GetChildren(iObjVector* oBrood);
+  <small>...</small> public member functions &#38; variables <small>...</small>
 };
 
-// Concrete implementation source (test.cpp)
-SCF_IMPLEMENT_FACTORY(Test)
+bool MyDog::IsAlive()
+{
+  return true;
+};
 
-SCF_IMPLEMENT_IBASE(Test)
+char const* MyDog::GetName()
+{
+  return Name;
+}
+
+void MyDog::SetName(char const* NewName)
+{
+  if (Name != 0)
+    free (Name);
+  Name = strcpy (NewName);
+}
+
+// And so on <small>...</small>
 </pre></td></tr></table></P><P>
 
-In reality, we need a few more macros because the <CODE>QueryInterface()</CODE>
-function is not static--it depends upon the interfaces implemented by given
-object.  In fact, <CODE>SCF_IMPLEMENT_IBASE()</CODE> defines <CODE>IncRef()</CODE>,
-<CODE>DecRef()</CODE>, <CODE>AddRefOwner()</CODE>, <CODE>RemoveRefOwner()</CODE>, and the
-beginning of the <CODE>QueryInterface()</CODE> function, but not the end of that
-function (i.e. the closing brace).  That's because you have to use an
-additional macro called <CODE>SCF_IMPLEMENTS_INTERFACE()</CODE> which will add the
-code required to support all implemented interface inside
-<CODE>QueryInterface()</CODE>:
+Now, we put the actual implementation into a separate module (i.e. into a
+shared library), and include within the client just the interface file
+`<TT>idog.h</TT>'. Since the client does not have any idea how we should build
+an object of the `<SAMP>MyDog</SAMP>' class, we also provide a function that will
+return a newly-allocated object of that class. This is called the
+<EM>class factory</EM> (in fact, a class factory is a bit more than just this,
+but more about this later). Here is how to do it:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_IMPLEMENT_FACTORY(Test)
-
-SCF_IMPLEMENT_IBASE(Test)
-  SCF_IMPLEMENTS_INTERFACE(iTest)
-SCF_IMPLEMENT_IBASE_END
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>static iDog* MyDog_Create()
+{
+  return new MyDog();
+}
 </pre></td></tr></table></P><P>
 
-The <CODE>SCF_DECLARE_IBASE()</CODE> macro also defines a few member variables:
-`<SAMP>scfRefCount</SAMP>', `<SAMP>scfWeakRefOwners</SAMP>', and `<SAMP>scfParent</SAMP>'.
-`<SAMP>scfRefCount</SAMP>' is the accumulator for external references to this object
-and is used by <CODE>IncRef()</CODE> and <CODE>DecRef()</CODE> methods.
-<CODE>scfWeakRefOwners</CODE> maintains the list of weak reference owners, if any.
-The `<SAMP>scfParent</SAMP>' variable points to the parent object, if any, and is also
-used by <CODE>IncRef()</CODE> and <CODE>DecRef()</CODE>.  Objects are chained together in a
-tree-like fashion, and an call to <CODE>IncRef()</CODE> will also call
-<CODE>scfParent-&#62;IncRef()</CODE>; same with <CODE>DecRef()</CODE>.  The root of the chain
-is the class factory, that is, an object that is used to create objects of a
-specific class.  The object tree looks like this:
+Okay, we did it. Now back to the client. To work with an object that
+implements the `<SAMP>iDog</SAMP>' interface we need to load the shared library, get
+a pointer to the <CODE>MyDog_Create()</CODE> function, call it and get a new
+`<SAMP>MyDog</SAMP>' object. Further we work with this pointer as if it were pointing
+to an `<SAMP>iDog</SAMP>' object:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>ClassFactory
-    => Object
-        => Embedded interface
-        => Embedded interface
-            => Sub-embedded interface
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csLibraryHandle handle = csLoadLibrary("./libdog.so");
+iDog (*iDog_Create)() = csGetLibrarySymbol(handle, "MyDog_Create");
+iDog* dog = iDog_Create();
+printf("Doggy's name is %s\n", dog-&#62;GetName());
+dog-&#62;Shout(100);
+<small>...</small>
 </pre></td></tr></table></P><P>
 
-Thus, if we call the <CODE>IncRef()</CODE> method for <EM>Sub-embedded interface</EM>,
-we also will increment reference count for <EM>Object</EM> and
-<EM>ClassFactory</EM>.
+Of course, you don't have to do all this stuff manually with the SCF
+implementation. The SCF library provides a number of useful macros and
+functions which hide these ugly implementation details from end-user.
 </P><P>
 
-You also should call <CODE>SCF_CONSTRUCT_IBASE(<VAR>parent</VAR>)</CODE> inside your class
-constructor, this macro will initialize `<SAMP>scfRefCount</SAMP>' to zero and
-`<SAMP>scfParent</SAMP>' to <VAR>parent</VAR>.  The constructor of many SCF classes
-should receive at least one argument of type `<SAMP>iBase*</SAMP>', which it should
-pass along to the <CODE>SCF_CONSTRUCT_IBASE()</CODE> macro.  It is also valid to
-specify `<SAMP>NULL</SAMP>' as the parent if the instance should have no parent.
-Likewise, you should call <CODE>SCF_DESTRUCT_IBASE()</CODE> inside your class
-destructor.  This will reverse the initialization performed by the
-corresponding <CODE>SCF_CONSTRUCT_IBASE()</CODE> invocation.
-</P><P>
-
-<A NAME="SCF Multiple Interfaces"></A>
+<A NAME="SCF Using"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC356"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_141.html#SEC358"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_141.html#SEC361"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: VIS sector structure</TITLE>
+<TITLE>Crystal Space: VIS entities</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: VIS sector structure">
-<META NAME="keywords" CONTENT="Crystal Space: VIS sector structure">
+<META NAME="description" CONTENT="Crystal Space: VIS entities">
+<META NAME="keywords" CONTENT="Crystal Space: VIS entities">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,43 +23,85 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC443"></A>
+<A NAME="SEC442"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_180.html#SEC438"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_182.html#SEC444"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_180.html#SEC441"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_182.html#SEC447"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC452"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.5.7.4 Sector Structure </H4>
+<H4> 7.5.7.3 Entities </H4>
+<!--docid::SEC442::-->
+<P>
+
+But first lets discuss the type of entities that Crystal Space supports.
+We already saw sectors above. These are the main containers for all
+the entities below.
+</P><P>
+
+<A NAME="SEC443"></A>
+<H4> Sprites or Models </H4>
 <!--docid::SEC443::-->
 <P>
 
-In this subsection we go deeper into the structure of a sector.
-A very common case to use sectors is to define a sector with one
-thing which is convex and makes up the outer hull of the sector. Sectors
-don't have to be defined like this but this is very common. You can then
-make a maze like structure with convex rooms connected to other convex
-rooms with portals. Non-convex attributes of the rooms can be added
-as separate detail objects.
+Crystal Space supports (among others) both 3D and 2D sprites. A 3D sprite
+is basically a set of triangles or a triangle mesh. I will not go into much
+more detail here because this document is related to visibility. A 2D sprite
+is a general polygon which always faces the camera. Both are considered
+detail objects (more on that later).
 </P><P>
 
-<A NAME="VIS visibility culling"></A>
+<A NAME="SEC444"></A>
+<H4> Things  </H4>
+<!--docid::SEC444::-->
+<P>
+
+Things are general objects used to define the basic geometry in a level.
+They can move and rotate but in general their most important use is to define
+level geometry (i.e. walls, floor, ceiling, a painting on the wall, a staircase,
+a chair, etc.). Small and detailed things will be tagged as detail
+objects. Polygons on things can also be portals to other areas.
+</P><P>
+
+<A NAME="SEC445"></A>
+<H4> Curved Surfaces </H4>
+<!--docid::SEC445::-->
+<P>
+
+Curved surfaces are implemented in a separate mesh object. They are usually
+considered as detail objects.
+</P><P>
+
+<A NAME="SEC446"></A>
+<H4> Terrain Surfaces </H4>
+<!--docid::SEC446::-->
+<P>
+
+A terrain surface is a large entity that can be in a sector.
+It is not a detail object (obviously). Handling of terrain and visibility
+is not ready yet. We need to do more work on this part. At this moment
+the terrain engine already has a visibility algorithm inside which is
+used for visibility culling of its own triangles but this algorithm should
+also be used to cull objects that are on the terrain.
+</P><P>
+
+<A NAME="VIS sector structure"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_180.html#SEC438"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_182.html#SEC444"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_180.html#SEC441"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_182.html#SEC447"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC452"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

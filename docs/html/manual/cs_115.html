@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Create Genmesh</TITLE>
+<TITLE>Crystal Space: HOWTO Create Thing</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Create Genmesh">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Create Genmesh">
+<META NAME="description" CONTENT="Crystal Space: HOWTO Create Thing">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Create Thing">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,187 +23,172 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC255"></A>
+<A NAME="SEC254"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_114.html#SEC250"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_116.html#SEC260"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_114.html#SEC247"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_116.html#SEC259"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.6 Creating a Genmesh Mesh </H3>
+<H3> 5.8.5 Creating a Thing Mesh </H3>
+<!--docid::SEC254::-->
+<P>
+
+This section describes how to create a thing mesh.
+</P><P>
+
+<A NAME="SEC255"></A>
+<H4> What are Things? </H4>
 <!--docid::SEC255::-->
 <P>
 
-This section describes how to create a Genmesh mesh.
+A `<SAMP>thing</SAMP>' mesh object (see section <A HREF="cs_226.html#SEC645">7.7.19 Thing Mesh Object</A>) is an object made
+out of polygons. Every polygon can have another material and the polygons
+can have three or more vertices. A thing uses lightmapping
+for lighting (roughly this means that every polygon gets another texture
+which contains light and shadow information for that polygon).
+</P><P>
+
+Things are useful for static geometry objects or objects that don't animate.
+You can use it for walls, floor, staircases, and even doors that open. As
+long as the object itself doesn't have to animate (but just moves) a thing
+is perfectly fine. For very high detail objects it is probably better to
+use the `<SAMP>genmesh</SAMP>' mesh object (see section <A HREF="cs_214.html#SEC581">7.7.7 Genmesh Mesh Object</A> instead. Also
+if you want to use internal animation (like an actor or a creature in your
+game) you should use the `<SAMP>sprite3d</SAMP>' mesh object (see section <A HREF="cs_212.html#SEC571">7.7.5 Sprite3D Mesh Object</A>).
+</P><P>
+
+Things can share geometry if they are made from the same factory. Note that
+information like lightmaps is not shared because a lightmap is position
+dependent (i.e. the amount of light a polygon receives depends on where the
+object instance actually is).
+</P><P>
+
+Note that you can hardtransform things (hardmove in maps). If you do this
+on a mesh object instance then the factory will be cloned if it is used
+by multiple mesh objects. That's because hardtransform essentially modifies
+the original geometry and the geometry of a thing is always in the factory.
+So beware of this because it may mean a lot of extra memory usage if you
+hardtransform every instance created from a factory.
+</P><P>
+
+Note that individual polygons can have names. This can be useful for debugging
+and also for attaching specific game features to some polygons (like indicating
+if some polygon is a light switch button or something) but be aware that these
+names add some memory overhead.
 </P><P>
 
 <A NAME="SEC256"></A>
-<H4> What is Genmesh? </H4>
+<H4> Creating a Thing in a Map </H4>
 <!--docid::SEC256::-->
 <P>
 
-A `<SAMP>Genmesh</SAMP>' mesh object (see section <A HREF="cs_213.html#SEC577">7.7.7 Genmesh Mesh Object</A>) is a generic
-triangle mesh object that (currently) supports one material for the entire
-mesh. In contrast with 3D sprites (see section <A HREF="cs_211.html#SEC567">7.7.5 Sprite3D Mesh Object</A>), genmeshes do not
-support animation (except that you can modify the vertices manually at
-runtime).
+Here is an example of how to create a cube thing in a map file. Note that
+in this example we avoid the use of a factory. We load a mesh object directly.
+A factory will be created invisibly to support the thing geometry:
 </P><P>
 
-Genmeshes are very useful for static or semi-static geometry (chests,
-doors, candles, swords, etc.) which do not need internal animation but which
-can sometimes require a lot of detail.
-</P><P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshobj name="cube"&#62;
+    &#60;plugin&#62;crystalspace.mesh.loader.thing&#60;/plugin&#62;
+    &#60;params&#62;
+        &#60;v x="-0.5" y="-0.5" z="-0.5" /&#62;
+        &#60;v x="-0.5" y="-0.5" z="0.5" /&#62;
+        &#60;v x="-0.5" y="0.5" z="-0.5" /&#62;
+        &#60;v x="-0.5" y="0.5" z="0.5" /&#62;
+        &#60;v x="0.5" y="-0.5" z="-0.5" /&#62;
+        &#60;v x="0.5" y="-0.5" z="0.5" /&#62;
+        &#60;v x="0.5" y="0.5" z="-0.5" /&#62;
+        &#60;v x="0.5" y="0.5" z="0.5" /&#62;
 
-Genmeshes use vertex lighting (or stencil if you use a stencil lighting
-shader).
-</P><P>
+        &#60;material&#62;upMaterial&#60;/material&#62;
+        &#60;p name="up"&#62;
+            &#60;v&#62;3&#60;/v&#62; &#60;v&#62;7&#60;/v&#62; &#60;v&#62;6&#60;/v&#62; &#60;v&#62;2&#60;/v&#62;
+        &#60;/p&#62;
+        &#60;material&#62;otherMaterial&#60;/material&#62;
+        &#60;p name="north"&#62;
+            &#60;v&#62;1&#60;/v&#62; &#60;v&#62;5&#60;/v&#62; &#60;v&#62;7&#60;/v&#62; &#60;v&#62;3&#60;/v&#62;
+        &#60;/p&#62;
+        &#60;p name="east"&#62;
+            &#60;v&#62;5&#60;/v&#62; &#60;v&#62;4&#60;/v&#62; &#60;v&#62;6&#60;/v&#62; &#60;v&#62;7&#60;/v&#62;
+        &#60;/p&#62;
+        &#60;p name="south"&#62;
+            &#60;v&#62;4&#60;/v&#62; &#60;v&#62;0&#60;/v&#62; &#60;v&#62;2&#60;/v&#62; &#60;v&#62;6&#60;/v&#62;
+        &#60;/p&#62;
+        &#60;p name="west"&#62;
+            &#60;v&#62;0&#60;/v&#62; &#60;v&#62;1&#60;/v&#62; &#60;v&#62;3&#60;/v&#62; &#60;v&#62;2&#60;/v&#62;
+        &#60;/p&#62;
+        &#60;p name="down"&#62;
+            &#60;v&#62;0&#60;/v&#62; &#60;v&#62;4&#60;/v&#62; &#60;v&#62;5&#60;/v&#62; &#60;v&#62;1&#60;/v&#62;
+        &#60;/p&#62;
+    &#60;/params&#62;
+    &#60;move&#62;
+        &#60;v x="1" y="0" z="3" /&#62;
+    &#60;/move&#62;
+&#60;/meshobj&#62;
+</pre></td></tr></table></P><P>
 
-Genmesh objects always have to be created through a factory. So, first
-you create the actual geometry in a genmesh factory and then you create one
-or more instances from that factory. This is a great way to save memory.
-This does mean that it is not possible to HardTransform genmeshes. It is
-only possible to HardTransform Genmesh factories.
+There is a lot more you can do in a thing. For example you can specify
+exactly how you want to map the texture on the polygons.
+In this particular example we create a cube that
+has another material for the upper polygon.
 </P><P>
 
 <A NAME="SEC257"></A>
-<H4> Creating a Genmesh in a Map </H4>
+<H4> Creating a Thing from Code </H4>
 <!--docid::SEC257::-->
 <P>
 
-Here is an example of how to create a cube genmesh in a map file:
+Here we create the same thing from code. We use a convenience function in
+the engine to create a thing (<CODE>CreateThingMesh</CODE>).
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshfact name="cubeFact"&#62;
-  &#60;plugin&#62;crystalspace.mesh.loader.factory.genmesh&#60;/plugin&#62;
-  &#60;params&#62;
-    &#60;numvt&#62;8&#60;/numvt&#62;
-    &#60;numtri&#62;12&#60;/numtri&#62;
-    &#60;v x="-0.1" y="0.1" z="0.1" u="0" v="0" /&#62;
-    &#60;v x="-0.1" y="0.1" z="-0.1" u="1" v="0" /&#62;
-    &#60;v x="0.1" y="0.1" z="-0.1" u="0" v="1" /&#62;
-    &#60;v x="0.1" y="0.1" z="0.1" u="1" v="1" /&#62;
-    &#60;v x="-0.1" y="-0.1" z="0.1" u="1" v="0" /&#62;
-    &#60;v x="-0.1" y="-0.1" z="-0.1" u="0" v="1" /&#62;
-    &#60;v x="0.1" y="-0.1" z="-0.1" u="1" v="1" /&#62;
-    &#60;v x="0.1" y="-0.1" z="0.1" u="0" v="0" /&#62;
-    &#60;t v1="0" v2="3" v3="1" /&#62;
-    &#60;t v1="3" v2="2" v3="1" /&#62;
-    &#60;t v1="4" v2="5" v3="7" /&#62;
-    &#60;t v1="5" v2="6" v3="7" /&#62;
-    &#60;t v1="0" v2="4" v3="3" /&#62;
-    &#60;t v1="4" v2="7" v3="3" /&#62;
-    &#60;t v1="1" v2="6" v3="5" /&#62;
-    &#60;t v1="1" v2="2" v3="6" /&#62;
-    &#60;t v1="0" v2="1" v3="5" /&#62;
-    &#60;t v1="0" v2="5" v3="4" /&#62;
-    &#60;t v1="2" v2="3" v3="7" /&#62;
-    &#60;t v1="2" v2="7" v3="6" /&#62;
-    &#60;autonormals /&#62;
-  &#60;/params&#62;
-&#60;/meshfact&#62;
-&#60;sector name="bla"&#62;
-  &#60;meshobj name="cube"&#62;
-    &#60;plugin&#62;crystalspace.mesh.loader.genmesh&#60;/plugin&#62;
-    &#60;params&#62;
-      &#60;factory&#62;cubeFact&#60;/factory&#62;
-      &#60;material&#62;mosaic&#60;/material&#62;
-    &#60;/params&#62;
-    &#60;move&#62;
-      &#60;v x="1" y="0" z="3" /&#62;
-    &#60;/move&#62;
-  &#60;/meshobj&#62;
-&#60;/sector&#62;
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  iMaterialWrapper* upMaterial = <small>...</small>
+  iMaterialWrapper* otherMaterial = <small>...</small>
+  csRef&#60;iMeshWrapper&#62; walls = engine-&#62;CreateThingMesh (room, "cube"));
+  csRef&#60;iThingState&#62; ws =
+  	SCF_QUERY_INTERFACE (walls-&#62;GetMeshObject (), iThingState);
+  csRef&#60;iThingFactoryState&#62; walls_state = ws-&#62;GetFactory ();
+  walls_state-&#62;AddQuad (
+    csVector3 (-.5, .5, -.5),
+    csVector3 (.5, .5, -.5),
+    csVector3 (.5, .5, .5),
+    csVector3 (-.5, .5, .5));
+  walls_state-&#62;SetPolygonMaterial (CS_POLYRANGE_LAST, upMaterial);
+  walls_state-&#62;SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+
+  <small>...</small>
 </pre></td></tr></table></P><P>
 
-In this example we define a box by specifying the eight corner vertices
-and the twelve triangles. The <CODE>&#60;autonormals&#62;</CODE> tag specifies that normals
-will be created automatically (to give the box a smooth appearance). The
-normals are used for lighthing. It is also possible to specify normals
-manually. Note that with every vertex we also specify a texture coordinate
-(uv coordinate).
-</P><P>
-
-To create a genmesh box you can actually use a short-hand notation:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshfact name="cubeFact"&#62;
-  &#60;plugin&#62;crystalspace.mesh.loader.factory.genmesh&#60;/plugin&#62;
-  &#60;params&#62;
-    &#60;box&#62;
-      &#60;min x="-0.1" y="-0.1" z="-0.1" /&#62;
-      &#60;max x="0.1" y="0.1" z="0.1" /&#62;
-    &#60;/box&#62;
-    &#60;autonormals /&#62;
-  &#60;/params&#62;
-&#60;/meshfact&#62;
-</pre></td></tr></table></P><P>
-
-This is a quick way to make boxes in a map file.
+This is only an extract of the example but you can easily see how to create
+additional polygons here.
 </P><P>
 
 <A NAME="SEC258"></A>
-<H4> Creating a Genmesh Programmatically </H4>
+<H4> Include Files   </H4>
 <!--docid::SEC258::-->
-<P>
-
-Here we create the same genmesh programmatically:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  // First create the factory:
-  csRef&#60;iMeshFactoryWrapper&#62; fact = engine-&#62;CreateMeshFactory (
-    "crystalspace.mesh.object.genmesh", "cubeFact");
-  csRef&#60;iGeneralFactoryState&#62; factstate = SCF_QUERY_INTERFACE (
-    fact-&#62;GetMeshObjectFactory (), iGeneralFactoryState);
-  factstate-&#62;SetVertexCount (8);
-  factstate-&#62;GetVertices ()[0].Set (-0.1, 0.1, 0.1);
-  factstate-&#62;GetTexels ()[0].Set (0, 0);
-  factstate-&#62;GetVertices ()[1].Set (-0.1, 0.1, -0.1);
-  factstate-&#62;GetTexels ()[1].Set (1, 0);
-  <small>...</small>
-  factstate-&#62;SetTriangleCount (12);
-  factstate-&#62;GetTriangles ()[0].Set (0, 3, 1);
-  factstate-&#62;GetTriangles ()[1].Set (3, 2, 1);
-  <small>...</small>
-  factstate-&#62;CalculateNormals ();
-
-  // Now create an instance:
-  csRef&#60;iMeshWrapper&#62; mesh =
-    engine-&#62;CreateMeshWrapper (fact, "cube");
-  csRef&#60;iGeneralMeshState&#62; meshstate = SCF_QUERY_INTERFACE (
-    mesh-&#62;GetMeshObject (), iGeneralMeshState);
-  meshstate-&#62;SetMaterialWrapper (myMaterial);
-  <small>...</small>
-</pre></td></tr></table></P><P>
-
-This will basically create the same cube as in the map file example.
-</P><P>
-
-<A NAME="SEC259"></A>
-<H4> Include Files    </H4>
-<!--docid::SEC259::-->
 <P>
 
 The include files useful for this section are:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "imesh/genmesh.h"
-</pre></td></tr></table><A NAME="HOWTO Camera Movement"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "imesh/thing.h"
+</pre></td></tr></table><A NAME="HOWTO Create Genmesh"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_114.html#SEC250"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_116.html#SEC260"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_114.html#SEC247"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_116.html#SEC259"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

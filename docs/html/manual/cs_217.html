@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: MeshObject Fountain</TITLE>
+<TITLE>Crystal Space: MeshObject PartSys</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: MeshObject Fountain">
-<META NAME="keywords" CONTENT="Crystal Space: MeshObject Fountain">
+<META NAME="description" CONTENT="Crystal Space: MeshObject PartSys">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject PartSys">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,156 +23,79 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC598"></A>
+<A NAME="SEC599"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_216.html#SEC595"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_218.html#SEC604"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_216.html#SEC593"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_218.html#SEC602"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.7.11 Fountain Mesh Object </H3>
-<!--docid::SEC598::-->
+<H3> 7.7.10 Particle Systems in General </H3>
+<!--docid::SEC599::-->
 <P>
 
 <EM>Written by Jorrit Tyberghein,
 <A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
 </P><P>
 
-A fountain is a particle system that emulates a fountain of water drops.  Also
-see the general particle system documentation which is valid for all particle
-systems.  See section <A HREF="cs_216.html#SEC595">7.7.10 Particle Systems in General</A>.
+This section explains everything that is common to all particle systems.
+Go to the specific particle system section for more information about
+a particle system in particular.
 </P><P>
-
-<A NAME="SEC599"></A>
-<H4> Basic Structure       </H4>
-<!--docid::SEC599::-->
-<P>
-
-The following SCF class names are used (for <CODE>CS_LOAD_PLUGIN()</CODE>):
-</P><P>
-
-<UL>
-<LI>
-Type plugin: `<SAMP>crystalspace.mesh.object.fountain</SAMP>'
-<LI>
-Loader plugin: `<SAMP>crystalspace.mesh.loader.fountain</SAMP>'
-<LI>
-Factory loader plugin: `<SAMP>crystalspace.mesh.loader.factory.fountain</SAMP>'
-</UL>
-<P>
-
-Objects in this plugin implement the following SCF interfaces (get
-with <CODE>SCF_QUERY_INTERFACE()</CODE>):
-</P><P>
-
-<UL>
-<LI>
-<EM>MeshObject</EM>
-<UL>
-<LI>
-Implements `<SAMP>iMeshObject</SAMP>'
-<LI>
-Implements `<SAMP>iParticleState</SAMP>'
-<LI>
-Implements `<SAMP>iFountainState</SAMP>'
-</UL>
-<LI>
-<EM>MeshObjectFactory</EM>
-<UL>
-<LI>
-Implements `<SAMP>iMeshObjectFactory</SAMP>'
-</UL>
-<LI>
-<EM>MeshObjectFactory</EM>
-<UL>
-<LI>
-Implements `<SAMP>iMeshObjectType</SAMP>'
-</UL>
-</UL>
-<P>
 
 <A NAME="SEC600"></A>
-<H4> Factory State Interface      </H4>
+<H4> Particle State Interface </H4>
 <!--docid::SEC600::-->
 <P>
 
-This plugin has no factory state interface.
+Use the `<SAMP>iParticleState</SAMP>' SCF interface to access settings for
+particle systems in general.  The definition of this interface can be found in
+`<TT>CS/include/imesh/partsys.h</TT>' and that's also the include file you need to
+include in your applications to use particle system plugins.  Using this
+interface you can access the material, blending mode (mixmode), color, and
+various other parameters.
 </P><P>
 
 <A NAME="SEC601"></A>
-<H4> Factory Loader      </H4>
+<H4> Object Loader      </H4>
 <!--docid::SEC601::-->
 <P>
 
-The fountain mesh factory loader has no parameters.
-</P><P>
-
-<A NAME="SEC602"></A>
-<H4> Object State Interface      </H4>
-<!--docid::SEC602::-->
-<P>
-
-`<SAMP>iFountainState</SAMP>' is the SCF interface that you can
-use to set/get settings for a fountain object. The definition of this
-interface can be found in `<TT>CS/include/imesh/fountain.h</TT>' and that's also the
-include file you need to include in your applications to use this plugin.
-Using this interface you can access the number of particles, the size
-of the particles, and various other fountain parameters.
-</P><P>
-
-In addition you can use `<SAMP>iParticleState</SAMP>'.
-</P><P>
-
-<A NAME="SEC603"></A>
-<H4> Object Loader       </H4>
-<!--docid::SEC603::-->
-<P>
-
-Also see the general documentation for particle systems for other recognized
-keywords.  See section <A HREF="cs_216.html#SEC595">7.7.10 Particle Systems in General</A>.
+Every particle system will at least have the following keywords in
+the loader for the object. In addition it will add particle system specific
+keywords which are explained in the respective sections.
 </P><P>
 
 <DL COMPACT>
-<DT><CODE>&#60;dropsize w="" h="" /&#62;</CODE>
-<DD>Size of the droplets for the fountain (width and height).
-<DT><CODE>&#60;origin x="" y="" z="" /&#62;</CODE>
-<DD>Origin of the fountain.  Usually this is (0,0,0) and the engine is responsible
-for setting the correct position of the fountain.  This works better for
-hierarchical transformations.
-<DT><CODE>&#60;accel x="" y="" z="" /&#62;</CODE>
-<DD>Acceleration of the particles (x, y, and z acceleration).
-<DT><CODE>&#60;speed&#62;speedValue&#60;/speed&#62;</CODE>
-<DD>Speed of the particles.
-<DT><CODE>&#60;opening&#62;openingValue&#60;/opening&#62;</CODE>
-<DD>Opening of the fountain sprinkler.
-<DT><CODE>&#60;azimuth&#62;azimuthValue&#60;/azimuth&#62;</CODE>
-<DD>Azimuth.
-<DT><CODE>&#60;elevation&#62;elevationValue&#60;/elevation&#62;</CODE>
-<DD>Elevation.
-<DT><CODE>&#60;falltime&#62;falltimeValue&#60;/falltime&#62;</CODE>
-<DD>Falltime.
-<DT><CODE>&#60;lighting&#62;yes/no&#60;/lighting&#62;</CODE>
-<DD>Disable or enable lighting for the fountain particles.
-<DT><CODE>&#60;number&#62;nrParticles&#60;/number&#62;</CODE>
-<DD>Number of particles to use.
+<DT><CODE>&#60;factory&#62;factoryName&#60;/factory&#62;</CODE>
+<DD>Name of the factory to use for creation of this instance.
+<DT><CODE>&#60;mixmode&#62;&#60;mode /&#62;&#60;/mixmode&#62;</CODE>
+<DD>Blending mode, one of `<SAMP>add</SAMP>', `<SAMP>alpha</SAMP>', `<SAMP>copy</SAMP>', `<SAMP>keycolor</SAMP>',
+`<SAMP>multiply2</SAMP>', `<SAMP>multiply</SAMP>', or `<SAMP>transparent</SAMP>'.
+<DT><CODE>&#60;material&#62;materialName&#60;/material&#62;</CODE>
+<DD>Material to use for the particle system.
+<DT><CODE>&#60;color red="" green="" blue="" /&#62;</CODE>
+<DD>Color to use for all particles.
 </DL>
-<A NAME="MeshObject Fire"></A>
+<P>
+
+<A NAME="MeshObject Fountain"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_216.html#SEC595"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_218.html#SEC604"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_216.html#SEC593"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_218.html#SEC602"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

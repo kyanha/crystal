@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Simple Loading Mesh Factory</TITLE>
+<TITLE>Crystal Space: Simple Loading Material</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Simple Loading Mesh Factory">
-<META NAME="keywords" CONTENT="Crystal Space: Simple Loading Mesh Factory">
+<META NAME="description" CONTENT="Crystal Space: Simple Loading Material">
+<META NAME="keywords" CONTENT="Crystal Space: Simple Loading Material">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,40 +23,44 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC177"></A>
+<A NAME="SEC180"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC176"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_83.html#SEC178"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_83.html#SEC181"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.3.2 Loading a Mesh Factory in Memory </H3>
-<!--docid::SEC177::-->
+<H3> 5.3.1 Loading a Material in Memory </H3>
+<!--docid::SEC180::-->
 <P>
 
-Now that we have our material we can use it to load the mesh factory.
-Edit `<TT>simple.cpp</TT>' and add the following code in
-<CODE>Simple::Initialize()</CODE> (before `<SAMP>return true</SAMP>' and after
-the code we just added to load the material):
+To make this example a little more interesting the material is going to be
+loaded <EM>after</EM> the other setup of the texture manager has been done.
+This is not really needed but it illustrates how a game might load materials
+dynamically later when the application is already running.  So first we edit
+`<TT>simple.cpp</TT>' and add the following in <CODE>Simple::Initialize()</CODE>
+(before `<SAMP>return true</SAMP>'):
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize ()
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize()
 {
   <small>...</small>
-  // Load a sprite template from disk.
-  csRef&#60;iMeshFactoryWrapper&#62; imeshfact (loader-&#62;LoadMeshObjectFactory (
-        "/lib/std/sprite1"));
-  if (imeshfact == 0)
+
+  // Load a texture for our sprite.
+  iTextureManager* txtmgr = g3d-&#62;GetTextureManager ();
+  iTextureWrapper* txt = loader-&#62;LoadTexture ("spark",
+        "/lib/std/spark.png", CS_TEXTURE_3D, txtmgr, true);
+  if (txt == 0)
   {
     csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple1",
-        "Error loading mesh object factory!");
+        "crystalspace.application.simple",
+        "Error loading texture!");
     return false;
   }
 
@@ -64,27 +68,52 @@ the code we just added to load the material):
 }
 </pre></td></tr></table></P><P>
 
-This example uses <CODE>iLoader::LoadMeshObjectFactory()</CODE> to load the
-mesh factory from the given location. The name of the mesh factory
-will be 'box' as that is the name given in the file `<TT>sprite1</TT>' itself.
+This code first loads a texture in our engine with
+<CODE>iLoader::LoadTexture()</CODE>.  The second argument is the file name for our
+texture (VFS path) and the first argument is how that texture should be
+named in the engine.  In this case we use `<SAMP>spark</SAMP>' for that because that's
+how the `<TT>sprite1</TT>' definition wants it. The third parameter indicates
+for what we want to use this texture. In this case we want to use it to texture
+map a model for the 3D engine so the texture must be prepared for 3D.
+The fourth parameter is the texture manager which will be used to register
+and prepare the texture and material. This is done automatically by
+this function because the fifth parameter is set to 'true'. In the previous
+tutorial we also used this function to load a texture but there we didn't
+specify the last three parameters. `<SAMP>CS_TEXTURE_3D</SAMP>' is default so that
+doesn't have to be specified and because we were going to call
+<CODE>engine-&#62;Prepare()</CODE> later we also didn't specify the texture manager
+and the last boolean parameter because <CODE>Prepare()</CODE> automatically
+registers and prepares all textures and materials that are loaded.
 </P><P>
 
-This is all there is to it. After this call the mesh factory is loaded
-in the engine and can be used to create meshes. This is what we'll do
-in the next section.
+If this loading succeeds this function will register our texture with the
+texture manager. As mentioned above this is needed because we are loading
+this texture AFTER <CODE>engine-&#62;Prepare()</CODE>. So this is an easy way to
+dynamically add textures and materials even when the engine is already
+running. Note that if you plan to load many new textures and materials
+it is more efficient to not let this function register automatically but
+instead register them manually and then call <CODE>txtmgr-&#62;PrepareTextures()</CODE>
+to prepare them all at once.
 </P><P>
 
-<A NAME="Simple Creating Mesh"></A>
+Note that when you load a texture like this there will also be an
+associated material with the same name. The engine itself works with
+materials and doesn't directly use textures. The material in this case
+is simply a wrapper on top of the texture. But you could also add detail
+textures.
+</P><P>
+
+<A NAME="Simple Loading Mesh Factory"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC176"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_83.html#SEC178"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_83.html#SEC181"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

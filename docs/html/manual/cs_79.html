@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Simple Locomotion</TITLE>
+<TITLE>Crystal Space: Simple Camera</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Simple Locomotion">
-<META NAME="keywords" CONTENT="Crystal Space: Simple Locomotion">
+<META NAME="description" CONTENT="Crystal Space: Simple Camera">
+<META NAME="keywords" CONTENT="Crystal Space: Simple Camera">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,114 +23,175 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC174"></A>
+<A NAME="SEC177"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_78.html#SEC173"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC155"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_78.html#SEC176"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC178"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.2.5 Locomotion (Moving Around) </H3>
-<!--docid::SEC174::-->
+<H3> 5.2.4 The Camera </H3>
+<!--docid::SEC177::-->
 <P>
 
-Staring at that solid wall gets a bit boring after some time.  The problem is
-that we can't move the camera to change our view point.  Let's add some code
-to do exactly this.  Edit `<TT>simple.cpp</TT>' again and change
-`<TT>SetupFrame()</TT>' as follows:
+In Crystal Space there is an interface called `<SAMP>iView</SAMP>' which
+encapsulates both `<SAMP>iCamera</SAMP>' and `<SAMP>iClipper2D</SAMP>' instances.
+In principle you can use those classes directly but using `<SAMP>iView</SAMP>' is
+easier.  Now edit `<TT>simple.h</TT>' to make use of `<SAMP>iView</SAMP>':
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><small>...</small>
+struct iView;
+<small>...</small>
+
+class Simple
+{
+private:
+  <small>...</small>
+  csRef&#60;iView&#62; view;
+  <small>...</small>
+  void SetupFrame ();
+  void FinishFrame ();
+  <small>...</small>
+</pre></td></tr></table></P><P>
+
+Then edit `<TT>simple.cpp</TT>' and make the following changes at the end of
+our <CODE>Initialize()</CODE> function:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize ()
+{
+  <small>...</small>
+  view = csPtr&#60;iView&#62; (new csView (engine, g3d));
+  view-&#62;GetCamera ()-&#62;SetSector (room);
+  view-&#62;GetCamera ()-&#62;GetTransform ().SetOrigin (csVector3 (0, 5, -3));
+  iGraphics2D* g2d = g3d-&#62;GetDriver2D ();
+  view-&#62;SetRectangle (0, 0, g2d-&#62;GetWidth (), g2d-&#62;GetHeight ());
+
+  return true;
+}
+</pre></td></tr></table></P><P>
+
+So first we create a view for our world and 3D graphics renderer.  The view
+has a current sector which is passed to the camera and is set by
+<CODE>SetSector()</CODE>.  The camera also has a position in that sector which you
+can set by first getting the camera with <CODE>GetCamera()</CODE> and then setting
+the position (which is a `<SAMP>csVector3</SAMP>') with <CODE>SetPosition()</CODE>.  The
+view also holds a clipping region which corresponds to the area on the window
+that is going to be used for drawing the world.  Crystal Space supports convex
+polygons to be used as viewing areas, but in case we use a simple rectangle
+which has almost the size of the window.  We set this viewing rectangle with
+<CODE>SetRectangle()</CODE>.
+</P><P>
+
+The call to create a new view is a bit special. See the discussion
+on smart pointers for a full info (see section <A HREF="cs_111.html#SEC227">5.8.1 Correctly Using Smart Pointers</A>).
+</P><P>
+
+Now, this still isn't enough.  We have a camera but the camera is not used.
+We still have to write code that actually draws the screen. We will do this
+in the functions <CODE>SetupFrame()</CODE> and <CODE>FinishFrame()</CODE>. Note that
+Crystal Space is event driven so the actual drawing needs to be triggered
+by the event handler. Add the following code somewhere in the source file:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>void Simple::SetupFrame ()
 {
-  // First get elapsed time from the virtual clock.
-  csTicks elapsed_time = vc-&#62;GetElapsedTicks ();
-  
-  // Now rotate the camera according to keyboard state
-  float speed = (elapsed_time / 1000.0) * (0.03 * 20);
+  // Tell 3D driver we're going to display 3D things.
+  if (!g3d-&#62;BeginDraw(
+    engine-&#62;GetBeginDrawFlags() | CSDRAW_3DGRAPHICS))
+    return;
 
-  iCamera* c = view-&#62;GetCamera();
-  if (kbd-&#62;GetKeyState (CSKEY_SHIFT))
-  {
-    // If the user is holding down shift, the arrow keys will cause
-    // the camera to strafe up, down, left or right from it's
-    // current position.
-    if (kbd-&#62;GetKeyState (CSKEY_RIGHT))
-      c-&#62;Move (CS_VEC_RIGHT * 4 * speed);
-    if (kbd-&#62;GetKeyState (CSKEY_LEFT))
-      c-&#62;Move (CS_VEC_LEFT * 4 * speed);
-    if (kbd-&#62;GetKeyState (CSKEY_UP))
-      c-&#62;Move (CS_VEC_UP * 4 * speed);
-    if (kbd-&#62;GetKeyState (CSKEY_DOWN))
-      c-&#62;Move (CS_VEC_DOWN * 4 * speed);
-  }
-  else
-  {
-    // left and right cause the camera to rotate on the global Y
-    // axis; page up and page down cause the camera to rotate on the
-    // _camera's_ X axis (more on this in a second) and up and down
-    // arrows cause the camera to go forwards and backwards.
-    if (kbd-&#62;GetKeyState (CSKEY_RIGHT))
-      rotY += speed;
-    if (kbd-&#62;GetKeyState (CSKEY_LEFT))
-      rotY -= speed;
-    if (kbd-&#62;GetKeyState (CSKEY_PGUP))
-      rotX += speed;
-    if (kbd-&#62;GetKeyState (CSKEY_PGDN))
-      rotX -= speed;
-    if (kbd-&#62;GetKeyState (CSKEY_UP))
-      c-&#62;Move (CS_VEC_FORWARD * 4 * speed);
-    if (kbd-&#62;GetKeyState (CSKEY_DOWN))
-      c-&#62;Move (CS_VEC_BACKWARD * 4 * speed);
-  }
+  // Tell the camera to render into the frame buffer.
+  view-&#62;Draw ();
+}
 
-  // We now assign a new rotation transformation to the camera.  You
-  // can think of the rotation this way: starting from the zero
-  // position, you first rotate "rotY" radians on your Y axis to get
-  // the first rotation.  From there you rotate "rotX" radians on the
-  // your X axis to get the final rotation.  We multiply the
-  // individual rotations on each axis together to get a single
-  // rotation matrix.  The rotations are applied in right to left
-  // order .
-  csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
-  csOrthoTransform ot (rot, c-&#62;GetTransform().GetOrigin ());
-  c-&#62;SetTransform (ot);
-
-  <small>...</small>
+void Simple::FinishFrame ()
+{
+  g3d-&#62;FinishDraw ();
+  g3d-&#62;Print (0);
 }
 </pre></td></tr></table></P><P>
 
-With this change you can rotate the camera with the left
-and right arrow keys and move forward and backward with the up and down arrow
-keys.  Try it out to see the effect.  To rotate the camera we use
-<CODE>RotateThis()</CODE> which expects a vector to rotate along and an angle given
-in radians (the speed parameter).  There are a number of predefined vectors
-which you can use.  A couple of them are used in this example.
+Modify the event handler like this:
 </P><P>
 
-That's it for now.  In this tutorial you learned how to setup the Crystal
-Space system for use, how to create a simple room with some lights, event
-handling, and how to handle some basic camera operations.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::HandleEvent (iEvent&#38; ev)
+{
+  if (ev.Type == csevBroadcast &#38;&#38; ev.Command.Code == cscmdProcess)
+  {
+    SetupFrame ();
+    return true;
+  }
+  else if (ev.Type == csevBroadcast &#38;&#38;
+    ev.Command.Code == cscmdFinalProcess)
+  {
+    FinishFrame ();
+    return true;
+  }
+  else if (ev.Type == csevKeyDown &#38;&#38; ev.Key.Code == CSKEY_ESC)
+  <small>...</small>
+</pre></td></tr></table></P><P>
+
+Drawing the screen is split in two parts. First there is the part that
+is done in <CODE>SetupFrame()</CODE>. Here we will actually fill the display.
+In this case we let the engine do most of that work by calling
+<CODE>view-&#62;Draw()</CODE>. But in principle you can do any kind of drawing here.
 </P><P>
 
-You can now go on to the next tutorial (see section <A HREF="cs_80.html#SEC175">5.3 Simple Tutorial 2: Sprites</A>)) to learn
-how to add a 3D sprite to this application.
-<A NAME="Tutorial Simple 2"></A>
+In <CODE>SetupFrame()</CODE> we first have to indicate to the 3D rasterizer that
+we want to start drawing 3D graphics.  This call makes sure that the
+needed buffers are set up and
+performs all necessary initialization. The engine often needs extra settings
+for this as well so you <EM>must</EM> call <CODE>engine-&#62;GetBeginDrawFlags()</CODE> to
+get these flags and or them with the ones that you want.
+</P><P>
+
+The second part is in <CODE>FinishFrame()</CODE> where we actually dump the
+frame to the screen. The reason this is split is that other components
+(plugins) in Crystal Space may choose to listen to events to draw additional
+things on top of the 3D view rendered in <CODE>SetupFrame()</CODE>. When a frame
+needs to be rendered the Crystal Space framework will send four messages:
+</P><P>
+
+<UL>
+<LI>
+`<SAMP>cscmdPreProcess</SAMP>' is sent first. This allows plugins to preprocess
+things before drawing can happen.
+<LI>
+`<SAMP>cscmdProcess</SAMP>' follows. In this pass the application will render.
+<LI>
+`<SAMP>cscmdPostProcess</SAMP>' is after that. This is the pass that can be used
+by external components to render on top of the view rendered by the
+application.
+<LI>
+`<SAMP>cscmdFinalProcess</SAMP>' is last. In this pass the application will display
+the frame on screen.
+</UL>
+<P>
+
+Compile and run this example.  For the first time you should see something.  A
+solid wall.  Congratulations, you have created your first almost useful
+Crystal Space application.
+</P><P>
+
+<A NAME="Simple Locomotion"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_78.html#SEC173"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC155"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_78.html#SEC176"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC178"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

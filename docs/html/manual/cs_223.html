@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: MeshObject Haze</TITLE>
+<TITLE>Crystal Space: MeshObject Spiral</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: MeshObject Haze">
-<META NAME="keywords" CONTENT="Crystal Space: MeshObject Haze">
+<META NAME="description" CONTENT="Crystal Space: MeshObject Spiral">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject Spiral">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,45 +23,149 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC634"></A>
+<A NAME="SEC632"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_222.html#SEC628"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_224.html#SEC635"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_222.html#SEC626"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_224.html#SEC638"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.7.17 Haze Mesh Object </H3>
-<!--docid::SEC634::-->
+<H3> 7.7.16 Spiral Mesh Object </H3>
+<!--docid::SEC632::-->
 <P>
 
 <EM>Written by Jorrit Tyberghein,
-(<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>).</EM>
+<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
 </P><P>
 
-<STRONG>DOCUMENTATION NOT UP-TO-DATE</STRONG>
+Spiral is a particle system for a special spiral effect.  This is an
+experimental particle system which is currently not fully operational.  Also
+see the general particle system documentation which is valid for all particle
+systems.  See section <A HREF="cs_217.html#SEC599">7.7.10 Particle Systems in General</A>.
 </P><P>
 
-This mesh object represents a 'haze' which is a bit like
-volumetric light.
+<A NAME="SEC633"></A>
+<H4> Basic Structure            </H4>
+<!--docid::SEC633::-->
+<P>
+
+The following SCF class names are used (for <CODE>CS_LOAD_PLUGIN()</CODE>):
 </P><P>
 
-<A NAME="MeshObject TerrFunc"></A>
+<UL>
+<LI>
+Type plugin: `<SAMP>crystalspace.mesh.object.spiral</SAMP>'
+<LI>
+Loader plugin: `<SAMP>crystalspace.mesh.loader.spiral</SAMP>'
+<LI>
+Factory loader plugin: `<SAMP>crystalspace.mesh.loader.factory.spiral</SAMP>'
+</UL>
+<P>
+
+Objects in this plugin implement the following SCF interfaces (get
+with <CODE>SCF_QUERY_INTERFACE()</CODE>):
+</P><P>
+
+<UL>
+<LI>
+<EM>MeshObject</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObject</SAMP>'
+<LI>
+Implements `<SAMP>iParticleState</SAMP>'
+<LI>
+Implements `<SAMP>iSpiralState</SAMP>'
+</UL>
+<LI>
+<EM>MeshObjectFactory</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObjectFactory</SAMP>'
+</UL>
+<LI>
+<EM>MeshObjectFactory</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObjectType</SAMP>'
+</UL>
+</UL>
+<P>
+
+<A NAME="SEC634"></A>
+<H4> Factory State Interface           </H4>
+<!--docid::SEC634::-->
+<P>
+
+This plugin has no factory state interface.
+</P><P>
+
+<A NAME="SEC635"></A>
+<H4> Factory Loader           </H4>
+<!--docid::SEC635::-->
+<P>
+
+The fountain mesh factory loader has no parameters.
+</P><P>
+
+<A NAME="SEC636"></A>
+<H4> Object State Interface           </H4>
+<!--docid::SEC636::-->
+<P>
+
+`<SAMP>iSpiralState</SAMP>' is the SCF interface that you can
+use to set/get settings for an spiral object. The definition of this
+interface can be found in `<TT>CS/include/imesh/spiral.h</TT>' and that's also the
+include file you need to include in your applications to use this plugin.
+Using this interface you can access the number of particles and the
+source of the spiral.
+</P><P>
+
+In addition you can use `<SAMP>iParticleState</SAMP>'.
+</P><P>
+
+<A NAME="SEC637"></A>
+<H4> Object Loader            </H4>
+<!--docid::SEC637::-->
+<P>
+
+Also see the general documentation for particle systems for other recognized
+keywords.  See section <A HREF="cs_217.html#SEC599">7.7.10 Particle Systems in General</A>.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>&#60;source x="" y="" z="" /&#62;</CODE>
+<DD>Source of the spiral (3D coordinate).
+<DT><CODE>&#60;number&#62;nrParticles&#60;/number&#62;</CODE>
+<DD>Number of particles to use.
+<DT><CODE>&#60;particlesize w="" h="" /&#62;</CODE>
+<DD>Size of the particles in the spiral.
+<DT><CODE>&#60;particletime&#62;particleTime&#60;/particleTime&#62;</CODE>
+<DD>Time to live of particles, in msec.
+<DT><CODE>&#60;radialspeed&#62;radialSpeed&#60;/radialSpeed&#62;</CODE>
+<DD>Particle radial speed in spiral.
+<DT><CODE>&#60;rotationspeed&#62;rotationSpeed&#60;/rotationSpeed&#62;</CODE>
+<DD>Particle rotation speed in spiral.
+<DT><CODE>&#60;climbspeed&#62;climbSpeed&#60;/climbSpeed&#62;</CODE>
+<DD>Particle climb speed in spiral.
+</DL>
+<A NAME="MeshObject Haze"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_222.html#SEC628"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_224.html#SEC635"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_222.html#SEC626"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_224.html#SEC638"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: MeshObject Ball</TITLE>
+<TITLE>Crystal Space: MeshObject Genmesh</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: MeshObject Ball">
-<META NAME="keywords" CONTENT="Crystal Space: MeshObject Ball">
+<META NAME="description" CONTENT="Crystal Space: MeshObject Genmesh">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject Genmesh">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,34 +23,41 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC583"></A>
+<A NAME="SEC581"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_213.html#SEC577"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_215.html#SEC589"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_213.html#SEC578"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_215.html#SEC587"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.7.8 Ball Mesh Object </H3>
-<!--docid::SEC583::-->
+<H3> 7.7.7 Genmesh Mesh Object </H3>
+<!--docid::SEC581::-->
 <P>
 
 <EM>Written by Jorrit Tyberghein,
 <A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
 </P><P>
 
-A ball is a ball shaped object made out of triangles. You can specify
-the detail (i.e. number of triangles used).
+A Genmesh is a complex set of 3D triangles (just like a 3D sprite)
+that doesn't support any automatic animation (unlike a 3D sprite). In general
+genmeshes are ideal for high detailed objects that don't require any animation.
+At this point in time genmeshes are limited to having only one material but
+that limitation may be removed in the future.
 </P><P>
 
-<A NAME="SEC584"></A>
-<H4> Basic Structure     </H4>
-<!--docid::SEC584::-->
+There is also a HOWTO discussing the creation of genmeshes.
+See section <A HREF="cs_116.html#SEC259">5.8.6 Creating a Genmesh Mesh</A>.
+</P><P>
+
+<A NAME="SEC582"></A>
+<H4> Basic Structure    </H4>
+<!--docid::SEC582::-->
 <P>
 
 The following SCF class names are used (for <CODE>CS_LOAD_PLUGIN()</CODE>):
@@ -58,16 +65,16 @@ The following SCF class names are used (for <CODE>CS_LOAD_PLUGIN()</CODE>):
 
 <UL>
 <LI>
-Type plugin: `<SAMP>crystalspace.mesh.object.ball</SAMP>'
+Type plugin: <CODE>crystalspace.mesh.object.genmesh</CODE>
 <LI>
-Loader plugin: `<SAMP>crystalspace.mesh.loader.ball</SAMP>'
+Loader plugin: <CODE>crystalspace.mesh.loader.genmesh</CODE>
 <LI>
-Factory loader plugin: `<SAMP>crystalspace.mesh.loader.factory.ball</SAMP>'
+Factory loader plugin: <CODE>crystalspace.mesh.loader.factory.genmesh</CODE>
 </UL>
 <P>
 
-Objects in this plugin implement the following SCF interfaces (get
-with <CODE>SCF_QUERY_INTERFACE()</CODE>):
+Objects in this plugin implement the following SCF interfaces, which you
+can retrieve with <CODE>SCF_QUERY_INTERFACE()</CODE>:
 </P><P>
 
 <UL>
@@ -77,16 +84,18 @@ with <CODE>SCF_QUERY_INTERFACE()</CODE>):
 <LI>
 Implements `<SAMP>iMeshObject</SAMP>'
 <LI>
-Implements `<SAMP>iBallState</SAMP>'
+Implements `<SAMP>iGeneralMeshState</SAMP>'
 </UL>
 <LI>
 <EM>MeshObjectFactory</EM>
 <UL>
 <LI>
 Implements `<SAMP>iMeshObjectFactory</SAMP>'
+<LI>
+Implements `<SAMP>iGeneralFactoryState</SAMP>'
 </UL>
 <LI>
-<EM>MeshObjectFactory</EM>
+<EM>MeshObjectType</EM>
 <UL>
 <LI>
 Implements `<SAMP>iMeshObjectType</SAMP>'
@@ -94,80 +103,55 @@ Implements `<SAMP>iMeshObjectType</SAMP>'
 </UL>
 <P>
 
+<A NAME="SEC583"></A>
+<H4> Factory State Interface   </H4>
+<!--docid::SEC583::-->
+<P>
+
+Use the `<SAMP>iGeneralFactoryState</SAMP>' SCF interface to access settings for
+a genmesh factory.  The definition of this interface can be found in
+`<TT>CS/include/imesh/genmesh.h</TT>' and that is also the include file you need
+to include in your applications to use this plugin.  Using this interface you
+can access the material, triangles, vertices, texture coordinates, normals,
+and various other configuration parameters for a genmesh factory.
+</P><P>
+
+<A NAME="SEC584"></A>
+<H4> Factory Loader   </H4>
+<!--docid::SEC584::-->
+<P>
+
+@@@TODO
+</P><P>
+
 <A NAME="SEC585"></A>
-<H4> Factory State Interface    </H4>
+<H4> Object State Interface   </H4>
 <!--docid::SEC585::-->
 <P>
 
-The ball mesh object plugin has no factory state interface.
+`<SAMP>iGeneralMeshState</SAMP>' (residing in `<TT>CS/include/imesh/genmesh.h</TT>') is the
+SCF interface that you can use to manipulate settings for a genmesh
+object.  By using this interface you can access the material, blending mode
+(mixmode), and various other configuration parameters for a genmesh object.
 </P><P>
 
 <A NAME="SEC586"></A>
-<H4> Factory Loader    </H4>
+<H4> Object Loader   </H4>
 <!--docid::SEC586::-->
 <P>
 
-The ball mesh factory loader has no parameters.
-</P><P>
-
-<A NAME="SEC587"></A>
-<H4> Object State Interface    </H4>
-<!--docid::SEC587::-->
-<P>
-
-`<SAMP>iBallState</SAMP>' is the SCF interface that you can
-use to set/get settings for a ball object. The definition of this
-interface can be found in <CODE>include/imesh/ball.h</CODE> and that's also the
-include file you need to include in your applications to use this plugin.
-Using this interface you can access the material, blending mode (mixmode),
-and radius.
-</P><P>
-
-<A NAME="SEC588"></A>
-<H4> Object Loader    </H4>
-<!--docid::SEC588::-->
-<P>
-
-<DL COMPACT>
-<DT><CODE>&#60;factory&#62;factoryname&#60;/factory&#62;</CODE>
-<DD>Name of the factory to use for creation of this instance.
-<DT><CODE>&#60;mixmode&#62;&#60;mode /&#62;&#60;/mixmode&#62;</CODE>
-<DD>Blending mode, one of `<SAMP>add</SAMP>', `<SAMP>alpha</SAMP>', `<SAMP>copy</SAMP>', `<SAMP>keycolor</SAMP>',
-`<SAMP>multiply2</SAMP>', `<SAMP>multiply</SAMP>', or `<SAMP>transparent</SAMP>'.
-<DT><CODE>&#60;material&#62;materialname&#60;/material&#62;</CODE>
-<DD>Material to use for the ball.
-<DT><CODE>&#60;numrim&#62;number&#60;/numrim&#62;</CODE>
-<DD>Number of vertices on the rim of the ball (i.e. the number of vertices along
-the equator).  A good default is 6.
-<DT><CODE>&#60;radius x="" y="" z="" /&#62;</CODE>
-<DD>Three parameters for x, y, and z radius.
-<DT><CODE>&#60;shift x="" y="" z="" /&#62;</CODE>
-<DD>Three parameters for x, y, and z shift.
-<DT><CODE>&#60;reversed&#62;yes/no&#60;/reversed&#62;</CODE>
-<DD>Reverse the order of the triangles so that the ball is visible from the
-inside instead of the outside.
-<DT><CODE>&#60;toponly&#62;yes/no&#60;/toponly&#62;</CODE>
-<DD>Only generate the top triangles instead of two halves.
-<DT><CODE>&#60;cylindrical&#62;yes/no&#60;/cylindrical&#62;</CODE>
-<DD>Use cylindrical texture mapping instead of only a circle from the
-texture (default off).
-<DT><CODE>&#60;lighting&#62;yes/no&#60;/lighting&#62;</CODE>
-<DD>Enable/disable lighting. Default on.
-<DT><CODE>&#60;color red="" green="" blue="" /&#62;</CODE>
-<DD>Set the base color to use for the ball. This color will be added to the
-color calculated by lighting (if lighting is enabled).
-</DL>
-<A NAME="MeshObject Emit"></A>
+@@@TODO
+<A NAME="MeshObject Ball"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_213.html#SEC577"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_215.html#SEC589"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_213.html#SEC578"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_215.html#SEC587"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

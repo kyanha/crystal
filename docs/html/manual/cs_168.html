@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Cameras and Matrices</TITLE>
+<TITLE>Crystal Space: Lighting</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Cameras and Matrices">
-<META NAME="keywords" CONTENT="Crystal Space: Cameras and Matrices">
+<META NAME="description" CONTENT="Crystal Space: Lighting">
+<META NAME="keywords" CONTENT="Crystal Space: Lighting">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,312 +23,250 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC418"></A>
+<A NAME="SEC417"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_167.html#SEC413"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC421"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_167.html#SEC411"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC422"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_165.html#SEC408"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.5.4 Cameras and Matrices </H3>
-<!--docid::SEC418::-->
+<H3> 7.5.3 Lighting </H3>
+<!--docid::SEC417::-->
 <P>
 
 <EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.  Mathematical typesetting for
-TeX performed by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
+<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
 </P><P>
 
-This section describes how a camera in a 3D engine can be represented by a 3x3
-matrix and a 3-element vector.  This is the method that is used in the Crystal
-Space engine but it is general enough that it can be used in other engines as
-well.
+Crystal Space supports three types of lighting: <EM>static</EM>,
+<EM>pseudo-dynamic</EM> and <EM>dynamic</EM>.  They are different in the ways you
+can change their attributes while the engine is running.  Static lights cannot
+be changed at all, but produce best performance and least memory consumption.
+Pseudo-dynamic lights can change their color and brightness, but not their
+position.  Dynamic lights can also change their position.
+</P><P>
+
+In the interest of accuracy, it is actually possible to change the so-called
+"unchangeable" attributes of static and pseudo-dynamic lights, but after
+doing so, it is necessary to perform time-consuming recalculation of lightmaps
+in order for the changes to be reflected in the rendered world.
+</P><P>
+
+Every light has a position in world space coordinates and a current
+<EM>sector</EM>.  Every light also has a radius (expressed in squared distance).
+This radius indicates where the light levels of the three light tables will
+reach zero.
+</P><P>
+
+<A NAME="SEC418"></A>
+<H4> Static Lights </H4>
+<!--docid::SEC418::-->
+<P>
+
+This section gives a very brief explanation of the static lighting system used
+in Crystal Space.  <STRONG>Warning</STRONG>: <EM>Although the basic principle
+described here is still valid, much more is going on now.  This document needs
+to be updated to reflect the current state of the engine.</EM>
+</P><P>
+
+Static lighting is based on <EM>lightmaps</EM>.  These are like textures except
+that every pixel defines the combined brightness of all lights at its
+position.  Before the rendering loop starts, these lightmaps are precalculated
+so there is little performance loss at runtime, where we only need to blend
+texture and lightmap of a polygon.
+</P><P>
+
+Lightmaps are calculated as follows:
+</P><P>
+
+<OL>
+<LI>
+First initialize all lightmaps to black (or the ambient color).
+<P>
+
+<LI>
+For every light in the world generate a view frustum as seen from the position
+of that light.  The frustum is defined as a set of 3D polygon or light
+patches.  Every light patch is clipped against the relevant portals until
+nothing remains (light patch becomes empty).  Every light patch in this
+frustum is in fact a projection of the light on the normal polygons.  It is in
+that area that we need to update the lightmap for every polygon.
+<P>
+
+<LI>
+For every polygon that was hit, cast beams from the light to every lightmap
+point on the polygon (lightmap points are often defined every 16 by 16 texels
+although you can change this value if desired).  We know that in principle the
+beam of light should reach the polygon since the light patch gives the
+boundary of where the light can reach the polygon.  But the frustum was
+generated ignoring Things.  So it is possible that there is a Thing blocking a
+specific beam of light.  We need to test for that.
+<P>
+
+<LI>
+If there is a successful hit then calculate the distance between the light and
+the point on the polygon and update the intensity there.
+</OL>
+<P>
+
+To create the three lightmaps for every polygon a 2D bounding box in texture
+space is calculated.  This defines a rectangle that overlaps with the texture
+on the polygon and is correctly aligned with it (so that every 16 by 16 texel
+grid has one lightmap position).  A consequence of this is that rotated
+textures can waste a lot of lightmap space.  For example, see the following
+polygon:
+</P><P>
+
+<CENTER><IMG SRC="plugins/engine/light1.png" ALT="plugins/engine/light1"></CENTER>
+</P><P>
+
+And assume that the texture is aligned horizontally.  Then we would need a
+lightmap of the following size:
+</P><P>
+
+<CENTER><IMG SRC="plugins/engine/light2.png" ALT="plugins/engine/light2"></CENTER>
+</P><P>
+
+Note also, that the texture in the texture cache will have that size.
 </P><P>
 
 <A NAME="SEC419"></A>
-<H4> Theory </H4>
+<H4> Pseudo-Dynamic Lights </H4>
 <!--docid::SEC419::-->
 <P>
 
-A way to look at the matrix and vector representation of a camera is by seeing
-the matrix as a 3 dimensional arrow pointing in some direction (the direction
-the camera is looking at) and the vector as the starting point (origin) of
-that arrow.
+The pseudo-dynamic lighting system is an extension to the static lighting
+system described above.  Pseudo-dynamic lights can not move but you can change
+the intensity or color.  When some light is made pseudo-dynamic (a simple
+flag) the processing is a bit different.  The shadow-computation remains the
+same but every polygon that is hit by the pseudo-dynamic light needs to have
+separate lightmaps for every pseudo-dynamic light that hits the polygon.  So
+in the end all the polygons that are only hit by static lights have just one
+lightmap (for the three tables) for all static lighting information.  Every
+polygon that is hit by one or more pseudo-dynamic lights will have one or more
+extra lightmap tables for every pseudo-dynamic light and one extra for all
+static lights.  This information is then added together to result in the final
+lightmap table that can then be used by the texture cache routine (as
+explained earlier).
 </P><P>
 
-What does this matrix do? It performs a linear transformation from 3D to 3D.
-With a 3x3 matrix you can represent every linear transformation from one 3D
-space to another 3D space.  The matrix that we use for a camera is just a
-linear transformation matrix that transforms coordinates represented in one
-coordinate system to another.  Let's assume that everything in the world is
-defined by using 3D vertices with an <EM>x</EM>, <EM>y</EM>, and <EM>z</EM>
-component.  So a vertex is defined by three numbers: <EM>x</EM>, <EM>y</EM>, and
-<EM>z</EM>.  These three numbers only have meaning when used relative to some
-origin.  A origin is defined by three axes (if it is a 3D origin that is).
+The lightmaps for the pseudo-dynamic lights are stored without the strength of
+the light.  So where the light shines brightest the value in the lightmap will
+be 255, and where it shines least bright the value will be 0.  When combining
+all pseudo-dynamic lightmaps and the static lightmap the strength of every
+light will be multiplied with the distance value to result in the real
+lightmap value.  This also implies that there is only one extra lightmap for
+every polygon/pseudo-dynamic light because the shadow information (which is
+basically what is represented in pseudo-dynamic lightmaps) is the same for all
+three light-tables.
 </P><P>
 
-So our camera matrix transforms 3D vertices from world space to camera space.
-This means that a vertex with position (<EM>x,y,z</EM>) in the world (in world
-space) will get new coordinates (<EM>x',y',z'</EM>) in camera space.  The only
-reason that we want to apply this transformation is to make things easier for
-the rest of the 3D engine.  Because after this transformation we can program
-the rest of the engine as if every vertex is represented in camera space.  In
-other words; a vertex with coordinates (<EM>0,0,5</EM>) will be a vertex that
-lies just in front of the camera at distance 5.  A vertex with coordinates
-(<EM>1,3,-5</EM>) is behind the plane of the camera and can thus be easily
-discarded.  The test <EM>Z &#60; 0</EM> is thus an easy test to see if a vertex will
-be visible or not.
+Here are some performance considerations for pseudo-dynamic lighting.  There
+is a memory penalty for every polygon that is hit by some pseudo-dynamic
+lighting because extra lightmaps need to be created.  So if you use no
+pseudo-dynamic lighting you will suffer no penalty but if you use a very large
+pseudo-dynamic light (with a large radius) it will probably hit a large number
+of polygons and you will have a considerable increase in memory requirements.
 </P><P>
 
-How does this transformation work? In fact it is just matrix algebra.  For
-example, if the camera matrix is represented by <EM>M</EM> and the camera
-position is represented by <EM>P</EM> then we can write the equation to
-transform from world space to camera space by using:
+There is also a performance penalty whenever the intensity of a pseudo-dynamic
+light changes.  This is because all the textures for the polygons that are hit
+by the pseudo-dynamic light need to be recalculated (they are removed from the
+texture cache).
 </P><P>
 
-<BLOCKQUOTE>
-<EM>C = M * (W - P)</EM>
-</BLOCKQUOTE>
-<P>
-
-<EM>W</EM> is a 3D vector describing the position of a vertex in world space
-coordinates.  <EM>C</EM> is a 3D vector describing the position of a vertex in
-camera space coordinates.
-</P><P>
-
-This formula does the following.  First it translates the world space position
-so that the camera position is at (<EM>0,0,0</EM>).  This is done by <EM>W -
-P</EM>.  As you can see a vertex that would be on the same world space coordinates
-as the camera would be translated to (<EM>0,0,0</EM>).  The result of this
-calculation is another 3D vector.
-</P><P>
-
-This vector is then multiplied by the camera matrix <EM>M</EM> to transform it
-to camera space.  You can visualize this by treating <EM>M</EM> as an arrow
-pointing in some direction and the vertex lying somewhere relative to that
-arrow.  By transforming with <EM>M</EM> (multiplying) we move the arrow until it
-points just the way we want it (with the Z-axis in front and so on).
-</P><P>
-
-A matrix by vector multiplication is defined as follows:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ a b c \     / x \     / a * x + b * y + c * z \
-| d e f |  *  | y |  =  | d * x + e * y + f * z |
-\ g h i /     \ z /     \ g * x + h * y + i * z /
-</pre></td></tr></table></P><P>
-
-So for example, let's apply this formula in the initial configuration, with
-the camera pointing forwards in world space.  The camera matrix is then equal
-to:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 1 0 0 \
-| 0 1 0 |
-\ 0 0 1 /
-</pre></td></tr></table></P><P>
-
-And the vector is equal to:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 0 \
-| 0 |
-\ 0 /
-</pre></td></tr></table></P><P>
-
-Translation of a vertex in world space coordinates to camera space coordinates
-makes no changes since the camera is at the origin of the world.
-Transformation results in the previous formula being applied:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 1 0 0 \     / x \     / 1 * x + 0 * y + 0 * z \
-| 0 1 0 |  *  | y |  =  | 0 * x + 1 * y + 0 * z |
-\ 0 0 1 /     \ z /     \ 0 * x + 0 * y + 1 * z /
-</pre></td></tr></table></P><P>
-
-So as you can see, this does not change the vertex at all.
+If the intensity of a pseudo-dynamic light does not change there is no
+performance hit at all.
 </P><P>
 
 <A NAME="SEC420"></A>
-<H4> Practice </H4>
+<H4> Dynamic Lights </H4>
 <!--docid::SEC420::-->
 <P>
 
-Now that the theory behind camera mathematics has been described, it is time
-to see everything put into practice in order to actually move the camera.  All
-of the different kind of movements that the camera can do are also performed
-as transformations.
+Crystal Space also supports true dynamic lights.  These are rendered atop the
+normal lightmaps as explained above and support colors and limited shadows.
 </P><P>
 
-For example, let's say that you want to move the camera forward a bit.  If you
-would represent this movement in camera space than you would say that the
-camera moves from (<EM>0,0,0</EM>)---since the camera is at the origin in camera
-space--to (<EM>0,0,d</EM>) with <EM>d</EM> the distance that you want it to move.
-This is because we defined camera space so that <EM>Z</EM> is in front of you.
-</P><P>
-
-But we want to know the position of the camera in world space.  In fact, what
-we want to do is to transform the camera space position (<EM>0,0,d</EM>) to
-world space.  This would then be the new position for the camera.
-</P><P>
-
-So we need the inverse transformation.  To calculate the inverse
-transformation you need to calculate the inverse of the matrix <EM>M</EM>.
-Let's call this inverse <EM>M'</EM>.  From Matrix Algebra, we know that
-<EM>M * M' = I</EM>
-(where <EM>I</EM> is the identity matrix).
-</P><P>
-
-Calculation of the inverse of a matrix is a bit complicated.  For exact
-details, consult a Matrix Algebra textbook.  In practical terms, it is done by
-starting with the following formula which is our transformation from world to
-camera space equation:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>C = M * (W - P)</EM>
-</BLOCKQUOTE>
+<A NAME="SEC421"></A>
+<H4> Shadow Calculation </H4>
+<!--docid::SEC421::-->
 <P>
 
-We would now like to calculate the new equation for the inverse
-transformation.  We already have <EM>M'</EM> (the inverse matrix).  Ok, let us
-multiply both sides of the equation by <EM>M'</EM>.  This gives:
+The algorithm to see if a given beam reaches a specific point on some polygon
+works as follows.  The beam is described as two vertices (<EM>start</EM> and
+<EM>end</EM>):
 </P><P>
 
-<BLOCKQUOTE>
-<EM>M' * C = M' * M * (W - P)</EM>
-</BLOCKQUOTE>
+<OL>
+<LI>
+Start at the "sector" of the light.
 <P>
 
-Since
-<EM>M' * M = I</EM>,
-this results in:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>M' * C = W - P</EM>
-</BLOCKQUOTE>
+<LI>
+If the current sector is equal to the sector of the polygon then there is a
+hit, since all polygons of a sector are completely visible from anywhere in a
+sector.
 <P>
 
-So the equation we are looking for is:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>W = M' * C + P</EM>
-</BLOCKQUOTE>
+<LI>
+Otherwise, if the light is not in this sector, the beam could reach this
+sector through a portal.  Since the beam certainly ends at the polygon (this
+is given, the start and end vertices define a beam that will--if not
+blocked--reach the polygon) and the beam passed through portals to reach here
+then the beam hits the polygon.  So perform the following steps:
 <P>
 
-So this is the equation that transforms camera space to world space.  Now we
-can use this to transform (<EM>0,0,d</EM>) to the new camera space coordinates.
-Other movements (like moving to the right (<EM>d,0,0</EM>), up (<EM>0,d,0</EM>),
-down (<EM>0,-d,0</EM>), and so on) are all performed in an equivalent manner.
-</P><P>
-
-If you want to turn right then your position will not change but you will have
-to change the transformation matrix.  This works differently.  For example, to
-turn right you would want to rotate a certain angle around the Y-axis (since
-the Y-axis points upwards).  This rotation can be represented by the following
-matrix (known as a <EM>rotation matrix</EM>) which rotates about the Y-axis:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ cos(a)   0    -sin(a) \
-| 0        1    0       |
-\ sin(a)   0    cos(a)  /
-</pre></td></tr></table></P><P>
-
-To see why this works, just try multiplying it by some vectors in 3D and see
-where they will transform too.
-</P><P>
-
-How can we then use this matrix to turn our camera to the right? An important
-thing to realize is that transformations can be combined by multiplying the
-transformation matrices together.  For example, if we have our matrix <EM>M</EM>
-transforming from world to camera space and we would like to apply the Y-axis
-rotation on the camera then you can see this as a combination of first the
-transformation from world to camera space followed by the rotation along the
-Y-axis.  So instead of:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>C = M * (W - P)</EM>
-</BLOCKQUOTE>
+<OL>
+<LI>
+Determine which polygon of the current sector intersects with the beam.
 <P>
 
-We would want to use:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>C = R * M * (W - P)</EM>
-</BLOCKQUOTE>
+<LI>
+If the polygon is on the same plane as the destination polygon then there is a
+hit.  The reason this is true has to do with the fact that the lightmaps are
+slightly bigger than what is really needed.  Bilinear interpolation is used to
+finally light the polygon and it has to be able to correctly interpolate at
+the boundaries of the polygon as well.
 <P>
 
-Where <EM>R</EM> is the rotation matrix.
-</P><P>
-
-<EM>R * M * (W - P)</EM>
-means to first apply transformation <EM>M</EM> on (<EM>W - P</EM>) and after that
-apply transformation <EM>R</EM> on the result.  Note that multiplication of
-matrices is not commutative.
-<EM>R * M</EM>
-is not guaranteed to be the same as
-<EM>M * R</EM>.
-</P><P>
-
-So, we can conclude from this that we just have to multiply the camera matrix
-by <EM>R</EM> to get the new camera matrix:
-</P><P>
-
-<BLOCKQUOTE>
-<EM>M' = R * M</EM>
-</BLOCKQUOTE>
+<LI>
+If the polygon that is hit is a portal then recursively continue with the
+following sector.  If the recursive calls returns a hit then we have a hit.
 <P>
 
-Matrix multiplication works as follows:
-</P><P>
+<LI>
+If the polygon is not a portal there is no hit so return from the algorithm
+(the beam of light does not reach the polygon).
+</OL>
+<P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ a b c \   / A B C \   / a*A+b*D+c*G a*B+b*E+c*H a*C+b*F+c*I \
-| d e f | * | D E F | = | d*A+e*D+f*G d*B+e*E+f*H d*C+e*F+f*I |
-\ g h i /   \ G H I /   \ g*A+h*D+i*G g*B+h*E+i*H g*C+h*F+i*I /
-</pre></td></tr></table></P><P>
+<LI>
+In all cases where a hit occurred according to the previous steps, arrive at
+this step to check if there are no Things blocking the beam.  For every Thing
+in the current sector check if the beam intersects with one of the polygons of
+the Thing.  If so then there is no hit.  Otherwise there is a hit.
+</OL>
+<P>
 
-Rotation along the other axes works in a similar fashion.  Rotation along the
-X-axis is represented by:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ 1   0        0       \
-| 0   cos(a)   -sin(a) |
-\ 0   sin(a)   cos(a)  /
-</pre></td></tr></table></P><P>
-
-Rotation along the Z-axis is represented by:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/ cos(a)   -sin(a) 0  \
-| sin(a)   cos(a)  0  |
-\ 0        0       1  /
-</pre></td></tr></table></P><P>
-
-With these formulas you should be able to do any movement of the camera that
-you want, including rotating the camera around the direction it is looking.
-</P><P>
-
-<A NAME="Space Warping"></A>
+A similar algorithm is used for Things.
+<A NAME="Cameras and Matrices"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_167.html#SEC413"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC421"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_163.html#SEC396"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_167.html#SEC411"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC422"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_165.html#SEC408"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

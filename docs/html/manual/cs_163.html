@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Sound Drivers</TITLE>
+<TITLE>Crystal Space: ProcTextures</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Sound Drivers">
-<META NAME="keywords" CONTENT="Crystal Space: Sound Drivers">
+<META NAME="description" CONTENT="Crystal Space: ProcTextures">
+<META NAME="keywords" CONTENT="Crystal Space: ProcTextures">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,243 +23,158 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC396"></A>
+<A NAME="SEC397"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC393"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC396"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC393"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC396"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 7.4 Sound Drivers </H2>
-<!--docid::SEC396::-->
-<P>
-
-The sound system consists of three components.
-</P><P>
-
-<DL COMPACT>
-<DT><EM>Sound Driver</EM>
-<DD>System dependent sound drivers.  This driver is used to pass one audio stream
-to the sound hardware (it does not mix several streams), and is only used by
-the software sound renderer.  The other renderers do not need this driver.
-There are currently drivers for MacOS/9, OSS (Linux) and WaveOut
-(Windows).
-<P>
-
-<EM>Note</EM>: You need not load the sound driver yourself.  It is loaded
-automatically by the software sound renderer. In fact, you normally don't
-have to deal with the sound driver in any way.
-</P><P>
-
-<DT><EM>Sound Renderer</EM>
-<DD>System dependent sound renderers.  This driver can be used to play sound.
-There are currently renderers for DirectSound3D and software.
-<P>
-
-<DT><EM>Sound Loader</EM>
-<DD>This module is used to load sound files.  There is only one implementation for
-this module.  It supports the following sound formats:
-<P>
-
-<UL>
-<LI>
-Sun standard `<TT>.au</TT>' (or `<TT>.snd</TT>'), 8- and 16-bit PCM and 8-bit
-G.711 u-Law (no-compression).
-<LI>
-Microsoft `<TT>.wav</TT>', 8- and 16-bit PCM.
-<LI>
-Amiga `<TT>.8svx</TT>' and `<TT>.iff</TT>', 8-bit PCM.
-<LI>
-MacOS/9 `<TT>.aiff</TT>', 8- and 16-bit PCM.
-</UL>
-</DL>
-<P>
-
-The options for all sound modules must be set in the (virtual) file
-`<TT>/config/sound.cfg</TT>'.
-</P><P>
-
-<A NAME="SEC397"></A>
-<H3> Sound Loader </H3>
+<H3> 7.3.1 Procedural Texture System </H3>
 <!--docid::SEC397::-->
 <P>
 
-The sound loader plug-in is used to load sound files and create sound data
-objects (<CODE>iSoundData</CODE>) from it. A sound data object represents the sound
-in its raw form. It is the same as the <CODE>iImage</CODE> is for graphics.
+Crystal Space supports procedural textures. These are textures that you can
+change dynamically (at runtime) so that you get the appearance of an
+animated texture.
 </P><P>
 
-Looking at the sound loader's methods, you have probably noticed that it
-takes an object of `<SAMP>csSoundFormat</SAMP>' type. This object tells the sound
-loader in what format (frequency, 8- or 16-bits, stereo or mono) the samples
-should be supplied. You can get this from the sound renderer.
+The current implementation of procedural textures works by rendering
+the contents of the texture on screen and then doing a copy to the
+texture memory. This means that procedural textures must be updated before
+the 3D view starts rendering and it also means that the 3D view must make
+sure that that part of the screen is changed (i.e. either put geometry
+there or manually clear screen every frame). Note that all textures
+can be updated with this technique. i.e. you don't need to mark a texture
+as being procedural.
 </P><P>
 
 <A NAME="SEC398"></A>
-<H3> Sound Data </H3>
+<H4> Updating a Texture Image </H4>
 <!--docid::SEC398::-->
 <P>
 
-A sound data object can be either <EM>static</EM> or <EM>streamed</EM>. These are
-fundamentally different. The only reason why they use the same interface is
-that this makes it easier for the user. A static sound is mainly a buffer of
-samples. A streamed sound is mainly a callback function to read samples. At
-this point we can already say that one main difference is that you can play
-many instances of a static sound at the same time (each with its own position
-counter), but only one instance of a streamed sound. However, this does not
-mean that you can't create more than one sound source from a streamed sound.
-Read on!
+The following code demonstrates how you can update a texture image:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  bool UpdateTexture (iTextureWrapper* tex)
+  {
+    g3d-&#62;SetRenderTarget (tex-&#62;GetTextureHandle ());
+    if (!g3d-&#62;BeginDraw (CDRAW_2DGRAPHICS)) return false;
+    <small>...</small>
+    // Do various operations on g2d.
+    <small>...</small>
+    g3d-&#62;FinishDraw ();
+    return true;
+  }
+</pre></td></tr></table></P><P>
+
+It is also possible to do 3D graphics on a procedural texture. Note that
+the code above overwrites what is currently displayed on screen! So make
+sure to do it before anything you need is rendered.
+</P><P>
+
+A useful function with procedural textures is <CODE>iGraphics2D-&#62;Blit()</CODE>
+which can copy a RGB buffer from memory directly to the screen. This
+is often useful for procedural textures.
+</P><P>
+
+<CODE>SetRenderTarget</CODE> also has a second parameter which is called
+`<SAMP>persistant</SAMP>' and which is set to false by default. If you set this to
+true then the previous contents of the texture is copied on screen first.
+That means you can make modifications to an existing texture. With this
+parameter set to false (default) you have to create the entire texture
+again. Note that setting `<SAMP>persistant</SAMP>' to true is slower if you intend
+to update the entire texture area anyway.
 </P><P>
 
 <A NAME="SEC399"></A>
-<H3> Sound Handle </H3>
+<H4> Using csProcTexture </H4>
 <!--docid::SEC399::-->
 <P>
 
-The next step towards playing the sound is to hand over the sound data to the
-sound renderer. After doing this you may not use the sound data itself
-anymore. The renderer will now possibly convert the sound data to an internal
-format, load it into the soundcard memory, etc. In return you get a
-<EM>sound handle</EM>, which you should use from now.
+In the `<SAMP>cstool</SAMP>' library there is a convenience class you can use
+to make updating of procedural textures easier. This class is called
+<CODE>csProcTexture</CODE>. Basically you make a subclass of this class like this:
 </P><P>
 
-For static sounds, the sound handle is just that: A wrapper around the sound
-data. But for streamed sounds it is more: We said before that there can be
-only one instance of a streamed sound. This is not really correct. There may
-be several instances, as long as they play the same sequence of samples all
-the time (like several speakers that are connected to the same recorder).
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "cstool/proctex.h"
+class MyProcTexture : public csProcTexture
+{
+public:
+  MyProcTexture () { }
+  virtual ~MyProcTexture () { }
+  virtual bool PrepareAnim ();
+  virtual void Animate (csTicks current_time);
+};
+
+bool MyProcTexture::PrepareAnim ()
+{
+  if (anim_prepared) return true;
+  if (!csProcTexture::PrepareAnim ()) return false;
+  <small>...</small>
+  // Do your stuff.
+  return true;
+}
+
+void MyProcTexture::Animate (csTicks current_time)
+{
+  g3d-&#62;SetRenderTarget (<small>...</small>);
+  <small>...</small>
+  g3d-&#62;FinishDraw ();
+}
+
+</pre></td></tr></table></P><P>
+
+To use this procedural texture you must do the following:
 </P><P>
 
-So here's a big difference between static and streamed sound. For static
-sounds, every instance has its own idea of which part of the sound to play,
-and you can control this on a per-instance basis. For streamed sounds, all
-instances of the same sound handle play the same stuff, and this is
-controlled on a per-handle basis. So the sound handle interface also contains
-methods to control playback, but only for streamed sounds.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  MyProcTexture* proctex = new MyProcTexture ();
+  if (proctex-&#62;Initialize (object_reg))
+  {
+    iTextureWrapper* txt = proctex-&#62;GetTextureWrapper ();
+    iMaterialWrapper* mat = engine-&#62;CreateMaterial ("mymaterial", txt);
+    <small>...</small>
+  }
+</pre></td></tr></table></P><P>
+
+<CODE>csProcTexture</CODE> will make sure that your <CODE>Animate</CODE> routine
+is called when needed. In practice this means that your animate routine
+will be called AFTER the first time the texture was needed. This is because
+<CODE>Animate</CODE> will change the display (because procedural textures
+render on screen) so it can't be done while rendering other objects. In
+general this is not really a problem since typically the material will be
+needed as soon as only a tiny part of the object is visible and this will
+only be visible for one frame.
 </P><P>
 
-In short, the sound handle can do the following:
+To minimize the impact of this effect you can make sure that the initial
+contents of the procedural texture is reasonable. You can do that by
+manually calling <CODE>Animate</CODE> for example.
 </P><P>
 
-<UL>
-<LI>
-Create and play an instance of the sound. This is a convenience function. It
-does not allow 3d effects or stopping the sound later (you must wait until
-it is finished). IT can be used for example for GUI sounds.
-<P>
-
-<LI>
-Create a sound source. A <EM>sound source</EM> is an instance of the sound.
-<P>
-
-<LI>
-Control playback for streamed sounds.
-</UL>
-<P>
-
-<A NAME="SEC400"></A>
-<H3> Sound Source </H3>
-<!--docid::SEC400::-->
-<P>
-
-The sound source is one instance of a sound. It controls position and velocity
-for 3d sounds. For static sounds it also controls playback position and
-activeness, while for streamed sounds it controls only activeness.
+Another way to fix this is by letting your procedural texture subclass
+set the `<SAMP>always_animate</SAMP>' flag to true. Of course this will make
+things slower.
 </P><P>
 
-<A NAME="SEC401"></A>
-<H3> The Sound Listener </H3>
-<!--docid::SEC401::-->
-<P>
-
-The sound renderer uses one global listener object. It controls how you hear
-sounds. This includes your own position and velocity (only for 3D sounds),
-and environmental effects.  @@@FIXME do env effects affect non-3D sounds?
-</P><P>
-
-<A NAME="SEC402"></A>
-<H3> Sound System Example </H3>
-<!--docid::SEC402::-->
-<P>
-
-Here's an example on how to set up the sound system:
-</P><P>
-
-Assume you have five players running around in a FPS game. Three of them
-have a pistol, two have a shotgun. You want to play sounds when they fire
-their weapons, and you also have a sound file for footsteps. Finally, you
-want to play some music from thee big speakers that are placed in the level.
-</P><P>
-
-First you load the sounds and register them. After that, you have three static
-sound handles for pistol, shotgun and footsteps, and one streamed sound handle
-for the music (note that there is currently no loader that creates streamed
-sound data, but let's assume there is).
-</P><P>
-
-Now you create the sound sources. As said before, a sound source is one
-instance of a sound. Thus, if you want to hear the same sound from two
-directions, it must come from two sources. We actually have some freedom on
-how we create the sound sources. One thing is sure: We need one source for
-each of the three speakers for the music. We create the sources, set them to
-active, set the position to the position of the speakers and start stream
-playback at the sound handle for the music.
-</P><P>
-
-For the footsteps we have several options. As one player cannot produce two
-footstep sounds at the same time, we can create one sound source for every
-player, then start playing on every step without looping. Or we could start
-looped playing when the player starts walking and stop playing when the player
-stops walking.
-</P><P>
-
-Instead of starting and stopping playback all the time, we could also create
-a new sound source on every step, and destroy at afterwards. Currently this
-should be considered slow, but this may change. On the other hand, every
-sound source takes its part of memory, possibly soundcard memory. This may
-also change.
-</P><P>
-
-What about the guns? It's similar to the footsteps. A player can only fire
-one shot at a time, so you can create one source per player for the shooting
-sound.
-</P><P>
-
-<A NAME="SEC403"></A>
-<H3> Advanced Sound Effects </H3>
-<!--docid::SEC403::-->
-<P>
-
-The environmental effects of the listener are not enough for you? You want to
-dynamically generate the sound? This is possible. You have to create your own
-implementation of <CODE>iSoundData</CODE>, usually as a streamed sound.
-</P><P>
-
-To create special effects, you may for example load a sound as a streamed
-sound. Instead of passing it to the sound renderer, you create an object of
-your special effects class that takes the original stream and is itself a
-sound stream. You then pass this object to the sound renderer. When it is
-asked for sample data by the sound renderer, it could for example read data
-from the original stream, apply an echoing effect and return the modified
-data to the sound renderer. Note that it has to copy the data before modifying
-it! Otherwise you may seriously damage the original stream.
-<A NAME="csEngine"></A>
+<A NAME="Sound Drivers"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC393"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC404"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_261.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC396"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC393"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC396"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_164.html#SEC400"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
