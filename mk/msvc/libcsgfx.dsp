@@ -158,6 +158,10 @@ SOURCE=..\..\libs\csgfx\imagetools.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\imagevolumemaker.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\inv_cmap.cpp
 # End Source File
 # Begin Source File
@@ -223,6 +227,10 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\imagemanipulate.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\imagetools.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\imagevolumemaker.h
 # End Source File
 # Begin Source File
 
