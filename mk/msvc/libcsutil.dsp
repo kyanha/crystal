@@ -310,10 +310,6 @@ SOURCE=..\..\libs\csutil\nulcache.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\objiter.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\objreg.cpp
 # End Source File
 # Begin Source File
