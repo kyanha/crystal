@@ -32,7 +32,7 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC178"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC930">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
@@ -94,39 +94,40 @@ Similarly for `<TT>simple.cpp</TT>':
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "cssysdef.h"
-#include "csutil/sysfunc.h"
-#include "iutil/vfs.h"
-#include "csutil/cscolor.h"
+#include "simpmap.h"
 #include "cstool/csview.h"
 #include "cstool/initapp.h"
-#include "simpmap.h"
-#include "iutil/eventq.h"
-#include "iutil/event.h"
-#include "iutil/objreg.h"
-#include "iutil/csinput.h"
-#include "iutil/virtclk.h"
-#include "iengine/sector.h"
-#include "iengine/engine.h"
+#include "csutil/cmdhelp.h"
+#include "csutil/cscolor.h"
+#include "csutil/event.h"
+#include "csutil/sysfunc.h"
 #include "iengine/camera.h"
+#include "iengine/campos.h"
+#include "iengine/engine.h"
 #include "iengine/light.h"
-#include "iengine/statlght.h"
-#include "iengine/texture.h"
+#include "iengine/material.h"
 #include "iengine/mesh.h"
 #include "iengine/movable.h"
-#include "iengine/material.h"
-#include "imesh/thing.h"
-#include "imesh/object.h"
-#include "ivideo/graph3d.h"
-#include "ivideo/graph2d.h"
-#include "ivideo/txtmgr.h"
-#include "ivideo/texture.h"
-#include "ivideo/material.h"
-#include "ivideo/fontserv.h"
+#include "iengine/sector.h"
+#include "iengine/texture.h"
 #include "igraphic/imageio.h"
 #include "imap/parser.h"
+#include "imesh/object.h"
+#include "imesh/thing.h"
+#include "iutil/csinput.h"
+#include "iutil/event.h"
+#include "iutil/eventq.h"
+#include "iutil/objreg.h"
+#include "iutil/vfs.h"
+#include "iutil/virtclk.h"
 #include "ivaria/reporter.h"
 #include "ivaria/stdrep.h"
-#include "csutil/cmdhelp.h"
+#include "ivideo/fontserv.h"
+#include "ivideo/graph2d.h"
+#include "ivideo/graph3d.h"
+#include "ivideo/material.h"
+#include "ivideo/texture.h"
+#include "ivideo/txtmgr.h"
 
 CS_IMPLEMENT_APPLICATION
 
@@ -192,14 +193,16 @@ bool Simple::HandleEvent (iEvent&#38; ev)
     simple-&#62;FinishFrame ();
     return true;
   }
-  else if (ev.Type == csevKeyDown &#38;&#38; ev.Key.Code == CSKEY_ESC)
+  else if (ev.Type == csevKeyboard &#38;&#38; 
+    csKeyEventHelper::GetEventType (&#38;ev) == csKeyEventTypeDown)
   {
-    csRef&#60;iEventQueue&#62; q = CS_QUERY_REGISTRY (object_reg, iEventQueue);
-    if (q)
+    if (csKeyEventHelper::GetCookedCode (&#38;ev) == CSKEY_ESC)
     {
-      q-&#62;GetEventOutlet()-&#62;Broadcast (cscmdQuit);
+      csRef&#60;iEventQueue&#62; q (CS_QUERY_REGISTRY (object_reg, iEventQueue));
+      if (q)
+	q-&#62;GetEventOutlet()-&#62;Broadcast (cscmdQuit);
+      return true;
     }
-    return true;
   }
 
   return false;
@@ -355,7 +358,7 @@ That's because relighting a map can be a time-consuming process.
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC178"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC930">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
