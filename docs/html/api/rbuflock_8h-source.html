@@ -39,65 +39,66 @@
 00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSTOOL_RBUFLOCK_H__</span>
 00022 <span class="preprocessor"></span>
 00027 <span class="preprocessor">#include "csutil/ref.h"</span>
-00028 <span class="preprocessor">#include "<a class="code" href="rndbuf_8h.html">ivideo/rndbuf.h</a>"</span>
-00029 
-00035 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00036"></a><a class="code" href="classcsRenderBufferLock.html">00036</a> <span class="keyword">class </span><a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock</a>
-00037 {
-00038   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> buffer;
-00039   <a class="code" href="group__gfx3d.html#a82">csRenderBufferLockType</a> lockType;
-00040   <span class="keywordtype">bool</span> isLocked;
-00041   T* lockBuf;
-00042   
-00043   <a class="code" href="classcsRenderBufferLock.html#a0">csRenderBufferLock</a>() {}
-00044 <span class="keyword">public</span>:
-<a name="l00048"></a><a class="code" href="classcsRenderBufferLock.html#a0">00048</a>   <a class="code" href="classcsRenderBufferLock.html#a0">csRenderBufferLock</a> (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* buf, 
-00049     <a class="code" href="group__gfx3d.html#a82">csRenderBufferLockType</a> lock = CS_BUF_LOCK_NORMAL) : buffer(buf),
-00050     lockType(lock), isLocked(false)
-00051   {
-00052   }
-00053   
-<a name="l00057"></a><a class="code" href="classcsRenderBufferLock.html#a1">00057</a>   <a class="code" href="classcsRenderBufferLock.html#a1">~csRenderBufferLock</a>()
-00058   {
-00059     <a class="code" href="classcsRenderBufferLock.html#a3">Unlock</a>();
-00060   }
-00061   
-<a name="l00063"></a><a class="code" href="classcsRenderBufferLock.html#a2">00063</a>   T* <a class="code" href="classcsRenderBufferLock.html#a2">Lock</a> ()
-00064   {
-00065     <span class="keywordflow">if</span> (!isLocked)
-00066     {
-00067       lockBuf = (T*)buffer-&gt;Lock (lockType);
-00068       isLocked = <span class="keyword">true</span>;
-00069     }
-00070     <span class="keywordflow">return</span> lockBuf;
-00071   }
-00072   
-<a name="l00074"></a><a class="code" href="classcsRenderBufferLock.html#a3">00074</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferLock.html#a3">Unlock</a> ()
-00075   {
-00076     <span class="keywordflow">if</span> (isLocked)
-00077     {
-00078       buffer-&gt;Release();
-00079       isLocked = <span class="keyword">false</span>;
-00080     }
-00081   }
-00082   
-<a name="l00084"></a><a class="code" href="classcsRenderBufferLock.html#a4">00084</a>   <a class="code" href="classcsRenderBufferLock.html#a4">operator T* </a>()
-00085   {
-00086     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a2">Lock</a>();
-00087   }
-00088 
-<a name="l00090"></a><a class="code" href="classcsRenderBufferLock.html#a5">00090</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a5">operator [] </a>(<span class="keywordtype">int</span> n)
-00091   {
-00092     <span class="keywordflow">return</span> *(<a class="code" href="classcsRenderBufferLock.html#a2">Lock</a>() + n);
-00093   }
-00094 
-<a name="l00096"></a><a class="code" href="classcsRenderBufferLock.html#a6">00096</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a6">Get</a> (<span class="keywordtype">int</span> n)
-00097   {
-00098     <span class="keywordflow">return</span> *(<a class="code" href="classcsRenderBufferLock.html#a2">Lock</a>() + n);
-00099   }
-00100 };
-00101 
-00102 <span class="preprocessor">#endif // __CS_CSTOOL_RBUFLOCK_H__</span>
+00028 <span class="preprocessor">#include "<a class="code" href="graph3d_8h.html">ivideo/graph3d.h</a>"</span>
+00029 <span class="preprocessor">#include "<a class="code" href="rndbuf_8h.html">ivideo/rndbuf.h</a>"</span>
+00030 
+00036 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00037"></a><a class="code" href="classcsRenderBufferLock.html">00037</a> <span class="keyword">class </span><a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock</a>
+00038 {
+00039   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> buffer;
+00040   <a class="code" href="group__gfx3d.html#a82">csRenderBufferLockType</a> lockType;
+00041   <span class="keywordtype">bool</span> isLocked;
+00042   T* lockBuf;
+00043   
+00044   <a class="code" href="classcsRenderBufferLock.html#a0">csRenderBufferLock</a>() {}
+00045 <span class="keyword">public</span>:
+<a name="l00049"></a><a class="code" href="classcsRenderBufferLock.html#a0">00049</a>   <a class="code" href="classcsRenderBufferLock.html#a0">csRenderBufferLock</a> (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* buf, 
+00050     <a class="code" href="group__gfx3d.html#a82">csRenderBufferLockType</a> lock = CS_BUF_LOCK_NORMAL) : buffer(buf),
+00051     lockType(lock), isLocked(false)
+00052   {
+00053   }
+00054   
+<a name="l00058"></a><a class="code" href="classcsRenderBufferLock.html#a1">00058</a>   <a class="code" href="classcsRenderBufferLock.html#a1">~csRenderBufferLock</a>()
+00059   {
+00060     <a class="code" href="classcsRenderBufferLock.html#a3">Unlock</a>();
+00061   }
+00062   
+<a name="l00064"></a><a class="code" href="classcsRenderBufferLock.html#a2">00064</a>   T* <a class="code" href="classcsRenderBufferLock.html#a2">Lock</a> ()
+00065   {
+00066     <span class="keywordflow">if</span> (!isLocked)
+00067     {
+00068       lockBuf = (T*)buffer-&gt;Lock (lockType);
+00069       isLocked = <span class="keyword">true</span>;
+00070     }
+00071     <span class="keywordflow">return</span> lockBuf;
+00072   }
+00073   
+<a name="l00075"></a><a class="code" href="classcsRenderBufferLock.html#a3">00075</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferLock.html#a3">Unlock</a> ()
+00076   {
+00077     <span class="keywordflow">if</span> (isLocked)
+00078     {
+00079       buffer-&gt;Release();
+00080       isLocked = <span class="keyword">false</span>;
+00081     }
+00082   }
+00083   
+<a name="l00085"></a><a class="code" href="classcsRenderBufferLock.html#a4">00085</a>   <a class="code" href="classcsRenderBufferLock.html#a4">operator T* </a>()
+00086   {
+00087     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a2">Lock</a>();
+00088   }
+00089 
+<a name="l00091"></a><a class="code" href="classcsRenderBufferLock.html#a5">00091</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a5">operator [] </a>(<span class="keywordtype">int</span> n)
+00092   {
+00093     <span class="keywordflow">return</span> *(<a class="code" href="classcsRenderBufferLock.html#a2">Lock</a>() + n);
+00094   }
+00095 
+<a name="l00097"></a><a class="code" href="classcsRenderBufferLock.html#a6">00097</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a6">Get</a> (<span class="keywordtype">int</span> n)
+00098   {
+00099     <span class="keywordflow">return</span> *(<a class="code" href="classcsRenderBufferLock.html#a2">Lock</a>() + n);
+00100   }
+00101 };
+00102 
+00103 <span class="preprocessor">#endif // __CS_CSTOOL_RBUFLOCK_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
