@@ -178,6 +178,10 @@ SOURCE=..\..\libs\csgfx\quantize.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\renderbuffer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\shaderexp.cpp
 # End Source File
 # Begin Source File
@@ -251,6 +255,10 @@ SOURCE=..\..\libs\csgfx\..\..\include\csgfx\packrgb.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgfx\..\..\include\csgfx\quantize.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgfx\..\..\include\csgfx\renderbuffer.h
 # End Source File
 # Begin Source File
 
