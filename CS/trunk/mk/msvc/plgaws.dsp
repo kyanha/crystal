@@ -146,10 +146,6 @@ SOURCE=..\..\plugins\aws\aws3dfrm.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\aws\awsadler.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\aws\awsbarct.cpp
 # End Source File
 # Begin Source File
@@ -302,10 +298,6 @@ SOURCE=..\..\plugins\aws\aws3dfrm.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\aws\awsadler.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\aws\awsbarct.h
 # End Source File
 # Begin Source File
@@ -443,10 +435,6 @@ SOURCE=..\..\plugins\aws\awswin.h
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\skinpars.hpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\slparse.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
