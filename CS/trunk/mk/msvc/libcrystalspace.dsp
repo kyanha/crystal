@@ -342,6 +342,10 @@ SOURCE=..\..\libs\csgfx\shaderexp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\shaderexpaccessor.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\shadervar.cpp
 # End Source File
 # Begin Source File
@@ -675,6 +679,10 @@ SOURCE=..\..\libs\csutil\memdebug.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\memfile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\mempool.cpp
 # End Source File
 # Begin Source File
 
@@ -1166,6 +1174,10 @@ SOURCE=..\..\libs\..\include\csgfx\shaderexp.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csgfx\shaderexpaccessor.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csgfx\shadervar.h
 # End Source File
 # Begin Source File
@@ -1627,6 +1639,10 @@ SOURCE=..\..\libs\..\include\csutil\memdebug.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\memfile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csutil\mempool.h
 # End Source File
 # Begin Source File
 
