@@ -392,15 +392,11 @@ SOURCE=..\..\libs\csgeom\vector4.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\obb_priv.h
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\box.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\..\..\include\csgeom\bsptree.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csgeom\..\..\include\csgeom\box.h
 # End Source File
 # Begin Source File
 
@@ -565,6 +561,10 @@ SOURCE=..\..\libs\csgeom\..\..\include\csgeom\vector3.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\..\..\include\csgeom\vector4.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\obb_priv.h
 # End Source File
 # End Group
 # End Target

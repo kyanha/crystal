@@ -248,6 +248,66 @@ SOURCE=..\..\plugins\collide\opcode\CSopcodecollider.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\Ice\IceAABB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceContainer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceHPoint.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceIndexedTriangle.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix3x3.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix4x4.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceOBB.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePlane.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePoint.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRandom.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRay.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRevisitedRadix.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceSegment.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceTriangle.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceUtils.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_AABBCollider.cpp
 # End Source File
 # Begin Source File
@@ -334,66 +394,6 @@ SOURCE=..\..\plugins\collide\opcode\Opcode.cpp
 
 SOURCE=..\..\plugins\collide\opcode\StdAfx.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceAABB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceContainer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceHPoint.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceIndexedTriangle.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix3x3.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix4x4.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceOBB.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IcePlane.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IcePoint.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceRandom.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceRay.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceRevisitedRadix.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceSegment.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceTriangle.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceUtils.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -405,6 +405,106 @@ SOURCE=..\..\plugins\collide\opcode\CSopcode.h
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\CSopcodecollider.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceAABB.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceAxes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceBoundingSphere.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceContainer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceFPU.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceHPoint.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceIndexedTriangle.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceLSS.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix3x3.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix4x4.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceMemoryMacros.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceOBB.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePairs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePlane.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePoint.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IcePreprocessor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRandom.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRay.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceRevisitedRadix.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceSegment.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceTriangle.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceTrilist.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceTypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\IceUtils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\Ice\Stdafx.h
 # End Source File
 # Begin Source File
 
@@ -545,106 +645,6 @@ SOURCE=..\..\plugins\collide\opcode\Opcode.h
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\Stdafx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceAABB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceAxes.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceBoundingSphere.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceContainer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceFPU.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceHPoint.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceIndexedTriangle.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceLSS.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix3x3.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceMatrix4x4.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceMemoryMacros.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceOBB.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IcePairs.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IcePlane.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IcePoint.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IcePreprocessor.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceRandom.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceRay.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceRevisitedRadix.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceSegment.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceTriangle.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceTrilist.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceTypes.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\IceUtils.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\Ice\Stdafx.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

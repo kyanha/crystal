@@ -240,30 +240,6 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3d.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3dcom.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_halo.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_polybuf.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtcache.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtmgr.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\renderer\opengl\effects\efdef.cpp
 # End Source File
 # Begin Source File
@@ -286,6 +262,30 @@ SOURCE=..\..\plugins\video\renderer\opengl\effects\eftech.cpp
 
 SOURCE=..\..\plugins\video\renderer\opengl\effects\statehdr.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3dcom.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_halo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_polybuf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtcache.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtmgr.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -293,26 +293,6 @@ SOURCE=..\..\plugins\video\renderer\opengl\effects\statehdr.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\video\renderer\opengl\effectdata.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3d.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3dcom.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_polybuf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtcache.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtmgr.h
 # End Source File
 # Begin Source File
 
@@ -337,6 +317,26 @@ SOURCE=..\..\plugins\video\renderer\opengl\effects\eftech.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\renderer\opengl\effects\statehdr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3d.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_g3dcom.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_polybuf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtcache.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtmgr.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

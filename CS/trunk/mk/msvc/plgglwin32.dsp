@@ -240,11 +240,11 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\openglwin\oglg2d.cpp
+SOURCE=..\..\plugins\video\canvas\openglwin\detectdriver.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\openglwin\detectdriver.cpp
+SOURCE=..\..\plugins\video\canvas\openglwin\oglg2d.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
