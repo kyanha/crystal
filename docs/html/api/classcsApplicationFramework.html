@@ -47,12 +47,14 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Returns a pointer to the object registry.</em> <a href="#d1"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d2">SetApplicationName</a> (char *name)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Set the application's string name identifier.</em> <a href="#d2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d3">Run</a> ()</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Start event queue.</em> <a href="#d3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>bool&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d4">DisplayError</a> (const char *description)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Display an error notification.</em> <a href="#d4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d5">DisplayInfo</a> (const char *description)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Display an information notification.</em> <a href="#d5"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>const char *&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d3">GetApplicationName</a> ()</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get the application name.</em> <a href="#d3"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d4">Run</a> ()</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Start event queue.</em> <a href="#d4"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>bool&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d5">ReportError</a> (const char *description,...)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Display an error notification.</em> <a href="#d5"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#d6">ReportInfo</a> (const char *description,...)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Display an information notification.</em> <a href="#d6"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Protected Methods</h2></td></tr>
 <tr><td nowrap align=right valign=top>&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#b0">csApplicationFramework</a> ()</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Constructor.</em> <a href="#b0"></a><em></em></font><br><br></td></tr>
@@ -62,6 +64,9 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Perform application logic.</em> <a href="#b2"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#b3">OnExit</a> ()</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Perform any end of program processing.</em> <a href="#b3"></a><em></em></font><br><br></td></tr>
+<tr><td colspan=2><br><h2>Static Protected Attributes</h2></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="structiObjectRegistry.html">iObjectRegistry</a> *&nbsp;</td><td valign=bottom><a class="el" href="classcsApplicationFramework.html#q0">object_reg</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Pointer to the application's object registry.</em> <a href="#q0"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Application framework class.
@@ -79,12 +84,9 @@ Application framework class.
    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsApplicationFramework.html#b2">Application</a>();
  };
 
- <span class="keyword">extern</span> MyApp myApp;
-
  <span class="comment">//--------------------------</span>
  <span class="comment">// Example.cpp</span>
  <span class="comment">// File scope</span>
- MyApp myApp;
 
  MyApp::MyApp() : <a class="code" href="classcsApplicationFramework.html">csApplicationFramework</a>()
  {
@@ -115,7 +117,8 @@ Application framework class.
  
  <span class="keywordtype">int</span> main (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]) 
  {
-   <span class="keywordflow">return</span> <a class="code" href="classcsApplicationFramework.html#a3">csApplicationFramework::Main</a> (argc, argv);
+   MyApp myApp;
+   <span class="keywordflow">return</span> myApp.Main (argc, argv);
  }
 </pre></div> 
 <p>
@@ -125,7 +128,7 @@ Application framework class.
 <p>
 
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00111">111</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00110">110</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a name="b0" doxytag="csApplicationFramework::csApplicationFramework"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -186,7 +189,8 @@ The csApplicationFramework constructor initializes framework application variabl
 <p>
 Destructor.
 <p>
-    </td>
+<dl compact><dt><b>Remarks: </b></dt><dd>
+Also calls <a class="el" href="classcsInitializer.html#d18">DestroyApplication()</a>. </dl>    </td>
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
@@ -223,16 +227,15 @@ Perform application logic.
  This method is where the user application should perform all of its main program logic, including initializing any Crystal Space variables and states, starting the event queue loop, etc. </dl>    </td>
   </tr>
 </table>
-<a name="d4" doxytag="csApplicationFramework::DisplayError"></a><p>
+<a name="d3" doxytag="csApplicationFramework::GetApplicationName"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> bool csApplicationFramework::DisplayError </td>
+          <td class="md" nowrap valign="top"> const char* csApplicationFramework::GetApplicationName </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">const char *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>description</em>          </td>
+          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
           <td class="md" valign="top">)&nbsp;</td>
           <td class="md" nowrap><code> [inline, static]</code></td>
         </tr>
@@ -249,50 +252,12 @@ Perform application logic.
     <td>
 
 <p>
-Display an error notification.
+Get the application name.
 <p>
 <dl compact><dt><b>Remarks: </b></dt><dd>
- The error displayed with this function will be identified with the application string name identifier set with <a class="el" href="classcsApplicationFramework.html#d2">SetApplicationName()</a>. </dl>
+This string is passed to the reporter to indicate message origins from within the derived user application class. It should be set in the derived class' constructor via SetApplicationName (). </dl>
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00322">322</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
-<p>
-References <a class="el" href="reporter_8h-source.html#l00049">CS_REPORTER_SEVERITY_ERROR</a>, and <a class="el" href="reporter_8h-source.html#l00379">csReport</a>.    </td>
-  </tr>
-</table>
-<a name="d5" doxytag="csApplicationFramework::DisplayInfo"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> void csApplicationFramework::DisplayInfo </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">const char *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>&nbsp; <em>description</em>          </td>
-          <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap><code> [inline, static]</code></td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Display an information notification.
-<p>
-<dl compact><dt><b>Remarks: </b></dt><dd>
- The info displayed with this function will be identified with the application string name identifier set with <a class="el" href="classcsApplicationFramework.html#d2">SetApplicationName()</a>. </dl>
-<p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00336">336</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
-<p>
-References <a class="el" href="reporter_8h-source.html#l00061">CS_REPORTER_SEVERITY_NOTIFY</a>, and <a class="el" href="reporter_8h-source.html#l00379">csReport</a>.    </td>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00296">296</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
   </tr>
 </table>
 <a name="d1" doxytag="csApplicationFramework::GetObjectRegistry"></a><p>
@@ -324,7 +289,7 @@ Returns a pointer to the object registry.
 <p>
 
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00256">256</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00254">254</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
   </tr>
 </table>
 <a name="a3" doxytag="csApplicationFramework::Main"></a><p>
@@ -478,7 +443,7 @@ Open plugins and open application window.
 <p>
 
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00271">271</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00269">269</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
 <p>
 References <a class="el" href="classcsInitializer.html#d14">csInitializer::OpenApplication()</a>.    </td>
   </tr>
@@ -513,7 +478,7 @@ Allow a csApplicationFramework object to be used as an <a class="el" href="struc
 <dl compact><dt><b>Remarks: </b></dt><dd>
  Using this implicit cast operator is a shorthand for calling <a class="el" href="classcsApplicationFramework.html#d1">GetObjectRegistry()</a>, and allows the developer to use his derived csApplicationFramework object as a parameter to any function (and some macros) which require an <a class="el" href="structiObjectRegistry.html">iObjectRegistry</a> reference. </dl>
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00266">266</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00264">264</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
   </tr>
 </table>
 <a name="d0" doxytag="csApplicationFramework::Quit"></a><p>
@@ -547,7 +512,97 @@ Quit running the appliation.
  This function will send a cscmdQuit event through the event queue. If no queue has been initialized, then it will terminate the program with an exit() call. </dl>    </td>
   </tr>
 </table>
-<a name="d3" doxytag="csApplicationFramework::Run"></a><p>
+<a name="d5" doxytag="csApplicationFramework::ReportError"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> bool csApplicationFramework::ReportError </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const char *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>description</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>...&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [inline, static]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Display an error notification.
+<p>
+<dl compact><dt><b>Remarks: </b></dt><dd>
+ The error displayed with this function will be identified with the application string name identifier set with <a class="el" href="classcsApplicationFramework.html#d2">SetApplicationName()</a>. </dl>
+<p>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00335">335</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
+<p>
+References <a class="el" href="reporter_8h-source.html#l00049">CS_REPORTER_SEVERITY_ERROR</a>, and <a class="el" href="reporter_8h-source.html#l00383">csReportV</a>.    </td>
+  </tr>
+</table>
+<a name="d6" doxytag="csApplicationFramework::ReportInfo"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> void csApplicationFramework::ReportInfo </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const char *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>description</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>...&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [inline, static]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Display an information notification.
+<p>
+<dl compact><dt><b>Remarks: </b></dt><dd>
+ The info displayed with this function will be identified with the application string name identifier set with <a class="el" href="classcsApplicationFramework.html#d2">SetApplicationName()</a>. </dl>
+<p>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00352">352</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
+<p>
+References <a class="el" href="reporter_8h-source.html#l00061">CS_REPORTER_SEVERITY_NOTIFY</a>, and <a class="el" href="reporter_8h-source.html#l00383">csReportV</a>.    </td>
+  </tr>
+</table>
+<a name="d4" doxytag="csApplicationFramework::Run"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -577,7 +632,7 @@ Start event queue.
 <dl compact><dt><b>Remarks: </b></dt><dd>
  This is a shorthand method of calling <a class="el" href="group__util.html#a53">csDefaultRunLoop()</a>. </dl>
 <p>
-Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00295">295</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00306">306</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.
 <p>
 References <a class="el" href="sysfunc_8h.html#a53">csDefaultRunLoop()</a>.    </td>
   </tr>
@@ -611,11 +666,38 @@ References <a class="el" href="sysfunc_8h.html#a53">csDefaultRunLoop()</a>.    <
 Set the application's string name identifier.
 <p>
 <dl compact><dt><b>Remarks: </b></dt><dd>
- This string is used by <a class="el" href="classcsApplicationFramework.html#d4">DisplayError()</a> and <a class="el" href="classcsApplicationFramework.html#d5">DisplayInfo()</a> to identify the source of a message as generated by the user application (as opposed to one generated by code within the framework library or other code with the Crystal Space libraries and plugins). 
-<p>
- Generally, you will call this function once in the constructor for your derived csApplicationFramework class, but it is safe to call it any number of times. </dl>
+ This string is used by DisplayError() and DisplayInfo() to identify the source of a message as generated by the user application (as opposed to one generated by code within the framework library or other code with the Crystal Space libraries and plugins). <dd>
+ Generally, you will call this function once in the constructor for your derived csApplicationFramework class, but it is safe to call it any number of times. <dd>
+ The string should be in the form "vendor.application-name". </dl>
 <p>
 Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00285">285</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
+  </tr>
+</table>
+<hr><h2>Member Data Documentation</h2>
+<a name="q0" doxytag="csApplicationFramework::object_reg"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="structiObjectRegistry.html">iObjectRegistry</a>* csApplicationFramework::object_reg<code> [static, protected]</code>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Pointer to the application's object registry.
+<p>
+
+<p>
+Definition at line <a class="el" href="csapplicationframework_8h-source.html#l00209">209</a> of file <a class="el" href="csapplicationframework_8h-source.html">csapplicationframework.h</a>.    </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
