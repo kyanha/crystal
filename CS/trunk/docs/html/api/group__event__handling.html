@@ -147,9 +147,9 @@ Instead, we tried to list here all the keys that are common among all platforms 
 <tr><td>&nbsp;</td><td><font size=-1><em>The highest code of a special key.</em> <a href="#a46"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a47">CSKEY_SPECIAL</a>(code)&nbsp;&nbsp;&nbsp;(CSKEY_SPECIAL_FIRST + (code))</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to construct a special key code.</em> <a href="#a47"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a48">CSKEY_IS_SPECIAL</a>(rawCode)&nbsp;&nbsp;&nbsp;((rawCode &gt;= CSKEY_SPECIAL_FIRST) &amp;&amp; (rawCode &lt;= CSKEY_SPECIAL_LAST))</td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a48">CSKEY_IS_SPECIAL</a>(rawCode)&nbsp;&nbsp;&nbsp;((rawCode &gt;= CSKEY_SPECIAL_FIRST) &amp;&amp; ((rawCode) &lt;= CSKEY_SPECIAL_LAST))</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to determine whether a key code identifies a special key.</em> <a href="#a48"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a49">CSKEY_SPECIAL_NUM</a>(rawCode)&nbsp;&nbsp;&nbsp;(rawCode - CSKEY_SPECIAL_FIRST)</td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a49">CSKEY_SPECIAL_NUM</a>(rawCode)&nbsp;&nbsp;&nbsp;((rawCode) - CSKEY_SPECIAL_FIRST)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to determine the parameter that was given to <a class="el" href="group__event__handling.html#a47">CSKEY_SPECIAL</a>.</em> <a href="#a49"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a50">CSKEY_UP</a>&nbsp;&nbsp;&nbsp;CSKEY_SPECIAL(0x00)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Up arrow key.</em> <a href="#a50"></a><em></em></font><br><br></td></tr>
@@ -207,7 +207,7 @@ Instead, we tried to list here all the keys that are common among all platforms 
 <tr><td>&nbsp;</td><td><font size=-1><em>The highest code of a modifier key.</em> <a href="#a76"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a77">CSKEY_MODIFIERTYPE_SHIFT</a>&nbsp;&nbsp;&nbsp;5</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>ESCape key.</em> <a href="#a77"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a78">CSKEY_MODIFIER</a>(type, num)&nbsp;&nbsp;&nbsp;CSKEY_SPECIAL(CSKEY_MODIFIER_FIRST + (type &lt;&lt; CSKEY_MODIFIERTYPE_SHIFT) + num)</td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a78">CSKEY_MODIFIER</a>(type, num)&nbsp;&nbsp;&nbsp;CSKEY_SPECIAL(CSKEY_MODIFIER_FIRST + ((type) &lt;&lt; CSKEY_MODIFIERTYPE_SHIFT) + (num))</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to construct a modifiers key code.</em> <a href="#a78"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a79">CSKEY_IS_MODIFIER</a>(rawCode)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to test whether a key code identifies a modifier.</em> <a href="#a79"></a><em></em></font><br><br></td></tr>
@@ -215,131 +215,133 @@ Instead, we tried to list here all the keys that are common among all platforms 
 <tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to determine the modifier type of a key code.</em> <a href="#a80"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a81">CSKEY_MODIFIER_NUM</a>(rawCode)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to determine the modifier number of a key code.</em> <a href="#a81"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a82">CSKEY_SHIFT_NUM</a>(n)&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeShift,n)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Construct a key code for the Shift modifier key number <em>n</em>.</em> <a href="#a82"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a83">CSKEY_SHIFT_FIRST</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(0)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Lowest code of the Shift modifier keys.</em> <a href="#a83"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a84">CSKEY_SHIFT_LAST</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(0x1e)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Highest code of the Shift modifier keys.</em> <a href="#a84"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a85">CSKEY_SHIFT_LEFT</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(csKeyModifierNumLeft)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Left Shift.</em> <a href="#a85"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a86">CSKEY_SHIFT_RIGHT</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(csKeyModifierNumRight)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Right Shift.</em> <a href="#a86"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a87">CSKEY_SHIFT</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(csKeyModifierNumAny)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Undistinguished Shift.</em> <a href="#a87"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a88">CSKEY_CTRL_NUM</a>(n)&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeCtrl,n)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Construct a key code for the Ctrl modifier key number <em>n</em>.</em> <a href="#a88"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a89">CSKEY_CTRL_FIRST</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(0)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Lowest code of the Ctrl modifier keys.</em> <a href="#a89"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a90">CSKEY_CTRL_LAST</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(0x1e)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Highest code of the Ctrl modifier keys.</em> <a href="#a90"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a91">CSKEY_CTRL_LEFT</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(csKeyModifierNumLeft)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Left Ctrl.</em> <a href="#a91"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a92">CSKEY_CTRL_RIGHT</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(csKeyModifierNumRight)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Right Ctrl.</em> <a href="#a92"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a93">CSKEY_CTRL</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(csKeyModifierNumAny)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Undistinguished Ctrl.</em> <a href="#a93"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a94">CSKEY_ALT_NUM</a>(n)&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeAlt,n)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Construct a key code for the Alt modifier key number <em>n</em>.</em> <a href="#a94"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a95">CSKEY_ALT_FIRST</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(0)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Lowest code of the Alt modifier keys.</em> <a href="#a95"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a96">CSKEY_ALT_LAST</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(0x1e)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Highest code of the Alt modifier keys.</em> <a href="#a96"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a97">CSKEY_ALT_LEFT</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(csKeyModifierNumLeft)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Left Alt.</em> <a href="#a97"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a98">CSKEY_ALT_RIGHT</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(csKeyModifierNumRight)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Right Alt.</em> <a href="#a98"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a99">CSKEY_ALT</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(csKeyModifierNumAny)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Undistinguished Alt.</em> <a href="#a99"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a100">CSKEY_PAD_FLAG</a>&nbsp;&nbsp;&nbsp;0x4000</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Bit that is set if a key is from the keypad.</em> <a href="#a100"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a101">CSKEY_PAD_KEY</a>(code)&nbsp;&nbsp;&nbsp;CSKEY_SPECIAL((unsigned int)code | CSKEY_PAD_FLAG)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to construct a keypade key code.</em> <a href="#a101"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a102">CSKEY_IS_PAD_KEY</a>(rawCode)&nbsp;&nbsp;&nbsp;((rawCode &amp; CSKEY_PAD_FLAG) != 0)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to test whether a key code identifies a keypad key.</em> <a href="#a102"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a103">CSKEY_PAD_TO_NORMAL</a>(rawCode)&nbsp;&nbsp;&nbsp;(rawCode &amp; (~CSKEY_PAD_FLAG))</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to convert a 'pad' key code into a 'normal' special key code.</em> <a href="#a103"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a104">CSKEY_PAD1</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('1')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 1.</em> <a href="#a104"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a105">CSKEY_PAD2</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('2')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 2.</em> <a href="#a105"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a106">CSKEY_PAD3</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('3')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 3.</em> <a href="#a106"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a107">CSKEY_PAD4</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('4')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 4.</em> <a href="#a107"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a108">CSKEY_PAD5</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('5')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 5.</em> <a href="#a108"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a109">CSKEY_CENTER</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD5</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad "Center" (5).</em> <a href="#a109"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a110">CSKEY_PAD6</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('6')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 6.</em> <a href="#a110"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a111">CSKEY_PAD7</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('7')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 7.</em> <a href="#a111"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a112">CSKEY_PAD8</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('8')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 8.</em> <a href="#a112"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a113">CSKEY_PAD9</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('9')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 9.</em> <a href="#a113"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a114">CSKEY_PAD0</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('0')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 0.</em> <a href="#a114"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a115">CSKEY_PADDECIMAL</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('.')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Decimal ('.' on English keyboards).</em> <a href="#a115"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a116">CSKEY_PADDIV</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('/')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Divide.</em> <a href="#a116"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a117">CSKEY_PADMULT</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('*')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Multiply.</em> <a href="#a117"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a118">CSKEY_PADMINUS</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('-')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Minus.</em> <a href="#a118"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a119">CSKEY_PADPLUS</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('+')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Plus.</em> <a href="#a119"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a120">CSKEY_PADENTER</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('\n')</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Enter.</em> <a href="#a120"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a121">CSKEY_PADNUM</a>&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeNumLock,csKeyModifierNumAny) | CSKEY_PAD_FLAG</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>NumLock key.</em> <a href="#a121"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a122">CSKEY_CAPSLOCK</a>&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeCapsLock,csKeyModifierNumAny)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>CapsLock key.</em> <a href="#a122"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a123">CSKEY_SCROLLLOCK</a>&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeScrollLock,csKeyModifierNumAny)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>ScrollLock key.</em> <a href="#a123"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a132">_csKeyCharType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a5">csKeyCharType</a></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a82">CSKEY_MODIFIER_COMPARE</a>(bitmask1, bitmask2)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to determine if two modifier bitmasks can be considered equal.</em> <a href="#a82"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a83">CSKEY_SHIFT_NUM</a>(n)&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeShift,n)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Construct a key code for the Shift modifier key number <em>n</em>.</em> <a href="#a83"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a84">CSKEY_SHIFT_FIRST</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(0)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Lowest code of the Shift modifier keys.</em> <a href="#a84"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a85">CSKEY_SHIFT_LAST</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(0x1e)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Highest code of the Shift modifier keys.</em> <a href="#a85"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a86">CSKEY_SHIFT_LEFT</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(csKeyModifierNumLeft)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Left Shift.</em> <a href="#a86"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a87">CSKEY_SHIFT_RIGHT</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(csKeyModifierNumRight)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Right Shift.</em> <a href="#a87"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a88">CSKEY_SHIFT</a>&nbsp;&nbsp;&nbsp;CSKEY_SHIFT_NUM(csKeyModifierNumAny)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Undistinguished Shift.</em> <a href="#a88"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a89">CSKEY_CTRL_NUM</a>(n)&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeCtrl,n)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Construct a key code for the Ctrl modifier key number <em>n</em>.</em> <a href="#a89"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a90">CSKEY_CTRL_FIRST</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(0)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Lowest code of the Ctrl modifier keys.</em> <a href="#a90"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a91">CSKEY_CTRL_LAST</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(0x1e)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Highest code of the Ctrl modifier keys.</em> <a href="#a91"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a92">CSKEY_CTRL_LEFT</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(csKeyModifierNumLeft)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Left Ctrl.</em> <a href="#a92"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a93">CSKEY_CTRL_RIGHT</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(csKeyModifierNumRight)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Right Ctrl.</em> <a href="#a93"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a94">CSKEY_CTRL</a>&nbsp;&nbsp;&nbsp;CSKEY_CTRL_NUM(csKeyModifierNumAny)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Undistinguished Ctrl.</em> <a href="#a94"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a95">CSKEY_ALT_NUM</a>(n)&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeAlt,n)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Construct a key code for the Alt modifier key number <em>n</em>.</em> <a href="#a95"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a96">CSKEY_ALT_FIRST</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(0)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Lowest code of the Alt modifier keys.</em> <a href="#a96"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a97">CSKEY_ALT_LAST</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(0x1e)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Highest code of the Alt modifier keys.</em> <a href="#a97"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a98">CSKEY_ALT_LEFT</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(csKeyModifierNumLeft)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Left Alt.</em> <a href="#a98"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a99">CSKEY_ALT_RIGHT</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(csKeyModifierNumRight)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Right Alt.</em> <a href="#a99"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a100">CSKEY_ALT</a>&nbsp;&nbsp;&nbsp;CSKEY_ALT_NUM(csKeyModifierNumAny)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Undistinguished Alt.</em> <a href="#a100"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a101">CSKEY_PAD_FLAG</a>&nbsp;&nbsp;&nbsp;0x4000</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Bit that is set if a key is from the keypad.</em> <a href="#a101"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a102">CSKEY_PAD_KEY</a>(code)&nbsp;&nbsp;&nbsp;CSKEY_SPECIAL((unsigned int)(code) | CSKEY_PAD_FLAG)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to construct a keypade key code.</em> <a href="#a102"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a103">CSKEY_IS_PAD_KEY</a>(rawCode)&nbsp;&nbsp;&nbsp;(((rawCode) &amp; CSKEY_PAD_FLAG) != 0)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to test whether a key code identifies a keypad key.</em> <a href="#a103"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a104">CSKEY_PAD_TO_NORMAL</a>(rawCode)&nbsp;&nbsp;&nbsp;((rawCode) &amp; (~CSKEY_PAD_FLAG))</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Helper macro to convert a 'pad' key code into a 'normal' special key code.</em> <a href="#a104"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a105">CSKEY_PAD1</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('1')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 1.</em> <a href="#a105"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a106">CSKEY_PAD2</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('2')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 2.</em> <a href="#a106"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a107">CSKEY_PAD3</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('3')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 3.</em> <a href="#a107"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a108">CSKEY_PAD4</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('4')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 4.</em> <a href="#a108"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a109">CSKEY_PAD5</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('5')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 5.</em> <a href="#a109"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a110">CSKEY_CENTER</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD5</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad "Center" (5).</em> <a href="#a110"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a111">CSKEY_PAD6</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('6')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 6.</em> <a href="#a111"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a112">CSKEY_PAD7</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('7')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 7.</em> <a href="#a112"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a113">CSKEY_PAD8</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('8')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 8.</em> <a href="#a113"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a114">CSKEY_PAD9</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('9')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 9.</em> <a href="#a114"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a115">CSKEY_PAD0</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('0')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad 0.</em> <a href="#a115"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a116">CSKEY_PADDECIMAL</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('.')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Decimal ('.' on English keyboards).</em> <a href="#a116"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a117">CSKEY_PADDIV</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('/')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Divide.</em> <a href="#a117"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a118">CSKEY_PADMULT</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('*')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Multiply.</em> <a href="#a118"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a119">CSKEY_PADMINUS</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('-')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Minus.</em> <a href="#a119"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a120">CSKEY_PADPLUS</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('+')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Plus.</em> <a href="#a120"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a121">CSKEY_PADENTER</a>&nbsp;&nbsp;&nbsp;CSKEY_PAD_KEY('\n')</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keypad Enter.</em> <a href="#a121"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a122">CSKEY_PADNUM</a>&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeNumLock,csKeyModifierNumAny) | CSKEY_PAD_FLAG</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>NumLock key.</em> <a href="#a122"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a123">CSKEY_CAPSLOCK</a>&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeCapsLock,csKeyModifierNumAny)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>CapsLock key.</em> <a href="#a123"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a124">CSKEY_SCROLLLOCK</a>&nbsp;&nbsp;&nbsp;CSKEY_MODIFIER(csKeyModifierTypeScrollLock,csKeyModifierNumAny)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>ScrollLock key.</em> <a href="#a124"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a133">_csKeyCharType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a5">csKeyCharType</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Character types.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a132">_csKeyCharType</a> { <a class="el" href="group__event__handling.html#a132a153">csKeyCharTypeNormal</a> =  0, 
-<a class="el" href="group__event__handling.html#a132a154">csKeyCharTypeDead</a>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a133">_csKeyCharType</a> { <a class="el" href="group__event__handling.html#a133a154">csKeyCharTypeNormal</a> =  0, 
+<a class="el" href="group__event__handling.html#a133a155">csKeyCharTypeDead</a>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Character types.</em> <a href="#a132">More...</a><em></em></font><br><br></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Character types.</em> <a href="#a133">More...</a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Event class masks</h2></td></tr>
 <tr><td colspan=2>Every event plug should provide information about which event types that may conflict with other event plugs it is able to generate.
 <p>
 The system driver checks it and if several event plugs generates conflicting types events, one of them (the one with lower priority) is disabled.<br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a124">CSEVTYPE_Keyboard</a>&nbsp;&nbsp;&nbsp;0x00000001</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keyboard events.</em> <a href="#a124"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a125">CSEVTYPE_Mouse</a>&nbsp;&nbsp;&nbsp;0x00000002</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Mouse events.</em> <a href="#a125"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a126">CSEVTYPE_Joystick</a>&nbsp;&nbsp;&nbsp;0x00000004</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Joystick events.</em> <a href="#a126"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a125">CSEVTYPE_Keyboard</a>&nbsp;&nbsp;&nbsp;0x00000001</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keyboard events.</em> <a href="#a125"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a126">CSEVTYPE_Mouse</a>&nbsp;&nbsp;&nbsp;0x00000002</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Mouse events.</em> <a href="#a126"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a127">CSEVTYPE_Joystick</a>&nbsp;&nbsp;&nbsp;0x00000004</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Joystick events.</em> <a href="#a127"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Modifier keys</h2></td></tr>
 <tr><td colspan=2><dl compact><dt><b>See also: </b></dt><dd>
 <a href="group__event__handling.html#Keyboard">Keyboard events</a>, Modifier key masks</dl><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a130">_csKeyModifierType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a2">csKeyModifierType</a></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a131">_csKeyModifierType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a2">csKeyModifierType</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Modifier types.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a131">_csKeyModifierNumType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a3">csKeyModifierNumType</a></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a132">_csKeyModifierNumType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a3">csKeyModifierNumType</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Modifier numbers.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>typedef <a class="el" href="struct__csKeyModifiers.html">_csKeyModifiers</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a4">csKeyModifiers</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Flags for all currently pressed modifiers.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a130">_csKeyModifierType</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a130a143">csKeyModifierTypeShift</a> =  0, 
-<a class="el" href="group__event__handling.html#a130a144">csKeyModifierTypeCtrl</a>, 
-<a class="el" href="group__event__handling.html#a130a145">csKeyModifierTypeAlt</a>, 
-<a class="el" href="group__event__handling.html#a130a146">csKeyModifierTypeCapsLock</a>, 
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a131">_csKeyModifierType</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a131a144">csKeyModifierTypeShift</a> =  0, 
+<a class="el" href="group__event__handling.html#a131a145">csKeyModifierTypeCtrl</a>, 
+<a class="el" href="group__event__handling.html#a131a146">csKeyModifierTypeAlt</a>, 
+<a class="el" href="group__event__handling.html#a131a147">csKeyModifierTypeCapsLock</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a130a147">csKeyModifierTypeNumLock</a>, 
-<a class="el" href="group__event__handling.html#a130a148">csKeyModifierTypeScrollLock</a>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a131a148">csKeyModifierTypeNumLock</a>, 
+<a class="el" href="group__event__handling.html#a131a149">csKeyModifierTypeScrollLock</a>
 <br>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Modifier types.</em> <a href="#a130">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a131">_csKeyModifierNumType</a> { <a class="el" href="group__event__handling.html#a131a150">csKeyModifierNumLeft</a> =  0, 
-<a class="el" href="group__event__handling.html#a131a151">csKeyModifierNumRight</a>, 
-<a class="el" href="group__event__handling.html#a131a152">csKeyModifierNumAny</a> =  0x1f
+<tr><td>&nbsp;</td><td><font size=-1><em>Modifier types.</em> <a href="#a131">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a132">_csKeyModifierNumType</a> { <a class="el" href="group__event__handling.html#a132a151">csKeyModifierNumLeft</a> =  0, 
+<a class="el" href="group__event__handling.html#a132a152">csKeyModifierNumRight</a>, 
+<a class="el" href="group__event__handling.html#a132a153">csKeyModifierNumAny</a> =  0x1f
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Modifier numbers.</em> <a href="#a131">More...</a><em></em></font><br><br></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Modifier numbers.</em> <a href="#a132">More...</a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>[NOHEADER]</h2></td></tr>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a8">CS_MAX_MOUSE_BUTTONS</a>&nbsp;&nbsp;&nbsp;10</td></tr>
@@ -349,98 +351,98 @@ The system driver checks it and if several event plugs generates conflicting typ
 <tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a10">CS_MAX_JOYSTICK_BUTTONS</a>&nbsp;&nbsp;&nbsp;10</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Maximal number of joystick buttons supported.</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a128">_csEventType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a0">csEventType</a></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a129">_csEventType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a0">csEventType</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>System Events.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a129">_csKeyEventType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a1">csKeyEventType</a></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a130">_csKeyEventType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a1">csKeyEventType</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Keyboard event type.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a133">_csCommandEventCode</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a6">csCommandEventCode</a></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__event__handling.html#a134">_csCommandEventCode</a>&nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a6">csCommandEventCode</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>General Command Codes.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Enumerations</h2></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a127">csKeyComposeResult</a> { <a class="el" href="group__event__handling.html#a127a3">csComposeNoChar</a> =  -1, 
-<a class="el" href="group__event__handling.html#a127a4">csComposeNormalChar</a>, 
-<a class="el" href="group__event__handling.html#a127a5">csComposeComposedChar</a>, 
-<a class="el" href="group__event__handling.html#a127a6">csComposeUncomposeable</a>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a128">csKeyComposeResult</a> { <a class="el" href="group__event__handling.html#a128a3">csComposeNoChar</a> =  -1, 
+<a class="el" href="group__event__handling.html#a128a4">csComposeNormalChar</a>, 
+<a class="el" href="group__event__handling.html#a128a5">csComposeComposedChar</a>, 
+<a class="el" href="group__event__handling.html#a128a6">csComposeUncomposeable</a>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Results for attempts to process a character key.</em> <a href="#a127">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a128">_csEventType</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a128a123">csevNothing</a> =  0, 
-<a class="el" href="group__event__handling.html#a128a124">csevKeyboard</a>, 
-<a class="el" href="group__event__handling.html#a128a125">csevMouseMove</a>, 
-<a class="el" href="group__event__handling.html#a128a126">csevMouseDown</a>, 
+<tr><td>&nbsp;</td><td><font size=-1><em>Results for attempts to process a character key.</em> <a href="#a128">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a129">_csEventType</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a129a124">csevNothing</a> =  0, 
+<a class="el" href="group__event__handling.html#a129a125">csevKeyboard</a>, 
+<a class="el" href="group__event__handling.html#a129a126">csevMouseMove</a>, 
+<a class="el" href="group__event__handling.html#a129a127">csevMouseDown</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a128a127">csevMouseUp</a>, 
-<a class="el" href="group__event__handling.html#a128a128">csevMouseClick</a>, 
-<a class="el" href="group__event__handling.html#a128a129">csevMouseDoubleClick</a>, 
-<a class="el" href="group__event__handling.html#a128a130">csevJoystickMove</a>, 
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a129a128">csevMouseUp</a>, 
+<a class="el" href="group__event__handling.html#a129a129">csevMouseClick</a>, 
+<a class="el" href="group__event__handling.html#a129a130">csevMouseDoubleClick</a>, 
+<a class="el" href="group__event__handling.html#a129a131">csevJoystickMove</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a128a131">csevJoystickDown</a>, 
-<a class="el" href="group__event__handling.html#a128a132">csevJoystickUp</a>, 
-<a class="el" href="group__event__handling.html#a128a133">csevCommand</a>, 
-<a class="el" href="group__event__handling.html#a128a134">csevBroadcast</a>, 
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a129a132">csevJoystickDown</a>, 
+<a class="el" href="group__event__handling.html#a129a133">csevJoystickUp</a>, 
+<a class="el" href="group__event__handling.html#a129a134">csevCommand</a>, 
+<a class="el" href="group__event__handling.html#a129a135">csevBroadcast</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a128a135">csevMouseEnter</a>, 
-<a class="el" href="group__event__handling.html#a128a136">csevMouseExit</a>, 
-<a class="el" href="group__event__handling.html#a128a137">csevLostFocus</a>, 
-<a class="el" href="group__event__handling.html#a128a138">csevGainFocus</a>, 
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a129a136">csevMouseEnter</a>, 
+<a class="el" href="group__event__handling.html#a129a137">csevMouseExit</a>, 
+<a class="el" href="group__event__handling.html#a129a138">csevLostFocus</a>, 
+<a class="el" href="group__event__handling.html#a129a139">csevGainFocus</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a128a139">csevGroupOff</a>, 
-<a class="el" href="group__event__handling.html#a128a140">csevFrameStart</a>
-<br>
- }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>System Events.</em> <a href="#a128">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a129">_csKeyEventType</a> { <a class="el" href="group__event__handling.html#a129a141">csKeyEventTypeUp</a> =  0, 
-<a class="el" href="group__event__handling.html#a129a142">csKeyEventTypeDown</a>
- }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Keyboard event type.</em> <a href="#a129">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a133">_csCommandEventCode</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a133a155">cscmdNothing</a> =  0, 
-<a class="el" href="group__event__handling.html#a133a156">cscmdQuit</a>, 
-<a class="el" href="group__event__handling.html#a133a157">cscmdFocusChanged</a>, 
-<a class="el" href="group__event__handling.html#a133a158">cscmdSystemOpen</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a133a159">cscmdSystemClose</a>, 
-<a class="el" href="group__event__handling.html#a133a160">cscmdContextResize</a>, 
-<a class="el" href="group__event__handling.html#a133a161">cscmdContextClose</a>, 
-<a class="el" href="group__event__handling.html#a133a162">cscmdCommandLineHelp</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a133a163">cscmdPreProcess</a>, 
-<a class="el" href="group__event__handling.html#a133a164">cscmdProcess</a>, 
-<a class="el" href="group__event__handling.html#a133a165">cscmdPostProcess</a>, 
-<a class="el" href="group__event__handling.html#a133a166">cscmdFinalProcess</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a133a167">cscmdCanvasHidden</a>, 
-<a class="el" href="group__event__handling.html#a133a168">cscmdCanvasExposed</a>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a129a140">csevGroupOff</a>, 
+<a class="el" href="group__event__handling.html#a129a141">csevFrameStart</a>
 <br>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>General Command Codes.</em> <a href="#a133">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a134">csEventError</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a0">csEventErrNone</a>, 
-<a class="el" href="group__event__handling.html#a134a1">csEventErrLossy</a>, 
-<a class="el" href="group__event__handling.html#a134a2">csEventErrNotFound</a>, 
-<a class="el" href="group__event__handling.html#a134a3">csEventErrMismatchInt</a>, 
+<tr><td>&nbsp;</td><td><font size=-1><em>System Events.</em> <a href="#a129">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a130">_csKeyEventType</a> { <a class="el" href="group__event__handling.html#a130a142">csKeyEventTypeUp</a> =  0, 
+<a class="el" href="group__event__handling.html#a130a143">csKeyEventTypeDown</a>
+ }</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Keyboard event type.</em> <a href="#a130">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a134">_csCommandEventCode</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a156">cscmdNothing</a> =  0, 
+<a class="el" href="group__event__handling.html#a134a157">cscmdQuit</a>, 
+<a class="el" href="group__event__handling.html#a134a158">cscmdFocusChanged</a>, 
+<a class="el" href="group__event__handling.html#a134a159">cscmdSystemOpen</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a136">csEventErrMismatchUInt</a>, 
-<a class="el" href="group__event__handling.html#a134a137">csEventErrMismatchFloat</a>, 
-<a class="el" href="group__event__handling.html#a134a138">csEventErrMismatchBuffer</a>, 
-<a class="el" href="group__event__handling.html#a134a139">csEventErrMismatchEvent</a>, 
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a160">cscmdSystemClose</a>, 
+<a class="el" href="group__event__handling.html#a134a161">cscmdContextResize</a>, 
+<a class="el" href="group__event__handling.html#a134a162">cscmdContextClose</a>, 
+<a class="el" href="group__event__handling.html#a134a163">cscmdCommandLineHelp</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a140">csEventErrMismatchIBase</a>, 
-<a class="el" href="group__event__handling.html#a134a9">csEventErrUhOhUnknown</a>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a164">cscmdPreProcess</a>, 
+<a class="el" href="group__event__handling.html#a134a165">cscmdProcess</a>, 
+<a class="el" href="group__event__handling.html#a134a166">cscmdPostProcess</a>, 
+<a class="el" href="group__event__handling.html#a134a167">cscmdFinalProcess</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a134a168">cscmdCanvasHidden</a>, 
+<a class="el" href="group__event__handling.html#a134a169">cscmdCanvasExposed</a>
 <br>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Error codes for event attribute retrieval.</em> <a href="#a134">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a135">csEventAttributeType</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a135a10">csEventAttrUnknown</a>, 
-<a class="el" href="group__event__handling.html#a135a11">csEventAttrInt</a>, 
-<a class="el" href="group__event__handling.html#a135a12">csEventAttrUInt</a>, 
-<a class="el" href="group__event__handling.html#a135a13">csEventAttrFloat</a>, 
+<tr><td>&nbsp;</td><td><font size=-1><em>General Command Codes.</em> <a href="#a134">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a135">csEventError</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a135a0">csEventErrNone</a>, 
+<a class="el" href="group__event__handling.html#a135a1">csEventErrLossy</a>, 
+<a class="el" href="group__event__handling.html#a135a2">csEventErrNotFound</a>, 
+<a class="el" href="group__event__handling.html#a135a3">csEventErrMismatchInt</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a135a14">csEventAttrDatabuffer</a>, 
-<a class="el" href="group__event__handling.html#a135a15">csEventAttrEvent</a>, 
-<a class="el" href="group__event__handling.html#a135a16">csEventAttriBase</a>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a135a137">csEventErrMismatchUInt</a>, 
+<a class="el" href="group__event__handling.html#a135a138">csEventErrMismatchFloat</a>, 
+<a class="el" href="group__event__handling.html#a135a139">csEventErrMismatchBuffer</a>, 
+<a class="el" href="group__event__handling.html#a135a140">csEventErrMismatchEvent</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a135a141">csEventErrMismatchIBase</a>, 
+<a class="el" href="group__event__handling.html#a135a9">csEventErrUhOhUnknown</a>
 <br>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Various atteibute data types supported by the event system (<a class="el" href="structiEvent.html">iEvent</a>).</em> <a href="#a135">More...</a><em></em></font><br><br></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Error codes for event attribute retrieval.</em> <a href="#a135">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__event__handling.html#a136">csEventAttributeType</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a136a10">csEventAttrUnknown</a>, 
+<a class="el" href="group__event__handling.html#a136a11">csEventAttrInt</a>, 
+<a class="el" href="group__event__handling.html#a136a12">csEventAttrUInt</a>, 
+<a class="el" href="group__event__handling.html#a136a13">csEventAttrFloat</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__event__handling.html#a136a14">csEventAttrDatabuffer</a>, 
+<a class="el" href="group__event__handling.html#a136a15">csEventAttrEvent</a>, 
+<a class="el" href="group__event__handling.html#a136a16">csEventAttriBase</a>
+<br>
+ }</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Various atteibute data types supported by the event system (<a class="el" href="structiEvent.html">iEvent</a>).</em> <a href="#a136">More...</a><em></em></font><br><br></td></tr>
 </table>
 <h3><a name="Keyboard">Keyboard events</a>
 </h3> Keyboard events are emitted when the user does something with the keyboard - presses down a key ("key down" events), holds it down (more "key down"  events in a specific interval - "auto-repeat") and releases it ("key up".) 
@@ -643,7 +645,7 @@ Maximal number of joystick buttons supported.
 <p>
 Definition at line <a class="el" href="iutil_2csinput_8h-source.html#l00045">45</a> of file <a class="el" href="iutil_2csinput_8h-source.html">csinput.h</a>.
 <p>
-Referenced by <a class="el" href="csutil_2csinput_8h-source.html#l00279">csJoystickDriver::GetLastButton()</a>.    </td>
+Referenced by <a class="el" href="csutil_2csinput_8h-source.html#l00282">csJoystickDriver::GetLastButton()</a>.    </td>
   </tr>
 </table>
 <a name="a9" doxytag="csinput.h::CS_MAX_JOYSTICK_COUNT"></a><p>
@@ -671,7 +673,7 @@ Maximal number of joysticks supported.
 <p>
 Definition at line <a class="el" href="iutil_2csinput_8h-source.html#l00043">43</a> of file <a class="el" href="iutil_2csinput_8h-source.html">csinput.h</a>.
 <p>
-Referenced by <a class="el" href="csutil_2csinput_8h-source.html#l00279">csJoystickDriver::GetLastButton()</a>.    </td>
+Referenced by <a class="el" href="csutil_2csinput_8h-source.html#l00282">csJoystickDriver::GetLastButton()</a>.    </td>
   </tr>
 </table>
 <a name="a8" doxytag="csinput.h::CS_MAX_MOUSE_BUTTONS"></a><p>
@@ -699,7 +701,7 @@ Maximal number of mouse buttons supported.
 <p>
 Definition at line <a class="el" href="iutil_2csinput_8h-source.html#l00041">41</a> of file <a class="el" href="iutil_2csinput_8h-source.html">csinput.h</a>.
 <p>
-Referenced by <a class="el" href="csutil_2csinput_8h-source.html#l00220">csMouseDriver::GetLastButton()</a>.    </td>
+Referenced by <a class="el" href="csutil_2csinput_8h-source.html#l00223">csMouseDriver::GetLastButton()</a>.    </td>
   </tr>
 </table>
 <a name="a31" doxytag="evdefs.h::CSEF_BROADCAST"></a><p>
@@ -728,7 +730,7 @@ Normally this is set only for csevBroadcast events.
 Definition at line <a class="el" href="evdefs_8h-source.html#l00173">173</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a126" doxytag="evdefs.h::CSEVTYPE_Joystick"></a><p>
+<a name="a127" doxytag="evdefs.h::CSEVTYPE_Joystick"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -751,10 +753,10 @@ Joystick events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00501">501</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00507">507</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a124" doxytag="evdefs.h::CSEVTYPE_Keyboard"></a><p>
+<a name="a125" doxytag="evdefs.h::CSEVTYPE_Keyboard"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -777,10 +779,10 @@ Keyboard events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00497">497</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00503">503</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a125" doxytag="evdefs.h::CSEVTYPE_Mouse"></a><p>
+<a name="a126" doxytag="evdefs.h::CSEVTYPE_Mouse"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -803,10 +805,10 @@ Mouse events.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00499">499</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00505">505</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a99" doxytag="evdefs.h::CSKEY_ALT"></a><p>
+<a name="a100" doxytag="evdefs.h::CSKEY_ALT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -829,10 +831,10 @@ Undistinguished Alt.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00416">416</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00422">422</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a95" doxytag="evdefs.h::CSKEY_ALT_FIRST"></a><p>
+<a name="a96" doxytag="evdefs.h::CSKEY_ALT_FIRST"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -855,10 +857,10 @@ Lowest code of the Alt modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00407">407</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00413">413</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a96" doxytag="evdefs.h::CSKEY_ALT_LAST"></a><p>
+<a name="a97" doxytag="evdefs.h::CSKEY_ALT_LAST"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -881,10 +883,10 @@ Highest code of the Alt modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00409">409</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00415">415</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a97" doxytag="evdefs.h::CSKEY_ALT_LEFT"></a><p>
+<a name="a98" doxytag="evdefs.h::CSKEY_ALT_LEFT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -907,10 +909,10 @@ Left Alt.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00412">412</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00418">418</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a94" doxytag="evdefs.h::CSKEY_ALT_NUM"></a><p>
+<a name="a95" doxytag="evdefs.h::CSKEY_ALT_NUM"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -938,10 +940,10 @@ Construct a key code for the Alt modifier key number <em>n</em>.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00405">405</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00411">411</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a98" doxytag="evdefs.h::CSKEY_ALT_RIGHT"></a><p>
+<a name="a99" doxytag="evdefs.h::CSKEY_ALT_RIGHT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -964,7 +966,7 @@ Right Alt.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00414">414</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00420">420</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a43" doxytag="evdefs.h::CSKEY_BACKSPACE"></a><p>
@@ -993,7 +995,7 @@ Back-space key.
 Definition at line <a class="el" href="evdefs_8h-source.html#l00283">283</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a122" doxytag="evdefs.h::CSKEY_CAPSLOCK"></a><p>
+<a name="a123" doxytag="evdefs.h::CSKEY_CAPSLOCK"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1016,10 +1018,10 @@ CapsLock key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00472">472</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00478">478</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a109" doxytag="evdefs.h::CSKEY_CENTER"></a><p>
+<a name="a110" doxytag="evdefs.h::CSKEY_CENTER"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1042,7 +1044,7 @@ Keypad "Center" (5).
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00441">441</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00447">447</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a60" doxytag="evdefs.h::CSKEY_CONTEXT"></a><p>
@@ -1071,7 +1073,7 @@ The "Context menu" key on Windows keyboards.
 Definition at line <a class="el" href="evdefs_8h-source.html#l00320">320</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a93" doxytag="evdefs.h::CSKEY_CTRL"></a><p>
+<a name="a94" doxytag="evdefs.h::CSKEY_CTRL"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1094,10 +1096,10 @@ Undistinguished Ctrl.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00402">402</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00408">408</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a89" doxytag="evdefs.h::CSKEY_CTRL_FIRST"></a><p>
+<a name="a90" doxytag="evdefs.h::CSKEY_CTRL_FIRST"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1120,10 +1122,10 @@ Lowest code of the Ctrl modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00393">393</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00399">399</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a90" doxytag="evdefs.h::CSKEY_CTRL_LAST"></a><p>
+<a name="a91" doxytag="evdefs.h::CSKEY_CTRL_LAST"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1146,10 +1148,10 @@ Highest code of the Ctrl modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00395">395</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00401">401</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a91" doxytag="evdefs.h::CSKEY_CTRL_LEFT"></a><p>
+<a name="a92" doxytag="evdefs.h::CSKEY_CTRL_LEFT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1172,10 +1174,10 @@ Left Ctrl.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00398">398</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00404">404</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a88" doxytag="evdefs.h::CSKEY_CTRL_NUM"></a><p>
+<a name="a89" doxytag="evdefs.h::CSKEY_CTRL_NUM"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1203,10 +1205,10 @@ Construct a key code for the Ctrl modifier key number <em>n</em>.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00391">391</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00397">397</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a92" doxytag="evdefs.h::CSKEY_CTRL_RIGHT"></a><p>
+<a name="a93" doxytag="evdefs.h::CSKEY_CTRL_RIGHT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1229,7 +1231,7 @@ Right Ctrl.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00400">400</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00406">406</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a59" doxytag="evdefs.h::CSKEY_DEL"></a><p>
@@ -1759,7 +1761,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00316">316</a> of 
 Definition at line <a class="el" href="evdefs_8h-source.html#l00363">363</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a102" doxytag="evdefs.h::CSKEY_IS_PAD_KEY"></a><p>
+<a name="a103" doxytag="evdefs.h::CSKEY_IS_PAD_KEY"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -1770,7 +1772,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00363">363</a> of 
           <td class="md" nowrap valign="top">rawCode&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
           <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;((rawCode &amp; CSKEY_PAD_FLAG) != 0)
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;(((rawCode) &amp; CSKEY_PAD_FLAG) != 0)
       </table>
     </td>
   </tr>
@@ -1787,7 +1789,7 @@ Helper macro to test whether a key code identifies a keypad key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00424">424</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00430">430</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a48" doxytag="evdefs.h::CSKEY_IS_SPECIAL"></a><p>
@@ -1801,7 +1803,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00424">424</a> of 
           <td class="md" nowrap valign="top">rawCode&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
           <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;((rawCode &gt;= CSKEY_SPECIAL_FIRST) &amp;&amp; (rawCode &lt;= CSKEY_SPECIAL_LAST))
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;((rawCode &gt;= CSKEY_SPECIAL_FIRST) &amp;&amp; ((rawCode) &lt;= CSKEY_SPECIAL_LAST))
       </table>
     </td>
   </tr>
@@ -1861,7 +1863,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00304">304</a> of 
           <td class="md" nowrap>num&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
           <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;CSKEY_SPECIAL(CSKEY_MODIFIER_FIRST + (type &lt;&lt; CSKEY_MODIFIERTYPE_SHIFT) + num)
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;CSKEY_SPECIAL(CSKEY_MODIFIER_FIRST + ((type) &lt;&lt; CSKEY_MODIFIERTYPE_SHIFT) + (num))
       </table>
     </td>
   </tr>
@@ -1879,6 +1881,42 @@ Helper macro to construct a modifiers key code.
 
 <p>
 Definition at line <a class="el" href="evdefs_8h-source.html#l00360">360</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+  </tr>
+</table>
+<a name="a82" doxytag="evdefs.h::CSKEY_MODIFIER_COMPARE"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define CSKEY_MODIFIER_COMPARE</td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">bitmask1,         <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>bitmask2&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" valign="top">)&nbsp;</td>
+          <td class="md" nowrap>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre>((bitmask1) == (bitmask2)                                                    \
+|| ((bitmask1) == (unsigned)(1 &lt;&lt; <a class="code" href="group__event__handling.html#a132a153">csKeyModifierNumAny</a>) &amp;&amp; (bitmask2) != 0)   \
+|| ((bitmask2) == (unsigned)(1 &lt;&lt; <a class="code" href="group__event__handling.html#a132a153">csKeyModifierNumAny</a>) &amp;&amp; (bitmask1) != 0))</pre></div>Helper macro to determine if two modifier bitmasks can be considered equal.
+<p>
+
+<p>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00377">377</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a75" doxytag="evdefs.h::CSKEY_MODIFIER_FIRST"></a><p>
@@ -1957,7 +1995,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00353">353</a> of 
     <td>
 
 <p>
-<b>Value:</b><div class="fragment"><pre>((rawCode - <a class="code" href="group__event__handling.html#a75">CSKEY_MODIFIER_FIRST</a> - <a class="code" href="group__event__handling.html#a45">CSKEY_SPECIAL_FIRST</a>) &amp; \
+<b>Value:</b><div class="fragment"><pre>(((rawCode) - <a class="code" href="group__event__handling.html#a75">CSKEY_MODIFIER_FIRST</a> - <a class="code" href="group__event__handling.html#a45">CSKEY_SPECIAL_FIRST</a>) &amp; \
   ((1 &lt;&lt; <a class="code" href="group__event__handling.html#a77">CSKEY_MODIFIERTYPE_SHIFT</a>) - 1))</pre></div>Helper macro to determine the modifier number of a key code.
 <p>
 
@@ -1989,7 +2027,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00372">372</a> of 
     <td>
 
 <p>
-<b>Value:</b><div class="fragment"><pre>((rawCode - <a class="code" href="group__event__handling.html#a75">CSKEY_MODIFIER_FIRST</a> - <a class="code" href="group__event__handling.html#a45">CSKEY_SPECIAL_FIRST</a>) &gt;&gt; \
+<b>Value:</b><div class="fragment"><pre>(((rawCode) - <a class="code" href="group__event__handling.html#a75">CSKEY_MODIFIER_FIRST</a> - <a class="code" href="group__event__handling.html#a45">CSKEY_SPECIAL_FIRST</a>) &gt;&gt; \
   <a class="code" href="group__event__handling.html#a77">CSKEY_MODIFIERTYPE_SHIFT</a>)</pre></div>Helper macro to determine the modifier type of a key code.
 <p>
 
@@ -2023,7 +2061,7 @@ ESCape key.
 Definition at line <a class="el" href="evdefs_8h-source.html#l00358">358</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a114" doxytag="evdefs.h::CSKEY_PAD0"></a><p>
+<a name="a115" doxytag="evdefs.h::CSKEY_PAD0"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2046,10 +2084,10 @@ Keypad 0.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00451">451</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00457">457</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a104" doxytag="evdefs.h::CSKEY_PAD1"></a><p>
+<a name="a105" doxytag="evdefs.h::CSKEY_PAD1"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2072,10 +2110,10 @@ Keypad 1.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00431">431</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00437">437</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a105" doxytag="evdefs.h::CSKEY_PAD2"></a><p>
+<a name="a106" doxytag="evdefs.h::CSKEY_PAD2"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2098,10 +2136,10 @@ Keypad 2.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00433">433</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00439">439</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a106" doxytag="evdefs.h::CSKEY_PAD3"></a><p>
+<a name="a107" doxytag="evdefs.h::CSKEY_PAD3"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2124,10 +2162,10 @@ Keypad 3.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00435">435</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00441">441</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a107" doxytag="evdefs.h::CSKEY_PAD4"></a><p>
+<a name="a108" doxytag="evdefs.h::CSKEY_PAD4"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2150,10 +2188,10 @@ Keypad 4.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00437">437</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00443">443</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a108" doxytag="evdefs.h::CSKEY_PAD5"></a><p>
+<a name="a109" doxytag="evdefs.h::CSKEY_PAD5"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2176,10 +2214,10 @@ Keypad 5.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00439">439</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00445">445</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a110" doxytag="evdefs.h::CSKEY_PAD6"></a><p>
+<a name="a111" doxytag="evdefs.h::CSKEY_PAD6"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2202,10 +2240,10 @@ Keypad 6.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00443">443</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00449">449</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a111" doxytag="evdefs.h::CSKEY_PAD7"></a><p>
+<a name="a112" doxytag="evdefs.h::CSKEY_PAD7"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2228,10 +2266,10 @@ Keypad 7.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00445">445</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00451">451</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a112" doxytag="evdefs.h::CSKEY_PAD8"></a><p>
+<a name="a113" doxytag="evdefs.h::CSKEY_PAD8"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2254,10 +2292,10 @@ Keypad 8.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00447">447</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00453">453</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a113" doxytag="evdefs.h::CSKEY_PAD9"></a><p>
+<a name="a114" doxytag="evdefs.h::CSKEY_PAD9"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2280,10 +2318,10 @@ Keypad 9.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00449">449</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00455">455</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a100" doxytag="evdefs.h::CSKEY_PAD_FLAG"></a><p>
+<a name="a101" doxytag="evdefs.h::CSKEY_PAD_FLAG"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2306,10 +2344,10 @@ Bit that is set if a key is from the keypad.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00419">419</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00425">425</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a101" doxytag="evdefs.h::CSKEY_PAD_KEY"></a><p>
+<a name="a102" doxytag="evdefs.h::CSKEY_PAD_KEY"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2320,7 +2358,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00419">419</a> of 
           <td class="md" nowrap valign="top">code&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
           <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;CSKEY_SPECIAL((unsigned int)code | CSKEY_PAD_FLAG)
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;CSKEY_SPECIAL((unsigned int)(code) | CSKEY_PAD_FLAG)
       </table>
     </td>
   </tr>
@@ -2337,10 +2375,10 @@ Helper macro to construct a keypade key code.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00421">421</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00427">427</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a103" doxytag="evdefs.h::CSKEY_PAD_TO_NORMAL"></a><p>
+<a name="a104" doxytag="evdefs.h::CSKEY_PAD_TO_NORMAL"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2351,7 +2389,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00421">421</a> of 
           <td class="md" nowrap valign="top">rawCode&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
           <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;(rawCode &amp; (~CSKEY_PAD_FLAG))
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;((rawCode) &amp; (~CSKEY_PAD_FLAG))
       </table>
     </td>
   </tr>
@@ -2368,10 +2406,10 @@ Helper macro to convert a 'pad' key code into a 'normal' special key code.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00428">428</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00434">434</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a115" doxytag="evdefs.h::CSKEY_PADDECIMAL"></a><p>
+<a name="a116" doxytag="evdefs.h::CSKEY_PADDECIMAL"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2394,10 +2432,10 @@ Keypad Decimal ('.' on English keyboards).
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00453">453</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00459">459</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a116" doxytag="evdefs.h::CSKEY_PADDIV"></a><p>
+<a name="a117" doxytag="evdefs.h::CSKEY_PADDIV"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2420,10 +2458,10 @@ Keypad Divide.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00455">455</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00461">461</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a120" doxytag="evdefs.h::CSKEY_PADENTER"></a><p>
+<a name="a121" doxytag="evdefs.h::CSKEY_PADENTER"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2446,10 +2484,10 @@ Keypad Enter.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00463">463</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00469">469</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a118" doxytag="evdefs.h::CSKEY_PADMINUS"></a><p>
+<a name="a119" doxytag="evdefs.h::CSKEY_PADMINUS"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2472,10 +2510,10 @@ Keypad Minus.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00459">459</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00465">465</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a117" doxytag="evdefs.h::CSKEY_PADMULT"></a><p>
+<a name="a118" doxytag="evdefs.h::CSKEY_PADMULT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2498,10 +2536,10 @@ Keypad Multiply.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00457">457</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00463">463</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a121" doxytag="evdefs.h::CSKEY_PADNUM"></a><p>
+<a name="a122" doxytag="evdefs.h::CSKEY_PADNUM"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2524,10 +2562,10 @@ NumLock key.
 <p>
 Both a modifier and a keypad key. 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00469">469</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00475">475</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a119" doxytag="evdefs.h::CSKEY_PADPLUS"></a><p>
+<a name="a120" doxytag="evdefs.h::CSKEY_PADPLUS"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2550,7 +2588,7 @@ Keypad Plus.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00461">461</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00467">467</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a62" doxytag="evdefs.h::CSKEY_PAUSE"></a><p>
@@ -2683,7 +2721,7 @@ Right arrow key.
 Definition at line <a class="el" href="evdefs_8h-source.html#l00306">306</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a123" doxytag="evdefs.h::CSKEY_SCROLLLOCK"></a><p>
+<a name="a124" doxytag="evdefs.h::CSKEY_SCROLLLOCK"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2706,10 +2744,10 @@ ScrollLock key.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00475">475</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00481">481</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a87" doxytag="evdefs.h::CSKEY_SHIFT"></a><p>
+<a name="a88" doxytag="evdefs.h::CSKEY_SHIFT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2732,10 +2770,10 @@ Undistinguished Shift.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00388">388</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00394">394</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a83" doxytag="evdefs.h::CSKEY_SHIFT_FIRST"></a><p>
+<a name="a84" doxytag="evdefs.h::CSKEY_SHIFT_FIRST"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2758,10 +2796,10 @@ Lowest code of the Shift modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00379">379</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00385">385</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a84" doxytag="evdefs.h::CSKEY_SHIFT_LAST"></a><p>
+<a name="a85" doxytag="evdefs.h::CSKEY_SHIFT_LAST"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2784,10 +2822,10 @@ Highest code of the Shift modifier keys.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00381">381</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00387">387</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a85" doxytag="evdefs.h::CSKEY_SHIFT_LEFT"></a><p>
+<a name="a86" doxytag="evdefs.h::CSKEY_SHIFT_LEFT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2810,10 +2848,10 @@ Left Shift.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00384">384</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00390">390</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a82" doxytag="evdefs.h::CSKEY_SHIFT_NUM"></a><p>
+<a name="a83" doxytag="evdefs.h::CSKEY_SHIFT_NUM"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2841,10 +2879,10 @@ Construct a key code for the Shift modifier key number <em>n</em>.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00377">377</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00383">383</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a86" doxytag="evdefs.h::CSKEY_SHIFT_RIGHT"></a><p>
+<a name="a87" doxytag="evdefs.h::CSKEY_SHIFT_RIGHT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -2867,7 +2905,7 @@ Right Shift.
 <p>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00386">386</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00392">392</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
 <a name="a44" doxytag="evdefs.h::CSKEY_SPACE"></a><p>
@@ -2990,7 +3028,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00290">290</a> of 
           <td class="md" nowrap valign="top">rawCode&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
           <td class="md" valign="top">)&nbsp;</td>
-          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;(rawCode - CSKEY_SPECIAL_FIRST)
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;((rawCode) - CSKEY_SPECIAL_FIRST)
       </table>
     </td>
   </tr>
@@ -3695,7 +3733,7 @@ Definition at line <a class="el" href="evdefs_8h-source.html#l00246">246</a> of 
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a133">_csCommandEventCode</a>  csCommandEventCode
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a134">_csCommandEventCode</a>  csCommandEventCode
       </table>
     </td>
   </tr>
@@ -3731,7 +3769,7 @@ General Command Codes.
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a128">_csEventType</a>  csEventType
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a129">_csEventType</a>  csEventType
       </table>
     </td>
   </tr>
@@ -3755,7 +3793,7 @@ System Events.
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a132">_csKeyCharType</a>  csKeyCharType
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a133">_csKeyCharType</a>  csKeyCharType
       </table>
     </td>
   </tr>
@@ -3779,7 +3817,7 @@ Character types.
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a129">_csKeyEventType</a>  csKeyEventType
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a130">_csKeyEventType</a>  csKeyEventType
       </table>
     </td>
   </tr>
@@ -3803,7 +3841,7 @@ Keyboard event type.
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a131">_csKeyModifierNumType</a>  csKeyModifierNumType
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a132">_csKeyModifierNumType</a>  csKeyModifierNumType
       </table>
     </td>
   </tr>
@@ -3851,7 +3889,7 @@ Flags for all currently pressed modifiers.
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a130">_csKeyModifierType</a>  csKeyModifierType
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__event__handling.html#a131">_csKeyModifierType</a>  csKeyModifierType
       </table>
     </td>
   </tr>
@@ -3870,7 +3908,7 @@ Modifier types.
   </tr>
 </table>
 <hr><h2>Enumeration Type Documentation</h2>
-<a name="a133" doxytag="evdefs.h::_csCommandEventCode"></a><p>
+<a name="a134" doxytag="evdefs.h::_csCommandEventCode"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -3905,15 +3943,15 @@ General Command Codes.
  }
  *</pre> <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a133a155" doxytag="cscmdNothing"></a><em>cscmdNothing</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a156" doxytag="cscmdNothing"></a><em>cscmdNothing</em></em>&nbsp;</td><td>
 No command.
 <p>
 Dunno really why it is needed but traditionally 0 stands for nothing. </td></tr>
-<tr><td valign=top><em><a name="a133a156" doxytag="cscmdQuit"></a><em>cscmdQuit</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a157" doxytag="cscmdQuit"></a><em>cscmdQuit</em></em>&nbsp;</td><td>
 The event below causes system driver to quit the event loop, even if the event loop has been entered multiple times.
 <p>
 The quit condition is never reset thus even if you call Loop again, the system driver will quit immediately. Such broadcasts are posted for irreversible finalization of the application such as when user closes the application window. </td></tr>
-<tr><td valign=top><em><a name="a133a157" doxytag="cscmdFocusChanged"></a><em>cscmdFocusChanged</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a158" doxytag="cscmdFocusChanged"></a><em>cscmdFocusChanged</em></em>&nbsp;</td><td>
 Application has changed its "focused" status.
 <p>
 
@@ -3921,54 +3959,54 @@ Application has changed its "focused" status.
  This command is posted (or is not posted) by system-dependent driver. This event is generated whenever user application receives/loses focus. Upon this event application may react correspondingly - stop music, hide software mouse cursor and so on. iEnable = true in the event application receives focus and false if it loses focus. <pre>
  Info: NULL -&gt; window lose focus, non-NULL -&gt; window got focus
  </pre> </td></tr>
-<tr><td valign=top><em><a name="a133a158" doxytag="cscmdSystemOpen"></a><em>cscmdSystemOpen</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a159" doxytag="cscmdSystemOpen"></a><em>cscmdSystemOpen</em></em>&nbsp;</td><td>
 This event is broadcasted to all event listeners just after all modules have been initialized.</td></tr>
-<tr><td valign=top><em><a name="a133a159" doxytag="cscmdSystemClose"></a><em>cscmdSystemClose</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a160" doxytag="cscmdSystemClose"></a><em>cscmdSystemClose</em></em>&nbsp;</td><td>
 This event is broadcasted to all event listeners just before modules are about to be shutdown and unloaded (that is, the system is shutting down).</td></tr>
-<tr><td valign=top><em><a name="a133a160" doxytag="cscmdContextResize"></a><em>cscmdContextResize</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a161" doxytag="cscmdContextResize"></a><em>cscmdContextResize</em></em>&nbsp;</td><td>
 This event is generated when user resizes the application window.
 <p>
 The argument points to the graphics context that has been resized. <pre>
  Info: (<a class="el" href="structiGraphics2D.html">iGraphics2D</a> *) The context that has been resized
  </pre> </td></tr>
-<tr><td valign=top><em><a name="a133a161" doxytag="cscmdContextClose"></a><em>cscmdContextClose</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a162" doxytag="cscmdContextClose"></a><em>cscmdContextClose</em></em>&nbsp;</td><td>
 This event is sent when a graphics context is being destroyed.
 <p>
 Usually this event is accompanyed by a shutdown but there is one exception: when a dynamic texture is closed (a dynamic texture is a graphics context as well). <pre>
  Info: (<a class="el" href="structiGraphics2D.html">iGraphics2D</a> *) The context that has been closed
  </pre> </td></tr>
-<tr><td valign=top><em><a name="a133a162" doxytag="cscmdCommandLineHelp"></a><em>cscmdCommandLineHelp</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a163" doxytag="cscmdCommandLineHelp"></a><em>cscmdCommandLineHelp</em></em>&nbsp;</td><td>
 This event is broadcasted when system driver displays the help text for all supported command-line switches.
 <p>
 Upon reception of such event every plugin should display a short help for any of the command-line switches it supports. The general format is: <pre>&lt;2 spaces&gt;&lt;switch - 18 positions&gt;&lt;space&gt;</pre> <pre>&lt;switch description&gt;{default value}</pre> The help should be displayed to standard output. </td></tr>
-<tr><td valign=top><em><a name="a133a163" doxytag="cscmdPreProcess"></a><em>cscmdPreProcess</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a164" doxytag="cscmdPreProcess"></a><em>cscmdPreProcess</em></em>&nbsp;</td><td>
 Broadcasted before cscmdProcess -- on every frame -- as Event.Command.Code of a broadcast event.
 <p>
 Use the event mask CSMASK_FrameProcess to receive this pseudo-event. </td></tr>
-<tr><td valign=top><em><a name="a133a164" doxytag="cscmdProcess"></a><em>cscmdProcess</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a165" doxytag="cscmdProcess"></a><em>cscmdProcess</em></em>&nbsp;</td><td>
 Broadcasted every frame as Event.Command.Code of a broadcast event.
 <p>
 Use the event mask CSMASK_FrameProcess to receive this pseudo-event. </td></tr>
-<tr><td valign=top><em><a name="a133a165" doxytag="cscmdPostProcess"></a><em>cscmdPostProcess</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a166" doxytag="cscmdPostProcess"></a><em>cscmdPostProcess</em></em>&nbsp;</td><td>
 Broadcasted after cscmdProcess -- on every frame -- as Event.Command.Code of a broadcast event.
 <p>
 Use the event mask CSMASK_FrameProcess to receive this pseudo-event. </td></tr>
-<tr><td valign=top><em><a name="a133a166" doxytag="cscmdFinalProcess"></a><em>cscmdFinalProcess</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a167" doxytag="cscmdFinalProcess"></a><em>cscmdFinalProcess</em></em>&nbsp;</td><td>
 Broadcasted after cscmdPostProcess -- on every frame -- as Event.Command.Code of a broadcast event.
 <p>
 Use the event mask CSMASK_FrameProcess to receive this pseudo-event. </td></tr>
-<tr><td valign=top><em><a name="a133a167" doxytag="cscmdCanvasHidden"></a><em>cscmdCanvasHidden</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a168" doxytag="cscmdCanvasHidden"></a><em>cscmdCanvasHidden</em></em>&nbsp;</td><td>
 Broadcast indicating that the display canvas is not currently visible to the user (such as being iconified).</td></tr>
-<tr><td valign=top><em><a name="a133a168" doxytag="cscmdCanvasExposed"></a><em>cscmdCanvasExposed</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a134a169" doxytag="cscmdCanvasExposed"></a><em>cscmdCanvasExposed</em></em>&nbsp;</td><td>
 Broadcast indicating that the display canvas has just become visible (such as being uniconified).</td></tr>
 </table>
 </dl>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00522">522</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00528">528</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a128" doxytag="evdefs.h::_csEventType"></a><p>
+<a name="a129" doxytag="evdefs.h::_csEventType"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -3991,47 +4029,47 @@ System Events.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a128a123" doxytag="csevNothing"></a><em>csevNothing</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a124" doxytag="csevNothing"></a><em>csevNothing</em></em>&nbsp;</td><td>
 Nothing happened.</td></tr>
-<tr><td valign=top><em><a name="a128a124" doxytag="csevKeyboard"></a><em>csevKeyboard</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a125" doxytag="csevKeyboard"></a><em>csevKeyboard</em></em>&nbsp;</td><td>
 A keyboard event (key down/up).
 <p>
 <dl compact><dt><b>See also: </b></dt><dd>
 <a class="el" href="classcsKeyEventHelper.html">csKeyEventHelper</a> , <a class="el" href="group__event__handling.html#a1">csKeyEventType</a> </dl></td></tr>
-<tr><td valign=top><em><a name="a128a125" doxytag="csevMouseMove"></a><em>csevMouseMove</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a126" doxytag="csevMouseMove"></a><em>csevMouseMove</em></em>&nbsp;</td><td>
 Mouse has been moved.</td></tr>
-<tr><td valign=top><em><a name="a128a126" doxytag="csevMouseDown"></a><em>csevMouseDown</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a127" doxytag="csevMouseDown"></a><em>csevMouseDown</em></em>&nbsp;</td><td>
 A mouse button has been pressed.</td></tr>
-<tr><td valign=top><em><a name="a128a127" doxytag="csevMouseUp"></a><em>csevMouseUp</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a128" doxytag="csevMouseUp"></a><em>csevMouseUp</em></em>&nbsp;</td><td>
 A mouse button has been released.</td></tr>
-<tr><td valign=top><em><a name="a128a128" doxytag="csevMouseClick"></a><em>csevMouseClick</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a129" doxytag="csevMouseClick"></a><em>csevMouseClick</em></em>&nbsp;</td><td>
 A mouse button has been clicked.</td></tr>
-<tr><td valign=top><em><a name="a128a129" doxytag="csevMouseDoubleClick"></a><em>csevMouseDoubleClick</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a130" doxytag="csevMouseDoubleClick"></a><em>csevMouseDoubleClick</em></em>&nbsp;</td><td>
 A mouse button has been clicked twice.</td></tr>
-<tr><td valign=top><em><a name="a128a130" doxytag="csevJoystickMove"></a><em>csevJoystickMove</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a131" doxytag="csevJoystickMove"></a><em>csevJoystickMove</em></em>&nbsp;</td><td>
 A joystick axis has been moved.</td></tr>
-<tr><td valign=top><em><a name="a128a131" doxytag="csevJoystickDown"></a><em>csevJoystickDown</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a132" doxytag="csevJoystickDown"></a><em>csevJoystickDown</em></em>&nbsp;</td><td>
 A joystick button has been pressed.</td></tr>
-<tr><td valign=top><em><a name="a128a132" doxytag="csevJoystickUp"></a><em>csevJoystickUp</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a133" doxytag="csevJoystickUp"></a><em>csevJoystickUp</em></em>&nbsp;</td><td>
 A joystick button has been released.</td></tr>
-<tr><td valign=top><em><a name="a128a133" doxytag="csevCommand"></a><em>csevCommand</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a134" doxytag="csevCommand"></a><em>csevCommand</em></em>&nbsp;</td><td>
 Somebody(-thing) sent a command.
 <p>
 <dl compact><dt><b>See also: </b></dt><dd>
 <a class="el" href="structcsEventCommandData.html">csEventCommandData</a> </dl></td></tr>
-<tr><td valign=top><em><a name="a128a134" doxytag="csevBroadcast"></a><em>csevBroadcast</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a135" doxytag="csevBroadcast"></a><em>csevBroadcast</em></em>&nbsp;</td><td>
 Somebody(-thing) sent a broadcast command.</td></tr>
-<tr><td valign=top><em><a name="a128a135" doxytag="csevMouseEnter"></a><em>csevMouseEnter</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a136" doxytag="csevMouseEnter"></a><em>csevMouseEnter</em></em>&nbsp;</td><td>
 The mouse has entered a component.</td></tr>
-<tr><td valign=top><em><a name="a128a136" doxytag="csevMouseExit"></a><em>csevMouseExit</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a137" doxytag="csevMouseExit"></a><em>csevMouseExit</em></em>&nbsp;</td><td>
 The mouse has exited a component.</td></tr>
-<tr><td valign=top><em><a name="a128a137" doxytag="csevLostFocus"></a><em>csevLostFocus</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a138" doxytag="csevLostFocus"></a><em>csevLostFocus</em></em>&nbsp;</td><td>
 The component has lost keyboard focus.</td></tr>
-<tr><td valign=top><em><a name="a128a138" doxytag="csevGainFocus"></a><em>csevGainFocus</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a139" doxytag="csevGainFocus"></a><em>csevGainFocus</em></em>&nbsp;</td><td>
 The component has gained keyboard focus.</td></tr>
-<tr><td valign=top><em><a name="a128a139" doxytag="csevGroupOff"></a><em>csevGroupOff</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a140" doxytag="csevGroupOff"></a><em>csevGroupOff</em></em>&nbsp;</td><td>
 A component in a group has been selected, everyone else should go to their off state.</td></tr>
-<tr><td valign=top><em><a name="a128a140" doxytag="csevFrameStart"></a><em>csevFrameStart</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a129a141" doxytag="csevFrameStart"></a><em>csevFrameStart</em></em>&nbsp;</td><td>
 The frame is about to draw.</td></tr>
 </table>
 </dl>
@@ -4040,7 +4078,7 @@ The frame is about to draw.</td></tr>
 Definition at line <a class="el" href="evdefs_8h-source.html#l00040">40</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a132" doxytag="evdefs.h::_csKeyCharType"></a><p>
+<a name="a133" doxytag="evdefs.h::_csKeyCharType"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -4063,18 +4101,18 @@ Character types.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a132a153" doxytag="csKeyCharTypeNormal"></a><em>csKeyCharTypeNormal</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a133a154" doxytag="csKeyCharTypeNormal"></a><em>csKeyCharTypeNormal</em></em>&nbsp;</td><td>
 Normal character.</td></tr>
-<tr><td valign=top><em><a name="a132a154" doxytag="csKeyCharTypeDead"></a><em>csKeyCharTypeDead</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a133a155" doxytag="csKeyCharTypeDead"></a><em>csKeyCharTypeDead</em></em>&nbsp;</td><td>
 "Dead" character</td></tr>
 </table>
 </dl>
 
 <p>
-Definition at line <a class="el" href="evdefs_8h-source.html#l00479">479</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
+Definition at line <a class="el" href="evdefs_8h-source.html#l00485">485</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a129" doxytag="evdefs.h::_csKeyEventType"></a><p>
+<a name="a130" doxytag="evdefs.h::_csKeyEventType"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -4097,9 +4135,9 @@ Keyboard event type.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a129a141" doxytag="csKeyEventTypeUp"></a><em>csKeyEventTypeUp</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a130a142" doxytag="csKeyEventTypeUp"></a><em>csKeyEventTypeUp</em></em>&nbsp;</td><td>
 A 'key down' event.</td></tr>
-<tr><td valign=top><em><a name="a129a142" doxytag="csKeyEventTypeDown"></a><em>csKeyEventTypeDown</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a130a143" doxytag="csKeyEventTypeDown"></a><em>csKeyEventTypeDown</em></em>&nbsp;</td><td>
 A 'key up' event.</td></tr>
 </table>
 </dl>
@@ -4108,7 +4146,7 @@ A 'key up' event.</td></tr>
 Definition at line <a class="el" href="evdefs_8h-source.html#l00089">89</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a131" doxytag="evdefs.h::_csKeyModifierNumType"></a><p>
+<a name="a132" doxytag="evdefs.h::_csKeyModifierNumType"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -4131,11 +4169,11 @@ Modifier numbers.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a131a150" doxytag="csKeyModifierNumLeft"></a><em>csKeyModifierNumLeft</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a132a151" doxytag="csKeyModifierNumLeft"></a><em>csKeyModifierNumLeft</em></em>&nbsp;</td><td>
 The default number for a 'left' version of a key.</td></tr>
-<tr><td valign=top><em><a name="a131a151" doxytag="csKeyModifierNumRight"></a><em>csKeyModifierNumRight</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a132a152" doxytag="csKeyModifierNumRight"></a><em>csKeyModifierNumRight</em></em>&nbsp;</td><td>
 The default number for a 'right' version of a key.</td></tr>
-<tr><td valign=top><em><a name="a131a152" doxytag="csKeyModifierNumAny"></a><em>csKeyModifierNumAny</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a132a153" doxytag="csKeyModifierNumAny"></a><em>csKeyModifierNumAny</em></em>&nbsp;</td><td>
 'Magic' modifier number used if there shouldn't be distinguished between multiple modifier keys of the same type.</td></tr>
 </table>
 </dl>
@@ -4144,7 +4182,7 @@ The default number for a 'right' version of a key.</td></tr>
 Definition at line <a class="el" href="evdefs_8h-source.html#l00202">202</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a130" doxytag="evdefs.h::_csKeyModifierType"></a><p>
+<a name="a131" doxytag="evdefs.h::_csKeyModifierType"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -4167,17 +4205,17 @@ Modifier types.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a130a143" doxytag="csKeyModifierTypeShift"></a><em>csKeyModifierTypeShift</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a131a144" doxytag="csKeyModifierTypeShift"></a><em>csKeyModifierTypeShift</em></em>&nbsp;</td><td>
 'Shift' is held</td></tr>
-<tr><td valign=top><em><a name="a130a144" doxytag="csKeyModifierTypeCtrl"></a><em>csKeyModifierTypeCtrl</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a131a145" doxytag="csKeyModifierTypeCtrl"></a><em>csKeyModifierTypeCtrl</em></em>&nbsp;</td><td>
 'Ctrl' is held</td></tr>
-<tr><td valign=top><em><a name="a130a145" doxytag="csKeyModifierTypeAlt"></a><em>csKeyModifierTypeAlt</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a131a146" doxytag="csKeyModifierTypeAlt"></a><em>csKeyModifierTypeAlt</em></em>&nbsp;</td><td>
 'Alt' is held</td></tr>
-<tr><td valign=top><em><a name="a130a146" doxytag="csKeyModifierTypeCapsLock"></a><em>csKeyModifierTypeCapsLock</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a131a147" doxytag="csKeyModifierTypeCapsLock"></a><em>csKeyModifierTypeCapsLock</em></em>&nbsp;</td><td>
 'CapsLock' is toggled</td></tr>
-<tr><td valign=top><em><a name="a130a147" doxytag="csKeyModifierTypeNumLock"></a><em>csKeyModifierTypeNumLock</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a131a148" doxytag="csKeyModifierTypeNumLock"></a><em>csKeyModifierTypeNumLock</em></em>&nbsp;</td><td>
 'NumLock' is toggled</td></tr>
-<tr><td valign=top><em><a name="a130a148" doxytag="csKeyModifierTypeScrollLock"></a><em>csKeyModifierTypeScrollLock</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a131a149" doxytag="csKeyModifierTypeScrollLock"></a><em>csKeyModifierTypeScrollLock</em></em>&nbsp;</td><td>
 'ScrollLock' is toggled</td></tr>
 </table>
 </dl>
@@ -4186,7 +4224,7 @@ Modifier types.
 Definition at line <a class="el" href="evdefs_8h-source.html#l00180">180</a> of file <a class="el" href="evdefs_8h-source.html">evdefs.h</a>.    </td>
   </tr>
 </table>
-<a name="a135" doxytag="event.h::csEventAttributeType"></a><p>
+<a name="a136" doxytag="event.h::csEventAttributeType"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -4209,21 +4247,21 @@ Various atteibute data types supported by the event system (<a class="el" href="
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a135a10" doxytag="csEventAttrUnknown"></a><em>csEventAttrUnknown</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a136a10" doxytag="csEventAttrUnknown"></a><em>csEventAttrUnknown</em></em>&nbsp;</td><td>
 The attribute type is unknown.
 <p>
 This shouldn't occur. </td></tr>
-<tr><td valign=top><em><a name="a135a11" doxytag="csEventAttrInt"></a><em>csEventAttrInt</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a136a11" doxytag="csEventAttrInt"></a><em>csEventAttrInt</em></em>&nbsp;</td><td>
 A signed integer is contained.</td></tr>
-<tr><td valign=top><em><a name="a135a12" doxytag="csEventAttrUInt"></a><em>csEventAttrUInt</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a136a12" doxytag="csEventAttrUInt"></a><em>csEventAttrUInt</em></em>&nbsp;</td><td>
 An unsigned integer is contained.</td></tr>
-<tr><td valign=top><em><a name="a135a13" doxytag="csEventAttrFloat"></a><em>csEventAttrFloat</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a136a13" doxytag="csEventAttrFloat"></a><em>csEventAttrFloat</em></em>&nbsp;</td><td>
 A floating point number is contained.</td></tr>
-<tr><td valign=top><em><a name="a135a14" doxytag="csEventAttrDatabuffer"></a><em>csEventAttrDatabuffer</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a136a14" doxytag="csEventAttrDatabuffer"></a><em>csEventAttrDatabuffer</em></em>&nbsp;</td><td>
 A string or raw data buffer is contained.</td></tr>
-<tr><td valign=top><em><a name="a135a15" doxytag="csEventAttrEvent"></a><em>csEventAttrEvent</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a136a15" doxytag="csEventAttrEvent"></a><em>csEventAttrEvent</em></em>&nbsp;</td><td>
 An <a class="el" href="structiEvent.html">iEvent</a> is contained.</td></tr>
-<tr><td valign=top><em><a name="a135a16" doxytag="csEventAttriBase"></a><em>csEventAttriBase</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a136a16" doxytag="csEventAttriBase"></a><em>csEventAttriBase</em></em>&nbsp;</td><td>
 An <a class="el" href="structiBase.html">iBase</a> interface is contained.</td></tr>
 </table>
 </dl>
@@ -4232,7 +4270,7 @@ An <a class="el" href="structiBase.html">iBase</a> interface is contained.</td><
 Definition at line <a class="el" href="iutil_2event_8h-source.html#l00203">203</a> of file <a class="el" href="iutil_2event_8h-source.html">event.h</a>.    </td>
   </tr>
 </table>
-<a name="a134" doxytag="event.h::csEventError"></a><p>
+<a name="a135" doxytag="event.h::csEventError"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -4255,37 +4293,37 @@ Error codes for event attribute retrieval.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a134a0" doxytag="csEventErrNone"></a><em>csEventErrNone</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a0" doxytag="csEventErrNone"></a><em>csEventErrNone</em></em>&nbsp;</td><td>
 No error.</td></tr>
-<tr><td valign=top><em><a name="a134a1" doxytag="csEventErrLossy"></a><em>csEventErrLossy</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a1" doxytag="csEventErrLossy"></a><em>csEventErrLossy</em></em>&nbsp;</td><td>
 The attribute value could be converted to the requested type, however, data was lost during the conversion.</td></tr>
-<tr><td valign=top><em><a name="a134a2" doxytag="csEventErrNotFound"></a><em>csEventErrNotFound</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a2" doxytag="csEventErrNotFound"></a><em>csEventErrNotFound</em></em>&nbsp;</td><td>
 The requested attribute was not found.</td></tr>
-<tr><td valign=top><em><a name="a134a3" doxytag="csEventErrMismatchInt"></a><em>csEventErrMismatchInt</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a3" doxytag="csEventErrMismatchInt"></a><em>csEventErrMismatchInt</em></em>&nbsp;</td><td>
 The contained value can not be converted to the requested type.
 <p>
 The error code indicates the actual contained type. </td></tr>
-<tr><td valign=top><em><a name="a134a136" doxytag="csEventErrMismatchUInt"></a><em>csEventErrMismatchUInt</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a137" doxytag="csEventErrMismatchUInt"></a><em>csEventErrMismatchUInt</em></em>&nbsp;</td><td>
 The contained value can not be converted to the requested type.
 <p>
 The error code indicates the actual contained type. </td></tr>
-<tr><td valign=top><em><a name="a134a137" doxytag="csEventErrMismatchFloat"></a><em>csEventErrMismatchFloat</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a138" doxytag="csEventErrMismatchFloat"></a><em>csEventErrMismatchFloat</em></em>&nbsp;</td><td>
 The contained value can not be converted to the requested type.
 <p>
 The error code indicates the actual contained type. </td></tr>
-<tr><td valign=top><em><a name="a134a138" doxytag="csEventErrMismatchBuffer"></a><em>csEventErrMismatchBuffer</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a139" doxytag="csEventErrMismatchBuffer"></a><em>csEventErrMismatchBuffer</em></em>&nbsp;</td><td>
 The contained value can not be converted to the requested type.
 <p>
 The error code indicates the actual contained type. </td></tr>
-<tr><td valign=top><em><a name="a134a139" doxytag="csEventErrMismatchEvent"></a><em>csEventErrMismatchEvent</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a140" doxytag="csEventErrMismatchEvent"></a><em>csEventErrMismatchEvent</em></em>&nbsp;</td><td>
 The contained value can not be converted to the requested type.
 <p>
 The error code indicates the actual contained type. </td></tr>
-<tr><td valign=top><em><a name="a134a140" doxytag="csEventErrMismatchIBase"></a><em>csEventErrMismatchIBase</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a141" doxytag="csEventErrMismatchIBase"></a><em>csEventErrMismatchIBase</em></em>&nbsp;</td><td>
 The contained value can not be converted to the requested type.
 <p>
 The error code indicates the actual contained type. </td></tr>
-<tr><td valign=top><em><a name="a134a9" doxytag="csEventErrUhOhUnknown"></a><em>csEventErrUhOhUnknown</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a135a9" doxytag="csEventErrUhOhUnknown"></a><em>csEventErrUhOhUnknown</em></em>&nbsp;</td><td>
 Unknown error.
 <p>
 Something doesn't work like it should. </td></tr>
@@ -4298,7 +4336,7 @@ Definition at line <a class="el" href="iutil_2event_8h-source.html#l00173">173</
 Referenced by <a class="el" href="csevent_8h-source.html#l00226">csEvent::Retrieve()</a>.    </td>
   </tr>
 </table>
-<a name="a127" doxytag="csinput.h::csKeyComposeResult"></a><p>
+<a name="a128" doxytag="csinput.h::csKeyComposeResult"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -4321,13 +4359,13 @@ Results for attempts to process a character key.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a127a3" doxytag="csComposeNoChar"></a><em>csComposeNoChar</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a128a3" doxytag="csComposeNoChar"></a><em>csComposeNoChar</em></em>&nbsp;</td><td>
 No character could be retrieved. Possibly the key was dead.</td></tr>
-<tr><td valign=top><em><a name="a127a4" doxytag="csComposeNormalChar"></a><em>csComposeNormalChar</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a128a4" doxytag="csComposeNormalChar"></a><em>csComposeNormalChar</em></em>&nbsp;</td><td>
 A single, normal chararacter is retrieved.</td></tr>
-<tr><td valign=top><em><a name="a127a5" doxytag="csComposeComposedChar"></a><em>csComposeComposedChar</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a128a5" doxytag="csComposeComposedChar"></a><em>csComposeComposedChar</em></em>&nbsp;</td><td>
 A single, composed chararacter is retrieved.</td></tr>
-<tr><td valign=top><em><a name="a127a6" doxytag="csComposeUncomposeable"></a><em>csComposeUncomposeable</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a128a6" doxytag="csComposeUncomposeable"></a><em>csComposeUncomposeable</em></em>&nbsp;</td><td>
 A key couldn't be combined with a previously pressed dead key, and both characters are returned individually.</td></tr>
 </table>
 </dl>
