@@ -39,10 +39,14 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Get number of collision pairs in array.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiCollideSystem.html#a4">ResetCollisionPairs</a> ()=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Reset the array with collision pairs.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiCollideSystem.html#a5">SetOneHitOnly</a> (bool o)=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Indicate if we are interested only in the first hit that is found.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiCollideSystem.html#a6">GetOneHitOnly</a> ()=0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Return true if this CD system will only return the first hit that is found.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiCollideSystem.html#a5">CollideRay</a> (<a class="el" href="structiCollider.html">iCollider</a> *collider, const <a class="el" href="classcsReversibleTransform.html">csReversibleTransform</a> *trans, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Collide a collider with a world space ray.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual const <a class="el" href="classcsArray.html">csArray</a>&lt; <a class="el" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a> &gt; &amp;&nbsp;</td><td valign=bottom><a class="el" href="structiCollideSystem.html#a6">GetIntersectingTriangles</a> () const=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get the array of intersection points as returned by <a class="el" href="structiCollideSystem.html#a5">CollideRay()</a>.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual void&nbsp;</td><td valign=bottom><a class="el" href="structiCollideSystem.html#a7">SetOneHitOnly</a> (bool o)=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Indicate if we are interested only in the first hit that is found.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>virtual bool&nbsp;</td><td valign=bottom><a class="el" href="structiCollideSystem.html#a8">GetOneHitOnly</a> ()=0</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Return true if this CD system will only return the first hit that is found.</em> <a href="#a8"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This is the Collide plug-in.
@@ -59,7 +63,7 @@ Main users of this interface: <ul>
 <p>
 
 <p>
-Definition at line <a class="el" href="ivaria_2collider_8h-source.html#l00085">85</a> of file <a class="el" href="ivaria_2collider_8h-source.html">collider.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="ivaria_2collider_8h-source.html#l00094">94</a> of file <a class="el" href="ivaria_2collider_8h-source.html">collider.h</a>.<hr><h2>Member Function Documentation</h2>
 <a name="a1" doxytag="iCollideSystem::Collide"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -122,6 +126,70 @@ is the second transform. </td></tr>
 </table>
 </dl><dl compact><dt><b>Returns: </b></dt><dd>
 true if there are triangles that intersect. The array with collision pairs will be updated. </dl>    </td>
+  </tr>
+</table>
+<a name="a5" doxytag="iCollideSystem::CollideRay"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual bool iCollideSystem::CollideRay </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiCollider.html">iCollider</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>collider</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>const <a class="el" href="classcsReversibleTransform.html">csReversibleTransform</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>trans</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>const <a class="el" href="classcsVector3.html">csVector3</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>start</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>const <a class="el" href="classcsVector3.html">csVector3</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>end</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Collide a collider with a world space ray.
+<p>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>collider</em>&nbsp;</td><td>
+is the collider to test with. </td></tr>
+<tr><td valign=top><em>trans</em>&nbsp;</td><td>
+is the transform for the object represented by the collider. If the collider belongs to a mesh object then you can get the transform by calling mesh-&gt;GetMovable()-&gt;GetFullTransform(). </td></tr>
+<tr><td valign=top><em>start</em>&nbsp;</td><td>
+is the start of the ray. </td></tr>
+<tr><td valign=top><em>end</em>&nbsp;</td><td>
+is the end of the ray. </td></tr>
+</table>
+</dl><dl compact><dt><b>Returns: </b></dt><dd>
+true if there was a collision. The array with intersecting triangles will be updated (see <a class="el" href="structiCollideSystem.html#a6">GetIntersectingTriangles()</a>). </dl>    </td>
   </tr>
 </table>
 <a name="a0" doxytag="iCollideSystem::CreateCollider"></a><p>
@@ -223,7 +291,37 @@ This array will grow with every call to Collide until you clear it using 'ResetC
 an array of collision pairs for all <a class="el" href="structiCollideSystem.html#a1">Collide()</a> calls that occured between now and the call to <a class="el" href="structiCollideSystem.html#a4">ResetCollisionPairs()</a>. </dl>    </td>
   </tr>
 </table>
-<a name="a6" doxytag="iCollideSystem::GetOneHitOnly"></a><p>
+<a name="a6" doxytag="iCollideSystem::GetIntersectingTriangles"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> virtual const <a class="el" href="classcsArray.html">csArray</a>&lt;<a class="el" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a>&gt;&amp; iCollideSystem::GetIntersectingTriangles </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>&nbsp;          </td>
+          <td class="md" valign="top">)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Get the array of intersection points as returned by <a class="el" href="structiCollideSystem.html#a5">CollideRay()</a>.
+<p>
+Note that the coordinates in the array of triangles is in object space of the collider object and not world space!     </td>
+  </tr>
+</table>
+<a name="a8" doxytag="iCollideSystem::GetOneHitOnly"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -250,7 +348,7 @@ an array of collision pairs for all <a class="el" href="structiCollideSystem.htm
 <p>
 Return true if this CD system will only return the first hit that is found.
 <p>
-For CD systems that support multiple hits this will return the value set by the <a class="el" href="structiCollideSystem.html#a5">SetOneHitOnly()</a> function. For CD systems that support one hit only this will always return true. <dl compact><dt><b>Returns: </b></dt><dd>
+For CD systems that support multiple hits this will return the value set by the <a class="el" href="structiCollideSystem.html#a7">SetOneHitOnly()</a> function. For CD systems that support one hit only this will always return true. <dl compact><dt><b>Returns: </b></dt><dd>
 true if there is only one hit recorder for every call to <a class="el" href="structiCollideSystem.html#a1">Collide()</a>. </dl>    </td>
   </tr>
 </table>
@@ -284,7 +382,7 @@ Reset the array with collision pairs.
 It is very important to call this before collision detection. Otherwise the internal table of collision pairs will grow forever.     </td>
   </tr>
 </table>
-<a name="a5" doxytag="iCollideSystem::SetOneHitOnly"></a><p>
+<a name="a7" doxytag="iCollideSystem::SetOneHitOnly"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
