@@ -27,37 +27,40 @@ CFG=libcstool - Win32 Release
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
+MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "libcstool - Win32 ExtensiveMemDebug"
+!IF  "$(CFG)" == "libcstool - Win32 Release"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "debug"
-# PROP BASE Intermediate_Dir "debug"
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "release"
+# PROP BASE Intermediate_Dir "release"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\out\debug\build\libcstool\"
-# PROP Intermediate_Dir "..\..\out\debug\build\libcstool\"
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\out\release\build\libcstool\"
+# PROP Intermediate_Dir "..\..\out\release\build\libcstool\"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs"
-MTL=midl.exe
+# ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
+# ADD CPP /nologo /vmb /vms /W3 /Gm /GX /G5 /FD /c /Gy /GF /MD /Ob2 /Og /Oi /Ot /Oy /D "_LIB" /D "_MT" /D "_MBCS" /D "NDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__"  /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
-# ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB"
-# ADD BASE CPP /nologo /G5 /W3 /D "WIN32" /FD /c
-# ADD CPP /nologo /G5 /MDd /W3 /Gm /GR /GX /ZI /Od /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32" /D "_LIB" /D "_MT" /D "_MBCS" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_WINDOWS" /D "CS_CSTOOL_LIB" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /FD /c
+# ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "NDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\libcstool\libcstool.res" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32" /d "_DEBUG" /d "CS_DEBUG" /d "CS_EXTENSIVE_MEMDEBUG" /d "_LIB" /d "_WINDOWS" /d "CS_CSTOOL_LIB" /d "CS_WIN32_CSCONFIG" /d "__CRYSTAL_SPACE__"
+# ADD RSC /l 0x409 /fo".\..\..\out\release\build\libcstool\libcstool.res" /D "NDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\out\debug\libs\libcstool_d.lib"
+# ADD LIB32 /nologo /out:"..\..\out\release\libs\libcstool.lib"
+LINK32=link.exe
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /machine:I386 /OPT:NOREF /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# Begin Special Build Tool
+SOURCE="$(InputPath)"
+# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "libcstool - Win32 Debug"
 
@@ -72,60 +75,64 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "..\..\out\debug\build\libcstool\"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs"
-MTL=midl.exe
+# ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
+# ADD CPP /nologo /vmb /vms /W3 /Gm /GX /G5 /FD /c /GR /MDd /ZI /Od /D "_LIB" /D "_MT" /D "_MBCS" /D "_DEBUG" /D "CS_DEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__"  /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB"
-# ADD BASE CPP /nologo /G5 /W3 /D "WIN32" /FD /c
-# ADD CPP /nologo /G5 /MDd /W3 /Gm /GR /GX /ZI /Od /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32" /D "_LIB" /D "_MT" /D "_MBCS" /D "_DEBUG" /D "CS_DEBUG" /D "_WINDOWS" /D "CS_CSTOOL_LIB" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /FD /c
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\libcstool\libcstool.res" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32" /d "_DEBUG" /d "CS_DEBUG" /d "_LIB" /d "_WINDOWS" /d "CS_CSTOOL_LIB" /d "CS_WIN32_CSCONFIG" /d "__CRYSTAL_SPACE__"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\libcstool\libcstool.res" /D "_DEBUG" /D "CS_DEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\out\debug\libs\libcstool_d.lib"
-
-!ELSEIF  "$(CFG)" == "libcstool - Win32 Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "release"
-# PROP BASE Intermediate_Dir "release"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\out\release\build\libcstool\"
-# PROP Intermediate_Dir "..\..\out\release\build\libcstool\"
-# PROP Ignore_Export_Lib 0
-# PROP Target_Dir ""
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib /nologo /version:4.0 /machine:I386 /OPT:NOREF /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs"
-MTL=midl.exe
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# Begin Special Build Tool
+SOURCE="$(InputPath)"
+# End Special Build Tool
+
+!ELSEIF  "$(CFG)" == "libcstool - Win32 ExtensiveMemDebug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "debug"
+# PROP BASE Intermediate_Dir "debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\out\debug\build\libcstool\"
+# PROP Intermediate_Dir "..\..\out\debug\build\libcstool\"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
+# ADD CPP /nologo /vmb /vms /W3 /Gm /GX /G5 /FD /c /GR /MDd /ZI /Od /D "_LIB" /D "_MT" /D "_MBCS" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__"  /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
-# ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "NDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB"
-# ADD BASE CPP /nologo /G5 /W3 /D "WIN32" /FD /c
-# ADD CPP /nologo /G5 /MD /W3 /GX /Ot /Og /Oi /Oy /Ob2 /Gy /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32" /D "_LIB" /D "_MT" /D "_MBCS" /D "NDEBUG" /D "_WINDOWS" /D "CS_CSTOOL_LIB" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /FD /GF /c
+# ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\release\build\libcstool\libcstool.res" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32" /d "NDEBUG" /d "_LIB" /d "_WINDOWS" /d "CS_CSTOOL_LIB" /d "CS_WIN32_CSCONFIG" /d "__CRYSTAL_SPACE__"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\libcstool\libcstool.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_CSTOOL_LIB" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"..\..\out\release\libs\libcstool.lib"
+# ADD LIB32 /nologo /out:"..\..\out\debug\libs\libcstool_d.lib"
+LINK32=link.exe
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# Begin Special Build Tool
+SOURCE="$(InputPath)"
+# End Special Build Tool
 
 !ENDIF 
 
 # Begin Target
 
-# Name "libcstool - Win32 ExtensiveMemDebug"
-# Name "libcstool - Win32 Debug"
 # Name "libcstool - Win32 Release"
+# Name "libcstool - Win32 Debug"
+# Name "libcstool - Win32 ExtensiveMemDebug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
@@ -229,10 +236,6 @@ SOURCE=..\..\libs\cstool\vidprefs.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\..\..\include\cstool\anonrndbuf.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\..\..\include\cstool\basetexfact.h
@@ -340,6 +343,10 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\sprbuild.h
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\..\..\include\cstool\tokenlist.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\..\..\include\cstool\userrndbuf.h
 # End Source File
 # Begin Source File
 
