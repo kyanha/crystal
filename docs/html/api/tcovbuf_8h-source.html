@@ -39,403 +39,404 @@
 00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSGEOM_TCOVBUF_H__</span>
 00021 <span class="preprocessor"></span>
 00022 <span class="preprocessor">#include "csextern.h"</span>
-00023 <span class="preprocessor">#include "<a class="code" href="vector2_8h.html">csgeom/vector2.h</a>"</span>
-00024 <span class="preprocessor">#include "<a class="code" href="math2d_8h.html">csgeom/math2d.h</a>"</span>
-00025 <span class="preprocessor">#include "<a class="code" href="dbghelp_8h.html">iutil/dbghelp.h</a>"</span>
-00026 
-00027 <span class="comment">//#define SHIFT_TILECOL 5</span>
-00028 <span class="comment">//#define SHIFT_TILEROW 6</span>
-00029 
-00030 <span class="preprocessor">#define SHIFT_TILECOL 6</span>
-00031 <span class="preprocessor"></span><span class="preprocessor">#define SHIFT_TILEROW 5</span>
-00032 <span class="preprocessor"></span>
-00033 <span class="preprocessor">#define NUM_TILECOL (1&lt;&lt;SHIFT_TILECOL)</span>
-00034 <span class="preprocessor"></span><span class="preprocessor">#define NUM_TILEROW (1&lt;&lt;SHIFT_TILEROW)</span>
-00035 <span class="preprocessor"></span><span class="preprocessor">#define NUM_DEPTHROW (NUM_TILEROW/8)</span>
-00036 <span class="preprocessor"></span><span class="preprocessor">#define NUM_DEPTHCOL (NUM_TILECOL/8)</span>
-00037 <span class="preprocessor"></span><span class="preprocessor">#define NUM_DEPTH (NUM_DEPTHROW * NUM_DEPTHCOL)</span>
-00038 <span class="preprocessor"></span>
-00039 <span class="preprocessor">#define TILECOL_EMPTY 0</span>
-00040 <span class="preprocessor"></span><span class="preprocessor">#define TILECOL_FULL ((uint32)~0)</span>
-00041 <span class="preprocessor"></span>
-00042 <span class="preprocessor">#define TEST_OCCLUDER_QUALITY 1</span>
-00043 <span class="preprocessor"></span>
-00044 <span class="keyword">typedef</span> uint32 csTileCol;
-00045 
-<a name="l00049"></a><a class="code" href="classcsBox2Int.html">00049</a> <span class="keyword">class </span><a class="code" href="classcsBox2Int.html">csBox2Int</a>
-00050 {
-00051 <span class="keyword">public</span>:
-00052   <span class="keywordtype">int</span> minx, miny;
-00053   <span class="keywordtype">int</span> maxx, maxy;
-00054   <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; operator+= (<span class="keyword">const</span> <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; box)
-00055   {
-00056     <span class="keywordflow">if</span> (box.<a class="code" href="classcsBox2Int.html#o0">minx</a> &lt; minx) minx = box.<a class="code" href="classcsBox2Int.html#o0">minx</a>;
-00057     <span class="keywordflow">if</span> (box.<a class="code" href="classcsBox2Int.html#o1">miny</a> &lt; miny) miny = box.<a class="code" href="classcsBox2Int.html#o1">miny</a>;
-00058     <span class="keywordflow">if</span> (box.<a class="code" href="classcsBox2Int.html#o2">maxx</a> &gt; maxx) maxx = box.<a class="code" href="classcsBox2Int.html#o2">maxx</a>;
-00059     <span class="keywordflow">if</span> (box.<a class="code" href="classcsBox2Int.html#o3">maxy</a> &gt; maxy) maxy = box.<a class="code" href="classcsBox2Int.html#o3">maxy</a>;
-00060     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00061   }
-00062 };
-00063 
-<a name="l00068"></a><a class="code" href="structcsTestRectData.html">00068</a> <span class="keyword">struct </span><a class="code" href="structcsTestRectData.html">csTestRectData</a>
-00069 {
-00070   <a class="code" href="classcsBox2Int.html">csBox2Int</a> bbox;
-00071   <span class="keywordtype">int</span> startrow, endrow;
-00072   <span class="keywordtype">int</span> startcol, endcol;
-00073   <span class="keywordtype">int</span> start_x, end_x;
-00074 };
-00075 
-00076 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
-00077 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
-00078 <span class="keyword">struct </span><a class="code" href="structiBugPlug.html">iBugPlug</a>;
-00079 <span class="keyword">class </span><a class="code" href="classcsString.html">csString</a>;
-00080 <span class="keyword">class </span><a class="code" href="classcsBox2.html">csBox2</a>;
-00081 <span class="keyword">class </span><a class="code" href="classcsTiledCoverageBuffer.html">csTiledCoverageBuffer</a>;
-00082 
-00083 <span class="comment">// Line operations in a tile.</span>
-00084 <span class="preprocessor">#define OP_LINE 1       // General line.</span>
-00085 <span class="preprocessor"></span><span class="preprocessor">#define OP_VLINE 2      // Vertical line.</span>
-00086 <span class="preprocessor"></span><span class="preprocessor">#define OP_FULLVLINE 3  // Full vertical line (from 0 to 63).</span>
-00087 <span class="preprocessor"></span>
-00088 <span class="comment">// A definition for a line operation.</span>
-00089 <span class="keyword">struct </span>csLineOperation
-00090 {
-00091   uint8 op;             <span class="comment">// One of OP_...</span>
-00092   <span class="comment">// All coordinates are with 0,0 relative to top-left of tile.</span>
-00093   <span class="comment">// x coordinates are also shifted 16 to the left.</span>
-00094   <span class="keywordtype">int</span> x1;               <span class="comment">// Start of line.</span>
-00095   <span class="keywordtype">int</span> y1;               <span class="comment">// Start of line. Not used with OP_FULLVLINE.</span>
-00096   <span class="keywordtype">int</span> x2;               <span class="comment">// End of line. Only used with OP_LINE.</span>
-00097   <span class="keywordtype">int</span> y2;               <span class="comment">// End of line. Not used with OP_FULLVLINE.</span>
-00098   <span class="keywordtype">int</span> dx;               <span class="comment">// Slope to add to x1 (shifted 16 to left).</span>
-00099 };
-00100 
-<a name="l00106"></a><a class="code" href="classcsCoverageTile.html">00106</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csCoverageTile
-00107 {
-00108   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsTiledCoverageBuffer.html">csTiledCoverageBuffer</a>;
-00109 
-00110 <span class="keyword">private</span>:
-00111   <span class="comment">// If true entire tile is full.</span>
-00112   <span class="keywordtype">bool</span> tile_full;
-00113   <span class="comment">// If true tile is queued as empty but 'coverage' and other</span>
-00114   <span class="comment">// data structures may not yet reflect this.</span>
-00115   <span class="keywordtype">bool</span> queue_tile_empty;
-00116 
-00117   <span class="comment">// The coverage bits.</span>
-00118   csTileCol coverage[NUM_TILECOL];
-00119 
-00120   <span class="comment">// The cache on which we will write lines before or-ing that to the</span>
-00121   <span class="comment">// real coverage bits.</span>
-00122   <span class="keyword">static</span> csTileCol coverage_cache[NUM_TILECOL];
-00123 
-00124   <span class="comment">// This is an array of precalculated bit-sets for vertical line</span>
-00125   <span class="comment">// segments that start at 'n' and go to 63.</span>
-00126   <span class="keyword">static</span> csTileCol precalc_end_lines[NUM_TILEROW];
-00127   <span class="comment">// This is an array of precalculated bit-sets for vertical line</span>
-00128   <span class="comment">// segments that start at 0 and go to 'n'.</span>
-00129   <span class="keyword">static</span> csTileCol precalc_start_lines[NUM_TILEROW];
-00130   <span class="comment">// If true the two arrays above are initialized.</span>
-00131   <span class="keyword">static</span> <span class="keywordtype">bool</span> precalc_init;
-00132 
-00133   <span class="comment">// For every block a depth value (4 blocks on every row, ordered</span>
-00134   <span class="comment">// by rows).</span>
-00135   <span class="keywordtype">float</span> depth[NUM_DEPTH];
-00136   <span class="comment">// Minimum depth of all blocks.</span>
-00137   <span class="keywordtype">float</span> tile_min_depth;
-00138   <span class="comment">// Maximum depth of all blocks.</span>
-00139   <span class="keywordtype">float</span> tile_max_depth;
-00140 
-00141   <span class="comment">// Line Operations that are waiting to be executed.</span>
-00142   <span class="keywordtype">int</span> num_operations;
-00143   <span class="keywordtype">int</span> max_operations;
-00144   csLineOperation* operations;
-00145 
-00146   <span class="comment">// A temporary values that are used to test if the objects in the write</span>
-00147   <span class="comment">// queue can actually help cull the object.</span>
-00148   <span class="keywordtype">bool</span> covered;
-00149   <span class="keywordtype">bool</span> fully_covered;
-00150 
-00151   <span class="comment">// Add an operation.</span>
-00152   csLineOperation&amp; AddOperation ();
-00153 
-00154   <span class="comment">// Check if the precalc tables are precalculated. If not</span>
-00155   <span class="comment">// precalculate them.</span>
-00156   <span class="keyword">static</span> <span class="keywordtype">void</span> MakePrecalcTables ();
-00157 
-00158   <span class="comment">// Count how many objects were occluded away that covered this tile.</span>
-00159   <span class="keywordtype">int</span> objects_culled;
-00160 
-00161 <span class="keyword">public</span>:
-00162   csCoverageTile () :
-00163         tile_full (<span class="keyword">false</span>),
-00164         queue_tile_empty (<span class="keyword">true</span>),
-00165         num_operations (0),
-00166         max_operations (16),
-00167         covered (<span class="keyword">false</span>)
-00168   {
-00169     operations = <span class="keyword">new</span> csLineOperation [16];
-00170     MakePrecalcTables ();
-00171     <a class="code" href="classcsCoverageTile.html#a3">MakeEmpty</a> ();
-00172   }
-00173 
-00174   ~csCoverageTile ()
-00175   {
-00176     <span class="keyword">delete</span>[] operations;
-00177   }
-00178 
-<a name="l00183"></a><a class="code" href="classcsCoverageTile.html#a2">00183</a>   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a2">MarkEmpty</a> ()
-00184   {
-00185     queue_tile_empty = <span class="keyword">true</span>;
-00186     tile_full = <span class="keyword">false</span>;
-00187     objects_culled = 0;
-00188   }
-00189 
-00190 <span class="preprocessor">#define INIT_MIN_DEPTH     999999999.0f</span>
-00191 <span class="preprocessor"></span><span class="preprocessor">#define INIT_MIN_DEPTH_CMP 999900000.0f</span>
-00192 <span class="preprocessor"></span>
-<a name="l00197"></a><a class="code" href="classcsCoverageTile.html#a3">00197</a>   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a3">MakeEmpty</a> ()
-00198   {
-00199     tile_full = <span class="keyword">false</span>; queue_tile_empty = <span class="keyword">false</span>;
-00200     memset (coverage, 0, <span class="keyword">sizeof</span> (csTileCol)*NUM_TILECOL);
-00201     memset (depth, 0, <span class="keyword">sizeof</span> (<span class="keywordtype">float</span>)*NUM_DEPTH);
-00202     tile_min_depth = INIT_MIN_DEPTH;
-00203     tile_max_depth = 0;
-00204     objects_culled = 0;
-00205   }
-00206 
-<a name="l00212"></a><a class="code" href="classcsCoverageTile.html#a4">00212</a>   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a4">MakeEmptyQuick</a> ()
-00213   {
-00214     queue_tile_empty = <span class="keyword">false</span>;
-00215     memset (depth, 0, <span class="keyword">sizeof</span> (<span class="keywordtype">float</span>)*NUM_DEPTH);
-00216     tile_min_depth = INIT_MIN_DEPTH;
-00217     tile_max_depth = 0;
-00218     objects_culled = 0;
-00219   }
-00220 
-<a name="l00224"></a><a class="code" href="classcsCoverageTile.html#a5">00224</a>   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a5">ClearOperations</a> ()
-00225   {
-00226     num_operations = 0;
-00227   }
-00228 
-<a name="l00232"></a><a class="code" href="classcsCoverageTile.html#a6">00232</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a6">IsFull</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> tile_full; }
-00233 
-<a name="l00239"></a><a class="code" href="classcsCoverageTile.html#a7">00239</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a7">IsEmpty</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> queue_tile_empty; }
-00240 
-00244   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a8">PushLine</a> (<span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> y2, <span class="keywordtype">int</span> dx);
-00245 
-00249   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a9">PushVLine</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> y2);
-00250 
-00254   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a10">PushFullVLine</a> (<span class="keywordtype">int</span> x);
-00255 
-00259   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a11">PerformOperations</a> ();
-00260 
-00266   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a12">FlushOperations</a> ();
-00267 
-00272   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a13">PerformOperationsOnlyFValue</a> (csTileCol&amp; fvalue);
-00273 
-00280   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a14">FlushOperationsOnlyFValue</a> (csTileCol&amp; fvalue);
-00281 
-00282   <span class="comment">//-----------------------------------------------------------------</span>
-00283 
-00293   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a15">Flush</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
-00294 
-00298   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a16">FlushIgnoreDepth</a> (csTileCol&amp; fvalue);
-00299 
-00304   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a17">FlushForEmpty</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
-00305 
-00310   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a18">FlushForEmptyNoDepth</a> (csTileCol&amp; fvalue);
-00311 
-00316   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a19">FlushForFull</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
-00317 
-00322   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a20">FlushNoDepth</a> (csTileCol&amp; fvalue);
-00323 
-00328   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a21">FlushGeneral</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
-00329 
-00334   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a22">FlushForEmptyConstFValue</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
-00335 
-00340   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a23">FlushForFullConstFValue</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
-00341 
-00347   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a24">FlushNoDepthConstFValue</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
-00348 
-00354   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a25">FlushGeneralConstFValue</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
-00355 
-00356   <span class="comment">//-----------------------------------------------------------------</span>
-00357 
-00362   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a26">TestCoverageFlush</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> mindepth,
-00363         <span class="keywordtype">bool</span>&amp; do_depth_test);
-00364 
-00368   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a27">TestCoverageFlushForFull</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> mindepth,
-00369         <span class="keywordtype">bool</span>&amp; do_depth_test);
-00370 
-00374   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a28">TestCoverageFlushGeneral</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth,
-00375         <span class="keywordtype">bool</span>&amp; do_depth_test);
-00376 
-00377   <span class="comment">//-----------------------------------------------------------------</span>
-00378 
-00383   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a29">TestDepthFlush</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> mindepth);
-00384 
-00388   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a30">TestDepthFlushGeneral</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
-00389 
-00390   <span class="comment">//-----------------------------------------------------------------</span>
-00391 
-00400   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a31">TestFullRect</a> (<span class="keywordtype">float</span> testdepth);
-00401 
-00406   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a32">TestDepthRect</a> (<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end, <span class="keywordtype">float</span> testdepth);
-00407 
-00413   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a32">TestDepthRect</a> (<span class="keyword">const</span> csTileCol&amp; vermask, <span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end,
-00414         <span class="keywordtype">float</span> testdepth);
-00415 
-00420   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a34">TestCoverageRect</a> (<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end, <span class="keywordtype">float</span> testdepth,
-00421         <span class="keywordtype">bool</span>&amp; do_depth_test);
-00422 
-00428   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a34">TestCoverageRect</a> (<span class="keyword">const</span> csTileCol&amp; vermask, <span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end,
-00429         <span class="keywordtype">float</span> testdepth, <span class="keywordtype">bool</span>&amp; do_depth_test);
-00430 
-00431   <span class="comment">//-----------------------------------------------------------------</span>
-00436 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a36">TestPoint</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">float</span> testdepth);
-00437 
-00441   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> <a class="code" href="classcsCoverageTile.html#a37">Debug_Dump</a> ();
-00442 
-00446   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> <a class="code" href="classcsCoverageTile.html#a38">Debug_Dump_Cache</a> ();
-00447 };
-00448 
-<a name="l00457"></a><a class="code" href="classcsTiledCoverageBuffer.html">00457</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTiledCoverageBuffer : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00458 {
-00459 <span class="keyword">public</span>:
-00460   <a class="code" href="structiBugPlug.html">iBugPlug</a>* bugplug;    <span class="comment">// For debugging...</span>
-00461 
-00462 <span class="keyword">private</span>:
-00463   <span class="keywordtype">int</span> width, height;
-00464   <span class="keywordtype">int</span> width_po2;        <span class="comment">// Width after correcting for power of two.</span>
-00465   <span class="keywordtype">int</span> height_64;        <span class="comment">// Height after making it a multiple of 64.</span>
-00466   <span class="keywordtype">int</span> w_shift;          <span class="comment">// Horizontal shift for width_po2 for tile multiples.</span>
-00467   <span class="keywordtype">int</span> num_tile_rows;
-00468 
-00469   <span class="comment">// All tiles representing the screen (ordered by rows).</span>
-00470   <span class="keywordtype">int</span> num_tiles;
-00471   csCoverageTile* tiles;
-00472 
-00473   <span class="comment">// For every row the following arrays contain the left-most and</span>
-00474   <span class="comment">// right-most horizontal tile number that was affected by the polygon/outline.</span>
-00475   <span class="comment">// DrawLine() will update these values.</span>
-00476   <span class="keywordtype">int</span>* dirty_left;
-00477   <span class="keywordtype">int</span>* dirty_right;
-00478 
-00485   <span class="keywordtype">void</span> DrawLine (<span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> y2, <span class="keywordtype">int</span> yfurther = 0);
-00486 
-00495   <span class="keywordtype">bool</span> DrawPolygon (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; bbox);
-00496 
-00503   <span class="keywordtype">bool</span> DrawOutline (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans,
-00504         <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts,
-00505         <span class="keywordtype">bool</span>* used_verts,
-00506         <span class="keywordtype">int</span>* edges, <span class="keywordtype">int</span> num_edges, <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; bbox,
-00507         <span class="keywordtype">float</span>&amp; max_depth, <span class="keywordtype">bool</span> splat_outline);
-00508 
-00512   csCoverageTile* GetTile (<span class="keywordtype">int</span> tx, <span class="keywordtype">int</span> ty)
-00513   {
-00514     CS_ASSERT (tx &gt;= 0);
-00515     CS_ASSERT (ty &gt;= 0 &amp;&amp; ty &lt; num_tile_rows);
-00516     <span class="keywordflow">return</span> &amp;tiles[(ty&lt;&lt;w_shift) + tx];
-00517   }
-00518 
-00522   <span class="keywordtype">void</span> MarkTileDirty (<span class="keywordtype">int</span> tx, <span class="keywordtype">int</span> ty)
-00523   {
-00524     CS_ASSERT (ty &gt;= 0 &amp;&amp; ty &lt; num_tile_rows);
-00525     <span class="keywordflow">if</span> (tx &lt; dirty_left[ty]) dirty_left[ty] = tx;
-00526     <span class="keywordflow">if</span> (tx &gt; dirty_right[ty]) dirty_right[ty] = tx;
-00527   }
-00528 
-00529 <span class="keyword">public</span>:
-00531   csTiledCoverageBuffer (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
-00533   <span class="keyword">virtual</span> ~csTiledCoverageBuffer ();
-00534 
-00536   <span class="keywordtype">void</span> Setup (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
-00537 
-00538   SCF_DECLARE_IBASE;
-00539 
-00541   <span class="keywordtype">void</span> Initialize ();
-00542 
-00552   <span class="keywordtype">bool</span> TestPolygon (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <span class="keywordtype">float</span> min_depth);
-00553 
-00557   <span class="keywordtype">void</span> InsertPolygonInverted (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <span class="keywordtype">float</span> max_depth);
-00558 
-00565   <span class="keywordtype">void</span> InsertPolygonInvertedNoDepth (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts);
-00566 
-00577   <span class="keywordtype">int</span> InsertPolygon (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <span class="keywordtype">float</span> max_depth,
-00578         <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; modified_bbox);
-00579 
-00591   <span class="keywordtype">int</span> InsertPolygonNoDepth (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts);
-00592 
-00606   <span class="keywordtype">int</span> InsertOutline (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans,
-00607         <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts,
-00608         <span class="keywordtype">bool</span>* used_verts,
-00609         <span class="keywordtype">int</span>* edges, <span class="keywordtype">int</span> num_edges, <span class="keywordtype">bool</span> splat_outline,
-00610         <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; modified_bbox);
-00611 
-00617   <span class="keywordtype">bool</span> PrepareTestRectangle (<span class="keyword">const</span> <a class="code" href="classcsBox2.html">csBox2</a>&amp; rect, <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data);
-00618 
-00625   <span class="keywordtype">bool</span> TestRectangle (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
-00626 
-00634   <span class="keywordtype">bool</span> QuickTestRectangle (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
-00635 
-00640   <span class="keywordtype">void</span> MarkCulledObject (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data);
-00641 
-00646   <span class="keywordtype">int</span> CountNotCulledObjects (<span class="keyword">const</span> <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; bbox);
-00647 
-00653   <span class="keywordtype">int</span> PrepareWriteQueueTest (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
-00654 
-00662   <span class="keywordtype">int</span> AddWriteQueueTest (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; maindata,
-00663         <span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">bool</span>&amp; relevant);
-00664 
-00670   <span class="keywordtype">bool</span> TestPoint (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point, <span class="keywordtype">float</span> min_depth);
-00671 
-00677   <span class="keywordtype">int</span> StatusNoDepth ();
-00678 
-00679   <span class="comment">// Debugging functions.</span>
-00680   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Debug_UnitTest ();
-00681   <a class="code" href="group__util.html#ga17">csTicks</a> Debug_Benchmark (<span class="keywordtype">int</span> num_iterations);
-00682   <span class="keywordtype">void</span> Debug_Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <span class="keywordtype">int</span> zoom = 1);
-00683   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Debug_Dump ();
-00684 
-00685   <span class="keyword">struct </span>DebugHelper : <span class="keyword">public</span> <a class="code" href="structiDebugHelper.html">iDebugHelper</a>
-00686   {
-00687     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (csTiledCoverageBuffer);
-00688     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetSupportedTests ()<span class="keyword"> const</span>
-00689 <span class="keyword">    </span>{
-00690       <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga144">CS_DBGHELP_UNITTEST</a> |
-00691              <a class="code" href="group__util.html#ga145">CS_DBGHELP_BENCHMARK</a> |
-00692              <a class="code" href="group__util.html#ga147">CS_DBGHELP_GFXDUMP</a> |
-00693              CS_DBGHELP_TXTDUMP;
-00694     }
-00695     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> UnitTest ()
-00696     {
-00697       <span class="keywordflow">return</span> scfParent-&gt;Debug_UnitTest ();
-00698     }
-00699     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> StateTest ()
-00700     {
-00701       <span class="keywordflow">return</span> 0;
-00702     }
-00703     <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga17">csTicks</a> Benchmark (<span class="keywordtype">int</span> num_iterations)
-00704     {
-00705       <span class="keywordflow">return</span> scfParent-&gt;Debug_Benchmark (num_iterations);
-00706     }
-00707     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Dump ()
-00708     {
-00709       <span class="keywordflow">return</span> scfParent-&gt;Debug_Dump ();
-00710     }
-00711     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d)
-00712     {
-00713       scfParent-&gt;Debug_Dump (g3d, 1);
-00714     }
-00715     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> DebugCommand (<span class="keyword">const</span> <span class="keywordtype">char</span>*)
-00716     {
-00717       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00718     }
-00719   } scfiDebugHelper;
-00720 };
-00721 
-00722 <span class="preprocessor">#endif // __CS_CSGEOM_TCOVBUF_H__</span>
-00723 <span class="preprocessor"></span>
+00023 <span class="preprocessor">#include "<a class="code" href="math2d_8h.html">csgeom/math2d.h</a>"</span>
+00024 <span class="preprocessor">#include "<a class="code" href="transfrm_8h.html">csgeom/transfrm.h</a>"</span>
+00025 <span class="preprocessor">#include "<a class="code" href="vector2_8h.html">csgeom/vector2.h</a>"</span>
+00026 <span class="preprocessor">#include "<a class="code" href="dbghelp_8h.html">iutil/dbghelp.h</a>"</span>
+00027 
+00028 <span class="comment">//#define SHIFT_TILECOL 5</span>
+00029 <span class="comment">//#define SHIFT_TILEROW 6</span>
+00030 
+00031 <span class="preprocessor">#define SHIFT_TILECOL 6</span>
+00032 <span class="preprocessor"></span><span class="preprocessor">#define SHIFT_TILEROW 5</span>
+00033 <span class="preprocessor"></span>
+00034 <span class="preprocessor">#define NUM_TILECOL (1&lt;&lt;SHIFT_TILECOL)</span>
+00035 <span class="preprocessor"></span><span class="preprocessor">#define NUM_TILEROW (1&lt;&lt;SHIFT_TILEROW)</span>
+00036 <span class="preprocessor"></span><span class="preprocessor">#define NUM_DEPTHROW (NUM_TILEROW/8)</span>
+00037 <span class="preprocessor"></span><span class="preprocessor">#define NUM_DEPTHCOL (NUM_TILECOL/8)</span>
+00038 <span class="preprocessor"></span><span class="preprocessor">#define NUM_DEPTH (NUM_DEPTHROW * NUM_DEPTHCOL)</span>
+00039 <span class="preprocessor"></span>
+00040 <span class="preprocessor">#define TILECOL_EMPTY 0</span>
+00041 <span class="preprocessor"></span><span class="preprocessor">#define TILECOL_FULL ((uint32)~0)</span>
+00042 <span class="preprocessor"></span>
+00043 <span class="preprocessor">#define TEST_OCCLUDER_QUALITY 1</span>
+00044 <span class="preprocessor"></span>
+00045 <span class="keyword">typedef</span> uint32 csTileCol;
+00046 
+<a name="l00050"></a><a class="code" href="classcsBox2Int.html">00050</a> <span class="keyword">class </span><a class="code" href="classcsBox2Int.html">csBox2Int</a>
+00051 {
+00052 <span class="keyword">public</span>:
+00053   <span class="keywordtype">int</span> minx, miny;
+00054   <span class="keywordtype">int</span> maxx, maxy;
+00055   <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; operator+= (<span class="keyword">const</span> <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; box)
+00056   {
+00057     <span class="keywordflow">if</span> (box.<a class="code" href="classcsBox2Int.html#o0">minx</a> &lt; minx) minx = box.<a class="code" href="classcsBox2Int.html#o0">minx</a>;
+00058     <span class="keywordflow">if</span> (box.<a class="code" href="classcsBox2Int.html#o1">miny</a> &lt; miny) miny = box.<a class="code" href="classcsBox2Int.html#o1">miny</a>;
+00059     <span class="keywordflow">if</span> (box.<a class="code" href="classcsBox2Int.html#o2">maxx</a> &gt; maxx) maxx = box.<a class="code" href="classcsBox2Int.html#o2">maxx</a>;
+00060     <span class="keywordflow">if</span> (box.<a class="code" href="classcsBox2Int.html#o3">maxy</a> &gt; maxy) maxy = box.<a class="code" href="classcsBox2Int.html#o3">maxy</a>;
+00061     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00062   }
+00063 };
+00064 
+<a name="l00069"></a><a class="code" href="structcsTestRectData.html">00069</a> <span class="keyword">struct </span><a class="code" href="structcsTestRectData.html">csTestRectData</a>
+00070 {
+00071   <a class="code" href="classcsBox2Int.html">csBox2Int</a> bbox;
+00072   <span class="keywordtype">int</span> startrow, endrow;
+00073   <span class="keywordtype">int</span> startcol, endcol;
+00074   <span class="keywordtype">int</span> start_x, end_x;
+00075 };
+00076 
+00077 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
+00078 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
+00079 <span class="keyword">struct </span><a class="code" href="structiBugPlug.html">iBugPlug</a>;
+00080 <span class="keyword">class </span><a class="code" href="classcsString.html">csString</a>;
+00081 <span class="keyword">class </span><a class="code" href="classcsBox2.html">csBox2</a>;
+00082 <span class="keyword">class </span><a class="code" href="classcsTiledCoverageBuffer.html">csTiledCoverageBuffer</a>;
+00083 
+00084 <span class="comment">// Line operations in a tile.</span>
+00085 <span class="preprocessor">#define OP_LINE 1       // General line.</span>
+00086 <span class="preprocessor"></span><span class="preprocessor">#define OP_VLINE 2      // Vertical line.</span>
+00087 <span class="preprocessor"></span><span class="preprocessor">#define OP_FULLVLINE 3  // Full vertical line (from 0 to 63).</span>
+00088 <span class="preprocessor"></span>
+00089 <span class="comment">// A definition for a line operation.</span>
+00090 <span class="keyword">struct </span>csLineOperation
+00091 {
+00092   uint8 op;             <span class="comment">// One of OP_...</span>
+00093   <span class="comment">// All coordinates are with 0,0 relative to top-left of tile.</span>
+00094   <span class="comment">// x coordinates are also shifted 16 to the left.</span>
+00095   <span class="keywordtype">int</span> x1;               <span class="comment">// Start of line.</span>
+00096   <span class="keywordtype">int</span> y1;               <span class="comment">// Start of line. Not used with OP_FULLVLINE.</span>
+00097   <span class="keywordtype">int</span> x2;               <span class="comment">// End of line. Only used with OP_LINE.</span>
+00098   <span class="keywordtype">int</span> y2;               <span class="comment">// End of line. Not used with OP_FULLVLINE.</span>
+00099   <span class="keywordtype">int</span> dx;               <span class="comment">// Slope to add to x1 (shifted 16 to left).</span>
+00100 };
+00101 
+<a name="l00107"></a><a class="code" href="classcsCoverageTile.html">00107</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csCoverageTile
+00108 {
+00109   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsTiledCoverageBuffer.html">csTiledCoverageBuffer</a>;
+00110 
+00111 <span class="keyword">private</span>:
+00112   <span class="comment">// If true entire tile is full.</span>
+00113   <span class="keywordtype">bool</span> tile_full;
+00114   <span class="comment">// If true tile is queued as empty but 'coverage' and other</span>
+00115   <span class="comment">// data structures may not yet reflect this.</span>
+00116   <span class="keywordtype">bool</span> queue_tile_empty;
+00117 
+00118   <span class="comment">// The coverage bits.</span>
+00119   csTileCol coverage[NUM_TILECOL];
+00120 
+00121   <span class="comment">// The cache on which we will write lines before or-ing that to the</span>
+00122   <span class="comment">// real coverage bits.</span>
+00123   <span class="keyword">static</span> csTileCol coverage_cache[NUM_TILECOL];
+00124 
+00125   <span class="comment">// This is an array of precalculated bit-sets for vertical line</span>
+00126   <span class="comment">// segments that start at 'n' and go to 63.</span>
+00127   <span class="keyword">static</span> csTileCol precalc_end_lines[NUM_TILEROW];
+00128   <span class="comment">// This is an array of precalculated bit-sets for vertical line</span>
+00129   <span class="comment">// segments that start at 0 and go to 'n'.</span>
+00130   <span class="keyword">static</span> csTileCol precalc_start_lines[NUM_TILEROW];
+00131   <span class="comment">// If true the two arrays above are initialized.</span>
+00132   <span class="keyword">static</span> <span class="keywordtype">bool</span> precalc_init;
+00133 
+00134   <span class="comment">// For every block a depth value (4 blocks on every row, ordered</span>
+00135   <span class="comment">// by rows).</span>
+00136   <span class="keywordtype">float</span> depth[NUM_DEPTH];
+00137   <span class="comment">// Minimum depth of all blocks.</span>
+00138   <span class="keywordtype">float</span> tile_min_depth;
+00139   <span class="comment">// Maximum depth of all blocks.</span>
+00140   <span class="keywordtype">float</span> tile_max_depth;
+00141 
+00142   <span class="comment">// Line Operations that are waiting to be executed.</span>
+00143   <span class="keywordtype">int</span> num_operations;
+00144   <span class="keywordtype">int</span> max_operations;
+00145   csLineOperation* operations;
+00146 
+00147   <span class="comment">// A temporary values that are used to test if the objects in the write</span>
+00148   <span class="comment">// queue can actually help cull the object.</span>
+00149   <span class="keywordtype">bool</span> covered;
+00150   <span class="keywordtype">bool</span> fully_covered;
+00151 
+00152   <span class="comment">// Add an operation.</span>
+00153   csLineOperation&amp; AddOperation ();
+00154 
+00155   <span class="comment">// Check if the precalc tables are precalculated. If not</span>
+00156   <span class="comment">// precalculate them.</span>
+00157   <span class="keyword">static</span> <span class="keywordtype">void</span> MakePrecalcTables ();
+00158 
+00159   <span class="comment">// Count how many objects were occluded away that covered this tile.</span>
+00160   <span class="keywordtype">int</span> objects_culled;
+00161 
+00162 <span class="keyword">public</span>:
+00163   csCoverageTile () :
+00164         tile_full (<span class="keyword">false</span>),
+00165         queue_tile_empty (<span class="keyword">true</span>),
+00166         num_operations (0),
+00167         max_operations (16),
+00168         covered (<span class="keyword">false</span>)
+00169   {
+00170     operations = <span class="keyword">new</span> csLineOperation [16];
+00171     MakePrecalcTables ();
+00172     <a class="code" href="classcsCoverageTile.html#a3">MakeEmpty</a> ();
+00173   }
+00174 
+00175   ~csCoverageTile ()
+00176   {
+00177     <span class="keyword">delete</span>[] operations;
+00178   }
+00179 
+<a name="l00184"></a><a class="code" href="classcsCoverageTile.html#a2">00184</a>   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a2">MarkEmpty</a> ()
+00185   {
+00186     queue_tile_empty = <span class="keyword">true</span>;
+00187     tile_full = <span class="keyword">false</span>;
+00188     objects_culled = 0;
+00189   }
+00190 
+00191 <span class="preprocessor">#define INIT_MIN_DEPTH     999999999.0f</span>
+00192 <span class="preprocessor"></span><span class="preprocessor">#define INIT_MIN_DEPTH_CMP 999900000.0f</span>
+00193 <span class="preprocessor"></span>
+<a name="l00198"></a><a class="code" href="classcsCoverageTile.html#a3">00198</a>   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a3">MakeEmpty</a> ()
+00199   {
+00200     tile_full = <span class="keyword">false</span>; queue_tile_empty = <span class="keyword">false</span>;
+00201     memset (coverage, 0, <span class="keyword">sizeof</span> (csTileCol)*NUM_TILECOL);
+00202     memset (depth, 0, <span class="keyword">sizeof</span> (<span class="keywordtype">float</span>)*NUM_DEPTH);
+00203     tile_min_depth = INIT_MIN_DEPTH;
+00204     tile_max_depth = 0;
+00205     objects_culled = 0;
+00206   }
+00207 
+<a name="l00213"></a><a class="code" href="classcsCoverageTile.html#a4">00213</a>   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a4">MakeEmptyQuick</a> ()
+00214   {
+00215     queue_tile_empty = <span class="keyword">false</span>;
+00216     memset (depth, 0, <span class="keyword">sizeof</span> (<span class="keywordtype">float</span>)*NUM_DEPTH);
+00217     tile_min_depth = INIT_MIN_DEPTH;
+00218     tile_max_depth = 0;
+00219     objects_culled = 0;
+00220   }
+00221 
+<a name="l00225"></a><a class="code" href="classcsCoverageTile.html#a5">00225</a>   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a5">ClearOperations</a> ()
+00226   {
+00227     num_operations = 0;
+00228   }
+00229 
+<a name="l00233"></a><a class="code" href="classcsCoverageTile.html#a6">00233</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a6">IsFull</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> tile_full; }
+00234 
+<a name="l00240"></a><a class="code" href="classcsCoverageTile.html#a7">00240</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a7">IsEmpty</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> queue_tile_empty; }
+00241 
+00245   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a8">PushLine</a> (<span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> y2, <span class="keywordtype">int</span> dx);
+00246 
+00250   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a9">PushVLine</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> y2);
+00251 
+00255   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a10">PushFullVLine</a> (<span class="keywordtype">int</span> x);
+00256 
+00260   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a11">PerformOperations</a> ();
+00261 
+00267   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a12">FlushOperations</a> ();
+00268 
+00273   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a13">PerformOperationsOnlyFValue</a> (csTileCol&amp; fvalue);
+00274 
+00281   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a14">FlushOperationsOnlyFValue</a> (csTileCol&amp; fvalue);
+00282 
+00283   <span class="comment">//-----------------------------------------------------------------</span>
+00284 
+00294   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a15">Flush</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00295 
+00299   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a16">FlushIgnoreDepth</a> (csTileCol&amp; fvalue);
+00300 
+00305   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a17">FlushForEmpty</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00306 
+00311   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a18">FlushForEmptyNoDepth</a> (csTileCol&amp; fvalue);
+00312 
+00317   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a19">FlushForFull</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00318 
+00323   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a20">FlushNoDepth</a> (csTileCol&amp; fvalue);
+00324 
+00329   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a21">FlushGeneral</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00330 
+00335   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a22">FlushForEmptyConstFValue</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00336 
+00341   <span class="keywordtype">void</span> <a class="code" href="classcsCoverageTile.html#a23">FlushForFullConstFValue</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00342 
+00348   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a24">FlushNoDepthConstFValue</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00349 
+00355   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a25">FlushGeneralConstFValue</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00356 
+00357   <span class="comment">//-----------------------------------------------------------------</span>
+00358 
+00363   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a26">TestCoverageFlush</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> mindepth,
+00364         <span class="keywordtype">bool</span>&amp; do_depth_test);
+00365 
+00369   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a27">TestCoverageFlushForFull</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> mindepth,
+00370         <span class="keywordtype">bool</span>&amp; do_depth_test);
+00371 
+00375   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a28">TestCoverageFlushGeneral</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth,
+00376         <span class="keywordtype">bool</span>&amp; do_depth_test);
+00377 
+00378   <span class="comment">//-----------------------------------------------------------------</span>
+00379 
+00384   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a29">TestDepthFlush</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> mindepth);
+00385 
+00389   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a30">TestDepthFlushGeneral</a> (csTileCol&amp; fvalue, <span class="keywordtype">float</span> maxdepth);
+00390 
+00391   <span class="comment">//-----------------------------------------------------------------</span>
+00392 
+00401   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a31">TestFullRect</a> (<span class="keywordtype">float</span> testdepth);
+00402 
+00407   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a32">TestDepthRect</a> (<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end, <span class="keywordtype">float</span> testdepth);
+00408 
+00414   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a32">TestDepthRect</a> (<span class="keyword">const</span> csTileCol&amp; vermask, <span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end,
+00415         <span class="keywordtype">float</span> testdepth);
+00416 
+00421   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a34">TestCoverageRect</a> (<span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end, <span class="keywordtype">float</span> testdepth,
+00422         <span class="keywordtype">bool</span>&amp; do_depth_test);
+00423 
+00429   <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a34">TestCoverageRect</a> (<span class="keyword">const</span> csTileCol&amp; vermask, <span class="keywordtype">int</span> start, <span class="keywordtype">int</span> end,
+00430         <span class="keywordtype">float</span> testdepth, <span class="keywordtype">bool</span>&amp; do_depth_test);
+00431 
+00432   <span class="comment">//-----------------------------------------------------------------</span>
+00437 <span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code" href="classcsCoverageTile.html#a36">TestPoint</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">float</span> testdepth);
+00438 
+00442   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> <a class="code" href="classcsCoverageTile.html#a37">Debug_Dump</a> ();
+00443 
+00447   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> <a class="code" href="classcsCoverageTile.html#a38">Debug_Dump_Cache</a> ();
+00448 };
+00449 
+<a name="l00458"></a><a class="code" href="classcsTiledCoverageBuffer.html">00458</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTiledCoverageBuffer : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00459 {
+00460 <span class="keyword">public</span>:
+00461   <a class="code" href="structiBugPlug.html">iBugPlug</a>* bugplug;    <span class="comment">// For debugging...</span>
+00462 
+00463 <span class="keyword">private</span>:
+00464   <span class="keywordtype">int</span> width, height;
+00465   <span class="keywordtype">int</span> width_po2;        <span class="comment">// Width after correcting for power of two.</span>
+00466   <span class="keywordtype">int</span> height_64;        <span class="comment">// Height after making it a multiple of 64.</span>
+00467   <span class="keywordtype">int</span> w_shift;          <span class="comment">// Horizontal shift for width_po2 for tile multiples.</span>
+00468   <span class="keywordtype">int</span> num_tile_rows;
+00469 
+00470   <span class="comment">// All tiles representing the screen (ordered by rows).</span>
+00471   <span class="keywordtype">int</span> num_tiles;
+00472   csCoverageTile* tiles;
+00473 
+00474   <span class="comment">// For every row the following arrays contain the left-most and</span>
+00475   <span class="comment">// right-most horizontal tile number that was affected by the polygon/outline.</span>
+00476   <span class="comment">// DrawLine() will update these values.</span>
+00477   <span class="keywordtype">int</span>* dirty_left;
+00478   <span class="keywordtype">int</span>* dirty_right;
+00479 
+00486   <span class="keywordtype">void</span> DrawLine (<span class="keywordtype">int</span> x1, <span class="keywordtype">int</span> y1, <span class="keywordtype">int</span> x2, <span class="keywordtype">int</span> y2, <span class="keywordtype">int</span> yfurther = 0);
+00487 
+00496   <span class="keywordtype">bool</span> DrawPolygon (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; bbox);
+00497 
+00504   <span class="keywordtype">bool</span> DrawOutline (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans,
+00505         <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts,
+00506         <span class="keywordtype">bool</span>* used_verts,
+00507         <span class="keywordtype">int</span>* edges, <span class="keywordtype">int</span> num_edges, <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; bbox,
+00508         <span class="keywordtype">float</span>&amp; max_depth, <span class="keywordtype">bool</span> splat_outline);
+00509 
+00513   csCoverageTile* GetTile (<span class="keywordtype">int</span> tx, <span class="keywordtype">int</span> ty)
+00514   {
+00515     CS_ASSERT (tx &gt;= 0);
+00516     CS_ASSERT (ty &gt;= 0 &amp;&amp; ty &lt; num_tile_rows);
+00517     <span class="keywordflow">return</span> &amp;tiles[(ty&lt;&lt;w_shift) + tx];
+00518   }
+00519 
+00523   <span class="keywordtype">void</span> MarkTileDirty (<span class="keywordtype">int</span> tx, <span class="keywordtype">int</span> ty)
+00524   {
+00525     CS_ASSERT (ty &gt;= 0 &amp;&amp; ty &lt; num_tile_rows);
+00526     <span class="keywordflow">if</span> (tx &lt; dirty_left[ty]) dirty_left[ty] = tx;
+00527     <span class="keywordflow">if</span> (tx &gt; dirty_right[ty]) dirty_right[ty] = tx;
+00528   }
+00529 
+00530 <span class="keyword">public</span>:
+00532   csTiledCoverageBuffer (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
+00534   <span class="keyword">virtual</span> ~csTiledCoverageBuffer ();
+00535 
+00537   <span class="keywordtype">void</span> Setup (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
+00538 
+00539   SCF_DECLARE_IBASE;
+00540 
+00542   <span class="keywordtype">void</span> Initialize ();
+00543 
+00553   <span class="keywordtype">bool</span> TestPolygon (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <span class="keywordtype">float</span> min_depth);
+00554 
+00558   <span class="keywordtype">void</span> InsertPolygonInverted (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <span class="keywordtype">float</span> max_depth);
+00559 
+00566   <span class="keywordtype">void</span> InsertPolygonInvertedNoDepth (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts);
+00567 
+00578   <span class="keywordtype">int</span> InsertPolygon (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts, <span class="keywordtype">float</span> max_depth,
+00579         <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; modified_bbox);
+00580 
+00592   <span class="keywordtype">int</span> InsertPolygonNoDepth (<a class="code" href="classcsVector2.html">csVector2</a>* verts, <span class="keywordtype">int</span> num_verts);
+00593 
+00607   <span class="keywordtype">int</span> InsertOutline (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans,
+00608         <span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts,
+00609         <span class="keywordtype">bool</span>* used_verts,
+00610         <span class="keywordtype">int</span>* edges, <span class="keywordtype">int</span> num_edges, <span class="keywordtype">bool</span> splat_outline,
+00611         <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; modified_bbox);
+00612 
+00618   <span class="keywordtype">bool</span> PrepareTestRectangle (<span class="keyword">const</span> <a class="code" href="classcsBox2.html">csBox2</a>&amp; rect, <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data);
+00619 
+00626   <span class="keywordtype">bool</span> TestRectangle (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
+00627 
+00635   <span class="keywordtype">bool</span> QuickTestRectangle (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
+00636 
+00641   <span class="keywordtype">void</span> MarkCulledObject (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data);
+00642 
+00647   <span class="keywordtype">int</span> CountNotCulledObjects (<span class="keyword">const</span> <a class="code" href="classcsBox2Int.html">csBox2Int</a>&amp; bbox);
+00648 
+00654   <span class="keywordtype">int</span> PrepareWriteQueueTest (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">float</span> min_depth);
+00655 
+00663   <span class="keywordtype">int</span> AddWriteQueueTest (<span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; maindata,
+00664         <span class="keyword">const</span> <a class="code" href="structcsTestRectData.html">csTestRectData</a>&amp; data, <span class="keywordtype">bool</span>&amp; relevant);
+00665 
+00671   <span class="keywordtype">bool</span> TestPoint (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point, <span class="keywordtype">float</span> min_depth);
+00672 
+00678   <span class="keywordtype">int</span> StatusNoDepth ();
+00679 
+00680   <span class="comment">// Debugging functions.</span>
+00681   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Debug_UnitTest ();
+00682   <a class="code" href="group__util.html#ga17">csTicks</a> Debug_Benchmark (<span class="keywordtype">int</span> num_iterations);
+00683   <span class="keywordtype">void</span> Debug_Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <span class="keywordtype">int</span> zoom = 1);
+00684   <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Debug_Dump ();
+00685 
+00686   <span class="keyword">struct </span>DebugHelper : <span class="keyword">public</span> <a class="code" href="structiDebugHelper.html">iDebugHelper</a>
+00687   {
+00688     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (csTiledCoverageBuffer);
+00689     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetSupportedTests ()<span class="keyword"> const</span>
+00690 <span class="keyword">    </span>{
+00691       <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga144">CS_DBGHELP_UNITTEST</a> |
+00692              <a class="code" href="group__util.html#ga145">CS_DBGHELP_BENCHMARK</a> |
+00693              <a class="code" href="group__util.html#ga147">CS_DBGHELP_GFXDUMP</a> |
+00694              CS_DBGHELP_TXTDUMP;
+00695     }
+00696     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> UnitTest ()
+00697     {
+00698       <span class="keywordflow">return</span> scfParent-&gt;Debug_UnitTest ();
+00699     }
+00700     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> StateTest ()
+00701     {
+00702       <span class="keywordflow">return</span> 0;
+00703     }
+00704     <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga17">csTicks</a> Benchmark (<span class="keywordtype">int</span> num_iterations)
+00705     {
+00706       <span class="keywordflow">return</span> scfParent-&gt;Debug_Benchmark (num_iterations);
+00707     }
+00708     <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iString&gt;</a> Dump ()
+00709     {
+00710       <span class="keywordflow">return</span> scfParent-&gt;Debug_Dump ();
+00711     }
+00712     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d)
+00713     {
+00714       scfParent-&gt;Debug_Dump (g3d, 1);
+00715     }
+00716     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> DebugCommand (<span class="keyword">const</span> <span class="keywordtype">char</span>*)
+00717     {
+00718       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00719     }
+00720   } scfiDebugHelper;
+00721 };
+00722 
+00723 <span class="preprocessor">#endif // __CS_CSGEOM_TCOVBUF_H__</span>
+00724 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
