@@ -258,6 +258,10 @@ SOURCE=..\..\libs\csgeom\subrec2.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\tcovbuf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\textrans.cpp
 # End Source File
 # Begin Source File
@@ -423,6 +427,10 @@ SOURCE=..\..\libs\csgeom\..\..\include\csgeom\subrec.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\..\..\include\csgeom\subrec2.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\..\..\include\csgeom\tcovbuf.h
 # End Source File
 # Begin Source File
 

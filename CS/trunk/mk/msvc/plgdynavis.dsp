@@ -154,10 +154,6 @@ SOURCE=..\..\plugins\culling\dynavis\exvis.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\dynavis\tcovbuf.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\culling\dynavis\wqueue.cpp
 # End Source File
 # End Group
@@ -179,10 +175,6 @@ SOURCE=..\..\plugins\culling\dynavis\dynavis.h
 # Begin Source File
 
 SOURCE=..\..\plugins\culling\dynavis\exvis.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\culling\dynavis\tcovbuf.h
 # End Source File
 # Begin Source File
 
