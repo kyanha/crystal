@@ -67,101 +67,107 @@
 00075 
 00077   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a1">Release</a>();
 00078 
-00080   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a2">CopyInto</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *data, size_t elementCount);
-00081 
-<a name="l00083"></a><a class="code" href="classcsRenderBuffer.html#a5">00083</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiRenderBuffer.html#a3">GetComponentCount</a> ()<span class="keyword"> const</span>
-00084 <span class="keyword">  </span>{
-00085     <span class="keywordflow">return</span> compCount;
-00086   }
-00087 
-<a name="l00089"></a><a class="code" href="classcsRenderBuffer.html#a6">00089</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga75">csRenderBufferComponentType</a> <a class="code" href="structiRenderBuffer.html#a4">GetComponentType</a> ()<span class="keyword"> const </span>
-00090 <span class="keyword">  </span>{
-00091     <span class="keywordflow">return</span> comptype;
-00092   }
-00093 
-<a name="l00095"></a><a class="code" href="classcsRenderBuffer.html#a7">00095</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga74">csRenderBufferType</a> <a class="code" href="structiRenderBuffer.html#a5">GetBufferType</a>()<span class="keyword"> const</span>
-00096 <span class="keyword">  </span>{
-00097     <span class="keywordflow">return</span> bufferType;
-00098   }
-00099 
-<a name="l00101"></a><a class="code" href="classcsRenderBuffer.html#a8">00101</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a6">GetSize</a>()<span class="keyword"> const</span>
-00102 <span class="keyword">  </span>{
-00103     <span class="keywordflow">return</span> bufferSize;
-00104   }
-00105 
-<a name="l00107"></a><a class="code" href="classcsRenderBuffer.html#a9">00107</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a7">GetStride</a>()<span class="keyword"> const </span>
-00108 <span class="keyword">  </span>{
-00109     <span class="keywordflow">return</span> stride;
-00110   }
-00111 
-<a name="l00112"></a><a class="code" href="classcsRenderBuffer.html#a10">00112</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a8">GetElementDistance</a>()<span class="keyword"> const</span>
-00113 <span class="keyword">  </span>{
-00114     <span class="keywordflow">return</span> stride ? stride :
-00115       compCount * csRenderBufferComponentSizes[comptype];
-00116   }
-00117 
-<a name="l00118"></a><a class="code" href="classcsRenderBuffer.html#a11">00118</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a9">GetOffset</a>()<span class="keyword"> const</span>
-00119 <span class="keyword">  </span>{ <span class="keywordflow">return</span> offset; }
-00120 
-<a name="l00122"></a><a class="code" href="classcsRenderBuffer.html#a12">00122</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="structiRenderBuffer.html#a10">GetVersion</a> ()
-00123   {
-00124     <span class="keywordflow">return</span> version;
-00125   }
-00126 
-00127   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsMasterBuffer ()
-00128   {
-00129     <span class="keywordflow">return</span> !masterBuffer.IsValid();
-00130   }
-00131 
-<a name="l00132"></a><a class="code" href="classcsRenderBuffer.html#a14">00132</a>   <span class="keyword">virtual</span> <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* <a class="code" href="structiRenderBuffer.html#a11">GetMasterBuffer</a> ()<span class="keyword"> const</span>
-00133 <span class="keyword">  </span>{
-00134     <span class="keywordflow">return</span> masterBuffer;
-00135   }
-00136 
-00137   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsIndexBuffer()<span class="keyword"> const</span>
-00138 <span class="keyword">  </span>{ <span class="keywordflow">return</span> isIndex; }
-00139 
-00140   <span class="keyword">virtual</span> size_t GetRangeStart()<span class="keyword"> const</span>
-00141 <span class="keyword">  </span>{ <span class="keywordflow">return</span> rangeStart; }
-00142   <span class="keyword">virtual</span> size_t GetRangeEnd()<span class="keyword"> const</span>
-00143 <span class="keyword">  </span>{ <span class="keywordflow">return</span> rangeEnd; }
-00144 
-00157   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> CreateRenderBuffer (size_t elementCount, 
-00158     csRenderBufferType type, csRenderBufferComponentType componentType, 
-00159     uint componentCount, <span class="keywordtype">bool</span> copy = <span class="keyword">true</span>);
-00174   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> CreateIndexRenderBuffer (size_t elementCount, 
-00175     csRenderBufferType type, csRenderBufferComponentType componentType,
-00176     size_t rangeStart, size_t rangeEnd, <span class="keywordtype">bool</span> copy = <span class="keyword">true</span>);
-00199   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> CreateInterleavedRenderBuffers (size_t elementCount, 
-00200     csRenderBufferType type, uint count, 
-00201     <span class="keyword">const</span> <a class="code" href="structcsInterleavedSubBufferOptions.html">csInterleavedSubBufferOptions</a>* elements, 
-00202     <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a>* buffers);
-00203 <span class="keyword">protected</span>:
-<a name="l00205"></a><a class="code" href="classcsRenderBuffer.html#p0">00205</a>   <a class="code" href="group__gfx3d.html#ga74">csRenderBufferType</a> bufferType; 
-<a name="l00207"></a><a class="code" href="classcsRenderBuffer.html#p1">00207</a>   <a class="code" href="group__gfx3d.html#ga75">csRenderBufferComponentType</a> comptype; 
-00208   
-<a name="l00210"></a><a class="code" href="classcsRenderBuffer.html#p2">00210</a>   size_t bufferSize; 
-<a name="l00212"></a><a class="code" href="classcsRenderBuffer.html#p3">00212</a>   <a class="code" href="group__util.html#ga12">uint</a> compCount;
-<a name="l00214"></a><a class="code" href="classcsRenderBuffer.html#p4">00214</a>   size_t stride;
-<a name="l00216"></a><a class="code" href="classcsRenderBuffer.html#p5">00216</a>   size_t offset; 
-00217 
-<a name="l00219"></a><a class="code" href="classcsRenderBuffer.html#p6">00219</a>   size_t rangeStart; 
-<a name="l00221"></a><a class="code" href="classcsRenderBuffer.html#p7">00221</a>   size_t rangeEnd; 
+00080   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRenderBuffer.html#a2">CopyInto</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *data, size_t elementCount,
+00081     size_t elemOffset = 0);
+00082 
+<a name="l00084"></a><a class="code" href="classcsRenderBuffer.html#a5">00084</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiRenderBuffer.html#a3">GetComponentCount</a> ()<span class="keyword"> const</span>
+00085 <span class="keyword">  </span>{
+00086     <span class="keywordflow">return</span> compCount;
+00087   }
+00088 
+<a name="l00090"></a><a class="code" href="classcsRenderBuffer.html#a6">00090</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga75">csRenderBufferComponentType</a> <a class="code" href="structiRenderBuffer.html#a4">GetComponentType</a> ()<span class="keyword"> const </span>
+00091 <span class="keyword">  </span>{
+00092     <span class="keywordflow">return</span> comptype;
+00093   }
+00094 
+<a name="l00096"></a><a class="code" href="classcsRenderBuffer.html#a7">00096</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga74">csRenderBufferType</a> <a class="code" href="structiRenderBuffer.html#a5">GetBufferType</a>()<span class="keyword"> const</span>
+00097 <span class="keyword">  </span>{
+00098     <span class="keywordflow">return</span> bufferType;
+00099   }
+00100 
+<a name="l00102"></a><a class="code" href="classcsRenderBuffer.html#a8">00102</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a6">GetSize</a>()<span class="keyword"> const</span>
+00103 <span class="keyword">  </span>{
+00104     <span class="keywordflow">return</span> bufferSize;
+00105   }
+00106 
+<a name="l00108"></a><a class="code" href="classcsRenderBuffer.html#a9">00108</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a7">GetStride</a>()<span class="keyword"> const </span>
+00109 <span class="keyword">  </span>{
+00110     <span class="keywordflow">return</span> stride;
+00111   }
+00112 
+<a name="l00113"></a><a class="code" href="classcsRenderBuffer.html#a10">00113</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a8">GetElementDistance</a>()<span class="keyword"> const</span>
+00114 <span class="keyword">  </span>{
+00115     <span class="keywordflow">return</span> stride ? stride :
+00116       compCount * csRenderBufferComponentSizes[comptype];
+00117   }
+00118 
+<a name="l00119"></a><a class="code" href="classcsRenderBuffer.html#a11">00119</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a9">GetOffset</a>()<span class="keyword"> const</span>
+00120 <span class="keyword">  </span>{ <span class="keywordflow">return</span> offset; }
+00121 
+<a name="l00123"></a><a class="code" href="classcsRenderBuffer.html#a12">00123</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="structiRenderBuffer.html#a10">GetVersion</a> ()
+00124   {
+00125     <span class="keywordflow">return</span> version;
+00126   }
+00127 
+00128   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsMasterBuffer ()
+00129   {
+00130     <span class="keywordflow">return</span> !masterBuffer.IsValid();
+00131   }
+00132 
+<a name="l00133"></a><a class="code" href="classcsRenderBuffer.html#a14">00133</a>   <span class="keyword">virtual</span> <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* <a class="code" href="structiRenderBuffer.html#a11">GetMasterBuffer</a> ()<span class="keyword"> const</span>
+00134 <span class="keyword">  </span>{
+00135     <span class="keywordflow">return</span> masterBuffer;
+00136   }
+00137 
+<a name="l00138"></a><a class="code" href="classcsRenderBuffer.html#a15">00138</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiRenderBuffer.html#a12">IsIndexBuffer</a>()<span class="keyword"> const</span>
+00139 <span class="keyword">  </span>{ <span class="keywordflow">return</span> isIndex; }
+00140 
+<a name="l00141"></a><a class="code" href="classcsRenderBuffer.html#a16">00141</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a13">GetRangeStart</a>()<span class="keyword"> const</span>
+00142 <span class="keyword">  </span>{ <span class="keywordflow">return</span> rangeStart; }
+<a name="l00143"></a><a class="code" href="classcsRenderBuffer.html#a17">00143</a>   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a14">GetRangeEnd</a>()<span class="keyword"> const</span>
+00144 <span class="keyword">  </span>{ <span class="keywordflow">return</span> rangeEnd; }
+00145 
+00146   <span class="keyword">virtual</span> size_t <a class="code" href="structiRenderBuffer.html#a15">GetElementCount</a>() <span class="keyword">const</span>;
+00147 
+00160   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> CreateRenderBuffer (size_t elementCount, 
+00161     csRenderBufferType type, csRenderBufferComponentType componentType, 
+00162     uint componentCount, <span class="keywordtype">bool</span> copy = <span class="keyword">true</span>);
+00177   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> CreateIndexRenderBuffer (size_t elementCount, 
+00178     csRenderBufferType type, csRenderBufferComponentType componentType,
+00179     size_t rangeStart, size_t rangeEnd, <span class="keywordtype">bool</span> copy = <span class="keyword">true</span>);
+00202   <span class="keyword">static</span> <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> CreateInterleavedRenderBuffers (size_t elementCount, 
+00203     csRenderBufferType type, uint count, 
+00204     <span class="keyword">const</span> <a class="code" href="structcsInterleavedSubBufferOptions.html">csInterleavedSubBufferOptions</a>* elements, 
+00205     <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a>* buffers);
+00206 
+00211   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetDescrFromBufferName (csRenderBufferName bufferName);
+00216   <span class="keyword">static</span> <a class="code" href="group__gfx3d.html#ga77">csRenderBufferName</a> GetBufferNameFromDescr (<span class="keyword">const</span> <span class="keywordtype">char</span>* name);
+00217 <span class="keyword">protected</span>:
+<a name="l00219"></a><a class="code" href="classcsRenderBuffer.html#p0">00219</a>   <a class="code" href="group__gfx3d.html#ga74">csRenderBufferType</a> bufferType; 
+<a name="l00221"></a><a class="code" href="classcsRenderBuffer.html#p1">00221</a>   <a class="code" href="group__gfx3d.html#ga75">csRenderBufferComponentType</a> comptype; 
 00222   
-<a name="l00224"></a><a class="code" href="classcsRenderBuffer.html#p8">00224</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> version; 
-00225 
-<a name="l00227"></a><a class="code" href="classcsRenderBuffer.html#p9">00227</a>   <span class="keywordtype">bool</span> doCopy; 
-<a name="l00229"></a><a class="code" href="classcsRenderBuffer.html#p10">00229</a>   <span class="keywordtype">bool</span> doDelete; 
-<a name="l00231"></a><a class="code" href="classcsRenderBuffer.html#p11">00231</a>   <span class="keywordtype">bool</span> isLocked;
-<a name="l00233"></a><a class="code" href="classcsRenderBuffer.html#p12">00233</a>   <span class="keywordtype">bool</span> isIndex; 
-00234 
-<a name="l00236"></a><a class="code" href="classcsRenderBuffer.html#p13">00236</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer; 
-<a name="l00238"></a><a class="code" href="classcsRenderBuffer.html#p14">00238</a>   <a class="code" href="group__gfx3d.html#ga76">csRenderBufferLockType</a> lastLock; 
-00239   
-00240   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> masterBuffer;
-00241 };
-00242 
-00245 <span class="preprocessor">#endif // __CS_CSGFX_RENDERBUFFER_H__</span>
+<a name="l00224"></a><a class="code" href="classcsRenderBuffer.html#p2">00224</a>   size_t bufferSize; 
+<a name="l00226"></a><a class="code" href="classcsRenderBuffer.html#p3">00226</a>   <a class="code" href="group__util.html#ga12">uint</a> compCount;
+<a name="l00228"></a><a class="code" href="classcsRenderBuffer.html#p4">00228</a>   size_t stride;
+<a name="l00230"></a><a class="code" href="classcsRenderBuffer.html#p5">00230</a>   size_t offset; 
+00231 
+<a name="l00233"></a><a class="code" href="classcsRenderBuffer.html#p6">00233</a>   size_t rangeStart; 
+<a name="l00235"></a><a class="code" href="classcsRenderBuffer.html#p7">00235</a>   size_t rangeEnd; 
+00236   
+<a name="l00238"></a><a class="code" href="classcsRenderBuffer.html#p8">00238</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> version; 
+00239 
+<a name="l00241"></a><a class="code" href="classcsRenderBuffer.html#p9">00241</a>   <span class="keywordtype">bool</span> doCopy; 
+<a name="l00243"></a><a class="code" href="classcsRenderBuffer.html#p10">00243</a>   <span class="keywordtype">bool</span> doDelete; 
+<a name="l00245"></a><a class="code" href="classcsRenderBuffer.html#p11">00245</a>   <span class="keywordtype">bool</span> isLocked;
+<a name="l00247"></a><a class="code" href="classcsRenderBuffer.html#p12">00247</a>   <span class="keywordtype">bool</span> isIndex; 
+00248 
+<a name="l00250"></a><a class="code" href="classcsRenderBuffer.html#p13">00250</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer; 
+<a name="l00252"></a><a class="code" href="classcsRenderBuffer.html#p14">00252</a>   <a class="code" href="group__gfx3d.html#ga76">csRenderBufferLockType</a> lastLock; 
+00253   
+00254   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> masterBuffer;
+00255 };
+00256 
+00259 <span class="preprocessor">#endif // __CS_CSGFX_RENDERBUFFER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

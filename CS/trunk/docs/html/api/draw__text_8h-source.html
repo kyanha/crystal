@@ -17,7 +17,7 @@
 <div class="qindex"><a class="qindex" href="index.html">Main&nbsp;Page</a> | <a class="qindex" href="modules.html">Modules</a> | <a class="qindex" href="hierarchy.html">Class&nbsp;Hierarchy</a> | <a class="qindex" href="classes.html">Alphabetical&nbsp;List</a> | <a class="qindex" href="annotated.html">Class&nbsp;List</a> | <a class="qindex" href="files.html">File&nbsp;List</a> | <a class="qindex" href="functions.html">Class&nbsp;Members</a> | <a class="qindex" href="globals.html">File&nbsp;Members</a> | <a class="qindex" href="pages.html">Related&nbsp;Pages</a></div>
 <div class="nav">
 <a class="el" href="dir_000005.html">csplugincommon</a>&nbsp;/&nbsp;<a class="el" href="dir_000006.html">canvas</a></div>
-<h1>draw_text.h</h1><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
+<h1>draw_text.h</h1><a href="draw__text_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
 00002 <span class="comment">    Copyright (C) 2004 by Jorrit Tyberghein</span>
 00003 <span class="comment">              (C) 2004 by Frank Richter</span>
 00004 <span class="comment"></span>
@@ -36,359 +36,359 @@
 00017 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
 00018 <span class="comment">*/</span>
 00019 
-00020 <span class="preprocessor">#ifndef __CS_CANVAS_COMMON_DRAW_TEXT_H__</span>
-00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CANVAS_COMMON_DRAW_TEXT_H__</span>
+00020 <span class="preprocessor">#ifndef __CS_CSPLUGINCOMMON_CANVAS_DRAW_TEXT_H__</span>
+00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSPLUGINCOMMON_CANVAS_DRAW_TEXT_H__</span>
 00022 <span class="preprocessor"></span>
-00023 <span class="preprocessor">#include "<a class="code" href="csuctransform_8h.html">csutil/csuctransform.h</a>"</span>
-00024 <span class="preprocessor">#include "draw_common.h"</span>
-00025 <span class="preprocessor">#include "csplugincommon/canvas/softfontcache.h"</span>
-00026 
-00027 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel, <span class="keyword">class</span> Tpixmixer1, <span class="keyword">class</span> Tpixmixer2, <span class="keyword">class</span> Tpixmixer3&gt;
-00028 <span class="keyword">class </span>csG2DDrawText
-00029 {
-00030 <span class="keyword">public</span>:
-00031   <span class="keyword">static</span> <span class="keywordtype">void</span> DrawText (csSoftFontCache* cache, <a class="code" href="structiFont.html">iFont</a>* font, <span class="keywordtype">int</span> pen_x, <span class="keywordtype">int</span> pen_y,
-00032     Tpixel fg, uint8 alphaFG, Tpixel bg, uint8 alphaBG, <span class="keyword">const</span> utf8_char *text, 
-00033     uint flags)
-00034   {
-00035     <a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* G2D = cache-&gt;G2D;
-00036     <span class="keyword">const</span> <span class="keywordtype">int</span> ClipX1 = cache-&gt;ClipX1, ClipY1 = cache-&gt;ClipY1, 
-00037       ClipX2 = cache-&gt;ClipX2, ClipY2 = cache-&gt;ClipY2;
-00038     Tpixmixer1 mixerFG (G2D, fg, alphaFG);
-00039     Tpixmixer2 mixerBG (G2D, bg, alphaBG);
-00040     
-00041     <span class="keywordflow">if</span> (!font)
-00042       <span class="keywordflow">return</span>;
-00043     
-00044     <span class="keywordflow">if</span> (!(flags &amp; CS_WRITE_BASELINE)) pen_y += font-&gt;<a class="code" href="structiFont.html#a11">GetAscent</a> ();
-00045   
-00046     csSoftFontCache::KnownFont* knownFont = cache-&gt;GetCachedFont (font);
-00047     <span class="keywordflow">if</span> (knownFont == 0) knownFont = cache-&gt;CacheFont (font);
-00048   
-00049     size_t textLen = strlen ((<span class="keywordtype">char</span>*)text);
-00050     <span class="keywordtype">int</span> charW, charH, advance = 0;
-00051     <span class="keywordtype">bool</span> firstchar = <span class="keyword">true</span>;
-00052     <span class="keywordflow">while</span> (textLen &gt; 0)
-00053     {
-00054       <a class="code" href="group__util.html#ga17">utf32_char</a> glyph;
-00055       <span class="keywordtype">int</span> skip = <a class="code" href="classcsUnicodeTransform.html#z109_0">csUnicodeTransform::UTF8Decode</a> (text, textLen, glyph, 0);
-00056       <span class="keywordflow">if</span> (skip == 0) <span class="keywordflow">break</span>;
-00057   
-00058       text += skip;
-00059       textLen -= skip;
-00060   
-00061       csSoftFontCache::SoftGlyphCacheData* cacheData = 
-00062         (csSoftFontCache::SoftGlyphCacheData*)cache-&gt;CacheGlyph (knownFont, 
-00063         glyph, flags);
-00064       <span class="keywordflow">if</span> (!cacheData-&gt;hasGlyph) 
-00065       {
-00066         <span class="comment">// fall back to the default glyph (CS_FONT_DEFAULT_GLYPH)</span>
-00067         cacheData = (csSoftFontCache::SoftGlyphCacheData*)cache-&gt;CacheGlyph (
-00068           knownFont, CS_FONT_DEFAULT_GLYPH, flags);
-00069         <span class="keywordflow">if</span> (!cacheData-&gt;hasGlyph) <span class="keywordflow">continue</span>;
-00070       }
-00071   
-00072       <span class="keyword">register</span> uint8 *CharImageAlpha = cacheData-&gt;glyphAlphaData;
-00073       <span class="keyword">register</span> uint8 *CharImage = cacheData-&gt;glyphData;
-00074       <span class="keywordflow">if</span> ((!CharImage) &amp;&amp; (!CharImageAlpha))
-00075         <span class="keywordflow">continue</span>;
-00076   
-00077       <a class="code" href="structcsBitmapMetrics.html">csBitmapMetrics</a>* bmetrics;
-00078       <span class="keywordflow">if</span> (CharImageAlpha)
-00079       {
-00080         bmetrics = &amp;cacheData-&gt;alphaMetrics;
-00081       }
-00082       <span class="keywordflow">else</span>
-00083       {
-00084         bmetrics = &amp;cacheData-&gt;bitmapMetrics;
-00085       }
-00086       charW = bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o0">width</a>;
-00087       charH = bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o1">height</a>;
-00088       
-00089       <span class="keywordtype">int</span> y = pen_y - bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o3">top</a>;
-00090       
-00091       <span class="comment">// If we are advancing more than the last char was wide, we have to</span>
-00092       <span class="comment">// fill the 'gap' with bg.</span>
-00093       
-00094       <span class="keywordtype">int</span> x = pen_x - (advance &gt; 0 ? advance : 0) + (bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o2">left</a> &lt; 0 ? bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o2">left</a> : 0);
-00095       advance += bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o2">left</a>;
-00096       
-00097       <span class="comment">// Hack: in case the first char has a negative left bitmap offset,</span>
-00098       <span class="comment">// some of the background isn't drawn. Fix that.</span>
-00099       <span class="keywordflow">if</span> (firstchar)
-00100       {
-00101         <span class="keywordflow">if</span> (advance &lt; 0)
-00102         {
-00103           advance = 0;
-00104         }
-00105         firstchar = <span class="keyword">false</span>;
-00106       }
-00107      
-00108       <span class="keywordflow">if</span> (alphaBG != 0)
-00109       {
-00110         <span class="keywordflow">while</span> (advance &gt; 0)
-00111         {
-00112           <span class="keywordflow">if</span> (x &gt;= ClipX2)
-00113             <span class="keywordflow">return</span>;
-00114     
-00115           <span class="keywordtype">int</span> cury = y;
-00116           <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
-00117           {
-00118             <span class="keywordflow">if</span> ((cury &lt; ClipY1) || (cury &gt;= ClipY2)) <span class="keywordflow">continue</span>;
-00119             <span class="keyword">register</span> Tpixel *VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (x, cury);
-00120             <span class="keywordflow">if</span> (x &gt;= ClipX1) mixerBG.Mix (*VRAM);
-00121           }
-00122           x++; advance--;
-00123         }
-00124       }
-00125       <span class="keywordflow">else</span>
-00126       {
-00127         <span class="keywordflow">if</span> (advance &gt; 0)
-00128         {
-00129           x += advance;
-00130           advance = 0;
-00131         }
-00132       }
-00133   
-00134       <span class="keywordflow">if</span> (x &gt;= ClipX2)
-00135         <span class="keywordflow">return</span>;
-00136   
-00137       <span class="comment">// If character is completely outside the clipping rectangle, continue</span>
-00138       <span class="keywordflow">if</span> (!((x + charW &lt;= ClipX1) || (x &gt;= ClipX2)
-00139        || (y + charH &lt;= ClipY1) || (y &gt;= ClipY2)))
-00140       {
-00141         <span class="keywordtype">int</span> cury = y;
-00142     
-00143         <span class="keywordtype">int</span> oldAdvance = advance;
-00144         <span class="comment">// If character should not be clipped, go the fast path</span>
-00145         <span class="keywordflow">if</span> ((x &lt; ClipX1) || (x + charW &gt;= ClipX2)
-00146          || (y &lt; ClipY1) || (y + charH &gt;= ClipY2))
-00147         {
-00148           <span class="comment">// Perform full clipping</span>
-00149           <span class="keywordtype">int</span> lX = x &lt; ClipX1 ? ClipX1 - x : 0;
-00150           <span class="keywordtype">int</span> rX = x + charW &gt;= ClipX2 ? ClipX2 - x : charW;
-00151           <span class="keywordtype">int</span> lBytes = CharImageAlpha ? lX : lX &gt;&gt; 3;
-00152           <span class="keywordtype">int</span> shiftX = CharImageAlpha ? 0 : lX &amp; 7;
-00153           <span class="keywordtype">int</span> bbl = CharImageAlpha ? charW : (charW + 7) / 8; <span class="comment">// bytes per line</span>
-00154           <span class="keywordtype">int</span> lAbsX = x + lX;
-00155           uint8 *p = CharImageAlpha ? CharImageAlpha - bbl : CharImage - bbl;
-00156           
-00157           <span class="keywordflow">if</span> (CharImageAlpha)
-00158           {
-00159             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
-00160             {
-00161               advance = oldAdvance;
-00162               p += bbl;
-00163               <span class="keywordflow">if</span> ((cury &lt; ClipY1) || (cury &gt;= ClipY2)) 
-00164               {
-00165                 <span class="keywordflow">if</span> (advance &lt; 0) advance = MIN(0, advance + (rX - lX));
-00166                 <span class="keywordflow">continue</span>;
-00167               }
-00168               CharImageAlpha = p + lBytes;
-00169               <span class="keyword">register</span> uint8 CharLine = (*CharImageAlpha++) &lt;&lt; shiftX;
-00170               <span class="keyword">register</span> Tpixel* VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (lAbsX, cury);
-00171               <span class="comment">// If we are advancing less than the last char was wide, the current</span>
-00172               <span class="comment">// and last chars overlap. So we can't draw opaque, but have to draw</span>
-00173               <span class="comment">// transparent instead.</span>
-00174               <span class="keywordflow">if</span> (advance &gt;= 0)
-00175               {
-00176                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = lX; j &lt; rX; j++)
-00177                 {
-00178                   <span class="keywordflow">if</span> (CharLine == 0xff)
-00179                   {
-00180                     mixerFG.Mix (*VRAM);
-00181                   }
-00182                   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (CharLine == 0x00)
-00183                   {
-00184                     mixerBG.Mix (*VRAM);
-00185                   }
-00186                   <span class="keywordflow">else</span>
-00187                   {
-00188                     <span class="comment">// @@@ Could be more optimal, probably.</span>
-00189                     Tpixel mixedFG = *VRAM;
-00190                     mixerFG.Mix (mixedFG);
-00191                     mixerBG.Mix (*VRAM);
-00192                     
-00193                     Tpixmixer3 mixer (G2D, mixedFG, CharLine);
-00194                     mixer.Mix (*VRAM);
+00027 <span class="preprocessor">#include "<a class="code" href="csuctransform_8h.html">csutil/csuctransform.h</a>"</span>
+00028 <span class="preprocessor">#include "<a class="code" href="draw__common_8h.html">draw_common.h</a>"</span>
+00029 <span class="preprocessor">#include "csplugincommon/canvas/softfontcache.h"</span>
+00030 
+00037 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Tpixel, <span class="keyword">class</span> Tpixmixer1, <span class="keyword">class</span> Tpixmixer2, <span class="keyword">class</span> Tpixmixer3&gt;
+<a name="l00038"></a><a class="code" href="classcsG2DDrawText.html">00038</a> <span class="keyword">class </span><a class="code" href="classcsG2DDrawText.html">csG2DDrawText</a>
+00039 {
+00040 <span class="keyword">public</span>:
+00041   <span class="keyword">static</span> <span class="keywordtype">void</span> DrawText (csSoftFontCache* cache, <a class="code" href="structiFont.html">iFont</a>* font, <span class="keywordtype">int</span> pen_x, <span class="keywordtype">int</span> pen_y,
+00042     Tpixel fg, uint8 alphaFG, Tpixel bg, uint8 alphaBG, <span class="keyword">const</span> <a class="code" href="group__util.html#ga15">utf8_char</a> *text, 
+00043     <a class="code" href="group__util.html#ga12">uint</a> flags)
+00044   {
+00045     <a class="code" href="classcsGraphics2D.html">csGraphics2D</a>* G2D = cache-&gt;G2D;
+00046     <span class="keyword">const</span> <span class="keywordtype">int</span> ClipX1 = cache-&gt;ClipX1, ClipY1 = cache-&gt;ClipY1, 
+00047       ClipX2 = cache-&gt;ClipX2, ClipY2 = cache-&gt;ClipY2;
+00048     Tpixmixer1 mixerFG (G2D, fg, alphaFG);
+00049     Tpixmixer2 mixerBG (G2D, bg, alphaBG);
+00050     
+00051     <span class="keywordflow">if</span> (!font)
+00052       <span class="keywordflow">return</span>;
+00053     
+00054     <span class="keywordflow">if</span> (!(flags &amp; CS_WRITE_BASELINE)) pen_y += font-&gt;<a class="code" href="structiFont.html#a11">GetAscent</a> ();
+00055   
+00056     csSoftFontCache::KnownFont* knownFont = cache-&gt;GetCachedFont (font);
+00057     <span class="keywordflow">if</span> (knownFont == 0) knownFont = cache-&gt;CacheFont (font);
+00058   
+00059     size_t textLen = strlen ((<span class="keywordtype">char</span>*)text);
+00060     <span class="keywordtype">int</span> charW, charH, advance = 0;
+00061     <span class="keywordtype">bool</span> firstchar = <span class="keyword">true</span>;
+00062     <span class="keywordflow">while</span> (textLen &gt; 0)
+00063     {
+00064       <a class="code" href="group__util.html#ga17">utf32_char</a> glyph;
+00065       <span class="keywordtype">int</span> skip = <a class="code" href="classcsUnicodeTransform.html#z109_0">csUnicodeTransform::UTF8Decode</a> (text, textLen, glyph, 0);
+00066       <span class="keywordflow">if</span> (skip == 0) <span class="keywordflow">break</span>;
+00067   
+00068       text += skip;
+00069       textLen -= skip;
+00070   
+00071       csSoftFontCache::SoftGlyphCacheData* cacheData = 
+00072         (csSoftFontCache::SoftGlyphCacheData*)cache-&gt;CacheGlyph (knownFont, 
+00073         glyph, flags);
+00074       <span class="keywordflow">if</span> (!cacheData-&gt;hasGlyph) 
+00075       {
+00076         <span class="comment">// fall back to the default glyph (CS_FONT_DEFAULT_GLYPH)</span>
+00077         cacheData = (csSoftFontCache::SoftGlyphCacheData*)cache-&gt;CacheGlyph (
+00078           knownFont, <a class="code" href="group__gfx2d.html#ga15">CS_FONT_DEFAULT_GLYPH</a>, flags);
+00079         <span class="keywordflow">if</span> (!cacheData-&gt;hasGlyph) <span class="keywordflow">continue</span>;
+00080       }
+00081   
+00082       <span class="keyword">register</span> uint8 *CharImageAlpha = cacheData-&gt;glyphAlphaData;
+00083       <span class="keyword">register</span> uint8 *CharImage = cacheData-&gt;glyphData;
+00084       <span class="keywordflow">if</span> ((!CharImage) &amp;&amp; (!CharImageAlpha))
+00085         <span class="keywordflow">continue</span>;
+00086   
+00087       <a class="code" href="structcsBitmapMetrics.html">csBitmapMetrics</a>* bmetrics;
+00088       <span class="keywordflow">if</span> (CharImageAlpha)
+00089       {
+00090         bmetrics = &amp;cacheData-&gt;alphaMetrics;
+00091       }
+00092       <span class="keywordflow">else</span>
+00093       {
+00094         bmetrics = &amp;cacheData-&gt;bitmapMetrics;
+00095       }
+00096       charW = bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o0">width</a>;
+00097       charH = bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o1">height</a>;
+00098       
+00099       <span class="keywordtype">int</span> y = pen_y - bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o3">top</a>;
+00100       
+00101       <span class="comment">// If we are advancing more than the last char was wide, we have to</span>
+00102       <span class="comment">// fill the 'gap' with bg.</span>
+00103       
+00104       <span class="keywordtype">int</span> x = pen_x - (advance &gt; 0 ? advance : 0) + (bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o2">left</a> &lt; 0 ? bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o2">left</a> : 0);
+00105       advance += bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o2">left</a>;
+00106       
+00107       <span class="comment">// Hack: in case the first char has a negative left bitmap offset,</span>
+00108       <span class="comment">// some of the background isn't drawn. Fix that.</span>
+00109       <span class="keywordflow">if</span> (firstchar)
+00110       {
+00111         <span class="keywordflow">if</span> (advance &lt; 0)
+00112         {
+00113           advance = 0;
+00114         }
+00115         firstchar = <span class="keyword">false</span>;
+00116       }
+00117      
+00118       <span class="keywordflow">if</span> (alphaBG != 0)
+00119       {
+00120         <span class="keywordflow">while</span> (advance &gt; 0)
+00121         {
+00122           <span class="keywordflow">if</span> (x &gt;= ClipX2)
+00123             <span class="keywordflow">return</span>;
+00124     
+00125           <span class="keywordtype">int</span> cury = y;
+00126           <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
+00127           {
+00128             <span class="keywordflow">if</span> ((cury &lt; ClipY1) || (cury &gt;= ClipY2)) <span class="keywordflow">continue</span>;
+00129             <span class="keyword">register</span> Tpixel *VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (x, cury);
+00130             <span class="keywordflow">if</span> (x &gt;= ClipX1) mixerBG.Mix (*VRAM);
+00131           }
+00132           x++; advance--;
+00133         }
+00134       }
+00135       <span class="keywordflow">else</span>
+00136       {
+00137         <span class="keywordflow">if</span> (advance &gt; 0)
+00138         {
+00139           x += advance;
+00140           advance = 0;
+00141         }
+00142       }
+00143   
+00144       <span class="keywordflow">if</span> (x &gt;= ClipX2)
+00145         <span class="keywordflow">return</span>;
+00146   
+00147       <span class="comment">// If character is completely outside the clipping rectangle, continue</span>
+00148       <span class="keywordflow">if</span> (!((x + charW &lt;= ClipX1) || (x &gt;= ClipX2)
+00149        || (y + charH &lt;= ClipY1) || (y &gt;= ClipY2)))
+00150       {
+00151         <span class="keywordtype">int</span> cury = y;
+00152     
+00153         <span class="keywordtype">int</span> oldAdvance = advance;
+00154         <span class="comment">// If character should not be clipped, go the fast path</span>
+00155         <span class="keywordflow">if</span> ((x &lt; ClipX1) || (x + charW &gt;= ClipX2)
+00156          || (y &lt; ClipY1) || (y + charH &gt;= ClipY2))
+00157         {
+00158           <span class="comment">// Perform full clipping</span>
+00159           <span class="keywordtype">int</span> lX = x &lt; ClipX1 ? ClipX1 - x : 0;
+00160           <span class="keywordtype">int</span> rX = x + charW &gt;= ClipX2 ? ClipX2 - x : charW;
+00161           <span class="keywordtype">int</span> lBytes = CharImageAlpha ? lX : lX &gt;&gt; 3;
+00162           <span class="keywordtype">int</span> shiftX = CharImageAlpha ? 0 : lX &amp; 7;
+00163           <span class="keywordtype">int</span> bbl = CharImageAlpha ? charW : (charW + 7) / 8; <span class="comment">// bytes per line</span>
+00164           <span class="keywordtype">int</span> lAbsX = x + lX;
+00165           uint8 *p = CharImageAlpha ? CharImageAlpha - bbl : CharImage - bbl;
+00166           
+00167           <span class="keywordflow">if</span> (CharImageAlpha)
+00168           {
+00169             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
+00170             {
+00171               advance = oldAdvance;
+00172               p += bbl;
+00173               <span class="keywordflow">if</span> ((cury &lt; ClipY1) || (cury &gt;= ClipY2)) 
+00174               {
+00175                 <span class="keywordflow">if</span> (advance &lt; 0) advance = MIN(0, advance + (rX - lX));
+00176                 <span class="keywordflow">continue</span>;
+00177               }
+00178               CharImageAlpha = p + lBytes;
+00179               <span class="keyword">register</span> uint8 CharLine = (*CharImageAlpha++) &lt;&lt; shiftX;
+00180               <span class="keyword">register</span> Tpixel* VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (lAbsX, cury);
+00181               <span class="comment">// If we are advancing less than the last char was wide, the current</span>
+00182               <span class="comment">// and last chars overlap. So we can't draw opaque, but have to draw</span>
+00183               <span class="comment">// transparent instead.</span>
+00184               <span class="keywordflow">if</span> (advance &gt;= 0)
+00185               {
+00186                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = lX; j &lt; rX; j++)
+00187                 {
+00188                   <span class="keywordflow">if</span> (CharLine == 0xff)
+00189                   {
+00190                     mixerFG.Mix (*VRAM);
+00191                   }
+00192                   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (CharLine == 0x00)
+00193                   {
+00194                     mixerBG.Mix (*VRAM);
 00195                   }
-00196                   VRAM++;
-00197                   <span class="keywordflow">if</span> (j &lt; rX-1) CharLine = (*CharImageAlpha++);
-00198                 } <span class="comment">/* endfor */</span>
-00199               }
-00200               <span class="keywordflow">else</span>
-00201               {
-00202                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = lX; j &lt; rX; j++)
-00203                 {
-00204                   <span class="keywordflow">if</span> (CharLine == 0xff)
-00205                   {
-00206                     mixerFG.Mix (*VRAM);
-00207                   }
-00208                   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (CharLine != 0x00)
-00209                   {
-00210                     <span class="comment">// @@@ Could be more optimal, probably.</span>
-00211                     Tpixel mixedFG = *VRAM;
-00212                     mixerFG.Mix (mixedFG);
-00213                     
-00214                     Tpixmixer3 mixer (G2D, mixedFG, CharLine);
-00215                     mixer.Mix (*VRAM);
-00216                   }
-00217                   VRAM++;
-00218                   <span class="keywordflow">if</span> (j &lt; rX-1) CharLine = (*CharImageAlpha++);
-00219                 } <span class="comment">/* endfor */</span>
-00220                 <span class="keywordflow">if</span> (advance &lt; 0) advance++;
-00221               }
-00222             }
-00223           }
-00224           <span class="keywordflow">else</span>
-00225           {
-00226             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
-00227             {
-00228               advance = oldAdvance;
-00229               p += bbl;
-00230               <span class="keywordflow">if</span> ((cury &lt; ClipY1) || (cury &gt;= ClipY2))
-00231               {
-00232                 <span class="keywordflow">if</span> (advance &lt; 0) advance = MIN(0, advance + (rX - lX));
-00233                 <span class="keywordflow">continue</span>;
-00234               }
-00235               CharImage = p + lBytes;
-00236               <span class="keyword">register</span> uint8 CharLine = (*CharImage++) &lt;&lt; shiftX;
-00237               <span class="keyword">register</span> Tpixel* VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (lAbsX, cury);
-00238               <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = lX; j &lt; rX; j++)
-00239               {
-00240                 <span class="keywordflow">if</span> (advance &gt;= 0)
-00241                 {
-00242                   <span class="keywordflow">if</span> (CharLine &amp; 0x80)
-00243                     mixerFG.Mix (*VRAM++);
-00244                   <span class="keywordflow">else</span>
-00245                     mixerBG.Mix (*VRAM++);
-00246                 }
-00247                 <span class="keywordflow">else</span>
-00248                 {
-00249                   <span class="keywordflow">if</span> (CharLine &amp; 0x80)
-00250                     mixerFG.Mix (*VRAM++);
-00251                   <span class="keywordflow">else</span>
-00252                     VRAM++;
-00253                   advance++;
-00254                 }
-00255                 <span class="keywordflow">if</span> ((j &amp; 7) == 7)
-00256                   CharLine = (*CharImage++);
+00196                   <span class="keywordflow">else</span>
+00197                   {
+00198                     <span class="comment">// @@@ Could be more optimal, probably.</span>
+00199                     Tpixel mixedFG = *VRAM;
+00200                     mixerFG.Mix (mixedFG);
+00201                     mixerBG.Mix (*VRAM);
+00202                     
+00203                     Tpixmixer3 mixer (G2D, mixedFG, CharLine);
+00204                     mixer.Mix (*VRAM);
+00205                   }
+00206                   VRAM++;
+00207                   <span class="keywordflow">if</span> (j &lt; rX-1) CharLine = (*CharImageAlpha++);
+00208                 } <span class="comment">/* endfor */</span>
+00209               }
+00210               <span class="keywordflow">else</span>
+00211               {
+00212                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = lX; j &lt; rX; j++)
+00213                 {
+00214                   <span class="keywordflow">if</span> (CharLine == 0xff)
+00215                   {
+00216                     mixerFG.Mix (*VRAM);
+00217                   }
+00218                   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (CharLine != 0x00)
+00219                   {
+00220                     <span class="comment">// @@@ Could be more optimal, probably.</span>
+00221                     Tpixel mixedFG = *VRAM;
+00222                     mixerFG.Mix (mixedFG);
+00223                     
+00224                     Tpixmixer3 mixer (G2D, mixedFG, CharLine);
+00225                     mixer.Mix (*VRAM);
+00226                   }
+00227                   VRAM++;
+00228                   <span class="keywordflow">if</span> (j &lt; rX-1) CharLine = (*CharImageAlpha++);
+00229                 } <span class="comment">/* endfor */</span>
+00230                 <span class="keywordflow">if</span> (advance &lt; 0) advance++;
+00231               }
+00232             }
+00233           }
+00234           <span class="keywordflow">else</span>
+00235           {
+00236             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
+00237             {
+00238               advance = oldAdvance;
+00239               p += bbl;
+00240               <span class="keywordflow">if</span> ((cury &lt; ClipY1) || (cury &gt;= ClipY2))
+00241               {
+00242                 <span class="keywordflow">if</span> (advance &lt; 0) advance = MIN(0, advance + (rX - lX));
+00243                 <span class="keywordflow">continue</span>;
+00244               }
+00245               CharImage = p + lBytes;
+00246               <span class="keyword">register</span> uint8 CharLine = (*CharImage++) &lt;&lt; shiftX;
+00247               <span class="keyword">register</span> Tpixel* VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (lAbsX, cury);
+00248               <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = lX; j &lt; rX; j++)
+00249               {
+00250                 <span class="keywordflow">if</span> (advance &gt;= 0)
+00251                 {
+00252                   <span class="keywordflow">if</span> (CharLine &amp; 0x80)
+00253                     mixerFG.Mix (*VRAM++);
+00254                   <span class="keywordflow">else</span>
+00255                     mixerBG.Mix (*VRAM++);
+00256                 }
 00257                 <span class="keywordflow">else</span>
-00258                   CharLine += CharLine;
-00259               } <span class="comment">/* endfor */</span>
-00260             }
-00261           }
-00262         }
-00263         <span class="keywordflow">else</span>
-00264         {
-00265           <span class="comment">// no clipping</span>
-00266           <span class="keywordflow">if</span> (CharImageAlpha)
-00267           {
-00268             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
-00269             {
-00270               advance = oldAdvance;
-00271               <span class="keyword">register</span> Tpixel* VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (x, cury);
-00272               <span class="keyword">register</span> <span class="keywordtype">unsigned</span> pixW = charW;
-00273               <span class="keyword">register</span> <span class="keywordtype">int</span> pix;
-00274               <span class="keywordflow">for</span> (pix = pixW; pix &gt; 0; pix--)
-00275               {
-00276                 <span class="keyword">register</span> uint8 CharLine = (*CharImageAlpha++);
-00277                 <span class="keywordflow">if</span> (advance &lt; 0)
-00278                 {
-00279                   <span class="keywordflow">if</span> (CharLine == 0xff)
-00280                   {
-00281                     mixerFG.Mix (*VRAM);
-00282                   }
-00283                   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (CharLine != 0x00)
-00284                   {
-00285                     <span class="comment">// @@@ Could be more optimal, probably.</span>
-00286                     Tpixel mixedFG = *VRAM;
-00287                     mixerFG.Mix (mixedFG);
-00288                     
-00289                     Tpixmixer3 mixer (G2D, mixedFG, CharLine);
-00290                     mixer.Mix (*VRAM);
-00291                   }
-00292                 }
-00293                 <span class="keywordflow">else</span>
-00294                 {
-00295                   <span class="keywordflow">if</span> (CharLine == 0xff)
-00296                   {
-00297                     mixerFG.Mix (*VRAM);
-00298                   }
-00299                   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (CharLine == 0x00)
-00300                   {
-00301                     mixerBG.Mix (*VRAM);
-00302                   }
-00303                   <span class="keywordflow">else</span>
-00304                   {
-00305                     <span class="comment">// @@@ Could be more optimal, probably.</span>
-00306                     Tpixel mixedFG = *VRAM;
-00307                     mixerFG.Mix (mixedFG);
-00308                     mixerBG.Mix (*VRAM);
-00309                     
-00310                     Tpixmixer3 mixer (G2D, mixedFG, CharLine);
-00311                     mixer.Mix (*VRAM);
+00258                 {
+00259                   <span class="keywordflow">if</span> (CharLine &amp; 0x80)
+00260                     mixerFG.Mix (*VRAM++);
+00261                   <span class="keywordflow">else</span>
+00262                     VRAM++;
+00263                   advance++;
+00264                 }
+00265                 <span class="keywordflow">if</span> ((j &amp; 7) == 7)
+00266                   CharLine = (*CharImage++);
+00267                 <span class="keywordflow">else</span>
+00268                   CharLine += CharLine;
+00269               } <span class="comment">/* endfor */</span>
+00270             }
+00271           }
+00272         }
+00273         <span class="keywordflow">else</span>
+00274         {
+00275           <span class="comment">// no clipping</span>
+00276           <span class="keywordflow">if</span> (CharImageAlpha)
+00277           {
+00278             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
+00279             {
+00280               advance = oldAdvance;
+00281               <span class="keyword">register</span> Tpixel* VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (x, cury);
+00282               <span class="keyword">register</span> <span class="keywordtype">unsigned</span> pixW = charW;
+00283               <span class="keyword">register</span> <span class="keywordtype">int</span> pix;
+00284               <span class="keywordflow">for</span> (pix = pixW; pix &gt; 0; pix--)
+00285               {
+00286                 <span class="keyword">register</span> uint8 CharLine = (*CharImageAlpha++);
+00287                 <span class="keywordflow">if</span> (advance &lt; 0)
+00288                 {
+00289                   <span class="keywordflow">if</span> (CharLine == 0xff)
+00290                   {
+00291                     mixerFG.Mix (*VRAM);
+00292                   }
+00293                   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (CharLine != 0x00)
+00294                   {
+00295                     <span class="comment">// @@@ Could be more optimal, probably.</span>
+00296                     Tpixel mixedFG = *VRAM;
+00297                     mixerFG.Mix (mixedFG);
+00298                     
+00299                     Tpixmixer3 mixer (G2D, mixedFG, CharLine);
+00300                     mixer.Mix (*VRAM);
+00301                   }
+00302                 }
+00303                 <span class="keywordflow">else</span>
+00304                 {
+00305                   <span class="keywordflow">if</span> (CharLine == 0xff)
+00306                   {
+00307                     mixerFG.Mix (*VRAM);
+00308                   }
+00309                   <span class="keywordflow">else</span> <span class="keywordflow">if</span> (CharLine == 0x00)
+00310                   {
+00311                     mixerBG.Mix (*VRAM);
 00312                   }
-00313                 }
-00314                 <span class="keywordflow">if</span> (advance &lt; 0) advance++;
-00315                 VRAM++;
-00316               }
-00317             }
-00318           }
-00319           <span class="keywordflow">else</span>
-00320           {
-00321             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
-00322             {
-00323               <span class="keyword">register</span> Tpixel* VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (x, cury);
-00324               <span class="keyword">register</span> <span class="keywordtype">unsigned</span> pixW = charW;
-00325               <span class="keywordflow">while</span> (pixW)
-00326               {
-00327                 <span class="keyword">register</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> CharLine = *CharImage++;
-00328                 <span class="keyword">register</span> <span class="keywordtype">int</span> pix;
-00329                 <span class="keywordflow">for</span> (pix = pixW &lt; 8 ? pixW : 8, pixW -= pix; CharLine &amp;&amp; pix; pix--)
-00330                 {
-00331                   <span class="keywordflow">if</span> (advance &lt; 0)
-00332                   {
-00333                     <span class="keywordflow">if</span> (CharLine &amp; 0x80)
-00334                       mixerFG.Mix (*VRAM++);
-00335                     <span class="keywordflow">else</span>
-00336                       VRAM++;
-00337                     <span class="comment">// Addition is faster than shift, at least on i586+</span>
-00338                     CharLine += CharLine;
-00339                   }
-00340                   <span class="keywordflow">else</span>
-00341                   {
-00342                     <span class="keywordflow">if</span> (CharLine &amp; 0x80)
-00343                       mixerFG.Mix (*VRAM++);
-00344                     <span class="keywordflow">else</span>
-00345                       mixerBG.Mix (*VRAM++);
-00346                     <span class="comment">// Addition is faster than shift, at least on i586+</span>
-00347                     CharLine += CharLine;
-00348                   }
-00349                   <span class="keywordflow">if</span> (advance &lt; 0) advance++;
-00350                 } <span class="comment">/* endfor */</span>
-00351                 <span class="keywordflow">if</span> (advance &lt; 0)
-00352                 {
-00353                   VRAM -= advance;
-00354                   pix += advance;
-00355                 }
-00356                 <span class="keywordflow">while</span> (pix--)
-00357                   mixerBG.Mix (*VRAM++);
-00358               } 
-00359             } 
-00360           }
-00361         } <span class="comment">/* endif */</span>
-00362       }
-00363   
-00364       pen_x += cacheData-&gt;glyphMetrics.advance;
-00365       advance += cacheData-&gt;glyphMetrics.advance - (charW + bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o2">left</a>);
-00366     }
-00367     cache-&gt;PurgeEmptyPlanes ();
-00368     
-00369   }
-00370 };
-00371 
-00372 <span class="preprocessor">#endif // __CS_CANVAS_COMMON_DRAW_TEXT_H___</span>
+00313                   <span class="keywordflow">else</span>
+00314                   {
+00315                     <span class="comment">// @@@ Could be more optimal, probably.</span>
+00316                     Tpixel mixedFG = *VRAM;
+00317                     mixerFG.Mix (mixedFG);
+00318                     mixerBG.Mix (*VRAM);
+00319                     
+00320                     Tpixmixer3 mixer (G2D, mixedFG, CharLine);
+00321                     mixer.Mix (*VRAM);
+00322                   }
+00323                 }
+00324                 <span class="keywordflow">if</span> (advance &lt; 0) advance++;
+00325                 VRAM++;
+00326               }
+00327             }
+00328           }
+00329           <span class="keywordflow">else</span>
+00330           {
+00331             <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; charH; i++, cury++)
+00332             {
+00333               <span class="keyword">register</span> Tpixel* VRAM = (Tpixel*)G2D-&gt;<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (x, cury);
+00334               <span class="keyword">register</span> <span class="keywordtype">unsigned</span> pixW = charW;
+00335               <span class="keywordflow">while</span> (pixW)
+00336               {
+00337                 <span class="keyword">register</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> CharLine = *CharImage++;
+00338                 <span class="keyword">register</span> <span class="keywordtype">int</span> pix;
+00339                 <span class="keywordflow">for</span> (pix = pixW &lt; 8 ? pixW : 8, pixW -= pix; CharLine &amp;&amp; pix; pix--)
+00340                 {
+00341                   <span class="keywordflow">if</span> (advance &lt; 0)
+00342                   {
+00343                     <span class="keywordflow">if</span> (CharLine &amp; 0x80)
+00344                       mixerFG.Mix (*VRAM++);
+00345                     <span class="keywordflow">else</span>
+00346                       VRAM++;
+00347                     <span class="comment">// Addition is faster than shift, at least on i586+</span>
+00348                     CharLine += CharLine;
+00349                   }
+00350                   <span class="keywordflow">else</span>
+00351                   {
+00352                     <span class="keywordflow">if</span> (CharLine &amp; 0x80)
+00353                       mixerFG.Mix (*VRAM++);
+00354                     <span class="keywordflow">else</span>
+00355                       mixerBG.Mix (*VRAM++);
+00356                     <span class="comment">// Addition is faster than shift, at least on i586+</span>
+00357                     CharLine += CharLine;
+00358                   }
+00359                   <span class="keywordflow">if</span> (advance &lt; 0) advance++;
+00360                 } <span class="comment">/* endfor */</span>
+00361                 <span class="keywordflow">if</span> (advance &lt; 0)
+00362                 {
+00363                   VRAM -= advance;
+00364                   pix += advance;
+00365                 }
+00366                 <span class="keywordflow">while</span> (pix--)
+00367                   mixerBG.Mix (*VRAM++);
+00368               } 
+00369             } 
+00370           }
+00371         } <span class="comment">/* endif */</span>
+00372       }
+00373   
+00374       pen_x += cacheData-&gt;glyphMetrics.advance;
+00375       advance += cacheData-&gt;glyphMetrics.advance - (charW + bmetrics-&gt;<a class="code" href="structcsBitmapMetrics.html#o2">left</a>);
+00376     }
+00377     cache-&gt;PurgeEmptyPlanes ();
+00378     
+00379   }
+00380 };
+00381 
+00382 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_CANVAS_DRAW_TEXT_H___</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

@@ -106,127 +106,128 @@
 00098   <span class="keyword">friend</span> <span class="keyword">class </span>csGLPixelFormatPicker;
 00099 
 <a name="l00101"></a><a class="code" href="classcsGraphics2DGLCommon.html#p0">00101</a>   <a class="code" href="classcsGLStateCache.html">csGLStateCache</a>* statecache;
-00102   
-00103   <span class="keywordtype">bool</span> hasRenderTarget;
-00104 
-00106   <span class="keywordtype">void</span> DecomposeColor (<span class="keywordtype">int</span> iColor, GLubyte &amp;oR, GLubyte &amp;oG, GLubyte &amp;oB, GLubyte &amp;oA);
-00108   <span class="keywordtype">void</span> DecomposeColor (<span class="keywordtype">int</span> iColor, <span class="keywordtype">float</span> &amp;oR, <span class="keywordtype">float</span> &amp;oG, <span class="keywordtype">float</span> &amp;oB, <span class="keywordtype">float</span> &amp;oA);
-00110   <span class="keywordtype">void</span> setGLColorfromint (<span class="keywordtype">int</span> color);
-00111 
-00112   uint8 *screen_shot;
-00113 
-00114   csGLScreenShot* ssPool;
-00115 
-00116   csGLScreenShot* GetScreenShot ();
-00117   <span class="keywordtype">void</span> RecycleScreenShot (csGLScreenShot* shot);
-00118 
-<a name="l00120"></a><a class="code" href="classcsGraphics2DGLCommon.html#p4">00120</a>   csGLExtensionManager ext;
-00122   <span class="comment">//int multiSamples;</span>
-<a name="l00124"></a><a class="code" href="classcsGraphics2DGLCommon.html#p5">00124</a> <span class="comment"></span>  <span class="keywordtype">bool</span> multiFavorQuality;
-00126   <span class="comment">//int depthBits;</span>
-<a name="l00127"></a><a class="code" href="classcsGraphics2DGLCommon.html#p6">00127</a>   GLPixelFormat currentFormat;
-<a name="l00129"></a><a class="code" href="classcsGraphics2DGLCommon.html#p7">00129</a>   csGLDriverDatabase driverdb;
-00130   <span class="keywordtype">bool</span> useCombineTE;
-00131 
-00132   <span class="keywordtype">void</span> GetPixelFormatString (<span class="keyword">const</span> GLPixelFormat&amp; format, <a class="code" href="classcsString.html">csString</a>&amp; str);
-00133 <span class="keyword">public</span>:
-00134   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetRendererString (<span class="keyword">const</span> <span class="keywordtype">char</span>* str);
-00135   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetVersionString (<span class="keyword">const</span> <span class="keywordtype">char</span>* ver);
-00136 
-00137   <a class="code" href="group__scf.html#ga49">SCF_DECLARE_IBASE_EXT</a>(<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>);
-00138 
-<a name="l00140"></a><a class="code" href="classcsGraphics2DGLCommon.html#o0">00140</a>   <a class="code" href="classcsRef.html">csRef&lt;iEventOutlet&gt;</a> EventOutlet;
-00141 
-00146   csGraphics2DGLCommon (<a class="code" href="structiBase.html">iBase</a> *iParent);
-00147 
-00149   <span class="keyword">virtual</span> ~csGraphics2DGLCommon ();
-00150 
-00151   <span class="comment">/*</span>
-00152 <span class="comment">   * You must supply all the functions not supplied here, such as</span>
-00153 <span class="comment">   * SetMouseCursor etc. Note also that even though Initialize, Open,</span>
-00154 <span class="comment">   * and Close are supplied here, you must still override these functions</span>
-00155 <span class="comment">   * for your own subclass to make system-specific calls for creating and</span>
-00156 <span class="comment">   * showing windows, etc.</span>
-00157 <span class="comment">   */</span>
-00158 
-00160   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a3">Initialize</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg);
-00161 
-00167   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a5">Open</a> ();
-00168 
-00169   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a6">Close</a> ();
-00170 
-00171   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a7">SetClipRect</a> (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
-00172 
-00177   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a9">BeginDraw</a> ();
-00179   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a10">FinishDraw</a> ();
-00180 
-00182   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a49">Resize</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
-00183 
+00102   csGLStateCacheContext *statecontext;
+00103 
+00104   <span class="keywordtype">bool</span> hasRenderTarget;
+00105 
+00107   <span class="keywordtype">void</span> DecomposeColor (<span class="keywordtype">int</span> iColor, GLubyte &amp;oR, GLubyte &amp;oG, GLubyte &amp;oB, GLubyte &amp;oA);
+00109   <span class="keywordtype">void</span> DecomposeColor (<span class="keywordtype">int</span> iColor, <span class="keywordtype">float</span> &amp;oR, <span class="keywordtype">float</span> &amp;oG, <span class="keywordtype">float</span> &amp;oB, <span class="keywordtype">float</span> &amp;oA);
+00111   <span class="keywordtype">void</span> setGLColorfromint (<span class="keywordtype">int</span> color);
+00112 
+00113   uint8 *screen_shot;
+00114 
+00115   csGLScreenShot* ssPool;
+00116 
+00117   csGLScreenShot* GetScreenShot ();
+00118   <span class="keywordtype">void</span> RecycleScreenShot (csGLScreenShot* shot);
+00119 
+<a name="l00121"></a><a class="code" href="classcsGraphics2DGLCommon.html#p5">00121</a>   csGLExtensionManager ext;
+00123   <span class="comment">//int multiSamples;</span>
+<a name="l00125"></a><a class="code" href="classcsGraphics2DGLCommon.html#p6">00125</a> <span class="comment"></span>  <span class="keywordtype">bool</span> multiFavorQuality;
+00127   <span class="comment">//int depthBits;</span>
+<a name="l00128"></a><a class="code" href="classcsGraphics2DGLCommon.html#p7">00128</a>   GLPixelFormat currentFormat;
+<a name="l00130"></a><a class="code" href="classcsGraphics2DGLCommon.html#p8">00130</a>   csGLDriverDatabase driverdb;
+00131   <span class="keywordtype">bool</span> useCombineTE;
+00132 
+00133   <span class="keywordtype">void</span> GetPixelFormatString (<span class="keyword">const</span> GLPixelFormat&amp; format, <a class="code" href="classcsString.html">csString</a>&amp; str);
+00134 <span class="keyword">public</span>:
+00135   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetRendererString (<span class="keyword">const</span> <span class="keywordtype">char</span>* str);
+00136   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetVersionString (<span class="keyword">const</span> <span class="keywordtype">char</span>* ver);
+00137 
+00138   <a class="code" href="group__scf.html#ga49">SCF_DECLARE_IBASE_EXT</a>(<a class="code" href="classcsGraphics2D.html">csGraphics2D</a>);
+00139 
+<a name="l00141"></a><a class="code" href="classcsGraphics2DGLCommon.html#o0">00141</a>   <a class="code" href="classcsRef.html">csRef&lt;iEventOutlet&gt;</a> EventOutlet;
+00142 
+00147   csGraphics2DGLCommon (<a class="code" href="structiBase.html">iBase</a> *iParent);
+00148 
+00150   <span class="keyword">virtual</span> ~csGraphics2DGLCommon ();
+00151 
+00152   <span class="comment">/*</span>
+00153 <span class="comment">   * You must supply all the functions not supplied here, such as</span>
+00154 <span class="comment">   * SetMouseCursor etc. Note also that even though Initialize, Open,</span>
+00155 <span class="comment">   * and Close are supplied here, you must still override these functions</span>
+00156 <span class="comment">   * for your own subclass to make system-specific calls for creating and</span>
+00157 <span class="comment">   * showing windows, etc.</span>
+00158 <span class="comment">   */</span>
+00159 
+00161   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a3">Initialize</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg);
+00162 
+00168   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a5">Open</a> ();
+00169 
+00170   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a6">Close</a> ();
+00171 
+00172   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a7">SetClipRect</a> (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
+00173 
+00178   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a9">BeginDraw</a> ();
+00180   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a10">FinishDraw</a> ();
+00181 
+00183   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a49">Resize</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
 00184 
-00185   <span class="comment">/*</span>
-00186 <span class="comment">   * the remaining functions here do not need to be overridden when</span>
-00187 <span class="comment">   * inheriting from this class</span>
-00188 <span class="comment">   */</span>
-00189 
-00191   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a15">Clear</a> (<span class="keywordtype">int</span> color);
-00192 
-00194   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a22">SetRGB</a> (<span class="keywordtype">int</span> i, <span class="keywordtype">int</span> r, <span class="keywordtype">int</span> g, <span class="keywordtype">int</span> b);
-<a name="l00195"></a><a class="code" href="classcsGraphics2DGLCommon.html#a14">00195</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsGraphics2D.html#a23">FindRGB</a> (<span class="keywordtype">int</span> r, <span class="keywordtype">int</span> g, <span class="keywordtype">int</span> b, <span class="keywordtype">int</span> a = 255)
-00196   {
-00197     <span class="keywordflow">if</span> (r &lt; 0) r = 0; else if (r &gt; 255) r = 255;
-00198     <span class="keywordflow">if</span> (g &lt; 0) g = 0; else if (g &gt; 255) g = 255;
-00199     <span class="keywordflow">if</span> (b &lt; 0) b = 0; else if (b &gt; 255) b = 255;
-00200     <span class="keywordflow">if</span> (a &lt; 0) a = 0; else if (a &gt; 255) a = 255;
-00201     <span class="keywordflow">return</span> ((255 - a) &lt;&lt; 24) | (r &lt;&lt; 16) | (g &lt;&lt; 8) | b;
-00202     <span class="comment">/* Alpha is "inverted" so '-1' can be decomposed to a </span>
-00203 <span class="comment">       transparent color. (But alpha not be inverted, '-1'</span>
-00204 <span class="comment">       would be "opaque white". However, -1 is the color</span>
-00205 <span class="comment">       index for "transparent text background". */</span>
-00206   }
-<a name="l00207"></a><a class="code" href="classcsGraphics2DGLCommon.html#a15">00207</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a24">GetRGB</a> (<span class="keywordtype">int</span> color, <span class="keywordtype">int</span>&amp; r, <span class="keywordtype">int</span>&amp; g, <span class="keywordtype">int</span>&amp; b)
-00208   {
-00209     r = (color &gt;&gt; 16) &amp; 0xff;
-00210     g = (color &gt;&gt; 8) &amp; 0xff;
-00211     b = color &amp; 0xff;
-00212   }
-<a name="l00213"></a><a class="code" href="classcsGraphics2DGLCommon.html#a16">00213</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a24">GetRGB</a> (<span class="keywordtype">int</span> color, <span class="keywordtype">int</span>&amp; r, <span class="keywordtype">int</span>&amp; g, <span class="keywordtype">int</span>&amp; b, <span class="keywordtype">int</span>&amp; a)
-00214   {
-00215     a = 255 - (color &gt;&gt; 24);
-00216     <a class="code" href="classcsGraphics2D.html#a24">GetRGB</a> (color, r, g, b);
-00217   }
-00218 
-00220   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a20">DrawLine</a> (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">int</span> color);
-00222   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a21">DrawBox</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">int</span> color);
-00224   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a17">DrawPixel</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> color);
-00226   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a18">DrawPixels</a> (<a class="code" href="structcsPixelCoord.html">csPixelCoord</a> <span class="keyword">const</span>* pixels, <span class="keywordtype">int</span> num_pixels,
-00227     <span class="keywordtype">int</span> color);
-00229   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a19">Blit</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* data);
-00230 
-00236   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y);
-00237 
-00239   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="classcsGraphics2D.html#a47">ScreenShot</a> ();
-00240 
-00246   <span class="keyword">virtual</span> <a class="code" href="structcsImageArea.html">csImageArea</a> *<a class="code" href="classcsGraphics2D.html#a32">SaveArea</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
-00248   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a33">RestoreArea</a> (<a class="code" href="structcsImageArea.html">csImageArea</a> *Area, <span class="keywordtype">bool</span> Free = <span class="keyword">true</span>);
-00249 
-<a name="l00251"></a><a class="code" href="classcsGraphics2DGLCommon.html#a26">00251</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a14">GetDoubleBufferState</a> ()
-00252   { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
-<a name="l00254"></a><a class="code" href="classcsGraphics2DGLCommon.html#a27">00254</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a13">DoubleBuffer</a> (<span class="keywordtype">bool</span> Enable)
-00255   { <span class="keywordflow">return</span> !Enable; }
-00256 
-00258   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a46">PerformExtensionV</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* command, va_list);
-00259 
-00261   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#b3">DebugCommand</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* cmd);
-00262 
-00263   <span class="comment">//------------------------ iEventPlug interface ---------------------------//</span>
-00264 
-<a name="l00265"></a><a class="code" href="classcsGraphics2DGLCommon.html#a30">00265</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <a class="code" href="structiEventPlug.html#a0">GetPotentiallyConflictingEvents</a> ()
-00266   { <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#ga125">CSEVTYPE_Keyboard</a> | CSEVTYPE_Mouse; }
-<a name="l00267"></a><a class="code" href="classcsGraphics2DGLCommon.html#a31">00267</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <a class="code" href="structiEventPlug.html#a1">QueryEventPriority</a> (<span class="keywordtype">unsigned</span> <span class="comment">/*iType*/</span>)
-00268   { <span class="keywordflow">return</span> 150; }
-00269 };
-00270 
-00271 <span class="preprocessor">#endif // __CS_GLCOMMON2D_H__</span>
+00185 
+00186   <span class="comment">/*</span>
+00187 <span class="comment">   * the remaining functions here do not need to be overridden when</span>
+00188 <span class="comment">   * inheriting from this class</span>
+00189 <span class="comment">   */</span>
+00190 
+00192   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a15">Clear</a> (<span class="keywordtype">int</span> color);
+00193 
+00195   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a22">SetRGB</a> (<span class="keywordtype">int</span> i, <span class="keywordtype">int</span> r, <span class="keywordtype">int</span> g, <span class="keywordtype">int</span> b);
+<a name="l00196"></a><a class="code" href="classcsGraphics2DGLCommon.html#a14">00196</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsGraphics2D.html#a23">FindRGB</a> (<span class="keywordtype">int</span> r, <span class="keywordtype">int</span> g, <span class="keywordtype">int</span> b, <span class="keywordtype">int</span> a = 255)
+00197   {
+00198     <span class="keywordflow">if</span> (r &lt; 0) r = 0; else if (r &gt; 255) r = 255;
+00199     <span class="keywordflow">if</span> (g &lt; 0) g = 0; else if (g &gt; 255) g = 255;
+00200     <span class="keywordflow">if</span> (b &lt; 0) b = 0; else if (b &gt; 255) b = 255;
+00201     <span class="keywordflow">if</span> (a &lt; 0) a = 0; else if (a &gt; 255) a = 255;
+00202     <span class="keywordflow">return</span> ((255 - a) &lt;&lt; 24) | (r &lt;&lt; 16) | (g &lt;&lt; 8) | b;
+00203     <span class="comment">/* Alpha is "inverted" so '-1' can be decomposed to a </span>
+00204 <span class="comment">       transparent color. (But alpha not be inverted, '-1'</span>
+00205 <span class="comment">       would be "opaque white". However, -1 is the color</span>
+00206 <span class="comment">       index for "transparent text background". */</span>
+00207   }
+<a name="l00208"></a><a class="code" href="classcsGraphics2DGLCommon.html#a15">00208</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a24">GetRGB</a> (<span class="keywordtype">int</span> color, <span class="keywordtype">int</span>&amp; r, <span class="keywordtype">int</span>&amp; g, <span class="keywordtype">int</span>&amp; b)
+00209   {
+00210     r = (color &gt;&gt; 16) &amp; 0xff;
+00211     g = (color &gt;&gt; 8) &amp; 0xff;
+00212     b = color &amp; 0xff;
+00213   }
+<a name="l00214"></a><a class="code" href="classcsGraphics2DGLCommon.html#a16">00214</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a24">GetRGB</a> (<span class="keywordtype">int</span> color, <span class="keywordtype">int</span>&amp; r, <span class="keywordtype">int</span>&amp; g, <span class="keywordtype">int</span>&amp; b, <span class="keywordtype">int</span>&amp; a)
+00215   {
+00216     a = 255 - (color &gt;&gt; 24);
+00217     <a class="code" href="classcsGraphics2D.html#a24">GetRGB</a> (color, r, g, b);
+00218   }
+00219 
+00221   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a20">DrawLine</a> (<span class="keywordtype">float</span> x1, <span class="keywordtype">float</span> y1, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2, <span class="keywordtype">int</span> color);
+00223   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a21">DrawBox</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">int</span> color);
+00225   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a17">DrawPixel</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> color);
+00227   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a18">DrawPixels</a> (<a class="code" href="structcsPixelCoord.html">csPixelCoord</a> <span class="keyword">const</span>* pixels, <span class="keywordtype">int</span> num_pixels,
+00228     <span class="keywordtype">int</span> color);
+00230   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a19">Blit</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* data);
+00231 
+00237   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<a class="code" href="classcsGraphics2D.html#a28">GetPixelAt</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y);
+00238 
+00240   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="classcsGraphics2D.html#a47">ScreenShot</a> ();
+00241 
+00247   <span class="keyword">virtual</span> <a class="code" href="structcsImageArea.html">csImageArea</a> *<a class="code" href="classcsGraphics2D.html#a32">SaveArea</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
+00249   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsGraphics2D.html#a33">RestoreArea</a> (<a class="code" href="structcsImageArea.html">csImageArea</a> *Area, <span class="keywordtype">bool</span> Free = <span class="keyword">true</span>);
+00250 
+<a name="l00252"></a><a class="code" href="classcsGraphics2DGLCommon.html#a26">00252</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a14">GetDoubleBufferState</a> ()
+00253   { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
+<a name="l00255"></a><a class="code" href="classcsGraphics2DGLCommon.html#a27">00255</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a13">DoubleBuffer</a> (<span class="keywordtype">bool</span> Enable)
+00256   { <span class="keywordflow">return</span> !Enable; }
+00257 
+00259   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#a46">PerformExtensionV</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* command, va_list);
+00260 
+00262   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsGraphics2D.html#b3">DebugCommand</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* cmd);
+00263 
+00264   <span class="comment">//------------------------ iEventPlug interface ---------------------------//</span>
+00265 
+<a name="l00266"></a><a class="code" href="classcsGraphics2DGLCommon.html#a30">00266</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <a class="code" href="structiEventPlug.html#a0">GetPotentiallyConflictingEvents</a> ()
+00267   { <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#ga125">CSEVTYPE_Keyboard</a> | CSEVTYPE_Mouse; }
+<a name="l00268"></a><a class="code" href="classcsGraphics2DGLCommon.html#a31">00268</a>   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <a class="code" href="structiEventPlug.html#a1">QueryEventPriority</a> (<span class="keywordtype">unsigned</span> <span class="comment">/*iType*/</span>)
+00269   { <span class="keywordflow">return</span> 150; }
+00270 };
+00271 
+00272 <span class="preprocessor">#endif // __CS_GLCOMMON2D_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
