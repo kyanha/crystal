@@ -237,339 +237,341 @@
 00218 <span class="comment">/*</span>
 00219 <span class="comment">  LONG_PTR is used in the Win32 canvases, but it's only defined in newer </span>
 00220 <span class="comment">  Platform or DirectX SDKs (in BaseTsd.h).</span>
-00221 <span class="comment">  Ergo, on older SDKs, we have to define ourselves. One indicator for the</span>
-00222 <span class="comment">  presence of LONG_PTR seems to be if the __int3264 macro is #defines.</span>
+00221 <span class="comment">  Ergo, on older SDKs, we have to define it ourselves. One indicator for the</span>
+00222 <span class="comment">  presence of LONG_PTR seems to be if the __int3264 macro is #defined.</span>
 00223 <span class="comment">  So, if it's not, we define LONG_PTR.</span>
 00224 <span class="comment"> */</span>
 00225 <span class="preprocessor">#ifndef __int3264</span>
 00226 <span class="preprocessor"></span>  <span class="keyword">typedef</span> LONG LONG_PTR;
-00227 <span class="preprocessor">#endif</span>
-00228 <span class="preprocessor"></span>
-00229 <span class="preprocessor">#if defined(_DEBUG) || defined(CS_DEBUG)</span>
-00230 <span class="preprocessor"></span><span class="preprocessor">  #include &lt;assert.h&gt;</span>
-00231 <span class="preprocessor">  #define ASSERT(expression) assert(expression)</span>
-00232 <span class="preprocessor"></span><span class="preprocessor">  #define VERIFY_SUCCESS(expression) assert(SUCCEEDED(expression))</span>
-00233 <span class="preprocessor"></span><span class="preprocessor">  #define VERIFY_RESULT(expression, result) assert(expression == result)</span>
-00234 <span class="preprocessor"></span><span class="preprocessor">  #ifndef CS_DEBUG</span>
-00235 <span class="preprocessor"></span><span class="preprocessor">    #define CS_DEBUG</span>
-00236 <span class="preprocessor"></span><span class="preprocessor">  #endif</span>
-00237 <span class="preprocessor"></span>
-00238 <span class="preprocessor">  #undef  DEBUG_BREAK</span>
-00239 <span class="preprocessor"></span><span class="preprocessor">  #define DEBUG_BREAK ::DebugBreak()</span>
-00240 <span class="preprocessor"></span>  
-00241 <span class="preprocessor">  #if defined(CS_COMPILER_MSVC) </span>
-00242 <span class="preprocessor"></span><span class="preprocessor">    #include &lt;crtdbg.h&gt;</span>
-00243 
-00244 <span class="preprocessor">    #if defined(CS_EXTENSIVE_MEMDEBUG)</span>
-00245 <span class="preprocessor"></span><span class="preprocessor">      #define malloc(size)      _malloc_dbg ((size), _NORMAL_BLOCK, __FILE__, __LINE__)</span>
-00246 <span class="preprocessor"></span><span class="preprocessor">      #define free(ptr)                 _free_dbg ((ptr), _NORMAL_BLOCK)</span>
-00247 <span class="preprocessor"></span><span class="preprocessor">      #define realloc(ptr, size)        _realloc_dbg ((ptr), (size), _NORMAL_BLOCK, __FILE__, __LINE__)</span>
-00248 <span class="preprocessor"></span><span class="preprocessor">      #define calloc(num, size) _calloc_dbg ((num), (size), _NORMAL_BLOCK, __FILE__, __LINE__)</span>
-00249 <span class="preprocessor"></span>
-00250       <span class="comment">// heap consistency check is on by default, leave it</span>
-00251 <span class="preprocessor">      #define CS_WIN32_MSVC_DEBUG_GOOP \</span>
-00252 <span class="preprocessor">        _CrtSetDbgFlag (_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF)</span>
-00253 <span class="preprocessor"></span><span class="preprocessor">    #else</span>
-00254 <span class="preprocessor"></span>      <span class="comment">// turn heap consistency check off</span>
-00255 <span class="preprocessor">      #define CS_WIN32_MSVC_DEBUG_GOOP \</span>
-00256 <span class="preprocessor">        _CrtSetDbgFlag ((_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG) &amp; ~_CRTDBG_ALLOC_MEM_DF) | \</span>
-00257 <span class="preprocessor">          _CRTDBG_LEAK_CHECK_DF)</span>
-00258 <span class="preprocessor"></span><span class="preprocessor">    #endif</span>
-00259 <span class="preprocessor"></span><span class="preprocessor">  #endif</span>
-00260 <span class="preprocessor"></span>
-00261 <span class="preprocessor">#else</span>
-00262 <span class="preprocessor"></span><span class="preprocessor">  #define ASSERT(expression)</span>
-00263 <span class="preprocessor"></span><span class="preprocessor">  #define VERIFY_SUCCESS(expression) expression</span>
-00264 <span class="preprocessor"></span><span class="preprocessor">  #define VERIFY_RESULT(expression, result) expression</span>
-00265 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00266 <span class="preprocessor"></span>
-00267 <span class="preprocessor">#ifdef CS_WIN32_MSVC_DEBUG_GOOP</span>
-00268 <span class="preprocessor"></span><span class="preprocessor">  #define CS_INITIALIZE_PLATFORM_APPLICATION CS_WIN32_MSVC_DEBUG_GOOP</span>
-00269 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00270 <span class="preprocessor"></span>
-00271 <span class="comment">// Defines that this platform supports hardware memory-mapped i/o</span>
-00272 <span class="preprocessor">#define CS_HAVE_MEMORY_MAPPED_IO</span>
-00273 <span class="preprocessor"></span>
-<a name="l00275"></a><a class="code" href="structcsMemMapInfo.html">00275</a> <span class="keyword">struct </span><a class="code" href="structcsMemMapInfo.html">csMemMapInfo</a>
-00276 {
-<a name="l00278"></a><a class="code" href="structcsMemMapInfo.html#o0">00278</a>     HANDLE hMappedFile;
-00279 
-<a name="l00281"></a><a class="code" href="structcsMemMapInfo.html#o1">00281</a>     HANDLE hFileMapping;
-00282     
-<a name="l00284"></a><a class="code" href="structcsMemMapInfo.html#o2">00284</a>     <span class="keywordtype">bool</span> close;
-00285   
-<a name="l00287"></a><a class="code" href="structcsMemMapInfo.html#o3">00287</a>     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *data;
-00288 
-<a name="l00290"></a><a class="code" href="structcsMemMapInfo.html#o4">00290</a>     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> file_size;
-00291 };
-00292 
-00293 <span class="comment">// The 2D graphics driver used by software renderer on this platform</span>
-00294 <span class="preprocessor">#define CS_SOFTWARE_2D_DRIVER "crystalspace.graphics2d.directdraw"</span>
-00295 <span class="preprocessor"></span><span class="preprocessor">#define CS_OPENGL_2D_DRIVER "crystalspace.graphics2d.glwin32"</span>
-00296 <span class="preprocessor"></span>
-00297 <span class="comment">// The sound driver</span>
-00298 <span class="preprocessor">#define CS_SOUND_DRIVER "crystalspace.sound.driver.waveout"</span>
-00299 <span class="preprocessor"></span>
-00300 <span class="comment">// SCF symbol export facility.</span>
-00301 <span class="preprocessor">#ifndef CS_STATIC_LINKED</span>
-00302 <span class="preprocessor"></span><span class="comment">// No need to export the symbols when statically linking into one big binary.</span>
-00303 <span class="preprocessor"># undef CS_EXPORTED_FUNCTION</span>
-00304 <span class="preprocessor"></span><span class="preprocessor"># define CS_EXPORTED_FUNCTION extern "C" __declspec(dllexport)</span>
-00305 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00306 <span class="preprocessor"></span>
-00307 <span class="preprocessor">#if defined (CS_COMPILER_BCC)</span>
-00308 <span class="preprocessor"></span><span class="preprocessor">#  define strcasecmp stricmp</span>
-00309 <span class="preprocessor"></span><span class="preprocessor">#  define strncasecmp strnicmp</span>
-00310 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00311 <span class="preprocessor"></span>
-00312 <span class="preprocessor">#if defined (CS_COMPILER_MSVC)</span>
-00313 <span class="preprocessor"></span><span class="preprocessor">#  define strcasecmp _stricmp</span>
-00314 <span class="preprocessor"></span><span class="preprocessor">#  define strncasecmp _strnicmp</span>
-00315 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00316 <span class="preprocessor"></span>
-00317 <span class="comment">// Maximal path length</span>
-00318 <span class="preprocessor">#ifndef CS_MAXPATHLEN</span>
-00319 <span class="preprocessor"></span><span class="preprocessor">#  ifdef _MAX_FNAME</span>
-00320 <span class="preprocessor"></span><span class="preprocessor">#    define CS_MAXPATHLEN _MAX_FNAME</span>
-00321 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
-00322 <span class="preprocessor"></span><span class="preprocessor">#    define CS_MAXPATHLEN 260 </span><span class="comment">/* not 256 */</span>
-00323 <span class="preprocessor">#  endif</span>
-00324 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00325 <span class="preprocessor"></span><span class="preprocessor">#define CS_PATH_DELIMITER ';'</span>
-00326 <span class="preprocessor"></span><span class="preprocessor">#define CS_PATH_SEPARATOR '\\'</span>
-00327 <span class="preprocessor"></span>
-00328 <span class="preprocessor">#if defined (__CYGWIN32__)</span>
-00329 <span class="preprocessor"></span><span class="preprocessor">#  define CS_MKDIR(path) mkdir(path, 0755)</span>
-00330 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00331 <span class="preprocessor"></span><span class="preprocessor">#  define CS_MKDIR(path) _mkdir(path)</span>
-00332 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00333 <span class="preprocessor"></span>
-00334 <span class="comment">// Directory read functions, file access, etc.</span>
-00335 <span class="preprocessor">#include &lt;io.h&gt;</span>
-00336 <span class="preprocessor">#ifndef F_OK</span>
-00337 <span class="preprocessor"></span><span class="preprocessor">#  define F_OK 0</span>
-00338 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00339 <span class="preprocessor"></span><span class="preprocessor">#ifndef R_OK</span>
-00340 <span class="preprocessor"></span><span class="preprocessor">#  define R_OK 2</span>
-00341 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00342 <span class="preprocessor"></span><span class="preprocessor">#ifndef W_OK</span>
-00343 <span class="preprocessor"></span><span class="preprocessor">#  define W_OK 4</span>
-00344 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00345 <span class="preprocessor"></span>
-00346 <span class="preprocessor">#define CS_PROVIDES_EXPAND_PATH 1</span>
-00347 <span class="preprocessor"></span><span class="keyword">inline</span> <span class="keywordtype">void</span> csPlatformExpandPath(<span class="keyword">const</span> <span class="keywordtype">char</span>* path, <span class="keywordtype">char</span>* buffer, <span class="keywordtype">int</span> nbuf) {}
-00348 
-00349 <span class="keyword">struct </span>dirent
-00350 {
-00351   <span class="keywordtype">char</span> d_name [<a class="code" href="cssysdef_8h.html#a3">CS_MAXPATHLEN</a> + 1]; <span class="comment">// File name, 0 terminated</span>
-00352   size_t d_size; <span class="comment">// File size (bytes)</span>
-00353   <span class="keywordtype">long</span> dwFileAttributes; <span class="comment">// File attributes (Windows-specific)</span>
-00354 };
-00355 
-00356 <span class="comment">// Although CS_COMPILER_GCC has opendir(), readdir(), etc., we prefer the CS</span>
-00357 <span class="comment">// versions of these functions.</span>
-00358 <span class="preprocessor">#define CS_WIN32_USE_CUSTOM_OPENDIR</span>
-00359 <span class="preprocessor"></span>
-00360 <span class="preprocessor"># if defined(CS_WIN32_USE_CUSTOM_OPENDIR)</span>
-00361 <span class="preprocessor"></span>  <span class="keyword">struct </span>DIR;
-00362 <span class="preprocessor"># ifdef CS_CRYSTALSPACE_LIB</span>
-00363 <span class="preprocessor"></span>  <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_EXPORT_SYM DIR *opendir (<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
-00364   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_EXPORT_SYM dirent *readdir (DIR *dirp);
-00365   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_EXPORT_SYM <span class="keywordtype">int</span> closedir (DIR *dirp);
-00366   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_EXPORT_SYM <span class="keywordtype">bool</span> isdir (<span class="keyword">const</span> <span class="keywordtype">char</span> *path, dirent *de);
-00367 <span class="preprocessor"># else</span>
-00368 <span class="preprocessor"></span>  <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_IMPORT_SYM DIR *opendir (<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
-00369   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_IMPORT_SYM dirent *readdir (DIR *dirp);
-00370   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_IMPORT_SYM <span class="keywordtype">int</span> closedir (DIR *dirp);
-00371   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_IMPORT_SYM <span class="keywordtype">bool</span> isdir (<span class="keyword">const</span> <span class="keywordtype">char</span> *path, dirent *de);
-00372 <span class="preprocessor"># endif // CS_BUILD_SHARED_LIBS</span>
-00373 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00374 <span class="preprocessor"></span>
-00375 <span class="preprocessor">#if defined (CS_COMPILER_BCC) || defined (__CYGWIN32__)</span>
-00376 <span class="preprocessor"></span><span class="preprocessor">#  define GETPID() getpid()</span>
-00377 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00378 <span class="preprocessor"></span><span class="preprocessor">#  define GETPID() _getpid()</span>
-00379 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00380 <span class="preprocessor"></span>
-00381 <span class="preprocessor">#ifdef __CYGWIN32__</span>
-00382 <span class="preprocessor"></span><span class="preprocessor">#  include &lt;unistd.h&gt;</span>
-00383 <span class="preprocessor">#  define CS_TEMP_FILE "cs%lu.tmp", (unsigned long)getpid()</span>
-00384 <span class="preprocessor"></span><span class="preprocessor">#  define CS_TEMP_DIR  "/tmp"</span>
-00385 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00386 <span class="preprocessor"></span><span class="preprocessor">#  include &lt;process.h&gt;</span>
-00387 <span class="preprocessor">#  define CS_TEMP_FILE "%x.cs", GETPID()</span>
-00388 <span class="preprocessor"></span><span class="preprocessor">#  define CS_TEMP_DIR win32_tempdir()</span>
-00389 <span class="preprocessor"></span>   <span class="comment">// This is the function called by CS_TEMP_DIR macro</span>
-00390    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">char</span> *win32_tempdir()
-00391    {
-00392      <span class="keywordtype">char</span> *tmp;
-00393      <span class="keywordflow">if</span> ((tmp = getenv (<span class="stringliteral">"TMP"</span>)) != 0)
-00394        <span class="keywordflow">return</span> tmp;
-00395      <span class="keywordflow">if</span> ((tmp = getenv (<span class="stringliteral">"TEMP"</span>)) != 0)
+00227   <span class="keyword">typedef</span> ULONG ULONG_PTR;
+00228   <span class="keyword">typedef</span> DWORD DWORD_PTR;
+00229 <span class="preprocessor">#endif</span>
+00230 <span class="preprocessor"></span>
+00231 <span class="preprocessor">#if defined(_DEBUG) || defined(CS_DEBUG)</span>
+00232 <span class="preprocessor"></span><span class="preprocessor">  #include &lt;assert.h&gt;</span>
+00233 <span class="preprocessor">  #define ASSERT(expression) assert(expression)</span>
+00234 <span class="preprocessor"></span><span class="preprocessor">  #define VERIFY_SUCCESS(expression) assert(SUCCEEDED(expression))</span>
+00235 <span class="preprocessor"></span><span class="preprocessor">  #define VERIFY_RESULT(expression, result) assert(expression == result)</span>
+00236 <span class="preprocessor"></span><span class="preprocessor">  #ifndef CS_DEBUG</span>
+00237 <span class="preprocessor"></span><span class="preprocessor">    #define CS_DEBUG</span>
+00238 <span class="preprocessor"></span><span class="preprocessor">  #endif</span>
+00239 <span class="preprocessor"></span>
+00240 <span class="preprocessor">  #undef  DEBUG_BREAK</span>
+00241 <span class="preprocessor"></span><span class="preprocessor">  #define DEBUG_BREAK ::DebugBreak()</span>
+00242 <span class="preprocessor"></span>  
+00243 <span class="preprocessor">  #if defined(CS_COMPILER_MSVC) </span>
+00244 <span class="preprocessor"></span><span class="preprocessor">    #include &lt;crtdbg.h&gt;</span>
+00245 
+00246 <span class="preprocessor">    #if defined(CS_EXTENSIVE_MEMDEBUG)</span>
+00247 <span class="preprocessor"></span><span class="preprocessor">      #define malloc(size)      _malloc_dbg ((size), _NORMAL_BLOCK, __FILE__, __LINE__)</span>
+00248 <span class="preprocessor"></span><span class="preprocessor">      #define free(ptr)                 _free_dbg ((ptr), _NORMAL_BLOCK)</span>
+00249 <span class="preprocessor"></span><span class="preprocessor">      #define realloc(ptr, size)        _realloc_dbg ((ptr), (size), _NORMAL_BLOCK, __FILE__, __LINE__)</span>
+00250 <span class="preprocessor"></span><span class="preprocessor">      #define calloc(num, size) _calloc_dbg ((num), (size), _NORMAL_BLOCK, __FILE__, __LINE__)</span>
+00251 <span class="preprocessor"></span>
+00252       <span class="comment">// heap consistency check is on by default, leave it</span>
+00253 <span class="preprocessor">      #define CS_WIN32_MSVC_DEBUG_GOOP \</span>
+00254 <span class="preprocessor">        _CrtSetDbgFlag (_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF)</span>
+00255 <span class="preprocessor"></span><span class="preprocessor">    #else</span>
+00256 <span class="preprocessor"></span>      <span class="comment">// turn heap consistency check off</span>
+00257 <span class="preprocessor">      #define CS_WIN32_MSVC_DEBUG_GOOP \</span>
+00258 <span class="preprocessor">        _CrtSetDbgFlag ((_CrtSetDbgFlag (_CRTDBG_REPORT_FLAG) &amp; ~_CRTDBG_ALLOC_MEM_DF) | \</span>
+00259 <span class="preprocessor">          _CRTDBG_LEAK_CHECK_DF)</span>
+00260 <span class="preprocessor"></span><span class="preprocessor">    #endif</span>
+00261 <span class="preprocessor"></span><span class="preprocessor">  #endif</span>
+00262 <span class="preprocessor"></span>
+00263 <span class="preprocessor">#else</span>
+00264 <span class="preprocessor"></span><span class="preprocessor">  #define ASSERT(expression)</span>
+00265 <span class="preprocessor"></span><span class="preprocessor">  #define VERIFY_SUCCESS(expression) expression</span>
+00266 <span class="preprocessor"></span><span class="preprocessor">  #define VERIFY_RESULT(expression, result) expression</span>
+00267 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00268 <span class="preprocessor"></span>
+00269 <span class="preprocessor">#ifdef CS_WIN32_MSVC_DEBUG_GOOP</span>
+00270 <span class="preprocessor"></span><span class="preprocessor">  #define CS_INITIALIZE_PLATFORM_APPLICATION CS_WIN32_MSVC_DEBUG_GOOP</span>
+00271 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00272 <span class="preprocessor"></span>
+00273 <span class="comment">// Defines that this platform supports hardware memory-mapped i/o</span>
+00274 <span class="preprocessor">#define CS_HAVE_MEMORY_MAPPED_IO</span>
+00275 <span class="preprocessor"></span>
+<a name="l00277"></a><a class="code" href="structcsMemMapInfo.html">00277</a> <span class="keyword">struct </span><a class="code" href="structcsMemMapInfo.html">csMemMapInfo</a>
+00278 {
+<a name="l00280"></a><a class="code" href="structcsMemMapInfo.html#o0">00280</a>     HANDLE hMappedFile;
+00281 
+<a name="l00283"></a><a class="code" href="structcsMemMapInfo.html#o1">00283</a>     HANDLE hFileMapping;
+00284     
+<a name="l00286"></a><a class="code" href="structcsMemMapInfo.html#o2">00286</a>     <span class="keywordtype">bool</span> close;
+00287   
+<a name="l00289"></a><a class="code" href="structcsMemMapInfo.html#o3">00289</a>     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *data;
+00290 
+<a name="l00292"></a><a class="code" href="structcsMemMapInfo.html#o4">00292</a>     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> file_size;
+00293 };
+00294 
+00295 <span class="comment">// The 2D graphics driver used by software renderer on this platform</span>
+00296 <span class="preprocessor">#define CS_SOFTWARE_2D_DRIVER "crystalspace.graphics2d.directdraw"</span>
+00297 <span class="preprocessor"></span><span class="preprocessor">#define CS_OPENGL_2D_DRIVER "crystalspace.graphics2d.glwin32"</span>
+00298 <span class="preprocessor"></span>
+00299 <span class="comment">// The sound driver</span>
+00300 <span class="preprocessor">#define CS_SOUND_DRIVER "crystalspace.sound.driver.waveout"</span>
+00301 <span class="preprocessor"></span>
+00302 <span class="comment">// SCF symbol export facility.</span>
+00303 <span class="preprocessor">#ifndef CS_STATIC_LINKED</span>
+00304 <span class="preprocessor"></span><span class="comment">// No need to export the symbols when statically linking into one big binary.</span>
+00305 <span class="preprocessor"># undef CS_EXPORTED_FUNCTION</span>
+00306 <span class="preprocessor"></span><span class="preprocessor"># define CS_EXPORTED_FUNCTION extern "C" __declspec(dllexport)</span>
+00307 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00308 <span class="preprocessor"></span>
+00309 <span class="preprocessor">#if defined (CS_COMPILER_BCC)</span>
+00310 <span class="preprocessor"></span><span class="preprocessor">#  define strcasecmp stricmp</span>
+00311 <span class="preprocessor"></span><span class="preprocessor">#  define strncasecmp strnicmp</span>
+00312 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00313 <span class="preprocessor"></span>
+00314 <span class="preprocessor">#if defined (CS_COMPILER_MSVC)</span>
+00315 <span class="preprocessor"></span><span class="preprocessor">#  define strcasecmp _stricmp</span>
+00316 <span class="preprocessor"></span><span class="preprocessor">#  define strncasecmp _strnicmp</span>
+00317 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00318 <span class="preprocessor"></span>
+00319 <span class="comment">// Maximal path length</span>
+00320 <span class="preprocessor">#ifndef CS_MAXPATHLEN</span>
+00321 <span class="preprocessor"></span><span class="preprocessor">#  ifdef _MAX_FNAME</span>
+00322 <span class="preprocessor"></span><span class="preprocessor">#    define CS_MAXPATHLEN _MAX_FNAME</span>
+00323 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
+00324 <span class="preprocessor"></span><span class="preprocessor">#    define CS_MAXPATHLEN 260 </span><span class="comment">/* not 256 */</span>
+00325 <span class="preprocessor">#  endif</span>
+00326 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00327 <span class="preprocessor"></span><span class="preprocessor">#define CS_PATH_DELIMITER ';'</span>
+00328 <span class="preprocessor"></span><span class="preprocessor">#define CS_PATH_SEPARATOR '\\'</span>
+00329 <span class="preprocessor"></span>
+00330 <span class="preprocessor">#if defined (__CYGWIN32__)</span>
+00331 <span class="preprocessor"></span><span class="preprocessor">#  define CS_MKDIR(path) mkdir(path, 0755)</span>
+00332 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00333 <span class="preprocessor"></span><span class="preprocessor">#  define CS_MKDIR(path) _mkdir(path)</span>
+00334 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00335 <span class="preprocessor"></span>
+00336 <span class="comment">// Directory read functions, file access, etc.</span>
+00337 <span class="preprocessor">#include &lt;io.h&gt;</span>
+00338 <span class="preprocessor">#ifndef F_OK</span>
+00339 <span class="preprocessor"></span><span class="preprocessor">#  define F_OK 0</span>
+00340 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00341 <span class="preprocessor"></span><span class="preprocessor">#ifndef R_OK</span>
+00342 <span class="preprocessor"></span><span class="preprocessor">#  define R_OK 2</span>
+00343 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00344 <span class="preprocessor"></span><span class="preprocessor">#ifndef W_OK</span>
+00345 <span class="preprocessor"></span><span class="preprocessor">#  define W_OK 4</span>
+00346 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00347 <span class="preprocessor"></span>
+00348 <span class="preprocessor">#define CS_PROVIDES_EXPAND_PATH 1</span>
+00349 <span class="preprocessor"></span><span class="keyword">inline</span> <span class="keywordtype">void</span> csPlatformExpandPath(<span class="keyword">const</span> <span class="keywordtype">char</span>* path, <span class="keywordtype">char</span>* buffer, <span class="keywordtype">int</span> nbuf) {}
+00350 
+00351 <span class="keyword">struct </span>dirent
+00352 {
+00353   <span class="keywordtype">char</span> d_name [<a class="code" href="cssysdef_8h.html#a3">CS_MAXPATHLEN</a> + 1]; <span class="comment">// File name, 0 terminated</span>
+00354   size_t d_size; <span class="comment">// File size (bytes)</span>
+00355   <span class="keywordtype">long</span> dwFileAttributes; <span class="comment">// File attributes (Windows-specific)</span>
+00356 };
+00357 
+00358 <span class="comment">// Although CS_COMPILER_GCC has opendir(), readdir(), etc., we prefer the CS</span>
+00359 <span class="comment">// versions of these functions.</span>
+00360 <span class="preprocessor">#define CS_WIN32_USE_CUSTOM_OPENDIR</span>
+00361 <span class="preprocessor"></span>
+00362 <span class="preprocessor"># if defined(CS_WIN32_USE_CUSTOM_OPENDIR)</span>
+00363 <span class="preprocessor"></span>  <span class="keyword">struct </span>DIR;
+00364 <span class="preprocessor"># ifdef CS_CRYSTALSPACE_LIB</span>
+00365 <span class="preprocessor"></span>  <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_EXPORT_SYM DIR *opendir (<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
+00366   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_EXPORT_SYM dirent *readdir (DIR *dirp);
+00367   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_EXPORT_SYM <span class="keywordtype">int</span> closedir (DIR *dirp);
+00368   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_EXPORT_SYM <span class="keywordtype">bool</span> isdir (<span class="keyword">const</span> <span class="keywordtype">char</span> *path, dirent *de);
+00369 <span class="preprocessor"># else</span>
+00370 <span class="preprocessor"></span>  <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_IMPORT_SYM DIR *opendir (<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
+00371   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_IMPORT_SYM dirent *readdir (DIR *dirp);
+00372   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_IMPORT_SYM <span class="keywordtype">int</span> closedir (DIR *dirp);
+00373   <span class="keyword">extern</span> <span class="stringliteral">"C"</span> CS_IMPORT_SYM <span class="keywordtype">bool</span> isdir (<span class="keyword">const</span> <span class="keywordtype">char</span> *path, dirent *de);
+00374 <span class="preprocessor"># endif // CS_BUILD_SHARED_LIBS</span>
+00375 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00376 <span class="preprocessor"></span>
+00377 <span class="preprocessor">#if defined (CS_COMPILER_BCC) || defined (__CYGWIN32__)</span>
+00378 <span class="preprocessor"></span><span class="preprocessor">#  define GETPID() getpid()</span>
+00379 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00380 <span class="preprocessor"></span><span class="preprocessor">#  define GETPID() _getpid()</span>
+00381 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00382 <span class="preprocessor"></span>
+00383 <span class="preprocessor">#ifdef __CYGWIN32__</span>
+00384 <span class="preprocessor"></span><span class="preprocessor">#  include &lt;unistd.h&gt;</span>
+00385 <span class="preprocessor">#  define CS_TEMP_FILE "cs%lu.tmp", (unsigned long)getpid()</span>
+00386 <span class="preprocessor"></span><span class="preprocessor">#  define CS_TEMP_DIR  "/tmp"</span>
+00387 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00388 <span class="preprocessor"></span><span class="preprocessor">#  include &lt;process.h&gt;</span>
+00389 <span class="preprocessor">#  define CS_TEMP_FILE "%x.cs", GETPID()</span>
+00390 <span class="preprocessor"></span><span class="preprocessor">#  define CS_TEMP_DIR win32_tempdir()</span>
+00391 <span class="preprocessor"></span>   <span class="comment">// This is the function called by CS_TEMP_DIR macro</span>
+00392    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">char</span> *win32_tempdir()
+00393    {
+00394      <span class="keywordtype">char</span> *tmp;
+00395      <span class="keywordflow">if</span> ((tmp = getenv (<span class="stringliteral">"TMP"</span>)) != 0)
 00396        <span class="keywordflow">return</span> tmp;
-00397      <span class="keywordflow">return</span> <span class="stringliteral">""</span>;
-00398    }
-00399 <span class="preprocessor">#endif</span>
-00400 <span class="preprocessor"></span>
-00401 <span class="comment">// Microsoft Visual C++ compiler includes a very in-efficient 'memcpy'.</span>
-00402 <span class="comment">// This also replaces the older 'better_memcpy', which was also not as</span>
-00403 <span class="comment">// efficient as it could be ergo... heres a better solution.</span>
-00404 <span class="preprocessor">#if defined(CS_COMPILER_MSVC) &amp;&amp; (_MSC_VER &lt; 1300)</span>
-00405 <span class="preprocessor"></span><span class="preprocessor">#include &lt;memory.h&gt;</span>
-00406 <span class="preprocessor">#define memcpy fast_mem_copy</span>
-00407 <span class="preprocessor"></span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span>* fast_mem_copy (<span class="keywordtype">void</span> *dest, <span class="keyword">const</span> <span class="keywordtype">void</span> *src, <span class="keywordtype">int</span> count)
-00408 {
-00409     __asm
-00410     {
-00411       mov               eax, count
-00412       mov               esi, src
-00413       mov               edi, dest
-00414       xor               ecx, ecx
-00415 
-00416       <span class="comment">// Check for 'short' moves</span>
-00417       cmp               eax, 16
-00418       jl                do_short
-00419                 
-00420       <span class="comment">// Move enough bytes to align 'dest'</span>
-00421       sub               ecx, edi
-00422       and               ecx, 3
-00423       je                skip
-00424       sub               eax, ecx
-00425       rep               movsb
-00426 
-00427       skip:
-00428         mov             ecx, eax
-00429         and             eax, 3
-00430         shr             ecx, 2
-00431         rep             movsd
-00432         test    eax, eax
-00433         je              end
-00434 
-00435       do_short:
-00436         mov             ecx, eax
-00437         rep             movsb
-00438 
-00439       end:
-00440     }
-00441 
-00442     <span class="keywordflow">return</span> dest;
-00443 }
-00444 <span class="preprocessor">#endif</span>
-00445 <span class="preprocessor"></span>
-00446 <span class="preprocessor">#ifdef CS_COMPILER_BCC</span>
-00447 <span class="preprocessor"></span><span class="comment">// Major hack due to pow failures in CS for Borland, removing this</span>
-00448 <span class="comment">// causes millions of strings to print out -- Brandon Ehle</span>
-00449 <span class="preprocessor">#define pow(arga, argb) ( (!arga &amp;&amp; !argb)?0:pow(arga, argb) )</span>
-00450 <span class="preprocessor"></span><span class="comment">// Dunno why this is in CS -- Brandon Ehle</span>
-00451 <span class="preprocessor">#define DEBUG_BREAK</span>
-00452 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00453 <span class="preprocessor"></span>
-00454 <span class="preprocessor">#if defined (CS_PROCESSOR_X86)</span>
-00455 <span class="preprocessor"></span><span class="preprocessor">#  define CS_LITTLE_ENDIAN</span>
-00456 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00457 <span class="preprocessor"></span><span class="preprocessor">#  error "Please define a suitable CS_XXX_ENDIAN macro in win32/csosdefs.h!"</span>
-00458 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00459 <span class="preprocessor"></span>
-00460 <span class="preprocessor">#if defined(CS_COMPILER_BCC)</span>
-00461 <span class="preprocessor"></span>  <span class="comment">// The Borland C++ compiler does not accept a 'main' routine</span>
-00462   <span class="comment">// in a program which already contains WinMain. This is a work-around.</span>
-00463 <span class="preprocessor">  #undef main</span>
-00464 <span class="preprocessor"></span><span class="preprocessor">  #define main csMain</span>
-00465 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00466 <span class="preprocessor"></span>
-00467 <span class="comment">// cygwin has no _beginthread and _endthread functions</span>
-00468 <span class="preprocessor">#ifdef __CYGWIN32__</span>
-00469 <span class="preprocessor"></span><span class="preprocessor">#ifndef _beginthread</span>
-00470 <span class="preprocessor"></span><span class="preprocessor">#define _beginthread(func, stack, ptr)  CreateThread (0, 0, \</span>
-00471 <span class="preprocessor">          LPTHREAD_START_ROUTINE(func), ptr, CREATE_SUSPENDED, 0)</span>
-00472 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00473 <span class="preprocessor"></span><span class="preprocessor">#ifndef _endthread</span>
-00474 <span class="preprocessor"></span><span class="preprocessor">#define _endthread()  {}</span>
-00475 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00476 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00477 <span class="preprocessor"></span>
-00478 <span class="comment">// just to avoid windows.h inclusion</span>
-00479 <span class="preprocessor">#define csSW_SHOWNORMAL 1</span>
-00480 <span class="preprocessor"></span>
-00481 <span class="preprocessor">#if defined(CS_COMPILER_GCC) &amp;&amp; defined(__STRICT_ANSI__)</span>
-00482 <span class="preprocessor"></span><span class="comment">// Need those...</span>
-00483   <span class="keyword">extern</span> <span class="keywordtype">int</span>            _argc;
-00484   <span class="keyword">extern</span> <span class="keywordtype">char</span>** _argv;
-00485 <span class="preprocessor">  #define CS_WIN32_ARGC _argc</span>
-00486 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGV _argv</span>
-00487 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_COMPILER_BCC) </span>
-00488 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGC _argc</span>
-00489 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGV _argv</span>
-00490 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00491 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGC __argc</span>
-00492 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGV __argv</span>
-00493 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00494 <span class="preprocessor"></span>
-00495 
-00496 <span class="preprocessor">#ifdef __CYGWIN32__</span>
-00497 <span class="preprocessor"></span><span class="preprocessor">#if !defined(CS_IMPLEMENT_PLATFORM_APPLICATION)</span>
-00498 <span class="preprocessor"></span><span class="preprocessor">#define CS_IMPLEMENT_PLATFORM_APPLICATION</span>
-00499 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00500 <span class="preprocessor"></span>
-00501 <span class="preprocessor">#else // __CYGWIN32__</span>
+00397      <span class="keywordflow">if</span> ((tmp = getenv (<span class="stringliteral">"TEMP"</span>)) != 0)
+00398        <span class="keywordflow">return</span> tmp;
+00399      <span class="keywordflow">return</span> <span class="stringliteral">""</span>;
+00400    }
+00401 <span class="preprocessor">#endif</span>
+00402 <span class="preprocessor"></span>
+00403 <span class="comment">// Microsoft Visual C++ compiler includes a very in-efficient 'memcpy'.</span>
+00404 <span class="comment">// This also replaces the older 'better_memcpy', which was also not as</span>
+00405 <span class="comment">// efficient as it could be ergo... heres a better solution.</span>
+00406 <span class="preprocessor">#if defined(CS_COMPILER_MSVC) &amp;&amp; (_MSC_VER &lt; 1300)</span>
+00407 <span class="preprocessor"></span><span class="preprocessor">#include &lt;memory.h&gt;</span>
+00408 <span class="preprocessor">#define memcpy fast_mem_copy</span>
+00409 <span class="preprocessor"></span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span>* fast_mem_copy (<span class="keywordtype">void</span> *dest, <span class="keyword">const</span> <span class="keywordtype">void</span> *src, <span class="keywordtype">int</span> count)
+00410 {
+00411     __asm
+00412     {
+00413       mov               eax, count
+00414       mov               esi, src
+00415       mov               edi, dest
+00416       xor               ecx, ecx
+00417 
+00418       <span class="comment">// Check for 'short' moves</span>
+00419       cmp               eax, 16
+00420       jl                do_short
+00421                 
+00422       <span class="comment">// Move enough bytes to align 'dest'</span>
+00423       sub               ecx, edi
+00424       and               ecx, 3
+00425       je                skip
+00426       sub               eax, ecx
+00427       rep               movsb
+00428 
+00429       skip:
+00430         mov             ecx, eax
+00431         and             eax, 3
+00432         shr             ecx, 2
+00433         rep             movsd
+00434         test    eax, eax
+00435         je              end
+00436 
+00437       do_short:
+00438         mov             ecx, eax
+00439         rep             movsb
+00440 
+00441       end:
+00442     }
+00443 
+00444     <span class="keywordflow">return</span> dest;
+00445 }
+00446 <span class="preprocessor">#endif</span>
+00447 <span class="preprocessor"></span>
+00448 <span class="preprocessor">#ifdef CS_COMPILER_BCC</span>
+00449 <span class="preprocessor"></span><span class="comment">// Major hack due to pow failures in CS for Borland, removing this</span>
+00450 <span class="comment">// causes millions of strings to print out -- Brandon Ehle</span>
+00451 <span class="preprocessor">#define pow(arga, argb) ( (!arga &amp;&amp; !argb)?0:pow(arga, argb) )</span>
+00452 <span class="preprocessor"></span><span class="comment">// Dunno why this is in CS -- Brandon Ehle</span>
+00453 <span class="preprocessor">#define DEBUG_BREAK</span>
+00454 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00455 <span class="preprocessor"></span>
+00456 <span class="preprocessor">#if defined (CS_PROCESSOR_X86)</span>
+00457 <span class="preprocessor"></span><span class="preprocessor">#  define CS_LITTLE_ENDIAN</span>
+00458 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00459 <span class="preprocessor"></span><span class="preprocessor">#  error "Please define a suitable CS_XXX_ENDIAN macro in win32/csosdefs.h!"</span>
+00460 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00461 <span class="preprocessor"></span>
+00462 <span class="preprocessor">#if defined(CS_COMPILER_BCC)</span>
+00463 <span class="preprocessor"></span>  <span class="comment">// The Borland C++ compiler does not accept a 'main' routine</span>
+00464   <span class="comment">// in a program which already contains WinMain. This is a work-around.</span>
+00465 <span class="preprocessor">  #undef main</span>
+00466 <span class="preprocessor"></span><span class="preprocessor">  #define main csMain</span>
+00467 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00468 <span class="preprocessor"></span>
+00469 <span class="comment">// cygwin has no _beginthread and _endthread functions</span>
+00470 <span class="preprocessor">#ifdef __CYGWIN32__</span>
+00471 <span class="preprocessor"></span><span class="preprocessor">#ifndef _beginthread</span>
+00472 <span class="preprocessor"></span><span class="preprocessor">#define _beginthread(func, stack, ptr)  CreateThread (0, 0, \</span>
+00473 <span class="preprocessor">          LPTHREAD_START_ROUTINE(func), ptr, CREATE_SUSPENDED, 0)</span>
+00474 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00475 <span class="preprocessor"></span><span class="preprocessor">#ifndef _endthread</span>
+00476 <span class="preprocessor"></span><span class="preprocessor">#define _endthread()  {}</span>
+00477 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00478 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00479 <span class="preprocessor"></span>
+00480 <span class="comment">// just to avoid windows.h inclusion</span>
+00481 <span class="preprocessor">#define csSW_SHOWNORMAL 1</span>
+00482 <span class="preprocessor"></span>
+00483 <span class="preprocessor">#if defined(CS_COMPILER_GCC) &amp;&amp; defined(__STRICT_ANSI__)</span>
+00484 <span class="preprocessor"></span><span class="comment">// Need those...</span>
+00485   <span class="keyword">extern</span> <span class="keywordtype">int</span>            _argc;
+00486   <span class="keyword">extern</span> <span class="keywordtype">char</span>** _argv;
+00487 <span class="preprocessor">  #define CS_WIN32_ARGC _argc</span>
+00488 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGV _argv</span>
+00489 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_COMPILER_BCC) </span>
+00490 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGC _argc</span>
+00491 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGV _argv</span>
+00492 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00493 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGC __argc</span>
+00494 <span class="preprocessor"></span><span class="preprocessor">  #define CS_WIN32_ARGV __argv</span>
+00495 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00496 <span class="preprocessor"></span>
+00497 
+00498 <span class="preprocessor">#ifdef __CYGWIN32__</span>
+00499 <span class="preprocessor"></span><span class="preprocessor">#if !defined(CS_IMPLEMENT_PLATFORM_APPLICATION)</span>
+00500 <span class="preprocessor"></span><span class="preprocessor">#define CS_IMPLEMENT_PLATFORM_APPLICATION</span>
+00501 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 00502 <span class="preprocessor"></span>
-00503 <span class="comment">/*</span>
-00504 <span class="comment"> if the EXE is compiled as a GUI app,</span>
-00505 <span class="comment"> a WinMain is needed. But if compiled</span>
-00506 <span class="comment"> as a console app it's not used but main() is</span>
-00507 <span class="comment"> instead. </span>
-00508 <span class="comment"> */</span>
-00509 
-00510 <span class="preprocessor">#if !defined(CS_IMPLEMENT_PLATFORM_APPLICATION)</span>
-00511 <span class="preprocessor"></span><span class="preprocessor">#ifndef __STRICT_ANSI__</span>
-00512 <span class="preprocessor"></span><span class="preprocessor">  #define csMain main</span>
-00513 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00514 <span class="preprocessor"></span>  <span class="comment">/* Work around "error: ISO C++ forbids taking address of function `::main'"</span>
-00515 <span class="comment">   * when compiling -ansi -pedantic */</span>
-00516 <span class="preprocessor">  #define csMain mainWithAnotherNameBecauseISOCPPForbidsIt</span>
-00517 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00518 <span class="preprocessor"></span><span class="preprocessor">#define CS_IMPLEMENT_PLATFORM_APPLICATION                              \</span>
-00519 <span class="preprocessor">int csMain (int argc, char* argv[]);                            \</span>
-00520 <span class="preprocessor">int WINAPI WinMain (HINSTANCE hApp, HINSTANCE prev, LPSTR cmd, int show)\</span>
-00521 <span class="preprocessor">{                                                                      \</span>
-00522 <span class="preprocessor">  (void)hApp;                                                          \</span>
-00523 <span class="preprocessor">  (void)show;                                                          \</span>
-00524 <span class="preprocessor">  (void)prev;                                                          \</span>
-00525 <span class="preprocessor">  (void)cmd;                                                           \</span>
-00526 <span class="preprocessor">  int ret = csMain (CS_WIN32_ARGC, CS_WIN32_ARGV);                     \</span>
-00527 <span class="preprocessor">  return ret;                                                          \</span>
-00528 <span class="preprocessor">}</span>
-00529 <span class="preprocessor"></span><span class="preprocessor">#ifdef __STRICT_ANSI__</span>
-00530 <span class="preprocessor"></span><span class="preprocessor">  #define main mainWithAnotherNameBecauseISOCPPForbidsIt</span>
-00531 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00532 <span class="preprocessor"></span><span class="preprocessor">#endif // CS_IMPLEMENT_PLATFORM_APPLICATION</span>
-00533 <span class="preprocessor"></span>
-00534 <span class="preprocessor">#endif // __CYGWIN32__</span>
+00503 <span class="preprocessor">#else // __CYGWIN32__</span>
+00504 <span class="preprocessor"></span>
+00505 <span class="comment">/*</span>
+00506 <span class="comment"> if the EXE is compiled as a GUI app,</span>
+00507 <span class="comment"> a WinMain is needed. But if compiled</span>
+00508 <span class="comment"> as a console app it's not used but main() is</span>
+00509 <span class="comment"> instead. </span>
+00510 <span class="comment"> */</span>
+00511 
+00512 <span class="preprocessor">#if !defined(CS_IMPLEMENT_PLATFORM_APPLICATION)</span>
+00513 <span class="preprocessor"></span><span class="preprocessor">#ifndef __STRICT_ANSI__</span>
+00514 <span class="preprocessor"></span><span class="preprocessor">  #define csMain main</span>
+00515 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00516 <span class="preprocessor"></span>  <span class="comment">/* Work around "error: ISO C++ forbids taking address of function `::main'"</span>
+00517 <span class="comment">   * when compiling -ansi -pedantic */</span>
+00518 <span class="preprocessor">  #define csMain mainWithAnotherNameBecauseISOCPPForbidsIt</span>
+00519 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00520 <span class="preprocessor"></span><span class="preprocessor">#define CS_IMPLEMENT_PLATFORM_APPLICATION                              \</span>
+00521 <span class="preprocessor">int csMain (int argc, char* argv[]);                            \</span>
+00522 <span class="preprocessor">int WINAPI WinMain (HINSTANCE hApp, HINSTANCE prev, LPSTR cmd, int show)\</span>
+00523 <span class="preprocessor">{                                                                      \</span>
+00524 <span class="preprocessor">  (void)hApp;                                                          \</span>
+00525 <span class="preprocessor">  (void)show;                                                          \</span>
+00526 <span class="preprocessor">  (void)prev;                                                          \</span>
+00527 <span class="preprocessor">  (void)cmd;                                                           \</span>
+00528 <span class="preprocessor">  int ret = csMain (CS_WIN32_ARGC, CS_WIN32_ARGV);                     \</span>
+00529 <span class="preprocessor">  return ret;                                                          \</span>
+00530 <span class="preprocessor">}</span>
+00531 <span class="preprocessor"></span><span class="preprocessor">#ifdef __STRICT_ANSI__</span>
+00532 <span class="preprocessor"></span><span class="preprocessor">  #define main mainWithAnotherNameBecauseISOCPPForbidsIt</span>
+00533 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00534 <span class="preprocessor"></span><span class="preprocessor">#endif // CS_IMPLEMENT_PLATFORM_APPLICATION</span>
 00535 <span class="preprocessor"></span>
-00536 <span class="preprocessor">#if !defined(CS_STATIC_LINKED)</span>
+00536 <span class="preprocessor">#endif // __CYGWIN32__</span>
 00537 <span class="preprocessor"></span>
-00538 <span class="preprocessor">#if !defined(CS_IMPLEMENT_PLATFORM_PLUGIN)</span>
-00539 <span class="preprocessor"></span><span class="preprocessor">#define CS_IMPLEMENT_PLATFORM_PLUGIN                                   \</span>
-00540 <span class="preprocessor">int _cs_main(int argc, char* argv[])                                   \</span>
-00541 <span class="preprocessor">{                                                                      \</span>
-00542 <span class="preprocessor">         return 0;                                                     \</span>
-00543 <span class="preprocessor">}                                                                      \</span>
-00544 <span class="preprocessor">extern "C" BOOL WINAPI                                                 \</span>
-00545 <span class="preprocessor">DllMain (HINSTANCE hinstDLL, DWORD fdwReason, LPVOID </span><span class="comment">/*lpvReserved*/</span>)  \
-00546 {                                                                      \
-00547           return TRUE;                                                 \
-00548 }                                                                      \
-00549 CS_EXPORTED_FUNCTION const char* plugin_compiler()                     \
-00550 {                                                                      \
-00551          return CS_COMPILER_NAME;                                      \
-00552 }
-00553 <span class="preprocessor">#endif // CS_IMPLEMENT_PLATFORM_PLUGIN</span>
-00554 <span class="preprocessor"></span>
-00555 <span class="preprocessor">#endif // CS_STATIC_LINKED</span>
+00538 <span class="preprocessor">#if !defined(CS_STATIC_LINKED)</span>
+00539 <span class="preprocessor"></span>
+00540 <span class="preprocessor">#if !defined(CS_IMPLEMENT_PLATFORM_PLUGIN)</span>
+00541 <span class="preprocessor"></span><span class="preprocessor">#define CS_IMPLEMENT_PLATFORM_PLUGIN                                   \</span>
+00542 <span class="preprocessor">int _cs_main(int argc, char* argv[])                                   \</span>
+00543 <span class="preprocessor">{                                                                      \</span>
+00544 <span class="preprocessor">         return 0;                                                     \</span>
+00545 <span class="preprocessor">}                                                                      \</span>
+00546 <span class="preprocessor">extern "C" BOOL WINAPI                                                 \</span>
+00547 <span class="preprocessor">DllMain (HINSTANCE hinstDLL, DWORD fdwReason, LPVOID </span><span class="comment">/*lpvReserved*/</span>)  \
+00548 {                                                                      \
+00549           return TRUE;                                                 \
+00550 }                                                                      \
+00551 CS_EXPORTED_FUNCTION const char* plugin_compiler()                     \
+00552 {                                                                      \
+00553          return CS_COMPILER_NAME;                                      \
+00554 }
+00555 <span class="preprocessor">#endif // CS_IMPLEMENT_PLATFORM_PLUGIN</span>
 00556 <span class="preprocessor"></span>
-00557 <span class="preprocessor">#include "sanity.inc"</span>
-00558 
-00559 <span class="preprocessor">#endif // __CS_CSOSDEFS_H__</span>
+00557 <span class="preprocessor">#endif // CS_STATIC_LINKED</span>
+00558 <span class="preprocessor"></span>
+00559 <span class="preprocessor">#include "sanity.inc"</span>
+00560 
+00561 <span class="preprocessor">#endif // __CS_CSOSDEFS_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
