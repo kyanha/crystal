@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Release Notes 17</TITLE>
+<TITLE>Crystal Space: Release Notes 18</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Release Notes 17">
-<META NAME="keywords" CONTENT="Crystal Space: Release Notes 17">
+<META NAME="description" CONTENT="Crystal Space: Release Notes 18">
+<META NAME="keywords" CONTENT="Crystal Space: Release Notes 18">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,453 +23,538 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC932"></A>
+<A NAME="SEC927"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC923"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC903"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC936"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> C.8 Release Notes from 0.16 to 0.17 </H2>
-<!--docid::SEC932::-->
+<H2> C.7 Release Notes from 0.17 to 0.18 </H2>
+<!--docid::SEC927::-->
 <P>
 
-This section documents the major changes between versions 0.16 and 0.17 of of
+This section documents the major changes between versions 0.17 and 0.18 of of
 Crystal Space.
 </P><P>
 
+<A NAME="SEC928"></A>
+<H3> Name Change: csWorld => csEngine </H3>
+<!--docid::SEC928::-->
+<P>
+
+The class `<SAMP>csWorld</SAMP>' has been renamed to `<SAMP>csEngine</SAMP>'.  Here is a
+summary of all the changes which result from this:
+</P><P>
+
+<UL>
+<LI>
+<CODE>iWorld</CODE> becomes <CODE>iEngine</CODE>
+<LI>
+<CODE>csWorld</CODE> becomes <CODE>csEngine</CODE>
+<LI>
+<CODE>csWorldConfig</CODE> becomes <CODE>csEngineConfig</CODE>
+<LI>
+<CODE>csWorldState</CODE> becomes <CODE>csEngineState</CODE>
+<LI>
+<CODE>csWorldStateVector</CODE> becomes <CODE>csEngineStateVector</CODE>
+<LI>
+<CODE>iworld.h</CODE> becomes <CODE>iengine.h</CODE>
+<LI>
+<CODE>world.h</CODE> becomes <CODE>engine.h</CODE>
+</UL>
+<P>
+
+<A NAME="SEC929"></A>
+<H3> csThingTemplate Removed </H3>
+<!--docid::SEC929::-->
+<P>
+
+The class `<SAMP>csThingTemplate</SAMP>' has been removed.  Instead you use normal
+`<SAMP>csThing</SAMP>' instances and clone them using <CODE>csThing::MergeTemplate()</CODE>.
+The `<SAMP>thing_templates</SAMP>' list in `<SAMP>csEngine</SAMP>' is still there but it now
+contains instances of `<SAMP>csThing</SAMP>' instead of `<SAMP>csThingTemplate</SAMP>'.  This
+also means that `<SAMP>csPolygonTemplate</SAMP>' is removed.  Fixing applications for
+this change is not very hard.  It mostly means replacing `<SAMP>csThingTemplate</SAMP>'
+with `<SAMP>csThing</SAMP>' and then doing small modifications to the API.
+</P><P>
+
+<A NAME="SEC930"></A>
+<H3> Configuration File Changes </H3>
+<!--docid::SEC930::-->
+<P>
+
+The configuration file format has changed significantly.  In contrast to the
+INI format used previously, Crystal Space now uses a flat format.
+Sections are gone.  Every configuration file is just a list of keys in the
+following format:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>; optional comment
+; (can also be several lines long)
+KeyName = Value
+</pre></td></tr></table></P><P>
+
+Also, key names have been changed completely.  Keys are organized in a
+pseudo-hierarchical structure by using key names such as
+`<SAMP>Engine.Lighting.Ambient.Red</SAMP>'.  To convert your own configuration files to
+the new format, you should take all keys from all sections and rename them
+using the template `<SAMP>ApplicationName.SectionName.KeyName</SAMP>'.  This is only a
+suggestion.  You can choose whatever name you want, except that the initial
+`<SAMP>ApplicationName.</SAMP>' should be used in order to avoid naming collisions with
+keys in other configuration files.  This is done to give every option a unique
+name.  The same should be done for plugins
+(`<SAMP>PluginName.SectionName.KeyName</SAMP>').
+</P><P>
+
+Comments at the end of the file are preserved when saving the file.
+</P><P>
+
+On the application side, things have also changed:
+</P><P>
+
+<UL>
+<LI>
+The old `<SAMP>csIniFile</SAMP>' class still exists.  All these changes refer to the
+difference between `<SAMP>csIniFile</SAMP>' and `<SAMP>csConfigFile</SAMP>', and the difference
+between `<SAMP>iConfigFile</SAMP>' and `<SAMP>iConfigFileNew</SAMP>'.  Sorry for this mess, but
+there were a few cases where I could not (yet) port modules to the new config
+system, so they still require the old system.  This will change soon.  The
+header files for the new system are `<TT>CS/csutil/cfgfile.h</TT>' and
+`<TT>icfgnew.h</TT>'.  The main system configuration file already uses the new
+system.
+<P>
+
+<LI>
+To read or write configuration keys, you now only pass the key name and default
+value, because sections no longer exist.  Be careful when porting, because the
+line:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>const char *s = Config-&#62;GetStr("section", "key");
+</pre></td></tr></table></P><P>
+
+In your code may now be interpreted as:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>const char *s = Config-&#62;GetStr("key", "default");
+</pre></td></tr></table></P><P>
+
+The compiler will not complain about this.
+</P><P>
+
+<LI>
+<CODE>GetYesNo()</CODE> and <CODE>SetYesNo()</CODE> have been renamed to <CODE>GetBool()</CODE>
+and <CODE>SetBool()</CODE>.
+<P>
+
+<LI>
+The `<SAMP>dirty</SAMP>' flag is now hidden inside the configuration file object. The
+<CODE>Save()</CODE> method respects this flag.
+<P>
+
+<LI>
+The section and data iterators have been merged into a single object. This
+iterator can be used to cycle through all options, or through all options
+in one <EM>subsection</EM>, which is the initial substring of the key name.
+For example, if you iterate all options in subsection `<SAMP>Engine.Lighting.</SAMP>',
+you will get all options whose name begin with this string. Note the trailing
+dot. It is part of the subsection name. This is important if you have other
+options like `<SAMP>Engine.LightingActivate</SAMP>', which would otherwise be
+enumerated as well. It is also important because you can ask an iterator for
+the <EM>local</EM> name of the current key, which is everything but the
+subsection name. For example, If your iterator loops through
+`<SAMP>Engine.Lighting.</SAMP>', then the key `<SAMP>Engine.Lighting.Ambient.Red</SAMP>'
+would have the local name `<SAMP>Ambient.Red</SAMP>'. If you omit the trailing dot,
+this would be `<SAMP>.Ambient.Red</SAMP>', which may not be what you want. To
+retrieve the local name, call <CODE>Iterator-&#62;GetName(true);</CODE>.
+<P>
+
+<LI>
+Convenience methods such as GetInt(), GetFloat(), and GetBool() have been
+added to the iterators.
+<P>
+
+<LI>
+The <CODE>Prev()</CODE> method of iterators has been removed because a new planned
+implementation of the `<SAMP>iConfigFileNew</SAMP>' interface is probably not able
+to implement this method. Also, it was never used.
+</UL>
+<P>
+
+<A NAME="SEC931"></A>
+<H3> Mesh Object Plugins </H3>
+<!--docid::SEC931::-->
+<P>
+
+Particle systems, 2D sprites, and 3D sprites are now no longer in the
+engine. This means that classes like `<SAMP>csSprite3D</SAMP>', `<SAMP>csSprite2D</SAMP>',
+`<SAMP>csParticleSystem</SAMP>', etc., are no longer directly accessible and now
+have to be accessed through the new mesh object plugin system.
+</P><P>
+
+In the engine the two primary mesh-related classes are now `<SAMP>csMeshWrapper</SAMP>'
+and `<SAMP>csMeshFactoryWrapper</SAMP>'.  The old `<SAMP>csSprite</SAMP>' class which was the
+superclass of all sprites has been replaced with `<SAMP>csMeshWrapper</SAMP>'
+`<SAMP>csMeshFactoryWrapper</SAMP>' is roughly similar to what `<SAMP>csSpriteTemplate</SAMP>'
+used to do except that it is now also a parent for particle system and 2D
+sprite instances.
+</P><P>
+
+The explanation below mainly tells you how to port the original
+`<SAMP>csSprite3D</SAMP>' code to the new system.  The other stuff follows almost
+automatically from what you see below.
+</P><P>
+
+Here is a list of things that are removed and which things
+you will have to use instead. More detailed info will come later:
+</P><P>
+
+<UL>
+<LI>
+<CODE>csSprite</CODE> => <CODE>csMeshWrapper</CODE>
+<LI>
+<CODE>csSprite2D</CODE> => <CODE>csMeshWrapper</CODE>, <CODE>iSprite2DState</CODE>
+<LI>
+<CODE>csSprite3D</CODE> => <CODE>csMeshWrapper</CODE>, <CODE>iSprite3DState</CODE>
+<LI>
+<CODE>csSpriteTemplate</CODE> => <CODE>csMeshFactoryWrapper</CODE>,
+<CODE>iSprite3DFactoryState</CODE>
+<LI>
+<CODE>csFrame</CODE> => <CODE>iSpriteFrame</CODE>
+<LI>
+<CODE>csSpriteAction</CODE> => <CODE>iSpriteAction</CODE>
+<LI>
+<CODE>csSkeleton</CODE> => <CODE>iSkeleton</CODE>
+<LI>
+<CODE>csSkeletonLimb</CODE> => <CODE>iSkeletonLimb</CODE>
+<LI>
+<CODE>csSkeletonConnection</CODE> => <CODE>iSkeletonConnection</CODE>
+<LI>
+<CODE>csSkeletonState</CODE> => <CODE>iSkeletonState</CODE>
+<LI>
+<CODE>csSkeletonLimbState</CODE> => <CODE>iSkeletonLimbState</CODE>
+<LI>
+<CODE>csSkeletonConnectionState</CODE> => <CODE>iSkeletonConnectionState</CODE>
+<LI>
+<CODE>iSprite</CODE> => <CODE>iMeshWrapper</CODE>
+<LI>
+<CODE>iSpriteTemplate</CODE> => <CODE>iMeshFactoryWrapper</CODE>
+<LI>
+<CODE>csLoader::LoadSpriteTemplate()</CODE> => Use `<TT>spr3dldr</TT>' plugin to
+load factories
+<LI>
+<CODE>csLoader::LoadSprite()</CODE> => Use `<TT>spr3dldr</TT>' plugin to load
+sprites
+<LI>
+<CODE>csEngine::sprites</CODE> => <CODE>csEngine::meshes</CODE>
+<LI>
+<CODE>csEngine::RemoveSprite</CODE> => <CODE>csEngine::RemoveMesh</CODE>
+<LI>
+<CODE>csEngine::UnlinkSprite</CODE> => <CODE>csEngine::UnlinkMesh</CODE>
+<LI>
+<CODE>csEngine::sprite_templates</CODE> => <CODE>csEngine::mesh_factories</CODE>
+<LI>
+<CODE>csSector::sprites</CODE> => <CODE>csSector::meshes</CODE>
+</UL>
+<P>
+
+In addition to that the `<SAMP>SPRITE</SAMP>' keyword in map files is also no longer
+supported. Instead you should use the new `<SAMP>MESHOBJ</SAMP>' keyword.
+</P><P>
+
+It is recommended that anyone who wants to convert to the new system should
+first to read the general documentation about the mesh object plugin system
+(see section <A HREF="cs_207.html#SEC552">7.7 Mesh Object Plug-In System</A>).  Read this very carefully.  A good understanding is
+required to perform a successful conversion.
+</P><P>
+
+In addition to what is explained, there are also two convenience functions to
+create mesh factories and mesh objects:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/**
+ * Convenience function to create a mesh factory from a
+ * given type.  The type plugin will only be loaded if
+ * needed.  'classId' is the SCF name of the plugin (like
+ * 'crystalspace.mesh.object.cube').  Returns NULL on
+ * failure.  The factory will be registered with the engine
+ * under the given name.  If there is already a factory with
+ * that name no new factory will be created but the found
+ * one is returned instead.  If the name is NULL then no
+ * name will be set and no check will happen if the factory
+ * already exists.
+ */
+virtual iMeshFactoryWrapper* CreateMeshFactory(
+  const char* classId, const char* name) = 0;
+
+/**
+ * Convenience function to create a mesh object for a given
+ * factory.  If 'sector' is NULL then the mesh object will
+ * not be set to a position.  Returns NULL on failure.  The
+ * object will be given the specified name.  'name' can be
+ * NULL if no name is wanted.  Different mesh objects can
+ * have the same name (in contrast with factory objects).
+ */
+virtual iMeshWrapper* CreateMeshObject(
+  iMeshFactoryWrapper* factory, const char* name,
+  iSector* sector, const csVector3&#38; pos) = 0;
+</pre></td></tr></table></P><P>
+
+To see how to use them you can take a look at the Simple application.
+</P><P>
+
+Here are a few examples of old code compared to new code:
+</P><P>
+
+Old code:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>// Load a sprite template from disk.
+csSpriteTemplate* spritetmpl =
+  csLoader::LoadSpriteTemplate (engine, "/lib/std/sprite1");
+// Add the sprite to the engine.
+csSprite3D* sprite = spritetmpl-&#62;NewSprite (engine);
+sprite-&#62;SetName ("MySprite");
+engine-&#62;sprites.Push (sprite);
+sprite-&#62;GetMovable ().SetSector (room);
+csMatrix3 m; m.Identity (); m *= 5.;
+sprite-&#62;GetMovable ().SetTransform (m);
+sprite-&#62;GetMovable ().SetPosition (csVector3 (-3, 5, 3));
+sprite-&#62;GetMovable ().UpdateMove ();
+sprite-&#62;SetAction ("default");
+sprite-&#62;InitSprite ();
+</pre></td></tr></table></P><P>
+
+New code:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>// Load a sprite template from disk.
+csMeshFactoryWrapper* spritetmpl =
+  csLoader::LoadMeshObjectFactory (engine, "/lib/std/sprite1");
+if (spritetmpl == NULL)
+{
+  Printf (MSG_FATAL_ERROR, "Error loading mesh object factory!\n");
+  cleanup ();
+  exit (1);
+}
+// Add the sprite to the engine.
+iMeshWrapper* sprite = engine-&#62;CreateMeshObject (
+   QUERY_INTERFACE (spritetmpl, iMeshFactoryWrapper),
+  "MySprite",
+  QUERY_INTERFACE (room, iSector),
+  csVector3 (-3, 5, 3));
+csMatrix3 m; m.Identity (); m *= 5.;
+sprite-&#62;GetMovable ()-&#62;SetTransform (m);
+sprite-&#62;GetMovable ()-&#62;UpdateMove ();
+iSprite3DState* spstate =
+  QUERY_INTERFACE (sprite-&#62;GetMeshObject (), iSprite3DState);
+spstate-&#62;SetAction ("default");
+spstate-&#62;DecRef ();
+</pre></td></tr></table></P><P>
+
+Keep in mind that for this to work `<TT>/lib/std/sprite1</TT>' has to be modified
+from old to new syntax, as well.
+</P><P>
+
+Here is an example for sprite templates:
+</P><P>
+
+Old syntax (sprite template):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SPRITE 'mySpriteTmpl' (
+  TEXNR ('xxx.gif')
+  FRAME (@dots{...})
+  @dots{...}
+)
+</pre></td></tr></table></P><P>
+
+New syntax (mesh wrapper factory):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>MESHOBJ 'mySpriteTmpl' (
+  PLUGIN ('crystalspace.mesh.loader.factory.sprite.3d')
+  PARAMS (
+    MATERIAL ('xxx')
+    FRAME (<small>...</small>)
+    <small>...</small>
+  )
+)
+</pre></td></tr></table></P><P>
+
+And here is an example for actual sprite instances:
+</P><P>
+
+Old syntax (sprite):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SPRITE 'mySprite' (
+  TEXNR ('xxx.gif')
+  TEMPLATE ('mySpriteTmpl', 'someAction')
+  MOVE (<small>...</small>)
+)
+</pre></td></tr></table></P><P>
+
+New syntax (mesh wrapper):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>MESHOBJ 'mySprite' (
+  PLUGIN ('crystalspace.mesh.loader.sprite.3d')
+  PARAMS (
+    MATERIAL ('xxx')
+    FACTORY ('mySpriteTmpl')
+    ACTION ('someAction')
+  )
+  MOVE (<small>...</small>)
+)
+</pre></td></tr></table></P><P>
+
+Here are some additional notes.
+</P><P>
+
+<UL>
+<LI>
+Notice that <CODE>MOVE()</CODE> goes outside the <CODE>PARAMS()</CODE> block for a sprite.
+<LI>
+Note that the new `<SAMP>spr3d</SAMP>' can not work with textures. It needs materials.
+So add a definition to the `<SAMP>MATERIALS</SAMP>' section.
+</UL>
+<P>
+
+<A NAME="SEC932"></A>
+<H3> csPixmap Moved and Renamed </H3>
+<!--docid::SEC932::-->
+<P>
+
+`<SAMP>csPixmap</SAMP>' has moved to the new `<TT>csfx</TT>' library, so you will need to
+include the header file from that library.  Note that `<SAMP>csPixmap</SAMP>' is now
+also an abstract class so where you would, in the past, instantiate
+`<SAMP>csPixmap</SAMP>', you now need to instantiate `<SAMP>csSimplePixmap</SAMP>', instead.
+In arguments and variables it is recommended you still use `<SAMP>csPixmap</SAMP>' as
+it will allow you to use other kinds of pixmaps there, as well.
+</P><P>
+
 <A NAME="SEC933"></A>
-<H3> Signature Change: NextFrame(elapsed_time/current_time) </H3>
+<H3> General Use of SCF Interfaces </H3>
 <!--docid::SEC933::-->
 <P>
 
-<CODE>csSystemDriver::NextFrame()</CODE> no longer accepts `<SAMP>elapsed_time</SAMP>' and
-`<SAMP>current_time</SAMP>' arguments, so you have to change the prototype of your own
-subclassed version of <CODE>NextFrame()</CODE> and call the following three lines in
-the order below (only if you need the elapsed and current time, of course):
+In general it is now a good idea to use SCF interfaces to access objects
+instead of the normal classes wherever possible.  This applies mostly to the
+engine (i.e. use methods from `<SAMP>iEngine</SAMP>' rather than `<SAMP>csEngine</SAMP>').
+Consequently, also use `<SAMP>iMeshWrapper</SAMP>' instead of `<SAMP>csMeshWrapper</SAMP>', and
+`<SAMP>iMaterialWrapper</SAMP>' instead of `<SAMP>csMaterialWrapper</SAMP>', and so on.  This
+will make the transition to version 1.0 easier when the engine will be fully
+accessible as a plugin.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>void MySubclass::NextFrame()
-{
-  SysSystemDriver::NextFrame();
-  cs_time elapsed_time, current_time;
-  GetElapsedTime(elapsed_time,current_time);
-  <small>...</small>
-</pre></td></tr></table></P><P>
-
 <A NAME="SEC934"></A>
-<H3> Signature Change: HandleEvent(csEvent) </H3>
+<H3> Sound System Changes </H3>
 <!--docid::SEC934::-->
 <P>
 
-The argument of <CODE>csSystemDriver::HandleEvent()</CODE> has changed from a
-`<SAMP>csEvent*</SAMP>' parameter to an `<SAMP>iEvent*</SAMP>'.  Update your subclassed
-versions if present.
+There have been three main changes in the sound system:
 </P><P>
 
+<UL>
+<LI>
+Some of the options in the configuration file have become redundant.  The
+others have been moved to `<TT>CS/data/config/sound.cfg</TT>'.  Have a look at this
+file to see which options remain.
+<P>
+
+<LI>
+As before, a sound can be loaded as a static or streamed sound, but this
+difference is now expressed by using different classes: `<SAMP>iSoundData</SAMP>' and
+`<SAMP>iSoundStream</SAMP>'. You can create any number of instances (sources) of a
+static sound, but only one instance of a streamed sound. In fact, whenever
+you play a static sound, a separate sound stream is created from it. The
+definition of a static sound is now explicitly "a sound of which any
+number of instances can be created".
+<P>
+
+<LI>
+The system of 3D and non-3D sources has been changed a bit. Every sound source
+now has a new attribute, the 3D mode. This mode can also be changed after the
+source is created. It can be set to the following values:
+<P>
+
+<DL COMPACT>
+<DT><CODE>SOUND3D_DISABLE</CODE>
+<DD>This will cause the sound source to produce no 3D effect. This is also the
+only mode in which the original stereo effects are preserved.  (This does not
+work correctly at the moment.)
+<P>
+
+<DT><CODE>SOUND3D_ABSOLUTE</CODE>
+<DD>This will interpret the position of the sound source and the listener as
+absolute coordinates and create the 3D effect based on this.
+<P>
+
+<DT><CODE>SOUND3D_RELATIVE</CODE>
+<DD>This will ignore the listener's position and interpret the position of the
+sound source as relative coordinated to the listener. In other words, it
+calculates the 3D effect as if the listener was positioned at (0,0,0)
+with default orientation.
+</DL>
+</UL>
+<P>
+
 <A NAME="SEC935"></A>
-<H3> Materials Versus Textures </H3>
+<H3> Miscellaneous Changes  </H3>
 <!--docid::SEC935::-->
 <P>
 
-Crystal Space 0.17 supports <EM>materials</EM> in the sense that the API is
-ready for it.  There is no real material support though.  A material currently
-just corresponds with a texture.  Here are a few short remarks about the
-changes:
+<CODE>iGraphics2D::WriteChar()</CODE> has been removed. Use <CODE>Write()</CODE> instead.
 </P><P>
 
-<UL>
-<LI>
-<CODE>csTextureHandle()</CODE> was renamed to <CODE>csTextureWrapper()</CODE>.
-<P>
-
-<LI>
-New class: <CODE>csMaterialWrapper</CODE>
-<P>
-
-<LI>
-The methods <CODE>SetTexture()</CODE> and <CODE>GetTexture()</CODE> were renamed to
-<CODE>SetMaterial()</CODE> and <CODE>GetMaterial()</CODE>, respectively, in many places.
-<P>
-
-<LI>
-The methods
-<CODE>SetTextureHandle()</CODE> and <CODE>GetTextureHandle()</CODE> were renamed to
-<CODE>SetMaterialWrapper()</CODE> and <CODE>GetMaterialWrapper()</CODE>, respectively.
-</UL>
-<P>
-
-In general, in most places where you used to use <CODE>SetTexture()</CODE> or
-<CODE>GetTexture()</CODE> you now need to use the material versions.  There are few
-places where you deal directly with textures.  The material system sits on top
-of the texture system and is what you should use in most cases.
+All <CODE>UpdateLighting()</CODE> calls now accept `<SAMP>iLight</SAMP>' pointers intead
+of `<SAMP>csLight</SAMP>' pointers. In addition <CODE>csEngine::GetNearbyLights()</CODE>
+returns an array of `<SAMP>iLight</SAMP>' pointers.
 </P><P>
 
-`<SAMP>csWorld</SAMP>' now has a <CODE>GetMaterials()</CODE> function which you probably
-should use wherever you used <CODE>GetTextures()</CODE> in the past.
+The obsolete `<SAMP>CLights</SAMP>' class (for uniform dynamic lighting) has been
+removed. It was not working properly anyway.
 </P><P>
 
-In the loader you can find a new function, <CODE>csLoader::FindMaterial()</CODE>,
-which will find a material with the given name.  If not found it tries to find
-a texture with of the same name and, if found, will automatically then create
-a material from that texture.
+The <CODE>csEngine::PrepareParticleSystems()</CODE> method has been removed.
+Instead, use the new <CODE>csEngine::PrepareMeshes()</CODE> method.
 </P><P>
 
-The <CODE>csLoader::LoadTexture()</CODE> method is a bit special.  As before, it
-loads a texture (and returns a `<SAMP>csTextureWrapper</SAMP>') but it also adds a
-material with the same name to the material list.  You can then fetch that
-material from that list with code similar to the following:
+The <CODE>csEngine::AdvanceSpriteFrames()</CODE> method has been renamed to
+<CODE>NextFrame()</CODE>.  In addition <CODE>UpdateParticleSystems()</CODE> has been
+removed and is now also handled by <CODE>csEngine::NextFrame()</CODE>.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csLoader::LoadTexture(world,"myTexture","/lib/std/stone4.gif");
-csMaterialWrapper* m =
-  world-&#62;GetMaterials()-&#62;FindByName("myTexture");
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC936"></A>
-<H3> Collision Detection Plugin </H3>
-<!--docid::SEC936::-->
-<P>
-
-This is a very significant change.  The RAPID collision detection system
-has been completely removed from the engine and is now available through a
-plug-in module.  This change will most likely require the most complicated
-changes to your code.
+With the new mesh object plugin system the `<SAMP>iParticle</SAMP>' interface
+also changed a little. Check out the header to see the changes.
 </P><P>
 
-The first thing you need to add to your application is code to load the
-plugin.  You can do this with the following code:
+<CODE>FastSqrt()</CODE> is gone. Use <CODE>qsqrt()</CODE> instead. If you want
+to calculate <CODE>1/sqrt()</CODE> then use <CODE>qisqrt()</CODE>.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>char const* p = Config-&#62;GetStr (
-  "YourGame",
-  "COLLDET_PLUGIN",
-  "crystalspace.colldet.rapid");
-collide_system =
-  LOAD_PLUGIN(this, p, "CollDet", iCollideSystem);
-if (!collide_system)
-{
-  Printf(MSG_FATAL_ERROR,
-    "No Collision Detection plugin found!\n");
-  return false;
-}
-</pre></td></tr></table></P><P>
-
-This code loads the rapid collision detection plugin by default (which is the
-only one we have now) but it also reads an entry from your config file so that
-the user can possibly change it.  If you don't want that then you can just
-hardcode the `<SAMP>p</SAMP>' pointer with the name of the RAPID plugin.
-</P><P>
-
-Note that you need to store the value of `<SAMP>collide_system</SAMP>' some place
-where it can be accessed by the routines that need to do the collision
-detection.
-</P><P>
-
-Then the class `<SAMP>csRAPIDCollider</SAMP>' has been removed from csengine.  Instead
-there is a new class, `<SAMP>csCollider</SAMP>'.  This class encapsulates an
-`<SAMP>iCollider</SAMP>' (which is something that is returned from
-`<SAMP>collide_system</SAMP>').  This is the easiest way to use the new collision
-detection system as it more closely resembles what was possible with
-`<SAMP>csRAPIDCollider</SAMP>'.  To make a `<SAMP>csCollider</SAMP>' you can use the following
-code:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>iPolygonMesh* mesh =
-  QUERY_INTERFACE(object, iPolygonMesh);
-csCollider* collider =
-  new csCollider(*object, collide_system, mesh);
-</pre></td></tr></table></P><P>
-
-`<SAMP>object</SAMP>' can be a sector, sprite, thing, or your own object that supports
-the `<SAMP>iPolygonMesh</SAMP>' interface.  The new collider will be attached (through
-the `<SAMP>csObject</SAMP>' system) to the object.  This is similar to what happened
-with the old `<SAMP>csRAPIDCollider</SAMP>' class.
-</P><P>
-
-To do collision detection you need to find the colliders (or have them stored
-somewhere) and then you can do:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool rc = collide_system-&#62;Collide(
-  col1-&#62;GetCollider(), trans1,
-  col2-&#62;GetCollider(), trans2);
-</pre></td></tr></table></P><P>
-
-Or:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool rc = col1-&#62;Collide(*object2, trans1, trans2);
-</pre></td></tr></table></P><P>
-
-With `<SAMP>col1</SAMP>' and `<SAMP>col2</SAMP>' are the colliders (`<SAMP>csCollider</SAMP>') and
-`<SAMP>object2</SAMP>' is the second object.  `<SAMP>trans1</SAMP>' and `<SAMP>trans2</SAMP>' are the
-respective transformations.
-</P><P>
-
-Note that before you call this you probably want to initialize the collision
-system like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>collide_system-&#62;ResetCollisionPairs();
-collide_system-&#62;SetOneHitOnly(<VAR>true</VAR>/<VAR>false</VAR>);
-</pre></td></tr></table></P><P>
-
-The argument for the second function depends on whether or not you
-are interested in receiving more than one hit.
-</P><P>
-
-Note that <CODE>ResetCollisionPairs()</CODE> is important. Every call
-to <CODE>Collide()</CODE> will add additional collision pairs to this array.
-So you have to reset it if you are no longer interested in that.
-</P><P>
-
-Note that <CODE>csRAPIDCollider::Report()</CODE> is gone. If you want that
-functionality you have to do it on your own (which is not difficult).
-</P><P>
-
-<A NAME="SEC937"></A>
-<H3> Texture Mapping Changes </H3>
-<!--docid::SEC937::-->
-<P>
-
-The way engine defines and uses texturing has changed.  There are four polygon
-texturing types now:
-</P><P>
-
-<DL COMPACT>
-<DT><CODE>POLYTXT_NONE</CODE>
-<DD>No texturing.  Useful when using materials without textures.  It defines no
-texturing parameters at all thus saves memory.
-<P>
-
-<DT><CODE>POLYTXT_FLAT</CODE>
-<DD>Flat-shading.  Only the angle between light and polygon normal is considered
-if `<SAMP>CS_POLY_LIGHTING</SAMP>' flag is set, and entire polygon is painted with one
-lighting value.  Every vertex has an U/V pair associated.
-<P>
-
-<DT><CODE>POLYTXT_GOURAUD</CODE>
-<DD>Every polygon vertex has a color and those colors are interpolated across
-scanlines.
-<P>
-
-<DT><CODE>POLYTXT_LIGHTMAP</CODE>
-<DD>A polygon which has an associated lightmap and a texture plane.
-</DL>
-<P>
-
-Now it is possible to define and use objects which have flat-color but still
-receive light with Gouraud as well as without Gouraud interpolation; in
-general this open a whole new area for experimenting.
-</P><P>
-
-In practice this means that `<SAMP>csGouraudShaded</SAMP>' is gone and has been
-replaced with `<SAMP>csPolyTexGouraud</SAMP>'.  `<SAMP>csLightMapped</SAMP>' has also gone and
-is replaced with `<SAMP>csPolyTexLightMap</SAMP>'.
-</P><P>
-
-<A NAME="SEC938"></A>
-<H3> Sound Changes </H3>
-<!--docid::SEC938::-->
-<P>
-
-Merged sound buffers into sound sources.  We now have 3D and non-3D sound
-sources.  Non-3D sources are what were formerly sound buffers.  As a parameter
-to `<SAMP>Renderer-&#62;CreateSource()</SAMP>' you can indicate if you want a 3D or non-3D
-source.
-</P><P>
-
-The sound loader is now a plugin and must be loaded as such.  It uses the
-`<SAMP>iSoundLoader</SAMP>' interface.  A loaded sound data block is represented by
-`<SAMP>iSoundData</SAMP>'.
-</P><P>
-
-If you use standard Crystal Space libraries to load sounds, this is all you
-need to be aware of.  Otherwise you should also know how to load a sound
-without `<SAMP>csParser</SAMP>'.
-</P><P>
-
-To load a sound the sound loader now needs some information describing the
-format of the sound.  This information can be queried from the sound renderer.
-Also, a sound can be optionally be loaded as <EM>stream</EM>.  This is currently
-not useful for anything, but will instead affect performance and memory in a
-negative way.  It is intended as a future option to load background music.
-All member functions of `<SAMP>iSoundData</SAMP>' are intended for private use (of
-course you may use them, but I don't think they are useful).  To load a sound,
-perform the following steps.
-</P><P>
-
-<OL>
-<LI>
-Load the file buffer from a VFS path.  See section <A HREF="cs_158.html#SEC389">7.2 Virtual File System (VFS)</A>.
-<P>
-
-<LI>
-Ask the sound renderer for the format descriptor (`<SAMP>csSoundFormat</SAMP>').
-<P>
-
-<LI>
-Pass both the file data and the format to the sound loader, using `<SAMP>false</SAMP>'
-for streaming (the default).  After that, you may delete the file data.
-</OL>
-<P>
-
-<A NAME="SEC939"></A>
-<H3> Thing and Sprite Changes (csMovable) </H3>
-<!--docid::SEC939::-->
-<P>
-
-The movement system of Things and Sprites has been merged into one class
-called `<SAMP>csMovable</SAMP>'.  Thus, all functions such as <CODE>SetPosition()</CODE>,
-<CODE>SetTransform()</CODE>, and so on, have been removed from `<SAMP>csThing</SAMP>' and
-`<SAMP>csSprite</SAMP>'.  Instead there is a function <CODE>GetMovable()</CODE> (both for
-Things and Sprites) which returns the `<SAMP>csMovable</SAMP>' for that object.  There
-is also a new function called <CODE>csMovable::UpdateMove()</CODE>--which resembles
-the original <CODE>csThing::Transform()</CODE> somewhat--which you <EM>must</EM> call
-after updating the position and/or transformation of the movable which belongs
-to the object.
-</P><P>
-
-In addition to the changes related to `<SAMP>csMovable</SAMP>' the linked list of sky
-and thing objects in a sector has also been replaced by a `<SAMP>csVector</SAMP>' and
-things are now also kept in a global list in the `<SAMP>csWorld</SAMP>', just like
-sprites.  This means that sprites and things look a lot more like each other
-now with regards to movement and placement in sectors.  This means that
-functions such as <CODE>AddThing()</CODE>, <CODE>GetNumThings()</CODE>,
-<CODE>RemoveThing()</CODE> and <CODE>GetFirstThing()</CODE> are now gone, as are the
-similar methods for sky objects.  Instead, you should work through the new
-public `<SAMP>skies</SAMP>' and `<SAMP>things</SAMP>' vectors.  In addition to this the
-<CODE>GetNext()</CODE> and <CODE>GetParent()</CODE> functions have been removed from
-`<SAMP>csPolygonSet</SAMP>'.
-</P><P>
-
-Given the old code to operate on things:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csThing* thing = new csThing(world);
-sector-&#62;AddThing(thing);
-thing-&#62;SetPosition(csVector3(0,0,3));
-thing-&#62;SetTransform(csMatrix3());
-thing-&#62;Transform();
-<small>...</small>
-sector-&#62;RemoveThing(thing);
-delete thing;
-</pre></td></tr></table></P><P>
-
-It will need to be converted to the following:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csThing* thing = new csThing(world);
-world-&#62;things.Push(thing);
-csMovable&#38; move = thing-&#62;GetMovable();
-move.SetSector(sector);
-move.SetPosition(csVector3(0,0,3));
-move.SetTransform(csMatrix3());
-move.UpdateMove();
-<small>...</small>
-world-&#62;RemoveThing(thing);
-</pre></td></tr></table></P><P>
-
-Given the old to operate on sprites:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSprite3D* sprite = new csSprite3D(world);
-world-&#62;sprites.Push(sprite);
-sprite-&#62;MoveToSector(sector);
-sprite-&#62;SetPosition(csVector3(0,0,3));
-sprite-&#62;SetTransform(csMatrix3());
-</pre></td></tr></table></P><P>
-
-It will need to be transformed to:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSprite3D* sprite = new csSprite3D(world);
-world-&#62;sprites.Push(sprite);
-csMovable&#38; move = sprite-&#62;GetMovable();
-move.SetSector(sector);
-move.SetPosition(csVector3(0,0,3));
-move.SetTransform(csMatrix3());
-move.UpdateMove();
-</pre></td></tr></table></P><P>
-
-Especially note the new call to <CODE>UpdateMove()</CODE>.
-</P><P>
-
-<A NAME="SEC940"></A>
-<H3> API Changes: csCamera </H3>
-<!--docid::SEC940::-->
-<P>
-
-The function <CODE>SetFOV()</CODE> now needs an extra parameter which is the width
-of the display.  This is needed for calculating the angle of the FOV
-(<EM>field of view</EM>).  In addition, there are now new <CODE>SetFOVAngle()</CODE>
-and <CODE>GetFOVAngle()</CODE> functions.  <CODE>GetFOVAngle()</CODE> used to be in
-<CODE>csRenderView()</CODE>.
-</P><P>
-
-<A NAME="SEC941"></A>
-<H3> API Changes: csWorld </H3>
-<!--docid::SEC941::-->
-<P>
-
-Here is a list of the more significant API changes to `<SAMP>csWorld</SAMP>'.
-</P><P>
-
-<UL>
-<LI>
-Added <CODE>csWorld::FindLight(char const* name)</CODE>.
-<P>
-
-<LI>
-Removed <CODE>csWorld::NewSector()</CODE>.  Use <CODE>world-&#62;CreateCsSector()</CODE>
-instead.
-<P>
-
-<LI>
-Removed <CODE>csWorld::GetThing()</CODE>.  Use <CODE>world-&#62;things.FindByName()</CODE>
-instead.
-<P>
-
-<LI>
-Removed the method <CODE>csWorld::GetSpriteTemplate()</CODE>.  Instead, use this
-expression: <CODE>world-&#62;sprite_templates.FindByName()</CODE>
-<P>
-
-<LI>
-Removed the method <CODE>csWorld::GetThingTemplate()</CODE>.  Instead, use this
-expression: <CODE>world-&#62;thing_templates.FindByName()</CODE> instead.
-<P>
-
-<LI>
-Added <CODE>csWorld::UnlinkCollection()</CODE> and
-<CODE>csWorld::RemoveCollection()</CODE>.
-<P>
-
-<LI>
-Added <CODE>csWorld::GetBeginDrawFlags()</CODE>.  This is a very important function
-that you <EM>must</EM> invoke when calling <CODE>iGraphics3D::BeginDraw()</CODE> in
-your application just before you give control to the engine for drawing.
-</UL>
-<P>
-
-<A NAME="Index"></A>
+`<SAMP>csRenderView</SAMP>' has no public members anymore.  You need to access
+everything through <CODE>GetFoo()</CODE> and <CODE>SetFoo()</CODE> methods Check out the
+header for more details.
+<A NAME="Release Notes 17"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC923"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC814"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_283.html#SEC903"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC936"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

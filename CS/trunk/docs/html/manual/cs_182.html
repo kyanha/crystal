@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: VIS visibility culling</TITLE>
+<TITLE>Crystal Space: VIS sector structure</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: VIS visibility culling">
-<META NAME="keywords" CONTENT="Crystal Space: VIS visibility culling">
+<META NAME="description" CONTENT="Crystal Space: VIS sector structure">
+<META NAME="keywords" CONTENT="Crystal Space: VIS sector structure">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,84 +23,43 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC444"></A>
+<A NAME="SEC447"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_181.html#SEC443"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_183.html#SEC445"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_181.html#SEC442"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_183.html#SEC448"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC452"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.5.7.5 Visibility Culling </H4>
-<!--docid::SEC444::-->
+<H4> 7.5.7.4 Sector Structure </H4>
+<!--docid::SEC447::-->
 <P>
 
-Ok, here it comes. Given the above structure with sectors and entities
-we can define how we want to calculate optimal (or near optimal) visibility.
+In this subsection we go deeper into the structure of a sector.
+A very common case to use sectors is to define a sector with one
+thing which is convex and makes up the outer hull of the sector. Sectors
+don't have to be defined like this but this is very common. You can then
+make a maze like structure with convex rooms connected to other convex
+rooms with portals. Non-convex attributes of the rooms can be added
+as separate detail objects.
 </P><P>
 
-When speaking about culling we are mainly speaking about three
-types of geometry:
-</P><P>
-
-<UL>
-<LI>
-<EM>World Geometry</EM>
-<P>
-
-World geometry is the basic geometry that makes up the world.
-In general world geometry are big polygons that define large boundaries
-in some world or level. They usually represent walls, floors, and
-ceilings.
-</P><P>
-
-<LI>
-<EM>Detail Objects</EM>
-<P>
-
-Detail objects are entities which are too detailed (i.e. too
-many small polygons or triangles) to be included in the processor
-intensive visibility calculations. So we mark them as detail and
-we process them on a higher level for visibility (mostly by treating
-their bounding box instead of the object itself). Curved surfaces,
-sprites, and some things are all detail objects.
-</P><P>
-
-<LI>
-<EM>Culling Objects</EM>
-<P>
-
-Culling objects are invisible objects. Their only purpose is to cull
-geometry. So they are in fact the reverse of detail objects. In general
-culling objects should be large and have few polygons. These polygons
-will be included in visibility testing. You can add a culling object
-inside a detail object. The detail object will not participate in culling
-objects behind it (it will itself be culled by its bounding box however)
-but the culling object inside will take care of culling what is hidden
-by the detail object. Culling objects are only useful for detail objects
-that are sufficiently large and in sectors where there is a sufficient
-number of other entities (i.e. objects or portals) to be culled.
-A question here is whether or not it is possible (easy) to generate culling
-objects automatically from detail objects.
-</UL>
-<P>
-
-<A NAME="VIS view frustum culling"></A>
+<A NAME="VIS visibility culling"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_181.html#SEC443"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_183.html#SEC445"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_181.html#SEC442"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_183.html#SEC448"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC452"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

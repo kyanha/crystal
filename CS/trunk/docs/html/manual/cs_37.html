@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Config Domains</TITLE>
+<TITLE>Crystal Space: Configuration File</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Config Domains">
-<META NAME="keywords" CONTENT="Crystal Space: Config Domains">
+<META NAME="description" CONTENT="Crystal Space: Configuration File">
+<META NAME="keywords" CONTENT="Crystal Space: Configuration File">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,274 +23,63 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC102"></A>
+<A NAME="SEC105"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_36.html#SEC101"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_38.html#SEC109"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_34.html#SEC99"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_34.html#SEC99"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_45.html#SEC123"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_36.html#SEC104"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_38.html#SEC106"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_46.html#SEC127"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 3.3 Configuration Domains </H2>
-<!--docid::SEC102::-->
-<P>
-
-<EM>Written by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
-</P><P>
-
-When you run an application, the configuration manager collects configuration
-information from various locations, including information loaded from the
-application's own configuration file and those of plugin modules.  It is
-possible that configuration information gathered from various locations can
-contain conflicting configuration settings.  For this reason, a priority value
-is assigned configuration information from each source, and the priority value
-is used to resolve conflicts.
-</P><P>
-
-Priorities are assigned to configuration information based upon the following
-heuristic.  Highest priority sources (known as <EM>domains</EM>) are listed first;
-lowest priority sources are listed last.
-</P><P>
-
-<UL>
-<LI>
-Command-line options are given the highest priority.  They override settings
-which appear in configuration files.  For example, the `<SAMP>--video=</SAMP>' option
-will override the `<SAMP>System.Plugins.iGraphics3D</SAMP>' key in all configuration
-files.
-<P>
-
-<LI>
-User-specific, application-specific settings exists at the next highest
-priority.  These are settings specific to a particular user and specific to a
-particular application.  This is the place where a user's personal settings are
-stored by a program.  For example, if a game allows a user to choose screen
-resolution, or if it wants to store statistics about the user, it would store
-that information in this domain.  Such information is specific to a particular
-user of this particular application.  Such information is not relevant to other
-users or other applications.
-<P>
-
-Settings at this priority are stored in a platform-dependent fashion
-(see  <A HREF="cs_37.html#Config PerUser">Config PerUser</A>).  Often, these settings <EM>roam</EM> with a user
-automatically as the user moves from machine to machine.
-</P><P>
-
-In order to associate settings with itself, an application needs to provide the
-configuration manager with a <EM>unique identifier</EM>.  Typically, this is
-accomplished by placing a `<SAMP>System.ApplicationID</SAMP>' key in the application's
-own configuration file.  It can also be set programmatically.  Given an
-application's identifer, the configuration manager can locate the user-specific
-settings associated with that application.
-</P><P>
-
-It is recommended that you use the form `<SAMP>&#60;Producer&#62;.&#60;ProductName&#62;</SAMP>' when
-constructing an application identifier.  Crystal Space example applications use
-`<SAMP>CrystalSpace</SAMP>' for the <VAR>Producer</VAR> portion of the application
-identifier; for example: `<SAMP>CrystalSpace.Walktest</SAMP>'.  Your own application
-identifier can be composed of any suitable components.  For instance, you might
-place the following key in your application-specific configuration file.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>System.ApplicationID = MyCompany.MyGame
-</pre></td></tr></table></P><P>
-
-<LI>
-User-specific, application-neutral settings have the next highest priority.
-These are settings which are specific to a particular user, but which are not
-specific to any particular application.  For instance, a user might prefer to
-use full-screen mode with all Crystal Space-derived applications, in which case
-he can give the `<SAMP>Video.FullScreen</SAMP>' key a value of `<SAMP>yes</SAMP>' in this
-domain.  As with the user-specific, application-specific domain, these settings
-are stored in a platform-dependent fashion (see  <A HREF="cs_37.html#Config PerUser">Config PerUser</A>).  Unlike
-settings in the user-specific, application-specific domain which are identified
-by the unique application identifier, settings in this domain are identified
-with the name `<SAMP>CrystalSpace.Global</SAMP>'.
-<P>
-
-<LI>
-Application-specific settings have the next highest priority.  These settings
-are specific to a particular application, but are shared among all users of the
-application.  User-specific settings in higher priority domains, as well as
-command-line options, can override these settings.  Conversely,
-application-specific settings can override plugin-specific settings.  For
-instance, if the canvas plugin configuration file specifies a default
-resolution of 640x480, an application configuration file might override that
-setting by giving its own values to the `<SAMP>Video.ScreenWidth</SAMP>' and
-`<SAMP>Video.ScreenHeight</SAMP>' keys.
-<P>
-
-Application-specific settings typically come from an application's
-configuration file.  For example, the Walktest application stores its settings
-in the file `<TT>walktest.cfg</TT>'.  As a programmer, you typically specify the
-application's configuration file with the following code:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csInitializer::SetupConfigManager(object_reg, "myapp.cfg");
-</pre></td></tr></table></P><P>
-
-<LI>
-Plugin-specific settings have the lowest priority.  These settings define
-default values for options specific to plugin modules.  For example, the OpenGL
-renderer loads configuration information from the `<TT>opengl.cfg</TT>' file, and
-the software renderer loads configuration from the `<TT>soft3d.cfg</TT>' file.
-</UL>
-<P>
-
-If the program allows the user to change options and settings, these changes
-are applied to the user-specific, application-specific domain by default.  It
-is possible programmatically to change settings in other domains, but this is
-rarely useful or needed since most user settings belong in the user-specific,
-application-specific domain.
-</P><P>
-
-<A NAME="Config PerUser"></A>
-<A NAME="SEC103"></A>
-<H2> Platform-Specific Per-User Settings Storage </H2>
-<!--docid::SEC103::-->
-<P>
-
-When programs store settings for a particular user, those settings belong to
-that user, which means that the settings must be stored separately from
-settings of other users.  Furthermore, it is often convenient and desirable for
-a user's settings to <EM>roam</EM> with the user as the user moves from machine
-to machine.  In order to satisfy these goals, Crystal Space utilizes
-platform-specific facilities for recording user-specific settings.  Utilization
-of these facilities is typically transparent to both users and programmers,
-however an understanding of some basic issues regarding these facilities is
-useful.
-</P><P>
-
-<A NAME="SEC104"></A>
-<H3> Application Unique Identifier </H3>
-<!--docid::SEC104::-->
-<P>
-
-As noted earlier, each application uses a <EM>unique identifier</EM> to
-distinguish its per-user settings from the per-user settings of other
-applications.  An application typically sets its unique identifier via the
-`<SAMP>System.ApplicationID</SAMP>' key in its application-specific configuration file,
-though the identifier can also be set programmatically.
-</P><P>
-
-The actual manner in which the application identifier is employed to access and
-store settings is specific to each platform-dependent implementation, however
-it is a good idea to ensure that each application identifier is unique in order
-to avoid collisions with identifiers of other applications.  For this reason,
-it is strongly recommended that an application identifier be composed with the
-form `<SAMP>&#60;Producer&#62;.&#60;ProductName&#62;</SAMP>'.  Crystal Space example applications use
-`<SAMP>CrystalSpace</SAMP>' for the <VAR>Producer</VAR> portion of the application
-identifier; for example: `<SAMP>CrystalSpace.Walktest</SAMP>'.  Your own application
-identifier can be composed of any suitable components.  For instance, you might
-place the following key in your application-specific configuration file.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>System.ApplicationID = MyCompany.MyGame
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC105"></A>
-<H3> Windows User-Specific Settings </H3>
+<H2> 3.2 Configuration File </H2>
 <!--docid::SEC105::-->
 <P>
 
-On Windows, user-specific settings are stored in configuration files in the
-`<TT>Application Data</TT>' directory.  The exact location and name of this
-directory differs between Windows versions and from language to language.  On
-Windows XP, 2000, and NT the directory is typically
-`<TT>C:\Documents and Settings\&#60;username&#62;\Application Data</TT>'.  On on Win9x it
-is typically `<TT>C:\WINDOWS\Application Data</TT>'.
+Many applications have an accompanying configuration file which describes
+configuration options specific to that application.  Similarly, plug-in
+modules can have configuration files.  Configuration files are named with the
+file extension `<TT>.cfg</TT>' and are typically located within the VFS
+virtual directory `<TT>/config/</TT>' (see section <A HREF="cs_159.html#SEC393">7.2 Virtual File System (VFS)</A>) which is often mounted at the
+physical location `<TT>CS/data/config</TT>' for Crystal Space sample applications.
 </P><P>
 
-The actual path of the user-specific, application-specific configuration file
-is generated from the application's <EM>unique application identifier</EM> by
-replacing all dots (<CODE>'.'</CODE>) with backslashes (<CODE>'\'</CODE>) and adding a
-`<TT>.cfg</TT>' suffix.  For example, the configuration for the application which
-has a unique identifier `<SAMP>MyGames.ClickFrenzy2</SAMP>' will be stored as
-`<TT>Application Data\MyGames\ClickFrenzy2.cfg</TT>'.  User-specific,
-application-neutral settings, on the other hand, will be stored as
-`<TT>Application Data\CrystalSpace\Global.cfg</TT>'.  The configuration file format
-is the described in the configuration file section, <A HREF="cs_36.html#SEC101">3.2 Configuration File</A>.
+The format of these files is simple. They consist of a number of <EM>keys</EM>,
+each of which consists of a name, a <EM>value</EM> and an optional comment.  Key
+names contain dots to create a pseudo-hierarchy, similar to a file system; for
+example: `<SAMP>Video.OpenGL.EnableDither</SAMP>'.  This should be interpreted as the
+`<SAMP>EnableDither</SAMP>' option in the sub-section `<SAMP>OpenGL.</SAMP>', which resides in
+section `<SAMP>Video.</SAMP>' (note that the dots are part of the key name).
 </P><P>
 
-<A NAME="SEC106"></A>
-<H4> Registry Storage </H4>
-<!--docid::SEC106::-->
-<P>
-
-On Windows, it is also possible to store configuration settings in the
-Registry.  This is accomplished by instantiating a `<SAMP>csWin32RegistryConfig</SAMP>'
-object and setting it as the configuration manager's <EM>dynamic domain</EM> after
-the configuration manager has been initialized.  See the documentation for
-`<SAMP>csWin32RegistryConfig</SAMP>' for full details.
-<A NAME="SEC107"></A>
-<H3> Unix User-Specific Settings </H3>
-<!--docid::SEC107::-->
-<P>
-
-On Unix and Unix-like platforms, user-specific settings are stored in files in
-the hidden directory `<TT>$HOME/.crystal</TT>'.  The actual name of a configuration
-file is generated from the <EM>unique application identifier</EM> with a
-`<TT>.cfg</TT>' suffix.  For example, the configuration for the application which
-has a unique identifier `<SAMP>MyGames.ClickFrenzy2</SAMP>' will be stored as
-`<TT>$HOME/.crystal/MyGames.ClickFrenzy2.cfg</TT>'.  User-specific,
-application-neutral settings, on the other hand, will be stored as
-`<TT>$HOME/.crystal/CrystalSpace.Global.cfg</TT>'.  The configuration file format
-is the described in the configuration file section, <A HREF="cs_36.html#SEC101">3.2 Configuration File</A>.
-<A NAME="SEC108"></A>
-<H3> MacOS/X User-Specific Settings </H3>
-<!--docid::SEC108::-->
-<P>
-
-On MacOS/X, user-specific settings are stored via the Cocoa <EM>defaults
-database</EM> (also known programmatically as `<SAMP>NSUserDefaults</SAMP>').  A program's
-<EM>unique application identifier</EM> is used as the name of the persistent
-`<SAMP>NSUserDefaults</SAMP>' domain into which the settings are stored.  For example,
-to list all the configuration settings for the application which has a unique
-identifier `<SAMP>MyGames.ClickFrenzy2</SAMP>', you would invoke the following command:
+The file itself looks something like this:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>defaults read MyGames.ClickFrenzy2
-</pre></td></tr></table></P><P>
-
-User-specific, application-neutral settings, on the other hand, will be stored
-under the `<SAMP>NSUserDefaults</SAMP>' domain named `<SAMP>CrystalSpace.Global</SAMP>'.  You
-can list the user-specific, application-neutral settings like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>defaults read CrystalSpace.Global
-</pre></td></tr></table></P><P>
-
-If you want to set some configuration options for all Crystal Space
-applications you can do so by storing the settings in the
-`<SAMP>CrystalSpace.Global</SAMP>' domain.  For instance, to instruct all programs to
-use resolution 1024x768, you could do this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>defaults write CrystalSpace.Global Video.ScreenWidth 1024
-defaults write CrystalSpace.Global Video.ScreenHeight 768
-</pre></td></tr></table></P><P>
-
-These settings will be used by all Crystal Space-based applications unless
-overridden explicitly by command-line arguments or user-specific,
-application-specific settings.
-</P><P>
-
-<A NAME="Specific Options"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>; This is the comment for the first batch of keys.
+Section.Keyname = Value
+; Comments may be
+; several lines long
+; The option 'Section.TestOption' (below) has no attached comment.
+Video.OpenGL.EnableDither = true
+Section.TestOption = false
+; Comments at the end of the file do not belong to any configuration
+; key. When a config file is loaded and saved again later this
+; end-of-file comment is retained at the end of the file.
+</pre></td></tr></table><A NAME="Config Domains"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_36.html#SEC101"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_38.html#SEC109"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_34.html#SEC99"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_34.html#SEC99"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_45.html#SEC123"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_36.html#SEC104"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_38.html#SEC106"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_35.html#SEC103"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_46.html#SEC127"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

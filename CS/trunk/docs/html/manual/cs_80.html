@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Tutorial Simple 2</TITLE>
+<TITLE>Crystal Space: Simple Locomotion</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Tutorial Simple 2">
-<META NAME="keywords" CONTENT="Crystal Space: Tutorial Simple 2">
+<META NAME="description" CONTENT="Crystal Space: Simple Locomotion">
+<META NAME="keywords" CONTENT="Crystal Space: Simple Locomotion">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,80 +23,114 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC175"></A>
+<A NAME="SEC178"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_79.html#SEC174"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC176"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC154"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_79.html#SEC177"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 5.3 Simple Tutorial 2: Sprites </H2>
-<!--docid::SEC175::-->
+<H3> 5.2.5 Locomotion (Moving Around) </H3>
+<!--docid::SEC178::-->
 <P>
 
-This tutorial continues on the Simple Tutorial (see section <A HREF="cs_74.html#SEC169">5.2 Simple Tutorial 1</A>).
-In this tutorial we explain a bit about VFS, texture management and
-how you can add a simple sprite to the simple application.
+Staring at that solid wall gets a bit boring after some time.  The problem is
+that we can't move the camera to change our view point.  Let's add some code
+to do exactly this.  Edit `<TT>simple.cpp</TT>' again and change
+`<TT>SetupFrame()</TT>' as follows:
 </P><P>
 
-Crystal Space has the concept of mesh factories and meshes. A mesh is basically
-some kind of 3D object. Crystal Space supports several kinds of meshes. In
-the previous tutorial we used the thing mesh to create the geometry of
-our room. In this tutorial we will use the 3D sprite mesh. A mesh
-factory is like a blue-print for a mesh (or sprite). It defines how the mesh
-looks and how it animates. Before you can use a mesh you need to have a
-mesh factory. Once you have a mesh factory you can create multiple
-meshes from this.  See section <A HREF="cs_206.html#SEC548">7.7 Mesh Object Plug-In System</A>.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>void Simple::SetupFrame ()
+{
+  // First get elapsed time from the virtual clock.
+  csTicks elapsed_time = vc-&#62;GetElapsedTicks ();
+  
+  // Now rotate the camera according to keyboard state
+  float speed = (elapsed_time / 1000.0) * (0.03 * 20);
+
+  iCamera* c = view-&#62;GetCamera();
+  if (kbd-&#62;GetKeyState (CSKEY_SHIFT))
+  {
+    // If the user is holding down shift, the arrow keys will cause
+    // the camera to strafe up, down, left or right from it's
+    // current position.
+    if (kbd-&#62;GetKeyState (CSKEY_RIGHT))
+      c-&#62;Move (CS_VEC_RIGHT * 4 * speed);
+    if (kbd-&#62;GetKeyState (CSKEY_LEFT))
+      c-&#62;Move (CS_VEC_LEFT * 4 * speed);
+    if (kbd-&#62;GetKeyState (CSKEY_UP))
+      c-&#62;Move (CS_VEC_UP * 4 * speed);
+    if (kbd-&#62;GetKeyState (CSKEY_DOWN))
+      c-&#62;Move (CS_VEC_DOWN * 4 * speed);
+  }
+  else
+  {
+    // left and right cause the camera to rotate on the global Y
+    // axis; page up and page down cause the camera to rotate on the
+    // _camera's_ X axis (more on this in a second) and up and down
+    // arrows cause the camera to go forwards and backwards.
+    if (kbd-&#62;GetKeyState (CSKEY_RIGHT))
+      rotY += speed;
+    if (kbd-&#62;GetKeyState (CSKEY_LEFT))
+      rotY -= speed;
+    if (kbd-&#62;GetKeyState (CSKEY_PGUP))
+      rotX += speed;
+    if (kbd-&#62;GetKeyState (CSKEY_PGDN))
+      rotX -= speed;
+    if (kbd-&#62;GetKeyState (CSKEY_UP))
+      c-&#62;Move (CS_VEC_FORWARD * 4 * speed);
+    if (kbd-&#62;GetKeyState (CSKEY_DOWN))
+      c-&#62;Move (CS_VEC_BACKWARD * 4 * speed);
+  }
+
+  // We now assign a new rotation transformation to the camera.  You
+  // can think of the rotation this way: starting from the zero
+  // position, you first rotate "rotY" radians on your Y axis to get
+  // the first rotation.  From there you rotate "rotX" radians on the
+  // your X axis to get the final rotation.  We multiply the
+  // individual rotations on each axis together to get a single
+  // rotation matrix.  The rotations are applied in right to left
+  // order .
+  csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
+  csOrthoTransform ot (rot, c-&#62;GetTransform().GetOrigin ());
+  c-&#62;SetTransform (ot);
+
+  <small>...</small>
+}
+</pre></td></tr></table></P><P>
+
+With this change you can rotate the camera with the left
+and right arrow keys and move forward and backward with the up and down arrow
+keys.  Try it out to see the effect.  To rotate the camera we use
+<CODE>RotateThis()</CODE> which expects a vector to rotate along and an angle given
+in radians (the speed parameter).  There are a number of predefined vectors
+which you can use.  A couple of them are used in this example.
 </P><P>
 
-In this example we are going to load a mesh factory from disk.  If you have
-the standard Crystal Space distribution then you have the file
-`<TT>CS/data/standard.zip</TT>'.  In that archive file there is a file called
-`<SAMP>sprite1</SAMP>' which contains the definition of our mesh factory.  Extract
-it (by using, for instance, the command `<SAMP>unzip -x standard.zip sprite1</SAMP>')
-and examine it to see how mesh factories for 3D sprites are defined (mesh
-factories for other types of meshes can look different).
+That's it for now.  In this tutorial you learned how to setup the Crystal
+Space system for use, how to create a simple room with some lights, event
+handling, and how to handle some basic camera operations.
 </P><P>
 
-But how are we actually going to get that file out of that ZIP archive
-from within the Simple application?  This is in fact very easy because Crystal
-Space supports the concept of VFS.  Take a look at the VFS
-documentation (see section <A HREF="cs_158.html#SEC389">7.2 Virtual File System (VFS)</A>) to learn how it works.  Suffice it to say that
-`<TT>standard.zip</TT>' is an archive that is, by default, mounted onto the
-VFS path `<TT>/lib/std</TT>'.  You can see all the mounted VFS paths in
-the `<TT>CS/vfs.cfg</TT>' file (and you can add more).  So, this means that our
-sprite file can be found at the path `<TT>/lib/std/sprite1</TT>'.
-</P><P>
-
-If you look at the `<TT>sprite1</TT>' file you can see that it refers to a material
-named `<SAMP>spark</SAMP>'.  So we'll have to load that material as well.  This can
-also be found in `<TT>standard.zip</TT>' at the path `<TT>/lib/std/spark.png</TT>'.
-</P><P>
-
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_81.html#SEC176">5.3.1 Loading a Material in Memory</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_82.html#SEC177">5.3.2 Loading a Mesh Factory in Memory</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_83.html#SEC178">5.3.3 Creating a Mesh from a Factory</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
-<P>
-
-<A NAME="Simple Loading Material"></A>
+You can now go on to the next tutorial (see section <A HREF="cs_81.html#SEC179">5.3 Simple Tutorial 2: Sprites</A>)) to learn
+how to add a 3D sprite to this application.
+<A NAME="Tutorial Simple 2"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_79.html#SEC174"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC176"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_69.html#SEC154"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_79.html#SEC177"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

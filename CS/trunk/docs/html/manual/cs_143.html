@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: SCF Client</TITLE>
+<TITLE>Crystal Space: SCF Versions</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: SCF Client">
-<META NAME="keywords" CONTENT="Crystal Space: SCF Client">
+<META NAME="description" CONTENT="Crystal Space: SCF Versions">
+<META NAME="keywords" CONTENT="Crystal Space: SCF Versions">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,85 +23,111 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC362"></A>
+<A NAME="SEC365"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_142.html#SEC361"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_144.html#SEC363"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_142.html#SEC362"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_144.html#SEC366"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 6.2.5 Client Side </H3>
-<!--docid::SEC362::-->
+<H3> 6.2.4 Interface Versions </H3>
+<!--docid::SEC365::-->
 <P>
 
-Now let's explain how to use all this mess from client side.  First, we should
-be able to create objects that implement the interfaces we want.  For this, you
-should use the <CODE>SCF_CREATE_INSTANCE()</CODE> macro.  It receives two arguments:
-the name of external class, and the name of the interface it implements.  So,
-if we know class `<SAMP>MyGraphics3D</SAMP>' implements the `<SAMP>iGraphics3D</SAMP>'
-interface, we can write:
+Unlike COM, SCF supports interface versions.  That is, a shared class
+could implement version 0.3.6 of given interface, and if client requests that
+interface of a version lower or equal than 0.3.6, a correct interface pointer
+is returned.  For this to work you need to define inside each interface header
+file a specialization of the <CODE>scfInterface&#60;&#62;</CODE> template class for each
+interface.  This specialization must provide the interface's version number as
+the result of its <CODE>GetVersion()</CODE> method.  To correctly support different
+versions of interfaces you should follow these guidelines:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iGraphics3D&#62; G3D =
-  SCF_CREATE_INSTANCE("MyGraphics3D", iGraphics3D);
-if (!G3D)
+<UL>
+<LI>
+Do not insert new methods into existing interfaces.  Instead, you should
+append them after last defined method.
+<P>
+
+<LI>
+If your change made the interface invalid for clients that expect older
+versions of interfaces (for example, you broke the previous rule), increase
+the major version number, and set minor and micro versions to zero.
+<P>
+
+<LI>
+If your changes are relatively minor, but you do a major release, increase the
+minor version number and drop the micro version to zero.
+<P>
+
+<LI>
+If you are in the development process, and did a minor change to the
+interface, increase the micro version.
+</UL>
+<P>
+
+The possible range for major and minor version numbers is 0..255, and the
+range for micro version number is 0..65535.
+</P><P>
+
+When you query an interface, you should always tell it what interface version
+are you looking for.  If a module cannot provide an interface compatible with
+the requested version, then <CODE>QueryInterface()</CODE> will return `<SAMP>NULL</SAMP>'
+(same as if interface wasn't available at all).  You can use
+<CODE>scfCompatibleVersion()</CODE> to check whether the requested version is
+compatible with interface version.  In fact, the
+<CODE>SCF_IMPLEMENTS_INTERFACE()</CODE> and
+<CODE>SCF_IMPLEMENTS_EMBEDDED_INTERFACE()</CODE> macros employ this function
+automatically.
+</P><P>
+
+Since specializing the <CODE>scfInterface&#60;&#62;</CODE> template for each interface is an
+onerous task, you can instead automate the task via use of the
+<CODE>SCF_VERSION()</CODE> macro.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_VERSION(iMyGraphics3D, 0, 0, 1);
+
+struct iMyGraphics3D : public iBase
 {
-  fprintf(stderr,
-    "Failed to create an instance of iGraphics3D!\n");
-  abort();
-}
+  <small>...</small>
+};
 </pre></td></tr></table></P><P>
 
-Now you can use the object any way you like, just like standard C++:
+If you are placing your interfaces in your project's own namespace, then you
+must invoke the <CODE>SCF_VERSION()</CODE> macro outside your namespace.  For
+instance:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>G3D-&#62;BeginDraw();
-G3D-&#62;DrawLine(<small>...</small>);
-G3D-&#62;DrawPolygon(<small>...</small>);
-G3D-&#62;EndDraw();
-</pre></td></tr></table></P><P>
-
-When you are done using the `<SAMP>G3D</SAMP>' pointer (say, when program exits), the
-reference you own for the object should be released.  This happens
-automatically when the <CODE>csRef&#60;&#62;</CODE> goes out of scope.  If you are not using
-<CODE>csRef&#60;&#62;</CODE>, but are instead using a plain pointer, `<SAMP>iGraphics3D*</SAMP>',
-then you must manually release the reference when you are done with it by
-calling <CODE>G3D-&#62;DecRef()</CODE>.  After this you can not use `<SAMP>G3D</SAMP>' anymore;
-you should create another instance of `<SAMP>iGraphics3D</SAMP>' if needed.
-</P><P>
-
-To query an object to see if it implements an interface, you should use the
-<CODE>SCF_QUERY_INTERFACE()</CODE> macro. It also receives two arguments, first being
-the object you are querying for the embedded interface, and second being the
-name of the interface you desire. Example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iHalo&#62; halo = SCF_QUERY_INTERFACE(G3D, iHalo);
-if (!halo)
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>namespace MyProject
 {
-  fprintf(stderr,
-    "3D graphic driver doesn't support halos!\n");
-  return;
+  struct iMyGraphics3D : public iBase
+  {
+    <small>...</small>
+  };
 }
+
+SCF_VERSION(MyProject::iMyGraphics3D, 0, 0, 1);
 </pre></td></tr></table></P><P>
 
-<A NAME="SCF Meta Info"></A>
+<A NAME="SCF Client"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_142.html#SEC361"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_144.html#SEC363"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_142.html#SEC362"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_144.html#SEC366"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

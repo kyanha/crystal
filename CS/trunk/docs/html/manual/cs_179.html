@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: VIS cullers</TITLE>
+<TITLE>Crystal Space: VIS sectors and portals</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: VIS cullers">
-<META NAME="keywords" CONTENT="Crystal Space: VIS cullers">
+<META NAME="description" CONTENT="Crystal Space: VIS sectors and portals">
+<META NAME="keywords" CONTENT="Crystal Space: VIS sectors and portals">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,57 +23,60 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC437"></A>
+<A NAME="SEC440"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC436"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_180.html#SEC438"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_180.html#SEC441"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC452"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.5.7.2 Visibility Cullers </H4>
-<!--docid::SEC437::-->
+<H4> 7.5.7.1 Sectors and Portals </H4>
+<!--docid::SEC440::-->
 <P>
 
-With a sector there is always an associated visibility culler. Currently
-Crystal Space supports two cullers:
-<UL>
-<LI>
-`<SAMP>frustvis</SAMP>': This is the default visibility culler that is used if no
-other is specified. It only does frustum culling. It is the best culler to
-use for simple sectors that don't have a lot of objects or else for sectors
-that are big but where all objects are small. For such sectors it doesn't
-make much sense to try to do more complicated visibility culling so
-frustum cullling (testing if an object is visible in the current view)
-is more than enough.
-<LI>
-`<SAMP>dynavis</SAMP>': This is a more advanced visibility culler that does
-frustum culling in addition to trying to avoid rendering objects that
-are obscured by other objects. This culler
-is mainly useful when you have big complex sectors with lots of objects
-and when objects have a good chance of occluding (hiding) other objects.
-</UL>
-<P>
-
-This document will mainly discuss `<SAMP>Dynavis</SAMP>'.
+A sector is the basic building block in Crystal Space. A world will be made out
+of several sectors connected with portals (see section <A HREF="cs_167.html#SEC411">7.5.2 Portal Engine</A>).
+Normally adjacent sectors can be connected with a straight portal but
+portals can also warp space so that you can connect any point in space to
+any other point in space. This effect can be used to create mirrors for
+example.
 </P><P>
 
-<A NAME="VIS entities"></A>
+This effect of portals makes them very powerful. It also means that
+you can have overlapping sectors and in general other weird portal
+constructs.
+</P><P>
+
+Portals starting in arbitrary space (i.e. in the middle of
+a sector) are called floating portals. Some special care needs to be taken
+for those because we can't rely on the Z-buffer to be useful here. So this
+is a case where clipping to the 2D boundary of the portal must happen.
+</P><P>
+
+Important for this discussion is the fact that we have two important
+areas where culling happens. We have in-sector visibility culling which
+is all visibility testing that ignores portal boundaries and we have
+portal/sector visibility which controls what you can see through a
+portal. Discussing both will be the main focus of this document later.
+</P><P>
+
+<A NAME="VIS cullers"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC436"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_180.html#SEC438"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC448"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_180.html#SEC441"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_187.html#SEC452"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

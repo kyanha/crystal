@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: SCF Advanced</TITLE>
+<TITLE>Crystal Space: SCF Example</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: SCF Advanced">
-<META NAME="keywords" CONTENT="Crystal Space: SCF Advanced">
+<META NAME="description" CONTENT="Crystal Space: SCF Example">
+<META NAME="keywords" CONTENT="Crystal Space: SCF Example">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,133 +23,236 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC367"></A>
+<A NAME="SEC370"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_147.html#SEC366"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_147.html#SEC369"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 6.2.10 Advanced Techniques </H3>
-<!--docid::SEC367::-->
-<P>
-
-The SCF library implements some things that you will need to know about
-to use some advanced techniques.  They are described in detail, below.
-</P><P>
-
-<A NAME="SEC368"></A>
-<H4> Dynamic Class Registration </H4>
-<!--docid::SEC368::-->
-<P>
-
-You can register and deregister SCF classes at run time.  There are times
-when you would like to provide a named SCF class in your main application,
-rather than in a plugin module.  In this case, you will need to manually
-register the class with SCF since it will not be discovered by the
-automatic scan for plugins.  To do this, the following method is provided:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool iSCF::RegisterClass (
-  scfFactoryFunc,
-  char const* ClassName,
-  char const* Description,
-  char const* Dependencies,
-  char const* context);
-</pre></td></tr></table></P><P>
-
-Rather than having to remember to call this method from your code, you can
-automate the registration by instead using the
-<CODE>SCF_REGISTER_STATIC_CLASS()</CODE> macro, which takes the following arguments:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_REGISTER_STATIC_CLASS(
-  C++Class,
-  "scf.class.name",
-  "description",
-  "comma-separated dependency list" or NULL)
-</pre></td></tr></table></P><P>
-
-This macro should be used at the top-level of the source file, outside of
-any function.
-</P><P>
-
-If a class resides in a plugin module which was not discovered by the startup
-scan, and if you do not elect to have SCF scan for the plugin with
-<CODE>iSCF::ScanPluginsPath()</CODE> or an additional call to <CODE>scfInitialize()</CODE>,
-then you can manually tell SCF all about the class with the following
-method:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool iSCF:RegisterClass (
-  char const* ClassName,
-  char const* PluginPath,
-  char const* FactoryClass,
-  char const* Description,
-  char const* Dependencies,
-  char const* context);
-</pre></td></tr></table></P><P>
-
-You can deregister a registered class with the following function:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool iSCF::UnregisterClass(char const* ClassIName)
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC369"></A>
-<H4> Non-Registered Classes </H4>
-<!--docid::SEC369::-->
-<P>
-
-Often, you do not need or want to register a class with the SCF kernel.
-That is, you create your objects manually, using `<SAMP>new</SAMP>' or some other
-method and return them to callers of your functions as pure SCF
-interfaces.  This is a perfectly valid use of SCF classes, and is often
-employed.  It is common, for instance, for a named, published SCF class to
-vend unnamed classes to callers of its methods.  These classes are often helper
-classes.  In this case the unnamed object is not a part of the class registry.
-</P><P>
-
-<A NAME="SEC370"></A>
-<H4> Non-Parented Classes </H4>
+<H3> 6.2.9 Example </H3>
 <!--docid::SEC370::-->
 <P>
 
-Often, classes do not need to be parented.  This is frequently true of classes
-which are not named and part of the class registry, as noted above.  In this
-case your object is not a part of the class tree (see above) and thus does not
-have a parent.  To implement such a class, you have to pass `<SAMP>NULL</SAMP>' to the
-<CODE>SCF_CONSTRUCT_IBASE()</CODE> macro in constructor.
+Here is a complete working example. It implements a shared class that has a
+base and an embedded interface.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>MyClass::MyClass()
+These are the interface files for the `<SAMP>iDog</SAMP>' interface (the base
+interface of our class) and the `<SAMP>iName</SAMP>' interface (the interface
+embedded into our class).
+</P><P>
+
+<EM>File</EM>: `<TT>idog.h</TT>'
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "csutil/scf.h"
+
+// Version number of our interface.
+SCF_VERSION(iDog, 0, 0, 1)
+
+struct iDog : public iBase
 {
-  SCF_CONSTRUCT_IBASE(0)
-  <small>...</small>
+  virtual void Walk() = 0;
+  virtual void Shout(char const* Message) = 0;
+};
+</pre></td></tr></table></P><P>
+
+<EM>File</EM>: `<TT>iname.h</TT>'
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "csutil/scf.h"
+
+// Version number of our interface.
+SCF_VERSION(iName, 0, 0, 1);
+
+struct iName : public iBase
+{
+  virtual char const* GetName() = 0;
+  virtual void SetName(char const*) = 0;
+};
+</pre></td></tr></table></P><P>
+
+Now here is the implementation of a class for both of the mentioned
+interfaces:
+</P><P>
+
+<EM>File</EM>: `<TT>dog.cpp</TT>'
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;stdio.h&#62;
+#include &#60;string.h&#62;
+#include &#60;stdlib.h&#62;
+
+#include "cssysdef.h"
+#include "idog.h"
+#include "iname.h"
+
+class csDog : public iDog
+{
+  char* Name;
+
+  // Embedded interface.
+  class csName : public iName
+  {
+  public:
+    SCF_DECLARE_EMBEDDED_IBASE(csDog);
+    virtual char const* GetName();
+    virtual void SetName(char const*);
+  } scfiName;
+  friend class csName;
+
+public:
+  SCF_DECLARE_IBASE;
+  csDog(iBase* Parent);
+  virtual ~csDog();
+  virtual void Walk();
+  virtual void Shout(char const*);
+};
+
+//---------- Implementation ---------
+
+SCF_IMPLEMENT_FACTORY(csDog)
+
+SCF_IMPLEMENT_IBASE(csDog)
+  SCF_IMPLEMENTS_INTERFACE(iDog)
+  SCF_IMPLEMENTS_EMBEDDED_INTERFACE(iName)
+SCF_IMPLEMENT_IBASE_END
+
+SCF_IMPLEMENT_EMBEDDED_IBASE(csDog::csName)
+  SCF_IMPLEMENTS_INTERFACE(iName)
+SCF_IMPLEMENT_EMBEDDED_IBASE_END
+
+csDog::csDog(iBase* Parent)
+{
+  SCF_CONSTRUCT_IBASE(Parent);
+  SCF_CONSTRUCT_EMBEDDED_IBASE(scfiName);
+  Name = strdup("&#60;noname&#62;");
 }
 
-MyClass::~MyClass()
+csDog::~csDog()
 {
-  <small>...</small>
-  SCF_DESTRUCT_IBASE()
+  free(Name);
+  SCF_DESTRUCT_EMBEDDED_IBASE(scfiName);
+  SCF_DESTRUCT_IBASE();
 }
-</pre></td></tr></table><A NAME="csGeom"></A>
+
+void csDog::Walk()
+{
+  printf("%s: I'm walking\n", Name);
+}
+
+void csDog::Shout(char const* Message)
+{
+  printf("I'm %s: shout, shout, %s\n", Name, Message);
+}
+
+// iName interface for dog.
+
+char const* csDog::csName::GetName()
+{
+  return scfParent-&#62;Name;
+}
+
+void csDog::csName::SetName(char const* NewName)
+{
+  if (scfParent-&#62;Name != 0)
+    free(scfParent-&#62;Name);
+  scfParent-&#62;Name = strdup(NewName != 0 ? NewName : "");
+}
+
+</pre></td></tr></table></P><P>
+
+Since this is a plugin module, it requires a meta-information resource.
+Here is the meta-information for the example plugin:
+</P><P>
+
+<EM>File</EM>: `<TT>dog.csplugin</TT>'
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;?xml version="1.0"?&#62;
+&#60;!-- dog.csplugin --&#62;
+&#60;plugin&#62;
+  &#60;scf&#62;
+    &#60;classes&#62;
+      &#60;class&#62;
+        &#60;name&#62;dog&#60;/name&#62;
+        &#60;implementation&#62;csDog&#60;/implementation&#62;
+        &#60;description&#62;A rather unusual dog&#60;/description&#62;
+      &#60;/class&#62;
+    &#60;/classes&#62;
+  &#60;/scf&#62;
+&#60;/plugin&#62;
+</pre></td></tr></table></P><P>
+
+The above files should be built to get a plugin module named `<TT>dog.so</TT>'
+(Unix) or `<TT>dog.dll</TT>' (Windows).  The plugin module will export the
+<CODE>csDog_Create()</CODE> function which is implemented by the
+<CODE>SCF_IMPLEMENT_FACTORY()</CODE> macro, and it will publish the meta-information
+contained in `<TT>dog.csplugin</TT>'.
+</P><P>
+
+Finally, here is the source code for a simple client application that uses the
+`<SAMP>csDog</SAMP>' plugin.
+</P><P>
+
+<EM>File</EM>: `<TT>doggy.cpp</TT>'
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;stdio.h&#62;
+
+#include "cssysdef.h"
+#include "csutil/scf.h"
+#include "csutil/cfgfile.h"
+#include "idog.h"
+#include "iname.h"
+
+static void test_dog()
+{
+  csRef&#60;iDog&#62; dog = SCF_CREATE_INSTANCE("csDog", iDog);
+  if (!dog)
+    fprintf(stderr, "No csDog shared class!\n");
+  else
+  {
+    csRef&#60;iName&#62; name = SCF_QUERY_INTERFACE(dog, iName);
+    if (!name)
+      fprintf(stderr,
+        "Dog does not support iName interface!\n");
+    else
+    {
+      name-&#62;SetName("Droopy");
+      dog-&#62;Walk();
+      dog-&#62;Shout("hello!");
+      printf("Dog's name is %s\n", name-&#62;GetName());
+    }
+  }
+}
+
+int main (int argc, char const* argv[])
+{
+  scfInitialize(argc, argv);
+  test_dog();
+  iSCF::SCF-&#62;Finish();
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="SCF Advanced"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_147.html#SEC366"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_147.html#SEC369"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Pixmaps</TITLE>
+<TITLE>Crystal Space: HOWTO Level Loading</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Pixmaps">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Pixmaps">
+<META NAME="description" CONTENT="Crystal Space: HOWTO Level Loading">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Level Loading">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -25,137 +25,104 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <A NAME="SEC273"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_119.html#SEC269"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_121.html#SEC279"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_119.html#SEC270"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_121.html#SEC277"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.11 Loading Images for Pixmaps </H3>
+<H3> 5.8.10 Loading a Level </H3>
 <!--docid::SEC273::-->
 <P>
 
-This section describes how you can load an image and use it on a pixmap.  A
-pixmap is a small graphics class that can be used independently from the
-engine.  It is very useful for CSWS (see section <A HREF="cs_150.html#SEC372">6.4 Crystal Space Windowing System (CSWS)</A>), to draw a logo on
-screen or to use for a <EM>heads-up-display</EM> (HUD).
+This section describes how you can load a level in your game.
 </P><P>
 
 <A NAME="SEC274"></A>
-<H4> Getting the Image Loader Plugin </H4>
+<H4> Getting the Level Loader Plugin </H4>
 <!--docid::SEC274::-->
 <P>
 
-To load an image you need the image loader plugin. There are two
+To load a level you need the level loader plugin. There are two
 ways to make sure you have this plugin in your application. You can put
-a line in your configuration file like this:
+a line in your config file like this:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>System.Plugins.iImageIO = crystalspace.graphic.image.io.multiplex
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>System.Plugins.iLoader = crystalspace.level.loader
 </pre></td></tr></table></P><P>
 
 Or you can add the following line to the call to
 <CODE>csInitializer::RequestPlugins()</CODE> in your <CODE>main()</CODE> function:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>CS_REQUEST_IMAGELOADER,
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>CS_REQUEST_LEVELLOADER,
 </pre></td></tr></table></P><P>
 
-To actually use the image loader in your application you need to ask the
-shared-object registry for a handle to the image loader:
+To finally be able to use the level loader in your application you
+need to do:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iImageIO&#62; imgldr = CS_QUERY_REGISTRY (object_reg, iImageIO);
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iLoader&#62; level_loader = CS_QUERY_REGISTRY (object_reg, iLoader);
 </pre></td></tr></table></P><P>
 
+When you don't need it anymore you must call <CODE>level_loader-&#62;DecRef ()</CODE>.
+</P><P>
+
 <A NAME="SEC275"></A>
-<H4> Loading the Image from VFS </H4>
+<H4> Loading a Map </H4>
 <!--docid::SEC275::-->
 <P>
 
-Next, you will probably want to load the image from VFS (see section <A HREF="cs_158.html#SEC389">7.2 Virtual File System (VFS)</A>).
-This is accomplished by loading the image as raw data and then asking the image
-loader to re-interpret the raw data as an actual `<SAMP>iImage</SAMP>' resource.
+Loading a map is simple. You just do:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iDataBuffer&#62; buf = VFS-&#62;ReadFile ("/lib/mydata/test.jpg");
-csRef&#60;iImage&#62; ifile = imgldr-&#62;Load (buf-&#62;GetUint8 (),
-  buf-&#62;GetSize (), txtmgr-&#62;GetTextureFormat ());
-iTextureHandle* txt = txtmgr-&#62;RegisterTexture (ifile, CS_TEXTURE_2D);
-txt-&#62;Prepare ();
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>VFS-&#62;ChDir ("/lev/mymap");
+level_loader-&#62;LoadMapFile ("world");
+engine-&#62;Prepare ();
 </pre></td></tr></table></P><P>
 
-This code first uses VFS to load the image from the given VFS
-path. This will only load the image data. VFS doesn't know how to parse
-images. This is the responsibility of the image loader. This is what the
-next line does. Here you give the loaded buffer to the image loader which
-will return the loaded image with an <CODE>iImage</CODE> pointer.
+This will first set the current directory to the right VFS dir
+(see section <A HREF="cs_159.html#SEC393">7.2 Virtual File System (VFS)</A>) and then it will load the map file which is called 'world' (this
+is not a requirement).
 </P><P>
 
-Now you have to make sure the image becomes a texture that is usable for
-drawing on screen. This is done with <CODE>txtmgr-&#62;RegisterTexture()</CODE>. Because
-we are going to use the texture for a pixmap (which is 2D) we use the
-`<SAMP>CS_TEXTURE_2D</SAMP>' flag. After registering the texture we have to
-<CODE>Prepare()</CODE> it for use.
+Note that this will clear all other geometry that might have been
+loaded in the engine before. If you don't want that then you need to
+set the second parameter of <CODE>LoadMapFile</CODE> to <CODE>false</CODE>.
+</P><P>
+
+The line <CODE>engine-&#62;Prepare()</CODE> will make sure that everything that
+is loaded is correctly set up (i.e. materials and texture will be registered,
+lightmaps will be loaded from the cache, ...).
 </P><P>
 
 <A NAME="SEC276"></A>
-<H4> Using the Texture in a Pixmap </H4>
+<H4> Include Files        </H4>
 <!--docid::SEC276::-->
-<P>
-
-To create a pixmap using this texture you can simply do:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csSimplePixmap* pixmap = new csSimplePixmap (txt);
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC277"></A>
-<H4> Drawing the Pixmap </H4>
-<!--docid::SEC277::-->
-<P>
-
-There are various ways to draw the pixmap. Check out the API documentation
-for more info. But here is one example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>pixmap-&#62;DrawScaled (G3D, 10, 10, 400, 400);
-</pre></td></tr></table></P><P>
-
-This will draw the pixmap at location 10, 10 with dimension 400, 400.
-If needed it will scale so that the pixmap really fits there.
-</P><P>
-
-<A NAME="SEC278"></A>
-<H4> Include Files         </H4>
-<!--docid::SEC278::-->
 <P>
 
 The include files useful for this section are:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "cstool/cspixmap.h"
-#include "igraphic/image.h"
-#include "igraphic/imageio.h"
-#include "ivideo/texture.h"
-#include "ivideo/txtmgr.h"
-#include "iutil/vfs.h"
-</pre></td></tr></table><A NAME="HOWTO Render Priorities"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "isys/vfs.h"
+#include "imap/parser.h"
+#include "iengine/engine.h"
+</pre></td></tr></table><A NAME="HOWTO Pixmaps"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_119.html#SEC269"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_121.html#SEC279"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_119.html#SEC270"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_121.html#SEC277"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

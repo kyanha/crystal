@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Porting</TITLE>
+<TITLE>Crystal Space: CVS Guide</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Porting">
-<META NAME="keywords" CONTENT="Crystal Space: Porting">
+<META NAME="description" CONTENT="Crystal Space: CVS Guide">
+<META NAME="keywords" CONTENT="Crystal Space: CVS Guide">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,56 +23,136 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC811"></A>
+<A NAME="SEC814"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC810"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC812"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC812"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC813"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC815"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC816"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 9.5 Porting to a New Platform </H2>
-<!--docid::SEC811::-->
+<H2> 9.4 CVS Etiquette Guidelines </H2>
+<!--docid::SEC814::-->
 <P>
 
-This section provides information useful to developers who wish to port
-Crystal Space to new platforms.
+Since Crystal Space has enough developers to warrant the use of CVS to
+manage its code base, there are some rules you need to keep in mind if you
+are going to be making changes of any sort to the CVS source tree.
 </P><P>
 
-Before undertaking the job of porting Crystal Space to a new platform one
-should, at least marginally, familiarize one's self with the various modules
-which comprise the package. A good way to gain such an overview is to read
-the Chapter about the internal structure of Crystal Space (see section <A HREF="cs_261.html#SEC793">8. Internal Project Structure</A>),
-as well as the Libraries (see section <A HREF="cs_134.html#SEC351">6. Libraries</A>) and Plug-in
-(see section <A HREF="cs_156.html#SEC387">7. Plug-In Modules and Drivers</A>) chapters.
+First off, to access the CVS repository anonymously, use this
+<CODE>CVSROOT</CODE> setting:
 </P><P>
 
-Once you have gained an overview of structure of Crystal Space, the first step
-in porting is to check the file `<TT>include/types.h</TT>' and see if it conforms
-to your system.  This file defines various types and constants which may need
-to be customized for a particular platform.  If you have a system with
-uncommon sizes for integers (for example 32-bit `<SAMP>short</SAMP>' values) then you
-may need to adjust the definitions contained within this file.  However, for
-most platforms this file may be used as-is.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>:pserver:anonymous@cvs.sourceforge.net:/cvsroot/crystal
+</pre></td></tr></table></P><P>
+
+The password for the `<SAMP>anonymous</SAMP>' account is the empty string--that is,
+just press the <KBD>RETURN</KBD> key at the `<SAMP>Password:</SAMP>' prompt.
 </P><P>
 
-<EM>FIXME</EM>: Flesh out the remainder of this discussion.
-<A NAME="Glossary"></A>
+For further instructions, please refer to the following document:
+</P><P>
+
+<A HREF="http://sourceforge.net/cvs/?group_id=649">http://sourceforge.net/cvs/?group_id=649</A>
+</P><P>
+
+Once you've logged in, checkout the module `<SAMP>crystal</SAMP>' to download the
+source code to the `<TT>CS</TT>' directory.  See the documentation for your
+CVS client on how to do this.
+</P><P>
+
+If you do not have a developer account, you will be able to check out files,
+but will not be able to commit any changes, so the rest of this document
+doesn't really apply to you.
+</P><P>
+
+If you do have developer account, you will have to access the CVS
+repository via SSH, the secure shell.  Instructions can be found at this
+location:
+</P><P>
+
+<A HREF="http://sourceforge.net/cvs/?group_id=649">http://sourceforge.net/cvs/?group_id=649</A>
+</P><P>
+
+Having a developer account implies you will be able to make changes to the
+code.  You should read the rest of this document before making any changes.
+</P><P>
+
+Below are some guidelines you should follow before committing files.  Also be
+sure to read the important portability guidelines in the <CITE>Portability</CITE>
+section.  See section <A HREF="cs_271.html#SEC812">9.2 Portability</A>.
+</P><P>
+
+<OL>
+<LI>
+Always perform an `<SAMP>update</SAMP>' before committing new or changed files, and
+then rebuild <EM>everything</EM> from scratch after updating.  <EM>Do not rely
+on dependencies!</EM>  If there were any conflicts during the update, resolve them.
+If there were any merges, examine them to ensure that the merged code still
+accurately reflects your changes.
+<P>
+
+<LI>
+If you worked on the engine internals or on the renderers, run <CODE>walktest</CODE>
+using `<TT>flarge</TT>' and visit various locations which exercise the engine's
+features, such as the doughnut in the street and the foggy corridor.
+<P>
+
+<LI>
+If it works, commit <EM>everything</EM> you have modified, not just parts of
+your modifications.  If you have created new files, please be certain that you
+have used the CVS `<SAMP>add</SAMP>' command before committing in order to ensure
+that the new files actually get added to the repository.
+<P>
+
+<LI>
+Do another `<SAMP>update</SAMP>' after committing everything.  Take a look at the
+output to see if you really committed everything you intended to commit.
+<P>
+
+<LI>
+Do another rebuild to ensure your changes didn't collide with somebody else's
+recent changes.
+<P>
+
+<LI>
+For large and important modifications, post a description of your changes to
+the main mailing list, <A HREF="mailto:crystal-main@lists.sourceforge.net">crystal-main@lists.sourceforge.net</A>.  This is
+especially important if your changes may have affected other ports which must
+be updated by other developers as a consequence.
+</OL>
+<P>
+
+This might look overdone to some people, but you should remember that we are
+all working together with the same source.  A bug in your code can cripple the
+entire project.
+</P><P>
+
+One final thing to remember is that you should <EM>never</EM> commit files that
+you <EM>know</EM> will stop the progress of other developers.  The CVS
+repository is the place to commit completed code, not code that needs
+debugging because you can't find a certain bug.  Other developers should not
+have to stop and track down your bugs just so they can proceed with their own
+coding.  When you've committed code, please monitor the mailing list regularly
+for any signs that you've caused a problem somewhere.  This is part of the
+responsibility that goes with the ability to commit code.
+<A NAME="Porting"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC810"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC812"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC802"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC812"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC813"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC815"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_269.html#SEC806"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_275.html#SEC816"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

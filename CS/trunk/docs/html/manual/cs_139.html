@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: SCF Explained</TITLE>
+<TITLE>Crystal Space: SCF</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: SCF Explained">
-<META NAME="keywords" CONTENT="Crystal Space: SCF Explained">
+<META NAME="description" CONTENT="Crystal Space: SCF">
+<META NAME="keywords" CONTENT="Crystal Space: SCF">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,169 +23,84 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC356"></A>
+<A NAME="SEC359"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_140.html#SEC357"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC358"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_140.html#SEC360"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 6.2.1 How it Works </H3>
-<!--docid::SEC356::-->
+<H2> 6.2 Shared Class Facility (SCF) </H2>
+<!--docid::SEC359::-->
 <P>
 
-This section contains technical details about SCF. If you're not
-interested in details, you can skip directly to the next section which
-explains how SCF should be used from the end-user's point of view.
+<EM>Original SCF design and concept by Andrew Zabolotny, 1999.  This
+document and Crystal Space's particular SCF implementation were written,
+and are copyright &copy; 1999 by Andrew Zabolotny,
+<A HREF="mailto:bit@eltech.ru">bit@eltech.ru</A>.  SCF is distributed under the GNU Library
+General Public License (LGPL).  See section <A HREF="cs_14.html#SEC16">1.13 GNU Library General Public License</A>.</EM>
 </P><P>
 
-SCF is somewhat similar to COM. This is because historically
-Crystal Space initially used COM for inter-module communication. Thanks
-to Dan Ogles for the initial implementation of a cross-platform COM
-library; his implementation was a good test-bed for this SCF
-implementation.
+<EM>Documentation revised significantly by Eric Sunshine,
+<A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.  Last updated September 24, 2003.</EM>
 </P><P>
 
-The differences between COM and SCF are due to the increased need for
-an easier-to-use and more lightweight mechanism than COM.  The COM
-implementation caused some problems (because of historic bugs in EGCS
-1.1.x and incompatibilities with platforms to which Crystal Space has ported).
-Also it has some problems due to the native Windows types used in COM;
-this experience was taken into account while developing SCF.
+This library is intended for separating C++ class implementations from programs
+that use them.  This is achieved by separating class implementations into a
+separate module in the form of shared libraries, which are also called
+<EM>plugin modules</EM>.  Separating the implementation of a class from the
+program helps to address problems regarding shared library facility
+incompatibilities on different platforms.  It also makes it possible to use
+different mechanisms for SCF, for example inter-process communication
+(through pipes, shared memory, or whatever); communication through network or
+through a COM or CORBA request broker; although currently only two
+minimal configurations supported: using shared libraries and using static
+linkage (for platforms that don't have shared library support).
 </P><P>
 
-The main paradigm of SCF, as in COM/CORBA/Java/etc. is the
-<EM>interface</EM>.  You define an <EM>interface</EM>, that is, a set of abstract
-methods that you want to access within some object.  SCF interfaces are
-plain C++ structs (or classes, it doesn't matter much except that if you're
-using classes to which you will have to add the `<SAMP>public:</SAMP>' keyword).
-Theoretically, interfaces can contain member variables and inline methods
-(though not non-virtual methods or constructors), <EM>but</EM> this practice is
-not encouraged because later someone may want to add a COM, CORBA,
-etc.  layer between the client and the actual object, and this will not be
-possible if the interfaces contains variables, inline methods, or non-virtual
-methods.  If you don't plan to use COM or CORBA later, then you can
-use variables and inline functions as much as you like in your own code, but
-their use in Crystal Space code is highly discouraged.
+There is a HOWTO which explains how to create a plugin module from the
+ground up using SCF technology (see section <A HREF="cs_130.html#SEC335">5.8.20 Create Your Own Plugin</A>).
+The HOWTO provides a much more concise explanation about how to create and
+utilize a plugin than what you will find here, since this section is more
+interested in exposing SCF in gory detail.  There is also a HOWTO
+which explains how to make using SCF interfaces easier by using smart
+pointers (see section <A HREF="cs_111.html#SEC227">5.8.1 Correctly Using Smart Pointers</A>).
 </P><P>
 
-Here is an example of an interface in a file named `<TT>idog.h</TT>':
+The SCF implementation is resides within the `<TT>csutil</TT>' library.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>struct iDog
-{
-  virtual bool IsAlive() = 0;
-  virtual char const* GetName() = 0;
-  virtual void SetName (char const*) = 0;
-  virtual void Shout(int Volume) = 0;
-  virtual void Run(int Speed, float Direction) = 0;
-  virtual bool GetChildren(iObjVector* oBrood) = 0;
-};
-</pre></td></tr></table></P><P>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_140.html#SEC360">6.2.1 How it Works</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_141.html#SEC361">6.2.2 Using SCF</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_142.html#SEC362">6.2.3 Classes Implementing Multiple Interfaces</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_143.html#SEC365">6.2.4 Interface Versions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_144.html#SEC366">6.2.5 Client Side</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_145.html#SEC367">6.2.6 Plugin Meta-Information</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_146.html#SEC368">6.2.7 Meta-Information Embedding</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_147.html#SEC369">6.2.8 Plugin Discovery</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_148.html#SEC370">6.2.9 Example</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_149.html#SEC371">6.2.10 Advanced Techniques</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
 
-Note the last method that gets a pointer of `<SAMP>iObjVector</SAMP>' type.
-`<SAMP>iObjVector</SAMP>' is yet another interface.  We could pass a pointer to a
-`<SAMP>csObjVector</SAMP>' (the implementation of that interface) as well, but this
-will mean both modules (caller and callee) should have same idea about what a
-`<SAMP>csObjVector</SAMP>' is, and if it happened that you compiled the shared library
-with a slightly different version of `<SAMP>csObjVector</SAMP>' (that, say, had one
-member variable fewer) you will end up with a SIGSEGV crash.  By instead
-specifying the abstract `<SAMP>iObjVector</SAMP>', there is no need to link the
-`<SAMP>csObjVector</SAMP>' class into both the caller and the callee.
-</P><P>
-
-Now let's write a particular <EM>implementation</EM> of the above interface.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "idog.h"
-
-class MyDog : public iDog
-{
-private:
-  // private member functions &#38; variables <small>...</small>
-  char* Name;
-public:
-  virtual bool IsAlive();
-  virtual char const* GetName();
-  virtual void SetName(char const*);
-  virtual void Shout(int Volume);
-  virtual void Run(int Speed, float Direction);
-  virtual bool GetChildren(iObjVector* oBrood);
-  <small>...</small> public member functions &#38; variables <small>...</small>
-};
-
-bool MyDog::IsAlive()
-{
-  return true;
-};
-
-char const* MyDog::GetName()
-{
-  return Name;
-}
-
-void MyDog::SetName(char const* NewName)
-{
-  if (Name != 0)
-    free (Name);
-  Name = strcpy (NewName);
-}
-
-// And so on <small>...</small>
-</pre></td></tr></table></P><P>
-
-Now, we put the actual implementation into a separate module (i.e. into a
-shared library), and include within the client just the interface file
-`<TT>idog.h</TT>'. Since the client does not have any idea how we should build
-an object of the `<SAMP>MyDog</SAMP>' class, we also provide a function that will
-return a newly-allocated object of that class. This is called the
-<EM>class factory</EM> (in fact, a class factory is a bit more than just this,
-but more about this later). Here is how to do it:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>static iDog* MyDog_Create()
-{
-  return new MyDog();
-}
-</pre></td></tr></table></P><P>
-
-Okay, we did it. Now back to the client. To work with an object that
-implements the `<SAMP>iDog</SAMP>' interface we need to load the shared library, get
-a pointer to the <CODE>MyDog_Create()</CODE> function, call it and get a new
-`<SAMP>MyDog</SAMP>' object. Further we work with this pointer as if it were pointing
-to an `<SAMP>iDog</SAMP>' object:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csLibraryHandle handle = csLoadLibrary("./libdog.so");
-iDog (*iDog_Create)() = csGetLibrarySymbol(handle, "MyDog_Create");
-iDog* dog = iDog_Create();
-printf("Doggy's name is %s\n", dog-&#62;GetName());
-dog-&#62;Shout(100);
-<small>...</small>
-</pre></td></tr></table></P><P>
-
-Of course, you don't have to do all this stuff manually with the SCF
-implementation. The SCF library provides a number of useful macros and
-functions which hide these ugly implementation details from end-user.
-</P><P>
-
-<A NAME="SCF Using"></A>
+<A NAME="SCF Explained"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_140.html#SEC357"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC352"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_149.html#SEC371"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC358"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_140.html#SEC360"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

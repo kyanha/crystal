@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Simple Base Code</TITLE>
+<TITLE>Crystal Space: Tutorial Simple Map</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Simple Base Code">
-<META NAME="keywords" CONTENT="Crystal Space: Simple Base Code">
+<META NAME="description" CONTENT="Crystal Space: Tutorial Simple Map">
+<META NAME="keywords" CONTENT="Crystal Space: Tutorial Simple Map">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,343 +23,46 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC180"></A>
+<A NAME="SEC183"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_86.html#SEC181"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC183"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC182"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_86.html#SEC184"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC158"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_89.html#SEC187"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.4.1 Minimal Base Code </H3>
-<!--docid::SEC180::-->
+<H2> 5.4 Simple Tutorial 3: Map Loading </H2>
+<!--docid::SEC183::-->
 <P>
 
-To start with we first take the code of tutorial one
-and remove the code that creates geometry and initializes
-the default camera position. In addition we add a new <CODE>LoadMap()</CODE>
-function. This results in the following for `<TT>simpmap.h</TT>':
+This tutorial continues on tutorial one. Here we will learn how you
+can load a level from a map file instead of creating the geometry
+in the code.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#ifndef __SIMPMAP_H__
-#define __SIMPMAP_H__
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_86.html#SEC184">5.4.1 Minimal Base Code</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_87.html#SEC185">5.4.2 Loading The Map</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_88.html#SEC186">5.4.3 Locating the Camera</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
 
-#include &#60;stdarg.h&#62;
-#include "csutil/ref.h"
-
-struct iEngine;
-struct iLoader;
-struct iGraphics3D;
-struct iKeyboardDriver;
-struct iVirtualClock;
-struct iObjectRegistry;
-struct iEvent;
-struct iSector;
-struct iView;
-
-class Simple
-{
-private:
-  iObjectRegistry* object_reg;
-  csRef&#60;iEngine&#62; engine;
-  csRef&#60;iLoader&#62; loader;
-  csRef&#60;iGraphics3D&#62; g3d;
-  csRef&#60;iKeyboardDriver&#62; kbd;
-  csRef&#60;iVirtualClock&#62; vc;
-  iSector* room;
-  csRef&#60;iView&#62; view;
- 
-  static bool SimpleEventHandler (iEvent&#38; ev);
-  bool HandleEvent (iEvent&#38; ev);
-  void SetupFrame ();
-  void FinishFrame ();
-  bool LoadMap ();
-
-public:
-  Simple (iObjectRegistry* object_reg);
-  ~Simple ();
-
-  bool Initialize ();
-  void Start ();
-};
-
-#endif // __SIMPMAP_H__
-</pre></td></tr></table></P><P>
-
-Similarly for `<TT>simple.cpp</TT>':
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "cssysdef.h"
-#include "simpmap.h"
-#include "cstool/csview.h"
-#include "cstool/initapp.h"
-#include "csutil/cmdhelp.h"
-#include "csutil/cscolor.h"
-#include "csutil/event.h"
-#include "csutil/sysfunc.h"
-#include "iengine/camera.h"
-#include "iengine/campos.h"
-#include "iengine/engine.h"
-#include "iengine/light.h"
-#include "iengine/material.h"
-#include "iengine/mesh.h"
-#include "iengine/movable.h"
-#include "iengine/sector.h"
-#include "iengine/texture.h"
-#include "igraphic/imageio.h"
-#include "imap/parser.h"
-#include "imesh/object.h"
-#include "imesh/thing.h"
-#include "iutil/csinput.h"
-#include "iutil/event.h"
-#include "iutil/eventq.h"
-#include "iutil/objreg.h"
-#include "iutil/vfs.h"
-#include "iutil/virtclk.h"
-#include "ivaria/reporter.h"
-#include "ivaria/stdrep.h"
-#include "ivideo/fontserv.h"
-#include "ivideo/graph2d.h"
-#include "ivideo/graph3d.h"
-#include "ivideo/material.h"
-#include "ivideo/texture.h"
-#include "ivideo/txtmgr.h"
-
-CS_IMPLEMENT_APPLICATION
-
-// The global pointer to simple
-Simple *simple;
-
-Simple::Simple (iObjectRegistry* object_reg)
-{
-  Simple::object_reg = object_reg;
-}
-
-Simple::~Simple ()
-{
-}
-
-void Simple::SetupFrame ()
-{
-  // First get elapsed time from the virtual clock.
-  csTicks elapsed_time = vc-&#62;GetElapsedTicks ();
-  
-  // Now rotate the camera according to keyboard state
-  float speed = (elapsed_time / 1000.0) * (0.03 * 20);
-
-  iCamera* c = view-&#62;GetCamera();
-  if (kbd-&#62;GetKeyState (CSKEY_RIGHT))
-    c-&#62;GetTransform ().RotateThis (CS_VEC_ROT_RIGHT, speed);
-  if (kbd-&#62;GetKeyState (CSKEY_LEFT))
-    c-&#62;GetTransform ().RotateThis (CS_VEC_ROT_LEFT, speed);
-  if (kbd-&#62;GetKeyState (CSKEY_PGUP))
-    c-&#62;GetTransform ().RotateThis (CS_VEC_TILT_UP, speed);
-  if (kbd-&#62;GetKeyState (CSKEY_PGDN))
-    c-&#62;GetTransform ().RotateThis (CS_VEC_TILT_DOWN, speed);
-  if (kbd-&#62;GetKeyState (CSKEY_UP))
-    c-&#62;Move (CS_VEC_FORWARD * 4 * speed);
-  if (kbd-&#62;GetKeyState (CSKEY_DOWN))
-    c-&#62;Move (CS_VEC_BACKWARD * 4 * speed);
-
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d-&#62;BeginDraw(
-    engine-&#62;GetBeginDrawFlags() | CSDRAW_3DGRAPHICS))
-    return;
-
-  // Tell the camera to render into the frame buffer.
-  view-&#62;Draw ();
-}
-
-void Simple::FinishFrame ()
-{
-  g3d-&#62;FinishDraw ();
-  g3d-&#62;Print (0);
-}
-
-bool Simple::HandleEvent (iEvent&#38; ev)
-{
-  if (ev.Type == csevBroadcast &#38;&#38; ev.Command.Code == cscmdProcess)
-  {
-    simple-&#62;SetupFrame ();
-    return true;
-  }
-  else if (ev.Type == csevBroadcast &#38;&#38;
-    ev.Command.Code == cscmdFinalProcess)
-  {
-    simple-&#62;FinishFrame ();
-    return true;
-  }
-  else if (ev.Type == csevKeyboard &#38;&#38; 
-    csKeyEventHelper::GetEventType (&#38;ev) == csKeyEventTypeDown)
-  {
-    if (csKeyEventHelper::GetCookedCode (&#38;ev) == CSKEY_ESC)
-    {
-      csRef&#60;iEventQueue&#62; q(CS_QUERY_REGISTRY(object_reg,iEventQueue));
-      if (q)
-	q-&#62;GetEventOutlet()-&#62;Broadcast (cscmdQuit);
-      return true;
-    }
-  }
-
-  return false;
-}
-
-bool Simple::SimpleEventHandler (iEvent&#38; ev)
-{
-  return simple-&#62;HandleEvent (ev);
-}
-
-bool Simple::Initialize ()
-{
-  if (!csInitializer::RequestPlugins (object_reg,
-  	CS_REQUEST_VFS,
-	CS_REQUEST_SOFTWARE3D,
-	CS_REQUEST_ENGINE,
-	CS_REQUEST_FONTSERVER,
-	CS_REQUEST_IMAGELOADER,
-	CS_REQUEST_LEVELLOADER,
-	CS_REQUEST_REPORTER,
-	CS_REQUEST_REPORTERLISTENER,
-	CS_REQUEST_END))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-    	"crystalspace.application.simple",
-	"Can't initialize plugins!");
-    return false;
-  }
-
-  if (!csInitializer::SetupEventHandler(
-    object_reg, SimpleEventHandler))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-    	"crystalspace.application.simple",
-	"Can't initialize event handler!");
-    return false;
-  }
-
-  // Check for commandline help.
-  if (csCommandLineHelper::CheckHelp (object_reg))
-  {
-    csCommandLineHelper::Help (object_reg);
-    return false;
-  }
-
-  // The virtual clock.
-  vc = CS_QUERY_REGISTRY (object_reg, iVirtualClock);
-  if (!vc)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-    	"crystalspace.application.simple",
-	"Can't find the virtual clock!");
-    return false;
-  }
-
-  // Find the pointer to engine plugin
-  engine = CS_QUERY_REGISTRY (object_reg, iEngine);
-  if (!engine)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-    	"crystalspace.application.simple",
-	"No iEngine plugin!");
-    return false;
-  }
-
-  loader = CS_QUERY_REGISTRY (object_reg, iLoader);
-  if (!loader)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-    	"crystalspace.application.simple",
-    	"No iLoader plugin!");
-    return false;
-  }
-
-  g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
-  if (!g3d)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-    	"crystalspace.application.simple",
-    	"No iGraphics3D plugin!");
-    return false;
-  }
-
-  kbd = CS_QUERY_REGISTRY (object_reg, iKeyboardDriver);
-  if (!kbd)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-    	"crystalspace.application.simple",
-    	"No iKeyboardDriver plugin!");
-    return false;
-  }
-
-  // Open the main system. This will open all the previously
-  // loaded plug-ins.
-  if (!csInitializer::OpenApplication (object_reg))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-    	"crystalspace.application.simple",
-    	"Error opening system!");
-    return false;
-  }
-
-  view = csPtr&#60;iView&#62; (new csView (engine, g3d));
-  iGraphics2D* g2d = g3d-&#62;GetDriver2D ();
-  view-&#62;SetRectangle (0, 0, g2d-&#62;GetWidth (), g2d-&#62;GetHeight ());
-
-  return true;
-}
-
-void Simple::Start ()
-{
-  csDefaultRunLoop (object_reg);
-}
-
-/*---------------*
- * Main function
- *---------------*/
-int main (int argc, char* argv[])
-{
-  iObjectRegistry* object_reg =
-    csInitializer::CreateEnvironment (argc, argv);
-  if (!object_reg) return -1;
-  simple = new Simple (object_reg);
-
-  if (simple-&#62;Initialize ())
-    simple-&#62;Start ();
-
-  delete simple;
-  csInitializer::DestroyApplication (object_reg);
-
-  return 0;
-}
-</pre></td></tr></table></P><P>
-
-One important note in the code above: we removed the following line:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  engine-&#62;SetLightingCacheMode (0);
-</pre></td></tr></table></P><P>
-
-That's because when we are loading from map file we actually want
-the lighting information to be read from the cache (if present).
-That's because relighting a map can be a time-consuming process.
-</P><P>
-
-<A NAME="Simple Loading The Map"></A>
+<A NAME="Simple Base Code"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_86.html#SEC181"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC183"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC182"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_86.html#SEC184"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC158"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_89.html#SEC187"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

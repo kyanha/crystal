@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: map2cs Tutorial Skybox</TITLE>
+<TITLE>Crystal Space: map2cs Tutorial Step 9</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: map2cs Tutorial Skybox">
-<META NAME="keywords" CONTENT="Crystal Space: map2cs Tutorial Skybox">
+<META NAME="description" CONTENT="Crystal Space: map2cs Tutorial Step 9">
+<META NAME="keywords" CONTENT="Crystal Space: map2cs Tutorial Step 9">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,164 +23,84 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC195"></A>
+<A NAME="SEC198"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_97.html#SEC194"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_99.html#SEC197"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC183"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_100.html#SEC198"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_97.html#SEC197"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_99.html#SEC199"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_89.html#SEC187"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC202"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.5.10 Generating Skybox Textures </H3>
-<!--docid::SEC195::-->
+<H3> 5.5.9 Step 9: Adding Manual Sectors </H3>
+<!--docid::SEC198::-->
 <P>
 
-If you don't like the idea of keeping the player always inside a building and
-never allowing him to look outside, then you need a skybox.  A skybox will
-give the player a good illusion that there is an outside to your level.  A
-skybox is a huge box with textures that shows what is outside.  However,
-creating these textures is a bit tricky, otherwise, it might just look like
-the inside of a textured cube.
+To further optimize your map, you can manually add sectoring information.  For 
+such a small map, this is not really needed, but on large maps you will 
+probably see some improvements.  
 </P><P>
 
-But there is good news, because there is a free tool that is great for making
-these textures.  It is called Terragen.
+To do this create a brush, select it, and press <EM>To Entity</EM>.  For 
+classname use `<SAMP>cs_sector</SAMP>'.  Then select the "Visgroups" tab on the 
+"Brushs Properties" dialog.  Press "Edit Groups", type the name 
+"Sectors" (or anything you like).  Then select the visgroup "Sectors" for 
+that brush.  (Otherwise you may have a hard time reselecting the brush later 
+on.) 
 </P><P>
 
-<A HREF="http://www.planetside.co.uk/">http://www.planetside.co.uk/</A>
+Duplicate the brush twice, so you have one for every room, and one for the 
+corridor.  Align the sector brush <EM>exactly</EM> with all inside walls.  Do 
+this with both rooms and the corridor.  
 </P><P>
 
-Please consult the terragen documentation about how to create a world, as
-I will only explain, how to export the map file to Crystal Space.
+In the editor it should look like this:
 </P><P>
 
-<A NAME="SEC196"></A>
-<H4> Exporting to Crystal Space </H4>
-<!--docid::SEC196::-->
-<P>
-
-When you are done creating your world perform the following steps:
+<CENTER><IMG SRC="tutorial/map2cs/wcmap2.png" ALT="tutorial/map2cs/wcmap2"></CENTER>
 </P><P>
 
-Open the "Rendering Controls" panel.
+Now compile your map again.  At first, the result should look just the same.  
+But if you enable edge drawing, you will see, that the large surrounding 
+automatic sector is gone, you have just eliminated significant overdraw.  (In 
+fact, now only half the fillrate is required.) But you will also see, that the 
+floor is split into many polygons.  which is completely unnecessary.  
 </P><P>
 
-<OL>
-<LI>
-Move your camera to the desired point in your map.
-<LI>
-Disable the "Fixed Height Above Surface" switch.
-<LI>
-Set "Detail" to <EM>Maximum</EM>.
-<LI>
-In the "Camera Settings" dialog set "Zoom Magnification" to "1".
-<LI>
-Set "Image Size" to 512x512 or 256x256.
-</OL>
-<P>
-
-<CENTER><IMG SRC="tutorial/map2cs/terra1.png" ALT="tutorial/map2cs/terra1"></CENTER>
+You can see this here (look especially at the area of the table): 
 </P><P>
 
-Now create six images and store them.  Use the following settings for these
-images:
+<CENTER><IMG SRC="tutorial/map2cs/csmap5a.jpg" ALT="tutorial/map2cs/csmap5a"></CENTER>
 </P><P>
 
-<BLOCKQUOTE>
-<TABLE>
-<TR><TD><EM>Texture Name Suffix</EM></TD>
-</TD><TD> <EM>Camera Head</EM>
-</TD><TD> <EM>Camera Pitch</EM>
-</TD><TD> <EM>Camera Bank</EM>
-</TR>
-<TR><TD><CODE>_f</CODE> </TD><TD> 0 </TD><TD> 0 </TD><TD> 0</TD>
-</TR>
-<TR><TD><CODE>_r</CODE> </TD><TD> 90 </TD><TD> 0 </TD><TD> 0</TD>
-</TR>
-<TR><TD><CODE>_b</CODE> </TD><TD> 180 </TD><TD> 0 </TD><TD> 0</TD>
-</TR>
-<TR><TD><CODE>_l</CODE> </TD><TD> 270 </TD><TD> 0 </TD><TD> 0</TD>
-</TR>
-<TR><TD><CODE>_u</CODE> </TD><TD> 0 </TD><TD> 90 </TD><TD> 0</TD>
-</TR>
-<TR><TD><CODE>_d</CODE> </TD><TD> 0 </TD><TD> 270 </TD><TD> 0</TD>
-</TR></TABLE>
-</BLOCKQUOTE>
-<P>
-
-Convert the generated bitmaps to a format readable by `<TT>map2cs</TT>' (TGA,
-JPG, JPEG, BMP, WAL).
+`<TT>map2cs</TT>' was created with this problem in mind, so you can avoid it 
+pretty easily.
 </P><P>
 
-Then you need to add a setting "skybox" with the value of your basename in
-the general world properties.  (For example, if your textures are called
-`<TT>sample_f.bmp</TT>', `<TT>sample_r.bmp</TT>', you will set "skybox" to
-"sample").  Now every brush you assign a key "sky" with a value of "1" 
-will look like your skybox. 
+Just select all furniture and do a "To Entity".  (`<TT>map2cs</TT>' will only 
+use regular world brushes to texture the sector walls, so the table and the 
+other furniture are "invisible" to the algorithm that textures the walls.  
 </P><P>
 
-In addition, faces whose texture is "sky" will also let you see the skybox.
+The much better result can be seen here:
 </P><P>
 
-Now you have to let map2cs know where `<TT>sample_f.bmp</TT>', `<TT>sample_r.bmp</TT>', etc.
-are located. We will put all the `<TT>sample_*.bmp</TT>' files on a single ZIP file.
-Launch WinZip, WinRAR, or the program you use to open ZIP
-files. Create a new file, store all the `<TT>sample_*.bmp</TT>' files on it, and save it
-as `<TT>C:\Crystal\Maps\sample.zip</TT>'.
-</P><P>
-
-Open the file `<TT>C:\Crystal\CS\data\config\map2cs.cfg</TT>' in your favorite text
-editor, then add a line like this: 
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>`<SAMP>Map2CS.TextureSettings.zip1 = C:\Crystal\Maps\sample.zip</SAMP>'.
-</pre></td></tr></table></P><P>
-
-`<TT>map2cs.cfg</TT>' should now look like the following example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>Map2CS.TextureSettings.DefaultTexture = liquids/bubbles
-Map2CS.TextureSettings.wad1 = C:\Crystal\WADs\cstex_1.wad
-Map2CS.TextureSettings.wad2 = C:\Crystal\WADs\cstex_2.wad
-Map2CS.TextureSettings.wad3 = C:\Sierra\HalfLife\valve\halflife.wad
-Map2CS.TextureSettings.wad4 = C:\Sierra\HalfLife\valve\xeno.wad
-Map2CS.TextureSettings.wad5 = C:\Sierra\HalfLife\valve\liquids.wad
-Map2CS.TextureSettings.wad6 = C:\Sierra\HalfLife\valve\texpack.wad
-Map2CS.TextureSettings.zip1 = C:\Crystal\Maps\sample.zip
-
-Map2CS.General.Scaling = 0.025
-Map2CS.General.UseBSP = 0
-Map2CS.General.RemoveHidden = 0
-Map2CS.General.LightScale=30
-
-System.ApplicationID = Map2CS
-</pre></td></tr></table></P><P>
-
-Ready! Just try this out.  It is a really amazing effect.
-</P><P>
-
-This screenshot doesn't really do justice to the skybox effect, but it looks
-quite nice, never-the-less.  To really appreciate the effect you will need to
-move around a world in Crystal Space using a map enclosed within a skybox.
-</P><P>
-
-<CENTER><IMG SRC="tutorial/map2cs/terra2.png" ALT="tutorial/map2cs/terra2"></CENTER>
-<A NAME="map2cs Tutorial Tips"></A>
+<CENTER><IMG SRC="tutorial/map2cs/csmap5b.jpg" ALT="tutorial/map2cs/csmap5b"></CENTER>
+<A NAME="map2cs Tutorial Skybox"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_97.html#SEC194"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_99.html#SEC197"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC183"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_100.html#SEC198"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_97.html#SEC197"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_99.html#SEC199"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_89.html#SEC187"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC202"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

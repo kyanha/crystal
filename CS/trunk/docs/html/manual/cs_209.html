@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Writing MeshObjects</TITLE>
+<TITLE>Crystal Space: Using MeshObject</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Writing MeshObjects">
-<META NAME="keywords" CONTENT="Crystal Space: Writing MeshObjects">
+<META NAME="description" CONTENT="Crystal Space: Using MeshObject">
+<META NAME="keywords" CONTENT="Crystal Space: Using MeshObject">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -25,18 +25,18 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <A NAME="SEC559"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC555"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_210.html#SEC560"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC553"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_210.html#SEC563"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.7.3 Writing Mesh Objects </H3>
+<H3> 7.7.2 Using Mesh Objects </H3>
 <!--docid::SEC559::-->
 <P>
 
@@ -44,21 +44,219 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
 </P><P>
 
-This section explains how you can write your own Mesh Object plug-in modules.
+This section explains how to use Mesh Objects in general.  It doesn't go into
+detail about the specific Mesh Object Types that Crystal Space supports.
 </P><P>
 
-NOT YET WRITTEN.
-<A NAME="MeshObject Spr2D"></A>
+<A NAME="SEC560"></A>
+<H4> General </H4>
+<!--docid::SEC560::-->
+<P>
+
+When the engine works with instances of Mesh Objects it does so through the
+`<SAMP>iMeshWrapper</SAMP>' interface.  `<SAMP>iMeshWrapper</SAMP>' holds the reference to the
+`<SAMP>iMeshObject</SAMP>' instances implementing the particular type of Mesh Object.
+`<SAMP>iMeshWrapper</SAMP>' is responsible for deciding when to draw a Mesh Object and
+when to light it.  `<SAMP>iMeshWrapper</SAMP>' also manages the position of the object
+in the world and manages possible hierarchical transformations (i.e.
+`<SAMP>iMeshWrapper</SAMP>' has an array of `<SAMP>iMeshWrapper</SAMP>' children).
+</P><P>
+
+<A NAME="SEC561"></A>
+<H4> Loading From Map File </H4>
+<!--docid::SEC561::-->
+<P>
+
+The easiest way to use Mesh Objects is to simply specify them in the map file
+for your level.  There are two things that you need to do for that.  First you
+have to specify an entry at top-level (directly inside the `<SAMP>world</SAMP>'
+statement) like this (this example uses the <EM>fountain</EM> plug-in to make a
+fountain):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshfact name="fountainFactory"&#62;
+  &#60;plugin&#62;crystalspace.mesh.loader.factory.fountain&#60;/plugin&#62;
+  &#60;params /&#62;
+&#60;/meshfact&#62;
+</pre></td></tr></table></P><P>
+
+This will use the <EM>mesh object loader</EM> plug-in which is identified by the
+SCF name mentioned by the `<SAMP>plugin</SAMP>' statement to load a factory
+(type `<SAMP>iMeshObjectFactory</SAMP>') and register it with the engine.  There are no
+parameters for the fountain's Mesh Object Factory so that's why the
+`<SAMP>params</SAMP>' block is empty.  But you still have to specify it.  Other mesh
+object factories may accept parameters.
+</P><P>
+
+Because the fountain defines no parameters for the Mesh Object Factory
+you only have to create one factory in order to make all fountains you need.
+But in some cases you may have to create multiple factories depending
+on the object characteristics you want.
+</P><P>
+
+To place a fountain in some room (sector) you use a `<SAMP>meshobj</SAMP>'
+statement, within the definition of a room or sector, like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshobj name="fountain"&#62;
+  &#60;plugin&#62;crystalspace.mesh.loader.fountain&#60;/plugin&#62;
+  &#60;params&#62;
+    &#60;factory&#62;fountainFactory&#60;/factory&#62;
+    &#60;number&#62;300&#60;/number&#62;
+    &#60;material&#62;spark&#60;/material&#62;
+    &#60;origin x="0" y="0" z="0"/&#62;
+    &#60;dropsize w=".05" h=".05"/&#62;
+    &#60;color red="0.7" green="0.9" blue="1.0"/&#62;
+    &#60;accel x="0" y="-.1" z="0"/&#62;
+    &#60;falltime&#62;3&#60;/falltime&#62;
+    &#60;speed&#62;1&#60;/speed&#62;
+    &#60;elevation&#62;1.5&#60;/elevation&#62;
+    &#60;azimuth&#62;0&#60;/azimuth&#62;
+    &#60;opening&#62;.2&#60;/opening&#62;
+    &#60;mixmode&#62;
+      &#60;add /&#62;
+    &#60;/mixmode&#62;
+  &#60;/params&#62;
+  &#60;move&#62;
+    &#60;v x="-10" y="-1" z="14"/&#62;
+    &#60;matrix&#62;
+      &#60;rot x="1.5"/&#62;
+    &#60;/matrix&#62;
+  &#60;/move&#62;
+&#60;/meshobj&#62;
+</pre></td></tr></table></P><P>
+
+This code fragment uses the `<SAMP>crystalspace.mesh.loader.fountain</SAMP>' loader
+plug-in named to load a Mesh Object (type
+`<SAMP>iMeshObject</SAMP>') and register it with the engine (while placing it in the
+current sector).  In this case there are many parameters.  The first parameter
+should always be the name of the factory.  This is true for all Mesh Objects
+regardless of their type.  For a complete list of parameters available, you
+should refer to the fountain documentation.
+</P><P>
+
+The `<SAMP>move</SAMP>' statement is outside of the `<SAMP>params</SAMP>' block.  The reason
+for this is that the position of Mesh Objects is controlled by the engine and
+not by the Mesh Object itself.
+</P><P>
+
+In addition to the above statements you can also nest other `<SAMP>meshobj</SAMP>'
+statements to create a hierarchy of Mesh Objects (not shown in the example
+above).  If you do that, then the `<SAMP>move</SAMP>' statement must be interpreted
+relative to the parent.
+</P><P>
+
+When you have Mesh Objects loaded into Crystal Space using the map file syntax
+illustrated above, then you can query the parameters from your application by
+using the standard API in the `<SAMP>iEngine</SAMP>' interface.
+</P><P>
+
+<A NAME="SEC562"></A>
+<H4> Using Directly From Code </H4>
+<!--docid::SEC562::-->
+<P>
+
+You can also create Mesh Objects directly from your application.  To do this,
+roughly, you have to perform the following steps:
+</P><P>
+
+<UL>
+<LI>
+Load the Mesh Object Type with <CODE>CS_LOAD_PLUGIN()</CODE> (preferably after checking
+if it is already loaded, by calling <CODE>CS_QUERY_PLUGIN_CLASS()</CODE>).
+<P>
+
+<LI>
+Create at least one Mesh Object Factory by calling <CODE>NewFactory()</CODE> on the
+Mesh Object Type instance.
+<P>
+
+<LI>
+If the factory has parameters you can call <CODE>SCF_QUERY_INTERFACE()</CODE> to get a
+handle to the `<SAMP>iSomethingFactoryState</SAMP>' interface (replace <EM>Something</EM>
+with whatever the type name of the Mesh Object is).  Then you set the
+parameters you want on that factory.
+<P>
+
+<LI>
+Create one or more Mesh Object instances by using one of your factories and
+calling <CODE>NewInstance()</CODE> on them.
+<P>
+
+<LI>
+If the object has parameters you use <CODE>SCF_QUERY_INTERFACE()</CODE> to get a handle
+to the `<SAMP>iSomethingState</SAMP>' interface (replace <EM>Something</EM> with whatever
+the type name of the Mesh Object is).  Then set the parameters you want on the
+Mesh Object.  Note that there are Mesh Object implementations which have
+multiple interfaces like this (for example, the particle systems implement both
+`<SAMP>iParticleState</SAMP>' plus another particle system-dependent interface).
+<P>
+
+<LI>
+For every instance of `<SAMP>iMeshObject</SAMP>' you need to create a
+`<SAMP>iMeshWrapper</SAMP>' instance for the engine.  Then you set up the
+`<SAMP>iMeshWrapper</SAMP>' by placing it in the sector that you want it and setup its
+position and rotation (transformation).
+</UL>
+<P>
+
+Here is a code example for creating an instance of the ball plug-in.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>void Initialize ()
+{
+  <small>...</small>
+  // Get the ball mesh object plug-in.
+  ball_type = CS_QUERY_PLUGIN_CLASS (this,
+    "crystalspace.mesh.object.ball", iMeshObjectType);
+  if (!ball_type)
+    ball_type = CS_LOAD_PLUGIN (this,
+      "crystalspace.mesh.object.ball", iMeshObjectType);
+  if (!ball_type)
+    Printf (CS_MSG_WARNING, "No ball type plug-in found!\n");
+  ball_factory = ball_type-&#62;NewFactory ();
+  <small>...</small>
+}
+<small>...</small>
+void SetupWorld ()
+{
+  <small>...</small>
+  // Make a ball using the ball plug-in.
+  csRef&#60;iMeshObject&#62; ballMesh = ball_factory-&#62;NewInstance ();
+  csRef&#60;iBallState&#62; ballState =
+    SCF_QUERY_INTERFACE (ballMesh, iBallState);
+  ballState-&#62;SetRadius (.5, .5, .5);
+  ballState-&#62;SetMaterialWrapper (material);
+  ballState-&#62;SetRimVertices (12);
+
+  csRef&#60;iMeshWrapper&#62; ball =
+    engine-&#62;CreateMeshWrapper (ballMesh, "MyBall", room);
+  m.Identity ();
+  ball-&#62;GetMovable ().SetTransform (m);
+  ball-&#62;GetMovable ().SetPosition (csVector3 (-3, 5, -3));
+  ball-&#62;GetMovable ().UpdateMove ();
+  <small>...</small>
+}
+</pre></td></tr></table></P><P>
+
+This example will load a ball using the plug-in and place it at (-3,5,-3) in
+`<SAMP>room</SAMP>'.  It will also make sure that it will be lit by the 10 closest
+lights.
+</P><P>
+
+`<SAMP>iBallState</SAMP>' is the state interface for setting the characteristics of
+ball Mesh Objects.
+<A NAME="Writing MeshObjects"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC555"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_210.html#SEC560"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC553"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_210.html#SEC563"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

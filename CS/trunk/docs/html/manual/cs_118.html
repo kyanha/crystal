@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Pseudo DynLight</TITLE>
+<TITLE>Crystal Space: HOWTO Clicking on Objects</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Pseudo DynLight">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Pseudo DynLight">
+<META NAME="description" CONTENT="Crystal Space: HOWTO Clicking on Objects">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Clicking on Objects">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,107 +23,90 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC266"></A>
+<A NAME="SEC267"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_117.html#SEC263"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_119.html#SEC269"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_117.html#SEC264"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_119.html#SEC270"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.9 Pseudo-dynamic Lights </H3>
-<!--docid::SEC266::-->
-<P>
-
-One little known feature in CS is the ability to have pseudo-dynamic
-lights. Pseudo-dynamic lights are somewhere between static lights and
-dynamic lights. Static lights cannot move but they generate high quality
-lightmaps. Dynamic lights can move but the quality of lighting is much
-less. Pseudo-dynamic lights are a variant of static lights. They cannot
-move either but they can change intensity and color dynamically. Since
-they also use lightmaps the quality is very good and they have correct
-shadows. Pseudo-dynamic lights are ideal for lights that can be switched
-on/off or possibly even for outside light that you want to turn off (at
-night). Note that the usage of pseudo-dynamic lights adds an additional
-shadow map to every polygon that is touched by that light. So memory
-usage can go up quickly.
-</P><P>
-
-<A NAME="SEC267"></A>
-<H4> Creating a Pseudo-Dynamic Light </H4>
+<H3> 5.8.8 Clicking on Objects </H3>
 <!--docid::SEC267::-->
 <P>
 
-To specify a pseudo-dynamic light in a map file you use the following
-syntax:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  &#60;light name="DynLight"&#62;
-    &#60;center x="23" y="1" z="5"/&#62;
-    &#60;radius&#62;10&#60;/radius&#62;
-    &#60;color red="1" green="0" blue="0"/&#62;
-    &#60;dynamic /&#62;
-  &#60;light&#62;
-</pre></td></tr></table></P><P>
-
-In other words, the syntax is the same as for a normal light except for
-the `<SAMP>dynamic</SAMP>' keyword. Note that lights usually don't have a name
-but for a pseudo-dynamic light it is convenient to have one since you can
-use that name to find the light later (which is essential if you want to
-change the color/intensity).
-</P><P>
-
-To create a pseudo-dynamic light from within an application you can
-use the following code:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  csRef&#60;iLight&#62; light = engine-&#62;CreateLight ("DynLight",
-  	csVector3 (23, 1, 5), 10, csColor (1, 0, 0), true);
-  sector-&#62;GetLights ()-&#62;AddLight (light);
-</pre></td></tr></table></P><P>
-
-This will create exactly the same light as the one specified above.
-</P><P>
-
-At some point you may want to change the color of the light. You can
-do this with the following code:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  light-&#62;SetColor (csColor (0, 0, 1));
-</pre></td></tr></table></P><P>
-
-This will change the color of the light from red to blue.
+This section describes how you can find out on which object a mouse
+has clicked.
 </P><P>
 
 <A NAME="SEC268"></A>
-<H4> Include Files       </H4>
+<H4> The Code </H4>
 <!--docid::SEC268::-->
+<P>
+
+Best way to explain this is by showing code:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iMeshWrapper* ClickedObject (iCamera* camera, int mousex, int mousey)
+{
+  // Setup a 2D vector with our mouse position.  We invert the y
+  // (based on vertical screen dimension) because CS assumes y=0
+  // is down for 3D calculations.
+  csVector2 v2d (mousex, camera-&#62;GetShiftY () * 2 - mousey);
+
+  // We calculate the inverse perspective of this 2D point at
+  // z=100.  This results in a 3D position in camera space at
+  // z=100 that directly corresponds to the 2D position we
+  // clicked on.  We use z=100 to ensure that we will at least
+  // hit all objects that are before that distance.
+  csVector3 v3d;
+  camera-&#62;InvPerspective (v2d, 100, v3d);
+
+  // We are going to cast a beam in the current sector of the
+  // camera from our camera position in the direction of the
+  // 'v3d' point.  First we transform the v3d camera space
+  // location to world space.
+  csVector3 startbeam = camera-&#62;GetTransform ().GetOrigin ();
+  csVector3 endbeam = camera-&#62;GetTransform ().This2Other (v3d);
+  csVector3 intersect;
+
+  // Now do the actual intersection.
+  int poly = -1;
+  iSector* beamsector = camera-&#62;GetSector ();
+  iMeshWrapper* mesh = beamsector-&#62;HitBeamPortals (
+  	startbeam, endbeam, intersect, &#38;poly);
+  return mesh;
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC269"></A>
+<H4> Include Files      </H4>
+<!--docid::SEC269::-->
 <P>
 
 The include files useful for this section are:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  #include "iengine/light.h"
-  #include "iengine/sector.h"
-  #include "iengine/engine.h"
-</pre></td></tr></table></P><P>
-
-<A NAME="HOWTO Level Loading"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "csgeom/transfrm.h"
+#include "iengine/camera.h"
+#include "iengine/sector.h"
+#include "iengine/mesh.h"
+</pre></td></tr></table><A NAME="HOWTO Pseudo DynLight"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_117.html#SEC263"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_119.html#SEC269"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_117.html#SEC264"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_119.html#SEC270"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Perl Bindings</TITLE>
+<TITLE>Crystal Space: Python Bindings</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Perl Bindings">
-<META NAME="keywords" CONTENT="Crystal Space: Perl Bindings">
+<META NAME="description" CONTENT="Crystal Space: Python Bindings">
+<META NAME="keywords" CONTENT="Crystal Space: Python Bindings">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,266 +23,39 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC649"></A>
+<A NAME="SEC652"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC648"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_230.html#SEC661"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_230.html#SEC661"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC651"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_230.html#SEC653"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC665"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.8.3 Perl Bindings </H3>
-<!--docid::SEC649::-->
-<P>
-
-CS has extensive bindings for Perl version 5.
-</P><P>
-
-<A NAME="SEC650"></A>
-<H3> Getting Started </H3>
-<!--docid::SEC650::-->
-<P>
-
-To make use of CS classes from a Perl script, first make sure that the file
-cspace.pm (found in your CS/scripts/perl5 directory) is available to Perl.
-The easiest way to do this is with this code near the top of your script:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>BEGIN { push @INC, "$ENV{CRYSTAL}/scripts/perl5" }
-</pre></td></tr></table></P><P>
-
-Also make sure that the cspace.so (Unix/Linux/MacOSX) or cspace.dll (Windows)
-file is in the same directory as the cspace.pm file.
-</P><P>
-
-Then add this line near the top of the script:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>use cspace;
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC651"></A>
-<H3> Functions and Classes </H3>
-<!--docid::SEC651::-->
-<P>
-
-CS has several global functions, which can be accessed easily from Perl.
-For instance, in C++, one might do:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>const char *str = "Hello, world!";
-int key = csHashCompute (str);
-</pre></td></tr></table>Perl is almost exactly the same, the most notable difference being the
-<CODE>cspace::</CODE> prefix:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$str = "Hello, world!";
-$key = cspace::csHashCompute ($str);
-</pre></td></tr></table></P><P>
-
-To create an object instance, we use the <CODE>new</CODE> "keyword":
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect = new cspace::csVector3 (1, 2, 3);
-</pre></td></tr></table>The object will be deleted automatically when it goes out of scope.
-Perl also has built-in reference counting, so if the object is still referenced
-in some other Perl code when it goes out of scope, it will still exist until
-there are no more references to it in Perl.
-</P><P>
-
-There are three ways to access object properties:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>print $vect-&#62;x;		# Preferred way, conforms to Perl convention
-print $vect-&#62;{"x"};	# Swig's generated primary way
-print $vect-&#62;get_x();	# Swig's generated secondary way
-</pre></td></tr></table></P><P>
-
-And three ways to modify object properties:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect-&#62;x(123);		# Preferred way, conforms to Perl convention
-$vect-&#62;{"x"} = 123;	# Swig's generated primary way
-$vect-&#62;set_x(123);	# Swig's generated secondary way
-</pre></td></tr></table></P><P>
-
-Calling methods works as you might expect:
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$vect-&#62;Norm();
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC652"></A>
-<H3> Arrays </H3>
+<H3> 7.8.2 Python Bindings </H3>
 <!--docid::SEC652::-->
 <P>
 
-Wherever an array is expected, or wherever an array is returned, in or from
-a CS C++ call, a Perl array reference is used.
+The CS Python bindings are extensive, but not yet documented.
 </P><P>
 
-<A NAME="SEC653"></A>
-<H3> Operator Overloading </H3>
-<!--docid::SEC653::-->
-<P>
-
-Operator overloading is not yet supported. All the code required to support it
-has been written, but the code requires some non-existant features of Swig.
-</P><P>
-
-The operators that exist in C++ and which Perl can overload are:
-<CODE>+ - * / % &#60;&#60; &#62;&#62; &#38; | ^ &#38;&#38; || ! ~ &#60; &#60;= == &#62;= &#62; != ++ --
-= += -= *= /= %= &#60;&#60;= &#62;&#62;= &#38;= |= ^=</CODE>
-</P><P>
-
-And: <CODE>** **=</CODE> (expontentiation), <CODE>lt le eq ge gt ne</CODE> (string
-comparison), <CODE>&#60;&#62;</CODE> (iteration), <CODE>x x=</CODE> (repeat), <CODE>. .=</CODE>
-(concatenate), <CODE>$ @ % * &#38;</CODE> (convert to Perl native types: scalar, array,
-hash, glob, subroutine), <CODE>abs</CODE> (absolute value), truth evaluation,
-stringify and numerify.
-</P><P>
-
-<A NAME="SEC654"></A>
-<H3> Interface Pointers </H3>
-<!--docid::SEC654::-->
-<P>
-
-Supposing you call a function that returns a pointer to some interface.
-You can store the returned value in a variable, and use it similarly to how
-objects are used in Perl (see above). You can call their methods in the same
-way, and pass them on to further functions as parameters where appropriate.
-</P><P>
-
-The Perl bindings automatically correctly handle csRef and csPtr.
-</P><P>
-
-<A NAME="SEC655"></A>
-<H3> Implementing Interfaces </H3>
-<!--docid::SEC655::-->
-<P>
-
-You can write your own Perl class and have it inherit from a CS interface,
-then use instances of that class wherever an implementation of that interface
-is expected. Currently the interfaces that support this feature are
-<CODE>iEventHandler iEventPlug iAwsSink</CODE> but it is easy to add more.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>package MyPerlEventHandler;
-@ISA = qw{ cspace::iEventHandler };
-sub new
-{
-  $x = {};
-  bless ($x, "MyPerlEventHandler");
-  return $x;
-}
-sub HandleEvent
-{
-  ($self, $event) = @_;
-  # your event handler here...
-}
-
-package main;
-$eventq = cspace::CS_QUERY_REGISTRY ($object_reg, "iEventQueue");
-$handler = new MyPerlEventHandler;
-$eventq-&#62;RegisterListener ($handler);
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC656"></A>
-<H3> Special Cases </H3>
-<!--docid::SEC656::-->
-<P>
-
-<A NAME="SEC657"></A>
-<H4> Macros that take Interfaces as Parameters </H4>
-<!--docid::SEC657::-->
-<P>
-
-In Perl, CS macros that take interface names as parameters, for instance
-<CODE>CS_QUERY_REGISTRY()</CODE>, take those interface names as strings:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$engine = cspace::CS_QUERY_REGISTRY($object_reg, "iEngine");
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC658"></A>
-<H4> <CODE>csRGBpixel</CODE> </H4>
-<!--docid::SEC658::-->
-<P>
-
-To convert a <CODE>csRGBpixel</CODE> to a <CODE>csRGBcolor</CODE>, use the
-<CODE>asRGBcolor</CODE> method:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$color = $pixel-&#62;asRGBcolor();
-</pre></td></tr></table></P><P>
-
-<A NAME="SEC659"></A>
-<H4> <CODE>iSprite2DState</CODE> </H4>
-<!--docid::SEC659::-->
-<P>
-
-<CODE>iSprite2DState</CODE> has an extra method in Perl, <CODE>GetVertexByIndex</CODE>,
-which takes a single integer parameter, an array index, and returns a
-<CODE>csSprite2DVertex</CODE> from the sprite's array of vertices.
-</P><P>
-
-<A NAME="SEC660"></A>
-<H4> <CODE>iEvent</CODE> </H4>
-<!--docid::SEC660::-->
-<P>
-
-The overloaded <CODE>Add</CODE> and <CODE>Find</CODE> methods in <CODE>iEvent</CODE> are
-replaced in Perl with ones with names which explicitly specify the types
-of their parameters (since otherwise Perl wouldn't know which C++ function to
-call):
-</P><P>
-
-<UL>
-<LI>
-<CODE>AddInt8</CODE>
-<LI>
-<CODE>AddInt16</CODE>
-<LI>
-<CODE>AddInt32</CODE>
-<LI>
-<CODE>AddUInt8</CODE>
-<LI>
-<CODE>AddUInt16</CODE>
-<LI>
-<CODE>AddUInt32</CODE>
-<LI>
-<CODE>AddFloat</CODE>
-<LI>
-<CODE>AddDouble</CODE>
-<LI>
-<CODE>AddString</CODE>
-<LI>
-<CODE>AddBool</CODE>
-<LI>
-<CODE>AddVoidPtr</CODE>
-<LI>
-<CODE>FindInt8</CODE>
-<LI>
-<CODE>FindInt16</CODE>
-<LI>
-<CODE>FindInt32</CODE>
-<LI>
-<CODE>FindUInt8</CODE>
-<LI>
-<CODE>FindUInt16</CODE>
-<LI>
-<CODE>FindUInt32</CODE>
-<LI>
-<CODE>FindFloat</CODE>
-<LI>
-<CODE>FindDouble</CODE>
-<LI>
-<CODE>FindString</CODE>
-<LI>
-<CODE>FindBool</CODE>
-<LI>
-<CODE>FindVoidPtr</CODE>
-</UL>
-<A NAME="Animation"></A>
+There are, however, a few example apps written entirely in Python, distributed
+as part of CS.
+<A NAME="Perl Bindings"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC648"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_230.html#SEC661"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_230.html#SEC661"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC651"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_230.html#SEC653"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_231.html#SEC665"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

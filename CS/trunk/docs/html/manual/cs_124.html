@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO CS Project</TITLE>
+<TITLE>Crystal Space: HOWTO User Objects in Maps</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO CS Project">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO CS Project">
+<META NAME="description" CONTENT="Crystal Space: HOWTO User Objects in Maps">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO User Objects in Maps">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,183 +23,97 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC295"></A>
+<A NAME="SEC296"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_123.html#SEC292"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_125.html#SEC300"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_123.html#SEC289"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_125.html#SEC299"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.15 Creating an External Crystal Space Application </H3>
-<!--docid::SEC295::-->
-<P>
-
-This section describes how to use the Crystal Space development kit for your
-own application.  Two methods are described: (1) using the Crystal Space
-Jam-based build system, (2) using a traditional Makefile-based build system.
-</P><P>
-
-<A NAME="SEC296"></A>
-<H4> External Application Requirements </H4>
+<H3> 5.8.14 Attaching User Objects to CS Objects in a map file </H3>
 <!--docid::SEC296::-->
 <P>
 
-For these techniques to work you need to have a sufficiently Unix-like
-environment.  The environments provided by Linux, MacOS/X, Msys/Mingw, and
-Cygwin are all acceptable.
+In the previous howto (see section <A HREF="cs_123.html#SEC289">5.8.13 Attaching User Objects to CS Objects</A>) you could see how
+you can attach game data to Crystal Space objects at runtime (i.e. from
+within code). It is also possible to attach game data to objects through
+the map file. Here we explain how.
 </P><P>
-
-If you installed Crystal Space in a non-standard location, then you probably
-will also need to set the `<SAMP>CRYSTAL</SAMP>' environment variable to point at the
-the location where the SDK was installed.  For instance, if you specified
-`<SAMP>--prefix=/site/sdk</SAMP>' when configuring Crystal Space, then you will need to
-set `<SAMP>CRYSTAL</SAMP>' to `<TT>/site/sdk</TT>'.  Using the Bourne shell or compatible
-(such as Bash), for instance, you can do this with the following commands:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>CRYSTAL=/site/sdk
-export CRYSTAL
-</pre></td></tr></table></P><P>
-
-From a C-shell or compatible (such as T-csh), you can use:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>setenv CRYSTAL /site/sdk
-</pre></td></tr></table></P><P>
 
 <A NAME="SEC297"></A>
-<H4> The `<TT>cs-config</TT>' Script </H4>
+<H4> Using Key/Value Pairs </H4>
 <!--docid::SEC297::-->
 <P>
 
-When you build and install Crystal Space, a script named `<TT>cs-config</TT>' is
-installed along with the rest of the package.  This script provides access to
-bits of information which can be fed to the development tools in order to
-incorporate Crystal Space into your project.  For instance, if you invoke
-`<TT>cs-config</TT>' with the `<SAMP>--cxxflags</SAMP>' argument, it will return Crystal
-Space-specific C++ compiler switches with which you should invoke the C++
-compiler.  Likewise, the `<SAMP>--libs</SAMP>' argument will return the Crystal
-Space-specific linker switches and libraries with which you should link your
-program.
+Crystal Space doesn't do anything with the keys you specify in a map file.
+The only thing it does is store them so you can use them later. Here is
+how you would fetch all keys from a mesh object:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>void MyGame::ProcessKeys (iMeshWrapper* mesh)
+{
+  csRef&#60;iObjectIterator&#62; it = mesh-&#62;QueryObject ()-&#62;GetIterator ();
+  while (it-&#62;HasNext ())
+  {
+    iObject* obj = it-&#62;Next ();
+    csRef&#60;iKeyValuePair&#62; key = SCF_QUERY_INTERFACE (obj, iKeyValuePair);
+    if (key)
+    {
+      if (!strcmp (key-&#62;GetKey (), "monsterAI"))
+      {
+        // Process key-&#62;GetValue ()
+        <small>...</small>
+      }
+      else if (!strcmp (key-&#62;GetKey (), "monsterLive"))
+      {
+        // Process key-&#62;GetValue ()
+        <small>...</small>
+      }
+    }
+  }
+}
+</pre></td></tr></table></P><P>
+
+This is only an example. You can call <CODE>QueryObject</CODE> on almost every
+Crystal Space object and loop over all keys (or other <CODE>iObject</CODE>
+implementing objects) with the code above.
+</P><P>
+
+To actually process the key you could check out the previous
+tutorial (see section <A HREF="cs_123.html#SEC289">5.8.13 Attaching User Objects to CS Objects</A>) and make your own game data object
+that contains all the collected values and attach that to the mesh too.
 </P><P>
 
 <A NAME="SEC298"></A>
-<H4> Jamtemplate </H4>
+<H4> Include Files            </H4>
 <!--docid::SEC298::-->
 <P>
 
-The Jamtemplate utility sets up a skeleton project on your behalf which is
-based upon Autoconf and the Jam build system featured in Crystal Space.  By
-utilizing these tools, your project gets many advanced build features for free.
-For instance, on MacOS/X, it will correctly create the Cocoa wrapper
-(`<TT>.app</TT>') for an application; on some platforms it knows how to embed
-plugin meta-information directly into the plugin module; and understands many
-of the familiar build targets, such as `<SAMP>all</SAMP>', `<SAMP>clean</SAMP>',
-`<SAMP>distclean</SAMP>', `<SAMP>install</SAMP>', etc.  The Jam system knows how to correctly
-build applications, plugin modules, and libraries on all platforms supported by
-Crystal Space.  The generated project skeleton even features support for
-synthesizing Microsoft Visual C++ project files for your application
-automatically (via the `<SAMP>jam msvcgen</SAMP>' target).  Jamtemplate is quite easy
-to use.  After setting up your `<SAMP>CRYSTAL</SAMP>' environment variable, simply run
-the `<SAMP>createproject.sh</SAMP>' script and follow the instructions which it
-presents:
+The include files useful for this section are:
 </P><P>
 
-<CODE>CS/scripts/jamtemplate/createproject.sh</CODE>
-</P><P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  #include "iutil/object.h"
+  #include "csutil/csobject.h"
+  #include "cstool/keyval.h"
+</pre></td></tr></table></P><P>
 
-<A NAME="SEC299"></A>
-<H4> Makefile </H4>
-<!--docid::SEC299::-->
-<P>
-
-If you prefer to have your project utilize a traditional Makefile, rather than
-being based upon the Crystal Space Jam build system, then follow these
-intructions.  Note, however, that the skeleton Makefile-based build system
-created by these instructions is bare-bones; it does not feature the fancy
-bells and whistles available with the Jam build system.
-</P><P>
-
-To begin, in the Crystal Space directory you will find the following files:
-</P><P>
-
-<CODE>CS/scripts/cs-config/Makefile.template</CODE><BR>
-<CODE>CS/scripts/cs-config/appwrap.sh</CODE>
-</P><P>
-
-Copy these files to the directory where your project is located and rename
-`<TT>Makefile.template</TT>' to `<TT>Makefile</TT>'.  The `<TT>appwrap.sh</TT>' script
-creates Cocoa application wrappers on MacOS/X.  You may omit this file if you
-do not plan to support MacOS/X.
-</P><P>
-
-You need to edit `<TT>Makefile</TT>' for your own project.  This template makefile
-is capable of building an executable program or a plugin module.  It is
-recommended that you change at least the following variables:
-</P><P>
-
-<UL>
-<LI>
-`<SAMP>TARGET_TYPE</SAMP>' should be set to either `<SAMP>exe</SAMP>' or `<SAMP>plugin</SAMP>',
-depending upon whether your project is an executable program or a plugin
-module.
-<P>
-
-<LI>
-`<SAMP>TARGET_NAME</SAMP>' should be the base name of your executable or plugin module.
-The file extension (`<TT>.exe</TT>', `<TT>.dll</TT>', `<TT>.so</TT>', etc.) is appended
-automatically, so do not add the suffix yourself.
-<P>
-
-<LI>
-`<SAMP>SRC</SAMP>' should list all the source files in your project which comprise the
-program or plugin module.
-<P>
-
-<LI>
-`<SAMP>LINKFLAGS</SAMP>' should be modified to list all the Crystal Space libraries
-that you want to use.  The typical list is `<SAMP>cstool</SAMP>', `<SAMP>gsgfx</SAMP>',
-`<SAMP>csgeom</SAMP>', and `<SAMP>csutil</SAMP>'.
-<P>
-
-<LI>
-`<SAMP>VERSION</SAMP>' should indicate your product's version number (for example,
-1.0).
-<P>
-
-<LI>
-`<SAMP>RELEASE_DATE</SAMP>' should indicate the date of your product's release.
-</UL>
-<P>
-
-The following targets are supported by this makefile:
-</P><P>
-
-<UL>
-<LI>
-`<SAMP>all</SAMP>': Builds the application or plugin module.
-<LI>
-`<SAMP>clean</SAMP>': Removes object files and other detritus.
-<LI>
-`<SAMP>depend</SAMP>': Calculates dependency information.
-</UL>
-<A NAME="HOWTO Creating External MSVC 6 Application"></A>
+<A NAME="HOWTO CS Project"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_123.html#SEC292"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_125.html#SEC300"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_123.html#SEC289"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_125.html#SEC299"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

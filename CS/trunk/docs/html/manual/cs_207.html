@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: MeshObject Concepts</TITLE>
+<TITLE>Crystal Space: MeshObject</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: MeshObject Concepts">
-<META NAME="keywords" CONTENT="Crystal Space: MeshObject Concepts">
+<META NAME="description" CONTENT="Crystal Space: MeshObject">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,174 +23,80 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC549"></A>
+<A NAME="SEC552"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC555"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC551"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC553"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.7.1 MeshObject Concepts </H3>
-<!--docid::SEC549::-->
-<P>
-
-<EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
-</P><P>
-
-In this section a general overview is given of the mesh object plug-in
-system and several of the concepts are explained.
-</P><P>
-
-<A NAME="SEC550"></A>
-<H4> Mesh Object </H4>
-<!--docid::SEC550::-->
-<P>
-
-A <EM>Mesh Object</EM> is what this plug-in system is all about.  It is basically
-a 3D object that the engine can render.  Every mesh object knows how to render
-and light itself.  Mesh Objects don't control their own position in the engine
-though.  The engine is responsible for doing that.  Mesh Object implementations
-must implement the SCF interface `<SAMP>iMeshObject</SAMP>'.  Every visible mesh
-object in the world will implement this interface.
-</P><P>
-
-Mesh Objects often also implement one or more additional type specific
-interfaces to access the characteristics of that Mesh Object.  The engine
-itself does not know about these interfaces.  It is the responsibility of the
-application writer to correctly set up the characteristics of all Mesh Objects
-that it uses.  These type specific interfaces are usually called
-`<SAMP>iSomethingState</SAMP>' (replace <EM>Something</EM> with the appropriate name).
-</P><P>
-
-Some Mesh Objects also implement the SCF interface `<SAMP>iPolygonMesh</SAMP>'
-which you can use for collision detection.  You can use
-<CODE>SCF_QUERY_INTERFACE()</CODE> to find out if some Mesh Object implements this
-interface.
-</P><P>
-
-In addition to the interfaces above, Mesh Objects also sometimes implement
-`<SAMP>iParticle</SAMP>'.  When they do so, they can be used as particles for one of
-the particle system Mesh Object plug-in modules.
-</P><P>
-
-<A NAME="SEC551"></A>
-<H4> Mesh Object Factory </H4>
-<!--docid::SEC551::-->
-<P>
-
-A <EM>Mesh Object Factory</EM> is an object from which you can generate Mesh
-Object instances.  The Mesh Objects generated from a Mesh Object Factory will
-inherit some of the characteristics from this factory.  Exactly which
-characteristics depend upon the Mesh Object Type (see below).  Roughly
-speaking, there are three possibilities:
-</P><P>
-
-<OL>
-<LI>
-For some types the factory is really empty and only serves as a stub to create
-Mesh Object instances.  In that case you would only have to use one factory to
-generate all your Mesh Objects of that type.
-<P>
-
-<LI>
-In other cases the factory contains default values for some characteristics
-that are copied to all Mesh Objects created from that factory.  In that case
-you can decide to use one factory and change the settings before creating new
-instances.  Or (for convenience) you can create several factories with default
-values that you use often and create Mesh Objects from the factory of choice.
-<P>
-
-<LI>
-In still other cases the factory actually contains the characteristics used by
-all Mesh Objects created from it.  Changing the factory characteristics will
-actually modify the characteristics for all Mesh Objects instantly.  In this
-case you will have to use a separate factory for all Mesh Objects sharing the
-same characteristics.
-</OL>
-<P>
-
-Which of the possibilities is selected by some Mesh Object type depends on the
-type.  You'll have to look it up in the respective documentation for that type.
-Mesh Object Factories implement the SCF interface
-`<SAMP>iMeshObjectFactory</SAMP>'.
-</P><P>
-
-Mesh Object Factories often implement one or more additional type specific
-interfaces to access the characteristics of that Mesh Object Factory.  The
-engine itself does not know about these interfaces.  It is the responsibility
-of the application writer to correctly set up the characteristics of all Mesh
-Objects Factories that it uses.  These type specific interfaces are usually
-called `<SAMP>iSomethingFactoryState</SAMP>' (replace <EM>Something</EM> with the
-appropriate name).
-</P><P>
-
-<A NAME="SEC552"></A>
-<H4> Mesh Object Type </H4>
+<H2> 7.7 Mesh Object Plug-In System </H2>
 <!--docid::SEC552::-->
 <P>
 
-The <EM>Mesh Object Type</EM> describes a specific kind of Mesh Object plug-in.
-For example, Crystal Space supports several types of Mesh Objects: snow
-particle system, fountain particle system, cube, ball, etc.  The Mesh Object
-Type corresponds directly to the plug-in itself.  It is the class' responsible
-for creating all Mesh Object Factories.  Mesh Object Types implement the
-SCF interface `<SAMP>iMeshObjectType</SAMP>'.
+This section covers the Crystal Space Mesh Object plug-in system.  This is a
+very general system for defining various kinds of 3D objects and using them in
+the Crystal Space 3D engine.  There are already a number of mesh objects
+predefined in Crystal Space: particle systems like snow and fountain, 2D
+sprites, a general mesh and a ball, etc.
 </P><P>
 
-Some Mesh Object Types implement the SCF interface `<SAMP>iConfig</SAMP>'.  In
-this case, you can use this interface to query all run-time options that are
-valid for that type.
+In the first section a general overview is given on some of the concepts
+in the mesh object system.
 </P><P>
 
-<A NAME="SEC553"></A>
-<H4> Loaders </H4>
-<!--docid::SEC553::-->
+In the second section you will see how you can use mesh objects in your own
+applications and how you can work with them.
+</P><P>
+
+The third section covers everything needed to write your own mesh object
+plug-in modules.
+</P><P>
+
+After that there is a section for every specific mesh object plugin that
+Crystal Space supports.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_208.html#SEC553">7.7.1 MeshObject Concepts</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_209.html#SEC559">7.7.2 Using Mesh Objects</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_210.html#SEC563">7.7.3 Writing Mesh Objects</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_211.html#SEC564">7.7.4 Sprite2D Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_212.html#SEC571">7.7.5 Sprite3D Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_213.html#SEC578">7.7.6 SpriteCal3D Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_214.html#SEC581">7.7.7 Genmesh Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_215.html#SEC587">7.7.8 Ball Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_216.html#SEC593">7.7.9 Emitter Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_217.html#SEC599">7.7.10 Particle Systems in General</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_218.html#SEC602">7.7.11 Fountain Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_219.html#SEC608">7.7.12 Fire Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_220.html#SEC614">7.7.13 Snow Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_221.html#SEC620">7.7.14 Rain Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_222.html#SEC626">7.7.15 Explosion Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_223.html#SEC632">7.7.16 Spiral Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_224.html#SEC638">7.7.17 Haze Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_225.html#SEC639">7.7.18 Terrain Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_226.html#SEC645">7.7.19 Thing Mesh Object</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
 <P>
 
-In addition to the functionality for the Mesh Objects themselves, many Mesh
-Object Types support two implementations of the SCF interface
-`<SAMP>iLoaderPlugin</SAMP>'.  By implementing this, these plug-ins can be used
-directly by the standard Crystal Space map file loader.  There is a loader for
-the Mesh Object Factory and a loader for the Mesh Object itself.  The Mesh
-Object plug-in itself doesn't know about these loader plug-ins.  In fact, you
-can even write different loader plug-ins for the same Mesh Object Type if you
-so desire.
-</P><P>
-
-<A NAME="SEC554"></A>
-<H4> Responsibilities </H4>
-<!--docid::SEC554::-->
-<P>
-
-As mentioned above Mesh Objects only know how to render themselves and how to
-update lighting information.  The engine is responsible for deciding when to
-draw and when to update.  So basically, the Mesh Objects control the <EM>how</EM>
-while the engine controls the <EM>when</EM>.  This is not completely true,
-though.  The Mesh Object implementation itself must do some parts of the
-visibility testing on its own.  For example, far plane clipping, and testing if
-the bounding box of the object is visible on screen are all the responsibility
-of the Mesh Object (but it can use the engine for help on calculating these
-things).
-</P><P>
-
-<A NAME="Using MeshObject"></A>
+<A NAME="MeshObject Concepts"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC555"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC551"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC553"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC391"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_227.html#SEC650"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

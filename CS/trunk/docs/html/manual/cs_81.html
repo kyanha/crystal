@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Simple Loading Material</TITLE>
+<TITLE>Crystal Space: Tutorial Simple 2</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Simple Loading Material">
-<META NAME="keywords" CONTENT="Crystal Space: Simple Loading Material">
+<META NAME="description" CONTENT="Crystal Space: Tutorial Simple 2">
+<META NAME="keywords" CONTENT="Crystal Space: Tutorial Simple 2">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,97 +23,80 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC176"></A>
+<A NAME="SEC179"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_82.html#SEC177"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC178"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_82.html#SEC180"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC158"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.3.1 Loading a Material in Memory </H3>
-<!--docid::SEC176::-->
+<H2> 5.3 Simple Tutorial 2: Sprites </H2>
+<!--docid::SEC179::-->
 <P>
 
-To make this example a little more interesting the material is going to be
-loaded <EM>after</EM> the other setup of the texture manager has been done.
-This is not really needed but it illustrates how a game might load materials
-dynamically later when the application is already running.  So first we edit
-`<TT>simple.cpp</TT>' and add the following in <CODE>Simple::Initialize()</CODE>
-(before `<SAMP>return true</SAMP>'):
+This tutorial continues on the Simple Tutorial (see section <A HREF="cs_75.html#SEC173">5.2 Simple Tutorial 1</A>).
+In this tutorial we explain a bit about VFS, texture management and
+how you can add a simple sprite to the simple application.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize()
-{
-  <small>...</small>
-
-  // Load a texture for our sprite.
-  iTextureManager* txtmgr = g3d-&#62;GetTextureManager ();
-  iTextureWrapper* txt = loader-&#62;LoadTexture ("spark",
-        "/lib/std/spark.png", CS_TEXTURE_3D, txtmgr, true);
-  if (txt == 0)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Error loading texture!");
-    return false;
-  }
-
-  return true;
-}
-</pre></td></tr></table></P><P>
-
-This code first loads a texture in our engine with
-<CODE>iLoader::LoadTexture()</CODE>.  The second argument is the file name for our
-texture (VFS path) and the first argument is how that texture should be
-named in the engine.  In this case we use `<SAMP>spark</SAMP>' for that because that's
-how the `<TT>sprite1</TT>' definition wants it. The third parameter indicates
-for what we want to use this texture. In this case we want to use it to texture
-map a model for the 3D engine so the texture must be prepared for 3D.
-The fourth parameter is the texture manager which will be used to register
-and prepare the texture and material. This is done automatically by
-this function because the fifth parameter is set to 'true'. In the previous
-tutorial we also used this function to load a texture but there we didn't
-specify the last three parameters. `<SAMP>CS_TEXTURE_3D</SAMP>' is default so that
-doesn't have to be specified and because we were going to call
-<CODE>engine-&#62;Prepare()</CODE> later we also didn't specify the texture manager
-and the last boolean parameter because <CODE>Prepare()</CODE> automatically
-registers and prepares all textures and materials that are loaded.
+Crystal Space has the concept of mesh factories and meshes. A mesh is basically
+some kind of 3D object. Crystal Space supports several kinds of meshes. In
+the previous tutorial we used the thing mesh to create the geometry of
+our room. In this tutorial we will use the 3D sprite mesh. A mesh
+factory is like a blue-print for a mesh (or sprite). It defines how the mesh
+looks and how it animates. Before you can use a mesh you need to have a
+mesh factory. Once you have a mesh factory you can create multiple
+meshes from this.  See section <A HREF="cs_207.html#SEC552">7.7 Mesh Object Plug-In System</A>.
 </P><P>
 
-If this loading succeeds this function will register our texture with the
-texture manager. As mentioned above this is needed because we are loading
-this texture AFTER <CODE>engine-&#62;Prepare()</CODE>. So this is an easy way to
-dynamically add textures and materials even when the engine is already
-running. Note that if you plan to load many new textures and materials
-it is more efficient to not let this function register automatically but
-instead register them manually and then call <CODE>txtmgr-&#62;PrepareTextures()</CODE>
-to prepare them all at once.
+In this example we are going to load a mesh factory from disk.  If you have
+the standard Crystal Space distribution then you have the file
+`<TT>CS/data/standard.zip</TT>'.  In that archive file there is a file called
+`<SAMP>sprite1</SAMP>' which contains the definition of our mesh factory.  Extract
+it (by using, for instance, the command `<SAMP>unzip -x standard.zip sprite1</SAMP>')
+and examine it to see how mesh factories for 3D sprites are defined (mesh
+factories for other types of meshes can look different).
 </P><P>
 
-Note that when you load a texture like this there will also be an
-associated material with the same name. The engine itself works with
-materials and doesn't directly use textures. The material in this case
-is simply a wrapper on top of the texture. But you could also add detail
-textures.
+But how are we actually going to get that file out of that ZIP archive
+from within the Simple application?  This is in fact very easy because Crystal
+Space supports the concept of VFS.  Take a look at the VFS
+documentation (see section <A HREF="cs_159.html#SEC393">7.2 Virtual File System (VFS)</A>) to learn how it works.  Suffice it to say that
+`<TT>standard.zip</TT>' is an archive that is, by default, mounted onto the
+VFS path `<TT>/lib/std</TT>'.  You can see all the mounted VFS paths in
+the `<TT>CS/vfs.cfg</TT>' file (and you can add more).  So, this means that our
+sprite file can be found at the path `<TT>/lib/std/sprite1</TT>'.
 </P><P>
 
-<A NAME="Simple Loading Mesh Factory"></A>
+If you look at the `<TT>sprite1</TT>' file you can see that it refers to a material
+named `<SAMP>spark</SAMP>'.  So we'll have to load that material as well.  This can
+also be found in `<TT>standard.zip</TT>' at the path `<TT>/lib/std/spark.png</TT>'.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_82.html#SEC180">5.3.1 Loading a Material in Memory</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_83.html#SEC181">5.3.2 Loading a Mesh Factory in Memory</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_84.html#SEC182">5.3.3 Creating a Mesh from a Factory</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Simple Loading Material"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_82.html#SEC177"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC178"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_82.html#SEC180"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC158"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

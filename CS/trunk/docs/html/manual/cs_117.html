@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Clicking on Objects</TITLE>
+<TITLE>Crystal Space: HOWTO Camera Movement</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Clicking on Objects">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Clicking on Objects">
+<META NAME="description" CONTENT="Crystal Space: HOWTO Camera Movement">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Camera Movement">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,90 +23,108 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC263"></A>
+<A NAME="SEC264"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_116.html#SEC260"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_118.html#SEC266"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_116.html#SEC259"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_118.html#SEC267"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.8 Clicking on Objects </H3>
-<!--docid::SEC263::-->
-<P>
-
-This section describes how you can find out on which object a mouse
-has clicked.
-</P><P>
-
-<A NAME="SEC264"></A>
-<H4> The Code </H4>
+<H3> 5.8.7 Camera Movement </H3>
 <!--docid::SEC264::-->
 <P>
 
-Best way to explain this is by showing code:
+This section describes how to move the camera.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>iMeshWrapper* ClickedObject (iCamera* camera, int mousex, int mousey)
-{
-  // Setup a 2D vector with our mouse position.  We invert the y
-  // (based on vertical screen dimension) because CS assumes y=0
-  // is down for 3D calculations.
-  csVector2 v2d (mousex, camera-&#62;GetShiftY () * 2 - mousey);
+<A NAME="SEC265"></A>
+<H4> The Camera is a Transform </H4>
+<!--docid::SEC265::-->
+<P>
 
-  // We calculate the inverse perspective of this 2D point at
-  // z=100.  This results in a 3D position in camera space at
-  // z=100 that directly corresponds to the 2D position we
-  // clicked on.  We use z=100 to ensure that we will at least
-  // hit all objects that are before that distance.
-  csVector3 v3d;
-  camera-&#62;InvPerspective (v2d, 100, v3d);
+Internally in the engine the `<SAMP>csCamera</SAMP>' class inherits
+directly from `<SAMP>csOrthoTransform</SAMP>' which inherits from
+`<SAMP>csReversibleTransform</SAMP>'. If you work with `<SAMP>iCamera</SAMP>' then you
+can get the reference to this transform with <CODE>camera-&#62;GetTransform()</CODE>.
+In addition to the transformation a camera also holds a pointer to the
+current sector.
+</P><P>
 
-  // We are going to cast a beam in the current sector of the
-  // camera from our camera position in the direction of the
-  // 'v3d' point.  First we transform the v3d camera space
-  // location to world space.
-  csVector3 startbeam = camera-&#62;GetTransform ().GetOrigin ();
-  csVector3 endbeam = camera-&#62;GetTransform ().This2Other (v3d);
-  csVector3 intersect;
+This means that all operations you have in `<SAMP>csOrthoTransform</SAMP>' can
+be used on the camera. One of the most useful functions there is
+<CODE>LookAt()</CODE> with which you can make the camera point to some spot.
+Using <CODE>LookAt()</CODE> it is very easy to make a 3rd person view.
+</P><P>
 
-  // Now do the actual intersection.
-  int poly = -1;
-  iSector* beamsector = camera-&#62;GetSector ();
-  iMeshWrapper* mesh = beamsector-&#62;HitBeamPortals (
-  	startbeam, endbeam, intersect, &#38;poly);
-  return mesh;
-}
+In addition to the standard functions from `<SAMP>csOrthoTransform</SAMP>' there
+are a number of other functions that you can use. The most interesting
+are <CODE>MoveWorld()</CODE> and <CODE>Move()</CODE>. These functions will move
+the camera and make sure that it cannot walk through a wall and also make
+sure that walking through portals will work. Both functions move the
+camera a relative amount. The difference between <CODE>MoveWorld()</CODE> and
+<CODE>Move()</CODE> is that the latter will move the camera in camera space.
+For example, take the following code:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  iCamera* camera;
+  camera-&#62;GetTransform ().Move (csVector3 (0, 0, 1));
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC265"></A>
-<H4> Include Files      </H4>
-<!--docid::SEC265::-->
+This will move the camera forward in camera space. This means that the
+camera will walk 'forward' :-) On the other hand:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  iCamera* camera;
+  camera-&#62;GetTransform ().MoveWorld (csVector3 (0, 0, 1));
+</pre></td></tr></table></P><P>
+
+This will move the camera in the world so that it goes one unit in
+the positive Z direction. This will happen independently of the orientation
+of the camera.
+</P><P>
+
+Here is another example which demonstrates how to use the <CODE>LookAt()</CODE>
+function. The following example will set a camera at location `<SAMP>3,5,1</SAMP>'
+and let it look at `<SAMP>3,5,10</SAMP>'. The up vector of the camera will be
+`<SAMP>0,1,0</SAMP>' (which is default):
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  csVector3 camera_pos (3, 5, 1);
+  csVector3 look_at_pos (3, 5, 10);
+  csVector3 up (0, 1, 0);
+  camera-&#62;GetTransform ().Move (camera_pos);
+  camera-&#62;GetTransform ().LookAt (camera_pos - look_at_pos, up);
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC266"></A>
+<H4> Include Files     </H4>
+<!--docid::SEC266::-->
 <P>
 
 The include files useful for this section are:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "csgeom/transfrm.h"
-#include "iengine/camera.h"
-#include "iengine/sector.h"
-#include "iengine/mesh.h"
-</pre></td></tr></table><A NAME="HOWTO Pseudo DynLight"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  #include "iengine/camera.h"
+  #include "csgeom/transfrm.h"
+</pre></td></tr></table></P><P>
+
+<A NAME="HOWTO Clicking on Objects"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_116.html#SEC260"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_118.html#SEC266"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_116.html#SEC259"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_118.html#SEC267"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Simple Header File</TITLE>
+<TITLE>Crystal Space: Tutorial Simple</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Simple Header File">
-<META NAME="keywords" CONTENT="Crystal Space: Simple Header File">
+<META NAME="description" CONTENT="Crystal Space: Tutorial Simple">
+<META NAME="keywords" CONTENT="Crystal Space: Tutorial Simple">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,350 +23,78 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC170"></A>
+<A NAME="SEC173"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_76.html#SEC171"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC155"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC172"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_76.html#SEC174"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC158"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.2.1 Simple Header File </H3>
-<!--docid::SEC170::-->
+<H2> 5.2 Simple Tutorial 1 </H2>
+<!--docid::SEC173::-->
 <P>
 
-It is good practice to always put defines and declares in header
-files as opposed to source files. In some cases it is even needed. Here
-we will show the header file for a simple Crystal Space application.
-Although this is not strictly required, we use a class to encapsulate
-the application logic. Our `<TT>simple.h</TT>' header looks as follows:
+This tutorial provides a step-by-step explanation on how you can use Crystal
+Space from within your application.  This tutorial is mainly based on the
+`<TT>simple</TT>' application which you can compile and run to see what it does
+(type `<SAMP>make tutsimp1</SAMP>' if you use commandline based compilation).
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#ifndef __SIMPLE_H__
-#define __SIMPLE_H__
-
-#include &#60;stdarg.h&#62;
-
-struct iEngine;
-struct iLoader;
-struct iGraphics3D;
-struct iKeyboardDriver;
-struct iSector;
-struct iView;
-struct iVirtualClock;
-struct iObjectRegistry;
-struct iEvent;
-
-class Simple
-{
-private:
-  iObjectRegistry* object_reg;
-  csRef&#60;iEngine&#62; engine;
-  csRef&#60;iLoader&#62; loader;
-  csRef&#60;iGraphics3D&#62; g3d;
-  csRef&#60;iKeyboardDriver&#62; kbd;
-  csRef&#60;iVirtualClock&#62; vc;
-
-  float rotX, rotY;
- 
-public:
-  Simple (iObjectRegistry* object_reg);
-  ~Simple ();
-
-  bool Initialize ();
-  void Start ();
-};
-
-#endif // __SIMPLE1_H__
-</pre></td></tr></table></P><P>
-
-In the `<SAMP>Simple</SAMP>' class we keep a number of references to important
-objects that we are going to need a lot. That way we don't have to get
-them every time when we need them. Other than that we have a constructor
-which will do the initialization of these variables, a destructor which
-will clean up the application, an initialization function which will
-be responsible for the full set up of Crystal Space and our application,
-and finally a <CODE>Start()</CODE> function to start the event handler.
+When you downloaded the Crystal Space package it contains a `<SAMP>CS/include</SAMP>'
+directory. This directory contains all header files you need to be able to
+use the Crystal Space components and libraries in your own applications. On
+one hand, the include directory contains SCF interface definitions.
+These pure interface file names start with the letter `<SAMP>i</SAMP>' (as in
+`<TT>iengine/engine.h</TT>').  On the other hand we also have plain C++ include
+files for interfacing with the libraries of Crystal Space.
+When you install Crystal Space on your development system (for instance,
+by invoking `<SAMP>make install</SAMP>'), these headers are placed in a location where
+they can be easily accessed when writing new programs based on Crystal Space.
+On Unix systems, for instance, these files usually end up in
+`<TT>/usr/local/crystal/include</TT>'.
 </P><P>
 
-Note that we use smart pointers (<CODE>csRef&#60;&#62;</CODE>) for several of those
-references. That makes it easier to manage reference counting. We let
-the smart pointer take care of this for us. For `<SAMP>iObjectRegistry</SAMP>'
-we don't do this because for technical reasons it doesn't make sense
-to keep references to that.
+Crystal Space also has a reference manual and API documentation.
+The manual is included in HTML form Crystal Space itself and is also
+available online.  The API documentation can be generated locally or
+viewed online.  See section <A HREF="cs_7.html#SEC7">1.6 Where to Get Crystal Space</A>.
 </P><P>
 
-In the source file `<TT>simple.cpp</TT>' we place the following:
+Additionally note that the source for some of these tutorials can be
+found in the `<TT>CS/apps/tutorials</TT>' directory. There are also a few
+additional tutorials there that are not (yet) covered in the documentation.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "cssysdef.h"
-#include "csutil/sysfunc.h"
-#include "iutil/vfs.h"
-#include "csutil/cscolor.h"
-#include "cstool/csview.h"
-#include "cstool/initapp.h"
-#include "simple.h"
-#include "iutil/eventq.h"
-#include "iutil/event.h"
-#include "iutil/objreg.h"
-#include "iutil/csinput.h"
-#include "iutil/virtclk.h"
-#include "iengine/sector.h"
-#include "iengine/engine.h"
-#include "iengine/camera.h"
-#include "iengine/light.h"
-#include "iengine/texture.h"
-#include "iengine/mesh.h"
-#include "iengine/movable.h"
-#include "iengine/material.h"
-#include "imesh/thing.h"
-#include "imesh/object.h"
-#include "ivideo/graph3d.h"
-#include "ivideo/graph2d.h"
-#include "ivideo/texture.h"
-#include "ivideo/material.h"
-#include "ivideo/fontserv.h"
-#include "igraphic/imageio.h"
-#include "imap/parser.h"
-#include "ivaria/reporter.h"
-#include "ivaria/stdrep.h"
-#include "csutil/cmdhelp.h"
-#include "csutil/event.h"
-
-CS_IMPLEMENT_APPLICATION
-
-// The global pointer to simple
-Simple* simple = 0;
-
-Simple::Simple (iObjectRegistry* object_reg)
-{
-  Simple::object_reg = object_reg;
-}
-
-Simple::~Simple ()
-{
-}
-
-bool Simple::Initialize ()
-{
-  if (!csInitializer::RequestPlugins (object_reg,
-        CS_REQUEST_VFS,
-        CS_REQUEST_OPENGL3D,
-        CS_REQUEST_ENGINE,
-        CS_REQUEST_FONTSERVER,
-        CS_REQUEST_IMAGELOADER,
-        CS_REQUEST_LEVELLOADER,
-        CS_REQUEST_REPORTER,
-        CS_REQUEST_REPORTERLISTENER,
-        CS_REQUEST_END))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Can't initialize plugins!");
-    return false;
-  }
-
-  // Check for commandline help.
-  if (csCommandLineHelper::CheckHelp (object_reg))
-  {
-    csCommandLineHelper::Help (object_reg);
-    return false;
-  }
-
-  // The virtual clock.
-  vc = CS_QUERY_REGISTRY (object_reg, iVirtualClock);
-  if (!vc)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Can't find the virtual clock!");
-    return false;
-  }
-
-  // Find the pointer to engine plugin
-  engine = CS_QUERY_REGISTRY (object_reg, iEngine);
-  if (!engine)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iEngine plugin!");
-    return false;
-  }
-
-  loader = CS_QUERY_REGISTRY (object_reg, iLoader);
-  if (!loader)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iLoader plugin!");
-    return false;
-  }
-
-  g3d = CS_QUERY_REGISTRY (object_reg, iGraphics3D);
-  if (!g3d)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iGraphics3D plugin!");
-    return false;
-  }
-
-  kbd = CS_QUERY_REGISTRY (object_reg, iKeyboardDriver);
-  if (!kbd)
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "No iKeyboardDriver plugin!");
-    return false;
-  }
-
-  // Open the main system. This will open all the previously
-  // loaded plug-ins.
-  if (!csInitializer::OpenApplication (object_reg))
-  {
-    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
-        "crystalspace.application.simple",
-        "Error opening system!");
-    return false;
-  }
-
-  csReport (object_reg, CS_REPORTER_SEVERITY_NOTIFY,
-        "crystalspace.application.simple",
-        "Simple Crystal Space Application version 0.1.");
-
-  return true;
-}
-
-void Simple::Start ()
-{
-  csDefaultRunLoop (object_reg);
-}
-
-/*---------------*
- * Main function
- *---------------*/
-int main (int argc, char* argv[])
-{
-  iObjectRegistry* object_reg =
-    csInitializer::CreateEnvironment (argc, argv);
-  if (!object_reg) return -1;
-
-  simple = new Simple (object_reg);
-  if (simple-&#62;Initialize ())
-    simple-&#62;Start ();
-  delete simple;
-  simple = 0;
-
-  csInitializer::DestroyApplication (object_reg);
-  return 0;
-}
-</pre></td></tr></table></P><P>
-
-This is almost the simplest possible application and it is absolutely useless.
-Also don't run it on an operating system where you can't kill a running
-application because there is no way to stop the application once it has
-started running.
+Before reading this tutorial you should read the Tutorial Introduction first
+(see section <A HREF="cs_71.html#SEC159">5.1 Developing a Crystal Space Application</A>).
 </P><P>
 
-Even though this application is useless it already has a lot of features
-that are going to be very useful later. Here is a short summary of all
-the things and features it already has:
-</P><P>
-
-<UL>
-<LI>
-It will open a window.
-<LI>
-You can control the size of the window and the video driver used
-for that window with commandline options (`<SAMP>-video</SAMP>' and `<SAMP>-mode</SAMP>'
-commandline options).
-<LI>
-It will give commandline help when you use the `<SAMP>-help</SAMP>' commandline
-option.
-<LI>
-It has the following plugins initialized and ready to use: engine, 3D
-renderer, canvas, reporter, reporter listener, font server, image loader,
-level loader, and VFS.
-</UL>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_76.html#SEC174">5.2.1 Simple Header File</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_77.html#SEC175">5.2.2 Event Handling</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_78.html#SEC176">5.2.3 Creating a "World"</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_79.html#SEC177">5.2.4 The Camera</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_80.html#SEC178">5.2.5 Locomotion (Moving Around)</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
 <P>
 
-Before we start making this application more useful lets have a look at what
-actually happens here.
-</P><P>
-
-Before doing anything at all, after including the necessary header files, we
-first need to use a few macros.  The CS_IMPLEMENT_APPLICATION macro is
-essential for every application using Crystal Space.  It makes sure that the
-<CODE>main()</CODE> routine is correctly linked and called on every platform.
-</P><P>
-
-The main routine first calls <CODE>csInitializer::CreateEnvironment()</CODE>
-to make sure SCF is set up, the object registry is created, commandline
-reading is set up, and several other useful utilities are created
-(plugin manager, event queue, ...).
-Then our main routine creates an instance of our
-`<SAMP>Simple</SAMP>' class. We put this instance into a global variable to make
-access to it easier. The next step is application initialization which
-is done in the <CODE>Initialize()</CODE> function.
-</P><P>
-
-Note the usage of the <CODE>csReport()</CODE> function. This is a convenience
-function to send a message (usually an error or notification) to the
-reporter plugin. It works a lot like <CODE>printf()</CODE> except that you
-additionally need to give the severity level and an identifier which can give
-someone listening to the reporter an idea of the origin of the message.
-</P><P>
-
-<CODE>csInitializer::RequestPlugins()</CODE> will use the config file (which
-we are not using in this tutorial), the commandline and the requested
-plugins to find out which plugins to load. The commandline has highest
-priority, followed by the config file and lastly the requested plugins.
-</P><P>
-
-The <CODE>csCommandLineHelper::CheckHelp()</CODE> function will check if the
-`<SAMP>-help</SAMP>' commandline option is given and if so show the help for
-all loaded plugins (every plugin that is loaded in memory is capable of
-extending the commandline options).
-</P><P>
-
-After that we will query the object registry to find out all the common
-objects that we're going to need later and store a reference in our
-main class. Because we use <CODE>csRef&#60;&#62;</CODE> or smart pointers we don't have
-to worry about <CODE>DecRef()</CODE>.
-</P><P>
-
-Finally, when all is done the window is opened with a call to the function
-<CODE>csInitializer::OpenApplication()</CODE>.  This sends the `<SAMP>cscmdSystemOpen</SAMP>'
-message to all components that are listening to the event queue.  One of the
-plugins that does this is the 3D renderer which will then open its window (or
-enable graphics on a non-windowing operating system).
-</P><P>
-
-This concludes the initialization pass.
-</P><P>
-
-In <CODE>Simple::Start()</CODE> we will start the default main loop by
-calling <CODE>csDefaultRunLoop()</CODE>. This function will only return when
-the application exits (which this example cannot yet do). Basically
-this function will start the loop to handle events.
-</P><P>
-
-<A NAME="Simple Event Handling"></A>
+<A NAME="Simple Header File"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_76.html#SEC171"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC155"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC172"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_76.html#SEC174"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC158"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

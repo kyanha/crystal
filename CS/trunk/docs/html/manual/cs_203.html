@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Map File Grammar</TITLE>
+<TITLE>Crystal Space: Old Map File Format</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Map File Grammar">
-<META NAME="keywords" CONTENT="Crystal Space: Map File Grammar">
+<META NAME="description" CONTENT="Crystal Space: Old Map File Format">
+<META NAME="keywords" CONTENT="Crystal Space: Old Map File Format">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,76 +23,70 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC513"></A>
+<A NAME="SEC516"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC512"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC514"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC489"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC512"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC514"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC517"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC493"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.6.2.1 Grammar </H4>
-<!--docid::SEC513::-->
+<H3> 7.6.2 Old Format of Map File </H3>
+<!--docid::SEC516::-->
 <P>
 
 <EM>Written by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
 </P><P>
 
-The syntax for the standard Crystal Space map file is specified using a
-context-free grammar using a modified BNF (<EM>Backus-Naur Form</EM>)
-notation.
+<EM>NOTE</EM>: This document is outdated.  Map files now use XML format
+rather than the format described here.  However, some of the information here
+is still useful and has not yet been transformed to the new XML format
+documentation.  See section <A HREF="cs_198.html#SEC493">7.6.1 Format of Map File (XML)</A>.
 </P><P>
 
-<EM>Terminal</EM> symbols (also known as <EM>tokens</EM>) are denoted like this,
-`<CODE>VERTEX</CODE>'.  <EM>Non-terminal</EM> symbols are denoted in this fashion,
-<EM>vector</EM>.  Expressions enclosed within `[' and `]' are optional.  When
-an expression is followed by the notation `<small>...</small>', then the expression may
-appear zero or more times.  Finally, the symbol '|' appearing between
-expressions indicates selection.  Either the expression to the left may be
-utilized, or the one to the right, but not both.  An example follows.
+The next couple sections of this document describe the format of the standard
+Crystal Space map file.  The first section describes the syntax of the file.
+The second section contains extra discussions and hints regarding the map file
+and the objects contained within it.
 </P><P>
 
-<EM>flip</EM> => `<CODE>HEAD</CODE>' | `<CODE>TAIL</CODE>'<BR>
-<EM>wager</EM> => `<CODE>WAGER</CODE>' <EM>flip</EM>     `<CODE>(</CODE>' <EM>money</EM> [ `<CODE>,</CODE>' <EM>money</EM> <small>...</small> ] `<CODE>)</CODE>'
+The Crystal Space engine, itself, does not care about the external format of
+world data, nor does it care about how that information was obtained.  It is
+possible to create additional map loaders as plug-in modules which understand
+world data stored in other formats, such as binary.  A map loading plug-in
+module could even load maps over the network from a map file server, or
+generate worlds randomly based upon some set of input properties.  There are
+many possibilities.
 </P><P>
 
-In this example, a `<SAMP>WAGER</SAMP>' may be followed by either `<SAMP>HEAD</SAMP>' or
-`<SAMP>TAIL</SAMP>', and then by a parenthesized list of monetary values separated by
-commas.  At least one monetary value must be specified.  All subsequent values
-(including the comma) are optional, as denoted by `[' and `]'.  Here are a
-couple of valid expressions which satisfy the <EM>wager</EM> production:
+The map file syntax described in this section, however, is that which is
+understood by the standard map file loader which accompanies Crystal Space.
+It deals strictly with plain-text files.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>WAGER HEAD (44)
-WAGER TAIL (5, 39, 2)
-</pre></td></tr></table></P><P>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_204.html#SEC517">7.6.2.1 Grammar</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_205.html#SEC518">7.6.2.2 Syntax</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_206.html#SEC551">7.6.2.3 Hints</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
 
-And here are a few invalid expressions which do not:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>WAGER HEAD (44,)
-WAGER TAIL (,23)
-WAGER TAIL ()
-WAGER EITHER (81, 15)
-WAGER (72, 91)
-</pre></td></tr></table></P><P>
-
-<A NAME="Map File Syntax"></A>
+<A NAME="Map File Grammar"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC512"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC514"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC489"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC512"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC548"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC514"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC517"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC493"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC492"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_207.html#SEC552"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

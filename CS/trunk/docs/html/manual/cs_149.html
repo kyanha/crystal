@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: csGeom</TITLE>
+<TITLE>Crystal Space: SCF Advanced</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: csGeom">
-<META NAME="keywords" CONTENT="Crystal Space: csGeom">
+<META NAME="description" CONTENT="Crystal Space: SCF Advanced">
+<META NAME="keywords" CONTENT="Crystal Space: SCF Advanced">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -25,163 +25,131 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <A NAME="SEC371"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_148.html#SEC367"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC372"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_148.html#SEC370"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 6.3 Geometry Library (<CODE>csGeom</CODE>) </H2>
+<H3> 6.2.10 Advanced Techniques </H3>
 <!--docid::SEC371::-->
 <P>
 
-This library is used to perform any calculations dealing with 2D or 3D
-geometry. It contains several more or less independent classes. The most
-important classes are:
+The SCF library implements some things that you will need to know about
+to use some advanced techniques.  They are described in detail, below.
 </P><P>
 
-<UL>
-<LI>
-<EM>Geometric Functionality</EM>
+<A NAME="SEC372"></A>
+<H4> Dynamic Class Registration </H4>
+<!--docid::SEC372::-->
 <P>
 
-These are functions that do not fit in one of the following classes, for
-example to calculate intersections. They are grouped as static member
-functions of one class. (It does not make sense to create objects of this
-class, as it only contains these static member functions).
+You can register and deregister SCF classes at run time.  There are times
+when you would like to provide a named SCF class in your main application,
+rather than in a plugin module.  In this case, you will need to manually
+register the class with SCF since it will not be discovered by the
+automatic scan for plugins.  To do this, the following method is provided:
 </P><P>
 
-<LI>
-<EM>Vectors</EM>
-<P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool iSCF::RegisterClass (
+  scfFactoryFunc,
+  char const* ClassName,
+  char const* Description,
+  char const* Dependencies,
+  char const* context);
+</pre></td></tr></table></P><P>
 
-These classes represent 2D and 3D vectors.  There is also a variant of the 3D
-vector class which uses double precision numbers to represent its elements,
-rather than the single precision numbers used by the standard 3D vector class.
-These classes supply specially overloaded operators so you can use them in
-calculations as you can use integer or float values.  The possible operators
-are:
+Rather than having to remember to call this method from your code, you can
+automate the registration by instead using the
+<CODE>SCF_REGISTER_STATIC_CLASS()</CODE> macro, which takes the following arguments:
 </P><P>
 
-<UL>
-<LI>
-Add two vectors
-<LI>
-Subtract two vectors
-<LI>
-Multiply a vector and a scalar
-<LI>
-Divide a vector by a scalar
-<LI>
-Dot product (uses `<SAMP>*</SAMP>' operator)
-<LI>
-Cross product (uses `<SAMP>%</SAMP>' operator)
-<LI>
-Comparison of two vectors (`<SAMP>==</SAMP>' and `<SAMP>!=</SAMP>')
-<LI>
-Projecting one vector on another (`<SAMP>&#60;&#60;</SAMP>' and `<SAMP>&#62;&#62;</SAMP>')
-<LI>
-Inverting a vector (`<SAMP>-</SAMP>' operator)
-<LI>
-Comparing all components with a small epsilon value (`<SAMP>&#60;</SAMP>' and `<SAMP>&#62;</SAMP>')
-</UL>
-<P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_REGISTER_STATIC_CLASS(
+  C++Class,
+  "scf.class.name",
+  "description",
+  "comma-separated dependency list" or NULL)
+</pre></td></tr></table></P><P>
 
-They also contain some functions to normalize the vector or return its length.
-Single and double precision vectors can be mixed in calculations.
+This macro should be used at the top-level of the source file, outside of
+any function.
 </P><P>
 
-<LI>
-<EM>Matrices</EM>
-<P>
-
-These are 2D and 3D matrices. They are used to transform (rotate, scale etc.)
-vectors. They also use their own operators for easier usage (for example to
-multiply a matrix and a vector).
+If a class resides in a plugin module which was not discovered by the startup
+scan, and if you do not elect to have SCF scan for the plugin with
+<CODE>iSCF::ScanPluginsPath()</CODE> or an additional call to <CODE>scfInitialize()</CODE>,
+then you can manually tell SCF all about the class with the following
+method:
 </P><P>
 
-<LI>
-<EM>Transforms</EM>
-<P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool iSCF:RegisterClass (
+  char const* ClassName,
+  char const* PluginPath,
+  char const* FactoryClass,
+  char const* Description,
+  char const* Dependencies,
+  char const* context);
+</pre></td></tr></table></P><P>
 
-A transformation consists of a matrix and a vector. In contrast to just a
-matrix you can also include movement in a transform. It also uses its own
-operators.
+You can deregister a registered class with the following function:
 </P><P>
 
-<LI>
-<EM>Quaternions</EM>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool iSCF::UnregisterClass(char const* ClassIName)
+</pre></td></tr></table></P><P>
+
+<A NAME="SEC373"></A>
+<H4> Non-Registered Classes </H4>
+<!--docid::SEC373::-->
 <P>
 
-Encapsulation of quaternion functionality.
+Often, you do not need or want to register a class with the SCF kernel.
+That is, you create your objects manually, using `<SAMP>new</SAMP>' or some other
+method and return them to callers of your functions as pure SCF
+interfaces.  This is a perfectly valid use of SCF classes, and is often
+employed.  It is common, for instance, for a named, published SCF class to
+vend unnamed classes to callers of its methods.  These classes are often helper
+classes.  In this case the unnamed object is not a part of the class registry.
 </P><P>
 
-<LI>
-<EM>Planes</EM>
+<A NAME="SEC374"></A>
+<H4> Non-Parented Classes </H4>
+<!--docid::SEC374::-->
 <P>
 
-These classes represent 2D and 3D planes. They can, for example, be used to
-split polygons or to calculate the distance of a point from a polygon (or
-line segments instead of polygons for 2D planes).
+Often, classes do not need to be parented.  This is frequently true of classes
+which are not named and part of the class registry, as noted above.  In this
+case your object is not a part of the class tree (see above) and thus does not
+have a parent.  To implement such a class, you have to pass `<SAMP>NULL</SAMP>' to the
+<CODE>SCF_CONSTRUCT_IBASE()</CODE> macro in constructor.
 </P><P>
 
-<LI>
-<EM>Line Segments</EM>
-<P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>MyClass::MyClass()
+{
+  SCF_CONSTRUCT_IBASE(0)
+  <small>...</small>
+}
 
-A line segment is a straight line between two points, which ends at these
-points. It could for example be used to define start and finish point of
-straight movement. There are 2D and 3D segments.
-</P><P>
-
-<LI>
-<EM>Polygons</EM>
-<P>
-
-Polygons are an important class used heavily in the 3D engine. A polygon is
-built from at least three points, called <EM>vertices</EM>. All vertices must
-be on the same plane in space. The polygons outline consists of all line
-segments from one vertex to the next one, including the segment from the last
-vertex to the first one. These segments may not cross. Also, the polygon
-must be convex, which means that if you take two arbitrary points inside the
-polygon and draw a straight line between them, it may not cross any of the
-polygon's edges.  A polygon has two faces, defined by the order of the
-vertices: If you count through all vertices, and from your position they appear
-in clockwise order, then you are viewing the front face, otherwise you are
-viewing the back face.  The <EM>normal</EM> vector of the polygon always points
-out perpendicular from the front face.
-</P><P>
-
-There are different types of polygons concerning management of the vertices
-and how they can be used. First, there are the basic 2D and 3D polygons that
-store their vertices as 3D vectors. The clippers are similar to this but
-they are specialized on clipping other polygons (you lay the clipper somewhere
-on a polygon and cut everything away of the polygon that is outside the
-clipper, resulting in a new, smaller polygon). Then there is a 2D polygon
-that stores its sides as line segments, not its vertices as vectors.
-The most important type for the engine is the indexed polygon, which does not
-store its vertices as 3D vectors but only as indices in a table.
-</UL>
-<P>
-
-There are also other classes that are mostly used inside the engine, such as
-bounding boxes, frustums, polygon pools, etc.
-<A NAME="CSWS"></A>
+MyClass::~MyClass()
+{
+  <small>...</small>
+  SCF_DESTRUCT_IBASE()
+}
+</pre></td></tr></table><A NAME="csGeom"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_148.html#SEC367"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC372"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_138.html#SEC355"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_156.html#SEC387"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_148.html#SEC370"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_136.html#SEC356"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_139.html#SEC359"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_150.html#SEC375"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

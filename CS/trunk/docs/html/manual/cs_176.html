@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Texture Mapping Animations</TITLE>
+<TITLE>Crystal Space: Texture Mapping Instructions</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Texture Mapping Animations">
-<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping Animations">
+<META NAME="description" CONTENT="Crystal Space: Texture Mapping Instructions">
+<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping Instructions">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,78 +23,123 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC431"></A>
+<A NAME="SEC434"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_175.html#SEC430"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_175.html#SEC433"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC421"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC425"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.5.6.6 Procedural, Dynamic and Animated Textures </H4>
-<!--docid::SEC431::-->
-<P>
-
-OK so we have the texture mapped onto the polygon, now the fun stuff starts.
-There are several ways to introduce movement into textures. Here is the
-terminology used in crystal space to describe these methods and brief
-explanations of what they entail:
-</P><P>
-
-<A NAME="SEC432"></A>
-<H4> Animated Textures </H4>
-<!--docid::SEC432::-->
- 
-Lets say we have several precomputed texture images, which when taken in 
-sequence form an animation. An Animated texture is simply when you swap
-the texture image mapped on to the polygon between the precomputed texture
-images. This is the simplest, cheapest and most common method.
-<P>
-
-<A NAME="SEC433"></A>
-<H4> Dynamic Textures </H4>
-<!--docid::SEC433::-->
-<P>
-
-Dynamic textures are when you manipulate the texture mapping transformation, or 
-the texture co-ordinates directly. This way you can rotate/scroll for example
-the texture on the polygon while it remains static.
-</P><P>
-
-<A NAME="SEC434"></A>
-<H4> Procedural Textures </H4>
+<H4> 7.5.6.5 Instructions for Texture Mapper </H4>
 <!--docid::SEC434::-->
 <P>
 
-If you still can't produce the effect you want with animated and or dynamic
-textures then you can resort to procedural textures. Another less common name
-for procedural textures is programmatic textures. This is when you write the
-texture on the fly. The texture is typically a buffer you render to in the
-same way as you would render to the main screen. Good procedural texture
-implementations gives you full blown 3d capable facilities to render to the
-texture. Fortunately Crystal Space has this :)
-Typical uses for procedural textures is when the content of the texture responds
-uniquely to user input or behavior. A good example is having a computer terminal
-within the virtual world which the user can type on and can see what they type
-come up on the virtual screen. (see section <A HREF="cs_162.html#SEC393">7.3.1 Procedural Texture System</A>).
+In the Crystal Space map file,
+the `<SAMP>orig</SAMP>', `<SAMP>first</SAMP>', and `<SAMP>second</SAMP>' vertex keywords describe the
+texture plane.  What Crystal Space does internally is to create a
+transformation matrix/vector which translates object space (3D coordinates) to
+texture space (<EM>u,v</EM> coordinates).  Here is how this works.
 </P><P>
 
-<A NAME="Visibility Culling"></A>
+First a few definitions:
+</P><P>
+
+<UL>
+<LI>
+<CODE>orig</CODE> vector is <EM>Vo</EM>
+<LI>
+<CODE>first</CODE> vector is <EM>V1</EM>
+<LI>
+<CODE>second</CODE> vector is <EM>V2</EM>
+<LI>
+<CODE>firstlen</CODE> is <EM>L1</EM>
+<LI>
+<CODE>secondlen</CODE> is <EM>L2</EM>
+<LI>
+Length of
+<EM>V1 - Vo</EM>
+is <EM>l1</EM>
+<LI>
+Length of
+<EM>V2 - Vo</EM>
+is <EM>l2</EM>
+</UL>
+<P>
+
+<EM>Vo</EM>, <EM>V1</EM> and <EM>V2</EM> are vertices in object space.  These define
+the local coordinate system for texture space.  So we have the following
+mapping:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>Vo</EM> ==> (<EM>0</EM>,<EM>0</EM>)<BR>
+<EM>V1</EM> ==> (<EM>L1</EM>,<EM>0</EM>)<BR>
+<EM>V2</EM> ==> (<EM>0</EM>,<EM>L2</EM>)
+</BLOCKQUOTE>
+<P>
+
+It is important to realize that the coordinate (0,0) in texture space is the
+top-left coordinate of the texture and (1,1) is the bottom-right corner.  The
+coordinate (2,2) is thus the bottom-right corner of a tiled texture (2x2
+times).
+</P><P>
+
+The conversion to the matrix happens as follows:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>Vu = (len1 / l1) * (V1-Vo)</EM><BR>
+<EM>Vv = (len2 / l2) * (V2-Vo)</EM>
+</BLOCKQUOTE>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>      / Vu.x Vv.x 1 \
+Mot = | Vu.y Vv.y 1 |
+      \ Vu.z Vv.z 1 /
+</pre></td></tr></table><P>
+
+The last column represents the <EM>W</EM> texture component which is not used.
+</P><P>
+
+<BLOCKQUOTE>
+<EM>Vot = &#60;Vo.x Vo.y Vo.z&#62;</EM>
+</BLOCKQUOTE>
+<P>
+
+So <EM>Mot</EM> and <EM>Vot</EM> are the transformation matrix/vector to go from
+object to texture space.  Use these as follows:
+</P><P>
+
+<BLOCKQUOTE>
+<EM>T = Mot * (O - Vot)</EM>
+</BLOCKQUOTE>
+<P>
+
+With <EM>O</EM> being the object space vector that you want to convert and
+<EM>T</EM> the texture space vector.  Only the <EM>x</EM> and <EM>y</EM> components
+are used of <EM>T</EM>.  <EM>x</EM> represents <EM>u</EM> and <EM>y</EM> represents
+<EM>v</EM>.
+</P><P>
+
+Using the last equation you can convert every point of your polygon to texture
+space.
+</P><P>
+
+<A NAME="Texture Mapping Animations"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_175.html#SEC430"> &lt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_175.html#SEC433"> &lt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_169.html#SEC421"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC422"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC435"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC425"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC426"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_178.html#SEC439"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

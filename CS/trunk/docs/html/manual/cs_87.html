@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Simple Locating the Camera</TITLE>
+<TITLE>Crystal Space: Simple Loading The Map</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Simple Locating the Camera">
-<META NAME="keywords" CONTENT="Crystal Space: Simple Locating the Camera">
+<META NAME="description" CONTENT="Crystal Space: Simple Loading The Map">
+<META NAME="keywords" CONTENT="Crystal Space: Simple Loading The Map">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,97 +23,105 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC182"></A>
+<A NAME="SEC185"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_86.html#SEC181"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC183"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC183"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_86.html#SEC184"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC186"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_89.html#SEC187"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.4.3 Locating the Camera </H3>
-<!--docid::SEC182::-->
+<H3> 5.4.2 Loading The Map </H3>
+<!--docid::SEC185::-->
 <P>
 
-`<SAMP>flarge</SAMP>' contains a number of sectors and various objects, and those
-are now all loaded in memory. However this is not enough. We also have
-to set the camera to some sector and position in that world. In the
-previous tutorials we simply used the sector that we just created
-and a fixed position in that sector (keep in mind that in Crystal
-Space a position in space is always defined as a sector in combination
-with a position). When loading a map we can't work that way because
-we don't know which sectors are in the map (unless we make an application
-that can only read one level, but that's not very flexible) and we
-also don't know where we can safely put our camera. In the map files
-it is possible to specify one or more starting positions. We will
-query the engine for such a starting position and initialize our
-view (camera) to that. This happens with the following code:
+Here we add the code to load a map. In this example we will load the
+`<SAMP>flarge</SAMP>' map which is included with Crystal Space.
 </P><P>
 
-First add the following to the include section:
+In the second tutorial we already mentioned VFS (see section <A HREF="cs_159.html#SEC393">7.2 Virtual File System (VFS)</A>). This
+is important in this case too since we are going to load the map from
+the virtual filesystem. To do this we first add the new <CODE>LoadMap()</CODE>
+routine right before the <CODE>Initialize()</CODE> function:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "iengine/campos.h"
-</pre></td></tr></table></P><P>
-
-Then add the following after <CODE>engine-&#62;Prepare()</CODE> in <CODE>LoadMap()</CODE>:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  // Find the starting position in this level.
-  csVector3 pos (0, 0, 0);
-  if (engine-&#62;GetCameraPositions ()-&#62;GetCount () &#62; 0)
-  {
-    // There is a valid starting position defined in the level file.
-    iCameraPosition* campos = engine-&#62;GetCameraPositions ()-&#62;Get (0);
-    room = engine-&#62;GetSectors ()-&#62;FindByName (campos-&#62;GetSector ());
-    pos = campos-&#62;GetPosition ();
-  }
-  else
-  {
-    // We didn't find a valid starting position. So we default
-    // to going to room called 'room' at position (0,0,0).
-    room = engine-&#62;GetSectors ()-&#62;FindByName ("room");
-  }
-  if (!room)
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::LoadMap ()
+{
+  // Set VFS current directory to the level we want to load.
+  csRef&#60;iVFS&#62; VFS (CS_QUERY_REGISTRY (object_reg, iVFS));
+  VFS-&#62;ChDir ("/lev/flarge");
+  // Load the level file which is called 'world'.
+  if (!loader-&#62;LoadMapFile ("world"))
   {
     csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
     	"crystalspace.application.simple",
-      	"Can't find a valid starting position!");
+    	"Couldn't load level!");
     return false;
   }
-  view-&#62;GetCamera ()-&#62;SetSector (room);
-  view-&#62;GetCamera ()-&#62;GetTransform ().SetOrigin (pos);
+  engine-&#62;Prepare ();
 
   return true;
 }
 </pre></td></tr></table></P><P>
 
-First we see how many camera positions there were defined in the
-map by using <CODE>iEngine::GetCameraPositionCount()</CODE>. If this is 0
-then the map didn't define a starting position. In that case we will
-assume there is a sector called 'room' and we will start the camera
-at (0,0,0) in that sector. But otherwise we will use the first
-starting position defined in the map.
+This code will first use <CODE>iVFS::ChDir()</CODE> to set the current
+directory in the virtual file system to `<TT>/lev/flarge</TT>'. In the
+case of `<SAMP>flarge</SAMP>' this MOUNT POINT is already created in the
+config file `<TT>vfs.cfg</TT>'. If this is not the case for your own levels
+you can either modify `<TT>vfs.cfg</TT>' or else call <CODE>iVFS::Mount()</CODE>
+to map a physical file path (can be a ZIP archive file as well)
+to a virtual directory.
 </P><P>
 
-This is all. After adding this code this application will now load
-the 'flarge' map and display it so you can run around in this level.
-<A NAME="map2cs Tutorial"></A>
+The call to <CODE>iLoader::LoadMapFile()</CODE> will take the given filename
+(in this case `<TT>world</TT>') and open it from the current VFS
+directory. Then it will parse that file and create the geometry which
+is specified there.
+</P><P>
+
+If this is successful then you must call <CODE>iEngine::Prepare()</CODE> to
+make sure that all lightmaps are correctly loaded from the cache
+and other necessary setup work is done (i.e. textures are registered
+and so on).
+</P><P>
+
+We additionally change the last part of <CODE>Initialize()</CODE> to
+this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize ()
+{
+  <small>...</small>
+
+  view = csPtr&#60;iView&#62; (new csView (engine, g3d));
+  iGraphics2D* g2d = g3d-&#62;GetDriver2D ();
+  view-&#62;SetRectangle (0, 0, g2d-&#62;GetWidth (), g2d-&#62;GetHeight ());
+
+  if (!LoadMap ()) return false;
+  return true;
+}
+</pre></td></tr></table></P><P>
+
+So first we create our view but doesn't yet set the current sector.
+<CODE>LoadMap()</CODE> will do that based on the loaded level.
+</P><P>
+
+<A NAME="Simple Locating the Camera"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_86.html#SEC181"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC183"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_84.html#SEC179"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC183"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_86.html#SEC184"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_88.html#SEC186"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_85.html#SEC183"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_89.html#SEC187"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

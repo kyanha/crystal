@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Creating External Application using KDevelop</TITLE>
+<TITLE>Crystal Space: HOWTO Creating External MSVC 7 Application</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Creating External Application using KDevelop">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Creating External Application using KDevelop">
+<META NAME="description" CONTENT="Crystal Space: HOWTO Creating External MSVC 7 Application">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Creating External MSVC 7 Application">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,427 +23,496 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC316"></A>
+<A NAME="SEC312"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_126.html#SEC308"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_128.html#SEC326"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_126.html#SEC304"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_128.html#SEC320"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.18 Creating an External Application using KDevelop </H3>
+<H3> 5.8.17 Creating an External MSVC 7 Application </H3>
+<!--docid::SEC312::-->
+<P>
+
+<EM>Written by Philip Wyett <A HREF="mailto:philipwyett@dsl.pipex.com">philipwyett@dsl.pipex.com</A>.</EM>
+<EM>Last updated 2 June 2003.</EM>
+</P><P>
+
+This HOWTO is a step by step guide for creating a basic Crystal Space
+application with MSVC 7 .NET outside the Crystal Space source tree.
+</P><P>
+
+IMPORTANT: This tutorial assumes you have a basic familiarity with
+MSVC and it's inner workings. This tutorial also assumes you have a fully
+compiled (both release and debug) version of Crystal Space somewhere on your
+computer.
+</P><P>
+
+<A NAME="SEC313"></A>
+<H4> Step 1 - Creating a basic project solution. </H4>
+<!--docid::SEC313::-->
+<P>
+
+Start MSVC 7 and from the <EM>File</EM> menu click on <EM>File</EM> then
+<EM>New</EM> and once the sub menu of <EM>New</EM> opens, click on
+<EM>Project</EM>.  You will now be presented with a dialog box (see image
+below) for creating a new project.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap0.jpg" ALT="tutorial/howto/msvc7proj/snap0"></CENTER>
+</P><P>
+
+Firstly we need to select the type of project we wish to create.  Crystal Space
+applications are Win32 applications and primarily work from a console base.
+This still allows the creation of <EM>Graphical User Interface</EM> (GUI)
+applications.  However, it also allows you to use the <EM>-console</EM> command
+line switch and access more verbose runtime data normally only available with
+debug builds.  If you do wish to create standard win32 applications, you may do
+so.  However...  the <EM>-console</EM> switch will not operate correctly in that
+type of application.
+</P><P>
+
+In the <EM>Project Types:</EM> window select <EM>Visual C++ projects</EM>.  Next we
+move to the <EM>Templates:</EM> window and choose the application type we wish to
+create.  As mentioned above Crystal Space applications are Win32 applications.
+So, search that window and select <EM>Win32 Project</EM>.  Now enter the name of
+your application in the <EM>Name</EM> text box.  In our example, the application
+will be named `<TT>simple1</TT>'.  Once done, click on the <EM>OK</EM> button.
+</P><P>
+
+You will now be presented with another dialog box (see image below).
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap1.jpg" ALT="tutorial/howto/msvc7proj/snap1"></CENTER>
+</P><P>
+
+We wish to specify some application settings.  So, click on hyperlink text
+<EM>Application Settings</EM> below <EM>Overview</EM> and you will be presented
+with what can be seen in the screenshot below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap2.jpg" ALT="tutorial/howto/msvc7proj/snap2"></CENTER>
+</P><P>
+
+As discussed above, Crystal Space applications are primarily console based
+(though GUI are allowed) inorder to give us acces to the verbose
+diagnostic text via <EM>-console</EM>.  Under <EM>Application type:</EM>, select
+<EM>Console application</EM>.  We are starting from a blank canvas. So, in the
+<EM>Additional options:</EM> section, check the box <EM>Empty project</EM>.  Once
+done, click on the <EM>Finish</EM> button.
+</P><P>
+
+You should now be in the MSVC 7 IDE (Intergrated Development
+Environment), with the <EM>simple1</EM> project loaded.  Lets move on...
+</P><P>
+
+<A NAME="SEC314"></A>
+<H4> Step 2 - Adding files/code to the project solution. </H4>
+<!--docid::SEC314::-->
+<P>
+
+Rather than create code for this tutorial and keeping inline with time honored
+tradition - We are now going to cheat and use existing Crystal Space code. :-)
+</P><P>
+
+Firstly copy and paste the `<TT>simple1.cpp</TT>' and `<TT>simple1.h</TT>' from the
+Crystal Space code tree, into the newly created `<TT>simple1</TT>' project
+directory.  These files can be found here:
+</P><P>
+
+`<TT>CS\apps\tutorial\simple1\</TT>'
+</P><P>
+
+Once done, return to the MSVC IDE and select the <EM>Solution Explorer</EM>
+tab within the <EM>Solution Explorer</EM> window.  See the image below to see the
+<EM>Solution Explorer</EM> window from within the MSVC IDE.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap3.jpg" ALT="tutorial/howto/msvc7proj/snap3"></CENTER>
+</P><P>
+
+To add file(s) to a project, select the appropriate folder in the
+<EM>Solution Explorer</EM> window, be that <EM>Source Files</EM> or
+<EM>Header Files</EM> etc.  Right click on it to bring up the context menu and
+then hover over <EM>Add</EM> until the sub menu appears and then click on
+<EM>Add Existing Item...</EM>.  You will now be presented with the
+<EM>Add Existing Item</EM> dialog box, which can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap4.jpg" ALT="tutorial/howto/msvc7proj/snap4"></CENTER>
+</P><P>
+
+After selecting the desired file(s) you wish to add, click on the <EM>Open</EM>
+button to finalize your choice(s) and be returned back to the MSVC IDE.
+Repeat this process twice adding `<TT>simple1.cpp</TT>' to the <EM>Source Files</EM>
+folder and `<TT>simple1.h</TT>' to the <EM>Header Files</EM> folder. Once done you
+should have a <EM>Solution Explorer</EM> window which looks like the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap5.jpg" ALT="tutorial/howto/msvc7proj/snap5"></CENTER>
+</P><P>
+
+<A NAME="SEC315"></A>
+<H4> Step 3 - Setting Crystal Space PATHS inside MSVC.  </H4>
+<!--docid::SEC315::-->
+<P>
+
+First thing we need todo is point MSVC to both Crystal Spaces `<TT>include</TT>'
+and both the release and debug build `<TT>libs</TT>' directories, so it may access
+them at compile/link time.  Select <EM>Tools</EM> from the <EM>File menu</EM> and
+then <EM>Options</EM><small>...</small> You will now be presented with the <EM>Options</EM>
+dialog box, which can be seen below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap6.jpg" ALT="tutorial/howto/msvc7proj/snap6"></CENTER>
+</P><P>
+
+Click <EM>Projects</EM> folder of the <EM>Options</EM> dialog.  Now click on
+<EM>VC++ Directories</EM>.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap7.jpg" ALT="tutorial/howto/msvc7proj/snap7"></CENTER>
+</P><P>
+
+Lets first add the path to the location of the Crystal Space `<TT>include</TT>'
+directory.  Select <EM>Include files</EM> in the <EM>Show directories</EM> for drop
+down menu.  Next click on the <EM>New Line</EM> button (folder beneath the drop
+down menu).  Click the browse button (button with three dots) on the right hand
+side, enabling you to select the Crystal Space <EM>include</EM> directory -
+wherever it is on your system.  See the image below for an example of it set.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap8.jpg" ALT="tutorial/howto/msvc7proj/snap8"></CENTER>
+</P><P>
+
+To set the paths to the Crystal Space lib files, you must remember you need to
+add two - one pointing to the location where the release libs are and another
+to where the debug libs are located.  In the <EM>Show directories</EM> for drop
+down menu, now select <EM>Library files</EM>.  Follow the same browse and
+selection procedure as you used when adding the `<TT>include</TT>' path, adding the
+following paths - adjusting for where you have Crystal Space located on your
+system.
+</P><P>
+
+`<TT>CS\mk\visualc7\csrelease\bin\libs\</TT>'
+</P><P>
+
+`<TT>CS\mk\visualc7\csdebug\bin\libs\</TT>'
+</P><P>
+
+See image below for an example of these set.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap9.jpg" ALT="tutorial/howto/msvc7proj/snap9"></CENTER>
+</P><P>
+
+Once done, click on the <EM>OK</EM> button and return to the MSVC IDE.
+</P><P>
+
+<A NAME="SEC316"></A>
+<H4> Step 4 - Setting Preprocessor Definitions in MSVC.  </H4>
 <!--docid::SEC316::-->
 <P>
 
-<EM>Written by Andreas Busch, <A HREF="mailto:nobita@t-online.de">nobita@t-online.de</A>.  Last updated
-1 April 2004.</EM>
+Crystal Space essentially has three preprocessor definitions which MUST be set
+in-order to successfully compile and link your application.  They are
+<CODE>WIN32_VOLATILE</CODE>, which is added whether the build is release or debug.
+<CODE>__CRYSTAL_SPACE__</CODE>, which is also set whether the build is release or
+debug.  And finally <CODE>CS_RELEASE</CODE> or <CODE>CS_DEBUG</CODE>, which is added as you
+may guess <CODE>CS_RELEASE</CODE> in the settings for release builds and
+<CODE>CS_DEBUG</CODE> in the settings for debug builds.
 </P><P>
 
-This HOWTO is a step by step guide for creating a Crystal Space
-application using KDevelop as your integrated development environment outside
-the Crystal Space source tree.
+To set the preprocessor definitions for your project.  Select your project in
+the <EM>Workspace</EM> window.  See area highlighted in blue in the image below.
+Now, from the <EM>Project</EM> menu select <EM>Properties</EM>.  Alternatively, you
+can right click on the highlighted area in the <EM>Workspace</EM> and then click
+on <EM>Properties</EM> - both ways work.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap5.jpg" ALT="tutorial/howto/msvc7proj/snap5"></CENTER>
+</P><P>
+
+Once you have clicked on <EM>Properties</EM>.  You will then be presented with
+the <EM>Properties</EM> dialog box, which can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap10.jpg" ALT="tutorial/howto/msvc7proj/snap10"></CENTER>
+</P><P>
+
+Open the C/C++ folder and select <EM>Preprocessor</EM>.  Insert the appropriate
+definitions in the <EM>Preprocessor Definitions</EM> text box i.e.  for a debug
+build <CODE>WIN32_VOLATILE</CODE>, <CODE>__CRYSTAL_SPACE__</CODE> and <CODE>CS_DEBUG</CODE>,
+making sure to separate with semi-colons.  Alternatively, you can click the
+elipsis (<small>...</small>) button to pull up an easier view.  An example of the ones
+entered for a debug build can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap11.jpg" ALT="tutorial/howto/msvc7proj/snap11"></CENTER>
+</P><P>
+
+Open the C/C++ folder and select <EM>Preprocessor</EM>.  Insert the appropriate
+definitions in the <EM>Preprocessor Definitions</EM> text box i.e.  for a release
+build <CODE>WIN32_VOLATILE</CODE>, <CODE>__CRYSTAL_SPACE__</CODE> and <CODE>CS_RELEASE</CODE>,
+making sure to separate with semi-colons.  Alternatively, you can click the
+elipsis (<small>...</small>) button to pull up an easier view.  An example the ones
+entered for a release build can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap12.jpg" ALT="tutorial/howto/msvc7proj/snap12"></CENTER>
+</P><P>
+
+Once done, click on the OK button and return to the MSVC IDE.
 </P><P>
 
 <A NAME="SEC317"></A>
-<H4> KDevelop External Step 1 </H4>
+<H4> Step 5 - Setting Run-Time Library Used with Crystal Space Applications.  </H4>
 <!--docid::SEC317::-->
 <P>
 
-Open KDevelop and click on <EM>New</EM> from the <EM>Project</EM> menu.  The
-KDevelop Application Wizard offers you special settings for the creation of
-dedicated GNOME or KDE/Qt applications, but the selection
-<EM>Terminal-C++</EM> is usually sufficient for creating a new Crystal Space
-project (i.e. using OpenGL).
+As in step 4 we need to change one or more project settings.  Select your
+project in the <EM>Workspace</EM> window.  See area highlighted in blue in the
+image below.  Now, from the <EM>Project</EM> menu select <EM>Properties</EM>.
+Alternatively, you can right click on the highlighted area in the
+<EM>Workspace</EM> and then click on <EM>Properties</EM> - both ways work.
 </P><P>
 
-<CENTER><IMG SRC="tutorial/howto/kdevproj/snap0.jpg" ALT="tutorial/howto/kdevproj/snap0"></CENTER>
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap5.jpg" ALT="tutorial/howto/msvc7proj/snap5"></CENTER>
+</P><P>
+
+Once you have clicked on <EM>Properties</EM>, you will be presented with the
+<EM>Properties</EM> dialog box once again.
+</P><P>
+
+Open the C/C++ folder and select <EM>Code Generation</EM>.  Crystal Space uses
+the Multithreaded DLL run-time internally, so to avoid conflict and errors
+applications should use the same.
+</P><P>
+
+For debug builds you need to select <EM>Debug Multithreaded DLL</EM> from the
+<EM>Runtime Library</EM> drop down menu.  As can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap13.jpg" ALT="tutorial/howto/msvc7proj/snap13"></CENTER>
+</P><P>
+
+For release builds you need to select <EM>Multithreaded DLL</EM> from the
+<EM>Runtime Library</EM> drop down menu.  As can be seen in the image below.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap14.jpg" ALT="tutorial/howto/msvc7proj/snap14"></CENTER>
+</P><P>
+
+Once done, click on the <EM>OK</EM> button and return to the MSVC IDE.
 </P><P>
 
 <A NAME="SEC318"></A>
-<H4> KDevelop External Step 2 </H4>
+<H4> Step 6 - Setting the Crystal Space static libs to link with.  </H4>
 <!--docid::SEC318::-->
 <P>
 
-In the <EM>Generate settings</EM> dialog enter the <EM>Project name</EM> as well as
-the <EM>Project directory</EM> for your project files outside the Crystal Space
-tree.  When you mark the checkbox <EM>generate sources and headers</EM> the Hello
-World `<TT>main.cpp</TT>' and `<TT>main.h</TT>' files are generated which can be used
-if you want to start from scratch.  If you want to import source files to start
-with, leave it unchecked.  The <EM>GNU-Standard-Files</EM> option copies the
-General Public License file `<TT>COPYING</TT>' a dummy `<TT>README</TT>' and
-`<TT>INSTALL</TT>' file into the project tree.
+When compiling Crystal Space in release and debug mode, you will end up with
+the following static libs, some of which you may require at some point in your
+own applications if you use the functionality contained within a given library.
 </P><P>
 
-<CENTER><IMG SRC="tutorial/howto/kdevproj/snap1.jpg" ALT="tutorial/howto/kdevproj/snap1"></CENTER>
+Crystal Space debug library names (the <EM>_d</EM> indicates a debug CS library):
 </P><P>
 
-Click <EM>Next</EM> and you will next be confronted with another dialog box.
+<CODE>libcsutil_d.lib libcsgeom_d.lib libcsgfx_d.lib libcstool_d.lib libcsws_d.lib</CODE>
+</P><P>
+
+Crystal Space release library names:
+</P><P>
+
+<CODE>libcsutil.lib libcsgeom.lib libcsgfx.lib libcstool.lib libcsws.lib</CODE>
+</P><P>
+
+To add the necessary libraries to link our application.  As in step 4 we need
+to change one or more project settings.  Select your project in the
+<EM>Workspace</EM> window.  See area highlighted in blue in the image below.
+Now, from the <EM>Project</EM> menu select <EM>Properties</EM>.  Alternatively, you
+can right click on the highlighted area in the <EM>Workspace</EM> and then click
+on <EM>Properties</EM> - both ways work.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap5.jpg" ALT="tutorial/howto/msvc7proj/snap5"></CENTER>
+</P><P>
+
+For our application we need only need link with a few of the available Crystal
+Space static libraries.  Open the <EM>Linker</EM> folder and select <EM>Input</EM>.
+In the text box <EM>Additional Dependencies</EM> add the Crystal Space libraries
+as named below into the box with those already there.
+</P><P>
+
+Debug:
+</P><P>
+
+<CODE>libcsutil_d.lib libcsgeom_d.lib libcsgfx_d.lib libcstool_d.lib</CODE>
+</P><P>
+
+See image below for example of debug build link settings.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap15.jpg" ALT="tutorial/howto/msvc7proj/snap15"></CENTER>
+</P><P>
+
+Release:
+</P><P>
+
+<CODE>libcsutil.lib libcsgeom.lib libcsgfx.lib libcstool.lib</CODE>
+</P><P>
+
+See image below for example of release build link settings.
+</P><P>
+
+<CENTER><IMG SRC="tutorial/howto/msvc7proj/snap16.jpg" ALT="tutorial/howto/msvc7proj/snap16"></CENTER>
+</P><P>
+
+Finally, click on <EM>OK</EM> to return to the MSVC IDE and then build the
+project.
 </P><P>
 
 <A NAME="SEC319"></A>
-<H4> KDevelop External Step 3 </H4>
+<H4> Commonly encountered problems.  </H4>
 <!--docid::SEC319::-->
 <P>
 
-If you want <EM>Version Control Support</EM> you can select <EM>CVS</EM> now
-and fill the required fields according to your CVS environment, otherwise
-leave it set to <EM>NONE</EM>.
-</P><P>
-
-The <EM>Next</EM> two pages are header templates for header `<TT>.h</TT>' and source
-`<TT>.cpp</TT>' files.  Click <EM>Next</EM> when you're done here.
-</P><P>
-
-<CENTER><IMG SRC="tutorial/howto/kdevproj/snap2.jpg" ALT="tutorial/howto/kdevproj/snap2"></CENTER>
-</P><P>
-
-Now an almost empty window appears and you should click on <EM>Create</EM> to run
-an automake.  After that you can click on <EM>Exit</EM> and do the relevant parts
-for using KDevelop with Crystal Space.
-</P><P>
-
-<A NAME="SEC320"></A>
-<H4> KDevelop External Step 4 </H4>
-<!--docid::SEC320::-->
+<UL>
+<LI>
+<STRONG>Q.</STRONG> I get the following error:
 <P>
 
-Click on <EM>Options</EM> in the <EM>Project</EM> menu and select <EM>Compiler
-Options</EM>.  <EM>Add</EM> a new <EM>Configuration</EM> and call it
-<EM>CrystalSpace</EM>, then make sure to set the path back to the correct
-<EM>Build Directoy</EM>.
-</P><P>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>----------Configuration: simple1 - Win32 Release----------
+Compiling...
+simple1.cpp
+C:\CS\INCLUDE\platform.h(26) : fatal error C1083:
+  Cannot open include file: 'volatile.h': No such file or directory
+Error executing cl.exe.
 
-<CENTER><IMG SRC="tutorial/howto/kdevproj/snap3.jpg" ALT="tutorial/howto/kdevproj/snap3"></CENTER>
-</P><P>
-
-<A NAME="SEC321"></A>
-<H4> KDevelop External Step 5 </H4>
-<!--docid::SEC321::-->
-<P>
-
-When you installed Crystal Space, the script `<TT>cs-config</TT>' should have been
-placed in the `<TT>bin/</TT>' installation directory, and this directory should be
-mentioned by your `<SAMP>PATH</SAMP>' environment variable,so that you can invoke
-`<TT>cs-config</TT>' as you would any other program simply by typing its name.  If
-you did not install Crystal Space, then you may want to copy `<TT>cs-config</TT>'
-into the top directory of your new project, or alter your `<SAMP>PATH</SAMP>' variable
-so that it points at the directory containing `<TT>cs-config</TT>' (the Crystal
-Space build directory, for instance).  In the examples below which invoke
-`<TT>cs-config</TT>', be sure to include the backticks in the fields
-<EM>CFLAGS</EM> and <EM>CXXFLAGS</EM> in the <EM>Flags and Warnings</EM>
-tab for the `<TT>cs-config</TT>' script to be executed properly, otherwise you will
-get an error message that your C-compiler cannot create executables.  The
-<EM>CFLAGS</EM> field should contain `<SAMP>`./cs-config --cflags`</SAMP>', and
-<EM>CXXFLAGS</EM> should contain `<SAMP>`./cs-config --cxxflags`</SAMP>'.
-</P><P>
-
-<CENTER><IMG SRC="tutorial/howto/kdevproj/snap4.jpg" ALT="tutorial/howto/kdevproj/snap4"></CENTER>
-</P><P>
-
-<A NAME="SEC322"></A>
-<H4> KDevelop External Step 6 </H4>
-<!--docid::SEC322::-->
-<P>
-
-The same applies to the field <EM>Additional flags</EM> in the <EM>Linker
-Flags</EM> tab.  After `<SAMP>`cs-config --libs`</SAMP>' you have to add the Crystal Space
-standard libraries `<TT>cstool</TT>', `<TT>gsgfx</TT>', `<TT>csgeom</TT>', `<TT>csutil</TT>';
-thus, the entire content of the <EM>Additional flags</EM> field should be
-`<SAMP>`./cs-config --libs cstool csgfx csgeom csutil`</SAMP>'.
-</P><P>
-
-<CENTER><IMG SRC="tutorial/howto/kdevproj/snap5.jpg" ALT="tutorial/howto/kdevproj/snap5"></CENTER>
-</P><P>
-
-<A NAME="SEC323"></A>
-<H4> KDevelop External Step 7 </H4>
-<!--docid::SEC323::-->
-<P>
-
-Now over to the <EM>Linker Options</EM>.  Include your additional libraries here
-as needed.  Many platforms will require `<SAMP>-lpthread</SAMP>' in this field.
-</P><P>
-
-<CENTER><IMG SRC="tutorial/howto/kdevproj/snap6.jpg" ALT="tutorial/howto/kdevproj/snap6"></CENTER>
-</P><P>
-
-<A NAME="SEC324"></A>
-<H4> KDevelop External Step 8 </H4>
-<!--docid::SEC324::-->
-<P>
-
-In the <EM>Make Options</EM> dialog you need to set the include directory for
-Crystal Space.  Don't forget the backticks for automatic execution upon build.
-The <EM>additional options</EM> field should contain
-<CODE>-I`./cs-config --includedir`</CODE>.
-</P><P>
-
-<CENTER><IMG SRC="tutorial/howto/kdevproj/snap7.jpg" ALT="tutorial/howto/kdevproj/snap7"></CENTER>
-</P><P>
-
-Click on <EM>OK</EM> and the configure will re-run.
-</P><P>
-
-In the <EM>Compile Configuration</EM> you can now change from <EM>(Default)</EM> to
-<EM>CrystalSpace</EM> to set your compiler options.  If you want to compile for
-different target platforms or optimized processor-types you can invoke
-<EM>Configure</EM> in the <EM>Build</EM> menu with different arguments.  For
-example, `<SAMP>--host=i686-linux --build=i686-linux --target=i686-linux</SAMP>',
-instead of the `<SAMP>i386-linux</SAMP>' default in KDevelop.  Of course, you can
-choose other platforms as well.
-</P><P>
-
-<CENTER><IMG SRC="tutorial/howto/kdevproj/snap8.jpg" ALT="tutorial/howto/kdevproj/snap8"></CENTER>
-</P><P>
-
-<A NAME="SEC325"></A>
-<H4> KDevelop External Step 9 </H4>
-<!--docid::SEC325::-->
-<P>
-
-In the <EM>Project</EM> menu you can now <EM>Add existing File(s)</EM> to your
-project.  Select the `<TT>simple1.cpp</TT>' and `<TT>simple1.h</TT>' files from the
-Crystal Space code tree and add them to your project destination directory.
-You may want to uncheck the <CODE>insert templates</CODE> box to keep the files
-unmodified.
-</P><P>
-
-These files can be found within the Crystal Space source code tree at the
-following location:
-</P><P>
-
-`<TT>CS/apps/tutorial/simple1</TT>'
-</P><P>
-
-Alternately, you can type in your own Crystal Space program, but for the sake
-of this tutorial, using the existing `<TT>simple1</TT>' application is easier.
-</P><P>
-
-The resulting KDevelop project session file `<TT>kdevelopcs.kdevses</TT>' will look
-like this.  (You do not need to edit this file by hand; it is shown here for
-illustrative purposes only.)
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;?xml version="1.0" encoding="UTF-8"?&#62;
-&#60;!DOCTYPE KDevPrjSession&#62;
-&#60;KDevPrjSession&#62;
- &#60;CompileConfigs&#62;
-  &#60;CrystalSpace&#62;
-   &#60;Architecture&#62;i386&#60;/Architecture&#62;
-   &#60;Platform&#62;linux&#60;/Platform&#62;
-   &#60;VPATHSubdir&#62;/compile/kdevelopcs&#60;/VPATHSubdir&#62;
-   &#60;CFLAGS&#62;`./cs-config --cflags`&#60;/CFLAGS&#62;
-   &#60;CPPFLAGS&#62;&#60;/CPPFLAGS&#62;
-   &#60;CXXFLAGS&#62;-O0 -g3 -Wall&#60;/CXXFLAGS&#62;
-   &#60;AdditCXXFLAGS&#62;`./cs-config --cxxflags`&#60;/AdditCXXFLAGS&#62;
-   &#60;LDFLAGS&#62;`./cs-config --libs`&#60;/LDFLAGS&#62;
-   &#60;ConfigureArgs&#62;--build=i386-linux --host=i386-linux \
-    --target=i386-linux&#60;/ConfigureArgs&#62;
-  &#60;/CrystalSpace&#62;
- &#60;/CompileConfigs&#62;
- &#60;LastCompileConfig&#62;CrystalSpace&#60;/LastCompileConfig&#62;
- &#60;Mainframe MaximizeMode="1" /&#62;
- &#60;DocsAndViews NumberOfDocuments="1" &#62;
-  &#60;Doc0 CursorPosLine="0" Type="KWriteDoc" NumberOfViews="1" \
-   CursorPosCol="0" FileName="/compile/kdevelopcs/kdevelopcs/main.cpp" &#62;
-   &#60;View0 Top="0" Width="406" Attach="1" Height="328" Left="0" \
-    Focus="1" Type="KWriteView" MinMaxMode="2" /&#62;
-  &#60;/Doc0&#62;
- &#60;/DocsAndViews&#62;
-&#60;/KDevPrjSession&#62;
+simple1.exe - 1 error(s), 0 warning(s)
 </pre></td></tr></table></P><P>
 
-The following is the content of the KDevelop project file
-`<TT>kdevelopcs.kdevprj</TT>'.  (Keep in mind that this file is created and updated
-automatically by KDevelop, so you do not need to manually change this file
-either.)
+<STRONG>A.</STRONG> Repeat <EM>Step 4</EM> - You seem to have not set one or more of the
+preprocessor definitions correctly.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>[AUTHORS]
-dist=true
-install=false
-install_location=
-type=DATA
+<LI>
+<STRONG>Q.</STRONG> I get the following link errors:
+<P>
 
-[COPYING]
-dist=true
-install=false
-install_location=
-type=DATA
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>----------Configuration: simple1 - Win32 Release----------
+Compiling...
+simple1.cpp
+Linking...
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: void __thiscall csReversibleTransform::RotateThis(
+    class csVector3 const &#38;,float)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static struct iSCF *  iSCF::SCF"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: __thiscall csView::csView(
+    struct iEngine *,struct iGraphics3D *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static bool __cdecl csInitializer::OpenApplication(
+    struct iObjectRegistry *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static void __cdecl csCommandLineHelper::Help(
+    struct iObjectRegistry *,struct iCommandLineParser *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static bool __cdecl csCommandLineHelper::CheckHelp(
+    struct iObjectRegistry *,struct iCommandLineParser *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static bool __cdecl csInitializer::SetupEventHandler(
+    struct iObjectRegistry *,
+    bool (__cdecl*)(struct iEvent &#38;),unsigned int)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static bool __cdecl csInitializer::RequestPlugins(
+  struct iObjectRegistry *,...)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "bool __cdecl csDefaultRunLoop(struct iObjectRegistry *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static void __cdecl csInitializer::DestroyApplication(
+    struct iObjectRegistry *)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "public: static struct iObjectRegistry * __cdec
+   csInitializer::CreateEnvironment(
+   int,char const * const * const)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "int __cdecl csPrintf(char const *,...)"
+simple1.obj : error LNK2001: unresolved external symbol
+  "int __cdecl csPrintfV(char const *,char *)"
+MSVCRT.lib(crtexe.obj) : error LNK2001:
+  unresolved external symbol _main
+Release/simple1.exe : fatal error LNK1120: 14 unresolved externals
+Error executing link.exe.
 
-[ChangeLog]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[Config for BinMakefileAm]
-bin_program=kdevelopcs
-cxxflags=-O0 -g3 -Wall
-ldadd=-lpthread
-ldflags=
-
-[General]
-AMChanged=false
-author=Some Body
-configure_args=
-email=some.body@some.where
-execute_args=-video=opengl
-kdevprj_version=1.3
-lfv_open_groups=
-make_options=-j1 -I/usr/local/crystal/include
-makefiles=Makefile.am,kdevelopcs/Makefile.am, \
-kdevelopcs/docs/Makefile.am,kdevelopcs/docs/en/Makefile.am
-modifyMakefiles=true
-project_name=KDevelopCS
-project_type=normal_cpp
-sgml_file=/compile/kdevelopcs/kdevelopcs/docs/en/index.sgml
-short_info=
-sub_dir=kdevelopcs/
-version=0.1
-version_control=None
-
-[INSTALL]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[LFV Groups]
-GNU=AUTHORS,COPYING,ChangeLog,INSTALL,README,TODO,NEWS
-Headers=*.h,*.hh,*.hxx,*.hpp,*.H
-Others=*
-Sources=*.cpp,*.c,*.cc,*.C,*.cxx,*.ec,*.ecpp,*.lxx,*.l++,*.ll,*.l
-groups=Headers,Sources,GNU,Others
-
-[Makefile.am]
-files=kdevelopcs.kdevprj,admin,AUTHORS,COPYING,ChangeLog, \
-INSTALL,README,TODO,kdevelopcs.lsm
-sub_dirs=kdevelopcs
-type=normal
-
-[README]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[TODO]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[admin]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs.kdevprj]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs.lsm]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs/Makefile.am]
-files=kdevelopcs/simple1.cpp,kdevelopcs/simple1.h
-sub_dirs=docs
-type=prog_main
-
-[kdevelopcs/docs/Makefile.am]
-sub_dirs=en
-type=normal
-
-[kdevelopcs/docs/en/Makefile.am]
-files=kdevelopcs/docs/en/index.html,kdevelopcs/docs/en/index-1.html, \
- kdevelopcs/docs/en/index-2.html,kdevelopcs/docs/en/index-3.html, \
- kdevelopcs/docs/en/index-4.html,kdevelopcs/docs/en/index-5.html, \
- kdevelopcs/docs/en/index-6.html
-sub_dirs=
-type=normal
-
-[kdevelopcs/docs/en/index-1.html]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs/docs/en/index-2.html]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs/docs/en/index-3.html]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs/docs/en/index-4.html]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs/docs/en/index-5.html]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs/docs/en/index-6.html]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs/docs/en/index.html]
-dist=true
-install=false
-install_location=
-type=DATA
-
-[kdevelopcs/simple1.cpp]
-dist=true
-install=false
-install_location=
-type=SOURCE
-
-[kdevelopcs/simple1.h]
-dist=true
-install=false
-install_location=
-type=HEADER
+simple1.exe - 15 error(s), 0 warning(s)
 </pre></td></tr></table></P><P>
 
-That is all there is to it.  Select <EM>Make</EM> from the <EM>Build</EM> menu, see
-your application correctly building, and do a test launch with <EM>Execute</EM>
-or <EM>Execute with arguments</EM> if you want to add <CODE>-video=opengl</CODE> for
-OpenGL rendering.
-<A NAME="HOWTO Setting the CRYSTAL environment variable"></A>
+<STRONG>A.</STRONG> This would indicate that you have forgotten to add the Crystal
+Space static libraries to link with.  Work through <EM>Step 6</EM> again and
+re-check the settings you have entered.
+</P><P>
+
+<LI>
+<STRONG>Q.</STRONG> I get the following link errors:
+<P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>----------Configuration: simple1 - Win32 Release----------
+Compiling...
+simple1.cpp
+Linking...
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _strchr already defined in LIBC.lib(strchr.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _strstr already defined in LIBC.lib(strstr.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _tolower already defined in LIBC.lib(tolower.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _strncpy already defined in LIBC.lib(strncpy.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _free already defined in LIBC.lib(free.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _memmove already defined in LIBC.lib(memmove.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _realloc already defined in LIBC.lib(realloc.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _malloc already defined in LIBC.lib(malloc.obj)
+MSVCRT.lib(MSVCRT.dll) : error LNK2005:
+  _strncmp already defined in LIBC.lib(strncmp.obj)
+LINK : warning LNK4098: defaultlib "MSVCRT" conflicts with use
+  of other libs; use /NODEFAULTLIB:library
+Release/simple1.exe : fatal error LNK1169: one or more multiply
+  defined symbols found
+Error executing link.exe.
+
+simple1.exe - 10 error(s), 1 warning(s)
+</pre></td></tr></table></P><P>
+
+<STRONG>A.</STRONG> This or similar LNK2005 errors, tend to indicate that you have
+forgotten to set the correct run-time library in the project settings.  Work
+through <EM>Step 5</EM> again and make sure you have your project set to
+<EM>Debug Multithreaded DLL</EM> or <EM>Multithreaded DLL</EM> for debug and
+release builds respectively.
+</UL>
+<A NAME="HOWTO Creating External Application using KDevelop"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_126.html#SEC308"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_128.html#SEC326"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_126.html#SEC304"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_128.html#SEC320"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

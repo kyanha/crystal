@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: AWS Component Parameter Delivery</TITLE>
+<TITLE>Crystal Space: AWS Custom Components</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: AWS Component Parameter Delivery">
-<META NAME="keywords" CONTENT="Crystal Space: AWS Component Parameter Delivery">
+<META NAME="description" CONTENT="Crystal Space: AWS Custom Components">
+<META NAME="keywords" CONTENT="Crystal Space: AWS Custom Components">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,147 +23,61 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC680"></A>
+<A NAME="SEC683"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC679"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC681"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC678"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC679"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_243.html#SEC683"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC682"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC684"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC678"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC680"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC687"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.11.3.1 Parameter Delivery </H4>
-<!--docid::SEC680::-->
+<H3> 7.11.3 Creating Custom AWS Components </H3>
+<!--docid::SEC683::-->
 <P>
 
-This section describes automatic <EM>parameter delivery</EM>, which provides a
-mechanism for extracting component parameters from a window definition.
+Obviously, the components included with AWS will not cover
+every single user's needs. Or, you may not like the way a
+certain control actually works. Maybe you want it to glow faintly
+when the mouse is over it. Or perhaps you don't like the way
+command buttons look. AWS is designed
+to be simple for component designers to use and extend. Without a rich set
+of components, no windowing system is very interesting.
 </P><P>
 
-In AWS, all windows are defined by a window definition.
-There may be multiple definitions in a file, or you may have
-multiple files. That's all up to the end user. For a component
-writer, however, you need to be able to get at this information.
-Furthermore, you need to be able to get the information for the
-window that's being created, and for the current instance of the
-component. How does that happen?
+The first thing you need to know is that all components are
+derived from the common base class `<SAMP>awsComponent</SAMP>'. This
+component has built in handling for events and drawing. You
+don't need to know anything about how internal event handling
+happens; you just have to override the correct events. This base
+component also has built in support for handling automatic
+<EM>parameter delivery</EM>, and sinks and sources. The next few
+sections detail the things that you should do to make a
+good, robust, custom AWS component.
 </P><P>
 
-It's very easy, actually. The window manager knows everything about everything,
-and it particularly knows where the component is in the window's setup process.
-You should only need to get your parameters once per creation of a window, and
-that happens at setup time.
-</P><P>
-
-Each component <STRONG>must</STRONG> override a function called <CODE>Setup()</CODE> in
-`<SAMP>awsComponent</SAMP>'. You should always called the base
-<CODE>awsComponent::Setup()</CODE> first, because there is some important work for it
-to do. You must never release or delete the parameters passed in to you,
-because they are not yours. You should never store the settings parameter,
-because it is only on loan and strange things may happen to it. Next, you are
-free to do whatever setup your component needs. This is primarily accomplished
-by using the <CODE>GetBlah()</CODE> functions of the preference manager. The
-<CODE>Setup()</CODE>
-function is passed two important parameters: a pointer to the window manager,
-and a pointer to the current settings container that contains all the settings
-for this instance of this component. The prototype for the setup function is
-as follows:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool awsComponent::Setup(iAws* wmgr, awsComponentNode *settings)
-</pre></td></tr></table></P><P>
-
-The default <CODE>Setup()</CODE> in `<SAMP>awsComponent</SAMP>' sets an internal variable
-that stores the pointer to the window manager, which may then be retrieved
-afterward from the accessor function <CODE>WindowManager()</CODE>.  The first
-statement in a setup function should always be:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (!awsComponent::Setup(wmgr, settings))
-  return false;
-</pre></td></tr></table></P><P>
-
-This lets the lower level setup code do some important initialization, and also
-keeps us from proceeding if something cataclysmic happens during initial setup.
-Returning `<SAMP>false</SAMP>' from the <CODE>Setup()</CODE> function at any time gracefully
-aborts construction of the component.  It does not, however, abort construction
-of the entire container or window.  It <EM>does</EM> abort construction of any
-children this component may have.
-</P><P>
-
-After the initial call to the base version of <CODE>Setup()</CODE>, you may do
-whatever you like. It is common to retrieve any important settings for your
-component here. For example, the base `<SAMP>awsComponent</SAMP>' retrieves the
-component's frame rectangle by performing the following:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>iAwsPrefs *pm = WindowManager()-&#62;GetPrefMgr();
-pm-&#62;GetRect(settings, "Frame", frame);
-</pre></td></tr></table></P><P>
-
-The preference manager supports two other versions of this
-command, altogether providing <CODE>GetInt()</CODE>, <CODE>GetRect()</CODE>,
-and <CODE>GetString()</CODE>. The first parameter is always provided
-for you: it is the settings container passed as a parameter. The
-second parameter is the text name of the attribute you wish to
-query, like `<SAMP>Frame</SAMP>' or `<SAMP>Style</SAMP>', etc. The final
-parameter is a variable of the type corresponding to the
-function, in which the results will be stored. For
-<CODE>GetInt()</CODE> this is always a signed integer, for
-<CODE>GetRect()</CODE> this is a `<SAMP>csRect</SAMP>' structure, and for
-<CODE>GetString()</CODE> this is an `<SAMP>iString</SAMP>' pointer.
-</P><P>
-
-If your component needs to get information about the default
-skin, it can do so using some other, very similar functions for
-the skin definition:
-</P><P>
-
-<UL>
-<LI>
-<CODE>LookupIntKey()</CODE>
-<LI>
-<CODE>LookupRectKey()</CODE>
-<LI>
-<CODE>LookupStringKey()</CODE>
-<LI>
-<CODE>LookupRGBKey()</CODE>
-</UL>
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_241.html#SEC684">7.11.3.1 Parameter Delivery</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_242.html#SEC685">7.11.3.2 Events: Responding To User Actions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_243.html#SEC686">7.11.3.3 Sending and Receiving Signals</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
 <P>
 
-These functions operate in a fashion identical to the
-<CODE>GetBlah()</CODE> functions, except that they know where their
-information is coming from, so they don't need a settings
-parameter. Also, <CODE>LookupRGBKey()</CODE> requires a reference to
-three value parameters: red, green, and blue in that order. Each
-is an unsigned character. Note that the preference manager also
-supports a <CODE>Get()</CODE> for colors, textures, and fonts. It is
-preferred to use these functions for actually getting those
-resources for use. Please consult the API reference for
-`<SAMP>awsPreferenceManager</SAMP>' for further information on those
-functions.
-</P><P>
-
-Once you have finished your setup process, you should always
-exit by returning `<SAMP>true</SAMP>'. This means that everything went well and
-you are ready to work.
-</P><P>
-
-<A NAME="AWS Component Events"></A>
+<A NAME="AWS Component Parameter Delivery"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC679"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC681"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC678"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC679"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_243.html#SEC683"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC682"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC684"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_235.html#SEC678"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_237.html#SEC680"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_244.html#SEC687"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

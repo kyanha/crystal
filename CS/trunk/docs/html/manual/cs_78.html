@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Simple Camera</TITLE>
+<TITLE>Crystal Space: Simple World</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Simple Camera">
-<META NAME="keywords" CONTENT="Crystal Space: Simple Camera">
+<META NAME="description" CONTENT="Crystal Space: Simple World">
+<META NAME="keywords" CONTENT="Crystal Space: Simple World">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,175 +23,224 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC173"></A>
+<A NAME="SEC176"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_77.html#SEC172"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_79.html#SEC174"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC155"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_77.html#SEC175"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_79.html#SEC177"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.2.4 The Camera </H3>
-<!--docid::SEC173::-->
+<H3> 5.2.3 Creating a "World" </H3>
+<!--docid::SEC176::-->
 <P>
 
-In Crystal Space there is an interface called `<SAMP>iView</SAMP>' which
-encapsulates both `<SAMP>iCamera</SAMP>' and `<SAMP>iClipper2D</SAMP>' instances.
-In principle you can use those classes directly but using `<SAMP>iView</SAMP>' is
-easier.  Now edit `<TT>simple.h</TT>' to make use of `<SAMP>iView</SAMP>':
+Now we have a very exciting application which opens a black window and waits
+for the <KBD>ESC</KBD> key to quit.  We assume this is the application you always
+wanted to have?  No?  Ok then, let's create some 3D stuff.
+</P><P>
+
+We'll add a texture manager, a room (technically called a <EM>sector</EM>) and
+some lights.  First, add a pointer to our main sector to the `<SAMP>Simple</SAMP>'
+class header file:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre><small>...</small>
-struct iView;
+struct iSector;
 <small>...</small>
-
 class Simple
 {
 private:
   <small>...</small>
-  csRef&#60;iView&#62; view;
-  <small>...</small>
-  void SetupFrame ();
-  void FinishFrame ();
+  iSector* room;
   <small>...</small>
 </pre></td></tr></table></P><P>
 
-Then edit `<TT>simple.cpp</TT>' and make the following changes at the end of
-our <CODE>Initialize()</CODE> function:
+Now add these chunks of code (texture manager, room, lights) to
+`<TT>simple.cpp</TT>':
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::Initialize ()
 {
   <small>...</small>
-  view = csPtr&#60;iView&#62; (new csView (engine, g3d));
-  view-&#62;GetCamera ()-&#62;SetSector (room);
-  view-&#62;GetCamera ()-&#62;GetTransform ().SetOrigin (csVector3 (0, 5, -3));
-  iGraphics2D* g2d = g3d-&#62;GetDriver2D ();
-  view-&#62;SetRectangle (0, 0, g2d-&#62;GetWidth (), g2d-&#62;GetHeight ());
+  csReport (object_reg, CS_REPORTER_SEVERITY_NOTIFY,
+        "crystalspace.application.simple",
+        "Simple Crystal Space Application version 0.1.");
 
+  <small>...</small>
+  // First disable the lighting cache. Our app is simple enough
+  // not to need this.
+  engine-&#62;SetLightingCacheMode (0);
+
+  // Load the texture from the standard library.  This is located in
+  // CS/data/standard.zip and mounted as /lib/std using the Virtual
+  // File System (VFS) plugin.
+  if (!loader-&#62;LoadTexture ("stone", "/lib/std/stone4.gif"))
+  {
+    csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,
+        "crystalspace.application.simple",
+        "Error loading 'stone4' texture!");
+    return false;
+  }
+  iMaterialWrapper* tm =
+    engine-&#62;GetMaterialList ()-&#62;FindByName ("stone");
+
+  // these are used store the current orientation of the camera
+  rotY = rotX = 0;
+
+  room = engine-&#62;CreateSector ("room");
+  csRef&#60;iMeshWrapper&#62; walls (
+    engine-&#62;CreateSectorWallsMesh (room, "walls"));
+  csRef&#60;iThingState&#62; thing_state (
+    SCF_QUERY_INTERFACE (walls-&#62;GetMeshObject (), iThingState));
+  iThingFactoryState* walls_state = thing_state-&#62;GetFactory ();
+  walls_state-&#62;AddInsideBox (
+    csVector3 (-5, 0, -5), csVector3 (5, 20, 5));
+  walls_state-&#62;SetPolygonMaterial (CS_POLYRANGE_LAST, tm);
+  walls_state-&#62;SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+
+  csRef&#60;iLight&#62; light;
+  iLightList* ll = room-&#62;GetLights ();
+
+  light = engine-&#62;CreateLight (0, csVector3 (-3, 5, 0), 10,
+        csColor (1, 0, 0));
+  ll-&#62;Add (light);
+
+  light = engine-&#62;CreateLight (0, csVector3 (3, 5,  0), 10,
+        csColor (0, 0, 1));
+  ll-&#62;Add (light);
+
+  light = engine-&#62;CreateLight (0, csVector3 (0, 5, -3), 10,
+        csColor (0, 1, 0));
+  ll-&#62;Add (light);
+
+  engine-&#62;Prepare ();
   return true;
 }
 </pre></td></tr></table></P><P>
 
-So first we create a view for our world and 3D graphics renderer.  The view
-has a current sector which is passed to the camera and is set by
-<CODE>SetSector()</CODE>.  The camera also has a position in that sector which you
-can set by first getting the camera with <CODE>GetCamera()</CODE> and then setting
-the position (which is a `<SAMP>csVector3</SAMP>') with <CODE>SetPosition()</CODE>.  The
-view also holds a clipping region which corresponds to the area on the window
-that is going to be used for drawing the world.  Crystal Space supports convex
-polygons to be used as viewing areas, but in case we use a simple rectangle
-which has almost the size of the window.  We set this viewing rectangle with
-<CODE>SetRectangle()</CODE>.
+This extra code first loads a texture with <CODE>LoadTexture()</CODE>.
+The first parameter is the name of the texture as it will be known in the
+engine; and the second is the
+actual filename on the VFS volume (see section <A HREF="cs_159.html#SEC393">7.2 Virtual File System (VFS)</A>).  Note, if you don't have
+the `<TT>stone4.gif</TT>' texture you can use another one.  The only requirement
+is that it must have sizes which are a power of 2 (e.g. 64x64) (note that
+CS will scale them automatically if this requirement isn't met but this can
+reduce quality). This function returns a `<SAMP>iTextureWrapper</SAMP>' which we
+don't use.  Instead we use the `<SAMP>iMaterialWrapper</SAMP>' which is created
+automatically by <CODE>LoadTexture()</CODE>.
 </P><P>
 
-The call to create a new view is a bit special. See the discussion
-on smart pointers for a full info (see section <A HREF="cs_110.html#SEC223">5.8.1 Correctly Using Smart Pointers</A>).
+Then we create our room with <CODE>CreateSector()</CODE>.  This room will initially
+be empty.  A room in Crystal Space is represented by `<SAMP>iSector</SAMP>' which is
+basically a container which can hold geometrical objects. Objects
+in Crystal Space are represented by MESH OBJECTS (see section <A HREF="cs_207.html#SEC552">7.7 Mesh Object Plug-In System</A>).
+There are several types of mesh objects in Crystal Space. Every type of
+mesh object represents some different way to represent geometry. In this
+tutorial we are only going to use the 'thing' mesh object type. This mesh
+object type is very useful for walls of indoor type levels or buildings.
 </P><P>
 
-Now, this still isn't enough.  We have a camera but the camera is not used.
-We still have to write code that actually draws the screen. We will do this
-in the functions <CODE>SetupFrame()</CODE> and <CODE>FinishFrame()</CODE>. Note that
-Crystal Space is event driven so the actual drawing needs to be triggered
-by the event handler. Add the following code somewhere in the source file:
+Now we want create the six walls of our room. First we make our thing mesh
+object. Because this is a very common case there is a convenience function
+in the engine (called <CODE>CreateSectorWallsMesh()</CODE>) which will create a
+thing mesh and add it to the given sector. The only thing that has to be
+done after this is add polygons to that mesh. To do this we first query
+the interface called `<SAMP>iThingState</SAMP>' from the thing mesh object.
+We use the macro <CODE>SCF_QUERY_INTERFACE()</CODE> which is part of SCF
+(see section <A HREF="cs_139.html#SEC359">6.2 Shared Class Facility (SCF)</A>). This will see if the mesh object (which is wrapped by
+the mesh wrapper) actually implements `<SAMP>iThingState</SAMP>' (which should
+be the case here) and if so it will return a pointer to the implementation
+of `<SAMP>iThingState</SAMP>'. All mesh objects implement some kind of state
+interface which is used to set up or query the state of that mesh object.
+Note that all interfaces which you query using <CODE>SCF_QUERY_INTERFACE()</CODE>
+should be released when you no longer need them (by calling <CODE>DecRef()</CODE>).
+However in this example we assign them to a <CODE>csRef&#60;&#62;</CODE> which takes care of
+<CODE>DecRef()</CODE> for us.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>void Simple::SetupFrame ()
-{
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d-&#62;BeginDraw(
-    engine-&#62;GetBeginDrawFlags() | CSDRAW_3DGRAPHICS))
-    return;
-
-  // Tell the camera to render into the frame buffer.
-  view-&#62;Draw ();
-}
-
-void Simple::FinishFrame ()
-{
-  g3d-&#62;FinishDraw ();
-  g3d-&#62;Print (0);
-}
-</pre></td></tr></table></P><P>
-
-Modify the event handler like this:
+From the returned thing state we now get the factory state
+(`<SAMP>iThingFactoryState</SAMP>') which we can now use to create polygons.
+There are various functions to create individual polygons if you want that
+but in this case we use a convenience function to create a box that can
+be seen from the inside. That will serve as the walls of our room.
+The <CODE>AddInsideBox()</CODE> function does this. It will create six polygons
+arranged so that they are visible from inside.
+(note that in Crystal Space a polygon is visible if vertices are oriented
+clock-wise). The box coordinates given to <CODE>AddInsideBox()</CODE> are in object
+space (in contrast with world space and camera space).
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool Simple::HandleEvent (iEvent&#38; ev)
-{
-  if (ev.Type == csevBroadcast &#38;&#38; ev.Command.Code == cscmdProcess)
-  {
-    SetupFrame ();
-    return true;
-  }
-  else if (ev.Type == csevBroadcast &#38;&#38;
-    ev.Command.Code == cscmdFinalProcess)
-  {
-    FinishFrame ();
-    return true;
-  }
-  else if (ev.Type == csevKeyDown &#38;&#38; ev.Key.Code == CSKEY_ESC)
-  <small>...</small>
-</pre></td></tr></table></P><P>
-
-Drawing the screen is split in two parts. First there is the part that
-is done in <CODE>SetupFrame()</CODE>. Here we will actually fill the display.
-In this case we let the engine do most of that work by calling
-<CODE>view-&#62;Draw()</CODE>. But in principle you can do any kind of drawing here.
+The <CODE>SetPolygonMaterial()</CODE> function will set the material of the
+polygons. The first parameter is a range. We use `<SAMP>CS_POLYRANGE_LAST</SAMP>'
+here to indicate that we are interested in setting the materials of the last
+created polygons (i.e. all polygons created with <CODE>AddInsideBox()</CODE>).
 </P><P>
 
-In <CODE>SetupFrame()</CODE> we first have to indicate to the 3D rasterizer that
-we want to start drawing 3D graphics.  This call makes sure that the
-needed buffers are set up and
-performs all necessary initialization. The engine often needs extra settings
-for this as well so you <EM>must</EM> call <CODE>engine-&#62;GetBeginDrawFlags()</CODE> to
-get these flags and or them with the ones that you want.
+The texture is mapped onto the polygon using <CODE>SetPolygonTextureMapping()</CODE>.
+There are several versions of this function.  The one we use in this tutorial
+is one of the simplest but it offers the least control.  In this particular
+case we take the first two vertices of every polygon that was created for the
+box and use that as the u-axis of the texture.  The v-axis will be calculated
+perpendicular to the u-axis.  The parameter 3 indicates that the texture will
+be scaled so that one texture tile is exactly 3x3 world units in size.
 </P><P>
 
-The second part is in <CODE>FinishFrame()</CODE> where we actually dump the
-frame to the screen. The reason this is split is that other components
-(plugins) in Crystal Space may choose to listen to events to draw additional
-things on top of the 3D view rendered in <CODE>SetupFrame()</CODE>. When a frame
-needs to be rendered the Crystal Space framework will send four messages:
+Finally we create some lights in our room to make sure that we actually are
+able to see the walls.  The interface `<SAMP>iLight</SAMP>' represents a light.
+In this case we created some static lights which can not move and change
+intensity.  We create three such lights
+and add them to the room with <CODE>AddLight()</CODE>. Note that the list of lights
+in a sector is presented by an object implementing `<SAMP>iLightList</SAMP>'. To
+get this list you call <CODE>iSector::GetLights()</CODE>.
 </P><P>
 
-<UL>
-<LI>
-`<SAMP>cscmdPreProcess</SAMP>' is sent first. This allows plugins to preprocess
-things before drawing can happen.
-<LI>
-`<SAMP>cscmdProcess</SAMP>' follows. In this pass the application will render.
-<LI>
-`<SAMP>cscmdPostProcess</SAMP>' is after that. This is the pass that can be used
-by external components to render on top of the view rendered by the
-application.
-<LI>
-`<SAMP>cscmdFinalProcess</SAMP>' is last. In this pass the application will display
-the frame on screen.
-</UL>
-<P>
-
-Compile and run this example.  For the first time you should see something.  A
-solid wall.  Congratulations, you have created your first almost useful
-Crystal Space application.
+When creating a light we use several parameters.
+First we have the name of the light. This is not used
+often and mostly you can set this to 0. The second parameter is
+the location of the light in the world. Then follows a radius. The light will
+not affect polygons which are outside the sphere described by the center of
+the light and the radius.  The next parameter is the color of the light in
+RGB format (<CODE>&#60;1,1,1&#62;</CODE> means white and <CODE>&#60;0,0,0&#62;</CODE> means black).
+The last parameter indicates whether or not we want to have a pseudo-dynamic
+light.  A pseudo-dynamic light still cannot move but it can change intensity.
+There are some performance costs associated with pseudo-dynamic lights so
+it is not enabled by default.
 </P><P>
 
-<A NAME="Simple Locomotion"></A>
+The call to <CODE>Prepare()</CODE> prepares the engine for rendering your scene.  It
+will prepare all textures and create all lightmaps if needed.  Only after this
+call can you start rendering your world, because lightmaps may have to be
+converted to a format more suitable for the chosen 3D renderer.
+</P><P>
+
+The last code we added allocates the palette with the texture manager.
+Note that is needed even if you are running on a true-color display which
+has no palette.  That's because the code does some other things beside
+setting up a palette.
+</P><P>
+
+Ok, now we have created our room and properly initialized it.  If you would
+compile and run this application you would still see a black screen.  Why?
+Because we have not created a camera through which you can see.
+</P><P>
+
+<A NAME="Simple Camera"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_77.html#SEC172"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_79.html#SEC174"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_70.html#SEC155"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_74.html#SEC169"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_80.html#SEC175"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_77.html#SEC175"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_79.html#SEC177"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_71.html#SEC159"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_75.html#SEC173"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_81.html#SEC179"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

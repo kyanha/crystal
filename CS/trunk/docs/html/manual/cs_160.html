@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: VFS Configuration File</TITLE>
+<TITLE>Crystal Space: VFS Details</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: VFS Configuration File">
-<META NAME="keywords" CONTENT="Crystal Space: VFS Configuration File">
+<META NAME="description" CONTENT="Crystal Space: VFS Details">
+<META NAME="keywords" CONTENT="Crystal Space: VFS Details">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,193 +23,84 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC391"></A>
+<A NAME="SEC394"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC390"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC388"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC389"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC393"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC395"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC392"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC393"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC396"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.2.2 Configuration File (`<TT>vfs.cfg</TT>') </H3>
-<!--docid::SEC391::-->
+<H3> 7.2.1 Details </H3>
+<!--docid::SEC394::-->
 <P>
 
-Keys in the `<TT>vfs.cfg</TT>' configuration file with names starting with
-`<SAMP>VFS.Mount.</SAMP>' describe the layout of the <EM>virtual</EM> file system.
-Imagine a clean disk drive onto which you start to create directories by making
-links to existing <EM>real</EM> directories and archive (`<TT>.zip</TT>') files.  An
-archive is treated exactly like a subdirectory; you even can link one "virtual
-directory" to several "real" paths and archives; however if you write files
-they will be written to the first directory or archive in list.
+To make difference between ZIP archives and physical disk directories
+VFS uses a simple convention: directories end with a path separator
+character (`<SAMP>$/</SAMP>') while archives do not. `<SAMP>$/</SAMP>' is a special
+configuration file variable which represents the path separator on any
+particular platform (see section <A HREF="cs_161.html#SEC395">7.2.2 Configuration File (`<TT>vfs.cfg</TT>')</A>). For example
+`<SAMP>$/data</SAMP>' refers to an archive, while `<SAMP>$/data$/</SAMP>' refers to an actual
+directory named `<TT>data</TT>'.  Failure to understand this distinction is often
+the major cause of errors; so if you're getting unexpected results check in
+the first place if directories have trailing path separators.
 </P><P>
 
-These keys present a list of virtual-to-real path mappings.  The local name of
-a key with the `<SAMP>VFS.Mount.</SAMP>' prefix define the virtual directory, and the
-values define the real paths, which can represent a list of <EM>physical</EM>
-directories and ZIP archives.  The physical directory path lists should be
-separated by commas (,), therefore commas cannot be used in directory names.
-This should not be much of a restriction, but if it is a problem for a
-particular platform, you may want to take the drastic action of changing
-`<SAMP>VFS_PATH_DIVIDER</SAMP>' macro in `<TT>vfs.cpp</TT>'.
+There are several differences between filesystems between operating systems
+that you should always keep in mind because VFS doesn't hide these
+details from you. To avoid inconsistencies between different file systems you
+should follow this list of guidelines:
 </P><P>
 
-The `<SAMP>VFS.Mount.</SAMP>' values typically makes heavy use of variables since
-most operating systems have different pathname semantics and syntax.  The
-"common denominator" that VFS emulates is a Unix-like filesystem.  To
-include the value of a variable in a VFS path use the
-`<SAMP>$(<VAR>variable-name</VAR>)</SAMP>' construct.  In the case where
-`<SAMP><VAR>variable-name</VAR></SAMP>' consists of a single letter, you can omit the
-parentheses, as in <CODE>$<VAR>variable-name</VAR></CODE> (for example `<SAMP>$A</SAMP>').
-</P><P>
-
-Variables that are defined in the environment override those defined in this
-file.  For example, the `<SAMP>$HOME</SAMP>' environment variable is set in all
-Unixes, but is undefined in many other operating systems.  They can define
-their own values for these variables in system-dependent sections, but if the
-user defines the `<SAMP>$HOME</SAMP>' environment variable it will always override
-the one from this file. You also can refer the variables in the following
-way: `<SAMP>$(<VAR>var</VAR>:<VAR>expr</VAR>)</SAMP>' which means "use the contents of
-`<SAMP><VAR>var</VAR></SAMP>' if `<SAMP><VAR>var</VAR></SAMP>' is set (usually in environment), or use
-`<SAMP><VAR>expr</VAR></SAMP>' if not".  This can be used for more complex expressions,
-for example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>$(HOME:$(HOMEDIR:$(HOMEPATH:/home)))
-</pre></td></tr></table></P><P>
-
-This expression means "take the value of the `<SAMP>$HOME</SAMP>' variable; if it is
-not set, use the contents of `<SAMP>$HOMEDIR</SAMP>'; if it is also not set, use
-`<SAMP>$HOMEPATH</SAMP>'; and if none are set, use the literal string `<SAMP>/home</SAMP>' as
-the resulting value.
-</P><P>
-
-VFS defines a pseudo-variable named `<SAMP>/</SAMP>' that contains the path
-delimiter for the current operating system (i.e.  `<TT>/</TT>' for Unix and
-MacOS/X, and `<TT>\</TT>' for Windows/DOS).  You reference this variable by
-writing `<SAMP>$/</SAMP>' rather than using the "real-world" delimiters `<SAMP>/</SAMP>',
-or `<SAMP>\</SAMP>'.
-</P><P>
-
-Here is the complete list of pseudo-variables understood by VFS:
-</P><P>
-
-<DL COMPACT>
-<DT><CODE>$/</CODE>
-<DD>Platform-specific path delimiter; `<TT>/</TT>' on Unix and MacOS/X; `<TT>\</TT>' on
-Windows.
+<UL>
+<LI>
+Choose filenames that are well suited for all operating systems you are
+targeting.  As of today DOS has the most restricted rules for naming
+files (ASCII7 characters except `<SAMP>?</SAMP>', `<SAMP>*</SAMP>', `<SAMP>+</SAMP>', and space,
+and with only one dot per filename).
+The part of VFS that is located in archives support virtually any
+filenames, so if you are sure that you will never have to place some file on a
+"real" filesystem, you can give it any name you desire.
 <P>
 
-<DT><CODE>$@</CODE>
-<DD>Crystal Space installation directory.
+<LI>
+Different platforms use different filename comparison criteria.  On Unix and
+MacOS/X UFS filesystems, filenames are case-sensitive, while on Windows,
+DOS, and Macintosh HFS filesystems, they are case-insensitive.  To
+avoid problems always refer to files by their exact names.  For example, if you
+have a file on VFS called `<TT>GaMe.DaT</TT>' you should open it exactly as
+`<TT>GaMe.DaT</TT>' and not as `<TT>game.dat</TT>' or `<TT>GAME.DAT</TT>'.  On DOS,
+the file will appear to be entirely upper-case `<TT>GAME.DAT</TT>', but you should
+still use the correct name, `<TT>GaMe.DaT</TT>', when opening it.
 <P>
 
-<DT><CODE>$*</CODE>
-<DD>Application resource directory; typically the directory in which the
-application executable resides but, on MacOS/X, it is the `<TT>Resources</TT>'
-directory within the Cocoa application wrapper for GUI programs.
+<LI>
+Keep in mind that Unix <EM>can</EM> delete files which are actively open, whereas
+Windows, DOS, and possibly other platforms can not.  Therefore, you should
+avoid deleting open files.  (<EM>Technical Note</EM>: Actually, this should work
+for files which are located in archives but is not advisable to do so, because
+in general, program code will not know if a file resides within an archive or
+within the physical filesystem.  Furthermore, deleting open files from an
+archive not been tested.
+</UL>
 <P>
 
-<DT><CODE>$^</CODE>
-<DD>Directory where application executable resides, or the directory where Cocoa
-application wrapper resides on MacOS/X.
-</DL>
-<P>
-
-The following is an example VFS configuration file.
-</P><P>
-
-Assume we wrote a game with three levels; the game is located on CD-ROM
-and we want to be able to release patches in the future which will replace
-several files from level archives (each level is presumed to be placed in a
-separate ZIP archive on either CD-ROM or cached on the hard drive).
-Additionally, we will add a link to user's home directory (something somewhat
-vaguely defined on non-Unix platforms) so that game can store the user's
-settings into the file `<TT>~/game.profile</TT>'.
-</P><P>
-
-Note that in this example many of the options in the real `<TT>vfs.cfg</TT>' are
-omitted. So you should not take this example for your game, because one of the
-libraries or plug-in modules you use may require a mapping that is not listed
-here. This example is only intended to understand the concept:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>;;; Virtual File System mount table
-;;;
-;;; $/ -- path delimiter (i.e. "/" on Unix; "\" on Windows)
-;;; $@ -- installation directory of Crystal Space
-;;; $* -- application resource directory
-;;; $^ -- directory in which application resides
-;;; The expansions of $@, $*, and $^ always have a trailing
-;;; path delimiter.
-;
-; The following variables should be defined either in
-; the environment or in system-dependent sections:
-;
-; $CD - The path to CD-ROM.
-; $HOME - user's home directory
-;
-; A common error is to omit the last $/ from directories.
-; This is an error since VFS will treat any path not ending
-; in $/ as an archive file name and not as a physical
-; directory.
-
-; Mount points. (These are split over multiple lines in order to
-; fit correctly on a printed page in the documentation.  In real
-; life, the values would appear immediately after the `=' signs!)
-VFS.Mount.~ = $(HOME)$/
-VFS.Mount.map1 =
-  $*$/patch$/map1$/, $*$/cache$/map1.zip, $(CD)$/data$/map1.zip
-VFS.Mount.map2 =
-  $*$/patch$/map2$/, $*$/cache$/map2.zip, $(CD)$/data$/map2.zip
-VFS.Mount.map3 =
-  $*$/patch$/map3$/, $*$/cache$/map3.zip, $(CD)$/data$/map3.zip
-
-; Platform aliases.  Aliases are always read first; VFS
-; entries specific to each platform override those defined
-; in the platform alias section.  For example, if your
-; current platform is MacOS/X, VFS will look for the value
-; of a variable first in the environment, then in
-; VFS.MacOS/X., and finally in VFS.Unix. (as specified in
-; section below).
-
-; Unix-style filesystems
-VFS.Alias.Unix    = VFS.Unix
-VFS.Alias.MacOS/X = VFS.Unix
-
-; CP/M-style filesystems
-VFS.Alias.Win32   = VFS.CP/M
-VFS.Alias.DOS     = VFS.CP/M
-
-; Strange key names follow:
-; VFS.Unix.. means key '.' in section VFS.Unix.*
-; VFS.Unix... means key '..' in section VFS.Unix.*
-VFS.Unix.. = .
-VFS.Unix... = ..
-VFS.Unix.CDROM = /mnt/cdrom
-VFS.Unix.TMP = /tmp
-
-VFS.CP/M.. = .
-VFS.CP/M... = ..
-VFS.CP/M.HOME = $(HOMEDIR:$(HOMEPATH:.))
-VFS.CP/M.CDROM = x:
-VFS.CP/M.TMP = $(TEMP:$(TMP:$(SYSTEMROOT)$/temp))
-</pre></td></tr></table><A NAME="Graphics Drivers"></A>
+<A NAME="VFS Configuration File"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC390"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_157.html#SEC388"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC389"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC392"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC393"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_161.html#SEC395"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_158.html#SEC392"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_159.html#SEC393"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_162.html#SEC396"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

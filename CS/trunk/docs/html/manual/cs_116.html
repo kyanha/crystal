@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Camera Movement</TITLE>
+<TITLE>Crystal Space: HOWTO Create Genmesh</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Camera Movement">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Camera Movement">
+<META NAME="description" CONTENT="Crystal Space: HOWTO Create Genmesh">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Create Genmesh">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,108 +23,187 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC260"></A>
+<A NAME="SEC259"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_115.html#SEC255"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_117.html#SEC263"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_115.html#SEC254"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_117.html#SEC264"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.7 Camera Movement </H3>
+<H3> 5.8.6 Creating a Genmesh Mesh </H3>
+<!--docid::SEC259::-->
+<P>
+
+This section describes how to create a Genmesh mesh.
+</P><P>
+
+<A NAME="SEC260"></A>
+<H4> What is Genmesh? </H4>
 <!--docid::SEC260::-->
 <P>
 
-This section describes how to move the camera.
+A `<SAMP>Genmesh</SAMP>' mesh object (see section <A HREF="cs_214.html#SEC581">7.7.7 Genmesh Mesh Object</A>) is a generic
+triangle mesh object that (currently) supports one material for the entire
+mesh. In contrast with 3D sprites (see section <A HREF="cs_212.html#SEC571">7.7.5 Sprite3D Mesh Object</A>), genmeshes do not
+support animation (except that you can modify the vertices manually at
+runtime).
+</P><P>
+
+Genmeshes are very useful for static or semi-static geometry (chests,
+doors, candles, swords, etc.) which do not need internal animation but which
+can sometimes require a lot of detail.
+</P><P>
+
+Genmeshes use vertex lighting (or stencil if you use a stencil lighting
+shader).
+</P><P>
+
+Genmesh objects always have to be created through a factory. So, first
+you create the actual geometry in a genmesh factory and then you create one
+or more instances from that factory. This is a great way to save memory.
+This does mean that it is not possible to HardTransform genmeshes. It is
+only possible to HardTransform Genmesh factories.
 </P><P>
 
 <A NAME="SEC261"></A>
-<H4> The Camera is a Transform </H4>
+<H4> Creating a Genmesh in a Map </H4>
 <!--docid::SEC261::-->
 <P>
 
-Internally in the engine the `<SAMP>csCamera</SAMP>' class inherits
-directly from `<SAMP>csOrthoTransform</SAMP>' which inherits from
-`<SAMP>csReversibleTransform</SAMP>'. If you work with `<SAMP>iCamera</SAMP>' then you
-can get the reference to this transform with <CODE>camera-&#62;GetTransform()</CODE>.
-In addition to the transformation a camera also holds a pointer to the
-current sector.
+Here is an example of how to create a cube genmesh in a map file:
 </P><P>
 
-This means that all operations you have in `<SAMP>csOrthoTransform</SAMP>' can
-be used on the camera. One of the most useful functions there is
-<CODE>LookAt()</CODE> with which you can make the camera point to some spot.
-Using <CODE>LookAt()</CODE> it is very easy to make a 3rd person view.
-</P><P>
-
-In addition to the standard functions from `<SAMP>csOrthoTransform</SAMP>' there
-are a number of other functions that you can use. The most interesting
-are <CODE>MoveWorld()</CODE> and <CODE>Move()</CODE>. These functions will move
-the camera and make sure that it cannot walk through a wall and also make
-sure that walking through portals will work. Both functions move the
-camera a relative amount. The difference between <CODE>MoveWorld()</CODE> and
-<CODE>Move()</CODE> is that the latter will move the camera in camera space.
-For example, take the following code:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  iCamera* camera;
-  camera-&#62;GetTransform ().Move (csVector3 (0, 0, 1));
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshfact name="cubeFact"&#62;
+  &#60;plugin&#62;crystalspace.mesh.loader.factory.genmesh&#60;/plugin&#62;
+  &#60;params&#62;
+    &#60;numvt&#62;8&#60;/numvt&#62;
+    &#60;numtri&#62;12&#60;/numtri&#62;
+    &#60;v x="-0.1" y="0.1" z="0.1" u="0" v="0" /&#62;
+    &#60;v x="-0.1" y="0.1" z="-0.1" u="1" v="0" /&#62;
+    &#60;v x="0.1" y="0.1" z="-0.1" u="0" v="1" /&#62;
+    &#60;v x="0.1" y="0.1" z="0.1" u="1" v="1" /&#62;
+    &#60;v x="-0.1" y="-0.1" z="0.1" u="1" v="0" /&#62;
+    &#60;v x="-0.1" y="-0.1" z="-0.1" u="0" v="1" /&#62;
+    &#60;v x="0.1" y="-0.1" z="-0.1" u="1" v="1" /&#62;
+    &#60;v x="0.1" y="-0.1" z="0.1" u="0" v="0" /&#62;
+    &#60;t v1="0" v2="3" v3="1" /&#62;
+    &#60;t v1="3" v2="2" v3="1" /&#62;
+    &#60;t v1="4" v2="5" v3="7" /&#62;
+    &#60;t v1="5" v2="6" v3="7" /&#62;
+    &#60;t v1="0" v2="4" v3="3" /&#62;
+    &#60;t v1="4" v2="7" v3="3" /&#62;
+    &#60;t v1="1" v2="6" v3="5" /&#62;
+    &#60;t v1="1" v2="2" v3="6" /&#62;
+    &#60;t v1="0" v2="1" v3="5" /&#62;
+    &#60;t v1="0" v2="5" v3="4" /&#62;
+    &#60;t v1="2" v2="3" v3="7" /&#62;
+    &#60;t v1="2" v2="7" v3="6" /&#62;
+    &#60;autonormals /&#62;
+  &#60;/params&#62;
+&#60;/meshfact&#62;
+&#60;sector name="bla"&#62;
+  &#60;meshobj name="cube"&#62;
+    &#60;plugin&#62;crystalspace.mesh.loader.genmesh&#60;/plugin&#62;
+    &#60;params&#62;
+      &#60;factory&#62;cubeFact&#60;/factory&#62;
+      &#60;material&#62;mosaic&#60;/material&#62;
+    &#60;/params&#62;
+    &#60;move&#62;
+      &#60;v x="1" y="0" z="3" /&#62;
+    &#60;/move&#62;
+  &#60;/meshobj&#62;
+&#60;/sector&#62;
 </pre></td></tr></table></P><P>
 
-This will move the camera forward in camera space. This means that the
-camera will walk 'forward' :-) On the other hand:
+In this example we define a box by specifying the eight corner vertices
+and the twelve triangles. The <CODE>&#60;autonormals&#62;</CODE> tag specifies that normals
+will be created automatically (to give the box a smooth appearance). The
+normals are used for lighthing. It is also possible to specify normals
+manually. Note that with every vertex we also specify a texture coordinate
+(uv coordinate).
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  iCamera* camera;
-  camera-&#62;GetTransform ().MoveWorld (csVector3 (0, 0, 1));
+To create a genmesh box you can actually use a short-hand notation:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshfact name="cubeFact"&#62;
+  &#60;plugin&#62;crystalspace.mesh.loader.factory.genmesh&#60;/plugin&#62;
+  &#60;params&#62;
+    &#60;box&#62;
+      &#60;min x="-0.1" y="-0.1" z="-0.1" /&#62;
+      &#60;max x="0.1" y="0.1" z="0.1" /&#62;
+    &#60;/box&#62;
+    &#60;autonormals /&#62;
+  &#60;/params&#62;
+&#60;/meshfact&#62;
 </pre></td></tr></table></P><P>
 
-This will move the camera in the world so that it goes one unit in
-the positive Z direction. This will happen independently of the orientation
-of the camera.
+This is a quick way to make boxes in a map file.
 </P><P>
-
-Here is another example which demonstrates how to use the <CODE>LookAt()</CODE>
-function. The following example will set a camera at location `<SAMP>3,5,1</SAMP>'
-and let it look at `<SAMP>3,5,10</SAMP>'. The up vector of the camera will be
-`<SAMP>0,1,0</SAMP>' (which is default):
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  csVector3 camera_pos (3, 5, 1);
-  csVector3 look_at_pos (3, 5, 10);
-  csVector3 up (0, 1, 0);
-  camera-&#62;GetTransform ().Move (camera_pos);
-  camera-&#62;GetTransform ().LookAt (camera_pos - look_at_pos, up);
-</pre></td></tr></table></P><P>
 
 <A NAME="SEC262"></A>
-<H4> Include Files     </H4>
+<H4> Creating a Genmesh Programmatically </H4>
 <!--docid::SEC262::-->
+<P>
+
+Here we create the same genmesh programmatically:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  // First create the factory:
+  csRef&#60;iMeshFactoryWrapper&#62; fact = engine-&#62;CreateMeshFactory (
+    "crystalspace.mesh.object.genmesh", "cubeFact");
+  csRef&#60;iGeneralFactoryState&#62; factstate = SCF_QUERY_INTERFACE (
+    fact-&#62;GetMeshObjectFactory (), iGeneralFactoryState);
+  factstate-&#62;SetVertexCount (8);
+  factstate-&#62;GetVertices ()[0].Set (-0.1, 0.1, 0.1);
+  factstate-&#62;GetTexels ()[0].Set (0, 0);
+  factstate-&#62;GetVertices ()[1].Set (-0.1, 0.1, -0.1);
+  factstate-&#62;GetTexels ()[1].Set (1, 0);
+  <small>...</small>
+  factstate-&#62;SetTriangleCount (12);
+  factstate-&#62;GetTriangles ()[0].Set (0, 3, 1);
+  factstate-&#62;GetTriangles ()[1].Set (3, 2, 1);
+  <small>...</small>
+  factstate-&#62;CalculateNormals ();
+
+  // Now create an instance:
+  csRef&#60;iMeshWrapper&#62; mesh =
+    engine-&#62;CreateMeshWrapper (fact, "cube");
+  csRef&#60;iGeneralMeshState&#62; meshstate = SCF_QUERY_INTERFACE (
+    mesh-&#62;GetMeshObject (), iGeneralMeshState);
+  meshstate-&#62;SetMaterialWrapper (myMaterial);
+  <small>...</small>
+</pre></td></tr></table></P><P>
+
+This will basically create the same cube as in the map file example.
+</P><P>
+
+<A NAME="SEC263"></A>
+<H4> Include Files    </H4>
+<!--docid::SEC263::-->
 <P>
 
 The include files useful for this section are:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>  #include "iengine/camera.h"
-  #include "csgeom/transfrm.h"
-</pre></td></tr></table></P><P>
-
-<A NAME="HOWTO Clicking on Objects"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "imesh/genmesh.h"
+</pre></td></tr></table><A NAME="HOWTO Camera Movement"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_115.html#SEC255"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_117.html#SEC263"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_101.html#SEC206"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_109.html#SEC222"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_134.html#SEC351"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_115.html#SEC254"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_117.html#SEC264"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_102.html#SEC210"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_110.html#SEC226"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_135.html#SEC355"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_285.html#SEC942">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC946">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
