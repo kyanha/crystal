@@ -138,6 +138,10 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\ansiparse.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\archive.cpp
 # End Source File
 # Begin Source File
@@ -536,6 +540,14 @@ SOURCE=..\..\libs\csutil\xmltiny.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\ansicolor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\ansiparse.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\archive.h
