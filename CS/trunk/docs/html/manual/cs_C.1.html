@@ -1519,26 +1519,71 @@ the mesh provides them). They are:
 <P>
 
 <A NAME="SEC_37"></A>
-<H3> <CODE>csString</CODE> Changes </H3>
+<H3> String Changes </H3>
 <!--docid::SEC_37::-->
 <P>
 
-The class hierarchy of csString was changed. Most functionality is provided by
-csStringBase, from which csStringFast&#60;&#62; and csString descend. csStringFast&#60;&#62;
-is a templated class that features an internal buffer which is used instead of 
-dynamically allocated memory if its size suffices, and is also faster in this 
-case. csString inherits from csStringFast&#60;&#62; and uses the default size for the 
-internal buffer.
+The class hierarchy of `<SAMP>csString</SAMP>' has changed. Most functionality is now
+provided by the new superclass `<SAMP>csStringBase</SAMP>'. From this,
+<CODE>csStringFast&#60;&#62;</CODE> is subclassed, and `<SAMP>csString</SAMP>' descends from
+<CODE>csStringFast&#60;&#62;</CODE>. <CODE>csStringFast&#60;&#62;</CODE> is a templated class featuring an
+internal character buffer which is used instead of dynamically heap-allocated
+memory when the string length is sufficently short (as controlled by the class
+template argument). This generalization can make `<SAMP>csStringFast&#60;&#62;</SAMP>' (and its
+subclass `<SAMP>csString</SAMP>') much faster when used as automatic (stack-allocated)
+variables, even when declared inside `<SAMP>for{}</SAMP>'-loops, since slow
+heap-allocation often can be avoided.
 </P><P>
 
-Several methods have been removed from csStringBase:
+For simplification purposes, several methods have been removed from
+`<SAMP>csString</SAMP>' and `<SAMP>iString</SAMP>' (when present):
+</P><P>
+
 <UL>
 <LI>
-Static <CODE>Pad*()</CODE> methods 
-=> Functionality can be achieved with non-static <CODE>Pad*()</CODE> methods.
+Static <CODE>PadFoo()</CODE> methods. The same functionality can be achieved with
+the remaining instance <CODE>PadFoo()</CODE> methods.
+<P>
+
 <LI>
-Static integer and float <CODE>Format()</CODE> routines
-=> Functionality can be achieved by utilizing the Replace() or Format() methods.
+<CODE>AsPadFoo()</CODE> instance methods. The same functionality can be achieved with
+the remaining instance <CODE>PadFoo()</CODE> methods.
+<P>
+
+<LI>
+Static integer and float <CODE>Format()</CODE> methods.  The same functionality can
+be achieved by utilizing the remaining <CODE>Replace()</CODE> or <CODE>Format()</CODE>
+methods.
+<P>
+
+<CODE>SetGrowsExponentially()</CODE> and <CODE>GetGrowsExponentially()</CODE>. The same
+functionality is provided by <CODE>SetGrowsBy(0)</CODE> and <CODE>GetGrowsBy()</CODE>.
+</UL>
+<P>
+
+For API consistency and uniformity between container classes, the
+following `<SAMP>csString</SAMP>' and `<SAMP>iString</SAMP>' methods (when present) have been
+renamed:
+</P><P>
+
+<UL>
+<LI>
+<CODE>Clear()</CODE> => <CODE>Empty()</CODE>
+<LI>
+<CODE>FindReplace()</CODE> => <CODE>ReplaceAll()</CODE>
+<LI>
+<CODE>FindStr()</CODE> => <CODE>Find()</CODE>
+<LI>
+<CODE>Reclaim()</CODE> => <CODE>ShrinkBestFit()</CODE>
+</UL>
+<P>
+
+Likewise, the following string-related functions have been renamed:
+</P><P>
+
+<UL>
+<LI>
+<CODE>csFindReplace()</CODE> => <CODE>csReplaceAll()</CODE>
 </UL>
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
