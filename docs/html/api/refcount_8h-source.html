@@ -38,38 +38,50 @@
 00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_REFCOUNT_H__</span>
 00022 <span class="preprocessor"></span>
 00027 <span class="preprocessor">#include "csextern.h"</span>
-00028 
-<a name="l00036"></a><a class="code" href="classcsRefCount.html">00036</a> <span class="keyword">class </span><a class="code" href="classcsRefCount.html">csRefCount</a>
-00037 {
-00038 <span class="keyword">protected</span>:
-00039   <span class="keywordtype">int</span> ref_count;
-00040 
-00041   <span class="comment">// To avoid a problem with MSVC and multiple DLLs (with separate memory</span>
-00042   <span class="comment">// space) we have to use a virtual destructor.</span>
-00043   <span class="comment">// @@@ Another alternative is to force this function to be non-inline, as</span>
-00044   <span class="comment">// doing so will most likely achieve the same result.</span>
-00045   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Delete ()
-00046   {
-00047     <span class="keyword">delete</span> <span class="keyword">this</span>;
-00048   }
-00049 
-00050   <span class="keyword">virtual</span> ~<a class="code" href="classcsRefCount.html">csRefCount</a> () {}
-00051 
-00052 <span class="keyword">public</span>:
-<a name="l00054"></a><a class="code" href="classcsRefCount.html#a0">00054</a>   <a class="code" href="classcsRefCount.html#a0">csRefCount</a> () : ref_count (1) {}
+00028 <span class="preprocessor">#include "reftrackeraccess.h"</span>
+00029 
+<a name="l00037"></a><a class="code" href="classcsRefCount.html">00037</a> <span class="keyword">class </span><a class="code" href="classcsRefCount.html">csRefCount</a>
+00038 {
+00039 <span class="keyword">protected</span>:
+00040   <span class="keywordtype">int</span> ref_count;
+00041 
+00042   <span class="comment">// To avoid a problem with MSVC and multiple DLLs (with separate memory</span>
+00043   <span class="comment">// space) we have to use a virtual destructor.</span>
+00044   <span class="comment">// @@@ Another alternative is to force this function to be non-inline, as</span>
+00045   <span class="comment">// doing so will most likely achieve the same result.</span>
+00046   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Delete ()
+00047   {
+00048     <span class="keyword">delete</span> <span class="keyword">this</span>;
+00049   }
+00050 
+00051   <span class="keyword">virtual</span> ~<a class="code" href="classcsRefCount.html">csRefCount</a> () 
+00052   {
+00053     csRefTrackerAccess::TrackDestruction (<span class="keyword">this</span>, ref_count);
+00054   }
 00055 
-<a name="l00057"></a><a class="code" href="classcsRefCount.html#a1">00057</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRefCount.html#a1">IncRef</a> () { ref_count++; }
-<a name="l00059"></a><a class="code" href="classcsRefCount.html#a2">00059</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRefCount.html#a2">DecRef</a> ()
-00060   {
-00061     ref_count--;
-00062     <span class="keywordflow">if</span> (ref_count &lt;= 0)
-00063       Delete ();
-00064   }
-<a name="l00066"></a><a class="code" href="classcsRefCount.html#a3">00066</a>   <span class="keywordtype">int</span> <a class="code" href="classcsRefCount.html#a3">GetRefCount</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ref_count; }
-00067 };
-00068 
-00069 <span class="preprocessor">#endif // __CS_REFCOUNT_H__</span>
-00070 <span class="preprocessor"></span>
+00056 <span class="keyword">public</span>:
+<a name="l00058"></a><a class="code" href="classcsRefCount.html#a0">00058</a>   <a class="code" href="classcsRefCount.html#a0">csRefCount</a> () : ref_count (1) 
+00059   {
+00060     csRefTrackerAccess::TrackConstruction (<span class="keyword">this</span>);
+00061   }
+00062 
+<a name="l00064"></a><a class="code" href="classcsRefCount.html#a1">00064</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRefCount.html#a1">IncRef</a> () 
+00065   { 
+00066     csRefTrackerAccess::TrackIncRef (<span class="keyword">this</span>, ref_count); 
+00067     ref_count++; 
+00068   }
+<a name="l00070"></a><a class="code" href="classcsRefCount.html#a2">00070</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRefCount.html#a2">DecRef</a> ()
+00071   {
+00072     csRefTrackerAccess::TrackDecRef (<span class="keyword">this</span>, ref_count);
+00073     ref_count--;
+00074     <span class="keywordflow">if</span> (ref_count &lt;= 0)
+00075       Delete ();
+00076   }
+<a name="l00078"></a><a class="code" href="classcsRefCount.html#a3">00078</a>   <span class="keywordtype">int</span> <a class="code" href="classcsRefCount.html#a3">GetRefCount</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ref_count; }
+00079 };
+00080 
+00081 <span class="preprocessor">#endif // __CS_REFCOUNT_H__</span>
+00082 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.6 
 </small></address> </div></body> </html>
