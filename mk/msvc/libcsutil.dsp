@@ -234,6 +234,10 @@ SOURCE=..\..\libs\csutil\evoutlet.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\floatrand.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\generic\appdir.cpp
 # End Source File
 # Begin Source File
@@ -663,6 +667,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\evoutlet.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\flags.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\floatrand.h
 # End Source File
 # Begin Source File
 
