@@ -180,6 +180,10 @@ PostBuild_Cmds=echo File is a lib, Copy skipped.
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\common\pixfmt.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\common\txtmgr.h
 # End Source File
 
