@@ -39,86 +39,90 @@
 00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IVARIA_BUGPLUG_H__</span>
 00021 <span class="preprocessor"></span>
 00022 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-00023 
-00024 <span class="keyword">class </span><a class="code" href="classcsBox3.html">csBox3</a>;
-00025 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
-00026 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
-00027 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
-00028 <span class="keyword">struct </span><a class="code" href="structiMeshObject.html">iMeshObject</a>;
-00029 <span class="keyword">struct </span><a class="code" href="structiBugPlug.html">iBugPlug</a>;
-00030 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
-00031 
-00032 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBugPlugRenderObject.html">iBugPlugRenderObject</a>, 0, 0, 1);
-00033 
-<a name="l00039"></a><a class="code" href="structiBugPlugRenderObject.html">00039</a> <span class="keyword">struct </span><a class="code" href="structiBugPlugRenderObject.html">iBugPlugRenderObject</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00040 {
-00042   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlugRenderObject.html#a0">Render</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <a class="code" href="structiBugPlug.html">iBugPlug</a>* bugplug) = 0;
-00043 };
-00044 
-00045 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBugPlug.html">iBugPlug</a>, 0, 0, 3);
-00046 
-<a name="l00051"></a><a class="code" href="structiBugPlug.html">00051</a> <span class="keyword">struct </span><a class="code" href="structiBugPlug.html">iBugPlug</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00052 {
-00053   <span class="comment">//=========================================================================</span>
-00054 
-00062   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a0">SetupDebugSector</a> () = 0;
-00063 
-00070   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a1">DebugSectorBox</a> (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; box, <span class="keywordtype">float</span> r, <span class="keywordtype">float</span> g, <span class="keywordtype">float</span> b,
-00071         <span class="keyword">const</span> <span class="keywordtype">char</span>* name = 0, <a class="code" href="structiMeshObject.html">iMeshObject</a>* mesh = 0) = 0;
-00072 
-00077   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a2">DebugSectorTriangle</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; s1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; s2,
-00078         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; s3, <span class="keywordtype">float</span> r, <span class="keywordtype">float</span> g, <span class="keywordtype">float</span> b) = 0;
-00079 
-00084   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a3">SwitchDebugSector</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans) = 0;
-00085 
-00089   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiBugPlug.html#a4">CheckDebugSector</a> () <span class="keyword">const </span>= 0;
-00090 
-00091   <span class="comment">//=========================================================================</span>
+00023 <span class="preprocessor">#include "<a class="code" href="graph3d_8h.html">ivideo/graph3d.h</a>"</span>
+00024 
+00025 <span class="keyword">class </span><a class="code" href="classcsBox3.html">csBox3</a>;
+00026 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
+00027 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
+00028 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
+00029 <span class="keyword">struct </span><a class="code" href="structiMeshObject.html">iMeshObject</a>;
+00030 <span class="keyword">struct </span><a class="code" href="structiBugPlug.html">iBugPlug</a>;
+00031 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
+00032 
+00033 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBugPlugRenderObject.html">iBugPlugRenderObject</a>, 0, 0, 1);
+00034 
+<a name="l00040"></a><a class="code" href="structiBugPlugRenderObject.html">00040</a> <span class="keyword">struct </span><a class="code" href="structiBugPlugRenderObject.html">iBugPlugRenderObject</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00041 {
+00043   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlugRenderObject.html#a0">Render</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <a class="code" href="structiBugPlug.html">iBugPlug</a>* bugplug) = 0;
+00044 };
+00045 
+00046 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBugPlug.html">iBugPlug</a>, 0, 0, 3);
+00047 
+<a name="l00052"></a><a class="code" href="structiBugPlug.html">00052</a> <span class="keyword">struct </span><a class="code" href="structiBugPlug.html">iBugPlug</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00053 {
+00054   <span class="comment">//=========================================================================</span>
+00055 
+00063   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a0">SetupDebugSector</a> () = 0;
+00064 
+00071   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a1">DebugSectorBox</a> (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; box, <span class="keywordtype">float</span> r, <span class="keywordtype">float</span> g, <span class="keywordtype">float</span> b,
+00072         <span class="keyword">const</span> <span class="keywordtype">char</span>* name = 0, <a class="code" href="structiMeshObject.html">iMeshObject</a>* mesh = 0,
+00073         <a class="code" href="group__util.html#ga18">uint</a> mixmode = <a class="code" href="group__gfx3d.html#ga18">CS_FX_COPY</a>) = 0;
+00074 
+00079   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a2">DebugSectorTriangle</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; s1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; s2,
+00080         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; s3, <span class="keywordtype">float</span> r, <span class="keywordtype">float</span> g, <span class="keywordtype">float</span> b,
+00081         <a class="code" href="group__util.html#ga18">uint</a> mixmode = <a class="code" href="group__gfx3d.html#ga21">CS_FX_ADD</a>) = 0;
+00082 
+00090   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a3">SwitchDebugSector</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans,
+00091         <span class="keywordtype">bool</span> clear = <span class="keyword">true</span>) = 0;
 00092 
-00098   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a5">SetupDebugView</a> () = 0;
+00096   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiBugPlug.html#a4">CheckDebugSector</a> () <span class="keyword">const </span>= 0;
+00097 
+00098   <span class="comment">//=========================================================================</span>
 00099 
-00103   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBugPlug.html#a6">DebugViewPoint</a> (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point) = 0;
-00104 
-00108   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a7">DebugViewLine</a> (<span class="keywordtype">int</span> i1, <span class="keywordtype">int</span> i2) = 0;
-00109 
-00113   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a8">DebugViewBox</a> (<span class="keywordtype">int</span> i1, <span class="keywordtype">int</span> i2) = 0;
-00114 
-00118   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBugPlug.html#a9">DebugViewPointCount</a> () <span class="keyword">const </span>= 0;
-00119 
-00123   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; <a class="code" href="structiBugPlug.html#a10">DebugViewGetPoint</a> (<span class="keywordtype">int</span> i) <span class="keyword">const </span>= 0;
-00124 
-00128   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBugPlug.html#a11">DebugViewLineCount</a> () <span class="keyword">const </span>= 0;
-00129 
-00133   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a12">DebugViewGetLine</a> (<span class="keywordtype">int</span> i, <span class="keywordtype">int</span>&amp; i1, <span class="keywordtype">int</span>&amp; i2) <span class="keyword">const </span>= 0;
-00134 
-00138   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBugPlug.html#a13">DebugViewBoxCount</a> () <span class="keyword">const </span>= 0;
-00139 
-00143   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a14">DebugViewGetBox</a> (<span class="keywordtype">int</span> i, <span class="keywordtype">int</span>&amp; i1, <span class="keywordtype">int</span>&amp; i2) <span class="keyword">const </span>= 0;
-00144 
-00149   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a15">DebugViewRenderObject</a> (<a class="code" href="structiBugPlugRenderObject.html">iBugPlugRenderObject</a>* obj) = 0;
-00150 
-00155   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a16">DebugViewClearScreen</a> (<span class="keywordtype">bool</span> cs) = 0;
-00156 
-00160   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a17">SwitchDebugView</a> () = 0;
-00161 
-00165   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiBugPlug.html#a18">CheckDebugView</a> () <span class="keyword">const </span>= 0;
-00166 
-00167   <span class="comment">//=========================================================================</span>
-00168 
-00176   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a19">AddCounter</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* countername, <span class="keywordtype">int</span> amount = 1) = 0;
-00177 
-00186   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a20">AddCounterEnum</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* countername, <span class="keywordtype">int</span> enumval,
-00187         <span class="keywordtype">int</span> amount = 1) = 0;
-00188 
-00194   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a21">ResetCounter</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* countername, <span class="keywordtype">int</span> value = 0) = 0;
-00195 
-00200   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a22">RemoveCounter</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* countername) = 0;
-00201 
-00202   <span class="comment">//=========================================================================</span>
-00203 };
-00204 
-00205 <span class="preprocessor">#endif // __CS_IVARIA_BUGPLUG_H__</span>
-00206 <span class="preprocessor"></span>
+00105   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a5">SetupDebugView</a> () = 0;
+00106 
+00110   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBugPlug.html#a6">DebugViewPoint</a> (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; point) = 0;
+00111 
+00115   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a7">DebugViewLine</a> (<span class="keywordtype">int</span> i1, <span class="keywordtype">int</span> i2) = 0;
+00116 
+00120   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a8">DebugViewBox</a> (<span class="keywordtype">int</span> i1, <span class="keywordtype">int</span> i2) = 0;
+00121 
+00125   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBugPlug.html#a9">DebugViewPointCount</a> () <span class="keyword">const </span>= 0;
+00126 
+00130   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; <a class="code" href="structiBugPlug.html#a10">DebugViewGetPoint</a> (<span class="keywordtype">int</span> i) <span class="keyword">const </span>= 0;
+00131 
+00135   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBugPlug.html#a11">DebugViewLineCount</a> () <span class="keyword">const </span>= 0;
+00136 
+00140   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a12">DebugViewGetLine</a> (<span class="keywordtype">int</span> i, <span class="keywordtype">int</span>&amp; i1, <span class="keywordtype">int</span>&amp; i2) <span class="keyword">const </span>= 0;
+00141 
+00145   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBugPlug.html#a13">DebugViewBoxCount</a> () <span class="keyword">const </span>= 0;
+00146 
+00150   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a14">DebugViewGetBox</a> (<span class="keywordtype">int</span> i, <span class="keywordtype">int</span>&amp; i1, <span class="keywordtype">int</span>&amp; i2) <span class="keyword">const </span>= 0;
+00151 
+00156   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a15">DebugViewRenderObject</a> (<a class="code" href="structiBugPlugRenderObject.html">iBugPlugRenderObject</a>* obj) = 0;
+00157 
+00162   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a16">DebugViewClearScreen</a> (<span class="keywordtype">bool</span> cs) = 0;
+00163 
+00168   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a17">SwitchDebugView</a> (<span class="keywordtype">bool</span> clear = <span class="keyword">true</span>) = 0;
+00169 
+00173   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiBugPlug.html#a18">CheckDebugView</a> () <span class="keyword">const </span>= 0;
+00174 
+00175   <span class="comment">//=========================================================================</span>
+00176 
+00184   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a19">AddCounter</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* countername, <span class="keywordtype">int</span> amount = 1) = 0;
+00185 
+00194   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a20">AddCounterEnum</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* countername, <span class="keywordtype">int</span> enumval,
+00195         <span class="keywordtype">int</span> amount = 1) = 0;
+00196 
+00202   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a21">ResetCounter</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* countername, <span class="keywordtype">int</span> value = 0) = 0;
+00203 
+00208   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBugPlug.html#a22">RemoveCounter</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* countername) = 0;
+00209 
+00210   <span class="comment">//=========================================================================</span>
+00211 };
+00212 
+00213 <span class="preprocessor">#endif // __CS_IVARIA_BUGPLUG_H__</span>
+00214 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>

@@ -75,7 +75,7 @@
 <a name="l00220"></a><a class="code" href="group__csws__comps__treebox.html#ga1">00220</a> <span class="preprocessor">#define CSS_TREEITEM_PLACEITEMS 0x00020000</span>
 00221 <span class="preprocessor"></span>
 00223 
-<a name="l00224"></a><a class="code" href="group__csws__comps__treebox.html#ga2">00224</a> <span class="preprocessor">#define CS_TREEITEM_MAGIC       (void *)0xdeadface</span>
+<a name="l00224"></a><a class="code" href="group__csws__comps__treebox.html#ga2">00224</a> <span class="preprocessor">#define CS_TREEITEM_MAGIC       (intptr_t)0xdeadface</span>
 00225 <span class="preprocessor"></span>
 <a name="l00230"></a><a class="code" href="group__csws__comps__treebox.html#ga11">00230</a> <span class="keyword">enum</span> <a class="code" href="group__csws__comps__treebox.html#ga11">csTreeItemStyle</a>
 00231 {
@@ -128,106 +128,109 @@
 00312 
 00314   <span class="keywordtype">int</span> Toggle (<span class="keywordtype">int</span> iAction = 2);
 00315 
-00322   csTreeItem *<a class="code" href="classcsTreeBox.html#a6">ForEachItem</a> (<span class="keywordtype">bool</span> (*func) (csTreeItem *child, <span class="keywordtype">void</span> *param),
-00323     <span class="keywordtype">void</span> *param = 0, <span class="keywordtype">bool</span> iOnlyOpen = <span class="keyword">false</span>);
+00322   csTreeItem *<a class="code" href="classcsTreeBox.html#a6">ForEachItem</a> (<span class="keywordtype">bool</span> (*func) (csTreeItem *child, intptr_t param),
+00323     intptr_t param = 0, <span class="keywordtype">bool</span> iOnlyOpen = <span class="keyword">false</span>);
 00324 
 <a name="l00326"></a><a class="code" href="classcsTreeItem.html#a14">00326</a>   <span class="keywordtype">void</span> ResetButton ()
-00327   { button-&gt;<a class="code" href="classcsComponent.html#a41">SetRect</a> (0, 0, -1, -1); parent-&gt;<a class="code" href="classcsComponent.html#a34">SendCommand</a> (<a class="code" href="group__csws__comps__treebox.html#gga10a14">cscmdTreeItemSizeChangeNotify</a>, <span class="keyword">this</span>); }
-00328 };
-00329 
-00335 
-<a name="l00336"></a><a class="code" href="group__csws__comps__treebox.html#ga3">00336</a> <span class="preprocessor">#define CSTS_HSCROLL            0x00000001</span>
-00337 <span class="preprocessor"></span>
-<a name="l00338"></a><a class="code" href="group__csws__comps__treebox.html#ga4">00338</a> <span class="preprocessor">#define CSTS_VSCROLL            0x00000002</span>
-00339 <span class="preprocessor"></span>
-<a name="l00340"></a><a class="code" href="group__csws__comps__treebox.html#ga5">00340</a> <span class="preprocessor">#define CSTS_AUTOSCROLLBAR      0x00000004</span>
-00341 <span class="preprocessor"></span>
-<a name="l00342"></a><a class="code" href="group__csws__comps__treebox.html#ga6">00342</a> <span class="preprocessor">#define CSTS_SMALLBUTTONS       0x00000008</span>
-00343 <span class="preprocessor"></span>
-<a name="l00345"></a><a class="code" href="group__csws__comps__treebox.html#ga7">00345</a> <span class="preprocessor">#define CSTS_DEFAULTVALUE       CSTS_VSCROLL | CSTS_AUTOSCROLLBAR</span>
+00327   {
+00328     button-&gt;<a class="code" href="classcsComponent.html#a41">SetRect</a> (0, 0, -1, -1);
+00329     parent-&gt;<a class="code" href="classcsComponent.html#a34">SendCommand</a> (<a class="code" href="group__csws__comps__treebox.html#gga10a14">cscmdTreeItemSizeChangeNotify</a>, (<a class="code" href="group__util.html#ga8">intptr_t</a>)<span class="keyword">this</span>);
+00330   }
+00331 };
+00332 
+00338 
+<a name="l00339"></a><a class="code" href="group__csws__comps__treebox.html#ga3">00339</a> <span class="preprocessor">#define CSTS_HSCROLL            0x00000001</span>
+00340 <span class="preprocessor"></span>
+<a name="l00341"></a><a class="code" href="group__csws__comps__treebox.html#ga4">00341</a> <span class="preprocessor">#define CSTS_VSCROLL            0x00000002</span>
+00342 <span class="preprocessor"></span>
+<a name="l00343"></a><a class="code" href="group__csws__comps__treebox.html#ga5">00343</a> <span class="preprocessor">#define CSTS_AUTOSCROLLBAR      0x00000004</span>
+00344 <span class="preprocessor"></span>
+<a name="l00345"></a><a class="code" href="group__csws__comps__treebox.html#ga6">00345</a> <span class="preprocessor">#define CSTS_SMALLBUTTONS       0x00000008</span>
 00346 <span class="preprocessor"></span>
-00351 
-<a name="l00352"></a><a class="code" href="group__csws__comps__treebox.html#ga8">00352</a> <span class="preprocessor">#define CSS_TREEBOX_PLACEITEMS  0x00010000</span>
-00353 <span class="preprocessor"></span>
-<a name="l00356"></a><a class="code" href="group__csws__comps__treebox.html#ga9">00356</a> <span class="preprocessor">#define CSS_TREEBOX_LOCKVISIBLE 0x00020000</span>
-00357 <span class="preprocessor"></span>
-00359 
-<a name="l00360"></a><a class="code" href="group__csws__comps__treebox.html#ga12">00360</a> <span class="keyword">enum</span> <a class="code" href="group__csws__comps__treebox.html#ga12">csTreeFrameStyle</a>
-00361 {
-00363   cstfsNone,
-00365   cstfsThinRect,
-00367   <a class="code" href="group__csws__comps__treebox.html#gga12a34">cstfsThickRect</a>
-00368 };
-00369 
-<a name="l00428"></a><a class="code" href="classcsTreeBox.html">00428</a> <span class="keyword">class </span>CS_CSWS_EXPORT csTreeBox : <span class="keyword">public</span> <a class="code" href="classcsComponent.html">csComponent</a>
-00429 {
-00449   <span class="keyword">class </span>csTreeView : <span class="keyword">public</span> <a class="code" href="classcsComponent.html">csComponent</a>
-00450   {
-00451   <span class="keyword">public</span>:
-00453     csTreeView (<a class="code" href="classcsComponent.html">csComponent</a> *iParent);
-00454 
-00456     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
+<a name="l00348"></a><a class="code" href="group__csws__comps__treebox.html#ga7">00348</a> <span class="preprocessor">#define CSTS_DEFAULTVALUE       CSTS_VSCROLL | CSTS_AUTOSCROLLBAR</span>
+00349 <span class="preprocessor"></span>
+00354 
+<a name="l00355"></a><a class="code" href="group__csws__comps__treebox.html#ga8">00355</a> <span class="preprocessor">#define CSS_TREEBOX_PLACEITEMS  0x00010000</span>
+00356 <span class="preprocessor"></span>
+<a name="l00359"></a><a class="code" href="group__csws__comps__treebox.html#ga9">00359</a> <span class="preprocessor">#define CSS_TREEBOX_LOCKVISIBLE 0x00020000</span>
+00360 <span class="preprocessor"></span>
+00362 
+<a name="l00363"></a><a class="code" href="group__csws__comps__treebox.html#ga12">00363</a> <span class="keyword">enum</span> <a class="code" href="group__csws__comps__treebox.html#ga12">csTreeFrameStyle</a>
+00364 {
+00366   cstfsNone,
+00368   cstfsThinRect,
+00370   <a class="code" href="group__csws__comps__treebox.html#gga12a34">cstfsThickRect</a>
+00371 };
+00372 
+<a name="l00431"></a><a class="code" href="classcsTreeBox.html">00431</a> <span class="keyword">class </span>CS_CSWS_EXPORT csTreeBox : <span class="keyword">public</span> <a class="code" href="classcsComponent.html">csComponent</a>
+00432 {
+00452   <span class="keyword">class </span>csTreeView : <span class="keyword">public</span> <a class="code" href="classcsComponent.html">csComponent</a>
+00453   {
+00454   <span class="keyword">public</span>:
+00456     csTreeView (<a class="code" href="classcsComponent.html">csComponent</a> *iParent);
 00457 
-00459     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Delete (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
-00460   } *clipview;
-00461 
-00463   <span class="keywordtype">int</span> TreeStyle;
-00465   <a class="code" href="group__csws__comps__treebox.html#ga12">csTreeFrameStyle</a> FrameStyle;
-00467   <span class="keywordtype">int</span> BorderWidth, BorderHeight;
-00469   <a class="code" href="classcsComponent.html">csComponent</a> *timer;
-00471   <a class="code" href="classcsScrollBar.html">csScrollBar</a> *hscroll, *vscroll;
-00473   <a class="code" href="structcsScrollBarStatus.html">csScrollBarStatus</a> hsbstatus, vsbstatus;
-00475   <span class="keywordtype">int</span> deltax, maxdeltax;
-00477   <span class="keywordtype">int</span> deltay, maxdeltay;
-00479   csTreeItem *active;
-00480 
-00482   csTreeItem *NextItem ();
-00484   csTreeItem *PrevItem ();
-00485 
-00486 <span class="keyword">public</span>:
-00488   csTreeBox (<a class="code" href="classcsComponent.html">csComponent</a> *iParent, <span class="keywordtype">int</span> iStyle = <a class="code" href="group__csws__comps__treebox.html#ga7">CSTS_DEFAULTVALUE</a>,
-00489     <a class="code" href="group__csws__comps__treebox.html#ga12">csTreeFrameStyle</a> iFrameStyle = <a class="code" href="group__csws__comps__treebox.html#gga12a34">cstfsThickRect</a>);
-00490 
-00492   <span class="keyword">virtual</span> ~csTreeBox ();
+00459     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
+00460 
+00462     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Delete (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
+00463   } *clipview;
+00464 
+00466   <span class="keywordtype">int</span> TreeStyle;
+00468   <a class="code" href="group__csws__comps__treebox.html#ga12">csTreeFrameStyle</a> FrameStyle;
+00470   <span class="keywordtype">int</span> BorderWidth, BorderHeight;
+00472   <a class="code" href="classcsComponent.html">csComponent</a> *timer;
+00474   <a class="code" href="classcsScrollBar.html">csScrollBar</a> *hscroll, *vscroll;
+00476   <a class="code" href="structcsScrollBarStatus.html">csScrollBarStatus</a> hsbstatus, vsbstatus;
+00478   <span class="keywordtype">int</span> deltax, maxdeltax;
+00480   <span class="keywordtype">int</span> deltay, maxdeltay;
+00482   csTreeItem *active;
+00483 
+00485   csTreeItem *NextItem ();
+00487   csTreeItem *PrevItem ();
+00488 
+00489 <span class="keyword">public</span>:
+00491   csTreeBox (<a class="code" href="classcsComponent.html">csComponent</a> *iParent, <span class="keywordtype">int</span> iStyle = <a class="code" href="group__csws__comps__treebox.html#ga7">CSTS_DEFAULTVALUE</a>,
+00492     <a class="code" href="group__csws__comps__treebox.html#ga12">csTreeFrameStyle</a> iFrameStyle = <a class="code" href="group__csws__comps__treebox.html#gga12a34">cstfsThickRect</a>);
 00493 
-00495   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsComponent.html#a31">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
+00495   <span class="keyword">virtual</span> ~csTreeBox ();
 00496 
-00498   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsComponent.html#a38">Draw</a> ();
+00498   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsComponent.html#a31">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
 00499 
-00501   <span class="keywordtype">void</span> PlaceItems (<span class="keywordtype">int</span> sbFlags = <a class="code" href="group__csws__comps__treebox.html#ga3">CSTS_HSCROLL</a> | <a class="code" href="group__csws__comps__treebox.html#ga4">CSTS_VSCROLL</a>);
+00501   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsComponent.html#a38">Draw</a> ();
 00502 
-00504   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsComponent.html#a41">SetRect</a> (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
+00504   <span class="keywordtype">void</span> PlaceItems (<span class="keywordtype">int</span> sbFlags = <a class="code" href="group__csws__comps__treebox.html#ga3">CSTS_HSCROLL</a> | <a class="code" href="group__csws__comps__treebox.html#ga4">CSTS_VSCROLL</a>);
 00505 
-00510   csTreeItem *ForEachItem (<span class="keywordtype">bool</span> (*func) (csTreeItem *child, <span class="keywordtype">void</span> *param),
-00511     <span class="keywordtype">void</span> *param = 0, <span class="keywordtype">bool</span> iOnlyOpen = <span class="keyword">false</span>);
-00512 
-00514   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsComponent.html#a52">SetState</a> (<span class="keywordtype">int</span> mask, <span class="keywordtype">bool</span> enable);
+00507   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsComponent.html#a41">SetRect</a> (<span class="keywordtype">int</span> xmin, <span class="keywordtype">int</span> ymin, <span class="keywordtype">int</span> xmax, <span class="keywordtype">int</span> ymax);
+00508 
+00513   csTreeItem *ForEachItem (<span class="keywordtype">bool</span> (*func) (csTreeItem *child, <a class="code" href="group__util.html#ga8">intptr_t</a> param),
+00514     <a class="code" href="group__util.html#ga8">intptr_t</a> param = 0, <span class="keywordtype">bool</span> iOnlyOpen = <span class="keyword">false</span>);
 00515 
-00517   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsComponent.html#a2">Insert</a> (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
+00517   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsComponent.html#a52">SetState</a> (<span class="keywordtype">int</span> mask, <span class="keywordtype">bool</span> enable);
 00518 
-00520   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ExpandAll ();
+00520   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsComponent.html#a2">Insert</a> (<a class="code" href="classcsComponent.html">csComponent</a> *comp);
 00521 
-00523   <span class="keyword">virtual</span> <span class="keywordtype">void</span> CollapseAll ();
+00523   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ExpandAll ();
 00524 
-<a name="l00526"></a><a class="code" href="classcsTreeBox.html#a11">00526</a>   <span class="keywordtype">int</span> GetStyle () { <span class="keywordflow">return</span> TreeStyle; }
-<a name="l00528"></a><a class="code" href="classcsTreeBox.html#a12">00528</a>   <a class="code" href="group__csws__comps__treebox.html#ga12">csTreeFrameStyle</a> GetFrameStyle () { <span class="keywordflow">return</span> FrameStyle; }
-00530   <span class="keywordtype">void</span> SetStyle (<span class="keywordtype">int</span> iStyle, csTreeFrameStyle iFrameStyle);
-00531 
-00532 <span class="keyword">protected</span>:
-00533   <span class="keyword">friend</span> <span class="keyword">class </span>csTreeItem;
+00526   <span class="keyword">virtual</span> <span class="keywordtype">void</span> CollapseAll ();
+00527 
+<a name="l00529"></a><a class="code" href="classcsTreeBox.html#a11">00529</a>   <span class="keywordtype">int</span> GetStyle () { <span class="keywordflow">return</span> TreeStyle; }
+<a name="l00531"></a><a class="code" href="classcsTreeBox.html#a12">00531</a>   <a class="code" href="group__csws__comps__treebox.html#ga12">csTreeFrameStyle</a> GetFrameStyle () { <span class="keywordflow">return</span> FrameStyle; }
+00533   <span class="keywordtype">void</span> SetStyle (<span class="keywordtype">int</span> iStyle, csTreeFrameStyle iFrameStyle);
 00534 
-00536   <span class="keywordtype">void</span> PrepareButton (<a class="code" href="classcsButton.html">csButton</a> *iButton, <span class="keywordtype">bool</span> iOpen);
+00535 <span class="keyword">protected</span>:
+00536   <span class="keyword">friend</span> <span class="keyword">class </span>csTreeItem;
 00537 
-00539   <span class="keywordtype">void</span> MakeItemVisible (<a class="code" href="classcsComponent.html">csComponent</a> *iItem, <span class="keywordtype">bool</span> iChildren = <span class="keyword">false</span>);
+00539   <span class="keywordtype">void</span> PrepareButton (<a class="code" href="classcsButton.html">csButton</a> *iButton, <span class="keywordtype">bool</span> iOpen);
 00540 
-00542   <span class="keywordtype">void</span> FocusItem (csTreeItem *iItem);
+00542   <span class="keywordtype">void</span> MakeItemVisible (<a class="code" href="classcsComponent.html">csComponent</a> *iItem, <span class="keywordtype">bool</span> iChildren = <span class="keyword">false</span>);
 00543 
-00545   <span class="keywordtype">void</span> VScroll (<span class="keywordtype">int</span> iDelta, <span class="keywordtype">bool</span> iMoveCaret);
+00545   <span class="keywordtype">void</span> FocusItem (csTreeItem *iItem);
 00546 
-00548   <span class="keywordtype">void</span> PlaceScrollbars ();
-00549 };
-00550 
-00553 <span class="preprocessor">#endif // __CS_CSTREE_H__</span>
+00548   <span class="keywordtype">void</span> VScroll (<span class="keywordtype">int</span> iDelta, <span class="keywordtype">bool</span> iMoveCaret);
+00549 
+00551   <span class="keywordtype">void</span> PlaceScrollbars ();
+00552 };
+00553 
+00556 <span class="preprocessor">#endif // __CS_CSTREE_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
