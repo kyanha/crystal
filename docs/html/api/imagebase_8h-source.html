@@ -41,55 +41,55 @@
 00032 <span class="preprocessor">#include "<a class="code" href="util_8h.html">csutil/util.h</a>"</span>
 00033 <span class="preprocessor">#include "<a class="code" href="image_8h.html">igraphic/image.h</a>"</span>
 00034 
-<a name="l00038"></a><a class="code" href="classcsImageBase.html">00038</a> <span class="keyword">class </span><a class="code" href="classcsImageBase.html">csImageBase</a> : <span class="keyword">public</span> <a class="code" href="structiImage.html">iImage</a>
-00039 {
-00040 <span class="keyword">protected</span>:
-00041   <span class="keywordtype">char</span>* fName;
-00042   <a class="code" href="classcsImageBase.html">csImageBase</a>() : fName(0) { }
-00043 <span class="keyword">public</span>:
-00044   <span class="keyword">virtual</span> ~<a class="code" href="classcsImageBase.html">csImageBase</a>() { <span class="keyword">delete</span>[] fName; }
-00045 
-00046   <span class="comment">/* Commented out: should be implemented by all descendants.</span>
-00047 <span class="comment">  virtual const void *GetImageData () { return 0; }</span>
-00048 <span class="comment">  virtual int GetWidth () const { return 0; }</span>
-00049 <span class="comment">  virtual int GetHeight () const { return 0; }</span>
-00050 <span class="comment">  */</span>
-00051   <span class="comment">// Most images are 2D, so provide a sensible default</span>
-<a name="l00052"></a><a class="code" href="classcsImageBase.html#a1">00052</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsImageBase.html#a1">GetDepth</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 1; }
-00053 
-<a name="l00054"></a><a class="code" href="classcsImageBase.html#a2">00054</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsImageBase.html#a2">SetName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName)
-00055   {
-00056     <span class="keyword">delete</span>[] fName; fName = <a class="code" href="group__util.html#ga87">csStrNew</a> (iName);
-00057   }
-<a name="l00058"></a><a class="code" href="classcsImageBase.html#a3">00058</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classcsImageBase.html#a3">GetName</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fName; }
-00059 
-00060   <span class="comment">/* Commented out: should be implemented by all descendants.</span>
-00061 <span class="comment">  virtual int GetFormat () const { return 0; }</span>
-00062 <span class="comment">  */</span>
-<a name="l00063"></a><a class="code" href="classcsImageBase.html#a4">00063</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="classcsImageBase.html#a4">GetPalette</a> () { <span class="keywordflow">return</span> 0; }
-<a name="l00064"></a><a class="code" href="classcsImageBase.html#a5">00064</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__util.html#ga0">uint8</a>* <a class="code" href="classcsImageBase.html#a5">GetAlpha</a> () { <span class="keywordflow">return</span> 0; }
-00065 
-<a name="l00066"></a><a class="code" href="classcsImageBase.html#a6">00066</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsImageBase.html#a6">HasKeyColor</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }
-<a name="l00067"></a><a class="code" href="classcsImageBase.html#a7">00067</a>   <a class="code" href="cssysdef_8h.html#a38">CS_DEPRECATED_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsImageBase.html#a7">HasKeycolor</a> ()<span class="keyword"> const</span>
-00068 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsImageBase.html#a6">HasKeyColor</a>(); }
-00069 
-<a name="l00070"></a><a class="code" href="classcsImageBase.html#a8">00070</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsImageBase.html#a8">GetKeyColor</a> (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b)<span class="keyword"> const </span>{ }
-<a name="l00071"></a><a class="code" href="classcsImageBase.html#a9">00071</a>   <a class="code" href="cssysdef_8h.html#a38">CS_DEPRECATED_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsImageBase.html#a9">GetKeycolor</a> (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b)<span class="keyword"> const</span>
-00072 <span class="keyword">  </span>{ <a class="code" href="classcsImageBase.html#a8">GetKeyColor</a> (r, g, b); }
-00073 
-<a name="l00074"></a><a class="code" href="classcsImageBase.html#a10">00074</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="classcsImageBase.html#a10">HasMipmaps</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
-<a name="l00075"></a><a class="code" href="classcsImageBase.html#a11">00075</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> <a class="code" href="classcsImageBase.html#a11">GetMipmap</a> (<a class="code" href="group__util.html#ga12">uint</a> num) 
-00076   { <span class="keywordflow">return</span> (num == 0) ? <span class="keyword">this</span> : 0; }
-00077 
-<a name="l00078"></a><a class="code" href="classcsImageBase.html#a12">00078</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsImageBase.html#a12">GetRawFormat</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
-<a name="l00079"></a><a class="code" href="classcsImageBase.html#a13">00079</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> <a class="code" href="classcsImageBase.html#a13">GetRawData</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
-<a name="l00080"></a><a class="code" href="classcsImageBase.html#a14">00080</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx2d.html#ga19">csImageType</a> <a class="code" href="classcsImageBase.html#a14">GetImageType</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="group__gfx2d.html#gga19a7">csimg2D</a>; }
-<a name="l00081"></a><a class="code" href="classcsImageBase.html#a15">00081</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="classcsImageBase.html#a15">HasSubImages</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
-<a name="l00082"></a><a class="code" href="classcsImageBase.html#a16">00082</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> <a class="code" href="classcsImageBase.html#a16">GetSubImage</a> (<a class="code" href="group__util.html#ga12">uint</a> num) 
-00083   { <span class="keywordflow">return</span> (num == 0) ? <span class="keyword">this</span> : 0; }
-00084 };
-00085 
-00088 <span class="preprocessor">#endif // __CS_CSGFX_IMAGEBASE_H__</span>
+<a name="l00040"></a><a class="code" href="classcsImageBase.html">00040</a> <span class="keyword">class </span><a class="code" href="classcsImageBase.html">csImageBase</a> : <span class="keyword">public</span> <a class="code" href="structiImage.html">iImage</a>
+00041 {
+00042 <span class="keyword">protected</span>:
+00043   <span class="keywordtype">char</span>* fName;
+00044   <a class="code" href="classcsImageBase.html">csImageBase</a>() : fName(0) { }
+00045 <span class="keyword">public</span>:
+00046   <span class="keyword">virtual</span> ~<a class="code" href="classcsImageBase.html">csImageBase</a>() { <span class="keyword">delete</span>[] fName; }
+00047 
+00048   <span class="comment">/* Commented out: should be implemented by all descendants.</span>
+00049 <span class="comment">  virtual const void *GetImageData () { return 0; }</span>
+00050 <span class="comment">  virtual int GetWidth () const { return 0; }</span>
+00051 <span class="comment">  virtual int GetHeight () const { return 0; }</span>
+00052 <span class="comment">  */</span>
+00053   <span class="comment">// Most images are 2D, so provide a sensible default</span>
+<a name="l00054"></a><a class="code" href="classcsImageBase.html#a1">00054</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsImageBase.html#a1">GetDepth</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 1; }
+00055 
+<a name="l00056"></a><a class="code" href="classcsImageBase.html#a2">00056</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsImageBase.html#a2">SetName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName)
+00057   {
+00058     <span class="keyword">delete</span>[] fName; fName = <a class="code" href="group__util.html#ga87">csStrNew</a> (iName);
+00059   }
+<a name="l00060"></a><a class="code" href="classcsImageBase.html#a3">00060</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classcsImageBase.html#a3">GetName</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fName; }
+00061 
+00062   <span class="comment">/* Commented out: should be implemented by all descendants.</span>
+00063 <span class="comment">  virtual int GetFormat () const { return 0; }</span>
+00064 <span class="comment">  */</span>
+<a name="l00065"></a><a class="code" href="classcsImageBase.html#a4">00065</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="classcsImageBase.html#a4">GetPalette</a> () { <span class="keywordflow">return</span> 0; }
+<a name="l00066"></a><a class="code" href="classcsImageBase.html#a5">00066</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__util.html#ga0">uint8</a>* <a class="code" href="classcsImageBase.html#a5">GetAlpha</a> () { <span class="keywordflow">return</span> 0; }
+00067 
+<a name="l00068"></a><a class="code" href="classcsImageBase.html#a6">00068</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsImageBase.html#a6">HasKeyColor</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }
+<a name="l00069"></a><a class="code" href="classcsImageBase.html#a7">00069</a>   <a class="code" href="cssysdef_8h.html#a38">CS_DEPRECATED_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsImageBase.html#a7">HasKeycolor</a> ()<span class="keyword"> const</span>
+00070 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsImageBase.html#a6">HasKeyColor</a>(); }
+00071 
+<a name="l00072"></a><a class="code" href="classcsImageBase.html#a8">00072</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsImageBase.html#a8">GetKeyColor</a> (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b)<span class="keyword"> const </span>{ }
+<a name="l00073"></a><a class="code" href="classcsImageBase.html#a9">00073</a>   <a class="code" href="cssysdef_8h.html#a38">CS_DEPRECATED_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsImageBase.html#a9">GetKeycolor</a> (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b)<span class="keyword"> const</span>
+00074 <span class="keyword">  </span>{ <a class="code" href="classcsImageBase.html#a8">GetKeyColor</a> (r, g, b); }
+00075 
+<a name="l00076"></a><a class="code" href="classcsImageBase.html#a10">00076</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="classcsImageBase.html#a10">HasMipmaps</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
+<a name="l00077"></a><a class="code" href="classcsImageBase.html#a11">00077</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> <a class="code" href="classcsImageBase.html#a11">GetMipmap</a> (<a class="code" href="group__util.html#ga12">uint</a> num) 
+00078   { <span class="keywordflow">return</span> (num == 0) ? <span class="keyword">this</span> : 0; }
+00079 
+<a name="l00080"></a><a class="code" href="classcsImageBase.html#a12">00080</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsImageBase.html#a12">GetRawFormat</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
+<a name="l00081"></a><a class="code" href="classcsImageBase.html#a13">00081</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> <a class="code" href="classcsImageBase.html#a13">GetRawData</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
+<a name="l00082"></a><a class="code" href="classcsImageBase.html#a14">00082</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx2d.html#ga19">csImageType</a> <a class="code" href="classcsImageBase.html#a14">GetImageType</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="group__gfx2d.html#gga19a7">csimg2D</a>; }
+<a name="l00083"></a><a class="code" href="classcsImageBase.html#a15">00083</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga12">uint</a> <a class="code" href="classcsImageBase.html#a15">HasSubImages</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
+<a name="l00084"></a><a class="code" href="classcsImageBase.html#a16">00084</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> <a class="code" href="classcsImageBase.html#a16">GetSubImage</a> (<a class="code" href="group__util.html#ga12">uint</a> num) 
+00085   { <span class="keywordflow">return</span> (num == 0) ? <span class="keyword">this</span> : 0; }
+00086 };
+00087 
+00090 <span class="preprocessor">#endif // __CS_CSGFX_IMAGEBASE_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.6 
 </small></address> </div></body> </html>
