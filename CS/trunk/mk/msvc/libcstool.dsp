@@ -304,6 +304,10 @@ SOURCE=..\..\libs\cstool\proctex.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\proctxtanim.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\rendermeshholder.cpp
 # End Source File
 # Begin Source File
@@ -393,6 +397,10 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\meshobjtmpl.h
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\..\..\include\cstool\proctex.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\..\..\include\cstool\proctxtanim.h
 # End Source File
 # Begin Source File
 
