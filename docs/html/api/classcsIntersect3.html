@@ -433,7 +433,10 @@ Returns true if there is an intersection. In that case the intersection point wi
 <p>
 Intersect a 3D segment with a plane.
 <p>
-Returns true if there is an intersection, with the intersection point returned in isect. The distance from u to the intersection point is returned in dist. The distance that is returned is a normalized distance with respect to the given input vector. i.e. a distance of 0.5 means that the intersection point is halfway u and v.     </td>
+Returns true if there is an intersection, with the intersection point returned in isect. The distance from u to the intersection point is returned in dist. The distance that is returned is a normalized distance with respect to the given input vector. i.e. a distance of 0.5 means that the intersection point is halfway u and v. There are two cases in which this method will return false:<ul>
+<li>If the plane and the segment are parallel, then 'dist' will be set equal to 0, and 'isect' equal to 'v'.<li>If the segment does not cross the plane (i.e. if 'dist'&gt;1+epsilon or 'dist'&lt;-epsilon, where epsilon is a very small value near to zero) then 'isect's value is (0, 0, 0). </ul>
+<dl compact><dt><b>Remarks: </b></dt><dd>
+ 'p' is the plane, expressed as: A x + B y + C z + D = 0 , where (A,B,C) is  the normal vector of the plane. 'u' and 'v' are the start (U point) and the end (V point) of the segment. 'isect' is searched along the segment U + x (V - U); the unknown 'x' value is got by: x = [(A,B,C) * U + D ] / (A,B,C) * (U - V), where * is the dot  product. </dl>    </td>
   </tr>
 </table>
 <a name="d3" doxytag="csIntersect3::Plane"></a><p>
@@ -551,7 +554,7 @@ Intersect a regular plane and an axis aligned plane and return the intersection 
 <p>
 This intersection is defined on the axis aligned plane. Returns false if there is no intersection. 
 <p>
-Definition at line <a class="el" href="math3d_8h-source.html#l00356">356</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.    </td>
+Definition at line <a class="el" href="math3d_8h-source.html#l00369">369</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.    </td>
   </tr>
 </table>
 <a name="d5" doxytag="csIntersect3::Planes"></a><p>
@@ -789,7 +792,7 @@ Intersect a 3D segment with the frustum plane Ax + z = 0.
 <p>
 Assumes an intersection, and returns the intersection point in isect. 
 <p>
-Definition at line <a class="el" href="math3d_8h-source.html#l00425">425</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.
+Definition at line <a class="el" href="math3d_8h-source.html#l00438">438</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.
 <p>
 References <a class="el" href="segment_8h-source.html#l00106">csSegment3::End()</a>, and <a class="el" href="segment_8h-source.html#l00103">csSegment3::Start()</a>.    </td>
   </tr>
@@ -891,7 +894,7 @@ Intersect a 3D segment with the frustum plane By + z = 0.
 <p>
 Assumes an intersection, and returns the intersection point in isect. 
 <p>
-Definition at line <a class="el" href="math3d_8h-source.html#l00442">442</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.
+Definition at line <a class="el" href="math3d_8h-source.html#l00455">455</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.
 <p>
 References <a class="el" href="segment_8h-source.html#l00106">csSegment3::End()</a>, and <a class="el" href="segment_8h-source.html#l00103">csSegment3::Start()</a>.    </td>
   </tr>
@@ -987,7 +990,7 @@ Intersect a 3D segment with the z = 0 plane.
 <p>
 Assumes that there is an intersection (fails if the segment is parallel to the plane), and returns the distance from u to the intersection point. The intersection point is returned in isect. 
 <p>
-Definition at line <a class="el" href="math3d_8h-source.html#l00384">384</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.
+Definition at line <a class="el" href="math3d_8h-source.html#l00397">397</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.
 <p>
 References <a class="el" href="segment_8h-source.html#l00106">csSegment3::End()</a>, and <a class="el" href="segment_8h-source.html#l00103">csSegment3::Start()</a>.    </td>
   </tr>
@@ -1083,7 +1086,7 @@ Intersect a 3D segment with the plane z = zval.
 <p>
 Assumes that there is an intersection (fails if the segment is parallel to the plane), and returns the distance from u to the intersection point. The intersection point is returned in isect. 
 <p>
-Definition at line <a class="el" href="math3d_8h-source.html#l00407">407</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.
+Definition at line <a class="el" href="math3d_8h-source.html#l00420">420</a> of file <a class="el" href="math3d_8h-source.html">math3d.h</a>.
 <p>
 References <a class="el" href="segment_8h-source.html#l00106">csSegment3::End()</a>, and <a class="el" href="segment_8h-source.html#l00103">csSegment3::Start()</a>.    </td>
   </tr>
