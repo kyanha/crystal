@@ -59,8 +59,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\out\release\libs\librenderstepcommon.lib"
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /subsystem:windows /machine:I386 /OPT:NOREF  /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /machine:I386 /OPT:NOREF /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -91,8 +91,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\out\debug\libs\librenderstepcommon_d.lib"
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /subsystem:windows /machine:I386 /debug /pdbtype:sept  /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -123,8 +123,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\out\release\libs\librenderstepcommon.lib"
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /subsystem:windows /machine:I386 /OPT:NOREF  /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /machine:I386 /OPT:NOREF /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -155,8 +155,8 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\out\debug\libs\librenderstepcommon_d.lib"
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /subsystem:windows /machine:I386 /debug /pdbtype:sept  /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -164,31 +164,31 @@ SOURCE="$(InputPath)"
 !ELSEIF  "$(CFG)" == "librenderstepcommon - Win32 ExtensiveMemDebug"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 
-# PROP BASE Output_Dir "memdebug"
-# PROP BASE Intermediate_Dir "memdebug"
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "debug"
+# PROP BASE Intermediate_Dir "debug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 
-# PROP Output_Dir "..\..\out\memdebug\build\librenderstepcommon\"
-# PROP Intermediate_Dir "..\..\out\memdebug\build\librenderstepcommon\"
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\out\debug\build\librenderstepcommon\"
+# PROP Intermediate_Dir "..\..\out\debug\build\librenderstepcommon\"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
-# ADD CPP /nologo /vmb /vms /W3 /Gm /GX /G5 /FD /c /D "_LIB" /D "_MT" /D "_MBCS" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__"  /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32"
+# ADD CPP /nologo /vmb /vms /W3 /Gm /GX /G5 /FD /c /GR /MDd /ZI /Od /D "_LIB" /D "_MT" /D "_MBCS" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__"  /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\memdebug\build\librenderstepcommon\librenderstepcommon.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\librenderstepcommon\librenderstepcommon.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo 
+# ADD LIB32 /nologo /out:"..\..\out\debug\libs\librenderstepcommon_d.lib"
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /subsystem:windows /machine:I386   /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -196,31 +196,31 @@ SOURCE="$(InputPath)"
 !ELSEIF  "$(CFG)" == "librenderstepcommon - Win32 ExtensiveMemDebug_NR"
 
 # PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 
-# PROP BASE Output_Dir "memdebug"
-# PROP BASE Intermediate_Dir "memdebug"
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "debug"
+# PROP BASE Intermediate_Dir "debug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
-# PROP Use_Debug_Libraries 
-# PROP Output_Dir "..\..\out\memdebug\build\librenderstepcommon\"
-# PROP Intermediate_Dir "..\..\out\memdebug\build\librenderstepcommon\"
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\out\debug\build\librenderstepcommon\"
+# PROP Intermediate_Dir "..\..\out\debug\build\librenderstepcommon\"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
-# ADD CPP /nologo /vmb /vms /W3 /Gm /GX /G5 /FD /c /D "_LIB" /D "_MT" /D "_MBCS" /D "_DEBUG" /D "CS_DEBUG" /D "CS_USE_NEW_RENDERER" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__"  /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32"
+# ADD CPP /nologo /vmb /vms /W3 /Gm /GX /G5 /FD /c /GR /MDd /ZI /Od /D "_LIB" /D "_MT" /D "_MBCS" /D "_DEBUG" /D "CS_DEBUG" /D "CS_USE_NEW_RENDERER" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "WIN32" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__"  /I "." /I "..\.." /I "..\..\include" /I "..\..\include\csutil\win32"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "CS_USE_NEW_RENDERER" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\memdebug\build\librenderstepcommon\librenderstepcommon.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_USE_NEW_RENDERER" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\librenderstepcommon\librenderstepcommon.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_USE_NEW_RENDERER" /D "CS_EXTENSIVE_MEMDEBUG" /D "_LIB" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo 
+# ADD LIB32 /nologo /out:"..\..\out\debug\libs\librenderstepcommon_d.lib"
 LINK32=link.exe
-# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /subsystem:windows /machine:I386   /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib   /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
