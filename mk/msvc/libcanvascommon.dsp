@@ -240,6 +240,10 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\video\canvas\common\fontcache.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\canvas\common\graph2d.cpp
 # End Source File
 # Begin Source File
@@ -248,20 +252,20 @@ SOURCE=..\..\plugins\video\canvas\common\scrshot.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\common\x11-keys.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\fontcache.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\canvas\common\softfontcache.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\common\x11-keys.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\common\fontcache.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\canvas\common\graph2d.h
@@ -273,10 +277,6 @@ SOURCE=..\..\plugins\video\canvas\common\scancode.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\canvas\common\scrshot.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\canvas\common\fontcache.h
 # End Source File
 # Begin Source File
 

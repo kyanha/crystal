@@ -240,10 +240,6 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\dynavis\dynavis.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\culling\dynavis\dhistmgr.cpp
 # End Source File
 # Begin Source File
@@ -252,7 +248,7 @@ SOURCE=..\..\plugins\culling\dynavis\dmodel.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\dynavis\wqueue.cpp
+SOURCE=..\..\plugins\culling\dynavis\dynavis.cpp
 # End Source File
 # Begin Source File
 
@@ -262,13 +258,17 @@ SOURCE=..\..\plugins\culling\dynavis\exvis.cpp
 
 SOURCE=..\..\plugins\culling\dynavis\tcovbuf.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\culling\dynavis\wqueue.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\dynavis\dynavis.h
+SOURCE=..\..\plugins\culling\dynavis\dhistmgr.h
 # End Source File
 # Begin Source File
 
@@ -276,7 +276,7 @@ SOURCE=..\..\plugins\culling\dynavis\dmodel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\dynavis\wqueue.h
+SOURCE=..\..\plugins\culling\dynavis\dynavis.h
 # End Source File
 # Begin Source File
 
@@ -288,7 +288,7 @@ SOURCE=..\..\plugins\culling\dynavis\tcovbuf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\culling\dynavis\dhistmgr.h
+SOURCE=..\..\plugins\culling\dynavis\wqueue.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

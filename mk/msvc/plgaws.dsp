@@ -244,127 +244,7 @@ SOURCE=..\..\plugins\aws\aws.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\aws\awscomp.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awskeycn.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsmgr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsprefs.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsslot.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awstex.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awswin.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\skinlex.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsfparm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awscmdbt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsstdsk.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsadler.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsmled.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awslabel.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awstxtbx.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awschkbx.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsgrpfr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsradbt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awslstbx.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\skinpars.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\aws\aws3dfrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsimgvw.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awskcfct.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsscr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsscrbr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awstimer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsstbar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsbarct.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsbl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsgbl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsntbk.cpp
 # End Source File
 # Begin Source File
 
@@ -388,7 +268,127 @@ SOURCE=..\..\plugins\aws\awsTabCtrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws\awsadler.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsbarct.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsbl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awschkbx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awscmdbt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awscomp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsfparm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsgbl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsgrpfr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsimgvw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awskcfct.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awskeycn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awslabel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awslstbx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsmgr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsmled.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsntbk.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws\awsparser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsprefs.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsradbt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsscr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsscrbr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsslot.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsstbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsstdsk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awstex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awstimer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awstxtbx.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awswin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\skinlex.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\skinpars.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -400,139 +400,11 @@ SOURCE=..\..\plugins\aws\aws.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\aws\awsadler.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awschkbx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awscmdbt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awscomp.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsfparm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsControlBar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsmled.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\slparse.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsgrpfr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awslabel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsprefs.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsradbt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsslot.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsstdsk.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awstex.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awstxtbx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awswin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awslstbx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsparser.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\skinpars.hpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\aws\aws3dfrm.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\aws\awscscr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsimgvw.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awskcfct.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsscr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsscrbr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awstimer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsgbc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsgbl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awslayot.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsbarct.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsbl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsstbar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws\awsntbk.h
+SOURCE=..\..\plugins\aws\awsControlBar.h
 # End Source File
 # Begin Source File
 
@@ -549,6 +421,134 @@ SOURCE=..\..\plugins\aws\awsPanel.h
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\awsTabCtrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsadler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsbarct.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsbl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awschkbx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awscmdbt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awscomp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awscscr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsfparm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsgbc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsgbl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsgrpfr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsimgvw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awskcfct.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awslabel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awslayot.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awslstbx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsmled.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsntbk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsparser.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsprefs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsradbt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsscr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsscrbr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsslot.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsstbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awsstdsk.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awstex.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awstimer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awstxtbx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\awswin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\skinpars.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\slparse.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

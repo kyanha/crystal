@@ -240,15 +240,11 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\bezier\object\beziermsh.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\mesh\bezier\object\bezier2.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\bezier\object\curvebase.cpp
+SOURCE=..\..\plugins\mesh\bezier\object\beziermsh.cpp
 # End Source File
 # Begin Source File
 
@@ -257,6 +253,10 @@ SOURCE=..\..\plugins\mesh\bezier\object\carrays.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\mesh\bezier\object\clightmap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\bezier\object\curvebase.cpp
 # End Source File
 # Begin Source File
 

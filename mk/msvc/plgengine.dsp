@@ -240,14 +240,6 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\halogen.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\3d\lghthalo.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\engine\3d\camera.cpp
 # End Source File
 # Begin Source File
@@ -268,11 +260,11 @@ SOURCE=..\..\plugins\engine\3d\engine.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\halogen2.cpp
+SOURCE=..\..\plugins\engine\3d\halogen.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\movable.cpp
+SOURCE=..\..\plugins\engine\3d\halogen2.cpp
 # End Source File
 # Begin Source File
 
@@ -284,11 +276,15 @@ SOURCE=..\..\plugins\engine\3d\impprctx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\engine\3d\lghthalo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\engine\3d\light.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\region.cpp
+SOURCE=..\..\plugins\engine\3d\lightmgr.cpp
 # End Source File
 # Begin Source File
 
@@ -308,11 +304,11 @@ SOURCE=..\..\plugins\engine\3d\meshobj.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\objwatch.cpp
+SOURCE=..\..\plugins\engine\3d\movable.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\radiosty.cpp
+SOURCE=..\..\plugins\engine\3d\objwatch.cpp
 # End Source File
 # Begin Source File
 
@@ -324,7 +320,7 @@ SOURCE=..\..\plugins\engine\3d\portalcontainer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\sector.cpp
+SOURCE=..\..\plugins\engine\3d\radiosty.cpp
 # End Source File
 # Begin Source File
 
@@ -332,7 +328,7 @@ SOURCE=..\..\plugins\engine\3d\rdrprior.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\lightmgr.cpp
+SOURCE=..\..\plugins\engine\3d\region.cpp
 # End Source File
 # Begin Source File
 
@@ -341,6 +337,10 @@ SOURCE=..\..\plugins\engine\3d\renderloop.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\3d\rview.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\3d\sector.cpp
 # End Source File
 # Begin Source File
 
@@ -360,10 +360,6 @@ SOURCE=..\..\plugins\engine\3d\texture.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\halo.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\engine\3d\camera.h
 # End Source File
 # Begin Source File
@@ -380,6 +376,10 @@ SOURCE=..\..\plugins\engine\3d\engine.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\engine\3d\halo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\engine\3d\halogen.h
 # End Source File
 # Begin Source File
@@ -393,6 +393,10 @@ SOURCE=..\..\plugins\engine\3d\impprctx.h
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\3d\light.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\3d\lightmgr.h
 # End Source File
 # Begin Source File
 
@@ -461,10 +465,6 @@ SOURCE=..\..\plugins\engine\3d\stats.h
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\3d\texture.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\3d\lightmgr.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

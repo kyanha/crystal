@@ -244,11 +244,19 @@ SOURCE=..\..\libs\cstool\collider.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\cstool\initapp.cpp
+SOURCE=..\..\libs\cstool\anonrndbuf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\basetexfact.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\csanim2d.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\csapplicationframework.cpp
 # End Source File
 # Begin Source File
 
@@ -268,11 +276,7 @@ SOURCE=..\..\libs\cstool\gentrtex.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\cstool\prsky.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\prdots.cpp
+SOURCE=..\..\libs\cstool\initapp.cpp
 # End Source File
 # Begin Source File
 
@@ -292,11 +296,15 @@ SOURCE=..\..\libs\cstool\mdltool.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\cstool\prfire.cpp
+SOURCE=..\..\libs\cstool\meshobjtmpl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\cstool\prwater.cpp
+SOURCE=..\..\libs\cstool\prdots.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\prfire.cpp
 # End Source File
 # Begin Source File
 
@@ -305,6 +313,22 @@ SOURCE=..\..\libs\cstool\proctex.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\prplasma.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\prsky.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\prwater.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\rendermeshholder.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\rendermeshlist.cpp
 # End Source File
 # Begin Source File
 
@@ -317,30 +341,6 @@ SOURCE=..\..\libs\cstool\sprbuild.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\vidprefs.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\meshobjtmpl.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\basetexfact.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\anonrndbuf.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\csapplicationframework.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\rendermeshlist.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\rendermeshholder.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -364,6 +364,10 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\csanim2d.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\..\..\include\cstool\csapplicationframework.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\..\..\include\cstool\csfxscr.h
 # End Source File
 # Begin Source File
@@ -373,6 +377,10 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\cspixmap.h
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\..\..\include\cstool\csview.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\..\..\include\cstool\framedataholder.h
 # End Source File
 # Begin Source File
 
@@ -428,6 +436,14 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\prwater.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\..\..\include\cstool\rbuflock.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\..\..\include\cstool\rendermeshholder.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\..\..\include\cstool\rendermeshlist.h
 # End Source File
 # Begin Source File
@@ -445,22 +461,6 @@ SOURCE=..\..\libs\cstool\..\..\include\cstool\tokenlist.h
 # Begin Source File
 
 SOURCE=..\..\libs\cstool\..\..\include\cstool\vidprefs.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\..\..\include\cstool\rbuflock.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\..\..\include\cstool\rendermeshholder.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\..\..\include\cstool\csapplicationframework.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\cstool\..\..\include\cstool\framedataholder.h
 # End Source File
 # End Group
 # End Target

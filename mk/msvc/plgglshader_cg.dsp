@@ -244,15 +244,15 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cg
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cgcommon.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cgfp.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cgvp.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cgcommon.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -264,15 +264,15 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cg
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cgcommon.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cgfp.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cgvp.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\glshader_cg\glshader_cgcommon.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -244,11 +244,11 @@ SOURCE=..\..\plugins\sound\renderer\software\sndhdl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\software\srdrsrc.cpp
+SOURCE=..\..\plugins\sound\renderer\software\srdrcom.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\software\srdrcom.cpp
+SOURCE=..\..\plugins\sound\renderer\software\srdrsrc.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -264,11 +264,11 @@ SOURCE=..\..\plugins\video\renderer\software\sft3dcom.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\software\soft_txt.cpp
+SOURCE=..\..\plugins\video\renderer\software\soft_g3d.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\software\soft_g3d.cpp
+SOURCE=..\..\plugins\video\renderer\software\soft_txt.cpp
 # End Source File
 # Begin Source File
 

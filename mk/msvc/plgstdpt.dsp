@@ -240,11 +240,11 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\proctex\standard\stdproctex.cpp
+SOURCE=..\..\plugins\proctex\standard\fire.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\proctex\standard\fire.cpp
+SOURCE=..\..\plugins\proctex\standard\stdproctex.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -252,11 +252,11 @@ SOURCE=..\..\plugins\proctex\standard\fire.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\proctex\standard\stdproctex.h
+SOURCE=..\..\plugins\proctex\standard\fire.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\proctex\standard\fire.h
+SOURCE=..\..\plugins\proctex\standard\stdproctex.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

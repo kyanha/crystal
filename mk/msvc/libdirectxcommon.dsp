@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\video\canvas\directxcommon\directdetection.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\directxcommon\directdetection.h
+SOURCE=..\..\plugins\video\canvas\directxcommon\iddetect.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\canvas\directxcommon\iddetect.h
+SOURCE=..\..\plugins\video\canvas\directxcommon\directdetection.h
 # End Source File
 # End Group
 # End Target

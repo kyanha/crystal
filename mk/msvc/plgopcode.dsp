@@ -256,6 +256,10 @@ SOURCE=..\..\plugins\collide\opcode\OPC_AABBTree.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\OPC_BaseModel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_BoxPruning.cpp
 # End Source File
 # Begin Source File
@@ -272,15 +276,11 @@ SOURCE=..\..\plugins\collide\opcode\OPC_HybridModel.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\OPC_LSSCollider.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_MeshInterface.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_Picking.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_SweepAndPrune.cpp
 # End Source File
 # Begin Source File
 
@@ -296,6 +296,10 @@ SOURCE=..\..\plugins\collide\opcode\OPC_OptimizedTree.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\OPC_Picking.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_PlanesCollider.cpp
 # End Source File
 # Begin Source File
@@ -305,6 +309,10 @@ SOURCE=..\..\plugins\collide\opcode\OPC_RayCollider.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_SphereCollider.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\OPC_SweepAndPrune.cpp
 # End Source File
 # Begin Source File
 
@@ -325,14 +333,6 @@ SOURCE=..\..\plugins\collide\opcode\Opcode.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\StdAfx.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_BaseModel.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_LSSCollider.cpp
 # End Source File
 # Begin Source File
 
@@ -400,11 +400,11 @@ SOURCE=..\..\plugins\collide\opcode\Ice\IceUtils.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\CSopcodecollider.h
+SOURCE=..\..\plugins\collide\opcode\CSopcode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\CSopcode.h
+SOURCE=..\..\plugins\collide\opcode\CSopcodecollider.h
 # End Source File
 # Begin Source File
 
@@ -424,6 +424,10 @@ SOURCE=..\..\plugins\collide\opcode\OPC_BoxBoxOverlap.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\OPC_BoxPruning.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_Collider.h
 # End Source File
 # Begin Source File
@@ -440,19 +444,23 @@ SOURCE=..\..\plugins\collide\opcode\OPC_IceHook.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\OPC_LSSAABBOverlap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\OPC_LSSCollider.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\OPC_LSSTriOverlap.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_MeshInterface.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Picking.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\collide\opcode\OPC_Model.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_SweepAndPrune.h
 # End Source File
 # Begin Source File
 
@@ -461,6 +469,10 @@ SOURCE=..\..\plugins\collide\opcode\OPC_OBBCollider.h
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_OptimizedTree.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\OPC_Picking.h
 # End Source File
 # Begin Source File
 
@@ -476,10 +488,6 @@ SOURCE=..\..\plugins\collide\opcode\OPC_PlanesTriOverlap.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\OPC_Settings.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\collide\opcode\OPC_RayAABBOverlap.h
 # End Source File
 # Begin Source File
@@ -492,6 +500,10 @@ SOURCE=..\..\plugins\collide\opcode\OPC_RayTriOverlap.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\collide\opcode\OPC_Settings.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\collide\opcode\OPC_SphereAABBOverlap.h
 # End Source File
 # Begin Source File
@@ -501,6 +513,10 @@ SOURCE=..\..\plugins\collide\opcode\OPC_SphereCollider.h
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\OPC_SphereTriOverlap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\collide\opcode\OPC_SweepAndPrune.h
 # End Source File
 # Begin Source File
 
@@ -529,22 +545,6 @@ SOURCE=..\..\plugins\collide\opcode\Opcode.h
 # Begin Source File
 
 SOURCE=..\..\plugins\collide\opcode\Stdafx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_BoxPruning.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_LSSAABBOverlap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_LSSCollider.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\OPC_LSSTriOverlap.h
 # End Source File
 # Begin Source File
 

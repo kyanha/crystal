@@ -248,10 +248,6 @@ SOURCE=..\..\plugins\font\server\csfont\csfont.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\font\server\csfont\font_tiny.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\font\server\csfont\csfont.h
 # End Source File
 # Begin Source File
@@ -265,6 +261,10 @@ SOURCE=..\..\plugins\font\server\csfont\font_italic.h
 # Begin Source File
 
 SOURCE=..\..\plugins\font\server\csfont\font_police.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\font\server\csfont\font_tiny.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -238,11 +238,11 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\apps\import\md32spr\md32spr.cpp
+SOURCE=..\..\apps\import\md32spr\bufio.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\import\md32spr\bufio.cpp
+SOURCE=..\..\apps\import\md32spr\md32spr.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -268,15 +268,15 @@ SOURCE=..\..\plugins\movierecorder\lzoconf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\movierecorder\movierecorder.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\movierecorder\minilzo.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\movierecorder\mmx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\movierecorder\movierecorder.h
 # End Source File
 # Begin Source File
 

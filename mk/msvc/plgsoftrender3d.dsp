@@ -244,11 +244,11 @@ SOURCE=..\..\plugins\video\render3d\software\drawpmap.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\renderbuffer.cpp
+SOURCE=..\..\plugins\video\render3d\software\halo.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\halo.cpp
+SOURCE=..\..\plugins\video\render3d\software\renderbuffer.cpp
 # End Source File
 # Begin Source File
 
@@ -272,15 +272,15 @@ SOURCE=..\..\plugins\video\render3d\software\soft_g3d.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\software\soft_polyrender.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\software\soft_txt.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\software\tcache.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\soft_polyrender.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -304,6 +304,10 @@ SOURCE=..\..\plugins\video\render3d\software\soft_g3d.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\software\soft_polyrender.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\software\soft_txt.h
 # End Source File
 # Begin Source File
@@ -313,10 +317,6 @@ SOURCE=..\..\plugins\video\render3d\software\sttest.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\software\tcache.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\soft_polyrender.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -272,6 +272,10 @@ SOURCE=..\..\plugins\video\renderer\common\dtmesh.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\renderer\common\pixfmt.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\renderer\common\polybuf.h
 # End Source File
 # Begin Source File
@@ -281,10 +285,6 @@ SOURCE=..\..\plugins\video\renderer\common\txtmgr.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\renderer\common\vbufmgr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\renderer\common\pixfmt.h
 # End Source File
 # End Group
 # End Target

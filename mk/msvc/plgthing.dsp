@@ -240,10 +240,6 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\thing\object\polygon.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\mesh\thing\object\lghtmap.cpp
 # End Source File
 # Begin Source File
@@ -253,6 +249,10 @@ SOURCE=..\..\plugins\mesh\thing\object\lppool.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\mesh\thing\object\parrays.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\thing\object\polygon.cpp
 # End Source File
 # Begin Source File
 

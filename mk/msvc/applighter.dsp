@@ -242,7 +242,11 @@ SOURCE=..\..\apps\tools\lighter\lighter.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\tools\lighter\lmmapper.cpp
+SOURCE=..\..\apps\tools\lighter\litobjsel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\litparsecfg.cpp
 # End Source File
 # Begin Source File
 
@@ -250,11 +254,7 @@ SOURCE=..\..\apps\tools\lighter\litpolygon.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\tools\lighter\litobjsel.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\apps\tools\lighter\litparsecfg.cpp
+SOURCE=..\..\apps\tools\lighter\lmmapper.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -266,11 +266,7 @@ SOURCE=..\..\apps\tools\lighter\lighter.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\tools\lighter\lmmapper.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\apps\tools\lighter\litpolygon.h
+SOURCE=..\..\apps\tools\lighter\litconfig.h
 # End Source File
 # Begin Source File
 
@@ -282,7 +278,11 @@ SOURCE=..\..\apps\tools\lighter\litparsecfg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\apps\tools\lighter\litconfig.h
+SOURCE=..\..\apps\tools\lighter\litpolygon.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\lmmapper.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
