@@ -94,12 +94,19 @@ Calculate a simplified set of triangles so that all vertices with cost lower the
 <p>
 The resulting simplified triangle mesh is returned (and number of triangles is set to num_triangles). You must delete[] the returned list of triangles if you don't want to use it anymore. <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>mesh</em>&nbsp;</td><td>
+the source triangle mesh. </td></tr>
+<tr><td valign=top><em>verts</em>&nbsp;</td><td>
+the vertex costs. </td></tr>
+<tr><td valign=top><em>max_cost</em>&nbsp;</td><td>
+the cost which sets the limit for the simplification. </td></tr>
+<tr><td valign=top><em>num_triangles</em>&nbsp;</td><td>
+receives the number of triangles in the simplified set. </td></tr>
 <tr><td valign=top><em>lodalgo</em>&nbsp;</td><td>
-is the lod algorithm. </td></tr>
+is the Lod algorithm. </td></tr>
 </table>
-</dl>
-<p>
- Note. The given 'mesh' and 'verts' objects are no longer valid after calling this function. Don't expect any useful information here.     </td>
+</dl><dl compact><dt><b>Remarks: </b></dt><dd>
+Note: The given 'mesh' and 'verts' objects are no longer valid after calling this function. Don't expect any useful information here. </dl>    </td>
   </tr>
 </table>
 <a name="d0" doxytag="csTriangleMeshLOD::CalculateLOD"></a><p>
@@ -157,14 +164,21 @@ is the lod algorithm. </td></tr>
 <p>
 For the given mesh and a set of vertices calculate the best order in which to perform LOD reduction.
 <p>
-This fills two arrays (which should have the same size as the number of vertices in 'verts'). 'translate' contains a mapping from the old order of vertices to the new one. The new ordering of vertices is done in a way so that the first vertex is the one which is always present in the model and with increasing detail, vertices are added in ascending vertex order. 'emerge_from' contains (for a given index in the new order) from which this vertex arises (or seen the other way around: to what this vertex had collapsed). <dl compact><dt><b>Parameters: </b></dt><dd>
+This fills two arrays (which should have the same size as the number of vertices in 'verts'). 'translate' contains a mapping from the old order of vertices to the new one. The new ordering of vertices is done in a way so that the first vertex is the one which is always present in the model and with increasing detail; vertices are added in ascending vertex order. 'emerge_from' indicates (for a given index in the new order) from which each vertex arises (or seen the other way around: to what this vertex had collapsed). <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>mesh</em>&nbsp;</td><td>
+the source triangle mesh. </td></tr>
+<tr><td valign=top><em>verts</em>&nbsp;</td><td>
+the vertex costs. </td></tr>
+<tr><td valign=top><em>translate</em>&nbsp;</td><td>
+contains a mapping from the old order of vertices to the new one. </td></tr>
+<tr><td valign=top><em>emerge_from</em>&nbsp;</td><td>
+indicates from which each vertex arises. </td></tr>
 <tr><td valign=top><em>lodalgo</em>&nbsp;</td><td>
 is the lod algorithm. </td></tr>
 </table>
-</dl>
-<p>
- Note. The given 'mesh' and 'verts' objects are no longer valid after calling this function. Don't expect any useful information here.     </td>
+</dl><dl compact><dt><b>Remarks: </b></dt><dd>
+Note: The given 'mesh' and 'verts' objects are no longer valid after calling this function. Don't expect any useful information here. </dl>    </td>
   </tr>
 </table>
 <a name="d2" doxytag="csTriangleMeshLOD::CalculateLODFast"></a><p>
@@ -222,14 +236,21 @@ is the lod algorithm. </td></tr>
 <p>
 This is a faster version of <a class="el" href="classcsTriangleMeshLOD.html#d0">CalculateLOD()</a> which doesn't recalculate the cost of a vertex after edge collapse.
 <p>
-It is less accurate in cases where the cost of a vertex can change after edge collapse but it calculates a LOT faster. <dl compact><dt><b>Parameters: </b></dt><dd>
+It is less accurate in cases where the cost of a vertex can change after edge collapse but it calculates a LOT faster. You must delete[] the returned list of triangles if you don't want to use it anymore. <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>mesh</em>&nbsp;</td><td>
+the source triangle mesh. </td></tr>
+<tr><td valign=top><em>verts</em>&nbsp;</td><td>
+the vertex costs. </td></tr>
+<tr><td valign=top><em>max_cost</em>&nbsp;</td><td>
+the cost which sets the limit for the simplification. </td></tr>
+<tr><td valign=top><em>num_triangles</em>&nbsp;</td><td>
+receives the number of triangles in the simplified set. </td></tr>
 <tr><td valign=top><em>lodalgo</em>&nbsp;</td><td>
 is the lod algorithm. </td></tr>
 </table>
-</dl>
-<p>
- Note. The given 'mesh' and 'verts' objects are no longer valid after calling this function. Don't expect any useful information here.     </td>
+</dl><dl compact><dt><b>Remarks: </b></dt><dd>
+Note: The given 'mesh' and 'verts' objects are no longer valid after calling this function. Don't expect any useful information here. </dl>    </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>

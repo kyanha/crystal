@@ -42,89 +42,89 @@
 00028 
 00029 <span class="keyword">struct </span><a class="code" href="structiVFS.html">iVFS</a>;
 00030 
-00032 <span class="keyword">const</span> <span class="keywordtype">unsigned</span> csmmioDefaultCacheBlockSize = 256;
-00033 
-00035 <span class="keyword">const</span> <span class="keywordtype">unsigned</span> csmmioDefaultCacheSize = 256;<span class="comment">//2048;</span>
-00036 
-00038 <span class="keyword">const</span> <span class="keywordtype">unsigned</span> csmmioDefaultHashSize = 211;<span class="comment">//1559;</span>
-00039 
+00034 <span class="keyword">const</span> <span class="keywordtype">unsigned</span> csmmioDefaultCacheBlockSize = 256;
+00035 
+00039 <span class="keyword">const</span> <span class="keywordtype">unsigned</span> csmmioDefaultCacheSize = 256;<span class="comment">//2048;</span>
 00040 
-00072 <span class="keyword">class </span>CS_CSUTIL_EXPORT <a class="code" href="classcsMemoryMappedIO.html">csMemoryMappedIO</a>
-00073 {
-00074 <span class="keyword">private</span>:
-00076   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> block_size;
-00077   
-00079   <span class="keywordtype">bool</span> valid_mmio_object;
-00080 
-00082   <span class="keywordtype">unsigned</span> cache_block_size;
-00083 
-00088   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cache_max_size;
+00044 <span class="keyword">const</span> <span class="keywordtype">unsigned</span> csmmioDefaultHashSize = 211;<span class="comment">//1559;</span>
+00045 
+00046 
+<a name="l00078"></a><a class="code" href="classcsMemoryMappedIO.html">00078</a> <span class="keyword">class </span>CS_CSUTIL_EXPORT <a class="code" href="classcsMemoryMappedIO.html">csMemoryMappedIO</a>
+00079 {
+00080 <span class="keyword">private</span>:
+00082   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> block_size;
+00083   
+00085   <span class="keywordtype">bool</span> valid_mmio_object;
+00086 
+00088   <span class="keywordtype">unsigned</span> cache_block_size;
 00089 
-00091   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cache_block_count;
-00092   
-00097   <a class="code" href="classcsBitArray.html">csBitArray</a> *page_map;
-00098 
-00099 <span class="preprocessor">#ifdef CS_DEBUG</span>
-00100 <span class="preprocessor"></span>
-00101 <span class="keyword">public</span>:
-00103   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> hits;
+00094   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cache_max_size;
+00095 
+00097   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cache_block_count;
+00098   
+00103   <a class="code" href="classcsBitArray.html">csBitArray</a> *page_map;
 00104 
-00106   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> misses;
-00107 
-00108 <span class="keyword">private</span>:
-00109 <span class="preprocessor">#endif</span>
-00110 <span class="preprocessor"></span>
-00112   <span class="keyword">struct </span>CacheBlock
-00113   {    
-00115     <span class="keywordtype">unsigned</span> age;
-00116 
-00118     <span class="keywordtype">unsigned</span> offset;
-00119 
-00121     <span class="keywordtype">unsigned</span> page;
-00122     
-00124     CacheBlock *next;
+00105 <span class="preprocessor">#ifdef CS_DEBUG</span>
+00106 <span class="preprocessor"></span>
+00107 <span class="keyword">public</span>:
+00109   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> hits;
+00110 
+00112   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> misses;
+00113 
+00114 <span class="keyword">private</span>:
+00115 <span class="preprocessor">#endif</span>
+00116 <span class="preprocessor"></span>
+00118   <span class="keyword">struct </span>CacheBlock
+00119   {    
+00121     <span class="keywordtype">unsigned</span> age;
+00122 
+00124     <span class="keywordtype">unsigned</span> offset;
 00125 
-00127     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *data;
-00128   };
-00129 
-00131   CacheBlock *cache[csmmioDefaultHashSize];
-00132 
-00133   <span class="comment">// Software specific csMemMapInfo struct, should only be defined for</span>
-00134   <span class="comment">// platforms w/o hardware mmio.</span>
-00135   <span class="keyword">struct </span>emulatedMmioInfo 
-00136   {          
-00138     FILE *hMappedFile;
-00139 
-00141     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *data;
-00142 
-00144     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> file_size;
-00145   } emulatedPlatform;
-00146   
-00147 <span class="preprocessor">#ifdef CS_HAS_MEMORY_MAPPED_IO</span>
-00148 <span class="preprocessor"></span>
-00149   <a class="code" href="structcsMemMapInfo.html">csMemMapInfo</a> platform;
-00150   
-00152   <span class="keywordtype">bool</span> valid_platform;
-00153 <span class="preprocessor">#endif</span>
-00154 <span class="preprocessor"></span><span class="keyword">public</span>:
-00162   <a class="code" href="classcsMemoryMappedIO.html">csMemoryMappedIO</a>(<span class="keywordtype">unsigned</span> _block_size, <span class="keywordtype">char</span> <span class="keyword">const</span> *filename, <a class="code" href="structiVFS.html">iVFS</a>* vfs = 0);
-00163 
-00167   ~<a class="code" href="classcsMemoryMappedIO.html">csMemoryMappedIO</a>();
-00168 
-00175   <span class="keywordtype">void</span> *GetPointer(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
-00176   
-00180   <span class="keywordtype">bool</span> IsValid();
-00181 
-00182 <span class="keyword">private</span>:
-00184   <span class="keywordtype">void</span> CachePage(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> page);
-00185 
-00187   <span class="keywordtype">bool</span> SoftMemoryMapFile(emulatedMmioInfo *platform, <span class="keywordtype">char</span> <span class="keyword">const</span> *filename);
-00188 
-00190   <span class="keywordtype">void</span> SoftUnMemoryMapFile(emulatedMmioInfo *platform);
-00191 };
-00192 
-00193 <span class="preprocessor">#endif // __CS_MEMORY_MAPPED_IO__</span>
-00194 <span class="preprocessor"></span>
+00127     <span class="keywordtype">unsigned</span> page;
+00128     
+00130     CacheBlock *next;
+00131 
+00133     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *data;
+00134   };
+00135 
+00137   CacheBlock *cache[csmmioDefaultHashSize];
+00138 
+00139   <span class="comment">// Software specific csMemMapInfo struct, should only be defined for</span>
+00140   <span class="comment">// platforms w/o hardware mmio.</span>
+00141   <span class="keyword">struct </span>emulatedMmioInfo 
+00142   {          
+00144     FILE *hMappedFile;
+00145 
+00147     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *data;
+00148 
+00150     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> file_size;
+00151   } emulatedPlatform;
+00152   
+00153 <span class="preprocessor">#ifdef CS_HAS_MEMORY_MAPPED_IO</span>
+00154 <span class="preprocessor"></span>
+00155   <a class="code" href="structcsMemMapInfo.html">csMemMapInfo</a> platform;
+00156   
+00158   <span class="keywordtype">bool</span> valid_platform;
+00159 <span class="preprocessor">#endif</span>
+00160 <span class="preprocessor"></span><span class="keyword">public</span>:
+00168   <a class="code" href="classcsMemoryMappedIO.html">csMemoryMappedIO</a>(<span class="keywordtype">unsigned</span> _block_size, <span class="keywordtype">char</span> <span class="keyword">const</span> *filename, <a class="code" href="structiVFS.html">iVFS</a>* vfs = 0);
+00169 
+00173   ~<a class="code" href="classcsMemoryMappedIO.html">csMemoryMappedIO</a>();
+00174 
+00181   <span class="keywordtype">void</span> *GetPointer(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
+00182   
+00186   <span class="keywordtype">bool</span> IsValid();
+00187 
+00188 <span class="keyword">private</span>:
+00190   <span class="keywordtype">void</span> CachePage(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> page);
+00191 
+00193   <span class="keywordtype">bool</span> SoftMemoryMapFile(emulatedMmioInfo *platform, <span class="keywordtype">char</span> <span class="keyword">const</span> *filename);
+00194 
+00196   <span class="keywordtype">void</span> SoftUnMemoryMapFile(emulatedMmioInfo *platform);
+00197 };
+00198 
+00199 <span class="preprocessor">#endif // __CS_MEMORY_MAPPED_IO__</span>
+00200 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

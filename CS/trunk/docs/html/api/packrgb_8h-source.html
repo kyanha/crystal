@@ -107,118 +107,118 @@
 00142 
 00143 <span class="preprocessor">#endif // CS_RGBCOLOR_SANE</span>
 00144 <span class="preprocessor"></span>
-00185 <span class="preprocessor">#ifdef CS_RGBPIXEL_SANE</span>
-00186 <span class="preprocessor"></span><span class="comment">// sizeof(csRGBpixel) == 4</span>
-00187 
-00188 <span class="keyword">inline</span> <span class="keyword">const</span> uint8* <a class="code" href="group__gfx.html#a4">csPackRGBpixelToRGBA</a> (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* pixels, 
-00189                                     <span class="keywordtype">int</span> <span class="comment">/*numPixels*/</span>)
-00190 {
-00191   <span class="keywordflow">return</span> (uint8*)pixels;
-00192 }
-00193 
-00194 <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__gfx.html#a5">csDiscardPackedRGBA</a> (<span class="keyword">const</span> uint8* <span class="comment">/*rgba*/</span>) {}
-00195 
-00196 <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="group__gfx.html#a6">csUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
-00197                                                  <span class="keywordtype">int</span> <span class="comment">/*numPixels*/</span>)
-00198 {
-00199   <span class="keywordflow">return</span> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>*)rgba;
-00200 }
-00201 
-00202 <span class="keyword">inline</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="group__gfx.html#a7">csCopyUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
-00203                                                <span class="keywordtype">int</span> numPixels)
-00204 {
-00205   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>[numPixels];
-00206   memcpy ((<span class="keywordtype">void</span>*)buf, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)rgba, numPixels*  <span class="keyword">sizeof</span>(csRGBpixel));
-00207   <span class="keywordflow">return</span> buf;
-00208 }
-00209 
-00210 <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__gfx.html#a8">csDiscardUnpackedRGBpixel</a> (<span class="keyword">const</span> csRGBpixel* <span class="comment">/*pixels*/</span>) {}
-00211 
-00212 <span class="preprocessor">#else</span>
-00213 <span class="preprocessor"></span><span class="comment">// sizeof(csRGBpixel) != 4</span>
-00214 
-<a name="l00215"></a><a class="code" href="group__gfx.html#a4">00215</a> <span class="keyword">inline</span> <span class="keyword">const</span> uint8* <a class="code" href="group__gfx.html#a4">csPackRGBpixelToRGBA</a> (<span class="keyword">const</span> csRGBpixel* pixels, 
-00216                                           <span class="keywordtype">int</span> numPixels)
-00217 {
-00218   uint8* buf = <span class="keyword">new</span> uint8[numPixels * 4];
-00219   uint8* bufptr = buf;
-00220   <span class="keywordflow">while</span> (numPixels--)
-00221   {
-00222     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m0">red</a>;
-00223     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m1">green</a>;
-00224     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m2">blue</a>;
-00225     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m3">alpha</a>;
-00226     pixels++; 
-00227   }
-00228   <span class="keywordflow">return</span> buf;
-00229 }
-00230 
-<a name="l00231"></a><a class="code" href="group__gfx.html#a5">00231</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__gfx.html#a5">csDiscardPackedRGBA</a> (<span class="keyword">const</span> uint8* rgba) 
-00232 {
-00233   <span class="keyword">delete</span>[] rgba;
-00234 }
-00235 
-<a name="l00236"></a><a class="code" href="group__gfx.html#a6">00236</a> <span class="keyword">inline</span> <span class="keyword">const</span> csRGBpixel* <a class="code" href="group__gfx.html#a6">csUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
-00237                                                  <span class="keywordtype">int</span> numPixels)
-00238 {
-00239   csRGBpixel* buf = <span class="keyword">new</span> csRGBpixel[numPixels];
-00240   csRGBpixel* bufptr = buf;
-00241   <span class="keywordflow">while</span> (numPixels--)
-00242   {
-00243     bufptr-&gt;<a class="code" href="structcsRGBpixel.html#m0">red</a> = *rgba++;
-00244     bufptr-&gt;<a class="code" href="structcsRGBpixel.html#m1">green</a> = *rgba++;
-00245     bufptr-&gt;<a class="code" href="structcsRGBpixel.html#m2">blue</a> = *rgba++;
-00246     bufptr-&gt;<a class="code" href="structcsRGBpixel.html#m3">alpha</a> = *rgba++;
-00247     bufptr++; 
-00248   }
-00249   <span class="keywordflow">return</span> buf;
-00250 }
-00251 
-<a name="l00252"></a><a class="code" href="group__gfx.html#a7">00252</a> <span class="keyword">inline</span> csRGBpixel* <a class="code" href="group__gfx.html#a7">csCopyUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
-00253                                                <span class="keywordtype">int</span> numPixels)
-00254 {
-00255   <span class="keywordflow">return</span> (csRGBpixel*)<a class="code" href="group__gfx.html#a6">csUnpackRGBAtoRGBpixel</a> (rgba, numPixels);
-00256 }
-00257 
-<a name="l00258"></a><a class="code" href="group__gfx.html#a8">00258</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__gfx.html#a8">csDiscardUnpackedRGBpixel</a> (<span class="keyword">const</span> csRGBpixel* pixels) 
-00259 {
-00260   <span class="keyword">delete</span>[] pixels;
-00261 }
-00262 
-00263 <span class="preprocessor">#endif // CS_RGBPIXEL_SANE</span>
-00264 <span class="preprocessor"></span>
-<a name="l00274"></a><a class="code" href="group__gfx.html#a9">00274</a> <span class="keyword">inline</span> uint8* <a class="code" href="group__gfx.html#a9">csPackRGBpixelToRGB</a> (<span class="keyword">const</span> csRGBpixel* pixels, 
-00275                                    <span class="keywordtype">int</span> numPixels)
-00276 {
-00277   uint8* buf = <span class="keyword">new</span> uint8[numPixels * 3];
-00278   uint8* bufptr = buf;
-00279   <span class="keywordflow">while</span> (numPixels--)
-00280   {
-00281     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m0">red</a>;
-00282     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m1">green</a>;
-00283     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m2">blue</a>;
-00284     pixels++; 
-00285   }
-00286   <span class="keywordflow">return</span> buf;
-00287 }
-00288 
-<a name="l00298"></a><a class="code" href="group__gfx.html#a10">00298</a> <span class="keyword">inline</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* <a class="code" href="group__gfx.html#a10">csUnpackRGBAtoRGBcolor</a> (<span class="keyword">const</span> uint8* rgba, 
-00299                                            <span class="keywordtype">int</span> numPixels)
-00300 {
-00301   <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>[numPixels];
-00302   csRGBcolor* bufptr = buf;
-00303   <span class="keywordflow">while</span> (numPixels--)
-00304   {
-00305     bufptr-&gt;<a class="code" href="structcsRGBcolor.html#m0">red</a> = *rgba++;
-00306     bufptr-&gt;<a class="code" href="structcsRGBcolor.html#m1">green</a> = *rgba++;
-00307     bufptr-&gt;<a class="code" href="structcsRGBcolor.html#m2">blue</a> = *rgba++;
-00308     rgba++;
-00309     bufptr++; 
-00310   }
-00311   <span class="keywordflow">return</span> buf;
-00312 }
-00313 
-00318 <span class="preprocessor">#endif // __CSGFX_PACKRGB_H__</span>
+00186 <span class="preprocessor">#ifdef CS_RGBPIXEL_SANE</span>
+00187 <span class="preprocessor"></span><span class="comment">// sizeof(csRGBpixel) == 4</span>
+00188 
+00189 <span class="keyword">inline</span> <span class="keyword">const</span> uint8* <a class="code" href="group__gfx.html#a4">csPackRGBpixelToRGBA</a> (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* pixels, 
+00190                                     <span class="keywordtype">int</span> <span class="comment">/*numPixels*/</span>)
+00191 {
+00192   <span class="keywordflow">return</span> (uint8*)pixels;
+00193 }
+00194 
+00195 <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__gfx.html#a5">csDiscardPackedRGBA</a> (<span class="keyword">const</span> uint8* <span class="comment">/*rgba*/</span>) {}
+00196 
+00197 <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="group__gfx.html#a6">csUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
+00198                                                  <span class="keywordtype">int</span> <span class="comment">/*numPixels*/</span>)
+00199 {
+00200   <span class="keywordflow">return</span> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>*)rgba;
+00201 }
+00202 
+00203 <span class="keyword">inline</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="group__gfx.html#a7">csCopyUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
+00204                                                <span class="keywordtype">int</span> numPixels)
+00205 {
+00206   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>[numPixels];
+00207   memcpy ((<span class="keywordtype">void</span>*)buf, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)rgba, numPixels*  <span class="keyword">sizeof</span>(csRGBpixel));
+00208   <span class="keywordflow">return</span> buf;
+00209 }
+00210 
+00211 <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__gfx.html#a8">csDiscardUnpackedRGBpixel</a> (<span class="keyword">const</span> csRGBpixel* <span class="comment">/*pixels*/</span>) {}
+00212 
+00213 <span class="preprocessor">#else</span>
+00214 <span class="preprocessor"></span><span class="comment">// sizeof(csRGBpixel) != 4</span>
+00215 
+<a name="l00216"></a><a class="code" href="group__gfx.html#a4">00216</a> <span class="keyword">inline</span> <span class="keyword">const</span> uint8* <a class="code" href="group__gfx.html#a4">csPackRGBpixelToRGBA</a> (<span class="keyword">const</span> csRGBpixel* pixels, 
+00217                                           <span class="keywordtype">int</span> numPixels)
+00218 {
+00219   uint8* buf = <span class="keyword">new</span> uint8[numPixels * 4];
+00220   uint8* bufptr = buf;
+00221   <span class="keywordflow">while</span> (numPixels--)
+00222   {
+00223     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m0">red</a>;
+00224     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m1">green</a>;
+00225     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m2">blue</a>;
+00226     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m3">alpha</a>;
+00227     pixels++; 
+00228   }
+00229   <span class="keywordflow">return</span> buf;
+00230 }
+00231 
+<a name="l00232"></a><a class="code" href="group__gfx.html#a5">00232</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__gfx.html#a5">csDiscardPackedRGBA</a> (<span class="keyword">const</span> uint8* rgba) 
+00233 {
+00234   <span class="keyword">delete</span>[] rgba;
+00235 }
+00236 
+<a name="l00237"></a><a class="code" href="group__gfx.html#a6">00237</a> <span class="keyword">inline</span> <span class="keyword">const</span> csRGBpixel* <a class="code" href="group__gfx.html#a6">csUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
+00238                                                  <span class="keywordtype">int</span> numPixels)
+00239 {
+00240   csRGBpixel* buf = <span class="keyword">new</span> csRGBpixel[numPixels];
+00241   csRGBpixel* bufptr = buf;
+00242   <span class="keywordflow">while</span> (numPixels--)
+00243   {
+00244     bufptr-&gt;<a class="code" href="structcsRGBpixel.html#m0">red</a> = *rgba++;
+00245     bufptr-&gt;<a class="code" href="structcsRGBpixel.html#m1">green</a> = *rgba++;
+00246     bufptr-&gt;<a class="code" href="structcsRGBpixel.html#m2">blue</a> = *rgba++;
+00247     bufptr-&gt;<a class="code" href="structcsRGBpixel.html#m3">alpha</a> = *rgba++;
+00248     bufptr++; 
+00249   }
+00250   <span class="keywordflow">return</span> buf;
+00251 }
+00252 
+<a name="l00253"></a><a class="code" href="group__gfx.html#a7">00253</a> <span class="keyword">inline</span> csRGBpixel* <a class="code" href="group__gfx.html#a7">csCopyUnpackRGBAtoRGBpixel</a> (<span class="keyword">const</span> uint8* rgba, 
+00254                                                <span class="keywordtype">int</span> numPixels)
+00255 {
+00256   <span class="keywordflow">return</span> (csRGBpixel*)<a class="code" href="group__gfx.html#a6">csUnpackRGBAtoRGBpixel</a> (rgba, numPixels);
+00257 }
+00258 
+<a name="l00259"></a><a class="code" href="group__gfx.html#a8">00259</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__gfx.html#a8">csDiscardUnpackedRGBpixel</a> (<span class="keyword">const</span> csRGBpixel* pixels) 
+00260 {
+00261   <span class="keyword">delete</span>[] pixels;
+00262 }
+00263 
+00264 <span class="preprocessor">#endif // CS_RGBPIXEL_SANE</span>
+00265 <span class="preprocessor"></span>
+<a name="l00275"></a><a class="code" href="group__gfx.html#a9">00275</a> <span class="keyword">inline</span> uint8* <a class="code" href="group__gfx.html#a9">csPackRGBpixelToRGB</a> (<span class="keyword">const</span> csRGBpixel* pixels, 
+00276                                    <span class="keywordtype">int</span> numPixels)
+00277 {
+00278   uint8* buf = <span class="keyword">new</span> uint8[numPixels * 3];
+00279   uint8* bufptr = buf;
+00280   <span class="keywordflow">while</span> (numPixels--)
+00281   {
+00282     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m0">red</a>;
+00283     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m1">green</a>;
+00284     *bufptr++ = pixels-&gt;<a class="code" href="structcsRGBpixel.html#m2">blue</a>;
+00285     pixels++; 
+00286   }
+00287   <span class="keywordflow">return</span> buf;
+00288 }
+00289 
+<a name="l00299"></a><a class="code" href="group__gfx.html#a10">00299</a> <span class="keyword">inline</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* <a class="code" href="group__gfx.html#a10">csUnpackRGBAtoRGBcolor</a> (<span class="keyword">const</span> uint8* rgba, 
+00300                                            <span class="keywordtype">int</span> numPixels)
+00301 {
+00302   <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* buf = <span class="keyword">new</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>[numPixels];
+00303   csRGBcolor* bufptr = buf;
+00304   <span class="keywordflow">while</span> (numPixels--)
+00305   {
+00306     bufptr-&gt;<a class="code" href="structcsRGBcolor.html#m0">red</a> = *rgba++;
+00307     bufptr-&gt;<a class="code" href="structcsRGBcolor.html#m1">green</a> = *rgba++;
+00308     bufptr-&gt;<a class="code" href="structcsRGBcolor.html#m2">blue</a> = *rgba++;
+00309     rgba++;
+00310     bufptr++; 
+00311   }
+00312   <span class="keywordflow">return</span> buf;
+00313 }
+00314 
+00319 <span class="preprocessor">#endif // __CSGFX_PACKRGB_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

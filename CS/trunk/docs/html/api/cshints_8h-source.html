@@ -62,40 +62,41 @@
 00066 <span class="preprocessor"></span>
 <a name="l00072"></a><a class="code" href="classcsHintManager.html">00072</a> <span class="keyword">class </span>CS_CSWS_EXPORT csHintManager : <span class="keyword">public</span> <a class="code" href="classcsArray.html">csArray</a>&lt;void*&gt;
 00073 {
-00075   <span class="keyword">struct </span>HintStore
-00076   {
-00078     <a class="code" href="classcsComponent.html">csComponent</a> *comp;
-00080     <span class="keywordtype">char</span> text [1];
-00081   };
-00082 
-00084   <a class="code" href="classcsApp.html">csApp</a> *app;
-00086   <a class="code" href="group__util.html#a11">csTicks</a> time;
-00088   <a class="code" href="group__util.html#a11">csTicks</a> timeout;
-00090   <a class="code" href="structiFont.html">iFont</a> *font;
-00092   <span class="keywordtype">int</span> fontsize;
-00094   <span class="keywordtype">bool</span> check;
-00095 
-00096 <span class="keyword">public</span>:
-00098   csHintManager (<a class="code" href="classcsApp.html">csApp</a> *iApp);
-00100   ~csHintManager ();
-00102   <span class="keywordtype">void</span> FreeAll ();
-00104   <span class="keywordtype">void</span> FreeItem (<span class="keywordtype">void</span>* Item);
-00106   <span class="keyword">static</span> <span class="keywordtype">int</span> Compare (<span class="keywordtype">void</span>* <span class="keyword">const</span>&amp; Item1, <span class="keywordtype">void</span>* <span class="keyword">const</span>&amp; Item2);
-00108   <span class="keyword">static</span> <span class="keywordtype">int</span> CompareKey (<span class="keywordtype">void</span>* <span class="keyword">const</span>&amp; Item, <a class="code" href="classcsComponent.html">csComponent</a>* <span class="keyword">const</span>&amp; key);
-00110   <span class="keyword">static</span> <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;void*,csComponent*&gt;</a> KeyCmp(<a class="code" href="classcsComponent.html">csComponent</a>* c)
-<a name="l00111"></a><a class="code" href="classcsHintManager.html#d2">00111</a>   { <span class="keywordflow">return</span> <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;void*,csComponent*&gt;</a>(c, CompareKey); }
-00113   <span class="keywordtype">void</span> Add (<span class="keyword">const</span> <span class="keywordtype">char</span> *iText, <a class="code" href="classcsComponent.html">csComponent</a> *iComp);
-00115   <span class="keywordtype">void</span> Remove (<a class="code" href="classcsComponent.html">csComponent</a> *iComp);
-00117   <span class="keywordtype">void</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
-00119   <span class="keywordtype">void</span> SetTimeout (<a class="code" href="group__util.html#a11">csTicks</a> iTimeout)
-<a name="l00120"></a><a class="code" href="classcsHintManager.html#a7">00120</a>   { timeout = iTimeout; }
-00122   <span class="keywordtype">void</span> SetFont (<a class="code" href="structiFont.html">iFont</a> *iNewFont, <span class="keywordtype">int</span> iSize);
-00123 
-00124 <span class="keyword">private</span>:
-00126   <span class="keyword">static</span> <span class="keywordtype">bool</span> do_checkhint (<a class="code" href="classcsComponent.html">csComponent</a> *comp, <span class="keywordtype">void</span> *data);
-00127 };
-00128 
-00131 <span class="preprocessor">#endif // __CS_CSHINTS_H__</span>
+00074 <span class="keyword">private</span>:
+00078   <span class="keyword">struct </span>HintStore
+00079   {
+00083     <a class="code" href="classcsComponent.html">csComponent</a> *comp;
+00087     <span class="keywordtype">char</span> text [1];
+00088   };
+00089 
+00091   <a class="code" href="classcsApp.html">csApp</a> *app;
+00093   <a class="code" href="group__util.html#a11">csTicks</a> time;
+00095   <a class="code" href="group__util.html#a11">csTicks</a> timeout;
+00097   <a class="code" href="structiFont.html">iFont</a> *font;
+00099   <span class="keywordtype">int</span> fontsize;
+00101   <span class="keywordtype">bool</span> check;
+00102 
+00103 <span class="keyword">public</span>:
+00105   csHintManager (<a class="code" href="classcsApp.html">csApp</a> *iApp);
+00107   ~csHintManager ();
+00109   <span class="keywordtype">void</span> FreeAll ();
+00111   <span class="keywordtype">void</span> FreeItem (<span class="keywordtype">void</span>* Item);
+00113   <span class="keyword">static</span> <span class="keywordtype">int</span> Compare (<span class="keywordtype">void</span>* <span class="keyword">const</span>&amp; Item1, <span class="keywordtype">void</span>* <span class="keyword">const</span>&amp; Item2);
+00115   <span class="keyword">static</span> <span class="keywordtype">int</span> CompareKey (<span class="keywordtype">void</span>* <span class="keyword">const</span>&amp; Item, <a class="code" href="classcsComponent.html">csComponent</a>* <span class="keyword">const</span>&amp; key);
+<a name="l00117"></a><a class="code" href="classcsHintManager.html#d2">00117</a>   <span class="keyword">static</span> <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;void*,csComponent*&gt;</a> KeyCmp(<a class="code" href="classcsComponent.html">csComponent</a>* c)
+00118   { <span class="keywordflow">return</span> <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;void*,csComponent*&gt;</a>(c, CompareKey); }
+00120   <span class="keywordtype">void</span> Add (<span class="keyword">const</span> <span class="keywordtype">char</span> *iText, <a class="code" href="classcsComponent.html">csComponent</a> *iComp);
+00122   <span class="keywordtype">void</span> Remove (<a class="code" href="classcsComponent.html">csComponent</a> *iComp);
+00124   <span class="keywordtype">void</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
+<a name="l00126"></a><a class="code" href="classcsHintManager.html#a7">00126</a>   <span class="keywordtype">void</span> SetTimeout (<a class="code" href="group__util.html#a11">csTicks</a> iTimeout)
+00127   { timeout = iTimeout; }
+00129   <span class="keywordtype">void</span> SetFont (<a class="code" href="structiFont.html">iFont</a> *iNewFont, <span class="keywordtype">int</span> iSize);
+00130 
+00131 <span class="keyword">private</span>:
+00135   <span class="keyword">static</span> <span class="keywordtype">bool</span> do_checkhint (<a class="code" href="classcsComponent.html">csComponent</a> *comp, <span class="keywordtype">void</span> *data);
+00136 };
+00137 
+00140 <span class="preprocessor">#endif // __CS_CSHINTS_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
