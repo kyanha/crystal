@@ -422,6 +422,10 @@ SOURCE=..\..\libs\csutil\utiltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\verbosity.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\vfscache.cpp
 # End Source File
 # Begin Source File
@@ -899,6 +903,10 @@ SOURCE=..\..\libs\csutil\..\..\include\csutil\util.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\..\..\include\csutil\utiltest.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\..\..\include\csutil\verbosity.h
 # End Source File
 # Begin Source File
 
