@@ -82,7 +82,7 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Create a base material that can be used to give to the texture manager.</em> <a href="#a23"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="structiTextureWrapper.html">iTextureWrapper</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiEngine.html#a24">CreateTexture</a> (const char *name, const char *fileName, <a class="el" href="classcsColor.html">csColor</a> *transp, int flags)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Create a texture from a file.</em> <a href="#a24"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>virtual <a class="el" href="structiTextureWrapper.html">iTextureWrapper</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiEngine.html#a25">CreateBlackTexture</a> (const char *name, int w, int h, <a class="el" href="classcsColor.html">csColor</a> *iTransp, int iFlags)=0</td></tr>
+<tr><td nowrap align=right valign=top>virtual <a class="el" href="structiTextureWrapper.html">iTextureWrapper</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiEngine.html#a25">CreateBlackTexture</a> (const char *name, int w, int h, <a class="el" href="classcsColor.html">csColor</a> *transp, int flags)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Create a black texture.</em> <a href="#a25"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>virtual <a class="el" href="structiMaterialWrapper.html">iMaterialWrapper</a> *&nbsp;</td><td valign=bottom><a class="el" href="structiEngine.html#a26">CreateMaterial</a> (const char *name, <a class="el" href="structiTextureWrapper.html">iTextureWrapper</a> *texture)=0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Register a material to be loaded during <a class="el" href="structiEngine.html#a1">Prepare()</a>.</em> <a href="#a26"></a><em></em></font><br><br></td></tr>
@@ -452,13 +452,13 @@ You will need to call <a class="el" href="structiMaterialWrapper.html#a6">iMater
           <td></td>
           <td></td>
           <td class="md" nowrap><a class="el" href="classcsColor.html">csColor</a> *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>iTransp</em>, </td>
+          <td class="mdname" nowrap>&nbsp; <em>transp</em>, </td>
         </tr>
         <tr>
           <td></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>iFlags</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>flags</em></td>
         </tr>
         <tr>
           <td></td>
@@ -490,7 +490,7 @@ the texture width (must be a power of 2, eg 64, 128, 256, 512...) </td></tr>
 the texture height (must be a power of 2, eg 64, 128, 256, 512...) </td></tr>
 <tr><td valign=top><em>transp</em>&nbsp;</td><td>
 pixels in the image with this key color will be considered transparent instead of being drawn </td></tr>
-<tr><td valign=top><em>iFlags</em>&nbsp;</td><td>
+<tr><td valign=top><em>flags</em>&nbsp;</td><td>
 see <a class="el" href="structiEngine.html#a24">CreateTexture()</a> </td></tr>
 </table>
 </dl><dl compact><dt><b>See also: </b></dt><dd>
@@ -717,8 +717,8 @@ Register a material to be loaded during <a class="el" href="structiEngine.html#a
 <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
 <tr><td valign=top><em>name</em>&nbsp;</td><td>
-the engine name for this material </td></tr>
-<tr><td valign=top><em>the</em>&nbsp;</td><td>
+engine name for this material </td></tr>
+<tr><td valign=top><em>texture</em>&nbsp;</td><td>
 texture to use for this material </td></tr>
 </table>
 </dl>    </td>
@@ -1182,11 +1182,15 @@ is the name of the portal container mesh to create the portal in. If the sourceS
 <tr><td valign=top><em>sourceSector</em>&nbsp;</td><td>
 is the sector where the portal container will be placed. </td></tr>
 <tr><td valign=top><em>pos</em>&nbsp;</td><td>
-is the position inside that sector. </td></tr>
+the position inside that sector. </td></tr>
 <tr><td valign=top><em>destSector</em>&nbsp;</td><td>
-is the sector where the single portal that is created inside the portal object will point too. </td></tr>
+the sector where the single portal that is created inside the portal object will point too. </td></tr>
+<tr><td valign=top><em>vertices</em>&nbsp;</td><td>
+list of vertices comprising the portal. </td></tr>
+<tr><td valign=top><em>num_vertices</em>&nbsp;</td><td>
+number of elements in 'vertices'. </td></tr>
 <tr><td valign=top><em>portal</em>&nbsp;</td><td>
-is a return value for the created portal. </td></tr>
+return value for the created portal. </td></tr>
 </table>
 </dl><dl compact><dt><b>Returns: </b></dt><dd>
 The meshwrapper on success (assign to a <a class="el" href="classcsRef.html">csRef</a>), or 0 on failure. </dl>    </td>
@@ -1261,6 +1265,10 @@ is the name of the portal container mesh to create the portal in. If the parentM
 is the mesh where the portal container will be placed as a child. </td></tr>
 <tr><td valign=top><em>destSector</em>&nbsp;</td><td>
 is the sector where the single portal that is created inside the portal object will point too. </td></tr>
+<tr><td valign=top><em>vertices</em>&nbsp;</td><td>
+list of vertices comprising the portal. </td></tr>
+<tr><td valign=top><em>num_vertices</em>&nbsp;</td><td>
+number of elements in 'vertices'. </td></tr>
 <tr><td valign=top><em>portal</em>&nbsp;</td><td>
 is a return value for the created portal. </td></tr>
 </table>
@@ -4532,8 +4540,8 @@ Calculate all lighting information.
 <p>
 Normally you shouldn't call this function directly, because it will be called by <a class="el" href="structiEngine.html#a1">Prepare()</a>. If the optional 'region' parameter is given then only lights will be recalculated for the given region. <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em>If</em>&nbsp;</td><td>
-supplied, only calculate lighting for lights and objects in the given region. </td></tr>
+<tr><td valign=top><em>region</em>&nbsp;</td><td>
+If supplied, only calculate lighting for lights and objects in the given region. </td></tr>
 <tr><td valign=top><em>meter</em>&nbsp;</td><td>
 If supplied, the meter object will be called back periodically to report the progress of engine lighting calculation. </td></tr>
 </table>

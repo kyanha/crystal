@@ -91,95 +91,95 @@
 00145     NORTHWEST = 18
 00146   };
 00147 
-00149   <span class="keyword">enum</span>  GRID_BAG_CONSTANTS_INTERNAL
-00150   {
-00151     _LEFT     = 20,
-00152     _CENTER   = 21,
-00153     _RIGHT    = 22
-00154   };
-00155 
-00157   <span class="keywordtype">bool</span> bSized;
-00159   <a class="code" href="structcsPoint.html">csPoint</a> mPrefCompSize;
-00160 };
-00161 
-<a name="l00283"></a><a class="code" href="classcsGridBagLayout.html">00283</a> <span class="keyword">class </span>CS_CSWS_EXPORT csGridBagLayout : <span class="keyword">public</span> <a class="code" href="classcsLayout2.html">csLayout2</a>
-00284 {
-00285   <span class="keyword">struct </span>CellInfo
-00286   {
-00287     <a class="code" href="classcsComponent.html">csComponent</a>* comp;
+00148   <span class="keyword">enum</span> GRID_BAG_CONSTANTS_INTERNAL
+00149   {
+00150     _LEFT     = 20,
+00151     _CENTER   = 21,
+00152     _RIGHT    = 22
+00153   };
+00154 
+00155   <span class="keywordtype">bool</span> bSized;
+00156   <a class="code" href="structcsPoint.html">csPoint</a> mPrefCompSize;
+00157 };
+00158 
+<a name="l00280"></a><a class="code" href="classcsGridBagLayout.html">00280</a> <span class="keyword">class </span>CS_CSWS_EXPORT csGridBagLayout : <span class="keyword">public</span> <a class="code" href="classcsLayout2.html">csLayout2</a>
+00281 {
+00282   <span class="keyword">struct </span>CellInfo
+00283   {
+00284     <a class="code" href="classcsComponent.html">csComponent</a>* comp;
+00285 
+00286     <span class="keywordtype">int</span> prefSize;        <span class="comment">// actually, it can be calculated on-the-fly</span>
+00287     <span class="keywordtype">int</span> prefCompSize;
 00288 
-00289     <span class="keywordtype">int</span> prefSize;        <span class="comment">// actually, it can be calculated on-the-fly</span>
-00290     <span class="keywordtype">int</span> prefCompSize;
-00291 
-00292     <span class="keywordtype">int</span> cellSpan;
-00293     <span class="keywordtype">int</span> leftInset;
-00294     <span class="keywordtype">int</span> rightInset;
-00295     <span class="keywordtype">int</span> pad;
-00296     <span class="keywordtype">int</span> fill;
-00297     <span class="keywordtype">int</span> anchor;
+00289     <span class="keywordtype">int</span> cellSpan;
+00290     <span class="keywordtype">int</span> leftInset;
+00291     <span class="keywordtype">int</span> rightInset;
+00292     <span class="keywordtype">int</span> pad;
+00293     <span class="keywordtype">int</span> fill;
+00294     <span class="keywordtype">int</span> anchor;
+00295 
+00296     <span class="keywordtype">float</span> extraSpace;
+00297     <span class="keywordtype">float</span> weight;
 00298 
-00299     <span class="keywordtype">float</span> extraSpace;
-00300     <span class="keywordtype">float</span> weight;
-00301 
-00302     <span class="keywordtype">int</span> finalSize;
-00303     <span class="keywordtype">int</span> finalPos;
-00304     <span class="keywordtype">int</span> finalCompSize;
-00305     <span class="keywordtype">int</span> finalCompPos;
-00306   };
-00307 
-00308   <span class="keyword">struct </span>CellHolder
-00309   {
-00310     <a class="code" href="classcsGridBagConstraint.html">csGridBagConstraint</a>* constr;
-00311     <span class="keywordtype">float</span> weightx;
-00312     <span class="keywordtype">float</span> weighty;
-00313 
-00314     <span class="keywordtype">int</span> gridwidth;
-00315     <span class="keywordtype">int</span> gridheight;
-00316     <span class="keywordtype">int</span> actualWidth;
-00317     <span class="keywordtype">int</span> actualHeight;
-00318 
-00319     <span class="keywordtype">bool</span> isFirstCellForComp;
-00320     <span class="keywordtype">int</span> x, y;
-00321   };
-00322 
-00323   <span class="keyword">typedef</span> <a class="code" href="classcsPDelArray.html">csPDelArray&lt;CellHolder&gt;</a> <a class="code" href="classcsPDelArray.html">CellHolderArrayT</a>;
-00324 
-00325  <span class="keyword">public</span>:
-00326   csGridBagLayout (<a class="code" href="classcsComponent.html">csComponent</a> *pParent);
-00327   ~csGridBagLayout ();
-00328 
-00329   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsLayout.html#a2">RemoveLayoutComponent</a> (<a class="code" href="classcsComponent.html">csComponent</a>* comp);
-00330   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsLayout.html#a3">SuggestSize</a> (<span class="keywordtype">int</span> &amp;sugw, <span class="keywordtype">int</span> &amp;sugh);
-00331   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsLayout.html#a4">LayoutContainer</a> ();
-00332 
-00333   <span class="keyword">virtual</span> <span class="keywordtype">void</span> MaximumLayoutSize (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h);
-00334   <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetLayoutAlignmentX ();
-00335   <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetLayoutAlignmentY ();
-00336 
-<a name="l00337"></a><a class="code" href="classcsGridBagLayout.html#m0">00337</a>   <a class="code" href="classcsGridBagConstraint.html">csGridBagConstraint</a> c;
-00338 
-00339 <span class="keyword">protected</span>:
-00340   <span class="keywordtype">int</span> CalcPrefSize (CellInfo* cells, <span class="keywordtype">int</span> xCnt, <span class="keywordtype">int</span> yCnt, <span class="keywordtype">int</span> _arrayWidth);
-00341   <span class="keywordtype">void</span> LayoutCells (CellInfo* cells, <span class="keywordtype">int</span> xCnt, <span class="keywordtype">int</span> yCnt,
-00342                     <span class="keywordtype">int</span> outterSize, <span class="keywordtype">int</span> outterPos, <span class="keywordtype">int</span> _arrayWidth );
-00343 
-00344   <span class="keywordtype">void</span> InitializeCellArray (CellInfo* cells, <span class="keywordtype">int</span> size);
-00345   <span class="keywordtype">void</span> InitCellFromHolder (CellHolder&amp; holder);
-00346   <span class="keywordtype">void</span> CreateMatrix ();
-00347   <span class="keywordtype">long</span> GetCellCode (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y);
-00348   <span class="keywordtype">void</span> CleanupConstraints ();
-00349   <span class="keywordtype">void</span> ClearCachedData ();
-00350   <span class="keywordtype">bool</span> HasCashedInfo ();
-00351   <span class="keywordtype">void</span> SetComponentLocations ();
-00352 
-00353 <span class="keyword">protected</span>:
-00354   CellInfo* mpHorizCellInfos;
-00355   CellInfo* mpVertCellInfos;
-00356   <span class="keywordtype">int</span> mColCount;
-00357   <span class="keywordtype">int</span> mRowCount;
-00358 };
-00359 
-00362 <span class="preprocessor">#endif // __CS_CSGRIDBAGLAYOUT_H__</span>
+00299     <span class="keywordtype">int</span> finalSize;
+00300     <span class="keywordtype">int</span> finalPos;
+00301     <span class="keywordtype">int</span> finalCompSize;
+00302     <span class="keywordtype">int</span> finalCompPos;
+00303   };
+00304 
+00305   <span class="keyword">struct </span>CellHolder
+00306   {
+00307     <a class="code" href="classcsGridBagConstraint.html">csGridBagConstraint</a>* constr;
+00308     <span class="keywordtype">float</span> weightx;
+00309     <span class="keywordtype">float</span> weighty;
+00310 
+00311     <span class="keywordtype">int</span> gridwidth;
+00312     <span class="keywordtype">int</span> gridheight;
+00313     <span class="keywordtype">int</span> actualWidth;
+00314     <span class="keywordtype">int</span> actualHeight;
+00315 
+00316     <span class="keywordtype">bool</span> isFirstCellForComp;
+00317     <span class="keywordtype">int</span> x, y;
+00318   };
+00319 
+00320   <span class="keyword">typedef</span> <a class="code" href="classcsPDelArray.html">csPDelArray&lt;CellHolder&gt;</a> <a class="code" href="classcsPDelArray.html">CellHolderArrayT</a>;
+00321 
+00322  <span class="keyword">public</span>:
+00323   csGridBagLayout (<a class="code" href="classcsComponent.html">csComponent</a> *pParent);
+00324   ~csGridBagLayout ();
+00325 
+00326   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsLayout.html#a2">RemoveLayoutComponent</a> (<a class="code" href="classcsComponent.html">csComponent</a>* comp);
+00327   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsLayout.html#a3">SuggestSize</a> (<span class="keywordtype">int</span> &amp;sugw, <span class="keywordtype">int</span> &amp;sugh);
+00328   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsLayout.html#a4">LayoutContainer</a> ();
+00329 
+00330   <span class="keyword">virtual</span> <span class="keywordtype">void</span> MaximumLayoutSize (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h);
+00331   <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetLayoutAlignmentX ();
+00332   <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetLayoutAlignmentY ();
+00333 
+<a name="l00334"></a><a class="code" href="classcsGridBagLayout.html#m0">00334</a>   <a class="code" href="classcsGridBagConstraint.html">csGridBagConstraint</a> c;
+00335 
+00336 <span class="keyword">protected</span>:
+00337   <span class="keywordtype">int</span> CalcPrefSize (CellInfo* cells, <span class="keywordtype">int</span> xCnt, <span class="keywordtype">int</span> yCnt, <span class="keywordtype">int</span> _arrayWidth);
+00338   <span class="keywordtype">void</span> LayoutCells (CellInfo* cells, <span class="keywordtype">int</span> xCnt, <span class="keywordtype">int</span> yCnt,
+00339                     <span class="keywordtype">int</span> outterSize, <span class="keywordtype">int</span> outterPos, <span class="keywordtype">int</span> _arrayWidth );
+00340 
+00341   <span class="keywordtype">void</span> InitializeCellArray (CellInfo* cells, <span class="keywordtype">int</span> size);
+00342   <span class="keywordtype">void</span> InitCellFromHolder (CellHolder&amp; holder);
+00343   <span class="keywordtype">void</span> CreateMatrix ();
+00344   <span class="keywordtype">long</span> GetCellCode (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y);
+00345   <span class="keywordtype">void</span> CleanupConstraints ();
+00346   <span class="keywordtype">void</span> ClearCachedData ();
+00347   <span class="keywordtype">bool</span> HasCashedInfo ();
+00348   <span class="keywordtype">void</span> SetComponentLocations ();
+00349 
+00350 <span class="keyword">protected</span>:
+00351   CellInfo* mpHorizCellInfos;
+00352   CellInfo* mpVertCellInfos;
+00353   <span class="keywordtype">int</span> mColCount;
+00354   <span class="keywordtype">int</span> mRowCount;
+00355 };
+00356 
+00359 <span class="preprocessor">#endif // __CS_CSGRIDBAGLAYOUT_H__</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>

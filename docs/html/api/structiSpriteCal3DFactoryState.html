@@ -209,10 +209,10 @@ This adds a mesh and one of its morph target to the given morph animation.
 <table border=0 cellspacing=2 cellpadding=0>
 <tr><td valign=top><em>morphanimation_index</em>&nbsp;</td><td>
 The index of the morph animation. </td></tr>
-<tr><td valign=top><em>mesh_index</em>&nbsp;</td><td>
-The index of the mesh. </td></tr>
-<tr><td valign=top><em>morphtarget_index</em>&nbsp;</td><td>
-The index of the morph target of the mesh.</td></tr>
+<tr><td valign=top><em>mesh_name</em>&nbsp;</td><td>
+The name of the mesh. </td></tr>
+<tr><td valign=top><em>morphtarget_name</em>&nbsp;</td><td>
+The name of the morph target of the mesh.</td></tr>
 </table>
 </dl><dl compact><dt><b>Returns: </b></dt><dd>
 True if successfull. </dl>    </td>
@@ -674,8 +674,12 @@ Returns the xml name of the morph animation at a certain index in the array.
 <p>
 Returns the number of morph targets of a mesh.
 <p>
-<dl compact><dt><b>m mesh_id The id of the mesh.</b></dt><dd>
- </dl><dl compact><dt><b>Returns: </b></dt><dd>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>mesh_id</em>&nbsp;</td><td>
+The id of the mesh.</td></tr>
+</table>
+</dl><dl compact><dt><b>Returns: </b></dt><dd>
 The number of morph targets of a mesh. -1 if something went wrong. </dl>    </td>
   </tr>
 </table>
@@ -868,6 +872,8 @@ This loads the supplied file as one animation action for the sprite.
 The ref to the vfs plugin used when loading the anim file </td></tr>
 <tr><td valign=top><em>filename</em>&nbsp;</td><td>
 The VFS path to the anim file. </td></tr>
+<tr><td valign=top><em>name</em>&nbsp;</td><td>
+The animation's name. </td></tr>
 <tr><td valign=top><em>type</em>&nbsp;</td><td>
 The type of anim this file represents. </td></tr>
 <tr><td valign=top><em>base_velocity</em>&nbsp;</td><td>
@@ -879,7 +885,11 @@ Same thing for max velocity for this anim to be blended in. </td></tr>
 <tr><td valign=top><em>min_interval</em>&nbsp;</td><td>
 When the anim of type "idle" is playing, the model will randomly choose override actions to play every so often to enhance the realism of the idle. (Thus a "standing" creature might shift his feet or scratch his nose every 30 seconds or so.) This param is the minimum time between these overrides. </td></tr>
 <tr><td valign=top><em>max_interval</em>&nbsp;</td><td>
-Max interval between these override idle actions. The model will randomly choose a time between min and max. @idle_pct For anims of type action, if the model is idling it will randomly choose among these based on the idle_pct weights specified here. This param should total 100 across all anims for the model if used. @lock This specifies whether the animation is to be locked on last frame or not. If not locked, the action will return to the base keyframe when complete. If locked, the action will stay in the final keyframe position until cleared. (This is usually for anims like "death".) </td></tr>
+Max interval between these override idle actions. The model will randomly choose a time between min and max. </td></tr>
+<tr><td valign=top><em>idle_pct</em>&nbsp;</td><td>
+For anims of type action, if the model is idling it will randomly choose among these based on the idle_pct weights specified here. This param should total 100 across all anims for the model if used. </td></tr>
+<tr><td valign=top><em>lock</em>&nbsp;</td><td>
+This specifies whether the animation is to be locked on last frame or not. If not locked, the action will return to the base keyframe when complete. If locked, the action will stay in the final keyframe position until cleared. (This is usually for anims like "death".) </td></tr>
 </table>
 </dl>    </td>
   </tr>
@@ -993,6 +1003,8 @@ This adds a mesh as a morph target of another mesh.
 <p>
 <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>vfs</em>&nbsp;</td><td>
+The VFS object where `filename' resides. </td></tr>
 <tr><td valign=top><em>mesh_index</em>&nbsp;</td><td>
 The index of the mesh we are going to add a morph target to. </td></tr>
 <tr><td valign=top><em>filename</em>&nbsp;</td><td>
