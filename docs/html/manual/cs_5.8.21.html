@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Create Your Own Plugin</TITLE>
+<TITLE>Crystal Space: HOWTO Setting the CRYSTAL environment variable</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Create Your Own Plugin">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Create Your Own Plugin">
+<META NAME="description" CONTENT="Crystal Space: HOWTO Setting the CRYSTAL environment variable">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO Setting the CRYSTAL environment variable">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -36,527 +36,127 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.21 Create Your Own Plugin </H3>
+<H3> 5.8.21 Setting the CRYSTAL environment variable </H3>
 <!--docid::SEC5.8.21::-->
 <P>
 
-<EM>Written by Jorrit Tyberghein, <A HREF="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</A> and
-Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
-</P><P>
-
-Making a plugin in Crystal Space is not very hard but nevertheless
-there are still a few issues that are often forgotten. Here in this
-article we show you how you can write a simple plugin and use
-it in your application.
+This section describes how to set the `<SAMP>CRYSTAL</SAMP>' environment variable under
+a variety of operating systems.
 </P><P>
 
 <A NAME="SEC_1"></A>
-<H4> Defining your Plugin API </H4>
+<H4> Windows 95/98/ME </H4>
 <!--docid::SEC_1::-->
 <P>
 
-The first thing that you need to do when making a plugin is to define the
-API for it.  The API is what your application is going to use to talk
-to the plugin.  It is the interface to the plugin so it is very important to
-get this right.  In the Crystal Space framework the Shared Class Facility
-(see section <A HREF="cs_6.2.html#SEC6.2">6.2 Shared Class Facility (SCF)</A>) is used to define the API.  With this facility you create an
-abstract interface containing only the methods from the API.  An abstract
-class in C++ means that all methods are pure virtual.  This means that no
-implementation is given; only method declarations.  The implementation will
-come later in the code of the plugin.
+First, locate the file `<TT>autoexec.bat</TT>'.  This can be found on your system
+drive i.e. the `<TT>C:\</TT>' drive most commonly.  Open the file with Notepad.
+Insert the following, making sure to change the string to correspond to the
+location of the `<TT>CS</TT>' directory on your computer.
 </P><P>
 
-This concept is completely analogous to the Java interface mechanism.  The
-advantage of using this paradigm is that you have a clear separation between
-the API and the implementation.  This allows one to easily replace an
-implementation of some API or even provide multiple implementations (for
-example, the software and OpenGL renderers are two implementations of the same
-3D rendering API).
-</P><P>
-
-Here is the API definition for our sample plugin:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#ifndef __GAME_MYAPI_H__
-#define __GAME_MYAPI_H__
-
-#include &#60;csutil/scf.h&#62;
-
-class csVector3;
-
-SCF_VERSION (iMyApi, 0, 0, 1);
-
-/**
- * This is the API for our plugin. It is recommended
- * that you use better comments than this one in a
- * real situation.
- */
-struct iMyApi : public iBase
-{
-/// Do something.
-virtual void DoSomething (int param, const csVector3&#38;) = 0;
-/// Get something.
-virtual int GetSomething () const = 0;
-};
-
-#endif // __GAME_MYAPI_H__
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>SET CRYSTAL=C:\projects\CS
 </pre></td></tr></table></P><P>
 
-The above text should be put in a header file. Let's put it in
-`<TT>myapi.h</TT>'.
+After adding the above simply click <EM>File</EM> and <EM>Save</EM>.  Close Notepad
+and reboot your computer.
 </P><P>
-
-First we include `<TT>csutil/scf.h</TT>'. This is a Crystal Space header
-for SCF which we need to get the definition of `<SAMP>iBase</SAMP>' and the
-definition of the <CODE>SCF_VERSION()</CODE> macro.
-</P><P>
-
-Then we declare `<SAMP>csVector3</SAMP>' as a class. We do this so that we
-can later use `<SAMP>csVector3</SAMP>' as a parameter in one of the API methods.
-We do not need the complete definition of `<SAMP>csVector3</SAMP>' since we
-are going to define the method so that it passes the vector by
-reference.
-</P><P>
-
-After this we use the <CODE>SCF_VERSION()</CODE> macro to define the version
-of this interface. This versioning can be used to query for
-specific versions of an interface. This can be useful later when you
-want to extend the API without breaking existing apps. The version
-has three parts: major, minor, and micro.
-</P><P>
-
-Finally we define the API by making a structure that inherits from
-`<SAMP>iBase</SAMP>'.  We use `<SAMP>struct</SAMP>' instead of `<SAMP>class</SAMP>' simply because, for
-structures, the default visibility is `<SAMP>public</SAMP>' instead of `<SAMP>private</SAMP>'
-as for classes.  This is just a convenience.  There is no other difference
-between a `<SAMP>struct</SAMP>' or a `<SAMP>class</SAMP>' in C++.
-</P><P>
-
-The name `<SAMP>iMyApi</SAMP>' is not random.  Crystal Space uses this naming
-convention (starting a name with `<SAMP>i</SAMP>') for SCF interfaces so that it
-is easy to see that they refer to SCF interfaces.
-</P><P>
-
-We inherit from `<SAMP>iBase</SAMP>' because it is the basis of all SCF
-interfaces.  All SCF interfaces must inherit from `<SAMP>iBase</SAMP>' either
-directly or indirectly.  This will ensure that we have reference counting (more
-on that later) and also takes care of the other internal SCF issues.
-</P><P>
-
-In that structure we define two methods: <CODE>DoSomething()</CODE> and
-<CODE>GetSomething()</CODE>. Note that every method is defined as follows:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>virtual <small>...</small> = 0;
-</pre></td></tr></table></P><P>
-
-The `<SAMP>= 0</SAMP>' means that we will not give an implementation here. The
-implementation will be provided by the plugin (see later).
-</P><P>
-
-Note that it is good practice to use `<SAMP>const</SAMP>' wherever applicable.  In the
-declaration of <CODE>GetSomething()</CODE> we added `<SAMP>const</SAMP>' at the end to
-indicate that this method will not change the object.  This is useful
-for a number of reasons:
-</P><P>
-
-<UL>
-<LI>
-It serves as documentation for the API reader.
-<LI>
-A good compiler might be able to do some optimizations if it knows that the
-method will not modify the object.
-</UL>
-<P>
 
 <A NAME="SEC_2"></A>
-<H4> Creating the Plugin Implementation (header) </H4>
+<H4> Windows NT4/2000/XP </H4>
 <!--docid::SEC_2::-->
 <P>
 
-After you defined the API for your plugin it is now time to actually
-make the plugin implementation. First you define a header called
-`<TT>myplug.h</TT>' with the following contents:
+The instructions for NT based Windows system may vary slightly but is
+essentially the same for adding a new environment variable to a system.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#ifndef __GAME_MYPLUG_H__
-#define __GAME_MYPLUG_H__
-
-#include &#60;iutil/comp.h&#62;
-#include &#60;csgeom/vector3.h&#62;
-#include &#60;myapi.h&#62;
-
-struct iObjectRegistry;
-
-/**
-* This is the implementation for our API and
-* also the implementation of the plugin.
-*/
-class MyPlugin : public iMyApi
-{
-private:
-  iObjectRegistry* object_reg;
-  csVector3 store_v;
-
-public:
-  SCF_DECLARE_IBASE;
-
-  MyPlugin (iBase* parent);
-  virtual ~MyPlugin ();
-  bool Initialize (iObjectRegistry*);
-
-  virtual void DoSomething (int param, const csVector3&#38;);
-  virtual int GetSomething () const;
-
-  struct Component : public iComponent
-  {
-    SCF_DECLARE_EMBEDDED_IBASE (MyPlugin);
-    virtual bool Initialize (iObjectRegistry* r)
-      { return scfParent-&#62;Initialize (r); }
-  } scfiComponent;
-};
-
-#endif // __GAME_MYPLUG_H__
-</pre></td></tr></table></P><P>
-
-This requires a little explanation.  The Crystal Space plugin framework
-requires that every <EM>named</EM> SCF class which will be requested by name
-from a plugin module via the Crystal Space plugin manager/loader must
-implement the `<SAMP>iComponent</SAMP>' interface.  This interface has a single method,
-<CODE>Initialize()</CODE>, with which the class will be initialized after it is
-instantiated.  This gives the instance a chance to perform various
-initialization operations and it also provides the instance with a pointer to
-the global object registry.
+First, open the <EM>Control Panel</EM>.  Now locate the <EM>System</EM> utility and
+click on the icon.  You will now be presented with a dialog box.  Click on the
+<EM>Advanced</EM> tab, then on the button <EM>Environment Variables</EM>.
 </P><P>
 
-But, our plugin also needs to implement its own native `<SAMP>iMyApi</SAMP>' interface.
-So here is a situation where the same class needs to implement two interfaces
-at the same time.  There are basically two ways to do this: multiple
-inheritance, or via use of an embedded SCF class.  We use the second
-technique here since it tends to be more portable and works better with older
-compilers which may have trouble supporting multiple inheritance.
+The <EM>Environment Variables</EM> dialog box should now be visible.  You should
+notice that there are two sections for adding environment variables, <EM>User</EM>
+and <EM>System</EM>.  We classify `<SAMP>CRYSTAL</SAMP>' as a system variable but adding
+it as a user variable will work just as well.
 </P><P>
 
-In the example above the class `<SAMP>MyPlugin</SAMP>' inherits from
-`<SAMP>iMyApi</SAMP>'. The methods from `<SAMP>iMyApi</SAMP>' are implemented directly in
-`<SAMP>MyPlugin</SAMP>'. To do that, the method declarations from `<SAMP>iMyApi</SAMP>' are
-copied to `<SAMP>MyPlugin</SAMP>' except that the `<SAMP>= 0</SAMP>' is removed. To indicate
-that this class represents an implementation of an SCF interface,
-we additionally need the <CODE>SCF_DECLARE_IBASE()</CODE> macro. This macro
-will take care of declaring the <CODE>DecRef()</CODE> and <CODE>IncRef()</CODE> functions
-which handle reference counting. In addition the macro also
-declares <CODE>QueryInterface()</CODE> so that it is possible to request
-other interfaces (like `<SAMP>iComponent)</SAMP>' from this class. You don't need
-to worry much about this.
+To create the `<SAMP>CRYSTAL</SAMP>' environment variable first click on the <EM>New</EM>
+button.  You will be presented with a dialog for inserting the necessary
+information.  In the text box <EM>Variable name</EM> insert `<SAMP>CRYSTAL</SAMP>' and in
+the <EM>Variable value</EM> text box type the path to your `<SAMP>CS</SAMP>' dir (i.e.
+`<SAMP>C:\projects\CS</SAMP>').
 </P><P>
 
-Note that `<SAMP>MyPlugin</SAMP>' needs a constructor that accepts an `<SAMP>iBase*</SAMP>'
-parameter. Otherwise SCF will not be able to intantiate this class.
+Now hit the <EM>Ok</EM> buttons until you are back at the <EM>Control Panel</EM>.
 </P><P>
 
-To implement `<SAMP>iComponent</SAMP>' we add an inner class called `<SAMP>Component</SAMP>'.
-This new class will inherit directly from `<SAMP>iComponent</SAMP>' which allows
-`<SAMP>MyPlugin</SAMP>' to implement `<SAMP>iComponent</SAMP>' indirectly.  Since this is an
-embedded interface we now need the <CODE>SCF_DECLARE_EMBEDDED_IBASE()</CODE> macro.
-This macro takes care of the fact that this interface actually belongs to the
-parent class (which is given as a parameter).  One thing it does is declare a
-variable of type `<SAMP>MyPlugin</SAMP>' which is called `<SAMP>scfParent</SAMP>'.  Through
-that variable the method implementations of the embedded interface can access
-the main class.  After declaring the class `<SAMP>Component</SAMP>' we immediately
-create an instance of this called `<SAMP>scfiComponent</SAMP>'.  This name is not
-chosen at random. It is composed of the token `<SAMP>scf</SAMP>' followed by the name
-of the SCF interface which this embedded object implements.  The
-<CODE>SCF_IMPLEMENTS_EMBEDDED_INTERFACE()</CODE> macro (see below) expects the name
-to be composed in this fashion.
-</P><P>
-
-Sometimes embedded classes are also made friend of the main
-class so that they can access the private information. In this case
-that is not needed. The only thing that `<SAMP>Component</SAMP>' has is an
-<CODE>Initialize()</CODE> method which immediately transfers control to
-the parent's public <CODE>Initialize()</CODE> method.
+If you have any command lines sessions open you will need to close and restart
+them for the variable to take effect.  Rebooting should not be necessary.
 </P><P>
 
 <A NAME="SEC_3"></A>
-<H4> Creating the Plugin Implementation (source) </H4>
+<H4> Unix/Linux </H4>
 <!--docid::SEC_3::-->
 <P>
 
-Now we create the main source file containing the implementation
-of our plugin. Let's call this `<TT>myplug.cpp</TT>':
+There are several ways of setting environment variables in Unix.  There are two
+common types of Unix shells, the Bourne shell (and its variants, such as Bash),
+and the C-shell (and its variants, such as Tcsh).  Setting environment
+variables in Bourne shells is done in two steps.  First set the variable, and
+then export it so that it is available to programs run by the shell.  For
+example, if Crystal Space is installed in `<TT>/usr/local/CS</TT>' the correct
+commands would be:
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;cssysdef.h&#62;
-#include &#60;myplug.h&#62;
-#include &#60;iutil/objreg.h&#62;
-#include &#60;iutil/plugin.h&#62;
-
-CS_IMPLEMENT_PLUGIN
-
-SCF_IMPLEMENT_IBASE (MyPlugin)
-  SCF_IMPLEMENTS_INTERFACE (iMyApi)
-  SCF_IMPLEMENTS_EMBEDDED_INTERFACE (iComponent)
-SCF_IMPLEMENT_IBASE_END
-
-SCF_IMPLEMENT_EMBEDDED_IBASE (MyPlugin::Component)
-  SCF_IMPLEMENTS_INTERFACE (iComponent)
-SCF_IMPLEMENT_EMBEDDED_IBASE_END
-
-SCF_IMPLEMENT_FACTORY (MyPlugin)
-
-MyPlugin::MyPlugin (iBase* parent) : object_reg(0)
-{
-  SCF_CONSTRUCT_IBASE (parent);
-  SCF_CONSTRUCT_EMBEDDED_IBASE (scfiComponent);
-}
-
-MyPlugin::~MyPlugin ()
-{
-  SCF_DESTRUCT_EMBEDDED_IBASE (scfiComponent);
-  SCF_DESTRUCT_IBASE ();
-}
-
-bool MyPlugin::Initialize (iObjectRegistry* r)
-{
-  object_reg = r;
-  return true;
-}
-
-void MyPlugin::DoSomething (int param, const csVector3&#38; v)
-{
-  // Just some behavior.
-  if (param == 1)
-    store_v = v;
-  else
-    store_v = -v;
-}
-
-int MyPlugin::GetSomething () const
-{
-  return (int)store_v.x + (int)store_v.y + (int)store_v.z;
-}
-
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>CRYSTAL="/usr/local/CS"
+export CRYSTAL
 </pre></td></tr></table></P><P>
 
-The first macro is <CODE>CS_IMPLEMENT_PLUGIN()</CODE>. This indicates to the
-Crystal Space framework that this module will end up as a plugin
-(as opposed to an application or library). On some platforms this
-actually makes a difference; on others it does not.  For best portability,
-you should use this macro in exactly one C++ file within each plugin
-module.
+Some Bourne shells (such as Bash) allow the two steps to be combined, so that
+the following single command may also work:
 </P><P>
 
-The <CODE>SCF_IMPLEMENT_IBASE()</CODE> describes what interfaces the class
-`<SAMP>MyPlugin</SAMP>' implements.  This section says that `<SAMP>MyPlugin</SAMP>' implements
-`<SAMP>iMyApi</SAMP>' directly and `<SAMP>iComponent</SAMP>' through embedding.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>export CRYSTAL="/usr/local/CS"
+</pre></td></tr></table></P><P>
+
+For C-shell, you instead use the `<SAMP>setenv</SAMP>' command.  For example:
 </P><P>
 
-The <CODE>SCF_IMPLEMENT_EMBEDDED_IBASE()</CODE> lists the interfaces
-implemented by the class `<SAMP>MyPlugin::Component</SAMP>' (the embedded class).
-In this case, `<SAMP>MyPlugin::Component</SAMP>' implements only `<SAMP>iComponent</SAMP>'.
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>setenv CRYSTAL "/usr/local/CS"
+</pre></td></tr></table></P><P>
+
+If you do not want to type these commands each time you start up a shell, you
+should insert them into one of the shell startup files that are automatically
+invoked when the shell launches.  For Bourne shell, you can place the commands
+in a file named `<TT>.profile</TT>' in your home directory.  Bash users can insert
+them into the file `<TT>.bash_profile</TT>', or alternately `<TT>/etc/profile</TT>' if
+you want to set the `<SAMP>CRYSTAL</SAMP>' environment variable for all users.  C-shell
+users can insert the `<SAMP>setenv</SAMP>' command into the `<TT>.cshrc</TT>' file in their
+home directory (or, the file `<TT>.tcshrc</TT>' for Tcsh users).
 </P><P>
 
-It is important to correctly use the above macros.  These macros ensure
-that the implementation for <CODE>IncRef()</CODE>, <CODE>DecRef()</CODE>, and
-<CODE>QueryInterface()</CODE> are provided by your custom class.
-</P><P>
-
-The <CODE>SCF_IMPLEMENT_FACTORY()</CODE> says that C++ class `<SAMP>MyPlugin</SAMP>'
-represents an SCF factory which allows SCF to instantiate objects of
-this class.  In addition to some other administrative tasks, this macro defines
-a function capable of instantiating an object of class `<SAMP>MyPlugin</SAMP>'.  Note
-that one plugin module can in fact define several distinct named SCF
-classes.  In that case you need multiple <CODE>SCF_IMPLEMENT_FACTORY()</CODE> lines;
-one for each exported SCF class.
-</P><P>
-
-<CODE>SCF_IMPLEMENT_<small>...</small>_IBASE()</CODE> and <CODE>SCF_IMPLEMENT_FACTORY()</CODE>) are
-general purpose SCF macros. As such they are not specifically related to
-plugin modules; but rather help to define SCF classes.
-</P><P>
-
-In the constructor of `<SAMP>MyPlugin</SAMP>' you must call
-<CODE>SCF_CONSTRUCT_IBASE()</CODE> for the main interface and
-<CODE>SCF_CONSTRUCT_EMBEDDED_IBASE()</CODE> for each embedded interface.  These
-macros will ensure that the object is initialized correctly (i.e. reference
-count set to 1, and so on).  Likewise, in the destructor, you must call the
-corresponding <CODE>SCF_DESTRUCT_IBASE()</CODE> and
-<CODE>SCF_DESTRUCT_EMBEDDED_IBASE()</CODE> macros.
-</P><P>
-
-The rest of the plugin is very straightforward. It is important
-to realize that you should do most initialization of the plugin
-in the <CODE>Initialize()</CODE> function and not in the constructor. The reason
-for this is that, at construction time, you cannot depend on the entire
-Crystal Space framework being ready. Also when <CODE>Initialize()</CODE> is
-called you get a pointer to the object registry which is essential
-for locating other modules and plugins loaded by the Crystal Space
-framework.
+If you are modifying a global startup file, such as `<TT>/etc/profile</TT>', be
+sure to read the comments in the since some configuration tools of Linux
+distributions override the settings.  In this case the distributions often
+created other files that are called automatically and are not touched by the
+configuration tools.
 </P><P>
 
 <A NAME="SEC_4"></A>
-<H4> Telling SCF About Your Plugin </H4>
+<H4> MacOS/X  </H4>
 <!--docid::SEC_4::-->
 <P>
 
-SCF discovers plugins automatically and dynamically.  It determines which
-plugin modules implement which SCF classes by consulting meta-information
-associated with each plugin.  The meta-information file for your plugin must
-have the same basename as your built plugin module, but with extension
-`<TT>.csplugin</TT>'.  For instance, if the example plugin is built with the name
-`<TT>myplugin.dll</TT>' (Windows) or `<TT>myplugin.so</TT>' (Unix), then the associated
-meta-information file should be named `<TT>myplugin.csplugin</TT>'. At build-time,
-the meta-information may be embedded directly into the plugin module if
-supported by the platform and if embedding is enabled. If not, then then the
-`<TT>cs.plugin</TT>' file will be laid down alongside the built plugin module.
-</P><P>
-
-The meta-information file is a structured XML-format document, and can
-contain any information relevant to the plugin module; it is not limited only
-to SCF information.  SCF itself expects to find a node named
-<CODE>&#60;scf&#62;</CODE>, which contains SCF-related information about the plugin
-module.
-</P><P>
-
-The `<TT>myplugin.csplugin</TT>' meta-information file for our example plugin
-module might look like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;?xml version="1.0"?&#62;
-&#60;!-- myplugin.csplugin --&#62;
-&#60;plugin&#62;
-  &#60;scf&#62;
-    &#60;classes&#62;
-      &#60;class&#62;
-        &#60;name&#62;crystalspace.mygame.myplugin&#60;/name&#62;
-        &#60;implementation&#62;MyPlugin&#60;/implementation&#62;
-        &#60;description&#62;My Special Game Plugin&#60;/description&#62;
-        &#60;requires&#62;
-          &#60;class&#62;crystalspace.graphics3d.&#60;/class&#62;
-        &#60;/requires&#62;
-      &#60;/class&#62;
-    &#60;/classes&#62;
-  &#60;/scf&#62;
-&#60;/plugin&#62;
-</pre></td></tr></table></P><P>
-
-Each named SCF class exported by the plugin should be presented in a
-<CODE>&#60;class&#62;</CODE> node within the <CODE>&#60;classes&#62;</CODE> group.  Each class has a
-<CODE>&#60;name&#62;</CODE>, which is the SCF name of the class; an
-<CODE>&#60;implementation&#62;</CODE>, which is the name of the C++ class implementing the
-SCF class; a <CODE>&#60;description&#62;</CODE>; and optionally a <CODE>&#60;requires&#62;</CODE>
-node, which lists the other SCF classes upon which this class depends.
-Any number of classes may appear in the <CODE>&#60;requires&#62;</CODE> group.  If your
-plugin depends only upon a certain type of class, rather than a specific
-SCF class, then you list only the prefix portion of the desired class
-type, as shown in this example (where we desire any 3D renderer).
-</P><P>
-
-<A NAME="SEC_5"></A>
-<H4> Compiling the Plugin </H4>
-<!--docid::SEC_5::-->
-<P>
-
-Depending on the development tools that you use, you should refer to one of the
-HOWTO's on the subject of building an external Crystal Space module.
-</P><P>
-
-<UL>
-<LI>
-<A HREF="cs_5.8.15.html#SEC5.8.15">5.8.15 Creating an External Crystal Space Application</A>
-<LI>
-<A HREF="cs_5.8.17.html#SEC5.8.17">5.8.17 Creating an External MSVC 7 Application</A>
-<LI>
-<A HREF="cs_5.8.16.html#SEC5.8.16">5.8.16 Creating an External MSVC 6 Application</A>
-<LI>
-<A HREF="cs_5.8.18.html#SEC5.8.18">5.8.18 Creating an External Application using KDevelop</A>
-</UL>
-<P>
-
-<A NAME="SEC_6"></A>
-<H4> Loading the Plugin in Your Application </H4>
-<!--docid::SEC_6::-->
-<P>
-
-First, include the header defining the API of the plugin:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;myapi.h&#62;
-</pre></td></tr></table></P><P>
-
-Do <EM>not</EM> include the `<TT>myplug.h</TT>' header file since it is
-implementation specific and you should not use the implementation of the plugin
-directly. Doing this invalidates the entire reason to use plugins in the first
-place.
-</P><P>
-
-To load the plugin there are a few possibilities. First, you
-can load the plugin manually using <CODE>CS_LOAD_PLUGIN()</CODE> like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>csRef&#60;iPluginManager&#62; plugin_mgr = 
-  CS_QUERY_REGISTRY (object_reg, iPluginManager);
-csRef&#60;iMyApi&#62; myapi = CS_LOAD_PLUGIN (plugin_mgr,
-  "crystalspace.mygame.myplugin", iMyApi);        
-if (myapi.IsValid())
-{
-  <small>...</small>
-}
-</pre></td></tr></table></P><P>
-
-This will get the plugin manager from the object registry.  This is the module
-that is responsible for loading and unloading plugins.  The code then uses the
-plugin manager to load your plugin. Note that this can fail. You should always
-check the returned value to see if it is valid.
-</P><P>
-
-Another way to load the plugin is through <CODE>RequestPlugins()</CODE>, which
-is called at initialization time:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (!csInitializer::RequestPlugins (object_reg,
-  CS_REQUEST_VFS,
-  CS_REQUEST_SOFTWARE3D,
-  CS_REQUEST_ENGINE,
-  <small>...</small>
-  CS_REQUEST_PLUGIN("crystalspace.mygame.myplugin", iMyApi),
-  CS_REQUEST_END))
-{
-  <small>...</small>
-}
-<small>...</small>
-
-csRef&#60;iMyApi&#62; myapi = CS_QUERY_REGISTRY (object_reg, iMyApi);
-</pre></td></tr></table></P><P>
-
-This way has several advantages.  First, it allows the user to override your
-plugin at the command line or in the configuration file (if your program has
-one).  In cases where there are multiple implementations for the same API
-this can be an important consideration.  It is by doing this, for example, that
-it is possible to switch between software and OpenGL renderers with the
-command-line `<SAMP>--video=</SAMP>' option, or via configuration file.
-</P><P>
-
-Secondly it registers the plugin with the object registry so that
-it is easier to find your module later. This also allows other plugins
-to find your plugin by doing a query on the object registry.
-</P><P>
-
-<A NAME="SEC_7"></A>
-<H4> Using the Plugin in Your Application </H4>
-<!--docid::SEC_7::-->
-<P>
-
-After loading the plugin you can use the plugin simply by
-calling the methods defined in the API:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>myapi-&#62;DoSomething (1, csVector3 (2, 3, 4));
-printf ("%d\n", myapi-&#62;GetSomething ());
-</pre></td></tr></table></P><P>
-
-This should print out 9.
-<A NAME="HOWTO Simple Map Example"></A>
+Rather than setting an environment variable, MacOS/X users should set up the
+`<SAMP>CrystalSpaceRoot</SAMP>' default in order to allow Crystal Space applications to
+be launched from the Finder.  As with the `<SAMP>CRYSTAL</SAMP>' environment variable,
+the `<SAMP>CrystalSpaceRoot</SAMP>' default should point at the root of the Crystal
+Space directory hierarchy, such as `<SAMP>/usr/local/CS</SAMP>'.  See the build
+instructions for MacOS/X for a more detailed description.
+See section <A HREF="cs_2.4.5.4.html#SEC2.4.5.4">2.4.5.4 Using Crystal Space</A>.
+<A NAME="HOWTO Create Your Own Plugin"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.20.html#SEC5.8.20"> &lt; </A>]</TD>

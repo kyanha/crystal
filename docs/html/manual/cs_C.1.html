@@ -1212,6 +1212,31 @@ The semantics of the parameters have changed, too; notably, instead of
 specifying the byte size of a buffer, the element count is specified. The same
 change has been made to <CODE>CopyToBuffer()</CODE> (which has been renamed to 
 <CODE>CopyInto()</CODE> to enforce human correction of the parameters).
+</P><P>
+
+<A NAME="SEC_34"></A>
+<H3> `<SAMP>iLight</SAMP>' Changes </H3>
+<!--docid::SEC_34::-->
+<P>
+
+The `<SAMP>iLight</SAMP>' and its implementation (`<SAMP>csLight</SAMP>') have been extended to
+also handle spot- and directional-lights. Note that the accual computation of
+lighting does not yet support these, however the engine can now store and
+handle the required data.
+</P><P>
+
+There have also been two smaller changes to the interface to make it more
+coherent. The influence radius have been renamed <EM>cut-off</EM> distance, and
+thus the methods <CODE>GetInfluenceRadius()</CODE> and <CODE>SetInfluenceRadius()</CODE>
+have been renamed accordingly to <CODE>GetCutoffDistance()</CODE> and
+<CODE>SetCutoffDistance()</CODE>, respectively.  Also, <CODE>SetAttenuation()</CODE> has
+been renamed to <CODE>SetAttenuationMode()</CODE> in order to avoid confusion with
+other similary named methods.  For the <CODE>CS_ATTN_LINEAR</CODE> attenuation type
+the specification has changed slightly. As a default, the distance where light
+goes out is same as the cut-off distance, but this can be changed by altering
+the first attenuation constant. See comments in
+`<TT>CS/include/iengine/light.h</TT>' for exact details of the different
+attenuation modes.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>

@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: HOWTO Create RPM</TITLE>
+<TITLE>Crystal Space: HOWTO CS Project DevCPP</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: HOWTO Create RPM">
-<META NAME="keywords" CONTENT="Crystal Space: HOWTO Create RPM">
+<META NAME="description" CONTENT="Crystal Space: HOWTO CS Project DevCPP">
+<META NAME="keywords" CONTENT="Crystal Space: HOWTO CS Project DevCPP">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -36,125 +36,204 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 5.8.19 Creating Crystal Space RPM's </H3>
+<H3> 5.8.19 Creating an External Crystal Space Application Using Dev-CPP </H3>
 <!--docid::SEC5.8.19::-->
 <P>
 
+This section describes how you can use Dev-CPP to compile external
+applications using Crystal Space and CEL. Crystal Space does not presently
+have project files for Dev-CPP so, at this time, you will need to use
+MinGW and MSYS to build Crystal Space itself, however, for your own
+external applications, you can use Dev-CPP.
+</P><P>
+
 <A NAME="SEC_1"></A>
-<H4> Creating Crystal Space RPM Packages </H4>
+<H4> External Application Requirements  </H4>
 <!--docid::SEC_1::-->
 <P>
 
-It is possible to build Crystal Space RPM's. This is useful if you want to
-distribute pre-built Crystal Space packages, or if you want to install Crystal
-Space on your machine using the normal package management facilities of your
-host.  For this purpose, `<TT>CS/scripts/rpm/cs.spec</TT>' file is provided with
-Crystal Space.
+First, configure, build, and install Crystal Space (and optionally CEL)
+using MinGW and MSYS.
+</P><P>
+
+If you installed Crystal Space in a non-standard location you probably
+will need to set the `<SAMP>CRYSTAL</SAMP>' environment variable to point at the
+the location where the SDK was installed.  For instance, if you specified
+`<SAMP>--prefix=/site/sdk</SAMP>' when configuring Crystal Space, then you will need to
+set `<SAMP>CRYSTAL</SAMP>' to `<TT>/site/sdk</TT>'.
+</P><P>
+
+If you plan to use CEL then you also must set the `<SAMP>CEL</SAMP>' environment
+variable.
 </P><P>
 
 <A NAME="SEC_2"></A>
-<H4> Configure to Build RPM Packages </H4>
+<H4> Specifying the Compiler </H4>
 <!--docid::SEC_2::-->
 <P>
 
-Building RPM packages involves a few settings, which are covered at
-the following page:
-</P><P>
-
-<A HREF="http://qa.mandrakesoft.com/twiki/bin/view/Main/RpmHowTo#Preliminary_tasks">http://qa.mandrakesoft.com/twiki/bin/view/Main/RpmHowTo#Preliminary_tasks</A>
+Chances are, the compiler which is provided by Dev-CPP is not compatible
+with the built Crystal Space since Crystal Space is compiled using the version
+of MingW which you have installed.  The easiest way to avoid problems with
+compiler versions here is to define a new compiler in Dev-CPP. To do so,
+invoke the <EM>Tools/Compiler Options</EM> menu item and click on the green
+`<SAMP>+</SAMP>' icon to add a compiler called MinGW. Make sure that that compiler is
+active in the popup and then switch to the <EM>Directories</EM> tab.  On that tab
+change the path of everything to point to your MinGW installation rather than
+the Dev-CPP versions. In the <EM>Binaries</EM> sub-tab you have to add both
+the `<TT>bin</TT>' directory of MinGW, as well as the the `<TT>bin</TT>' directory of
+MSYS (and remove the path to Dev-CPP). In the <EM>Libraries</EM>
+sub-tab add the path to the MinGW `<TT>lib</TT>' directory, and do the same for the
+<EM>C Includes</EM> sub-tab. In the <EM>C++ Includes</EM> tab you have to add the
+correct `<SAMP>C++</SAMP>' MinGW `<TT>include</TT>' directory.  If this is done correctly
+you should now be able to use the compiler from MinGW.
 </P><P>
 
 <A NAME="SEC_3"></A>
-<H4> Building Your Own RPM's From Source Archive </H4>
+<H4> Creating a New Project </H4>
 <!--docid::SEC_3::-->
 <P>
 
-Once you've set your system to build RPM packages as a regular user,
-perform the following steps:
+Select the `<SAMP>File/New/Project</SAMP>' menu and choose `<SAMP>Console Application</SAMP>'
+as the project type. Select an appropriate name and make sure `<SAMP>C++</SAMP>' is
+selected as the language. Save the project file in an appropriate directory.
+It is best to make a new directory for the project file and all other files
+related to the project.
 </P><P>
 
-<OL>
-<LI>
-Get Crystal Space sources archive (see section <A HREF="cs_1.6.html#SEC1.6">1.6 Where to Get Crystal Space</A>) and put it in your
-`<TT>rpm/SOURCES/</TT>' directory.
+If this is done succesfully Dev-CPP will open with an unsaved
+`<TT>main.cpp</TT>'. Don't save it yet.
+</P><P>
+
+<A NAME="SEC_4"></A>
+<H4> Project Settings </H4>
+<!--docid::SEC_4::-->
 <P>
 
-<LI>
-Go into your `<TT>rpm/SPECS</TT>' directory.
-<P>
+First, you need to prepare various settings in the project. Select the
+<EM>Project/Project Options</EM> menu.  Navigate to the <EM>Compiler</EM> tab and
+switch to the new MinGW compiler which you defined earlier.  Next, go to the
+<EM>Parameters</EM> tab where you need to add the Crystal Space (and optionally
+CEL) libraries with which you want to link. For Crystal Space the
+libraries will be `<TT>$CRYSTAL/lib</TT>' if you installed the SDK. If not,
+then you can access the directories from the build location with a path that
+looks somewhat like this (assuming that `<SAMP>CRYSTAL</SAMP>' points at the build
+directory): `<TT>$CRYSTAL/out/msysx86/optimize/libs/cstool</TT>'.  Substitute
+`<TT>debug</TT>' for `<TT>optimize</TT>' if you build the project in debug mode.
+</P><P>
 
-<LI>
-Extract the `<TT>CS/scripts/rpm/cs.spec</TT>' file, and put it in your
-`<TT>rpm/SPECS/</TT>' directory.
-<P>
+If you installed the Crystal Space SDK, add the following libraries:
+</P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>cd /home/user/rpm/SPECS
-tar xvjf /home/user/rpm/SOURCES/cs-current-snapshot.tar.bz2 \
-     CS/scripts/rpm/cs.spec
-mv CS/scripts/rpm/cs.spec /home/user/rpm/SPECS
-rm -rf CS
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$CRYSTAL/lib/libcsgeom.a
+$CRYSTAL/lib/libcsgfx.a
+$CRYSTAL/lib/libcstool.a
+$CRYSTAL/lib/libcsutil.a
+$CRYSTAL/lib/libcsgeom.a
+$CRYSTAL/lib/libcsgfx.a
+$CRYSTAL/lib/libcstool.a
+$CRYSTAL/lib/libcsutil.a
 </pre></td></tr></table></P><P>
 
-<LI>
-Verify the source archive filename you downloaded is set in accordance with the
-filename part of the URL in `<SAMP>Source:</SAMP>' line of `<TT>cs.spec</TT>',
-otherwise <CODE>rpm</CODE> won't be able to do his job.
-<P>
-
-<LI>
-Build the RPM's.
-<P>
-
-<UL>
-<LI>
-To build binary RPM's only, issue <CODE>rpm -bb cs.spec</CODE>
-<LI>
-To build source RPM's as well, issue <CODE>rpm -ba cs.spec</CODE>
-</UL>
-</OL>
-<P>
-
-Build options are specified by using <CODE>--with</CODE> switch. The following
-values are supported:
+If you did not install the SDK, then add the directories from the build
+directory (subtituting `<SAMP>debug</SAMP>' for `<SAMP>optimize</SAMP>' if you build in debug
+mode):
 </P><P>
 
-<UL>
-<LI>
-<CODE>--with perl</CODE> to build with Perl support.
-<LI>
-<CODE>--with debug</CODE> to build with debuggin support. Note, however, that
-this option may be useless since <CODE>rpm</CODE> strips files before packaging.
-</UL>
-<P>
-
-So, to build all packages, with Perl support, use:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>rpm -ba cs.spec --with perl
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$CRYSTAL/out/msysx86/debug/libs/csgeom/libcsgeom.a
+$CRYSTAL/out/msysx86/debug/libs/csgfx/libcsgfx.a
+$CRYSTAL/out/msysx86/debug/libs/cstool/libcstool.a
+$CRYSTAL/out/msysx86/debug/libs/csutil/libcsutil.a
+$CRYSTAL/out/msysx86/debug/libs/csgeom/libcsgeom.a
+$CRYSTAL/out/msysx86/debug/libs/csgfx/libcsgfx.a
+$CRYSTAL/out/msysx86/debug/libs/cstool/libcstool.a
+$CRYSTAL/out/msysx86/debug/libs/csutil/libcsutil.a
 </pre></td></tr></table></P><P>
 
-The binary RPM's should be under `<TT>rpm/RPMS/</TT>', and the source RPM
-in `<TT>rpm/SRPMS/</TT>'.
+It is important to add the libraries two times! The reason for this
+is to make sure everything is loaded when there are dependencies
+between the libraries themselves.
 </P><P>
 
-The process creates four Crystal Space binary RPM packages:
+Finally, you have to add the GDI library. This can be found
+in the MinGW directory. For example:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>../MinGW-3.1.0-1/lib/libgdi32.a
+</pre></td></tr></table></P><P>
+
+Next, proceed to the <EM>Directories</EM> tab. In that tab switch to the
+<EM>Include Directories</EM> sub-tab and add the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>$CRYSTAL\include\crystalspace
+$CRYSTAL\include
+src
+</pre></td></tr></table></P><P>
+
+The `<TT>src</TT>' directory is where you will put all source code for your
+project. (This is optional, of course.)
+</P><P>
+
+This concludes the project settings.
+</P><P>
+
+<A NAME="SEC_5"></A>
+<H4> Additional Dynamic Link Libraries </H4>
+<!--docid::SEC_5::-->
+<P>
+
+Crystal Space requires a few Dynamic Link Libraries (DLL's) so that the
+program can run. The DLL's that are required depend on what your
+application needs but they can be any of the DLL's which you find in your
+path where you installed the Crystal Space Library package for Windows (the
+`<TT>cs-win32libs</TT>' package).  Most commonly the following are at least
+required:
 </P><P>
 
 <UL>
 <LI>
-`<SAMP>crystalspace</SAMP>' base package. It provides plugins, data and configuration
-files.
+`<TT>libz-cs.dll</TT>'
 <LI>
-`<SAMP>crystalspace-devel</SAMP>' development package. It provides headers and static
-libraries needed for development.
+`<TT>libjpeg-cs.dll</TT>'
 <LI>
-`<SAMP>crystalspace-doc</SAMP>' documentation package. It provides API and user
-manual documentation in HTML format.
-<LI>
-`<SAMP>crystalspace-utils</SAMP>' utilities package. It provides executables, data
-(especially map files) and configuration files.
+`<TT>libpng-cs.dll</TT>'
 </UL>
-<A NAME="HOWTO Setting the CRYSTAL environment variable"></A>
+<P>
+
+You can either copy those dll's manually to the project folder (the place where
+the executable will reside), or you can make sure the DLL's are in a
+standard location mentioned by your `<SAMP>PATH</SAMP>' environment variable, or where
+DLL's are typically found (inside the `<TT>c:\windows</TT>' folder, for
+instance, though modification of system folders is deprecated).
+</P><P>
+
+<A NAME="SEC_6"></A>
+<H4> Getting Started </H4>
+<!--docid::SEC_6::-->
+<P>
+
+Now that the project is set up it is time to start programming.  As an example,
+replace the `<TT>main.cpp</TT>' with the one provided here:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;crystalspace.h&#62;
+#include "myapp.h"
+
+CS_IMPLEMENT_APPLICATION
+
+int main(int argc, char *argv[])
+{
+  MyApp app;
+  return app.Main (argc, argv);
+}
+</pre></td></tr></table></P><P>
+
+After this, create `<TT>myapp.h</TT>' and `<TT>myapp.cpp</TT>', which will define the
+master <CODE>MyApp</CODE> class for the application. Refer to the other tutorials in
+this manual for more information on how to proceed from this point.
+See section <A HREF="cs_5.2.html#SEC5.2">5.2 Simple Tutorial 1</A>.
+<A NAME="HOWTO Create RPM"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.8.18.html#SEC5.8.18"> &lt; </A>]</TD>
