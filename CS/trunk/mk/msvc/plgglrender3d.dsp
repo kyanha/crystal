@@ -252,10 +252,6 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_renderbuffer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\opengl\gl_txtcache.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.cpp
 # End Source File
 # End Group
@@ -273,10 +269,6 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_render3d.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\opengl\gl_renderbuffer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\opengl\gl_txtcache.h
 # End Source File
 # Begin Source File
 
