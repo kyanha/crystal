@@ -40,6 +40,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <!--docid::SEC5.8.21::-->
 <P>
 
+<EM>Written by Jorrit Tyberghein, <A HREF="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</A> and
+Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
+</P><P>
+
 Making a plugin in Crystal Space is not very hard but nevertheless
 there are still a few issues that are often forgotten. Here in this
 article we show you how you can write a simple plugin and use
@@ -90,7 +94,7 @@ SCF_VERSION (iMyApi, 0, 0, 1);
 struct iMyApi : public iBase
 {
 /// Do something.
-virtual void DoSomething (int param, const csVector3&#38; v) = 0;
+virtual void DoSomething (int param, const csVector3&#38;) = 0;
 /// Get something.
 virtual int GetSomething () const = 0;
 };
@@ -152,17 +156,17 @@ implementation will be provided by the plugin (see later).
 
 Note that it is good practice to use `<SAMP>const</SAMP>' wherever applicable.  In the
 declaration of <CODE>GetSomething()</CODE> we added `<SAMP>const</SAMP>' at the end to
-indicate that this method will not change the object.  This is useful for two
-reasons:
+indicate that this method will not change the object.  This is useful
+for a number of reasons:
 </P><P>
 
-<OL>
+<UL>
 <LI>
-It serves as documentation for the API user.
+It serves as documentation for the API reader.
 <LI>
 A good compiler might be able to do some optimizations if it knows that the
 method will not modify the object.
-</OL>
+</UL>
 <P>
 
 <A NAME="SEC_2"></A>
@@ -199,16 +203,16 @@ public:
 
   MyPlugin (iBase* parent);
   virtual ~MyPlugin ();
-  bool Initialize (iObjectRegistry* iobject_reg);
+  bool Initialize (iObjectRegistry*);
 
-  virtual void DoSomething (int param, const csVector3&#38; v);
+  virtual void DoSomething (int param, const csVector3&#38;);
   virtual int GetSomething () const;
 
   struct Component : public iComponent
   {
     SCF_DECLARE_EMBEDDED_IBASE (MyPlugin);
-    virtual bool Initialize (iObjectRegistry* object_reg)
-      { return scfParent-&#62;Initialize (object_reg); }
+    virtual bool Initialize (iObjectRegistry* r)
+      { return scfParent-&#62;Initialize (r); }
   } scfiComponent;
 };
 
@@ -217,7 +221,7 @@ public:
 
 This requires a little explanation.  The Crystal Space plugin framework
 requires that every <EM>named</EM> SCF class which will be requested by name
-from a plugin module via the Crystal Space <EM>plugin manager/loader</EM> must
+from a plugin module via the Crystal Space plugin manager/loader must
 implement the `<SAMP>iComponent</SAMP>' interface.  This interface has a single method,
 <CODE>Initialize()</CODE>, with which the class will be initialized after it is
 instantiated.  This gives the instance a chance to perform various
@@ -228,19 +232,19 @@ the global object registry.
 But, our plugin also needs to implement its own native `<SAMP>iMyApi</SAMP>' interface.
 So here is a situation where the same class needs to implement two interfaces
 at the same time.  There are basically two ways to do this: multiple
-inheritance, or via use of an embedded SCF class.  We use the second case
-here since it tends to be more portable and works better with older compilers
-which have trouble supporting multiple inheritance.
+inheritance, or via use of an embedded SCF class.  We use the second
+technique here since it tends to be more portable and works better with older
+compilers which may have trouble supporting multiple inheritance.
 </P><P>
 
 In the example above the class `<SAMP>MyPlugin</SAMP>' inherits from
 `<SAMP>iMyApi</SAMP>'. The methods from `<SAMP>iMyApi</SAMP>' are implemented directly in
-`<SAMP>MyPlugin</SAMP>'. To do that the method declarations from `<SAMP>iMyApi</SAMP>' are
+`<SAMP>MyPlugin</SAMP>'. To do that, the method declarations from `<SAMP>iMyApi</SAMP>' are
 copied to `<SAMP>MyPlugin</SAMP>' except that the `<SAMP>= 0</SAMP>' is removed. To indicate
-that this class represents an implementation of an SCF interface
+that this class represents an implementation of an SCF interface,
 we additionally need the <CODE>SCF_DECLARE_IBASE()</CODE> macro. This macro
 will take care of declaring the <CODE>DecRef()</CODE> and <CODE>IncRef()</CODE> functions
-to take care of reference counting. In addition the macro also
+which handle reference counting. In addition the macro also
 declares <CODE>QueryInterface()</CODE> so that it is possible to request
 other interfaces (like `<SAMP>iComponent)</SAMP>' from this class. You don't need
 to worry much about this.
@@ -259,15 +263,18 @@ parent class (which is given as a parameter).  One thing it does is declare a
 variable of type `<SAMP>MyPlugin</SAMP>' which is called `<SAMP>scfParent</SAMP>'.  Through
 that variable the method implementations of the embedded interface can access
 the main class.  After declaring the class `<SAMP>Component</SAMP>' we immediately
-create an instance of this called `<SAMP>scfiComponent</SAMP>'.  You can call it
-whatever you like.  This name is just a convention in Crystal Space.
+create an instance of this called `<SAMP>scfiComponent</SAMP>'.  This name is not
+chosen at random. It is composed of the token `<SAMP>scf</SAMP>' followed by the name
+of the SCF interface which this embedded object implements.  The
+<CODE>SCF_IMPLEMENTS_EMBEDDED_INTERFACE()</CODE> macro (see below) expects the name
+to be composed in this fashion.
 </P><P>
 
 Sometimes embedded classes are also made friend of the main
 class so that they can access the private information. In this case
-this is not needed. The only thing that `<SAMP>Component</SAMP>' has is an
+that is not needed. The only thing that `<SAMP>Component</SAMP>' has is an
 <CODE>Initialize()</CODE> method which immediately transfers control to
-the parent's <CODE>Initialize()</CODE> method.
+the parent's public <CODE>Initialize()</CODE> method.
 </P><P>
 
 <A NAME="SEC_3"></A>
@@ -297,11 +304,10 @@ SCF_IMPLEMENT_EMBEDDED_IBASE_END
 
 SCF_IMPLEMENT_FACTORY (MyPlugin)
 
-MyPlugin::MyPlugin (iBase* parent)
+MyPlugin::MyPlugin (iBase* parent) : object_reg(0)
 {
   SCF_CONSTRUCT_IBASE (parent);
   SCF_CONSTRUCT_EMBEDDED_IBASE (scfiComponent);
-  object_reg = 0;
 }
 
 MyPlugin::~MyPlugin ()
@@ -310,9 +316,9 @@ MyPlugin::~MyPlugin ()
   SCF_DESTRUCT_IBASE ();
 }
 
-bool MyPlugin::Initialize (iObjectRegistry* iobject_reg)
+bool MyPlugin::Initialize (iObjectRegistry* r)
 {
-  object_reg = iobject_reg;
+  object_reg = r;
   return true;
 }
 
@@ -340,17 +346,17 @@ you should use this macro in exactly one C++ file within each plugin
 module.
 </P><P>
 
-The first <CODE>SCF_IMPLEMENT_IBASE()</CODE> describes what interfaces the class
+The <CODE>SCF_IMPLEMENT_IBASE()</CODE> describes what interfaces the class
 `<SAMP>MyPlugin</SAMP>' implements.  This section says that `<SAMP>MyPlugin</SAMP>' implements
 `<SAMP>iMyApi</SAMP>' directly and `<SAMP>iComponent</SAMP>' through embedding.
 </P><P>
 
-The second <CODE>SCF_IMPLEMENT_EMBEDDED_IBASE()</CODE> lists the interfaces
+The <CODE>SCF_IMPLEMENT_EMBEDDED_IBASE()</CODE> lists the interfaces
 implemented by the class `<SAMP>MyPlugin::Component</SAMP>' (the embedded class).
-`<SAMP>MyPlugin::Component</SAMP>' only implements `<SAMP>iComponent</SAMP>'.
+In this case, `<SAMP>MyPlugin::Component</SAMP>' implements only `<SAMP>iComponent</SAMP>'.
 </P><P>
 
-It is important to correctly use the above macros.  These macros will ensure
+It is important to correctly use the above macros.  These macros ensure
 that the implementation for <CODE>IncRef()</CODE>, <CODE>DecRef()</CODE>, and
 <CODE>QueryInterface()</CODE> are provided by your custom class.
 </P><P>
@@ -359,21 +365,21 @@ The <CODE>SCF_IMPLEMENT_FACTORY()</CODE> says that C++ class `<SAMP>MyPlugin</SA
 represents an SCF factory which allows SCF to instantiate objects of
 this class.  In addition to some other administrative tasks, this macro defines
 a function capable of instantiating an object of class `<SAMP>MyPlugin</SAMP>'.  Note
-that one plugin module can in fact define several distinct SCF classes.
-In that case you need multiple <CODE>SCF_IMPLEMENT_FACTORY()</CODE> lines; one for
-each SCF class.
+that one plugin module can in fact define several distinct named SCF
+classes.  In that case you need multiple <CODE>SCF_IMPLEMENT_FACTORY()</CODE> lines;
+one for each exported SCF class.
 </P><P>
 
-<CODE>SCF_IMPLEMENT_<small>...</small>()</CODE> and <CODE>SCF_IMPLEMENT_FACTORY()</CODE>) are general
-SCF macros.  As such they are not specifically related to plugin modules;
-but rather help to define SCF classes.
+<CODE>SCF_IMPLEMENT_<small>...</small>_IBASE()</CODE> and <CODE>SCF_IMPLEMENT_FACTORY()</CODE>) are
+general purpose SCF macros. As such they are not specifically related to
+plugin modules; but rather help to define SCF classes.
 </P><P>
 
 In the constructor of `<SAMP>MyPlugin</SAMP>' you must call
 <CODE>SCF_CONSTRUCT_IBASE()</CODE> for the main interface and
 <CODE>SCF_CONSTRUCT_EMBEDDED_IBASE()</CODE> for each embedded interface.  These
 macros will ensure that the object is initialized correctly (i.e. reference
-count set to 1 and so on).  Likewise, in the destructor, you must call the
+count set to 1, and so on).  Likewise, in the destructor, you must call the
 corresponding <CODE>SCF_DESTRUCT_IBASE()</CODE> and
 <CODE>SCF_DESTRUCT_EMBEDDED_IBASE()</CODE> macros.
 </P><P>
@@ -381,14 +387,11 @@ corresponding <CODE>SCF_DESTRUCT_IBASE()</CODE> and
 The rest of the plugin is very straightforward. It is important
 to realize that you should do most initialization of the plugin
 in the <CODE>Initialize()</CODE> function and not in the constructor. The reason
-for this is that at construction time you cannot depend on the entire
+for this is that, at construction time, you cannot depend on the entire
 Crystal Space framework being ready. Also when <CODE>Initialize()</CODE> is
 called you get a pointer to the object registry which is essential
 for locating other modules and plugins loaded by the Crystal Space
 framework.
-</P><P>
-
-This should conclude the implementation of the plugin.
 </P><P>
 
 <A NAME="SEC_4"></A>
@@ -402,15 +405,21 @@ associated with each plugin.  The meta-information file for your plugin must
 have the same basename as your built plugin module, but with extension
 `<TT>.csplugin</TT>'.  For instance, if the example plugin is built with the name
 `<TT>myplugin.dll</TT>' (Windows) or `<TT>myplugin.so</TT>' (Unix), then the associated
-meta-information file should be named `<TT>myplugin.csplugin</TT>'.  The
-meta-information file is a structured XML-format document, and can contain
-any information relevant to the plugin module.  SCF expects to find a node
-named `<SAMP>scf</SAMP>', which contains SCF-related information about the plugin
+meta-information file should be named `<TT>myplugin.csplugin</TT>'. At build-time,
+the meta-information may be embedded directly into the plugin module if
+supported by the platform and if embedding is enabled. If not, then then the
+`<TT>cs.plugin</TT>' file will be laid down alongside the built plugin module.
+</P><P>
+
+The meta-information file is a structured XML-format document, and can
+contain any information relevant to the plugin module; it is not limited only
+to SCF information.  SCF itself expects to find a node named
+<CODE>&#60;scf&#62;</CODE>, which contains SCF-related information about the plugin
 module.
 </P><P>
 
-The `<TT>myplugin.csplugin</TT>' meta-information file for our example plugin module
-might look like this:
+The `<TT>myplugin.csplugin</TT>' meta-information file for our example plugin
+module might look like this:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;?xml version="1.0"?&#62;
@@ -431,7 +440,7 @@ might look like this:
 &#60;/plugin&#62;
 </pre></td></tr></table></P><P>
 
-Each SCF class exported by the plugin should be presented in a
+Each named SCF class exported by the plugin should be presented in a
 <CODE>&#60;class&#62;</CODE> node within the <CODE>&#60;classes&#62;</CODE> group.  Each class has a
 <CODE>&#60;name&#62;</CODE>, which is the SCF name of the class; an
 <CODE>&#60;implementation&#62;</CODE>, which is the name of the C++ class implementing the
@@ -448,30 +457,40 @@ type, as shown in this example (where we desire any 3D renderer).
 <!--docid::SEC_5::-->
 <P>
 
-Depending on the compiler that you use I refer you to the
-HOWTO's on the subject of compiling an external application. There
-is a template makefile provided which also works for plugins. That's
-by far the easiest way to get this compiled.
+Depending on the development tools that you use, you should refer to one of the
+HOWTO's on the subject of building an external Crystal Space module.
 </P><P>
 
+<UL>
+<LI>
+<A HREF="cs_5.8.15.html#SEC5.8.15">5.8.15 Creating an External Crystal Space Application</A>
+<LI>
+<A HREF="cs_5.8.17.html#SEC5.8.17">5.8.17 Creating an External MSVC 7 Application</A>
+<LI>
+<A HREF="cs_5.8.16.html#SEC5.8.16">5.8.16 Creating an External MSVC 6 Application</A>
+<LI>
+<A HREF="cs_5.8.18.html#SEC5.8.18">5.8.18 Creating an External Application using KDevelop</A>
+</UL>
+<P>
+
 <A NAME="SEC_6"></A>
-<H4> Loading the Plugin in your Application </H4>
+<H4> Loading the Plugin in Your Application </H4>
 <!--docid::SEC_6::-->
 <P>
 
-First include the header defining the API of the plugin:
+First, include the header defining the API of the plugin:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;myapi.h&#62;
 </pre></td></tr></table></P><P>
 
-Do <EM>not</EM> include the `<TT>myplug.h</TT>' header file! This is implementation
-specific and you should not use the implementation of the plugin
-directly. Doing this invalidates the entire reason to use plugins
-in the first place.
+Do <EM>not</EM> include the `<TT>myplug.h</TT>' header file since it is
+implementation specific and you should not use the implementation of the plugin
+directly. Doing this invalidates the entire reason to use plugins in the first
+place.
 </P><P>
 
-To load the plugin there are a few possibilities. First you
+To load the plugin there are a few possibilities. First, you
 can load the plugin manually using <CODE>CS_LOAD_PLUGIN()</CODE> like this:
 </P><P>
 
@@ -479,29 +498,29 @@ can load the plugin manually using <CODE>CS_LOAD_PLUGIN()</CODE> like this:
   CS_QUERY_REGISTRY (object_reg, iPluginManager);
 csRef&#60;iMyApi&#62; myapi = CS_LOAD_PLUGIN (plugin_mgr,
   "crystalspace.mygame.myplugin", iMyApi);        
+if (myapi.IsValid())
+{
+  <small>...</small>
+}
 </pre></td></tr></table></P><P>
 
-This will query the plugin manager from the object registry.
-This is the module that is responsible for loading and unloading
-plugins.
+This will get the plugin manager from the object registry.  This is the module
+that is responsible for loading and unloading plugins.  The code then uses the
+plugin manager to load your plugin. Note that this can fail. You should always
+check the returned value to see if it is valid.
 </P><P>
 
-Then it will use the plugin manager to load your plugin. Note that
-this can fail. You should always check the returned value to see if
-it is different from `<SAMP>0</SAMP>'.
-</P><P>
-
-Another way to load the plugin is through <CODE>RequestPlugins()</CODE> which
+Another way to load the plugin is through <CODE>RequestPlugins()</CODE>, which
 is called at initialization time:
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>if (!csInitializer::RequestPlugins (object_reg,
-     CS_REQUEST_VFS,
-     CS_REQUEST_SOFTWARE3D,
-     CS_REQUEST_ENGINE,
-     <small>...</small>
-     CS_REQUEST_PLUGIN("crystalspace.mygame.myplugin", iMyApi),
-     CS_REQUEST_END))
+  CS_REQUEST_VFS,
+  CS_REQUEST_SOFTWARE3D,
+  CS_REQUEST_ENGINE,
+  <small>...</small>
+  CS_REQUEST_PLUGIN("crystalspace.mygame.myplugin", iMyApi),
+  CS_REQUEST_END))
 {
   <small>...</small>
 }
@@ -510,17 +529,17 @@ is called at initialization time:
 csRef&#60;iMyApi&#62; myapi = CS_QUERY_REGISTRY (object_reg, iMyApi);
 </pre></td></tr></table></P><P>
 
-This way has several advantages.  First it makes sure that the user can
-override your plugin at the command line or in the configuration file (if you
-have one for your game).  In cases where there are multiple possible
-implementations for the same API this can be important.  It is by doing
-this that it is possible to switch between software and OpenGL renderers with
-the command line or via configuration file.
+This way has several advantages.  First, it allows the user to override your
+plugin at the command line or in the configuration file (if your program has
+one).  In cases where there are multiple implementations for the same API
+this can be an important consideration.  It is by doing this, for example, that
+it is possible to switch between software and OpenGL renderers with the
+command-line `<SAMP>--video=</SAMP>' option, or via configuration file.
 </P><P>
 
 Secondly it registers the plugin with the object registry so that
-it is easier to find your module later. This way other plugins
-can find your plugin by doing a query on the object registry.
+it is easier to find your module later. This also allows other plugins
+to find your plugin by doing a query on the object registry.
 </P><P>
 
 <A NAME="SEC_7"></A>
@@ -528,7 +547,7 @@ can find your plugin by doing a query on the object registry.
 <!--docid::SEC_7::-->
 <P>
 
-After loading the plugin you can use the plugin by just
+After loading the plugin you can use the plugin simply by
 calling the methods defined in the API:
 </P><P>
 
