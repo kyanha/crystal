@@ -67,7 +67,7 @@
 00055 <span class="preprocessor"></span>
 <a name="l00056"></a><a class="code" href="group__loadsave.html#a3">00056</a> <span class="preprocessor">#define CSTEX_UV_SHIFT 8 </span>
 00057 <span class="preprocessor"></span>
-00059 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiSyntaxService.html">iSyntaxService</a>, 1, 5, 0);
+00059 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiSyntaxService.html">iSyntaxService</a>, 1, 6, 0);
 00060 
 <a name="l00065"></a><a class="code" href="structiSyntaxService.html">00065</a> <span class="keyword">struct </span><a class="code" href="structiSyntaxService.html">iSyntaxService</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
 00066 {
@@ -82,38 +82,40 @@
 00098 
 00102   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a4">ParseColor</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="classcsColor.html">csColor</a> &amp;c) = 0;
 00103 
-00107   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a5">ParseMixmode</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="group__util.html#a10">uint</a> &amp;mixmode,
-00108     <span class="keywordtype">bool</span> allowFxMesh = <span class="keyword">false</span>) = 0;
-00109 
-00116   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a6">HandlePortalParameter</a> (
-00117         <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* child, <a class="code" href="structiLoaderContext.html">iLoaderContext</a>* ldr_context,
-00118         uint32 &amp;flags, <span class="keywordtype">bool</span> &amp;mirror, <span class="keywordtype">bool</span> &amp;warp, <span class="keywordtype">int</span>&amp; msv,
-00119         <a class="code" href="classcsMatrix3.html">csMatrix3</a> &amp;m, <a class="code" href="classcsVector3.html">csVector3</a> &amp;before, <a class="code" href="classcsVector3.html">csVector3</a> &amp;after,
-00120         <a class="code" href="structiString.html">iString</a>* destSector, <span class="keywordtype">bool</span>&amp; handled, <span class="keywordtype">bool</span>&amp; autoresolve) = 0;
-00121 
-00125   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a7">ParseGradient</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node,
-00126                               <a class="code" href="classcsGradient.html">csGradient</a>&amp; gradient) = 0;
-00127 
-00131   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a8">ParseShaderVar</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, 
-00132     <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>&amp; var) = 0;
-00133                             
-00137   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSyntaxService.html#a9">ReportError</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgid, <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* errornode,
-00138         <span class="keyword">const</span> <span class="keywordtype">char</span>* msg, ...) CS_GNUC_PRINTF(4,5) = 0;
-00139 
-00144   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSyntaxService.html#a10">ReportBadToken</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* badtokennode) = 0;
-00145 
-00149   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSyntaxService.html#a11">Report</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgid, <span class="keywordtype">int</span> severity, 
-00150     <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* errornode, <span class="keyword">const</span> <span class="keywordtype">char</span>* msg, ...) CS_GNUC_PRINTF(5,6) = 0;
-00151   
-00155   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a12">ParseAlphaMode</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiStringSet.html">iStringSet</a>* strings,
-00156     <a class="code" href="structcsAlphaMode.html">csAlphaMode</a>&amp; alphaMode) = 0;
-00157     
-00167   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a13">ParseZMode</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="group__gfx3d.html#a75">csZBufMode</a>&amp; zmode,
-00168     <span class="keywordtype">bool</span> allowZmesh = <span class="keyword">false</span>) = 0;
-00169 };
-00170 
-00173 <span class="preprocessor">#endif // __CS_IMAP_SYNTAXSERVICE_H__</span>
-00174 <span class="preprocessor"></span>
+00107   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a4">ParseColor</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="classcsColor4.html">csColor4</a> &amp;c) = 0;
+00108 
+00112   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a6">ParseMixmode</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="group__util.html#a10">uint</a> &amp;mixmode,
+00113     <span class="keywordtype">bool</span> allowFxMesh = <span class="keyword">false</span>) = 0;
+00114 
+00121   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a7">HandlePortalParameter</a> (
+00122         <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* child, <a class="code" href="structiLoaderContext.html">iLoaderContext</a>* ldr_context,
+00123         uint32 &amp;flags, <span class="keywordtype">bool</span> &amp;mirror, <span class="keywordtype">bool</span> &amp;warp, <span class="keywordtype">int</span>&amp; msv,
+00124         <a class="code" href="classcsMatrix3.html">csMatrix3</a> &amp;m, <a class="code" href="classcsVector3.html">csVector3</a> &amp;before, <a class="code" href="classcsVector3.html">csVector3</a> &amp;after,
+00125         <a class="code" href="structiString.html">iString</a>* destSector, <span class="keywordtype">bool</span>&amp; handled, <span class="keywordtype">bool</span>&amp; autoresolve) = 0;
+00126 
+00130   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a8">ParseGradient</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node,
+00131                               <a class="code" href="classcsGradient.html">csGradient</a>&amp; gradient) = 0;
+00132 
+00136   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a9">ParseShaderVar</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, 
+00137     <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>&amp; var) = 0;
+00138                             
+00142   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSyntaxService.html#a10">ReportError</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgid, <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* errornode,
+00143         <span class="keyword">const</span> <span class="keywordtype">char</span>* msg, ...) CS_GNUC_PRINTF(4,5) = 0;
+00144 
+00149   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSyntaxService.html#a11">ReportBadToken</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* badtokennode) = 0;
+00150 
+00154   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSyntaxService.html#a12">Report</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgid, <span class="keywordtype">int</span> severity, 
+00155     <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* errornode, <span class="keyword">const</span> <span class="keywordtype">char</span>* msg, ...) CS_GNUC_PRINTF(5,6) = 0;
+00156   
+00160   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a13">ParseAlphaMode</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiStringSet.html">iStringSet</a>* strings,
+00161     <a class="code" href="structcsAlphaMode.html">csAlphaMode</a>&amp; alphaMode) = 0;
+00162     
+00172   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a14">ParseZMode</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="group__gfx3d.html#a76">csZBufMode</a>&amp; zmode,
+00173     <span class="keywordtype">bool</span> allowZmesh = <span class="keyword">false</span>) = 0;
+00174 };
+00175 
+00178 <span class="preprocessor">#endif // __CS_IMAP_SYNTAXSERVICE_H__</span>
+00179 <span class="preprocessor"></span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
