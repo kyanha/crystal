@@ -272,6 +272,22 @@ SOURCE=..\..\plugins\video\canvas\common\cursorconvert.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\canvas\common\draw_box.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\common\draw_common.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\common\draw_line.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\common\draw_text.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\canvas\common\fontcache.h
 # End Source File
 # Begin Source File
@@ -289,6 +305,10 @@ SOURCE=..\..\plugins\video\canvas\common\scrshot.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\canvas\common\softfontcache.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\canvas\common\softfontcacheimpl.h
 # End Source File
 # End Group
 # End Target
