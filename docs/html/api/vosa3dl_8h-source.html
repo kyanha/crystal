@@ -43,33 +43,42 @@
 00025 <span class="preprocessor">#include "<a class="code" href="mesh_8h.html">iengine/mesh.h</a>"</span>
 00026 <span class="preprocessor">#include "<a class="code" href="sector_8h.html">iengine/sector.h</a>"</span>
 00027 <span class="preprocessor">#include "ivaria/dynamics.h"</span>
-00028 
-00048 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVosSector.html">iVosSector</a>, 0, 1, 1);
-00049 
-<a name="l00052"></a><a class="code" href="structiVosSector.html">00052</a> <span class="keyword">struct </span><a class="code" href="structiVosSector.html">iVosSector</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00053 {
-00059   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVosSector.html#a0">Load</a>() = 0;
-00060 
-00063   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iSector&gt;</a> <a class="code" href="structiVosSector.html#a1">GetSector</a>() = 0;
-00064 };
-00065 
-00066 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVosA3DL.html">iVosA3DL</a>, 0, 1, 1);
-00067 
-<a name="l00083"></a><a class="code" href="structiVosA3DL.html">00083</a> <span class="keyword">struct </span><a class="code" href="structiVosA3DL.html">iVosA3DL</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00084 {
-00091   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iVosSector&gt;</a> <a class="code" href="structiVosA3DL.html#a0">GetSector</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>*) = 0;
-00092 };
-00093 
-00094 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVosObject3D.html">iVosObject3D</a>, 0, 1, 1);
-00095 
-<a name="l00102"></a><a class="code" href="structiVosObject3D.html">00102</a> <span class="keyword">struct </span><a class="code" href="structiVosObject3D.html">iVosObject3D</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00103 {
-00105   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iMeshWrapper&gt;</a> <a class="code" href="structiVosObject3D.html#a0">GetMeshWrapper</a>() = 0;
-00106 
-00113   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iRigidBody&gt;</a> <a class="code" href="structiVosObject3D.html#a1">GetCollider</a>() = 0;
-00114 };
-00115 
-00116 <span class="preprocessor">#endif</span>
+00028 <span class="preprocessor">#include "csutil/hash.h"</span>
+00029 
+00050 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVosObject3D.html">iVosObject3D</a>, 0, 1, 1);
+00051 
+<a name="l00058"></a><a class="code" href="structiVosObject3D.html">00058</a> <span class="keyword">struct </span><a class="code" href="structiVosObject3D.html">iVosObject3D</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00059 {
+00061   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iMeshWrapper&gt;</a> <a class="code" href="structiVosObject3D.html#a0">GetMeshWrapper</a>() = 0;
+00062 
+00069   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iRigidBody&gt;</a> <a class="code" href="structiVosObject3D.html#a1">GetCollider</a>() = 0;
+00070 };
+00071 
+00072 
+00073 
+00074 
+00075 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVosSector.html">iVosSector</a>, 0, 1, 1);
+00076 
+<a name="l00079"></a><a class="code" href="structiVosSector.html">00079</a> <span class="keyword">struct </span><a class="code" href="structiVosSector.html">iVosSector</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00080 {
+00086   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVosSector.html#a0">Load</a>() = 0;
+00087 
+00090   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iSector&gt;</a> <a class="code" href="structiVosSector.html#a1">GetSector</a>() = 0;
+00091 
+00096   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsSet.html">csSet&lt;iVosObject3D*&gt;</a> &amp;<a class="code" href="structiVosSector.html#a2">GetObject3Ds</a>() = 0;
+00097 };
+00098 
+00099 
+00100 
+00101 
+00102 <a class="code" href="group__scf.html#a55">SCF_VERSION</a> (<a class="code" href="structiVosA3DL.html">iVosA3DL</a>, 0, 1, 1);
+00103 
+<a name="l00119"></a><a class="code" href="structiVosA3DL.html">00119</a> <span class="keyword">struct </span><a class="code" href="structiVosA3DL.html">iVosA3DL</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00120 {
+00127   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iVosSector&gt;</a> <a class="code" href="structiVosA3DL.html#a0">GetSector</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>*) = 0;
+00128 };
+00129 
+00130 <span class="preprocessor">#endif</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
