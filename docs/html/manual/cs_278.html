@@ -23,30 +23,30 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC819"></A>
+<A NAME="SEC820"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC825"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC948"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC819"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC827"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC819"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC819"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC950"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC948">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC950">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
 <H2> C.1 Release Notes from 0.98 to 1.00 </H2>
-<!--docid::SEC819::-->
+<!--docid::SEC820::-->
 <P>
 
 This section documents the major changes between versions 0.98 and 1.00 of
 Crystal Space.
 </P><P>
 
-<A NAME="SEC820"></A>
+<A NAME="SEC821"></A>
 <H3> <CODE>csArray&#60;&#62;</CODE> Index and Size Type Change </H3>
-<!--docid::SEC820::-->
+<!--docid::SEC821::-->
 <P>
 
 <CODE>csArray&#60;&#62;</CODE> has been changed to use the <CODE>size_t</CODE> instead of
@@ -63,9 +63,9 @@ caused <EM>semantics</EM> to change subtly.
 This has the greatest impact in the following areas discussed below.
 </P><P>
 
-<A NAME="SEC821"></A>
+<A NAME="SEC822"></A>
 <H4> Iterating Over <CODE>csArray&#60;&#62;</CODE> Contents </H4>
-<!--docid::SEC821::-->
+<!--docid::SEC822::-->
 <P>
 
 For this purpose, usually, `<SAMP>int</SAMP>' typed variables were used for keeping
@@ -142,9 +142,9 @@ post-decrement ensures that `<SAMP>i</SAMP>' has the expected value in the loop 
 </UL>
 <P>
 
-<A NAME="SEC822"></A>
+<A NAME="SEC823"></A>
 <H4> Searching </H4>
-<!--docid::SEC822::-->
+<!--docid::SEC823::-->
 <P>
 
 Functions like <CODE>csArray&#60;&#62;::FindSortedKey()</CODE> and <CODE>csArray&#60;&#62;::Find()</CODE>
@@ -193,9 +193,9 @@ else
 }
 </pre></td></tr></table></P><P>
 
-<A NAME="SEC823"></A>
+<A NAME="SEC824"></A>
 <H3> Texture and Material Preparation </H3>
-<!--docid::SEC823::-->
+<!--docid::SEC824::-->
 <P>
 
 Texture and material preparation is now fully automatic. It is no longer
@@ -217,9 +217,65 @@ them from your applications if you used them):
 </UL>
 <P>
 
-<A NAME="SEC824"></A>
+<A NAME="SEC825"></A>
+<H3> Input Definitions </H3>
+<!--docid::SEC825::-->
+<P>
+
+The file <CODE>inpnames.h</CODE> in <CODE>csutil</CODE> has been renamed to
+<CODE>inputdef.h</CODE> and the following functions have been removed:
+</P><P>
+
+<UL>
+<LI>
+<CODE>csTypeOfInputDef</CODE>
+<LI>
+<CODE>csParseKeyDef</CODE>
+<LI>
+<CODE>csGetKeyDesc</CODE>
+<LI>
+<CODE>csParseMouseDef</CODE>
+<LI>
+<CODE>csGetMouseDesc</CODE>
+<LI>
+<CODE>csParseJoystickDef</CODE>
+<LI>
+<CODE>csGetJoystickDesc</CODE>
+</UL>
+<P>
+
+These functions allowed you to convert a string such as <CODE>"Ctrl+A"</CODE>,
+<CODE>"JoystickX"</CODE> or <CODE>"Alt+Mouse1"</CODE> into values describing input events
+and vice versa.
+</P><P>
+
+The correct way to do this is now to use <CODE>csInputDefinition</CODE> which is
+defined in <CODE>inputdef.h</CODE>. The preferred way to convert a string to a
+definition is to construct a <CODE>csInputDefinition</CODE> from a
+<CODE>const char *</CODE>, and the preferred way to convert a definition back to a
+string (perhaps constructed some other way) is with the <CODE>ToString</CODE> method.
+</P><P>
+
+However, there are static helper methods in <CODE>csInputDefinition</CODE> which
+accept arguments in a similar way to the old functions, which perform the
+work of instantiating the object for you:
+</P><P>
+
+<UL>
+<LI>
+<CODE>csInputDefinition::ParseKey</CODE>
+<LI>
+<CODE>csInputDefinition::GetKeyString</CODE>
+<LI>
+<CODE>csInputDefinition::ParseOther</CODE>
+<LI>
+<CODE>csInputDefinition::GetOtherString</CODE>
+</UL>
+<P>
+
+<A NAME="SEC826"></A>
 <H3> Pollution Reduction </H3>
-<!--docid::SEC824::-->
+<!--docid::SEC826::-->
 <P>
 
 The following global header files have been renamed in order to avoid possible
@@ -286,14 +342,14 @@ global namespace.
 <A NAME="Release Notes 98"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC825"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC818"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC948"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC819"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_279.html#SEC827"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC819"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_277.html#SEC819"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC950"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC948">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC950">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
