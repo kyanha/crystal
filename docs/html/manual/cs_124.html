@@ -40,10 +40,9 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <!--docid::SEC295::-->
 <P>
 
-This section describes one way to use the Crystal Space development kit for
-your application without having to place your application within the Crystal
-Space source code tree.  Your application's source code can reside wherever you
-like.
+This section describes how to use the Crystal Space development kit for your
+own application.  Two methods are described: (1) using the Crystal Space
+Jam-based build system, (2) using a traditional Makefile-based build system.
 </P><P>
 
 <A NAME="SEC296"></A>
@@ -51,9 +50,28 @@ like.
 <!--docid::SEC296::-->
 <P>
 
-For this to work you need to have a sufficiently Unix-like environment.
-The environments provided by Msys/Mingw and Cygwin should work, as well.
+For these techniques to work you need to have a sufficiently Unix-like
+environment.  The environments provided by Linux, MacOS/X, Msys/Mingw, and
+Cygwin are all acceptable.
 </P><P>
+
+If you installed Crystal Space in a non-standard location, then you probably
+will also need to set the `<SAMP>CRYSTAL</SAMP>' environment variable to point at the
+the location where the SDK was installed.  For instance, if you specified
+`<SAMP>--prefix=/site/sdk</SAMP>' when configuring Crystal Space, then you will need to
+set `<SAMP>CRYSTAL</SAMP>' to `<TT>/site/sdk</TT>'.  Using the Bourne shell or compatible
+(such as Bash), for instance, you can do this with the following commands:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>CRYSTAL=/site/sdk
+export CRYSTAL
+</pre></td></tr></table></P><P>
+
+From a C-shell or compatible (such as T-csh), you can use:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>setenv CRYSTAL /site/sdk
+</pre></td></tr></table></P><P>
 
 <A NAME="SEC297"></A>
 <H4> The `<TT>cs-config</TT>' Script </H4>
@@ -62,32 +80,67 @@ The environments provided by Msys/Mingw and Cygwin should work, as well.
 
 When you build and install Crystal Space, a script named `<TT>cs-config</TT>' is
 installed along with the rest of the package.  This script provides access to
-bits of information which you need to feed to the development tools in order to
+bits of information which can be fed to the development tools in order to
 incorporate Crystal Space into your project.  For instance, if you invoke
 `<TT>cs-config</TT>' with the `<SAMP>--cxxflags</SAMP>' argument, it will return Crystal
 Space-specific C++ compiler switches with which you should invoke the C++
-compiler (in addition to whatever other switches your project requires).
-Likewise, the `<SAMP>--libs</SAMP>' argument will return the Crystal Space-specific
-linker switches and libraries with which you should like your program.
+compiler.  Likewise, the `<SAMP>--libs</SAMP>' argument will return the Crystal
+Space-specific linker switches and libraries with which you should like your
+program.
 </P><P>
 
 <A NAME="SEC298"></A>
-<H4> Makefile </H4>
+<H4> Jamtemplate </H4>
 <!--docid::SEC298::-->
 <P>
 
-In the Crystal Space directory you will find the following file:
+The Jamtemplate utility sets up a skeleton project on your behalf which is
+based upon Autoconf and the Jam build system featured in Crystal Space.  By
+utilizing these tools, your project gets many advanced build features for free.
+For instance, on MacOS/X, it will correctly create the Cocoa wrapper
+(`<TT>.app</TT>') for an application; on some platforms it knows how to embed
+plugin meta-information directly into the plugin module; and understands many
+of the familiar build targets, such as `<SAMP>all</SAMP>', `<SAMP>clean</SAMP>',
+`<SAMP>distclean</SAMP>', `<SAMP>install</SAMP>', etc.  The Jam system knows how to correctly
+build applications, plugin modules, and libraries on all platforms supported by
+Crystal Space.  The generated project skeleton even features support for
+synthesizing Microsoft Visual C++ project files for your application
+automatically (via the `<SAMP>jam msvcgen</SAMP>' target).  Jamtemplate is quite easy
+to use.  After setting up your `<SAMP>CRYSTAL</SAMP>' environment variable, simply run
+the `<SAMP>createproject.sh</SAMP>' script and follow the instructions which it
+presents:
 </P><P>
 
-`<TT>CS/scripts/cs-config/Makefile.template</TT>'.
+<CODE>CS/scripts/jamtemplate/createproject.sh</CODE>
 </P><P>
 
-Copy this file to the directory where your project is located and rename it to
-`<TT>Makefile</TT>'.
+<A NAME="SEC299"></A>
+<H4> Makefile </H4>
+<!--docid::SEC299::-->
+<P>
+
+If you prefer to have your project utilize a traditional Makefile, rather than
+being based upon the Crystal Space Jam build system, then follow these
+intructions.  Note, however, that the skeleton Makefile-based build system
+created by these instructions is bare-bones; it does not feature the fancy
+bells and whistles available with the Jam build system.
 </P><P>
 
-You need to edit this file for your own project.  This template makefile is
-capable of building an executable program or a plugin module.  It is
+To begin, in the Crystal Space directory you will find the following files:
+</P><P>
+
+<CODE>CS/scripts/cs-config/Makefile.template</CODE><BR>
+<CODE>CS/scripts/cs-config/appwrap.sh</CODE>
+</P><P>
+
+Copy these files to the directory where your project is located and rename
+`<TT>Makefile.template</TT>' to `<TT>Makefile</TT>'.  The `<TT>appwrap.sh</TT>' script
+creates Cocoa application wrappers on MacOS/X.  You may omit this file if you
+do not plan to support MacOS/X.
+</P><P>
+
+You need to edit `<TT>Makefile</TT>' for your own project.  This template makefile
+is capable of building an executable program or a plugin module.  It is
 recommended that you change at least the following variables:
 </P><P>
 
@@ -99,9 +152,9 @@ module.
 <P>
 
 <LI>
-`<SAMP>TARGET_NAME</SAMP>' should be the name of your executable or plugin module.  The
-file extension (`<TT>.exe</TT>', `<TT>.dll</TT>', `<TT>.so</TT>', etc.) is appended
-automatically, so do not the suffix yourself.
+`<SAMP>TARGET_NAME</SAMP>' should be the base name of your executable or plugin module.
+The file extension (`<TT>.exe</TT>', `<TT>.dll</TT>', `<TT>.so</TT>', etc.) is appended
+automatically, so do not add the suffix yourself.
 <P>
 
 <LI>
@@ -113,31 +166,17 @@ program or plugin module.
 `<SAMP>LINKFLAGS</SAMP>' should be modified to list all the Crystal Space libraries
 that you want to use.  The typical list is `<SAMP>cstool</SAMP>', `<SAMP>gsgfx</SAMP>',
 `<SAMP>csgeom</SAMP>', and `<SAMP>csutil</SAMP>'.
+<P>
+
+<LI>
+`<SAMP>VERSION</SAMP>' should indicate your product's version number (for example,
+1.0).
+<P>
+
+<LI>
+`<SAMP>RELEASE_DATE</SAMP>' should indicate the date of your product's release.
 </UL>
 <P>
-
-<A NAME="SEC299"></A>
-<H4> Using the Makefile </H4>
-<!--docid::SEC299::-->
-<P>
-
-If you installed Crystal Space in a non-standard location, then you probably
-will also need to set the `<SAMP>CRYSTAL</SAMP>' environment variable to point at the
-the location where the SDK was installed.  For instance, if you specified
-`<SAMP>--prefix=/site/sdk</SAMP>' when configuring Crystal Space, then you will need to
-set `<SAMP>CRYSTAL</SAMP>' to `<TT>/site/sdk/crystal</TT>'.  Using the Bourne shell, for
-instance, you can do this with the following commands:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>CRYSTAL=/site/sdk/crystal
-export CRYSTAL
-</pre></td></tr></table></P><P>
-
-From a C-shell or compatible, you can use:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>setenv CRYSTAL /site/sdk/crystal
-</pre></td></tr></table></P><P>
 
 The following targets are supported by this makefile:
 </P><P>
@@ -146,9 +185,9 @@ The following targets are supported by this makefile:
 <LI>
 `<SAMP>all</SAMP>': Builds the application or plugin module.
 <LI>
-`<SAMP>depend</SAMP>': Calculates dependency information.
-<LI>
 `<SAMP>clean</SAMP>': Removes object files and other detritus.
+<LI>
+`<SAMP>depend</SAMP>': Calculates dependency information.
 </UL>
 <A NAME="HOWTO Creating External MSVC 6 Application"></A>
 <HR SIZE=1>
