@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Coding Style</TITLE>
+<TITLE>Crystal Space: Porting</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Coding Style">
-<META NAME="keywords" CONTENT="Crystal Space: Coding Style">
+<META NAME="description" CONTENT="Crystal Space: Porting">
+<META NAME="keywords" CONTENT="Crystal Space: Porting">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,180 +23,56 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC809"></A>
+<A NAME="SEC806"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC810"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC812"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC805"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC807"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC807"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 9.3 Coding Style </H2>
-<!--docid::SEC809::-->
+<H2> 9.5 Porting to a New Platform </H2>
+<!--docid::SEC806::-->
 <P>
 
-For consistency and ease of future maintenance, when working on Crystal Space
-source code, please follow the following guidelines.  Also be sure to read
-important portability guidelines presented in the <CITE>Portability</CITE> section.
-See section <A HREF="cs_272.html#SEC808">9.2 Portability</A>.
+This section provides information useful to developers who wish to port
+Crystal Space to new platforms.
 </P><P>
 
-<OL>
-<LI>
-<EM>Indentation</EM>
-<P>
-
-Indent with two (2) spaces. If you use tabs then they must be interpreted as
-eight (8) spaces. This means that you should not use the tab character for
-indentation since that would indent by eight characters rather than two. Also
-consider avoiding tabs altogether in order to eliminate tab-related problems.
-Here is an example of proper indentation:
+Before undertaking the job of porting Crystal Space to a new platform one
+should, at least marginally, familiarize one's self with the various modules
+which comprise the package. A good way to gain such an overview is to read
+the Chapter about the internal structure of Crystal Space (see section <A HREF="cs_261.html#SEC788">8. Internal Project Structure</A>),
+as well as the Libraries (see section <A HREF="cs_134.html#SEC346">6. Libraries</A>) and Plug-in
+(see section <A HREF="cs_156.html#SEC382">7. Plug-In Modules and Drivers</A>) chapters.
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>void foo()
-{
-  int a;
-  for (a = 0; a &#60; 10; a++)
-  {
-    int b = bar();
-    if (a &#60; b)
-      printf("Hello\n");
-  }
-}
-</pre></td></tr></table></P><P>
-
-This example also illustrates how to place curly braces and where to add
-spaces, for example `<SAMP>for_(</SAMP>' rather than `<SAMP>for(_</SAMP>', where `<SAMP>_</SAMP>'
-represents whitespace in this context.  Also add sufficient whitespace between
-tokens.
+Once you have gained an overview of structure of Crystal Space, the first step
+in porting is to check the file `<TT>include/types.h</TT>' and see if it conforms
+to your system.  This file defines various types and constants which may need
+to be customized for a particular platform.  If you have a system with
+uncommon sizes for integers (for example 32-bit `<SAMP>short</SAMP>' values) then you
+may need to adjust the definitions contained within this file.  However, for
+most platforms this file may be used as-is.
 </P><P>
 
-<LI>
-<EM>Class and Method Naming</EM>
-<P>
-
-Classes should be named in this fashion: <CODE>csThisIsAClass</CODE>. The name
-starts with lower-case `<SAMP>cs</SAMP>' and has every word capitalized.
-</P><P>
-
-Methods and functions should be named in this fashion: <CODE>ThisIsAMethod()</CODE>.
-Each word in the name is capitalized.
-</P><P>
-
-<LI>
-<EM>SCF Interfaces</EM>
-<P>
-
-SCF interfaces always start with a lower `<SAMP>i</SAMP>', as in
-<CODE>iThisIsAnInterface</CODE>.  See section <A HREF="cs_138.html#SEC350">6.2 Shared Class Facility (SCF)</A>.
-</P><P>
-
-<LI>
-<EM>Doxygen and Comments</EM>
-<P>
-
-Use Doxygen comments in header files to document classes, methods, and
-functions. These comments are extracted with the Doxygen tool and HTML
-documentation is generated from them.
-</P><P>
-
-<STRONG>Warning</STRONG>: Always use Doxygen comments for a class. If you fail to do so
-then Doxygen will ignore comments for methods within the class itself.
-</P><P>
-
-A one line Doxygen comment uses three slashes (`<SAMP>///</SAMP>') rather than two as
-is typical for normal C++ comments.  Multi-line Doxygen comments are specified
-with `<SAMP>/** <small>...</small> */</SAMP>' rather than `<SAMP>/* <small>...</small> */</SAMP>'.  Here is an
-example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/**
- * This class represents a blue ball.
- * Blue balls bounce higher than red balls.
- */
-class csBlueBall
-{
-private:
-  // A private function, so no Doxygen comment here,
-  // but still commented for readers of the header file.
-  void PrivateFunction();
-
-public:
-  /// This is the constructor which initializes the blue ball.
-  csBlueBall();
-
-  /**
-   * This is a multi-line comment.
-   * And this is the second line of the multi-line comment.
-   */
-  void Deflate();
-};
-</pre></td></tr></table></P><P>
-
-<LI>
-<EM>Maximum Line Length</EM>
-<P>
-
-In general, lines in source code should be no longer than 78 characters.  This
-facilitates generation of hard-copy and works better with certain tools which
-process code or text files.
-</P><P>
-
-<LI>
-<EM>Multiple-Inclusion Protection for Headers</EM>
-<P>
-
-Be certain to insert multiple-inclusion protection in all header files.  These
-controls should take this form:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>#ifndef __CS_FILENAME_H__
-#define __CS_FILENAME_H__
-<small>...</small>
-#endif // __CS_FILENAME_H__
-</pre></td></tr></table></P><P>
-
-<LI>
-<EM>Include `<TT>cssysdef.h</TT>'</EM>
-<P>
-
-Always include `<TT>cssysdef.h</TT>' in each source file as the very first file
-included.  If you need to use special facilities provided by `<TT>cssysdef.h</TT>'
-then be sure to <CODE>#define</CODE> the appropriate macro before including
-`<TT>cssysdef.h</TT>'.
-</P><P>
-
-<EM>Never</EM> include `<TT>cssysdef.h</TT>' in header files.
-</P><P>
-
-<LI>
-<EM>Module and Library Dependencies</EM>
-<P>
-
-Do not introduce unnecessary dependencies between libraries and modules.
-Absolutely avoid introducing circular dependencies.
-</P><P>
-
-For instance, code in the <CODE>csGeom</CODE> library should never refer to code
-from the <CODE>csEngine</CODE> library.  The other way around is okay, however,
-since <CODE>csEngine</CODE> is at a higher level within the dependency hierarchy.
-</OL>
-<A NAME="CVS Guide"></A>
+<EM>FIXME</EM>: Flesh out the remainder of this discussion.
+<A NAME="Glossary"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC808"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC810"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC812"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_272.html#SEC805"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC807"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC807"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

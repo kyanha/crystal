@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Texture Mapping Animations</TITLE>
+<TITLE>Crystal Space: VIS sectors and portals</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Texture Mapping Animations">
-<META NAME="keywords" CONTENT="Crystal Space: Texture Mapping Animations">
+<META NAME="description" CONTENT="Crystal Space: VIS sectors and portals">
+<META NAME="keywords" CONTENT="Crystal Space: VIS sectors and portals">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -26,75 +26,57 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <A NAME="SEC431"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC430"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_179.html#SEC435"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC421"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC422"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_179.html#SEC435"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_179.html#SEC432"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC417"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC430"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC443"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.6.6.6 Procedural, Dynamic and Animated Textures </H4>
+<H4> 7.5.7.1 Sectors and Portals </H4>
 <!--docid::SEC431::-->
 <P>
 
-OK so we have the texture mapped onto the polygon, now the fun stuff starts.
-There are several ways to introduce movement into textures. Here is the
-terminology used in crystal space to describe these methods and brief
-explanations of what they entail:
+A sector is the basic building block in Crystal Space. A world will be made out
+of several sectors connected with portals (see section <A HREF="cs_166.html#SEC402">7.5.2 Portal Engine</A>).
+Normally adjacent sectors can be connected with a straight portal but
+portals can also warp space so that you can connect any point in space to
+any other point in space. This effect can be used to create mirrors for
+example.
 </P><P>
 
-<A NAME="SEC432"></A>
-<H4> Animated Textures </H4>
-<!--docid::SEC432::-->
- 
-Lets say we have several precomputed texture images, which when taken in 
-sequence form an animation. An Animated texture is simply when you swap
-the texture image mapped on to the polygon between the precomputed texture
-images. This is the simplest, cheapest and most common method.
-<P>
-
-<A NAME="SEC433"></A>
-<H4> Dynamic Textures </H4>
-<!--docid::SEC433::-->
-<P>
-
-Dynamic textures are when you manipulate the texture mapping transformation, or 
-the texture co-ordinates directly. This way you can rotate/scroll for example
-the texture on the polygon while it remains static.
+This effect of portals makes them very powerful. It also means that
+you can have overlapping sectors and in general other weird portal
+constructs.
 </P><P>
 
-<A NAME="SEC434"></A>
-<H4> Procedural Textures </H4>
-<!--docid::SEC434::-->
-<P>
-
-If you still can't produce the effect you want with animated and or dynamic
-textures then you can resort to procedural textures. Another less common name
-for procedural textures is programmatic textures. This is when you write the
-texture on the fly. The texture is typically a buffer you render to in the
-same way as you would render to the main screen. Good procedural texture
-implementations gives you full blown 3d capable facilities to render to the
-texture. Fortunately Crystal Space has this :)
-Typical uses for procedural textures is when the content of the texture responds
-uniquely to user input or behavior. A good example is having a computer terminal
-within the virtual world which the user can type on and can see what they type
-come up on the virtual screen. (see section <A HREF="cs_162.html#SEC388">7.3.1 Procedural Texture System</A>).
+Portals starting in arbitrary space (i.e. in the middle of
+a sector) are called floating portals. Some special care needs to be taken
+for those because we can't rely on the Z-buffer to be useful here. So this
+is a case where clipping to the 2D boundary of the portal must happen.
 </P><P>
 
-<A NAME="Visibility Culling"></A>
+Important for this discussion is the fact that we have two important
+areas where culling happens. We have in-sector visibility culling which
+is all visibility testing that ignores portal boundaries and we have
+portal/sector visibility which controls what you can see through a
+portal. Discussing both will be the main focus of this document later.
+</P><P>
+
+<A NAME="VIS cullers"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
 <TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC430"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_179.html#SEC435"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_171.html#SEC421"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_172.html#SEC422"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_179.html#SEC435"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_179.html#SEC432"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_170.html#SEC417"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_177.html#SEC430"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_186.html#SEC443"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

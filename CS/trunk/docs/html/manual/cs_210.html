@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Using MeshObject</TITLE>
+<TITLE>Crystal Space: MeshObject Spr2D</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Using MeshObject">
-<META NAME="keywords" CONTENT="Crystal Space: Using MeshObject">
+<META NAME="description" CONTENT="Crystal Space: MeshObject Spr2D">
+<META NAME="keywords" CONTENT="Crystal Space: MeshObject Spr2D">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -25,238 +25,277 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <A NAME="SEC555"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_209.html#SEC549"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_211.html#SEC559"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_209.html#SEC554"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_211.html#SEC562"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC641"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.8.2 Using Mesh Objects </H3>
+<H3> 7.7.4 Sprite2D Mesh Object </H3>
 <!--docid::SEC555::-->
 <P>
 
 <EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
+(<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>).</EM>
 </P><P>
 
-This section explains how to use Mesh Objects in general.  It doesn't go into
-detail about the specific Mesh Object Types that Crystal Space supports.
+A 2D Sprite is basically a polygon that always faces the camera.  There are
+some special effects that you can do with this but it is really very simple
+otherwise.
 </P><P>
 
 <A NAME="SEC556"></A>
-<H4> General </H4>
+<H4> Basic Structure  </H4>
 <!--docid::SEC556::-->
 <P>
 
-When the engine works with instances of Mesh Objects it does so through the
-`<SAMP>iMeshWrapper</SAMP>' interface.  `<SAMP>iMeshWrapper</SAMP>' holds the reference to the
-`<SAMP>iMeshObject</SAMP>' instances implementing the particular type of Mesh Object.
-`<SAMP>iMeshWrapper</SAMP>' is responsible for deciding when to draw a Mesh Object and
-when to light it.  `<SAMP>iMeshWrapper</SAMP>' also manages the position of the object
-in the world and manages possible hierarchical transformations (i.e.
-`<SAMP>iMeshWrapper</SAMP>' has an array of `<SAMP>iMeshWrapper</SAMP>' children).
-</P><P>
-
-<A NAME="SEC557"></A>
-<H4> Loading From Map File </H4>
-<!--docid::SEC557::-->
-<P>
-
-The easiest way to use Mesh Objects is to simply specify them in the map file
-for your level.  There are two things that you need to do for that.  First you
-have to specify an entry at top-level (directly inside the `<SAMP>world</SAMP>'
-statement) like this (this example uses the <EM>fountain</EM> plug-in to make a
-fountain):
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshfact name="fountainFactory"&#62;
-  &#60;plugin&#62;crystalspace.mesh.loader.factory.fountain&#60;/plugin&#62;
-  &#60;params /&#62;
-&#60;/meshfact&#62;
-</pre></td></tr></table></P><P>
-
-This will use the <EM>mesh object loader</EM> plug-in which is identified by the
-SCF name mentioned by the `<SAMP>plugin</SAMP>' statement to load a factory
-(type `<SAMP>iMeshObjectFactory</SAMP>') and register it with the engine.  There are no
-parameters for the fountain's Mesh Object Factory so that's why the
-`<SAMP>params</SAMP>' block is empty.  But you still have to specify it.  Other mesh
-object factories may accept parameters.
-</P><P>
-
-Because the fountain defines no parameters for the Mesh Object Factory
-you only have to create one factory in order to make all fountains you need.
-But in some cases you may have to create multiple factories depending
-on the object characteristics you want.
-</P><P>
-
-To place a fountain in some room (sector) you use a `<SAMP>meshobj</SAMP>'
-statement, within the definition of a room or sector, like this:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;meshobj name="fountain"&#62;
-  &#60;plugin&#62;crystalspace.mesh.loader.fountain&#60;/plugin&#62;
-  &#60;params&#62;
-    &#60;factory&#62;fountainFactory&#60;/factory&#62;
-    &#60;number&#62;300&#60;/number&#62;
-    &#60;material&#62;spark&#60;/material&#62;
-    &#60;origin x="0" y="0" z="0"/&#62;
-    &#60;dropsize w=".05" h=".05"/&#62;
-    &#60;color red="0.7" green="0.9" blue="1.0"/&#62;
-    &#60;accel x="0" y="-.1" z="0"/&#62;
-    &#60;falltime&#62;3&#60;/falltime&#62;
-    &#60;speed&#62;1&#60;/speed&#62;
-    &#60;elevation&#62;1.5&#60;/elevation&#62;
-    &#60;azimuth&#62;0&#60;/azimuth&#62;
-    &#60;opening&#62;.2&#60;/opening&#62;
-    &#60;mixmode&#62;
-      &#60;add /&#62;
-    &#60;/mixmode&#62;
-  &#60;/params&#62;
-  &#60;move&#62;
-    &#60;v x="-10" y="-1" z="14"/&#62;
-    &#60;matrix&#62;
-      &#60;rot x="1.5"/&#62;
-    &#60;/matrix&#62;
-  &#60;/move&#62;
-&#60;/meshobj&#62;
-</pre></td></tr></table></P><P>
-
-This code fragment uses the `<SAMP>crystalspace.mesh.loader.fountain</SAMP>' loader
-plug-in named to load a Mesh Object (type
-`<SAMP>iMeshObject</SAMP>') and register it with the engine (while placing it in the
-current sector).  In this case there are many parameters.  The first parameter
-should always be the name of the factory.  This is true for all Mesh Objects
-regardless of their type.  For a complete list of parameters available, you
-should refer to the fountain documentation.
-</P><P>
-
-The `<SAMP>move</SAMP>' statement is outside of the `<SAMP>params</SAMP>' block.  The reason
-for this is that the position of Mesh Objects is controlled by the engine and
-not by the Mesh Object itself.
-</P><P>
-
-In addition to the above statements you can also nest other `<SAMP>meshobj</SAMP>'
-statements to create a hierarchy of Mesh Objects (not shown in the example
-above).  If you do that, then the `<SAMP>move</SAMP>' statement must be interpreted
-relative to the parent.
-</P><P>
-
-When you have Mesh Objects loaded into Crystal Space using the map file syntax
-illustrated above, then you can query the parameters from your application by
-using the standard API in the `<SAMP>iEngine</SAMP>' interface.
-</P><P>
-
-<A NAME="SEC558"></A>
-<H4> Using Directly From Code </H4>
-<!--docid::SEC558::-->
-<P>
-
-You can also create Mesh Objects directly from your application.  To do this,
-roughly, you have to perform the following steps:
+The following SCF class names are used (for <CODE>CS_LOAD_PLUGIN()</CODE>):
 </P><P>
 
 <UL>
 <LI>
-Load the Mesh Object Type with <CODE>CS_LOAD_PLUGIN()</CODE> (preferably after checking
-if it is already loaded, by calling <CODE>CS_QUERY_PLUGIN_CLASS()</CODE>).
-<P>
-
+Type plugin: `<SAMP>crystalspace.mesh.object.sprite.2d</SAMP>'
 <LI>
-Create at least one Mesh Object Factory by calling <CODE>NewFactory()</CODE> on the
-Mesh Object Type instance.
-<P>
-
+Loader plugin: `<SAMP>crystalspace.mesh.loader.sprite.2d</SAMP>'
 <LI>
-If the factory has parameters you can call <CODE>SCF_QUERY_INTERFACE()</CODE> to get a
-handle to the `<SAMP>iSomethingFactoryState</SAMP>' interface (replace <EM>Something</EM>
-with whatever the type name of the Mesh Object is).  Then you set the
-parameters you want on that factory.
-<P>
-
-<LI>
-Create one or more Mesh Object instances by using one of your factories and
-calling <CODE>NewInstance()</CODE> on them.
-<P>
-
-<LI>
-If the object has parameters you use <CODE>SCF_QUERY_INTERFACE()</CODE> to get a handle
-to the `<SAMP>iSomethingState</SAMP>' interface (replace <EM>Something</EM> with whatever
-the type name of the Mesh Object is).  Then set the parameters you want on the
-Mesh Object.  Note that there are Mesh Object implementations which have
-multiple interfaces like this (for example, the particle systems implement both
-`<SAMP>iParticleState</SAMP>' plus another particle system-dependent interface).
-<P>
-
-<LI>
-For every instance of `<SAMP>iMeshObject</SAMP>' you need to create a
-`<SAMP>iMeshWrapper</SAMP>' instance for the engine.  Then you set up the
-`<SAMP>iMeshWrapper</SAMP>' by placing it in the sector that you want it and setup its
-position and rotation (transformation).
+Factory loader plugin: `<SAMP>crystalspace.mesh.loader.factory.sprite.2d</SAMP>'
 </UL>
 <P>
 
-Here is a code example for creating an instance of the ball plug-in.
+Objects in this plugin implement the following SCF interfaces (get with
+<CODE>SCF_QUERY_INTERFACE()</CODE>):
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>void Initialize ()
-{
-  <small>...</small>
-  // Get the ball mesh object plug-in.
-  ball_type = CS_QUERY_PLUGIN_CLASS (this,
-    "crystalspace.mesh.object.ball", iMeshObjectType);
-  if (!ball_type)
-    ball_type = CS_LOAD_PLUGIN (this,
-      "crystalspace.mesh.object.ball", iMeshObjectType);
-  if (!ball_type)
-    Printf (CS_MSG_WARNING, "No ball type plug-in found!\n");
-  ball_factory = ball_type-&#62;NewFactory ();
-  <small>...</small>
-}
-<small>...</small>
-void SetupWorld ()
-{
-  <small>...</small>
-  // Make a ball using the ball plug-in.
-  csRef&#60;iMeshObject&#62; ballMesh = ball_factory-&#62;NewInstance ();
-  csRef&#60;iBallState&#62; ballState =
-    SCF_QUERY_INTERFACE (ballMesh, iBallState);
-  ballState-&#62;SetRadius (.5, .5, .5);
-  ballState-&#62;SetMaterialWrapper (material);
-  ballState-&#62;SetRimVertices (12);
+<UL>
+<LI>
+<EM>MeshObject</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObject</SAMP>'
+<LI>
+Implements `<SAMP>iSprite2DState</SAMP>'
+<LI>
+Implements `<SAMP>iParticle</SAMP>'
+</UL>
+<LI>
+<EM>MeshObjectFactory</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObjectFactory</SAMP>'
+<LI>
+Implements `<SAMP>iSprite2DFactoryState</SAMP>'
+</UL>
+<LI>
+<EM>MeshObjectFactory</EM>
+<UL>
+<LI>
+Implements `<SAMP>iMeshObjectType</SAMP>'
+</UL>
+</UL>
+<P>
 
-  csRef&#60;iMeshWrapper&#62; ball =
-    engine-&#62;CreateMeshWrapper (ballMesh, "MyBall", room);
-  m.Identity ();
-  ball-&#62;GetMovable ().SetTransform (m);
-  ball-&#62;GetMovable ().SetPosition (csVector3 (-3, 5, -3));
-  ball-&#62;GetMovable ().UpdateMove ();
-  <small>...</small>
-}
-</pre></td></tr></table></P><P>
+<A NAME="SEC557"></A>
+<H4> Factory State Interface </H4>
+<!--docid::SEC557::-->
+<P>
 
-This example will load a ball using the plug-in and place it at (-3,5,-3) in
-`<SAMP>room</SAMP>'.  It will also make sure that it will be lit by the 10 closest
-lights.
+Use the SCF interface `<SAMP>iSprite2DFactoryState</SAMP>' to access settings for
+a 2D sprite factory.  The definition of this interface can be found in
+`<TT>CS/include/imesh/sprite2d.h</TT>' and that is also the include file you need
+to include in your applications to use this plugin.  Using this interface you
+can access the material, blending mode (mixmode), and lighting settings.
 </P><P>
 
-`<SAMP>iBallState</SAMP>' is the state interface for setting the characteristics of
-ball Mesh Objects.
-<A NAME="Writing MeshObjects"></A>
+<A NAME="SEC558"></A>
+<H4> Factory Loader </H4>
+<!--docid::SEC558::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE>&#60;lighting&#62;yes/no&#60;/lighting&#62;</CODE>
+<DD>Enable/disable lighting.
+<DT><CODE>&#60;material&#62;materialname&#60;/material&#62;</CODE>
+<DD>Material to use for the polygon.
+<DT><CODE>&#60;mixmode&#62;&#60;mode /&#62;&#60;/mixmode&#62;</CODE>
+<DD>Blending mode; one of `<SAMP>add</SAMP>', `<SAMP>alpha</SAMP>', `<SAMP>copy</SAMP>', `<SAMP>keycolor</SAMP>',
+`<SAMP>multiply2</SAMP>', `<SAMP>multiply</SAMP>', or `<SAMP>transparent</SAMP>'.
+<DT><CODE>&#60;uvanimation name=uvanimationname&#62;&#60;frame <small>...</small>&#62; <small>...</small></CODE>
+<DD>Define an uv animation, that is a sequence of frames which textures are all in
+one big texture.  Thus the animation is achieved by altering the (u,v)
+coordinates of the polygon defined by this sprite.
+<DT><CODE>&#60;frame&#62;&#60;duration&#62;&#60;vertices <small>...</small>&#62; <small>...</small></CODE>
+<DD>Defines a single frame within an uv animation by specifying its duration in
+milliseconds and the u,v coordinates to use.
+<UL>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;frame name="framename"&#62;
+ &#60;duration&#62;milliseconds&#60;/duration&#62;
+ &#60;v u="" v="" /&#62;
+ <small>...</small> u,v coo list
+&#60;/frame&#62;
+</pre></td></tr></table></UL>
+</DL>
+<P>
+
+<A NAME="SEC559"></A>
+<H4> Object State Interface </H4>
+<!--docid::SEC559::-->
+<P>
+
+`<SAMP>iSprite2DState</SAMP>' is the SCF interface that you can use to set/get
+settings for a 2D sprite object.  The definition of this interface can be found
+in `<TT>CS/include/imesh/sprite2d.h</TT>' and that is also the include file you
+need to include in your applications to use this plugin.  Using this
+interface you can access the material, blending mode (mixmode), lighting
+settings, and also the vertices of the 2D polygon controlled by this plugin.
+</P><P>
+
+<A NAME="SEC560"></A>
+<H4> Object Loader </H4>
+<!--docid::SEC560::-->
+<P>
+
+<DL COMPACT>
+<DT><CODE>&#60;factory&#62;factoryname&#60;/factory&#62;</CODE>
+<DD>Name of the factory to use for creation of this instance.
+<DT><CODE>&#60;mixmode&#62;&#60;mode /&#62;&#60;/mixmode&#62;</CODE>
+<DD>Blending mode, one of `<SAMP>add</SAMP>', `<SAMP>alpha</SAMP>', `<SAMP>copy</SAMP>', `<SAMP>keycolor</SAMP>',
+`<SAMP>multiply2</SAMP>', `<SAMP>multiply</SAMP>', or `<SAMP>transparent</SAMP>'.
+<DT><CODE>&#60;material&#62;materialname&#60;/material&#62;</CODE>
+<DD>Material to use for the polygon.
+<DT><CODE>&#60;lighting&#62;yes/no&#60;/lighting&#62;</CODE>
+<DD>Enable/disable lighting.
+<DT><CODE>vertices &#60;v x="" y="" /&#62; <small>...</small></CODE>
+<DD>List of 2D vertices defining the polygon.
+<DT><CODE>&#60;uv u="" v="" /&#62;</CODE>
+<DD>List of texture mapping UV coordinates for the polygon.
+<DT><CODE>&#60;color red="" green="" blue="" /&#62;</CODE>
+<DD>List of rgb colors for the polygon.
+<DT><CODE>&#60;animate&#62; <small>...</small></CODE>
+<DD>Select an uv animation from the list of animations declared in the template
+<UL>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;animate name="animationname"&#62;
+    &#60;timing&#62;milliseconds&#60;/timing&#62;
+    &#60;loop&#62;yes/no&#60;/loop&#62;
+&#60;/animate&#62;
+</pre></td></tr></table><UL>
+<LI>
+timing &#62; 0 : every &#60;timing&#62; milliseconds the next frame will be shown
+<LI>
+timing &#60; 0 : every &#60;-timing&#62; gameloop the next frame will be shown
+<LI>
+timing = 0 : timing attached to the frame will be used
+<LI>
+loop : loop the animation or stop after last frame (and show the last frame)
+</UL>
+</UL>
+</DL>
+<P>
+
+<A NAME="SEC561"></A>
+<H4> Example 1 </H4>
+<!--docid::SEC561::-->
+<P>
+
+This is how our world file looks:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;world&#62;
+    &#60;textures&#62;
+        &#60;texture name="blow"&#62;
+            &#60;file&#62;blow.png&#60;/file&#62;
+        &#60;/texture&#62;
+    &#60;/textures&#62;
+    &#60;materials&#62;
+        &#60;material name="explosion"&#62;
+            &#60;texture&#62;blow&#60;/texture&#62;
+        &#60;/material&#62;
+    &#60;/materials&#62;
+    &#60;meshobj name="Explosion"&#62;
+        &#60;plugin&#62;crystalspace.mesh.loader.factory.sprite.2d&#60;/plugin&#62;
+        &#60;params&#62;
+            &#60;material&#62;explosion&#60;/material&#62;
+            &#60;uvanimation name="boom"&#62;
+                &#60;frame name="first"&#62;
+                    &#60;duration&#62;100&#60;/duration&#62;
+                    &#60;v u="0" v="0" /&#62;
+                    &#60;v u="0.5" v="0" /&#62;
+                    &#60;v u="0.5" v="0.5" /&#62;
+                    &#60;v u="0" v="0.5" /&#62;
+                &#60;/frame&#62;
+                &#60;frame name="second"&#62;
+                    &#60;duration&#62;100&#60;/duration&#62;
+                    &#60;v u="0.5" v="0" /&#62;
+                    &#60;v u="1" v="0" /&#62;
+                    &#60;v u="1" v="0.5" /&#62;
+                    &#60;v u="0.5" v="0.5" /&#62;
+                &#60;/frame&#62;
+                &#60;frame name="third"&#62;
+                    &#60;duration&#62;100&#60;/duration&#62;
+                    &#60;v u="0" v="0.5" /&#62;
+                    &#60;v u="0.5" v="0.5" /&#62;
+                    &#60;v u="0.5" v="1" /&#62;
+                    &#60;v u="0" v="1" /&#62;
+                &#60;/frame&#62;
+                &#60;frame name="fourth"&#62;
+                    &#60;duration&#62;100&#60;/duration&#62;
+                    &#60;v u="0.5" v="0.5" /&#62;
+                    &#60;v u="1" v="0.5" /&#62;
+                    &#60;v u="1" v="1" /&#62;
+                    &#60;v u="0.5" v="1" /&#62;
+                &#60;/frame&#62;
+            &#60;/uvanimation&#62;
+        &#60;/params&#62;
+    &#60;/meshobj&#62;
+    &#60;sector name="space"&#62;
+    &#60;!-- define all the stuff in space
+         <small>...</small>
+         and now one of the enemies right after we met him --&#62;
+        &#60;meshobj name="Kaboom"&#62;
+	    &#60;plugin&#62;crystalspace.mesh.loader.sprite.2d&#60;/plugin&#62;
+	    &#60;params&#62;
+		&#60;v x="-1" y="1" /&#62;
+    	        &#60;v x="1" y="1" /&#62;
+    		&#60;v x="1" y="-1" /&#62;
+	        &#60;v x="-1" y="-1" /&#62;
+		&#60;uv u="0" v="0" /&#62;
+		&#60;uv u="1" v="0" /&#62;
+	        &#60;uv u="1" v="1" /&#62;
+		&#60;uv u="0" v="1" /&#62;
+	        &#60;color red="1" green="1" blue="1" /&#62;
+		&#60;color red="1" green="1" blue="1" /&#62;
+	        &#60;color red="1" green="1" blue="1" /&#62;
+		&#60;color red="1" green="1" blue="1" /&#62;
+	        &#60;lighting&#62;no&#60;/lighting&#62;
+		&#60;!-- show the animation, use the timings attached to
+	    	     the frames, loop --&#62;
+    	    	&#60;animate name="boom"&#62;
+		    &#60;timing&#62;0&#60;/timing&#62;
+	    	    &#60;loop&#62;yes&#60;/loop&#62;
+		&#60;/animate&#62;
+	    &#60;/params&#62;
+	    &#60;move&#62;
+		&#60;v x="0" y="0" z="0"&#62;
+	    &#60;/move&#62;
+	&#60;/meshobj&#62;
+    &#60;/sector&#62;
+&#60;/world&#62;
+
+</pre></td></tr></table><A NAME="MeshObject Spr3D"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_209.html#SEC549"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_211.html#SEC559"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_208.html#SEC548"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_228.html#SEC646"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_209.html#SEC554"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_211.html#SEC562"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_196.html#SEC483"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_226.html#SEC641"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

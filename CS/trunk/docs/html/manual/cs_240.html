@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: AWS Signals</TITLE>
+<TITLE>Crystal Space: AWS Component Parameter Delivery</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: AWS Signals">
-<META NAME="keywords" CONTENT="Crystal Space: AWS Signals">
+<META NAME="description" CONTENT="Crystal Space: AWS Component Parameter Delivery">
+<META NAME="keywords" CONTENT="Crystal Space: AWS Component Parameter Delivery">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,97 +23,147 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC678"></A>
+<A NAME="SEC675"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC677"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC679"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC674"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC676"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC674"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC676"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC673"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC674"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_243.html#SEC678"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.12.2 Signals: Responding To User Input </H3>
-<!--docid::SEC678::-->
+<H4> 7.11.3.1 Parameter Delivery </H4>
+<!--docid::SEC675::-->
 <P>
 
-AWS implements a <EM>slot</EM>/<EM>signal</EM> mechanism for responding to user
-input.
+This section describes automatic <EM>parameter delivery</EM>, which provides a
+mechanism for extracting component parameters from a window definition.
 </P><P>
 
-All AWS
-components are signal <EM>sources</EM>, which means that you should be
-able to find out anything important that happens to them by
-creating appropriate <EM>sinks</EM>. The idea here is that the
-application provides certain services. The GUI is event
-driven, which means that you're not so much interested in finding
-out when a certain button is clicked, but rather you would
-like to know when a user wants to do something. For example, you
-don't care so much that the "Login" button has been pressed or
-toggled or selected or whatever it is that happens to the "Login"
-button to activate it, but rather that the user wants to login to
-the system. In the window definition file,
-connection maps that a
-GUI designer can hook up to signal sinks defined by an
-application programmer support this paradigm. For a game, this
-model seems especially appropriate.
+In AWS, all windows are defined by a window definition.
+There may be multiple definitions in a file, or you may have
+multiple files. That's all up to the end user. For a component
+writer, however, you need to be able to get at this information.
+Furthermore, you need to be able to get the information for the
+window that's being created, and for the current instance of the
+component. How does that happen?
 </P><P>
 
-For example, say the application programmer has defined a sink
-called `<SAMP>loginSink</SAMP>'. This sink has a few triggers: `<SAMP>login</SAMP>',
-`<SAMP>setusername</SAMP>', and `<SAMP>setpassword</SAMP>'. In order to have the login
-proceed, all of these triggers must be activated. The simplest
-method would be to hookup the `<SAMP>TextChanged</SAMP>' signal from the
-text boxes to the `<SAMP>setusername</SAMP>' and `<SAMP>setpassword</SAMP>' triggers.
-Both of these triggers might expect to receive a source that is an
-`<SAMP>awsComponent</SAMP>' supporting the property `<SAMP>Text</SAMP>'. A
-command button's `<SAMP>Clicked</SAMP>' signal could be connected to the
-`<SAMP>login</SAMP>' trigger.
+It's very easy, actually. The window manager knows everything about everything,
+and it particularly knows where the component is in the window's setup process.
+You should only need to get your parameters once per creation of a window, and
+that happens at setup time.
 </P><P>
 
-Once everything is properly connected, the following sequence occurs:
+Each component <STRONG>must</STRONG> override a function called <CODE>Setup()</CODE> in
+`<SAMP>awsComponent</SAMP>'. You should always called the base
+<CODE>awsComponent::Setup()</CODE> first, because there is some important work for it
+to do. You must never release or delete the parameters passed in to you,
+because they are not yours. You should never store the settings parameter,
+because it is only on loan and strange things may happen to it. Next, you are
+free to do whatever setup your component needs. This is primarily accomplished
+by using the <CODE>GetBlah()</CODE> functions of the preference manager. The
+<CODE>Setup()</CODE>
+function is passed two important parameters: a pointer to the window manager,
+and a pointer to the current settings container that contains all the settings
+for this instance of this component. The prototype for the setup function is
+as follows:
 </P><P>
 
-<OL>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>bool awsComponent::Setup(iAws* wmgr, awsComponentNode *settings)
+</pre></td></tr></table></P><P>
+
+The default <CODE>Setup()</CODE> in `<SAMP>awsComponent</SAMP>' sets an internal variable
+that stores the pointer to the window manager, which may then be retrieved
+afterward from the accessor function <CODE>WindowManager()</CODE>.  The first
+statement in a setup function should always be:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (!awsComponent::Setup(wmgr, settings))
+  return false;
+</pre></td></tr></table></P><P>
+
+This lets the lower level setup code do some important initialization, and also
+keeps us from proceeding if something cataclysmic happens during initial setup.
+Returning `<SAMP>false</SAMP>' from the <CODE>Setup()</CODE> function at any time gracefully
+aborts construction of the component.  It does not, however, abort construction
+of the entire container or window.  It <EM>does</EM> abort construction of any
+children this component may have.
+</P><P>
+
+After the initial call to the base version of <CODE>Setup()</CODE>, you may do
+whatever you like. It is common to retrieve any important settings for your
+component here. For example, the base `<SAMP>awsComponent</SAMP>' retrieves the
+component's frame rectangle by performing the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>iAwsPrefs *pm = WindowManager()-&#62;GetPrefMgr();
+pm-&#62;GetRect(settings, "Frame", frame);
+</pre></td></tr></table></P><P>
+
+The preference manager supports two other versions of this
+command, altogether providing <CODE>GetInt()</CODE>, <CODE>GetRect()</CODE>,
+and <CODE>GetString()</CODE>. The first parameter is always provided
+for you: it is the settings container passed as a parameter. The
+second parameter is the text name of the attribute you wish to
+query, like `<SAMP>Frame</SAMP>' or `<SAMP>Style</SAMP>', etc. The final
+parameter is a variable of the type corresponding to the
+function, in which the results will be stored. For
+<CODE>GetInt()</CODE> this is always a signed integer, for
+<CODE>GetRect()</CODE> this is a `<SAMP>csRect</SAMP>' structure, and for
+<CODE>GetString()</CODE> this is an `<SAMP>iString</SAMP>' pointer.
+</P><P>
+
+If your component needs to get information about the default
+skin, it can do so using some other, very similar functions for
+the skin definition:
+</P><P>
+
+<UL>
 <LI>
-The user enters text into the username box. A signal is sent to the
-`<SAMP>setusername</SAMP>' trigger, which tries to extract the value of the
-`<SAMP>Text</SAMP>' property
-using the component's <CODE>GetProperty()</CODE> method. If this
-succeeds, it stores a copy of the text.
-<P>
-
+<CODE>LookupIntKey()</CODE>
 <LI>
-The user types in the password box. The same process occurs here.
-<P>
-
+<CODE>LookupRectKey()</CODE>
 <LI>
-The user clicks on the "Login" button.  The `<SAMP>Clicked</SAMP>' signal is sent to
-the `<SAMP>login</SAMP>' trigger, which then performs some sort of authentication.  It
-might also then call some controlling object to hide the window and change the
-display to an menu or something other.
-</OL>
+<CODE>LookupStringKey()</CODE>
+<LI>
+<CODE>LookupRGBKey()</CODE>
+</UL>
 <P>
 
-This is the general way that you interact with the user. The
-controlling principle being that the application developer
-provides the means; whereas the GUI designer provides the
-manner. AWS tries to separate controller and view semantics
-as much as possible.
-<A NAME="AWS Custom Components"></A>
+These functions operate in a fashion identical to the
+<CODE>GetBlah()</CODE> functions, except that they know where their
+information is coming from, so they don't need a settings
+parameter. Also, <CODE>LookupRGBKey()</CODE> requires a reference to
+three value parameters: red, green, and blue in that order. Each
+is an unsigned character. Note that the preference manager also
+supports a <CODE>Get()</CODE> for colors, textures, and fonts. It is
+preferred to use these functions for actually getting those
+resources for use. Please consult the API reference for
+`<SAMP>awsPreferenceManager</SAMP>' for further information on those
+functions.
+</P><P>
+
+Once you have finished your setup process, you should always
+exit by returning `<SAMP>true</SAMP>'. This means that everything went well and
+you are ready to work.
+</P><P>
+
+<A NAME="AWS Component Events"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC677"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC679"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC674"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC676"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_263.html#SEC793"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC674"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_241.html#SEC676"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC673"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC674"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_243.html#SEC678"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

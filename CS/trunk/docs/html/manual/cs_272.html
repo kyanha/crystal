@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: Portability</TITLE>
+<TITLE>Crystal Space: CVS Guide</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: Portability">
-<META NAME="keywords" CONTENT="Crystal Space: Portability">
+<META NAME="description" CONTENT="Crystal Space: CVS Guide">
+<META NAME="keywords" CONTENT="Crystal Space: CVS Guide">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,315 +23,136 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC808"></A>
+<A NAME="SEC805"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC803"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC809"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC812"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC804"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC806"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC807"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H2> 9.2 Portability </H2>
-<!--docid::SEC808::-->
+<H2> 9.4 CVS Etiquette Guidelines </H2>
+<!--docid::SEC805::-->
 <P>
 
-<EM>Written by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>, with
-contributions by others.</EM>
+Since Crystal Space has enough developers to warrant the use of CVS to
+manage its code base, there are some rules you need to keep in mind if you
+are going to be making changes of any sort to the CVS source tree.
 </P><P>
 
-Crystal Space is a highly portable cross-platform 3D engine and toolkit.  As a
-contributor to the project, you should familiarize yourself with the issues
-discussed in this section in order to ensure maximum portability of code which
-you write and resources which you create.
+First off, to access the CVS repository anonymously, use this
+<CODE>CVSROOT</CODE> setting:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>:pserver:anonymous@cvs.crystal.sourceforge.net:/cvsroot/crystal
+</pre></td></tr></table></P><P>
+
+The password for the `<SAMP>anonymous</SAMP>' account is the empty string--that is,
+just press the <KBD>RETURN</KBD> key at the `<SAMP>Password:</SAMP>' prompt.
+</P><P>
+
+For further instructions, please refer to the following document:
+</P><P>
+
+<A HREF="http://sourceforge.net/cvs/?group_id=649">http://sourceforge.net/cvs/?group_id=649</A>
+</P><P>
+
+Once you've logged in, checkout the module `<SAMP>crystal</SAMP>' to download the
+source code to the `<TT>CS</TT>' directory.  See the documentation for your
+CVS client on how to do this.
+</P><P>
+
+If you do not have a developer account, you will be able to check out files,
+but will not be able to commit any changes, so the rest of this document
+doesn't really apply to you.
+</P><P>
+
+If you do have developer account, you will have to access the CVS
+repository via SSH, the secure shell.  Instructions can be found at this
+location:
+</P><P>
+
+<A HREF="http://sourceforge.net/cvs/?group_id=649">http://sourceforge.net/cvs/?group_id=649</A>
+</P><P>
+
+Having a developer account implies you will be able to make changes to the
+code.  You should read the rest of this document before making any changes.
+</P><P>
+
+Below are some guidelines you should follow before committing files.  Also be
+sure to read the important portability guidelines in the <CITE>Portability</CITE>
+section.  See section <A HREF="cs_270.html#SEC803">9.2 Portability</A>.
 </P><P>
 
 <OL>
 <LI>
-<EM>Endian-ness</EM>
+Always perform an `<SAMP>update</SAMP>' before committing new or changed files, and
+then rebuild <EM>everything</EM> from scratch after updating.  <EM>Do not rely
+on dependencies!</EM>  If there were any conflicts during the update, resolve them.
+If there were any merges, examine them to ensure that the merged code still
+accurately reflects your changes.
 <P>
-
-Beware of code that is endian-specific.  To facilitate writing portable code,
-key off of the `<SAMP>CS_BIG_ENDIAN</SAMP>' or `<SAMP>CS_LITTLE_ENDIAN</SAMP>' macros if
-necessary.
-</P><P>
-
-Avoid casting a `<SAMP>long*</SAMP>' or `<SAMP>int*</SAMP>' to a `<SAMP>short*</SAMP>' or `<SAMP>char*</SAMP>'
-as a slick way of checking the value of a particular sub-byte of the number
-since this trick will fail on platforms with different endian-ness.  In other
-words, given the declaration `<SAMP>long n = 1</SAMP>', and the expression `<SAMP>short
-p = *((short*)&#38;n)</SAMP>', on a little-endian platform, `<SAMP>p</SAMP>' will equal 1, but on
-a big-endian platform, `<SAMP>p</SAMP>' will equal 0.
-</P><P>
-
-Avoid using C "unions" to represent bit-sets since they can result in
-endian-related problems if improperly used or stored as persistent data.
-Using bit-masks is a much better and far more portable solution.
-</P><P>
-
-Beware of reading and writing data to binary format files and sending such
-information over the network.  Unless special care is taken to ensure
-portability, these files and network related facilities will suffer
-endian-related problems.  Use the network functions <CODE>ntohl()</CODE>,
-<CODE>ntohs()</CODE>, <CODE>htonl()</CODE>, and <CODE>htons()</CODE> to convert numbers to
-canonical format before transmitting them over the network.  You can also make
-use of the Crystal Space endian-related conversion functions found in
-`<TT>CS/include/csutil/csendian.h</TT>'.
-</P><P>
 
 <LI>
-<EM>Data Alignment</EM>
+If you worked on the engine internals or on the renderers, run <CODE>walktest</CODE>
+using `<TT>flarge</TT>' and visit various locations which exercise the engine's
+features, such as the doughnut in the street and the foggy corridor.
 <P>
-
-Some platforms require data values to be strictly aligned in memory.  For
-instance, some processors can not access a `<SAMP>long</SAMP>' value at an odd memory
-address or at an address which is not a multiple of four (which is the size in
-bytes of the `<SAMP>long</SAMP>' data type).  In such cases, the program may crash.
-Other processors may be able to access misaligned values, but at greatly
-reduced speed, which can slow down program execution significantly if done
-frequently enough.
-</P><P>
-
-In most cases, the compiler ensures that values are properly aligned for the
-given processor, but this problem can crop up when reading byte-streams from
-external sources such as binary files or network connections.  In such cases,
-it is up to you to ensure the proper alignment of the data before accessing
-it.
-</P><P>
-
-For instance, if you are reading elements from a byte-stream and the next
-element to be read is a `<SAMP>long</SAMP>', then the following code to extract the
-value is <EM>incorrect</EM> and <EM>non-portable</EM> since it does not ensure
-that the data is aligned properly for `<SAMP>long</SAMP>' access:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>long extract_long(unsigned char const* stream)
-{
-  return *((long*)stream);
-}
-</pre></td></tr></table></P><P>
-
-The correct way to code this example would be as follows:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>long extract_long(unsigned char const* stream)
-{
-  long n;
-  memcpy(&#38;n, stream, sizeof(n));
-  return n;
-}
-</pre></td></tr></table></P><P>
 
 <LI>
-<EM>Floating Points</EM>
+If it works, commit <EM>everything</EM> you have modified, not just parts of
+your modifications.  If you have created new files, please be certain that you
+have used the CVS `<SAMP>add</SAMP>' command before committing in order to ensure
+that the new files actually get added to the repository.
 <P>
-
-Depending upon the accuracy and representation of floating point values on
-some platforms, a number may successfully compare to (and equal) 0.0 on one
-platform or processor but fail on another.  In order to avoid such problems,
-compare numbers to a small value such as `<SAMP>EPSILON</SAMP>'.  In other words, if
-`<SAMP>EPSILON</SAMP>' is defined as a very small value, use `<SAMP>(val &#60; EPSILON)</SAMP>'
-rather than `<SAMP>(val == 0.0)</SAMP>'.
-</P><P>
-
-As a corollary.  when comparing two floating point values, employ the
-`<SAMP>EPSILON</SAMP>' trick to ensure that they compare properly over a wide variety
-of platforms.  In other words, instead of `<SAMP>(float1 &#60; float2)</SAMP>', use
-`<SAMP>(float1 &#60; float2 + EPSILON)</SAMP>'.
-</P><P>
 
 <LI>
-<EM>Scope of `<SAMP>for</SAMP>' Statements</EM>
+Do another `<SAMP>update</SAMP>' after committing everything.  Take a look at the
+output to see if you really committed everything you intended to commit.
 <P>
-
-Some compilers do not properly scope a variable declared in a <CODE>for(;;)</CODE>
-statement to the loop itself.  In other words, some compilers treat the
-following code:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>for (int i = 0; <small>...</small>) <small>...</small>
-</pre></td></tr></table></P><P>
-
-As though `<SAMP>i</SAMP>' was declared outside of the `<SAMP>for</SAMP>' statement, as in:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>int i;
-for (i = 0; <small>...</small>) <small>...</small>
-</pre></td></tr></table></P><P>
-
-This can be a problem when several `<SAMP>for</SAMP>' loops exists at the same scoping
-level in a single block since some compilers will complain that `<SAMP>i</SAMP>' is
-being redeclared by all `<SAMP>for</SAMP>' loops following the first one.  In other
-words, the following code will generate a "variable redeclaration" warning
-with some compilers:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>for (int i = 0; <small>...</small>) <small>...</small>
-<small>...</small> other code <small>...</small>
-for (int i = 5; <small>...</small>) <small>...</small>
-</pre></td></tr></table></P><P>
-
-In cases where the variable appears in only a single `<SAMP>for</SAMP>' loop, declaring
-it directly in the `<SAMP>for</SAMP>' statement is perfectly safe, but in cases where
-many such loops may want to use the same variable name, the variable should
-be declared once outside of all loops, as in the following example:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>int i;
-for (i = 0; <small>...</small>) <small>...</small>
-<small>...</small> other code <small>...</small>
-for (i = 5; <small>...</small>) <small>...</small>
-</pre></td></tr></table></P><P>
-
-The Microsoft Visual C++ compiler is known to suffer from this problem,
-however most modern C++ compilers properly scope variables declared in the
-`<SAMP>for</SAMP>' statement.
-</P><P>
 
 <LI>
-<EM>Avoid Global Objects With Constructors in Plug-In Modules</EM>
+Do another rebuild to ensure your changes didn't collide with somebody else's
+recent changes.
 <P>
-
-Avoid placing global objects which require automatic construction in
-dynamically loaded libraries (plug-in modules).  Some platforms fail to call
-the object's constructor at the time the library is loaded.  Therefore it is
-unsafe to rely on such objects.
-</P><P>
 
 <LI>
-<EM>Avoid Initializing Global Variables via Functions in Plug-In Modules</EM>
-<P>
-
-Avoid initializing global variables within a plug-in module via function
-call.  In other words, in the following example, the function <CODE>foo()</CODE>
-should not rely upon the variable `<SAMP>angle</SAMP>' as having been properly
-initialized, assuming that this code fragment appears in a plug-in module.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>static float angle = cos(0.23);
-void foo() { printf("angle=%g\n", angle); }
-</pre></td></tr></table></P><P>
-
-Instead, you should arrange for such variables to be initialized manually by
-some other mechanism.  Here is one possible (though not ideal) way to ensure
-that `<SAMP>angle</SAMP>' is initialized before it is accessed.
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>static float angle = 0;
-void foo()
-{
-  static bool angle_ok = false;
-  if (!angle_ok)
-  {
-    angle = cos(0.23);
-    angle_ok = true;
-  }
-  printf("angle=%g\n", angle);
-}
-</pre></td></tr></table></P><P>
-
-An even better solution is to utilize the initialization hooks provided by the
-SCF system to initialize global variables at the time that the plug-in
-module is loaded.  See section <A HREF="cs_138.html#SEC350">6.2 Shared Class Facility (SCF)</A>.
-</P><P>
-
-<LI>
-<EM>Pathname Syntax</EM>
-<P>
-
-Pathname syntax varies widely from platform to platform.  For instance, a
-Unix-style pathname such as `<TT>/mnt/home/zoop.c</TT>' might appear as
-`<TT>C:\home\zoop.c</TT>' on DOS and Windows, and `<TT>vol:home:zoop.c</TT>' on
-Macintosh.
-</P><P>
-
-When programming you should always use Unix-style pathname syntax in your
-<CODE>#include</CODE> directives; that is, always use the forward slash `<SAMP>/</SAMP>', as
-in <CODE>#include "csutil/scf.h"</CODE>.  The forward slash is understood by
-compilers on all platforms including Unix, Windows, and Macintosh.  Never use
-`<SAMP>\</SAMP>' or `<SAMP>:</SAMP>' in filenames mentioned by an <CODE>#include</CODE> directive.
-Even though your Windows or Macintosh compiler might accept these characters,
-the Unix compilers will not.  The obvious exception to this rule is for source
-files which are intended only for a specific platform.  Such files may use the
-prohibited characters, but in general there is no reason to do so.
-</P><P>
-
-At the application level, when writing a program or library which utilizes
-Crystal Space you should make use of the VFS facility which provides a
-unified way of referring to files by hiding platform-specific pathname syntax
-details.  Under VFS's unified naming scheme, all pathnames use the
-Unix-style syntax and VFS translates such pathnames to a form appropriate
-for the host platform.  See section <A HREF="cs_158.html#SEC384">7.2 Virtual File System (VFS)</A>.
-</P><P>
-
-<LI>
-<EM>Filesystem Case Sensitivity</EM>
-<P>
-
-Some operating systems have case sensitive filenames, whereas others do not.
-Undesirable things happen if you capitalize a file one way in an
-<CODE>#include</CODE> directive and a different way for the actual filename.  This
-problem may not even be apparent on your platform if you are using a
-case-insensitive file system such as DOS, Windows, or Macintosh (HFS).  In
-general, it is preferable to use entirely lower-case filenames for files which
-are shared between ports.
-</P><P>
-
-<STRONG>Warning</STRONG>: `<TT>WinCVS</TT>' has been reported to botch capitalization of
-files.  Please be aware of this potential problem.
-</P><P>
-
-<LI>
-<EM>Makefiles and Project Files</EM>
-<P>
-
-Some platforms use custom project files, whereas other platforms use the
-Crystal Space makefile system.  If you change a makefile and then change the
-code so that it depends on this change, ports for other platforms will
-probably break.  This may be unavoidable to some extent, but try to minimize
-the breakage.  For example, wrap the dependent code in an <CODE>#ifdef</CODE> and
-check for operating systems that <EM>do</EM> support the change.  This will
-allow other systems to continue to work without your change.  After committing
-your change to the CVS repository, be sure to inform port maintainers
-that their projects may need to be updated in order to support your
-modifications.
-</P><P>
-
-<LI>
-<EM>Ensuring Rendering</EM>
-<P>
-
-Some renderers and video drivers depend on the <CODE>BeginDraw()</CODE> and
-<CODE>FinishDraw()</CODE> calls to `<SAMP>iGraphics3D</SAMP>' or `<SAMP>iGraphics2D</SAMP>'.  Thus
-every <CODE>BeginDraw()</CODE> must be followed by a <CODE>FinishDraw()</CODE> or nothing
-will be rendered.  Microsoft's DirectX renderer is known to have this
-requirement, so be sure to follow this guideline for maximum portability.
-</P><P>
-
-<LI>
-<EM>Avoid Templates</EM>
-<P>
-
-These days, C++ compilers used with Crystal Space support templates, and the
-project makes use of templates for several utility classes.  For portability
-reasons, however, the entire template implementation should be placed into the
-header file.  There should be no associated source code file.
+For large and important modifications, post a description of your changes to
+the main mailing list, <A HREF="mailto:crystal-main@lists.sourceforge.net">crystal-main@lists.sourceforge.net</A>.  This is
+especially important if your changes may have affected other ports which must
+be updated by other developers as a consequence.
 </OL>
-<A NAME="Coding Style"></A>
+<P>
+
+This might look overdone to some people, but you should remember that we are
+all working together with the same source.  A bug in your code can cripple the
+entire project.
+</P><P>
+
+One final thing to remember is that you should <EM>never</EM> commit files that
+you <EM>know</EM> will stop the progress of other developers.  The CVS
+repository is the place to commit completed code, not code that needs
+debugging because you can't find a certain bug.  Other developers should not
+have to stop and track down your bugs just so they can proceed with their own
+coding.  When you've committed code, please monitor the mailing list regularly
+for any signs that you've caused a problem somewhere.  This is part of the
+responsibility that goes with the ability to commit code.
+<A NAME="Porting"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC803"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC809"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_270.html#SEC802"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_276.html#SEC812"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_271.html#SEC804"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_273.html#SEC806"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_268.html#SEC797"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_274.html#SEC807"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

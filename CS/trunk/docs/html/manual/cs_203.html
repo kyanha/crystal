@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: XML Action Section</TITLE>
+<TITLE>Crystal Space: Map File Grammar</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: XML Action Section">
-<META NAME="keywords" CONTENT="Crystal Space: XML Action Section">
+<META NAME="description" CONTENT="Crystal Space: Map File Grammar">
+<META NAME="keywords" CONTENT="Crystal Space: Map File Grammar">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,47 +23,76 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC510"></A>
+<A NAME="SEC508"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC506"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_199.html#SEC489"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC507"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC509"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC484"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC507"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H4> 7.7.1.4 Action Section </H4>
-<!--docid::SEC510::-->
+<H4> 7.6.2.1 Grammar </H4>
+<!--docid::SEC508::-->
 <P>
 
-This section describes the action section.
+<EM>Written by Eric Sunshine, <A HREF="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</A>.</EM>
 </P><P>
 
-<A NAME="SEC511"></A>
-<H4> Sequences and Triggers </H4>
-<!--docid::SEC511::-->
-<P>
-
-With the sequences and triggers section you can define actions and
-interactions on objects in your map file. These sections are used to drive
-the engine sequence manager (see section <A HREF="cs_195.html#SEC460">7.6.12 Sequence Manager</A>).
+The syntax for the standard Crystal Space map file is specified using a
+context-free grammar using a modified BNF (<EM>Backus-Naur Form</EM>)
+notation.
 </P><P>
 
-<A NAME="Old Map File Format"></A>
+<EM>Terminal</EM> symbols (also known as <EM>tokens</EM>) are denoted like this,
+`<CODE>VERTEX</CODE>'.  <EM>Non-terminal</EM> symbols are denoted in this fashion,
+<EM>vector</EM>.  Expressions enclosed within `[' and `]' are optional.  When
+an expression is followed by the notation `<small>...</small>', then the expression may
+appear zero or more times.  Finally, the symbol '|' appearing between
+expressions indicates selection.  Either the expression to the left may be
+utilized, or the one to the right, but not both.  An example follows.
+</P><P>
+
+<EM>flip</EM> => `<CODE>HEAD</CODE>' | `<CODE>TAIL</CODE>'<BR>
+<EM>wager</EM> => `<CODE>WAGER</CODE>' <EM>flip</EM>     `<CODE>(</CODE>' <EM>money</EM> [ `<CODE>,</CODE>' <EM>money</EM> <small>...</small> ] `<CODE>)</CODE>'
+</P><P>
+
+In this example, a `<SAMP>WAGER</SAMP>' may be followed by either `<SAMP>HEAD</SAMP>' or
+`<SAMP>TAIL</SAMP>', and then by a parenthesized list of monetary values separated by
+commas.  At least one monetary value must be specified.  All subsequent values
+(including the comma) are optional, as denoted by `[' and `]'.  Here are a
+couple of valid expressions which satisfy the <EM>wager</EM> production:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>WAGER HEAD (44)
+WAGER TAIL (5, 39, 2)
+</pre></td></tr></table></P><P>
+
+And here are a few invalid expressions which do not:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>WAGER HEAD (44,)
+WAGER TAIL (,23)
+WAGER TAIL ()
+WAGER EITHER (81, 15)
+WAGER (72, 91)
+</pre></td></tr></table></P><P>
+
+<A NAME="Map File Syntax"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC506"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_198.html#SEC488"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_199.html#SEC489"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC512"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC507"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_204.html#SEC509"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_197.html#SEC484"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_202.html#SEC507"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_206.html#SEC543"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  

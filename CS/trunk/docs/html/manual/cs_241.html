@@ -11,10 +11,10 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 -->
 <HTML>
 <HEAD>
-<TITLE>Crystal Space: AWS Custom Components</TITLE>
+<TITLE>Crystal Space: AWS Component Events</TITLE>
 
-<META NAME="description" CONTENT="Crystal Space: AWS Custom Components">
-<META NAME="keywords" CONTENT="Crystal Space: AWS Custom Components">
+<META NAME="description" CONTENT="Crystal Space: AWS Component Events">
+<META NAME="keywords" CONTENT="Crystal Space: AWS Component Events">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 <META NAME="Generator" CONTENT="texi2html 1.64">
@@ -23,61 +23,97 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 
 <BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
 
-<A NAME="SEC679"></A>
+<A NAME="SEC676"></A>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC678"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC680"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC674"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC676"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_245.html#SEC683"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC675"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC677"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC673"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC674"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_243.html#SEC678"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <HR SIZE=1>
-<H3> 7.12.3 Creating Custom AWS Components </H3>
-<!--docid::SEC679::-->
+<H4> 7.11.3.2 Events: Responding To User Actions </H4>
+<!--docid::SEC676::-->
 <P>
 
-Obviously, the components included with AWS will not cover
-every single user's needs. Or, you may not like the way a
-certain control actually works. Maybe you want it to glow faintly
-when the mouse is over it. Or perhaps you don't like the way
-command buttons look. AWS is designed
-to be simple for component designers to use and extend. Without a rich set
-of components, no windowing system is very interesting.
+Events are broken out into <CODE>OnBlah()</CODE> functions. The
+parameters for those events are also broken out and passed to the
+functions. At the end of any of the <CODE>OnBlah()</CODE> event
+functions (except <CODE>OnDraw()</CODE>) you should return `<SAMP>true</SAMP>' if the
+event was used by you, otherwise return `<SAMP>false</SAMP>'. You <EM>must</EM>
+override <EM>all</EM> event functions, even if you don't use them
+all. If you will not use a particular event, just return `<SAMP>false</SAMP>'.
 </P><P>
 
-The first thing you need to know is that all components are
-derived from the common base class `<SAMP>awsComponent</SAMP>'. This
-component has built in handling for events and drawing. You
-don't need to know anything about how internal event handling
-happens; you just have to override the correct events. This base
-component also has built in support for handling automatic
-<EM>parameter delivery</EM>, and sinks and sources. The next few
-sections detail the things that you should do to make a
-good, robust, custom AWS component.
+It's important to note that you will only receive events that
+apply to your component. For example, if the mouse is inside
+your component, you will receive all mouse events. However, once
+the mouse leaves the confines of your borders you will no longer
+receive <EM>any</EM> mouse events. The only exception to this is
+the <CODE>OnMouseExit()</CODE> event which is sent to the component that
+just lost the mouse.
 </P><P>
 
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_242.html#SEC680">7.12.3.1 Parameter Delivery</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_243.html#SEC681">7.12.3.2 Events: Responding To User Actions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_244.html#SEC682">7.12.3.3 Sending and Receiving Signals</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
+The following is the list of all events understood by components:
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>virtual bool OnMouseDown(int button, int x, int y)</CODE>
+<DD>Triggered when the user presses a mouse button.
 <P>
 
-<A NAME="AWS Component Parameter Delivery"></A>
+<DT><CODE>virtual bool OnMouseUp(int button, int x, int y)</CODE>
+<DD>Triggered when the user releases a mouse button.
+<P>
+
+<DT><CODE>virtual bool OnMouseMove(int button, int x, int y)</CODE>
+<DD>Triggered when the user moves the mouse.
+<P>
+
+<DT><CODE>virtual bool OnMouseClick(int button, int x, int y)</CODE>
+<DD>Triggered when the user clicks the mouse.
+<P>
+
+<DT><CODE>virtual bool OnMouseDoubleClick(int button, int x, int y)</CODE>
+<DD>Triggered when the user double clicks the mouse.
+<P>
+
+<DT><CODE>virtual bool OnMouseExit()</CODE>
+<DD>Triggered when this component loses mouse focus.
+<P>
+
+<DT><CODE>virtual bool OnMouseEnter()</CODE>
+<DD>Triggered when this component gains mouse focus.
+<P>
+
+<DT><CODE>virtual bool OnKeypress(int key, int modifiers)</CODE>
+<DD>Triggered when the user presses a key.
+<P>
+
+<DT><CODE>virtual bool OnLostFocus()</CODE>
+<DD>Triggered when the keyboard focus is lost.
+<P>
+
+<DT><CODE>virtual bool OnGainFocus()</CODE>
+<DD>Triggered when the keyboard focus is gained.
+</DL>
+<P>
+
+<A NAME="AWS Component Signals"></A>
 <HR SIZE=1>
 <TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC678"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC680"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_236.html#SEC674"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC676"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_245.html#SEC683"> &gt;&gt; </A>]</TD>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_240.html#SEC675"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_242.html#SEC677"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_238.html#SEC673"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_239.html#SEC674"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_243.html#SEC678"> &gt;&gt; </A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_286.html#SEC934">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_284.html#SEC929">Index</A>]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <BR>  
