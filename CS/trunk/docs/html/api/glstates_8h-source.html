@@ -488,224 +488,226 @@
 00470         glGetIntegerv (GL_TEXTURE_COORD_ARRAY_TYPE, (GLint*)&amp;parameter_ttype[i]);
 00471         glGetPointerv (GL_TEXTURE_COORD_ARRAY_POINTER, &amp;parameter_tpointer[i]);
 00472       }
-00473     } <span class="keywordflow">else</span> {
-00474       enabled_GL_TEXTURE_1D[0] = glIsEnabled (GL_TEXTURE_1D);
-00475       enabled_GL_TEXTURE_2D[0] = glIsEnabled (GL_TEXTURE_2D);
-00476       enabled_GL_TEXTURE_3D[0] = glIsEnabled (GL_TEXTURE_3D);
-00477       enabled_GL_TEXTURE_CUBE_MAP[0] = glIsEnabled (GL_TEXTURE_CUBE_MAP);
-00478       enabled_GL_TEXTURE_COORD_ARRAY[0] = glIsEnabled (GL_TEXTURE_COORD_ARRAY);
-00479       glGetIntegerv (GL_TEXTURE_COORD_ARRAY_SIZE, (GLint*)&amp;parameter_tsize[0]);
-00480       glGetIntegerv (GL_TEXTURE_COORD_ARRAY_STRIDE, (GLint*)&amp;parameter_tstride[0]);
-00481       glGetIntegerv (GL_TEXTURE_COORD_ARRAY_TYPE, (GLint*)&amp;parameter_ttype[0]);
-00482       glGetPointerv (GL_TEXTURE_COORD_ARRAY_POINTER, &amp;parameter_tpointer[0]);
-00483       <span class="keywordflow">for</span> (i = 1 ; i &lt; CS_GL_MAX_LAYER; i++)
-00484       {
-00485         enabled_GL_TEXTURE_1D[i] = enabled_GL_TEXTURE_1D[0];
-00486         enabled_GL_TEXTURE_2D[i] = enabled_GL_TEXTURE_2D[0];
-00487         enabled_GL_TEXTURE_3D[i] = enabled_GL_TEXTURE_3D[0];
-00488         enabled_GL_TEXTURE_CUBE_MAP[i] = enabled_GL_TEXTURE_CUBE_MAP[0];
-00489         enabled_GL_TEXTURE_COORD_ARRAY[i] = enabled_GL_TEXTURE_COORD_ARRAY[0];
-00490       }
-00491     }
-00492     enabled_GL_SCISSOR_TEST = glIsEnabled (GL_SCISSOR_TEST);
-00493     enabled_GL_VERTEX_ARRAY = glIsEnabled (GL_VERTEX_ARRAY);
-00494     enabled_GL_COLOR_ARRAY = glIsEnabled (GL_COLOR_ARRAY);
-00495     enabled_GL_NORMAL_ARRAY = glIsEnabled (GL_NORMAL_ARRAY);
-00496 
-00497     <span class="keywordflow">if</span> (extmgr-&gt;<a class="code" href="structcsGLExtensionFlags.html#o3">CS_GL_ARB_multitexture</a>)
-00498     {
-00499       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z382_0">glActiveTextureARB</a> (GL_TEXTURE0_ARB);
-00500       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z382_1">glClientActiveTextureARB</a> (GL_TEXTURE0_ARB);
-00501     }
-00502     memset (boundtexture, 0, CS_GL_MAX_LAYER * <span class="keyword">sizeof</span> (GLuint));
-00503     currentUnit = 0;
-00504     activeUnit = 0;
-00505     currentBufferID = 0;
-00506     currentIndexID = 0;
-00507 
-00508     glGetIntegerv (GL_VERTEX_ARRAY_SIZE, (GLint*)&amp;parameter_vsize);
-00509     glGetIntegerv (GL_VERTEX_ARRAY_STRIDE, (GLint*)&amp;parameter_vstride);
-00510     glGetIntegerv (GL_VERTEX_ARRAY_TYPE, (GLint*)&amp;parameter_vtype);
-00511     glGetPointerv (GL_VERTEX_ARRAY_POINTER, &amp;parameter_vpointer);
-00512 
-00513     glGetIntegerv (GL_NORMAL_ARRAY_STRIDE, (GLint*)&amp;parameter_nstride);
-00514     glGetIntegerv (GL_NORMAL_ARRAY_TYPE, (GLint*)&amp;parameter_ntype);
-00515     glGetPointerv (GL_NORMAL_ARRAY_POINTER, &amp;parameter_npointer);
-00516 
-00517     glGetIntegerv (GL_COLOR_ARRAY_SIZE, (GLint*)&amp;parameter_csize);
-00518     glGetIntegerv (GL_COLOR_ARRAY_STRIDE, (GLint*)&amp;parameter_cstride);
-00519     glGetIntegerv (GL_COLOR_ARRAY_TYPE, (GLint*)&amp;parameter_ctype);
-00520     glGetPointerv (GL_COLOR_ARRAY_POINTER, &amp;parameter_cpointer);
-00521   }
-00522 };
-00523 
-00524 
-<a name="l00531"></a><a class="code" href="classcsGLStateCache.html">00531</a> CS_CSPLUGINCOMMON_GL_EXPORT <span class="keyword">class </span><a class="code" href="classcsGLStateCache.html">csGLStateCache</a>
-00532 {
-00533 <span class="keyword">public</span>:
-00534   <a class="code" href="structcsGLExtensionManager.html">csGLExtensionManager</a>* extmgr;
-00535   csGLStateCacheContext* currentContext;
-00536 
-00537   <a class="code" href="classcsGLStateCache.html">csGLStateCache</a> (<a class="code" href="structcsGLExtensionManager.html">csGLExtensionManager</a>* extmgr)
-00538   {
-00539     csGLStateCache::extmgr = extmgr;
-00540     currentContext = 0;
-00541   }
-00542 
-00543   <span class="keywordtype">void</span> SetContext (csGLStateCacheContext *context)
-00544   {
-00545     currentContext = context;
-00546   }
-00547 
-00548   <span class="comment">// Standardized caches</span>
-00549   IMPLEMENT_CACHED_BOOL (GL_DEPTH_TEST)
-00550   IMPLEMENT_CACHED_BOOL (GL_BLEND)
-00551   IMPLEMENT_CACHED_BOOL (GL_DITHER)
-00552   IMPLEMENT_CACHED_BOOL (GL_STENCIL_TEST)
-00553   IMPLEMENT_CACHED_BOOL (GL_CULL_FACE)
-00554   IMPLEMENT_CACHED_BOOL (GL_POLYGON_OFFSET_FILL)
-00555   IMPLEMENT_CACHED_BOOL (GL_LIGHTING)
-00556   IMPLEMENT_CACHED_BOOL (GL_ALPHA_TEST)
-00557   IMPLEMENT_CACHED_BOOL (GL_SCISSOR_TEST)
-00558   IMPLEMENT_CACHED_BOOL (GL_TEXTURE_GEN_S)
-00559   IMPLEMENT_CACHED_BOOL (GL_TEXTURE_GEN_T)
-00560   IMPLEMENT_CACHED_BOOL (GL_TEXTURE_GEN_R)
-00561   IMPLEMENT_CACHED_BOOL (GL_FOG)
-00562   IMPLEMENT_CACHED_BOOL_CURRENTLAYER (GL_TEXTURE_1D)
-00563   IMPLEMENT_CACHED_BOOL_CURRENTLAYER (GL_TEXTURE_2D)
-00564   IMPLEMENT_CACHED_BOOL_CURRENTLAYER (GL_TEXTURE_3D)
-00565   IMPLEMENT_CACHED_BOOL_CURRENTLAYER (GL_TEXTURE_CUBE_MAP)
-00566   IMPLEMENT_CACHED_PARAMETER_2 (glAlphaFunc, AlphaFunc, GLenum, alpha_func, GLclampf, alpha_ref)
-00567   IMPLEMENT_CACHED_PARAMETER_2 (glBlendFunc, BlendFunc, GLenum, blend_source, GLenum, blend_destination)
-00568   IMPLEMENT_CACHED_PARAMETER_1 (glCullFace, CullFace, GLenum, cull_mode)
-00569   IMPLEMENT_CACHED_PARAMETER_1 (glDepthFunc, DepthFunc, GLenum, depth_func)
-00570   IMPLEMENT_CACHED_PARAMETER_1 (glDepthMask, DepthMask, GLboolean, depth_mask)
-00571   IMPLEMENT_CACHED_PARAMETER_1 (glShadeModel, ShadeModel, GLenum, shade_model)
-00572   IMPLEMENT_CACHED_PARAMETER_3 (glStencilFunc, StencilFunc, GLenum, stencil_func, GLint, stencil_ref, GLuint, stencil_mask)
-00573   IMPLEMENT_CACHED_PARAMETER_3 (glStencilOp, StencilOp, GLenum, stencil_fail, GLenum, stencil_zfail, GLenum, stencil_zpass)
-00574   IMPLEMENT_CACHED_PARAMETER_1 (glStencilMask, StencilMask, GLuint, maskl)
-00575   IMPLEMENT_CACHED_PARAMETER_4 (glColorMask, ColorMask, GLboolean, wmRed, \
-00576     GLboolean, wmGreen, GLboolean, wmBlue, GLboolean, wmAlpha)
-00577 
-00578   IMPLEMENT_CACHED_CLIENT_STATE (GL_VERTEX_ARRAY)
-00579   IMPLEMENT_CACHED_CLIENT_STATE (GL_COLOR_ARRAY)
-00580   IMPLEMENT_CACHED_CLIENT_STATE (GL_NORMAL_ARRAY)
-00581   IMPLEMENT_CACHED_CLIENT_STATE_LAYER (GL_TEXTURE_COORD_ARRAY)
-00582 
-00583   IMPLEMENT_CACHED_PARAMETER_1 (glMatrixMode, MatrixMode, GLenum, matrixMode)
-00584   
-00585   IMPLEMENT_CACHED_PARAMETER_4 (glVertexPointer, VertexPointer, GLint, vsize,
-00586     GLenum, vtype, GLsizei, vstride, GLvoid*, vpointer);
-00587   IMPLEMENT_CACHED_PARAMETER_3 (glNormalPointer, NormalPointer, GLenum, ntype,
-00588     GLsizei, nstride, GLvoid*, npointer);
-00589   IMPLEMENT_CACHED_PARAMETER_4 (glColorPointer, ColorPointer, GLint, csize,
-00590     GLenum, ctype, GLsizei, cstride, GLvoid*, cpointer);
-00591   IMPLEMENT_CACHED_PARAMETER_4_LAYER (glTexCoordPointer, TexCoordPointer, GLint, tsize,
-00592     GLenum, ttype, GLsizei, tstride, GLvoid*, tpointer);
-00593   
-00594   <span class="comment">// Special caches</span>
-00595   <span class="keywordtype">void</span> SetTexture (GLenum target, GLuint texture)
-00596   {
-00597     <span class="keywordflow">if</span> (texture != currentContext-&gt;boundtexture[currentContext-&gt;currentUnit])
-00598     {
-00599       ActivateTU ();
-00600       currentContext-&gt;boundtexture[currentContext-&gt;currentUnit] = texture;
-00601       glBindTexture (target, texture);
-00602     }
-00603   }
-00604   GLuint GetTexture (GLenum target)
-00605   {
-00606     <span class="keywordflow">return</span> currentContext-&gt;boundtexture[currentContext-&gt;currentUnit];
-00607   }
-00608   GLuint GetTexture (GLenum target, <span class="keywordtype">int</span> unit)
-00609   {
-00610     <span class="keywordflow">return</span> currentContext-&gt;boundtexture[unit];
-00611   }
-<a name="l00616"></a><a class="code" href="classcsGLStateCache.html#a9">00616</a>   <span class="keywordtype">void</span> SetActiveTU (<span class="keywordtype">int</span> unit)
-00617   {
-00618     currentContext-&gt;currentUnit = unit;   
-00619   }
-00620   <span class="keywordtype">int</span> GetActiveTU ()
-00621   {
-00622     <span class="keywordflow">return</span> currentContext-&gt;currentUnit;
-00623   }
-00624   <span class="keywordtype">void</span> ActivateTU ()
-00625   {
-00626     <span class="keywordflow">if</span> (currentContext-&gt;activeUnit != currentContext-&gt;currentUnit &amp;&amp; extmgr-&gt;<a class="code" href="structcsGLExtensionFlags.html#o3">CS_GL_ARB_multitexture</a>)
-00627     {
-00628       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z382_0">glActiveTextureARB</a> (GL_TEXTURE0_ARB + currentContext-&gt;currentUnit);
-00629       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z382_1">glClientActiveTextureARB</a> (GL_TEXTURE0_ARB + currentContext-&gt;currentUnit);
-00630     }
-00631     currentContext-&gt;activeUnit = currentContext-&gt;currentUnit;
-00632   }
-00633 
-00634   <span class="comment">//VBO buffers</span>
-00635   <span class="keywordtype">void</span> SetBufferARB (GLenum target, GLuint <span class="keywordtype">id</span>)
-00636   {
-00637     <span class="keywordflow">if</span> (target == GL_ELEMENT_ARRAY_BUFFER_ARB)
-00638     {
-00639       <span class="keywordflow">if</span> (<span class="keywordtype">id</span> != currentContext-&gt;currentIndexID)
-00640       {
-00641         extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z527_0">glBindBufferARB</a> (target, <span class="keywordtype">id</span>);
-00642         currentContext-&gt;currentIndexID = id;
-00643       }
-00644     } 
-00645     <span class="keywordflow">else</span> 
-00646     {
-00647       <span class="keywordflow">if</span> (<span class="keywordtype">id</span> != currentContext-&gt;currentBufferID)
-00648       {
-00649         extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z527_0">glBindBufferARB</a> (target, <span class="keywordtype">id</span>);
-00650         currentContext-&gt;currentBufferID = id;
-00651         currentContext-&gt;parameter_vpointer = (GLvoid*)~0; <span class="comment">//invalidate vertexpointer</span>
-00652         currentContext-&gt;parameter_npointer = (GLvoid*)~0; <span class="comment">//invalidate vertexpointer</span>
-00653         currentContext-&gt;parameter_cpointer = (GLvoid*)~0; <span class="comment">//invalidate vertexpointer</span>
-00654         memset(&amp;currentContext-&gt;parameter_tpointer, ~0, <span class="keyword">sizeof</span>(GLvoid*)*CS_GL_MAX_LAYER);
-00655       }
-00656     }
-00657   }
-00658 
-00659   GLuint GetBufferARB (GLenum target)
-00660   {
-00661     <span class="keywordflow">if</span> (target == GL_ELEMENT_ARRAY_BUFFER_ARB)
-00662     {
-00663       <span class="keywordflow">return</span> currentContext-&gt;currentIndexID;
-00664     } 
-00665     <span class="keywordflow">else</span> 
-00666     {
-00667       <span class="keywordflow">return</span> currentContext-&gt;currentBufferID;
-00668     }
-00669   }
-00670 };
-00671 
-00672 <span class="preprocessor">#undef IMPLEMENT_CACHED_BOOL</span>
-00673 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_BOOL_CURRENTLAYER</span>
-00674 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_1</span>
-00675 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_2</span>
-00676 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_3</span>
-00677 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_4</span>
-00678 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_1_LAYER</span>
-00679 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_2_LAYER</span>
-00680 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_3_LAYER</span>
-00681 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_4_LAYER</span>
-00682 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_CLIENT_STATE</span>
-00683 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_CLIENT_STATE_LAYER</span>
-00684 <span class="preprocessor"></span>
-00685 <span class="preprocessor">#undef DECLARE_CACHED_BOOL</span>
-00686 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_BOOL_CURRENTLAYER</span>
-00687 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_1</span>
-00688 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_2</span>
-00689 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_3</span>
-00690 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_4</span>
-00691 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_1_LAYER</span>
-00692 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_2_LAYER</span>
-00693 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_3_LAYER</span>
-00694 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_4_LAYER</span>
-00695 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_CLIENT_STATE</span>
-00696 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_CLIENT_STATE_LAYER</span>
-00697 <span class="preprocessor"></span>
-00698 <span class="preprocessor">#undef FORCE_STATE_CHANGE</span>
+00473     } 
+00474     <span class="keywordflow">else</span> 
+00475     {
+00476       enabled_GL_TEXTURE_1D[0] = glIsEnabled (GL_TEXTURE_1D);
+00477       enabled_GL_TEXTURE_2D[0] = glIsEnabled (GL_TEXTURE_2D);
+00478       enabled_GL_TEXTURE_3D[0] = glIsEnabled (GL_TEXTURE_3D);
+00479       enabled_GL_TEXTURE_CUBE_MAP[0] = glIsEnabled (GL_TEXTURE_CUBE_MAP);
+00480       enabled_GL_TEXTURE_COORD_ARRAY[0] = glIsEnabled (GL_TEXTURE_COORD_ARRAY);
+00481       glGetIntegerv (GL_TEXTURE_COORD_ARRAY_SIZE, (GLint*)&amp;parameter_tsize[0]);
+00482       glGetIntegerv (GL_TEXTURE_COORD_ARRAY_STRIDE, (GLint*)&amp;parameter_tstride[0]);
+00483       glGetIntegerv (GL_TEXTURE_COORD_ARRAY_TYPE, (GLint*)&amp;parameter_ttype[0]);
+00484       glGetPointerv (GL_TEXTURE_COORD_ARRAY_POINTER, &amp;parameter_tpointer[0]);
+00485       <span class="keywordflow">for</span> (i = 1 ; i &lt; CS_GL_MAX_LAYER; i++)
+00486       {
+00487         enabled_GL_TEXTURE_1D[i] = enabled_GL_TEXTURE_1D[0];
+00488         enabled_GL_TEXTURE_2D[i] = enabled_GL_TEXTURE_2D[0];
+00489         enabled_GL_TEXTURE_3D[i] = enabled_GL_TEXTURE_3D[0];
+00490         enabled_GL_TEXTURE_CUBE_MAP[i] = enabled_GL_TEXTURE_CUBE_MAP[0];
+00491         enabled_GL_TEXTURE_COORD_ARRAY[i] = enabled_GL_TEXTURE_COORD_ARRAY[0];
+00492       }
+00493     }
+00494     enabled_GL_SCISSOR_TEST = glIsEnabled (GL_SCISSOR_TEST);
+00495     enabled_GL_VERTEX_ARRAY = glIsEnabled (GL_VERTEX_ARRAY);
+00496     enabled_GL_COLOR_ARRAY = glIsEnabled (GL_COLOR_ARRAY);
+00497     enabled_GL_NORMAL_ARRAY = glIsEnabled (GL_NORMAL_ARRAY);
+00498 
+00499     <span class="keywordflow">if</span> (extmgr-&gt;<a class="code" href="structcsGLExtensionFlags.html#o3">CS_GL_ARB_multitexture</a>)
+00500     {
+00501       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z382_0">glActiveTextureARB</a> (GL_TEXTURE0_ARB);
+00502       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z382_1">glClientActiveTextureARB</a> (GL_TEXTURE0_ARB);
+00503     }
+00504     memset (boundtexture, 0, CS_GL_MAX_LAYER * <span class="keyword">sizeof</span> (GLuint));
+00505     currentUnit = 0;
+00506     activeUnit = 0;
+00507     currentBufferID = 0;
+00508     currentIndexID = 0;
+00509 
+00510     glGetIntegerv (GL_VERTEX_ARRAY_SIZE, (GLint*)&amp;parameter_vsize);
+00511     glGetIntegerv (GL_VERTEX_ARRAY_STRIDE, (GLint*)&amp;parameter_vstride);
+00512     glGetIntegerv (GL_VERTEX_ARRAY_TYPE, (GLint*)&amp;parameter_vtype);
+00513     glGetPointerv (GL_VERTEX_ARRAY_POINTER, &amp;parameter_vpointer);
+00514 
+00515     glGetIntegerv (GL_NORMAL_ARRAY_STRIDE, (GLint*)&amp;parameter_nstride);
+00516     glGetIntegerv (GL_NORMAL_ARRAY_TYPE, (GLint*)&amp;parameter_ntype);
+00517     glGetPointerv (GL_NORMAL_ARRAY_POINTER, &amp;parameter_npointer);
+00518 
+00519     glGetIntegerv (GL_COLOR_ARRAY_SIZE, (GLint*)&amp;parameter_csize);
+00520     glGetIntegerv (GL_COLOR_ARRAY_STRIDE, (GLint*)&amp;parameter_cstride);
+00521     glGetIntegerv (GL_COLOR_ARRAY_TYPE, (GLint*)&amp;parameter_ctype);
+00522     glGetPointerv (GL_COLOR_ARRAY_POINTER, &amp;parameter_cpointer);
+00523   }
+00524 };
+00525 
+00526 
+<a name="l00533"></a><a class="code" href="classcsGLStateCache.html">00533</a> CS_CSPLUGINCOMMON_GL_EXPORT <span class="keyword">class </span><a class="code" href="classcsGLStateCache.html">csGLStateCache</a>
+00534 {
+00535 <span class="keyword">public</span>:
+00536   <a class="code" href="structcsGLExtensionManager.html">csGLExtensionManager</a>* extmgr;
+00537   csGLStateCacheContext* currentContext;
+00538 
+00539   <a class="code" href="classcsGLStateCache.html">csGLStateCache</a> (<a class="code" href="structcsGLExtensionManager.html">csGLExtensionManager</a>* extmgr)
+00540   {
+00541     csGLStateCache::extmgr = extmgr;
+00542     currentContext = 0;
+00543   }
+00544 
+00545   <span class="keywordtype">void</span> SetContext (csGLStateCacheContext *context)
+00546   {
+00547     currentContext = context;
+00548   }
+00549 
+00550   <span class="comment">// Standardized caches</span>
+00551   IMPLEMENT_CACHED_BOOL (GL_DEPTH_TEST)
+00552   IMPLEMENT_CACHED_BOOL (GL_BLEND)
+00553   IMPLEMENT_CACHED_BOOL (GL_DITHER)
+00554   IMPLEMENT_CACHED_BOOL (GL_STENCIL_TEST)
+00555   IMPLEMENT_CACHED_BOOL (GL_CULL_FACE)
+00556   IMPLEMENT_CACHED_BOOL (GL_POLYGON_OFFSET_FILL)
+00557   IMPLEMENT_CACHED_BOOL (GL_LIGHTING)
+00558   IMPLEMENT_CACHED_BOOL (GL_ALPHA_TEST)
+00559   IMPLEMENT_CACHED_BOOL (GL_SCISSOR_TEST)
+00560   IMPLEMENT_CACHED_BOOL (GL_TEXTURE_GEN_S)
+00561   IMPLEMENT_CACHED_BOOL (GL_TEXTURE_GEN_T)
+00562   IMPLEMENT_CACHED_BOOL (GL_TEXTURE_GEN_R)
+00563   IMPLEMENT_CACHED_BOOL (GL_FOG)
+00564   IMPLEMENT_CACHED_BOOL_CURRENTLAYER (GL_TEXTURE_1D)
+00565   IMPLEMENT_CACHED_BOOL_CURRENTLAYER (GL_TEXTURE_2D)
+00566   IMPLEMENT_CACHED_BOOL_CURRENTLAYER (GL_TEXTURE_3D)
+00567   IMPLEMENT_CACHED_BOOL_CURRENTLAYER (GL_TEXTURE_CUBE_MAP)
+00568   IMPLEMENT_CACHED_PARAMETER_2 (glAlphaFunc, AlphaFunc, GLenum, alpha_func, GLclampf, alpha_ref)
+00569   IMPLEMENT_CACHED_PARAMETER_2 (glBlendFunc, BlendFunc, GLenum, blend_source, GLenum, blend_destination)
+00570   IMPLEMENT_CACHED_PARAMETER_1 (glCullFace, CullFace, GLenum, cull_mode)
+00571   IMPLEMENT_CACHED_PARAMETER_1 (glDepthFunc, DepthFunc, GLenum, depth_func)
+00572   IMPLEMENT_CACHED_PARAMETER_1 (glDepthMask, DepthMask, GLboolean, depth_mask)
+00573   IMPLEMENT_CACHED_PARAMETER_1 (glShadeModel, ShadeModel, GLenum, shade_model)
+00574   IMPLEMENT_CACHED_PARAMETER_3 (glStencilFunc, StencilFunc, GLenum, stencil_func, GLint, stencil_ref, GLuint, stencil_mask)
+00575   IMPLEMENT_CACHED_PARAMETER_3 (glStencilOp, StencilOp, GLenum, stencil_fail, GLenum, stencil_zfail, GLenum, stencil_zpass)
+00576   IMPLEMENT_CACHED_PARAMETER_1 (glStencilMask, StencilMask, GLuint, maskl)
+00577   IMPLEMENT_CACHED_PARAMETER_4 (glColorMask, ColorMask, GLboolean, wmRed, \
+00578     GLboolean, wmGreen, GLboolean, wmBlue, GLboolean, wmAlpha)
+00579 
+00580   IMPLEMENT_CACHED_CLIENT_STATE (GL_VERTEX_ARRAY)
+00581   IMPLEMENT_CACHED_CLIENT_STATE (GL_COLOR_ARRAY)
+00582   IMPLEMENT_CACHED_CLIENT_STATE (GL_NORMAL_ARRAY)
+00583   IMPLEMENT_CACHED_CLIENT_STATE_LAYER (GL_TEXTURE_COORD_ARRAY)
+00584 
+00585   IMPLEMENT_CACHED_PARAMETER_1 (glMatrixMode, MatrixMode, GLenum, matrixMode)
+00586   
+00587   IMPLEMENT_CACHED_PARAMETER_4 (glVertexPointer, VertexPointer, GLint, vsize,
+00588     GLenum, vtype, GLsizei, vstride, GLvoid*, vpointer);
+00589   IMPLEMENT_CACHED_PARAMETER_3 (glNormalPointer, NormalPointer, GLenum, ntype,
+00590     GLsizei, nstride, GLvoid*, npointer);
+00591   IMPLEMENT_CACHED_PARAMETER_4 (glColorPointer, ColorPointer, GLint, csize,
+00592     GLenum, ctype, GLsizei, cstride, GLvoid*, cpointer);
+00593   IMPLEMENT_CACHED_PARAMETER_4_LAYER (glTexCoordPointer, TexCoordPointer, GLint, tsize,
+00594     GLenum, ttype, GLsizei, tstride, GLvoid*, tpointer);
+00595   
+00596   <span class="comment">// Special caches</span>
+00597   <span class="keywordtype">void</span> SetTexture (GLenum target, GLuint texture)
+00598   {
+00599     <span class="keywordflow">if</span> (texture != currentContext-&gt;boundtexture[currentContext-&gt;currentUnit])
+00600     {
+00601       ActivateTU ();
+00602       currentContext-&gt;boundtexture[currentContext-&gt;currentUnit] = texture;
+00603       glBindTexture (target, texture);
+00604     }
+00605   }
+00606   GLuint GetTexture (GLenum target)
+00607   {
+00608     <span class="keywordflow">return</span> currentContext-&gt;boundtexture[currentContext-&gt;currentUnit];
+00609   }
+00610   GLuint GetTexture (GLenum target, <span class="keywordtype">int</span> unit)
+00611   {
+00612     <span class="keywordflow">return</span> currentContext-&gt;boundtexture[unit];
+00613   }
+<a name="l00618"></a><a class="code" href="classcsGLStateCache.html#a9">00618</a>   <span class="keywordtype">void</span> SetActiveTU (<span class="keywordtype">int</span> unit)
+00619   {
+00620     currentContext-&gt;currentUnit = unit;   
+00621   }
+00622   <span class="keywordtype">int</span> GetActiveTU ()
+00623   {
+00624     <span class="keywordflow">return</span> currentContext-&gt;currentUnit;
+00625   }
+00626   <span class="keywordtype">void</span> ActivateTU ()
+00627   {
+00628     <span class="keywordflow">if</span> (currentContext-&gt;activeUnit != currentContext-&gt;currentUnit &amp;&amp; extmgr-&gt;<a class="code" href="structcsGLExtensionFlags.html#o3">CS_GL_ARB_multitexture</a>)
+00629     {
+00630       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z382_0">glActiveTextureARB</a> (GL_TEXTURE0_ARB + currentContext-&gt;currentUnit);
+00631       extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z382_1">glClientActiveTextureARB</a> (GL_TEXTURE0_ARB + currentContext-&gt;currentUnit);
+00632     }
+00633     currentContext-&gt;activeUnit = currentContext-&gt;currentUnit;
+00634   }
+00635 
+00636   <span class="comment">//VBO buffers</span>
+00637   <span class="keywordtype">void</span> SetBufferARB (GLenum target, GLuint <span class="keywordtype">id</span>)
+00638   {
+00639     <span class="keywordflow">if</span> (target == GL_ELEMENT_ARRAY_BUFFER_ARB)
+00640     {
+00641       <span class="keywordflow">if</span> (<span class="keywordtype">id</span> != currentContext-&gt;currentIndexID)
+00642       {
+00643         extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z527_0">glBindBufferARB</a> (target, <span class="keywordtype">id</span>);
+00644         currentContext-&gt;currentIndexID = id;
+00645       }
+00646     } 
+00647     <span class="keywordflow">else</span> 
+00648     {
+00649       <span class="keywordflow">if</span> (<span class="keywordtype">id</span> != currentContext-&gt;currentBufferID)
+00650       {
+00651         extmgr-&gt;<a class="code" href="structcsGLExtensionFunctions.html#z527_0">glBindBufferARB</a> (target, <span class="keywordtype">id</span>);
+00652         currentContext-&gt;currentBufferID = id;
+00653         currentContext-&gt;parameter_vpointer = (GLvoid*)~0; <span class="comment">//invalidate vertexpointer</span>
+00654         currentContext-&gt;parameter_npointer = (GLvoid*)~0; <span class="comment">//invalidate vertexpointer</span>
+00655         currentContext-&gt;parameter_cpointer = (GLvoid*)~0; <span class="comment">//invalidate vertexpointer</span>
+00656         memset(&amp;currentContext-&gt;parameter_tpointer, ~0, <span class="keyword">sizeof</span>(GLvoid*)*CS_GL_MAX_LAYER);
+00657       }
+00658     }
+00659   }
+00660 
+00661   GLuint GetBufferARB (GLenum target)
+00662   {
+00663     <span class="keywordflow">if</span> (target == GL_ELEMENT_ARRAY_BUFFER_ARB)
+00664     {
+00665       <span class="keywordflow">return</span> currentContext-&gt;currentIndexID;
+00666     } 
+00667     <span class="keywordflow">else</span> 
+00668     {
+00669       <span class="keywordflow">return</span> currentContext-&gt;currentBufferID;
+00670     }
+00671   }
+00672 };
+00673 
+00674 <span class="preprocessor">#undef IMPLEMENT_CACHED_BOOL</span>
+00675 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_BOOL_CURRENTLAYER</span>
+00676 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_1</span>
+00677 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_2</span>
+00678 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_3</span>
+00679 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_4</span>
+00680 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_1_LAYER</span>
+00681 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_2_LAYER</span>
+00682 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_3_LAYER</span>
+00683 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_PARAMETER_4_LAYER</span>
+00684 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_CLIENT_STATE</span>
+00685 <span class="preprocessor"></span><span class="preprocessor">#undef IMPLEMENT_CACHED_CLIENT_STATE_LAYER</span>
+00686 <span class="preprocessor"></span>
+00687 <span class="preprocessor">#undef DECLARE_CACHED_BOOL</span>
+00688 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_BOOL_CURRENTLAYER</span>
+00689 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_1</span>
+00690 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_2</span>
+00691 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_3</span>
+00692 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_4</span>
+00693 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_1_LAYER</span>
+00694 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_2_LAYER</span>
+00695 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_3_LAYER</span>
+00696 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_PARAMETER_4_LAYER</span>
+00697 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_CLIENT_STATE</span>
+00698 <span class="preprocessor"></span><span class="preprocessor">#undef DECLARE_CACHED_CLIENT_STATE_LAYER</span>
 00699 <span class="preprocessor"></span>
-00700 <span class="preprocessor">#endif // __CS_GLSTATES_H__</span>
+00700 <span class="preprocessor">#undef FORCE_STATE_CHANGE</span>
+00701 <span class="preprocessor"></span>
+00702 <span class="preprocessor">#endif // __CS_GLSTATES_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
