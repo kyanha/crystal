@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\loader\gif\gifimage.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\gif\csgifimg.csplugin
+SOURCE=..\..\mk\msvc\plgcsgifimg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsgifimg.rc
+SOURCE=..\..\plugins\video\loader\gif\csgifimg.csplugin
 # End Source File
 # End Group
 # End Target

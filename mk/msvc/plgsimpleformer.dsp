@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\terraformer\simpleformer\simpleformer.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\terraformer\simpleformer\simpleformer.csplugin
+SOURCE=..\..\mk\msvc\plgsimpleformer.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsimpleformer.rc
+SOURCE=..\..\plugins\terraformer\simpleformer\simpleformer.csplugin
 # End Source File
 # End Group
 # End Target

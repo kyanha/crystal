@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\sound\loader\aiff\aifffile.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\loader\aiff\sndaiff.csplugin
+SOURCE=..\..\mk\msvc\plgsndaiff.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndaiff.rc
+SOURCE=..\..\plugins\sound\loader\aiff\sndaiff.csplugin
 # End Source File
 # End Group
 # End Target

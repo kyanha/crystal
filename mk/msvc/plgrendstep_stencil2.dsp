@@ -260,11 +260,11 @@ SOURCE=..\..\plugins\engine\renderloop\shadow\stencil2\stencil2.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\renderloop\shadow\stencil2\rendstep_stencil2.csplugin
+SOURCE=..\..\mk\msvc\plgrendstep_stencil2.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgrendstep_stencil2.rc
+SOURCE=..\..\plugins\engine\renderloop\shadow\stencil2\rendstep_stencil2.csplugin
 # End Source File
 # End Group
 # End Target

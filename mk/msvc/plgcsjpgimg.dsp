@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\loader\jpg\jpgimage.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\jpg\csjpgimg.csplugin
+SOURCE=..\..\mk\msvc\plgcsjpgimg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsjpgimg.rc
+SOURCE=..\..\plugins\video\loader\jpg\csjpgimg.csplugin
 # End Source File
 # End Group
 # End Target

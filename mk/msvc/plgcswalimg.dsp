@@ -260,11 +260,11 @@ SOURCE=..\..\plugins\video\loader\wal\walpal.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\wal\cswalimg.csplugin
+SOURCE=..\..\mk\msvc\plgcswalimg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcswalimg.rc
+SOURCE=..\..\plugins\video\loader\wal\cswalimg.csplugin
 # End Source File
 # End Group
 # End Target

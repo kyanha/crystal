@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\sound\loader\au\aufile.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\loader\au\sndau.csplugin
+SOURCE=..\..\mk\msvc\plgsndau.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndau.rc
+SOURCE=..\..\plugins\sound\loader\au\sndau.csplugin
 # End Source File
 # End Group
 # End Target

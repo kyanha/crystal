@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\emit\persist\standard\emitldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\emit\persist\standard\emitldr.csplugin
+SOURCE=..\..\mk\msvc\plgemitldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgemitldr.rc
+SOURCE=..\..\plugins\mesh\emit\persist\standard\emitldr.csplugin
 # End Source File
 # End Group
 # End Target

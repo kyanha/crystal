@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\stars\object\stars.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\stars\object\stars.csplugin
+SOURCE=..\..\mk\msvc\plgstars.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgstars.rc
+SOURCE=..\..\plugins\mesh\stars\object\stars.csplugin
 # End Source File
 # End Group
 # End Target

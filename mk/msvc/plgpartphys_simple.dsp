@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\particles\physics\simple\simplephys.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\particles\physics\simple\partphys_simple.csplugin
+SOURCE=..\..\mk\msvc\plgpartphys_simple.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgpartphys_simple.rc
+SOURCE=..\..\plugins\mesh\particles\physics\simple\partphys_simple.csplugin
 # End Source File
 # End Group
 # End Target

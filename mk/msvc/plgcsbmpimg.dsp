@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\loader\bmp\bmpimage.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\loader\bmp\csbmpimg.csplugin
+SOURCE=..\..\mk\msvc\plgcsbmpimg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsbmpimg.rc
+SOURCE=..\..\plugins\video\loader\bmp\csbmpimg.csplugin
 # End Source File
 # End Group
 # End Target

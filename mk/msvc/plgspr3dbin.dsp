@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\spr3d\persist\binary\spr3dbin.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\spr3d\persist\binary\spr3dbin.csplugin
+SOURCE=..\..\mk\msvc\plgspr3dbin.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgspr3dbin.rc
+SOURCE=..\..\plugins\mesh\spr3d\persist\binary\spr3dbin.csplugin
 # End Source File
 # End Group
 # End Target

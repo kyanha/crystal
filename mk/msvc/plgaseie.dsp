@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\mesh\impexp\ase\aseie.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\impexp\ase\aseie.csplugin
+SOURCE=..\..\mk\msvc\plgaseie.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgaseie.rc
+SOURCE=..\..\plugins\mesh\impexp\ase\aseie.csplugin
 # End Source File
 # End Group
 # End Target

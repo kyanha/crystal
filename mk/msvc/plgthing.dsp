@@ -296,11 +296,11 @@ SOURCE=..\..\plugins\mesh\thing\object\thing.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\thing\object\thing.csplugin
+SOURCE=..\..\mk\msvc\plgthing.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgthing.rc
+SOURCE=..\..\plugins\mesh\thing\object\thing.csplugin
 # End Source File
 # End Group
 # End Target

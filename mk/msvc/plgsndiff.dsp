@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\sound\loader\iff\ifffile.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\loader\iff\sndiff.csplugin
+SOURCE=..\..\mk\msvc\plgsndiff.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndiff.rc
+SOURCE=..\..\plugins\sound\loader\iff\sndiff.csplugin
 # End Source File
 # End Group
 # End Target

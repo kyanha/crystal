@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\sound\loader\wav\wavfile.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\loader\wav\sndwav.csplugin
+SOURCE=..\..\mk\msvc\plgsndwav.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndwav.rc
+SOURCE=..\..\plugins\sound\loader\wav\sndwav.csplugin
 # End Source File
 # End Group
 # End Target

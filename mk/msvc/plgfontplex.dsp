@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\font\server\fontplex\fontplex.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\font\server\fontplex\fontplex.csplugin
+SOURCE=..\..\mk\msvc\plgfontplex.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgfontplex.rc
+SOURCE=..\..\plugins\font\server\fontplex\fontplex.csplugin
 # End Source File
 # End Group
 # End Target

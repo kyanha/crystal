@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\mesh\impexp\mdl\mdlie.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\impexp\mdl\mdlie.csplugin
+SOURCE=..\..\mk\msvc\plgmdlie.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgmdlie.rc
+SOURCE=..\..\plugins\mesh\impexp\mdl\mdlie.csplugin
 # End Source File
 # End Group
 # End Target

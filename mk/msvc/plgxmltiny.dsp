@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\documentsystem\xmltiny\xmltiny.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\documentsystem\xmltiny\xmltiny.csplugin
+SOURCE=..\..\mk\msvc\plgxmltiny.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgxmltiny.rc
+SOURCE=..\..\plugins\documentsystem\xmltiny\xmltiny.csplugin
 # End Source File
 # End Group
 # End Target

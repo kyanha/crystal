@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\sprcal3d\persist\sprcal3dldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\sprcal3d\persist\sprcal3dldr.csplugin
+SOURCE=..\..\mk\msvc\plgsprcal3dldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsprcal3dldr.rc
+SOURCE=..\..\plugins\mesh\sprcal3d\persist\sprcal3dldr.csplugin
 # End Source File
 # End Group
 # End Target

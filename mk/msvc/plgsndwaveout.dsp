@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\sound\driver\waveoutsd\wodrv.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\driver\waveoutsd\sndwaveout.csplugin
+SOURCE=..\..\mk\msvc\plgsndwaveout.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndwaveout.rc
+SOURCE=..\..\plugins\sound\driver\waveoutsd\sndwaveout.csplugin
 # End Source File
 # End Group
 # End Target

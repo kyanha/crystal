@@ -264,11 +264,11 @@ SOURCE=..\..\plugins\mesh\spr2d\object\spr2duv.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\spr2d\object\spr2d.csplugin
+SOURCE=..\..\mk\msvc\plgspr2d.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgspr2d.rc
+SOURCE=..\..\plugins\mesh\spr2d\object\spr2d.csplugin
 # End Source File
 # End Group
 # End Target

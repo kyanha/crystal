@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\null\persist\standard\nmeshldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\null\persist\standard\nullmeshldr.csplugin
+SOURCE=..\..\mk\msvc\plgnullmeshldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgnullmeshldr.rc
+SOURCE=..\..\plugins\mesh\null\persist\standard\nullmeshldr.csplugin
 # End Source File
 # End Group
 # End Target

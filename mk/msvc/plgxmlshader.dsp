@@ -284,11 +284,11 @@ SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\xmlshader.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\xmlshader.csplugin
+SOURCE=..\..\mk\msvc\plgxmlshader.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgxmlshader.rc
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\xmlshader.csplugin
 # End Source File
 # End Group
 # End Target

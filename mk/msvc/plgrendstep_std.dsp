@@ -288,11 +288,11 @@ SOURCE=..\..\plugins\engine\renderloop\stdsteps\target.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\renderloop\stdsteps\rendstep_std.csplugin
+SOURCE=..\..\mk\msvc\plgrendstep_std.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgrendstep_std.rc
+SOURCE=..\..\plugins\engine\renderloop\stdsteps\rendstep_std.csplugin
 # End Source File
 # End Group
 # End Target

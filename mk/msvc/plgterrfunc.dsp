@@ -272,11 +272,11 @@ SOURCE=..\..\plugins\mesh\terrfunc\object\terrvis.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrfunc\object\terrfunc.csplugin
+SOURCE=..\..\mk\msvc\plgterrfunc.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgterrfunc.rc
+SOURCE=..\..\plugins\mesh\terrfunc\object\terrfunc.csplugin
 # End Source File
 # End Group
 # End Target

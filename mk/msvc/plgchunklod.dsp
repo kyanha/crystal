@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\terrain\object\chunklod.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain\object\chunklod.csplugin
+SOURCE=..\..\mk\msvc\plgchunklod.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgchunklod.rc
+SOURCE=..\..\plugins\mesh\terrain\object\chunklod.csplugin
 # End Source File
 # End Group
 # End Target

@@ -336,11 +336,11 @@ SOURCE=..\..\plugins\proctex\standard\water.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\proctex\standard\stdpt.csplugin
+SOURCE=..\..\mk\msvc\plgstdpt.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgstdpt.rc
+SOURCE=..\..\plugins\proctex\standard\stdpt.csplugin
 # End Source File
 # End Group
 # End Target

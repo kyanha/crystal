@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\sound\loader\ogg\oggdata.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\loader\ogg\sndogg.csplugin
+SOURCE=..\..\mk\msvc\plgsndogg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndogg.rc
+SOURCE=..\..\plugins\sound\loader\ogg\sndogg.csplugin
 # End Source File
 # End Group
 # End Target

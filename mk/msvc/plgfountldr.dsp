@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\fountain\persist\standard\fountldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\fountain\persist\standard\fountldr.csplugin
+SOURCE=..\..\mk\msvc\plgfountldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgfountldr.rc
+SOURCE=..\..\plugins\mesh\fountain\persist\standard\fountldr.csplugin
 # End Source File
 # End Group
 # End Target

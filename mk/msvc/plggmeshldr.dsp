@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\genmesh\persist\standard\gmeshldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\genmesh\persist\standard\gmeshldr.csplugin
+SOURCE=..\..\mk\msvc\plggmeshldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plggmeshldr.rc
+SOURCE=..\..\plugins\mesh\genmesh\persist\standard\gmeshldr.csplugin
 # End Source File
 # End Group
 # End Target

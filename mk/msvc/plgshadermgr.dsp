@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.csplugin
+SOURCE=..\..\mk\msvc\plgshadermgr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgshadermgr.rc
+SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\rain\persist\standard\rainldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\rain\persist\standard\rainldr.csplugin
+SOURCE=..\..\mk\msvc\plgrainldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgrainldr.rc
+SOURCE=..\..\plugins\mesh\rain\persist\standard\rainldr.csplugin
 # End Source File
 # End Group
 # End Target

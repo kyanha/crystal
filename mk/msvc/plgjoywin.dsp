@@ -260,11 +260,11 @@ SOURCE=..\..\plugins\device\joystick\windows\dinputdefs.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\device\joystick\windows\joywin.csplugin
+SOURCE=..\..\mk\msvc\plgjoywin.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgjoywin.rc
+SOURCE=..\..\plugins\device\joystick\windows\joywin.csplugin
 # End Source File
 # End Group
 # End Target

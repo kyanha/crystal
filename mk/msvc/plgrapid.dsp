@@ -276,11 +276,11 @@ SOURCE=..\..\plugins\collide\rapid\rapcol.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\rapid\rapid.csplugin
+SOURCE=..\..\mk\msvc\plgrapid.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgrapid.rc
+SOURCE=..\..\plugins\collide\rapid\rapid.csplugin
 # End Source File
 # End Group
 # End Target

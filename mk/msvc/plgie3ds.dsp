@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\impexp\3ds\ie3ds.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\impexp\3ds\ie3ds.csplugin
+SOURCE=..\..\mk\msvc\plgie3ds.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgie3ds.rc
+SOURCE=..\..\plugins\mesh\impexp\3ds\ie3ds.csplugin
 # End Source File
 # End Group
 # End Target

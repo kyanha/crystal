@@ -280,11 +280,11 @@ SOURCE=..\..\plugins\sound\renderer\ds3d\sndsrc.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\ds3d\sndds3d.csplugin
+SOURCE=..\..\mk\msvc\plgsndds3d.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndds3d.rc
+SOURCE=..\..\plugins\sound\renderer\ds3d\sndds3d.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\haze\object\haze.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\haze\object\haze.csplugin
+SOURCE=..\..\mk\msvc\plghaze.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plghaze.rc
+SOURCE=..\..\plugins\mesh\haze\object\haze.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\proctex\ptanimimg\ptanimimg.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\proctex\ptanimimg\ptanimimg.csplugin
+SOURCE=..\..\mk\msvc\plgptanimimg.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgptanimimg.rc
+SOURCE=..\..\plugins\proctex\ptanimimg\ptanimimg.csplugin
 # End Source File
 # End Group
 # End Target

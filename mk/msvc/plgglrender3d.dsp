@@ -288,11 +288,11 @@ SOURCE=..\..\plugins\video\render3d\opengl\normalizationcube.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\opengl\glrender3d.csplugin
+SOURCE=..\..\mk\msvc\plgglrender3d.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgglrender3d.rc
+SOURCE=..\..\plugins\video\render3d\opengl\glrender3d.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\spiral\object\spiral.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\spiral\object\spiral.csplugin
+SOURCE=..\..\mk\msvc\plgspiral.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgspiral.rc
+SOURCE=..\..\plugins\mesh\spiral\object\spiral.csplugin
 # End Source File
 # End Group
 # End Target

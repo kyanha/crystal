@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\terrain\persist\standard\terrainldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrain\persist\standard\terrainldr.csplugin
+SOURCE=..\..\mk\msvc\plgterrainldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgterrainldr.rc
+SOURCE=..\..\plugins\mesh\terrain\persist\standard\terrainldr.csplugin
 # End Source File
 # End Group
 # End Target

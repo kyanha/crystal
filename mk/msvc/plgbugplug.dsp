@@ -272,11 +272,11 @@ SOURCE=..\..\plugins\bugplug\spider.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\bugplug\bugplug.csplugin
+SOURCE=..\..\mk\msvc\plgbugplug.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgbugplug.rc
+SOURCE=..\..\plugins\bugplug\bugplug.csplugin
 # End Source File
 # End Group
 # End Target

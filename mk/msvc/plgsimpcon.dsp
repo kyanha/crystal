@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\console\output\simple\simpcon.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\console\output\simple\simpcon.csplugin
+SOURCE=..\..\mk\msvc\plgsimpcon.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsimpcon.rc
+SOURCE=..\..\plugins\console\output\simple\simpcon.csplugin
 # End Source File
 # End Group
 # End Target

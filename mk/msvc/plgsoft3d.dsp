@@ -308,11 +308,11 @@ SOURCE=..\..\plugins\video\renderer\software\tcache.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\software\soft3d.csplugin
+SOURCE=..\..\mk\msvc\plgsoft3d.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsoft3d.rc
+SOURCE=..\..\plugins\video\renderer\software\soft3d.csplugin
 # End Source File
 # End Group
 # End Target

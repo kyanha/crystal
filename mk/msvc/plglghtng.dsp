@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\lghtng\object\lghtng.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\lghtng\object\lghtng.csplugin
+SOURCE=..\..\mk\msvc\plglghtng.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plglghtng.rc
+SOURCE=..\..\plugins\mesh\lghtng\object\lghtng.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\particles\physics\ode\odeparticles.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\particles\physics\ode\partphys_ode.csplugin
+SOURCE=..\..\mk\msvc\plgpartphys_ode.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgpartphys_ode.rc
+SOURCE=..\..\plugins\mesh\particles\physics\ode\partphys_ode.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\fire\persist\standard\fireldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\fire\persist\standard\fireldr.csplugin
+SOURCE=..\..\mk\msvc\plgfireldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgfireldr.rc
+SOURCE=..\..\plugins\mesh\fire\persist\standard\fireldr.csplugin
 # End Source File
 # End Group
 # End Target

@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\sound\loader\mplex\sndmulti.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\loader\mplex\sndplex.csplugin
+SOURCE=..\..\mk\msvc\plgsndplex.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndplex.rc
+SOURCE=..\..\plugins\sound\loader\mplex\sndplex.csplugin
 # End Source File
 # End Group
 # End Target

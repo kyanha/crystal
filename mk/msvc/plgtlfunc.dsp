@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\proctex\tlfunc\tlfunc.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\proctex\tlfunc\tlfunc.csplugin
+SOURCE=..\..\mk\msvc\plgtlfunc.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgtlfunc.rc
+SOURCE=..\..\plugins\proctex\tlfunc\tlfunc.csplugin
 # End Source File
 # End Group
 # End Target

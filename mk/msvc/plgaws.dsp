@@ -556,11 +556,11 @@ SOURCE=..\..\plugins\aws\slparse.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\aws\aws.csplugin
+SOURCE=..\..\mk\msvc\plgaws.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgaws.rc
+SOURCE=..\..\plugins\aws\aws.csplugin
 # End Source File
 # End Group
 # End Target

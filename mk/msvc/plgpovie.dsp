@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\mesh\impexp\pov\povie.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\impexp\pov\povie.csplugin
+SOURCE=..\..\mk\msvc\plgpovie.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgpovie.rc
+SOURCE=..\..\plugins\mesh\impexp\pov\povie.csplugin
 # End Source File
 # End Group
 # End Target

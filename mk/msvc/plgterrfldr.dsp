@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\terrfunc\persist\standard\terrfldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\terrfunc\persist\standard\terrfldr.csplugin
+SOURCE=..\..\mk\msvc\plgterrfldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgterrfldr.rc
+SOURCE=..\..\plugins\mesh\terrfunc\persist\standard\terrfldr.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\thing\persist\standard\thingldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\thing\persist\standard\thingldr.csplugin
+SOURCE=..\..\mk\msvc\plgthingldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgthingldr.rc
+SOURCE=..\..\plugins\mesh\thing\persist\standard\thingldr.csplugin
 # End Source File
 # End Group
 # End Target

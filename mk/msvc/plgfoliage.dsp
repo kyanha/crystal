@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\foliage\object\foliage.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\foliage\object\foliage.csplugin
+SOURCE=..\..\mk\msvc\plgfoliage.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgfoliage.rc
+SOURCE=..\..\plugins\mesh\foliage\object\foliage.csplugin
 # End Source File
 # End Group
 # End Target

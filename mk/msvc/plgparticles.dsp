@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\particles\object\particles.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\particles\object\particles.csplugin
+SOURCE=..\..\mk\msvc\plgparticles.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgparticles.rc
+SOURCE=..\..\plugins\mesh\particles\object\particles.csplugin
 # End Source File
 # End Group
 # End Target

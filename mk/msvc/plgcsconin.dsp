@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\console\input\standard\csconin.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\console\input\standard\csconin.csplugin
+SOURCE=..\..\mk\msvc\plgcsconin.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcsconin.rc
+SOURCE=..\..\plugins\console\input\standard\csconin.csplugin
 # End Source File
 # End Group
 # End Target

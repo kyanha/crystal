@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\genmesh\object\genmesh.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\genmesh\object\genmesh.csplugin
+SOURCE=..\..\mk\msvc\plggenmesh.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plggenmesh.rc
+SOURCE=..\..\plugins\mesh\genmesh\object\genmesh.csplugin
 # End Source File
 # End Group
 # End Target

@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\stars\persist\standard\starldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\stars\persist\standard\starldr.csplugin
+SOURCE=..\..\mk\msvc\plgstarldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgstarldr.rc
+SOURCE=..\..\plugins\mesh\stars\persist\standard\starldr.csplugin
 # End Source File
 # End Group
 # End Target

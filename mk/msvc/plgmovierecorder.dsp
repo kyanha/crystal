@@ -296,11 +296,11 @@ SOURCE=..\..\plugins\movierecorder\rtjpeg.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\movierecorder\movierecorder.csplugin
+SOURCE=..\..\mk\msvc\plgmovierecorder.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgmovierecorder.rc
+SOURCE=..\..\plugins\movierecorder\movierecorder.csplugin
 # End Source File
 # End Group
 # End Target

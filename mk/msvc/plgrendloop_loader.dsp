@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\engine\renderloop\loader\rlloader.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\renderloop\loader\rendloop_loader.csplugin
+SOURCE=..\..\mk\msvc\plgrendloop_loader.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgrendloop_loader.rc
+SOURCE=..\..\plugins\engine\renderloop\loader\rendloop_loader.csplugin
 # End Source File
 # End Group
 # End Target

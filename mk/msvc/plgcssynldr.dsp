@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\csparser\services\syntxldr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\csparser\services\cssynldr.csplugin
+SOURCE=..\..\mk\msvc\plgcssynldr.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgcssynldr.rc
+SOURCE=..\..\plugins\csparser\services\cssynldr.csplugin
 # End Source File
 # End Group
 # End Target

@@ -280,11 +280,11 @@ SOURCE=..\..\plugins\sound\renderer\openal\alsndsrc.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\sound\renderer\openal\sndoal.csplugin
+SOURCE=..\..\mk\msvc\plgsndoal.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgsndoal.rc
+SOURCE=..\..\plugins\sound\renderer\openal\sndoal.csplugin
 # End Source File
 # End Group
 # End Target

@@ -652,11 +652,11 @@ SOURCE=..\..\plugins\collide\opcode\Stdafx.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\opcode.csplugin
+SOURCE=..\..\mk\msvc\plgopcode.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgopcode.rc
+SOURCE=..\..\plugins\collide\opcode\opcode.csplugin
 # End Source File
 # End Group
 # End Target

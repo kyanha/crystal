@@ -264,11 +264,11 @@ SOURCE=..\..\plugins\documentsystem\binary\bindoc.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\documentsystem\binary\bindoc.csplugin
+SOURCE=..\..\mk\msvc\plgbindoc.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgbindoc.rc
+SOURCE=..\..\plugins\documentsystem\binary\bindoc.csplugin
 # End Source File
 # End Group
 # End Target

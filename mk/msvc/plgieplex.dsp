@@ -248,11 +248,11 @@ SOURCE=..\..\plugins\mesh\impexp\ieplex\ieplex.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\impexp\ieplex\ieplex.csplugin
+SOURCE=..\..\mk\msvc\plgieplex.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgieplex.rc
+SOURCE=..\..\plugins\mesh\impexp\ieplex\ieplex.csplugin
 # End Source File
 # End Group
 # End Target

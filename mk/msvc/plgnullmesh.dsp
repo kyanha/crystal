@@ -256,11 +256,11 @@ SOURCE=..\..\plugins\mesh\null\object\nullmesh.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\mesh\null\object\nullmesh.csplugin
+SOURCE=..\..\mk\msvc\plgnullmesh.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgnullmesh.rc
+SOURCE=..\..\plugins\mesh\null\object\nullmesh.csplugin
 # End Source File
 # End Group
 # End Target

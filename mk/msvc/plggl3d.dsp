@@ -344,11 +344,11 @@ SOURCE=..\..\plugins\video\renderer\opengl\ogl_txtmgr.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\renderer\opengl\gl3d.csplugin
+SOURCE=..\..\mk\msvc\plggl3d.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plggl3d.rc
+SOURCE=..\..\plugins\video\renderer\opengl\gl3d.csplugin
 # End Source File
 # End Group
 # End Target
