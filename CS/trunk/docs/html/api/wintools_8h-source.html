@@ -41,70 +41,71 @@
 00027 <span class="preprocessor">#include "<a class="code" href="csunicode_8h.html">csutil/csunicode.h</a>"</span>
 00028 <span class="preprocessor">#include "<a class="code" href="util_8h.html">csutil/util.h</a>"</span>
 00029 <span class="preprocessor">#include &lt;winnls.h&gt;</span> <span class="comment">// contains MultiByteToWideChar()/WideCharToMultiByte()</span>
-00030 
-<a name="l00040"></a><a class="code" href="wintools_8h.html#a0">00040</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">wchar_t</span>* <a class="code" href="wintools_8h.html#a0">cswinAnsiToWide</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* ansi, 
-00041                                          UINT codePage = CP_ACP)
-00042 {
-00043   <span class="keywordtype">int</span> bufsize;
-00044   WCHAR* buf;
-00045 
-00046   bufsize = MultiByteToWideChar (codePage,
-00047     MB_PRECOMPOSED, ansi, -1, 0, 0);
-00048   buf = <span class="keyword">new</span> WCHAR[bufsize];
-00049   MultiByteToWideChar (codePage,
-00050     MB_PRECOMPOSED, ansi, -1, buf, bufsize);
-00051   
-00052   <span class="keywordflow">return</span> buf;
-00053 }
-00054 
-<a name="l00064"></a><a class="code" href="wintools_8h.html#a1">00064</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">char</span>* <a class="code" href="wintools_8h.html#a1">cswinWideToAnsi</a> (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* wide, 
-00065                                      UINT codePage = CP_ACP)
-00066 {
-00067   <span class="keywordtype">int</span> bufsize;
-00068   <span class="keywordtype">char</span>* buf;
-00069 
-00070   bufsize = WideCharToMultiByte (codePage,
-00071     WC_COMPOSITECHECK, wide, -1, 0, 0, 0, 0);
-00072   buf = <span class="keyword">new</span> <span class="keywordtype">char</span>[bufsize];
-00073   WideCharToMultiByte (codePage,
-00074     WC_COMPOSITECHECK, wide, -1, buf, bufsize, 0, 0);
-00075   
-00076   <span class="keywordflow">return</span> buf;
-00077 }
-00078 
-<a name="l00092"></a><a class="code" href="structcswinWtoA.html">00092</a> <span class="keyword">struct </span>CS_CSUTIL_EXPORT <a class="code" href="structcswinWtoA.html">cswinWtoA</a>
-00093 {
-00094 <span class="keyword">private</span>:
-00095   <span class="keywordtype">char</span>* s;
-00096 <span class="keyword">public</span>:
-<a name="l00098"></a><a class="code" href="structcswinWtoA.html#a0">00098</a>   <a class="code" href="structcswinWtoA.html">cswinWtoA</a> (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* ws)
-00099   { s = <a class="code" href="wintools_8h.html#a1">cswinWideToAnsi</a> (ws); }
-<a name="l00101"></a><a class="code" href="structcswinWtoA.html#a1">00101</a>   ~<a class="code" href="structcswinWtoA.html">cswinWtoA</a> ()
-00102   { <span class="keyword">delete</span>[] s; }
-<a name="l00104"></a><a class="code" href="structcswinWtoA.html#a2">00104</a>   operator const char* ()<span class="keyword"> const</span>
-00105 <span class="keyword">  </span>{ <span class="keywordflow">return</span> s; }
-00106 };
-00107 
-<a name="l00117"></a><a class="code" href="structcswinCtoA.html">00117</a> <span class="keyword">struct </span>CS_CSUTIL_EXPORT cswinCtoA
-00118 {
-00119 <span class="keyword">private</span>:
-00120   <span class="keywordtype">char</span>* s;
-00121 <span class="keyword">public</span>:
-<a name="l00123"></a><a class="code" href="structcswinCtoA.html#a0">00123</a>   cswinCtoA (<span class="keyword">const</span> <span class="keywordtype">char</span>* ws, UINT codePage = CP_ACP)
-00124   { 
-00125     s = <a class="code" href="wintools_8h.html#a1">cswinWideToAnsi</a> (<a class="code" href="structcsCtoW.html">csCtoW</a> (ws), codePage); 
-00126   }
-<a name="l00128"></a><a class="code" href="structcswinCtoA.html#a1">00128</a>   ~cswinCtoA ()
-00129   { <span class="keyword">delete</span>[] s; }
-<a name="l00131"></a><a class="code" href="structcswinCtoA.html#a2">00131</a>   operator const char* ()<span class="keyword"> const</span>
-00132 <span class="keyword">  </span>{ <span class="keywordflow">return</span> s; }
-00133 };
-00134 
-00146 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">char</span>* <a class="code" href="wintools_8h.html#a2">cswinGetErrorMessage</a> (HRESULT code);
-00157 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">wchar_t</span>* <a class="code" href="wintools_8h.html#a3">cswinGetErrorMessageW</a> (HRESULT code);
-00167 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">bool</span> <a class="code" href="wintools_8h.html#a4">cswinIsWinNT</a> ();
-00168 
-00169 <span class="preprocessor">#endif</span>
+00030 <span class="preprocessor">#include "sanity.inc"</span>
+00031 
+<a name="l00041"></a><a class="code" href="wintools_8h.html#a0">00041</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">wchar_t</span>* <a class="code" href="wintools_8h.html#a0">cswinAnsiToWide</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* ansi, 
+00042                                          UINT codePage = CP_ACP)
+00043 {
+00044   <span class="keywordtype">int</span> bufsize;
+00045   WCHAR* buf;
+00046 
+00047   bufsize = MultiByteToWideChar (codePage,
+00048     MB_PRECOMPOSED, ansi, -1, 0, 0);
+00049   buf = <span class="keyword">new</span> WCHAR[bufsize];
+00050   MultiByteToWideChar (codePage,
+00051     MB_PRECOMPOSED, ansi, -1, buf, bufsize);
+00052   
+00053   <span class="keywordflow">return</span> buf;
+00054 }
+00055 
+<a name="l00065"></a><a class="code" href="wintools_8h.html#a1">00065</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">char</span>* <a class="code" href="wintools_8h.html#a1">cswinWideToAnsi</a> (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* wide, 
+00066                                      UINT codePage = CP_ACP)
+00067 {
+00068   <span class="keywordtype">int</span> bufsize;
+00069   <span class="keywordtype">char</span>* buf;
+00070 
+00071   bufsize = WideCharToMultiByte (codePage,
+00072     WC_COMPOSITECHECK, wide, -1, 0, 0, 0, 0);
+00073   buf = <span class="keyword">new</span> <span class="keywordtype">char</span>[bufsize];
+00074   WideCharToMultiByte (codePage,
+00075     WC_COMPOSITECHECK, wide, -1, buf, bufsize, 0, 0);
+00076   
+00077   <span class="keywordflow">return</span> buf;
+00078 }
+00079 
+<a name="l00093"></a><a class="code" href="structcswinWtoA.html">00093</a> <span class="keyword">struct </span>CS_CSUTIL_EXPORT <a class="code" href="structcswinWtoA.html">cswinWtoA</a>
+00094 {
+00095 <span class="keyword">private</span>:
+00096   <span class="keywordtype">char</span>* s;
+00097 <span class="keyword">public</span>:
+<a name="l00099"></a><a class="code" href="structcswinWtoA.html#a0">00099</a>   <a class="code" href="structcswinWtoA.html">cswinWtoA</a> (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* ws)
+00100   { s = <a class="code" href="wintools_8h.html#a1">cswinWideToAnsi</a> (ws); }
+<a name="l00102"></a><a class="code" href="structcswinWtoA.html#a1">00102</a>   ~<a class="code" href="structcswinWtoA.html">cswinWtoA</a> ()
+00103   { <span class="keyword">delete</span>[] s; }
+<a name="l00105"></a><a class="code" href="structcswinWtoA.html#a2">00105</a>   operator const char* ()<span class="keyword"> const</span>
+00106 <span class="keyword">  </span>{ <span class="keywordflow">return</span> s; }
+00107 };
+00108 
+<a name="l00118"></a><a class="code" href="structcswinCtoA.html">00118</a> <span class="keyword">struct </span>CS_CSUTIL_EXPORT cswinCtoA
+00119 {
+00120 <span class="keyword">private</span>:
+00121   <span class="keywordtype">char</span>* s;
+00122 <span class="keyword">public</span>:
+<a name="l00124"></a><a class="code" href="structcswinCtoA.html#a0">00124</a>   cswinCtoA (<span class="keyword">const</span> <span class="keywordtype">char</span>* ws, UINT codePage = CP_ACP)
+00125   { 
+00126     s = <a class="code" href="wintools_8h.html#a1">cswinWideToAnsi</a> (<a class="code" href="structcsCtoW.html">csCtoW</a> (ws), codePage); 
+00127   }
+<a name="l00129"></a><a class="code" href="structcswinCtoA.html#a1">00129</a>   ~cswinCtoA ()
+00130   { <span class="keyword">delete</span>[] s; }
+<a name="l00132"></a><a class="code" href="structcswinCtoA.html#a2">00132</a>   operator const char* ()<span class="keyword"> const</span>
+00133 <span class="keyword">  </span>{ <span class="keywordflow">return</span> s; }
+00134 };
+00135 
+00147 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">char</span>* <a class="code" href="wintools_8h.html#a2">cswinGetErrorMessage</a> (HRESULT code);
+00158 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">wchar_t</span>* <a class="code" href="wintools_8h.html#a3">cswinGetErrorMessageW</a> (HRESULT code);
+00168 <span class="keyword">extern</span> CS_CSUTIL_EXPORT <span class="keywordtype">bool</span> <a class="code" href="wintools_8h.html#a4">cswinIsWinNT</a> ();
+00169 
+00170 <span class="preprocessor">#endif</span>
 </pre></div><hr><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.2.18 
 </small></address> </div></body> </html>
