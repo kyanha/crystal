@@ -292,10 +292,6 @@ SOURCE=..\..\plugins\collide\opcode\OPC_VolumeCollider.cpp
 
 SOURCE=..\..\plugins\collide\opcode\Opcode.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\collide\opcode\StdAfx.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 

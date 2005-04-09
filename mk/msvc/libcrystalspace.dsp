@@ -250,10 +250,6 @@ SOURCE=..\..\libs\csgeom\spline.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\subrec.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgeom\subrec2.cpp
 # End Source File
 # Begin Source File
@@ -1295,6 +1291,10 @@ SOURCE=..\..\libs\..\include\csplugincommon\soundrenderer\slstn.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\cstool\basetexfact.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\cstool\bitmasktostr.h
 # End Source File
 # Begin Source File
 
