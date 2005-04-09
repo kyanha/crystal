@@ -23,9 +23,9 @@
 <a href="classcsBlockAllocator-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#a0">csBlockAllocator</a> (size_t nelem=32)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#a0">csBlockAllocator</a> (size_t nelem=32, bool warn_unfreed=false)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Construct a new block allocator which uses <code>nelem</code> elements per block.  <a href="#a0"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Construct a new block allocator.  <a href="#a0"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#a1">~csBlockAllocator</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy all allocated objects and release memory.  <a href="#a1"></a><br></td></tr>
@@ -34,16 +34,36 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy all objects allocated by the pool.  <a href="#a2"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#a3">Compact</a> ()</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compact the block allocator so that all blocks that are completely free are removed.  <a href="#a3"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compact the block allocator so that all blocks that are completely unused are removed.  <a href="#a3"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">T *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#a4">Alloc</a> ()</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Allocate a new element.  <a href="#a4"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#a5">Free</a> (T *el)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Allocate a new object.  <a href="#a4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#a5">Free</a> (T *p)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Deallocate an element.  <a href="#a5"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#a6">Dump</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Deallocate an object.  <a href="#a5"></a><br></td></tr>
+<tr><td colspan="2"><br><h2>Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#b0">FindBlock</a> (void const *m) const </td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">For debugging: dump contents.  <a href="#a6"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Find the memory block which contains the given memory.  <a href="#b0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="group__util.html#ga0">uint8</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#b1">AllocBlock</a> () const </td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Allocate a block and initialize its free-node chain.  <a href="#b1"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#b2">FreeBlock</a> (<a class="el" href="group__util.html#ga0">uint8</a> *p) const </td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Dispose of a block.  <a href="#b2"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#b3">DestroyObject</a> (T *p, bool warn=false) const </td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy an object, optionally warning if pedanticism is desired.  <a href="#b3"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsBitArray.html">csBitArray</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#b4">GetAllocationMap</a> () const </td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a usage mask showing all used (1's) and free (0's) nodes in the entire allocator.  <a href="#b4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#b5">DisposeAll</a> (bool warn_unfreed)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroys all living objects and releases all memory allocated by the pool.  <a href="#b5"></a><br></td></tr>
+<tr><td colspan="2"><br><h2>Static Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsBlockAllocator.html#f0">FuzzyCmp</a> (<a class="el" href="group__util.html#ga0">uint8</a> *const &amp;block, BlockKey const &amp;k)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Comparison function for <a class="el" href="classcsBlockAllocator.html#b0">FindBlock()</a> which does a "fuzzy" search given an arbitrary address.  <a href="#f0"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 <h3>template&lt;class T&gt;<br>
@@ -51,16 +71,16 @@
 
 This class implements a memory allocator which can efficiently allocate objects that all have the same size. 
 <p>
-It has no memory overhead per allocation (unless the objects are smaller than 8 bytes) and is extremely fast, both for <a class="el" href="classcsBlockAllocator.html#a4">Alloc()</a> and <a class="el" href="classcsBlockAllocator.html#a5">Free()</a>. Only restriction is it can only be used for the same type of object. <dl compact><dt><b>Remarks:</b></dt><dd>The objects are properly constructed and destructed. <p>
+It has no memory overhead per allocation (unless the objects are smaller than sizeof(void*) bytes) and is extremely fast, both for <a class="el" href="classcsBlockAllocator.html#a4">Alloc()</a> and <a class="el" href="classcsBlockAllocator.html#a5">Free()</a>. The only restriction is that any specific allocator can be used for just one type of object (the type for which the template is instantiated). <dl compact><dt><b>Remarks:</b></dt><dd>The objects are properly constructed and destructed. <p>
+Assumes that the class <code>T</code> with which the template is instantiated has a default (zero-argument) constructor. <a class="el" href="classcsBlockAllocator.html#a4">Alloc()</a> uses this constructor to initialize each vended object. <p>
 Defining the macro CS_BLOCKALLOC_DEBUG will cause freed objects to be overwritten with '0xfb' bytes. This can be useful to track use of already freed objects, as they can be more easily recognized (as some members will be likely bogus.) </dd></dl>
-<dl compact><dt><b>Warning:</b></dt><dd>This class does VERY little error checking! </dd></dl>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="classcsArray.html">csArray</a> <p>
 <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> </dd></dl>
 
 <p>
 
 <p>
-Definition at line <a class="el" href="blockallocator_8h-source.html#l00057">57</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00063">63</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="a0" doxytag="csBlockAllocator::csBlockAllocator"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -74,9 +94,18 @@ template&lt;class T&gt; </td>
           <td class="md" nowrap valign="top"><a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::<a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">size_t&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>nelem</em> = <code>32</code>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap><code> [inline]</code></td>
+          <td class="mdname" nowrap> <em>nelem</em> = <code>32</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap> <em>warn_unfreed</em> = <code>false</code></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [inline]</code></td>
         </tr>
       </table>
     </td>
@@ -90,11 +119,19 @@ template&lt;class T&gt; </td>
     <td>
 
 <p>
-Construct a new block allocator which uses <code>nelem</code> elements per block. 
+Construct a new block allocator. 
 <p>
-Bigger values for <code>nelem</code> will improve allocation performance, but at the cost of having some potential waste if you do not add <code>nelem</code> elements to the pool. For instance, if <code>nelem</code> is 50 but you only add 3 elements to the pool, then the space for the remaining 47 elements, though allocated, will remain unused (until you add more elements). 
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>nelem</em>&nbsp;</td><td>Number of elements to store in each allocation unit. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>warn_unfreed</em>&nbsp;</td><td>If true, in debug mode warn about objects not explicitly released via <a class="el" href="classcsBlockAllocator.html#a5">Free()</a>. </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Remarks:</b></dt><dd>Bigger values for <code>nelem</code> will improve allocation performance, but at the cost of having some potential waste if you do not add <code>nelem</code> elements to each pool. For instance, if <code>nelem</code> is 50 but you only add 3 elements to the pool, then the space for the remaining 47 elements, though allocated, will remain unused (until you add more elements). <p>
+If use use csBlockAllocator as a convenient and lightweight garbage collection facility (for which it is well-suited), and expect it to dispose of allocated objects when the pool itself is destroyed, then set <code>warn_unfreed</code> to false. On the other hand, if you use csBlockAllocator only as a fast allocator but intend to manage each object's life time manually, then you may want to set <code>warn_unfreed</code> to true in order to receive diagnostics about objects which you have forgotten to release explicitly via manual invocation of <a class="el" href="classcsBlockAllocator.html#a5">Free()</a>. </dd></dl>
+
 <p>
-Definition at line <a class="el" href="blockallocator_8h-source.html#l00186">186</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00227">227</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a1" doxytag="csBlockAllocator::~csBlockAllocator"></a><p>
@@ -129,7 +166,7 @@ Destroy all allocated objects and release memory.
 <p>
 
 <p>
-Definition at line <a class="el" href="blockallocator_8h-source.html#l00216">216</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00238">238</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
@@ -161,13 +198,49 @@ template&lt;class T&gt; </td>
     <td>
 
 <p>
-Allocate a new element. 
+Allocate a new object. 
 <p>
-
+Its default (no-argument) constructor is invoked. 
 <p>
-Definition at line <a class="el" href="blockallocator_8h-source.html#l00255">255</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00299">299</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.
 <p>
 Referenced by <a class="el" href="bintree_8h-source.html#l00115">csTree&lt; T &gt;::csTree()</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="b1" doxytag="csBlockAllocator::AllocBlock"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" colspan="4">
+template&lt;class T&gt; </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="group__util.html#ga0">uint8</a>* <a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::AllocBlock           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [inline, protected]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Allocate a block and initialize its free-node chain. 
+<p>
+<dl compact><dt><b>Returns:</b></dt><dd>The returned address is both the reference to the overall block, and the address of the first free node in the chain. </dd></dl>
+
+<p>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00110">110</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a3" doxytag="csBlockAllocator::Compact"></a><p>
@@ -198,14 +271,14 @@ template&lt;class T&gt; </td>
     <td>
 
 <p>
-Compact the block allocator so that all blocks that are completely free are removed. 
+Compact the block allocator so that all blocks that are completely unused are removed. 
 <p>
 The blocks that still contain elements are not touched. 
 <p>
-Definition at line <a class="el" href="blockallocator_8h-source.html#l00236">236</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00257">257</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a6" doxytag="csBlockAllocator::Dump"></a><p>
+<a class="anchor" name="b3" doxytag="csBlockAllocator::DestroyObject"></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -215,11 +288,21 @@ Definition at line <a class="el" href="blockallocator_8h-source.html#l00236">236
 template&lt;class T&gt; </td>
         </tr>
         <tr>
-          <td class="md" nowrap valign="top">void <a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::Dump           </td>
+          <td class="md" nowrap valign="top">void <a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::DestroyObject           </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap><code> [inline]</code></td>
+          <td class="md" nowrap valign="top">T *&nbsp;</td>
+          <td class="mdname" nowrap> <em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap> <em>warn</em> = <code>false</code></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"> const<code> [inline, protected]</code></td>
         </tr>
       </table>
     </td>
@@ -233,11 +316,52 @@ template&lt;class T&gt; </td>
     <td>
 
 <p>
-For debugging: dump contents. 
+Destroy an object, optionally warning if pedanticism is desired. 
 <p>
 
 <p>
-Definition at line <a class="el" href="blockallocator_8h-source.html#l00415">415</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00154">154</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="b5" doxytag="csBlockAllocator::DisposeAll"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" colspan="4">
+template&lt;class T&gt; </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap valign="top">void <a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::DisposeAll           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">bool&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>warn_unfreed</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [inline, protected]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Destroys all living objects and releases all memory allocated by the pool. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>warn_unfreed</em>&nbsp;</td><td>If true, in debug mode warn about objects not explicitly released via <a class="el" href="classcsBlockAllocator.html#a5">Free()</a>. </td></tr>
+  </table>
+</dl>
+
+<p>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00190">190</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a2" doxytag="csBlockAllocator::Empty"></a><p>
@@ -273,7 +397,43 @@ Destroy all objects allocated by the pool.
 <dl compact><dt><b>Remarks:</b></dt><dd>All pointers returned by <a class="el" href="classcsBlockAllocator.html#a4">Alloc()</a> are invalidated. It is safe to perform new allocations from the pool after invoking <a class="el" href="classcsBlockAllocator.html#a2">Empty()</a>. </dd></dl>
 
 <p>
-Definition at line <a class="el" href="blockallocator_8h-source.html#l00226">226</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00248">248</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="b0" doxytag="csBlockAllocator::FindBlock"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" colspan="4">
+template&lt;class T&gt; </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap valign="top">size_t <a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::FindBlock           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">void const *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>m</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [inline, protected]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Find the memory block which contains the given memory. 
+<p>
+
+<p>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00099">99</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a5" doxytag="csBlockAllocator::Free"></a><p>
@@ -289,7 +449,7 @@ template&lt;class T&gt; </td>
           <td class="md" nowrap valign="top">void <a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::Free           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">T *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>el</em>          </td>
+          <td class="mdname1" valign="top" nowrap> <em>p</em>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap><code> [inline]</code></td>
         </tr>
@@ -305,13 +465,129 @@ template&lt;class T&gt; </td>
     <td>
 
 <p>
-Deallocate an element. 
+Deallocate an object. 
 <p>
-It is ok to give a 0 pointer here. 
+It is safe to provide a null pointer. 
 <p>
-Definition at line <a class="el" href="blockallocator_8h-source.html#l00288">288</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00315">315</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.
 <p>
 Referenced by <a class="el" href="bintree_8h-source.html#l00229">csTree&lt; T &gt;::Delete()</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="b2" doxytag="csBlockAllocator::FreeBlock"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" colspan="4">
+template&lt;class T&gt; </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap valign="top">void <a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::FreeBlock           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="group__util.html#ga0">uint8</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>p</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [inline, protected]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Dispose of a block. 
+<p>
+
+<p>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00140">140</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="f0" doxytag="csBlockAllocator::FuzzyCmp"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" colspan="4">
+template&lt;class T&gt; </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap valign="top">int <a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::FuzzyCmp           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="group__util.html#ga0">uint8</a> *const &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>block</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>BlockKey const &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>k</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [inline, static, protected]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Comparison function for <a class="el" href="classcsBlockAllocator.html#b0">FindBlock()</a> which does a "fuzzy" search given an arbitrary address. 
+<p>
+It checks if the address falls somewhere within a block rather than checking if the address exactly matches the start of the block (which is the only information recorded in blocks[] array). 
+<p>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00091">91</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="b4" doxytag="csBlockAllocator::GetAllocationMap"></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" colspan="4">
+template&lt;class T&gt; </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="classcsBitArray.html">csBitArray</a> <a class="el" href="classcsBlockAllocator.html">csBlockAllocator</a>&lt; T &gt;::GetAllocationMap           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [inline, protected]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Get a usage mask showing all used (1's) and free (0's) nodes in the entire allocator. 
+<p>
+
+<p>
+Definition at line <a class="el" href="blockallocator_8h-source.html#l00171">171</a> of file <a class="el" href="blockallocator_8h-source.html">blockallocator.h</a>.    </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>

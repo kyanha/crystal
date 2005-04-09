@@ -40,9 +40,9 @@
 00021 <span class="preprocessor"></span>
 00026 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
 00027 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
-00028 <span class="preprocessor">#include "<a class="code" href="graph3d_8h.html">ivideo/graph3d.h</a>"</span>
-00029 
-00030 <span class="keyword">class </span><a class="code" href="classcsShaderVariable.html">csShaderVariable</a>;
+00028 <span class="preprocessor">#include "csgfx/shadervar.h"</span>
+00029 <span class="preprocessor">#include "<a class="code" href="graph3d_8h.html">ivideo/graph3d.h</a>"</span>
+00030 
 00031 <span class="keyword">class </span><a class="code" href="classcsMatrix3.html">csMatrix3</a>;
 00032 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
 00033 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
@@ -69,7 +69,7 @@
 00056 <span class="preprocessor"></span>
 <a name="l00057"></a><a class="code" href="group__loadsave.html#ga3">00057</a> <span class="preprocessor">#define CSTEX_UV_SHIFT 8 </span>
 00058 <span class="preprocessor"></span>
-00060 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSyntaxService.html">iSyntaxService</a>, 1, 6, 0);
+00060 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSyntaxService.html">iSyntaxService</a>, 1, 7, 0);
 00061 
 <a name="l00066"></a><a class="code" href="structiSyntaxService.html">00066</a> <span class="keyword">struct </span><a class="code" href="structiSyntaxService.html">iSyntaxService</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
 00067 {
@@ -132,39 +132,41 @@
 00199 
 00203   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a20">ParseShaderVar</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, 
 00204     <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>&amp; var) = 0;
-00205                             
-00209   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a21">WriteShaderVar</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, 
-00210     <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* var) = 0;
+00209   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iShaderVariableAccessor&gt;</a> <a class="code" href="structiSyntaxService.html#a21">ParseShaderVarExpr</a> (
+00210     <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node) = 0;
 00211                             
-00215   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSyntaxService.html#a22">ReportError</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgid, <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* errornode,
-00216         <span class="keyword">const</span> <span class="keywordtype">char</span>* msg, ...) CS_GNUC_PRINTF(4,5) = 0;
-00217 
-00222   virtual <span class="keywordtype">void</span> ReportBadToken (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* badtokennode) = 0;
+00215   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSyntaxService.html#a22">WriteShaderVar</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, 
+00216     <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* var) = 0;
+00217                             
+00221   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSyntaxService.html#a23">ReportError</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgid, <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* errornode,
+00222         <span class="keyword">const</span> <span class="keywordtype">char</span>* msg, ...) CS_GNUC_PRINTF(4,5) = 0;
 00223 
-00227   virtual <span class="keywordtype">void</span> Report (const <span class="keywordtype">char</span>* msgid, <span class="keywordtype">int</span> severity, 
-00228     <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* errornode, const <span class="keywordtype">char</span>* msg, ...) CS_GNUC_PRINTF(5,6) = 0;
-00229   
-00233   virtual <span class="keywordtype">bool</span> ParseAlphaMode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiStringSet.html">iStringSet</a>* strings,
-00234     <a class="code" href="structcsAlphaMode.html">csAlphaMode</a>&amp; alphaMode, <span class="keywordtype">bool</span> allowAutoMode = true) = 0;
-00235     
-00239   virtual <span class="keywordtype">bool</span> WriteAlphaMode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiStringSet.html">iStringSet</a>* strings,
-00240     <a class="code" href="structcsAlphaMode.html">csAlphaMode</a>* alphaMode) = 0;
+00228   virtual <span class="keywordtype">void</span> ReportBadToken (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* badtokennode) = 0;
+00229 
+00233   virtual <span class="keywordtype">void</span> Report (const <span class="keywordtype">char</span>* msgid, <span class="keywordtype">int</span> severity, 
+00234     <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* errornode, const <span class="keywordtype">char</span>* msg, ...) CS_GNUC_PRINTF(5,6) = 0;
+00235   
+00239   virtual <span class="keywordtype">bool</span> ParseAlphaMode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiStringSet.html">iStringSet</a>* strings,
+00240     <a class="code" href="structcsAlphaMode.html">csAlphaMode</a>&amp; alphaMode, <span class="keywordtype">bool</span> allowAutoMode = true) = 0;
 00241     
-00251   virtual <span class="keywordtype">bool</span> ParseZMode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, csZBufMode&amp; zmode,
-00252     <span class="keywordtype">bool</span> allowZmesh = false) = 0;
-00253 
-00257   virtual <span class="keywordtype">bool</span> WriteZMode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, csZBufMode* zmode,
-00258     <span class="keywordtype">bool</span> allowZmesh) = 0;
+00245   virtual <span class="keywordtype">bool</span> WriteAlphaMode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiStringSet.html">iStringSet</a>* strings,
+00246     <a class="code" href="structcsAlphaMode.html">csAlphaMode</a>* alphaMode) = 0;
+00247     
+00257   virtual <span class="keywordtype">bool</span> ParseZMode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, csZBufMode&amp; zmode,
+00258     <span class="keywordtype">bool</span> allowZmesh = false) = 0;
 00259 
-00265   virtual <span class="keywordtype">bool</span> ParseKey (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiKeyValuePair.html">iKeyValuePair</a>* &amp;keyvalue) = 0;
-00266 
-00271   virtual <span class="keywordtype">bool</span> WriteKey (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiKeyValuePair.html">iKeyValuePair</a>* keyvalue) = 0;
+00263   virtual <span class="keywordtype">bool</span> WriteZMode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, csZBufMode* zmode,
+00264     <span class="keywordtype">bool</span> allowZmesh) = 0;
+00265 
+00271   virtual <span class="keywordtype">bool</span> ParseKey (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiKeyValuePair.html">iKeyValuePair</a>* &amp;keyvalue) = 0;
 00272 
-00276   virtual <a class="code" href="classcsRef.html">csRef</a>&lt;<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>&gt; ParseRenderBuffer (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node) = 0;
-00277 };
+00277   virtual <span class="keywordtype">bool</span> WriteKey (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiKeyValuePair.html">iKeyValuePair</a>* keyvalue) = 0;
 00278 
-00281 #endif <span class="comment">// __CS_IMAP_SYNTAXSERVICE_H__</span>
-00282 
+00282   virtual <a class="code" href="classcsRef.html">csRef</a>&lt;<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>&gt; ParseRenderBuffer (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node) = 0;
+00283 };
+00284 
+00287 #endif <span class="comment">// __CS_IMAP_SYNTAXSERVICE_H__</span>
+00288 
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
