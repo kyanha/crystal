@@ -18,8 +18,8 @@
 <div class="nav">
 <a class="el" href="dir_000022.html">csutil</a></div>
 <h1>blockallocator.h</h1><a href="blockallocator_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
-00002 <span class="comment">  Crystal Space Generic Memory Block Allocator</span>
-00003 <span class="comment">  Copyright (C) 2003 by Jorrit Tyberghein</span>
+00002 <span class="comment">  Crystal Space Generic Object Block Allocator</span>
+00003 <span class="comment">  Copyright (C)2005 by Eric sunshine &lt;sunshine@sunshineco.com&gt;</span>
 00004 <span class="comment"></span>
 00005 <span class="comment">  This library is free software; you can redistribute it and/or</span>
 00006 <span class="comment">  modify it under the terms of the GNU Library General Public</span>
@@ -35,364 +35,228 @@
 00016 <span class="comment">  License along with this library; if not, write to the Free</span>
 00017 <span class="comment">  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
 00018 <span class="comment">*/</span>
-00019 <span class="preprocessor">#ifndef __CSUTIL_BLKALLOC_H__</span>
-00020 <span class="preprocessor"></span><span class="preprocessor">#define __CSUTIL_BLKALLOC_H__</span>
+00019 <span class="preprocessor">#ifndef __CSUTIL_BLOCK_ALLOCATOR_H__</span>
+00020 <span class="preprocessor"></span><span class="preprocessor">#define __CSUTIL_BLOCK_ALLOCATOR_H__</span>
 00021 <span class="preprocessor"></span>
 00026 <span class="preprocessor">#include "csextern.h"</span>
 00027 <span class="preprocessor">#include "<a class="code" href="array_8h.html">array.h</a>"</span>
-00028 
-00029 <span class="comment">// hack: work around problems caused by #defining 'new'</span>
-00030 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
-00031 <span class="preprocessor"></span><span class="preprocessor"># undef new</span>
-00032 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00033 <span class="preprocessor"></span><span class="preprocessor">#include &lt;new&gt;</span>
-00034 
-00035 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
-00036 <span class="preprocessor"></span><span class="preprocessor">#include "csutil/memdebug.h"</span>
-00037 <span class="preprocessor">#include &lt;typeinfo&gt;</span>
-00038 <span class="preprocessor">#endif</span>
-00039 <span class="preprocessor"></span>
-00056 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00057"></a><a class="code" href="classcsBlockAllocator.html">00057</a> <span class="keyword">class </span><a class="code" href="classcsBlockAllocator.html">csBlockAllocator</a>
-00058 {
-00059 <span class="keyword">private</span>:
-00060   <span class="comment">// A dummy structure for a linked list of free items.</span>
-00061   <span class="keyword">struct </span>csFreeList
-00062   {
-00063     csFreeList* next;
-00064     size_t numfree;             <span class="comment">// Free elements in this block.</span>
-00065   };
-00066 
-00067   <span class="comment">// A memory block (a series of 'size' objects).</span>
-00068   <span class="keyword">struct </span>csBlock
-00069   {
-00070     <span class="keywordtype">void</span>* memory;
-00071     csFreeList* firstfree;      <span class="comment">// Linked list of free items in this block.</span>
-00072     csBlock () : memory (0), firstfree (0) {}
-00073     ~csBlock ()
-00074     {
-00075       <span class="keywordflow">if</span> (memory)
-00076       {
-00077 <span class="preprocessor">#       ifdef CS_MEMORY_TRACKER</span>
-00078 <span class="preprocessor"></span>        int32* ptr = ((int32*)memory)-2;
-00079         mtiRegisterFree ((csMemTrackerInfo*)*ptr, (size_t)ptr[1]);
-00080         free (ptr);
-00081 <span class="preprocessor">#       else</span>
-00082 <span class="preprocessor"></span>        free (memory);
-00083 <span class="preprocessor">#       endif</span>
-00084 <span class="preprocessor"></span>      }
-00085     }
-00086   };
-00087 
-00088   <a class="code" href="classcsArray.html">csArray&lt;csBlock&gt;</a> blocks;
-00089   size_t size;                  <span class="comment">// Number of elements per block.</span>
-00090   size_t elsize;                <span class="comment">// Element size (bigger than 8).</span>
-00091   size_t blocksize;             <span class="comment">// Size in bytes per block.</span>
-00092 
-00093   <span class="comment">// First block that contains a free element.</span>
-00094   size_t firstfreeblock;
+00028 <span class="preprocessor">#include "<a class="code" href="bitarray_8h.html">bitarray.h</a>"</span>
+00029 <span class="preprocessor">#include "<a class="code" href="sysfunc_8h.html">sysfunc.h</a>"</span>
+00030 
+00031 <span class="comment">// hack: work around problems caused by #defining 'new'</span>
+00032 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
+00033 <span class="preprocessor"></span><span class="preprocessor"># undef new</span>
+00034 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00035 <span class="preprocessor"></span><span class="preprocessor">#include &lt;new&gt;</span>
+00036 
+00037 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
+00038 <span class="preprocessor"></span><span class="preprocessor">#include "csutil/memdebug.h"</span>
+00039 <span class="preprocessor">#include &lt;typeinfo&gt;</span>
+00040 <span class="preprocessor">#endif</span>
+00041 <span class="preprocessor"></span>
+00062 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00063"></a><a class="code" href="classcsBlockAllocator.html">00063</a> <span class="keyword">class </span><a class="code" href="classcsBlockAllocator.html">csBlockAllocator</a>
+00064 {
+00065 <span class="keyword">protected</span>: <span class="comment">// 'protected' allows access by test-suite.</span>
+00066   <span class="keyword">struct </span>FreeNode
+00067   {
+00068     FreeNode* next;
+00069   };
+00070 
+00071   <span class="keyword">struct </span>BlockKey
+00072   {
+00073     uint8 <span class="keyword">const</span>* addr;
+00074     size_t blocksize;
+00075     BlockKey(uint8 <span class="keyword">const</span>* p, size_t n) : addr(p), blocksize(n) {}
+00076   };
+00077 
+00078   <a class="code" href="classcsArray.html">csArray&lt;uint8*&gt;</a> blocks;       <span class="comment">// List of allocated blocks; sorted by address.</span>
+00079   size_t size;                  <span class="comment">// Number of elements per block.</span>
+00080   size_t elsize;                <span class="comment">// Element size; &gt;= sizeof(void*).</span>
+00081   size_t blocksize;             <span class="comment">// Size in bytes per block.</span>
+00082   FreeNode* freenode;           <span class="comment">// Head of the chain of free nodes.</span>
+00083   <span class="keywordtype">bool</span> pedantic;                <span class="comment">// Warn about nodes not explicitly freed.</span>
+00084 
+<a name="l00091"></a><a class="code" href="classcsBlockAllocator.html#f0">00091</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> FuzzyCmp(uint8* <span class="keyword">const</span>&amp; block, BlockKey <span class="keyword">const</span>&amp; k)
+00092   {
+00093     <span class="keywordflow">return</span> (block + k.blocksize &lt;= k.addr ? -1 : (block &gt; k.addr ? 1 : 0));
+00094   }
 00095 
-00099   size_t FindBlock (<span class="keywordtype">void</span>* m)
-00100   {
-00101     size_t i;
-00102     <span class="keywordflow">for</span> (i = 0 ; i &lt; blocks.<a class="code" href="classcsArray.html#a5">Length</a> () ; i++)
-00103     {
-00104       csBlock* b = &amp;blocks[i];
-00105       <span class="keywordflow">if</span> (b-&gt;memory &lt;= m)
-00106       {
-00107         <span class="keywordtype">char</span>* eb = ((<span class="keywordtype">char</span>*)b-&gt;memory) + blocksize;
-00108         <span class="keywordflow">if</span> (((<span class="keywordtype">char</span>*)m) &lt; eb)
-00109           <span class="keywordflow">return</span> i;
-00110       }
-00111     }
-00112     <span class="keywordflow">return</span> (size_t)-1;
-00113   }
-00114 
-00119   <span class="keywordtype">void</span> FindAndUpdateFreeBlock (size_t potentialnextfree)
-00120   {
-00121     CS_ASSERT (blocks.<a class="code" href="classcsArray.html#a5">Length</a>() != 0);
-00122     firstfreeblock = potentialnextfree;
-00123     <span class="keywordflow">while</span> (firstfreeblock &lt; blocks.<a class="code" href="classcsArray.html#a5">Length</a> ()
-00124                 &amp;&amp; blocks[firstfreeblock].firstfree == 0)
-00125       ++firstfreeblock;
-00126 
-00127     <span class="keywordflow">if</span> (firstfreeblock == blocks.<a class="code" href="classcsArray.html#a5">Length</a> ())
+<a name="l00099"></a><a class="code" href="classcsBlockAllocator.html#b0">00099</a>   size_t FindBlock(<span class="keywordtype">void</span> <span class="keyword">const</span>* m)<span class="keyword"> const</span>
+00100 <span class="keyword">  </span>{
+00101     <span class="keywordflow">return</span> blocks.<a class="code" href="classcsArray.html#a24">FindSortedKey</a>(
+00102       <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;uint8*,BlockKey&gt;</a>(BlockKey((uint8*)m, blocksize), FuzzyCmp));
+00103   }
+00104 
+<a name="l00110"></a><a class="code" href="classcsBlockAllocator.html#b1">00110</a>   uint8* AllocBlock()<span class="keyword"> const</span>
+00111 <span class="keyword">  </span>{
+00112     uint8* block;
+00113 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
+00114 <span class="preprocessor"></span>    <span class="keywordtype">char</span> buf[255];
+00115     sprintf (buf, <span class="stringliteral">"csBlockAllocator&lt;%s&gt;"</span>, <span class="keyword">typeid</span> (T).name());
+00116     int32* ptr = (int32*)malloc (blocksize + <span class="keyword">sizeof</span> (int32)*2);
+00117     *ptr++ = (int32)mtiRegisterAlloc (blocksize, buf);
+00118     *ptr++ = blocksize;
+00119     block = (uint8*)ptr;
+00120 <span class="preprocessor">#else</span>
+00121 <span class="preprocessor"></span>    block = (uint8*)malloc(blocksize);
+00122 <span class="preprocessor">#endif</span>
+00123 <span class="preprocessor"></span>
+00124     <span class="comment">// Build the free-node chain (all nodes are free in the new block).</span>
+00125     FreeNode* nextfree = 0;
+00126     uint8* node = block + (size - 1) * elsize;
+00127     <span class="keywordflow">for</span> ( ; node &gt;= block; node -= elsize)
 00128     {
-00129       firstfreeblock = blocks.<a class="code" href="classcsArray.html#a17">Push</a> (csBlock ());
-00130       csBlock&amp; bl = blocks[firstfreeblock];
-00131 <span class="preprocessor">#     ifdef CS_MEMORY_TRACKER</span>
-00132 <span class="preprocessor"></span>      <span class="keywordtype">char</span> buf[255];
-00133       sprintf (buf, <span class="stringliteral">"csBlockAllocator&lt;%s&gt;"</span>, <span class="keyword">typeid</span> (T).name());
-00134       int32* ptr = (int32*)malloc (blocksize + <span class="keyword">sizeof</span> (int32)*2);
-00135       *ptr++ = (int32)mtiRegisterAlloc (blocksize, buf);
-00136       *ptr++ = blocksize;
-00137       bl.memory = (<span class="keywordtype">void</span>*)ptr;
-00138 <span class="preprocessor">#     else</span>
-00139 <span class="preprocessor"></span>      bl.memory = (<span class="keywordtype">void</span>*)malloc (blocksize);
-00140 <span class="preprocessor">#     endif</span>
-00141 <span class="preprocessor"></span>      bl.firstfree = (csFreeList*)bl.memory;
-00142       bl.firstfree-&gt;next = 0;
-00143       bl.firstfree-&gt;numfree = size;
-00144     }
-00145   }
-00146 
-00154   <span class="keywordtype">void</span> DisposeAll()
-00155   {
-00156 <span class="preprocessor">#if 0</span>
-00157 <span class="preprocessor"></span>    <span class="keywordflow">for</span> (size_t i = blocks.<a class="code" href="classcsArray.html#a5">Length</a>(); i-- &gt; 0; )
-00158     {
-00159       csBlock <span class="keyword">const</span>&amp; bl = blocks[i];
-00160       uint8* el = (uint8*)bl.memory;
-00161       uint8 <span class="keyword">const</span>* blockend = el + blocksize;
-00162       uint8 <span class="keyword">const</span>* nextfree = (uint8*)bl.firstfree;
-00163       CS_ASSERT(nextfree == 0 || (nextfree &gt;= el &amp;&amp; nextfree &lt; blockend));
-00164       <span class="keywordflow">for</span> ( ; el &lt; blockend; el += elsize)
-00165       {
-00166         <span class="keywordflow">if</span> (nextfree == 0 || el &lt; nextfree)
-00167           ((T*)el)-&gt;~T();
-00168         <span class="keywordflow">else</span> <span class="keywordflow">if</span> (nextfree != 0)
-00169           nextfree = (uint8*)((csFreeList*)nextfree)-&gt;next;
-00170       }
-00171     }
-00172     blocks.<a class="code" href="classcsArray.html#a32">Empty</a>();
-00173     firstfreeblock = (size_t)-1;
-00174 <span class="preprocessor">#endif</span>
-00175 <span class="preprocessor"></span>  }
-00176 
-00177 <span class="keyword">public</span>:
-<a name="l00186"></a><a class="code" href="classcsBlockAllocator.html#a0">00186</a>   <a class="code" href="classcsBlockAllocator.html">csBlockAllocator</a> (size_t nelem = 32)
-00187   {
-00188     size = nelem;
-00189     elsize = <span class="keyword">sizeof</span> (T);
-00190     <span class="keywordflow">if</span> (elsize &lt; <span class="keyword">sizeof</span> (csFreeList))
-00191       elsize = <span class="keyword">sizeof</span> (csFreeList);
-00192     blocksize = elsize * size;
-00193 
-00194     size_t idx = blocks.<a class="code" href="classcsArray.html#a17">Push</a> (csBlock ());
-00195     csBlock&amp; bl = blocks[idx];
-00196 <span class="preprocessor">#   ifdef CS_MEMORY_TRACKER</span>
-00197 <span class="preprocessor"></span>    <span class="keywordtype">char</span> buf[255];
-00198     sprintf (buf, <span class="stringliteral">"csBlockAllocator&lt;%s&gt;"</span>, <span class="keyword">typeid</span> (T).name());
-00199     int32* ptr = (int32*)malloc (blocksize + <span class="keyword">sizeof</span> (int32)*2);
-00200     *ptr++ = (int32)mtiRegisterAlloc (blocksize, buf);
-00201     *ptr++ = blocksize;
-00202     bl.memory = (<span class="keywordtype">void</span>*)ptr;
-00203 <span class="preprocessor">#   else</span>
-00204 <span class="preprocessor"></span>    bl.memory = (<span class="keywordtype">void</span>*)malloc (blocksize);
-00205 <span class="preprocessor">#   endif</span>
-00206 <span class="preprocessor"></span>    bl.firstfree = (csFreeList*)bl.memory;
-00207     bl.firstfree-&gt;next = 0;
-00208     bl.firstfree-&gt;numfree = size;
-00209 
-00210     firstfreeblock = 0;
-00211   }
-00212 
-<a name="l00216"></a><a class="code" href="classcsBlockAllocator.html#a1">00216</a>   ~<a class="code" href="classcsBlockAllocator.html">csBlockAllocator</a> ()
-00217   {
-00218     DisposeAll();
-00219   }
-00220 
-<a name="l00226"></a><a class="code" href="classcsBlockAllocator.html#a2">00226</a>   <span class="keywordtype">void</span> Empty()
-00227   {
-00228     DisposeAll();
-00229     FindAndUpdateFreeBlock(0);
-00230   }
-00231 
-<a name="l00236"></a><a class="code" href="classcsBlockAllocator.html#a3">00236</a>   <span class="keywordtype">void</span> Compact ()
-00237   {
-00238     CS_ASSERT (blocks.<a class="code" href="classcsArray.html#a5">Length</a>() != 0);
-00239     size_t i = blocks.<a class="code" href="classcsArray.html#a5">Length</a> () - 1;
-00240     <span class="keywordflow">while</span> (i &gt; firstfreeblock)
-00241     {
-00242       <span class="keywordflow">if</span> (blocks[i].firstfree == (csFreeList*)blocks[i].memory 
-00243         &amp;&amp; blocks[i].firstfree-&gt;numfree == size)
-00244       {
-00245         CS_ASSERT (blocks[i].firstfree-&gt;next == 0);
-00246         blocks.<a class="code" href="classcsArray.html#a36">DeleteIndex</a> (i);
-00247       }
-00248       i--;
-00249     }
-00250   }
-00251 
-<a name="l00255"></a><a class="code" href="classcsBlockAllocator.html#a4">00255</a>   T* Alloc ()
-00256   {
-00257     CS_ASSERT (blocks.<a class="code" href="classcsArray.html#a5">Length</a>() != 0);
-00258 
-00259     <span class="comment">// This routine makes sure there is ALWAYS free space available.</span>
-00260     csBlock&amp; freebl = blocks[firstfreeblock];
-00261     <span class="keywordtype">void</span>* ptr = (<span class="keywordtype">void</span>*)(freebl.firstfree);
-00262 
-00263     <span class="keywordflow">if</span> (freebl.firstfree-&gt;numfree &gt;= 2)
-00264     {
-00265       <span class="comment">// Still room in this block after allocation.</span>
-00266       csFreeList* nf = (csFreeList*)(((<span class="keywordtype">char</span>*)ptr)+elsize);
-00267       nf-&gt;next = freebl.firstfree-&gt;next;
-00268       nf-&gt;numfree = freebl.firstfree-&gt;numfree-1;
-00269       freebl.firstfree = nf;
-00270     }
-00271     <span class="keywordflow">else</span>
-00272     {
-00273       <span class="comment">// We need a new block later.</span>
-00274       freebl.firstfree = freebl.firstfree-&gt;next;
-00275       <span class="keywordflow">if</span> (!freebl.firstfree)
-00276       {
-00277         <span class="comment">// This block has no more free space. We need a new one.</span>
-00278         FindAndUpdateFreeBlock (firstfreeblock + 1);
-00279       }
-00280     }
-00281 
-00282     <span class="keywordflow">return</span> <span class="keyword">new</span> (ptr) T;
-00283   }
-00284 
-<a name="l00288"></a><a class="code" href="classcsBlockAllocator.html#a5">00288</a>   <span class="keywordtype">void</span> Free (T* el)
-00289   {
-00290     <span class="keywordflow">if</span> (!el) <span class="keywordflow">return</span>;
-00291 
-00292     size_t idx = FindBlock ((<span class="keywordtype">void</span>*)el);
-00293     CS_ASSERT_MSG (
-00294       <span class="stringliteral">"csBlockAllocator&lt;&gt;::Free() called with invalid element address"</span>,
-00295       idx != (size_t)-1);
-00296 
-00297     el-&gt;~T();
-00298 
-00299 <span class="preprocessor">#ifdef CS_BLOCKALLOC_DEBUG</span>
-00300 <span class="preprocessor"></span>    memset (el, 0xfb, elsize);
-00301 <span class="preprocessor">#endif</span>
-00302 <span class="preprocessor"></span>
-00303     <span class="comment">// If the index is lower than the index of the first free block</span>
-00304     <span class="comment">// then we update the firstfreeblock index.</span>
-00305     <span class="keywordflow">if</span> (idx &lt; firstfreeblock)
-00306       firstfreeblock = idx;
-00307 
-00308     csBlock&amp; bl = blocks[idx];
-00309     <span class="keywordflow">if</span> (bl.firstfree == 0)
-00310     {
-00311       <span class="comment">// Block has no free items so we create the first free item</span>
-00312       <span class="comment">// here.</span>
-00313       bl.firstfree = (csFreeList*)el;
-00314       bl.firstfree-&gt;next = 0;
-00315       bl.firstfree-&gt;numfree = 1;
-00316     }
-00317     <span class="keywordflow">else</span>
+00129       FreeNode* slot = (FreeNode*)node;
+00130       slot-&gt;next = nextfree;
+00131       nextfree = slot;
+00132     }
+00133     CS_ASSERT((uint8*)nextfree == block);
+00134     <span class="keywordflow">return</span> block;
+00135   }
+00136 
+<a name="l00140"></a><a class="code" href="classcsBlockAllocator.html#b2">00140</a>   <span class="keywordtype">void</span> FreeBlock(uint8* p)<span class="keyword"> const</span>
+00141 <span class="keyword">  </span>{
+00142 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
+00143 <span class="preprocessor"></span>    int32* ptr = ((int32*)p)-2;
+00144     mtiRegisterFree ((csMemTrackerInfo*)*ptr, (size_t)ptr[1]);
+00145     free (ptr);
+00146 <span class="preprocessor">#else</span>
+00147 <span class="preprocessor"></span>    free (p);
+00148 <span class="preprocessor">#endif</span>
+00149 <span class="preprocessor"></span>  }
+00150 
+<a name="l00154"></a><a class="code" href="classcsBlockAllocator.html#b3">00154</a>   <span class="keywordtype">void</span> DestroyObject(T* p, <span class="keywordtype">bool</span> warn = <span class="keyword">false</span>)<span class="keyword"> const</span>
+00155 <span class="keyword">  </span>{
+00156     p-&gt;~T();
+00157 <span class="preprocessor">#ifdef CS_DEBUG</span>
+00158 <span class="preprocessor"></span>    <span class="keywordflow">if</span> (warn)
+00159       <a class="code" href="group__util.html#ga80">csPrintfErr</a>(<span class="stringliteral">"NOTIFY: csBlockAllocator(%p) destroying potentially leaked "</span>
+00160                   <span class="stringliteral">"object at %p.\n"</span>, <span class="keyword">this</span>, p);
+00161 <span class="preprocessor">#endif</span>
+00162 <span class="preprocessor"></span><span class="preprocessor">#ifdef CS_BLOCKALLOC_DEBUG</span>
+00163 <span class="preprocessor"></span>    memset (p, 0xfb, elsize);
+00164 <span class="preprocessor">#endif</span>
+00165 <span class="preprocessor"></span>  }
+00166 
+<a name="l00171"></a><a class="code" href="classcsBlockAllocator.html#b4">00171</a>   <a class="code" href="classcsBitArray.html">csBitArray</a> GetAllocationMap()<span class="keyword"> const</span>
+00172 <span class="keyword">  </span>{
+00173     <a class="code" href="classcsBitArray.html">csBitArray</a> mask(size * blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>());
+00174     mask.FlipAllBits();
+00175     <span class="keywordflow">for</span> (FreeNode* p = freenode; p != 0; p = p-&gt;next)
+00176     {
+00177       size_t <span class="keyword">const</span> n = FindBlock(p);
+00178       CS_ASSERT(n != <a class="code" href="array_8h.html#a3">csArrayItemNotFound</a>);
+00179       size_t <span class="keyword">const</span> slot = ((uint8*)p - blocks[n]) / elsize; <span class="comment">// Slot in block.</span>
+00180       mask.ClearBit(n * size + slot);
+00181     }
+00182     <span class="keywordflow">return</span> mask;
+00183   }
+00184 
+<a name="l00190"></a><a class="code" href="classcsBlockAllocator.html#b5">00190</a>   <span class="keywordtype">void</span> DisposeAll(<span class="keywordtype">bool</span> warn_unfreed)
+00191   {
+00192     <a class="code" href="classcsBitArray.html">csBitArray</a> <span class="keyword">const</span> mask(GetAllocationMap());
+00193     size_t node = 0;
+00194     <span class="keywordflow">for</span> (size_t b = 0, bN = blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>(); b &lt; bN; b++)
+00195     {
+00196       <span class="keywordflow">for</span> (uint8 *p = blocks[b], *pN = p + blocksize; p &lt; pN; p += elsize)
+00197         <span class="keywordflow">if</span> (mask.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a>(node++))
+00198           DestroyObject((T*)p, warn_unfreed);
+00199       FreeBlock(blocks[b]);
+00200     }
+00201     blocks.<a class="code" href="classcsArray.html#a30">DeleteAll</a>();
+00202     freenode = 0;
+00203   }
+00204 
+00205 <span class="keyword">public</span>:
+<a name="l00227"></a><a class="code" href="classcsBlockAllocator.html#a0">00227</a>   <a class="code" href="classcsBlockAllocator.html">csBlockAllocator</a>(size_t nelem = 32, <span class="keywordtype">bool</span> warn_unfreed = <span class="keyword">false</span>) :
+00228     size(nelem), elsize(sizeof(T)), freenode(0), pedantic(warn_unfreed)
+00229   {
+00230     <span class="keywordflow">if</span> (elsize &lt; <span class="keyword">sizeof</span> (FreeNode))
+00231       elsize = <span class="keyword">sizeof</span> (FreeNode);
+00232     blocksize = elsize * size;
+00233   }
+00234 
+<a name="l00238"></a><a class="code" href="classcsBlockAllocator.html#a1">00238</a>   ~<a class="code" href="classcsBlockAllocator.html">csBlockAllocator</a>()
+00239   {
+00240     DisposeAll(pedantic);
+00241   }
+00242 
+<a name="l00248"></a><a class="code" href="classcsBlockAllocator.html#a2">00248</a>   <span class="keywordtype">void</span> Empty()
+00249   {
+00250     DisposeAll(<span class="keyword">false</span>);
+00251   }
+00252 
+<a name="l00257"></a><a class="code" href="classcsBlockAllocator.html#a3">00257</a>   <span class="keywordtype">void</span> Compact()
+00258   {
+00259     <span class="keywordtype">bool</span> compacted = <span class="keyword">false</span>;
+00260     <a class="code" href="classcsBitArray.html">csBitArray</a> mask(GetAllocationMap());
+00261     <span class="keywordflow">for</span> (size_t b = blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>(); b-- &gt; 0; )
+00262     {
+00263       size_t <span class="keyword">const</span> node = b * size;
+00264       <span class="keywordflow">if</span> (!mask.<a class="code" href="classcsBitArray.html#a21">AreSomeBitsSet</a>(node, size))
+00265       {
+00266         FreeBlock(blocks[b]);
+00267         blocks.<a class="code" href="classcsArray.html#a36">DeleteIndex</a>(b);
+00268         mask.<a class="code" href="classcsBitArray.html#a24">Delete</a>(node, size);
+00269         compacted = <span class="keyword">true</span>;
+00270       }
+00271     }
+00272 
+00273     <span class="comment">// If blocks were deleted, then free-node chain broke, so rebuild it.</span>
+00274     <span class="keywordflow">if</span> (compacted)
+00275     {
+00276       FreeNode* nextfree = 0;
+00277       size_t <span class="keyword">const</span> bN = blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>();
+00278       size_t node = bN * size;
+00279       <span class="keywordflow">for</span> (size_t b = bN; b-- &gt; 0; )
+00280       {
+00281         uint8* <span class="keyword">const</span> p0 = blocks[b];
+00282         <span class="keywordflow">for</span> (uint8* p = p0 + (size - 1) * elsize; p &gt;= p0; p -= elsize)
+00283         {
+00284           <span class="keywordflow">if</span> (!mask.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a>(--node))
+00285           {
+00286             FreeNode* slot = (FreeNode*)p;
+00287             slot-&gt;next = nextfree;
+00288             nextfree = slot;
+00289           }
+00290         }
+00291       }
+00292       freenode = nextfree;
+00293     }
+00294   }
+00295 
+<a name="l00299"></a><a class="code" href="classcsBlockAllocator.html#a4">00299</a>   T* Alloc()
+00300   {
+00301     <span class="keywordflow">if</span> (freenode == 0)
+00302     {
+00303       uint8* p = AllocBlock();
+00304       blocks.<a class="code" href="classcsArray.html#a25">InsertSorted</a>(p);
+00305       freenode = (FreeNode*)p;
+00306     }
+00307     <span class="keywordtype">void</span>* <span class="keyword">const</span> node = freenode;
+00308     freenode = freenode-&gt;next;
+00309     <span class="keywordflow">return</span> <span class="keyword">new</span> (node) T;
+00310   }
+00311 
+<a name="l00315"></a><a class="code" href="classcsBlockAllocator.html#a5">00315</a>   <span class="keywordtype">void</span> Free(T* p)
+00316   {
+00317     <span class="keywordflow">if</span> (p != 0)
 00318     {
-00319       csFreeList* p_el = (csFreeList*)el;
-00320 
-00321       <span class="keywordflow">if</span> (p_el &lt; bl.firstfree)
-00322       {
-00323         <span class="comment">// New free element is before the current free element.</span>
-00324         <span class="keywordflow">if</span> (((<span class="keywordtype">char</span>*)bl.firstfree) - ((<span class="keywordtype">char</span>*)p_el) == (int)elsize)
-00325         {
-00326           <span class="comment">// New free element is directly before the current free</span>
-00327           <span class="comment">// element.</span>
-00328           p_el-&gt;next = bl.firstfree-&gt;next;
-00329           p_el-&gt;numfree = bl.firstfree-&gt;numfree+1;
-00330         }
-00331         <span class="keywordflow">else</span>
-00332         {
-00333           <span class="comment">// There is a gap.</span>
-00334           p_el-&gt;next = bl.firstfree;
-00335           p_el-&gt;numfree = 1;
-00336         }
-00337 
-00338         bl.firstfree = p_el;
-00339       }
-00340       <span class="keywordflow">else</span>
-00341       {
-00342         <span class="comment">// New free element is after the current free element.</span>
-00343         <span class="comment">// First we find the two free blocks that enclose the new</span>
-00344         <span class="comment">// free element.</span>
-00345         csFreeList* fl_before = bl.firstfree;
-00346         csFreeList* fl_after = bl.firstfree-&gt;next;
-00347         <span class="keywordflow">while</span> (fl_after != 0 &amp;&amp; fl_after &lt; p_el)
-00348         {
-00349           fl_before = fl_after;
-00350           fl_after = fl_after-&gt;next;
-00351         }
-00352 
-00353         <span class="comment">// 'fl_before_end' points to the memory right after the free block</span>
-00354         <span class="comment">// that is directly before the new free element. We use</span>
-00355         <span class="comment">// 'fl_before_end' later.</span>
-00356         <span class="keywordtype">char</span>* fl_before_end = ((<span class="keywordtype">char</span>*)fl_before) + fl_before-&gt;numfree * elsize;
-00357 
-00358         <span class="keywordflow">if</span> (!fl_after)
-00359         {
-00360           <span class="comment">// The new free element is after the last free block. First check</span>
-00361           <span class="comment">// if the new free element directly follows that free block.</span>
-00362           <span class="comment">// If so we can extend that.</span>
-00363           <span class="keywordflow">if</span> (fl_before_end == (<span class="keywordtype">char</span>*)p_el)
-00364           {
-00365             <span class="comment">// Yes, extend.</span>
-00366             ++(fl_before-&gt;numfree);
-00367           }
-00368           <span class="keywordflow">else</span>
-00369           {
-00370             <span class="comment">// No, we have to create a new free block.</span>
-00371             p_el-&gt;next = 0;
-00372             p_el-&gt;numfree = 1;
-00373             fl_before-&gt;next = p_el;
-00374           }
-00375         }
-00376         <span class="keywordflow">else</span>
-00377         {
-00378           <span class="comment">// We have a block before and after the new free block.</span>
-00379           <span class="comment">// First we check if the new free item exactly between</span>
-00380           <span class="comment">// fl_before and fl_after.</span>
-00381           <span class="keywordflow">if</span> (fl_before_end == (<span class="keywordtype">char</span>*)p_el
-00382                 &amp;&amp; ((<span class="keywordtype">char</span>*)p_el) + elsize == (<span class="keywordtype">char</span>*)fl_after)
-00383           {
-00384             <span class="comment">// Perfect fit, merge fl_before and fl_after.</span>
-00385             fl_before-&gt;next = fl_after-&gt;next;
-00386             fl_before-&gt;numfree = fl_before-&gt;numfree + 1 + fl_after-&gt;numfree;
-00387           }
-00388           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (fl_before_end == (<span class="keywordtype">char</span>*)p_el)
-00389           {
-00390             <span class="comment">// New free item fits directly after fl_before.</span>
-00391             ++(fl_before-&gt;numfree);
-00392           }
-00393           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (((<span class="keywordtype">char</span>*)p_el) + elsize == (<span class="keywordtype">char</span>*)fl_after)
-00394           {
-00395             <span class="comment">// New free item fits directly before fl_after.</span>
-00396             fl_before-&gt;next = p_el;
-00397             p_el-&gt;next = fl_after-&gt;next;
-00398             p_el-&gt;numfree = fl_after-&gt;numfree+1;
-00399           }
-00400           <span class="keywordflow">else</span>
-00401           {
-00402             <span class="comment">// We need a new free block.</span>
-00403             fl_before-&gt;next = p_el;
-00404             p_el-&gt;next = fl_after;
-00405             p_el-&gt;numfree = 1;
-00406           }
-00407         }
-00408       }
-00409     }
-00410   }
-00411 
-<a name="l00415"></a><a class="code" href="classcsBlockAllocator.html#a6">00415</a>   <span class="keywordtype">void</span> Dump ()
-00416   {
-00417     <span class="keywordtype">int</span> i;
-00418     printf (<span class="stringliteral">"=============================\nelsize = %zu\n"</span>, elsize);
-00419     <span class="keywordflow">for</span> (i = 0 ; i &lt; blocks.<a class="code" href="classcsArray.html#a5">Length</a> () ; i++)
-00420     {
-00421       printf (<span class="stringliteral">"Block %d\n"</span>, i);
-00422       csFreeList* fl = blocks[i].firstfree;
-00423       <span class="keywordtype">char</span>* m = (<span class="keywordtype">char</span>*)blocks[i].memory;
-00424       <span class="keywordflow">while</span> (fl)
-00425       {
-00426         printf (<span class="stringliteral">"  free %td %zu\n"</span>, (((<span class="keywordtype">char</span>*)fl) - m) / elsize, fl-&gt;numfree);
-00427         fl = fl-&gt;next;
-00428       }
-00429     }
-00430     printf (<span class="stringliteral">"=============================\n"</span>);
-00431     fflush (stdout);
-00432   }
-00433 };
-00434 
-00435 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
-00436 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
-00437 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00438 <span class="preprocessor"></span>
-00439 <span class="preprocessor">#endif</span>
+00319       CS_ASSERT(FindBlock(p) != <a class="code" href="array_8h.html#a3">csArrayItemNotFound</a>);
+00320       DestroyObject(p, <span class="keyword">false</span>);
+00321       FreeNode* f = (FreeNode*)p;
+00322       f-&gt;next = freenode;
+00323       freenode = f;
+00324     }
+00325   }
+00326 };
+00327 
+00328 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
+00329 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
+00330 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00331 <span class="preprocessor"></span>
+00332 <span class="preprocessor">#endif // __CSUTIL_BLOCK_ALLOCATOR_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.3.9.1 
 </small></address> </div></body> </html>
