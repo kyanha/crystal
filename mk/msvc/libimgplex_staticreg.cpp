@@ -22,25 +22,25 @@ static char const metainfo_imgplex[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.graphic.image.io.multiplex</name>"
-"        <implementation>csMultiplexImageIO</implementation>"
-"        <description>Image file format multiplex plug-in.</description>"
+"        <name>crystalspace.graphic.image.io.multiplexer</name>"
+"        <implementation>csImageIOMultiplexer</implementation>"
+"        <description>Image file format multiplexer plug-in.</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csMultiplexImageIO_FACTORY_REGISTER_DEFINED 
-  #define csMultiplexImageIO_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csMultiplexImageIO) 
+  #ifndef csImageIOMultiplexer_FACTORY_REGISTER_DEFINED 
+  #define csImageIOMultiplexer_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csImageIOMultiplexer) 
   #endif
 
 class imgplex
 {
 SCF_REGISTER_STATIC_LIBRARY(imgplex,metainfo_imgplex)
-  #ifndef csMultiplexImageIO_FACTORY_REGISTERED 
-  #define csMultiplexImageIO_FACTORY_REGISTERED 
-    csMultiplexImageIO_StaticInit csMultiplexImageIO_static_init__; 
+  #ifndef csImageIOMultiplexer_FACTORY_REGISTERED 
+  #define csImageIOMultiplexer_FACTORY_REGISTERED 
+    csImageIOMultiplexer_StaticInit csImageIOMultiplexer_static_init__; 
   #endif
 public:
  imgplex();

@@ -23,8 +23,8 @@ static char const metainfo_fontplex[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.font.server.multiplexer</name>"
-"        <implementation>csFontServerMultiplexor</implementation>"
-"        <description>Crystal Space font server multiplexor</description>"
+"        <implementation>csFontServerMultiplexer</implementation>"
+"        <description>Crystal Space font server multiplexer</description>"
 "        <requires>"
 "          <class>crystalspace.font.server.</class>"
 "        </requires>"
@@ -33,17 +33,17 @@ static char const metainfo_fontplex[] =
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csFontServerMultiplexor_FACTORY_REGISTER_DEFINED 
-  #define csFontServerMultiplexor_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csFontServerMultiplexor) 
+  #ifndef csFontServerMultiplexer_FACTORY_REGISTER_DEFINED 
+  #define csFontServerMultiplexer_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csFontServerMultiplexer) 
   #endif
 
 class fontplex
 {
 SCF_REGISTER_STATIC_LIBRARY(fontplex,metainfo_fontplex)
-  #ifndef csFontServerMultiplexor_FACTORY_REGISTERED 
-  #define csFontServerMultiplexor_FACTORY_REGISTERED 
-    csFontServerMultiplexor_StaticInit csFontServerMultiplexor_static_init__; 
+  #ifndef csFontServerMultiplexer_FACTORY_REGISTERED 
+  #define csFontServerMultiplexer_FACTORY_REGISTERED 
+    csFontServerMultiplexer_StaticInit csFontServerMultiplexer_static_init__; 
   #endif
 public:
  fontplex();

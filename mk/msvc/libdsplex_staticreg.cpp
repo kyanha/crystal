@@ -23,24 +23,24 @@ static char const metainfo_dsplex[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.documentsystem.multiplex</name>"
-"        <implementation>csMplexDocumentSystem</implementation>"
+"        <implementation>csDocumentSystemMultiplexer</implementation>"
 "        <description>Document system multiplexer</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csMplexDocumentSystem_FACTORY_REGISTER_DEFINED 
-  #define csMplexDocumentSystem_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csMplexDocumentSystem) 
+  #ifndef csDocumentSystemMultiplexer_FACTORY_REGISTER_DEFINED 
+  #define csDocumentSystemMultiplexer_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csDocumentSystemMultiplexer) 
   #endif
 
 class dsplex
 {
 SCF_REGISTER_STATIC_LIBRARY(dsplex,metainfo_dsplex)
-  #ifndef csMplexDocumentSystem_FACTORY_REGISTERED 
-  #define csMplexDocumentSystem_FACTORY_REGISTERED 
-    csMplexDocumentSystem_StaticInit csMplexDocumentSystem_static_init__; 
+  #ifndef csDocumentSystemMultiplexer_FACTORY_REGISTERED 
+  #define csDocumentSystemMultiplexer_FACTORY_REGISTERED 
+    csDocumentSystemMultiplexer_StaticInit csDocumentSystemMultiplexer_static_init__; 
   #endif
 public:
  dsplex();
