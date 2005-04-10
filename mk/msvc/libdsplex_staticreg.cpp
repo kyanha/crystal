@@ -22,7 +22,7 @@ static char const metainfo_dsplex[] =
 "  <scf>"
 "    <classes>"
 "      <class>"
-"        <name>crystalspace.documentsystem.multiplex</name>"
+"        <name>crystalspace.documentsystem.multiplexer</name>"
 "        <implementation>csDocumentSystemMultiplexer</implementation>"
 "        <description>Document system multiplexer</description>"
 "      </class>"
