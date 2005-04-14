@@ -286,6 +286,10 @@ SOURCE=..\..\libs\csgeom\vector4.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\bakekeycolor.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\csimgvec.cpp
 # End Source File
 # Begin Source File
@@ -1095,6 +1099,10 @@ SOURCE=..\..\libs\..\include\csgeom\vector3.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csgeom\vector4.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csgfx\bakekeycolor.h
 # End Source File
 # Begin Source File
 
