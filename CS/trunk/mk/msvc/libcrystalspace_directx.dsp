@@ -160,10 +160,6 @@ SOURCE=..\..\libs\csplugincommon\directx\..\..\..\include\csplugincommon\directx
 
 SOURCE=..\..\libs\csplugincommon\directx\..\..\..\include\csplugincommon\directx\guids.h
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csplugincommon\directx\..\..\..\include\csplugincommon\directx\iddetect.h
-# End Source File
 # End Group
 # End Target
 # End Project
