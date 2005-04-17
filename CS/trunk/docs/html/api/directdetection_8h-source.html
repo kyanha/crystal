@@ -51,115 +51,54 @@
 00032 <span class="preprocessor">#include &lt;d3d.h&gt;</span>
 00033 <span class="preprocessor">#include &lt;d3dcaps.h&gt;</span>
 00034 
-00035 <span class="preprocessor">#include "csplugincommon/directx/iddetect.h"</span>
-00036 
-<a name="l00038"></a><a class="code" href="classDirectDetection2D.html">00038</a> <span class="keyword">class </span>CS_CSPLUGINCOMMON_DX_EXPORT <a class="code" href="classDirectDetection2D.html">DirectDetection2D</a>
-00039 {
-00040 <span class="keyword">public</span>:
-00041   <a class="code" href="classDirectDetection2D.html">DirectDetection2D</a>()
-00042   {
-00043     Mipmap = <span class="keyword">false</span>; Texture = <span class="keyword">false</span>; Can3D = <span class="keyword">false</span>; Windowed = <span class="keyword">false</span>;
-00044     IsPrimary2D = <span class="keyword">true</span>; DeviceName2D = 0; DeviceDescription2D = 0;
-00045     ZeroMemory(&amp;Guid2D, <span class="keyword">sizeof</span>(GUID));
-00046   }
-00047   <span class="keyword">virtual</span> ~<a class="code" href="classDirectDetection2D.html">DirectDetection2D</a>() 
-00048   {
-00049   }
-00050 
-00051   <span class="keywordtype">bool</span> Mipmap;                <span class="comment">// Can enable ddraw surface as mipmap ?</span>
-00052   <span class="keywordtype">bool</span> Texture;               <span class="comment">// Can enable ddraw surface as texture ?</span>
-00053   GUID Guid2D;                <span class="comment">// Guid for DirectDraw device</span>
-00054   <span class="keywordtype">bool</span> Can3D;                 <span class="comment">// Have a support for d3d device ?</span>
-00055   <span class="keywordtype">bool</span> Windowed;              <span class="comment">// Can enable windowed mode for graphics ?</span>
-00056   <span class="keywordtype">bool</span> IsPrimary2D;           <span class="comment">// Is a primary ddraw device ?</span>
-00057   <span class="keywordtype">char</span> * DeviceName2D;        <span class="comment">// Name of device</span>
-00058   <span class="keywordtype">char</span> * DeviceDescription2D; <span class="comment">// Description of device</span>
-00059 };
-00060 
-<a name="l00062"></a><a class="code" href="classDirectDetection3D.html">00062</a> <span class="keyword">class </span>CS_CSPLUGINCOMMON_DX_EXPORT DirectDetection3D : <span class="keyword">public</span> <a class="code" href="classDirectDetection2D.html">DirectDetection2D</a>
-00063 {
-00064 <span class="keyword">public</span>:
-00065   <span class="comment">// construct a device from ddraw (2d) device</span>
-00066   DirectDetection3D(<a class="code" href="classDirectDetection2D.html">DirectDetection2D</a> * dd2d)
-00067   {
-00068     Hardware = <span class="keyword">false</span>; AlphaBlendType = 0; AlphaBlend = <span class="keyword">false</span>, AlphaBlendHalo = <span class="keyword">false</span>;
-00069     Perspective = <span class="keyword">false</span>; HighColor = <span class="keyword">false</span>; ZBuffer = <span class="keyword">false</span>;
-00070     ZeroMemory(&amp;Desc3D, <span class="keyword">sizeof</span>(D3DDEVICEDESC));
-00071     ZeroMemory(&amp;Guid3D, <span class="keyword">sizeof</span>(GUID));
-00072     DeviceName3D = 0; DeviceDescription3D = 0;
-00073     IsPrimary3D = <span class="keyword">true</span>;
-00074 
-00075     memcpy((<a class="code" href="classDirectDetection2D.html">DirectDetection2D</a> *)<span class="keyword">this</span>, dd2d, <span class="keyword">sizeof</span>(<a class="code" href="classDirectDetection2D.html">DirectDetection2D</a>));
-00076   }
-00077   DirectDetection3D():<a class="code" href="classDirectDetection2D.html">DirectDetection2D</a>()
-00078   {
-00079     Hardware = <span class="keyword">false</span>; AlphaBlendType = 0; AlphaBlend = <span class="keyword">false</span>, AlphaBlendHalo = <span class="keyword">false</span>;
-00080     Perspective = <span class="keyword">false</span>; HighColor = <span class="keyword">false</span>; ZBuffer = <span class="keyword">false</span>;
-00081     ZeroMemory(&amp;Desc3D, <span class="keyword">sizeof</span>(D3DDEVICEDESC));
-00082     ZeroMemory(&amp;Guid3D, <span class="keyword">sizeof</span>(GUID));
-00083     DeviceName3D = 0; DeviceDescription3D = 0;
-00084     IsPrimary3D = <span class="keyword">true</span>;
-00085   }
-00086   <span class="keyword">virtual</span> ~DirectDetection3D() {}
-00087 
-00088   <span class="keywordtype">bool</span> Hardware;              <span class="comment">// Is hardware device ?</span>
-00089   <span class="keywordtype">bool</span> AlphaBlend;            <span class="comment">// Can enable AlphaBlend for lightmap ?</span>
-00090   <span class="keywordtype">bool</span> AlphaBlendHalo;            <span class="comment">// Can enable AlphaBlend for halo ?</span>
-00091   <span class="keywordtype">int</span> AlphaBlendType;         <span class="comment">// type of AphaBlend supported</span>
-00092   <span class="keywordtype">bool</span> Perspective;           <span class="comment">// Can enable perspective ?</span>
-00093   <span class="keywordtype">bool</span> VideoMemoryTexture;    <span class="comment">// Can push texture in video memory ?</span>
-00094   <span class="keywordtype">bool</span> HighColor;             <span class="comment">// Can enable 16 bit mode</span>
-00095   <span class="keywordtype">bool</span> ZBuffer;               <span class="comment">// Have a ZBuffer ?</span>
-00096   D3DDEVICEDESC Desc3D;       <span class="comment">// D3DDEVICEDESC for complete information</span>
-00097   GUID Guid3D;                <span class="comment">// Guid for Direct3D device</span>
-00098   <span class="keywordtype">bool</span> IsPrimary3D;           <span class="comment">// Is a primary d3d device ?</span>
-00099   <span class="keywordtype">char</span> * DeviceName3D;        <span class="comment">// Device name</span>
-00100   <span class="keywordtype">char</span> * DeviceDescription3D; <span class="comment">// Device description</span>
-00101 };
-00102 
-<a name="l00104"></a><a class="code" href="classDirectDetectionDevice.html">00104</a> <span class="keyword">class </span>CS_CSPLUGINCOMMON_DX_EXPORT DirectDetectionDevice : <span class="keyword">public</span> DirectDetection3D, 
-00105   <span class="keyword">public</span> IDirectDetectionInternal
-00106 {
-00107 <span class="keyword">public</span>:
-00108   DirectDetectionDevice():DirectDetection3D() {next = 0; Only2D = <span class="keyword">true</span>;}
-00109   <span class="keyword">virtual</span> ~DirectDetectionDevice() {}
-00110 
-00111   <span class="keywordtype">bool</span> Only2D; <span class="comment">// Is only a 2d device ?</span>
-00112   DirectDetectionDevice * next;
-00113 
-00114   STDMETHODIMP_(LPD3DDEVICEDESC) GetDesc3D()  { <span class="keywordflow">return</span> &amp;Desc3D; }
-00115   STDMETHODIMP_(LPGUID) GetGuid3D() { <span class="keywordflow">return</span> &amp;Guid3D; }
-00116   STDMETHODIMP_(<span class="keywordtype">bool</span>) GetMipmap() { <span class="keywordflow">return</span> Mipmap; }
-00117   STDMETHODIMP_(<span class="keywordtype">bool</span>) GetAlphaBlend() { <span class="keywordflow">return</span> AlphaBlend; }
-00118   STDMETHODIMP_(<span class="keywordtype">int</span>) GetAlphaBlendType() { <span class="keywordflow">return</span> AlphaBlendType; }
-00119   STDMETHODIMP_(<span class="keywordtype">bool</span>) GetAlphaBlendHalo() { <span class="keywordflow">return</span> AlphaBlendHalo; }
-00120   STDMETHODIMP_(<span class="keywordtype">bool</span>) GetHardware() { <span class="keywordflow">return</span> Hardware; }
-00121 };
-00122 
-00123 <span class="comment">// master class of the device detection of direct3d and directdraw</span>
-00124 <span class="keyword">class </span>CS_CSPLUGINCOMMON_DX_EXPORT DirectDetection
-00125 {
-00126 <span class="keyword">public</span>:
-00127   <span class="keywordtype">bool</span> Have2DDevice();
-00128   <span class="keywordtype">bool</span> Have3DDevice();
-00129   DirectDetection();
-00130   <span class="keyword">virtual</span> ~DirectDetection();
-00131   DirectDetectionDevice * findBestDevice3D(<span class="keywordtype">bool</span> fscreen);
-00132   DirectDetectionDevice * findBestDevice2D(<span class="keywordtype">int</span> displayNumber = 0);
-00133   <span class="keywordtype">int</span> addDevice(<a class="code" href="classDirectDetection2D.html">DirectDetection2D</a> * dd2d);
-00134   <span class="keywordtype">int</span> addDevice(DirectDetection3D * dd3d);
-00135   <span class="keywordtype">bool</span> checkDevices();
-00136   <span class="keywordtype">bool</span> checkDevices2D();
-00137   <span class="keywordtype">bool</span> checkDevices3D();
-00138 
-00139   <span class="keywordtype">void</span> ReportResult (<span class="keywordtype">int</span> severity, <span class="keywordtype">char</span> *str, HRESULT hRes);
-00140   <span class="keywordtype">void</span> SystemFatalError (<span class="keywordtype">char</span> *str, HRESULT hRes);
-00141 
-00142   DirectDetectionDevice * Devices; <span class="comment">// list of devices</span>
-00143   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-00144 };
-00145 
-00146 <span class="preprocessor">#endif // __CS_DIRECTDETECTION_H__</span>
+<a name="l00036"></a><a class="code" href="classDirectDetectionDevice.html">00036</a> <span class="keyword">class </span>CS_CSPLUGINCOMMON_DX_EXPORT <a class="code" href="classDirectDetectionDevice.html">DirectDetectionDevice</a>
+00037 {
+00038 <span class="keyword">public</span>:
+00039   <a class="code" href="classDirectDetectionDevice.html">DirectDetectionDevice</a>() : Windowed(<span class="keyword">false</span>), IsPrimary2D(<span class="keyword">true</span>), 
+00040     DeviceName2D(0), DeviceDescription2D(0)
+00041   {
+00042     ZeroMemory (&amp;Guid2D, <span class="keyword">sizeof</span>(GUID));
+00043   }
+00044   <a class="code" href="classDirectDetectionDevice.html">DirectDetectionDevice</a> (<span class="keyword">const</span> <a class="code" href="classDirectDetectionDevice.html">DirectDetectionDevice</a>&amp; other) :
+00045     Windowed (other.<a class="code" href="classDirectDetectionDevice.html#o1">Windowed</a>), IsPrimary2D (other.<a class="code" href="classDirectDetectionDevice.html#o2">IsPrimary2D</a>)
+00046   {
+00047     memcpy (&amp;Guid2D, &amp;other.<a class="code" href="classDirectDetectionDevice.html#o0">Guid2D</a>, sizeof (GUID));
+00048     DeviceName2D = <a class="code" href="group__util.html#ga94">csStrNew</a> (other.<a class="code" href="classDirectDetectionDevice.html#o3">DeviceName2D</a>);
+00049     DeviceDescription2D = <a class="code" href="group__util.html#ga94">csStrNew</a> (other.<a class="code" href="classDirectDetectionDevice.html#o4">DeviceDescription2D</a>);
+00050   }
+00051   ~<a class="code" href="classDirectDetectionDevice.html">DirectDetectionDevice</a>()
+00052   {
+00053     <span class="keyword">delete</span>[] DeviceName2D;
+00054     <span class="keyword">delete</span>[] DeviceDescription2D;
+00055   }
+00056 
+00057   GUID Guid2D;                <span class="comment">// Guid for DirectDraw device</span>
+00058   <span class="keywordtype">bool</span> Windowed;              <span class="comment">// Can enable windowed mode for graphics ?</span>
+00059   <span class="keywordtype">bool</span> IsPrimary2D;           <span class="comment">// Is a primary ddraw device ?</span>
+00060   <span class="keywordtype">char</span> * DeviceName2D;        <span class="comment">// Name of device</span>
+00061   <span class="keywordtype">char</span> * DeviceDescription2D; <span class="comment">// Description of device</span>
+00062 };
+00063 
+00064 <span class="comment">// master class of the device detection of direct3d and directdraw</span>
+00065 <span class="keyword">class </span>CS_CSPLUGINCOMMON_DX_EXPORT DirectDetection
+00066 {
+00067 <span class="keyword">public</span>:
+00068   <span class="keywordtype">bool</span> Have2DDevice();
+00069   DirectDetection();
+00070   <span class="keyword">virtual</span> ~DirectDetection();
+00071   <span class="keyword">const</span> <a class="code" href="classDirectDetectionDevice.html">DirectDetectionDevice</a>* FindBestDevice (<span class="keywordtype">int</span> displayNumber = 0);
+00072   <span class="keywordtype">int</span> AddDevice (<span class="keyword">const</span> <a class="code" href="classDirectDetectionDevice.html">DirectDetectionDevice</a>&amp; dd2d);
+00073   <span class="keywordtype">bool</span> CheckDevices();
+00074   <span class="keywordtype">bool</span> CheckDevices2D();
+00075 
+00076   <span class="keywordtype">void</span> ReportResult (<span class="keywordtype">int</span> severity, <span class="keywordtype">char</span> *str, HRESULT hRes);
+00077   <span class="keywordtype">void</span> SystemFatalError (<span class="keywordtype">char</span> *str, HRESULT hRes);
+00078 
+00079   <a class="code" href="classcsArray.html">csArray&lt;DirectDetectionDevice&gt;</a> Devices; <span class="comment">// list of devices</span>
+00080   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+00081 };
+00082 
+00083 <span class="preprocessor">#endif // __CS_DIRECTDETECTION_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

@@ -18,7 +18,7 @@
 <h1>iMaterialWrapper Struct Reference<br>
 <small>
 [<a class="el" href="group__engine3d__textures.html">Textures &amp; Materials</a>,&nbsp;<a class="el" href="group__engine3d__textures.html">Textures &amp; Materials</a>]</small>
-</h1>A material wrapper is an engine-level object that wraps around an actual material (<a class="el" href="structiMaterialHandle.html">iMaterialHandle</a>).  
+</h1>A material wrapper is an engine-level object that wraps around an actual material (<a class="el" href="structiMaterial.html">iMaterial</a>).  
 <a href="#_details">More...</a>
 <p>
 <code>#include &lt;<a class="el" href="iengine_2material_8h-source.html">iengine/material.h</a>&gt;</code>
@@ -37,45 +37,36 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiMaterialWrapper.html">iMaterialWrapper</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a1">Clone</a> () const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a clone this material wrapper, using the same material handle.  <a href="#a1"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a2">SetMaterialHandle</a> (<a class="el" href="structiMaterialHandle.html">iMaterialHandle</a> *mat)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a2">SetMaterial</a> (<a class="el" href="structiMaterial.html">iMaterial</a> *material)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Change the material handle.  <a href="#a2"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiMaterialHandle.html">iMaterialHandle</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a3">GetMaterialHandle</a> ()=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Change the base material.  <a href="#a2"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiMaterial.html">iMaterial</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a3">GetMaterial</a> ()=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the material handle.  <a href="#a3"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a4">SetMaterial</a> (<a class="el" href="structiMaterial.html">iMaterial</a> *material)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the original material.  <a href="#a3"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a4">Visit</a> ()=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Change the base material.  <a href="#a4"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiMaterial.html">iMaterial</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a5">GetMaterial</a> ()=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Visit this material.  <a href="#a4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a5">IsVisitRequired</a> () const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the original material.  <a href="#a5"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a6">Register</a> (<a class="el" href="structiTextureManager.html">iTextureManager</a> *txtmng)=0</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Register the material with the texture manager.  <a href="#a6"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a7">Visit</a> ()=0</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Visit this material.  <a href="#a7"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMaterialWrapper.html#a8">IsVisitRequired</a> () const =0</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return true if it is needed to call <a class="el" href="structiMaterialWrapper.html#a7">Visit()</a>.  <a href="#a8"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return true if it is needed to call <a class="el" href="structiMaterialWrapper.html#a4">Visit()</a>.  <a href="#a5"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-A material wrapper is an engine-level object that wraps around an actual material (<a class="el" href="structiMaterialHandle.html">iMaterialHandle</a>). 
+A material wrapper is an engine-level object that wraps around an actual material (<a class="el" href="structiMaterial.html">iMaterial</a>). 
 <p>
-Every material in the engine is represented by a material wrapper, which keeps the pointer to the material handle, its name, and possibly the base material object that was registered to create the material handle. <p>
+Every material in the engine is represented by a material wrapper, which keeps the pointer to the material and its name, and possibly the base material object. <p>
 Main creators of instances implementing this interface: <ul>
 <li>
-<a class="el" href="structiEngine.html#a26">iEngine::CreateMaterial()</a> </li>
+<a class="el" href="structiEngine.html#a25">iEngine::CreateMaterial()</a> </li>
 <li>
 <a class="el" href="structiMaterialList.html#a0">iMaterialList::NewMaterial()</a> </li>
 </ul>
 Main ways to get pointers to this interface: <ul>
 <li>
-<a class="el" href="structiEngine.html#a43">iEngine::FindMaterial()</a> </li>
+<a class="el" href="structiEngine.html#a42">iEngine::FindMaterial()</a> </li>
 <li>
-<a class="el" href="structiMaterialList.html#a3">iMaterialList::Get()</a> </li>
+<a class="el" href="structiMaterialList.html#a2">iMaterialList::Get()</a> </li>
 <li>
-<a class="el" href="structiMaterialList.html#a9">iMaterialList::FindByName()</a> </li>
+<a class="el" href="structiMaterialList.html#a8">iMaterialList::FindByName()</a> </li>
 <li>
 <a class="el" href="structiLoaderContext.html#a1">iLoaderContext::FindMaterial()</a> </li>
 <li>
@@ -95,7 +86,7 @@ Mesh objects </li>
 <p>
 
 <p>
-Definition at line <a class="el" href="iengine_2material_8h-source.html#l00068">68</a> of file <a class="el" href="iengine_2material_8h-source.html">material.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="iengine_2material_8h-source.html#l00066">66</a> of file <a class="el" href="iengine_2material_8h-source.html">material.h</a>.<hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="a1" doxytag="iMaterialWrapper::Clone"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -125,7 +116,7 @@ Create a clone this material wrapper, using the same material handle.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a5" doxytag="iMaterialWrapper::GetMaterial"></a><p>
+<a class="anchor" name="a3" doxytag="iMaterialWrapper::GetMaterial"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -154,36 +145,7 @@ Get the original material.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a3" doxytag="iMaterialWrapper::GetMaterialHandle"></a><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">virtual <a class="el" href="structiMaterialHandle.html">iMaterialHandle</a>* iMaterialWrapper::GetMaterialHandle           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Get the material handle. 
-<p>
-    </td>
-  </tr>
-</table>
-<a class="anchor" name="a8" doxytag="iMaterialWrapper::IsVisitRequired"></a><p>
+<a class="anchor" name="a5" doxytag="iMaterialWrapper::IsVisitRequired"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -207,7 +169,7 @@ Get the material handle.
     <td>
 
 <p>
-Return true if it is needed to call <a class="el" href="structiMaterialWrapper.html#a7">Visit()</a>. 
+Return true if it is needed to call <a class="el" href="structiMaterialWrapper.html#a4">Visit()</a>. 
 <p>
     </td>
   </tr>
@@ -241,37 +203,7 @@ Get the <a class="el" href="structiObject.html">iObject</a> for this material.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a6" doxytag="iMaterialWrapper::Register"></a><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">virtual void iMaterialWrapper::Register           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structiTextureManager.html">iTextureManager</a> *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>txtmng</em>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Register the material with the texture manager. 
-<p>
-    </td>
-  </tr>
-</table>
-<a class="anchor" name="a4" doxytag="iMaterialWrapper::SetMaterial"></a><p>
+<a class="anchor" name="a2" doxytag="iMaterialWrapper::SetMaterial"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -301,37 +233,7 @@ Change the base material.
 Note: The changes will not be visible until you re-register the material.     </td>
   </tr>
 </table>
-<a class="anchor" name="a2" doxytag="iMaterialWrapper::SetMaterialHandle"></a><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">virtual void iMaterialWrapper::SetMaterialHandle           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structiMaterialHandle.html">iMaterialHandle</a> *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>mat</em>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Change the material handle. 
-<p>
-Note: This will also change the base material to 0.     </td>
-  </tr>
-</table>
-<a class="anchor" name="a7" doxytag="iMaterialWrapper::Visit"></a><p>
+<a class="anchor" name="a4" doxytag="iMaterialWrapper::Visit"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -357,7 +259,7 @@ Note: This will also change the base material to 0.     </td>
 <p>
 Visit this material. 
 <p>
-This should be called by the engine right before using the material. It will call <a class="el" href="structiMaterialWrapper.html#a7">Visit()</a> on all textures that are used.     </td>
+This should be called by the engine right before using the material. It will call <a class="el" href="structiMaterialWrapper.html#a4">Visit()</a> on all textures that are used.     </td>
   </tr>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
