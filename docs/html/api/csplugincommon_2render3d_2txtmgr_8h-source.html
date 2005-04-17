@@ -171,90 +171,39 @@
 00248   <a class="code" href="classcsTextureHandle.html">csTextureHandle</a> *get_parent () { <span class="keywordflow">return</span> parent; }
 00249 };
 00250 
-<a name="l00254"></a><a class="code" href="classcsMaterialHandle.html">00254</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csMaterialHandle : <span class="keyword">public</span> <a class="code" href="structiMaterialHandle.html">iMaterialHandle</a>
-00255 {
-00256 <span class="keyword">protected</span>:
-<a name="l00258"></a><a class="code" href="classcsMaterialHandle.html#p0">00258</a>   <a class="code" href="classcsRef.html">csRef&lt;iMaterial&gt;</a> material;
-<a name="l00260"></a><a class="code" href="classcsMaterialHandle.html#p1">00260</a>   <a class="code" href="classcsRef.html">csRef&lt;csTextureManager&gt;</a> texman;
-<a name="l00262"></a><a class="code" href="classcsMaterialHandle.html#p2">00262</a>   <a class="code" href="classcsRef.html">csRef&lt;iTextureHandle&gt;</a> texture;
-00263 
-00264 <span class="keyword">public</span>:
-00266   csMaterialHandle (<a class="code" href="structiMaterial.html">iMaterial</a>* material, <a class="code" href="classcsTextureManager.html">csTextureManager</a> *parent);
-00268   csMaterialHandle (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>* texture, <a class="code" href="classcsTextureManager.html">csTextureManager</a> *parent);
-00270   <span class="keyword">virtual</span> ~csMaterialHandle ();
-00271 
-00273   <span class="keywordtype">void</span> FreeMaterial ();
+<a name="l00256"></a><a class="code" href="classcsTextureManager.html">00256</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTextureManager : <span class="keyword">public</span> <a class="code" href="structiTextureManager.html">iTextureManager</a>
+00257 {
+00258 <span class="keyword">protected</span>:
+00259 
+00260   <span class="comment">//typedef csArray&lt;csTextureHandle*&gt; csTexVector;</span>
+00261   <span class="keyword">typedef</span> <a class="code" href="classcsWeakRefArray.html">csWeakRefArray&lt;csTextureHandle&gt;</a> <a class="code" href="classcsWeakRefArray.html">csTexVector</a>;
+00262 
+<a name="l00264"></a><a class="code" href="classcsTextureManager.html#p0">00264</a>   <a class="code" href="classcsWeakRefArray.html">csTexVector</a> textures;
+00265 
+00267   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg;
+00268 
+00270   <span class="keyword">virtual</span> <span class="keywordtype">void</span> read_config (<a class="code" href="structiConfigFile.html">iConfigFile</a> *config);
+00271 <span class="keyword">public</span>:
+<a name="l00273"></a><a class="code" href="classcsTextureManager.html#o0">00273</a>   <a class="code" href="structcsPixelFormat.html">csPixelFormat</a> pfmt;
 00274 
-<a name="l00276"></a><a class="code" href="classcsMaterialHandle.html#a4">00276</a>   <a class="code" href="structiMaterial.html">iMaterial</a>* GetMaterial () { <span class="keywordflow">return</span> material; }
-00277 
-00278   <span class="comment">//--------------------- iMaterialHandle implementation ----------------------</span>
+00275   <a class="code" href="group__util.html#ga23">csStringID</a> nameDiffuseTexture;
+00276 
+00277   <a class="code" href="classcsStringSet.html">csStringSet</a> texClassIDs;
+00278 
 00279   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
 00280 
-<a name="l00284"></a><a class="code" href="classcsMaterialHandle.html#a5">00284</a>   <span class="keyword">virtual</span> <a class="code" href="structiShader.html">iShader</a> *<a class="code" href="structiMaterialHandle.html#a0">GetShader</a> (<a class="code" href="group__util.html#ga23">csStringID</a> type) 
-00285   { <span class="keywordflow">return</span> material-&gt;GetShader(type); }
-00286 
-00290   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a> *<a class="code" href="structiMaterialHandle.html#a1">GetTexture</a> ();
+00282   csTextureManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <a class="code" href="structiGraphics2D.html">iGraphics2D</a> *iG2D);
+00284   <span class="keyword">virtual</span> ~csTextureManager ();
+00285 
+<a name="l00287"></a><a class="code" href="classcsTextureManager.html#a2">00287</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Clear ()
+00288   {
+00289     textures.DeleteAll ();
+00290   }
 00291 
-<a name="l00296"></a><a class="code" href="classcsMaterialHandle.html#a7">00296</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMaterialHandle.html#a2">GetFlatColor</a> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a> &amp;oColor)
-00297   { 
-00298     material-&gt;GetFlatColor (oColor);
-00299   }
-00300 
-<a name="l00304"></a><a class="code" href="classcsMaterialHandle.html#a8">00304</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMaterialHandle.html#a3">GetReflection</a> (<span class="keywordtype">float</span> &amp;oDiffuse, <span class="keywordtype">float</span> &amp;oAmbient,
-00305     <span class="keywordtype">float</span> &amp;oReflection)
-00306   { 
-00307     material-&gt;GetReflection (oDiffuse, oAmbient, oReflection);
-00308   }
-00309 };
-00310 
-<a name="l00316"></a><a class="code" href="classcsTextureManager.html">00316</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTextureManager : <span class="keyword">public</span> <a class="code" href="structiTextureManager.html">iTextureManager</a>
-00317 {
-00318 <span class="keyword">protected</span>:
-00319 
-00320   <span class="comment">//typedef csArray&lt;csTextureHandle*&gt; csTexVector;</span>
-00321   <span class="keyword">typedef</span> <a class="code" href="classcsWeakRefArray.html">csWeakRefArray&lt;csTextureHandle&gt;</a> <a class="code" href="classcsWeakRefArray.html">csTexVector</a>;
-00322 
-<a name="l00324"></a><a class="code" href="classcsTextureManager.html#p0">00324</a>   <a class="code" href="classcsWeakRefArray.html">csTexVector</a> textures;
-00325 
-00326   <span class="comment">// Private class used to keep a list of objects derived from csMaterialHandle</span>
-00327   <span class="comment">//typedef csArray&lt;csMaterialHandle*&gt; csMatVector;</span>
-00328   <span class="keyword">typedef</span> <a class="code" href="classcsWeakRefArray.html">csWeakRefArray&lt;csMaterialHandle&gt;</a> <a class="code" href="classcsWeakRefArray.html">csMatVector</a>;
-00329 
-<a name="l00331"></a><a class="code" href="classcsTextureManager.html#p1">00331</a>   <a class="code" href="classcsWeakRefArray.html">csMatVector</a> materials;
-00332 
-00334   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg;
-00335 
-00337   <span class="keyword">virtual</span> <span class="keywordtype">void</span> read_config (<a class="code" href="structiConfigFile.html">iConfigFile</a> *config);
-00338 <span class="keyword">public</span>:
-<a name="l00340"></a><a class="code" href="classcsTextureManager.html#o0">00340</a>   <a class="code" href="structcsPixelFormat.html">csPixelFormat</a> pfmt;
-00341 
-00342   <a class="code" href="group__util.html#ga23">csStringID</a> nameDiffuseTexture;
-00343 
-00344   <a class="code" href="classcsStringSet.html">csStringSet</a> texClassIDs;
-00345 
-00346   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
-00347 
-00349   csTextureManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <a class="code" href="structiGraphics2D.html">iGraphics2D</a> *iG2D);
-00351   <span class="keyword">virtual</span> ~csTextureManager ();
-00352 
-00357   <span class="keywordtype">void</span> UnregisterMaterial (csMaterialHandle* handle);
-00358 
-<a name="l00360"></a><a class="code" href="classcsTextureManager.html#a3">00360</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Clear ()
-00361   {
-00362     textures.DeleteAll ();
-00363     materials.DeleteAll ();
-00364   }
-00365 
-00373   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiTextureManager.html#a4">GetTextureFormat</a> ();
-00374 
-00381   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMaterialHandle&gt;</a> <a class="code" href="structiTextureManager.html#a1">RegisterMaterial</a> (<a class="code" href="structiMaterial.html">iMaterial</a>* material);
-00382 
-00387   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMaterialHandle&gt;</a> <a class="code" href="structiTextureManager.html#a1">RegisterMaterial</a> (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>* txthandle);
-00388 
-00393   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureManager.html#a3">FreeMaterials</a> ();
-00394 };
-00395 
-00396 <span class="preprocessor">#endif // __CS_TXTMGR_H__</span>
+00299   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiTextureManager.html#a1">GetTextureFormat</a> ();
+00300 };
+00301 
+00302 <span class="preprocessor">#endif // __CS_TXTMGR_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
