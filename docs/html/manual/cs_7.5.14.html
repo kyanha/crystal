@@ -1,962 +1,819 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- Created by texi2html 1.64 -->
-<!-- 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on April, 18 2005 by texi2html 1.76 -->
+<!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
             Olaf Bachmann <obachman@mathematik.uni-kl.de>
             and many others.
-Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
-Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
- 
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
 -->
-<HTML>
-<HEAD>
-<TITLE>Crystal Space: Internal Workings</TITLE>
+<head>
+<title>Crystal Space: 7.5.14 The Engine Internals Explained</title>
 
-<META NAME="description" CONTENT="Crystal Space: Internal Workings">
-<META NAME="keywords" CONTENT="Crystal Space: Internal Workings">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-<META NAME="Generator" CONTENT="texi2html 1.64">
+<meta name="description" content="Crystal Space: 7.5.14 The Engine Internals Explained">
+<meta name="keywords" content="Crystal Space: 7.5.14 The Engine Internals Explained">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
 
-</HEAD>
 
-<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+</head>
 
-<A NAME="SEC7.5.14"></A>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.13.html#SEC7.5.13"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.4.html#SEC7.4"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.html#SEC7.5"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<HR SIZE=1>
-<H3> 7.5.14 The Engine Internals Explained </H3>
-<!--docid::SEC7.5.14::-->
-<P>
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>. Last updated 30 April 2004.</EM>
-</P><P>
+<a name="Internal-Workings"></a>
+<a name="SEC463"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_7.5.13.html#SEC457" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.6.html#SEC479" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_7.html#SEC378" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.5.html#SEC395" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_8.html#SEC790" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_SEC_Top.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_SEC987.html#SEC987" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 7.5.14 The Engine Internals Explained </h3>
 
-This section explains, in some detail, how the engine works internally.
+
+<p><em>Written by Jorrit Tyberghein,
+<a href="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</a>. Last updated 30 April 2004.</em>
+</p>
+<p>This section explains, in some detail, how the engine works internally.
 This information is mainly for people who are interested in learning
 how the Crystal Space engine works internally and for people who want
 to contribute to the engine proper. The sources for the 3D engine can be found
-in `<TT>CS/plugins/engine/3d</TT>'.
-</P><P>
-
-Note: This discussion is specific to how the engine works in relation
+in <tt>`CS/plugins/engine/3d'</tt>.
+</p>
+<p>Note: This discussion is specific to how the engine works in relation
 to the new renderer. The old renderer is still in Crystal Space at this moment
 but this discussion does not bear upon it.
-</P><P>
+</p>
+<a name="SEC464"></a>
+<h4 class="subsubheading"> Engine Data Structures </h4>
 
-<A NAME="SEC_1"></A>
-<H4> Engine Data Structures </H4>
-<!--docid::SEC_1::-->
-<P>
-
-The following sections explain the various data structures that
+<p>The following sections explain the various data structures that
 are used in the engine. Many of these data structures are subclasses of
-`<SAMP>csObject</SAMP>', which means that you can use them in your game to attach
+<samp>`csObject'</samp>, which means that you can use them in your game to attach
 other game specific objects.
-</P><P>
+</p>
+<a name="SEC465"></a>
+<h4 class="subsubheading"> Engine Data Structures: csEngine </h4>
 
-<A NAME="SEC_2"></A>
-<H4> Engine Data Structures: csEngine </H4>
-<!--docid::SEC_2::-->
-<P>
-
-At the core of everything there is the `<SAMP>csEngine</SAMP>' class which implements
-the publicly viewable `<SAMP>iEngine</SAMP>' interface.  The engine class implements
+<p>At the core of everything there is the <samp>`csEngine'</samp> class which implements
+the publicly viewable <samp>`iEngine'</samp> interface.  The engine class implements
 the following interfaces:
-</P><P>
+</p>
+<ul>
+<li>
+<code>iEngine</code>: The main entry point for the engine.
+</li><li>
+<code>iObject</code>: Allows attachment of game-specific data.
+</li></ul>
 
-<UL>
-<LI>
-<CODE>iEngine</CODE>: The main entry point for the engine.
-<LI>
-<CODE>iObject</CODE>: Allows attachment of game-specific data.
-</UL>
-<P>
-
-The engine class maintains the following lists of different types of objects
+<p>The engine class maintains the following lists of different types of objects
 or operations:
-</P><P>
-
-<UL>
-<LI>
-<CODE>sectors</CODE>: Class `<SAMP>csSector</SAMP>', interface `<SAMP>iSector</SAMP>'. As explained
+</p>
+<ul>
+<li>
+<code>sectors</code>: Class <samp>`csSector'</samp>, interface <samp>`iSector'</samp>. As explained
 in other parts of this manual, a sector is simply an infinite region of space.
 There is always at least one sector.
-<P>
 
-<LI>
-<CODE>mesh_factories</CODE>: Class `<SAMP>csMeshFactoryWrapper</SAMP>', interface
-`<SAMP>iMeshFactoryWrapper</SAMP>'. Mesh factory wrappers contain templates for making
+</li><li>
+<code>mesh_factories</code>: Class <samp>`csMeshFactoryWrapper'</samp>, interface
+<samp>`iMeshFactoryWrapper'</samp>. Mesh factory wrappers contain templates for making
 objects. A factory is not visible itself but you can create mesh objects
 from a factory and place them into sectors. Note that children of hierarchical
 mesh factories are not in this list.
-<P>
 
-<LI>
-<CODE>meshes</CODE>: Class `<SAMP>csMeshWrapper</SAMP>', interface `<SAMP>iMeshWrapper</SAMP>'. These
+</li><li>
+<code>meshes</code>: Class <samp>`csMeshWrapper'</samp>, interface <samp>`iMeshWrapper'</samp>. These
 are the actual mesh objects. Mesh objects are normally placed in sectors but
 every mesh will also be present in this list so that the engine can perform
 maintenance on them. A mesh object that is not in any sector, but only
 in this list, will not be visible. Note that children of hierarchical
 mesh objects are not in this list.
-<P>
 
-<LI>
-<CODE>collections</CODE>: Class `<SAMP>csCollection</SAMP>', interface `<SAMP>iCollection</SAMP>'. A
+</li><li>
+<code>collections</code>: Class <samp>`csCollection'</samp>, interface <samp>`iCollection'</samp>. A
 collection is a simple container for other objects (meshes, lights, etc.).
 This can be useful for scripts.
-<P>
 
-<LI>
-<CODE>camera_positions</CODE>: Class `<SAMP>csCameraPosition</SAMP>', interface
-`<SAMP>iCameraPosition</SAMP>'. If you define start positions in your map file, then
+</li><li>
+<code>camera_positions</code>: Class <samp>`csCameraPosition'</samp>, interface
+<samp>`iCameraPosition'</samp>. If you define start positions in your map file, then
 they will be placed into this list.
-<P>
 
-<LI>
-<CODE>regions</CODE>: Class `<SAMP>csRegion</SAMP>', interface `<SAMP>iRegion</SAMP>'.  Regions
+</li><li>
+<code>regions</code>: Class <samp>`csRegion'</samp>, interface <samp>`iRegion'</samp>.  Regions
 provide a way to organize your objects.  Every object (mesh, factory, material,
 light, sector, etc.) can be placed into a region. Note that a region is not
 a geometrical concept. You can use one region to contain all materials,
 and another to contain all mesh objects, for example. On the other hand, it is
 probably most useful to have regions that represent geometrical areas which
 you can load and unload from the engine (useful for making huge maps).
-<P>
 
-<LI>
-<CODE>textures</CODE>: Class `<SAMP>csTextureWrapper</SAMP>', interface
-`<SAMP>iTextureWrapper</SAMP>'.  A texture is a processed image that can be used by the
+</li><li>
+<code>textures</code>: Class <samp>`csTextureWrapper'</samp>, interface
+<samp>`iTextureWrapper'</samp>.  A texture is a processed image that can be used by the
 renderer.
-<P>
 
-<LI>
-<CODE>materials</CODE>: Class `<SAMP>csMaterialWrapper</SAMP>', interface
-`<SAMP>iMaterialWrapper</SAMP>'.  A material is a surface attribute for a mesh object.
+</li><li>
+<code>materials</code>: Class <samp>`csMaterialWrapper'</samp>, interface
+<samp>`iMaterialWrapper'</samp>.  A material is a surface attribute for a mesh object.
 A material usually uses at least one texture but it is also possible to have
 materials that do not utilize textures at all.
-<P>
 
-<LI>
-<CODE>halos</CODE>: Class `<SAMP>csLightHalo</SAMP>', interface `<SAMP>iHalo</SAMP>'.  Halos and lens
+</li><li>
+<code>halos</code>: Class <samp>`csLightHalo'</samp>, interface <samp>`iHalo'</samp>.  Halos and lens
 flares are in this list.  This list contains all halos that were visible during
 frame rendering. After the entire frame has been rendered the engine uses
 this list to draw all halos that were visible.
-<P>
 
-<LI>
-<CODE>shared_variables</CODE>: Class `<SAMP>csSharedVariable</SAMP>', interface
-`<SAMP>iSharedVariable</SAMP>'. The engine maintains a list of variables that can
-be used for the engine sequence manager and also for controlling LOD
+</li><li>
+<code>shared_variables</code>: Class <samp>`csSharedVariable'</samp>, interface
+<samp>`iSharedVariable'</samp>. The engine maintains a list of variables that can
+be used for the engine sequence manager and also for controlling <small>LOD</small>
 (level of detail).
-<P>
 
-<LI>
-<CODE>cleanup</CODE>: This is an array that keeps track of items that the engine must
+</li><li>
+<code>cleanup</code>: This is an array that keeps track of items that the engine must
 clean up (delete) when the engine itself is destroyed.
-<P>
 
-<LI>
-<CODE>render_priorities</CODE>: This is a list of all render priorities supported by
+</li><li>
+<code>render_priorities</code>: This is a list of all render priorities supported by
 the engine. Render priorities control in which order objects
 in a sector must be rendered.
-<P>
 
-<LI>
-<CODE>want_to_die</CODE>: This is a set of all `<SAMP>iMeshWrapper</SAMP>' objects
+</li><li>
+<code>want_to_die</code>: This is a set of all <samp>`iMeshWrapper'</samp> objects
 that want to die the next frame. The purpose of this lists is for mesh
 objects to schedule their own destruction (this can be useful for an
 explosion mesh object for example). The mesh object cannot destroy itself
 since it would then remove its own instance and this would be problematic.
-</UL>
-<P>
+</li></ul>
 
-In addition, the engine also maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>Strings</CODE>: Interface `<SAMP>iStringSet</SAMP>'.  The string set interface is used
+<p>In addition, the engine also maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>Strings</code>: Interface <samp>`iStringSet'</samp>.  The string set interface is used
 for converting strings to numerical identifiers.  The renderer and shader
 systems uses these identifiers for tagging types of items since comparison of
 numerical identifiers is faster than comparison of string identifiers.
-<P>
 
-<LI>
-<CODE>cache_mgr</CODE>: Interface `<SAMP>iCacheManager</SAMP>'.  This is the default cache
+</li><li>
+<code>cache_mgr</code>: Interface <samp>`iCacheManager'</samp>.  This is the default cache
 manager maintained by the engine.  The cache manager is responsible for storing
 data that is hard to compute.  Mesh objects and other plugins may use the cache
 manager to store, for example, lightmaps and other stuff.
-<P>
 
-<LI>
-<CODE>defaultRenderLoop</CODE>: Interface `<SAMP>iRenderLoop</SAMP>'. The default renderloop
+</li><li>
+<code>defaultRenderLoop</code>: Interface <samp>`iRenderLoop'</samp>. The default renderloop
 controls how objects are rendered in a sector in combination with shaders.
 More on that later. Note that sectors can override the default renderloop.
-<P>
 
-<LI>
-<CODE>renderLoopManager</CODE>: Interface `<SAMP>csRenderLoopManager</SAMP>'.  The renderloop
+</li><li>
+<code>renderLoopManager</code>: Interface <samp>`csRenderLoopManager'</samp>.  The renderloop
 manager is responsible for creating renderloops.
-<P>
 
-<LI>
-<CODE>render_context</CODE>: Interface `<SAMP>iTextureHandle</SAMP>'.  This is used while
-rendering on a texture (i.e. when using <CODE>iGraphics3D::SetRenderTarget()</CODE>
+</li><li>
+<code>render_context</code>: Interface <samp>`iTextureHandle'</samp>.  This is used while
+rendering on a texture (i.e. when using <code>iGraphics3D::SetRenderTarget()</code>
 is in effect).
-<P>
 
-<LI>
-<CODE>default_shader</CODE>: Interface `<SAMP>iShader</SAMP>'.  This is the default shader
+</li><li>
+<code>default_shader</code>: Interface <samp>`iShader'</samp>.  This is the default shader
 that is used on all materials which do not otherwise specify a shader.
-<P>
 
-<LI>
-<CODE>top_clipper</CODE>: Class `<SAMP>csRenderView</SAMP>'.  During rendering of a frame
-this variable points at the top level clipper.  More on how `<SAMP>csRenderView</SAMP>'
+</li><li>
+<code>top_clipper</code>: Class <samp>`csRenderView'</samp>.  During rendering of a frame
+this variable points at the top level clipper.  More on how <samp>`csRenderView'</samp>
 works later.
-</UL>
-<P>
+</li></ul>
 
-<A NAME="SEC_3"></A>
-<H4> Engine Data Structures: csSector </H4>
-<!--docid::SEC_3::-->
-<P>
+<a name="SEC466"></a>
+<h4 class="subsubheading"> Engine Data Structures: csSector </h4>
 
-A sector is one of the most important data structures in the engine.
+<p>A sector is one of the most important data structures in the engine.
 It is a container for other objects (meshes and lights).
 The sector class implements the following interfaces:
-</P><P>
+</p>
+<ul>
+<li>
+<code>iSector</code>: The main entry point for the sector.
+</li><li>
+<code>iObject</code>: Allows attachment of game-specific data.
+</li></ul>
 
-<UL>
-<LI>
-<CODE>iSector</CODE>: The main entry point for the sector.
-<LI>
-<CODE>iObject</CODE>: Allows attachment of game-specific data.
-</UL>
-<P>
-
-The sector maintains the following lists:
-</P><P>
-
-<UL>
-<LI>
-<CODE>meshes</CODE>: Interface `<SAMP>iMeshWrapper</SAMP>'.  This is a list of all mesh
+<p>The sector maintains the following lists:
+</p>
+<ul>
+<li>
+<code>meshes</code>: Interface <samp>`iMeshWrapper'</samp>.  This is a list of all mesh
 objects that are visible in this sector.  Note that a mesh can be in multiple
 sectors at the same time (if it is crossing a portal boundary).
-<P>
 
-<LI>
-<CODE>camera_meshes</CODE>: Interface `<SAMP>iMeshWrapper</SAMP>'.  This list contains all
-meshes that have the `<SAMP>CS_ENTITY_CAMERA</SAMP>' flag set.  These meshes have to be
+</li><li>
+<code>camera_meshes</code>: Interface <samp>`iMeshWrapper'</samp>.  This list contains all
+meshes that have the <samp>`CS_ENTITY_CAMERA'</samp> flag set.  These meshes have to be
 treated a bit differently (more on that later).
-<P>
 
-<LI>
-<CODE>portal_meshes</CODE>: Interface `<SAMP>iMeshWrapper</SAMP>'.  This is a set of meshes
+</li><li>
+<code>portal_meshes</code>: Interface <samp>`iMeshWrapper'</samp>.  This is a set of meshes
 that have portals which leave from this sector.  By using this set you can
 quickly find all sectors that are reachable from this sector (through portals).
-<P>
 
-<LI>
-<CODE>lights</CODE>: Interface `<SAMP>iLight</SAMP>'.  This is a list of all lights in this
+</li><li>
+<code>lights</code>: Interface <samp>`iLight'</samp>.  This is a list of all lights in this
 sector.
-<P>
 
-<LI>
-<CODE>visibleMeshCache</CODE>: Class `<SAMP>csSector::visibleMeshCacheHolder</SAMP>'.  This
+</li><li>
+<code>visibleMeshCache</code>: Class <samp>`csSector::visibleMeshCacheHolder'</samp>.  This
 is a special list of caches for visibility.  More on this later.
-<P>
 
-<LI>
-<CODE>usedMeshLists</CODE>: Class `<SAMP>csRenderMeshList</SAMP>'.  This is a list of data
+</li><li>
+<code>usedMeshLists</code>: Class <samp>`csRenderMeshList'</samp>.  This is a list of data
 structures which need to be cleaned up when the sector itself is destroyed.
 More on this later.
-</UL>
-<P>
+</li></ul>
 
-In addition, the sector also maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>dynamic_ambient_color</CODE>: Class `<SAMP>csColor</SAMP>'.  This is the current
+<p>In addition, the sector also maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>dynamic_ambient_color</code>: Class <samp>`csColor'</samp>.  This is the current
 dynamic ambient color that is added to all mesh objects in this sector.
-<P>
 
-<LI>
-<CODE>renderloop</CODE>: Interface `<SAMP>iRenderLoop</SAMP>'.  The optional renderloop for
+</li><li>
+<code>renderloop</code>: Interface <samp>`iRenderLoop'</samp>.  The optional renderloop for
 this sector.  If null, then the engine's renderloop will be used.
-<P>
 
-<LI>
-<CODE>culler</CODE>: Interface `<SAMP>iVisibilityCuller</SAMP>'.  Every sector has a
-visibility culler; usually an instance of either <EM>Frustvis</EM> or
-<EM>Dynavis</EM>.  Frustvis is the default culler.
-<P>
+</li><li>
+<code>culler</code>: Interface <samp>`iVisibilityCuller'</samp>.  Every sector has a
+visibility culler; usually an instance of either <em>Frustvis</em> or
+<em>Dynavis</em>.  Frustvis is the default culler.
 
-<LI>
-<CODE>lights::kdtree</CODE>: Class `<SAMP>csKDTree</SAMP>'.  The <EM>kdtree</EM> helps to find
+</li><li>
+<code>lights::kdtree</code>: Class <samp>`csKDTree'</samp>.  The <em>kdtree</em> helps to find
 lights based upon some box in the sector.  Every light is added to this tree
-with a <EM>bbox</EM> (bounding box) that is calculated from the center of the
+with a <em>bbox</em> (bounding box) that is calculated from the center of the
 light and the influence radius.
-</UL>
-<P>
+</li></ul>
 
-<A NAME="SEC_4"></A>
-<H4> Engine Data Structures: csMeshFactoryWrapper </H4>
-<!--docid::SEC_4::-->
-<P>
+<a name="SEC467"></a>
+<h4 class="subsubheading"> Engine Data Structures: csMeshFactoryWrapper </h4>
 
-A `<SAMP>csMeshFactoryWrapper</SAMP>' is a wrapper class which the engine uses to keep
-track of <CODE>iMeshObjectFactory</CODE> instances (these represent the real mesh
+<p>A <samp>`csMeshFactoryWrapper'</samp> is a wrapper class which the engine uses to keep
+track of <code>iMeshObjectFactory</code> instances (these represent the real mesh
 object factories), and also stores some engine-specific information.
 The mesh factory wrapper class implements the following interfaces:
-</P><P>
+</p>
+<ul>
+<li>
+<code>iMeshFactoryWrapper</code>: The main entry point for the factory wrapper.
+</li><li>
+<code>iObject</code>: Allows attachment of game-specific data.
+</li></ul>
 
-<UL>
-<LI>
-<CODE>iMeshFactoryWrapper</CODE>: The main entry point for the factory wrapper.
-<LI>
-<CODE>iObject</CODE>: Allows attachment of game-specific data.
-</UL>
-<P>
-
-A mesh factory wrapper maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>meshFact</CODE>: Interface `<SAMP>iMeshObjectFactory</SAMP>'.  This is the actual mesh
+<p>A mesh factory wrapper maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>meshFact</code>: Interface <samp>`iMeshObjectFactory'</samp>.  This is the actual mesh
 object factory represented by this wrapper.
-<P>
 
-<LI>
-<CODE>parent</CODE>: Interface `<SAMP>iMeshFactoryWrapper</SAMP>'.  Mesh factories can be
+</li><li>
+<code>parent</code>: Interface <samp>`iMeshFactoryWrapper'</samp>.  Mesh factories can be
 hierarchical.  If they are, then this variable will point to the parent.
 Otherwise it is null.
-<P>
 
-<LI>
-<CODE>transform</CODE>: Class `<SAMP>csReversibleTransform</SAMP>'.  This transform is only
+</li><li>
+<code>transform</code>: Class <samp>`csReversibleTransform'</samp>.  This transform is only
 used if this factory is a child of another factory.  In that case it is the
 relative position of this child relative to the parent.  This is used when
 instantiating mesh objects from a hierarchical factory to set up the initial
 transforms.
-<P>
 
-<LI>
-<CODE>children</CODE>: Class `<SAMP>csMeshFactoryFactoryList</SAMP>'.  If this is a
+</li><li>
+<code>children</code>: Class <samp>`csMeshFactoryFactoryList'</samp>.  If this is a
 hierarchical mesh factory, then the children are listed here.
-<P>
 
-<LI>
-<CODE>static_lod</CODE>: Class `<SAMP>csStaticLODFactoryMesh</SAMP>'.  If this is a
-hierarchical factory with static LOD (level of detail), then this field
+</li><li>
+<code>static_lod</code>: Class <samp>`csStaticLODFactoryMesh'</samp>.  If this is a
+hierarchical factory with static <small>LOD</small> (level of detail), then this field
 contains more information about that.
-</UL>
-<P>
+</li></ul>
 
-<A NAME="SEC_5"></A>
-<H4> Engine Data Structures: csMeshWrapper </H4>
-<!--docid::SEC_5::-->
-<P>
+<a name="SEC468"></a>
+<h4 class="subsubheading"> Engine Data Structures: csMeshWrapper </h4>
 
-A `<SAMP>csMeshWrapper</SAMP>' is a wrapper class for the engine which allows it to
-keep track of an `<SAMP>iMeshObject</SAMP>' instance (real mesh objects), and also
+<p>A <samp>`csMeshWrapper'</samp> is a wrapper class for the engine which allows it to
+keep track of an <samp>`iMeshObject'</samp> instance (real mesh objects), and also
 stores some engine-specific information.  The mesh wrapper class implements the
 following interfaces:
-</P><P>
-
-<UL>
-<LI>
-<CODE>iMeshWrapper</CODE>: The main entry point for the mesh object wrapper.
-<LI>
-<CODE>iObject</CODE>: Allows attachment of game-specific data.
-<LI>
-<CODE>iVisibilityObject</CODE>: Used by the visibility culling plugin.  Mesh wrappers
+</p>
+<ul>
+<li>
+<code>iMeshWrapper</code>: The main entry point for the mesh object wrapper.
+</li><li>
+<code>iObject</code>: Allows attachment of game-specific data.
+</li><li>
+<code>iVisibilityObject</code>: Used by the visibility culling plugin.  Mesh wrappers
 can be registered with the visibility culler that lives in a sector.
-<LI>
-<CODE>iImposter</CODE>: Not yet implemented, but will be used for an imposter system.
-</UL>
-<P>
+</li><li>
+<code>iImposter</code>: Not yet implemented, but will be used for an imposter system.
+</li></ul>
 
-A mesh object wrapper maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>meshobj</CODE>: Interface `<SAMP>iMeshObject</SAMP>'. This is the actual mesh object
+<p>A mesh object wrapper maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>meshobj</code>: Interface <samp>`iMeshObject'</samp>. This is the actual mesh object
 represented by this wrapper.
-<P>
 
-<LI>
-<CODE>Parent</CODE> and <CODE>csParent</CODE>: Interface `<SAMP>iMeshWrapper</SAMP>' and class
-`<SAMP>csMeshWrapper</SAMP>'.  If the mesh is part of a hierarchical mesh, then these
+</li><li>
+<code>Parent</code> and <code>csParent</code>: Interface <samp>`iMeshWrapper'</samp> and class
+<samp>`csMeshWrapper'</samp>.  If the mesh is part of a hierarchical mesh, then these
 fields will point at the parent mesh.
-<P>
 
-<LI>
-<CODE>children</CODE>: Class `<SAMP>csMeshMeshList</SAMP>'.  This is a list of children if
+</li><li>
+<code>children</code>: Class <samp>`csMeshMeshList'</samp>.  This is a list of children if
 this is a hierarchical mesh object.
-<P>
 
-<LI>
-<CODE>factory</CODE>: Interface `<SAMP>iMeshFactoryWrapper</SAMP>'.  Points a the factory
+</li><li>
+<code>factory</code>: Interface <samp>`iMeshFactoryWrapper'</samp>.  Points a the factory
 from which this mesh originated (optional).
-<P>
 
-<LI>
-<CODE>movable</CODE>: Class `<SAMP>csMovable</SAMP>'.  This important field contains
+</li><li>
+<code>movable</code>: Class <samp>`csMovable'</samp>.  This important field contains
 information about where the mesh actually resides.  It maintains a list of
 sectors (a mesh can reside in multiple sectors at once) and a current position
 and transform.  It is also aware of the hierarchical nature of meshes so that
 you can ask the real position and the position relative to the parent.
-<P>
 
-<LI>
-<CODE>zbufMode</CODE> Class `<SAMP>csZBufMode</SAMP>'.  The z-buffer mode to use for
+</li><li>
+<code>zbufMode</code> Class <samp>`csZBufMode'</samp>.  The z-buffer mode to use for
 rendering this object (zfill, zuse, ztest, etc.).
-<P>
 
-<LI>
-<CODE>render_priority</CODE>: Type `<SAMP>int</SAMP>'.  This is a number indicating this
+</li><li>
+<code>render_priority</code>: Type <samp>`int'</samp>.  This is a number indicating this
 mesh's render priority.
-<P>
 
-<LI>
-<CODE>static_lod</CODE>: Class `<SAMP>csStaticLODMesh</SAMP>'.  If this mesh is the parent
-for a static LOD (level of detail) mesh, then this structure will contain
+</li><li>
+<code>static_lod</code>: Class <samp>`csStaticLODMesh'</samp>.  If this mesh is the parent
+for a static <small>LOD</small> (level of detail) mesh, then this structure will contain
 more information about that.
-<P>
 
-<LI>
-<CODE>light_info</CODE>: Interface `<SAMP>iLightingInfo</SAMP>'.  Some meshes implement this
+</li><li>
+<code>light_info</code>: Interface <samp>`iLightingInfo'</samp>.  Some meshes implement this
 interface.  The engine very often requires a pointer to the mesh's
 implementation of this interface.  As an optimization, it therefore maintains a
-pointer to that interface here in order to avoid <CODE>SCF_QUERY_INTERFACE()</CODE>,
+pointer to that interface here in order to avoid <code>SCF_QUERY_INTERFACE()</code>,
 which is somewhat time-consuming.
-<P>
 
-<LI>
-<CODE>shadow_receiver</CODE>: Interface `<SAMP>iShadowReceiver</SAMP>'.  Some meshes
+</li><li>
+<code>shadow_receiver</code>: Interface <samp>`iShadowReceiver'</samp>.  Some meshes
 implement this interface.  Again, as an optimization, a pointer to this
 information is maintained.
-<P>
 
-<LI>
-<CODE>portal_container</CODE>: Interface `<SAMP>iPortalContainer</SAMP>'.  A portal container
+</li><li>
+<code>portal_container</code>: Interface <samp>`iPortalContainer'</samp>.  A portal container
 is a special type of mesh which is maintained by the engine itself and which
 contains portals to other sectors.  This interface can also be obtained from
-the mesh object via <CODE>SCF_QUERY_INTERFACE()</CODE>, but it is also maintained
+the mesh object via <code>SCF_QUERY_INTERFACE()</code>, but it is also maintained
 here as an optimization.
-<P>
 
-<LI>
-<CODE>relevant_lights</CODE>: Interface `<SAMP>iLight</SAMP>'.  This is used for dynamic
+</li><li>
+<code>relevant_lights</code>: Interface <samp>`iLight'</samp>.  This is used for dynamic
 lighting calculation, and will contain a list of all lights that currently
 affect this mesh.
-<P>
 
-<LI>
-<CODE>relevant_lights_ref</CODE>: Class `<SAMP>csMeshWrapper::LightRef</SAMP>'.  This is a
-mirror of `<SAMP>relevant_lights</SAMP>'.  It uses `<SAMP>csWeakRef</SAMP>' as a trick for
+</li><li>
+<code>relevant_lights_ref</code>: Class <samp>`csMeshWrapper::LightRef'</samp>.  This is a
+mirror of <samp>`relevant_lights'</samp>.  It uses <samp>`csWeakRef'</samp> as a trick for
 detecting if a light has been removed or changed.  (Weak references are
 automatically set to null as soon as the object to which the weak reference
 points is deleted.)
-<P>
 
-<LI>
+</li><li>
 Several imposter variables: not yet implemented.
-</UL>
-<P>
+</li></ul>
 
-<A NAME="SEC_6"></A>
-<H4> Engine Data Structures: csRegion </H4>
-<!--docid::SEC_6::-->
-<P>
+<a name="SEC469"></a>
+<h4 class="subsubheading"> Engine Data Structures: csRegion </h4>
 
-A region is a collection of objects.  It utilizes `<SAMP>csObject</SAMP>' to hold all
+<p>A region is a collection of objects.  It utilizes <samp>`csObject'</samp> to hold all
 objects that are in the region.  The region class implements the following
 interfaces:
-</P><P>
+</p>
+<ul>
+<li>
+<code>iRegion</code>: The main entry point for the region.
+</li><li>
+<code>iObject</code>: Allows attachment of game-specific data.
+</li></ul>
 
-<UL>
-<LI>
-<CODE>iRegion</CODE>: The main entry point for the region.
-<LI>
-<CODE>iObject</CODE>: Allows attachment of game-specific data.
-</UL>
-<P>
+<a name="SEC470"></a>
+<h4 class="subsubheading"> Engine Data Structures: csTextureWrapper </h4>
 
-<A NAME="SEC_7"></A>
-<H4> Engine Data Structures: csTextureWrapper </H4>
-<!--docid::SEC_7::-->
-<P>
-
-A texture wrapper is an engine object which keeps track of the real
-textures from the renderers (`<SAMP>iTextureHandle</SAMP>').
+<p>A texture wrapper is an engine object which keeps track of the real
+textures from the renderers (<samp>`iTextureHandle'</samp>).
 The texture wrapper class implements the following interfaces:
-</P><P>
+</p>
+<ul>
+<li>
+<code>iTextureWrapper</code>: The main entry point for the texture wrapper.
+</li><li>
+<code>iObject</code>: Allows attachment of game-specific data.
+</li></ul>
 
-<UL>
-<LI>
-<CODE>iTextureWrapper</CODE>: The main entry point for the texture wrapper.
-<LI>
-<CODE>iObject</CODE>: Allows attachment of game-specific data.
-</UL>
-<P>
-
-A texture wrapper maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>image</CODE>: Interface `<SAMP>iImage</SAMP>'.  This is the object which contains the
-original image data from disk.  After <EM>preparing</EM> this texture to make it
+<p>A texture wrapper maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>image</code>: Interface <samp>`iImage'</samp>.  This is the object which contains the
+original image data from disk.  After <em>preparing</em> this texture to make it
 suitable the renderer, the image is released (unless keep_image is true).
-<P>
 
-<LI>
-<CODE>keep_image</CODE>: Type `<SAMP>bool</SAMP>'.  To prevent `<SAMP>image</SAMP>' from being
+</li><li>
+<code>keep_image</code>: Type <samp>`bool'</samp>.  To prevent <samp>`image'</samp> from being
 cleared, set this to true.  Note that this increases memory usage of a single
 texture, often dramatically, so only do this if the original image data will be
 needed at a later time.
-<P>
 
-<LI>
-<CODE>handle</CODE>: Interface `<SAMP>iTextureHandle</SAMP>'.  This is the texture handle as
-returned by the renderer (via the <CODE>iTextureManager</CODE> interface).
-</UL>
-<P>
+</li><li>
+<code>handle</code>: Interface <samp>`iTextureHandle'</samp>.  This is the texture handle as
+returned by the renderer (via the <code>iTextureManager</code> interface).
+</li></ul>
 
-<A NAME="SEC_8"></A>
-<H4> Engine Data Structures: csMaterialWrapper </H4>
-<!--docid::SEC_8::-->
-<P>
+<a name="SEC471"></a>
+<h4 class="subsubheading"> Engine Data Structures: csMaterialWrapper </h4>
 
-A material wrapper is an engine object which keeps track of the real
-materials from the renderers (`<SAMP>iMaterialHandle</SAMP>').
+<p>A material wrapper is an engine object which keeps track of the real
+materials from the renderers (<samp>`iMaterialHandle'</samp>).
 The material wrapper class implements the following interfaces:
-</P><P>
+</p>
+<ul>
+<li>
+<code>iMaterialWrapper</code>: The main entry point for the material wrapper.
+</li><li>
+<code>iObject</code>: Allows attachment of game-specific data.
+</li></ul>
 
-<UL>
-<LI>
-<CODE>iMaterialWrapper</CODE>: The main entry point for the material wrapper.
-<LI>
-<CODE>iObject</CODE>: Allows attachment of game-specific data.
-</UL>
-<P>
-
-A material wrapper maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>material</CODE>: Interface `<SAMP>iMaterial</SAMP>'.  This is the original
-representation of the material from which the <CODE>iMaterialHandle</CODE> was
+<p>A material wrapper maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>material</code>: Interface <samp>`iMaterial'</samp>.  This is the original
+representation of the material from which the <code>iMaterialHandle</code> was
 generated.
-<P>
 
-<LI>
-<CODE>matEngine</CODE>: Interface `<SAMP>iMaterialEngine</SAMP>'.  This points to the
-engine-specific material class (`<SAMP>csMaterial</SAMP>', which implements both
-`<SAMP>iMaterial</SAMP>' and `<SAMP>iMaterialEngine</SAMP>').  The reason for the presence of
-this variable is that `<SAMP>iMaterial</SAMP>' is an interface that is not specific to
+</li><li>
+<code>matEngine</code>: Interface <samp>`iMaterialEngine'</samp>.  This points to the
+engine-specific material class (<samp>`csMaterial'</samp>, which implements both
+<samp>`iMaterial'</samp> and <samp>`iMaterialEngine'</samp>).  The reason for the presence of
+this variable is that <samp>`iMaterial'</samp> is an interface that is not specific to
 the engine so it is not possible to maintain engine-specific information there
-(such as a reference to an `<SAMP>iTextureWrapper</SAMP>').  Instead, such information
-is maintained in the `<SAMP>iMaterialEngine</SAMP>' interface.
-<P>
+(such as a reference to an <samp>`iTextureWrapper'</samp>).  Instead, such information
+is maintained in the <samp>`iMaterialEngine'</samp> interface.
 
-<LI>
-<CODE>handle</CODE>: Interface `<SAMP>iMaterialHandle</SAMP>'.  This is the actual material
-handle as returned by the renderer (via the `<SAMP>iTextureManager</SAMP>' interface).
-</UL>
-<P>
+</li><li>
+<code>handle</code>: Interface <samp>`iMaterialHandle'</samp>.  This is the actual material
+handle as returned by the renderer (via the <samp>`iTextureManager'</samp> interface).
+</li></ul>
 
-<A NAME="SEC_9"></A>
-<H4> Engine Data Structures: csMovable </H4>
-<!--docid::SEC_9::-->
-<P>
+<a name="SEC472"></a>
+<h4 class="subsubheading"> Engine Data Structures: csMovable </h4>
 
-The movable class is used by the `<SAMP>csMeshWrapper</SAMP>' class to keep track
+<p>The movable class is used by the <samp>`csMeshWrapper'</samp> class to keep track
 of the mesh's current location.
 The movable class implements the following interfaces:
-</P><P>
+</p>
+<ul>
+<li>
+<code>iMovable</code>: The main entry point for the movable.
+</li></ul>
 
-<UL>
-<LI>
-<CODE>iMovable</CODE>: The main entry point for the movable.
-</UL>
-<P>
+<p>A movable maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>obj</code>: Class <samp>`csReversibleTransform'</samp>.  The world-to-object transform
+for the mesh represented by this movable.  For this transform <em>This</em>
+represents object space and <em>Other</em> represents world space.
 
-A movable maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>obj</CODE>: Class `<SAMP>csReversibleTransform</SAMP>'.  The world-to-object transform
-for the mesh represented by this movable.  For this transform <EM>This</EM>
-represents object space and <EM>Other</EM> represents world space.
-<P>
-
-<LI>
-<CODE>is_identity</CODE>: Type `<SAMP>bool</SAMP>'.  If the `<SAMP>obj</SAMP>' transform is an
+</li><li>
+<code>is_identity</code>: Type <samp>`bool'</samp>.  If the <samp>`obj'</samp> transform is an
 identity transform (i.e. neither moves nor rotates the object) then it is
 possible to perform various optimizations.
-<P>
 
-<LI>
-<CODE>sectors</CODE>: Class `<SAMP>csMovableSectorList</SAMP>'.  This is a list of sectors in
+</li><li>
+<code>sectors</code>: Class <samp>`csMovableSectorList'</samp>.  This is a list of sectors in
 which the mesh object resides In many cases a mesh will only reside in only one
 sector, but it is possible for a mesh to be in several sectors at once if the
 mesh happens to cross a portal boundary.  Note that the application is
 responsible for adding a mesh to sectors.  The engine will never do so.
-<P>
 
-<LI>
-<CODE>listeners</CODE>: Interface `<SAMP>iMovableListener</SAMP>'.  This is an array of
+</li><li>
+<code>listeners</code>: Interface <samp>`iMovableListener'</samp>.  This is an array of
 listeners (pieces of code) interested in knowing when the movable changes (i.e.
 when the mesh moves).
-<P>
 
-<LI>
-<CODE>parent</CODE>: Interface `<SAMP>iMovable</SAMP>'.  If the mesh is being used in a
+</li><li>
+<code>parent</code>: Interface <samp>`iMovable'</samp>.  If the mesh is being used in a
 hierarchical mesh object, then this will point to the movable of the parent
 mesh.
-<P>
 
-<LI>
-<CODE>object</CODE>: Class `<SAMP>csMeshWrapper</SAMP>'. This is the mesh for the movable.
-<P>
+</li><li>
+<code>object</code>: Class <samp>`csMeshWrapper'</samp>. This is the mesh for the movable.
 
-<LI>
-<CODE>updatenr</CODE>: Type `<SAMP>long</SAMP>'.  One way to get notified about movable
+</li><li>
+<code>updatenr</code>: Type <samp>`long'</samp>.  One way to get notified about movable
 updates is to register as a listener.  The listener will be called whenever the
 movable is updated.  Another way is to keep track of the current
-`<SAMP>updatenr</SAMP>'.  This number is updated every time the movable is updated.
-</UL>
-<P>
+<samp>`updatenr'</samp>.  This number is updated every time the movable is updated.
+</li></ul>
 
-<A NAME="SEC_10"></A>
-<H4> Engine Data Structures: csLight </H4>
-<!--docid::SEC_10::-->
-<P>
+<a name="SEC473"></a>
+<h4 class="subsubheading"> Engine Data Structures: csLight </h4>
 
-The light class is the representation of a light. A light lives in a sector.
+<p>The light class is the representation of a light. A light lives in a sector.
 The light class implements the following interfaces:
-</P><P>
+</p>
+<ul>
+<li>
+<code>iLight</code>: The main entry point for the light.
+</li><li>
+<code>iObject</code>: Allows attachment of game-specific data.
+</li></ul>
 
-<UL>
-<LI>
-<CODE>iLight</CODE>: The main entry point for the light.
-<LI>
-<CODE>iObject</CODE>: Allows attachment of game-specific data.
-</UL>
-<P>
-
-A light maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>light_id</CODE>: Type `<SAMP>char*</SAMP>'.  This is a 16-byte string (MD5 hash)
+<p>A light maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>light_id</code>: Type <samp>`char*'</samp>.  This is a 16-byte string (<small>MD5</small> hash)
 which is used for caching light data.  It is, hopefully, unique for a given
 light since it is calculated from various light settings such as the position,
 radius, sector, etc.
-<P>
 
-<LI>
-<CODE>childnode</CODE>: Class `<SAMP>csKDTreeChild</SAMP>'.  Lights are represented in a
-KD-tree that lives in the sector (see above).  This child object is the
+</li><li>
+<code>childnode</code>: Class <samp>`csKDTreeChild'</samp>.  Lights are represented in a
+<small>KD</small>-tree that lives in the sector (see above).  This child object is the
 representation of the light in that tree.
-<P>
 
-<LI>
-<CODE>sector</CODE>: Interface `<SAMP>iSector</SAMP>'. The current sector of the light.
-<P>
+</li><li>
+<code>sector</code>: Interface <samp>`iSector'</samp>. The current sector of the light.
 
-<LI>
-<CODE>center</CODE>: Class `<SAMP>csVector3</SAMP>'. The current position of the light.
-<P>
+</li><li>
+<code>center</code>: Class <samp>`csVector3'</samp>. The current position of the light.
 
-<LI>
-<CODE>color</CODE>: Class `<SAMP>csColor</SAMP>'. The current color of the light.
-<P>
+</li><li>
+<code>color</code>: Class <samp>`csColor'</samp>. The current color of the light.
 
-<LI>
-<CODE>halo</CODE>: Class `<SAMP>csHalo</SAMP>'.  If the light has a halo, then this field
+</li><li>
+<code>halo</code>: Class <samp>`csHalo'</samp>.  If the light has a halo, then this field
 contains a pointer to that structure.
-<P>
 
-<LI>
-<CODE>dynamic_type</CODE>: Type `<SAMP>int</SAMP>'.  This represents the type of the light
+</li><li>
+<code>dynamic_type</code>: Type <samp>`int'</samp>.  This represents the type of the light
 (dynamic, static, etc.).
-<P>
 
-<LI>
-<CODE>attenunation</CODE>: Type `<SAMP>int</SAMP>'.  This is the kind of attenunation that
+</li><li>
+<code>attenunation</code>: Type <samp>`int'</samp>.  This is the kind of attenunation that
 the light uses.
-<P>
 
-<LI>
-<CODE>attenuationvec</CODE>: Class `<SAMP>csVector3</SAMP>'.  If the attenuation is CLQ
+</li><li>
+<code>attenuationvec</code>: Class <samp>`csVector3'</samp>.  If the attenuation is <small>CLQ</small>
 based, then this will be the vector.
-<P>
 
-<LI>
-<CODE>influenceRadius</CODE>: Type `<SAMP>float</SAMP>'.  This is the influence radius of the
+</li><li>
+<code>influenceRadius</code>: Type <samp>`float'</samp>.  This is the influence radius of the
 light.  Beyond this distance the light has almost no effect.
-<P>
 
-<LI>
-<CODE>lightnr</CODE>: Type `<SAMP>uint32</SAMP>'.  This number is used to detect light
+</li><li>
+<code>lightnr</code>: Type <samp>`uint32'</samp>.  This number is used to detect light
 changes.  It will be updated whenever the light is moved or otherwise changes.
-<P>
 
-<LI>
-<CODE>light_cb_vector</CODE>: Interface `<SAMP>iLightCallback</SAMP>'.  This is another way
+</li><li>
+<code>light_cb_vector</code>: Interface <samp>`iLightCallback'</samp>.  This is another way
 to get notified of light changes.
-<P>
 
-<LI>
-<CODE>lightinginfos</CODE>: Interface `<SAMP>iLightingInfo</SAMP>'.  This is a hash set with
-lighting <EM>info</EM>'s which this light is currently affecting.  When the light
+</li><li>
+<code>lightinginfos</code>: Interface <samp>`iLightingInfo'</samp>.  This is a hash set with
+lighting <em>info</em>'s which this light is currently affecting.  When the light
 color changes (without the light moving) the light class simply notifies every
 element of this set.
-</UL>
-<P>
+</li></ul>
 
-<A NAME="SEC_11"></A>
-<H4> Engine Data Structures: csPortalContainer </H4>
-<!--docid::SEC_11::-->
-<P>
+<a name="SEC474"></a>
+<h4 class="subsubheading"> Engine Data Structures: csPortalContainer </h4>
 
-This is the representation of a portal container. It
+<p>This is the representation of a portal container. It
 is the only mesh object that is implemented directly in the engine itself.
 A portal container is a collection of portals (i.e. every polygon in the
 portal container is a portal to another sector).
 The portal container class implements the following interfaces:
-</P><P>
-
-<UL>
-<LI>
-<CODE>iMeshObject</CODE>: A portal container is a mesh object.
-<LI>
-<CODE>iPortalContainer</CODE>: The portal container-specific API (this
+</p>
+<ul>
+<li>
+<code>iMeshObject</code>: A portal container is a mesh object.
+</li><li>
+<code>iPortalContainer</code>: The portal container-specific <small>API</small> (this
 is the state interface of the mesh object).
-<LI>
-<CODE>iShadowReceiver</CODE>: A portal container can receive shadows (and pass
+</li><li>
+<code>iShadowReceiver</code>: A portal container can receive shadows (and pass
 them along to the destination sectors).
-</UL>
-<P>
+</li></ul>
 
-A portal container maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>portals</CODE>: Class `<SAMP>csPortal</SAMP>'.  This is a list of all portals in the
+<p>A portal container maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>portals</code>: Class <samp>`csPortal'</samp>.  This is a list of all portals in the
 portal container.
-<P>
 
-<LI>
-<CODE>data_nr</CODE>: Type `<SAMP>uint32</SAMP>'.  This number is increased with each
+</li><li>
+<code>data_nr</code>: Type <samp>`uint32'</samp>.  This number is increased with each
 significant change to the portal container.
-<P>
 
-<LI>
-<CODE>vertices</CODE>: Class `<SAMP>csVector3</SAMP>'.  This is an array of vertices that are
+</li><li>
+<code>vertices</code>: Class <samp>`csVector3'</samp>.  This is an array of vertices that are
 used by the portals in this container.  These vertices are in object space.
-<P>
 
-<LI>
-<CODE>world_vertices</CODE>: Class `<SAMP>csVector3</SAMP>'.  This is an array of vertices in
+</li><li>
+<code>world_vertices</code>: Class <samp>`csVector3'</samp>.  This is an array of vertices in
 world space.
-<P>
 
-<LI>
-<CODE>camera_vertices</CODE>: Class `<SAMP>csVector3</SAMP>'.  This is an array of vertices
+</li><li>
+<code>camera_vertices</code>: Class <samp>`csVector3'</samp>.  This is an array of vertices
 in camera space.
-<P>
 
-<LI>
-<CODE>meshwrapper</CODE>: Class `<SAMP>csMeshWrapper</SAMP>'.  A pointer back to the mesh
+</li><li>
+<code>meshwrapper</code>: Class <samp>`csMeshWrapper'</samp>.  A pointer back to the mesh
 wrapper containing this portal container.
-</UL>
-<P>
+</li></ul>
 
-<A NAME="SEC_12"></A>
-<H4> Engine Data Structures: csRenderView </H4>
-<!--docid::SEC_12::-->
-<P>
+<a name="SEC475"></a>
+<h4 class="subsubheading"> Engine Data Structures: csRenderView </h4>
 
-This is a temporary data structure that is used during rendering. It will
+<p>This is a temporary data structure that is used during rendering. It will
 be discussed in more detail in the section about drawing a frame. Here is a
 brief summary of the class.
 The renderview class implements the following interfaces:
-</P><P>
+</p>
+<ul>
+<li>
+<code>iRenderView</code>: The main entry point for the render view.
+</li></ul>
 
-<UL>
-<LI>
-<CODE>iRenderView</CODE>: The main entry point for the render view.
-</UL>
-<P>
-
-The renderview class maintains the following important variables:
-</P><P>
-
-<UL>
-<LI>
-<CODE>context_id</CODE>: Type `<SAMP>uint32</SAMP>'.  This is a field that is incremented
-with each new <CODE>csRenderView</CODE> instance (and also when a new render context
+<p>The renderview class maintains the following important variables:
+</p>
+<ul>
+<li>
+<code>context_id</code>: Type <samp>`uint32'</samp>.  This is a field that is incremented
+with each new <code>csRenderView</code> instance (and also when a new render context
 is created), and is used so the engine can detect if two render contexts are
 the same (comparing on pointers is not valid since render contexts are reused).
-<P>
 
-<LI>
-<CODE>ctxt</CODE>: Class `<SAMP>csRenderContext</SAMP>'.  This is the current render context.
-There is one `<SAMP>csRenderView</SAMP>' instance that is used through the entire
+</li><li>
+<code>ctxt</code>: Class <samp>`csRenderContext'</samp>.  This is the current render context.
+There is one <samp>`csRenderView'</samp> instance that is used through the entire
 rendering of a frame but every time a portal is traversed a new
-`<SAMP>csRenderContext</SAMP>' instance is created.
-<P>
+<samp>`csRenderContext'</samp> instance is created.
 
-<LI>
-<CODE>original_camera</CODE>: Interface `<SAMP>iCamera</SAMP>'.  This points at the original
+</li><li>
+<code>original_camera</code>: Interface <samp>`iCamera'</samp>.  This points at the original
 camera which was used when starting the rendering (i.e. the top level camera).
 Normally, this camera will be constant unless there is a space warping portal
 (a portal that changes space; for example, a mirror).  In that case a new
 camera is created for the new render context.
-</UL>
-<P>
+</li></ul>
 
-<A NAME="SEC_13"></A>
-<H4> Drawing a Frame </H4>
-<!--docid::SEC_13::-->
-<P>
+<a name="SEC476"></a>
+<h4 class="subsubheading"> Drawing a Frame </h4>
 
-When rendering a frame the base entry point is <CODE>iEngine::Draw()</CODE>. However,
+<p>When rendering a frame the base entry point is <code>iEngine::Draw()</code>. However,
 most applications do not call this function directly. Most applications will
-invoke <CODE>iView::Draw()</CODE> instead.
-</P><P>
-
-<CODE>iEngine::Draw()</CODE> accepts two arguments: the camera to use, and the
+invoke <code>iView::Draw()</code> instead.
+</p>
+<p><code>iEngine::Draw()</code> accepts two arguments: the camera to use, and the
 2D clipping area. When this function is called then engine will perform the
 following steps in the order shown:
-</P><P>
-
-<UL>
-<LI>
-`<SAMP>current_framenumber</SAMP>' is incremented so that the engine and other
+</p>
+<ul>
+<li>
+<samp>`current_framenumber'</samp> is incremented so that the engine and other
 plugins can check the current frame number to update per-frame caches, for
 example.
-<P>
 
-<LI>
-<CODE>csEngine::ControlMeshes()</CODE> is called. This function checks
-all meshes that want to die (the `<SAMP>csEngine::want_to_die</SAMP>' set) and destroys
+</li><li>
+<code>csEngine::ControlMeshes()</code> is called. This function checks
+all meshes that want to die (the <samp>`csEngine::want_to_die'</samp> set) and destroys
 them.
-<P>
 
-<LI>
-A `<SAMP>csRenderView</SAMP>' instance is created and initializated with the
+</li><li>
+A <samp>`csRenderView'</samp> instance is created and initializated with the
 current camera and clipper.
-<P>
 
-<LI>
-A few <CODE>iGraphics3D</CODE> methods are invoked to ensure that the clipper is
+</li><li>
+A few <code>iGraphics3D</code> methods are invoked to ensure that the clipper is
 set up correctly, among other things.
-<P>
 
-<LI>
+</li><li>
 The engine checks if the sector has a renderloop. If so, it will use it.
 Otherwise it will use the default renderloop in the engine.
-It will call <CODE>iRenderLoop::Draw()</CODE>, which will be described below.  The
+It will call <code>iRenderLoop::Draw()</code>, which will be described below.  The
 upshot of this method invocation is the recursive drawing of everything
 visible.
-<P>
 
-<LI>
+</li><li>
 Halos are drawn.
-<P>
 
-<LI>
-The clipper in <CODE>iGraphics3D</CODE> is reset.
-</UL>
-<P>
+</li><li>
+The clipper in <code>iGraphics3D</code> is reset.
+</li></ul>
 
-<CODE>iRenderLoop::Draw()</CODE> is called for every sector in the recursion.  It
-will first be invoked by <CODE>csEngine::Draw()</CODE>, and it will also be called
+<p><code>iRenderLoop::Draw()</code> is called for every sector in the recursion.  It
+will first be invoked by <code>csEngine::Draw()</code>, and it will also be called
 again whenever portal traversal occurs (see below).  The following operations
 are performed by this function in the order shown:
-</P><P>
-
-<UL>
-<LI>
-<CODE>csRenderView::SetupClipPlanes()</CODE> is invoked. This function will
+</p>
+<ul>
+<li>
+<code>csRenderView::SetupClipPlanes()</code> is invoked. This function will
 set up the clipping planes for the current 2D portal boundary (2D clipper) and
 the current camera (view frustum). The far plane and near clipping planes
 are also added if needed.
-<P>
 
-<LI>
-Many of the shaders depend on <EM>shader variables</EM>.
+</li><li>
+Many of the shaders depend on <em>shader variables</em>.
 A stack of shader variables is maintained at each level. At the lowest
 level there is the renderloop. Here the variables from the shader manager
 itself are pushed onto the stack.  Presently, there are no variables at this
 level, but in the future one can imagine variables such as the current frame
-number, and other globals.  <CODE>iShaderManager::PushVariables()</CODE> performs
+number, and other globals.  <code>iShaderManager::PushVariables()</code> performs
 this operation.
-<P>
 
-<LI>
-<CODE>csSector::PrepareDraw()</CODE> is invoked. This function will first make
+</li><li>
+<code>csSector::PrepareDraw()</code> is invoked. This function will first make
 sure the visibility culler plugin for the sector is present. Then, it will
-set the current sector on the `<SAMP>csRenderView</SAMP>'. Next, it will call all
-<EM>callbacks</EM> that are interested in hearing when this sector is traversed.
+set the current sector on the <samp>`csRenderView'</samp>. Next, it will call all
+<em>callbacks</em> that are interested in hearing when this sector is traversed.
 One of the most important things this function does however, is move all
-meshes that have the `<SAMP>CS_ENTITY_CAMERA</SAMP>' flag set so that their center
+meshes that have the <samp>`CS_ENTITY_CAMERA'</samp> flag set so that their center
 point is at the camera position.
-<P>
 
-<LI>
+</li><li>
 It loops over all steps
 in this renderloop and perform them one by one. Each renderstep will
 render all meshes in the sector using some shader type (more on this later).
 This is the place where the meshes in this sector are actually rendered.
 It is also during rendering of meshes that portals are actually traversed.
 Note that, typically, only one renderstep will have portal traversal enabled.
-<P>
 
-<LI>
+</li><li>
 After doing all rendering of this sector the shader variables that were added
 here are popped from the stack.
-<P>
 
-<LI>
+</li><li>
 All halos in this sector are added to the engine queue so that the
 engine can draw them after render recursion ends.
-</UL>
-<P>
+</li></ul>
 
-What actually occurs during invocation of the rendersteps depends upon how the
+<p>What actually occurs during invocation of the rendersteps depends upon how the
 renderloop is set up, and upon how many rendersteps there are.  What follows is
 an explanation of the default case of a single render step that uses the
-<EM>old-renderer compatibility</EM> shader type (this is the renderloop that is
-created by <CODE>iEngine::CreateDefaultRenderLoop()</CODE>).  This render step is
+<em>old-renderer compatibility</em> shader type (this is the renderloop that is
+created by <code>iEngine::CreateDefaultRenderLoop()</code>).  This render step is
 designed to be compatible with old renderer style maps that use lightmaps
-without no special shaders.  It uses `<SAMP>CS_ZBUF_MESH</SAMP>' for this render step
+without no special shaders.  It uses <samp>`CS_ZBUF_MESH'</samp> for this render step
 which means that the z-buf mode of the mesh itself will be used.  It also
 disables Z-offset since there will only be one step.  Z-offset is used to make
 sure that, when using multi-texturing, the polygons end up at exactly the same
@@ -964,81 +821,70 @@ Z-distance (i.e. no z fighting occurs).  The first step is always rendered
 using disabled z-offset.  Subsequent steps should enable it to make sure they
 will render nicely on the previously rendered base.  This render step also
 enables portal traversal.
-</P><P>
-
-<CODE>iRenderStep::Perform()</CODE> resides in the generic render step plugin which
-is located in the source tree at `<TT>CS/plugins/engine/renderloop/stdsteps</TT>'.
+</p>
+<p><code>iRenderStep::Perform()</code> resides in the generic render step plugin which
+is located in the source tree at <tt>`CS/plugins/engine/renderloop/stdsteps'</tt>.
 This function performs the following tasks in the order shown:
-</P><P>
-
-<UL>
-<LI>
-Obtains a list of all visible meshes (via <CODE>iSector::GetVisibleMeshes()</CODE>)
+</p>
+<ul>
+<li>
+Obtains a list of all visible meshes (via <code>iSector::GetVisibleMeshes()</code>)
 from the sector.  A later section will go into this step in more detail.
-<P>
 
-<LI>
-After getting a `<SAMP>csRenderMeshList</SAMP>' with all visible meshes, they are
+</li><li>
+After getting a <samp>`csRenderMeshList'</samp> with all visible meshes, they are
 sorted based upon render priority (and for some render priorities it will also
 sort on distance from the camera--i.e. alpha render priority).  In addition
 it will also sort on shaders so that meshes using the same shader are put
 together (this is more efficient for the renderer).
-<P>
 
-<LI>
+</li><li>
 Shader variables are added to the variable stack (remember
 we first had the shader variables from the shader manager itself, now we
 add another level of variables on that stack).  Presently, the only variables
 added are the fog parameters of the current sector.
-<P>
 
-<LI>
+</li><li>
 The sorted and visible meshes are rendered. It will collect
-all meshes with the same shader and then call <CODE>RenderMeshes()</CODE>.
-<CODE>RenderMeshes()</CODE> will first set the current settings for this step
+all meshes with the same shader and then call <code>RenderMeshes()</code>.
+<code>RenderMeshes()</code> will first set the current settings for this step
 (like z-offset). Then it will get the number of passes for the given
 shader and render all meshes with that shader with the given pass. Note
 that the shader will also add variables to the stack at this point; in
 particular variables about the current object to camera transformation and
 the current material.
-<P>
 
-<LI>
-If `<SAMP>portaltraversal</SAMP>' is enabled and the mesh is a portal container (this
-is indicated by `<SAMP>csRenderMesh</SAMP>' having a portal field that is not null),
+</li><li>
+If <samp>`portaltraversal'</samp> is enabled and the mesh is a portal container (this
+is indicated by <samp>`csRenderMesh'</samp> having a portal field that is not null),
 then the portal will be traversed by invoking
-<CODE>iPortalContainer::Draw()</CODE>. More on this later, but this is the important
+<code>iPortalContainer::Draw()</code>. More on this later, but this is the important
 place where the recursion through portals occurs.
-<P>
 
-<LI>
+</li><li>
 The settings for this step are restored.
-</UL>
-<P>
+</li></ul>
 
-<A NAME="SEC_14"></A>
-<H4> Drawing a Frame: Getting the Visible Meshes </H4>
-<!--docid::SEC_14::-->
-<P>
+<a name="SEC477"></a>
+<h4 class="subsubheading"> Drawing a Frame: Getting the Visible Meshes </h4>
 
-One very important function that is called from within
-<CODE>iRenderStep::Perform()</CODE> is <CODE>iSector::GetVisibleMeshes()</CODE>.  This
+<p>One very important function that is called from within
+<code>iRenderStep::Perform()</code> is <code>iSector::GetVisibleMeshes()</code>.  This
 function is responsible for finding all meshes that are visible.  To calculate
 this the sector uses the visibility culler that is in every sector.  At
 this moment we have two possible implementations for that visibility culler:
-<EM>Frustvis</EM> and <EM>Dynavis</EM>.  Frustvis performs frustum culling alone.
+<em>Frustvis</em> and <em>Dynavis</em>.  Frustvis performs frustum culling alone.
 This means that every object that is in the view frustum is considered visible.
 Dynavis does frustum culling and also attempts to find out which objects are
 visible and which are not by using an occlusion buffer.  There is another
 chapter explaining the differences a bit more and also how Dynavis works
 internally.  The description here is only a short synopsis.
-<CODE>GetVisibleMeshes()</CODE> performs the following actions in the order shown:
-</P><P>
-
-<UL>
-<LI>
+<code>GetVisibleMeshes()</code> performs the following actions in the order shown:
+</p>
+<ul>
+<li>
 In every sector a list of visible mesh lists is maintained.  The reason for
-this is that sometimes <CODE>GetVisibleMeshes()</CODE> is called multiple times in
+this is that sometimes <code>GetVisibleMeshes()</code> is called multiple times in
 one frame and it is desirable to avoid duplicating the visibility culling,
 since that can be expensive (especially in the case of Dynavis).  Therefore, a
 cache of visible mesh lists is kept, and each entry in that cache (i.e. every
@@ -1047,153 +893,133 @@ context identification number.  These two numbers are used to check if the
 cached list can be used for the given frame and context.  If there is no such
 cached list then proceed to the next step.  Otherwise return the cached list
 that matches the frame and context identification.
-<P>
 
-<LI>
+</li><li>
 If there is no matching list in the cache, then a slot in the list of cached
 mesh lists which was for another frame is re-used.  It is known that the chosen
 list will never be used again since that frame has already been rendered (it is
 in the past).  So, if such an entry is found, the list can be re-used, and
 re-calculation via the visibility culler can be performed (by calling
-<CODE>iVisibilityCuller::VisTest()</CODE>.
-<P>
+<code>iVisibilityCuller::VisTest()</code>.
 
-<LI>
+</li><li>
 If no such dead entry is found, a new entry is added to the cache and is
 populated with the visible meshes by again calling
-<CODE>iVisibilityCuller::VisTest()</CODE>.
-</UL>
-<P>
+<code>iVisibilityCuller::VisTest()</code>.
+</li></ul>
 
-<CODE>iVisibilityCuller::VisTest()</CODE> internally uses a KD-tree to traverse
+<p><code>iVisibilityCuller::VisTest()</code> internally uses a <small>KD</small>-tree to traverse
 the objects in the sector and, for all visible objects, it invokes the
-`<SAMP>iVisibilityCullerListener</SAMP>' callback that was provided as a parameter of
-the <CODE>VisTest()</CODE> call.  More detail about the actual implementation of
-<CODE>VisTest()</CODE> for both Frustvis and Dynavis will be presented in later
+<samp>`iVisibilityCullerListener'</samp> callback that was provided as a parameter of
+the <code>VisTest()</code> call.  More detail about the actual implementation of
+<code>VisTest()</code> for both Frustvis and Dynavis will be presented in later
 sections.
-</P><P>
-
-The callback's <CODE>ObjectVisible()</CODE> is a function that resides in the sector
-(the culler itself is implemented in another plugin).  <CODE>ObjectVisible()</CODE>
-will mark the given object as visible by adding all `<SAMP>csRenderMesh</SAMP>'
-instances as returned by the visible `<SAMP>iMeshObject</SAMP>' (through the
-<CODE>iMeshObject::GetRenderMeshes()</CODE> invocation) to the list of visible meshes
+</p>
+<p>The callback's <code>ObjectVisible()</code> is a function that resides in the sector
+(the culler itself is implemented in another plugin).  <code>ObjectVisible()</code>
+will mark the given object as visible by adding all <samp>`csRenderMesh'</samp>
+instances as returned by the visible <samp>`iMeshObject'</samp> (through the
+<code>iMeshObject::GetRenderMeshes()</code> invocation) to the list of visible meshes
 which is being built.  In addition, it will also do something special if the
-mesh is a hierarchical mesh that uses static LOD.  In such a case, it will
+mesh is a hierarchical mesh that uses static <small>LOD</small>.  In such a case, it will
 calculate which of the children should be visible for the given distance to the
 camera (and other potential factors), and will mark that child as visible too.
-</P><P>
-
-It is important to note that there is an important difference between normal
-hierarchical meshes and static LOD meshes with regards to the visibility
+</p>
+<p>It is important to note that there is an important difference between normal
+hierarchical meshes and static <small>LOD</small> meshes with regards to the visibility
 culler.  Both are implemented using hierarchical meshes but, in case of a
 normal hierarchical mesh, all children are registered with the visibility
 culler as seperate meshes.  This means that every mesh in a hierarchical mesh
 is considered a seperate entity for the visibility culler, and is also tested
 for visibility on its own (so a child of a hierarchical mesh can be visible
-even if the parent is not visible).  For a static LOD mesh the situation
+even if the parent is not visible).  For a static <small>LOD</small> mesh the situation
 is completely different.  In that case, the children are not registered with
 the visibility culler but, instead, the mesh object will mark the correct child
 as visible when it, itself, is visible.  This means that you must always make
-sure that, with static LOD, the parent is a mesh that is at least as big
-as the biggest child.  Usually, a `<SAMP>nullmesh</SAMP>' with an appropriate box is
+sure that, with static <small>LOD</small>, the parent is a mesh that is at least as big
+as the biggest child.  Usually, a <samp>`nullmesh'</samp> with an appropriate box is
 used for this purpose.
-</P><P>
+</p>
+<a name="SEC478"></a>
+<h4 class="subsubheading"> Drawing a Frame: Traversing Portals </h4>
 
-<A NAME="SEC_15"></A>
-<H4> Drawing a Frame: Traversing Portals </H4>
-<!--docid::SEC_15::-->
-<P>
-
-While performing the renderstep, it will try traverse portals if that
+<p>While performing the renderstep, it will try traverse portals if that
 renderstep has portal traversal enabled.  This will proceed to
-<CODE>iPortalContainer::Draw()</CODE>, which will perform the following actions in
+<code>iPortalContainer::Draw()</code>, which will perform the following actions in
 the order shown:
-</P><P>
-
-<UL>
-<LI>
-<CODE>Prepare()</CODE> is invoked in order to ensure that the portal container is
+</p>
+<ul>
+<li>
+<code>Prepare()</code> is invoked in order to ensure that the portal container is
 ready for use.  This function will initialize the portal container, compress
 the vertices (remove double vertices), and calculate the bounding box and
 sphere.
-<P>
 
-<LI>
-<CODE>WorldToCamera()</CODE> is invoked.  This will take the world space vertices and
+</li><li>
+<code>WorldToCamera()</code> is invoked.  This will take the world space vertices and
 planes and transform them to camera space.
-<P>
 
-<LI>
+</li><li>
 The portal and far plane are set up, if needed.
-<P>
 
-<LI>
-During the call to <CODE>GetRenderMeshes()</CODE> that occurred earlier (when the
-renderloop called <CODE>iSector-&#62;GetVisibleMeshes()</CODE>) it tested if the portal
+</li><li>
+During the call to <code>GetRenderMeshes()</code> that occurred earlier (when the
+renderloop called <code>iSector-&gt;GetVisibleMeshes()</code>) it tested if the portal
 container object needed to be clipped to the frustum or near plane.  The result
-of that clip test was stored in the variables <CODE>clip_plane</CODE>,
-<CODE>clip_portal</CODE>, and <CODE>clip_z_plane</CODE>.  If clipping is required then, at
+of that clip test was stored in the variables <code>clip_plane</code>,
+<code>clip_portal</code>, and <code>clip_z_plane</code>.  If clipping is required then, at
 ths stage, it will loop over every portal and clip it before traversal.  If no
 clipping is required, it will simply loop over all portals and traverse them.
-<P>
 
-<LI>
-Traversing through a portal is done with <CODE>DrawOnePortal()</CODE>.  This function
+</li><li>
+Traversing through a portal is done with <code>DrawOnePortal()</code>.  This function
 will first set up various things for fog and floating portals (like calling
-<CODE>iGraphics3D::OpenPortal()</CODE>, for instance), and then call
-<CODE>csPortal::Draw()</CODE>.
-<P>
+<code>iGraphics3D::OpenPortal()</code>, for instance), and then call
+<code>csPortal::Draw()</code>.
 
-<LI>
-<CODE>csPortal::Draw()</CODE> will first make sure the sector is present by calling
-<CODE>CompleteSector()</CODE>.  This function invokes missing sector callbacks if the
+</li><li>
+<code>csPortal::Draw()</code> will first make sure the sector is present by calling
+<code>CompleteSector()</code>.  This function invokes missing sector callbacks if the
 sector is missing and if such callbacks have been registered.  This gives the
 application a chance to load the destination sector.  If this fails then portal
 traversal will not occur.
-<P>
 
-<LI>
-<CODE>csPortal::Draw()</CODE> will also make sure portal recursion is not occurring
+</li><li>
+<code>csPortal::Draw()</code> will also make sure portal recursion is not occurring
 too deeply the same sector.  This is done to avoid infinite loops caused by
 space warping portals that warp back in space so that the same portal is
 visible again.
-<P>
 
-<LI>
-The `<SAMP>csRenderView</SAMP>' for the current portal is updated (i.e. clipper, fog
+</li><li>
+The <samp>`csRenderView'</samp> for the current portal is updated (i.e. clipper, fog
 information, recursion level, last portal, previous sector, clip plane, etc.).
-<P>
 
-<LI>
+</li><li>
 If this is a space warping portal (a portal that changes the camera transform),
 then a new camera is created.  @@@ TODO Continue here...
-</UL>
-<P>
+</li></ul>
 
-@@@TODO: explain Frustvis::VisTest()<BR>
-@@@TODO: explain Dynavis::VisTest()<BR>
-@@@TODO: explain the operations of one mesh object in the above context<BR>
-</P><P>
+<p>@@@TODO: explain Frustvis::VisTest()<br>
+@@@TODO: explain Dynavis::VisTest()<br>
+@@@TODO: explain the operations of one mesh object in the above context<br>
+</p>
 
-<A NAME="csParser"></A>
-<HR SIZE=1>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.13.html#SEC7.5.13"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.4.html#SEC7.4"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.html#SEC7.5"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<BR>  
-<FONT SIZE="-1">
-This document was generated using
-<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
-"><I>texi2html</I></A>
 
-</BODY>
-</HTML>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_7.5.13.html#SEC457" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.6.html#SEC479" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_7.html#SEC378" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.5.html#SEC395" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_8.html#SEC790" title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

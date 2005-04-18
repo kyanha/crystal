@@ -1,346 +1,324 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- Created by texi2html 1.64 -->
-<!-- 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on April, 18 2005 by texi2html 1.76 -->
+<!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
             Olaf Bachmann <obachman@mathematik.uni-kl.de>
             and many others.
-Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
-Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
- 
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
 -->
-<HTML>
-<HEAD>
-<TITLE>Crystal Space: Tutorial Introduction</TITLE>
+<head>
+<title>Crystal Space: 5.1 Developing a Crystal Space Application</title>
 
-<META NAME="description" CONTENT="Crystal Space: Tutorial Introduction">
-<META NAME="keywords" CONTENT="Crystal Space: Tutorial Introduction">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-<META NAME="Generator" CONTENT="texi2html 1.64">
+<meta name="description" content="Crystal Space: 5.1 Developing a Crystal Space Application">
+<meta name="keywords" content="Crystal Space: 5.1 Developing a Crystal Space Application">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
 
-</HEAD>
 
-<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+</head>
 
-<A NAME="SEC5.1"></A>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.html#SEC5"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.1.1.html#SEC5.1.1"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.html#SEC5"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.html#SEC5"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.2.html#SEC5.2"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<HR SIZE=1>
-<H2> 5.1 Developing a Crystal Space Application </H2>
-<!--docid::SEC5.1::-->
-<P>
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-Crystal Space is a package of components and libraries which can all be useful
+<a name="Tutorial-Introduction"></a>
+<a name="SEC150"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_5.html#SEC149" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.1.1.html#SEC151" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_5.html#SEC149" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#SEC149" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_6.html#SEC357" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_SEC_Top.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_SEC987.html#SEC987" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h2 class="section"> 5.1 Developing a Crystal Space Application </h2>
+
+<p>Crystal Space is a package of components and libraries which can all be useful
 for creating computer games.  Although some of the packages are intended more
 for 3D gaming this is not as such a restriction of the package.  Components
 such as the sound driver function just as well in a 2D gaming environment, and
-the Virtual File System plugin (see section <A HREF="cs_7.2.html#SEC7.2">7.2 Virtual File System (VFS)</A>) can be used in non-graphical
+the Virtual File System plugin (see section <a href="cs_7.2.html#SEC380">Virtual File System (<small>VFS</small>)</a>) can be used in non-graphical
 applications.  This highlights one of the important characteristics of Crystal
 Space: the components and libraries are more or less independent of each other.
-If you do not want "real" physics, then just don't use the physics plugin.
+If you do not want &quot;real&quot; physics, then just don't use the physics plugin.
 If you don't want scripting then don't include that.  All packages are designed
 to be functional on their own or with a minimal number of other packages.
 There are some dependencies of course.  For example, the 3D engine requires a
 3D renderer to display its output, and a renderer requires a canvas onto which
 to draw.  On the other hand, you could very well use the 3D renderer without
 the 3D engine.
-</P><P>
-
-Although there is a high level of independence, there is also a high level of
+</p>
+<p>Although there is a high level of independence, there is also a high level of
 integration.  The components and libraries were also designed to be used
 together and as such offer a flexible scheme of integration.
-</P><P>
-
-If you are interested in developing a program using Crystal Space, then it is
+</p>
+<p>If you are interested in developing a program using Crystal Space, then it is
 important to understand that Crystal Space is not a single monolithic library,
-but instead consists of several <EM>libraries</EM> and <EM>plug-in modules</EM>.
-This manual uses the term <EM>module</EM> for both libraries and plug-ins when
+but instead consists of several <em>libraries</em> and <em>plug-in modules</em>.
+This manual uses the term <em>module</em> for both libraries and plug-ins when
 the distinction between the two is not important.
-</P><P>
-
-A plug-in module is similar to a library, but has some advantages over a
+</p>
+<p>A plug-in module is similar to a library, but has some advantages over a
 library.  All plug-ins can be accessed in a common fashion.  They have a pure
 interface, and they can provide this interface even if they are extracted to a
 dynamic load library.  So, they are the better solution as long as speed is not
 the dictator of all decisions as in the math library (access to plug-in
 functions uses virtual methods).  The main difference between the interface of
-a library and a plug-in is that a library may use SCF, the Shared Class
-Facility (see section <A HREF="cs_6.2.html#SEC6.2">6.2 Shared Class Facility (SCF)</A>), and C++ classes; plug-ins may only use SCF.
-</P><P>
+a library and a plug-in is that a library may use <small>SCF</small>, the Shared Class
+Facility (see section <a href="cs_6.2.html#SEC361">Shared Class Facility (<small>SCF</small>)</a>), and C++ classes; plug-ins may only use <small>SCF</small>.
+</p>
+<ul>
+<li>
+What is <small>SCF</small>?
 
-<UL>
-<LI>
-What is SCF?
-<P>
-
-The main SCF object is the <EM>interface</EM>.  An interface is the
+<p>The main <small>SCF</small> object is the <em>interface</em>.  An interface is the
 solution to strictly decouple the public methods of an object from their
 implementation.  You only get a pointer to an abstract class with only virtual
 methods, called the interface, so your program doesn't know about the actual
-object behind the pointer.  This object is called an <EM>implementation</EM> of
+object behind the pointer.  This object is called an <em>implementation</em> of
 the interface.  You as the user of Crystal Space will call functions that
 create the actual object, but only return the interface.  After that you can
 use the interface like a C++ object.  When you don't need it anymore, don't
-`<SAMP>delete</SAMP>' it, but call <CODE>DecRef()</CODE>.  When you pass a pointer to the
-interface to anywhere, call <CODE>IncRef()</CODE> from there, and <CODE>DecRef()</CODE>
+<samp>`delete'</samp> it, but call <code>DecRef()</code>.  When you pass a pointer to the
+interface to anywhere, call <code>IncRef()</code> from there, and <code>DecRef()</code>
 when you don't need the interface there anymore.
-</P><P>
-
-Starting with Crystal Space version 0.95 we also have smart pointers.
-A smart pointer is an instance of the class <CODE>csRef</CODE>. This class takes
-care of <CODE>IncRef()</CODE> and <CODE>DecRef()</CODE> for you
-(see section <A HREF="cs_5.8.1.html#SEC5.8.1">5.8.1 Correctly Using Smart Pointers</A>). It is very important to use smart pointers
+</p>
+<p>Starting with Crystal Space version 0.95 we also have smart pointers.
+A smart pointer is an instance of the class <code>csRef</code>. This class takes
+care of <code>IncRef()</code> and <code>DecRef()</code> for you
+(see section <a href="cs_5.8.1.html#SEC218">Correctly Using Smart Pointers</a>). It is very important to use smart pointers
 now. They are making life a lot easier and in the future they may become
 required usage (i.e. no longer optional).
-</P><P>
-
-As the user you'll only have to include a header that defines the interface,
+</p>
+<p>As the user you'll only have to include a header that defines the interface,
 but not the implementation.  Despite the obvious advantage of having a very
 clear structure in your code, there is the advantage that linking the
 interface to the implementation can be done at run-time, but more about this
 later.
-</P><P>
-
-<LI>
+</p>
+</li><li>
 What are the characteristics of a library?
-<P>
 
-A library is just a normal C++ library as you know them.  A library can
-optionally provide SCF interfaces.  In the case of a library this is just
+<p>A library is just a normal C++ library as you know them.  A library can
+optionally provide <small>SCF</small> interfaces.  In the case of a library this is just
 a way to define a clear structure.  But as their main interface, libraries
 provide C++ classes.
-</P><P>
-
-<LI>
+</p>
+</li><li>
 What are the characteristics of a plug-in?
-<P>
 
-A plug-in, on the other hand, will only provide SCF interfaces, no normal
-C++ classes. The plug-in itself will also appear as an SCF interface.
+<p>A plug-in, on the other hand, will only provide <small>SCF</small> interfaces, no normal
+C++ classes. The plug-in itself will also appear as an <small>SCF</small> interface.
 This is part of the definition of a plug-in.  A plug-in can be organized as
-static library or DLL; this only makes a small difference in how you use
+static library or <small>DLL</small>; this only makes a small difference in how you use
 it in your program.
-</P><P>
-
-As the user of Crystal Space, you have to do
+</p>
+<p>As the user of Crystal Space, you have to do
 the following steps to use a plug-in:
-</P><P>
-
-<UL>
-<LI>
+</p>
+<ul class="toc">
+<li>-
 First, do all these steps for the dependencies (other plug-ins) that this
 plug-in relies on.
-<P>
 
-<LI>
+</li><li>-
 Register the library that contains the plug-in.
-<P>
 
-<LI>
+</li><li>-
 Load the plug-in.  This will also initialize the plug-in.  It will fail if you
 forgot any dependencies.
-<P>
 
-<LI>
-Query the plug-in interface.  This is an SCF interface, so you now have
+</li><li>-
+Query the plug-in interface.  This is an <small>SCF</small> interface, so you now have
 access to the functions of the plug-in.
-</UL>
-<P>
+</li></ul>
 
-<LI>
+</li><li>
 How can I register the plug-in library?
-<P>
 
-<EM>Registering</EM> means to tell SCF the name of the plug-in that was given
+<p><em>Registering</em> means to tell <small>SCF</small> the name of the plug-in that was given
 to it by its author, and a class or a dynamic library to associate it with.
-Plugin libraries can contain multiple named SCF classes.  For example, to
-use the software graphics renderer SCF must know that the SCF class
-`<SAMP>crystalspace.graphics3d.software</SAMP>' can be found in `<TT>soft3d.dll</TT>'
-(Windows) or `<TT>soft3d.so</TT>' (Unix).  SCF determines dynamically which
-plugin libraries contain which SCF classes by consulting meta-information
+Plugin libraries can contain multiple named <small>SCF</small> classes.  For example, to
+use the software graphics renderer <small>SCF</small> must know that the <small>SCF</small> class
+<samp>`crystalspace.graphics3d.software'</samp> can be found in <tt>`soft3d.dll'</tt>
+(Windows) or <tt>`soft3d.so'</tt> (Unix).  <small>SCF</small> determines dynamically which
+plugin libraries contain which <small>SCF</small> classes by consulting meta-information
 associated with each plugin.  Depending upon the platform, the associated
 meta-information may be bundled into the plugin itself, or it might exist in a
-separate file with a `<TT>.csplugin</TT>' extension alongside the plugin module.
-</P><P>
-
-How you register a library depends on whether it is a static library or a
-dynamic library (`<TT>.dll</TT>' or `<TT>.so</TT>').  For a static library, that is,
+separate file with a <tt>`.csplugin'</tt> extension alongside the plugin module.
+</p>
+<p>How you register a library depends on whether it is a static library or a
+dynamic library (<tt>`.dll'</tt> or <tt>`.so'</tt>).  For a static library, that is,
 one which is linked directly into the application rather than loaded
 dynamically at run-time, put the following macro invocation at top-level in one
-of your C++ files once for each SCF class contained in your library:
-</P><P>
-
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>SCF_REGISTER_STATIC_CLASS(
-  <VAR>cxx-class</VAR>,
-  <VAR>scf-name</VAR>,
-  <VAR>description</VAR>,
-  <VAR>dependencies</VAR>)
-</pre></td></tr></table></P><P>
-
-Here, <VAR>cxx-class</VAR> is the name of the C++ class which implements the
-factory for this particular SCF class.  <VAR>cxx-class</VAR> is the same name
-given to the <CODE>SCF_IMPLEMENT_FACTORY()</CODE> macro.  <VAR>scf-name</VAR> is the
-SCF class name corrsponding to <VAR>cxx-class</VAR>, <VAR>description</VAR> is a
+of your C++ files once for each <small>SCF</small> class contained in your library:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">SCF_REGISTER_STATIC_CLASS(
+  <var>cxx-class</var>,
+  <var>scf-name</var>,
+  <var>description</var>,
+  <var>dependencies</var>)
+</pre></td></tr></table>
+<p>Here, <var>cxx-class</var> is the name of the C++ class which implements the
+factory for this particular <small>SCF</small> class.  <var>cxx-class</var> is the same name
+given to the <code>SCF_IMPLEMENT_FACTORY()</code> macro.  <var>scf-name</var> is the
+<small>SCF</small> class name corrsponding to <var>cxx-class</var>, <var>description</var> is a
 human-readable string describing the purpose of the class, and
-<VAR>dependencies</VAR> is a comma-separated list of other SCF class upon which
+<var>dependencies</var> is a comma-separated list of other <small>SCF</small> class upon which
 this class depends.
-</P><P>
-
-For a dynamic library, SCF will discover the plugin and register the
+</p>
+<p>For a dynamic library, <small>SCF</small> will discover the plugin and register the
 contained classes automatically by consulting the associated meta-information.
-</P><P>
-
-<LI>
+</p>
+</li><li>
 How can I load the plug-in?
-<P>
 
-To load a plug-in, you must tell the plug-in manager the name
+<p>To load a plug-in, you must tell the plug-in manager the name
 of the plug-in as it was registered in the previous step. In the most
 common case you will probably use the plug-in loader to load the plug-in.
 This is a convenience class that is able to load plug-in as specified
 in a config file, from the commandline, or as requested by the application
 programmer. In addition to loading the plug-in (the plug-in loader will
 use the plug-in manager to do that), the plug-in loader will optionally
-also register the plug-in with the <EM>Object Registry</EM>.
-</P><P>
-
-The object registry is a central location in the Crystal Space framework
-where any module can register SCF objects. The object registry is not
-only for plug-ins. It can contain any SCF object. Objects in the
+also register the plug-in with the <em>Object Registry</em>.
+</p>
+<p>The object registry is a central location in the Crystal Space framework
+where any module can register <small>SCF</small> objects. The object registry is not
+only for plug-ins. It can contain any <small>SCF</small> object. Objects in the
 object registry also have a tag name associated with them. By convention
-the <EM>default</EM> object for a given SCF interface will be
+the <em>default</em> object for a given <small>SCF</small> interface will be
 added to the object registry with the tag name equal to the interface
 name. For example, a 3D renderer is a plug-in module that
-implements (among others) the `<SAMP>iGraphics3D</SAMP>' interface. At the same
+implements (among others) the <samp>`iGraphics3D'</samp> interface. At the same
 time there can be multiple 3D renderers in memory (for example, for
 procedural textures). But the default 3D renderer will be registered
-with the tag name `<SAMP>iGraphics3D</SAMP>'.
-</P><P>
-
-Note that the decision which graphics driver you use (e.g. Software or
+with the tag name <samp>`iGraphics3D'</samp>.
+</p>
+<p>Note that the decision which graphics driver you use (e.g. Software or
 OpenGL) is done at the time you load the plug-in by passing the name of
 that driver. At the time you ask for the plug-in interface and use it in
 your program, this does not make a difference anymore. This makes it possible
 to exchange the driver simply by loading another driver, but without changing
 your main program.
-</P><P>
-
-The Crystal Space modules themselves will use the standard plug-ins with the
+</p>
+<p>The Crystal Space modules themselves will use the standard plug-ins with the
 default tag name as explained above. For example, the 3d engine looks
 for the graphics driver by looking in the object registry for an object
-with the tag `<SAMP>iGraphics3D</SAMP>'.
-</P><P>
-
-Now how can you actually load the plug-in? You can either load them
-manually in the code using the <CODE>CS_LOAD_PLUGIN()</CODE> macro or else
+with the tag <samp>`iGraphics3D'</samp>.
+</p>
+<p>Now how can you actually load the plug-in? You can either load them
+manually in the code using the <code>CS_LOAD_PLUGIN()</code> macro or else
 you can use the plugin loader. As explained above, the plugin loader
 can load plugins specified on the commandline, a config file, or else
 explicitly requested in the code. This is done in a specific way:
 The commandline has highest priority. i.e. if the user specified the
 OpenGL video driver on the commandline then this will be the plugin that
-is loaded on the `<SAMP>iGraphics3D</SAMP>' tag. The config file and plugins requested
+is loaded on the <samp>`iGraphics3D'</samp> tag. The config file and plugins requested
 from the code are ignored then (for that tag at least). The plugins
 requested from the code have lowest priority and only serve as a default
 if neither the commandline nor the config file specified a plug-in for
 the given tag.
-</P><P>
-
-There is a class called <CODE>csInitializer()</CODE> which contains various
+</p>
+<p>There is a class called <code>csInitializer()</code> which contains various
 convenience routines to help initialize a Crystal Space application.
-This class also contains a routine (<CODE>RequestPlugins()</CODE>) which will
+This class also contains a routine (<code>RequestPlugins()</code>) which will
 use the plugin loader automatically.
-</P><P>
-
-There are several advantages to using the plugin loader as opposed
-to manually loading plug-ins using <CODE>CS_LOAD_PLUGIN()</CODE>:
-</P><P>
-
-<UL>
-<LI>
+</p>
+<p>There are several advantages to using the plugin loader as opposed
+to manually loading plug-ins using <code>CS_LOAD_PLUGIN()</code>:
+</p>
+<ul class="toc">
+<li>-
 The plugin loader will sort all plug-ins based on dependencies.
 For example, the engine depends on a 3D rasterizer so the plugin
 loader will make sure that the engine is loaded later. If you manually
 load plugins you risk that the loading will fail because a plugin
 that it needs is not yet present.
-<LI>
+</li><li>-
 The user is able to override the plug-ins loaded by the plugin loader.
 He or she can modify the config file or specify an alternative
 plug-in on the commandline. There is no way to change what plugin is
-loaded using <CODE>CS_LOAD_PLUGIN()</CODE> unless by recompilation (unless of course
+loaded using <code>CS_LOAD_PLUGIN()</code> unless by recompilation (unless of course
 you use some other way to read the config file and find out what plugin
 to load).
-</UL>
-<P>
+</li></ul>
 
-<LI>
+</li><li>
 How can I query the plug-in interface?
-<P>
 
-This is the last step before you can use the plug-in. It means that inside
+<p>This is the last step before you can use the plug-in. It means that inside
 your program you ask the object registry for an object registered with
 the desired tag. The easiest way to do this is as follows:
-<CODE>CS_QUERY_REGISTRY(<VAR>object_reg</VAR>,<VAR>iInterface</VAR>)</CODE>.
+<code>CS_QUERY_REGISTRY(<var>object_reg</var>,<var>iInterface</var>)</code>.
 This macro will search the object registry for the default object
 implementing the given interface (i.e. the object registered with the
 tag equal to the interface name). Alternatively you can also use
-<CODE>CS_QUERY_REGISTRY_TAG()</CODE> to get an object with a specific tag.
-</P><P>
-
-<LI>
+<code>CS_QUERY_REGISTRY_TAG()</code> to get an object with a specific tag.
+</p>
+</li><li>
 Conclusion
-<P>
 
-To sum it up, SCF is mainly used to provide common interfaces for
-DLLs, but it can also be used by statically linked libraries. If you
+<p>To sum it up, <small>SCF</small> is mainly used to provide common interfaces for
+<small>DLL</small>s, but it can also be used by statically linked libraries. If you
 want to know how to write a plug-in yourself, you should read the complete
-SCF documentation. See section <A HREF="cs_6.2.html#SEC6.2">6.2 Shared Class Facility (SCF)</A>.
-</UL>
-<P>
+<small>SCF</small> documentation. See section <a href="cs_6.2.html#SEC361">Shared Class Facility (<small>SCF</small>)</a>.
+</p></li></ul>
 
-For further information about modules and plug-in drivers, see the sections
-on Libraries (see section <A HREF="cs_6.html#SEC6">6. Facilities</A>) and plug-in modules
-(see section <A HREF="cs_7.html#SEC7">7. Plug-In Modules and Drivers</A>).
-</P><P>
-
-Now that you have learned some basics about the Crystal Space environment,
+<p>For further information about modules and plug-in drivers, see the sections
+on Libraries (see section <a href="cs_6.html#SEC357">Facilities</a>) and plug-in modules
+(see section <a href="cs_7.html#SEC378">Plug-In Modules and Drivers</a>).
+</p>
+<p>Now that you have learned some basics about the Crystal Space environment,
 you can try writing your first program.
-</P><P>
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="cs_5.1.1.html#SEC151">5.1.1 Basic Crystal Space Concepts</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.1.2.html#SEC162">5.1.2 Minimum Application Requirements</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.1.3.html#SEC163">5.1.3 Compiling the Application</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
 
-<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_5.1.1.html#SEC5.1.1">5.1.1 Basic Crystal Space Concepts</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_5.1.2.html#SEC5.1.2">5.1.2 Minimum Application Requirements</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="cs_5.1.3.html#SEC5.1.3">5.1.3 Compiling the Application</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-</TABLE></BLOCKQUOTE>
-<P>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_5.html#SEC149" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.1.1.html#SEC151" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_5.html#SEC149" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#SEC149" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_6.html#SEC357" title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
 
-<A NAME="TutIntro Basic Concepts"></A>
-<HR SIZE=1>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.html#SEC5"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.1.1.html#SEC5.1.1"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.html#SEC5"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.html#SEC5"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_5.2.html#SEC5.2"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<BR>  
-<FONT SIZE="-1">
-This document was generated using
-<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
-"><I>texi2html</I></A>
-
-</BODY>
-</HTML>
+</p>
+</body>
+</html>
