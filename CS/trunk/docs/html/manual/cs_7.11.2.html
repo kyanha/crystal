@@ -1,126 +1,137 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- Created by texi2html 1.64 -->
-<!-- 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on April, 18 2005 by texi2html 1.76 -->
+<!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
             Olaf Bachmann <obachman@mathematik.uni-kl.de>
             and many others.
-Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
-Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
- 
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
 -->
-<HTML>
-<HEAD>
-<TITLE>Crystal Space: AWS Signals</TITLE>
+<head>
+<title>Crystal Space: 7.11.2 Signals: Responding To User Input</title>
 
-<META NAME="description" CONTENT="Crystal Space: AWS Signals">
-<META NAME="keywords" CONTENT="Crystal Space: AWS Signals">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-<META NAME="Generator" CONTENT="texi2html 1.64">
+<meta name="description" content="Crystal Space: 7.11.2 Signals: Responding To User Input">
+<meta name="keywords" content="Crystal Space: 7.11.2 Signals: Responding To User Input">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
 
-</HEAD>
 
-<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+</head>
 
-<A NAME="SEC7.11.2"></A>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.1.html#SEC7.11.1"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.3.html#SEC7.11.3"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<HR SIZE=1>
-<H3> 7.11.2 Signals: Responding To User Input </H3>
-<!--docid::SEC7.11.2::-->
-<P>
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-AWS implements a <EM>slot</EM>/<EM>signal</EM> mechanism for responding to user
+<a name="AWS-Signals"></a>
+<a name="SEC675"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_7.11.1.html#SEC674" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.11.3.html#SEC676" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_7.html#SEC378" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.11.html#SEC673" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_8.html#SEC790" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_SEC_Top.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_SEC987.html#SEC987" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 7.11.2 Signals: Responding To User Input </h3>
+
+<p><small>AWS</small> implements a <em>slot</em>/<em>signal</em> mechanism for responding to user
 input.
-</P><P>
-
-All AWS
-components are signal <EM>sources</EM>, which means that you should be
+</p>
+<p>All <small>AWS</small>
+components are signal <em>sources</em>, which means that you should be
 able to find out anything important that happens to them by
-creating appropriate <EM>sinks</EM>. The idea here is that the
-application provides certain services. The GUI is event
+creating appropriate <em>sinks</em>. The idea here is that the
+application provides certain services. The <small>GUI</small> is event
 driven, which means that you're not so much interested in finding
 out when a certain button is clicked, but rather you would
 like to know when a user wants to do something. For example, you
-don't care so much that the "Login" button has been pressed or
-toggled or selected or whatever it is that happens to the "Login"
+don't care so much that the &quot;Login&quot; button has been pressed or
+toggled or selected or whatever it is that happens to the &quot;Login&quot;
 button to activate it, but rather that the user wants to login to
 the system. In the window definition file,
 connection maps that a
-GUI designer can hook up to signal sinks defined by an
+<small>GUI</small> designer can hook up to signal sinks defined by an
 application programmer support this paradigm. For a game, this
 model seems especially appropriate.
-</P><P>
-
-For example, say the application programmer has defined a sink
-called `<SAMP>loginSink</SAMP>'. This sink has a few triggers: `<SAMP>login</SAMP>',
-`<SAMP>setusername</SAMP>', and `<SAMP>setpassword</SAMP>'. In order to have the login
+</p>
+<p>For example, say the application programmer has defined a sink
+called <samp>`loginSink'</samp>. This sink has a few triggers: <samp>`login'</samp>,
+<samp>`setusername'</samp>, and <samp>`setpassword'</samp>. In order to have the login
 proceed, all of these triggers must be activated. The simplest
-method would be to hookup the `<SAMP>TextChanged</SAMP>' signal from the
-text boxes to the `<SAMP>setusername</SAMP>' and `<SAMP>setpassword</SAMP>' triggers.
+method would be to hookup the <samp>`TextChanged'</samp> signal from the
+text boxes to the <samp>`setusername'</samp> and <samp>`setpassword'</samp> triggers.
 Both of these triggers might expect to receive a source that is an
-`<SAMP>awsComponent</SAMP>' supporting the property `<SAMP>Text</SAMP>'. A
-command button's `<SAMP>Clicked</SAMP>' signal could be connected to the
-`<SAMP>login</SAMP>' trigger.
-</P><P>
-
-Once everything is properly connected, the following sequence occurs:
-</P><P>
-
-<OL>
-<LI>
+<samp>`awsComponent'</samp> supporting the property <samp>`Text'</samp>. A
+command button's <samp>`Clicked'</samp> signal could be connected to the
+<samp>`login'</samp> trigger.
+</p>
+<p>Once everything is properly connected, the following sequence occurs:
+</p>
+<ol>
+<li>
 The user enters text into the username box. A signal is sent to the
-`<SAMP>setusername</SAMP>' trigger, which tries to extract the value of the
-`<SAMP>Text</SAMP>' property
-using the component's <CODE>GetProperty()</CODE> method. If this
+<samp>`setusername'</samp> trigger, which tries to extract the value of the
+<samp>`Text'</samp> property
+using the component's <code>GetProperty()</code> method. If this
 succeeds, it stores a copy of the text.
-<P>
 
-<LI>
+</li><li>
 The user types in the password box. The same process occurs here.
-<P>
 
-<LI>
-The user clicks on the "Login" button.  The `<SAMP>Clicked</SAMP>' signal is sent to
-the `<SAMP>login</SAMP>' trigger, which then performs some sort of authentication.  It
+</li><li>
+The user clicks on the &quot;Login&quot; button.  The <samp>`Clicked'</samp> signal is sent to
+the <samp>`login'</samp> trigger, which then performs some sort of authentication.  It
 might also then call some controlling object to hide the window and change the
 display to an menu or something other.
-</OL>
-<P>
+</li></ol>
 
-This is the general way that you interact with the user. The
+<p>This is the general way that you interact with the user. The
 controlling principle being that the application developer
-provides the means; whereas the GUI designer provides the
-manner. AWS tries to separate controller and view semantics
+provides the means; whereas the <small>GUI</small> designer provides the
+manner. <small>AWS</small> tries to separate controller and view semantics
 as much as possible.
-<A NAME="AWS Custom Components"></A>
-<HR SIZE=1>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.1.html#SEC7.11.1"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.3.html#SEC7.11.3"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_8.html#SEC8"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<BR>  
-<FONT SIZE="-1">
-This document was generated using
-<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
-"><I>texi2html</I></A>
+</p>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_7.11.1.html#SEC674" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.11.3.html#SEC676" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_7.html#SEC378" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.11.html#SEC673" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_8.html#SEC790" title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
 
-</BODY>
-</HTML>
+</p>
+</body>
+</html>

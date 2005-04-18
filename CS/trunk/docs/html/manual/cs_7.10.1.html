@@ -1,144 +1,159 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- Created by texi2html 1.64 -->
-<!-- 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on April, 18 2005 by texi2html 1.76 -->
+<!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
             Olaf Bachmann <obachman@mathematik.uni-kl.de>
             and many others.
-Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
-Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
- 
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
 -->
-<HTML>
-<HEAD>
-<TITLE>Crystal Space: Model Data Structure</TITLE>
+<head>
+<title>Crystal Space: 7.10.1 Common Model Data Structure (iModelData)</title>
 
-<META NAME="description" CONTENT="Crystal Space: Model Data Structure">
-<META NAME="keywords" CONTENT="Crystal Space: Model Data Structure">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-<META NAME="Generator" CONTENT="texi2html 1.64">
+<meta name="description" content="Crystal Space: 7.10.1 Common Model Data Structure (iModelData)">
+<meta name="keywords" content="Crystal Space: 7.10.1 Common Model Data Structure (iModelData)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
 
-</HEAD>
 
-<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+</head>
 
-<A NAME="SEC7.10.1"></A>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.9.html#SEC7.9"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<HR SIZE=1>
-<H3> 7.10.1 Common Model Data Structure (<CODE>iModelData</CODE>) </H3>
-<!--docid::SEC7.10.1::-->
-<P>
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-The IDS is built by a simple concept. All components implement
-<CODE>iObject</CODE>. Except a few cases, the structure is built using the
-<CODE>iObject</CODE> hierarchy. The following components are currently used:
-</P><P>
+<a name="Model-Data-Structure"></a>
+<a name="SEC672"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_7.10.html#SEC671" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.11.html#SEC673" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_7.html#SEC378" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.10.html#SEC671" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_8.html#SEC790" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_SEC_Top.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_SEC987.html#SEC987" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 7.10.1 Common Model Data Structure (<code>iModelData</code>) </h3>
 
-<DL COMPACT>
-<DT><EM>Scene</EM>
-<DD>This is the main object. It contains any number of <EM>objects</EM>,
-<EM>light sources</EM>, <EM>cameras</EM>, <EM>materials</EM> and <EM>textures</EM>.
-<P>
-
-<DT><EM>Texture</EM>
-<DD>An image, which can be stored as an <CODE>iImage</CODE>, an <CODE>iTextureWrapper</CODE>,
+<p>The <small>IDS</small> is built by a simple concept. All components implement
+<code>iObject</code>. Except a few cases, the structure is built using the
+<code>iObject</code> hierarchy. The following components are currently used:
+</p>
+<dl compact="compact">
+<dt> <em>Scene</em></dt>
+<dd><p>This is the main object. It contains any number of <em>objects</em>,
+<em>light sources</em>, <em>cameras</em>, <em>materials</em> and <em>textures</em>.
+</p>
+</dd>
+<dt> <em>Texture</em></dt>
+<dd><p>An image, which can be stored as an <code>iImage</code>, an <code>iTextureWrapper</code>,
 or a filename.
-<P>
-
-<DT><EM>Material</EM>
-<DD>A material, which can be stored as an <CODE>iMaterial</CODE> or an
-<CODE>iMaterialWrapper</CODE>.
-<P>
-
-<DT><EM>Camera</EM>
-<DD>A camera that looks into the scene. It currently contains a position and
+</p>
+</dd>
+<dt> <em>Material</em></dt>
+<dd><p>A material, which can be stored as an <code>iMaterial</code> or an
+<code>iMaterialWrapper</code>.
+</p>
+</dd>
+<dt> <em>Camera</em></dt>
+<dd><p>A camera that looks into the scene. It currently contains a position and
 up, front and right vectors.
-<P>
-
-<DT><EM>Light Source</EM>
-<DD>A light source, consisting of position, brightness and color.
-<P>
-
-<DT><EM>Vertex Frame</EM>
-<DD>This is a collection of any number of vertex positions, any number of normal
+</p>
+</dd>
+<dt> <em>Light Source</em></dt>
+<dd><p>A light source, consisting of position, brightness and color.
+</p>
+</dd>
+<dt> <em>Vertex Frame</em></dt>
+<dd><p>This is a collection of any number of vertex positions, any number of normal
 vectors, of color values and of texture coordinates (also called
-<EM>texels</EM>).
-<P>
-
-<DT><EM>Polygon</EM>
-<DD>A list of quadruples of index values. Every entry in the list contains an
+<em>texels</em>).
+</p>
+</dd>
+<dt> <em>Polygon</em></dt>
+<dd><p>A list of quadruples of index values. Every entry in the list contains an
 index for a vertex table, an index for a normal table, one for a color table
 and one for a texel table. To produce meaningful output, a polygon has to be
 used together with a vertex frame object.
-<P>
-
-<DT><EM>Object</EM>
-<DD>This is what model importing is usually about. An object can be as much as
+</p>
+</dd>
+<dt> <em>Object</em></dt>
+<dd><p>This is what model importing is usually about. An object can be as much as
 a complete level or as few as one polygon. It is simply something that you
 can build a mesh object from. This means that it doesn't even have to use
 polygons (it could use curves instead). This object itself is hardly more
-than a node in the <CODE>iObject</CODE> hierarchy.
-<P>
-
-Sub-objects are currently organized in a way that is closely related to the
-<EM>thing</EM> and <EM>sprite</EM> meshes used in CS: Every object contains a
-<EM>Default Vertex Frame</EM>, which is (of course) a vertex frame object. Also,
-an object contains any number of <EM>polygon</EM> objects. Take these together
+than a node in the <code>iObject</code> hierarchy.
+</p>
+<p>Sub-objects are currently organized in a way that is closely related to the
+<em>thing</em> and <em>sprite</em> meshes used in CS: Every object contains a
+<em>Default Vertex Frame</em>, which is (of course) a vertex frame object. Also,
+an object contains any number of <em>polygon</em> objects. Take these together
 and you have the static shape of an object (and also the shape that is used
 when you build a thing mesh from it).
-</P><P>
-
-<DT><EM>Action</EM>
-<DD>For sprites, it is more difficult as you also want animation. An IDS
-object can also contain any number of <EM>action</EM> objects. An action is
-a list of frames and time values. Frames are also handled as generic IDS
+</p>
+</dd>
+<dt> <em>Action</em></dt>
+<dd><p>For sprites, it is more difficult as you also want animation. An <small>IDS</small>
+object can also contain any number of <em>action</em> objects. An action is
+a list of frames and time values. Frames are also handled as generic <small>IDS</small>
 objects. However, they are special in the way that they are not contained in
-the action as <CODE>iObject</CODE> children but rather directly though the
-<CODE>iModelDataAction</CODE> interface. Currently the only types of frames that are
+the action as <code>iObject</code> children but rather directly though the
+<code>iModelDataAction</code> interface. Currently the only types of frames that are
 allowed are vertex frames.
-<P>
-
-Finally, the time value system has to be explained. Time values are stored in
+</p>
+<p>Finally, the time value system has to be explained. Time values are stored in
 a rather unusual way: The time that is stored with each frame is the point
 in time when the frame ends. For example, if the first frame lasts 50 msec,
 then the time value stored with it is 50 msec. If the second frame lasts 30
 msec, its time value is 80 (50+30). The last time value is also the total
 length of one animation cycle. Note that for interpolated animation this
-produces another effect: At the point <EM>zero</EM> in time, the frame to show
+produces another effect: At the point <em>zero</em> in time, the frame to show
 is equal to the last stored frame. The animation then moves on to the first
 time value, shifting the frame to show over to the first stored frame.
-</DL>
-<P>
+</p></dd>
+</dl>
 
-<A NAME="AWS"></A>
-<HR SIZE=1>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.9.html#SEC7.9"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.10.html#SEC7.10"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.11.html#SEC7.11"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<BR>  
-<FONT SIZE="-1">
-This document was generated using
-<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
-"><I>texi2html</I></A>
 
-</BODY>
-</HTML>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_7.10.html#SEC671" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.11.html#SEC673" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_7.html#SEC378" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.10.html#SEC671" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_8.html#SEC790" title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

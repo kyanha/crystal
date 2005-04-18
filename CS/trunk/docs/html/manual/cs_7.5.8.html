@@ -1,206 +1,203 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- Created by texi2html 1.64 -->
-<!-- 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created on April, 18 2005 by texi2html 1.76 -->
+<!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
             Olaf Bachmann <obachman@mathematik.uni-kl.de>
             and many others.
-Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
-Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
- 
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
 -->
-<HTML>
-<HEAD>
-<TITLE>Crystal Space: Rendering Loop</TITLE>
+<head>
+<title>Crystal Space: 7.5.8 Rendering Loop</title>
 
-<META NAME="description" CONTENT="Crystal Space: Rendering Loop">
-<META NAME="keywords" CONTENT="Crystal Space: Rendering Loop">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-<META NAME="Generator" CONTENT="texi2html 1.64">
+<meta name="description" content="Crystal Space: 7.5.8 Rendering Loop">
+<meta name="keywords" content="Crystal Space: 7.5.8 Rendering Loop">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
 
-</HEAD>
 
-<BODY LANG="" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+</head>
 
-<A NAME="SEC7.5.8"></A>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.7.8.html#SEC7.5.7.8"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.9.html#SEC7.5.9"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.7.html#SEC7.5.7"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.html#SEC7.5"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<HR SIZE=1>
-<H3> 7.5.8 Rendering Loop </H3>
-<!--docid::SEC7.5.8::-->
-<P>
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<EM>Written by Jorrit Tyberghein,
-<A HREF="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</A>.</EM>
-</P><P>
+<a name="Rendering-Loop"></a>
+<a name="SEC439"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_7.5.7.8.html#SEC438" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.5.9.html#SEC442" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_7.html#SEC378" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.5.html#SEC395" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_8.html#SEC790" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_SEC_Top.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_SEC987.html#SEC987" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 7.5.8 Rendering Loop </h3>
 
-Here is a short run-through of the main rendering loop.  This document is not an
+
+<p><em>Written by Jorrit Tyberghein,
+<a href="mailto:jorrit.tyberghein@uz.kuleuven.ac.be">jorrit.tyberghein@uz.kuleuven.ac.be</a>.</em>
+</p>
+<p>Here is a short run-through of the main rendering loop.  This document is not an
 explanation of portal technology.  It just explains how the main rendering
 loop in Crystal Space works so that you can have a quick idea of where you
 have to go to see a particular part of the algorithm work.  This is a rather
 technical document and not intended for people who are only interested in
 using Crystal Space in their own projects.  It is intended for people who want
 to know how Crystal Space works internally.
-</P><P>
-
-To understand this you should know how portals are used in Crystal Space.  You
-should also read the tutorial (see section <A HREF="cs_5.2.html#SEC5.2">5.2 Simple Tutorial 1</A>) as this explains the
+</p>
+<p>To understand this you should know how portals are used in Crystal Space.  You
+should also read the tutorial (see section <a href="cs_5.2.html#SEC164">Simple Tutorial 1</a>) as this explains the
 basics for using Crystal Space.  This document is based upon the
-`<TT>simple</TT>' application (`<TT>CS/apps/tutorial/simple1/</TT>') because this
+<tt>`simple'</tt> application (<tt>`CS/apps/tutorial/simple1/'</tt>) because this
 discussion looks a lot like a tutorial.
-</P><P>
-
-First we start in `<TT>apps/tutorial/simple1/simple1.cpp</TT>'.  In the
-<CODE>main()</CODE> function we initialize our engine.  This is an instance of the
-plugin `<SAMP>iEngine</SAMP>' which actually represents the engine.  I will not
+</p>
+<p>First we start in <tt>`apps/tutorial/simple1/simple1.cpp'</tt>.  In the
+<code>main()</code> function we initialize our engine.  This is an instance of the
+plugin <samp>`iEngine'</samp> which actually represents the engine.  I will not
 explain how all the initialization works.  This is explained in the tutorial.
-But I will go straight to <CODE>iEngine::Draw()</CODE> which is called indirectly
-from within <CODE>Simple::NextFrame()</CODE>.  It is called indirectly because first
-we call <CODE>iView::Draw()</CODE> which then calls <CODE>iEngine::Draw()</CODE>.
-</P><P>
+But I will go straight to <code>iEngine::Draw()</code> which is called indirectly
+from within <code>Simple::NextFrame()</code>.  It is called indirectly because first
+we call <code>iView::Draw()</code> which then calls <code>iEngine::Draw()</code>.
+</p>
+<a name="SEC440"></a>
+<h4 class="subsubheading"> World Rendering (<code>iEngine::Draw()</code>) </h4>
 
-<A NAME="SEC_1"></A>
-<H4> World Rendering (<CODE>iEngine::Draw()</CODE>) </H4>
-<!--docid::SEC_1::-->
-<P>
-
-The method <CODE>iEngine::Draw()</CODE> is located in
-`<TT>CS/plugins/engine/3d/engine.cpp</TT>'.
-</P><P>
-
-<CODE>iEngine::Draw()</CODE> first sets up the initial `<SAMP>iRenderView</SAMP>'
+<p>The method <code>iEngine::Draw()</code> is located in
+<tt>`CS/plugins/engine/3d/engine.cpp'</tt>.
+</p>
+<p><code>iEngine::Draw()</code> first sets up the initial <samp>`iRenderView'</samp>
 structure.  This structure is defined in
-`<TT>CS/include/iengine/rview.h</TT>' and is the main structure which is
+<tt>`CS/include/iengine/rview.h'</tt> and is the main structure which is
 used throughout the entire rendering process.  It collects all data that
 is required for rendering the recursive portal structure.
-</P><P>
-
-Basically, it contains the following information:
-</P><P>
-
-<DL COMPACT>
-<DT><CODE>view</CODE>
-<DD>This is the current clipper.  A clipper is a 2D polygon which defines what is
+</p>
+<p>Basically, it contains the following information:
+</p>
+<dl compact="compact">
+<dt> <code>view</code></dt>
+<dd><p>This is the current clipper.  A clipper is a 2D polygon which defines what is
 visible.  Every object is clipped to the view first.  Every time we go through
 a portal the view is modified.
-<P>
-
-<DT><CODE>g3d</CODE>
-<DD><DT><CODE>g2d</CODE>
-<DD>These are pointers to our 3D and 2D graphics subsystems.
-<P>
-
-<DT><CODE>clip_plane</CODE>
-<DD>This is a special plane.  If `<SAMP>do_clip_plane</SAMP>' is used then we clip all
-geometry in 3D to `<SAMP>clip_plane</SAMP>'.  This is normally not used except in
+</p>
+</dd>
+<dt> <code>g3d</code></dt>
+<dt> <code>g2d</code></dt>
+<dd><p>These are pointers to our 3D and 2D graphics subsystems.
+</p>
+</dd>
+<dt> <code>clip_plane</code></dt>
+<dd><p>This is a special plane.  If <samp>`do_clip_plane'</samp> is used then we clip all
+geometry in 3D to <samp>`clip_plane'</samp>.  This is normally not used except in
 special cases where we have portals that arrive in the middle of a sector.  In
 that case the portal will be used as an extra clipping plane because we don't
 want to render everything that is behind the arrival plane of the portal.
-</DL>
-<P>
+</p></dd>
+</dl>
 
-Another important thing is that `<SAMP>iRenderView</SAMP>' is actually a subclass of
-`<SAMP>iCamera</SAMP>' (`<TT>CS/include/iengine/camera.h</TT>') so all camera
+<p>Another important thing is that <samp>`iRenderView'</samp> is actually a subclass of
+<samp>`iCamera'</samp> (<tt>`CS/include/iengine/camera.h'</tt>) so all camera
 functionality is present as well.
-</P><P>
-
-To set up the initial `<SAMP>iRenderView</SAMP>' structure <CODE>iEngine::Draw()</CODE>
+</p>
+<p>To set up the initial <samp>`iRenderView'</samp> structure <code>iEngine::Draw()</code>
 creates a new instance based upon the given camera.
-</P><P>
-
-After this <CODE>iEngine::Draw()</CODE> gets the current sector from the camera and
-calls <CODE>iSector::Draw()</CODE> (`<TT>CS/plugins/engine/3d/sector.cpp</TT>').  This
+</p>
+<p>After this <code>iEngine::Draw()</code> gets the current sector from the camera and
+calls <code>iSector::Draw()</code> (<tt>`CS/plugins/engine/3d/sector.cpp'</tt>).  This
 will essentially draw the whole screen as discussed below.
-</P><P>
-
-After doing this (now that the screen is fully updated) we optionally draw
+</p>
+<p>After doing this (now that the screen is fully updated) we optionally draw
 halos.  Halos are drawn on top of everything else since they are an effect in
 the eyes.
-</P><P>
+</p>
+<a name="SEC441"></a>
+<h4 class="subsubheading"> Sector Rendering (<code>iSector::Draw()</code>) </h4>
 
-<A NAME="SEC_2"></A>
-<H4> Sector Rendering (<CODE>iSector::Draw()</CODE>) </H4>
-<!--docid::SEC_2::-->
-<P>
-
-This method <CODE>iSector::Draw()</CODE> is located in
-`<TT>CS/plugins/engine/3d/sector.cpp</TT>'.
-</P><P>
-
-<CODE>iSector::Draw()</CODE> is responsible for rendering everything in the current
+<p>This method <code>iSector::Draw()</code> is located in
+<tt>`CS/plugins/engine/3d/sector.cpp'</tt>.
+</p>
+<p><code>iSector::Draw()</code> is responsible for rendering everything in the current
 sector. Before it does that it will ask the current visibility culler
-(`<SAMP>frustvis</SAMP>' or `<SAMP>dynavis</SAMP>') what objects are likely to be visible
+(<samp>`frustvis'</samp> or <samp>`dynavis'</samp>) what objects are likely to be visible
 or not. It will then render all visible objects sorted by render priority
-(see section <A HREF="cs_5.8.12.html#SEC5.8.12">5.8.12 Render Priorities and Objects in Sectors</A>) and using the z-buffer mode that is
+(see section <a href="cs_5.8.12.html#SEC274">Render Priorities and Objects in Sectors</a>) and using the z-buffer mode that is
 associated with every object. It is up to the map designer to make sure
 that the objects in their render priority and z-buffer mode will actually
 cause the sector to be rendered ok.
-</P><P>
-
-Every object that is rendered will get the current camera transformation
+</p>
+<p>Every object that is rendered will get the current camera transformation
 so it can correctly transform its coordinates from world to camera space:
 (0,0,0) is the camera pointer, (1,0,0) is one to the right, (0,1,0) is one
 unit above the camera, and (0,0,1) is one unit in front of the camera.
-</P><P>
-
-Every object also gets the current movable (<CODE>iMovable</CODE>) which indicates
+</p>
+<p>Every object also gets the current movable (<code>iMovable</code>) which indicates
 where the object currently is in the world. The transform created from
 the camera and the movable can be used to transform from object space
 to camera space. Note that some objects leave this transformation up to
 the 3D renderer which is good because that means hardware accelerated
 transforms can be used.
-</P><P>
-
-Every mesh object is responsible for drawing itself (see section <A HREF="cs_7.7.html#SEC7.7">7.7 Mesh Object Plug-In System</A>).
+</p>
+<p>Every mesh object is responsible for drawing itself (see section <a href="cs_7.7.html#SEC539">Mesh Object Plug-In System</a>).
 The engine decides when to render an object, the object decides on how
 to render itself. Finally the 3D renderer will process the actual rendering
 operations done by the mesh object.
-</P><P>
-
-The `<SAMP>thing</SAMP>' mesh object type supports portals. When such a thing containing
+</p>
+<p>The <samp>`thing'</samp> mesh object type supports portals. When such a thing containing
 a portal is rendered the destination sector will be rendered recursively.
 This means that rendering of the current sector will be temporarily
 suspended while first the destination sector through that portal is rendered.
-Going through a portal results in the current `<SAMP>iRenderView</SAMP>'
+Going through a portal results in the current <samp>`iRenderView'</samp>
 instance to get a new clipper (a smaller clipper usually). Objects can use
 that clipper to decide if they want to be rendered or not. In some special
 cases a portal can also transform space (like a mirror). In that case the
-world=>camera transformation will also be modified in the current
-<CODE>iRenderView</CODE>.
-</P><P>
-
-When a sector has finished rendering we conclude by optionally fogging the
+world&rArr;camera transformation will also be modified in the current
+<code>iRenderView</code>.
+</p>
+<p>When a sector has finished rendering we conclude by optionally fogging the
 current sector if this is needed.
-</P><P>
+</p>
 
-<A NAME="3D Sprites"></A>
-<HR SIZE=1>
-<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
-<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.7.8.html#SEC7.5.7.8"> &lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.9.html#SEC7.5.9"> &gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.7.html#SEC7.5.7"> &lt;&lt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.5.html#SEC7.5"> Up </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_7.6.html#SEC7.6"> &gt;&gt; </A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="index.html#SEC_Top">Top</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_toc.html#SEC_Contents">Contents</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs__1.html#SEC_1">Index</A>]</TD>
-<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="cs_abt.html#SEC_About"> ? </A>]</TD>
-</TR></TABLE>
-<BR>  
-<FONT SIZE="-1">
-This document was generated using
-<A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
-"><I>texi2html</I></A>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_7.5.7.8.html#SEC438" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.5.9.html#SEC442" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_7.html#SEC378" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.5.html#SEC395" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_8.html#SEC790" title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
 
-</BODY>
-</HTML>
+</p>
+</body>
+</html>
