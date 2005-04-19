@@ -76,187 +76,203 @@
 00081   size_t blocksize;             <span class="comment">// Size in bytes per block.</span>
 00082   FreeNode* freenode;           <span class="comment">// Head of the chain of free nodes.</span>
 00083   <span class="keywordtype">bool</span> pedantic;                <span class="comment">// Warn about nodes not explicitly freed.</span>
-00084 
-<a name="l00091"></a><a class="code" href="classcsBlockAllocator.html#f0">00091</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsBlockAllocator.html#f0">FuzzyCmp</a>(<a class="code" href="group__util.html#ga0">uint8</a>* <span class="keyword">const</span>&amp; block, BlockKey <span class="keyword">const</span>&amp; k)
-00092   {
-00093     <span class="keywordflow">return</span> (block + k.blocksize &lt;= k.addr ? -1 : (block &gt; k.addr ? 1 : 0));
-00094   }
-00095 
-<a name="l00099"></a><a class="code" href="classcsBlockAllocator.html#b0">00099</a>   size_t <a class="code" href="classcsBlockAllocator.html#b0">FindBlock</a>(<span class="keywordtype">void</span> <span class="keyword">const</span>* m)<span class="keyword"> const</span>
-00100 <span class="keyword">  </span>{
-00101     <span class="keywordflow">return</span> blocks.<a class="code" href="classcsArray.html#a26">FindSortedKey</a>(
-00102       <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;uint8*,BlockKey&gt;</a>(BlockKey((<a class="code" href="group__util.html#ga0">uint8</a>*)m, blocksize), <a class="code" href="classcsBlockAllocator.html#f0">FuzzyCmp</a>));
-00103   }
-00104 
-<a name="l00110"></a><a class="code" href="classcsBlockAllocator.html#b1">00110</a>   <a class="code" href="group__util.html#ga0">uint8</a>* <a class="code" href="classcsBlockAllocator.html#b1">AllocBlock</a>()<span class="keyword"> const</span>
-00111 <span class="keyword">  </span>{
-00112     <a class="code" href="group__util.html#ga0">uint8</a>* block;
-00113 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
-00114 <span class="preprocessor"></span>    <span class="keywordtype">char</span> buf[255];
-00115     sprintf (buf, <span class="stringliteral">"csBlockAllocator&lt;%s&gt;"</span>, <span class="keyword">typeid</span> (T).name());
-00116     <a class="code" href="group__util.html#ga5">int32</a>* ptr = (<a class="code" href="group__util.html#ga5">int32</a>*)malloc (blocksize + <span class="keyword">sizeof</span> (<a class="code" href="group__util.html#ga5">int32</a>)*2);
-00117     *ptr++ = (int32)mtiRegisterAlloc (blocksize, buf);
-00118     *ptr++ = blocksize;
-00119     block = (<a class="code" href="group__util.html#ga0">uint8</a>*)ptr;
-00120 <span class="preprocessor">#else</span>
-00121 <span class="preprocessor"></span>    block = (<a class="code" href="group__util.html#ga0">uint8</a>*)malloc(blocksize);
-00122 <span class="preprocessor">#endif</span>
-00123 <span class="preprocessor"></span>
-00124     <span class="comment">// Build the free-node chain (all nodes are free in the new block).</span>
-00125     FreeNode* nextfree = 0;
-00126     <a class="code" href="group__util.html#ga0">uint8</a>* node = block + (size - 1) * elsize;
-00127     <span class="keywordflow">for</span> ( ; node &gt;= block; node -= elsize)
-00128     {
-00129       FreeNode* slot = (FreeNode*)node;
-00130       slot-&gt;next = nextfree;
-00131       nextfree = slot;
-00132     }
-00133     CS_ASSERT((<a class="code" href="group__util.html#ga0">uint8</a>*)nextfree == block);
-00134     <span class="keywordflow">return</span> block;
-00135   }
-00136 
-<a name="l00140"></a><a class="code" href="classcsBlockAllocator.html#b2">00140</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#b2">FreeBlock</a>(<a class="code" href="group__util.html#ga0">uint8</a>* p)<span class="keyword"> const</span>
-00141 <span class="keyword">  </span>{
-00142 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
-00143 <span class="preprocessor"></span>    <a class="code" href="group__util.html#ga5">int32</a>* ptr = ((<a class="code" href="group__util.html#ga5">int32</a>*)p)-2;
-00144     mtiRegisterFree ((csMemTrackerInfo*)*ptr, (size_t)ptr[1]);
-00145     free (ptr);
-00146 <span class="preprocessor">#else</span>
-00147 <span class="preprocessor"></span>    free (p);
-00148 <span class="preprocessor">#endif</span>
-00149 <span class="preprocessor"></span>  }
-00150 
-<a name="l00154"></a><a class="code" href="classcsBlockAllocator.html#b3">00154</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#b3">DestroyObject</a>(T* p, <span class="keywordtype">bool</span> warn = <span class="keyword">false</span>)<span class="keyword"> const</span>
-00155 <span class="keyword">  </span>{
-00156     p-&gt;~T();
-00157 <span class="preprocessor">#ifdef CS_DEBUG</span>
-00158 <span class="preprocessor"></span>    <span class="keywordflow">if</span> (warn)
-00159       <a class="code" href="group__util.html#ga80">csPrintfErr</a>(<span class="stringliteral">"NOTIFY: csBlockAllocator(%p) destroying potentially leaked "</span>
-00160                   <span class="stringliteral">"object at %p.\n"</span>, <span class="keyword">this</span>, p);
-00161 <span class="preprocessor">#endif</span>
-00162 <span class="preprocessor"></span><span class="preprocessor">#ifdef CS_BLOCKALLOC_DEBUG</span>
-00163 <span class="preprocessor"></span>    memset (p, 0xfb, elsize);
-00164 <span class="preprocessor">#endif</span>
-00165 <span class="preprocessor"></span>  }
-00166 
-<a name="l00171"></a><a class="code" href="classcsBlockAllocator.html#b4">00171</a>   <a class="code" href="classcsBitArray.html">csBitArray</a> <a class="code" href="classcsBlockAllocator.html#b4">GetAllocationMap</a>()<span class="keyword"> const</span>
-00172 <span class="keyword">  </span>{
-00173     <a class="code" href="classcsBitArray.html">csBitArray</a> mask(size * blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>());
-00174     mask.<a class="code" href="classcsBitArray.html#a23">FlipAllBits</a>();
-00175     <span class="keywordflow">for</span> (FreeNode* p = freenode; p != 0; p = p-&gt;next)
-00176     {
-00177       size_t <span class="keyword">const</span> n = <a class="code" href="classcsBlockAllocator.html#b0">FindBlock</a>(p);
-00178       CS_ASSERT(n != <a class="code" href="array_8h.html#a3">csArrayItemNotFound</a>);
-00179       size_t <span class="keyword">const</span> slot = ((<a class="code" href="group__util.html#ga0">uint8</a>*)p - blocks[n]) / elsize; <span class="comment">// Slot in block.</span>
-00180       mask.<a class="code" href="classcsBitArray.html#a17">ClearBit</a>(n * size + slot);
-00181     }
-00182     <span class="keywordflow">return</span> mask;
-00183   }
-00184 
-<a name="l00190"></a><a class="code" href="classcsBlockAllocator.html#b5">00190</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#b5">DisposeAll</a>(<span class="keywordtype">bool</span> warn_unfreed)
-00191   {
-00192     <a class="code" href="classcsBitArray.html">csBitArray</a> <span class="keyword">const</span> mask(<a class="code" href="classcsBlockAllocator.html#b4">GetAllocationMap</a>());
-00193     size_t node = 0;
-00194     <span class="keywordflow">for</span> (size_t b = 0, bN = blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>(); b &lt; bN; b++)
-00195     {
-00196       <span class="keywordflow">for</span> (<a class="code" href="group__util.html#ga0">uint8</a> *p = blocks[b], *pN = p + blocksize; p &lt; pN; p += elsize)
-00197         <span class="keywordflow">if</span> (mask.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a>(node++))
-00198           <a class="code" href="classcsBlockAllocator.html#b3">DestroyObject</a>((T*)p, warn_unfreed);
-00199       <a class="code" href="classcsBlockAllocator.html#b2">FreeBlock</a>(blocks[b]);
-00200     }
-00201     blocks.<a class="code" href="classcsArray.html#a32">DeleteAll</a>();
-00202     freenode = 0;
-00203   }
-00204 
-00205 <span class="keyword">public</span>:
-<a name="l00227"></a><a class="code" href="classcsBlockAllocator.html#a0">00227</a>   <a class="code" href="classcsBlockAllocator.html#a0">csBlockAllocator</a>(size_t nelem = 32, <span class="keywordtype">bool</span> warn_unfreed = <span class="keyword">false</span>) :
-00228     size(nelem), elsize(sizeof(T)), freenode(0), pedantic(warn_unfreed)
-00229   {
-00230     <span class="keywordflow">if</span> (elsize &lt; <span class="keyword">sizeof</span> (FreeNode))
-00231       elsize = <span class="keyword">sizeof</span> (FreeNode);
-00232     blocksize = elsize * size;
-00233   }
-00234 
-<a name="l00238"></a><a class="code" href="classcsBlockAllocator.html#a1">00238</a>   <a class="code" href="classcsBlockAllocator.html#a1">~csBlockAllocator</a>()
-00239   {
-00240     <a class="code" href="classcsBlockAllocator.html#b5">DisposeAll</a>(pedantic);
+00084   <span class="keywordtype">bool</span> insideDisposeAll;        <span class="comment">// Flag to ignore calls to Compact() and</span>
+00085                                 <span class="comment">//  Free() if they're called recursively</span>
+00086                                 <span class="comment">//  while disposing the entire allocation set.</span>
+00087                                 <span class="comment">//  Recursive calls to Alloc() will signal an</span>
+00088                                 <span class="comment">//  assertion failure.</span>
+00089 
+<a name="l00096"></a><a class="code" href="classcsBlockAllocator.html#f0">00096</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsBlockAllocator.html#f0">FuzzyCmp</a>(<a class="code" href="group__util.html#ga0">uint8</a>* <span class="keyword">const</span>&amp; block, BlockKey <span class="keyword">const</span>&amp; k)
+00097   {
+00098     <span class="keywordflow">return</span> (block + k.blocksize &lt;= k.addr ? -1 : (block &gt; k.addr ? 1 : 0));
+00099   }
+00100 
+<a name="l00104"></a><a class="code" href="classcsBlockAllocator.html#b0">00104</a>   size_t <a class="code" href="classcsBlockAllocator.html#b0">FindBlock</a>(<span class="keywordtype">void</span> <span class="keyword">const</span>* m)<span class="keyword"> const</span>
+00105 <span class="keyword">  </span>{
+00106     <span class="keywordflow">return</span> blocks.<a class="code" href="classcsArray.html#a26">FindSortedKey</a>(
+00107       <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;uint8*,BlockKey&gt;</a>(BlockKey((<a class="code" href="group__util.html#ga0">uint8</a>*)m, blocksize), <a class="code" href="classcsBlockAllocator.html#f0">FuzzyCmp</a>));
+00108   }
+00109 
+<a name="l00115"></a><a class="code" href="classcsBlockAllocator.html#b1">00115</a>   <a class="code" href="group__util.html#ga0">uint8</a>* <a class="code" href="classcsBlockAllocator.html#b1">AllocBlock</a>()<span class="keyword"> const</span>
+00116 <span class="keyword">  </span>{
+00117     <a class="code" href="group__util.html#ga0">uint8</a>* block;
+00118 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
+00119 <span class="preprocessor"></span>    <span class="keywordtype">char</span> buf[255];
+00120     sprintf (buf, <span class="stringliteral">"csBlockAllocator&lt;%s&gt;"</span>, <span class="keyword">typeid</span> (T).name());
+00121     <a class="code" href="group__util.html#ga5">int32</a>* ptr = (<a class="code" href="group__util.html#ga5">int32</a>*)malloc (blocksize + <span class="keyword">sizeof</span> (<a class="code" href="group__util.html#ga5">int32</a>)*2);
+00122     *ptr++ = (int32)mtiRegisterAlloc (blocksize, buf);
+00123     *ptr++ = blocksize;
+00124     block = (<a class="code" href="group__util.html#ga0">uint8</a>*)ptr;
+00125 <span class="preprocessor">#else</span>
+00126 <span class="preprocessor"></span>    block = (<a class="code" href="group__util.html#ga0">uint8</a>*)malloc(blocksize);
+00127 <span class="preprocessor">#endif</span>
+00128 <span class="preprocessor"></span>
+00129     <span class="comment">// Build the free-node chain (all nodes are free in the new block).</span>
+00130     FreeNode* nextfree = 0;
+00131     <a class="code" href="group__util.html#ga0">uint8</a>* node = block + (size - 1) * elsize;
+00132     <span class="keywordflow">for</span> ( ; node &gt;= block; node -= elsize)
+00133     {
+00134       FreeNode* slot = (FreeNode*)node;
+00135       slot-&gt;next = nextfree;
+00136       nextfree = slot;
+00137     }
+00138     CS_ASSERT((<a class="code" href="group__util.html#ga0">uint8</a>*)nextfree == block);
+00139     <span class="keywordflow">return</span> block;
+00140   }
+00141 
+<a name="l00145"></a><a class="code" href="classcsBlockAllocator.html#b2">00145</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#b2">FreeBlock</a>(<a class="code" href="group__util.html#ga0">uint8</a>* p)<span class="keyword"> const</span>
+00146 <span class="keyword">  </span>{
+00147 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
+00148 <span class="preprocessor"></span>    <a class="code" href="group__util.html#ga5">int32</a>* ptr = ((<a class="code" href="group__util.html#ga5">int32</a>*)p)-2;
+00149     mtiRegisterFree ((csMemTrackerInfo*)*ptr, (size_t)ptr[1]);
+00150     free (ptr);
+00151 <span class="preprocessor">#else</span>
+00152 <span class="preprocessor"></span>    free (p);
+00153 <span class="preprocessor">#endif</span>
+00154 <span class="preprocessor"></span>  }
+00155 
+<a name="l00159"></a><a class="code" href="classcsBlockAllocator.html#b3">00159</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#b3">DestroyObject</a>(T* p, <span class="keywordtype">bool</span> warn = <span class="keyword">false</span>)<span class="keyword"> const</span>
+00160 <span class="keyword">  </span>{
+00161     p-&gt;~T();
+00162 <span class="preprocessor">#ifdef CS_DEBUG</span>
+00163 <span class="preprocessor"></span>    <span class="keywordflow">if</span> (warn)
+00164       <a class="code" href="group__util.html#ga80">csPrintfErr</a>(<span class="stringliteral">"NOTIFY: csBlockAllocator(%p) destroying potentially leaked "</span>
+00165                   <span class="stringliteral">"object at %p.\n"</span>, <span class="keyword">this</span>, p);
+00166 <span class="preprocessor">#endif</span>
+00167 <span class="preprocessor"></span><span class="preprocessor">#ifdef CS_BLOCKALLOC_DEBUG</span>
+00168 <span class="preprocessor"></span>    memset (p, 0xfb, elsize);
+00169 <span class="preprocessor">#endif</span>
+00170 <span class="preprocessor"></span>  }
+00171 
+<a name="l00176"></a><a class="code" href="classcsBlockAllocator.html#b4">00176</a>   <a class="code" href="classcsBitArray.html">csBitArray</a> <a class="code" href="classcsBlockAllocator.html#b4">GetAllocationMap</a>()<span class="keyword"> const</span>
+00177 <span class="keyword">  </span>{
+00178     <a class="code" href="classcsBitArray.html">csBitArray</a> mask(size * blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>());
+00179     mask.<a class="code" href="classcsBitArray.html#a23">FlipAllBits</a>();
+00180     <span class="keywordflow">for</span> (FreeNode* p = freenode; p != 0; p = p-&gt;next)
+00181     {
+00182       size_t <span class="keyword">const</span> n = <a class="code" href="classcsBlockAllocator.html#b0">FindBlock</a>(p);
+00183       CS_ASSERT(n != <a class="code" href="array_8h.html#a3">csArrayItemNotFound</a>);
+00184       size_t <span class="keyword">const</span> slot = ((<a class="code" href="group__util.html#ga0">uint8</a>*)p - blocks[n]) / elsize; <span class="comment">// Slot in block.</span>
+00185       mask.<a class="code" href="classcsBitArray.html#a17">ClearBit</a>(n * size + slot);
+00186     }
+00187     <span class="keywordflow">return</span> mask;
+00188   }
+00189 
+<a name="l00195"></a><a class="code" href="classcsBlockAllocator.html#b5">00195</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#b5">DisposeAll</a>(<span class="keywordtype">bool</span> warn_unfreed)
+00196   {
+00197     insideDisposeAll = <span class="keyword">true</span>;
+00198     <a class="code" href="classcsBitArray.html">csBitArray</a> <span class="keyword">const</span> mask(<a class="code" href="classcsBlockAllocator.html#b4">GetAllocationMap</a>());
+00199     size_t node = 0;
+00200     <span class="keywordflow">for</span> (size_t b = 0, bN = blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>(); b &lt; bN; b++)
+00201     {
+00202       <span class="keywordflow">for</span> (<a class="code" href="group__util.html#ga0">uint8</a> *p = blocks[b], *pN = p + blocksize; p &lt; pN; p += elsize)
+00203           <span class="keywordflow">if</span> (mask.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a>(node++))
+00204             <a class="code" href="classcsBlockAllocator.html#b3">DestroyObject</a>((T*)p, warn_unfreed);
+00205       <a class="code" href="classcsBlockAllocator.html#b2">FreeBlock</a>(blocks[b]);
+00206     }
+00207     blocks.<a class="code" href="classcsArray.html#a32">DeleteAll</a>();
+00208     freenode = 0;
+00209     insideDisposeAll = <span class="keyword">false</span>;
+00210   }
+00211 
+00212 <span class="keyword">public</span>:
+<a name="l00234"></a><a class="code" href="classcsBlockAllocator.html#a0">00234</a>   <a class="code" href="classcsBlockAllocator.html#a0">csBlockAllocator</a>(size_t nelem = 32, <span class="keywordtype">bool</span> warn_unfreed = <span class="keyword">false</span>) :
+00235     size(nelem), elsize(sizeof(T)), freenode(0), pedantic(warn_unfreed),
+00236     insideDisposeAll(false)
+00237   {
+00238     <span class="keywordflow">if</span> (elsize &lt; <span class="keyword">sizeof</span> (FreeNode))
+00239       elsize = <span class="keyword">sizeof</span> (FreeNode);
+00240     blocksize = elsize * size;
 00241   }
 00242 
-<a name="l00248"></a><a class="code" href="classcsBlockAllocator.html#a2">00248</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#a2">Empty</a>()
-00249   {
-00250     <a class="code" href="classcsBlockAllocator.html#b5">DisposeAll</a>(<span class="keyword">false</span>);
-00251   }
-00252 
-<a name="l00257"></a><a class="code" href="classcsBlockAllocator.html#a3">00257</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#a3">Compact</a>()
-00258   {
-00259     <span class="keywordtype">bool</span> compacted = <span class="keyword">false</span>;
-00260     <a class="code" href="classcsBitArray.html">csBitArray</a> mask(<a class="code" href="classcsBlockAllocator.html#b4">GetAllocationMap</a>());
-00261     <span class="keywordflow">for</span> (size_t b = blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>(); b-- &gt; 0; )
-00262     {
-00263       size_t <span class="keyword">const</span> node = b * size;
-00264       <span class="keywordflow">if</span> (!mask.<a class="code" href="classcsBitArray.html#a21">AreSomeBitsSet</a>(node, size))
-00265       {
-00266         <a class="code" href="classcsBlockAllocator.html#b2">FreeBlock</a>(blocks[b]);
-00267         blocks.<a class="code" href="classcsArray.html#a38">DeleteIndex</a>(b);
-00268         mask.<a class="code" href="classcsBitArray.html#a24">Delete</a>(node, size);
-00269         compacted = <span class="keyword">true</span>;
-00270       }
-00271     }
-00272 
-00273     <span class="comment">// If blocks were deleted, then free-node chain broke, so rebuild it.</span>
-00274     <span class="keywordflow">if</span> (compacted)
-00275     {
-00276       FreeNode* nextfree = 0;
-00277       size_t <span class="keyword">const</span> bN = blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>();
-00278       size_t node = bN * size;
-00279       <span class="keywordflow">for</span> (size_t b = bN; b-- &gt; 0; )
-00280       {
-00281         <a class="code" href="group__util.html#ga0">uint8</a>* <span class="keyword">const</span> p0 = blocks[b];
-00282         <span class="keywordflow">for</span> (<a class="code" href="group__util.html#ga0">uint8</a>* p = p0 + (size - 1) * elsize; p &gt;= p0; p -= elsize)
-00283         {
-00284           <span class="keywordflow">if</span> (!mask.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a>(--node))
-00285           {
-00286             FreeNode* slot = (FreeNode*)p;
-00287             slot-&gt;next = nextfree;
-00288             nextfree = slot;
-00289           }
-00290         }
-00291       }
-00292       freenode = nextfree;
-00293     }
-00294   }
-00295 
-<a name="l00299"></a><a class="code" href="classcsBlockAllocator.html#a4">00299</a>   T* <a class="code" href="classcsBlockAllocator.html#a4">Alloc</a>()
-00300   {
-00301     <span class="keywordflow">if</span> (freenode == 0)
-00302     {
-00303       <a class="code" href="group__util.html#ga0">uint8</a>* p = <a class="code" href="classcsBlockAllocator.html#b1">AllocBlock</a>();
-00304       blocks.<a class="code" href="classcsArray.html#a27">InsertSorted</a>(p);
-00305       freenode = (FreeNode*)p;
-00306     }
-00307     <span class="keywordtype">void</span>* <span class="keyword">const</span> node = freenode;
-00308     freenode = freenode-&gt;next;
-00309     <span class="keywordflow">return</span> <span class="keyword">new</span> (node) T;
-00310   }
-00311 
-<a name="l00315"></a><a class="code" href="classcsBlockAllocator.html#a5">00315</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#a5">Free</a>(T* p)
-00316   {
-00317     <span class="keywordflow">if</span> (p != 0)
+<a name="l00246"></a><a class="code" href="classcsBlockAllocator.html#a1">00246</a>   <a class="code" href="classcsBlockAllocator.html#a1">~csBlockAllocator</a>()
+00247   {
+00248     <a class="code" href="classcsBlockAllocator.html#b5">DisposeAll</a>(pedantic);
+00249   }
+00250 
+<a name="l00256"></a><a class="code" href="classcsBlockAllocator.html#a2">00256</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#a2">Empty</a>()
+00257   {
+00258     <a class="code" href="classcsBlockAllocator.html#b5">DisposeAll</a>(<span class="keyword">false</span>);
+00259   }
+00260 
+<a name="l00265"></a><a class="code" href="classcsBlockAllocator.html#a3">00265</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#a3">Compact</a>()
+00266   {
+00267     <span class="keywordflow">if</span> (insideDisposeAll) <span class="keywordflow">return</span>;
+00268 
+00269     <span class="keywordtype">bool</span> compacted = <span class="keyword">false</span>;
+00270     <a class="code" href="classcsBitArray.html">csBitArray</a> mask(<a class="code" href="classcsBlockAllocator.html#b4">GetAllocationMap</a>());
+00271     <span class="keywordflow">for</span> (size_t b = blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>(); b-- &gt; 0; )
+00272     {
+00273       size_t <span class="keyword">const</span> node = b * size;
+00274       <span class="keywordflow">if</span> (!mask.<a class="code" href="classcsBitArray.html#a21">AreSomeBitsSet</a>(node, size))
+00275       {
+00276         <a class="code" href="classcsBlockAllocator.html#b2">FreeBlock</a>(blocks[b]);
+00277         blocks.<a class="code" href="classcsArray.html#a38">DeleteIndex</a>(b);
+00278         mask.<a class="code" href="classcsBitArray.html#a24">Delete</a>(node, size);
+00279         compacted = <span class="keyword">true</span>;
+00280       }
+00281     }
+00282 
+00283     <span class="comment">// If blocks were deleted, then free-node chain broke, so rebuild it.</span>
+00284     <span class="keywordflow">if</span> (compacted)
+00285     {
+00286       FreeNode* nextfree = 0;
+00287       size_t <span class="keyword">const</span> bN = blocks.<a class="code" href="classcsArray.html#a4">GetSize</a>();
+00288       size_t node = bN * size;
+00289       <span class="keywordflow">for</span> (size_t b = bN; b-- &gt; 0; )
+00290       {
+00291         <a class="code" href="group__util.html#ga0">uint8</a>* <span class="keyword">const</span> p0 = blocks[b];
+00292         <span class="keywordflow">for</span> (<a class="code" href="group__util.html#ga0">uint8</a>* p = p0 + (size - 1) * elsize; p &gt;= p0; p -= elsize)
+00293         {
+00294           <span class="keywordflow">if</span> (!mask.<a class="code" href="classcsBitArray.html#a20">IsBitSet</a>(--node))
+00295           {
+00296             FreeNode* slot = (FreeNode*)p;
+00297             slot-&gt;next = nextfree;
+00298             nextfree = slot;
+00299           }
+00300         }
+00301       }
+00302       freenode = nextfree;
+00303     }
+00304   }
+00305 
+<a name="l00309"></a><a class="code" href="classcsBlockAllocator.html#a4">00309</a>   T* <a class="code" href="classcsBlockAllocator.html#a4">Alloc</a>()
+00310   {
+00311     <span class="keywordflow">if</span> (insideDisposeAll)
+00312     {
+00313         <a class="code" href="group__util.html#ga80">csPrintfErr</a>(<span class="stringliteral">"ERROR: csBlockAllocator(%p) tried to allocate memory while inside DisposeAll()"</span>, <span class="keyword">this</span>);
+00314       CS_ASSERT(<span class="keyword">false</span>);
+00315     }
+00316 
+00317     <span class="keywordflow">if</span> (freenode == 0)
 00318     {
-00319       CS_ASSERT(<a class="code" href="classcsBlockAllocator.html#b0">FindBlock</a>(p) != <a class="code" href="array_8h.html#a3">csArrayItemNotFound</a>);
-00320       <a class="code" href="classcsBlockAllocator.html#b3">DestroyObject</a>(p, <span class="keyword">false</span>);
-00321       FreeNode* f = (FreeNode*)p;
-00322       f-&gt;next = freenode;
-00323       freenode = f;
-00324     }
-00325   }
-00326 };
+00319       <a class="code" href="group__util.html#ga0">uint8</a>* p = <a class="code" href="classcsBlockAllocator.html#b1">AllocBlock</a>();
+00320       blocks.<a class="code" href="classcsArray.html#a27">InsertSorted</a>(p);
+00321       freenode = (FreeNode*)p;
+00322     }
+00323     <span class="keywordtype">void</span>* <span class="keyword">const</span> node = freenode;
+00324     freenode = freenode-&gt;next;
+00325     <span class="keywordflow">return</span> <span class="keyword">new</span> (node) T;
+00326   }
 00327 
-00328 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
-00329 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
-00330 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00331 <span class="preprocessor"></span>
-00332 <span class="preprocessor">#endif // __CSUTIL_BLOCK_ALLOCATOR_H__</span>
+<a name="l00331"></a><a class="code" href="classcsBlockAllocator.html#a5">00331</a>   <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocator.html#a5">Free</a>(T* p)
+00332   {
+00333     <span class="keywordflow">if</span> (p != 0 &amp;&amp; !insideDisposeAll)
+00334     {
+00335       CS_ASSERT(<a class="code" href="classcsBlockAllocator.html#b0">FindBlock</a>(p) != <a class="code" href="array_8h.html#a3">csArrayItemNotFound</a>);
+00336       <a class="code" href="classcsBlockAllocator.html#b3">DestroyObject</a>(p, <span class="keyword">false</span>);
+00337       FreeNode* f = (FreeNode*)p;
+00338       f-&gt;next = freenode;
+00339       freenode = f;
+00340     }
+00341   }
+00342 };
+00343 
+00344 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
+00345 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
+00346 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00347 <span class="preprocessor"></span>
+00348 <span class="preprocessor">#endif // __CSUTIL_BLOCK_ALLOCATOR_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

@@ -21,16 +21,22 @@
 <p>
 <code>#include "csextern.h"</code><br>
 <code>#include "<a class="el" href="verbositymanager_8h-source.html">iutil/verbositymanager.h</a>"</code><br>
+<code>#include "<a class="el" href="strhash_8h-source.html">csutil/strhash.h</a>"</code><br>
 <code>#include "<a class="el" href="csstring_8h-source.html">csutil/csstring.h</a>"</code><br>
-<code>#include "<a class="el" href="hashhandlers_8h-source.html">csutil/hashhandlers.h</a>"</code><br>
 
 <p>
 <a href="verbosity_8h-source.html">Go to the source code of this file.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="verbosity_8h.html#a0">csCheckVerbosity</a> (int argc, const char *const argv[], const char *msgClass, const char *msgSubclass=0)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsVerbosityParser.html">csVerbosityParser</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="verbosity_8h.html#a0">csParseVerbosity</a> (int argc, char const *const argv[])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse verbosity for some given command line arguments.  <a href="#a0"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Construct a <a class="el" href="classcsVerbosityParser.html">csVerbosityParser</a> from <code>--verbosity=flags</code> options given on the command-line.  <a href="#a0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="verbosity_8h.html#a1">csCheckVerbosity</a> (int argc, char const *const argv[], char const *flag=0, bool fuzzy=true)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Search command-line arguments for <code>--verbosity=flags</code> options, and check if <em>flag</em> is enabled or disabled.  <a href="#a1"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">CS_DEPRECATED_METHOD bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="verbosity_8h.html#a2">csCheckVerbosity</a> (int argc, char const *const argv[], char const *major, char const *minor)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Given major and minor components, check if the verbosity class "major.minor" is enabled via the command-line `--verbose' switch.  <a href="#a2"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Verbosity management helpers. 
@@ -38,13 +44,13 @@ Verbosity management helpers.
 
 <p>
 Definition in file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.<hr><h2>Function Documentation</h2>
-<a class="anchor" name="a0" doxytag="verbosity.h::csCheckVerbosity"></a><p>
+<a class="anchor" name="a2" doxytag="verbosity.h::csCheckVerbosity"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">bool csCheckVerbosity           </td>
+          <td class="md" nowrap valign="top">CS_DEPRECATED_METHOD bool csCheckVerbosity           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">int&nbsp;</td>
           <td class="mdname" nowrap> <em>argc</em>, </td>
@@ -52,20 +58,20 @@ Definition in file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap>const char *const &nbsp;</td>
+          <td class="md" nowrap>char const *const &nbsp;</td>
           <td class="mdname" nowrap> <em>argv</em>[], </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap> <em>msgClass</em>, </td>
+          <td class="md" nowrap>char const *&nbsp;</td>
+          <td class="mdname" nowrap> <em>major</em>, </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap> <em>msgSubclass</em> = <code>0</code></td>
+          <td class="md" nowrap>char const *&nbsp;</td>
+          <td class="mdname" nowrap> <em>minor</em></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -84,9 +90,116 @@ Definition in file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>
     <td>
 
 <p>
-Parse verbosity for some given command line arguments. 
+Given major and minor components, check if the verbosity class "major.minor" is enabled via the command-line `--verbose' switch. 
 <p>
-<dl compact><dt><b>Remarks:</b></dt><dd>Should only be used during early initializations when the object registry is not set up yet; otherwise, the <a class="el" href="structiVerbosityManager.html">iVerbosityManager</a> object should be obtained and used instead. </dd></dl>
+<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd>Use instead the more generic <a class="el" href="verbosity_8h.html#a1">csCheckVerbosity()</a> function which takes a single verbosity class flag since it accepts any granularity of class breakdown; not just major and minor components.</dd></dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="a1" doxytag="verbosity.h::csCheckVerbosity"></a><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">bool csCheckVerbosity           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname" nowrap> <em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>char const *const &nbsp;</td>
+          <td class="mdname" nowrap> <em>argv</em>[], </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>char const *&nbsp;</td>
+          <td class="mdname" nowrap> <em>flag</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap> <em>fuzzy</em> = <code>true</code></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Search command-line arguments for <code>--verbosity=flags</code> options, and check if <em>flag</em> is enabled or disabled. 
+<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>This is a simple convenience wrapper around <a class="el" href="verbosity_8h.html#a1">csCheckVerbosity()</a> which invokes <code>Enabled(flags)</code> on the constructed verbosity parser. See the <a class="el" href="verbosity_8h.html#a0">csParseVerbosity()</a> and <a class="el" href="classcsVerbosityParser.html#a5">csVerbosityParser::Enabled()</a> for a description of the arguments to this function. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="classcsVerbosityParser.html">csVerbosityParser</a> <p>
+<a class="el" href="classcsVerbosityManager.html">csVerbosityManager</a> <p>
+<a class="el" href="verbosity_8h.html#a0">csParseVerbosity</a>; <p>
+<a class="el" href="structiVerbosityManager.html">iVerbosityManager</a> </dd></dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="a0" doxytag="verbosity.h::csParseVerbosity"></a><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="classcsVerbosityParser.html">csVerbosityParser</a> csParseVerbosity           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname" nowrap> <em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>char const *const &nbsp;</td>
+          <td class="mdname" nowrap> <em>argv</em>[]</td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Construct a <a class="el" href="classcsVerbosityParser.html">csVerbosityParser</a> from <code>--verbosity=flags</code> options given on the command-line. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>Command-line argument count from main(). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>Command-line argument vector from main(). </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Remarks:</b></dt><dd>This function extracts the <code>flags</code> text following the equal sign in each <code>--verbose=flags</code> option (if present) and constructs a <a class="el" href="classcsVerbosityParser.html">csVerbosityParser</a> with the extracted text. <p>
+This function is useful for verbosity queries during very early initialization before any of the higher-level framework has been set up. Once partial initialization has occurred, however, it is often more convenient to obtain a handle to an <a class="el" href="structiVerbosityManager.html">iVerbosityManager</a> instance from the global iObjectRegitry and use that instead since it does not require access to <em>argc</em> and <em>argv</em>[]. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="classcsVerbosityParser.html">csVerbosityParser</a> <p>
+<a class="el" href="classcsVerbosityManager.html">csVerbosityManager</a> <p>
+<a class="el" href="verbosity_8h.html#a2">csCheckVerbosity</a> <p>
+<a class="el" href="structiVerbosityManager.html">iVerbosityManager</a> </dd></dl>
     </td>
   </tr>
 </table>
