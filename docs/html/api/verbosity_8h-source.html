@@ -18,86 +18,105 @@
 <div class="nav">
 <a class="el" href="dir_000022.html">csutil</a></div>
 <h1>verbosity.h</h1><a href="verbosity_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
-00002 <span class="comment">    Copyright (C) 2004 by Jorrit Tyberghein</span>
-00003 <span class="comment">              (C) 2004 by Frank Richter</span>
-00004 <span class="comment"></span>
-00005 <span class="comment">    This library is free software; you can redistribute it and/or</span>
-00006 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
-00007 <span class="comment">    License as published by the Free Software Foundation; either</span>
-00008 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
-00009 <span class="comment"></span>
-00010 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
-00011 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-00012 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
-00013 <span class="comment">    Library General Public License for more details.</span>
-00014 <span class="comment"></span>
-00015 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
-00016 <span class="comment">    License along with this library; if not, write to the Free</span>
-00017 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
-00018 <span class="comment">*/</span>
-00019 
-00020 <span class="preprocessor">#ifndef __CS_CSUTIL_VERBOSITY_H__</span>
-00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_VERBOSITY_H__</span>
-00022 <span class="preprocessor"></span>
-00026 <span class="preprocessor">#include "csextern.h"</span>
-00027 <span class="preprocessor">#include "<a class="code" href="verbositymanager_8h.html">iutil/verbositymanager.h</a>"</span>
-00028 
-00029 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
-00030 <span class="preprocessor">#include "<a class="code" href="hashhandlers_8h.html">csutil/hashhandlers.h</a>"</span>
-00031 
-<a name="l00048"></a><a class="code" href="classcsVerbosityParser.html">00048</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>
-00049 {
-00050   <span class="keyword">struct </span>VerbosityFlag
-00051   {
-00052     <a class="code" href="classcsString.html">csString</a> msgClass;
-00057     <span class="keywordtype">bool</span> defaultFlag;
-00058     <a class="code" href="classcsHash.html">csHash&lt;bool, csStrKey, csConstCharHashKeyHandler&gt;</a> msgSubclasses;
-00059     
-00060     VerbosityFlag() : defaultFlag(<span class="keyword">true</span>) {}
-00061   };
-00062   <a class="code" href="classcsArray.html">csArray&lt;VerbosityFlag&gt;</a> verbosityFlags;
-00063   <span class="keyword">enum</span>
-00064   {
-00065     ForceResult = 1,
-00066     DefTrue = 2,
-00067     DefFalse = 0,
-00068     DefMask = DefTrue
-00069   };
-00070   <a class="code" href="group__util.html#ga18">uint</a> defaultGlobalFlag;
-00071 
-00072   <span class="keyword">static</span> <span class="keywordtype">int</span> VfKeyCompare (<span class="keyword">const</span> VerbosityFlag&amp; vf, <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>&amp; K);
-00073   <span class="keyword">static</span> <span class="keywordtype">int</span> VfCompare (<span class="keyword">const</span> VerbosityFlag&amp; vf1, <span class="keyword">const</span> VerbosityFlag&amp; vf2);
-00074 <span class="keyword">public</span>:
-00080   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* flags);
-00081   
-00085   <span class="keywordtype">bool</span> CheckFlag (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgClass, <span class="keyword">const</span> <span class="keywordtype">char</span>* msgSubclass = 0);
-00086 };
-00087 
-00094 <span class="keyword">extern</span> CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="verbosity_8h.html#a0">csCheckVerbosity</a> (<span class="keywordtype">int</span> argc,
-00095   <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span> argv[], <span class="keyword">const</span> <span class="keywordtype">char</span>* msgClass,
-00096   <span class="keyword">const</span> <span class="keywordtype">char</span>* msgSubclass = 0);
-00097   
-<a name="l00102"></a><a class="code" href="classcsVerbosityManager.html">00102</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csVerbosityManager : <span class="keyword">public</span> <a class="code" href="structiVerbosityManager.html">iVerbosityManager</a>
-00103 {
-00104   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> vp;
-00105 <span class="keyword">public</span>:
-00106   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+00002 <span class="comment">    Copyright (C) 2005 by Eric Sunshine &lt;sunshine@sunshineco.com&gt;</span>
+00003 <span class="comment"></span>
+00004 <span class="comment">    This library is free software; you can redistribute it and/or</span>
+00005 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
+00006 <span class="comment">    License as published by the Free Software Foundation; either</span>
+00007 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
+00008 <span class="comment"></span>
+00009 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
+00010 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+00011 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+00012 <span class="comment">    Library General Public License for more details.</span>
+00013 <span class="comment"></span>
+00014 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
+00015 <span class="comment">    License along with this library; if not, write to the Free</span>
+00016 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
+00017 <span class="comment">*/</span>
+00018 
+00019 <span class="preprocessor">#ifndef __CS_CSUTIL_VERBOSITY_H__</span>
+00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_VERBOSITY_H__</span>
+00021 <span class="preprocessor"></span>
+00025 <span class="preprocessor">#include "csextern.h"</span>
+00026 <span class="preprocessor">#include "<a class="code" href="verbositymanager_8h.html">iutil/verbositymanager.h</a>"</span>
+00027 <span class="preprocessor">#include "<a class="code" href="strhash_8h.html">csutil/strhash.h</a>"</span>
+00028 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
+00029 <span class="keyword">class </span><a class="code" href="classcsStringArray.html">csStringArray</a>;
+00030 
+<a name="l00103"></a><a class="code" href="classcsVerbosityParser.html">00103</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>
+00104 {
+00105 <span class="keyword">private</span>:
+00106   <a class="code" href="classcsStringHash.html">csStringHash</a> flags;
 00107 
-00108   csVerbosityManager (<span class="keyword">const</span> <span class="keywordtype">char</span>* flags) : vp (flags)
-00109   {
-00110     <a class="code" href="group__scf.html#ga25">SCF_CONSTRUCT_IBASE</a>(0);
-00111   }
-00112   <span class="keyword">virtual</span> ~csVerbosityManager()
-00113   {
-00114     <a class="code" href="group__scf.html#ga27">SCF_DESTRUCT_IBASE</a>();
-00115   }
-00116 
-<a name="l00117"></a><a class="code" href="classcsVerbosityManager.html#a2">00117</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVerbosityManager.html#a0">CheckFlag</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* msgClass, 
-00118     <span class="keyword">const</span> <span class="keywordtype">char</span>* msgSubclass = 0)
-00119   { <span class="keywordflow">return</span> vp.CheckFlag (msgClass, msgSubclass); }
-00120 };
-00121 
-00122 <span class="preprocessor">#endif // __CS_CSUTIL_VERBOSITY_H__</span>
+00108   <span class="keyword">typedef</span> <a class="code" href="classcsStringFast.html">csStringFast&lt;128&gt;</a> <a class="code" href="classcsStringFast.html">Str</a>;
+00109   <span class="keyword">typedef</span> bool (*SplitPredicate)(<span class="keywordtype">char</span> c, size_t pos);
+00110   <span class="keyword">static</span> <span class="keywordtype">bool</span> Split(<span class="keywordtype">char</span> <span class="keyword">const</span>*, <span class="keywordtype">char</span> delim, SplitPredicate, <span class="keywordtype">bool</span> empty_okay,
+00111                     <a class="code" href="classcsStringArray.html">csStringArray</a>&amp;);
+00112   <span class="keyword">static</span> <a class="code" href="classcsStringFast.html">Str</a>  Join(<a class="code" href="classcsStringArray.html">csStringArray</a> <span class="keyword">const</span>&amp;, <a class="code" href="classcsStringFast.html">Str</a> delim);
+00113   <span class="keyword">static</span> <span class="keywordtype">bool</span> Error(<span class="keywordtype">char</span> <span class="keyword">const</span>* msg, <span class="keywordtype">char</span> <span class="keyword">const</span>* s, size_t pos);
+00114   <span class="keyword">static</span> <span class="keywordtype">bool</span> ParseToggle(<span class="keywordtype">char</span> <span class="keyword">const</span>*&amp;);
+00115   <span class="keyword">static</span> <span class="keywordtype">bool</span> ParseFlag(<span class="keywordtype">char</span> <span class="keyword">const</span>*, <a class="code" href="classcsStringArray.html">csStringArray</a>&amp;, <span class="keywordtype">bool</span> empty_okay);
+00116   <span class="keywordtype">bool</span> TestFlag(<a class="code" href="classcsStringFast.html">Str</a> name, <span class="keywordtype">bool</span>&amp; enable) <span class="keyword">const</span>;
+00117   <span class="keywordtype">void</span> Copy(<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <span class="keyword">const</span>&amp; v) { flags = v.<a class="code" href="classcsVerbosityParser.html#r0">flags</a>; }
+00118 
+00119 <span class="keyword">public</span>:
+00134   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags = 0);
+00135   
+<a name="l00139"></a><a class="code" href="classcsVerbosityParser.html#a1">00139</a>   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>(<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <span class="keyword">const</span>&amp; v) { Copy(v); }
+00140 
+<a name="l00144"></a><a class="code" href="classcsVerbosityParser.html#a2">00144</a>   ~<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>() {}
+00145 
+<a name="l00149"></a><a class="code" href="classcsVerbosityParser.html#a3">00149</a>   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>&amp; operator=(<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <span class="keyword">const</span>&amp; v)
+00150   { Copy(v); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+00151 
+00162   <span class="keywordtype">void</span> Parse(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags);
+00163 
+00184   <span class="keywordtype">bool</span> Enabled(<span class="keywordtype">char</span> <span class="keyword">const</span>* flag = 0, <span class="keywordtype">bool</span> fuzzy = <span class="keyword">true</span>) <span class="keyword">const</span>;
+00185 
+00192   <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a>
+<a name="l00193"></a><a class="code" href="classcsVerbosityParser.html#a6">00193</a>   <span class="keywordtype">bool</span> CheckFlag(<span class="keywordtype">char</span> <span class="keyword">const</span>* major, <span class="keywordtype">char</span> <span class="keyword">const</span>* minor)<span class="keyword"> const</span>
+00194 <span class="keyword">  </span>{
+00195     <a class="code" href="classcsStringFast.html">Str</a> flag; flag &lt;&lt; major &lt;&lt; <span class="charliteral">'.'</span> &lt;&lt; minor;
+00196     <span class="keywordflow">return</span> Enabled(flag);
+00197   }
+00198 };
+00199 
+00219 CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <a class="code" href="verbosity_8h.html#a0">csParseVerbosity</a> (
+00220   <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[]);
+00221   
+00234 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="verbosity_8h.html#a1">csCheckVerbosity</a> (
+00235   <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[], <span class="keywordtype">char</span> <span class="keyword">const</span>* flag = 0, <span class="keywordtype">bool</span> fuzzy = <span class="keyword">true</span>);
+00236   
+00244 <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a>
+00245 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="verbosity_8h.html#a1">csCheckVerbosity</a> (
+00246   <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[], <span class="keywordtype">char</span> <span class="keyword">const</span>* major, <span class="keywordtype">char</span> <span class="keyword">const</span>* minor);
+00247   
+<a name="l00258"></a><a class="code" href="classcsVerbosityManager.html">00258</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csVerbosityManager : <span class="keyword">public</span> <a class="code" href="structiVerbosityManager.html">iVerbosityManager</a>
+00259 {
+00260 <span class="keyword">private</span>:
+00261   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> vp;
+00262 <span class="keyword">public</span>:
+00263   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+00264 
+<a name="l00270"></a><a class="code" href="classcsVerbosityManager.html#a0">00270</a>   csVerbosityManager(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags = 0) : vp(flags)
+00271   { <a class="code" href="group__scf.html#ga25">SCF_CONSTRUCT_IBASE</a>(0); }
+<a name="l00273"></a><a class="code" href="classcsVerbosityManager.html#a1">00273</a>   <span class="keyword">virtual</span> ~csVerbosityManager() { <a class="code" href="group__scf.html#ga27">SCF_DESTRUCT_IBASE</a>(); }
+00274 
+<a name="l00280"></a><a class="code" href="classcsVerbosityManager.html#a2">00280</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVerbosityManager.html#a0">Parse</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags) { vp.Parse(flags); }
+00281 
+<a name="l00293"></a><a class="code" href="classcsVerbosityManager.html#a3">00293</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVerbosityManager.html#a1">Enabled</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* flag = 0, <span class="keywordtype">bool</span> fuzzy = <span class="keyword">true</span>)<span class="keyword"> const</span>
+00294 <span class="keyword">  </span>{ <span class="keywordflow">return</span> vp.Enabled(flag, fuzzy); }
+00295 
+00302   <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a>
+<a name="l00303"></a><a class="code" href="classcsVerbosityManager.html#a4">00303</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVerbosityManager.html#a2">CheckFlag</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* major, <span class="keywordtype">char</span> <span class="keyword">const</span>* minor)<span class="keyword"> const</span>
+00304 <span class="keyword">  </span>{
+00305     <a class="code" href="classcsStringFast.html">csStringFast&lt;128&gt;</a> flag; flag &lt;&lt; major &lt;&lt; <span class="charliteral">'.'</span> &lt;&lt; minor;
+00306     <span class="keywordflow">return</span> <a class="code" href="structiVerbosityManager.html#a1">Enabled</a>(flag);
+00307   }
+00308 };
+00309 
+00310 <span class="preprocessor">#endif // __CS_CSUTIL_VERBOSITY_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
