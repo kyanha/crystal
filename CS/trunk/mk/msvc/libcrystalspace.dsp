@@ -818,10 +818,6 @@ SOURCE=..\..\libs\csutil\util.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\utiltest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\verbosity.cpp
 # End Source File
 # Begin Source File
@@ -1811,10 +1807,6 @@ SOURCE=..\..\libs\..\include\csutil\tree.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\util.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\..\include\csutil\utiltest.h
 # End Source File
 # Begin Source File
 
