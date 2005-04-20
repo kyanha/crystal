@@ -274,6 +274,10 @@ SOURCE=..\..\libs\csgeom\trimeshlod.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\tritri.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\vector2.cpp
 # End Source File
 # Begin Source File
