@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 <html>
-<!-- Created on April, 19 2005 by texi2html 1.76 -->
+<!-- Created on April, 20 2005 by texi2html 1.76 -->
 <!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
@@ -169,13 +169,13 @@ of platforms.  In other words, instead of <samp>`(float1 &lt; float2)'</samp>, u
 statement to the loop itself.  In other words, some compilers treat the
 following code:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">for (int i = 0; &hellip;) &hellip;
+<table><tr><td>&nbsp;</td><td><pre class="example">for (int i = 0; ...) ...
 </pre></td></tr></table>
 
 <p>As though <samp>`i'</samp> was declared outside of the <samp>`for'</samp> statement, as in:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">int i;
-for (i = 0; &hellip;) &hellip;
+for (i = 0; ...) ...
 </pre></td></tr></table>
 <p>This can be a problem when several <samp>`for'</samp> loops exists at the same scoping
 level in a single block since some compilers will complain that <samp>`i'</samp> is
@@ -183,9 +183,9 @@ being redeclared by all <samp>`for'</samp> loops following the first one.  In ot
 words, the following code will generate a &quot;variable redeclaration&quot; warning
 with some compilers:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">for (int i = 0; &hellip;) &hellip;
-&hellip; other code &hellip;
-for (int i = 5; &hellip;) &hellip;
+<table><tr><td>&nbsp;</td><td><pre class="example">for (int i = 0; ...) ...
+... other code ...
+for (int i = 5; ...) ...
 </pre></td></tr></table>
 <p>In cases where the variable appears in only a single <samp>`for'</samp> loop, declaring
 it directly in the <samp>`for'</samp> statement is perfectly safe, but in cases where
@@ -193,9 +193,9 @@ many such loops may want to use the same variable name, the variable should
 be declared once outside of all loops, as in the following example:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">int i;
-for (i = 0; &hellip;) &hellip;
-&hellip; other code &hellip;
-for (i = 5; &hellip;) &hellip;
+for (i = 0; ...) ...
+... other code ...
+for (i = 5; ...) ...
 </pre></td></tr></table>
 <p>The Microsoft Visual C++ compiler is known to suffer from this problem,
 however most modern C++ compilers properly scope variables declared in the

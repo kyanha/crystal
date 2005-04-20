@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 <html>
-<!-- Created on April, 19 2005 by texi2html 1.76 -->
+<!-- Created on April, 20 2005 by texi2html 1.76 -->
 <!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
@@ -84,27 +84,27 @@ caused <em>semantics</em> to change subtly.
 track of the index of the current item of an array iteration.  Fixing forward
 iteration over a <code>csArray&lt;&gt;</code> to instead use <samp>`size_t'</samp> is simple:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;&hellip;&gt; a;
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
 for (int i = 0, n = a.Length(); i &lt; n; i++)
 {
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 
 <p>Is changed to:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&hellip;
+<table><tr><td>&nbsp;</td><td><pre class="example">...
 for (size_t i = 0, n = a.Length(); i &lt; n; i++)
-&hellip;
+...
 </pre></td></tr></table>
 <p>Backward iteration is a bit more problematic. As mentioned before,
 <samp>`size_t'</samp> typically is unsigned, so you do not have negative values. This
 can be a problem in constructs like:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;&hellip;&gt; a;
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
 for (int i = a.Length() - 1; i &gt;= 0; i--)
 {
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 <p>If the <samp>`int'</samp> is changed simply to a <samp>`size_t'</samp>, this 
@@ -127,10 +127,10 @@ Use an <code>int</code>-typed counter variable and cast the array length to
 </li><li>
 Re-write the loop to deal properly with the unsigned nature of <samp>`size_t'</samp>:
 
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;&hellip;&gt; a;
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
 for (size_t i = a.Length(); i-- &gt; 0;)
 {
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 <p>This code does the same as the <samp>`int'</samp> version above, iterating from 
@@ -158,32 +158,32 @@ actually a valid index by testing with <samp>`&gt;= 0'</samp> no longer works si
 <samp>`(size_t)-1'</samp> is always <code>&gt;= 0</code>. Replace such checks with tests of
 equality against <samp>`csArrayItemNotFound'</samp>:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;&hellip;&gt; a;
-int index = a.Find (&hellip;);
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
+int index = a.Find (...);
 if (index &gt;= 0)
 {
   /* Item found */
-  &hellip;
+  ...
 }
 else
 {
   /* Item not found */
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 <p>Must be replaced with:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;&hellip;&gt; a;
-size_t index = a.Find (&hellip;);
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
+size_t index = a.Find (...);
 if (index != csArrayItemNotFound)
 {
   /* Item found */
-  &hellip;
+  ...
 }
 else
 {
   /* Item not found */
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 <a name="SEC809"></a>
@@ -280,13 +280,13 @@ conflict with headers installed by other packages.
 </p>
 <ul>
 <li>
-<code>platform.h</code> &rArr; <code>csplatform.h</code>
+<code>platform.h</code> =&gt; <code>csplatform.h</code>
 </li><li>
-<code>qint.h</code> &rArr; <code>csqint.h</code>
+<code>qint.h</code> =&gt; <code>csqint.h</code>
 </li><li>
-<code>qsqrt.h</code> &rArr; <code>csqsqrt.h</code>
+<code>qsqrt.h</code> =&gt; <code>csqsqrt.h</code>
 </li><li>
-<code>volatile.h</code> &rArr; <code>csconfig.h</code>
+<code>volatile.h</code> =&gt; <code>csconfig.h</code>
 </li></ul>
 
 <p>The following symbols have been renamed in order to avoid pollution of the
@@ -294,122 +294,122 @@ global namespace.
 </p>
 <ul>
 <li>
-<code>big_endian_float()</code> &rArr; <code>csBigEndianFloat()</code>
+<code>big_endian_float()</code> =&gt; <code>csBigEndianFloat()</code>
 </li><li>
-<code>big_endian_long()</code> &rArr; <code>csBigEndianLong()</code>
+<code>big_endian_long()</code> =&gt; <code>csBigEndianLong()</code>
 </li><li>
-<code>big_endian_longlong()</code> &rArr; <code>csBigEndianLongLong()</code>
+<code>big_endian_longlong()</code> =&gt; <code>csBigEndianLongLong()</code>
 </li><li>
-<code>big_endian_short()</code> &rArr; <code>csBigEndianShort()</code>
+<code>big_endian_short()</code> =&gt; <code>csBigEndianShort()</code>
 </li><li>
-<code>COMP_BC</code> &rArr; <code>CS_COMPILER_BCC</code>
+<code>COMP_BC</code> =&gt; <code>CS_COMPILER_BCC</code>
 </li><li>
-<code>COMP_GCC</code> &rArr; <code>CS_COMPILER_GCC</code>
+<code>COMP_GCC</code> =&gt; <code>CS_COMPILER_GCC</code>
 </li><li>
-<code>COMP_VC</code> &rArr; <code>CS_COMPILER_MSVC</code>
+<code>COMP_VC</code> =&gt; <code>CS_COMPILER_MSVC</code>
 </li><li>
-<code>convert_endian()</code> &rArr; <code>csConvertEndian()</code>
+<code>convert_endian()</code> =&gt; <code>csConvertEndian()</code>
 </li><li>
-<code>DO_MMX</code> &rArr; <code>CS_HAVE_MMX</code>
+<code>DO_MMX</code> =&gt; <code>CS_HAVE_MMX</code>
 </li><li>
-<code>DO_NASM</code> &rArr; <code>CS_HAVE_NASM</code>
+<code>DO_NASM</code> =&gt; <code>CS_HAVE_NASM</code>
 </li><li>
-<code>double2longlong()</code> &rArr; <code>csDoubleToLongLong()</code>
+<code>double2longlong()</code> =&gt; <code>csDoubleToLongLong()</code>
 </li><li>
-<code>float2long()</code> &rArr; <code>csFloatToLong()</code>
+<code>float2long()</code> =&gt; <code>csFloatToLong()</code>
 </li><li>
-<code>float2short()</code> &rArr; <code>csFloatToShort()</code>
+<code>float2short()</code> =&gt; <code>csFloatToShort()</code>
 </li><li>
-<code>get_le_float16()</code> &rArr; <code>csGetLittleEndianFloat16()</code>
+<code>get_le_float16()</code> =&gt; <code>csGetLittleEndianFloat16()</code>
 </li><li>
-<code>get_le_float32()</code> &rArr; <code>csGetLittleEndianFloat32()</code>
+<code>get_le_float32()</code> =&gt; <code>csGetLittleEndianFloat32()</code>
 </li><li>
-<code>get_le_long()</code> &rArr; <code>csGetLittleEndianLong()</code>
+<code>get_le_long()</code> =&gt; <code>csGetLittleEndianLong()</code>
 </li><li>
-<code>get_le_short()</code> &rArr; <code>csGetLittleEndianShort()</code>
+<code>get_le_short()</code> =&gt; <code>csGetLittleEndianShort()</code>
 </li><li>
-<code>little_endian_float()</code> &rArr; <code>csLittleEndianFloat()</code>
+<code>little_endian_float()</code> =&gt; <code>csLittleEndianFloat()</code>
 </li><li>
-<code>little_endian_long()</code> &rArr; <code>csLittleEndianLong()</code>
+<code>little_endian_long()</code> =&gt; <code>csLittleEndianLong()</code>
 </li><li>
-<code>little_endian_longlong()</code> &rArr; <code>csLittleEndianLongLong()</code>
+<code>little_endian_longlong()</code> =&gt; <code>csLittleEndianLongLong()</code>
 </li><li>
-<code>little_endian_short()</code> &rArr; <code>csLittleEndianShort()</code>
+<code>little_endian_short()</code> =&gt; <code>csLittleEndianShort()</code>
 </li><li>
-<code>long2float()</code> &rArr; <code>csLongToFloat()</code>
+<code>long2float()</code> =&gt; <code>csLongToFloat()</code>
 </li><li>
-<code>longlong2double()</code> &rArr; <code>csLongLongToDouble()</code>
+<code>longlong2double()</code> =&gt; <code>csLongLongToDouble()</code>
 </li><li>
-<code>MemEntry</code> &rArr; <code>csMemTrackerEntry</code>
+<code>MemEntry</code> =&gt; <code>csMemTrackerEntry</code>
 </li><li>
-<code>MemoryMapFile()</code> &rArr; <code>csMemoryMapFile()</code>
+<code>MemoryMapFile()</code> =&gt; <code>csMemoryMapFile()</code>
 </li><li>
-<code>MemoryMapWindow()</code> &rArr; <code>csMemoryMapWindow()</code>
+<code>MemoryMapWindow()</code> =&gt; <code>csMemoryMapWindow()</code>
 </li><li>
-<code>MemTrackerInfo</code> &rArr; <code>csMemTrackerInfo</code>
+<code>MemTrackerInfo</code> =&gt; <code>csMemTrackerInfo</code>
 </li><li>
-<code>MemTrackerModule</code> &rArr; <code>csMemTrackerModule</code>
+<code>MemTrackerModule</code> =&gt; <code>csMemTrackerModule</code>
 </li><li>
-<code>MemTrackerRegistry</code> &rArr; <code>csMemTrackerRegistry</code>
+<code>MemTrackerRegistry</code> =&gt; <code>csMemTrackerRegistry</code>
 </li><li>
-<code>MKDIR()</code> &rArr; <code>CS_MKDIR()</code>
+<code>MKDIR()</code> =&gt; <code>CS_MKDIR()</code>
 </li><li>
-<code>mmioInfo</code> &rArr; <code>csMemMapInfo</code>
+<code>mmioInfo</code> =&gt; <code>csMemMapInfo</code>
 </li><li>
-<code>__NEED_GENERIC_ISDIR</code> &rArr; <code>CS_USE_CUSTOM_ISDIR</code>
+<code>__NEED_GENERIC_ISDIR</code> =&gt; <code>CS_USE_CUSTOM_ISDIR</code>
 </li><li>
-<code>__NEED_OPENDIR_PROTOTYPE</code> &rArr; <code>CS_WIN32_USE_CUSTOM_OPENDIR</code>
+<code>__NEED_OPENDIR_PROTOTYPE</code> =&gt; <code>CS_WIN32_USE_CUSTOM_OPENDIR</code>
 </li><li>
-<code>OS_DOS</code> &rArr; <code>CS_PLATFORM_DOS</code>
+<code>OS_DOS</code> =&gt; <code>CS_PLATFORM_DOS</code>
 </li><li>
-<code>OS_MACOSX</code> &rArr; <code>CS_PLATFORM_MACOSX</code>
+<code>OS_MACOSX</code> =&gt; <code>CS_PLATFORM_MACOSX</code>
 </li><li>
-<code>OS_UNIX</code> &rArr; <code>CS_PLATFORM_UNIX</code>
+<code>OS_UNIX</code> =&gt; <code>CS_PLATFORM_UNIX</code>
 </li><li>
-<code>OS_WIN32</code> &rArr; <code>CS_PLATFORM_WIN32</code>
+<code>OS_WIN32</code> =&gt; <code>CS_PLATFORM_WIN32</code>
 </li><li>
-<code>PATH_DELIMITER</code> &rArr; <code>CS_PATH_DELIMITER</code>
+<code>PATH_DELIMITER</code> =&gt; <code>CS_PATH_DELIMITER</code>
 </li><li>
-<code>PATH_SEPARATOR</code> &rArr; <code>CS_PATH_SEPARATOR</code>
+<code>PATH_SEPARATOR</code> =&gt; <code>CS_PATH_SEPARATOR</code>
 </li><li>
-<code>PROC_arch</code> &rArr; <code>CS_PROCESSOR_arch</code> (where <samp>`arch'</samp> is
+<code>PROC_arch</code> =&gt; <code>CS_PROCESSOR_arch</code> (where <samp>`arch'</samp> is
 <samp>`X86'</samp>, <samp>`M68K'</samp>, etc.)
 </li><li>
-<code>ProcEventHandler()</code> &rArr; <code>csProcTexEventHandler</code>
+<code>ProcEventHandler()</code> =&gt; <code>csProcTexEventHandler</code>
 </li><li>
-<code>QInt()</code> &rArr; <code>csQint()</code>
+<code>QInt()</code> =&gt; <code>csQint()</code>
 </li><li>
-<code>QInt8()</code> &rArr; <code>csQfixed8()</code>
+<code>QInt8()</code> =&gt; <code>csQfixed8()</code>
 </li><li>
-<code>QInt16()</code> &rArr; <code>csQfixed16()</code>
+<code>QInt16()</code> =&gt; <code>csQfixed16()</code>
 </li><li>
-<code>QInt24()</code> &rArr; <code>csQfixed24()</code>
+<code>QInt24()</code> =&gt; <code>csQfixed24()</code>
 </li><li>
-<code>qisqrt()</code> &rArr; <code>csQisqrt()</code>
+<code>qisqrt()</code> =&gt; <code>csQisqrt()</code>
 </li><li>
-<code>QRound()</code> &rArr; <code>csQround()</code>
+<code>QRound()</code> =&gt; <code>csQround()</code>
 </li><li>
-<code>qsqrt()</code> &rArr; <code>csQsqrt()</code>
+<code>qsqrt()</code> =&gt; <code>csQsqrt()</code>
 </li><li>
-<code>RegisterMemoryTrackerModule()</code> &rArr; <code>mtiRegisterModule()</code>
+<code>RegisterMemoryTrackerModule()</code> =&gt; <code>mtiRegisterModule()</code>
 </li><li>
-<code>set_le_float16()</code> &rArr; <code>csSetLittleEndianFloat16()</code>
+<code>set_le_float16()</code> =&gt; <code>csSetLittleEndianFloat16()</code>
 </li><li>
-<code>set_le_float32()</code> &rArr; <code>csSetLittleEndianFloat32()</code>
+<code>set_le_float32()</code> =&gt; <code>csSetLittleEndianFloat32()</code>
 </li><li>
-<code>set_le_long()</code> &rArr; <code>csSetLittleEndianLong()</code>
+<code>set_le_long()</code> =&gt; <code>csSetLittleEndianLong()</code>
 </li><li>
-<code>set_le_short()</code> &rArr; <code>csSetLittleEndianShort()</code>
+<code>set_le_short()</code> =&gt; <code>csSetLittleEndianShort()</code>
 </li><li>
-<code>short2float()</code> &rArr; <code>csShortToFloat()</code>
+<code>short2float()</code> =&gt; <code>csShortToFloat()</code>
 </li><li>
-<code>TEMP_DIR</code> &rArr; <code>CS_TEMP_DIR</code>
+<code>TEMP_DIR</code> =&gt; <code>CS_TEMP_DIR</code>
 </li><li>
-<code>TEMP_FILE</code> &rArr; <code>CS_TEMP_FILE</code>
+<code>TEMP_FILE</code> =&gt; <code>CS_TEMP_FILE</code>
 </li><li>
-<code>UnMemoryMapFile()</code> &rArr; <code>csUnMemoryMapFile()</code>
+<code>UnMemoryMapFile()</code> =&gt; <code>csUnMemoryMapFile()</code>
 </li><li>
-<code>WIN32_VOLATILE</code> &rArr; <code>CS_WIN32_CSCONFIG</code>
+<code>WIN32_VOLATILE</code> =&gt; <code>CS_WIN32_CSCONFIG</code>
 </li></ul>
 
 <a name="SEC813"></a>
@@ -763,7 +763,7 @@ the first element, like all other elements, is accessed by an invocation of
 <p>Old code which accessed the elements of a <code>csList&lt;&gt;::Iterator</code> required a
 non-standard idiom, such as:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csList&lt;sometype&gt; list = &hellip;;
+<table><tr><td>&nbsp;</td><td><pre class="example">csList&lt;sometype&gt; list = ...;
 csList&lt;sometype&gt;::Iterator it(list);
 if (it.HasCurrent())
 {
@@ -836,15 +836,15 @@ plugins:
 </p>
 <ul>
 <li>
-<code>crystalspace.mesh.object.nullmesh</code> &rArr;
+<code>crystalspace.mesh.object.nullmesh</code> =&gt;
 <code>crystalspace.mesh.object.null</code>
 </li><li>
-<code>crystalspace.graphics2d.null2d</code> &rArr;
+<code>crystalspace.graphics2d.null2d</code> =&gt;
 <code>crystalspace.graphics2d.null</code>
 </li><li>
-<code>crystalspace.documentsystem.multiplex</code> &rArr;
+<code>crystalspace.documentsystem.multiplex</code> =&gt;
 <code>crystalspace.documentsystem.multiplexer</code>
-<code>crystalspace.graphic.image.io.multiplex</code> &rArr;
+<code>crystalspace.graphic.image.io.multiplex</code> =&gt;
 <code>crystalspace.graphic.image.io.multiplexer</code>
 </li></ul>
 
@@ -853,39 +853,39 @@ following methods have been renamed:
 </p>
 <ul>
 <li>
-<code>csArray&lt;&gt;::Length()</code> &rArr; <code>csArray&lt;&gt;::GetSize()</code>
+<code>csArray&lt;&gt;::Length()</code> =&gt; <code>csArray&lt;&gt;::GetSize()</code>
 </li><li>
-<code>csArray&lt;&gt;::SetLength()</code> &rArr; <code>csArray&lt;&gt;::SetSize()</code>
+<code>csArray&lt;&gt;::SetLength()</code> =&gt; <code>csArray&lt;&gt;::SetSize()</code>
 </li><li>
-<code>csHash&lt;&gt;::DeleteAll()</code> &rArr; <code>csHash&lt;&gt;::Empty()</code>
+<code>csHash&lt;&gt;::DeleteAll()</code> =&gt; <code>csHash&lt;&gt;::Empty()</code>
 </li><li>
-<code>csHash&lt;&gt;::In()</code> &rArr; <code>csHash&lt;&gt;::Contains()</code>
+<code>csHash&lt;&gt;::In()</code> =&gt; <code>csHash&lt;&gt;::Contains()</code>
 </li><li>
-<code>csHash&lt;&gt;::PutFirst()</code> &rArr; <code>csHash&lt;&gt;::PutUnique()</code>
+<code>csHash&lt;&gt;::PutFirst()</code> =&gt; <code>csHash&lt;&gt;::PutUnique()</code>
 </li><li>
-<code>csList&lt;&gt;::FetchPrev()</code> &rArr; <code>csList&lt;&gt;::FetchPrevious()</code>
+<code>csList&lt;&gt;::FetchPrev()</code> =&gt; <code>csList&lt;&gt;::FetchPrevious()</code>
 </li><li>
-<code>csList&lt;&gt;::HasPrev()</code> &rArr; <code>csList&lt;&gt;::HasPrevious()</code>
+<code>csList&lt;&gt;::HasPrev()</code> =&gt; <code>csList&lt;&gt;::HasPrevious()</code>
 </li><li>
-<code>csSet&lt;&gt;::DeleteAll()</code> &rArr; <code>csSet&lt;&gt;::Empty()</code>
+<code>csSet&lt;&gt;::DeleteAll()</code> =&gt; <code>csSet&lt;&gt;::Empty()</code>
 </li><li>
-<code>csSet&lt;&gt;::In()</code> &rArr; <code>csSet&lt;&gt;::Contains()</code>
+<code>csSet&lt;&gt;::In()</code> =&gt; <code>csSet&lt;&gt;::Contains()</code>
 </li><li>
-<code>csString::Clear()</code> &rArr; <code>csString::Empty()</code>
+<code>csString::Clear()</code> =&gt; <code>csString::Empty()</code>
 </li><li>
-<code>csString::FindReplace()</code> &rArr; <code>csString::ReplaceAll()</code>
+<code>csString::FindReplace()</code> =&gt; <code>csString::ReplaceAll()</code>
 </li><li>
-<code>csString::FindStr()</code> &rArr; <code>csString::Find()</code>
+<code>csString::FindStr()</code> =&gt; <code>csString::Find()</code>
 </li><li>
-<code>csString::Reclaim()</code> &rArr; <code>csString::ShrinkBestFit()</code>
+<code>csString::Reclaim()</code> =&gt; <code>csString::ShrinkBestFit()</code>
 </li><li>
-<code>iString::FindReplace()</code> &rArr; <code>iString::ReplaceAll()</code>
+<code>iString::FindReplace()</code> =&gt; <code>iString::ReplaceAll()</code>
 </li><li>
-<code>iString::FindStr()</code> &rArr; <code>iString::Find()</code>
+<code>iString::FindStr()</code> =&gt; <code>iString::Find()</code>
 </li><li>
-<code>iStringArray::DeleteAll()</code> &rArr; <code>iStringArray::Empty()</code>
+<code>iStringArray::DeleteAll()</code> =&gt; <code>iStringArray::Empty()</code>
 </li><li>
-<code>iStringSet::Clear()</code> &rArr; <code>iStringSet::Empty()</code>
+<code>iStringSet::Clear()</code> =&gt; <code>iStringSet::Empty()</code>
 </li></ul>
 
 
@@ -899,7 +899,7 @@ learn about newly available functionality.
 </p>
 <ul>
 <li>
-<code>csFindReplace()</code> &rArr; <code>csReplaceAll()</code>
+<code>csFindReplace()</code> =&gt; <code>csReplaceAll()</code>
 </li></ul>
 
 <p>For consistency with like-named methods in other <small>SCF</small> interfaces, the
@@ -907,9 +907,9 @@ following <samp>`iImage'</samp> methods have been renamed:
 </p>
 <ul>
 <li>
-<code>GetKeycolor()</code> &rArr; <code>GetKeyColor()</code>
+<code>GetKeycolor()</code> =&gt; <code>GetKeyColor()</code>
 </li><li>
-<code>HasKeycolor()</code> &rArr; <code>HasKeyColor()</code>
+<code>HasKeycolor()</code> =&gt; <code>HasKeyColor()</code>
 </li></ul>
 
 <p>Various methods in <samp>`csIntersect3'</samp> have been renamed in order to improve
@@ -919,51 +919,55 @@ first the segment argument followed by the triangle argument.
 </p>
 <ul>
 <li>
-<code>AxisPlane()</code> &rArr; <code>SegmentAxisPlane()</code>
+<code>AxisPlane()</code> =&gt; <code>SegmentAxisPlane()</code>
 </li><li>
-<code>IntersectPolygon()</code> &rArr; <code>PlanePolygon()</code> (plane version)
+<code>IntersectPolygon()</code> =&gt; <code>PlanePolygon()</code> (plane version)
 </li><li>
-<code>IntersectPolygon()</code> &rArr; <code>SegmentPolygon()</code> (segment version)
+<code>IntersectPolygon()</code> =&gt; <code>SegmentPolygon()</code> (segment version)
 </li><li>
-<code>IntersectSegment()</code> &rArr; <code>SegmentFrustum()</code>
+<code>IntersectSegment()</code> =&gt; <code>SegmentFrustum()</code>
 </li><li>
-<code>IntersectTriangle()</code> &rArr; <code>SegmentTriangle()</code>
+<code>IntersectTriangle()</code> =&gt; <code>SegmentTriangle()</code>
 </li><li>
-<code>Plane()</code> &rArr; <code>SegmentPlane()</code>
+<code>Plane()</code> =&gt; <code>SegmentPlane()</code>
 </li><li>
-<code>Planes()</code> &rArr; <code>SegmentPlanes()</code> (segment version)
+<code>Planes()</code> =&gt; <code>SegmentPlanes()</code> (segment version)
 </li><li>
-<code>Planes()</code> &rArr; <code>ThreePlanes()</code> (three planes version)
+<code>Planes()</code> =&gt; <code>ThreePlanes()</code> (three planes version)
 </li><li>
-<code>XFrustum()</code> &rArr; <code>SegmentXFrustum()</code>
+<code>XFrustum()</code> =&gt; <code>SegmentXFrustum()</code>
 </li><li>
-<code>XPlane()</code> &rArr; <code>SegmentXPlane()</code>
+<code>XPlane()</code> =&gt; <code>SegmentXPlane()</code>
 </li><li>
-<code>YFrustum()</code> &rArr; <code>SegmentYFrustum()</code>
+<code>YFrustum()</code> =&gt; <code>SegmentYFrustum()</code>
 </li><li>
-<code>YPlane()</code> &rArr; <code>SegmentYPlane()</code>
+<code>YPlane()</code> =&gt; <code>SegmentYPlane()</code>
 </li><li>
-<code>Z0Plane()</code> &rArr; <code>SegmentZ0Plane()</code>
+<code>Z0Plane()</code> =&gt; <code>SegmentZ0Plane()</code>
 </li><li>
-<code>ZPlane()</code> &rArr; <code>SegmentZPlane()</code>
+<code>ZPlane()</code> =&gt; <code>SegmentZPlane()</code>
 </li></ul>
 
+<p>In addition to that the function <code>csMath3::FindIntersection()</code> has been
+removed and is replaced with a new <code>csIntersect3::TriangleTriangle()</code>
+routine which is faster and more correct.
+</p>
 
 <p>The same improvements have been made to <code>csIntersect2</code>:
 </p>
 <ul>
 <li>
-<code>IntersectPolygon()</code> &rArr; <code>PlanePolygon()</code> (plane version)
+<code>IntersectPolygon()</code> =&gt; <code>PlanePolygon()</code> (plane version)
 </li><li>
-<code>Lines()</code> &rArr; <code>LineLine()</code> (plane version)
+<code>Lines()</code> =&gt; <code>LineLine()</code> (plane version)
 </li><li>
-<code>Plane()</code> &rArr; <code>SegmentPlane()</code>
+<code>Plane()</code> =&gt; <code>SegmentPlane()</code>
 </li><li>
-<code>PlaneNoTest()</code> &rArr; <code>SegmentPlaneNoTest()</code>
+<code>PlaneNoTest()</code> =&gt; <code>SegmentPlaneNoTest()</code>
 </li><li>
-<code>Planes()</code> &rArr; <code>PlanePlane()</code>
+<code>Planes()</code> =&gt; <code>PlanePlane()</code>
 </li><li>
-<code>Segments()</code> &rArr; <code>SegmentSegment()</code> (plane version)
+<code>Segments()</code> =&gt; <code>SegmentSegment()</code> (plane version)
 </li></ul>
 
 <p>The following configuration control macros (most of which are emitted to
@@ -973,39 +977,39 @@ closely to naming scheme used by Autoconf.
 </p>
 <ul>
 <li>
-<code>CS_HAS_CAL3D</code> &rArr; <code>CS_HAVE_CAL3D</code>
+<code>CS_HAS_CAL3D</code> =&gt; <code>CS_HAVE_CAL3D</code>
 </li><li>
-<code>CS_HAS_CMATH_H</code> &rArr; <code>CS_HAVE_CMATH_H</code>
+<code>CS_HAS_CMATH_H</code> =&gt; <code>CS_HAVE_CMATH_H</code>
 </li><li>
-<code>CS_HAS_GLHANDLEARB_T</code> &rArr; <code>CS_HAVE_GLHANDLEARB_T</code>
+<code>CS_HAS_GLHANDLEARB_T</code> =&gt; <code>CS_HAVE_GLHANDLEARB_T</code>
 </li><li>
-<code>CS_HAS_INT64_C</code> &rArr; <code>CS_HAVE_INT64_C</code>
+<code>CS_HAS_INT64_C</code> =&gt; <code>CS_HAVE_INT64_C</code>
 </li><li>
-<code>CS_HAS_INTMAX_T</code> &rArr; <code>CS_HAVE_INTMAX_T</code>
+<code>CS_HAS_INTMAX_T</code> =&gt; <code>CS_HAVE_INTMAX_T</code>
 </li><li>
-<code>CS_HAS_INTPTR_T</code> &rArr; <code>CS_HAVE_INTPTR_T</code>
+<code>CS_HAS_INTPTR_T</code> =&gt; <code>CS_HAVE_INTPTR_T</code>
 </li><li>
-<code>CS_HAS_INTTYPES_H</code> &rArr; <code>CS_HAVE_INTTYPES_H</code>
+<code>CS_HAS_INTTYPES_H</code> =&gt; <code>CS_HAVE_INTTYPES_H</code>
 </li><li>
-<code>CS_HAS_MACHINE_SOUNDCARD_H</code> &rArr; <code>CS_HAVE_MACHINE_SOUNDCARD_H</code>
+<code>CS_HAS_MACHINE_SOUNDCARD_H</code> =&gt; <code>CS_HAVE_MACHINE_SOUNDCARD_H</code>
 </li><li>
-<code>CS_HAS_MEMORY_MAPPED_IO</code> &rArr; <code>CS_HAVE_MEMORY_MAPPED_IO</code>
+<code>CS_HAS_MEMORY_MAPPED_IO</code> =&gt; <code>CS_HAVE_MEMORY_MAPPED_IO</code>
 </li><li>
-<code>CS_HAS_POSIX_MMAP</code> &rArr; <code>CS_HAVE_POSIX_MMAP</code>
+<code>CS_HAS_POSIX_MMAP</code> =&gt; <code>CS_HAVE_POSIX_MMAP</code>
 </li><li>
-<code>CS_HAS_REGEX</code> &rArr; <code>CS_HAVE_REGEX</code>
+<code>CS_HAS_REGEX</code> =&gt; <code>CS_HAVE_REGEX</code>
 </li><li>
-<code>CS_HAS_SOUNDCARD_H</code> &rArr; <code>CS_HAVE_SOUNDCARD_H</code>
+<code>CS_HAS_SOUNDCARD_H</code> =&gt; <code>CS_HAVE_SOUNDCARD_H</code>
 </li><li>
-<code>CS_HAS_STDINT_H</code> &rArr; <code>CS_HAVE_STDINT_H</code>
+<code>CS_HAS_STDINT_H</code> =&gt; <code>CS_HAVE_STDINT_H</code>
 </li><li>
-<code>CS_HAS_SYS_PARAM_H</code> &rArr; <code>CS_HAVE_SYS_PARAM_H</code>
+<code>CS_HAS_SYS_PARAM_H</code> =&gt; <code>CS_HAVE_SYS_PARAM_H</code>
 </li><li>
-<code>CS_HAS_SYS_SOUNDCARD_H</code> &rArr; <code>CS_HAVE_SYS_SOUNDCARD_H</code>
+<code>CS_HAS_SYS_SOUNDCARD_H</code> =&gt; <code>CS_HAVE_SYS_SOUNDCARD_H</code>
 </li><li>
-<code>CS_HAS_WCHAR_H</code> &rArr; <code>CS_HAVE_WCHAR_H</code>
+<code>CS_HAS_WCHAR_H</code> =&gt; <code>CS_HAVE_WCHAR_H</code>
 </li><li>
-<code>CS_RTLD_NOW_AVAILABLE</code> &rArr; <code>CS_HAVE_RTLD_NOW</code>
+<code>CS_RTLD_NOW_AVAILABLE</code> =&gt; <code>CS_HAVE_RTLD_NOW</code>
 </li></ul>
 
 
@@ -1016,20 +1020,20 @@ name change.
 </p>
 <ul>
 <li>
-<code>CS_USE_FAKE_EXPLICIT_KEYWORD</code> &rArr;
+<code>CS_USE_FAKE_EXPLICIT_KEYWORD</code> =&gt;
 <code>CS_HAVE_CXX_KEYWORD_EXPLICIT</code>
 </li><li>
-<code>CS_USE_FAKE_MATH_H_FLOAT_FUNCS</code> &rArr;
+<code>CS_USE_FAKE_MATH_H_FLOAT_FUNCS</code> =&gt;
 <code>CS_HAVE_MATH_H_FLOAT_FUNCS</code>
 </li><li>
-<code>CS_USE_FAKE_SOCKLEN_TYPE</code> &rArr; <code>CS_HAVE_SOCKLEN_T</code>
+<code>CS_USE_FAKE_SOCKLEN_TYPE</code> =&gt; <code>CS_HAVE_SOCKLEN_T</code>
 </li><li>
-<code>CS_USE_FAKE_TYPENAME_KEYWORD</code> &rArr;
+<code>CS_USE_FAKE_TYPENAME_KEYWORD</code> =&gt;
 <code>CS_HAVE_CXX_KEYWORD_TYPENAME</code>
 </li><li>
-<code>CS_USE_FAKE_WCHAR_TYPE</code> &rArr; <code>CS_HAVE_WCHAR_T</code>
+<code>CS_USE_FAKE_WCHAR_TYPE</code> =&gt; <code>CS_HAVE_WCHAR_T</code>
 </li><li>
-<code>CS_USE_FAKE_WCSLEN</code> &rArr; <code>CS_HAVE_WCSLEN</code>
+<code>CS_USE_FAKE_WCSLEN</code> =&gt; <code>CS_HAVE_WCSLEN</code>
 </li></ul>
 
 <p>For consistency with like-named macros (such as <samp>`CS_PROCESSOR_NAME'</samp> and
@@ -1037,7 +1041,7 @@ name change.
 </p>
 <ul>
 <li>
-<code>CS_PROCSIZE</code> &rArr; <code>CS_PROCESSOR_SIZE</code>
+<code>CS_PROCSIZE</code> =&gt; <code>CS_PROCESSOR_SIZE</code>
 </li></ul>
 
 <a name="SEC824"></a>
@@ -1099,19 +1103,19 @@ by the unwary when fixing code to deal with this semantic change. Conditionals
 which test if retrieval of an attribute succeeded must be changed to take this
 new semantic into account. For instance, code such as the following:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = &hellip;;
-if (ev-&gt;Find(&hellip;))
+<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = ...;
+if (ev-&gt;Find(...))
 {
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 
 <p>must be changed to perform an explicit test on the return value of
 <code>Retrieve()</code>, rather than relying upon default boolean semantics:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">if (ev-&gt;Retrieve(&hellip;) == csEventErrNone)
+<table><tr><td>&nbsp;</td><td><pre class="example">if (ev-&gt;Retrieve(...) == csEventErrNone)
 {
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 <a name="SEC829"></a>
@@ -1159,16 +1163,16 @@ provide more information.
 </p>
 <ul>
 <li>
-<code>or_lighting.xml</code> &rArr; <code>std_lighting.xml</code>
+<code>or_lighting.xml</code> =&gt; <code>std_lighting.xml</code>
 </li><li>
-<code>or_lighting_detail.xml</code> &rArr; <code>std_lighting_detail.xml</code>
+<code>or_lighting_detail.xml</code> =&gt; <code>std_lighting_detail.xml</code>
 </li><li>
-<code>or_lighting_detail_add.xml</code> &rArr; <code>std_lighting_detail_add.xml</code>
+<code>or_lighting_detail_add.xml</code> =&gt; <code>std_lighting_detail_add.xml</code>
 </li><li>
-<code>or_lighting_detail_alpha.xml</code> &rArr;
+<code>or_lighting_detail_alpha.xml</code> =&gt;
 <code>std_lighting_detail_alpha.xml</code>
 </li><li>
-<code>or_lighting_portal.xml</code> &rArr; <code>std_lighting_portal.xml</code>
+<code>or_lighting_portal.xml</code> =&gt; <code>std_lighting_portal.xml</code>
 </li></ul>
 
 <a name="SEC833"></a>
@@ -1351,13 +1355,13 @@ attenuation modes.
 has been replaced by the templated class <code>csTypedObjectIterator&lt;&gt;</code>. Given
 existing code, such as:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iObject* parent = &hellip;;
+<table><tr><td>&nbsp;</td><td><pre class="example">iObject* parent = ...;
 CS_DECLARE_OBJECT_ITERATOR(MyFooIter, iFoo);
 MyFooIter iter(parent);
 while (iter.HasNext())
 {
   iFoo* foo = iter.Next();
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 
@@ -1447,7 +1451,7 @@ undefined).
 <samp>`primary color'</samp>, <samp>`lit color'</samp>, <samp>`texture coordinate n'</samp> (where 0 &lt;=
 n &lt; 3), <samp>`texture coordinate lightmap'</samp>, <samp>`generic n'</samp> (where 0 &lt;= n &lt;
 3), <samp>`binormal'</samp>, and <samp>`tangent'</samp>. These appear in the
-<samp>`source=&quot;&hellip;&quot;'</samp> tag within the <small>XML</small> shader description.
+<samp>`source=&quot;<small class="dots">...</small>&quot;'</samp> tag within the <small>XML</small> shader description.
 </p>
 <p>Mapping of custom buffers is accomplished as so:
 </p>
@@ -1469,11 +1473,11 @@ the mesh provides them). They are:
 </p>
 <ul>
 <li>
-<samp>`position'</samp> &rArr; <samp>`position'</samp>
+<samp>`position'</samp> =&gt; <samp>`position'</samp>
 </li><li>
-<samp>`color'</samp> &rArr; <samp>`primary color'</samp>
+<samp>`color'</samp> =&gt; <samp>`primary color'</samp>
 </li><li>
-<samp>`texture coordinate 0'</samp> &rArr; <samp>`texture coordinate 0'</samp>
+<samp>`texture coordinate 0'</samp> =&gt; <samp>`texture coordinate 0'</samp>
 </li></ul>
 
 <a name="SEC844"></a>
@@ -1543,8 +1547,8 @@ usually quite simple. Where your code presently declares a variable or casts a
 value to <samp>`void*'</samp>, change it to <samp>`intptr_t'</samp>. Likewise, <samp>`void**'</samp>
 becomes <samp>`intptr_t*'</samp>. For example:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iGraphics2D canvas = &hellip;;
-iEventOutlet* outlet = &hellip;;
+<table><tr><td>&nbsp;</td><td><pre class="example">iGraphics2D canvas = ...;
+iEventOutlet* outlet = ...;
 outlet-&gt;Broadcast(cscmdCanvasExposed, (void*)canvas);
 </pre></td></tr></table>
 

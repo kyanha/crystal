@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 <html>
-<!-- Created on April, 19 2005 by texi2html 1.76 -->
+<!-- Created on April, 20 2005 by texi2html 1.76 -->
 <!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
@@ -109,7 +109,7 @@ Also curves have been separated from the thing plugin and now live in the
     &lt;curvecenter x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot; /&gt;
     &lt;curvescale&gt;80&lt;/curvescale&gt;
     &lt;curvecontrol x=&quot;5&quot; y=&quot;2&quot; z=&quot;0&quot; u=&quot;1&quot; v=&quot;0&quot; /&gt;
-    &hellip;
+    ...
     &lt;curve name=&quot;bez&quot;&gt;b1&lt;/curve&gt;
   &lt;/params&gt;
 &lt;/meshfact&gt;
@@ -123,7 +123,7 @@ Also curves have been separated from the thing plugin and now live in the
     &lt;curvecenter x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot; /&gt;
     &lt;curvescale&gt;80&lt;/curvescale&gt;
     &lt;curvecontrol x=&quot;5&quot; y=&quot;2&quot; z=&quot;0&quot; u=&quot;1&quot; v=&quot;0&quot; /&gt;
-    &hellip;
+    ...
     &lt;curve name=&quot;b1&quot;&gt;
       &lt;material&gt;mosaic&lt;/material&gt;
       &lt;v&gt;0&lt;/v&gt; &lt;v&gt;1&lt;/v&gt; &lt;v&gt;2&lt;/v&gt;
@@ -174,32 +174,32 @@ manipulate polygons.  Here is an example:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">  iPolygon3D* p;
   p = state-&gt;CreatePolygon (&quot;First one&quot;);
-  p-&gt;CreateVertex (csVector3 (&hellip;));
-  p-&gt;CreateVertex (csVector3 (&hellip;));
-  p-&gt;CreateVertex (csVector3 (&hellip;));
-  p-&gt;CreateVertex (csVector3 (&hellip;));
+  p-&gt;CreateVertex (csVector3 (...));
+  p-&gt;CreateVertex (csVector3 (...));
+  p-&gt;CreateVertex (csVector3 (...));
+  p-&gt;CreateVertex (csVector3 (...));
   p-&gt;SetMaterial (mat);
   p = state-&gt;CreatePolygon (&quot;Second one&quot;);
-  p-&gt;CreateVertex (csVector3 (&hellip;));
-  p-&gt;CreateVertex (csVector3 (&hellip;));
-  p-&gt;CreateVertex (csVector3 (&hellip;));
-  p-&gt;CreateVertex (csVector3 (&hellip;));
+  p-&gt;CreateVertex (csVector3 (...));
+  p-&gt;CreateVertex (csVector3 (...));
+  p-&gt;CreateVertex (csVector3 (...));
+  p-&gt;CreateVertex (csVector3 (...));
   p-&gt;SetMaterial (mat);
-  &hellip;
+  ...
 </pre></td></tr></table>
 <p>Here is the new code:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">  state-&gt;AddQuad (
-    csVector3 (&hellip;),
-    csVector3 (&hellip;),
-    csVector3 (&hellip;),
-    csVector3 (&hellip;));
+    csVector3 (...),
+    csVector3 (...),
+    csVector3 (...),
+    csVector3 (...));
   state-&gt;SetPolygonName (CS_POLYRANGE_LAST, &quot;First one&quot;);
   state-&gt;AddQuad (
-    csVector3 (&hellip;),
-    csVector3 (&hellip;),
-    csVector3 (&hellip;),
-    csVector3 (&hellip;));
+    csVector3 (...),
+    csVector3 (...),
+    csVector3 (...),
+    csVector3 (...));
   state-&gt;SetPolygonName (CS_POLYRANGE_LAST, &quot;Second one&quot;);
   state-&gt;SetPolygonMaterial (CS_POLYRANGE_ALL, mat);
 </pre></td></tr></table>
@@ -315,21 +315,21 @@ functions <code>iEngine::CreatePortal()</code> and
 <code>iEngine::CreatePortalContainer()</code>. Here is an example of old code
 and how to change it to new code:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">  &hellip; create thing in sourceSector &hellip;
+<table><tr><td>&nbsp;</td><td><pre class="example">  ... create thing in sourceSector ...
   iPolygon3D* p = state-&gt;CreatePolygon ();
-  p-&gt;CreateVertex (csVector3 (&hellip;));
-  p-&gt;CreateVertex (csVector3 (&hellip;));
-  p-&gt;CreateVertex (csVector3 (&hellip;));
-  p-&gt;CreateVertex (csVector3 (&hellip;));
+  p-&gt;CreateVertex (csVector3 (...));
+  p-&gt;CreateVertex (csVector3 (...));
+  p-&gt;CreateVertex (csVector3 (...));
+  p-&gt;CreateVertex (csVector3 (...));
   iPortal* portal = p-&gt;CreatePortal (destSector);
 </pre></td></tr></table>
 <p>New code:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">  csPoly3D poly;
-  poly.AddVertex (csVector3 (&hellip;));
-  poly.AddVertex (csVector3 (&hellip;));
-  poly.AddVertex (csVector3 (&hellip;));
-  poly.AddVertex (csVector3 (&hellip;));
+  poly.AddVertex (csVector3 (...));
+  poly.AddVertex (csVector3 (...));
+  poly.AddVertex (csVector3 (...));
+  poly.AddVertex (csVector3 (...));
   iPortal* portal;
   csRef&lt;iMeshWrapper&gt; portal_mesh = engine-&gt;CreatePortal (
         &quot;my_portal&quot;, sourceSector, csVector3 (0, 0, 0),
@@ -560,11 +560,11 @@ public:
   }
   virtual int Compare (void* i1, void* i2, int mode) const
   {
-    &hellip;
+    ...
   }
   virtual int CompareKey (void* i, const void* key, int mode) const
   {
-    &hellip;
+    ...
   }
 };
 </pre></td></tr></table>
@@ -576,11 +576,11 @@ public:
 public:
   static int Compare (MyType const&amp; i1, MyType const&amp; i2)
   {
-    &hellip;
+    ...
   }
   static int CompareKey (MyType const&amp; i, MyKey const&amp; key)
   {
-    &hellip;
+    ...
   }
 };
 </pre></td></tr></table>
@@ -589,10 +589,10 @@ accept an optional comparison function (<code>MyVector::Compare()</code>, in the
 example).  To use a custom comparison function, invoke these functions like
 this:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">MyVector v = &hellip;;
+<table><tr><td>&nbsp;</td><td><pre class="example">MyVector v = ...;
 v.Sort(MyVector::Compare);
-&hellip;
-MyType o = &hellip;;
+...
+MyType o = ...;
 v.InsertSorted(o, MyVector::Compare);
 </pre></td></tr></table>
 
@@ -609,8 +609,8 @@ you are searching and an optional comparison function
 this:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">int r;
-MyKey key = &hellip;;
-MyVector v = &hellip;;
+MyKey key = ...;
+MyVector v = ...;
 r = v.FindKey(csArrayCmp&lt;MyType,MyKey&gt;(key, MyVector::CompareKey));
 r = v.FindSortedKey(
               csArrayCmp&lt;MyType,MyKey&gt;(key, MyVector::CompareKey));
@@ -633,7 +633,7 @@ For example, if you have an array of integers which you want to sort and then
 search, you can use the default comparison semantics, rather than writing a
 custom comparison function, as shown here:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;int&gt; v = &hellip;;
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;int&gt; v = ...;
 v.Sort();
 int r = v.FindSortedKey(csArrayCmp&lt;int,int&gt;(33));
 </pre></td></tr></table>
@@ -809,7 +809,7 @@ desire to publish <em>image indentification</em> information which would allow t
 image loading multiplexor to selectively request image loading plugins
 <em>on-demand</em>, rather than requesting all plugins unconditionally, even if
 they are not needed.  Here is a possible meta-information table for a <small>PNG</small>
-image loader (with the <code>&lt;scf&gt;</code> node collapsed to <samp>`&hellip;'</samp> for the
+image loader (with the <code>&lt;scf&gt;</code> node collapsed to <samp>`<small class="dots">...</small>'</samp> for the
 sake of illustration):
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;?xml version=&quot;1.0&quot;?&gt;
@@ -1048,9 +1048,9 @@ straight forward.  For example:
 </p>
 <ul>
 <li>
-<code>iFoo_VERSION</code> &rArr; <code>scfInterface&lt;iFoo&gt;::GetVersion()</code>
+<code>iFoo_VERSION</code> =&gt; <code>scfInterface&lt;iFoo&gt;::GetVersion()</code>
 </li><li>
-<code>iFoo_scfGetID()</code> &rArr; <code>scfInterface&lt;iFoo&gt;::GetID()</code>
+<code>iFoo_scfGetID()</code> =&gt; <code>scfInterface&lt;iFoo&gt;::GetID()</code>
 </li></ul>
 
 <p>A consequence of this change is that it is no longer possible to invoke the
@@ -1064,7 +1064,7 @@ namespace MyProject
 {
   struct iMyInterface : public iBase
   {
-    &hellip;
+    ...
   };
 }
 
@@ -1116,7 +1116,7 @@ CS_IMPLEMENT_APPLICATION
 
 class MyApp : public csApplicationFramework
 {
-  /* &hellip; */
+  /* ... */
 };
 
 int main (int argc, char* argv[]) 
@@ -1376,7 +1376,7 @@ documentation in the Event Handling and Keyboard Events sections.
 <p>To understand how to adjust your code for these changes, see the following
 examples.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iEvent&amp; e = &hellip;;
+<table><tr><td>&nbsp;</td><td><pre class="example">iEvent&amp; e = ...;
 if (e.Type == csevKeyDown &amp;&amp; e.Key.Code == CSKEY_ESC)
 {
 </pre></td></tr></table>
@@ -1389,7 +1389,7 @@ if (e.Type == csevKeyDown &amp;&amp; e.Key.Code == CSKEY_ESC)
 {
 </pre></td></tr></table>
 <p>Another example:
-</p><table><tr><td>&nbsp;</td><td><pre class="example">iEvent&amp; e = &hellip;;
+</p><table><tr><td>&nbsp;</td><td><pre class="example">iEvent&amp; e = ...;
 switch (e.Type)
 {
   case csevKeyDown:
@@ -1438,13 +1438,13 @@ global namespace.
 </p>
 <ul>
 <li>
-<code>STATIC_CAST()</code> &rArr; <code>CS_STATIC_CAST()</code>
+<code>STATIC_CAST()</code> =&gt; <code>CS_STATIC_CAST()</code>
 </li><li>
-<code>DYNAMIC_CAST()</code> &rArr; <code>CS_DYNAMIC_CAST()</code>
+<code>DYNAMIC_CAST()</code> =&gt; <code>CS_DYNAMIC_CAST()</code>
 </li><li>
-<code>REINTERPRET_CAST()</code> &rArr; <code>CS_REINTERPRET_CAST()</code>
+<code>REINTERPRET_CAST()</code> =&gt; <code>CS_REINTERPRET_CAST()</code>
 </li><li>
-<code>CONST_CAST()</code> &rArr; <code>CS_CONST_CAST()</code>
+<code>CONST_CAST()</code> =&gt; <code>CS_CONST_CAST()</code>
 </li></ul>
 
 <a name="SEC896"></a>
@@ -1470,13 +1470,13 @@ is created and returned.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iFont&gt; font = fontserver-&gt;LoadFont (&quot;myfont.ttf&quot;);
 font-&gt;SetSize (23);
-g2d-&gt;Write (font, &hellip;);
+g2d-&gt;Write (font, ...);
 </pre></td></tr></table>
 
 <p>Should be changed to:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iFont&gt; font = fontserver-&gt;LoadFont (&quot;myfont.ttf&quot;, 23);
-g2d-&gt;Write (font, &hellip;);
+g2d-&gt;Write (font, ...);
 </pre></td></tr></table>
 <a name="SEC898"></a>
 <h3 class="subheading"> Mesh flag change </h3>
