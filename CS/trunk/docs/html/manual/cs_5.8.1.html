@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 <html>
-<!-- Created on April, 19 2005 by texi2html 1.76 -->
+<!-- Created on April, 20 2005 by texi2html 1.76 -->
 <!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
@@ -85,7 +85,7 @@ so on). To do this you just declare in your main class:
 <table><tr><td>&nbsp;</td><td><pre class="example">class MyClass
 {
   csRef&lt;iEngine&gt; engine;
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 <p>Smart pointers do not need to be initialized, so there is no need to write
@@ -96,7 +96,7 @@ automatically when the instance of <code>MyClass</code> is destroyed.
 <p>Here is an example of assigning a valid object to the <samp>`engine'</samp> smart
 pointer and then utilizing that pointer (assuming the engine plugin is loaded):
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iObjectRegistry* object_reg = &hellip;;
+<table><tr><td>&nbsp;</td><td><pre class="example">iObjectRegistry* object_reg = ...;
 engine = CS_QUERY_REGISTRY (object_reg, iEngine);
 engine-&gt;CreateSector ();
 </pre></td></tr></table>
@@ -106,7 +106,7 @@ operations would have been performed before the introduction of smart pointers:
 <table><tr><td>&nbsp;</td><td><pre class="example">class MyClass
 {
   iEngine* engine;
-  &hellip;
+  ...
 }
 
 MyClass::MyClass ()
@@ -120,10 +120,10 @@ MyClass::~MyClass ()
     engine-&gt;DecRef ();
 }
 
-&hellip;
+...
 engine = CS_QUERY_REGISTRY (object_reg, iEngine);
-engine-&gt;CreateSector (); &hellip;
-&hellip;
+engine-&gt;CreateSector (); ...
+...
 </pre></td></tr></table>
 <p>The advantage might not seem huge but, in general, it is a <em>lot</em> easier to
 use smart pointers than to manually manipulate reference counts.  The nice
@@ -132,7 +132,7 @@ a normal pointer (i.e. you can do things like <code>engine-&gt;CreateSector()</c
 </p>
 <p>Here is another example illustrating smart pointers:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iMeshWrapper&gt; sprite(engine-&gt;CreateMeshWrapper(&hellip;));
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iMeshWrapper&gt; sprite(engine-&gt;CreateMeshWrapper(...));
 csRef&lt;iSprite3DState&gt; state (SCF_QUERY_INTERFACE (
     sprite-&gt;GetMeshObject (), iSprite3DState));
 state-&gt;SetAction (&quot;default&quot;);
@@ -158,9 +158,9 @@ created by the function on the caller's behalf.  For example:
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iFoo&gt; MyFunction ()
 {
   csRef&lt;iFoo&gt; foo;
-  foo.AttachNew(new Foo(&hellip;));
-  foo-&gt;FooMethod(&hellip;);
-  &hellip;
+  foo.AttachNew(new Foo(...));
+  foo-&gt;FooMethod(...);
+  ...
   return foo;
 }
 </pre></td></tr></table>
@@ -204,18 +204,18 @@ leaked, even if the caller neglects to assign it to a variable.
 <table><tr><td>&nbsp;</td><td><pre class="example">// An example interface and method.
 struct iEngine
 {
-  virtual csPtr&lt;iLight&gt; CreateLight (&hellip;) = 0;
-  &hellip;
+  virtual csPtr&lt;iLight&gt; CreateLight (...) = 0;
+  ...
 }
 
 // Assignment of csPtr&lt;&gt; to csRef&lt;&gt;.
-csRef&lt;iLight&gt; light (engine-&gt;CreateLight (&hellip;));
+csRef&lt;iLight&gt; light (engine-&gt;CreateLight (...));
 // or...
-csRef&lt;iLight&gt; light = engine-&gt;CreateLight (&hellip;);
+csRef&lt;iLight&gt; light = engine-&gt;CreateLight (...);
 // or...
 csRef&lt;iLight&gt; light;
-&hellip;
-light = engine-&gt;CreateLight (&hellip;);
+...
+light = engine-&gt;CreateLight (...);
 </pre></td></tr></table>
 <p>When a <code>csPtr&lt;&gt;</code> is assigned to a <code>csRef&lt;&gt;</code>, the reference owned by
 the <code>csPtr&lt;&gt;</code> is transferred to the <code>csRef&lt;&gt;</code> without an additional
@@ -231,8 +231,8 @@ sole argument.  This means that the following code is valid:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csPtr&lt;iFoo&gt; MyFunction ()
 {
-  csRef&lt;iFoo&gt; foo = &hellip;;
-  &hellip;
+  csRef&lt;iFoo&gt; foo = ...;
+  ...
   return csPtr&lt;iFoo&gt; (foo);
 }
 </pre></td></tr></table>
@@ -246,8 +246,8 @@ object.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">iFoo* MyFunction ()
 {
-  csRef&lt;iFoo&gt; foo = &hellip;;
-  &hellip;
+  csRef&lt;iFoo&gt; foo = ...;
+  ...
   return foo;
 }
 </pre></td></tr></table>
@@ -266,8 +266,8 @@ above example can be re-written so that it works correctly:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">iFoo* MyFunction ()
 {
-  csRef&lt;iFoo&gt; foo = &hellip;;
-  &hellip;
+  csRef&lt;iFoo&gt; foo = ...;
+  ...
   foo-&gt;IncRef();
   return foo;
 }
@@ -277,7 +277,7 @@ above example can be re-written so that it works correctly:
 assigning a newly allocated object to a <code>csRef&lt;&gt;</code>.  The following idiom
 ensures that the reference count of the new object is correctly maintained.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iView&gt; view = csPtr&lt;iView&gt; (new csView (&hellip;));
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iView&gt; view = csPtr&lt;iView&gt; (new csView (...));
 </pre></td></tr></table>
 <p>This works
 correctly because the new object (<samp>`new csView'</samp>) already automatically has
@@ -291,7 +291,7 @@ operation, and one from the <code>IncRef()</code> invocation performed by the
 <code>csRef&lt;&gt;</code>.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">// Do not do this! It will cause a resource leak.
-csRef&lt;iView&gt; view = new csView (&hellip;);
+csRef&lt;iView&gt; view = new csView (...);
 </pre></td></tr></table>
 <p><em>WARNING</em>: Only use <code>csPtr&lt;&gt;</code> in the situations described above!
 <em>Never</em> use a <code>csPtr&lt;&gt;</code> to store an object.  <em>Never</em> pass
@@ -360,12 +360,12 @@ the returned object:
 <table><tr><td>&nbsp;</td><td><pre class="example">// An example interface and method.
 struct iEngine
 {
-  virtual csPtr&lt;iLight&gt; CreateLight (&hellip;) = 0;
-  &hellip;
+  virtual csPtr&lt;iLight&gt; CreateLight (...) = 0;
+  ...
 }
 
 // Do not do this!  It will cause a resource leak.
-engine-&gt;CreateLight (&hellip;);
+engine-&gt;CreateLight (...);
 </pre></td></tr></table>
 <p>Note that if you build the project in debug mode, then Crystal Space will add a
 run-time test for this incorrect usage, and will throw an exception if you
@@ -379,8 +379,8 @@ neglect to assign a returned <code>csPtr&lt;&gt;</code> to a <code>csRef&lt;&gt;
 specialized cases, and only when you know exactly what you are doing and why
 you are doing it.  Avoid constructs like this:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iMeshWrapper&gt; mesh = &hellip;;
-&hellip;
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iMeshWrapper&gt; mesh = ...;
+...
 mesh-&gt;DecRef ();
 mesh = 0;
 </pre></td></tr></table>
@@ -401,10 +401,10 @@ invoking <code>DestroyApplication()</code>.  Therefore, the following code is
 {
   iObjectRegistry* object_reg =
     csInitializer::CreateEnvironment(argc, argv);
-  &hellip;
+  ...
   csRef&lt;iPluginManager&gt; plugin_mgr =
     (CS_QUERY_REGISTRY (object_reg, iPluginManager));
-  &hellip;
+  ...
   csInitializer::DestroyApplication (object_reg);
   return 0;
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
 <html>
-<!-- Created on April, 19 2005 by texi2html 1.76 -->
+<!-- Created on April, 20 2005 by texi2html 1.76 -->
 <!--
 Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
             Karl Berry  <karl@freefriends.org>
@@ -122,20 +122,20 @@ particular implementation.
 how this affects your code, if your old code was checking an object's type in
 this fashion:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csObject* obj = &hellip;;
+<table><tr><td>&nbsp;</td><td><pre class="example">csObject* obj = ...;
 if (obj-&gt;Type == csMyClass::Type)
 {
   csMyClass* a = (csMyClass*)obj;
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 <p>Then it should now do so in this fashion:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csObject *obj = &hellip;;
+<table><tr><td>&nbsp;</td><td><pre class="example">csObject *obj = ...;
 iMyInterface* a = SCF_QUERY_INTERFACE(obj, iMyInterface);
 if (a != NULL)
 {
-  &hellip;
+  ...
 }
 </pre></td></tr></table>
 <p>In performance-critical areas, you should use <code>SCF_QUERY_INTERFACE_FAST()</code>
@@ -266,12 +266,12 @@ the <samp>`iImageIO'</samp> interface. To use it you typically use the following
 code:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;igraphic/imageio.h&quot;
-&hellip;
-iDataBuffer* buf = &hellip;;
+...
+iDataBuffer* buf = ...;
 iImageIO* imgldr = CS_QUERY_PLUGIN (System, iImageIO);
 imgldr-&gt;Load (buf-&gt;GetUint8 (), buf-&gt;GetSize (),
 txtmgr-&gt;GetTextureFormat ());
-&hellip;
+...
 imgldr-&gt;DecRef ();
 </pre></td></tr></table>
 <a name="SEC944"></a>
@@ -310,15 +310,15 @@ about this.
 </p>
 <ul>
 <li>
-<code>PLANE</code> &rArr; <code>ADDON</code>
+<code>PLANE</code> =&gt; <code>ADDON</code>
 </li><li>
-<code>THING</code> &rArr; <code>MESHOBJ</code>
+<code>THING</code> =&gt; <code>MESHOBJ</code>
 </li><li>
-<code>SKY</code> &rArr; <code>MESHOBJ + RENDPRI</code>
+<code>SKY</code> =&gt; <code>MESHOBJ + RENDPRI</code>
 </li><li>
-<code>MESHOBJ</code> &rArr; <code>MESHFACT</code> -- (for factories)
+<code>MESHOBJ</code> =&gt; <code>MESHFACT</code> -- (for factories)
 </li><li>
-<code>BEZIER</code> &rArr; <code>ADDON</code>
+<code>BEZIER</code> =&gt; <code>ADDON</code>
 </li><li>
 <code>MATERIALS</code>
 </li><li>
@@ -346,7 +346,7 @@ instead of linking to the <tt>`csengine'</tt> library.  You can do this with:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csInitializer::RequestPlugins (object_reg,
   CS_REQUEST_ENGINE,
-  &hellip;,
+  ...,
   CS_REQUEST_END);
 iEngine* engine = CS_QUERY_REGISTRY (object_reg, iEngine);
 </pre></td></tr></table>
@@ -368,13 +368,13 @@ mesh object. In a world file this happens like this:
   MESHOBJ 'walls' (
     PLUGIN ('crystalspace.mesh.loader.thing')
     PARAMS (
-      VERTEX (&hellip;) &hellip;
-      POLYGON (&hellip;) &hellip;
+      VERTEX (...) ...
+      POLYGON (...) ...
     )
     ZFILL ()
     PRIORITY ('wall')
   )
-  &hellip;
+  ...
 )
 </pre></td></tr></table>
 <p>In code you can use <code>iEngine::CreateSectorWallsMesh()</code> like this:
@@ -391,9 +391,9 @@ subddirectories of <tt>`CS/include'</tt>.  A few brief examples:
 </p>
 <ul>
 <li>
-<code>imeshobj.h</code> &rArr; <code>imesh/object.h</code> and <code>iengine/mesh.h</code>
+<code>imeshobj.h</code> =&gt; <code>imesh/object.h</code> and <code>iengine/mesh.h</code>
 </li><li>
-<code>light.h</code> &rArr; <code>iengine/light.h</code>
+<code>light.h</code> =&gt; <code>iengine/light.h</code>
 </li></ul>
 
 <p>The following new header directories exist:
@@ -402,7 +402,7 @@ subddirectories of <tt>`CS/include'</tt>.  A few brief examples:
 <dt> <code>include/iengine</code></dt>
 <dd><p>Everything related to the engine itself
 (<code>view.h</code>, <code>camera.h</code>, <code>light.h</code>, <code>sector.h</code>,
-<code>engine.h</code>, <code>texture.h</code>, &hellip;).
+<code>engine.h</code>, <code>texture.h</code>, <small class="dots">...</small>).
 </p></dd>
 <dt> <code>include/igame</code></dt>
 <dd><p>For the <tt>`csgame'</tt> plugin (<code>csgame.h</code>).
@@ -421,13 +421,13 @@ savers (<code>parser.h</code>, <code>reader.h</code>, and <code>writer.h</code>)
 <dt> <code>include/imesh</code></dt>
 <dd><p>For everything related to mesh objects and the
 state interfaces of mesh objects (<code>object.h</code>, <code>spr3d.h</code>,
-<code>ball.h</code>, <code>thing.h</code>, &hellip;).
+<code>ball.h</code>, <code>thing.h</code>, <small class="dots">...</small>).
 </p></dd>
 <dt> <code>include/inetwork</code></dt>
 <dd><p>For networking plugins (<code>driver.h</code> and <code>socket.h</code>).
 </p></dd>
 <dt> <code>include/isound</code></dt>
-<dd><p>For sound (<code>listener.h</code>, <code>renderer.h</code>, &hellip;).
+<dd><p>For sound (<code>listener.h</code>, <code>renderer.h</code>, <small class="dots">...</small>).
 </p></dd>
 <dt> <code>include/isys</code></dt>
 <dd><p>Everything related to the system driver and its facilities (<code>event.h</code>,
@@ -435,17 +435,17 @@ state interfaces of mesh objects (<code>object.h</code>, <code>spr3d.h</code>,
 </p></dd>
 <dt> <code>include/iutil</code></dt>
 <dd><p>For the <tt>`csutil'</tt> library (<code>string.h</code>, <code>object.h</code>,
-<code>config.h</code>, &hellip;).
+<code>config.h</code>, <small class="dots">...</small>).
 </p></dd>
 <dt> <code>include/ivideo</code></dt>
 <dd><p>Everything for the 3D and 2D driver subsystems (<code>graph2d.h</code>,
 <code>graph3d.h</code>, <code>texture.h</code>, <code>fontserv.h</code>, <code>txtmgr.h</code>,
-&hellip;).
+<small class="dots">...</small>).
 </p></dd>
 <dt> <code>include/ivaria</code></dt>
 <dd><p>Everything that does not fit anywhere else
 (<code>collider.h</code>, <code>conin.h</code>, <code>conout.h</code>, <code>iso.h</code>,
-<code>keyval.h</code>, <code>script.h</code>, &hellip;).
+<code>keyval.h</code>, <code>script.h</code>, <small class="dots">...</small>).
 </p></dd>
 </dl>
 
@@ -457,95 +457,95 @@ polluting the global namespace.
 </p>
 <ul>
 <li>
-<code>CONSTRUCT_EMBEDDED_IBASE</code> &rArr; <code>SCF_CONSTRUCT_EMBEDDED_IBASE</code>
+<code>CONSTRUCT_EMBEDDED_IBASE</code> =&gt; <code>SCF_CONSTRUCT_EMBEDDED_IBASE</code>
 </li><li>
-<code>CONSTRUCT_IBASE</code> &rArr; <code>SCF_CONSTRUCT_IBASE</code>
+<code>CONSTRUCT_IBASE</code> =&gt; <code>SCF_CONSTRUCT_IBASE</code>
 </li><li>
-<code>CREATE_INSTANCE</code> &rArr; <code>SCF_CREATE_INSTANCE</code>
+<code>CREATE_INSTANCE</code> =&gt; <code>SCF_CREATE_INSTANCE</code>
 </li><li>
-<code>DECLARE_EMBEDDED_IBASE</code> &rArr; <code>SCF_DECLARE_EMBEDDED_IBASE</code>
+<code>DECLARE_EMBEDDED_IBASE</code> =&gt; <code>SCF_DECLARE_EMBEDDED_IBASE</code>
 </li><li>
-<code>DECLARE_FACTORY</code> &rArr; <code>SCF_DECLARE_FACTORY</code>
+<code>DECLARE_FACTORY</code> =&gt; <code>SCF_DECLARE_FACTORY</code>
 </li><li>
-<code>DECLARE_FAST_INTERFACE</code> &rArr; <code>SCF_DECLARE_FAST_INTERFACE</code>
+<code>DECLARE_FAST_INTERFACE</code> =&gt; <code>SCF_DECLARE_FAST_INTERFACE</code>
 </li><li>
-<code>DECLARE_IBASE_EXT</code> &rArr; <code>SCF_DECLARE_IBASE_EXT</code>
+<code>DECLARE_IBASE_EXT</code> =&gt; <code>SCF_DECLARE_IBASE_EXT</code>
 </li><li>
-<code>DECLARE_IBASE</code> &rArr; <code>SCF_DECLARE_IBASE</code>
+<code>DECLARE_IBASE</code> =&gt; <code>SCF_DECLARE_IBASE</code>
 </li><li>
-<code>DEC_REF</code> &rArr; <code>SCF_DEC_REF</code>
+<code>DEC_REF</code> =&gt; <code>SCF_DEC_REF</code>
 </li><li>
-<code>EXPORT_CLASS_DEP</code> &rArr; <code>SCF_EXPORT_CLASS_DEP</code>
+<code>EXPORT_CLASS_DEP</code> =&gt; <code>SCF_EXPORT_CLASS_DEP</code>
 </li><li>
-<code>EXPORT_CLASS_TABLE_END</code> &rArr; <code>SCF_EXPORT_CLASS_TABLE_END</code>
+<code>EXPORT_CLASS_TABLE_END</code> =&gt; <code>SCF_EXPORT_CLASS_TABLE_END</code>
 </li><li>
-<code>EXPORT_CLASS_TABLE</code> &rArr; <code>SCF_EXPORT_CLASS_TABLE</code>
+<code>EXPORT_CLASS_TABLE</code> =&gt; <code>SCF_EXPORT_CLASS_TABLE</code>
 </li><li>
-<code>EXPORT_CLASS</code> &rArr; <code>SCF_EXPORT_CLASS</code>
+<code>EXPORT_CLASS</code> =&gt; <code>SCF_EXPORT_CLASS</code>
 </li><li>
-<code>IMPLEMENTS_EMBEDDED_INTERFACE</code> &rArr; <code>SCF_IMPLEMENTS_EMBEDDED_INTERFACE</code>
+<code>IMPLEMENTS_EMBEDDED_INTERFACE</code> =&gt; <code>SCF_IMPLEMENTS_EMBEDDED_INTERFACE</code>
 </li><li>
-<code>IMPLEMENTS_INTERFACE_COMMON</code> &rArr; <code>SCF_IMPLEMENTS_INTERFACE_COMMON</code>
+<code>IMPLEMENTS_INTERFACE_COMMON</code> =&gt; <code>SCF_IMPLEMENTS_INTERFACE_COMMON</code>
 </li><li>
-<code>IMPLEMENTS_INTERFACE</code> &rArr; <code>SCF_IMPLEMENTS_INTERFACE</code>
+<code>IMPLEMENTS_INTERFACE</code> =&gt; <code>SCF_IMPLEMENTS_INTERFACE</code>
 </li><li>
-<code>IMPLEMENT_EMBEDDED_IBASE_DECREF</code> &rArr; <code>SCF_IMPLEMENT_EMBEDDED_IBASE_DECREF</code>
+<code>IMPLEMENT_EMBEDDED_IBASE_DECREF</code> =&gt; <code>SCF_IMPLEMENT_EMBEDDED_IBASE_DECREF</code>
 </li><li>
-<code>IMPLEMENT_EMBEDDED_IBASE_END</code> &rArr; <code>SCF_IMPLEMENT_EMBEDDED_IBASE_END</code>
+<code>IMPLEMENT_EMBEDDED_IBASE_END</code> =&gt; <code>SCF_IMPLEMENT_EMBEDDED_IBASE_END</code>
 </li><li>
-<code>IMPLEMENT_EMBEDDED_IBASE_GETREFCOUNT</code> &rArr;<br><code>SCF_IMPLEMENT_EMBEDDED_IBASE_GETREFCOUNT</code>
+<code>IMPLEMENT_EMBEDDED_IBASE_GETREFCOUNT</code> =&gt;<br><code>SCF_IMPLEMENT_EMBEDDED_IBASE_GETREFCOUNT</code>
 </li><li>
-<code>IMPLEMENT_EMBEDDED_IBASE_INCREF</code> &rArr; <code>SCF_IMPLEMENT_EMBEDDED_IBASE_INCREF</code>
+<code>IMPLEMENT_EMBEDDED_IBASE_INCREF</code> =&gt; <code>SCF_IMPLEMENT_EMBEDDED_IBASE_INCREF</code>
 </li><li>
-<code>IMPLEMENT_EMBEDDED_IBASE_QUERY_END</code> &rArr;<br><code>SCF_IMPLEMENT_EMBEDDED_IBASE_QUERY_END</code>
+<code>IMPLEMENT_EMBEDDED_IBASE_QUERY_END</code> =&gt;<br><code>SCF_IMPLEMENT_EMBEDDED_IBASE_QUERY_END</code>
 </li><li>
-<code>IMPLEMENT_EMBEDDED_IBASE_QUERY</code> &rArr; <code>SCF_IMPLEMENT_EMBEDDED_IBASE_QUERY</code>
+<code>IMPLEMENT_EMBEDDED_IBASE_QUERY</code> =&gt; <code>SCF_IMPLEMENT_EMBEDDED_IBASE_QUERY</code>
 </li><li>
-<code>IMPLEMENT_EMBEDDED_IBASE</code> &rArr; <code>SCF_IMPLEMENT_EMBEDDED_IBASE</code>
+<code>IMPLEMENT_EMBEDDED_IBASE</code> =&gt; <code>SCF_IMPLEMENT_EMBEDDED_IBASE</code>
 </li><li>
-<code>IMPLEMENT_FACTORY</code> &rArr; <code>SCF_IMPLEMENT_FACTORY</code>
+<code>IMPLEMENT_FACTORY</code> =&gt; <code>SCF_IMPLEMENT_FACTORY</code>
 </li><li>
-<code>IMPLEMENT_IBASE_DECREF</code> &rArr; <code>SCF_IMPLEMENT_IBASE_DECREF</code>
+<code>IMPLEMENT_IBASE_DECREF</code> =&gt; <code>SCF_IMPLEMENT_IBASE_DECREF</code>
 </li><li>
-<code>IMPLEMENT_IBASE_END</code> &rArr; <code>SCF_IMPLEMENT_IBASE_END</code>
+<code>IMPLEMENT_IBASE_END</code> =&gt; <code>SCF_IMPLEMENT_IBASE_END</code>
 </li><li>
-<code>IMPLEMENT_IBASE_EXT_DECREF</code> &rArr; <code>SCF_IMPLEMENT_IBASE_EXT_DECREF</code>
+<code>IMPLEMENT_IBASE_EXT_DECREF</code> =&gt; <code>SCF_IMPLEMENT_IBASE_EXT_DECREF</code>
 </li><li>
-<code>IMPLEMENT_IBASE_EXT_END</code> &rArr; <code>SCF_IMPLEMENT_IBASE_EXT_END</code>
+<code>IMPLEMENT_IBASE_EXT_END</code> =&gt; <code>SCF_IMPLEMENT_IBASE_EXT_END</code>
 </li><li>
-<code>IMPLEMENT_IBASE_EXT_GETREFCOUNT</code> &rArr; <code>SCF_IMPLEMENT_IBASE_EXT_GETREFCOUNT</code>
+<code>IMPLEMENT_IBASE_EXT_GETREFCOUNT</code> =&gt; <code>SCF_IMPLEMENT_IBASE_EXT_GETREFCOUNT</code>
 </li><li>
-<code>IMPLEMENT_IBASE_EXT_INCREF</code> &rArr; <code>SCF_IMPLEMENT_IBASE_EXT_INCREF</code>
+<code>IMPLEMENT_IBASE_EXT_INCREF</code> =&gt; <code>SCF_IMPLEMENT_IBASE_EXT_INCREF</code>
 </li><li>
-<code>IMPLEMENT_IBASE_EXT_QUERY_END</code> &rArr; <code>SCF_IMPLEMENT_IBASE_EXT_QUERY_END</code>
+<code>IMPLEMENT_IBASE_EXT_QUERY_END</code> =&gt; <code>SCF_IMPLEMENT_IBASE_EXT_QUERY_END</code>
 </li><li>
-<code>IMPLEMENT_IBASE_EXT_QUERY</code> &rArr; <code>SCF_IMPLEMENT_IBASE_EXT_QUERY</code>
+<code>IMPLEMENT_IBASE_EXT_QUERY</code> =&gt; <code>SCF_IMPLEMENT_IBASE_EXT_QUERY</code>
 </li><li>
-<code>IMPLEMENT_IBASE_EXT</code> &rArr; <code>SCF_IMPLEMENT_IBASE_EXT</code>
+<code>IMPLEMENT_IBASE_EXT</code> =&gt; <code>SCF_IMPLEMENT_IBASE_EXT</code>
 </li><li>
-<code>IMPLEMENT_IBASE_GETREFCOUNT</code> &rArr; <code>SCF_IMPLEMENT_IBASE_GETREFCOUNT</code>
+<code>IMPLEMENT_IBASE_GETREFCOUNT</code> =&gt; <code>SCF_IMPLEMENT_IBASE_GETREFCOUNT</code>
 </li><li>
-<code>IMPLEMENT_IBASE_INCREF</code> &rArr; <code>SCF_IMPLEMENT_IBASE_INCREF</code>
+<code>IMPLEMENT_IBASE_INCREF</code> =&gt; <code>SCF_IMPLEMENT_IBASE_INCREF</code>
 </li><li>
-<code>IMPLEMENT_IBASE_QUERY_END</code> &rArr; <code>SCF_IMPLEMENT_IBASE_QUERY_END</code>
+<code>IMPLEMENT_IBASE_QUERY_END</code> =&gt; <code>SCF_IMPLEMENT_IBASE_QUERY_END</code>
 </li><li>
-<code>IMPLEMENT_IBASE_QUERY</code> &rArr; <code>SCF_IMPLEMENT_IBASE_QUERY</code>
+<code>IMPLEMENT_IBASE_QUERY</code> =&gt; <code>SCF_IMPLEMENT_IBASE_QUERY</code>
 </li><li>
-<code>IMPLEMENT_IBASE</code> &rArr; <code>SCF_IMPLEMENT_IBASE</code>
+<code>IMPLEMENT_IBASE</code> =&gt; <code>SCF_IMPLEMENT_IBASE</code>
 </li><li>
-<code>INC_REF</code> &rArr; <code>SCF_INC_REF</code>
+<code>INC_REF</code> =&gt; <code>SCF_INC_REF</code>
 </li><li>
-<code>QUERY_INTERFACE_FAST</code> &rArr; <code>SCF_QUERY_INTERFACE_FAST</code>
+<code>QUERY_INTERFACE_FAST</code> =&gt; <code>SCF_QUERY_INTERFACE_FAST</code>
 </li><li>
-<code>QUERY_INTERFACE_SAFE</code> &rArr; <code>SCF_QUERY_INTERFACE_SAFE</code>
+<code>QUERY_INTERFACE_SAFE</code> =&gt; <code>SCF_QUERY_INTERFACE_SAFE</code>
 </li><li>
-<code>QUERY_INTERFACE</code> &rArr; <code>SCF_QUERY_INTERFACE</code>
+<code>QUERY_INTERFACE</code> =&gt; <code>SCF_QUERY_INTERFACE</code>
 </li><li>
-<code>REGISTER_STATIC_CLASS_DEP</code> &rArr; <code>SCF_REGISTER_STATIC_CLASS_DEP</code>
+<code>REGISTER_STATIC_CLASS_DEP</code> =&gt; <code>SCF_REGISTER_STATIC_CLASS_DEP</code>
 </li><li>
-<code>REGISTER_STATIC_CLASS</code> &rArr; <code>SCF_REGISTER_STATIC_CLASS</code>
+<code>REGISTER_STATIC_CLASS</code> =&gt; <code>SCF_REGISTER_STATIC_CLASS</code>
 </li><li>
-<code>REGISTER_STATIC_LIBRARY</code> &rArr; <code>SCF_REGISTER_STATIC_LIBRARY</code>
+<code>REGISTER_STATIC_LIBRARY</code> =&gt; <code>SCF_REGISTER_STATIC_LIBRARY</code>
 </li></ul>
 
 <p>Plugin management macro names are now prefixed with <samp>`CS_'</samp> in order to
@@ -553,11 +553,11 @@ avoid polluting the global namespace.
 </p>
 <ul>
 <li>
-<code>QUERY_PLUGIN_CLASS</code> &rArr; <code>CS_QUERY_PLUGIN_CLASS</code>
+<code>QUERY_PLUGIN_CLASS</code> =&gt; <code>CS_QUERY_PLUGIN_CLASS</code>
 </li><li>
-<code>LOAD_PLUGIN</code> &rArr; <code>CS_LOAD_PLUGIN</code>
+<code>LOAD_PLUGIN</code> =&gt; <code>CS_LOAD_PLUGIN</code>
 </li><li>
-<code>_LOAD_PLUGIN</code> &rArr; <code>CS_LOAD_PLUGIN_ALWAYS</code>
+<code>_LOAD_PLUGIN</code> =&gt; <code>CS_LOAD_PLUGIN_ALWAYS</code>
 </li></ul>
 
 <p>Macros for classifying events are now prefixed with <samp>`CS_'</samp> in order to
@@ -565,13 +565,13 @@ avoid polluting the global namespace.
 </p>
 <ul>
 <li>
-<code>IS_KEYBOARD_EVENT</code> &rArr; <code>CS_IS_KEYBOARD_EVENT</code>
+<code>IS_KEYBOARD_EVENT</code> =&gt; <code>CS_IS_KEYBOARD_EVENT</code>
 </li><li>
-<code>IS_MOUSE_EVENT</code> &rArr; <code>CS_IS_MOUSE_EVENT</code>
+<code>IS_MOUSE_EVENT</code> =&gt; <code>CS_IS_MOUSE_EVENT</code>
 </li><li>
-<code>IS_JOYSTICK_EVENT</code> &rArr; <code>CS_IS_JOYSTICK_EVENT</code>
+<code>IS_JOYSTICK_EVENT</code> =&gt; <code>CS_IS_JOYSTICK_EVENT</code>
 </li><li>
-<code>IS_NETWORK_EVENT</code> &rArr; <code>CS_IS_NETWORK_EVENT</code>
+<code>IS_NETWORK_EVENT</code> =&gt; <code>CS_IS_NETWORK_EVENT</code>
 </li></ul>
 
 <p>Platform-specific configuration macros are now prefixed with <samp>`CS_'</samp> in
@@ -579,13 +579,13 @@ order to avoid polluting the global namespace.
 </p>
 <ul>
 <li>
-<code>SOFTWARE_2D_DRIVER</code> &rArr; <code>CS_SOFTWARE_2D_DRIVER</code>
+<code>SOFTWARE_2D_DRIVER</code> =&gt; <code>CS_SOFTWARE_2D_DRIVER</code>
 </li><li>
-<code>OPENGL_2D_DRIVER</code> &rArr; <code>CS_OPENGL_2D_DRIVER</code>
+<code>OPENGL_2D_DRIVER</code> =&gt; <code>CS_OPENGL_2D_DRIVER</code>
 </li><li>
-<code>GLIDE_2D_DRIVER</code> &rArr; <code>CS_GLIDE_2D_DRIVER</code>
+<code>GLIDE_2D_DRIVER</code> =&gt; <code>CS_GLIDE_2D_DRIVER</code>
 </li><li>
-<code>SOUND_DRIVER</code> &rArr; <code>CS_SOUND_DRIVER</code>
+<code>SOUND_DRIVER</code> =&gt; <code>CS_SOUND_DRIVER</code>
 </li></ul>
 
 <p>All <samp>`csVector'</samp>-related macros are now prefixed with <samp>`CS_'</samp> in order to
@@ -596,17 +596,17 @@ this array type works with reference-counted <samp>`iBase'</samp> objects.
 </p>
 <ul>
 <li>
-<code>BEGIN_TYPED_VECTOR()</code> &rArr; <code>CS_BEGIN_TYPED_VECTOR()</code>
+<code>BEGIN_TYPED_VECTOR()</code> =&gt; <code>CS_BEGIN_TYPED_VECTOR()</code>
 </li><li>
-<code>FINISH_TYPED_VECTOR()</code> &rArr; <code>CS_FINISH_TYPED_VECTOR()</code>
+<code>FINISH_TYPED_VECTOR()</code> =&gt; <code>CS_FINISH_TYPED_VECTOR()</code>
 </li><li>
-<code>DECLARE_TYPED_VECTOR()</code> &rArr; <code>CS_DECLARE_TYPED_VECTOR()</code>
+<code>DECLARE_TYPED_VECTOR()</code> =&gt; <code>CS_DECLARE_TYPED_VECTOR()</code>
 </li><li>
-<code>DECLARE_TYPED_VECTOR_HELPER()</code> &rArr; <code>CS_CS_DECLARE_TYPED_VECTOR_HELPER()</code>
+<code>DECLARE_TYPED_VECTOR_HELPER()</code> =&gt; <code>CS_CS_DECLARE_TYPED_VECTOR_HELPER()</code>
 </li><li>
-<code>DECLARE_TYPED_VECTOR_NODELETE()</code> &rArr; <code>CS_CS_DECLARE_TYPED_VECTOR_NODELETE()</code>
+<code>DECLARE_TYPED_VECTOR_NODELETE()</code> =&gt; <code>CS_CS_DECLARE_TYPED_VECTOR_NODELETE()</code>
 </li><li>
-<code>DECLARE_TYPED_SCF_VECTOR()</code> &rArr; <code>CS_DECLARE_TYPED_IBASE_VECTOR()</code>
+<code>DECLARE_TYPED_SCF_VECTOR()</code> =&gt; <code>CS_DECLARE_TYPED_IBASE_VECTOR()</code>
 </li></ul>
 
 <p>All <samp>`SYSDEF_BLAH'</samp> request macros are now prefixed with <samp>`CS_'</samp> in order
@@ -616,29 +616,29 @@ request that <tt>`cssysdef.h'</tt> <em>provides</em> certain facilities.
 </p>
 <ul>
 <li>
-<code>SYSDEF_ACCESS</code> &rArr; <code>CS_SYSDEF_PROVIDE_ACCESS</code>
+<code>SYSDEF_ACCESS</code> =&gt; <code>CS_SYSDEF_PROVIDE_ACCESS</code>
 </li><li>
-<code>SYSDEF_ALLOCA</code> &rArr; <code>CS_SYSDEF_PROVIDE_ALLOCA</code>
+<code>SYSDEF_ALLOCA</code> =&gt; <code>CS_SYSDEF_PROVIDE_ALLOCA</code>
 </li><li>
-<code>SYSDEF_CASE</code> &rArr; <code>CS_SYSDEF_PROVIDE_CASE</code>
+<code>SYSDEF_CASE</code> =&gt; <code>CS_SYSDEF_PROVIDE_CASE</code>
 </li><li>
-<code>SYSDEF_DIR</code> &rArr; <code>CS_SYSDEF_PROVIDE_DIR</code>
+<code>SYSDEF_DIR</code> =&gt; <code>CS_SYSDEF_PROVIDE_DIR</code>
 </li><li>
-<code>SYSDEF_GETCWD</code> &rArr; <code>CS_SYSDEF_PROVIDE_GETCWD</code>
+<code>SYSDEF_GETCWD</code> =&gt; <code>CS_SYSDEF_PROVIDE_GETCWD</code>
 </li><li>
-<code>SYSDEF_GETOPT</code> &rArr; <code>CS_SYSDEF_PROVIDE_GETOPT</code>
+<code>SYSDEF_GETOPT</code> =&gt; <code>CS_SYSDEF_PROVIDE_GETOPT</code>
 </li><li>
-<code>SYSDEF_MKDIR</code> &rArr; <code>CS_SYSDEF_PROVIDE_MKDIR</code>
+<code>SYSDEF_MKDIR</code> =&gt; <code>CS_SYSDEF_PROVIDE_MKDIR</code>
 </li><li>
-<code>SYSDEF_PATH</code> &rArr; <code>CS_SYSDEF_PROVIDE_PATH</code>
+<code>SYSDEF_PATH</code> =&gt; <code>CS_SYSDEF_PROVIDE_PATH</code>
 </li><li>
-<code>SYSDEF_SELECT</code> &rArr; <code>CS_SYSDEF_PROVIDE_SELECT</code>
+<code>SYSDEF_SELECT</code> =&gt; <code>CS_SYSDEF_PROVIDE_SELECT</code>
 </li><li>
-<code>SYSDEF_SOCKETS</code> &rArr; <code>CS_SYSDEF_PROVIDE_SOCKETS</code>
+<code>SYSDEF_SOCKETS</code> =&gt; <code>CS_SYSDEF_PROVIDE_SOCKETS</code>
 </li><li>
-<code>SYSDEF_TEMP</code> &rArr; <code>CS_SYSDEF_PROVIDE_TEMP</code>
+<code>SYSDEF_TEMP</code> =&gt; <code>CS_SYSDEF_PROVIDE_TEMP</code>
 </li><li>
-<code>SYSDEF_UNLINK</code> &rArr; <code>CS_SYSDEF_PROVIDE_UNLINK</code>
+<code>SYSDEF_UNLINK</code> =&gt; <code>CS_SYSDEF_PROVIDE_UNLINK</code>
 </li></ul>
 
 <p>Methods in many classes and <small>SCF</small> interfaces have been renamed in order to
@@ -649,103 +649,103 @@ The following method name changes follow the pattern where
 </p>
 <ul>
 <li>
-<code>GetMiniBspNumVerts()</code> &rArr; <code>GetMiniBspVertexCount()</code>
+<code>GetMiniBspNumVerts()</code> =&gt; <code>GetMiniBspVertexCount()</code>
 </li><li>
-<code>GetNumActions()</code> &rArr; <code>GetActionCount()</code>
+<code>GetNumActions()</code> =&gt; <code>GetActionCount()</code>
 </li><li>
-<code>GetNumberAging()</code> &rArr; <code>GetAgingCount()</code>
+<code>GetNumberAging()</code> =&gt; <code>GetAgingCount()</code>
 </li><li>
-<code>GetNumberEmitters()</code> &rArr; <code>GetEmitterCount()</code>
+<code>GetNumberEmitters()</code> =&gt; <code>GetEmitterCount()</code>
 </li><li>
-<code>GetNumberMetaBalls()</code> &rArr; <code>GetMetaBallCount()</code>
+<code>GetNumberMetaBalls()</code> =&gt; <code>GetMetaBallCount()</code>
 </li><li>
-<code>GetNumberParticles()</code> &rArr; <code>GetParticleCount()</code>
+<code>GetNumberParticles()</code> =&gt; <code>GetParticleCount()</code>
 </li><li>
-<code>GetNumCameraPositions()</code> &rArr; <code>GetCameraPositionCount()</code>
+<code>GetNumCameraPositions()</code> =&gt; <code>GetCameraPositionCount()</code>
 </li><li>
-<code>GetNumChars()</code> &rArr; <code>GetCharCount()</code>
+<code>GetNumChars()</code> =&gt; <code>GetCharCount()</code>
 </li><li>
-<code>GetNumCollections()</code> &rArr; <code>GetCollectionCount()</code>
+<code>GetNumCollections()</code> =&gt; <code>GetCollectionCount()</code>
 </li><li>
-<code>GetNumCollisionPairs()</code> &rArr; <code>GetCollisionPairCount()</code>
+<code>GetNumCollisionPairs()</code> =&gt; <code>GetCollisionPairCount()</code>
 </li><li>
-<code>GetNumCurves()</code> &rArr; <code>GetCurveCount()</code>
+<code>GetNumCurves()</code> =&gt; <code>GetCurveCount()</code>
 </li><li>
-<code>GetNumCurveVertices()</code> &rArr; <code>GetCurveVertexCount()</code>
+<code>GetNumCurveVertices()</code> =&gt; <code>GetCurveVertexCount()</code>
 </li><li>
-<code>GetNumDimensions()</code> &rArr; <code>GetDimensionCount()</code>
+<code>GetNumDimensions()</code> =&gt; <code>GetDimensionCount()</code>
 </li><li>
-<code>GetNumEdges()</code> &rArr; <code>GetEdgeCount()</code>
+<code>GetNumEdges()</code> =&gt; <code>GetEdgeCount()</code>
 </li><li>
-<code>GetNumElements()</code> &rArr; <code>GetElementCount()</code>
+<code>GetNumElements()</code> =&gt; <code>GetElementCount()</code>
 </li><li>
-<code>GetNumFonts()</code> &rArr; <code>GetFontCount()</code>
+<code>GetNumFonts()</code> =&gt; <code>GetFontCount()</code>
 </li><li>
-<code>GetNumFormats()</code> &rArr; <code>GetFormatCount()</code>
+<code>GetNumFormats()</code> =&gt; <code>GetFormatCount()</code>
 </li><li>
-<code>GetNumFrames()</code> &rArr; <code>GetFrameCount()</code>
+<code>GetNumFrames()</code> =&gt; <code>GetFrameCount()</code>
 </li><li>
-<code>GetNumMaterials()</code> &rArr; <code>GetMaterialCount()</code>
+<code>GetNumMaterials()</code> =&gt; <code>GetMaterialCount()</code>
 </li><li>
-<code>GetNumMeshFactories()</code> &rArr; <code>GetMeshFactoryCount()</code>
+<code>GetNumMeshFactories()</code> =&gt; <code>GetMeshFactoryCount()</code>
 </li><li>
-<code>GetNumMeshObjects()</code> &rArr; <code>GetMeshObjectCount()</code>
+<code>GetNumMeshObjects()</code> =&gt; <code>GetMeshObjectCount()</code>
 </li><li>
-<code>GetNumNormals()</code> &rArr; <code>GetNormalCount()</code>
+<code>GetNumNormals()</code> =&gt; <code>GetNormalCount()</code>
 </li><li>
-<code>GetNumObjects()</code> &rArr; <code>GetObjectCount()</code>
+<code>GetNumObjects()</code> =&gt; <code>GetObjectCount()</code>
 </li><li>
-<code>GetNumPalEntries()</code> &rArr; <code>GetPalEntryCount()</code>
+<code>GetNumPalEntries()</code> =&gt; <code>GetPalEntryCount()</code>
 </li><li>
-<code>GetNumPlanes()</code> &rArr; <code>GetPlaneCount()</code>
+<code>GetNumPlanes()</code> =&gt; <code>GetPlaneCount()</code>
 </li><li>
-<code>GetNumPlugIns()</code> &rArr; <code>GetPlugInCount()</code>
+<code>GetNumPlugIns()</code> =&gt; <code>GetPlugInCount()</code>
 </li><li>
-<code>GetNumPoints()</code> &rArr; <code>GetPointCount()</code>
+<code>GetNumPoints()</code> =&gt; <code>GetPointCount()</code>
 </li><li>
-<code>GetNumPolygons()</code> &rArr; <code>GetPolygonCount()</code>
+<code>GetNumPolygons()</code> =&gt; <code>GetPolygonCount()</code>
 </li><li>
-<code>GetNumPolyTxtPlanes()</code> &rArr; <code>GetPolyTxtPlaneCount()</code>
+<code>GetNumPolyTxtPlanes()</code> =&gt; <code>GetPolyTxtPlaneCount()</code>
 </li><li>
-<code>GetNumRepeats()</code> &rArr; <code>GetRepeatCount()</code>
+<code>GetNumRepeats()</code> =&gt; <code>GetRepeatCount()</code>
 </li><li>
-<code>GetNumShadows()</code> &rArr; <code>GetShadowCount()</code>
+<code>GetNumShadows()</code> =&gt; <code>GetShadowCount()</code>
 </li><li>
-<code>GetNumSpokes()</code> &rArr; <code>GetSpokeCount()</code>
+<code>GetNumSpokes()</code> =&gt; <code>GetSpokeCount()</code>
 </li><li>
-<code>GetNumTexels()</code> &rArr; <code>GetTexelCount()</code>
+<code>GetNumTexels()</code> =&gt; <code>GetTexelCount()</code>
 </li><li>
-<code>GetNumTextureLayers()</code> &rArr; <code>GetTextureLayerCount()</code>
+<code>GetNumTextureLayers()</code> =&gt; <code>GetTextureLayerCount()</code>
 </li><li>
-<code>GetNumTextures()</code> &rArr; <code>GetTextureCount()</code>
+<code>GetNumTextures()</code> =&gt; <code>GetTextureCount()</code>
 </li><li>
-<code>GetNumTriangles()</code> &rArr; <code>GetTriangleCount()</code>
+<code>GetNumTriangles()</code> =&gt; <code>GetTriangleCount()</code>
 </li><li>
-<code>GetNumVertices()</code> &rArr; <code>GetVertexCount()</code>
+<code>GetNumVertices()</code> =&gt; <code>GetVertexCount()</code>
 </li><li>
-<code>GetNumVertsToLight()</code> &rArr; <code>GetVertexToLightCount()</code>
+<code>GetNumVertsToLight()</code> =&gt; <code>GetVertexToLightCount()</code>
 </li><li>
-<code>GetStaticNumSamples()</code> &rArr; <code>GetStaticSampleCount()</code>
+<code>GetStaticNumSamples()</code> =&gt; <code>GetStaticSampleCount()</code>
 </li><li>
-<code>NumVertices()</code> &rArr; <code>GetVertexCount()</code>
+<code>NumVertices()</code> =&gt; <code>GetVertexCount()</code>
 </li><li>
-<code>ReportNumberTriangles()</code> &rArr; <code>ReportTriangleCount()</code>
+<code>ReportNumberTriangles()</code> =&gt; <code>ReportTriangleCount()</code>
 </li><li>
-<code>SetNumber()</code> &rArr; <code>SetCount()</code>
+<code>SetNumber()</code> =&gt; <code>SetCount()</code>
 </li><li>
-<code>SetNumberMetaBalls()</code> &rArr; <code>SetMetaBallCount()</code>
+<code>SetNumberMetaBalls()</code> =&gt; <code>SetMetaBallCount()</code>
 </li><li>
-<code>SetNumberParticles()</code> &rArr; <code>SetParticleCount()</code>
+<code>SetNumberParticles()</code> =&gt; <code>SetParticleCount()</code>
 </li><li>
-<code>SetNumEdges()</code> &rArr; <code>SetEdgeCount()</code>
+<code>SetNumEdges()</code> =&gt; <code>SetEdgeCount()</code>
 </li><li>
-<code>SetNumPolygons()</code> &rArr; <code>SetPolygonCount()</code>
+<code>SetNumPolygons()</code> =&gt; <code>SetPolygonCount()</code>
 </li><li>
-<code>SetNumSpokes()</code> &rArr; <code>SetSpokeCount()</code>
+<code>SetNumSpokes()</code> =&gt; <code>SetSpokeCount()</code>
 </li><li>
-<code>SetNumVertices()</code> &rArr; <code>SetVertexCount()</code>
+<code>SetNumVertices()</code> =&gt; <code>SetVertexCount()</code>
 </li><li>
-<code>Update_Num()</code> &rArr; <code>UpdateCount()</code>
+<code>Update_Num()</code> =&gt; <code>UpdateCount()</code>
 </li></ul>
 
 <p>The prefix <samp>`cs'</samp> was added to the following list of functions, and their
@@ -753,49 +753,49 @@ names were also normalized.
 </p>
 <ul>
 <li>
-<code>ByteSwap16bit()</code> &rArr; <code>csByteSwap16bit()</code>
+<code>ByteSwap16bit()</code> =&gt; <code>csByteSwap16bit()</code>
 </li><li>
-<code>ByteSwap16bitBuffer()</code> &rArr; <code>csByteSwap16bitBuffer()</code>
+<code>ByteSwap16bitBuffer()</code> =&gt; <code>csByteSwap16bitBuffer()</code>
 </li><li>
-<code>ByteSwap32bit()</code> &rArr; <code>csByteSwap32bit()</code>
+<code>ByteSwap32bit()</code> =&gt; <code>csByteSwap32bit()</code>
 </li><li>
-<code>ByteSwap32bitBuffer()</code> &rArr; <code>csByteSwap32bitBuffer()</code>
+<code>ByteSwap32bitBuffer()</code> =&gt; <code>csByteSwap32bitBuffer()</code>
 </li><li>
-<code>Combinations()</code> &rArr; <code>csCombinations()</code>
+<code>Combinations()</code> =&gt; <code>csCombinations()</code>
 </li><li>
-<code>expandname()</code> &rArr; <code>csExpandName()</code>
+<code>expandname()</code> =&gt; <code>csExpandName()</code>
 </li><li>
-<code>FindNearestPowerOf2()</code> &rArr; <code>csFindNearestPowerOf2()</code>
+<code>FindNearestPowerOf2()</code> =&gt; <code>csFindNearestPowerOf2()</code>
 </li><li>
-<code>fnamematches()</code> &rArr; <code>csFilenameMatches()</code>
+<code>fnamematches()</code> =&gt; <code>csFilenameMatches()</code>
 </li><li>
-<code>fSquare()</code> &rArr; <code>csSquareFloat()</code>
+<code>fSquare()</code> =&gt; <code>csSquareFloat()</code>
 </li><li>
-<code>fSwap()</code> &rArr; <code>csSwapFloat()</code>
+<code>fSwap()</code> =&gt; <code>csSwapFloat()</code>
 </li><li>
-<code>GenerateHalo()</code> &rArr; <code>csGenerateHalo()</code>
+<code>GenerateHalo()</code> =&gt; <code>csGenerateHalo()</code>
 </li><li>
-<code>GenerateNova()</code> &rArr; <code>csGenerateNova()</code>
+<code>GenerateNova()</code> =&gt; <code>csGenerateNova()</code>
 </li><li>
-<code>get_token()</code> &rArr; <code>csGetToken()</code>
+<code>get_token()</code> =&gt; <code>csGetToken()</code>
 </li><li>
-<code>get_token_float()</code> &rArr; <code>csGetTokenFloat()</code>
+<code>get_token_float()</code> =&gt; <code>csGetTokenFloat()</code>
 </li><li>
-<code>get_token_int()</code> &rArr; <code>csGetTokenInt()</code>
+<code>get_token_int()</code> =&gt; <code>csGetTokenInt()</code>
 </li><li>
-<code>IsPowerOf2()</code> &rArr; <code>csIsPowerOf2()</code>
+<code>IsPowerOf2()</code> =&gt; <code>csIsPowerOf2()</code>
 </li><li>
-<code>iSwap()</code> &rArr; <code>csSwapInt()</code>
+<code>iSwap()</code> =&gt; <code>csSwapInt()</code>
 </li><li>
-<code>RndNum()</code> &rArr; <code>csRndNum()</code>
+<code>RndNum()</code> =&gt; <code>csRndNum()</code>
 </li><li>
-<code>ScanStr()</code> &rArr; <code>csScanStr()</code>
+<code>ScanStr()</code> =&gt; <code>csScanStr()</code>
 </li><li>
-<code>skip_token()</code> &rArr; <code>csSkipToken()</code>
+<code>skip_token()</code> =&gt; <code>csSkipToken()</code>
 </li><li>
-<code>splitpath()</code> &rArr; <code>csSplitPath()</code>
+<code>splitpath()</code> =&gt; <code>csSplitPath()</code>
 </li><li>
-<code>strnew()</code> &rArr; <code>csStrNew()</code>
+<code>strnew()</code> =&gt; <code>csStrNew()</code>
 </li></ul>
 
 <a name="SEC952"></a>
@@ -868,7 +868,7 @@ so you can use <code>SCF_QUERY_INTERFACE()</code> to check for this.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">struct ModalData : public iBase
 {
-  &hellip;
+  ...
   SCF_DECLARE_IBASE;
   ModalData ()
   {
@@ -890,7 +890,7 @@ bool MyApp::HandleEvent (iEvent &amp;Event)
         { // Allow user to select a file with csFileDialog.
           csWindow* d = csFileDialog (this, &quot;test file dialog&quot;);
           ModalData* data = new ModalData ();
-          &hellip;
+          ...
           StartModal (d, data);
           data-&gt;DecRef ();
           return true;
@@ -913,10 +913,10 @@ bool MyApp::HandleEvent (iEvent &amp;Event)
             return true;
           }
           ModalData* md = (ModalData*)GetTopModalUserdata ();
-          &hellip; // csFileDialog was closed.
+          ... // csFileDialog was closed.
           return true;
         }
-        &hellip;
+        ...
 }
 </pre></td></tr></table>
 <a name="SEC959"></a>
@@ -949,7 +949,7 @@ passing the parameter at all makes no sense.
 <p>The <small>SCF</small> name of the 3D engine changed:
 </p>
 
-<p><code>crystalspace.engine.core</code> &rArr; <code>crystalspace.engine.3d</code>
+<p><code>crystalspace.engine.core</code> =&gt; <code>crystalspace.engine.3d</code>
 </p>
 <p><code>csEngine::NextFrame()</code> and <code>iEngine::NextFrame()</code> are removed.
 This is now done automatically in <code>csEngine::Draw()</code>.
