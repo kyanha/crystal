@@ -198,6 +198,10 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_renderbuffer.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\opengl\gl_stringlists.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.h
 # End Source File
 # End Group
