@@ -50,46 +50,50 @@
 00038 <span class="keyword">protected</span>:
 00039   <span class="keyword">const</span> csIdentString* strings;
 00040   size_t stringCount;
-00041 <span class="keyword">public</span>:
-00042   <a class="code" href="classcsIdentStrings.html">csIdentStrings</a> (<span class="keyword">const</span> csIdentString* str, size_t cnt) :
-00043     strings(str), stringCount(cnt) { }
-<a name="l00045"></a><a class="code" href="classcsIdentStrings.html#a1">00045</a>   <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsIdentStrings.html#a1">StringForIdent</a> (<span class="keywordtype">int</span> ident)
-00046   {
-00047     size_t l = 0, r = stringCount;
-00048     <span class="keywordflow">while</span> (l &lt; r)
-00049     {
-00050       size_t m = (l+r) / 2;
-00051       <span class="keywordflow">if</span> (strings[m].ident == ident)
-00052       {
-00053         <span class="keywordflow">return</span> strings[m].str;
-00054       }
-00055       <span class="keywordflow">else</span> <span class="keywordflow">if</span> (strings[m].ident &lt; ident)
-00056       {
-00057         l = m + 1;
-00058       }
-00059       <span class="keywordflow">else</span>
-00060       {
-00061         r = m;
-00062       }
-00063     }
-00064     <span class="keywordflow">return</span> 0;
-00065   }
-00066 };
-00067 
-<a name="l00084"></a><a class="code" href="identstrings_8h.html#a0">00084</a> <span class="preprocessor">#define CS_IDENT_STRING_LIST(ListName)                                  \</span>
-00085 <span class="preprocessor">  static csIdentStrings::csIdentString ListName##_strings[] = {</span>
-00086 <span class="preprocessor"></span>
-<a name="l00090"></a><a class="code" href="identstrings_8h.html#a1">00090</a> <span class="preprocessor">#define CS_IDENT_STRING(Ident)                          {Ident, #Ident},</span>
-00091 <span class="preprocessor"></span>
-<a name="l00095"></a><a class="code" href="identstrings_8h.html#a2">00095</a> <span class="preprocessor">#define CS_IDENT_STRING_EXPLICIT(Ident, Str)            {Ident, str},</span>
-00096 <span class="preprocessor"></span>
-<a name="l00099"></a><a class="code" href="identstrings_8h.html#a3">00099</a> <span class="preprocessor">#define CS_IDENT_STRING_LIST_END(ListName)                              \</span>
-00100 <span class="preprocessor">    {0, 0}                                                              \</span>
-00101 <span class="preprocessor">  };                                                                    \</span>
-00102 <span class="preprocessor">  static csIdentStrings ListName (ListName##_strings,                   \</span>
-00103 <span class="preprocessor">    (sizeof (ListName##_strings) / sizeof (csIdentStrings::csIdentString)) - 1);</span>
-00104 <span class="preprocessor"></span>
-00105 <span class="preprocessor">#endif // __CS_CSTOOL_IDENTSTRINGS_H__</span>
+00041   <a class="code" href="classcsString.html">csString</a>* scratch;
+00042 <span class="keyword">public</span>:
+00043   <a class="code" href="classcsIdentStrings.html">csIdentStrings</a> (<span class="keyword">const</span> csIdentString* str, <a class="code" href="classcsString.html">csString</a>* scratch, size_t cnt) :
+00044     strings(str), stringCount(cnt), scratch(scratch) { }
+<a name="l00050"></a><a class="code" href="classcsIdentStrings.html#a1">00050</a>   <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsIdentStrings.html#a1">StringForIdent</a> (<span class="keywordtype">int</span> ident)
+00051   {
+00052     size_t l = 0, r = stringCount;
+00053     <span class="keywordflow">while</span> (l &lt; r)
+00054     {
+00055       size_t m = (l+r) / 2;
+00056       <span class="keywordflow">if</span> (strings[m].ident == ident)
+00057       {
+00058         <span class="keywordflow">return</span> strings[m].str;
+00059       }
+00060       <span class="keywordflow">else</span> <span class="keywordflow">if</span> (strings[m].ident &lt; ident)
+00061       {
+00062         l = m + 1;
+00063       }
+00064       <span class="keywordflow">else</span>
+00065       {
+00066         r = m;
+00067       }
+00068     }
+00069     scratch-&gt;<a class="code" href="classcsStringBase.html#a58">Format</a> (<span class="stringliteral">"%d"</span>, ident);
+00070     <span class="keywordflow">return</span> scratch-&gt;<a class="code" href="classcsStringFast.html#a10">GetData</a>();
+00071   }
+00072 };
+00073 
+<a name="l00090"></a><a class="code" href="identstrings_8h.html#a0">00090</a> <span class="preprocessor">#define CS_IDENT_STRING_LIST(ListName)                                  \</span>
+00091 <span class="preprocessor">  static csIdentStrings::csIdentString ListName##_strings[] = {</span>
+00092 <span class="preprocessor"></span>
+<a name="l00096"></a><a class="code" href="identstrings_8h.html#a1">00096</a> <span class="preprocessor">#define CS_IDENT_STRING(Ident)                          {Ident, #Ident},</span>
+00097 <span class="preprocessor"></span>
+<a name="l00101"></a><a class="code" href="identstrings_8h.html#a2">00101</a> <span class="preprocessor">#define CS_IDENT_STRING_EXPLICIT(Ident, Str)            {Ident, str},</span>
+00102 <span class="preprocessor"></span>
+<a name="l00105"></a><a class="code" href="identstrings_8h.html#a3">00105</a> <span class="preprocessor">#define CS_IDENT_STRING_LIST_END(ListName)                              \</span>
+00106 <span class="preprocessor">    {0, 0}                                                              \</span>
+00107 <span class="preprocessor">  };                                                                    \</span>
+00108 <span class="preprocessor">  CS_IMPLEMENT_STATIC_VAR(Get##ListName##Scratch, csString, ());        \</span>
+00109 <span class="preprocessor">  static csIdentStrings ListName (ListName##_strings,                   \</span>
+00110 <span class="preprocessor">    Get##ListName##Scratch(),                                           \</span>
+00111 <span class="preprocessor">    (sizeof (ListName##_strings) / sizeof (csIdentStrings::csIdentString)) - 1);</span>
+00112 <span class="preprocessor"></span>
+00113 <span class="preprocessor">#endif // __CS_CSTOOL_IDENTSTRINGS_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
