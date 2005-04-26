@@ -1754,6 +1754,10 @@ SOURCE=..\..\libs\..\include\csutil\scopedmutexlock.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\set.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\snprintf.h
 # End Source File
 # Begin Source File
