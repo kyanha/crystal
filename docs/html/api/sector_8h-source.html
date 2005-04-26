@@ -43,156 +43,157 @@
 00030 <span class="preprocessor">#include "<a class="code" href="cstypes_8h.html">cstypes.h</a>"</span>
 00031 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
 00032 <span class="preprocessor">#include "<a class="code" href="hash_8h.html">csutil/hash.h</a>"</span>
-00033 <span class="preprocessor">#include "<a class="code" href="iutil_2object_8h.html">iutil/object.h</a>"</span>
-00034 
-00035 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
-00036 <span class="keyword">class </span><a class="code" href="classcsColor.html">csColor</a>;
-00037 <span class="keyword">class </span><a class="code" href="classcsBox3.html">csBox3</a>;
-00038 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
-00039 <span class="keyword">struct </span><a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>;
-00040 <span class="keyword">struct </span><a class="code" href="structiMeshList.html">iMeshList</a>;
-00041 <span class="keyword">struct </span><a class="code" href="structiLightList.html">iLightList</a>;
-00042 <span class="keyword">struct </span><a class="code" href="structiLight.html">iLight</a>;
-00043 <span class="keyword">struct </span>iThing;
-00044 <span class="keyword">struct </span><a class="code" href="structiVisibilityCuller.html">iVisibilityCuller</a>;
-00045 <span class="keyword">struct </span><a class="code" href="structiVisibilityObject.html">iVisibilityObject</a>;
-00046 <span class="keyword">struct </span><a class="code" href="structiObject.html">iObject</a>;
-00047 <span class="keyword">struct </span><a class="code" href="structcsFog.html">csFog</a>;
-00048 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
-00049 <span class="keyword">struct </span><a class="code" href="structiRenderView.html">iRenderView</a>;
-00050 <span class="keyword">struct </span><a class="code" href="structiRenderLoop.html">iRenderLoop</a>;
-00051 <span class="keyword">struct </span><a class="code" href="structiFrustumView.html">iFrustumView</a>;
-00052 <span class="keyword">struct </span><a class="code" href="structiSector.html">iSector</a>;
-00053 <span class="keyword">struct </span><a class="code" href="structiPortal.html">iPortal</a>;
-00054 <span class="keyword">struct </span><a class="code" href="structiDocumentNode.html">iDocumentNode</a>;
-00055 <span class="keyword">class </span><a class="code" href="classcsRenderMeshList.html">csRenderMeshList</a>;
-00056 
-00057 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSectorCallback.html">iSectorCallback</a>, 0, 0, 1);
-00058 
-<a name="l00064"></a><a class="code" href="structiSectorCallback.html">00064</a> <span class="keyword">struct </span><a class="code" href="structiSectorCallback.html">iSectorCallback</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00065 {
-00070   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorCallback.html#a0">Traverse</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <a class="code" href="structiBase.html">iBase</a>* context) = 0;
-00071 };
-00072 
-00073 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSectorMeshCallback.html">iSectorMeshCallback</a>, 0, 0, 1);
-00074 
-<a name="l00079"></a><a class="code" href="structiSectorMeshCallback.html">00079</a> <span class="keyword">struct </span><a class="code" href="structiSectorMeshCallback.html">iSectorMeshCallback</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00080 {
-00085   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorMeshCallback.html#a0">NewMesh</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
-00086 
-00090   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorMeshCallback.html#a1">RemoveMesh</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
-00091 };
-00092 
-00093 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSector.html">iSector</a>, 0, 5, 5);
-00094 
-<a name="l00122"></a><a class="code" href="structiSector.html">00122</a> <span class="keyword">struct </span><a class="code" href="structiSector.html">iSector</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00123 {
-00125   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *<a class="code" href="structiSector.html#a0">QueryObject</a> () = 0;
-00126 
-00131   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a1">SetRenderLoop</a> (<a class="code" href="structiRenderLoop.html">iRenderLoop</a>* rl) = 0;
-00132 
-00138   <span class="keyword">virtual</span> <a class="code" href="structiRenderLoop.html">iRenderLoop</a>* <a class="code" href="structiSector.html#a2">GetRenderLoop</a> () = 0;
-00139 
-00141   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSector.html#a3">HasFog</a> () <span class="keyword">const </span>= 0;
-00143   <span class="keyword">virtual</span> <a class="code" href="structcsFog.html">csFog</a> *<a class="code" href="structiSector.html#a4">GetFog</a> () <span class="keyword">const </span>= 0;
-00145   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a5">SetFog</a> (<span class="keywordtype">float</span> density, <span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color) = 0;
-00147   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a6">DisableFog</a> () = 0;
-00148 
-00150   <span class="keyword">virtual</span> <a class="code" href="structiMeshList.html">iMeshList</a>* <a class="code" href="structiSector.html#a7">GetMeshes</a> () = 0;
-00154   <span class="keyword">virtual</span> <a class="code" href="structiLightList.html">iLightList</a>* <a class="code" href="structiSector.html#a8">GetLights</a> () = 0;
-00155 
-00157   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a9">ShineLights</a> () = 0;
-00159   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a9">ShineLights</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>*) = 0;
-00160 
-00162   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a11">SetDynamicAmbientLight</a>(<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color) = 0;
-00163 
-00165   <span class="keyword">virtual</span> <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="structiSector.html#a12">GetDynamicAmbientLight</a>() <span class="keyword">const </span>= 0;
-00166 
-00172   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a13">CalculateSectorBBox</a> (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox,
-00173     <span class="keywordtype">bool</span> do_meshes) <span class="keyword">const </span>= 0;
-00174 
-00182   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSector.html#a14">SetVisibilityCullerPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
-00183         <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* culler_params = 0) = 0;
-00189   <span class="keyword">virtual</span> <a class="code" href="structiVisibilityCuller.html">iVisibilityCuller</a>* <a class="code" href="structiSector.html#a15">GetVisibilityCuller</a> () = 0;
-00190 
-00194   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSector.html#a16">GetRecLevel</a> () <span class="keyword">const </span>= 0;
-00195 
-00199   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a17">IncRecLevel</a> () = 0;
-00200 
-00204   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a18">DecRecLevel</a> () = 0;
-00205 
-00214   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiSector.html#a19">HitBeamPortals</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start,
-00215         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end, <a class="code" href="classcsVector3.html">csVector3</a>&amp; isect, <span class="keywordtype">int</span>* polygon_idx) = 0;
-00216 
-00224   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiSector.html#a20">HitBeam</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end,
-00225     <a class="code" href="classcsVector3.html">csVector3</a>&amp; intersect, <span class="keywordtype">int</span>* polygon_idx, <span class="keywordtype">bool</span> accurate = <span class="keyword">false</span>) = 0;
-00226 
-00245   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiSector.html#a21">FollowSegment</a> (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t,
-00246     <a class="code" href="classcsVector3.html">csVector3</a>&amp; new_position, <span class="keywordtype">bool</span>&amp; mirror, <span class="keywordtype">bool</span> only_portals = <span class="keyword">false</span>) = 0;
-00247 
-00249   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a22">Draw</a> (<a class="code" href="structiRenderView.html">iRenderView</a>* rview) = 0;
-00250 
-00255   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a23">PrepareDraw</a> (<a class="code" href="structiRenderView.html">iRenderView</a>* rview) = 0;
-00256 
-00263   <span class="keyword">virtual</span> <a class="code" href="classcsRenderMeshList.html">csRenderMeshList</a>* <a class="code" href="structiSector.html#a24">GetVisibleMeshes</a> (<a class="code" href="structiRenderView.html">iRenderView</a> *) = 0;
-00264 
-00269   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a25">SetSectorCallback</a> (<a class="code" href="structiSectorCallback.html">iSectorCallback</a>* cb) = 0;
-00270 
-00274   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a26">RemoveSectorCallback</a> (<a class="code" href="structiSectorCallback.html">iSectorCallback</a>* cb) = 0;
-00275 
-00277   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSector.html#a27">GetSectorCallbackCount</a> () <span class="keyword">const </span>= 0;
-00278 
-00280   <span class="keyword">virtual</span> <a class="code" href="structiSectorCallback.html">iSectorCallback</a>* <a class="code" href="structiSector.html#a28">GetSectorCallback</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
-00281 
-00286   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a29">AddSectorMeshCallback</a> (<a class="code" href="structiSectorMeshCallback.html">iSectorMeshCallback</a>* cb) = 0;
-00287 
-00291   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a30">RemoveSectorMeshCallback</a> (<a class="code" href="structiSectorMeshCallback.html">iSectorMeshCallback</a>* cb) = 0;
-00292 
-00294   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a31">CheckFrustum</a> (<a class="code" href="structiFrustumView.html">iFrustumView</a>* lview) = 0;
-00295 
-00302   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsSet.html">csSet&lt;iMeshWrapper*&gt;</a>&amp; <a class="code" href="structiSector.html#a32">GetPortalMeshes</a> () <span class="keyword">const </span>= 0;
-00306   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a33">RegisterPortalMesh</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
-00310   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a34">UnregisterPortalMesh</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
-00311 
-00318   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a35">UnlinkObjects</a> () = 0;
-00319 };
-00320 
+00033 <span class="preprocessor">#include "<a class="code" href="set_8h.html">csutil/set.h</a>"</span>
+00034 <span class="preprocessor">#include "<a class="code" href="iutil_2object_8h.html">iutil/object.h</a>"</span>
+00035 
+00036 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
+00037 <span class="keyword">class </span><a class="code" href="classcsColor.html">csColor</a>;
+00038 <span class="keyword">class </span><a class="code" href="classcsBox3.html">csBox3</a>;
+00039 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
+00040 <span class="keyword">struct </span><a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>;
+00041 <span class="keyword">struct </span><a class="code" href="structiMeshList.html">iMeshList</a>;
+00042 <span class="keyword">struct </span><a class="code" href="structiLightList.html">iLightList</a>;
+00043 <span class="keyword">struct </span><a class="code" href="structiLight.html">iLight</a>;
+00044 <span class="keyword">struct </span>iThing;
+00045 <span class="keyword">struct </span><a class="code" href="structiVisibilityCuller.html">iVisibilityCuller</a>;
+00046 <span class="keyword">struct </span><a class="code" href="structiVisibilityObject.html">iVisibilityObject</a>;
+00047 <span class="keyword">struct </span><a class="code" href="structiObject.html">iObject</a>;
+00048 <span class="keyword">struct </span><a class="code" href="structcsFog.html">csFog</a>;
+00049 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
+00050 <span class="keyword">struct </span><a class="code" href="structiRenderView.html">iRenderView</a>;
+00051 <span class="keyword">struct </span><a class="code" href="structiRenderLoop.html">iRenderLoop</a>;
+00052 <span class="keyword">struct </span><a class="code" href="structiFrustumView.html">iFrustumView</a>;
+00053 <span class="keyword">struct </span><a class="code" href="structiSector.html">iSector</a>;
+00054 <span class="keyword">struct </span><a class="code" href="structiPortal.html">iPortal</a>;
+00055 <span class="keyword">struct </span><a class="code" href="structiDocumentNode.html">iDocumentNode</a>;
+00056 <span class="keyword">class </span><a class="code" href="classcsRenderMeshList.html">csRenderMeshList</a>;
+00057 
+00058 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSectorCallback.html">iSectorCallback</a>, 0, 0, 1);
+00059 
+<a name="l00065"></a><a class="code" href="structiSectorCallback.html">00065</a> <span class="keyword">struct </span><a class="code" href="structiSectorCallback.html">iSectorCallback</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00066 {
+00071   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorCallback.html#a0">Traverse</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <a class="code" href="structiBase.html">iBase</a>* context) = 0;
+00072 };
+00073 
+00074 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSectorMeshCallback.html">iSectorMeshCallback</a>, 0, 0, 1);
+00075 
+<a name="l00080"></a><a class="code" href="structiSectorMeshCallback.html">00080</a> <span class="keyword">struct </span><a class="code" href="structiSectorMeshCallback.html">iSectorMeshCallback</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00081 {
+00086   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorMeshCallback.html#a0">NewMesh</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
+00087 
+00091   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorMeshCallback.html#a1">RemoveMesh</a> (<a class="code" href="structiSector.html">iSector</a>* sector, <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
+00092 };
+00093 
+00094 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSector.html">iSector</a>, 0, 5, 5);
+00095 
+<a name="l00123"></a><a class="code" href="structiSector.html">00123</a> <span class="keyword">struct </span><a class="code" href="structiSector.html">iSector</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00124 {
+00126   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *<a class="code" href="structiSector.html#a0">QueryObject</a> () = 0;
+00127 
+00132   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a1">SetRenderLoop</a> (<a class="code" href="structiRenderLoop.html">iRenderLoop</a>* rl) = 0;
+00133 
+00139   <span class="keyword">virtual</span> <a class="code" href="structiRenderLoop.html">iRenderLoop</a>* <a class="code" href="structiSector.html#a2">GetRenderLoop</a> () = 0;
+00140 
+00142   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSector.html#a3">HasFog</a> () <span class="keyword">const </span>= 0;
+00144   <span class="keyword">virtual</span> <a class="code" href="structcsFog.html">csFog</a> *<a class="code" href="structiSector.html#a4">GetFog</a> () <span class="keyword">const </span>= 0;
+00146   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a5">SetFog</a> (<span class="keywordtype">float</span> density, <span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color) = 0;
+00148   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a6">DisableFog</a> () = 0;
+00149 
+00151   <span class="keyword">virtual</span> <a class="code" href="structiMeshList.html">iMeshList</a>* <a class="code" href="structiSector.html#a7">GetMeshes</a> () = 0;
+00155   <span class="keyword">virtual</span> <a class="code" href="structiLightList.html">iLightList</a>* <a class="code" href="structiSector.html#a8">GetLights</a> () = 0;
+00156 
+00158   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a9">ShineLights</a> () = 0;
+00160   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a9">ShineLights</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>*) = 0;
+00161 
+00163   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a11">SetDynamicAmbientLight</a>(<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color) = 0;
+00164 
+00166   <span class="keyword">virtual</span> <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="structiSector.html#a12">GetDynamicAmbientLight</a>() <span class="keyword">const </span>= 0;
+00167 
+00173   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a13">CalculateSectorBBox</a> (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox,
+00174     <span class="keywordtype">bool</span> do_meshes) <span class="keyword">const </span>= 0;
+00175 
+00183   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSector.html#a14">SetVisibilityCullerPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name,
+00184         <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* culler_params = 0) = 0;
+00190   <span class="keyword">virtual</span> <a class="code" href="structiVisibilityCuller.html">iVisibilityCuller</a>* <a class="code" href="structiSector.html#a15">GetVisibilityCuller</a> () = 0;
+00191 
+00195   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSector.html#a16">GetRecLevel</a> () <span class="keyword">const </span>= 0;
+00196 
+00200   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a17">IncRecLevel</a> () = 0;
+00201 
+00205   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a18">DecRecLevel</a> () = 0;
+00206 
+00215   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiSector.html#a19">HitBeamPortals</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start,
+00216         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end, <a class="code" href="classcsVector3.html">csVector3</a>&amp; isect, <span class="keywordtype">int</span>* polygon_idx) = 0;
+00217 
+00225   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiSector.html#a20">HitBeam</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end,
+00226     <a class="code" href="classcsVector3.html">csVector3</a>&amp; intersect, <span class="keywordtype">int</span>* polygon_idx, <span class="keywordtype">bool</span> accurate = <span class="keyword">false</span>) = 0;
+00227 
+00246   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiSector.html#a21">FollowSegment</a> (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t,
+00247     <a class="code" href="classcsVector3.html">csVector3</a>&amp; new_position, <span class="keywordtype">bool</span>&amp; mirror, <span class="keywordtype">bool</span> only_portals = <span class="keyword">false</span>) = 0;
+00248 
+00250   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a22">Draw</a> (<a class="code" href="structiRenderView.html">iRenderView</a>* rview) = 0;
+00251 
+00256   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a23">PrepareDraw</a> (<a class="code" href="structiRenderView.html">iRenderView</a>* rview) = 0;
+00257 
+00264   <span class="keyword">virtual</span> <a class="code" href="classcsRenderMeshList.html">csRenderMeshList</a>* <a class="code" href="structiSector.html#a24">GetVisibleMeshes</a> (<a class="code" href="structiRenderView.html">iRenderView</a> *) = 0;
+00265 
+00270   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a25">SetSectorCallback</a> (<a class="code" href="structiSectorCallback.html">iSectorCallback</a>* cb) = 0;
+00271 
+00275   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a26">RemoveSectorCallback</a> (<a class="code" href="structiSectorCallback.html">iSectorCallback</a>* cb) = 0;
+00276 
+00278   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSector.html#a27">GetSectorCallbackCount</a> () <span class="keyword">const </span>= 0;
+00279 
+00281   <span class="keyword">virtual</span> <a class="code" href="structiSectorCallback.html">iSectorCallback</a>* <a class="code" href="structiSector.html#a28">GetSectorCallback</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
+00282 
+00287   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a29">AddSectorMeshCallback</a> (<a class="code" href="structiSectorMeshCallback.html">iSectorMeshCallback</a>* cb) = 0;
+00288 
+00292   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a30">RemoveSectorMeshCallback</a> (<a class="code" href="structiSectorMeshCallback.html">iSectorMeshCallback</a>* cb) = 0;
+00293 
+00295   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a31">CheckFrustum</a> (<a class="code" href="structiFrustumView.html">iFrustumView</a>* lview) = 0;
+00296 
+00303   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsSet.html">csSet&lt;iMeshWrapper*&gt;</a>&amp; <a class="code" href="structiSector.html#a32">GetPortalMeshes</a> () <span class="keyword">const </span>= 0;
+00307   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a33">RegisterPortalMesh</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
+00311   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a34">UnregisterPortalMesh</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh) = 0;
+00312 
+00319   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSector.html#a35">UnlinkObjects</a> () = 0;
+00320 };
 00321 
-00322 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSectorList.html">iSectorList</a>, 0, 0, 2);
-00323 
-<a name="l00337"></a><a class="code" href="structiSectorList.html">00337</a> <span class="keyword">struct </span><a class="code" href="structiSectorList.html">iSectorList</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00338 {
-00340   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSectorList.html#a0">GetCount</a> () <span class="keyword">const </span>= 0;
-00341 
-00343   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a> *<a class="code" href="structiSectorList.html#a1">Get</a> (<span class="keywordtype">int</span> n) <span class="keyword">const </span>= 0;
-00344 
-00346   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSectorList.html#a2">Add</a> (<a class="code" href="structiSector.html">iSector</a> *obj) = 0;
-00347 
-00349   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSectorList.html#a3">Remove</a> (<a class="code" href="structiSector.html">iSector</a> *obj) = 0;
-00350 
-00352   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSectorList.html#a3">Remove</a> (<span class="keywordtype">int</span> n) = 0;
-00353 
-00355   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorList.html#a5">RemoveAll</a> () = 0;
-00356 
-00358   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSectorList.html#a6">Find</a> (<a class="code" href="structiSector.html">iSector</a> *obj) <span class="keyword">const </span>= 0;
-00359 
-00361   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a> *<a class="code" href="structiSectorList.html#a7">FindByName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Name) <span class="keyword">const </span>= 0;
-00362 };
-00363 
-00364 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSectorIterator.html">iSectorIterator</a>, 0, 1, 0);
-00365 
-<a name="l00375"></a><a class="code" href="structiSectorIterator.html">00375</a> <span class="keyword">struct </span><a class="code" href="structiSectorIterator.html">iSectorIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00376 {
-00378   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSectorIterator.html#a0">HasNext</a> () = 0;
-00379 
-00381   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiSectorIterator.html#a1">Next</a> () = 0;
-00382 
-00387   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiSectorIterator.html#a2">GetLastPosition</a> () = 0;
-00388 
-00390   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorIterator.html#a3">Reset</a> () = 0;
-00391 };
-00392 
-00395 <span class="preprocessor">#endif // __CS_IENGINE_SECTOR_H__</span>
+00322 
+00323 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSectorList.html">iSectorList</a>, 0, 0, 2);
+00324 
+<a name="l00338"></a><a class="code" href="structiSectorList.html">00338</a> <span class="keyword">struct </span><a class="code" href="structiSectorList.html">iSectorList</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00339 {
+00341   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSectorList.html#a0">GetCount</a> () <span class="keyword">const </span>= 0;
+00342 
+00344   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a> *<a class="code" href="structiSectorList.html#a1">Get</a> (<span class="keywordtype">int</span> n) <span class="keyword">const </span>= 0;
+00345 
+00347   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSectorList.html#a2">Add</a> (<a class="code" href="structiSector.html">iSector</a> *obj) = 0;
+00348 
+00350   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSectorList.html#a3">Remove</a> (<a class="code" href="structiSector.html">iSector</a> *obj) = 0;
+00351 
+00353   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSectorList.html#a3">Remove</a> (<span class="keywordtype">int</span> n) = 0;
+00354 
+00356   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorList.html#a5">RemoveAll</a> () = 0;
+00357 
+00359   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSectorList.html#a6">Find</a> (<a class="code" href="structiSector.html">iSector</a> *obj) <span class="keyword">const </span>= 0;
+00360 
+00362   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a> *<a class="code" href="structiSectorList.html#a7">FindByName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Name) <span class="keyword">const </span>= 0;
+00363 };
+00364 
+00365 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSectorIterator.html">iSectorIterator</a>, 0, 1, 0);
+00366 
+<a name="l00376"></a><a class="code" href="structiSectorIterator.html">00376</a> <span class="keyword">struct </span><a class="code" href="structiSectorIterator.html">iSectorIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00377 {
+00379   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSectorIterator.html#a0">HasNext</a> () = 0;
+00380 
+00382   <span class="keyword">virtual</span> <a class="code" href="structiSector.html">iSector</a>* <a class="code" href="structiSectorIterator.html#a1">Next</a> () = 0;
+00383 
+00388   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiSectorIterator.html#a2">GetLastPosition</a> () = 0;
+00389 
+00391   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSectorIterator.html#a3">Reset</a> () = 0;
+00392 };
+00393 
+00396 <span class="preprocessor">#endif // __CS_IENGINE_SECTOR_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

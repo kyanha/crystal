@@ -45,162 +45,163 @@
 00030 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
 00031 <span class="preprocessor">#include "<a class="code" href="refarr_8h.html">csutil/refarr.h</a>"</span>
 00032 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-00033 <span class="preprocessor">#include "<a class="code" href="strhash_8h.html">csutil/strhash.h</a>"</span>
-00034 <span class="preprocessor">#include "<a class="code" href="graph3d_8h.html">ivideo/graph3d.h</a>"</span>
-00035 <span class="preprocessor">#include "csgfx/shadervar.h"</span>
-00036 
-00037 <span class="keyword">struct </span><a class="code" href="structiString.html">iString</a>;
-00038 <span class="keyword">struct </span><a class="code" href="structiDataBuffer.html">iDataBuffer</a>;
-00039 <span class="keyword">struct </span><a class="code" href="structiDocumentNode.html">iDocumentNode</a>;
-00040 <span class="keyword">struct </span><a class="code" href="structiMaterial.html">iMaterial</a>;
-00041 <span class="keyword">struct </span><a class="code" href="structiLight.html">iLight</a>;
-00042 <span class="keyword">struct </span><a class="code" href="structiObject.html">iObject</a>;
-00043 
-00044 <span class="keyword">struct </span><a class="code" href="structiShaderManager.html">iShaderManager</a>;
-00045 <span class="keyword">struct </span><a class="code" href="structiShaderRenderInterface.html">iShaderRenderInterface</a>;
-00046 <span class="keyword">struct </span><a class="code" href="structiShader.html">iShader</a>;
-00047 <span class="keyword">struct </span><a class="code" href="structiShaderCompiler.html">iShaderCompiler</a>;
-00048 
-<a name="l00049"></a><a class="code" href="shader_8h.html#a0">00049</a> <span class="keyword">struct </span><a class="code" href="structcsRenderMesh.html">csRenderMesh</a>;
-00050 
-00056 <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt; csArray&lt;csShaderVariable*&gt;</a> &gt; <a class="code" href="classcsArray.html">csShaderVarStack</a>;
-00057 
-00058 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>, 0, 0, 1);
-00059 
-<a name="l00064"></a><a class="code" href="structiShaderVariableContext.html">00064</a> <span class="keyword">struct </span><a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00065 {
-00067   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a0">AddVariable</a> (<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable) = 0;
-00068   
-00070   <span class="keyword">virtual</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* <a class="code" href="structiShaderVariableContext.html#a1">GetVariable</a> (<a class="code" href="group__util.html#ga23">csStringID</a> name) <span class="keyword">const </span>= 0;
-00071 
-<a name="l00073"></a><a class="code" href="structiShaderVariableContext.html#a2">00073</a>   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* <a class="code" href="structiShaderVariableContext.html#a2">GetVariableAdd</a> (<a class="code" href="group__util.html#ga23">csStringID</a> name)
-00074   {
-00075     <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* sv;
-00076     sv = <a class="code" href="structiShaderVariableContext.html#a1">GetVariable</a> (name);
-00077     <span class="keywordflow">if</span> (sv == 0)
-00078     {
-00079       <a class="code" href="classcsRef.html">csRef&lt;csShaderVariable&gt;</a> nsv (
-00080         <a class="code" href="classcsPtr.html">csPtr&lt;csShaderVariable&gt;</a> (<span class="keyword">new</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> (name)));
-00081       <a class="code" href="structiShaderVariableContext.html#a0">AddVariable</a> (nsv);
-00082       sv = nsv; <span class="comment">// OK, sv won't be destructed, SV context takes ownership</span>
-00083     }
-00084     <span class="keywordflow">return</span> sv;
-00085   }
-00086 
-00088   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a>&amp; <a class="code" href="structiShaderVariableContext.html#a3">GetShaderVariables</a> () <span class="keyword">const </span>= 0;
-00089 
-00094   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a4">PushVariables</a> (<a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks) <span class="keyword">const </span>= 0;
-00095 
-00100   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a5">PopVariables</a> (<a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks) <span class="keyword">const </span>= 0;
-00101 
-00103   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderVariableContext.html#a6">IsEmpty</a> () <span class="keyword">const </span>= 0;
-00104 };
-00105 
-00106 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderManager.html">iShaderManager</a>, 0, 1, 0);
-00107 
-<a name="l00111"></a><a class="code" href="shader_8h.html#a4">00111</a> <span class="keyword">enum</span> <a class="code" href="shader_8h.html#a4">csShaderTagPresence</a>
-00112 {
-00117   <a class="code" href="shader_8h.html#a4a1">TagNeutral</a>,
-00121   <a class="code" href="shader_8h.html#a4a2">TagForbidden</a>,
-00127   <a class="code" href="shader_8h.html#a4a3">TagRequired</a>
-00128 };
-00129 
-<a name="l00133"></a><a class="code" href="structiShaderManager.html">00133</a> <span class="keyword">struct </span><a class="code" href="structiShaderManager.html">iShaderManager</a> : <span class="keyword">public</span> <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>
-00134 {
-00139   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a0">RegisterShader</a> (<a class="code" href="structiShader.html">iShader</a>* shader) = 0;
-00141   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a1">UnregisterShader</a> (<a class="code" href="structiShader.html">iShader</a>* shader) = 0;
-00143   <span class="keyword">virtual</span> <a class="code" href="structiShader.html">iShader</a>* <a class="code" href="structiShaderManager.html#a2">GetShader</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00145   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;iShader&gt;</a> &amp;<a class="code" href="structiShaderManager.html#a3">GetShaders</a> ()  = 0;
-00146 
-00148   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a4">RegisterCompiler</a> (<a class="code" href="structiShaderCompiler.html">iShaderCompiler</a>* compiler) = 0;
-00150   <span class="keyword">virtual</span> <a class="code" href="structiShaderCompiler.html">iShaderCompiler</a>* <a class="code" href="structiShaderManager.html#a5">GetCompiler</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00151 
-00153   <span class="keyword">virtual</span> <a class="code" href="classcsArray.html">csShaderVarStack</a>&amp; <a class="code" href="structiShaderManager.html#a6">GetShaderVariableStack</a> () = 0;
-00154 
-00163   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a7">SetTagOptions</a> (<a class="code" href="group__util.html#ga23">csStringID</a> tag, <a class="code" href="shader_8h.html#a4">csShaderTagPresence</a> presence, 
-00164     <span class="keywordtype">int</span> priority = 0) = 0;
-00169   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a8">GetTagOptions</a> (<a class="code" href="group__util.html#ga23">csStringID</a> tag, <a class="code" href="shader_8h.html#a4">csShaderTagPresence</a>&amp; presence, 
-00170     <span class="keywordtype">int</span>&amp; priority) = 0;
-00171 
-00175   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsSet.html">csSet&lt;csStringID&gt;</a>&amp; <a class="code" href="structiShaderManager.html#a9">GetTags</a> (<a class="code" href="shader_8h.html#a4">csShaderTagPresence</a> presence,
-00176     <span class="keywordtype">int</span>&amp; count) = 0;
-00177 
-00182   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a10">SetActiveLights</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;iLight*&gt;</a>&amp; lights) = 0;
-00183 
-00187   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;iLight*&gt;</a>&amp; <a class="code" href="structiShaderManager.html#a11">GetActiveLights</a> () <span class="keyword">const </span>= 0;
-00188 };
-00189 
-00190 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderRenderInterface.html">iShaderRenderInterface</a>, 0,0,1);
-00191 
-<a name="l00193"></a><a class="code" href="structiShaderRenderInterface.html">00193</a> <span class="keyword">struct </span><a class="code" href="structiShaderRenderInterface.html">iShaderRenderInterface</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00194 {
-00196   <span class="keyword">virtual</span> <span class="keywordtype">void</span>* <a class="code" href="structiShaderRenderInterface.html#a0">GetPrivateObject</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-00197 };
-00198 
-<a name="l00206"></a><a class="code" href="structcsShaderMetadata.html">00206</a> <span class="keyword">struct </span><a class="code" href="structcsShaderMetadata.html">csShaderMetadata</a>
-00207 {
-<a name="l00209"></a><a class="code" href="structcsShaderMetadata.html#o0">00209</a>   <span class="keywordtype">char</span> *<a class="code" href="structcsShaderMetadata.html#o0">description</a>;
-00210 
-<a name="l00216"></a><a class="code" href="structcsShaderMetadata.html#o1">00216</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsShaderMetadata.html#o1">numberOfLights</a>;
-00217 
-<a name="l00219"></a><a class="code" href="structcsShaderMetadata.html#a0">00219</a>   <a class="code" href="structcsShaderMetadata.html#a0">csShaderMetadata</a> ()
-00220     : <a class="code" href="structcsShaderMetadata.html#o0">description</a> (0), <a class="code" href="structcsShaderMetadata.html#o1">numberOfLights</a> (0)
-00221   {}
-00222 };
-00223 
-00224 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShader.html">iShader</a>, 0, 3, 0);
-00225 
-<a name="l00230"></a><a class="code" href="structiShader.html">00230</a> <span class="keyword">struct </span><a class="code" href="structiShader.html">iShader</a> : <span class="keyword">public</span> <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>
-00231 {
-00233   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a>* <a class="code" href="structiShader.html#a0">QueryObject</a> () = 0;
-00234 
-00236   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiShader.html#a1">GetFileName</a> () = 0;
-00237 
-00239   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShader.html#a2">SetFileName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename) = 0;
-00240 
-00251   <span class="keyword">virtual</span> size_t <a class="code" href="structiShader.html#a3">GetTicket</a> (<span class="keyword">const</span> <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>&amp; modes,
-00252     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a>&amp; stacks) = 0;
-00253 
-00255   <span class="keyword">virtual</span> size_t <a class="code" href="structiShader.html#a4">GetNumberOfPasses</a> (size_t ticket) = 0;
-00256 
-00258   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShader.html#a5">ActivatePass</a> (size_t ticket, size_t number) = 0;
-00259 
-00261   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShader.html#a6">SetupPass</a> (size_t ticket, <span class="keyword">const</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a> *mesh,
-00262     <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>&amp; modes,
-00263     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a>&amp; stacks) = 0;
-00264 
-00269   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShader.html#a7">TeardownPass</a> (size_t ticket) = 0;
-00270 
-00272   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShader.html#a8">DeactivatePass</a> (size_t ticket) = 0;
-00273 
-00275   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsShaderMetadata.html">csShaderMetadata</a>&amp; <a class="code" href="structiShader.html#a9">GetMetadata</a> (size_t ticket) <span class="keyword">const </span>= 0;
-00276 };
-00277 
+00033 <span class="preprocessor">#include "<a class="code" href="set_8h.html">csutil/set.h</a>"</span>
+00034 <span class="preprocessor">#include "<a class="code" href="strhash_8h.html">csutil/strhash.h</a>"</span>
+00035 <span class="preprocessor">#include "<a class="code" href="graph3d_8h.html">ivideo/graph3d.h</a>"</span>
+00036 <span class="preprocessor">#include "csgfx/shadervar.h"</span>
+00037 
+00038 <span class="keyword">struct </span><a class="code" href="structiString.html">iString</a>;
+00039 <span class="keyword">struct </span><a class="code" href="structiDataBuffer.html">iDataBuffer</a>;
+00040 <span class="keyword">struct </span><a class="code" href="structiDocumentNode.html">iDocumentNode</a>;
+00041 <span class="keyword">struct </span><a class="code" href="structiMaterial.html">iMaterial</a>;
+00042 <span class="keyword">struct </span><a class="code" href="structiLight.html">iLight</a>;
+00043 <span class="keyword">struct </span><a class="code" href="structiObject.html">iObject</a>;
+00044 
+00045 <span class="keyword">struct </span><a class="code" href="structiShaderManager.html">iShaderManager</a>;
+00046 <span class="keyword">struct </span><a class="code" href="structiShaderRenderInterface.html">iShaderRenderInterface</a>;
+00047 <span class="keyword">struct </span><a class="code" href="structiShader.html">iShader</a>;
+00048 <span class="keyword">struct </span><a class="code" href="structiShaderCompiler.html">iShaderCompiler</a>;
+00049 
+<a name="l00050"></a><a class="code" href="shader_8h.html#a0">00050</a> <span class="keyword">struct </span><a class="code" href="structcsRenderMesh.html">csRenderMesh</a>;
+00051 
+00057 <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt; csArray&lt;csShaderVariable*&gt;</a> &gt; <a class="code" href="classcsArray.html">csShaderVarStack</a>;
+00058 
+00059 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>, 0, 0, 1);
+00060 
+<a name="l00065"></a><a class="code" href="structiShaderVariableContext.html">00065</a> <span class="keyword">struct </span><a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00066 {
+00068   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a0">AddVariable</a> (<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable) = 0;
+00069   
+00071   <span class="keyword">virtual</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* <a class="code" href="structiShaderVariableContext.html#a1">GetVariable</a> (<a class="code" href="group__util.html#ga23">csStringID</a> name) <span class="keyword">const </span>= 0;
+00072 
+<a name="l00074"></a><a class="code" href="structiShaderVariableContext.html#a2">00074</a>   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* <a class="code" href="structiShaderVariableContext.html#a2">GetVariableAdd</a> (<a class="code" href="group__util.html#ga23">csStringID</a> name)
+00075   {
+00076     <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* sv;
+00077     sv = <a class="code" href="structiShaderVariableContext.html#a1">GetVariable</a> (name);
+00078     <span class="keywordflow">if</span> (sv == 0)
+00079     {
+00080       <a class="code" href="classcsRef.html">csRef&lt;csShaderVariable&gt;</a> nsv (
+00081         <a class="code" href="classcsPtr.html">csPtr&lt;csShaderVariable&gt;</a> (<span class="keyword">new</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> (name)));
+00082       <a class="code" href="structiShaderVariableContext.html#a0">AddVariable</a> (nsv);
+00083       sv = nsv; <span class="comment">// OK, sv won't be destructed, SV context takes ownership</span>
+00084     }
+00085     <span class="keywordflow">return</span> sv;
+00086   }
+00087 
+00089   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a>&amp; <a class="code" href="structiShaderVariableContext.html#a3">GetShaderVariables</a> () <span class="keyword">const </span>= 0;
+00090 
+00095   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a4">PushVariables</a> (<a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks) <span class="keyword">const </span>= 0;
+00096 
+00101   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a5">PopVariables</a> (<a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks) <span class="keyword">const </span>= 0;
+00102 
+00104   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderVariableContext.html#a6">IsEmpty</a> () <span class="keyword">const </span>= 0;
+00105 };
+00106 
+00107 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderManager.html">iShaderManager</a>, 0, 1, 0);
+00108 
+<a name="l00112"></a><a class="code" href="shader_8h.html#a4">00112</a> <span class="keyword">enum</span> <a class="code" href="shader_8h.html#a4">csShaderTagPresence</a>
+00113 {
+00118   <a class="code" href="shader_8h.html#a4a1">TagNeutral</a>,
+00122   <a class="code" href="shader_8h.html#a4a2">TagForbidden</a>,
+00128   <a class="code" href="shader_8h.html#a4a3">TagRequired</a>
+00129 };
+00130 
+<a name="l00134"></a><a class="code" href="structiShaderManager.html">00134</a> <span class="keyword">struct </span><a class="code" href="structiShaderManager.html">iShaderManager</a> : <span class="keyword">public</span> <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>
+00135 {
+00140   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a0">RegisterShader</a> (<a class="code" href="structiShader.html">iShader</a>* shader) = 0;
+00142   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a1">UnregisterShader</a> (<a class="code" href="structiShader.html">iShader</a>* shader) = 0;
+00144   <span class="keyword">virtual</span> <a class="code" href="structiShader.html">iShader</a>* <a class="code" href="structiShaderManager.html#a2">GetShader</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00146   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;iShader&gt;</a> &amp;<a class="code" href="structiShaderManager.html#a3">GetShaders</a> ()  = 0;
+00147 
+00149   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a4">RegisterCompiler</a> (<a class="code" href="structiShaderCompiler.html">iShaderCompiler</a>* compiler) = 0;
+00151   <span class="keyword">virtual</span> <a class="code" href="structiShaderCompiler.html">iShaderCompiler</a>* <a class="code" href="structiShaderManager.html#a5">GetCompiler</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00152 
+00154   <span class="keyword">virtual</span> <a class="code" href="classcsArray.html">csShaderVarStack</a>&amp; <a class="code" href="structiShaderManager.html#a6">GetShaderVariableStack</a> () = 0;
+00155 
+00164   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a7">SetTagOptions</a> (<a class="code" href="group__util.html#ga23">csStringID</a> tag, <a class="code" href="shader_8h.html#a4">csShaderTagPresence</a> presence, 
+00165     <span class="keywordtype">int</span> priority = 0) = 0;
+00170   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a8">GetTagOptions</a> (<a class="code" href="group__util.html#ga23">csStringID</a> tag, <a class="code" href="shader_8h.html#a4">csShaderTagPresence</a>&amp; presence, 
+00171     <span class="keywordtype">int</span>&amp; priority) = 0;
+00172 
+00176   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsSet.html">csSet&lt;csStringID&gt;</a>&amp; <a class="code" href="structiShaderManager.html#a9">GetTags</a> (<a class="code" href="shader_8h.html#a4">csShaderTagPresence</a> presence,
+00177     <span class="keywordtype">int</span>&amp; count) = 0;
+00178 
+00183   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderManager.html#a10">SetActiveLights</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;iLight*&gt;</a>&amp; lights) = 0;
+00184 
+00188   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;iLight*&gt;</a>&amp; <a class="code" href="structiShaderManager.html#a11">GetActiveLights</a> () <span class="keyword">const </span>= 0;
+00189 };
+00190 
+00191 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderRenderInterface.html">iShaderRenderInterface</a>, 0,0,1);
+00192 
+<a name="l00194"></a><a class="code" href="structiShaderRenderInterface.html">00194</a> <span class="keyword">struct </span><a class="code" href="structiShaderRenderInterface.html">iShaderRenderInterface</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00195 {
+00197   <span class="keyword">virtual</span> <span class="keywordtype">void</span>* <a class="code" href="structiShaderRenderInterface.html#a0">GetPrivateObject</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+00198 };
+00199 
+<a name="l00207"></a><a class="code" href="structcsShaderMetadata.html">00207</a> <span class="keyword">struct </span><a class="code" href="structcsShaderMetadata.html">csShaderMetadata</a>
+00208 {
+<a name="l00210"></a><a class="code" href="structcsShaderMetadata.html#o0">00210</a>   <span class="keywordtype">char</span> *<a class="code" href="structcsShaderMetadata.html#o0">description</a>;
+00211 
+<a name="l00217"></a><a class="code" href="structcsShaderMetadata.html#o1">00217</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsShaderMetadata.html#o1">numberOfLights</a>;
+00218 
+<a name="l00220"></a><a class="code" href="structcsShaderMetadata.html#a0">00220</a>   <a class="code" href="structcsShaderMetadata.html#a0">csShaderMetadata</a> ()
+00221     : <a class="code" href="structcsShaderMetadata.html#o0">description</a> (0), <a class="code" href="structcsShaderMetadata.html#o1">numberOfLights</a> (0)
+00222   {}
+00223 };
+00224 
+00225 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShader.html">iShader</a>, 0, 3, 0);
+00226 
+<a name="l00231"></a><a class="code" href="structiShader.html">00231</a> <span class="keyword">struct </span><a class="code" href="structiShader.html">iShader</a> : <span class="keyword">public</span> <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>
+00232 {
+00234   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a>* <a class="code" href="structiShader.html#a0">QueryObject</a> () = 0;
+00235 
+00237   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiShader.html#a1">GetFileName</a> () = 0;
+00238 
+00240   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShader.html#a2">SetFileName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename) = 0;
+00241 
+00252   <span class="keyword">virtual</span> size_t <a class="code" href="structiShader.html#a3">GetTicket</a> (<span class="keyword">const</span> <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>&amp; modes,
+00253     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a>&amp; stacks) = 0;
+00254 
+00256   <span class="keyword">virtual</span> size_t <a class="code" href="structiShader.html#a4">GetNumberOfPasses</a> (size_t ticket) = 0;
+00257 
+00259   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShader.html#a5">ActivatePass</a> (size_t ticket, size_t number) = 0;
+00260 
+00262   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShader.html#a6">SetupPass</a> (size_t ticket, <span class="keyword">const</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a> *mesh,
+00263     <a class="code" href="structcsRenderMeshModes.html">csRenderMeshModes</a>&amp; modes,
+00264     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a>&amp; stacks) = 0;
+00265 
+00270   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShader.html#a7">TeardownPass</a> (size_t ticket) = 0;
+00271 
+00273   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShader.html#a8">DeactivatePass</a> (size_t ticket) = 0;
+00274 
+00276   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsShaderMetadata.html">csShaderMetadata</a>&amp; <a class="code" href="structiShader.html#a9">GetMetadata</a> (size_t ticket) <span class="keyword">const </span>= 0;
+00277 };
 00278 
-00279 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderPriorityList.html">iShaderPriorityList</a>, 0,0,1);
-<a name="l00283"></a><a class="code" href="structiShaderPriorityList.html">00283</a> <span class="keyword">struct </span><a class="code" href="structiShaderPriorityList.html">iShaderPriorityList</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00284 {
-00286   <span class="keyword">virtual</span> size_t <a class="code" href="structiShaderPriorityList.html#a0">GetCount</a> () <span class="keyword">const </span>= 0;
-00288   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiShaderPriorityList.html#a1">GetPriority</a> (size_t idx) <span class="keyword">const </span>= 0;
-00289 };
-00290 
-00291 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderCompiler.html">iShaderCompiler</a>, 0,0,1);
-<a name="l00297"></a><a class="code" href="structiShaderCompiler.html">00297</a> <span class="keyword">struct </span><a class="code" href="structiShaderCompiler.html">iShaderCompiler</a> : <a class="code" href="structiBase.html">iBase</a>
-00298 {
-00300   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiShaderCompiler.html#a0">GetName</a>() = 0;
-00301 
-00310   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iShader&gt;</a> <a class="code" href="structiShaderCompiler.html#a1">CompileShader</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a> *templ,
-00311                   <span class="keywordtype">int</span> forcepriority = -1) = 0;
-00312 
-00314   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderCompiler.html#a2">ValidateTemplate</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a> *templ) = 0;
-00315 
-00317   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderCompiler.html#a3">IsTemplateToCompiler</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a> *templ) = 0;
-00318 
-00324   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iShaderPriorityList&gt;</a> <a class="code" href="structiShaderCompiler.html#a4">GetPriorities</a> (
-00325                   <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* templ) = 0;
-00326 };
-00327 
-00328 <span class="preprocessor">#endif // __CS_IVIDEO_SHADER_H__</span>
+00279 
+00280 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderPriorityList.html">iShaderPriorityList</a>, 0,0,1);
+<a name="l00284"></a><a class="code" href="structiShaderPriorityList.html">00284</a> <span class="keyword">struct </span><a class="code" href="structiShaderPriorityList.html">iShaderPriorityList</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00285 {
+00287   <span class="keyword">virtual</span> size_t <a class="code" href="structiShaderPriorityList.html#a0">GetCount</a> () <span class="keyword">const </span>= 0;
+00289   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiShaderPriorityList.html#a1">GetPriority</a> (size_t idx) <span class="keyword">const </span>= 0;
+00290 };
+00291 
+00292 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiShaderCompiler.html">iShaderCompiler</a>, 0,0,1);
+<a name="l00298"></a><a class="code" href="structiShaderCompiler.html">00298</a> <span class="keyword">struct </span><a class="code" href="structiShaderCompiler.html">iShaderCompiler</a> : <a class="code" href="structiBase.html">iBase</a>
+00299 {
+00301   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiShaderCompiler.html#a0">GetName</a>() = 0;
+00302 
+00311   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iShader&gt;</a> <a class="code" href="structiShaderCompiler.html#a1">CompileShader</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a> *templ,
+00312                   <span class="keywordtype">int</span> forcepriority = -1) = 0;
+00313 
+00315   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderCompiler.html#a2">ValidateTemplate</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a> *templ) = 0;
+00316 
+00318   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderCompiler.html#a3">IsTemplateToCompiler</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a> *templ) = 0;
+00319 
+00325   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iShaderPriorityList&gt;</a> <a class="code" href="structiShaderCompiler.html#a4">GetPriorities</a> (
+00326                   <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* templ) = 0;
+00327 };
+00328 
+00329 <span class="preprocessor">#endif // __CS_IVIDEO_SHADER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
