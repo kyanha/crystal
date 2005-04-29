@@ -852,14 +852,14 @@ should be condensed.  Most implementations of <samp>`iDocument'</samp> will atte
 respect this option if possible.  For implementations where it does not make
 sense, the option will be ignored.
 </p>
-<p>Previously, <small>XML</small> implementations of <samp>`iDocument'</samp> condensed whitespace
-in <samp>`CS_NODE_TEXT'</samp> nodes at <code>Parse()</code> time.  This is no longer the
-case.  Whitespace is now preserved by default.  If the new behavior is
-unsuitable for your case, use the new argument to <code>iDocument::Parse()</code> to
-indicate that whitespace should be condensed.  This change was made in order to
-conform to the latest <small>XML</small> specification which states that <small>XML</small>
-scanners must preserve whitespace by default.  Consult the following documents
-for more information regarding this issue.
+<p>Previously, <small>XML</small>-based implementations of the <samp>`iDocument'</samp> interface
+condensed whitespace in <samp>`CS_NODE_TEXT'</samp> nodes at <code>Parse()</code> time.  This
+is no longer the case.  Whitespace is now preserved by default.  If the new
+behavior is unsuitable for your case, use the new argument to
+<code>iDocument::Parse()</code> to indicate that whitespace should be condensed.
+This change was made in order to conform to the latest <small>XML</small> specification
+which states that <small>XML</small> scanners must preserve whitespace by default.
+Consult the following documents for more information regarding this issue.
 </p>
 
 <p><a href="http://www.w3.org/TR/REC-xml/#sec-white-space">http://www.w3.org/TR/REC-xml/#sec-white-space</a><br>
@@ -1083,6 +1083,10 @@ name change.
 <code>CS_PROCSIZE</code> =&gt; <code>CS_PROCESSOR_SIZE</code>
 </li></ul>
 
+<p>The <code>csOrdering&lt;&gt;</code> method has been renamed to the more general 
+<code>csComparator&lt;&gt;</code> (to reflect the fact that this template can perform both
+ordering and equality comparisons).
+</p>
 <a name="SEC824"></a>
 <h3 class="subheading"> Default <code>csHash&lt;&gt;</code> (and <code>csHashReversible&lt;&gt;</code>) Table Size </h3>
 
@@ -1737,7 +1741,7 @@ change.
 <h3 class="subheading"> <samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> Removal </h3>
 
 <p><samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> have been replaced
-with <samp>`csStringSet::GlobalIterator'</samp> and
+with the iterator classes <samp>`csStringSet::GlobalIterator'</samp> and
 <samp>`csStringHash::GlobalIterator'</samp>, respectively.  Rather than instantiating
 iterators directly, you now ask the set or hash for an iterator. This brings
 the <samp>`csStringSet'</samp> and <samp>`csStringHash'</samp> <small>API</small>'s in line with other
@@ -1776,15 +1780,20 @@ questionable use.
 </li><li>
 <code>csIndPrint</code> and <tt>`csutil/indprint.h'</tt>
 </li><li>
-<code>iMaterialHandle</code>. Equivalent functionality can be achieved by using
-<samp>`iTextureHandle'</samp> or <samp>`iMaterial'</samp> directly; whichever is more
-appropriate.
+<code>iMaterialHandle</code>.  Use <samp>`iTextureHandle'</samp> or <samp>`iMaterial'</samp> directly
+(whichever is more appropriate) to achieve equivalent functionality.
 </li><li>
 <code>csRenderMeshHolderMultiple</code>. Equivalent functionality can be achieved by 
 using <samp>`csFrameDataHolder&lt;csDirtyAccessArray&lt;csRenderMesh*&gt; &gt;'</samp>.
 </li></ul>
 
 <a name="SEC855"></a>
+<h3 class="subheading"> <code>csRenderMeshHolderSingle</code> Renamed </h3>
+
+<p><samp>`csRenderMeshHolderSingle'</samp> has been renamed to <samp>`csRenderMeshHolder'</samp>
+as a consequence of the removal of <samp>`csRenderMeshHolderMultiple'</samp>.
+</p>
+<a name="SEC856"></a>
 <h3 class="subheading"> C++ Standard Conformance </h3>
 
 <p>Crystal Space's public header files are now C++ Language Standard
@@ -1793,7 +1802,7 @@ strictly to the C++ Language Standard (such as those which employ <em>gcc</em>'s
 <samp>`-ansi'</samp> and <samp>`-pedantic'</samp> options) can now include Crystal Space
 headers safely.
 </p>
-<a name="SEC856"></a>
+<a name="SEC857"></a>
 <h3 class="subheading"> <tt>`imap/parser.h'</tt> Deprecated </h3>
 
 <p>All functionality in the header <tt>`imap/parser.h'</tt> was long ago moved to
@@ -1803,21 +1812,28 @@ merely included <tt>`imap/loader.h'</tt> and did nothing more. Since
 <tt>`imap/parser.h'</tt> has no useful purpose, it is now officially deprecated,
 and deprecation warnings have been added. Use <tt>`imap/loader.h'</tt> instead.
 </p>
-<a name="SEC857"></a>
-<h3 class="subheading"> <code>csRenderMeshHolderSingle</code> Renamed </h3>
-
-<p>Following the removal of <code>csRenderMeshHolderMultiple</code> (see above),
-<code>csRenderMeshHolderSingle</code> has been renamed to <code>csRenderMeshHolder</code>. 
-</p>
 <a name="SEC858"></a>
-<h3 class="subheading"> <code>csSet&lt;&gt;</code> Relocation </h3>
+<h3 class="subheading"> <code>csSet&lt;&gt;</code> Relocation and Changes </h3>
 
-<p>The class <code>csSet&lt;&gt;</code> was moved out from <tt>`csutil/hash.h'</tt> into its own 
-header file, <tt>`csutil/set.h'</tt>. While <code>csSet&lt;&gt;</code> internally depends on
-<code>csHash&lt;&gt;</code>, this is an implementation detail that could change in the
-future. Hence, to hide this detail and reduce the need to make any adjustments
-in case the implementation of <code>csSet&lt;&gt;</code> would change the class has been
-relocated.
+<p>The declaration of <code>csSet&lt;&gt;</code> was moved out from <tt>`csutil/hash.h'</tt> and
+into its own header file, <tt>`csutil/set.h'</tt>. The method
+<code>csSet&lt;&gt;::GetHash()</code> has likewise been removed since it unnecessarily
+exposed an underlying implementation detail of <code>csSet&lt;&gt;</code>.
+</p>
+<a name="SEC859"></a>
+<h3 class="subheading"> <code>csHash&lt;&gt;</code> Changes </h3>
+
+<p>The way <code>csHash&lt;&gt;</code> handles support for arbitrary key types has been 
+changed. Previously, a so-called &quot;hash key handler&quot; was passed as a template
+parameter that computed hash keys and compared keys. Now, the hash computation
+is handled through the <code>csHashComputer&lt;&gt;</code> template and key comparison 
+through <code>csComparator&lt;&gt;</code>. To provide hash computation and comparisons for 
+specific types used as hash keys, specializations of the templates mentioned
+above are needed. Alternatively the default comparator uses the <code>&lt;</code> and 
+<code>&gt;</code> operators, so you can also implement those instead of a 
+<code>csComparator&lt;&gt;</code> specialization - however, <code>csHashComputer&lt;&gt;</code> still 
+needs to be specialized. <small>CS</small> already provides specializations for the 
+commonly used types <samp>`csString'</samp>, <samp>`const char*'</samp> and <samp>`csStrKey'</samp>.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
