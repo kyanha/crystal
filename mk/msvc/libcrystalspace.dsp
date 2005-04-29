@@ -1478,6 +1478,10 @@ SOURCE=..\..\libs\..\include\csutil\cmdline.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\comparator.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\csbaseeventh.h
 # End Source File
 # Begin Source File
