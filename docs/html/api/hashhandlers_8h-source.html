@@ -17,7 +17,7 @@
 <div class="qindex"><a class="qindex" href="index.html">Main&nbsp;Page</a> | <a class="qindex" href="modules.html">Modules</a> | <a class="qindex" href="hierarchy.html">Class&nbsp;Hierarchy</a> | <a class="qindex" href="classes.html">Alphabetical&nbsp;List</a> | <a class="qindex" href="annotated.html">Class&nbsp;List</a> | <a class="qindex" href="dirs.html">Directories</a> | <a class="qindex" href="files.html">File&nbsp;List</a> | <a class="qindex" href="functions.html">Class&nbsp;Members</a> | <a class="qindex" href="globals.html">File&nbsp;Members</a> | <a class="qindex" href="pages.html">Related&nbsp;Pages</a></div>
 <div class="nav">
 <a class="el" href="dir_000022.html">csutil</a></div>
-<h1>hashhandlers.h</h1><a href="hashhandlers_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
+<h1>hashhandlers.h</h1><div class="fragment"><pre class="fragment">00001 <span class="comment">/*</span>
 00002 <span class="comment">    Copyright (C) 2003 by Jorrit Tyberghein</span>
 00003 <span class="comment">              (C) 2003 by Frank Richter</span>
 00004 <span class="comment"></span>
@@ -39,74 +39,24 @@
 00020 <span class="preprocessor">#ifndef __CS_UTIL_HASHHANDLERS_H__</span>
 00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_UTIL_HASHHANDLERS_H__</span>
 00022 <span class="preprocessor"></span>
-00027 <span class="preprocessor">#include "csextern.h"</span>
-00028 <span class="preprocessor">#include "<a class="code" href="hash_8h.html">hash.h</a>"</span>
-00029 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">ref.h</a>"</span>
-00030 <span class="preprocessor">#include "<a class="code" href="util_8h.html">util.h</a>"</span>
-00031 
-<a name="l00040"></a><a class="code" href="classcsConstCharHashKeyHandler.html">00040</a> <span class="keyword">class </span><a class="code" href="classcsConstCharHashKeyHandler.html">csConstCharHashKeyHandler</a>
-00041 {
-00042 <span class="keyword">public</span>:
-00043   <span class="keyword">static</span> <a class="code" href="group__util.html#ga4">uint32</a> ComputeHash (<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>&amp; key)
-00044   {
-00045     <span class="keywordflow">return</span> (<a class="code" href="hash_8h.html#a0">csHashCompute</a> (key));
-00046   }
-00047 
-00048   <span class="keyword">static</span> <span class="keywordtype">bool</span> CompareKeys (<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>&amp; key1, <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>&amp; key2)
-00049   {
-00050     <span class="keywordflow">return</span> (strcmp (key1, key2) == 0);
-00051   }
-00052 };
-00053 
-<a name="l00059"></a><a class="code" href="classcsStrKey.html">00059</a> <span class="keyword">class </span><a class="code" href="classcsStrKey.html">csStrKey</a>
-00060 {
-00061 <span class="keyword">private</span>:
-00062   <span class="keywordtype">char</span>* str;
-00063 
-00064 <span class="keyword">public</span>:
-00065   <a class="code" href="classcsStrKey.html">csStrKey</a> () { str = 0; }
-00066   <a class="code" href="classcsStrKey.html">csStrKey</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s) { str = <a class="code" href="group__util.html#ga94">csStrNew</a> (s); }
-00067   <a class="code" href="classcsStrKey.html">csStrKey</a> (<span class="keyword">const</span> <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; c) { str = <a class="code" href="group__util.html#ga94">csStrNew</a> (c.<a class="code" href="classcsStrKey.html#r0">str</a>); }
-00068   ~<a class="code" href="classcsStrKey.html">csStrKey</a> () { <span class="keyword">delete</span>[] str; }
-00069   <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; o)
-00070   {
-00071     <span class="keyword">delete</span>[] str; str = <a class="code" href="group__util.html#ga94">csStrNew</a> (o.<a class="code" href="classcsStrKey.html#r0">str</a>);
-00072     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00073   }
-00074   operator const char* ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> str; }
-00075 };
-00076 
-00083 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00084"></a><a class="code" href="classcsRefHashKeyHandler.html">00084</a> <span class="keyword">class </span><a class="code" href="classcsRefHashKeyHandler.html">csRefHashKeyHandler</a>
-00085 {
-00086 <span class="keyword">public</span>:
-00087   <span class="keyword">static</span> <a class="code" href="group__util.html#ga4">uint32</a> ComputeHash (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key)
-00088   {
-00089     <span class="keywordflow">return</span> (<a class="code" href="group__util.html#ga8">intptr_t</a>) ((T*)key);
-00090   }
-00091 
-00092   <span class="keyword">static</span> <span class="keywordtype">bool</span> CompareKeys (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key2)
-00093   {
-00094     <span class="keywordflow">return</span> ((T*)key1 == (T*)key2);
-00095   }
-00096 };
-00097 
-00101 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00102"></a><a class="code" href="classcsStructKeyHandler.html">00102</a> <span class="keyword">class </span><a class="code" href="classcsStructKeyHandler.html">csStructKeyHandler</a>
-00103 {
-00104 <span class="keyword">public</span>:
-00105   <span class="keyword">static</span> <a class="code" href="group__util.html#ga4">uint32</a> ComputeHash (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key)
-00106   {
-00107     <span class="keywordflow">return</span> <a class="code" href="hash_8h.html#a0">csHashCompute</a> ((<span class="keywordtype">char</span>*)&amp;key, <span class="keyword">sizeof</span> (T));
-00108   }
-00109 
-00110   <span class="keyword">static</span> <span class="keywordtype">bool</span> CompareKeys (<span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key1, <span class="keyword">const</span> <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a>&amp; key2)
-00111   {
-00112     <span class="keywordflow">return</span> (memcmp (&amp;key1, &amp;key2, <span class="keyword">sizeof</span> (T)) == 0);
-00113   }
-00114 };
-00115 
-00116 <span class="preprocessor">#endif // __CS_UTIL_HASHHANDLERS_H__</span>
+00023 <span class="preprocessor">#ifdef CS_COMPILER_GCC</span>
+00024 <span class="preprocessor"></span><span class="preprocessor">  #warning The "hash key handlers" mechanism has been removed; to provide custom</span>
+00025 <span class="preprocessor"></span><span class="preprocessor">  #warning comparisons for two keys, provide a suitable specialization of the</span>
+00026 <span class="preprocessor"></span><span class="preprocessor">  #warning csComparator&lt;&gt; and csHashComputer&lt;&gt; templates.</span>
+00027 <span class="preprocessor"></span><span class="preprocessor">  #warning Also note that for some commonly used key types (notably, const char*) </span>
+00028 <span class="preprocessor"></span><span class="preprocessor">  #warning specializations are already provide (consult API docs for a list of</span>
+00029 <span class="preprocessor"></span><span class="preprocessor">  #warning specializations.)</span>
+00030 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00031 <span class="preprocessor"></span><span class="preprocessor">#ifdef CS_COMPILER_MSVC</span>
+00032 <span class="preprocessor"></span><span class="preprocessor">  #pragma message ("The \"hash key handlers\" mechanism has been removed; to provide custom")</span>
+00033 <span class="preprocessor"></span><span class="preprocessor">  #pragma message ("comparisons for two keys, provide a suitable specialization of the")</span>
+00034 <span class="preprocessor"></span><span class="preprocessor">  #pragma message ("csComparator&lt;&gt; and csHashComputer&lt;&gt; templates.")</span>
+00035 <span class="preprocessor"></span><span class="preprocessor">  #pragma message ("Also note that for some commonly used key types (notably, const char*)")</span>
+00036 <span class="preprocessor"></span><span class="preprocessor">  #pragma message ("specializations are already provide (consult API docs for a list of")</span>
+00037 <span class="preprocessor"></span><span class="preprocessor">  #pragma message ("specializations.)")</span>
+00038 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00039 <span class="preprocessor"></span>
+00040 <span class="preprocessor">#endif // __CS_UTIL_HASHHANDLERS_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

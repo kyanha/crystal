@@ -40,465 +40,515 @@
 00021 <span class="preprocessor"></span>
 00026 <span class="preprocessor">#include "csextern.h"</span>
 00027 <span class="preprocessor">#include "<a class="code" href="array_8h.html">array.h</a>"</span>
-00028 
-00035 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="hash_8h.html#a0">csHashCompute</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>*);
-00036 
-00043 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="hash_8h.html#a0">csHashCompute</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>*, size_t length);
-00044 
-00048 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00049"></a><a class="code" href="classcsIntegralHashKeyHandler.html">00049</a> <span class="keyword">class </span><a class="code" href="classcsIntegralHashKeyHandler.html">csIntegralHashKeyHandler</a>
-00050 {
-00051 <span class="keyword">public</span>:
-00052   <span class="keyword">static</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> ComputeHash (<span class="keyword">const</span> T&amp; key)
-00053   {
-00054 <span class="preprocessor">#if (CS_PROCESSOR_SIZE == 32)</span>
-00055 <span class="preprocessor"></span><span class="preprocessor">#if (_MSC_VER &gt;= 1300)</span>
-00056 <span class="preprocessor"></span>    <span class="comment">/*</span>
-00057 <span class="comment">      VC7 with 64bit warnings complains about a pointer truncation when T is</span>
-00058 <span class="comment">      a pointer. This isn't serious (as csHash&lt;&gt; does not rely on the hash of</span>
-00059 <span class="comment">      a key alone to retrieve a value). The __w64 causes VC7 to not emit that</span>
-00060 <span class="comment">      warning (on 32bit compilers at least).</span>
-00061 <span class="comment">     */</span>
-00062     <span class="keywordflow">return</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> __w64)key;  
-00063 <span class="preprocessor">#else</span>
-00064 <span class="preprocessor"></span>    <span class="keywordflow">return</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)key;  
-00065 <span class="preprocessor">#endif</span>
-00066 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00067 <span class="preprocessor"></span>    <span class="comment">// Cast to uint64 first to avoid compiler warnings about truncation.</span>
-00068     <span class="keywordflow">return</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)((<a class="code" href="group__util.html#ga6">uint64</a>)key);
-00069 <span class="preprocessor">#endif</span>
-00070 <span class="preprocessor"></span>  }
-00071 
-00072   <span class="keyword">static</span> <span class="keywordtype">bool</span> CompareKeys (<span class="keyword">const</span> T&amp; key1, <span class="keyword">const</span> T&amp; key2)
-00073   {
-00074     <span class="keywordflow">return</span> (key1 == key2);
-00075   }
-00076 };
-00077 
-00082 <span class="keyword">template</span> &lt;<span class="keyword">class </span>T, <span class="keyword">class </span>K = <span class="keywordtype">unsigned</span> int, 
-00083   <span class="keyword">class </span>KeyHandler = <a class="code" href="classcsIntegralHashKeyHandler.html">csIntegralHashKeyHandler&lt;K&gt;</a> &gt; 
-<a name="l00084"></a><a class="code" href="classcsHash.html">00084</a> <span class="keyword">class </span><a class="code" href="classcsHash.html">csHash</a>
-00085 {
-00086 <span class="keyword">protected</span>:
-00087   <span class="keyword">struct </span>Element
-00088   {
-00089     <span class="keyword">const</span> K key;
-00090     T value;
-00091 
-00092     Element (<span class="keyword">const</span> K&amp; key0, <span class="keyword">const</span> T &amp;value0) : key (key0), value (value0) {}
-00093     Element (<span class="keyword">const</span> Element &amp;other) : key (other.key), value (other.value) {}
-00094   };
-00095   <a class="code" href="classcsArray.html">csArray&lt; csArray&lt;Element&gt;</a> &gt; Elements;
-00096 
-00097   size_t Modulo;
-00098 
-00099 <span class="keyword">private</span>:
-00100   size_t InitModulo;
-00101   size_t GrowRate;
-00102   size_t MaxSize;
-00103   size_t Size;
-00104 
-00105   <span class="keywordtype">void</span> Grow ()
-00106   {
-00107     <span class="keyword">static</span> <span class="keyword">const</span> size_t Primes[] =
-00108     {
-00109       53,         97,         193,       389,       769, 
-00110       1543,       3079,       6151,      12289,     24593,
-00111       49157,      98317,      196613,    393241,    786433,
-00112       1572869,    3145739,    6291469,   12582917,  25165843,
-00113       50331653,   100663319,  201326611, 402653189, 805306457,
-00114       1610612741, 0
-00115     };
-00116 
-00117     <span class="keyword">const</span> size_t *p;
-00118     size_t elen = Elements.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00119     <span class="keywordflow">for</span> (p = Primes; *p &amp;&amp; *p &lt;= elen; p++) ;
-00120     Modulo = *p;
-00121     CS_ASSERT (Modulo);
-00122 
-00123     Elements.<a class="code" href="classcsArray.html#a10">SetLength</a>(Modulo, <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a>(0, MIN(Modulo / GrowRate, 8)));
-00124 
-00125     <span class="keywordflow">for</span> (size_t i = 0; i &lt; elen; i++)
-00126     {
-00127       <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a>&amp; src = Elements[i];
-00128       size_t slen = src.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00129       <span class="keywordflow">for</span> (size_t j = slen; j &gt; 0; j--)
-00130       {
-00131         <span class="keyword">const</span> Element&amp; srcElem = src[j - 1];
-00132         <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a>&amp; dst = 
-00133           Elements.<a class="code" href="classcsArray.html#a12">Get</a> (KeyHandler::ComputeHash (srcElem.key) % Modulo);
-00134         <span class="keywordflow">if</span> (&amp;src != &amp;dst)
-00135         {
-00136           dst.<a class="code" href="classcsArray.html#a19">Push</a> (srcElem);
-00137           src.<a class="code" href="classcsArray.html#a38">DeleteIndex</a> (j - 1);
-00138         }
-00139       }
-00140     }
-00141   }
-00142 
-00143 <span class="keyword">public</span>:
-<a name="l00158"></a><a class="code" href="classcsHash.html#a0">00158</a>   <a class="code" href="classcsHash.html#a0">csHash</a> (size_t size = 23, size_t grow_rate = 5, size_t max_size = 20000)
-00159     : Elements (size), Modulo (size), InitModulo (size),
-00160       GrowRate (MIN (grow_rate, size)), MaxSize (max_size), Size (0)
-00161   {
-00162     Elements.<a class="code" href="classcsArray.html#a10">SetLength</a> (size, <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> (0, MIN (size / GrowRate, 8)));
-00163   }
-00164 
-<a name="l00166"></a><a class="code" href="classcsHash.html#a1">00166</a>   <a class="code" href="classcsHash.html#a0">csHash</a> (<span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T&gt;</a> &amp;o) : Elements (o.Elements),
-00167     Modulo (o.Modulo), InitModulo (o.InitModulo),
-00168     GrowRate (o.GrowRate), MaxSize (o.MaxSize), Size (o.Size) {}
-00169 
-<a name="l00177"></a><a class="code" href="classcsHash.html#a2">00177</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a2">Put</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
-00178   {
-00179     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00180       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00181     values.<a class="code" href="classcsArray.html#a19">Push</a> (Element (key, value));
-00182     Size++;
-00183     <span class="keywordflow">if</span> (values.<a class="code" href="classcsArray.html#a5">Length</a> () &gt; Elements.<a class="code" href="classcsArray.html#a5">Length</a> () / GrowRate
-00184      &amp;&amp; Elements.<a class="code" href="classcsArray.html#a5">Length</a> () &lt; MaxSize) Grow ();
-00185   }
-00186 
-<a name="l00188"></a><a class="code" href="classcsHash.html#a3">00188</a>   <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> <a class="code" href="classcsHash.html#a3">GetAll</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
-00189 <span class="keyword">  </span>{
-00190     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00191       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00192     <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> ret (values.<a class="code" href="classcsArray.html#a5">Length</a> () / 2);
-00193     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00194     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
-00195     {
-00196       <span class="keyword">const</span> Element&amp; v = values[i];
-00197       <span class="keywordflow">if</span> (KeyHandler::CompareKeys (v.key, key)) 
-00198         ret.<a class="code" href="classcsArray.html#a19">Push</a> (v.value);
-00199     }
-00200     <span class="keywordflow">return</span> ret;
-00201   }
-00202 
-<a name="l00204"></a><a class="code" href="classcsHash.html#a4">00204</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a4">PutUnique</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
-00205   {
-00206     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00207       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00208     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00209     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
-00210     {
-00211       Element&amp; v = values[i];
-00212       <span class="keywordflow">if</span> (KeyHandler::CompareKeys (v.key, key))
-00213       {
-00214         v.value = value;
-00215         <span class="keywordflow">return</span>;
-00216       }
-00217     }
+00028 <span class="preprocessor">#include "<a class="code" href="comparator_8h.html">comparator.h</a>"</span>
+00029 <span class="preprocessor">#include "<a class="code" href="util_8h.html">util.h</a>"</span>
+00030 
+00040 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="group__util__containers.html#ga1">csHashCompute</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>*);
+00041 
+00048 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code" href="group__util__containers.html#ga1">csHashCompute</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>*, size_t length);
+00049 
+00055 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00056"></a><a class="code" href="classcsHashComputer.html">00056</a> <span class="keyword">class </span><a class="code" href="classcsHashComputer.html">csHashComputer</a>
+00057 {
+00058 <span class="keyword">public</span>:
+<a name="l00060"></a><a class="code" href="classcsHashComputer.html#e0">00060</a>   <span class="keyword">static</span> <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="classcsHashComputer.html#e0">ComputeHash</a> (<span class="keyword">const</span> T&amp; key)
+00061   {
+00062 <span class="preprocessor">#if (CS_PROCESSOR_SIZE == 32)</span>
+00063 <span class="preprocessor"></span><span class="preprocessor">#if (_MSC_VER &gt;= 1300)</span>
+00064 <span class="preprocessor"></span>    <span class="comment">/*</span>
+00065 <span class="comment">      VC7 with 64bit warnings complains about a pointer truncation when T is</span>
+00066 <span class="comment">      a pointer. This isn't serious (as csHash&lt;&gt; does not rely on the hash of</span>
+00067 <span class="comment">      a key alone to retrieve a value). The __w64 causes VC7 to not emit that</span>
+00068 <span class="comment">      warning (on 32bit compilers at least).</span>
+00069 <span class="comment">     */</span>
+00070     <span class="comment">// void* cast is to make csRef&lt;&gt;s work.</span>
+00071     <span class="keywordflow">return</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> __w64)(<span class="keywordtype">void</span>*)key;  
+00072 <span class="preprocessor">#else</span>
+00073 <span class="preprocessor"></span>    <span class="keywordflow">return</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)(<span class="keywordtype">void</span>*)key;  
+00074 <span class="preprocessor">#endif</span>
+00075 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00076 <span class="preprocessor"></span>    <span class="comment">// Cast to uintptr_t first to avoid compiler warnings about truncation.</span>
+00077     <span class="keywordflow">return</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>)((<a class="code" href="group__util.html#ga9">uintptr_t</a>)(<span class="keywordtype">void</span>*)key);
+00078 <span class="preprocessor">#endif</span>
+00079 <span class="preprocessor"></span>  }
+00080 };
+00081 
+00091 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00092"></a><a class="code" href="classcsHashComputerString.html">00092</a> <span class="keyword">class </span><a class="code" href="classcsHashComputerString.html">csHashComputerString</a>
+00093 {
+00094 <span class="keyword">public</span>:
+00095   <span class="keyword">static</span> <a class="code" href="group__util.html#ga18">uint</a> ComputeHash (<span class="keyword">const</span> T&amp; key)
+00096   {
+00097     <span class="keywordflow">return</span> <a class="code" href="group__util__containers.html#ga1">csHashCompute</a> ((<span class="keyword">const</span> <span class="keywordtype">char</span>*)key);
+00098   }
+00099 };
+00100 
+00104 CS_SPECIALIZE_TEMPLATE
+<a name="l00105"></a><a class="code" href="classcsHashComputer_3_01const_01char_01_5_01_4.html">00105</a> <span class="keyword">class </span><a class="code" href="classcsHashComputer.html">csHashComputer</a>&lt;const char*&gt; : <span class="keyword">public</span> <a class="code" href="classcsHashComputerString.html">csHashComputerString&lt;const char*&gt;</a> {};
+00106 
+00116 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00117"></a><a class="code" href="classcsHashComputerStruct.html">00117</a> <span class="keyword">class </span><a class="code" href="classcsHashComputerStruct.html">csHashComputerStruct</a>
+00118 {
+00119 <span class="keyword">public</span>:
+00120   <span class="keyword">static</span> <a class="code" href="group__util.html#ga18">uint</a> ComputeHash (<span class="keyword">const</span> T&amp; key)
+00121   {
+00122     <span class="keywordflow">return</span> <a class="code" href="group__util__containers.html#ga1">csHashCompute</a> ((<span class="keywordtype">char</span>*)&amp;key, <span class="keyword">sizeof</span> (T));
+00123   }
+00124 };
+00125 
+<a name="l00130"></a><a class="code" href="classcsStrKey.html">00130</a> <span class="keyword">class </span><a class="code" href="classcsStrKey.html">csStrKey</a>
+00131 {
+00132 <span class="keyword">private</span>:
+00133   <span class="keywordtype">char</span>* str;
+00134 
+00135 <span class="keyword">public</span>:
+00136   <a class="code" href="classcsStrKey.html">csStrKey</a> () { str = 0; }
+00137   <a class="code" href="classcsStrKey.html">csStrKey</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s) { str = <a class="code" href="group__util.html#ga94">csStrNew</a> (s); }
+00138   <a class="code" href="classcsStrKey.html">csStrKey</a> (<span class="keyword">const</span> <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; c) { str = <a class="code" href="group__util.html#ga94">csStrNew</a> (c.<a class="code" href="classcsStrKey.html#r0">str</a>); }
+00139   ~<a class="code" href="classcsStrKey.html">csStrKey</a> () { <span class="keyword">delete</span>[] str; }
+00140   <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classcsStrKey.html">csStrKey</a>&amp; o)
+00141   {
+00142     <span class="keyword">delete</span>[] str; str = <a class="code" href="group__util.html#ga94">csStrNew</a> (o.<a class="code" href="classcsStrKey.html#r0">str</a>);
+00143     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00144   }
+00145   operator const char* ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> str; }
+00146 };
+00147 
+00151 CS_SPECIALIZE_TEMPLATE
+<a name="l00152"></a><a class="code" href="classcsHashComputer_3_01csStrKey_01_4.html">00152</a> <span class="keyword">class </span><a class="code" href="classcsHashComputer.html">csHashComputer</a>&lt;csStrKey&gt; : <span class="keyword">public</span> <a class="code" href="classcsHashComputerString.html">csHashComputerString</a>&lt;csStrKey&gt; {};
+00153 
+00157 CS_SPECIALIZE_TEMPLATE
+<a name="l00158"></a><a class="code" href="classcsComparator_3_01csStrKey_00_01csStrKey_01_4.html">00158</a> <span class="keyword">class </span><a class="code" href="classcsComparator.html">csComparator</a>&lt;csStrKey, csStrKey&gt; : <span class="keyword">public</span> <a class="code" href="classcsComparatorString.html">csComparatorString</a>&lt;csStrKey&gt; {};
+00159 
+00163 CS_SPECIALIZE_TEMPLATE
+<a name="l00164"></a><a class="code" href="classcsHashComputer_3_01csString_01_4.html">00164</a> <span class="keyword">class </span><a class="code" href="classcsHashComputer.html">csHashComputer</a>&lt;csString&gt; : <span class="keyword">public</span> <a class="code" href="classcsHashComputerString.html">csHashComputerString</a>&lt;csString&gt; {};
+00165 CS_SPECIALIZE_TEMPLATE
+00166 <span class="keyword">class </span><a class="code" href="classcsHashComputer.html">csHashComputer</a>&lt;csStringBase&gt; : <span class="keyword">public</span> <a class="code" href="classcsHashComputerString.html">csHashComputerString</a>&lt;csStringBase&gt; {};
+00167 
+00177 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T, <span class="keyword">class</span> K = <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>&gt; 
+<a name="l00178"></a><a class="code" href="classcsHash.html">00178</a> <span class="keyword">class </span><a class="code" href="classcsHash.html">csHash</a>
+00179 {
+00180 <span class="keyword">protected</span>:
+00181   <span class="keyword">struct </span>Element
+00182   {
+00183     <span class="keyword">const</span> K key;
+00184     T value;
+00185 
+00186     Element (<span class="keyword">const</span> K&amp; key0, <span class="keyword">const</span> T &amp;value0) : key (key0), value (value0) {}
+00187     Element (<span class="keyword">const</span> Element &amp;other) : key (other.key), value (other.value) {}
+00188   };
+00189   <a class="code" href="classcsArray.html">csArray&lt; csArray&lt;Element&gt;</a> &gt; Elements;
+00190 
+00191   size_t Modulo;
+00192 
+00193 <span class="keyword">private</span>:
+00194   size_t InitModulo;
+00195   size_t GrowRate;
+00196   size_t MaxSize;
+00197   size_t Size;
+00198 
+00199   <span class="keywordtype">void</span> Grow ()
+00200   {
+00201     <span class="keyword">static</span> <span class="keyword">const</span> size_t Primes[] =
+00202     {
+00203       53,         97,         193,       389,       769, 
+00204       1543,       3079,       6151,      12289,     24593,
+00205       49157,      98317,      196613,    393241,    786433,
+00206       1572869,    3145739,    6291469,   12582917,  25165843,
+00207       50331653,   100663319,  201326611, 402653189, 805306457,
+00208       1610612741, 0
+00209     };
+00210 
+00211     <span class="keyword">const</span> size_t *p;
+00212     size_t elen = Elements.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00213     <span class="keywordflow">for</span> (p = Primes; *p &amp;&amp; *p &lt;= elen; p++) ;
+00214     Modulo = *p;
+00215     CS_ASSERT (Modulo);
+00216 
+00217     Elements.<a class="code" href="classcsArray.html#a10">SetLength</a>(Modulo, <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a>(0, MIN(Modulo / GrowRate, 8)));
 00218 
-00219     values.<a class="code" href="classcsArray.html#a19">Push</a> (Element (key, value));
-00220     Size++;
-00221     <span class="keywordflow">if</span> (values.<a class="code" href="classcsArray.html#a5">Length</a> () &gt; Elements.<a class="code" href="classcsArray.html#a5">Length</a> () / GrowRate
-00222      &amp;&amp; Elements.<a class="code" href="classcsArray.html#a5">Length</a> () &lt; MaxSize) Grow ();
-00223   }
-00224 
-<a name="l00229"></a><a class="code" href="classcsHash.html#a5">00229</a>   <a class="code" href="cssysdef_8h.html#a40">CS_DEPRECATED_METHOD</a> <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a5">PutFirst</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
-00230   {
-00231     <a class="code" href="classcsHash.html#a4">PutUnique</a>(key, value);
-00232   }
-00233 
-<a name="l00235"></a><a class="code" href="classcsHash.html#a6">00235</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a6">Contains</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
-00236 <span class="keyword">  </span>{
-00237     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00238       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00239     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00240     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
-00241       <span class="keywordflow">if</span> (KeyHandler::CompareKeys (values[i].key, key)) 
-00242         <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00243     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00244   }
-00245 
-<a name="l00251"></a><a class="code" href="classcsHash.html#a7">00251</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a7">In</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
-00252 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsHash.html#a6">Contains</a>(key); }
-00253 
-<a name="l00258"></a><a class="code" href="classcsHash.html#a8">00258</a>   <span class="keyword">const</span> T* <a class="code" href="classcsHash.html#a8">GetElementPointer</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
-00259 <span class="keyword">  </span>{
-00260     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00261       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00262     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00263     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
-00264     {
-00265       <span class="keyword">const</span> Element&amp; v = values[i];
-00266       <span class="keywordflow">if</span> (KeyHandler::CompareKeys (v.key, key))
-00267         <span class="keywordflow">return</span> &amp;v.value;
-00268     }
-00269 
-00270     <span class="keywordflow">return</span> 0;
-00271   }
-00272 
-<a name="l00277"></a><a class="code" href="classcsHash.html#a9">00277</a>   T* <a class="code" href="classcsHash.html#a8">GetElementPointer</a> (<span class="keyword">const</span> K&amp; key)
-00278   {
-00279     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00280       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00281     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00282     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
-00283     {
-00284       Element&amp; v = values[i];
-00285       <span class="keywordflow">if</span> (KeyHandler::CompareKeys (v.key, key))
-00286         <span class="keywordflow">return</span> &amp;v.value;
-00287     }
-00288 
-00289     <span class="keywordflow">return</span> 0;
-00290   }
-00291 
-<a name="l00296"></a><a class="code" href="classcsHash.html#a10">00296</a>   <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash.html#a10">Get</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T&amp; fallback)<span class="keyword"> const</span>
-00297 <span class="keyword">  </span>{
-00298     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00299       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00300     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00301     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
-00302     {
-00303       <span class="keyword">const</span> Element&amp; v = values[i];
-00304       <span class="keywordflow">if</span> (KeyHandler::CompareKeys (v.key, key))
-00305         <span class="keywordflow">return</span> v.value;
-00306     }
-00307 
-00308     <span class="keywordflow">return</span> fallback;
-00309   }
-00310 
-<a name="l00315"></a><a class="code" href="classcsHash.html#a11">00315</a>   T&amp; <a class="code" href="classcsHash.html#a10">Get</a> (<span class="keyword">const</span> K&amp; key, T&amp; fallback)
-00316   {
-00317     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00318       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00319     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00320     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
-00321     {
-00322       Element&amp; v = values[i];
-00323       <span class="keywordflow">if</span> (KeyHandler::CompareKeys (v.key, key))
-00324         <span class="keywordflow">return</span> v.value;
-00325     }
-00326 
-00327     <span class="keywordflow">return</span> fallback;
-00328   }
-00329 
-<a name="l00331"></a><a class="code" href="classcsHash.html#a12">00331</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a12">DeleteAll</a> ()
-00332   {
-00333     Elements.<a class="code" href="classcsArray.html#a10">SetLength</a> (Modulo = InitModulo);
-00334     size_t elen = Elements.<a class="code" href="classcsArray.html#a5">Length</a> ();
-00335     <span class="keywordflow">for</span> (size_t i = 0; i &lt; elen; i++)
-00336       Elements[i].<a class="code" href="classcsArray.html#a34">Empty</a> ();
-00337     Size = 0;
+00219     <span class="keywordflow">for</span> (size_t i = 0; i &lt; elen; i++)
+00220     {
+00221       <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a>&amp; src = Elements[i];
+00222       size_t slen = src.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00223       <span class="keywordflow">for</span> (size_t j = slen; j &gt; 0; j--)
+00224       {
+00225         <span class="keyword">const</span> Element&amp; srcElem = src[j - 1];
+00226         <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a>&amp; dst = 
+00227           Elements.<a class="code" href="classcsArray.html#a12">Get</a> (<a class="code" href="classcsHashComputer.html">csHashComputer&lt;K&gt;</a>::ComputeHash (srcElem.key) % Modulo);
+00228         <span class="keywordflow">if</span> (&amp;src != &amp;dst)
+00229         {
+00230           dst.<a class="code" href="classcsArray.html#a19">Push</a> (srcElem);
+00231           src.<a class="code" href="classcsArray.html#a38">DeleteIndex</a> (j - 1);
+00232         }
+00233       }
+00234     }
+00235   }
+00236 
+00237 <span class="keyword">public</span>:
+<a name="l00252"></a><a class="code" href="classcsHash.html#a0">00252</a>   <a class="code" href="classcsHash.html#a0">csHash</a> (size_t size = 23, size_t grow_rate = 5, size_t max_size = 20000)
+00253     : Elements (size), Modulo (size), InitModulo (size),
+00254       GrowRate (MIN (grow_rate, size)), MaxSize (max_size), Size (0)
+00255   {
+00256     Elements.<a class="code" href="classcsArray.html#a10">SetLength</a> (size, <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> (0, MIN (size / GrowRate, 8)));
+00257   }
+00258 
+<a name="l00260"></a><a class="code" href="classcsHash.html#a1">00260</a>   <a class="code" href="classcsHash.html#a0">csHash</a> (<span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T&gt;</a> &amp;o) : Elements (o.Elements),
+00261     Modulo (o.Modulo), InitModulo (o.InitModulo),
+00262     GrowRate (o.GrowRate), MaxSize (o.MaxSize), Size (o.Size) {}
+00263 
+<a name="l00271"></a><a class="code" href="classcsHash.html#a2">00271</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a2">Put</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
+00272   {
+00273     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00274       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00275     values.<a class="code" href="classcsArray.html#a19">Push</a> (Element (key, value));
+00276     Size++;
+00277     <span class="keywordflow">if</span> (values.<a class="code" href="classcsArray.html#a5">Length</a> () &gt; Elements.<a class="code" href="classcsArray.html#a5">Length</a> () / GrowRate
+00278      &amp;&amp; Elements.<a class="code" href="classcsArray.html#a5">Length</a> () &lt; MaxSize) Grow ();
+00279   }
+00280 
+<a name="l00282"></a><a class="code" href="classcsHash.html#a3">00282</a>   <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> <a class="code" href="classcsHash.html#a3">GetAll</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
+00283 <span class="keyword">  </span>{
+00284     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00285       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00286     <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> ret (values.<a class="code" href="classcsArray.html#a5">Length</a> () / 2);
+00287     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00288     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
+00289     {
+00290       <span class="keyword">const</span> Element&amp; v = values[i];
+00291       <span class="keywordflow">if</span> (<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (v.key, key) == 0) 
+00292         ret.<a class="code" href="classcsArray.html#a19">Push</a> (v.value);
+00293     }
+00294     <span class="keywordflow">return</span> ret;
+00295   }
+00296 
+<a name="l00298"></a><a class="code" href="classcsHash.html#a4">00298</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a4">PutUnique</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
+00299   {
+00300     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00301       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00302     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00303     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
+00304     {
+00305       Element&amp; v = values[i];
+00306       <span class="keywordflow">if</span> (<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (v.key, key) == 0)
+00307       {
+00308         v.value = value;
+00309         <span class="keywordflow">return</span>;
+00310       }
+00311     }
+00312 
+00313     values.<a class="code" href="classcsArray.html#a19">Push</a> (Element (key, value));
+00314     Size++;
+00315     <span class="keywordflow">if</span> (values.<a class="code" href="classcsArray.html#a5">Length</a> () &gt; Elements.<a class="code" href="classcsArray.html#a5">Length</a> () / GrowRate
+00316      &amp;&amp; Elements.<a class="code" href="classcsArray.html#a5">Length</a> () &lt; MaxSize) Grow ();
+00317   }
+00318 
+<a name="l00323"></a><a class="code" href="classcsHash.html#a5">00323</a>   <a class="code" href="cssysdef_8h.html#a40">CS_DEPRECATED_METHOD</a> <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a5">PutFirst</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
+00324   {
+00325     <a class="code" href="classcsHash.html#a4">PutUnique</a>(key, value);
+00326   }
+00327 
+<a name="l00329"></a><a class="code" href="classcsHash.html#a6">00329</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a6">Contains</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
+00330 <span class="keyword">  </span>{
+00331     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00332       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00333     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00334     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
+00335       <span class="keywordflow">if</span> (<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (values[i].key, key) == 0) 
+00336         <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00337     <span class="keywordflow">return</span> <span class="keyword">false</span>;
 00338   }
 00339 
-<a name="l00341"></a><a class="code" href="classcsHash.html#a13">00341</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a13">Empty</a>() { <a class="code" href="classcsHash.html#a12">DeleteAll</a>(); }
-00342 
-<a name="l00344"></a><a class="code" href="classcsHash.html#a14">00344</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a12">DeleteAll</a> (<span class="keyword">const</span> K&amp; key)
-00345   {
-00346     <span class="keywordtype">bool</span> ret = <span class="keyword">false</span>;
-00347     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00348       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00349     <span class="keywordflow">for</span> (size_t i = values.<a class="code" href="classcsArray.html#a5">Length</a> (); i &gt; 0; i--)
-00350     {
-00351       <span class="keyword">const</span> size_t idx = i - 1;
-00352       <span class="keywordflow">if</span> (KeyHandler::CompareKeys (values[idx].key, key))
-00353       {
-00354         values.<a class="code" href="classcsArray.html#a39">DeleteIndexFast</a> (idx);
-00355         ret = <span class="keyword">true</span>;
-00356         Size--;
-00357       }
-00358     }
-00359     <span class="keywordflow">return</span> ret;
-00360   }
-00361   
-<a name="l00363"></a><a class="code" href="classcsHash.html#a15">00363</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a15">Delete</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
-00364   {
-00365     <span class="keywordtype">bool</span> ret = <span class="keyword">false</span>;
-00366     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
-00367       Elements[KeyHandler::ComputeHash (key) % Modulo];
-00368     <span class="keywordflow">for</span> (size_t i = values.<a class="code" href="classcsArray.html#a5">Length</a> (); i &gt; 0; i--)
-00369     {
-00370       <span class="keyword">const</span> size_t idx = i - 1;
-00371       <span class="keywordflow">if</span> (KeyHandler::CompareKeys (values[idx].key, key) &amp;&amp; 
-00372         (values[idx].value == value))
-00373       {
-00374         values.<a class="code" href="classcsArray.html#a39">DeleteIndexFast</a> (idx);
-00375         ret = <span class="keyword">true</span>;
-00376         Size--;
-00377       }
-00378     }
-00379     <span class="keywordflow">return</span> ret;
-00380   }
-00381 
-<a name="l00383"></a><a class="code" href="classcsHash.html#a16">00383</a>   size_t <a class="code" href="classcsHash.html#a16">GetSize</a> ()<span class="keyword"> const</span>
-00384 <span class="keyword">  </span>{
-00385     <span class="keywordflow">return</span> Size;
-00386   }
-00387 
-<a name="l00393"></a><a class="code" href="classcsHash.html#a17">00393</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a17">IsEmpty</a>()<span class="keyword"> const</span>
-00394 <span class="keyword">  </span>{
-00395     <span class="keywordflow">return</span> <a class="code" href="classcsHash.html#a16">GetSize</a>() == 0;
-00396   }
-00397 
-<a name="l00399"></a><a class="code" href="classcsHash_1_1Iterator.html">00399</a>   <span class="keyword">class </span><a class="code" href="classcsHash_1_1Iterator.html">Iterator</a>
-00400   {
-00401   <span class="keyword">private</span>:
-00402     <span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T, K, KeyHandler&gt;</a>* hash;
-00403     <span class="keyword">const</span> K key;
-00404     size_t bucket, size, element;
-00405 
-00406     <span class="keywordtype">void</span> Seek ()
-00407     {
-00408       <span class="keywordflow">while</span> ((element &lt; size) &amp;&amp; 
-00409         ! KeyHandler::CompareKeys (hash-&gt;Elements[bucket][element].key, key))
-00410           element++;
-00411     }
-00412 
-00413   <span class="keyword">protected</span>:
-00414     <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T, K, KeyHandler&gt;</a>* hash0, <span class="keyword">const</span> K&amp; key0) :
-00415       hash(hash0),
-00416       key(key0), 
-00417       bucket(KeyHandler::ComputeHash(key) % hash-&gt;Modulo),
-00418       size(hash-&gt;Elements[bucket].Length ())
-00419       { <a class="code" href="classcsHash_1_1Iterator.html#a4">Reset</a> (); }
+<a name="l00345"></a><a class="code" href="classcsHash.html#a7">00345</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a7">In</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
+00346 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsHash.html#a6">Contains</a>(key); }
+00347 
+<a name="l00352"></a><a class="code" href="classcsHash.html#a8">00352</a>   <span class="keyword">const</span> T* <a class="code" href="classcsHash.html#a8">GetElementPointer</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
+00353 <span class="keyword">  </span>{
+00354     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00355       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00356     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00357     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
+00358     {
+00359       <span class="keyword">const</span> Element&amp; v = values[i];
+00360       <span class="keywordflow">if</span> (<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (v.key, key) == 0)
+00361         <span class="keywordflow">return</span> &amp;v.value;
+00362     }
+00363 
+00364     <span class="keywordflow">return</span> 0;
+00365   }
+00366 
+<a name="l00371"></a><a class="code" href="classcsHash.html#a9">00371</a>   T* <a class="code" href="classcsHash.html#a8">GetElementPointer</a> (<span class="keyword">const</span> K&amp; key)
+00372   {
+00373     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00374       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00375     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00376     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
+00377     {
+00378       Element&amp; v = values[i];
+00379       <span class="keywordflow">if</span> (<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (v.key, key) == 0)
+00380         <span class="keywordflow">return</span> &amp;v.value;
+00381     }
+00382 
+00383     <span class="keywordflow">return</span> 0;
+00384   }
+00385 
+<a name="l00390"></a><a class="code" href="classcsHash.html#a10">00390</a>   <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash.html#a10">Get</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T&amp; fallback)<span class="keyword"> const</span>
+00391 <span class="keyword">  </span>{
+00392     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00393       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00394     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00395     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
+00396     {
+00397       <span class="keyword">const</span> Element&amp; v = values[i];
+00398       <span class="keywordflow">if</span> (<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (v.key, key) == 0)
+00399         <span class="keywordflow">return</span> v.value;
+00400     }
+00401 
+00402     <span class="keywordflow">return</span> fallback;
+00403   }
+00404 
+<a name="l00409"></a><a class="code" href="classcsHash.html#a11">00409</a>   T&amp; <a class="code" href="classcsHash.html#a10">Get</a> (<span class="keyword">const</span> K&amp; key, T&amp; fallback)
+00410   {
+00411     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00412       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00413     <span class="keyword">const</span> size_t len = values.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00414     <span class="keywordflow">for</span> (size_t i = 0; i &lt; len; ++i)
+00415     {
+00416       Element&amp; v = values[i];
+00417       <span class="keywordflow">if</span> (<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (v.key, key) == 0)
+00418         <span class="keywordflow">return</span> v.value;
+00419     }
 00420 
-00421     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHash.html">csHash</a>&lt;T, K, KeyHandler&gt;;
-00422   <span class="keyword">public</span>:
-<a name="l00424"></a><a class="code" href="classcsHash_1_1Iterator.html#a0">00424</a>     <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a> &amp;o) :
-00425       hash (o.hash),
-00426       key(o.key),
-00427       bucket(o.bucket),
-00428       size(o.size),
-00429       element(o.element) {}
-00430 
-<a name="l00432"></a><a class="code" href="classcsHash_1_1Iterator.html#a1">00432</a>     <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a>&amp; <a class="code" href="classcsHash_1_1Iterator.html#a1">operator=</a>(<span class="keyword">const</span> <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a>&amp; o)
-00433     {
-00434       hash = o.<a class="code" href="classcsHash_1_1Iterator.html#r0">hash</a>;
-00435       key = o.<a class="code" href="classcsHash_1_1Iterator.html#r1">key</a>;
-00436       bucket = o.<a class="code" href="classcsHash_1_1Iterator.html#r2">bucket</a>;
-00437       size = o.<a class="code" href="classcsHash_1_1Iterator.html#r3">size</a>;
-00438       element = o.<a class="code" href="classcsHash_1_1Iterator.html#r4">element</a>;
-00439       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00440     }
-00441 
-<a name="l00443"></a><a class="code" href="classcsHash_1_1Iterator.html#a2">00443</a>     <span class="keywordtype">bool</span> <a class="code" href="classcsHash_1_1Iterator.html#a2">HasNext</a> ()<span class="keyword"> const</span>
-00444 <span class="keyword">    </span>{
-00445       <span class="keywordflow">return</span> element &lt; size;
-00446     }
-00447 
-<a name="l00449"></a><a class="code" href="classcsHash_1_1Iterator.html#a3">00449</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1Iterator.html#a3">Next</a> ()
-00450     {
-00451       <span class="keyword">const</span> T &amp;ret = hash-&gt;Elements[bucket][element].value;
-00452       element++;
-00453       Seek ();
-00454       <span class="keywordflow">return</span> ret;
-00455     }
-00456 
-<a name="l00458"></a><a class="code" href="classcsHash_1_1Iterator.html#a4">00458</a>     <span class="keywordtype">void</span> <a class="code" href="classcsHash_1_1Iterator.html#a4">Reset</a> () { element = 0; Seek (); }
-00459   };
-00460   <span class="keyword">friend</span> <span class="keyword">class </span>Iterator;
-00461 
-<a name="l00463"></a><a class="code" href="classcsHash_1_1GlobalIterator.html">00463</a>   <span class="keyword">class </span><a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a>
-00464   {
-00465   <span class="keyword">private</span>:
-00466     <span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T, K, KeyHandler&gt;</a> *hash;
-00467     size_t bucket, size, element;
-00468 
-00469     <span class="keywordtype">void</span> Zero () { bucket = element = 0; }
-00470     <span class="keywordtype">void</span> Init () { size = hash-&gt;Elements[bucket].Length (); }
-00471 
-00472     <span class="keywordtype">void</span> FindItem ()
-00473     {
-00474       <span class="keywordflow">if</span> (element &gt;= size)
-00475       {
-00476         <span class="keywordflow">while</span> (++bucket &lt; hash-&gt;Elements.Length ())
-00477         {
-00478           Init ();
-00479           <span class="keywordflow">if</span> (size != 0)
-00480           {
-00481             element = 0;
-00482             <span class="keywordflow">break</span>;
-00483           }
-00484         }
-00485       }
-00486     }
-00487 
-00488   <span class="keyword">protected</span>:
-00489     <a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T, K, KeyHandler&gt;</a> *hash0) : hash (hash0) 
-00490     { 
-00491       Zero (); 
-00492       Init (); 
-00493       FindItem ();
-00494     }
-00495 
-00496     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHash.html">csHash</a>&lt;T, K, KeyHandler&gt;;
-00497   <span class="keyword">public</span>:
-<a name="l00499"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a0">00499</a>     <a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a> &amp;o) :
-00500       hash (o.hash),
-00501       bucket (o.bucket),
-00502       size (o.size),
-00503       element (o.element) {}
-00504 
-<a name="l00506"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a1">00506</a>     <a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a>&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a1">operator=</a>(<span class="keyword">const</span> <a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a>&amp; o)
-00507     {
-00508       hash = o.<a class="code" href="classcsHash_1_1GlobalIterator.html#r0">hash</a>;
-00509       bucket = o.<a class="code" href="classcsHash_1_1GlobalIterator.html#r1">bucket</a>;
-00510       size = o.<a class="code" href="classcsHash_1_1GlobalIterator.html#r2">size</a>;
-00511       element = o.<a class="code" href="classcsHash_1_1GlobalIterator.html#r3">element</a>;
-00512       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-00513     }
-00514 
-<a name="l00516"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a2">00516</a>     <span class="keywordtype">bool</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a2">HasNext</a> ()<span class="keyword"> const</span>
-00517 <span class="keyword">    </span>{
-00518       <span class="keywordflow">if</span> (hash-&gt;Elements.Length () == 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00519       <span class="keywordflow">return</span> element &lt; size || bucket &lt; hash-&gt;Elements.Length ();
-00520     }
-00521 
-<a name="l00523"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a3">00523</a>     <span class="keywordtype">void</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a3">Advance</a> ()
-00524     {
-00525       element++;
-00526       FindItem ();
-00527     }
-00528 
-<a name="l00530"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a4">00530</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a4">NextNoAdvance</a> ()
-00531     {
-00532       <span class="keywordflow">return</span> hash-&gt;Elements[bucket][element].value;
-00533     }
-00534 
-<a name="l00536"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a5">00536</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a5">Next</a> ()
-00537     {
-00538       <span class="keyword">const</span> T &amp;ret = <a class="code" href="classcsHash_1_1GlobalIterator.html#a4">NextNoAdvance</a> ();
-00539       <a class="code" href="classcsHash_1_1GlobalIterator.html#a3">Advance</a> ();
-00540       <span class="keywordflow">return</span> ret;
+00421     <span class="keywordflow">return</span> fallback;
+00422   }
+00423 
+<a name="l00425"></a><a class="code" href="classcsHash.html#a12">00425</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a12">DeleteAll</a> ()
+00426   {
+00427     Elements.<a class="code" href="classcsArray.html#a10">SetLength</a> (Modulo = InitModulo);
+00428     size_t elen = Elements.<a class="code" href="classcsArray.html#a5">Length</a> ();
+00429     <span class="keywordflow">for</span> (size_t i = 0; i &lt; elen; i++)
+00430       Elements[i].<a class="code" href="classcsArray.html#a34">Empty</a> ();
+00431     Size = 0;
+00432   }
+00433 
+<a name="l00435"></a><a class="code" href="classcsHash.html#a13">00435</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a13">Empty</a>() { <a class="code" href="classcsHash.html#a12">DeleteAll</a>(); }
+00436 
+<a name="l00438"></a><a class="code" href="classcsHash.html#a14">00438</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a12">DeleteAll</a> (<span class="keyword">const</span> K&amp; key)
+00439   {
+00440     <span class="keywordtype">bool</span> ret = <span class="keyword">false</span>;
+00441     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00442       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00443     <span class="keywordflow">for</span> (size_t i = values.<a class="code" href="classcsArray.html#a5">Length</a> (); i &gt; 0; i--)
+00444     {
+00445       <span class="keyword">const</span> size_t idx = i - 1;
+00446       <span class="keywordflow">if</span> (<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (values[idx].key, key) == 0)
+00447       {
+00448         values.<a class="code" href="classcsArray.html#a39">DeleteIndexFast</a> (idx);
+00449         ret = <span class="keyword">true</span>;
+00450         Size--;
+00451       }
+00452     }
+00453     <span class="keywordflow">return</span> ret;
+00454   }
+00455   
+<a name="l00457"></a><a class="code" href="classcsHash.html#a15">00457</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a15">Delete</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
+00458   {
+00459     <span class="keywordtype">bool</span> ret = <span class="keyword">false</span>;
+00460     <a class="code" href="classcsArray.html">csArray&lt;Element&gt;</a> &amp;values = 
+00461       Elements[<a class="code" href="classcsHashComputer.html#e0">csHashComputer&lt;K&gt;::ComputeHash</a> (key) % Modulo];
+00462     <span class="keywordflow">for</span> (size_t i = values.<a class="code" href="classcsArray.html#a5">Length</a> (); i &gt; 0; i--)
+00463     {
+00464       <span class="keyword">const</span> size_t idx = i - 1;
+00465       <span class="keywordflow">if</span> ((<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (values[idx].key, key) == 0) &amp;&amp; 
+00466         (values[idx].value == value))
+00467       {
+00468         values.<a class="code" href="classcsArray.html#a39">DeleteIndexFast</a> (idx);
+00469         ret = <span class="keyword">true</span>;
+00470         Size--;
+00471       }
+00472     }
+00473     <span class="keywordflow">return</span> ret;
+00474   }
+00475 
+<a name="l00477"></a><a class="code" href="classcsHash.html#a16">00477</a>   size_t <a class="code" href="classcsHash.html#a16">GetSize</a> ()<span class="keyword"> const</span>
+00478 <span class="keyword">  </span>{
+00479     <span class="keywordflow">return</span> Size;
+00480   }
+00481 
+<a name="l00487"></a><a class="code" href="classcsHash.html#a17">00487</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsHash.html#a17">IsEmpty</a>()<span class="keyword"> const</span>
+00488 <span class="keyword">  </span>{
+00489     <span class="keywordflow">return</span> <a class="code" href="classcsHash.html#a16">GetSize</a>() == 0;
+00490   }
+00491 
+<a name="l00493"></a><a class="code" href="classcsHash_1_1Iterator.html">00493</a>   <span class="keyword">class </span><a class="code" href="classcsHash_1_1Iterator.html">Iterator</a>
+00494   {
+00495   <span class="keyword">private</span>:
+00496     <span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T, K&gt;</a>* hash;
+00497     <span class="keyword">const</span> K key;
+00498     size_t bucket, size, element;
+00499 
+00500     <span class="keywordtype">void</span> Seek ()
+00501     {
+00502       <span class="keywordflow">while</span> ((element &lt; size) &amp;&amp; 
+00503         (<a class="code" href="classcsComparator.html">csComparator&lt;K, K&gt;</a>::Compare (hash-&gt;Elements[bucket][element].key, 
+00504         key) != 0))
+00505           element++;
+00506     }
+00507 
+00508   <span class="keyword">protected</span>:
+00509     <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T, K&gt;</a>* hash0, <span class="keyword">const</span> K&amp; key0) :
+00510       hash(hash0),
+00511       key(key0), 
+00512       bucket(<a class="code" href="classcsHashComputer.html">csHashComputer&lt;K&gt;</a>::ComputeHash (key) % hash-&gt;Modulo),
+00513       size(hash-&gt;Elements[bucket].Length ())
+00514       { <a class="code" href="classcsHash_1_1Iterator.html#a4">Reset</a> (); }
+00515 
+00516     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHash.html">csHash</a>&lt;T, K&gt;;
+00517   <span class="keyword">public</span>:
+<a name="l00519"></a><a class="code" href="classcsHash_1_1Iterator.html#a0">00519</a>     <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a> &amp;o) :
+00520       hash (o.hash),
+00521       key(o.key),
+00522       bucket(o.bucket),
+00523       size(o.size),
+00524       element(o.element) {}
+00525 
+<a name="l00527"></a><a class="code" href="classcsHash_1_1Iterator.html#a1">00527</a>     <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a>&amp; <a class="code" href="classcsHash_1_1Iterator.html#a1">operator=</a>(<span class="keyword">const</span> <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a>&amp; o)
+00528     {
+00529       hash = o.<a class="code" href="classcsHash_1_1Iterator.html#r0">hash</a>;
+00530       key = o.<a class="code" href="classcsHash_1_1Iterator.html#r1">key</a>;
+00531       bucket = o.<a class="code" href="classcsHash_1_1Iterator.html#r2">bucket</a>;
+00532       size = o.<a class="code" href="classcsHash_1_1Iterator.html#r3">size</a>;
+00533       element = o.<a class="code" href="classcsHash_1_1Iterator.html#r4">element</a>;
+00534       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00535     }
+00536 
+<a name="l00538"></a><a class="code" href="classcsHash_1_1Iterator.html#a2">00538</a>     <span class="keywordtype">bool</span> <a class="code" href="classcsHash_1_1Iterator.html#a2">HasNext</a> ()<span class="keyword"> const</span>
+00539 <span class="keyword">    </span>{
+00540       <span class="keywordflow">return</span> element &lt; size;
 00541     }
 00542 
-<a name="l00544"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a6">00544</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a4">NextNoAdvance</a> (K &amp;key)
+<a name="l00544"></a><a class="code" href="classcsHash_1_1Iterator.html#a3">00544</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1Iterator.html#a3">Next</a> ()
 00545     {
-00546       key = hash-&gt;Elements[bucket][element].key;
-00547       <span class="keywordflow">return</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a4">NextNoAdvance</a> ();
-00548     }
-00549 
-<a name="l00551"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a7">00551</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a5">Next</a> (K &amp;key)
-00552     {
-00553       key = hash-&gt;Elements[bucket][element].key;
-00554       <span class="keywordflow">return</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a5">Next</a> ();
-00555     }
+00546       <span class="keyword">const</span> T &amp;ret = hash-&gt;Elements[bucket][element].value;
+00547       element++;
+00548       Seek ();
+00549       <span class="keywordflow">return</span> ret;
+00550     }
+00551 
+<a name="l00553"></a><a class="code" href="classcsHash_1_1Iterator.html#a4">00553</a>     <span class="keywordtype">void</span> <a class="code" href="classcsHash_1_1Iterator.html#a4">Reset</a> () { element = 0; Seek (); }
+00554   };
+00555   <span class="keyword">friend</span> <span class="keyword">class </span>Iterator;
 00556 
-<a name="l00558"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a8">00558</a>     <span class="keywordtype">void</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a8">Reset</a> () { Zero (); Init (); FindItem (); }
-00559   };
-00560   <span class="keyword">friend</span> <span class="keyword">class </span>GlobalIterator;
-00561 
-<a name="l00564"></a><a class="code" href="classcsHash.html#a18">00564</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a18">DeleteElement</a> (GlobalIterator&amp; iterator)
-00565   {
-00566     Elements[iterator.bucket].<a class="code" href="classcsArray.html#a38">DeleteIndex</a>(iterator.element);
-00567     Size--;
-00568     iterator.size--;
-00569     iterator.FindItem ();
-00570   }
-00571 
-<a name="l00578"></a><a class="code" href="classcsHash.html#a19">00578</a>   Iterator <a class="code" href="classcsHash.html#a20">GetIterator</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
-00579 <span class="keyword">  </span>{
-00580     <span class="keywordflow">return</span> Iterator (<span class="keyword">this</span>, key);
-00581   }
+<a name="l00558"></a><a class="code" href="classcsHash_1_1GlobalIterator.html">00558</a>   <span class="keyword">class </span><a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a>
+00559   {
+00560   <span class="keyword">private</span>:
+00561     <span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T, K&gt;</a> *hash;
+00562     size_t bucket, size, element;
+00563 
+00564     <span class="keywordtype">void</span> Zero () { bucket = element = 0; }
+00565     <span class="keywordtype">void</span> Init () { size = hash-&gt;Elements[bucket].Length (); }
+00566 
+00567     <span class="keywordtype">void</span> FindItem ()
+00568     {
+00569       <span class="keywordflow">if</span> (element &gt;= size)
+00570       {
+00571         <span class="keywordflow">while</span> (++bucket &lt; hash-&gt;Elements.Length ())
+00572         {
+00573           Init ();
+00574           <span class="keywordflow">if</span> (size != 0)
+00575           {
+00576             element = 0;
+00577             <span class="keywordflow">break</span>;
+00578           }
+00579         }
+00580       }
+00581     }
 00582 
-<a name="l00588"></a><a class="code" href="classcsHash.html#a20">00588</a>   GlobalIterator <a class="code" href="classcsHash.html#a20">GetIterator</a> ()<span class="keyword"> const</span>
-00589 <span class="keyword">  </span>{
-00590     <span class="keywordflow">return</span> GlobalIterator (<span class="keyword">this</span>);
-00591   }
-00592 };
-00593 
-00594 <span class="preprocessor">#endif</span>
+00583   <span class="keyword">protected</span>:
+00584     <a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHash.html">csHash&lt;T, K&gt;</a> *hash0) : hash (hash0) 
+00585     { 
+00586       Zero (); 
+00587       Init (); 
+00588       FindItem ();
+00589     }
+00590 
+00591     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsHash.html">csHash</a>&lt;T, K&gt;;
+00592   <span class="keyword">public</span>:
+<a name="l00594"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a0">00594</a>     <a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsHash_1_1Iterator.html">Iterator</a> &amp;o) :
+00595       hash (o.hash),
+00596       bucket (o.bucket),
+00597       size (o.size),
+00598       element (o.element) {}
+00599 
+<a name="l00601"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a1">00601</a>     <a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a>&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a1">operator=</a>(<span class="keyword">const</span> <a class="code" href="classcsHash_1_1GlobalIterator.html">GlobalIterator</a>&amp; o)
+00602     {
+00603       hash = o.<a class="code" href="classcsHash_1_1GlobalIterator.html#r0">hash</a>;
+00604       bucket = o.<a class="code" href="classcsHash_1_1GlobalIterator.html#r1">bucket</a>;
+00605       size = o.<a class="code" href="classcsHash_1_1GlobalIterator.html#r2">size</a>;
+00606       element = o.<a class="code" href="classcsHash_1_1GlobalIterator.html#r3">element</a>;
+00607       <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+00608     }
+00609 
+<a name="l00611"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a2">00611</a>     <span class="keywordtype">bool</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a2">HasNext</a> ()<span class="keyword"> const</span>
+00612 <span class="keyword">    </span>{
+00613       <span class="keywordflow">if</span> (hash-&gt;Elements.Length () == 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00614       <span class="keywordflow">return</span> element &lt; size || bucket &lt; hash-&gt;Elements.Length ();
+00615     }
+00616 
+<a name="l00618"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a3">00618</a>     <span class="keywordtype">void</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a3">Advance</a> ()
+00619     {
+00620       element++;
+00621       FindItem ();
+00622     }
+00623 
+<a name="l00625"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a4">00625</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a4">NextNoAdvance</a> ()
+00626     {
+00627       <span class="keywordflow">return</span> hash-&gt;Elements[bucket][element].value;
+00628     }
+00629 
+<a name="l00631"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a5">00631</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a5">Next</a> ()
+00632     {
+00633       <span class="keyword">const</span> T &amp;ret = <a class="code" href="classcsHash_1_1GlobalIterator.html#a4">NextNoAdvance</a> ();
+00634       <a class="code" href="classcsHash_1_1GlobalIterator.html#a3">Advance</a> ();
+00635       <span class="keywordflow">return</span> ret;
+00636     }
+00637 
+<a name="l00639"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a6">00639</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a4">NextNoAdvance</a> (K &amp;key)
+00640     {
+00641       key = hash-&gt;Elements[bucket][element].key;
+00642       <span class="keywordflow">return</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a4">NextNoAdvance</a> ();
+00643     }
+00644 
+<a name="l00646"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a7">00646</a>     <span class="keyword">const</span> T&amp; <a class="code" href="classcsHash_1_1GlobalIterator.html#a5">Next</a> (K &amp;key)
+00647     {
+00648       key = hash-&gt;Elements[bucket][element].key;
+00649       <span class="keywordflow">return</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a5">Next</a> ();
+00650     }
+00651 
+<a name="l00653"></a><a class="code" href="classcsHash_1_1GlobalIterator.html#a8">00653</a>     <span class="keywordtype">void</span> <a class="code" href="classcsHash_1_1GlobalIterator.html#a8">Reset</a> () { Zero (); Init (); FindItem (); }
+00654   };
+00655   <span class="keyword">friend</span> <span class="keyword">class </span>GlobalIterator;
+00656 
+<a name="l00659"></a><a class="code" href="classcsHash.html#a18">00659</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHash.html#a18">DeleteElement</a> (GlobalIterator&amp; iterator)
+00660   {
+00661     Elements[iterator.bucket].<a class="code" href="classcsArray.html#a38">DeleteIndex</a>(iterator.element);
+00662     Size--;
+00663     iterator.size--;
+00664     iterator.FindItem ();
+00665   }
+00666 
+<a name="l00673"></a><a class="code" href="classcsHash.html#a19">00673</a>   Iterator <a class="code" href="classcsHash.html#a20">GetIterator</a> (<span class="keyword">const</span> K&amp; key)<span class="keyword"> const</span>
+00674 <span class="keyword">  </span>{
+00675     <span class="keywordflow">return</span> Iterator (<span class="keyword">this</span>, key);
+00676   }
+00677 
+<a name="l00683"></a><a class="code" href="classcsHash.html#a20">00683</a>   GlobalIterator <a class="code" href="classcsHash.html#a20">GetIterator</a> ()<span class="keyword"> const</span>
+00684 <span class="keyword">  </span>{
+00685     <span class="keywordflow">return</span> GlobalIterator (<span class="keyword">this</span>);
+00686   }
+00687 };
+00688 
+00691 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

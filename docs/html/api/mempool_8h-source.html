@@ -48,31 +48,31 @@
 00033 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 00034 <span class="preprocessor"></span><span class="preprocessor">#include &lt;new&gt;</span>
 00035 
-<a name="l00055"></a><a class="code" href="classcsMemoryPool.html">00055</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>
-00056 {
-00057 <span class="keyword">private</span>:
-00059   <a class="code" href="classcsArray.html">csArray&lt;uint8*&gt;</a> blocks;
-00061   size_t remaining;
-00063   size_t granularity;
-00064 
-00065   <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>(<a class="code" href="classcsMemoryPool.html">csMemoryPool</a> <span class="keyword">const</span>&amp;);   <span class="comment">// Illegal; unimplemented.</span>
-00066   <span class="keywordtype">void</span> operator=(<a class="code" href="classcsMemoryPool.html">csMemoryPool</a> <span class="keyword">const</span>&amp;); <span class="comment">// Illegal; unimplemented.</span>
+<a name="l00058"></a><a class="code" href="classcsMemoryPool.html">00058</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>
+00059 {
+00060 <span class="keyword">private</span>:
+00062   <a class="code" href="classcsArray.html">csArray&lt;uint8*&gt;</a> blocks;
+00064   size_t remaining;
+00066   size_t granularity;
 00067 
-00068 <span class="keyword">public</span>:
-<a name="l00080"></a><a class="code" href="classcsMemoryPool.html#a0">00080</a>   <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>(size_t gran = 4096) : remaining(0), granularity(gran) {}
-<a name="l00082"></a><a class="code" href="classcsMemoryPool.html#a1">00082</a>   ~<a class="code" href="classcsMemoryPool.html">csMemoryPool</a>() { Empty(); }
-00083 
-00092   <span class="keywordtype">void</span>* Alloc(size_t);
-00098   <span class="keywordtype">void</span> Empty();
-00104   <span class="keywordtype">void</span> <span class="keyword">const</span>* Store(<span class="keywordtype">void</span> <span class="keyword">const</span>*, size_t);
-00111   <span class="keywordtype">char</span> <span class="keyword">const</span>* Store(<span class="keywordtype">char</span> <span class="keyword">const</span>*);
-00112 };
-00113 
-<a name="l00133"></a><a class="code" href="mempool_8h.html#a0">00133</a> <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="mempool_8h.html#a0">operator new</a>(size_t n, <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>&amp; p)
-00134 { <span class="keywordflow">return</span> p.<a class="code" href="classcsMemoryPool.html#a2">Alloc</a>(n); }
-00135 <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="mempool_8h.html#a0">operator new</a>(size_t n, <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>* p)
-00136 { <span class="keywordflow">return</span> p-&gt;<a class="code" href="classcsMemoryPool.html#a2">Alloc</a>(n); }
-00139 <span class="preprocessor">#endif //  __CS_CSUTIL_MEMPOOL_H__</span>
+00068   <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>(<a class="code" href="classcsMemoryPool.html">csMemoryPool</a> <span class="keyword">const</span>&amp;);   <span class="comment">// Illegal; unimplemented.</span>
+00069   <span class="keywordtype">void</span> operator=(<a class="code" href="classcsMemoryPool.html">csMemoryPool</a> <span class="keyword">const</span>&amp;); <span class="comment">// Illegal; unimplemented.</span>
+00070 
+00071 <span class="keyword">public</span>:
+<a name="l00083"></a><a class="code" href="classcsMemoryPool.html#a0">00083</a>   <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>(size_t gran = 4096) : remaining(0), granularity(gran) {}
+<a name="l00085"></a><a class="code" href="classcsMemoryPool.html#a1">00085</a>   ~<a class="code" href="classcsMemoryPool.html">csMemoryPool</a>() { Empty(); }
+00086 
+00095   <span class="keywordtype">void</span>* Alloc(size_t);
+00101   <span class="keywordtype">void</span> Empty();
+00107   <span class="keywordtype">void</span> <span class="keyword">const</span>* Store(<span class="keywordtype">void</span> <span class="keyword">const</span>*, size_t);
+00114   <span class="keywordtype">char</span> <span class="keyword">const</span>* Store(<span class="keywordtype">char</span> <span class="keyword">const</span>*);
+00115 };
+00116 
+<a name="l00136"></a><a class="code" href="group__util__containers.html#ga3">00136</a> <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="group__util__containers.html#ga3">operator new</a>(size_t n, <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>&amp; p)
+00137 { <span class="keywordflow">return</span> p.<a class="code" href="classcsMemoryPool.html#a2">Alloc</a>(n); }
+00138 <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="group__util__containers.html#ga3">operator new</a>(size_t n, <a class="code" href="classcsMemoryPool.html">csMemoryPool</a>* p)
+00139 { <span class="keywordflow">return</span> p-&gt;<a class="code" href="classcsMemoryPool.html#a2">Alloc</a>(n); }
+00144 <span class="preprocessor">#endif //  __CS_CSUTIL_MEMPOOL_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

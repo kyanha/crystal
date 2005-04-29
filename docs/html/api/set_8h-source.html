@@ -40,11 +40,11 @@
 00021 <span class="preprocessor"></span>
 00022 <span class="preprocessor">#include "<a class="code" href="hash_8h.html">hash.h</a>"</span>
 00023 
-00036 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T, <span class="keyword">class</span> KeyHandler = csIntegralHashKeyHandler&lt;T&gt; &gt; 
+00036 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt; 
 <a name="l00037"></a><a class="code" href="classcsSet.html">00037</a> <span class="keyword">class </span><a class="code" href="classcsSet.html">csSet</a>
 00038 {
 00039 <span class="keyword">public</span>:
-00040   <span class="keyword">typedef</span> <a class="code" href="classcsHash.html">csHash&lt;bool, T, KeyHandler&gt;</a> <a class="code" href="classcsHash.html">HashType</a>;
+00040   <span class="keyword">typedef</span> <a class="code" href="classcsHash.html">csHash&lt;bool, T&gt;</a> <a class="code" href="classcsHash.html">HashType</a>;
 00041 
 00042 <span class="keyword">private</span>:
 00043   <span class="keyword">typedef</span> typename_qualifier HashType::GlobalIterator ParentIter;
@@ -57,28 +57,27 @@
 00051   <span class="keyword">protected</span>:
 00052     ParentIter iter;
 00053     <a class="code" href="classcsSet_1_1GlobalIterator.html">GlobalIterator</a> () {}
-00054     <a class="code" href="classcsSet_1_1GlobalIterator.html">GlobalIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsSet.html">csSet&lt;T, KeyHandler&gt;</a>* s) :
-00055       iter(s-&gt;<a class="code" href="classcsSet.html#r0">map</a>.<a class="code" href="classcsHash.html#a19">GetIterator</a>()) {}
-00056 
-00057   <span class="keyword">public</span>:
-00058     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsSet.html">csSet</a>&lt;T, KeyHandler&gt;;
-00059 
-00060     <a class="code" href="classcsSet_1_1GlobalIterator.html">GlobalIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsSet_1_1GlobalIterator.html">GlobalIterator</a>&amp; o) : iter(o.<a class="code" href="classcsSet_1_1GlobalIterator.html#p0">iter</a>) {}
-00061     GlobalIterator&amp; operator=(<span class="keyword">const</span> GlobalIterator&amp; o)
-00062     { iter = o.<a class="code" href="classcsSet_1_1GlobalIterator.html#p0">iter</a>; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-00063 
-<a name="l00065"></a><a class="code" href="classcsSet_1_1GlobalIterator.html#a2">00065</a>     <span class="keywordtype">bool</span> <a class="code" href="classcsSet_1_1GlobalIterator.html#a2">HasNext</a> ()<span class="keyword"> const</span>
-00066 <span class="keyword">    </span>{ <span class="keywordflow">return</span> iter.HasNext(); }
-00067 
-<a name="l00069"></a><a class="code" href="classcsSet_1_1GlobalIterator.html#a3">00069</a>     T <a class="code" href="classcsSet_1_1GlobalIterator.html#a3">Next</a>()
-00070     {
-00071       T key;
-00072       iter.Next(key);
-00073       <span class="keywordflow">return</span> key;
-00074     }
-00075   };
-00076   <span class="keyword">friend</span> <span class="keyword">class </span>GlobalIterator;
-00077 
+00054     <a class="code" href="classcsSet_1_1GlobalIterator.html">GlobalIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsSet.html">csSet&lt;T&gt;</a>* s) : iter(s-&gt;<a class="code" href="classcsSet.html#r0">map</a>.<a class="code" href="classcsHash.html#a19">GetIterator</a>()) {}
+00055 
+00056   <span class="keyword">public</span>:
+00057     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsSet.html">csSet</a>&lt;T&gt;;
+00058 
+00059     <a class="code" href="classcsSet_1_1GlobalIterator.html">GlobalIterator</a> (<span class="keyword">const</span> <a class="code" href="classcsSet_1_1GlobalIterator.html">GlobalIterator</a>&amp; o) : iter(o.<a class="code" href="classcsSet_1_1GlobalIterator.html#p0">iter</a>) {}
+00060     GlobalIterator&amp; operator=(<span class="keyword">const</span> GlobalIterator&amp; o)
+00061     { iter = o.<a class="code" href="classcsSet_1_1GlobalIterator.html#p0">iter</a>; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+00062 
+<a name="l00064"></a><a class="code" href="classcsSet_1_1GlobalIterator.html#a2">00064</a>     <span class="keywordtype">bool</span> <a class="code" href="classcsSet_1_1GlobalIterator.html#a2">HasNext</a> ()<span class="keyword"> const</span>
+00065 <span class="keyword">    </span>{ <span class="keywordflow">return</span> iter.HasNext(); }
+00066 
+<a name="l00068"></a><a class="code" href="classcsSet_1_1GlobalIterator.html#a3">00068</a>     T <a class="code" href="classcsSet_1_1GlobalIterator.html#a3">Next</a>()
+00069     {
+00070       T key;
+00071       iter.Next(key);
+00072       <span class="keywordflow">return</span> key;
+00073     }
+00074   };
+00075   <span class="keyword">friend</span> <span class="keyword">class </span>GlobalIterator;
+00076 
 <a name="l00082"></a><a class="code" href="classcsSet.html#a0">00082</a>   <a class="code" href="classcsSet.html#a0">csSet</a> (<span class="keywordtype">int</span> size = 23, <span class="keywordtype">int</span> grow_rate = 5, <span class="keywordtype">int</span> max_size = 20000)
 00083         : map (size, grow_rate, max_size)
 00084   {
@@ -125,15 +124,13 @@
 00158     <span class="keywordflow">return</span> <a class="code" href="classcsSet.html#a8">GetSize</a>() == 0;
 00159   }
 00160 
-<a name="l00162"></a><a class="code" href="classcsSet.html#a10">00162</a>   <a class="code" href="classcsHash.html">HashType</a>* <a class="code" href="classcsSet.html#a10">GetHash</a> () { <span class="keywordflow">return</span> &amp;map; }
-00163 
-<a name="l00169"></a><a class="code" href="classcsSet.html#a11">00169</a>   GlobalIterator <a class="code" href="classcsSet.html#a11">GetIterator</a> ()<span class="keyword"> const</span>
-00170 <span class="keyword">  </span>{
-00171     <span class="keywordflow">return</span> GlobalIterator(<span class="keyword">this</span>);
-00172   }
-00173 };
-00174 
-00177 <span class="preprocessor">#endif // __CS_UTIL_SET_H__</span>
+<a name="l00166"></a><a class="code" href="classcsSet.html#a10">00166</a>   GlobalIterator <a class="code" href="classcsSet.html#a10">GetIterator</a> ()<span class="keyword"> const</span>
+00167 <span class="keyword">  </span>{
+00168     <span class="keywordflow">return</span> GlobalIterator(<span class="keyword">this</span>);
+00169   }
+00170 };
+00171 
+00174 <span class="preprocessor">#endif // __CS_UTIL_SET_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
