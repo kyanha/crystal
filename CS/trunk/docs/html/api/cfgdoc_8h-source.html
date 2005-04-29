@@ -43,93 +43,92 @@
 00028 <span class="preprocessor">#include "<a class="code" href="iutil_2cfgfile_8h.html">iutil/cfgfile.h</a>"</span>
 00029 <span class="preprocessor">#include "<a class="code" href="document_8h.html">iutil/document.h</a>"</span>
 00030 <span class="preprocessor">#include "<a class="code" href="hash_8h.html">csutil/hash.h</a>"</span>
-00031 <span class="preprocessor">#include "<a class="code" href="hashhandlers_8h.html">csutil/hashhandlers.h</a>"</span>
-00032 
-00033 <span class="keyword">class </span>csConfigDocumentIterator;
-00034 
-<a name="l00039"></a><a class="code" href="classcsConfigDocument.html">00039</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> : <span class="keyword">public</span> <a class="code" href="structiConfigFile.html">iConfigFile</a>
-00040 {
-00041   <span class="keyword">friend</span> <span class="keyword">class </span>csConfigDocumentIterator;
-00042 
-00043   <span class="keywordtype">char</span>* filename;
-00044   <a class="code" href="classcsRef.html">csRef&lt;iDocument&gt;</a> document;
-00045   <a class="code" href="classcsRef.html">csRef&lt;iVFS&gt;</a> fileVFS;
-00046 
-00047   <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT KeyInfo
-00048   {
-00049     <a class="code" href="classcsRef.html">csRef&lt;iDocumentNode&gt;</a> comment;
-00050     <a class="code" href="classcsRef.html">csRef&lt;iDocumentNode&gt;</a> node;
-00051     <span class="keywordtype">char</span>* cachedStringValue;
-00052     <span class="keywordtype">char</span>* cachedComment;
-00053     <span class="keywordtype">char</span>* originalKey;
-00054 
-00055     KeyInfo () : cachedStringValue(0), cachedComment(0), originalKey(0) {}
-00056     KeyInfo (<span class="keyword">const</span> KeyInfo&amp; other)
-00057     {
-00058       cachedStringValue = <a class="code" href="group__util.html#ga94">csStrNew</a> (other.cachedStringValue);
-00059       cachedComment = <a class="code" href="group__util.html#ga94">csStrNew</a> (other.cachedComment);
-00060       originalKey = <a class="code" href="group__util.html#ga94">csStrNew</a> (other.originalKey);
-00061     }
-00062     ~KeyInfo()
-00063     {
-00064       <span class="keyword">delete</span>[] cachedStringValue;
-00065       <span class="keyword">delete</span>[] cachedComment;
-00066       <span class="keyword">delete</span>[] originalKey;
-00067     }
-00068   };
-00069   <a class="code" href="classcsHash.html">csHash&lt;KeyInfo, csStrKey, csConstCharHashKeyHandler&gt;</a> keys;
-00070 
-00071   <span class="keywordtype">void</span> ParseDocument (<a class="code" href="structiDocument.html">iDocument</a>* doc, <span class="keywordtype">bool</span> Merge = <span class="keyword">false</span>,
-00072     <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>);
-00073   <span class="keywordtype">void</span> ParseNode (<span class="keyword">const</span> <span class="keywordtype">char</span>* parent, <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, 
-00074     <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>);
-00075 <span class="keyword">public</span>:
-00076   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
-00077   
-00078   <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> ();
-00079   <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Filename, <a class="code" href="structiVFS.html">iVFS</a>* = 0);
-00080   <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> (<a class="code" href="structiDocument.html">iDocument</a>* doc);
-00081   <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node);
-00082   <span class="keyword">virtual</span> ~<a class="code" href="classcsConfigDocument.html">csConfigDocument</a>();
-00083   
-00084   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetFileName () <span class="keyword">const</span>;
-00085 
-00086   <span class="keyword">virtual</span> <a class="code" href="structiVFS.html">iVFS</a>* GetVFS () <span class="keyword">const</span>;
-00087 
-00088   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFileName (<span class="keyword">const</span> <span class="keywordtype">char</span>*, <a class="code" href="structiVFS.html">iVFS</a>*);
-00089 
-00090   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Load (<span class="keyword">const</span> <span class="keywordtype">char</span>* iFileName, <a class="code" href="structiVFS.html">iVFS</a>* = 0, <span class="keywordtype">bool</span> Merge = <span class="keyword">false</span>,
-00091     <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>);
-00092   <span class="keywordtype">bool</span> LoadNode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <span class="keywordtype">bool</span> Merge = <span class="keyword">false</span>, <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>);
-00093 
-00094   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Save ();
-00095 
-00096   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Save (<span class="keyword">const</span> <span class="keywordtype">char</span> *iFileName, <a class="code" href="structiVFS.html">iVFS</a>* = 0);
-00097 
-00098   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Clear ();
-00099 
-00100   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iConfigIterator&gt;</a> Enumerate (<span class="keyword">const</span> <span class="keywordtype">char</span> *Subsection = 0);
-00101 
-00102   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> KeyExists (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) <span class="keyword">const</span>;
-00103   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SubsectionExists (<span class="keyword">const</span> <span class="keywordtype">char</span> *Subsection) <span class="keyword">const</span>;
-00104 
-00105   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetInt (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">int</span> Def = 0) <span class="keyword">const</span>;
-00106   <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetFloat (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">float</span> Def = 0.0) <span class="keyword">const</span>;
-00107   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetStr (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Def = <span class="stringliteral">""</span>) <span class="keyword">const</span>;
-00108   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetBool (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">bool</span> Def = <span class="keyword">false</span>) <span class="keyword">const</span>;
-00109   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetComment (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) <span class="keyword">const</span>;
-00110 
-00111   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetStr (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Val);
-00112   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetInt (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">int</span> Value);
-00113   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFloat (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">float</span> Value);
-00114   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetBool (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">bool</span> Value);
-00115   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SetComment (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Text);
-00116   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DeleteKey (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key);
-00117   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetEOFComment () <span class="keyword">const</span>;
-00118   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetEOFComment (<span class="keyword">const</span> <span class="keywordtype">char</span> *Text);
-00119 };
-00120 
-00121 <span class="preprocessor">#endif // __CS_UTIL_CFGDOC_H__</span>
+00031 
+00032 <span class="keyword">class </span>csConfigDocumentIterator;
+00033 
+<a name="l00038"></a><a class="code" href="classcsConfigDocument.html">00038</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> : <span class="keyword">public</span> <a class="code" href="structiConfigFile.html">iConfigFile</a>
+00039 {
+00040   <span class="keyword">friend</span> <span class="keyword">class </span>csConfigDocumentIterator;
+00041 
+00042   <span class="keywordtype">char</span>* filename;
+00043   <a class="code" href="classcsRef.html">csRef&lt;iDocument&gt;</a> document;
+00044   <a class="code" href="classcsRef.html">csRef&lt;iVFS&gt;</a> fileVFS;
+00045 
+00046   <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT KeyInfo
+00047   {
+00048     <a class="code" href="classcsRef.html">csRef&lt;iDocumentNode&gt;</a> comment;
+00049     <a class="code" href="classcsRef.html">csRef&lt;iDocumentNode&gt;</a> node;
+00050     <span class="keywordtype">char</span>* cachedStringValue;
+00051     <span class="keywordtype">char</span>* cachedComment;
+00052     <span class="keywordtype">char</span>* originalKey;
+00053 
+00054     KeyInfo () : cachedStringValue(0), cachedComment(0), originalKey(0) {}
+00055     KeyInfo (<span class="keyword">const</span> KeyInfo&amp; other)
+00056     {
+00057       cachedStringValue = <a class="code" href="group__util.html#ga94">csStrNew</a> (other.cachedStringValue);
+00058       cachedComment = <a class="code" href="group__util.html#ga94">csStrNew</a> (other.cachedComment);
+00059       originalKey = <a class="code" href="group__util.html#ga94">csStrNew</a> (other.originalKey);
+00060     }
+00061     ~KeyInfo()
+00062     {
+00063       <span class="keyword">delete</span>[] cachedStringValue;
+00064       <span class="keyword">delete</span>[] cachedComment;
+00065       <span class="keyword">delete</span>[] originalKey;
+00066     }
+00067   };
+00068   <a class="code" href="classcsHash.html">csHash&lt;KeyInfo, csStrKey&gt;</a> keys;
+00069 
+00070   <span class="keywordtype">void</span> ParseDocument (<a class="code" href="structiDocument.html">iDocument</a>* doc, <span class="keywordtype">bool</span> Merge = <span class="keyword">false</span>,
+00071     <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>);
+00072   <span class="keywordtype">void</span> ParseNode (<span class="keyword">const</span> <span class="keywordtype">char</span>* parent, <a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, 
+00073     <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>);
+00074 <span class="keyword">public</span>:
+00075   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+00076   
+00077   <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> ();
+00078   <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Filename, <a class="code" href="structiVFS.html">iVFS</a>* = 0);
+00079   <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> (<a class="code" href="structiDocument.html">iDocument</a>* doc);
+00080   <a class="code" href="classcsConfigDocument.html">csConfigDocument</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node);
+00081   <span class="keyword">virtual</span> ~<a class="code" href="classcsConfigDocument.html">csConfigDocument</a>();
+00082   
+00083   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetFileName () <span class="keyword">const</span>;
+00084 
+00085   <span class="keyword">virtual</span> <a class="code" href="structiVFS.html">iVFS</a>* GetVFS () <span class="keyword">const</span>;
+00086 
+00087   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFileName (<span class="keyword">const</span> <span class="keywordtype">char</span>*, <a class="code" href="structiVFS.html">iVFS</a>*);
+00088 
+00089   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Load (<span class="keyword">const</span> <span class="keywordtype">char</span>* iFileName, <a class="code" href="structiVFS.html">iVFS</a>* = 0, <span class="keywordtype">bool</span> Merge = <span class="keyword">false</span>,
+00090     <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>);
+00091   <span class="keywordtype">bool</span> LoadNode (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <span class="keywordtype">bool</span> Merge = <span class="keyword">false</span>, <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>);
+00092 
+00093   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Save ();
+00094 
+00095   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Save (<span class="keyword">const</span> <span class="keywordtype">char</span> *iFileName, <a class="code" href="structiVFS.html">iVFS</a>* = 0);
+00096 
+00097   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Clear ();
+00098 
+00099   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iConfigIterator&gt;</a> Enumerate (<span class="keyword">const</span> <span class="keywordtype">char</span> *Subsection = 0);
+00100 
+00101   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> KeyExists (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) <span class="keyword">const</span>;
+00102   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SubsectionExists (<span class="keyword">const</span> <span class="keywordtype">char</span> *Subsection) <span class="keyword">const</span>;
+00103 
+00104   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetInt (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">int</span> Def = 0) <span class="keyword">const</span>;
+00105   <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetFloat (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">float</span> Def = 0.0) <span class="keyword">const</span>;
+00106   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetStr (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Def = <span class="stringliteral">""</span>) <span class="keyword">const</span>;
+00107   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetBool (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">bool</span> Def = <span class="keyword">false</span>) <span class="keyword">const</span>;
+00108   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetComment (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) <span class="keyword">const</span>;
+00109 
+00110   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetStr (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Val);
+00111   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetInt (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">int</span> Value);
+00112   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFloat (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">float</span> Value);
+00113   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetBool (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">bool</span> Value);
+00114   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> SetComment (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Text);
+00115   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DeleteKey (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key);
+00116   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetEOFComment () <span class="keyword">const</span>;
+00117   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetEOFComment (<span class="keyword">const</span> <span class="keywordtype">char</span> *Text);
+00118 };
+00119 
+00120 <span class="preprocessor">#endif // __CS_UTIL_CFGDOC_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

@@ -43,301 +43,300 @@
 00024 <span class="preprocessor">#include "csextern.h"</span>
 00025 <span class="preprocessor">#include "<a class="code" href="iutil_2event_8h.html">iutil/event.h</a>"</span>
 00026 <span class="preprocessor">#include "<a class="code" href="hashr_8h.html">hashr.h</a>"</span>
-00027 <span class="preprocessor">#include "<a class="code" href="hashhandlers_8h.html">hashhandlers.h</a>"</span>
-00028 <span class="preprocessor">#include "<a class="code" href="csendian_8h.html">csendian.h</a>"</span>
-00029 <span class="preprocessor">#include "<a class="code" href="weakref_8h.html">weakref.h</a>"</span>
-00030 <span class="preprocessor">#include "<a class="code" href="cseventq_8h.html">cseventq.h</a>"</span>
-00031 <span class="preprocessor">#include "<a class="code" href="csutil_2strset_8h.html">strset.h</a>"</span>
-00032 
-00037 <span class="keyword">class </span>csEventAttributeIterator;
-00038 
-00039 <span class="keyword">class </span><a class="code" href="classcsEvent.html">csEvent</a>;
-00040 
-00041 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="classcsEvent.html">csEvent</a>, 0, 0, 1);
-00042 
-<a name="l00049"></a><a class="code" href="classcsEvent.html">00049</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsEvent.html">csEvent</a> : <span class="keyword">public</span> <a class="code" href="structiEvent.html">iEvent</a>
-00050 {
-00051 <span class="keyword">private</span>:
-00052   <span class="keyword">struct </span>attribute
-00053   {
-00054     <span class="keyword">union</span>
-00055 <span class="keyword">    </span>{
-00056       <a class="code" href="group__util.html#ga7">int64</a> intVal;
-00057       <span class="keywordtype">double</span> doubleVal;
-00058       <span class="keywordtype">char</span>* bufferVal;
-00059       <a class="code" href="structiBase.html">iBase</a>* ibaseVal;
-00060     };
-00061     <a class="code" href="group__event__handling.html#ga137">csEventAttributeType</a> type;
-00062     size_t dataSize;
-00063     attribute (<a class="code" href="group__event__handling.html#ga137">csEventAttributeType</a> t) { type = t; }
-00064     ~attribute () 
-00065     { 
-00066       <span class="keywordflow">if</span> (type == <a class="code" href="group__event__handling.html#gga137a21">csEventAttrDatabuffer</a>) 
-00067         <span class="keyword">delete</span>[] bufferVal; 
-00068       <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((type == <a class="code" href="group__event__handling.html#gga137a22">csEventAttrEvent</a>) || (type == <a class="code" href="group__event__handling.html#gga137a23">csEventAttriBase</a>))
-00069         ibaseVal-&gt;DecRef();
-00070     }
-00071   };
-00072   <a class="code" href="classcsHash.html">csHash&lt;attribute*, csStringID&gt;</a> attributes;
-00073   <span class="keyword">friend</span> <span class="keyword">class </span>csEventAttributeIterator;
-00074 
-00075   size_t count;
-00076 
-00077   <span class="keywordtype">bool</span> CheckForLoops(<a class="code" href="structiEvent.html">iEvent</a> *current, <a class="code" href="structiEvent.html">iEvent</a> *e);
-00078 
-00079   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-00080   <span class="keywordtype">bool</span> InternalAddInt (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, T value)
-00081   {
-00082     <span class="keywordflow">if</span> (attributes.In (GetKeyID (name))) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00083     attribute* object = <span class="keyword">new</span> attribute (<a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>); 
-00084     object-&gt;intVal = (<a class="code" href="group__util.html#ga7">int64</a>)value;                              
-00085     attributes.Put (GetKeyID (name), object);                           
-00086     count++;                                                    
-00087     <span class="keywordflow">return</span> <span class="keyword">true</span>;                                                
-00088   }
-00089 
-00090   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-00091   <span class="keywordtype">bool</span> InternalAddUInt (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, T value)
-00092   {
-00093     <span class="keywordflow">if</span> (attributes.In (GetKeyID (name))) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00094     attribute* object = <span class="keyword">new</span> attribute (<a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>);        
-00095     object-&gt;intVal = (<a class="code" href="group__util.html#ga7">int64</a>)value;                              
-00096     attributes.Put (GetKeyID (name), object);                           
-00097     count++;                                                    
-00098     <span class="keywordflow">return</span> <span class="keyword">true</span>;                                                
-00099   }
-00100 
-00101   <a class="code" href="group__event__handling.html#ga136">csEventError</a> InternalReportMismatch (attribute* attr)<span class="keyword"> const</span>
-00102 <span class="keyword">  </span>{
-00103     <span class="keywordflow">switch</span> (attr-&gt;type)
-00104     {
-00105       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>:
-00106         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a10">csEventErrMismatchInt</a>;
-00107       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>:
-00108         <span class="keywordflow">return</span> csEventErrMismatchUInt;
-00109       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a20">csEventAttrFloat</a>:
-00110         <span class="keywordflow">return</span> csEventErrMismatchFloat;
-00111       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a21">csEventAttrDatabuffer</a>:
-00112         <span class="keywordflow">return</span> csEventErrMismatchBuffer;
-00113       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a22">csEventAttrEvent</a>:
-00114         <span class="keywordflow">return</span> csEventErrMismatchEvent;
-00115       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a23">csEventAttriBase</a>:
-00116         <span class="keywordflow">return</span> csEventErrMismatchIBase;
-00117       <span class="keywordflow">default</span>:
-00118         <span class="keywordflow">break</span>;
-00119     }
-00120     <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a16">csEventErrUhOhUnknown</a>;
-00121   }
-00122 
-00123   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-00124   <a class="code" href="group__event__handling.html#ga136">csEventError</a> InternalRetrieveInt (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, T&amp; value)<span class="keyword"> const</span>
-00125 <span class="keyword">  </span>{                                                             
-00126     attribute* object = attributes.Get (GetKeyID (name), 0);
-00127     <span class="keywordflow">if</span> (!object) <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a9">csEventErrNotFound</a>;
-00128     <span class="keywordflow">if</span> ((object-&gt;type == <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>) || (object-&gt;type == <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>))
-00129     {                                                                   
-00130       value = (T)object-&gt;intVal;
-00131       <span class="keyword">const</span> T rangeMin = (T)(1 &lt;&lt; (<span class="keyword">sizeof</span>(T) * 8 - 1));
-00132       <span class="keyword">const</span> T rangeMax = ~rangeMin;
-00133       <span class="keywordflow">if</span> ((object-&gt;intVal &lt; rangeMin) || (object-&gt;intVal &gt; rangeMax))
-00134         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a8">csEventErrLossy</a>;
-00135       <span class="keywordflow">else</span>
-00136         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a7">csEventErrNone</a>;
-00137     }
-00138     <span class="keywordflow">else</span>
-00139     {
-00140       <span class="keywordflow">return</span> InternalReportMismatch (object);
-00141     }
-00142   }
-00143 
-00144   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-00145   <a class="code" href="group__event__handling.html#ga136">csEventError</a> InternalRetrieveUint (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, T&amp; value)<span class="keyword"> const</span>
-00146 <span class="keyword">  </span>{                                                             
-00147     attribute* object = attributes.Get (GetKeyID (name), 0);
-00148     <span class="keywordflow">if</span> (!object) <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a9">csEventErrNotFound</a>;
-00149     <span class="keywordflow">if</span> ((object-&gt;type == <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>) || (object-&gt;type == <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>))
-00150     {                                                                   
-00151       value = (T)object-&gt;intVal;
-00152       <span class="keyword">const</span> T rangeMax = (T)~0;
-00153       <span class="keywordflow">if</span> ((<a class="code" href="group__util.html#ga6">uint64</a>)object-&gt;intVal &gt; rangeMax)
-00154         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a8">csEventErrLossy</a>;
-00155       <span class="keywordflow">else</span>
-00156         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a7">csEventErrNone</a>;                                                  
-00157     }
-00158     <span class="keywordflow">else</span>
-00159     {
-00160       <span class="keywordflow">return</span> InternalReportMismatch (object);
-00161     }
-00162   }
-00163 
-00164   <span class="keyword">static</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetTypeName (<a class="code" href="group__event__handling.html#ga137">csEventAttributeType</a> t);
-00165   <span class="keyword">static</span> <a class="code" href="group__util.html#ga23">csStringID</a> GetKeyID (<span class="keyword">const</span> <span class="keywordtype">char</span>* key);
-00166   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetKeyName (<a class="code" href="group__util.html#ga23">csStringID</a> <span class="keywordtype">id</span>);
-00167 <span class="keyword">protected</span>:
-00168   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iEvent&gt;</a> CreateEvent();
-00169 
-00170 <span class="keyword">public</span>:
-00172   <a class="code" href="classcsEvent.html">csEvent</a> ();
-00173 
-00178   <a class="code" href="classcsEvent.html">csEvent</a> (<a class="code" href="classcsEvent.html">csEvent</a> <span class="keyword">const</span>&amp;);
-00179 
-00181   <a class="code" href="classcsEvent.html">csEvent</a> (<a class="code" href="group__util.html#ga17">csTicks</a>, <span class="keywordtype">int</span> type, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> button, <span class="keywordtype">int</span> modifiers);
-00182 
-00184   <a class="code" href="classcsEvent.html">csEvent</a> (<a class="code" href="group__util.html#ga17">csTicks</a>, <span class="keywordtype">int</span> type, <span class="keywordtype">int</span> n, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> button, <span class="keywordtype">int</span> modifiers);
-00185 
-00187   <a class="code" href="classcsEvent.html">csEvent</a> (<a class="code" href="group__util.html#ga17">csTicks</a>, <span class="keywordtype">int</span> type, <span class="keywordtype">int</span> code, <a class="code" href="group__util.html#ga8">intptr_t</a> info = 0);
-00188 
-00190   <span class="keyword">virtual</span> ~<a class="code" href="classcsEvent.html">csEvent</a> ();
-00191 
-00193 
-<a name="l00194"></a><a class="code" href="csevent_8h.html#a0">00194</a> <span class="preprocessor">#define CS_CSEVENT_ADDINT(type)                                 \</span>
-00195 <span class="preprocessor">  virtual bool Add (const char* name, type value)               \</span>
-00196 <span class="preprocessor">  { return InternalAddInt (name, value); }</span>
-00197 <span class="preprocessor"></span>  <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>(<a class="code" href="group__util.html#ga1">int8</a>)
-00198   <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>(<a class="code" href="group__util.html#ga3">int16</a>)
-00199   <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>(<a class="code" href="group__util.html#ga5">int32</a>)
-00200   <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>(<a class="code" href="group__util.html#ga7">int64</a>)
-00201 #undef <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>
-00202 #define CS_CSEVENT_ADDUINT(type)                                \
-00203   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span>* name, type value)               \
-00204   { <span class="keywordflow">return</span> InternalAddUInt (name, value); }
-00205   CS_CSEVENT_ADDUINT(<a class="code" href="group__util.html#ga0">uint8</a>)
-00206   CS_CSEVENT_ADDUINT(<a class="code" href="group__util.html#ga2">uint16</a>)
-00207   CS_CSEVENT_ADDUINT(<a class="code" href="group__util.html#ga4">uint32</a>)
-00208   CS_CSEVENT_ADDUINT(<a class="code" href="group__util.html#ga6">uint64</a>)
-00209 #undef CS_CSEVENT_ADDUINT
-00210   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> v);
-00211   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <span class="keywordtype">double</span> v);
-00212   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, const <span class="keywordtype">char</span> *v);
-00213   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, const <span class="keywordtype">void</span> *v, size_t size);
-00214   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <span class="keywordtype">bool</span> v);
-00215   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <a class="code" href="structiEvent.html">iEvent</a>* v);
-00216   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <a class="code" href="structiBase.html">iBase</a>* v);
-00217 
-<a name="l00219"></a><a class="code" href="csevent_8h.html#a2">00219</a> #define <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>(T)                                           \
-00220   virtual <a class="code" href="group__event__handling.html#ga136">csEventError</a> Retrieve (const <span class="keywordtype">char</span>* name, T&amp; value) const      \
-00221   { <span class="keywordflow">return</span> InternalRetrieveInt (name, value); }
-00222   <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>(<a class="code" href="group__util.html#ga1">int8</a>)
-00223   <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>(<a class="code" href="group__util.html#ga3">int16</a>)
-00224   <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>(<a class="code" href="group__util.html#ga5">int32</a>)
-00225 #undef <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>
-00226   virtual <a class="code" href="group__event__handling.html#ga136">csEventError</a> Retrieve (const <span class="keywordtype">char</span>* name, <a class="code" href="group__util.html#ga7">int64</a>&amp; value)<span class="keyword"> const</span>
-00227 <span class="keyword">  </span>{                                                             
-00228     attribute* object = attributes.Get (GetKeyID (name), 0);
-00229     <span class="keywordflow">if</span> (!object) <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a9">csEventErrNotFound</a>;
-00230     <span class="keywordflow">if</span> ((object-&gt;type == <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>) || (object-&gt;type == <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>))
-00231     {                                                                   
-00232       value = object-&gt;intVal;
-00233       <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a7">csEventErrNone</a>;
-00234     }
-00235     <span class="keywordflow">else</span>
-00236     {
-00237       <span class="keywordflow">return</span> InternalReportMismatch (object);
-00238     }
-00239   }
-00240 
-00241 <span class="preprocessor">#define CS_CSEVENT_FINDUINT(T)                                          \</span>
-00242 <span class="preprocessor">  virtual csEventError Retrieve (const char* name, T&amp; value) const      \</span>
-00243 <span class="preprocessor">  { return InternalRetrieveUint (name, value); }</span>
-00244 <span class="preprocessor"></span>  CS_CSEVENT_FINDUINT(<a class="code" href="group__util.html#ga0">uint8</a>)
-00245   CS_CSEVENT_FINDUINT(<a class="code" href="group__util.html#ga2">uint16</a>)
-00246   CS_CSEVENT_FINDUINT(<a class="code" href="group__util.html#ga4">uint32</a>)
-00247 #undef CS_CSEVENT_FINDUINT
-00248   virtual <a class="code" href="group__event__handling.html#ga136">csEventError</a> Retrieve (const <span class="keywordtype">char</span>* name, <a class="code" href="group__util.html#ga6">uint64</a>&amp; value)<span class="keyword"> const</span>
-00249 <span class="keyword">  </span>{                                                             
-00250     attribute* object = attributes.Get (GetKeyID (name), 0);
-00251     <span class="keywordflow">if</span> (!object) <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a9">csEventErrNotFound</a>;
-00252     <span class="keywordflow">if</span> ((object-&gt;type == <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>) || (object-&gt;type == <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>))
-00253     {                                                                   
-00254       value = (<a class="code" href="group__util.html#ga6">uint64</a>)object-&gt;intVal;
-00255       <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a7">csEventErrNone</a>;
-00256     }
-00257     <span class="keywordflow">else</span>
-00258     {
-00259       <span class="keywordflow">return</span> InternalReportMismatch (object);
-00260     }
-00261   }
-00262 
-00263   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> &amp;v) <span class="keyword">const</span>;
-00264   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">double</span> &amp;v) <span class="keyword">const</span>;
-00265   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *&amp;v) <span class="keyword">const</span>;
-00266   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">void</span> *&amp;v,
-00267         size_t &amp;size) <span class="keyword">const</span>;
-00268   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">bool</span> &amp;v) <span class="keyword">const</span>;
-00269   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classcsRef.html">csRef&lt;iEvent&gt;</a> &amp;v) <span class="keyword">const</span>;
-00270   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classcsRef.html">csRef&lt;iBase&gt;</a> &amp;v) <span class="keyword">const</span>;
-00271 
-00272   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a30">AttributeExists</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name);
-00273   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga137">csEventAttributeType</a> <a class="code" href="structiEvent.html#a31">GetAttributeType</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name);
-00274 
-00275   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a32">Remove</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
-00276   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a33">RemoveAll</a> ();
-00277 
-00278   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iEventAttributeIterator&gt;</a> <a class="code" href="structiEvent.html#a34">GetAttributeIterator</a>();
-00279 
-00280   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Print (<span class="keywordtype">int</span> level = 0);
-00281 
-00282   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
-00283 };
-00284 
-<a name="l00292"></a><a class="code" href="classcsPoolEvent.html">00292</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPoolEvent : <span class="keyword">public</span> <a class="code" href="classcsEvent.html">csEvent</a>
-00293 {
-00294   <span class="keyword">typedef</span> <a class="code" href="classcsEvent.html">csEvent</a> <a class="code" href="classcsEvent.html">superclass</a>;
-00295   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsEventQueue.html">csEventQueue</a>;
-00296   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsEvent.html">csEvent</a>;
-00297 
-00298 <span class="keyword">private</span>:
-00299   <span class="comment">// As per the XML pool, keep a reference to the pool container obejct</span>
-00300   <span class="comment">// and this also allows our overridden DecRef() to place the event back</span>
-00301   <span class="comment">// into the pool when users are done with it.</span>
-00302   <a class="code" href="classcsWeakRef.html">csWeakRef&lt;csEventQueue&gt;</a> pool;
-00303 
-00304   <span class="comment">// The next event in the pool, or null if the event is in use.</span>
-00305   csPoolEvent *next;
-00306 
-00307   <span class="comment">// The 'real' DecRef() call that deletes the event, should in theory only be</span>
-00308   <span class="comment">// called from csEventQueue.</span>
-00309   <span class="keywordtype">void</span> Free () { <a class="code" href="structiBase.html#a1">csEvent::DecRef</a>(); }
-00310 
-00311 <span class="keyword">protected</span>:
-00312   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iEvent&gt;</a> CreateEvent();
-00313 
-00314 <span class="keyword">public</span>:
-00316   csPoolEvent (<a class="code" href="classcsEventQueue.html">csEventQueue</a> *q);
-00317 
-00319   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a1">DecRef</a> ();
-00320 };
-00321 
-00325 <span class="keyword">class </span>csEventAttributeIterator : <span class="keyword">public</span> <a class="code" href="structiEventAttributeIterator.html">iEventAttributeIterator</a>
-00326 {
-00327   <a class="code" href="classcsHash.html">csHash&lt;csEvent::attribute*, csStringID&gt;</a>::GlobalIterator iterator;                                                              
-00328 <span class="keyword">public</span>:
-00329   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
-00330   
-00331   csEventAttributeIterator (
-00332     <a class="code" href="classcsHash.html">csHash&lt;csEvent::attribute*, csStringID&gt;</a>::GlobalIterator&amp; iter) : 
-00333     iterator(iter)
-00334   {
-00335     <a class="code" href="group__scf.html#ga25">SCF_CONSTRUCT_IBASE</a>(0);
-00336   }
-00337 
-00338   <span class="keyword">virtual</span> ~csEventAttributeIterator()
-00339   {
-00340     <a class="code" href="group__scf.html#ga27">SCF_DESTRUCT_IBASE</a>();
-00341   }
-00342 
-00343   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventAttributeIterator.html#a0">HasNext</a>()
-00344   {
-00345     <span class="keywordflow">return</span> iterator.HasNext();
-00346   }
-00347   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiEventAttributeIterator.html#a1">Next</a>();
-00348   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventAttributeIterator.html#a2">Reset</a>()
-00349   {
-00350     iterator.Reset();
-00351   }
-00352 };
-00353 
-00354 <span class="preprocessor">#endif // __CS_CSEVENT_H__</span>
+00027 <span class="preprocessor">#include "<a class="code" href="csendian_8h.html">csendian.h</a>"</span>
+00028 <span class="preprocessor">#include "<a class="code" href="weakref_8h.html">weakref.h</a>"</span>
+00029 <span class="preprocessor">#include "<a class="code" href="cseventq_8h.html">cseventq.h</a>"</span>
+00030 <span class="preprocessor">#include "<a class="code" href="csutil_2strset_8h.html">strset.h</a>"</span>
+00031 
+00036 <span class="keyword">class </span>csEventAttributeIterator;
+00037 
+00038 <span class="keyword">class </span><a class="code" href="classcsEvent.html">csEvent</a>;
+00039 
+00040 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="classcsEvent.html">csEvent</a>, 0, 0, 1);
+00041 
+<a name="l00048"></a><a class="code" href="classcsEvent.html">00048</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsEvent.html">csEvent</a> : <span class="keyword">public</span> <a class="code" href="structiEvent.html">iEvent</a>
+00049 {
+00050 <span class="keyword">private</span>:
+00051   <span class="keyword">struct </span>attribute
+00052   {
+00053     <span class="keyword">union</span>
+00054 <span class="keyword">    </span>{
+00055       <a class="code" href="group__util.html#ga7">int64</a> intVal;
+00056       <span class="keywordtype">double</span> doubleVal;
+00057       <span class="keywordtype">char</span>* bufferVal;
+00058       <a class="code" href="structiBase.html">iBase</a>* ibaseVal;
+00059     };
+00060     <a class="code" href="group__event__handling.html#ga137">csEventAttributeType</a> type;
+00061     size_t dataSize;
+00062     attribute (<a class="code" href="group__event__handling.html#ga137">csEventAttributeType</a> t) { type = t; }
+00063     ~attribute () 
+00064     { 
+00065       <span class="keywordflow">if</span> (type == <a class="code" href="group__event__handling.html#gga137a21">csEventAttrDatabuffer</a>) 
+00066         <span class="keyword">delete</span>[] bufferVal; 
+00067       <span class="keywordflow">else</span> <span class="keywordflow">if</span> ((type == <a class="code" href="group__event__handling.html#gga137a22">csEventAttrEvent</a>) || (type == <a class="code" href="group__event__handling.html#gga137a23">csEventAttriBase</a>))
+00068         ibaseVal-&gt;DecRef();
+00069     }
+00070   };
+00071   <a class="code" href="classcsHash.html">csHash&lt;attribute*, csStringID&gt;</a> attributes;
+00072   <span class="keyword">friend</span> <span class="keyword">class </span>csEventAttributeIterator;
+00073 
+00074   size_t count;
+00075 
+00076   <span class="keywordtype">bool</span> CheckForLoops(<a class="code" href="structiEvent.html">iEvent</a> *current, <a class="code" href="structiEvent.html">iEvent</a> *e);
+00077 
+00078   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+00079   <span class="keywordtype">bool</span> InternalAddInt (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, T value)
+00080   {
+00081     <span class="keywordflow">if</span> (attributes.In (GetKeyID (name))) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00082     attribute* object = <span class="keyword">new</span> attribute (<a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>); 
+00083     object-&gt;intVal = (<a class="code" href="group__util.html#ga7">int64</a>)value;                              
+00084     attributes.Put (GetKeyID (name), object);                           
+00085     count++;                                                    
+00086     <span class="keywordflow">return</span> <span class="keyword">true</span>;                                                
+00087   }
+00088 
+00089   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+00090   <span class="keywordtype">bool</span> InternalAddUInt (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, T value)
+00091   {
+00092     <span class="keywordflow">if</span> (attributes.In (GetKeyID (name))) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00093     attribute* object = <span class="keyword">new</span> attribute (<a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>);        
+00094     object-&gt;intVal = (<a class="code" href="group__util.html#ga7">int64</a>)value;                              
+00095     attributes.Put (GetKeyID (name), object);                           
+00096     count++;                                                    
+00097     <span class="keywordflow">return</span> <span class="keyword">true</span>;                                                
+00098   }
+00099 
+00100   <a class="code" href="group__event__handling.html#ga136">csEventError</a> InternalReportMismatch (attribute* attr)<span class="keyword"> const</span>
+00101 <span class="keyword">  </span>{
+00102     <span class="keywordflow">switch</span> (attr-&gt;type)
+00103     {
+00104       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>:
+00105         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a10">csEventErrMismatchInt</a>;
+00106       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>:
+00107         <span class="keywordflow">return</span> csEventErrMismatchUInt;
+00108       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a20">csEventAttrFloat</a>:
+00109         <span class="keywordflow">return</span> csEventErrMismatchFloat;
+00110       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a21">csEventAttrDatabuffer</a>:
+00111         <span class="keywordflow">return</span> csEventErrMismatchBuffer;
+00112       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a22">csEventAttrEvent</a>:
+00113         <span class="keywordflow">return</span> csEventErrMismatchEvent;
+00114       <span class="keywordflow">case</span> <a class="code" href="group__event__handling.html#gga137a23">csEventAttriBase</a>:
+00115         <span class="keywordflow">return</span> csEventErrMismatchIBase;
+00116       <span class="keywordflow">default</span>:
+00117         <span class="keywordflow">break</span>;
+00118     }
+00119     <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a16">csEventErrUhOhUnknown</a>;
+00120   }
+00121 
+00122   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+00123   <a class="code" href="group__event__handling.html#ga136">csEventError</a> InternalRetrieveInt (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, T&amp; value)<span class="keyword"> const</span>
+00124 <span class="keyword">  </span>{                                                             
+00125     attribute* object = attributes.Get (GetKeyID (name), 0);
+00126     <span class="keywordflow">if</span> (!object) <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a9">csEventErrNotFound</a>;
+00127     <span class="keywordflow">if</span> ((object-&gt;type == <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>) || (object-&gt;type == <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>))
+00128     {                                                                   
+00129       value = (T)object-&gt;intVal;
+00130       <span class="keyword">const</span> T rangeMin = (T)(1 &lt;&lt; (<span class="keyword">sizeof</span>(T) * 8 - 1));
+00131       <span class="keyword">const</span> T rangeMax = ~rangeMin;
+00132       <span class="keywordflow">if</span> ((object-&gt;intVal &lt; rangeMin) || (object-&gt;intVal &gt; rangeMax))
+00133         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a8">csEventErrLossy</a>;
+00134       <span class="keywordflow">else</span>
+00135         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a7">csEventErrNone</a>;
+00136     }
+00137     <span class="keywordflow">else</span>
+00138     {
+00139       <span class="keywordflow">return</span> InternalReportMismatch (object);
+00140     }
+00141   }
+00142 
+00143   <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+00144   <a class="code" href="group__event__handling.html#ga136">csEventError</a> InternalRetrieveUint (<span class="keyword">const</span> <span class="keywordtype">char</span>* name, T&amp; value)<span class="keyword"> const</span>
+00145 <span class="keyword">  </span>{                                                             
+00146     attribute* object = attributes.Get (GetKeyID (name), 0);
+00147     <span class="keywordflow">if</span> (!object) <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a9">csEventErrNotFound</a>;
+00148     <span class="keywordflow">if</span> ((object-&gt;type == <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>) || (object-&gt;type == <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>))
+00149     {                                                                   
+00150       value = (T)object-&gt;intVal;
+00151       <span class="keyword">const</span> T rangeMax = (T)~0;
+00152       <span class="keywordflow">if</span> ((<a class="code" href="group__util.html#ga6">uint64</a>)object-&gt;intVal &gt; rangeMax)
+00153         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a8">csEventErrLossy</a>;
+00154       <span class="keywordflow">else</span>
+00155         <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a7">csEventErrNone</a>;                                                  
+00156     }
+00157     <span class="keywordflow">else</span>
+00158     {
+00159       <span class="keywordflow">return</span> InternalReportMismatch (object);
+00160     }
+00161   }
+00162 
+00163   <span class="keyword">static</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* GetTypeName (<a class="code" href="group__event__handling.html#ga137">csEventAttributeType</a> t);
+00164   <span class="keyword">static</span> <a class="code" href="group__util.html#ga23">csStringID</a> GetKeyID (<span class="keyword">const</span> <span class="keywordtype">char</span>* key);
+00165   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetKeyName (<a class="code" href="group__util.html#ga23">csStringID</a> <span class="keywordtype">id</span>);
+00166 <span class="keyword">protected</span>:
+00167   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iEvent&gt;</a> CreateEvent();
+00168 
+00169 <span class="keyword">public</span>:
+00171   <a class="code" href="classcsEvent.html">csEvent</a> ();
+00172 
+00177   <a class="code" href="classcsEvent.html">csEvent</a> (<a class="code" href="classcsEvent.html">csEvent</a> <span class="keyword">const</span>&amp;);
+00178 
+00180   <a class="code" href="classcsEvent.html">csEvent</a> (<a class="code" href="group__util.html#ga17">csTicks</a>, <span class="keywordtype">int</span> type, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> button, <span class="keywordtype">int</span> modifiers);
+00181 
+00183   <a class="code" href="classcsEvent.html">csEvent</a> (<a class="code" href="group__util.html#ga17">csTicks</a>, <span class="keywordtype">int</span> type, <span class="keywordtype">int</span> n, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> button, <span class="keywordtype">int</span> modifiers);
+00184 
+00186   <a class="code" href="classcsEvent.html">csEvent</a> (<a class="code" href="group__util.html#ga17">csTicks</a>, <span class="keywordtype">int</span> type, <span class="keywordtype">int</span> code, <a class="code" href="group__util.html#ga8">intptr_t</a> info = 0);
+00187 
+00189   <span class="keyword">virtual</span> ~<a class="code" href="classcsEvent.html">csEvent</a> ();
+00190 
+00192 
+<a name="l00193"></a><a class="code" href="csevent_8h.html#a0">00193</a> <span class="preprocessor">#define CS_CSEVENT_ADDINT(type)                                 \</span>
+00194 <span class="preprocessor">  virtual bool Add (const char* name, type value)               \</span>
+00195 <span class="preprocessor">  { return InternalAddInt (name, value); }</span>
+00196 <span class="preprocessor"></span>  <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>(<a class="code" href="group__util.html#ga1">int8</a>)
+00197   <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>(<a class="code" href="group__util.html#ga3">int16</a>)
+00198   <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>(<a class="code" href="group__util.html#ga5">int32</a>)
+00199   <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>(<a class="code" href="group__util.html#ga7">int64</a>)
+00200 #undef <a class="code" href="csevent_8h.html#a0">CS_CSEVENT_ADDINT</a>
+00201 #define CS_CSEVENT_ADDUINT(type)                                \
+00202   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span>* name, type value)               \
+00203   { <span class="keywordflow">return</span> InternalAddUInt (name, value); }
+00204   CS_CSEVENT_ADDUINT(<a class="code" href="group__util.html#ga0">uint8</a>)
+00205   CS_CSEVENT_ADDUINT(<a class="code" href="group__util.html#ga2">uint16</a>)
+00206   CS_CSEVENT_ADDUINT(<a class="code" href="group__util.html#ga4">uint32</a>)
+00207   CS_CSEVENT_ADDUINT(<a class="code" href="group__util.html#ga6">uint64</a>)
+00208 #undef CS_CSEVENT_ADDUINT
+00209   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> v);
+00210   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <span class="keywordtype">double</span> v);
+00211   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, const <span class="keywordtype">char</span> *v);
+00212   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, const <span class="keywordtype">void</span> *v, size_t size);
+00213   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <span class="keywordtype">bool</span> v);
+00214   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <a class="code" href="structiEvent.html">iEvent</a>* v);
+00215   virtual <span class="keywordtype">bool</span> Add (const <span class="keywordtype">char</span> *name, <a class="code" href="structiBase.html">iBase</a>* v);
+00216 
+<a name="l00218"></a><a class="code" href="csevent_8h.html#a2">00218</a> #define <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>(T)                                           \
+00219   virtual <a class="code" href="group__event__handling.html#ga136">csEventError</a> Retrieve (const <span class="keywordtype">char</span>* name, T&amp; value) const      \
+00220   { <span class="keywordflow">return</span> InternalRetrieveInt (name, value); }
+00221   <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>(<a class="code" href="group__util.html#ga1">int8</a>)
+00222   <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>(<a class="code" href="group__util.html#ga3">int16</a>)
+00223   <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>(<a class="code" href="group__util.html#ga5">int32</a>)
+00224 #undef <a class="code" href="csevent_8h.html#a2">CS_CSEVENT_FINDINT</a>
+00225   virtual <a class="code" href="group__event__handling.html#ga136">csEventError</a> Retrieve (const <span class="keywordtype">char</span>* name, <a class="code" href="group__util.html#ga7">int64</a>&amp; value)<span class="keyword"> const</span>
+00226 <span class="keyword">  </span>{                                                             
+00227     attribute* object = attributes.Get (GetKeyID (name), 0);
+00228     <span class="keywordflow">if</span> (!object) <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a9">csEventErrNotFound</a>;
+00229     <span class="keywordflow">if</span> ((object-&gt;type == <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>) || (object-&gt;type == <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>))
+00230     {                                                                   
+00231       value = object-&gt;intVal;
+00232       <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a7">csEventErrNone</a>;
+00233     }
+00234     <span class="keywordflow">else</span>
+00235     {
+00236       <span class="keywordflow">return</span> InternalReportMismatch (object);
+00237     }
+00238   }
+00239 
+00240 <span class="preprocessor">#define CS_CSEVENT_FINDUINT(T)                                          \</span>
+00241 <span class="preprocessor">  virtual csEventError Retrieve (const char* name, T&amp; value) const      \</span>
+00242 <span class="preprocessor">  { return InternalRetrieveUint (name, value); }</span>
+00243 <span class="preprocessor"></span>  CS_CSEVENT_FINDUINT(<a class="code" href="group__util.html#ga0">uint8</a>)
+00244   CS_CSEVENT_FINDUINT(<a class="code" href="group__util.html#ga2">uint16</a>)
+00245   CS_CSEVENT_FINDUINT(<a class="code" href="group__util.html#ga4">uint32</a>)
+00246 #undef CS_CSEVENT_FINDUINT
+00247   virtual <a class="code" href="group__event__handling.html#ga136">csEventError</a> Retrieve (const <span class="keywordtype">char</span>* name, <a class="code" href="group__util.html#ga6">uint64</a>&amp; value)<span class="keyword"> const</span>
+00248 <span class="keyword">  </span>{                                                             
+00249     attribute* object = attributes.Get (GetKeyID (name), 0);
+00250     <span class="keywordflow">if</span> (!object) <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a9">csEventErrNotFound</a>;
+00251     <span class="keywordflow">if</span> ((object-&gt;type == <a class="code" href="group__event__handling.html#gga137a18">csEventAttrInt</a>) || (object-&gt;type == <a class="code" href="group__event__handling.html#gga137a19">csEventAttrUInt</a>))
+00252     {                                                                   
+00253       value = (<a class="code" href="group__util.html#ga6">uint64</a>)object-&gt;intVal;
+00254       <span class="keywordflow">return</span> <a class="code" href="group__event__handling.html#gga136a7">csEventErrNone</a>;
+00255     }
+00256     <span class="keywordflow">else</span>
+00257     {
+00258       <span class="keywordflow">return</span> InternalReportMismatch (object);
+00259     }
+00260   }
+00261 
+00262   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> &amp;v) <span class="keyword">const</span>;
+00263   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">double</span> &amp;v) <span class="keyword">const</span>;
+00264   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *&amp;v) <span class="keyword">const</span>;
+00265   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">void</span> *&amp;v,
+00266         size_t &amp;size) <span class="keyword">const</span>;
+00267   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">bool</span> &amp;v) <span class="keyword">const</span>;
+00268   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classcsRef.html">csRef&lt;iEvent&gt;</a> &amp;v) <span class="keyword">const</span>;
+00269   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiEvent.html#a15">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classcsRef.html">csRef&lt;iBase&gt;</a> &amp;v) <span class="keyword">const</span>;
+00270 
+00271   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a30">AttributeExists</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name);
+00272   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga137">csEventAttributeType</a> <a class="code" href="structiEvent.html#a31">GetAttributeType</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name);
+00273 
+00274   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a32">Remove</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name);
+00275   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a33">RemoveAll</a> ();
+00276 
+00277   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iEventAttributeIterator&gt;</a> <a class="code" href="structiEvent.html#a34">GetAttributeIterator</a>();
+00278 
+00279   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Print (<span class="keywordtype">int</span> level = 0);
+00280 
+00281   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+00282 };
+00283 
+<a name="l00291"></a><a class="code" href="classcsPoolEvent.html">00291</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPoolEvent : <span class="keyword">public</span> <a class="code" href="classcsEvent.html">csEvent</a>
+00292 {
+00293   <span class="keyword">typedef</span> <a class="code" href="classcsEvent.html">csEvent</a> <a class="code" href="classcsEvent.html">superclass</a>;
+00294   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsEventQueue.html">csEventQueue</a>;
+00295   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsEvent.html">csEvent</a>;
+00296 
+00297 <span class="keyword">private</span>:
+00298   <span class="comment">// As per the XML pool, keep a reference to the pool container obejct</span>
+00299   <span class="comment">// and this also allows our overridden DecRef() to place the event back</span>
+00300   <span class="comment">// into the pool when users are done with it.</span>
+00301   <a class="code" href="classcsWeakRef.html">csWeakRef&lt;csEventQueue&gt;</a> pool;
+00302 
+00303   <span class="comment">// The next event in the pool, or null if the event is in use.</span>
+00304   csPoolEvent *next;
+00305 
+00306   <span class="comment">// The 'real' DecRef() call that deletes the event, should in theory only be</span>
+00307   <span class="comment">// called from csEventQueue.</span>
+00308   <span class="keywordtype">void</span> Free () { <a class="code" href="structiBase.html#a1">csEvent::DecRef</a>(); }
+00309 
+00310 <span class="keyword">protected</span>:
+00311   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iEvent&gt;</a> CreateEvent();
+00312 
+00313 <span class="keyword">public</span>:
+00315   csPoolEvent (<a class="code" href="classcsEventQueue.html">csEventQueue</a> *q);
+00316 
+00318   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a1">DecRef</a> ();
+00319 };
+00320 
+00324 <span class="keyword">class </span>csEventAttributeIterator : <span class="keyword">public</span> <a class="code" href="structiEventAttributeIterator.html">iEventAttributeIterator</a>
+00325 {
+00326   <a class="code" href="classcsHash.html">csHash&lt;csEvent::attribute*, csStringID&gt;</a>::GlobalIterator iterator;                                                              
+00327 <span class="keyword">public</span>:
+00328   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+00329   
+00330   csEventAttributeIterator (
+00331     <a class="code" href="classcsHash.html">csHash&lt;csEvent::attribute*, csStringID&gt;</a>::GlobalIterator&amp; iter) : 
+00332     iterator(iter)
+00333   {
+00334     <a class="code" href="group__scf.html#ga25">SCF_CONSTRUCT_IBASE</a>(0);
+00335   }
+00336 
+00337   <span class="keyword">virtual</span> ~csEventAttributeIterator()
+00338   {
+00339     <a class="code" href="group__scf.html#ga27">SCF_DESTRUCT_IBASE</a>();
+00340   }
+00341 
+00342   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventAttributeIterator.html#a0">HasNext</a>()
+00343   {
+00344     <span class="keywordflow">return</span> iterator.HasNext();
+00345   }
+00346   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiEventAttributeIterator.html#a1">Next</a>();
+00347   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventAttributeIterator.html#a2">Reset</a>()
+00348   {
+00349     iterator.Reset();
+00350   }
+00351 };
+00352 
+00353 <span class="preprocessor">#endif // __CS_CSEVENT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

@@ -41,36 +41,35 @@
 00026 <span class="preprocessor"></span>
 00027 <span class="preprocessor">#include "<a class="code" href="hash_8h.html">hash.h</a>"</span>
 00028  
-00030 <span class="keyword">template</span> &lt;<span class="keyword">class </span>T, <span class="keyword">class </span>K = <a class="code" href="group__util.html#ga4">uint32</a>, 
-00031   <span class="keyword">class </span>KeyHandler = <a class="code" href="classcsIntegralHashKeyHandler.html">csIntegralHashKeyHandler&lt;K&gt;</a>,
-00032   <span class="keyword">class </span>ReverseKeyHandler = <a class="code" href="classcsIntegralHashKeyHandler.html">csIntegralHashKeyHandler&lt;T&gt;</a> &gt; 
-<a name="l00033"></a><a class="code" href="classcsHashReversible.html">00033</a> <span class="keyword">class </span><a class="code" href="classcsHashReversible.html">csHashReversible</a> : <span class="keyword">public</span> <a class="code" href="classcsHash.html">csHash</a>&lt;T, K, KeyHandler&gt;
-00034 {
-00035   <a class="code" href="classcsHash.html">csHash&lt;K, T, ReverseKeyHandler&gt;</a> reverse;
-00036 <span class="keyword">public</span>:
-<a name="l00050"></a><a class="code" href="classcsHashReversible.html#a0">00050</a>   <a class="code" href="classcsHashReversible.html#a0">csHashReversible</a> (<span class="keywordtype">int</span> size = 23, <span class="keywordtype">int</span> grow_rate = 5, <span class="keywordtype">int</span> max_size = 20000) :
-00051     <a class="code" href="classcsHash.html">csHash</a>&lt;T, K, KeyHandler&gt; (size, grow_rate, max_size), 
-00052     reverse (size, grow_rate, max_size)
-00053   {
-00054   }
-<a name="l00058"></a><a class="code" href="classcsHashReversible.html#a1">00058</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHashReversible.html#a1">Put</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
-00059   {
-00060     <a class="code" href="classcsHash.html#a2">csHash&lt;T, K, KeyHandler&gt;::Put</a> (key, value);
-00061     reverse.<a class="code" href="classcsHash.html#a2">Put</a> (value, key);
-00062   }
-00063 
-<a name="l00068"></a><a class="code" href="classcsHashReversible.html#a2">00068</a>   <span class="keyword">const</span> K* <a class="code" href="classcsHashReversible.html#a2">GetKeyPointer</a> (<span class="keyword">const</span> T&amp; key)<span class="keyword"> const</span>
-00069 <span class="keyword">  </span>{
-00070     <span class="keywordflow">return</span> reverse.<a class="code" href="classcsHash.html#a8">GetElementPointer</a> (key);
-00071   }
-00072  
-<a name="l00077"></a><a class="code" href="classcsHashReversible.html#a3">00077</a>   <span class="keyword">const</span> K&amp; <a class="code" href="classcsHashReversible.html#a3">GetKey</a> (<span class="keyword">const</span> T&amp; key, <span class="keyword">const</span> K&amp; fallback)<span class="keyword"> const</span>
-00078 <span class="keyword">  </span>{
-00079     <span class="keywordflow">return</span> reverse.<a class="code" href="classcsHash.html#a10">Get</a> (key, fallback);
-00080   }
-00081 };
-00082 
-00083 <span class="preprocessor">#endif // __CS_UTIL_HASHR_H__</span>
+00032 
+00033 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T, <span class="keyword">class</span> K = <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>&gt; 
+<a name="l00034"></a><a class="code" href="classcsHashReversible.html">00034</a> <span class="keyword">class </span><a class="code" href="classcsHashReversible.html">csHashReversible</a> : <span class="keyword">public</span> <a class="code" href="classcsHash.html">csHash</a>&lt;T, K&gt;
+00035 {
+00036   <a class="code" href="classcsHash.html">csHash&lt;K, T&gt;</a> reverse;
+00037 <span class="keyword">public</span>:
+<a name="l00051"></a><a class="code" href="classcsHashReversible.html#a0">00051</a>   <a class="code" href="classcsHashReversible.html#a0">csHashReversible</a> (<span class="keywordtype">int</span> size = 23, <span class="keywordtype">int</span> grow_rate = 5, <span class="keywordtype">int</span> max_size = 20000) :
+00052     <a class="code" href="classcsHash.html">csHash</a>&lt;T, K&gt; (size, grow_rate, max_size), 
+00053     reverse (size, grow_rate, max_size)
+00054   {
+00055   }
+<a name="l00059"></a><a class="code" href="classcsHashReversible.html#a1">00059</a>   <span class="keywordtype">void</span> <a class="code" href="classcsHashReversible.html#a1">Put</a> (<span class="keyword">const</span> K&amp; key, <span class="keyword">const</span> T &amp;value)
+00060   {
+00061     <a class="code" href="classcsHash.html#a2">csHash&lt;T, K&gt;::Put</a> (key, value);
+00062     reverse.<a class="code" href="classcsHash.html#a2">Put</a> (value, key);
+00063   }
+00064 
+<a name="l00069"></a><a class="code" href="classcsHashReversible.html#a2">00069</a>   <span class="keyword">const</span> K* <a class="code" href="classcsHashReversible.html#a2">GetKeyPointer</a> (<span class="keyword">const</span> T&amp; key)<span class="keyword"> const</span>
+00070 <span class="keyword">  </span>{
+00071     <span class="keywordflow">return</span> reverse.<a class="code" href="classcsHash.html#a8">GetElementPointer</a> (key);
+00072   }
+00073  
+<a name="l00078"></a><a class="code" href="classcsHashReversible.html#a3">00078</a>   <span class="keyword">const</span> K&amp; <a class="code" href="classcsHashReversible.html#a3">GetKey</a> (<span class="keyword">const</span> T&amp; key, <span class="keyword">const</span> K&amp; fallback)<span class="keyword"> const</span>
+00079 <span class="keyword">  </span>{
+00080     <span class="keywordflow">return</span> reverse.<a class="code" href="classcsHash.html#a10">Get</a> (key, fallback);
+00081   }
+00082 };
+00083 
+00086 <span class="preprocessor">#endif // __CS_UTIL_HASHR_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

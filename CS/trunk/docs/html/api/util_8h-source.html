@@ -52,70 +52,70 @@
 00070 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">int</span> <a class="code" href="group__util.html#ga99">csStrNCaseCmp</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* str1, <span class="keywordtype">char</span> <span class="keyword">const</span>* str2,
 00071   size_t n);
 00072 
-<a name="l00085"></a><a class="code" href="structcsWtoC.html">00085</a> <span class="keyword">struct </span><a class="code" href="structcsWtoC.html">csWtoC</a>
-00086 {
-00087 <span class="keyword">private</span>:
-00088   <span class="keywordtype">char</span>* s;
-00089 <span class="keyword">public</span>:
-<a name="l00094"></a><a class="code" href="structcsWtoC.html#a0">00094</a>   <a class="code" href="structcsWtoC.html#a0">csWtoC</a> (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* ws)
-00095   { s = <a class="code" href="group__util.html#ga94">csStrNew</a> (ws); }
-<a name="l00099"></a><a class="code" href="structcsWtoC.html#a1">00099</a>   <a class="code" href="structcsWtoC.html#a1">~csWtoC</a> ()
-00100   { <span class="keyword">delete</span>[] s; }
-<a name="l00104"></a><a class="code" href="structcsWtoC.html#a2">00104</a>   <a class="code" href="structcsWtoC.html#a2">operator const char* </a>()<span class="keyword"> const</span>
-00105 <span class="keyword">  </span>{ <span class="keywordflow">return</span> s; }
-00106 };
-00107 
-<a name="l00114"></a><a class="code" href="structcsCtoW.html">00114</a> <span class="keyword">struct </span><a class="code" href="structcsCtoW.html">csCtoW</a>
-00115 {
-00116 <span class="keyword">private</span>:
-00117   <span class="keywordtype">wchar_t</span>* ws;
-00118 <span class="keyword">public</span>:
-<a name="l00123"></a><a class="code" href="structcsCtoW.html#a0">00123</a>   <a class="code" href="structcsCtoW.html#a0">csCtoW</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s)
-00124   { ws = <a class="code" href="group__util.html#ga96">csStrNewW</a> (s); }
-<a name="l00128"></a><a class="code" href="structcsCtoW.html#a1">00128</a>   <a class="code" href="structcsCtoW.html#a1">~csCtoW</a> ()
-00129   { <span class="keyword">delete</span>[] ws; }
-<a name="l00133"></a><a class="code" href="structcsCtoW.html#a2">00133</a>   <a class="code" href="structcsCtoW.html#a2">operator const wchar_t* </a>()<span class="keyword"> const</span>
-00134 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ws; }
-00135 };
-00136 
-00146 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">char</span> *<a class="code" href="group__util.html#ga100">csExpandName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName);
-00147 
-00151 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga101">csSplitPath</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iPathName, <span class="keywordtype">char</span> *oPath,
-00152   size_t iPathSize, <span class="keywordtype">char</span> *oName, size_t iNameSize);
-00153 
-00162 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="group__util.html#ga102">csGlobMatches</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *fName, <span class="keyword">const</span> <span class="keywordtype">char</span> *fMask);
-00163 
-00168 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">int</span> <a class="code" href="group__util.html#ga103">csFindNearestPowerOf2</a> (<span class="keywordtype">int</span> n);
-00169 
-00171 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="group__util.html#ga104">csIsPowerOf2</a> (<span class="keywordtype">int</span> n);
-00172 
-<a name="l00174"></a><a class="code" href="group__util.html#ga105">00174</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#ga105">csLog2</a> (<span class="keywordtype">int</span> n)
-00175 {
-00176   <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> b[] = {0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000};
-00177   <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> S[] = {1, 2, 4, 8, 16};
-00178   <span class="keywordtype">int</span> i;
-00179 
-00180   <span class="keyword">register</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> c = 0; <span class="comment">// result of log2(v) will go here</span>
-00181   <span class="keywordflow">for</span> (i = 4; i &gt;= 0; i--) <span class="comment">// unroll for speed...</span>
-00182   {
-00183     <span class="keywordflow">if</span> (n &amp; b[i])
-00184     {
-00185       n &gt;&gt;= S[i];
-00186       c |= S[i];
-00187     } 
-00188   }
-00189   <span class="keywordflow">return</span> c;
-00190 }
-00191 
-00197 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga106">csReplaceAll</a> (<span class="keywordtype">char</span> *dest, <span class="keyword">const</span> <span class="keywordtype">char</span> *src,
-00198   <span class="keyword">const</span> <span class="keywordtype">char</span> *search, <span class="keyword">const</span> <span class="keywordtype">char</span> *replace, <span class="keywordtype">int</span> max);
-00199 
-00206 <span class="comment">/* CS_DEPRECATED_METHOD */</span>
-<a name="l00207"></a><a class="code" href="group__util.html#ga107">00207</a> CS_CRYSTALSPACE_EXPORT <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga107">csFindReplace</a> (<span class="keywordtype">char</span> *dest, <span class="keyword">const</span> <span class="keywordtype">char</span> *src,
-00208   <span class="keyword">const</span> <span class="keywordtype">char</span> *search, <span class="keyword">const</span> <span class="keywordtype">char</span> *replace, <span class="keywordtype">int</span> max)
-00209 { <a class="code" href="group__util.html#ga106">csReplaceAll</a>(dest, src, search, replace, max); }
-00210 
-00213 <span class="preprocessor">#endif // __CS_UTIL_H__</span>
+<a name="l00086"></a><a class="code" href="structcsWtoC.html">00086</a> <span class="keyword">struct </span><a class="code" href="structcsWtoC.html">csWtoC</a>
+00087 {
+00088 <span class="keyword">private</span>:
+00089   <span class="keywordtype">char</span>* s;
+00090 <span class="keyword">public</span>:
+<a name="l00095"></a><a class="code" href="structcsWtoC.html#a0">00095</a>   <a class="code" href="structcsWtoC.html#a0">csWtoC</a> (<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* ws)
+00096   { s = <a class="code" href="group__util.html#ga94">csStrNew</a> (ws); }
+<a name="l00100"></a><a class="code" href="structcsWtoC.html#a1">00100</a>   <a class="code" href="structcsWtoC.html#a1">~csWtoC</a> ()
+00101   { <span class="keyword">delete</span>[] s; }
+<a name="l00105"></a><a class="code" href="structcsWtoC.html#a2">00105</a>   <a class="code" href="structcsWtoC.html#a2">operator const char* </a>()<span class="keyword"> const</span>
+00106 <span class="keyword">  </span>{ <span class="keywordflow">return</span> s; }
+00107 };
+00108 
+<a name="l00116"></a><a class="code" href="structcsCtoW.html">00116</a> <span class="keyword">struct </span><a class="code" href="structcsCtoW.html">csCtoW</a>
+00117 {
+00118 <span class="keyword">private</span>:
+00119   <span class="keywordtype">wchar_t</span>* ws;
+00120 <span class="keyword">public</span>:
+<a name="l00125"></a><a class="code" href="structcsCtoW.html#a0">00125</a>   <a class="code" href="structcsCtoW.html#a0">csCtoW</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* s)
+00126   { ws = <a class="code" href="group__util.html#ga96">csStrNewW</a> (s); }
+<a name="l00130"></a><a class="code" href="structcsCtoW.html#a1">00130</a>   <a class="code" href="structcsCtoW.html#a1">~csCtoW</a> ()
+00131   { <span class="keyword">delete</span>[] ws; }
+<a name="l00135"></a><a class="code" href="structcsCtoW.html#a2">00135</a>   <a class="code" href="structcsCtoW.html#a2">operator const wchar_t* </a>()<span class="keyword"> const</span>
+00136 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ws; }
+00137 };
+00138 
+00148 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">char</span> *<a class="code" href="group__util.html#ga100">csExpandName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName);
+00149 
+00153 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga101">csSplitPath</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iPathName, <span class="keywordtype">char</span> *oPath,
+00154   size_t iPathSize, <span class="keywordtype">char</span> *oName, size_t iNameSize);
+00155 
+00164 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="group__util.html#ga102">csGlobMatches</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *fName, <span class="keyword">const</span> <span class="keywordtype">char</span> *fMask);
+00165 
+00170 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">int</span> <a class="code" href="group__util.html#ga103">csFindNearestPowerOf2</a> (<span class="keywordtype">int</span> n);
+00171 
+00173 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="group__util.html#ga104">csIsPowerOf2</a> (<span class="keywordtype">int</span> n);
+00174 
+<a name="l00176"></a><a class="code" href="group__util.html#ga105">00176</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#ga105">csLog2</a> (<span class="keywordtype">int</span> n)
+00177 {
+00178   <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> b[] = {0x2, 0xC, 0xF0, 0xFF00, 0xFFFF0000};
+00179   <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> S[] = {1, 2, 4, 8, 16};
+00180   <span class="keywordtype">int</span> i;
+00181 
+00182   <span class="keyword">register</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> c = 0; <span class="comment">// result of log2(v) will go here</span>
+00183   <span class="keywordflow">for</span> (i = 4; i &gt;= 0; i--) <span class="comment">// unroll for speed...</span>
+00184   {
+00185     <span class="keywordflow">if</span> (n &amp; b[i])
+00186     {
+00187       n &gt;&gt;= S[i];
+00188       c |= S[i];
+00189     } 
+00190   }
+00191   <span class="keywordflow">return</span> c;
+00192 }
+00193 
+00199 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga106">csReplaceAll</a> (<span class="keywordtype">char</span> *dest, <span class="keyword">const</span> <span class="keywordtype">char</span> *src,
+00200   <span class="keyword">const</span> <span class="keywordtype">char</span> *search, <span class="keyword">const</span> <span class="keywordtype">char</span> *replace, <span class="keywordtype">int</span> max);
+00201 
+00208 <a class="code" href="cssysdef_8h.html#a40">CS_DEPRECATED_METHOD</a> 
+<a name="l00209"></a><a class="code" href="group__util.html#ga107">00209</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga107">csFindReplace</a> (<span class="keywordtype">char</span> *dest, <span class="keyword">const</span> <span class="keywordtype">char</span> *src,
+00210   <span class="keyword">const</span> <span class="keywordtype">char</span> *search, <span class="keyword">const</span> <span class="keywordtype">char</span> *replace, <span class="keywordtype">int</span> max)
+00211 { <a class="code" href="group__util.html#ga106">csReplaceAll</a>(dest, src, search, replace, max); }
+00212 
+00215 <span class="preprocessor">#endif // __CS_UTIL_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
