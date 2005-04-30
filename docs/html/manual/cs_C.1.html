@@ -60,6 +60,10 @@ ul.toc {list-style: none}
 </tr></table>
 <h2 class="appendixsec"> C.1 Release Notes from 0.98 to 1.00 </h2>
 
+
+<p><em>Written by Eric Sunshine, <a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a> and
+Frank Richter, <a href="mailto:resqu@gmx.ch">resqu@gmx.ch</a>.</em>
+</p>
 <p>This section documents the major changes between versions 0.98 and 1.00 of
 Crystal Space.
 </p>
@@ -1083,9 +1087,9 @@ name change.
 <code>CS_PROCSIZE</code> =&gt; <code>CS_PROCESSOR_SIZE</code>
 </li></ul>
 
-<p>The <code>csOrdering&lt;&gt;</code> method has been renamed to the more general 
-<code>csComparator&lt;&gt;</code> (to reflect the fact that this template can perform both
-ordering and equality comparisons).
+<p>The <code>csOrdering&lt;&gt;</code> template has been renamed to the more general
+<code>csComparator&lt;&gt;</code> to reflect the fact that this template can perform both
+ordering and equality comparisons.
 </p>
 <a name="SEC824"></a>
 <h3 class="subheading"> Default <code>csHash&lt;&gt;</code> (and <code>csHashReversible&lt;&gt;</code>) Table Size </h3>
@@ -1823,17 +1827,21 @@ exposed an underlying implementation detail of <code>csSet&lt;&gt;</code>.
 <a name="SEC859"></a>
 <h3 class="subheading"> <code>csHash&lt;&gt;</code> Changes </h3>
 
-<p>The way <code>csHash&lt;&gt;</code> handles support for arbitrary key types has been 
-changed. Previously, a so-called &quot;hash key handler&quot; was passed as a template
-parameter that computed hash keys and compared keys. Now, the hash computation
-is handled through the <code>csHashComputer&lt;&gt;</code> template and key comparison 
-through <code>csComparator&lt;&gt;</code>. To provide hash computation and comparisons for 
-specific types used as hash keys, specializations of the templates mentioned
-above are needed. Alternatively the default comparator uses the <code>&lt;</code> and 
-<code>&gt;</code> operators, so you can also implement those instead of a 
-<code>csComparator&lt;&gt;</code> specialization - however, <code>csHashComputer&lt;&gt;</code> still 
-needs to be specialized. <small>CS</small> already provides specializations for the 
-commonly used types <samp>`csString'</samp>, <samp>`const char*'</samp> and <samp>`csStrKey'</samp>.
+<p>The way <code>csHash&lt;&gt;</code> handles support for arbitrary key types has been
+changed. Previously, a so-called &quot;hash key handler&quot; was passed as an optional
+third template parameter that computed hash keys and was able to compare
+keys. Now, the hash computation is handled through the new
+<code>csHashComputer&lt;&gt;</code> template, and key comparison through
+<code>csComparator&lt;&gt;</code>. To provide hash computation and comparisons for specific
+types used as hash keys, specializations of the templates mentioned above are
+needed. Alternatively the default comparator uses the <samp>`operator &lt;'</samp> and
+<samp>`operator &gt;'</samp> operators, so you can also implement those operators instead
+of a <code>csComparator&lt;&gt;</code> specialization--however, <code>csHashComputer&lt;&gt;</code>
+still needs to be specialized. As a convenience, Crystal Space already provides
+specializations for the commonly used types <samp>`csString'</samp>, <samp>`const char*'</samp>
+and <samp>`csStrKey'</samp>; and the default comparison semantics of <samp>`operator &lt;'</samp>
+and <samp>`operator &gt;'</samp> handle the remaining fundamental types and any composite
+types which provide these operators.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
