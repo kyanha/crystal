@@ -1866,10 +1866,6 @@ SOURCE=..\..\libs\..\include\csutil\win32\registrycfg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\csutil\win32\SpecStrings.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csutil\win32\win32.h
 # End Source File
 # Begin Source File
