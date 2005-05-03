@@ -352,236 +352,237 @@
 00853 
 <a name="l00864"></a><a class="code" href="classcsStringBase.html#a92">00864</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* Detach ()
 00865   { <span class="keywordtype">char</span>* d = Data; Data = 0; Size = 0; MaxSize = 0; <span class="keywordflow">return</span> d; }
-00866 };
-00867 
-<a name="l00869"></a><a class="code" href="csstring_8h.html#a1">00869</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="csstring_8h.html#a1">operator + </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr1, <span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;iStr2)
-00870 {
-00871   <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html">csStringBase</a> (iStr1).Append (iStr2);
-00872 }
-00873 
-<a name="l00875"></a><a class="code" href="csstring_8h.html#a2">00875</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="csstring_8h.html#a1">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; iStr1, <span class="keyword">const</span> <span class="keywordtype">char</span>* iStr2)
-00876 {
-00877   <span class="keywordflow">return</span> iStr1.Clone ().Append (iStr2);
-00878 }
-00879 
-00887 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
-<a name="l00888"></a><a class="code" href="csstring_8h.html#a3">00888</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;<a class="code" href="csstring_8h.html#a3">operator &lt;&lt;</a>(<a class="code" href="classcsStringBase.html">csStringBase</a> &amp;s, T <span class="keyword">const</span>&amp; v)
-00889 { <span class="keywordflow">return</span> s.Append (v); }
-00890 
-00891 <span class="comment">// Specialization which prevents gcc from barfing on strings allocated via</span>
-00892 <span class="comment">// CS_ALLOC_STACK_ARRAY().</span>
-00893 <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;<a class="code" href="csstring_8h.html#a3">operator &lt;&lt;</a>(<a class="code" href="classcsStringBase.html">csStringBase</a> &amp;s, <span class="keywordtype">char</span> <span class="keyword">const</span>* v)
-00894 { <span class="keywordflow">return</span> s.Append(v); }
+00870   <a class="code" href="group__util.html#ga18">uint</a> GetHash() <span class="keyword">const</span>;
+00871 };
+00872 
+<a name="l00874"></a><a class="code" href="csstring_8h.html#a1">00874</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="csstring_8h.html#a1">operator + </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr1, <span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;iStr2)
+00875 {
+00876   <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html">csStringBase</a> (iStr1).Append (iStr2);
+00877 }
+00878 
+<a name="l00880"></a><a class="code" href="csstring_8h.html#a2">00880</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="csstring_8h.html#a1">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; iStr1, <span class="keyword">const</span> <span class="keywordtype">char</span>* iStr2)
+00881 {
+00882   <span class="keywordflow">return</span> iStr1.Clone ().Append (iStr2);
+00883 }
+00884 
+00892 <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
+<a name="l00893"></a><a class="code" href="csstring_8h.html#a3">00893</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;<a class="code" href="csstring_8h.html#a3">operator &lt;&lt;</a>(<a class="code" href="classcsStringBase.html">csStringBase</a> &amp;s, T <span class="keyword">const</span>&amp; v)
+00894 { <span class="keywordflow">return</span> s.Append (v); }
 00895 
-00900 <span class="keyword">template</span>&lt;<span class="keywordtype">int</span> LEN = 36&gt;
-<a name="l00901"></a><a class="code" href="classcsStringFast.html">00901</a> <span class="keyword">class </span><a class="code" href="classcsStringFast.html">csStringFast</a> : <span class="keyword">public</span> <a class="code" href="classcsStringBase.html">csStringBase</a>
-00902 {
-00903 <span class="keyword">protected</span>:
-<a name="l00905"></a><a class="code" href="classcsStringFast.html#p0">00905</a>   <span class="keywordtype">char</span> <a class="code" href="classcsStringFast.html#p0">minibuff</a>[LEN];
-<a name="l00914"></a><a class="code" href="classcsStringFast.html#p1">00914</a>   size_t <a class="code" href="classcsStringFast.html#p1">miniused</a>;
-00915 
-<a name="l00916"></a><a class="code" href="classcsStringFast.html#b0">00916</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#b0">SetCapacityInternal</a> (size_t NewSize, <span class="keywordtype">bool</span> soft)
-00917   {
-00918     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0) <span class="comment">// If dynamic buffer already allocated, just re-use it.</span>
-00919       <a class="code" href="classcsStringBase.html#b1">csStringBase::SetCapacityInternal</a>(NewSize, soft);
-00920     <span class="keywordflow">else</span>
-00921     {
-00922       NewSize++; <span class="comment">// Plus one for implicit null byte.</span>
-00923       <span class="keywordflow">if</span> (NewSize &lt;= LEN)
-00924         <a class="code" href="classcsStringFast.html#p1">miniused</a> = NewSize;
-00925       <span class="keywordflow">else</span>
-00926       {
-00927         CS_ASSERT(<a class="code" href="classcsStringBase.html#p2">MaxSize</a> == 0);
-00928         <span class="keywordflow">if</span> (soft)
-00929           NewSize = <a class="code" href="classcsStringBase.html#b2">ComputeNewSize</a> (NewSize);
-00930         <a class="code" href="classcsStringBase.html#p0">Data</a> = <span class="keyword">new</span> <span class="keywordtype">char</span>[NewSize];
-00931         <a class="code" href="classcsStringBase.html#p2">MaxSize</a> = NewSize;
-00932         <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p1">Size</a> == 0)
-00933           <a class="code" href="classcsStringBase.html#p0">Data</a>[0] = <span class="charliteral">'\0'</span>;
-00934         <span class="keywordflow">else</span>
-00935           memcpy(<a class="code" href="classcsStringBase.html#p0">Data</a>, <a class="code" href="classcsStringFast.html#p0">minibuff</a>, <a class="code" href="classcsStringBase.html#p1">Size</a> + 1);
-00936       }
-00937     }
-00938   }
-00939 
-<a name="l00940"></a><a class="code" href="classcsStringFast.html#b1">00940</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringFast.html#b1">GetDataMutable</a> ()
-00941   { <span class="keywordflow">return</span> (<a class="code" href="classcsStringFast.html#p1">miniused</a> == 0 &amp;&amp; <a class="code" href="classcsStringBase.html#p0">Data</a> == 0 ? 0 : (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#p0">Data</a> : <a class="code" href="classcsStringFast.html#p0">minibuff</a>)); }
-00942 
-00943 <span class="keyword">public</span>:
-<a name="l00947"></a><a class="code" href="classcsStringFast.html#a0">00947</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> () : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0) { }
-<a name="l00952"></a><a class="code" href="classcsStringFast.html#a1">00952</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (size_t <a class="code" href="classcsStringBase.html#a38">Length</a>) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
-00953   { <a class="code" href="classcsStringBase.html#a0">SetCapacity</a> (Length); }
-<a name="l00957"></a><a class="code" href="classcsStringFast.html#a2">00957</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0) 
-00958   { <a class="code" href="classcsStringBase.html#a2">Append</a> (copy); }
-<a name="l00962"></a><a class="code" href="classcsStringFast.html#a3">00962</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
+00896 <span class="comment">// Specialization which prevents gcc from barfing on strings allocated via</span>
+00897 <span class="comment">// CS_ALLOC_STACK_ARRAY().</span>
+00898 <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;<a class="code" href="csstring_8h.html#a3">operator &lt;&lt;</a>(<a class="code" href="classcsStringBase.html">csStringBase</a> &amp;s, <span class="keywordtype">char</span> <span class="keyword">const</span>* v)
+00899 { <span class="keywordflow">return</span> s.Append(v); }
+00900 
+00905 <span class="keyword">template</span>&lt;<span class="keywordtype">int</span> LEN = 36&gt;
+<a name="l00906"></a><a class="code" href="classcsStringFast.html">00906</a> <span class="keyword">class </span><a class="code" href="classcsStringFast.html">csStringFast</a> : <span class="keyword">public</span> <a class="code" href="classcsStringBase.html">csStringBase</a>
+00907 {
+00908 <span class="keyword">protected</span>:
+<a name="l00910"></a><a class="code" href="classcsStringFast.html#p0">00910</a>   <span class="keywordtype">char</span> <a class="code" href="classcsStringFast.html#p0">minibuff</a>[LEN];
+<a name="l00919"></a><a class="code" href="classcsStringFast.html#p1">00919</a>   size_t <a class="code" href="classcsStringFast.html#p1">miniused</a>;
+00920 
+<a name="l00921"></a><a class="code" href="classcsStringFast.html#b0">00921</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#b0">SetCapacityInternal</a> (size_t NewSize, <span class="keywordtype">bool</span> soft)
+00922   {
+00923     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0) <span class="comment">// If dynamic buffer already allocated, just re-use it.</span>
+00924       <a class="code" href="classcsStringBase.html#b1">csStringBase::SetCapacityInternal</a>(NewSize, soft);
+00925     <span class="keywordflow">else</span>
+00926     {
+00927       NewSize++; <span class="comment">// Plus one for implicit null byte.</span>
+00928       <span class="keywordflow">if</span> (NewSize &lt;= LEN)
+00929         <a class="code" href="classcsStringFast.html#p1">miniused</a> = NewSize;
+00930       <span class="keywordflow">else</span>
+00931       {
+00932         CS_ASSERT(<a class="code" href="classcsStringBase.html#p2">MaxSize</a> == 0);
+00933         <span class="keywordflow">if</span> (soft)
+00934           NewSize = <a class="code" href="classcsStringBase.html#b2">ComputeNewSize</a> (NewSize);
+00935         <a class="code" href="classcsStringBase.html#p0">Data</a> = <span class="keyword">new</span> <span class="keywordtype">char</span>[NewSize];
+00936         <a class="code" href="classcsStringBase.html#p2">MaxSize</a> = NewSize;
+00937         <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p1">Size</a> == 0)
+00938           <a class="code" href="classcsStringBase.html#p0">Data</a>[0] = <span class="charliteral">'\0'</span>;
+00939         <span class="keywordflow">else</span>
+00940           memcpy(<a class="code" href="classcsStringBase.html#p0">Data</a>, <a class="code" href="classcsStringFast.html#p0">minibuff</a>, <a class="code" href="classcsStringBase.html#p1">Size</a> + 1);
+00941       }
+00942     }
+00943   }
+00944 
+<a name="l00945"></a><a class="code" href="classcsStringFast.html#b1">00945</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringFast.html#b1">GetDataMutable</a> ()
+00946   { <span class="keywordflow">return</span> (<a class="code" href="classcsStringFast.html#p1">miniused</a> == 0 &amp;&amp; <a class="code" href="classcsStringBase.html#p0">Data</a> == 0 ? 0 : (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#p0">Data</a> : <a class="code" href="classcsStringFast.html#p0">minibuff</a>)); }
+00947 
+00948 <span class="keyword">public</span>:
+<a name="l00952"></a><a class="code" href="classcsStringFast.html#a0">00952</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> () : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0) { }
+<a name="l00957"></a><a class="code" href="classcsStringFast.html#a1">00957</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (size_t <a class="code" href="classcsStringBase.html#a38">Length</a>) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
+00958   { <a class="code" href="classcsStringBase.html#a0">SetCapacity</a> (Length); }
+<a name="l00962"></a><a class="code" href="classcsStringFast.html#a2">00962</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0) 
 00963   { <a class="code" href="classcsStringBase.html#a2">Append</a> (copy); }
-<a name="l00967"></a><a class="code" href="classcsStringFast.html#a4">00967</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
-00968   { <a class="code" href="classcsStringBase.html#a2">Append</a> (src); }
-<a name="l00970"></a><a class="code" href="classcsStringFast.html#a5">00970</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
-00971   { <a class="code" href="classcsStringBase.html#a2">Append</a> (c); }
-<a name="l00973"></a><a class="code" href="classcsStringFast.html#a6">00973</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
-00974   { <a class="code" href="classcsStringBase.html#a2">Append</a> ((<span class="keywordtype">char</span>)c); }
-<a name="l00976"></a><a class="code" href="classcsStringFast.html#a7">00976</a>   <span class="keyword">virtual</span> <a class="code" href="classcsStringFast.html#a7">~csStringFast</a> () { }
-00977 
-<a name="l00979"></a><a class="code" href="classcsStringFast.html#a8">00979</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
-00980   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-00981 
-00983   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;
-<a name="l00984"></a><a class="code" href="classcsStringFast.html#a9">00984</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(T <span class="keyword">const</span>&amp; s) { <a class="code" href="classcsStringBase.html#a60">Replace</a> (s); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-00985 
-<a name="l00986"></a><a class="code" href="classcsStringFast.html#a10">00986</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classcsStringFast.html#a10">GetData</a> ()<span class="keyword"> const</span>
-00987 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (<a class="code" href="classcsStringFast.html#p1">miniused</a> == 0 &amp;&amp; <a class="code" href="classcsStringBase.html#p0">Data</a> == 0 ? 0 : (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#p0">Data</a> : <a class="code" href="classcsStringFast.html#p0">minibuff</a>)); }
-00988 
-<a name="l00989"></a><a class="code" href="classcsStringFast.html#a11">00989</a>   <span class="keyword">virtual</span> size_t <a class="code" href="classcsStringFast.html#a11">GetCapacity</a>()<span class="keyword"> const</span>
-00990 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html#p0">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#a1">csStringBase::GetCapacity</a>() : <a class="code" href="classcsStringFast.html#p1">miniused</a> - 1; }
-00991 
-<a name="l00992"></a><a class="code" href="classcsStringFast.html#a12">00992</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#a12">ShrinkBestFit</a> ()
-00993   {
-00994     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p1">Size</a> == 0)
-00995     {
-00996       <a class="code" href="classcsStringBase.html#a33">csStringBase::ShrinkBestFit</a>();
-00997       <a class="code" href="classcsStringFast.html#p1">miniused</a> = 0;
-00998     }
-00999     <span class="keywordflow">else</span>
+<a name="l00967"></a><a class="code" href="classcsStringFast.html#a3">00967</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
+00968   { <a class="code" href="classcsStringBase.html#a2">Append</a> (copy); }
+<a name="l00972"></a><a class="code" href="classcsStringFast.html#a4">00972</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
+00973   { <a class="code" href="classcsStringBase.html#a2">Append</a> (src); }
+<a name="l00975"></a><a class="code" href="classcsStringFast.html#a5">00975</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
+00976   { <a class="code" href="classcsStringBase.html#a2">Append</a> (c); }
+<a name="l00978"></a><a class="code" href="classcsStringFast.html#a6">00978</a>   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#p1">miniused</a>(0)
+00979   { <a class="code" href="classcsStringBase.html#a2">Append</a> ((<span class="keywordtype">char</span>)c); }
+<a name="l00981"></a><a class="code" href="classcsStringFast.html#a7">00981</a>   <span class="keyword">virtual</span> <a class="code" href="classcsStringFast.html#a7">~csStringFast</a> () { }
+00982 
+<a name="l00984"></a><a class="code" href="classcsStringFast.html#a8">00984</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
+00985   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+00986 
+00988   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;
+<a name="l00989"></a><a class="code" href="classcsStringFast.html#a9">00989</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(T <span class="keyword">const</span>&amp; s) { <a class="code" href="classcsStringBase.html#a60">Replace</a> (s); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+00990 
+<a name="l00991"></a><a class="code" href="classcsStringFast.html#a10">00991</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classcsStringFast.html#a10">GetData</a> ()<span class="keyword"> const</span>
+00992 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (<a class="code" href="classcsStringFast.html#p1">miniused</a> == 0 &amp;&amp; <a class="code" href="classcsStringBase.html#p0">Data</a> == 0 ? 0 : (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#p0">Data</a> : <a class="code" href="classcsStringFast.html#p0">minibuff</a>)); }
+00993 
+<a name="l00994"></a><a class="code" href="classcsStringFast.html#a11">00994</a>   <span class="keyword">virtual</span> size_t <a class="code" href="classcsStringFast.html#a11">GetCapacity</a>()<span class="keyword"> const</span>
+00995 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html#p0">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#a1">csStringBase::GetCapacity</a>() : <a class="code" href="classcsStringFast.html#p1">miniused</a> - 1; }
+00996 
+<a name="l00997"></a><a class="code" href="classcsStringFast.html#a12">00997</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#a12">ShrinkBestFit</a> ()
+00998   {
+00999     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p1">Size</a> == 0)
 01000     {
-01001       size_t needed = <a class="code" href="classcsStringBase.html#p1">Size</a> + 1;
-01002       <span class="keywordflow">if</span> (needed &gt; LEN)
-01003         <a class="code" href="classcsStringBase.html#a33">csStringBase::ShrinkBestFit</a>();
-01004       <span class="keywordflow">else</span>
-01005       {
-01006         <a class="code" href="classcsStringFast.html#p1">miniused</a> = needed;
-01007         <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0)
-01008         {
-01009           memcpy(<a class="code" href="classcsStringFast.html#p0">minibuff</a>, <a class="code" href="classcsStringBase.html#p0">Data</a>, needed); <span class="comment">// Includes implicit null byte.</span>
-01010           <a class="code" href="classcsStringBase.html#a30">csStringBase::Free</a>();
-01011         }
-01012       }
-01013     }
-01014   }
-01015 
-<a name="l01016"></a><a class="code" href="classcsStringFast.html#a13">01016</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#a13">Free</a> () { <a class="code" href="classcsStringFast.html#p1">miniused</a> = 0; <a class="code" href="classcsStringBase.html#a30">csStringBase::Free</a>(); }
-01017 
-<a name="l01018"></a><a class="code" href="classcsStringFast.html#a14">01018</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringFast.html#a14">Detach</a> ()
-01019   { 
-01020     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0)
-01021       <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html#a92">csStringBase::Detach</a>();
-01022     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="classcsStringFast.html#p1">miniused</a> == 0)
-01023       <span class="keywordflow">return</span> 0; <span class="comment">// Emulate NULL return of csStringBase in this case.</span>
-01024     <span class="keywordflow">else</span>
-01025     {
-01026       CS_ASSERT(<a class="code" href="classcsStringBase.html#p2">MaxSize</a> == 0);
-01027       <span class="keywordtype">char</span>* d = <a class="code" href="group__util.html#ga94">csStrNew</a> (<a class="code" href="classcsStringFast.html#p0">minibuff</a>);
-01028       <a class="code" href="classcsStringBase.html#p1">Size</a> = 0; <a class="code" href="classcsStringFast.html#p1">miniused</a> = 0;
-01029       <span class="keywordflow">return</span> d;
-01030     }
-01031   }
-01032 };
-01033 
-01034 CS_SPECIALIZE_TEMPLATE
-01035 <span class="keyword">class </span><a class="code" href="classcsStringFast.html">csStringFast</a>&lt;0&gt; : <span class="keyword">public</span> <a class="code" href="classcsStringBase.html">csStringBase</a>
-01036 {
-01037 <span class="keyword">public</span>:
-01038   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> () : <a class="code" href="classcsStringBase.html">csStringBase</a>() { }
-01039   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (size_t <a class="code" href="classcsStringBase.html#a38">Length</a>) : <a class="code" href="classcsStringBase.html">csStringBase</a>(Length) { }
-01040   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (copy) { }
-01041   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringBase.html">csStringBase</a>(src) { }
-01042   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(c) { }
-01043   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(c) { }
-01044   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
-01045   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01046   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* copy)
-01047   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01048   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">char</span> x)
-01049   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01050   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> x)
-01051   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01052   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">bool</span> x)
-01053   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01054   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">short</span> x)
-01055   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01056   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> x)
-01057   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01058   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">int</span> x)
-01059   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01060   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x)
-01061   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01062   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">long</span> x)
-01063   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01064   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> x)
-01065   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01066   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">float</span> x)
-01067   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01068   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">double</span> x)
-01069   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01070 <span class="preprocessor">#ifndef __STRICT_ANSI__</span>
-01071 <span class="preprocessor"></span>  <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<a class="code" href="group__util.html#ga15">longlong</a> x)
+01001       <a class="code" href="classcsStringBase.html#a33">csStringBase::ShrinkBestFit</a>();
+01002       <a class="code" href="classcsStringFast.html#p1">miniused</a> = 0;
+01003     }
+01004     <span class="keywordflow">else</span>
+01005     {
+01006       size_t needed = <a class="code" href="classcsStringBase.html#p1">Size</a> + 1;
+01007       <span class="keywordflow">if</span> (needed &gt; LEN)
+01008         <a class="code" href="classcsStringBase.html#a33">csStringBase::ShrinkBestFit</a>();
+01009       <span class="keywordflow">else</span>
+01010       {
+01011         <a class="code" href="classcsStringFast.html#p1">miniused</a> = needed;
+01012         <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0)
+01013         {
+01014           memcpy(<a class="code" href="classcsStringFast.html#p0">minibuff</a>, <a class="code" href="classcsStringBase.html#p0">Data</a>, needed); <span class="comment">// Includes implicit null byte.</span>
+01015           <a class="code" href="classcsStringBase.html#a30">csStringBase::Free</a>();
+01016         }
+01017       }
+01018     }
+01019   }
+01020 
+<a name="l01021"></a><a class="code" href="classcsStringFast.html#a13">01021</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#a13">Free</a> () { <a class="code" href="classcsStringFast.html#p1">miniused</a> = 0; <a class="code" href="classcsStringBase.html#a30">csStringBase::Free</a>(); }
+01022 
+<a name="l01023"></a><a class="code" href="classcsStringFast.html#a14">01023</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringFast.html#a14">Detach</a> ()
+01024   { 
+01025     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#p0">Data</a> != 0)
+01026       <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html#a92">csStringBase::Detach</a>();
+01027     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="classcsStringFast.html#p1">miniused</a> == 0)
+01028       <span class="keywordflow">return</span> 0; <span class="comment">// Emulate NULL return of csStringBase in this case.</span>
+01029     <span class="keywordflow">else</span>
+01030     {
+01031       CS_ASSERT(<a class="code" href="classcsStringBase.html#p2">MaxSize</a> == 0);
+01032       <span class="keywordtype">char</span>* d = <a class="code" href="group__util.html#ga94">csStrNew</a> (<a class="code" href="classcsStringFast.html#p0">minibuff</a>);
+01033       <a class="code" href="classcsStringBase.html#p1">Size</a> = 0; <a class="code" href="classcsStringFast.html#p1">miniused</a> = 0;
+01034       <span class="keywordflow">return</span> d;
+01035     }
+01036   }
+01037 };
+01038 
+01039 CS_SPECIALIZE_TEMPLATE
+01040 <span class="keyword">class </span><a class="code" href="classcsStringFast.html">csStringFast</a>&lt;0&gt; : <span class="keyword">public</span> <a class="code" href="classcsStringBase.html">csStringBase</a>
+01041 {
+01042 <span class="keyword">public</span>:
+01043   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> () : <a class="code" href="classcsStringBase.html">csStringBase</a>() { }
+01044   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (size_t <a class="code" href="classcsStringBase.html#a38">Length</a>) : <a class="code" href="classcsStringBase.html">csStringBase</a>(Length) { }
+01045   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (copy) { }
+01046   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringBase.html">csStringBase</a>(src) { }
+01047   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(c) { }
+01048   <a class="code" href="classcsStringFast.html#a0">csStringFast</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(c) { }
+01049   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
+01050   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01051   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* copy)
+01052   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01053   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">char</span> x)
+01054   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01055   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> x)
+01056   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01057   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">bool</span> x)
+01058   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01059   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">short</span> x)
+01060   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01061   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> x)
+01062   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01063   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">int</span> x)
+01064   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01065   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x)
+01066   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01067   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">long</span> x)
+01068   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01069   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> x)
+01070   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01071   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">float</span> x)
 01072   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01073   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<a class="code" href="group__util.html#ga16">ulonglong</a> x)
+01073   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<span class="keywordtype">double</span> x)
 01074   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01075 <span class="preprocessor">#endif</span>
-01076 <span class="preprocessor"></span>};
-01077 
-01078 <span class="preprocessor">#ifndef SWIG</span>
-01079 <span class="preprocessor"></span>
-<a name="l01084"></a><a class="code" href="csstring_8h.html#a0">01084</a> <span class="keyword">typedef</span> <a class="code" href="classcsStringFast.html">csStringFast&lt;&gt;</a> <a class="code" href="classcsStringFast.html">csStringFastDefault</a>;
-01085 <span class="preprocessor">#else</span>
-01086 <span class="preprocessor"></span><span class="preprocessor">#define csStringFastDefault csStringFast&lt;36&gt;</span>
-01087 <span class="preprocessor"></span>%<span class="keyword">template</span>(csStringParent) <a class="code" href="classcsStringFast.html">csStringFast&lt;36&gt;</a>;
-01088 <span class="preprocessor">#endif</span>
-01089 <span class="preprocessor"></span>
-<a name="l01093"></a><a class="code" href="classcsString.html">01093</a> <span class="keyword">class </span><a class="code" href="classcsString.html">csString</a> : <span class="keyword">public</span> csStringFastDefault
-01094 {
-01095 <span class="keyword">public</span>:
-<a name="l01097"></a><a class="code" href="classcsString.html#a0">01097</a>   <a class="code" href="classcsString.html">csString</a> () : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; () { }
-<a name="l01102"></a><a class="code" href="classcsString.html#a1">01102</a>   <a class="code" href="classcsString.html">csString</a> (size_t Length) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (Length) { }
-01104 
-<a name="l01105"></a><a class="code" href="classcsString.html#a2">01105</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy) :
-01106     <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; ((const <a class="code" href="classcsStringBase.html">csStringBase</a>&amp;)copy) { }
-01107   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (copy) { }
+01075 <span class="preprocessor">#ifndef __STRICT_ANSI__</span>
+01076 <span class="preprocessor"></span>  <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<a class="code" href="group__util.html#ga15">longlong</a> x)
+01077   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01078   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#a8">operator = </a>(<a class="code" href="group__util.html#ga16">ulonglong</a> x)
+01079   { <a class="code" href="classcsStringBase.html#a60">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01080 <span class="preprocessor">#endif</span>
+01081 <span class="preprocessor"></span>};
+01082 
+01083 <span class="preprocessor">#ifndef SWIG</span>
+01084 <span class="preprocessor"></span>
+<a name="l01089"></a><a class="code" href="csstring_8h.html#a0">01089</a> <span class="keyword">typedef</span> <a class="code" href="classcsStringFast.html">csStringFast&lt;&gt;</a> <a class="code" href="classcsStringFast.html">csStringFastDefault</a>;
+01090 <span class="preprocessor">#else</span>
+01091 <span class="preprocessor"></span><span class="preprocessor">#define csStringFastDefault csStringFast&lt;36&gt;</span>
+01092 <span class="preprocessor"></span>%<span class="keyword">template</span>(csStringParent) <a class="code" href="classcsStringFast.html">csStringFast&lt;36&gt;</a>;
+01093 <span class="preprocessor">#endif</span>
+01094 <span class="preprocessor"></span>
+<a name="l01098"></a><a class="code" href="classcsString.html">01098</a> <span class="keyword">class </span><a class="code" href="classcsString.html">csString</a> : <span class="keyword">public</span> csStringFastDefault
+01099 {
+01100 <span class="keyword">public</span>:
+<a name="l01102"></a><a class="code" href="classcsString.html#a0">01102</a>   <a class="code" href="classcsString.html">csString</a> () : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; () { }
+<a name="l01107"></a><a class="code" href="classcsString.html#a1">01107</a>   <a class="code" href="classcsString.html">csString</a> (size_t Length) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (Length) { }
 01109 
-<a name="l01110"></a><a class="code" href="classcsString.html#a4">01110</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (src) { }
-<a name="l01112"></a><a class="code" href="classcsString.html#a5">01112</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (c) { }
-<a name="l01114"></a><a class="code" href="classcsString.html#a6">01114</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (c) { }
-01115 
-01117 
-<a name="l01118"></a><a class="code" href="classcsString.html#a7">01118</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy)
-01119   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01120"></a><a class="code" href="classcsString.html#a8">01120</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
-01121   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01122   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <span class="keywordtype">char</span>* copy)
-01123   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01124   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">char</span> x)
-01125   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01126   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> x)
-01127   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01128   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">bool</span> x)
-01129   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01130   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">short</span> x)
-01131   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01132   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> x)
-01133   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01134   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">int</span> x)
-01135   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01136   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x)
-01137   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01138   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">long</span> x)
-01139   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01140   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> x)
-01141   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01142   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">float</span> x)
-01143   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01144   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">double</span> x)
-01145   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01146 <span class="preprocessor">#ifndef __STRICT_ANSI__</span>
-01147 <span class="preprocessor"></span>  <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<a class="code" href="group__util.html#ga15">longlong</a> x)
+<a name="l01110"></a><a class="code" href="classcsString.html#a2">01110</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy) :
+01111     <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; ((const <a class="code" href="classcsStringBase.html">csStringBase</a>&amp;)copy) { }
+01112   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (copy) { }
+01114 
+<a name="l01115"></a><a class="code" href="classcsString.html#a4">01115</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (src) { }
+<a name="l01117"></a><a class="code" href="classcsString.html#a5">01117</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (c) { }
+<a name="l01119"></a><a class="code" href="classcsString.html#a6">01119</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (c) { }
+01120 
+01122 
+<a name="l01123"></a><a class="code" href="classcsString.html#a7">01123</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy)
+01124   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01125"></a><a class="code" href="classcsString.html#a8">01125</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
+01126   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01127   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <span class="keywordtype">char</span>* copy)
+01128   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01129   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">char</span> x)
+01130   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01131   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> x)
+01132   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01133   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">bool</span> x)
+01134   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01135   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">short</span> x)
+01136   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01137   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> x)
+01138   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01139   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">int</span> x)
+01140   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01141   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x)
+01142   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01143   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">long</span> x)
+01144   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01145   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> x)
+01146   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01147   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">float</span> x)
 01148   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01149   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<a class="code" href="group__util.html#ga16">ulonglong</a> x)
+01149   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">double</span> x)
 01150   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-01151 <span class="preprocessor">#endif</span>
-01152 <span class="preprocessor"></span>
-01153 };
-01154 
-01155 <span class="preprocessor">#endif // __CS_CSSTRING_H__</span>
+01151 <span class="preprocessor">#ifndef __STRICT_ANSI__</span>
+01152 <span class="preprocessor"></span>  <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<a class="code" href="group__util.html#ga15">longlong</a> x)
+01153   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01154   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<a class="code" href="group__util.html#ga16">ulonglong</a> x)
+01155   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+01156 <span class="preprocessor">#endif</span>
+01157 <span class="preprocessor"></span>
+01158 };
+01159 
+01160 <span class="preprocessor">#endif // __CS_CSSTRING_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
