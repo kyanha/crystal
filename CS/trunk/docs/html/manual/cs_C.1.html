@@ -1824,6 +1824,10 @@ into its own header file, <tt>`csutil/set.h'</tt>. The method
 <code>csSet&lt;&gt;::GetHash()</code> has likewise been removed since it unnecessarily
 exposed an underlying implementation detail of <code>csSet&lt;&gt;</code>.
 </p>
+<p>However, this implementation detail still affects the use of <code>csSet&lt;&gt;</code> as
+for storage of pointers in a <code>csSet&lt;&gt;</code> the <code>csPtrKey&lt;&gt;</code> wrapper must
+be used.
+</p>
 <a name="SEC859"></a>
 <h3 class="subheading"> <code>csHash&lt;&gt;</code> Changes </h3>
 
@@ -1836,12 +1840,19 @@ keys. Now, the hash computation is handled through the new
 types used as hash keys, specializations of the templates mentioned above are
 needed. Alternatively the default comparator uses the <samp>`operator &lt;'</samp> and
 <samp>`operator &gt;'</samp> operators, so you can also implement those operators instead
-of a <code>csComparator&lt;&gt;</code> specialization--however, <code>csHashComputer&lt;&gt;</code>
-still needs to be specialized. As a convenience, Crystal Space already provides
-specializations for the commonly used types <samp>`csString'</samp>, <samp>`const char*'</samp>
-and <samp>`csStrKey'</samp>; and the default comparison semantics of <samp>`operator &lt;'</samp>
-and <samp>`operator &gt;'</samp> handle the remaining fundamental types and any composite
-types which provide these operators.
+of a <code>csComparator&lt;&gt;</code> specialization. The default <code>csHashComputer&lt;&gt;</code>
+implementation assumes that a type provides a <samp>`GetHash()'</samp> method that
+computes the hash value for an object. However, this means that integral types 
+need a specialization. As a convenience, Crystal Space already provides 
+specializations of <code>csHashComputer&lt;&gt;</code> for a number of commonly used 
+intergrals. Further, <code>csComparator&lt;&gt;</code> and/or <code>csHashComputer&lt;&gt;</code> 
+specializations are provided for the commonly used types <samp>`csString'</samp>, 
+<samp>`const char*'</samp> and <samp>`csStrKey'</samp>; and the default comparison semantics of 
+<samp>`operator &lt;'</samp> and <samp>`operator &gt;'</samp> handle the remaining fundamental types 
+and any composite types which provide these operators. Pointers (other than 
+<samp>`void*'</samp> for which exists a specialization) as hash keys are a special 
+case: to use a pointer of type <samp>`Foo*'</samp> as a hash key, employ 
+<samp>`csPtrKey&lt;Foo&gt;'</samp> as the key type in the hash declaration. 
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
