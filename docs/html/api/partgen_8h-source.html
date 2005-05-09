@@ -100,326 +100,325 @@
 00110 
 00111   <a class="code" href="classcsRenderMeshHolder.html">csRenderMeshHolder</a> rmHolder;
 00112 
-00113   <a class="code" href="classcsRef.html">csRef&lt;csRenderBufferHolder&gt;</a> bufferHolder;
-00114   size_t VertexCount;
-00115   size_t TriangleCount;
-00116   <a class="code" href="classcsVector3.html">csVector3</a>* vertices;
-00117   <a class="code" href="classcsVector2.html">csVector2</a>* texels;
-00118   <a class="code" href="classcsColor.html">csColor</a>* colors;
-00119 
-00120   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> vertex_buffer;
-00121   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> texel_buffer;
-00122   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> normal_buffer;
-00123   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> color_buffer;
-00124   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> index_buffer;
-00125 
-00126   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
-00127 
-00129   <span class="keywordtype">void</span> SetupBuffers (size_t part_sides);
-00130   size_t part_sides;    <span class="comment">// Number of vertices per particle (for buffers).</span>
-00131 
-00132   <span class="keywordtype">bool</span> initialized;
-00134   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetupObject ();
-00135 
-00136   <span class="comment">// Call if object needs changing.</span>
-00137   <span class="keywordtype">void</span> ChangeObject ()
-00138   {
-00139     initialized = <span class="keyword">false</span>;
-00140     scfiObjectModel.ShapeChanged ();
-00141   }
-00142 
-00143 <span class="keyword">private</span>:
-00144   <a class="code" href="classcsRandomFloatGen.html">csRandomFloatGen</a> randgen;
-00145 <span class="keyword">protected</span>:
-00147   <a class="code" href="classcsVector3.html">csVector3</a> GetRandomDirection();
-00149   <a class="code" href="classcsVector3.html">csVector3</a> GetRandomDirection(<a class="code" href="classcsVector3.html">csVector3</a> <span class="keyword">const</span>&amp; magnitude,
-00150     <a class="code" href="classcsVector3.html">csVector3</a> <span class="keyword">const</span>&amp; offset);
-00152   <a class="code" href="classcsVector3.html">csVector3</a> GetRandomPosition(<a class="code" href="classcsBox3.html">csBox3</a> <span class="keyword">const</span>&amp; box);
-00153 
-00154 <span class="keyword">public</span>:
-00159   <a class="code" href="classcsParticleSystem.html">csParticleSystem</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* factory);
-00160 
-00164   <span class="keyword">virtual</span> ~<a class="code" href="classcsParticleSystem.html">csParticleSystem</a> ();
-00165 
-<a name="l00167"></a><a class="code" href="classcsParticleSystem.html#a2">00167</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetParticleCount (size_t num)
-00168   {
-00169     number = num;
-00170     ChangeObject ();
-00171   }
-<a name="l00173"></a><a class="code" href="classcsParticleSystem.html#a3">00173</a>   size_t GetParticleCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> number; }
-00174 
-00175   <span class="keywordtype">void</span> UpdateLighting (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;iLight*&gt;</a>&amp; lights, <a class="code" href="structiMovable.html">iMovable</a>* movable);
-00176 
-<a name="l00178"></a><a class="code" href="classcsParticleSystem.html#a5">00178</a>   <span class="keyword">inline</span> size_t GetNumParticles ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> particles.Length();}
-<a name="l00180"></a><a class="code" href="classcsParticleSystem.html#a6">00180</a>   <span class="keyword">inline</span> <a class="code" href="structiParticle.html">iParticle</a>* GetParticle (size_t idx)<span class="keyword"> const</span>
-00181 <span class="keyword">  </span>{ <span class="keywordflow">return</span> particles[idx]; }
-00183   <span class="keywordtype">void</span> RemoveParticles ();
-00184 
-<a name="l00186"></a><a class="code" href="classcsParticleSystem.html#a8">00186</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> AppendParticle (<a class="code" href="structiParticle.html">iParticle</a> *part, <a class="code" href="structiSprite2DState.html">iSprite2DState</a>* spr2d)
-00187   {
-00188     sprite2ds.Push (spr2d);
-00189     particles.Push (part);
-00190   }
-00191 
-00196   <span class="keywordtype">void</span> AppendRectSprite (<span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat,
-00197     <span class="keywordtype">bool</span> lighted);
-00198 
-00203   <span class="keywordtype">void</span> AppendRegularSprite (<span class="keywordtype">int</span> n, <span class="keywordtype">float</span> radius, <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat,
-00204     <span class="keywordtype">bool</span> lighted);
-00205 
-<a name="l00207"></a><a class="code" href="classcsParticleSystem.html#a11">00207</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetSelfDestruct (<a class="code" href="group__util.html#ga17">csTicks</a> t)
-00208   { self_destruct=<span class="keyword">true</span>; time_to_live = t; };
-<a name="l00210"></a><a class="code" href="classcsParticleSystem.html#a12">00210</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnSetSelfDestruct () { self_destruct=<span class="keyword">false</span>; }
-<a name="l00212"></a><a class="code" href="classcsParticleSystem.html#a13">00212</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetSelfDestruct ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> self_destruct; }
-<a name="l00214"></a><a class="code" href="classcsParticleSystem.html#a14">00214</a>   <span class="keyword">inline</span> <a class="code" href="group__util.html#ga17">csTicks</a> GetTimeToLive ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> time_to_live; }
-00215 
-<a name="l00217"></a><a class="code" href="classcsParticleSystem.html#a15">00217</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetChangeColor(<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col)
-00218   {change_color = <span class="keyword">true</span>; colorpersecond = col;}
-<a name="l00220"></a><a class="code" href="classcsParticleSystem.html#a16">00220</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnsetChangeColor() {change_color=<span class="keyword">false</span>;}
-<a name="l00222"></a><a class="code" href="classcsParticleSystem.html#a17">00222</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetChangeColor (<a class="code" href="classcsColor.html">csColor</a>&amp; col)<span class="keyword"> const</span>
-00223 <span class="keyword">  </span>{ <span class="keywordflow">if</span>(!change_color) <span class="keywordflow">return</span> <span class="keyword">false</span>; col = colorpersecond; <span class="keywordflow">return</span> <span class="keyword">true</span>; }
-00224 
-<a name="l00226"></a><a class="code" href="classcsParticleSystem.html#a18">00226</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetChangeSize(<span class="keywordtype">float</span> factor)
-00227   {change_size = <span class="keyword">true</span>; scalepersecond = factor;}
-<a name="l00229"></a><a class="code" href="classcsParticleSystem.html#a19">00229</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnsetChangeSize() {change_size=<span class="keyword">false</span>;}
-<a name="l00231"></a><a class="code" href="classcsParticleSystem.html#a20">00231</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetChangeSize (<span class="keywordtype">float</span>&amp; factor)<span class="keyword"> const</span>
-00232 <span class="keyword">  </span>{ <span class="keywordflow">if</span>(!change_size) <span class="keywordflow">return</span> <span class="keyword">false</span>; factor = scalepersecond; <span class="keywordflow">return</span> <span class="keyword">true</span>; }
-00233 
-<a name="l00235"></a><a class="code" href="classcsParticleSystem.html#a21">00235</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetAlpha(<span class="keywordtype">float</span> alpha)
-00236   {alpha_now = alpha; MixMode = <a class="code" href="group__gfx3d.html#ga32">CS_FX_SETALPHA</a> (alpha); SetupMixMode (); }
-<a name="l00238"></a><a class="code" href="classcsParticleSystem.html#a22">00238</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> GetAlpha()<span class="keyword"> const </span>{<span class="keywordflow">return</span> alpha_now;}
-<a name="l00240"></a><a class="code" href="classcsParticleSystem.html#a23">00240</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetChangeAlpha(<span class="keywordtype">float</span> factor)
-00241   {change_alpha = <span class="keyword">true</span>; alphapersecond = factor;}
-<a name="l00243"></a><a class="code" href="classcsParticleSystem.html#a24">00243</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnsetChangeAlpha() {change_alpha=<span class="keyword">false</span>;}
-<a name="l00245"></a><a class="code" href="classcsParticleSystem.html#a25">00245</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetChangeAlpha (<span class="keywordtype">float</span>&amp; factor)<span class="keyword"> const</span>
-00246 <span class="keyword">  </span>{ <span class="keywordflow">if</span>(!change_alpha) <span class="keywordflow">return</span> <span class="keyword">false</span>; factor = alphapersecond; <span class="keywordflow">return</span> <span class="keyword">true</span>; }
-00247 
-<a name="l00249"></a><a class="code" href="classcsParticleSystem.html#a26">00249</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetChangeRotation(<span class="keywordtype">float</span> angle)
-00250   {change_rotation = <span class="keyword">true</span>; anglepersecond = angle;}
-<a name="l00252"></a><a class="code" href="classcsParticleSystem.html#a27">00252</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnsetChangeRotation() {change_rotation=<span class="keyword">false</span>;}
-<a name="l00254"></a><a class="code" href="classcsParticleSystem.html#a28">00254</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetChangeRotation (<span class="keywordtype">float</span>&amp; angle)<span class="keyword"> const</span>
-00255 <span class="keyword">  </span>{ <span class="keywordflow">if</span>(!change_rotation) <span class="keywordflow">return</span> <span class="keyword">false</span>; angle = anglepersecond; <span class="keywordflow">return</span> <span class="keyword">true</span>; }
-00256 
-<a name="l00258"></a><a class="code" href="classcsParticleSystem.html#a29">00258</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; GetBoundingBox()<span class="keyword"> const </span>{<span class="keywordflow">return</span> bbox;}
-00259 
-00261   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetupColor ();
-00263   <span class="keyword">virtual</span> <span class="keywordtype">void</span> AddColor (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col);
-00265   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ScaleBy(<span class="keywordtype">float</span> factor);
-00267   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetupMixMode ();
-00269   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Rotate(<span class="keywordtype">float</span> angle);
-00270 
-00277   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Update (<a class="code" href="group__util.html#ga17">csTicks</a> elapsed_time);
-00278 
-00279   <span class="keywordtype">void</span> GetObjectBoundingBox (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox)
-00280   {
-00281     SetupObject ();
-00282     bbox = <a class="code" href="classcsParticleSystem.html#p22">csParticleSystem::bbox</a>;
-00283   }
-00284   <span class="keywordtype">void</span> SetObjectBoundingBox (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox)
-00285   {
-00286     <a class="code" href="classcsParticleSystem.html#p22">csParticleSystem::bbox</a> = bbox;
-00287     scfiObjectModel.ShapeChanged ();
-00288   }
-00289   <span class="keywordtype">void</span> GetRadius (<a class="code" href="classcsVector3.html">csVector3</a>&amp; rad, <a class="code" href="classcsVector3.html">csVector3</a>&amp; cent)
-00290   {
-00291     SetupObject ();
-00292     rad = radius;
-00293     cent = bbox.<a class="code" href="classcsBox3.html#a13">GetCenter</a>();
-00294   }
-00295 
-00296   <span class="comment">//----------------------- iMeshObject implementation ------------------------</span>
-00297   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
-00298 
-<a name="l00299"></a><a class="code" href="classcsParticleSystem.html#a39">00299</a>   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* <a class="code" href="structiMeshObject.html#a0">GetFactory</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> factory; }
-<a name="l00300"></a><a class="code" href="classcsParticleSystem.html#a40">00300</a>   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiMeshObject.html#a1">GetFlags</a> () { <span class="keywordflow">return</span> flags; }
-<a name="l00301"></a><a class="code" href="classcsParticleSystem.html#a41">00301</a>   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshObject&gt;</a> <a class="code" href="structiMeshObject.html#a2">Clone</a> () { <span class="keywordflow">return</span> 0; }
-00302   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PreGetRenderMeshes (<a class="code" href="structiRenderView.html">iRenderView</a>* rview, <a class="code" href="structiMovable.html">iMovable</a>* movable,
-00303         <a class="code" href="group__util.html#ga4">uint32</a> frustum_mask);
-00304   <span class="keyword">virtual</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>** <a class="code" href="structiMeshObject.html#a3">GetRenderMeshes</a> (<span class="keywordtype">int</span>&amp; n, <a class="code" href="structiRenderView.html">iRenderView</a>* rview,
-00305     <a class="code" href="structiMovable.html">iMovable</a>* movable, <a class="code" href="group__util.html#ga4">uint32</a> frustum_mask);
-<a name="l00306"></a><a class="code" href="classcsParticleSystem.html#a44">00306</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a4">SetVisibleCallback</a> (<a class="code" href="structiMeshObjectDrawCallback.html">iMeshObjectDrawCallback</a>* cb)
-00307   {
-00308     <span class="keywordflow">if</span> (cb) cb-&gt;<a class="code" href="structiBase.html#a0">IncRef</a> ();
-00309     <span class="keywordflow">if</span> (vis_cb) vis_cb-&gt;DecRef ();
-00310     vis_cb = cb;
-00311   }
-<a name="l00312"></a><a class="code" href="classcsParticleSystem.html#a45">00312</a>   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectDrawCallback.html">iMeshObjectDrawCallback</a>* <a class="code" href="structiMeshObject.html#a5">GetVisibleCallback</a> ()<span class="keyword"> const</span>
-00313 <span class="keyword">  </span>{
-00314     <span class="keywordflow">return</span> vis_cb;
-00315   }
-<a name="l00316"></a><a class="code" href="classcsParticleSystem.html#a46">00316</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a6">NextFrame</a> (<a class="code" href="group__util.html#ga17">csTicks</a> current_time, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <span class="comment">/*pos*/</span>)
-00317   {
-00318     <a class="code" href="group__util.html#ga17">csTicks</a> elaps = 0;
-00319     <span class="keywordflow">if</span> (prev_time != 0) elaps = current_time-prev_time;
-00320     prev_time = current_time;
-00321     Update (elaps);
-00322   }
-00323   <span class="keyword">virtual</span> <span class="keywordtype">int</span> HitBeamBBox (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;,
-00324         <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keywordtype">float</span>*)
-00325   { <span class="keywordflow">return</span> -1; }
-<a name="l00326"></a><a class="code" href="classcsParticleSystem.html#a48">00326</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a9">HitBeamOutline</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;,
-00327         <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keywordtype">float</span>*)
-00328   { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
-<a name="l00329"></a><a class="code" href="classcsParticleSystem.html#a49">00329</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a10">HitBeamObject</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;,
-00330         <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keywordtype">float</span>*, <span class="keywordtype">int</span>* = 0) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
-<a name="l00331"></a><a class="code" href="classcsParticleSystem.html#a50">00331</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a11">SetLogicalParent</a> (<a class="code" href="structiBase.html">iBase</a>* lp) { logparent = lp; }
-<a name="l00332"></a><a class="code" href="classcsParticleSystem.html#a51">00332</a>   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>* <a class="code" href="structiMeshObject.html#a12">GetLogicalParent</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> logparent; }
-00333 
-00334   <span class="comment">//------------------------- iObjectModel implementation ----------------</span>
-00335   <span class="keyword">class </span>ObjectModel : <span class="keyword">public</span> <a class="code" href="classcsObjectModel.html">csObjectModel</a>
-00336   {
-00337     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (<a class="code" href="classcsParticleSystem.html">csParticleSystem</a>);
-00338     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetObjectBoundingBox (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox)
-00339     {
-00340       scfParent-&gt;GetObjectBoundingBox (bbox);
-00341     }
-00342     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetObjectBoundingBox (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox)
-00343     {
-00344       scfParent-&gt;SetObjectBoundingBox (bbox);
-00345     }
-00346     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetRadius (<a class="code" href="classcsVector3.html">csVector3</a>&amp; rad, <a class="code" href="classcsVector3.html">csVector3</a>&amp; cent)
-00347     {
-00348       scfParent-&gt;GetRadius (rad, cent);
-00349     }
-00350   } scfiObjectModel;
-00351   <span class="keyword">friend</span> <span class="keyword">class </span>ObjectModel;
-00352 
-<a name="l00353"></a><a class="code" href="classcsParticleSystem.html#a52">00353</a>   <span class="keyword">virtual</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>* <a class="code" href="structiMeshObject.html#a13">GetObjectModel</a> () { <span class="keywordflow">return</span> &amp;scfiObjectModel; }
-<a name="l00354"></a><a class="code" href="classcsParticleSystem.html#a53">00354</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a14">SetColor</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col)
-00355   {
-00356     color = col;
-00357     SetupColor ();
-00358     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00359   }
-<a name="l00360"></a><a class="code" href="classcsParticleSystem.html#a54">00360</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a15">GetColor</a> (<a class="code" href="classcsColor.html">csColor</a>&amp; col)<span class="keyword"> const</span>
-00361 <span class="keyword">  </span>{
-00362     col = color;
-00363     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00364   }
-<a name="l00365"></a><a class="code" href="classcsParticleSystem.html#a55">00365</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a16">SetMaterialWrapper</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat)
-00366   {
-00367     initialized = <span class="keyword">false</span>;
-00368     <a class="code" href="classcsParticleSystem.html#p11">csParticleSystem::mat</a> = mat;
-00369     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00370   }
-<a name="l00371"></a><a class="code" href="classcsParticleSystem.html#a56">00371</a>   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiMeshObject.html#a17">GetMaterialWrapper</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mat; }
-<a name="l00372"></a><a class="code" href="classcsParticleSystem.html#a57">00372</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a18">InvalidateMaterialHandles</a> () { }
-<a name="l00377"></a><a class="code" href="classcsParticleSystem.html#a58">00377</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a19">PositionChild</a> (<a class="code" href="structiMeshObject.html">iMeshObject</a>* child,<a class="code" href="group__util.html#ga17">csTicks</a> current_time) { }
-00378 
-00379   <span class="comment">//------------------------- iParticleState implementation ----------------</span>
-00380   <span class="keyword">class </span>ParticleState : <span class="keyword">public</span> <a class="code" href="structiParticleState.html">iParticleState</a>
-00381   {
-00382     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (<a class="code" href="classcsParticleSystem.html">csParticleSystem</a>);
-00383     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetMaterialWrapper (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* material)
-00384     {
-00385       scfParent-&gt;initialized = <span class="keyword">false</span>;
-00386       scfParent-&gt;mat = material;
-00387     }
-00388     <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* GetMaterialWrapper ()<span class="keyword"> const</span>
-00389 <span class="keyword">    </span>{
-00390       <span class="keywordflow">return</span> scfParent-&gt;mat;
-00391     }
-00392     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetMixMode (<a class="code" href="group__util.html#ga18">uint</a> mode)
-00393     {
-00394       scfParent-&gt;MixMode = mode;
-00395       scfParent-&gt;SetupMixMode ();
-00396     }
-00397     <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga18">uint</a> GetMixMode ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> scfParent-&gt;MixMode; }
-00398     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetColor (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color)
-00399     {
-00400       scfParent-&gt;color = color;
-00401       scfParent-&gt;SetupColor ();
-00402     }
-00403     <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; GetColor ()<span class="keyword"> const</span>
-00404 <span class="keyword">    </span>{
-00405       <span class="keywordflow">return</span> scfParent-&gt;color;
-00406     }
-00407     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetAlpha(<span class="keywordtype">float</span> alpha) {scfParent-&gt;SetAlpha(alpha);}
-00408     <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetAlpha()<span class="keyword"> const </span>{<span class="keywordflow">return</span> scfParent-&gt;GetAlpha ();}
-00409     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetChangeColor (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color)
-00410     {
-00411       scfParent-&gt;SetChangeColor (color);
-00412     }
-00413     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnsetChangeColor ()
-00414     {
-00415       scfParent-&gt;UnsetChangeColor ();
-00416     }
-00417     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetChangeColor (<a class="code" href="classcsColor.html">csColor</a>&amp; col)<span class="keyword"> const</span>
-00418 <span class="keyword">    </span>{
-00419       <span class="keywordflow">return</span> scfParent-&gt;GetChangeColor(col); }
-00420     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetChangeSize (<span class="keywordtype">float</span> factor)
-00421     {
-00422       scfParent-&gt;SetChangeSize (factor);
-00423     }
-00424     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnsetChangeSize ()
-00425     {
-00426       scfParent-&gt;UnsetChangeSize ();
-00427     }
-00428     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetChangeSize (<span class="keywordtype">float</span>&amp; factor)<span class="keyword"> const</span>
-00429 <span class="keyword">    </span>{
-00430       <span class="keywordflow">return</span> scfParent-&gt;GetChangeSize(factor);
-00431     }
-00432     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetChangeRotation (<span class="keywordtype">float</span> angle)
-00433     {
-00434       scfParent-&gt;SetChangeRotation (angle);
-00435     }
-00436     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnsetChangeRotation ()
-00437     {
-00438       scfParent-&gt;UnsetChangeRotation ();
-00439     }
-00440     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetChangeRotation (<span class="keywordtype">float</span>&amp; angle)<span class="keyword"> const</span>
-00441 <span class="keyword">    </span>{
-00442       <span class="keywordflow">return</span> scfParent-&gt;GetChangeRotation(angle);
-00443     }
-00444     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetChangeAlpha (<span class="keywordtype">float</span> factor)
-00445     {
-00446       scfParent-&gt;SetChangeAlpha (factor);
-00447     }
-00448     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnsetChangeAlpha ()
-00449     {
-00450       scfParent-&gt;UnsetChangeAlpha ();
-00451     }
-00452     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetChangeAlpha (<span class="keywordtype">float</span>&amp; factor)<span class="keyword"> const</span>
-00453 <span class="keyword">    </span>{
-00454       <span class="keywordflow">return</span> scfParent-&gt;GetChangeAlpha(factor);
-00455     }
-00456     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetSelfDestruct (<a class="code" href="group__util.html#ga17">csTicks</a> t)
-00457     {
-00458       scfParent-&gt;SetSelfDestruct (t);
-00459     }
-00460     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnSetSelfDestruct ()
-00461     {
-00462       scfParent-&gt;UnSetSelfDestruct ();
-00463     }
-00464   } scfiParticleState;
-00465   <span class="keyword">friend</span> <span class="keyword">class </span>ParticleState;
-00466 };
-00467 
-<a name="l00472"></a><a class="code" href="classcsNewtonianParticleSystem.html">00472</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csNewtonianParticleSystem : <span class="keyword">public</span> <a class="code" href="classcsParticleSystem.html">csParticleSystem</a>
-00473 {
-00474 <span class="keyword">protected</span>:
-<a name="l00476"></a><a class="code" href="classcsNewtonianParticleSystem.html#p0">00476</a>   <a class="code" href="classcsVector3.html">csVector3</a> *part_speed;
-<a name="l00478"></a><a class="code" href="classcsNewtonianParticleSystem.html#p1">00478</a>   <a class="code" href="classcsVector3.html">csVector3</a> *part_accel;
-00479 
-00480 <span class="keyword">public</span>:
-00482   csNewtonianParticleSystem (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg,
-00483         <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* factory);
-00484   <span class="keyword">virtual</span> ~csNewtonianParticleSystem ();
-00485 
-00486   <span class="keywordtype">void</span> SetCount (<span class="keywordtype">int</span> max);
-00487 
-00489   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsParticleSystem.html#a35">Update</a> (<a class="code" href="group__util.html#ga17">csTicks</a> elapsed_time);
-00490 
-<a name="l00492"></a><a class="code" href="classcsNewtonianParticleSystem.html#a4">00492</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetSpeed (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> part_speed[idx]; }
-<a name="l00494"></a><a class="code" href="classcsNewtonianParticleSystem.html#a5">00494</a>   <span class="keywordtype">void</span> SetSpeed (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; spd)
-00495   { part_speed[idx] = spd; }
-00496 
-<a name="l00498"></a><a class="code" href="classcsNewtonianParticleSystem.html#a6">00498</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetAccel (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> part_accel[idx]; }
-<a name="l00500"></a><a class="code" href="classcsNewtonianParticleSystem.html#a7">00500</a>   <span class="keywordtype">void</span> SetAccel (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; acl)
-00501   { part_accel[idx] = acl; }
-00502 };
-00503 
-00506 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_PARTICLESYS_PARTGEN_H__</span>
+00113   size_t VertexCount;
+00114   size_t TriangleCount;
+00115   <span class="keyword">struct </span>PerFrameData
+00116   {
+00117     <a class="code" href="classcsRef.html">csRef&lt;csRenderBufferHolder&gt;</a> bufferHolder;
+00118     <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> vertex_buffer;
+00119     <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> texel_buffer;
+00120     <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> color_buffer;
+00121   };
+00122   <a class="code" href="classcsFrameDataHolder.html">csFrameDataHolder&lt;PerFrameData&gt;</a> perFrameHolder;
+00123   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> index_buffer;
+00124 
+00125   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
+00126 
+00128   <span class="keywordtype">void</span> SetupBuffers (size_t part_sides);
+00129   size_t part_sides;    <span class="comment">// Number of vertices per particle (for buffers).</span>
+00130 
+00131   <span class="keywordtype">bool</span> initialized;
+00133   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetupObject ();
+00134 
+00135   <span class="comment">// Call if object needs changing.</span>
+00136   <span class="keywordtype">void</span> ChangeObject ()
+00137   {
+00138     initialized = <span class="keyword">false</span>;
+00139     scfiObjectModel.ShapeChanged ();
+00140   }
+00141 
+00142 <span class="keyword">private</span>:
+00143   <a class="code" href="classcsRandomFloatGen.html">csRandomFloatGen</a> randgen;
+00144 <span class="keyword">protected</span>:
+00146   <a class="code" href="classcsVector3.html">csVector3</a> GetRandomDirection();
+00148   <a class="code" href="classcsVector3.html">csVector3</a> GetRandomDirection(<a class="code" href="classcsVector3.html">csVector3</a> <span class="keyword">const</span>&amp; magnitude,
+00149     <a class="code" href="classcsVector3.html">csVector3</a> <span class="keyword">const</span>&amp; offset);
+00151   <a class="code" href="classcsVector3.html">csVector3</a> GetRandomPosition(<a class="code" href="classcsBox3.html">csBox3</a> <span class="keyword">const</span>&amp; box);
+00152 
+00153 <span class="keyword">public</span>:
+00158   <a class="code" href="classcsParticleSystem.html">csParticleSystem</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* factory);
+00159 
+00163   <span class="keyword">virtual</span> ~<a class="code" href="classcsParticleSystem.html">csParticleSystem</a> ();
+00164 
+<a name="l00166"></a><a class="code" href="classcsParticleSystem.html#a2">00166</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetParticleCount (size_t num)
+00167   {
+00168     number = num;
+00169     ChangeObject ();
+00170   }
+<a name="l00172"></a><a class="code" href="classcsParticleSystem.html#a3">00172</a>   size_t GetParticleCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> number; }
+00173 
+00174   <span class="keywordtype">void</span> UpdateLighting (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;iLight*&gt;</a>&amp; lights, <a class="code" href="structiMovable.html">iMovable</a>* movable);
+00175 
+<a name="l00177"></a><a class="code" href="classcsParticleSystem.html#a5">00177</a>   <span class="keyword">inline</span> size_t GetNumParticles ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> particles.Length();}
+<a name="l00179"></a><a class="code" href="classcsParticleSystem.html#a6">00179</a>   <span class="keyword">inline</span> <a class="code" href="structiParticle.html">iParticle</a>* GetParticle (size_t idx)<span class="keyword"> const</span>
+00180 <span class="keyword">  </span>{ <span class="keywordflow">return</span> particles[idx]; }
+00182   <span class="keywordtype">void</span> RemoveParticles ();
+00183 
+<a name="l00185"></a><a class="code" href="classcsParticleSystem.html#a8">00185</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> AppendParticle (<a class="code" href="structiParticle.html">iParticle</a> *part, <a class="code" href="structiSprite2DState.html">iSprite2DState</a>* spr2d)
+00186   {
+00187     sprite2ds.Push (spr2d);
+00188     particles.Push (part);
+00189   }
+00190 
+00195   <span class="keywordtype">void</span> AppendRectSprite (<span class="keywordtype">float</span> width, <span class="keywordtype">float</span> height, <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat,
+00196     <span class="keywordtype">bool</span> lighted);
+00197 
+00202   <span class="keywordtype">void</span> AppendRegularSprite (<span class="keywordtype">int</span> n, <span class="keywordtype">float</span> radius, <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat,
+00203     <span class="keywordtype">bool</span> lighted);
+00204 
+<a name="l00206"></a><a class="code" href="classcsParticleSystem.html#a11">00206</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetSelfDestruct (<a class="code" href="group__util.html#ga17">csTicks</a> t)
+00207   { self_destruct=<span class="keyword">true</span>; time_to_live = t; };
+<a name="l00209"></a><a class="code" href="classcsParticleSystem.html#a12">00209</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnSetSelfDestruct () { self_destruct=<span class="keyword">false</span>; }
+<a name="l00211"></a><a class="code" href="classcsParticleSystem.html#a13">00211</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetSelfDestruct ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> self_destruct; }
+<a name="l00213"></a><a class="code" href="classcsParticleSystem.html#a14">00213</a>   <span class="keyword">inline</span> <a class="code" href="group__util.html#ga17">csTicks</a> GetTimeToLive ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> time_to_live; }
+00214 
+<a name="l00216"></a><a class="code" href="classcsParticleSystem.html#a15">00216</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetChangeColor(<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col)
+00217   {change_color = <span class="keyword">true</span>; colorpersecond = col;}
+<a name="l00219"></a><a class="code" href="classcsParticleSystem.html#a16">00219</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnsetChangeColor() {change_color=<span class="keyword">false</span>;}
+<a name="l00221"></a><a class="code" href="classcsParticleSystem.html#a17">00221</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetChangeColor (<a class="code" href="classcsColor.html">csColor</a>&amp; col)<span class="keyword"> const</span>
+00222 <span class="keyword">  </span>{ <span class="keywordflow">if</span>(!change_color) <span class="keywordflow">return</span> <span class="keyword">false</span>; col = colorpersecond; <span class="keywordflow">return</span> <span class="keyword">true</span>; }
+00223 
+<a name="l00225"></a><a class="code" href="classcsParticleSystem.html#a18">00225</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetChangeSize(<span class="keywordtype">float</span> factor)
+00226   {change_size = <span class="keyword">true</span>; scalepersecond = factor;}
+<a name="l00228"></a><a class="code" href="classcsParticleSystem.html#a19">00228</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnsetChangeSize() {change_size=<span class="keyword">false</span>;}
+<a name="l00230"></a><a class="code" href="classcsParticleSystem.html#a20">00230</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetChangeSize (<span class="keywordtype">float</span>&amp; factor)<span class="keyword"> const</span>
+00231 <span class="keyword">  </span>{ <span class="keywordflow">if</span>(!change_size) <span class="keywordflow">return</span> <span class="keyword">false</span>; factor = scalepersecond; <span class="keywordflow">return</span> <span class="keyword">true</span>; }
+00232 
+<a name="l00234"></a><a class="code" href="classcsParticleSystem.html#a21">00234</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetAlpha(<span class="keywordtype">float</span> alpha)
+00235   {alpha_now = alpha; MixMode = <a class="code" href="group__gfx3d.html#ga32">CS_FX_SETALPHA</a> (alpha); SetupMixMode (); }
+<a name="l00237"></a><a class="code" href="classcsParticleSystem.html#a22">00237</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> GetAlpha()<span class="keyword"> const </span>{<span class="keywordflow">return</span> alpha_now;}
+<a name="l00239"></a><a class="code" href="classcsParticleSystem.html#a23">00239</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetChangeAlpha(<span class="keywordtype">float</span> factor)
+00240   {change_alpha = <span class="keyword">true</span>; alphapersecond = factor;}
+<a name="l00242"></a><a class="code" href="classcsParticleSystem.html#a24">00242</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnsetChangeAlpha() {change_alpha=<span class="keyword">false</span>;}
+<a name="l00244"></a><a class="code" href="classcsParticleSystem.html#a25">00244</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetChangeAlpha (<span class="keywordtype">float</span>&amp; factor)<span class="keyword"> const</span>
+00245 <span class="keyword">  </span>{ <span class="keywordflow">if</span>(!change_alpha) <span class="keywordflow">return</span> <span class="keyword">false</span>; factor = alphapersecond; <span class="keywordflow">return</span> <span class="keyword">true</span>; }
+00246 
+<a name="l00248"></a><a class="code" href="classcsParticleSystem.html#a26">00248</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetChangeRotation(<span class="keywordtype">float</span> angle)
+00249   {change_rotation = <span class="keyword">true</span>; anglepersecond = angle;}
+<a name="l00251"></a><a class="code" href="classcsParticleSystem.html#a27">00251</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> UnsetChangeRotation() {change_rotation=<span class="keyword">false</span>;}
+<a name="l00253"></a><a class="code" href="classcsParticleSystem.html#a28">00253</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> GetChangeRotation (<span class="keywordtype">float</span>&amp; angle)<span class="keyword"> const</span>
+00254 <span class="keyword">  </span>{ <span class="keywordflow">if</span>(!change_rotation) <span class="keywordflow">return</span> <span class="keyword">false</span>; angle = anglepersecond; <span class="keywordflow">return</span> <span class="keyword">true</span>; }
+00255 
+<a name="l00257"></a><a class="code" href="classcsParticleSystem.html#a29">00257</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; GetBoundingBox()<span class="keyword"> const </span>{<span class="keywordflow">return</span> bbox;}
+00258 
+00260   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetupColor ();
+00262   <span class="keyword">virtual</span> <span class="keywordtype">void</span> AddColor (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col);
+00264   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ScaleBy(<span class="keywordtype">float</span> factor);
+00266   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetupMixMode ();
+00268   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Rotate(<span class="keywordtype">float</span> angle);
+00269 
+00276   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Update (<a class="code" href="group__util.html#ga17">csTicks</a> elapsed_time);
+00277 
+00278   <span class="keywordtype">void</span> GetObjectBoundingBox (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox)
+00279   {
+00280     SetupObject ();
+00281     bbox = <a class="code" href="classcsParticleSystem.html#p22">csParticleSystem::bbox</a>;
+00282   }
+00283   <span class="keywordtype">void</span> SetObjectBoundingBox (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox)
+00284   {
+00285     <a class="code" href="classcsParticleSystem.html#p22">csParticleSystem::bbox</a> = bbox;
+00286     scfiObjectModel.ShapeChanged ();
+00287   }
+00288   <span class="keywordtype">void</span> GetRadius (<a class="code" href="classcsVector3.html">csVector3</a>&amp; rad, <a class="code" href="classcsVector3.html">csVector3</a>&amp; cent)
+00289   {
+00290     SetupObject ();
+00291     rad = radius;
+00292     cent = bbox.<a class="code" href="classcsBox3.html#a13">GetCenter</a>();
+00293   }
+00294 
+00295   <span class="comment">//----------------------- iMeshObject implementation ------------------------</span>
+00296   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+00297 
+<a name="l00298"></a><a class="code" href="classcsParticleSystem.html#a39">00298</a>   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* <a class="code" href="structiMeshObject.html#a0">GetFactory</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> factory; }
+<a name="l00299"></a><a class="code" href="classcsParticleSystem.html#a40">00299</a>   <span class="keyword">virtual</span> <a class="code" href="classcsFlags.html">csFlags</a>&amp; <a class="code" href="structiMeshObject.html#a1">GetFlags</a> () { <span class="keywordflow">return</span> flags; }
+<a name="l00300"></a><a class="code" href="classcsParticleSystem.html#a41">00300</a>   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshObject&gt;</a> <a class="code" href="structiMeshObject.html#a2">Clone</a> () { <span class="keywordflow">return</span> 0; }
+00301   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PreGetRenderMeshes (<a class="code" href="structiRenderView.html">iRenderView</a>* rview, <a class="code" href="structiMovable.html">iMovable</a>* movable,
+00302         <a class="code" href="group__util.html#ga4">uint32</a> frustum_mask);
+00303   <span class="keyword">virtual</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>** <a class="code" href="structiMeshObject.html#a3">GetRenderMeshes</a> (<span class="keywordtype">int</span>&amp; n, <a class="code" href="structiRenderView.html">iRenderView</a>* rview,
+00304     <a class="code" href="structiMovable.html">iMovable</a>* movable, <a class="code" href="group__util.html#ga4">uint32</a> frustum_mask);
+<a name="l00305"></a><a class="code" href="classcsParticleSystem.html#a44">00305</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a4">SetVisibleCallback</a> (<a class="code" href="structiMeshObjectDrawCallback.html">iMeshObjectDrawCallback</a>* cb)
+00306   {
+00307     <span class="keywordflow">if</span> (cb) cb-&gt;<a class="code" href="structiBase.html#a0">IncRef</a> ();
+00308     <span class="keywordflow">if</span> (vis_cb) vis_cb-&gt;DecRef ();
+00309     vis_cb = cb;
+00310   }
+<a name="l00311"></a><a class="code" href="classcsParticleSystem.html#a45">00311</a>   <span class="keyword">virtual</span> <a class="code" href="structiMeshObjectDrawCallback.html">iMeshObjectDrawCallback</a>* <a class="code" href="structiMeshObject.html#a5">GetVisibleCallback</a> ()<span class="keyword"> const</span>
+00312 <span class="keyword">  </span>{
+00313     <span class="keywordflow">return</span> vis_cb;
+00314   }
+<a name="l00315"></a><a class="code" href="classcsParticleSystem.html#a46">00315</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a6">NextFrame</a> (<a class="code" href="group__util.html#ga17">csTicks</a> current_time, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <span class="comment">/*pos*/</span>)
+00316   {
+00317     <a class="code" href="group__util.html#ga17">csTicks</a> elaps = 0;
+00318     <span class="keywordflow">if</span> (prev_time != 0) elaps = current_time-prev_time;
+00319     prev_time = current_time;
+00320     Update (elaps);
+00321   }
+00322   <span class="keyword">virtual</span> <span class="keywordtype">int</span> HitBeamBBox (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;,
+00323         <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keywordtype">float</span>*)
+00324   { <span class="keywordflow">return</span> -1; }
+<a name="l00325"></a><a class="code" href="classcsParticleSystem.html#a48">00325</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a9">HitBeamOutline</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;,
+00326         <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keywordtype">float</span>*)
+00327   { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
+<a name="l00328"></a><a class="code" href="classcsParticleSystem.html#a49">00328</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a10">HitBeamObject</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;,
+00329         <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keywordtype">float</span>*, <span class="keywordtype">int</span>* = 0) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
+<a name="l00330"></a><a class="code" href="classcsParticleSystem.html#a50">00330</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a11">SetLogicalParent</a> (<a class="code" href="structiBase.html">iBase</a>* lp) { logparent = lp; }
+<a name="l00331"></a><a class="code" href="classcsParticleSystem.html#a51">00331</a>   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>* <a class="code" href="structiMeshObject.html#a12">GetLogicalParent</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> logparent; }
+00332 
+00333   <span class="comment">//------------------------- iObjectModel implementation ----------------</span>
+00334   <span class="keyword">class </span>ObjectModel : <span class="keyword">public</span> <a class="code" href="classcsObjectModel.html">csObjectModel</a>
+00335   {
+00336     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (<a class="code" href="classcsParticleSystem.html">csParticleSystem</a>);
+00337     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetObjectBoundingBox (<a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox)
+00338     {
+00339       scfParent-&gt;GetObjectBoundingBox (bbox);
+00340     }
+00341     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetObjectBoundingBox (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox)
+00342     {
+00343       scfParent-&gt;SetObjectBoundingBox (bbox);
+00344     }
+00345     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetRadius (<a class="code" href="classcsVector3.html">csVector3</a>&amp; rad, <a class="code" href="classcsVector3.html">csVector3</a>&amp; cent)
+00346     {
+00347       scfParent-&gt;GetRadius (rad, cent);
+00348     }
+00349   } scfiObjectModel;
+00350   <span class="keyword">friend</span> <span class="keyword">class </span>ObjectModel;
+00351 
+<a name="l00352"></a><a class="code" href="classcsParticleSystem.html#a52">00352</a>   <span class="keyword">virtual</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>* <a class="code" href="structiMeshObject.html#a13">GetObjectModel</a> () { <span class="keywordflow">return</span> &amp;scfiObjectModel; }
+<a name="l00353"></a><a class="code" href="classcsParticleSystem.html#a53">00353</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a14">SetColor</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col)
+00354   {
+00355     color = col;
+00356     SetupColor ();
+00357     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00358   }
+<a name="l00359"></a><a class="code" href="classcsParticleSystem.html#a54">00359</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a15">GetColor</a> (<a class="code" href="classcsColor.html">csColor</a>&amp; col)<span class="keyword"> const</span>
+00360 <span class="keyword">  </span>{
+00361     col = color;
+00362     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00363   }
+<a name="l00364"></a><a class="code" href="classcsParticleSystem.html#a55">00364</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a16">SetMaterialWrapper</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat)
+00365   {
+00366     initialized = <span class="keyword">false</span>;
+00367     <a class="code" href="classcsParticleSystem.html#p11">csParticleSystem::mat</a> = mat;
+00368     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00369   }
+<a name="l00370"></a><a class="code" href="classcsParticleSystem.html#a56">00370</a>   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiMeshObject.html#a17">GetMaterialWrapper</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mat; }
+<a name="l00371"></a><a class="code" href="classcsParticleSystem.html#a57">00371</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a18">InvalidateMaterialHandles</a> () { }
+<a name="l00376"></a><a class="code" href="classcsParticleSystem.html#a58">00376</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a19">PositionChild</a> (<a class="code" href="structiMeshObject.html">iMeshObject</a>* child,<a class="code" href="group__util.html#ga17">csTicks</a> current_time) { }
+00377 
+00378   <span class="comment">//------------------------- iParticleState implementation ----------------</span>
+00379   <span class="keyword">class </span>ParticleState : <span class="keyword">public</span> <a class="code" href="structiParticleState.html">iParticleState</a>
+00380   {
+00381     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (<a class="code" href="classcsParticleSystem.html">csParticleSystem</a>);
+00382     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetMaterialWrapper (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* material)
+00383     {
+00384       scfParent-&gt;initialized = <span class="keyword">false</span>;
+00385       scfParent-&gt;mat = material;
+00386     }
+00387     <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* GetMaterialWrapper ()<span class="keyword"> const</span>
+00388 <span class="keyword">    </span>{
+00389       <span class="keywordflow">return</span> scfParent-&gt;mat;
+00390     }
+00391     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetMixMode (<a class="code" href="group__util.html#ga18">uint</a> mode)
+00392     {
+00393       scfParent-&gt;MixMode = mode;
+00394       scfParent-&gt;SetupMixMode ();
+00395     }
+00396     <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga18">uint</a> GetMixMode ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> scfParent-&gt;MixMode; }
+00397     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetColor (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color)
+00398     {
+00399       scfParent-&gt;color = color;
+00400       scfParent-&gt;SetupColor ();
+00401     }
+00402     <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; GetColor ()<span class="keyword"> const</span>
+00403 <span class="keyword">    </span>{
+00404       <span class="keywordflow">return</span> scfParent-&gt;color;
+00405     }
+00406     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetAlpha(<span class="keywordtype">float</span> alpha) {scfParent-&gt;SetAlpha(alpha);}
+00407     <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetAlpha()<span class="keyword"> const </span>{<span class="keywordflow">return</span> scfParent-&gt;GetAlpha ();}
+00408     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetChangeColor (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; color)
+00409     {
+00410       scfParent-&gt;SetChangeColor (color);
+00411     }
+00412     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnsetChangeColor ()
+00413     {
+00414       scfParent-&gt;UnsetChangeColor ();
+00415     }
+00416     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetChangeColor (<a class="code" href="classcsColor.html">csColor</a>&amp; col)<span class="keyword"> const</span>
+00417 <span class="keyword">    </span>{
+00418       <span class="keywordflow">return</span> scfParent-&gt;GetChangeColor(col); }
+00419     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetChangeSize (<span class="keywordtype">float</span> factor)
+00420     {
+00421       scfParent-&gt;SetChangeSize (factor);
+00422     }
+00423     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnsetChangeSize ()
+00424     {
+00425       scfParent-&gt;UnsetChangeSize ();
+00426     }
+00427     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetChangeSize (<span class="keywordtype">float</span>&amp; factor)<span class="keyword"> const</span>
+00428 <span class="keyword">    </span>{
+00429       <span class="keywordflow">return</span> scfParent-&gt;GetChangeSize(factor);
+00430     }
+00431     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetChangeRotation (<span class="keywordtype">float</span> angle)
+00432     {
+00433       scfParent-&gt;SetChangeRotation (angle);
+00434     }
+00435     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnsetChangeRotation ()
+00436     {
+00437       scfParent-&gt;UnsetChangeRotation ();
+00438     }
+00439     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetChangeRotation (<span class="keywordtype">float</span>&amp; angle)<span class="keyword"> const</span>
+00440 <span class="keyword">    </span>{
+00441       <span class="keywordflow">return</span> scfParent-&gt;GetChangeRotation(angle);
+00442     }
+00443     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetChangeAlpha (<span class="keywordtype">float</span> factor)
+00444     {
+00445       scfParent-&gt;SetChangeAlpha (factor);
+00446     }
+00447     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnsetChangeAlpha ()
+00448     {
+00449       scfParent-&gt;UnsetChangeAlpha ();
+00450     }
+00451     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetChangeAlpha (<span class="keywordtype">float</span>&amp; factor)<span class="keyword"> const</span>
+00452 <span class="keyword">    </span>{
+00453       <span class="keywordflow">return</span> scfParent-&gt;GetChangeAlpha(factor);
+00454     }
+00455     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetSelfDestruct (<a class="code" href="group__util.html#ga17">csTicks</a> t)
+00456     {
+00457       scfParent-&gt;SetSelfDestruct (t);
+00458     }
+00459     <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnSetSelfDestruct ()
+00460     {
+00461       scfParent-&gt;UnSetSelfDestruct ();
+00462     }
+00463   } scfiParticleState;
+00464   <span class="keyword">friend</span> <span class="keyword">class </span>ParticleState;
+00465 };
+00466 
+<a name="l00471"></a><a class="code" href="classcsNewtonianParticleSystem.html">00471</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csNewtonianParticleSystem : <span class="keyword">public</span> <a class="code" href="classcsParticleSystem.html">csParticleSystem</a>
+00472 {
+00473 <span class="keyword">protected</span>:
+<a name="l00475"></a><a class="code" href="classcsNewtonianParticleSystem.html#p0">00475</a>   <a class="code" href="classcsVector3.html">csVector3</a> *part_speed;
+<a name="l00477"></a><a class="code" href="classcsNewtonianParticleSystem.html#p1">00477</a>   <a class="code" href="classcsVector3.html">csVector3</a> *part_accel;
+00478 
+00479 <span class="keyword">public</span>:
+00481   csNewtonianParticleSystem (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg,
+00482         <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* factory);
+00483   <span class="keyword">virtual</span> ~csNewtonianParticleSystem ();
+00484 
+00485   <span class="keywordtype">void</span> SetCount (<span class="keywordtype">int</span> max);
+00486 
+00488   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsParticleSystem.html#a35">Update</a> (<a class="code" href="group__util.html#ga17">csTicks</a> elapsed_time);
+00489 
+<a name="l00491"></a><a class="code" href="classcsNewtonianParticleSystem.html#a4">00491</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetSpeed (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> part_speed[idx]; }
+<a name="l00493"></a><a class="code" href="classcsNewtonianParticleSystem.html#a5">00493</a>   <span class="keywordtype">void</span> SetSpeed (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; spd)
+00494   { part_speed[idx] = spd; }
+00495 
+<a name="l00497"></a><a class="code" href="classcsNewtonianParticleSystem.html#a6">00497</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetAccel (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> part_accel[idx]; }
+<a name="l00499"></a><a class="code" href="classcsNewtonianParticleSystem.html#a7">00499</a>   <span class="keywordtype">void</span> SetAccel (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; acl)
+00500   { part_accel[idx] = acl; }
+00501 };
+00502 
+00505 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_PARTICLESYS_PARTGEN_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
