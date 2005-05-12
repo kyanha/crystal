@@ -13,4 +13,4 @@
 #pragma comment(linker, "/merge:.CSmetai=.CSmeta")
 #endif
 
-SCF_USE_STATIC_PLUGIN(vfs.csplugin)
+SCF_USE_STATIC_PLUGIN(vfs)
