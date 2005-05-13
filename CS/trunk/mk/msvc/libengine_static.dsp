@@ -250,10 +250,6 @@ SOURCE=..\..\plugins\engine\3d\sharevar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\stats.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\engine\3d\texture.cpp
 # End Source File
 # End Group
@@ -359,10 +355,6 @@ SOURCE=..\..\plugins\engine\3d\sector.h
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\3d\sharevar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\3d\stats.h
 # End Source File
 # Begin Source File
 
