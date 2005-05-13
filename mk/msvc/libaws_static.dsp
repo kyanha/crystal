@@ -282,6 +282,22 @@ SOURCE=..\..\plugins\aws\awswin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws\builtin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\functor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\object.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\registrar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws\skinlex.cpp
 # End Source File
 # Begin Source File
@@ -438,7 +454,31 @@ SOURCE=..\..\plugins\aws\awswin.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws\functor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\object.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\property.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\registrar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\sigslot.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws\skinpars.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\split.h
 # End Source File
 # End Group
 # End Target

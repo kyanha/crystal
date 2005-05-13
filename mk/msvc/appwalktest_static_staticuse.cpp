@@ -12,7 +12,6 @@
 #pragma comment(linker, "/section:.CSmeta,er")
 #pragma comment(linker, "/merge:.CSmetai=.CSmeta")
 #endif
-
 SCF_USE_STATIC_PLUGIN(ball)
 SCF_USE_STATIC_PLUGIN(ballldr)
 SCF_USE_STATIC_PLUGIN(bezier)
@@ -88,3 +87,4 @@ SCF_USE_STATIC_PLUGIN(bruteblock)
 SCF_USE_STATIC_PLUGIN(crossbld)
 SCF_USE_STATIC_PLUGIN(csbmpimg)
 SCF_USE_STATIC_PLUGIN(rendstep_stencil)
+
