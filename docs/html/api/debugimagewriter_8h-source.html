@@ -58,52 +58,52 @@
 00047 <span class="preprocessor">#endif</span>
 00048 <span class="preprocessor"></span>  }
 00049 <span class="keyword">public</span>:
-<a name="l00058"></a><a class="code" href="classcsDebugImageWriter.html#e0">00058</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> DebugImageWrite (<a class="code" href="structiImage.html">iImage</a>* image, <span class="keyword">const</span> <span class="keywordtype">char</span>* filename, ...)
-00059   {
-00060 <span class="preprocessor">  #ifdef CS_DEBUG</span>
-00061 <span class="preprocessor"></span>    CS_ASSERT(<a class="code" href="structiSCF.html#s0">iSCF::SCF</a>-&gt;object_reg);
-00062     <a class="code" href="classcsRef.html">csRef&lt;iImageIO&gt;</a> imgsaver =
-00063       CS_QUERY_REGISTRY (<a class="code" href="structiSCF.html#s0">iSCF::SCF</a>-&gt;object_reg, <a class="code" href="structiImageIO.html">iImageIO</a>);
-00064     <span class="keywordflow">if</span> (!imgsaver) 
-00065     {
-00066       Report (<a class="code" href="group__util.html#ga160">CS_REPORTER_SEVERITY_ERROR</a>, <span class="stringliteral">"No iImageIO"</span>);
-00067       <span class="keywordflow">return</span>;
-00068     }
-00069     <a class="code" href="classcsRef.html">csRef&lt;iVFS&gt;</a> vfs =
-00070       CS_QUERY_REGISTRY (<a class="code" href="structiSCF.html#s0">iSCF::SCF</a>-&gt;object_reg, <a class="code" href="structiVFS.html">iVFS</a>);
-00071     <span class="keywordflow">if</span> (!vfs) 
-00072     {
-00073       Report (<a class="code" href="group__util.html#ga160">CS_REPORTER_SEVERITY_ERROR</a>, <span class="stringliteral">"No iVFS"</span>);
-00074       <span class="keywordflow">return</span>;
-00075     }
-00076     
-00077     <a class="code" href="classcsString.html">csString</a> finalFilename;
-00078     va_list arg;
-00079     va_start (arg, filename);
-00080     finalFilename.<a class="code" href="classcsStringBase.html#a59">FormatV</a> (filename, arg);
-00081     va_end (arg);
-00082     
-00083     <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> buf = imgsaver-&gt;Save (image, <span class="stringliteral">"image/png"</span>);
-00084     <span class="keywordflow">if</span> (!buf) 
-00085     {
-00086       Report (<a class="code" href="group__util.html#ga160">CS_REPORTER_SEVERITY_ERROR</a>, <span class="stringliteral">"Error saving image"</span>);
-00087       <span class="keywordflow">return</span>;
-00088     }
-00089     vfs-&gt;PushDir ();
-00090     vfs-&gt;ChDir (<span class="stringliteral">"/tmp"</span>);
-00091     <span class="keywordtype">bool</span> written = vfs-&gt;WriteFile (finalFilename, (<span class="keywordtype">char</span>*)buf-&gt;GetInt8 (), 
-00092       buf-&gt;GetSize ());
-00093     vfs-&gt;PopDir ();
-00094     <span class="keywordflow">if</span> (!written)
-00095     {
-00096       Report (<a class="code" href="group__util.html#ga160">CS_REPORTER_SEVERITY_ERROR</a>, <span class="stringliteral">"Could not write to %s"</span>, 
-00097         finalFilename.<a class="code" href="classcsStringFast.html#a10">GetData</a> ());
-00098     }
-00099 <span class="preprocessor">  #endif</span>
-00100 <span class="preprocessor"></span>  }
-00101 };
-00102 
-00103 <span class="preprocessor">#endif // __CS_CSTOOL_DEBUGIMAGEWRITER_H__</span>
+<a name="l00059"></a><a class="code" href="classcsDebugImageWriter.html#e0">00059</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> DebugImageWrite (<a class="code" href="structiImage.html">iImage</a>* image, <span class="keyword">const</span> <span class="keywordtype">char</span>* filename, ...)
+00060   {
+00061 <span class="preprocessor">  #ifdef CS_DEBUG</span>
+00062 <span class="preprocessor"></span>    CS_ASSERT(<a class="code" href="structiSCF.html#s0">iSCF::SCF</a>-&gt;object_reg);
+00063     <a class="code" href="classcsRef.html">csRef&lt;iImageIO&gt;</a> imgsaver =
+00064       CS_QUERY_REGISTRY (<a class="code" href="structiSCF.html#s0">iSCF::SCF</a>-&gt;object_reg, <a class="code" href="structiImageIO.html">iImageIO</a>);
+00065     <span class="keywordflow">if</span> (!imgsaver) 
+00066     {
+00067       Report (<a class="code" href="group__util.html#ga160">CS_REPORTER_SEVERITY_ERROR</a>, <span class="stringliteral">"No iImageIO"</span>);
+00068       <span class="keywordflow">return</span>;
+00069     }
+00070     <a class="code" href="classcsRef.html">csRef&lt;iVFS&gt;</a> vfs =
+00071       CS_QUERY_REGISTRY (<a class="code" href="structiSCF.html#s0">iSCF::SCF</a>-&gt;object_reg, <a class="code" href="structiVFS.html">iVFS</a>);
+00072     <span class="keywordflow">if</span> (!vfs) 
+00073     {
+00074       Report (<a class="code" href="group__util.html#ga160">CS_REPORTER_SEVERITY_ERROR</a>, <span class="stringliteral">"No iVFS"</span>);
+00075       <span class="keywordflow">return</span>;
+00076     }
+00077     
+00078     <a class="code" href="classcsString.html">csString</a> finalFilename;
+00079     va_list arg;
+00080     va_start (arg, filename);
+00081     finalFilename.<a class="code" href="classcsStringBase.html#a59">FormatV</a> (filename, arg);
+00082     va_end (arg);
+00083     
+00084     <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> buf = imgsaver-&gt;Save (image, <span class="stringliteral">"image/png"</span>);
+00085     <span class="keywordflow">if</span> (!buf) 
+00086     {
+00087       Report (<a class="code" href="group__util.html#ga160">CS_REPORTER_SEVERITY_ERROR</a>, <span class="stringliteral">"Error saving image"</span>);
+00088       <span class="keywordflow">return</span>;
+00089     }
+00090     vfs-&gt;PushDir ();
+00091     vfs-&gt;ChDir (<span class="stringliteral">"/tmp"</span>);
+00092     <span class="keywordtype">bool</span> written = vfs-&gt;WriteFile (finalFilename, (<span class="keywordtype">char</span>*)buf-&gt;GetInt8 (), 
+00093       buf-&gt;GetSize ());
+00094     vfs-&gt;PopDir ();
+00095     <span class="keywordflow">if</span> (!written)
+00096     {
+00097       Report (<a class="code" href="group__util.html#ga160">CS_REPORTER_SEVERITY_ERROR</a>, <span class="stringliteral">"Could not write to %s"</span>, 
+00098         finalFilename.<a class="code" href="classcsStringFast.html#a10">GetData</a> ());
+00099     }
+00100 <span class="preprocessor">  #endif</span>
+00101 <span class="preprocessor"></span>  }
+00102 };
+00103 
+00104 <span class="preprocessor">#endif // __CS_CSTOOL_DEBUGIMAGEWRITER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
