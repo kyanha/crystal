@@ -305,10 +305,10 @@ static void&nbsp;</td><td class="memItemRight" valign="bottom"><b>CS_INIT_TOKEN_
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Greatest-width unsigned integer.  <a href="#ga12"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">typedef long long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga15">longlong</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Type to pass to cs_snprintf() as an argument to the "%lld" format specifier.  <a href="#ga15"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Type to pass to <a class="el" href="snprintf_8h.html#a0">cs_snprintf()</a> as an argument to the "%lld" format specifier.  <a href="#ga15"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">typedef unsigned long long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga16">ulonglong</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Type to pass to cs_snprintf() as an argument to the "%llu" format specifier.  <a href="#ga16"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Type to pass to <a class="el" href="snprintf_8h.html#a0">cs_snprintf()</a> as an argument to the "%llu" format specifier.  <a href="#ga16"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">typedef unsigned int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga17">csTicks</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A time value measured in milliseconds (1/1000 of a second).  <a href="#ga17"></a><br></td></tr>
@@ -746,6 +746,11 @@ static void&nbsp;</td><td class="memItemRight" valign="bottom"><b>CS_INIT_TOKEN_
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">An <em>invalid</em> csStringID.  <a href="#ga24"></a><br></td></tr>
 </table>
+<h3><a class="anchor" name="FormatterNotes">Notes about string formatting in CrystalSpace</a></h3>The format specifiers supported by csPrintfFormatter&lt;&gt; are basically the same as supported by glibc. Some notable aspects are summed up here.<p>
+<ul>
+<li>For <code>size_t</code>, <code>intmax_t</code>, <code>ptrdiff_t</code> and <code>longlong</code> arguments, the '<code>z</code>', '<code>j</code>', '<code>t</code>' and '<code>ll</code>' modifiers are supported.</li><li>char* strings ("&lt;tt&gt;%s&lt;/tt&gt;") are expected to be UTF-8 encoded - likewise, char* formatting results will usually be encoded in UTF-8.</li><li>To format explicitly sized types (like <code>uint32</code>) the PRIX99 macros should be used, e.g.: <div class="fragment"><pre class="fragment">   <a class="code" href="group__util.html#ga2">uint16</a> myUI16 = 0xabcd;
+   <a class="code" href="group__util.html#ga75">csPrintf</a> (<span class="stringliteral">"%"</span> PRIu16, myUI16);
+</pre></div> </li></ul>
 <hr><h2>Define Documentation</h2>
 <a class="anchor" name="ga122" doxytag="cstypes.h::CONST_INT64"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
@@ -1294,7 +1299,7 @@ This is the worst thing that can happen. It means that some code detected a bug 
 <p>
 Definition at line <a class="el" href="reporter_8h-source.html#l00044">44</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
-Referenced by <a class="el" href="reporter_8h-source.html#l00282">iReporter::ReportBug()</a>, and <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper::ReportV()</a>.    </td>
+Referenced by <a class="el" href="reporter_8h-source.html#l00289">iReporter::ReportBug()</a>, and <a class="el" href="reporter_8h-source.html#l00337">csReporterHelper::ReportV()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga163" doxytag="reporter.h::CS_REPORTER_SEVERITY_DEBUG"></a><p>
@@ -1323,7 +1328,7 @@ This is for debugging and it will usually generate an entry in some log.
 <p>
 Definition at line <a class="el" href="reporter_8h-source.html#l00070">70</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
-Referenced by <a class="el" href="reporter_8h-source.html#l00291">iReporter::ReportDebug()</a>, and <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper::ReportV()</a>.    </td>
+Referenced by <a class="el" href="reporter_8h-source.html#l00298">iReporter::ReportDebug()</a>, and <a class="el" href="reporter_8h-source.html#l00337">csReporterHelper::ReportV()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga160" doxytag="reporter.h::CS_REPORTER_SEVERITY_ERROR"></a><p>
@@ -1352,7 +1357,7 @@ There was an error of some kind. Usually this is an error while reading data.
 <p>
 Definition at line <a class="el" href="reporter_8h-source.html#l00051">51</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
-Referenced by <a class="el" href="debugimagewriter_8h-source.html#l00058">csDebugImageWriter::DebugImageWrite()</a>, <a class="el" href="reporter_8h-source.html#l00255">iReporter::ReportError()</a>, <a class="el" href="csapplicationframework_8h-source.html#l00332">csApplicationFramework::ReportError()</a>, and <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper::ReportV()</a>.    </td>
+Referenced by <a class="el" href="debugimagewriter_8h-source.html#l00059">csDebugImageWriter::DebugImageWrite()</a>, <a class="el" href="reporter_8h-source.html#l00262">iReporter::ReportError()</a>, <a class="el" href="csapplicationframework_8h-source.html#l00334">csApplicationFramework::ReportError()</a>, and <a class="el" href="reporter_8h-source.html#l00337">csReporterHelper::ReportV()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga162" doxytag="reporter.h::CS_REPORTER_SEVERITY_NOTIFY"></a><p>
@@ -1381,7 +1386,7 @@ Just a notification message.
 <p>
 Definition at line <a class="el" href="reporter_8h-source.html#l00063">63</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
-Referenced by <a class="el" href="csapplicationframework_8h-source.html#l00365">csApplicationFramework::ReportInfo()</a>, <a class="el" href="reporter_8h-source.html#l00273">iReporter::ReportNotify()</a>, and <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper::ReportV()</a>.    </td>
+Referenced by <a class="el" href="csapplicationframework_8h-source.html#l00369">csApplicationFramework::ReportInfo()</a>, <a class="el" href="reporter_8h-source.html#l00280">iReporter::ReportNotify()</a>, and <a class="el" href="reporter_8h-source.html#l00337">csReporterHelper::ReportV()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga161" doxytag="reporter.h::CS_REPORTER_SEVERITY_WARNING"></a><p>
@@ -1410,7 +1415,7 @@ There was some condition which is non fatal but is suspicious.
 <p>
 Definition at line <a class="el" href="reporter_8h-source.html#l00057">57</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
-Referenced by <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper::ReportV()</a>, <a class="el" href="reporter_8h-source.html#l00264">iReporter::ReportWarning()</a>, and <a class="el" href="csapplicationframework_8h-source.html#l00349">csApplicationFramework::ReportWarning()</a>.    </td>
+Referenced by <a class="el" href="reporter_8h-source.html#l00337">csReporterHelper::ReportV()</a>, <a class="el" href="reporter_8h-source.html#l00271">iReporter::ReportWarning()</a>, and <a class="el" href="csapplicationframework_8h-source.html#l00352">csApplicationFramework::ReportWarning()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga118" doxytag="tokenlist.h::CS_TOKEN_LIST_TOKEN"></a><p>
@@ -2027,7 +2032,7 @@ Helper macro to use a reporter easily.
 <p>
 
 <p>
-Definition at line <a class="el" href="reporter_8h-source.html#l00381">381</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.    </td>
+Definition at line <a class="el" href="reporter_8h-source.html#l00390">390</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga165" doxytag="reporter.h::csReportV"></a><p>
@@ -2054,9 +2059,9 @@ Helper macro to use a reporter easily.
 <p>
 
 <p>
-Definition at line <a class="el" href="reporter_8h-source.html#l00385">385</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
+Definition at line <a class="el" href="reporter_8h-source.html#l00394">394</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
-Referenced by <a class="el" href="csapplicationframework_8h-source.html#l00332">csApplicationFramework::ReportError()</a>, <a class="el" href="csapplicationframework_8h-source.html#l00365">csApplicationFramework::ReportInfo()</a>, and <a class="el" href="csapplicationframework_8h-source.html#l00349">csApplicationFramework::ReportWarning()</a>.    </td>
+Referenced by <a class="el" href="csapplicationframework_8h-source.html#l00334">csApplicationFramework::ReportError()</a>, <a class="el" href="csapplicationframework_8h-source.html#l00369">csApplicationFramework::ReportInfo()</a>, and <a class="el" href="csapplicationframework_8h-source.html#l00352">csApplicationFramework::ReportWarning()</a>.    </td>
   </tr>
 </table>
 <hr><h2>Typedef Documentation</h2>
@@ -2296,7 +2301,7 @@ Definition at line <a class="el" href="cstypes_8h-source.html#l00139">139</a> of
     <td>
 
 <p>
-Type to pass to cs_snprintf() as an argument to the "%lld" format specifier. 
+Type to pass to <a class="el" href="snprintf_8h.html#a0">cs_snprintf()</a> as an argument to the "%lld" format specifier. 
 <p>
 
 <p>
@@ -2539,7 +2544,7 @@ Definition at line <a class="el" href="cstypes_8h-source.html#l00141">141</a> of
     <td>
 
 <p>
-Type to pass to cs_snprintf() as an argument to the "%llu" format specifier. 
+Type to pass to <a class="el" href="snprintf_8h.html#a0">cs_snprintf()</a> as an argument to the "%llu" format specifier. 
 <p>
 
 <p>
@@ -3444,7 +3449,9 @@ Referenced by <a class="el" href="csendian_8h-source.html#l00384">csSetBigEndian
 <p>
 CS version of fprintf (file, str, . 
 <p>
-..). It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>Remarks:</b></dt><dd>Will not flush file. </dd></dl>
+..). It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a></dd></dl>
+ <dl compact><dt><b>Remarks:</b></dt><dd>Will not flush file. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
     </td>
   </tr>
 </table>
@@ -3490,7 +3497,9 @@ CS version of fprintf (file, str, .
 <p>
 CS version of vfprintf (stderr, str, . 
 <p>
-..). It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>Remarks:</b></dt><dd>Will not flush file. </dd></dl>
+..). It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a></dd></dl>
+ <dl compact><dt><b>Remarks:</b></dt><dd>Will not flush file. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
     </td>
   </tr>
 </table>
@@ -4451,7 +4460,7 @@ Find the log2 of 32bit argument.
 <p>
 Definition at line <a class="el" href="util_8h-source.html#l00176">176</a> of file <a class="el" href="util_8h-source.html">util.h</a>.
 <p>
-Referenced by <a class="el" href="formatter_8h-source.html#l01157">csPrintfFormatter&lt; Twriter, Treader &gt;::Format()</a>.    </td>
+Referenced by <a class="el" href="formatter_8h-source.html#l01178">csPrintfFormatter&lt; Twriter, Treader &gt;::Format()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga37" doxytag="csendian.h::csLongLongToDouble"></a><p>
@@ -4658,9 +4667,10 @@ Some platforms on which Crystal Space runs need to perform their own startup pro
 <p>
 CS version of printf. 
 <p>
-It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. 
+It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
+
 <p>
-Referenced by <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper::ReportV()</a>.    </td>
+Referenced by <a class="el" href="reporter_8h-source.html#l00337">csReporterHelper::ReportV()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga80" doxytag="sysfunc.h::csPrintfErr"></a><p>
@@ -4699,7 +4709,9 @@ Referenced by <a class="el" href="reporter_8h-source.html#l00328">csReporterHelp
 <p>
 CS version of fprintf (stderr, str, . 
 <p>
-..). It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>Remarks:</b></dt><dd>Will flush stderr. </dd></dl>
+..). It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a></dd></dl>
+ <dl compact><dt><b>Remarks:</b></dt><dd>Will flush stderr. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
 
 <p>
 Referenced by <a class="el" href="blockallocator_8h-source.html#l00309">csBlockAllocator&lt; csBSPTree &gt;::Alloc()</a>, and <a class="el" href="blockallocator_8h-source.html#l00159">csBlockAllocator&lt; csBSPTree &gt;::DestroyObject()</a>.    </td>
@@ -4741,7 +4753,9 @@ Referenced by <a class="el" href="blockallocator_8h-source.html#l00309">csBlockA
 <p>
 CS version of vfprintf (stderr, str, . 
 <p>
-..). It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>Remarks:</b></dt><dd>Will flush stderr. </dd></dl>
+..). It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a></dd></dl>
+ <dl compact><dt><b>Remarks:</b></dt><dd>Will flush stderr. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
     </td>
   </tr>
 </table>
@@ -4781,9 +4795,11 @@ CS version of vfprintf (stderr, str, .
 <p>
 CS version of vprintf. 
 <p>
-It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. 
+It accepts UTF-8 strings and converts it, if required, to the platforms native codepage. <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a></dd></dl>
+ <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
+
 <p>
-Referenced by <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper::ReportV()</a>.    </td>
+Referenced by <a class="el" href="reporter_8h-source.html#l00337">csReporterHelper::ReportV()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga66" doxytag="csshlib.h::csPrintLibraryError"></a><p>
@@ -5557,7 +5573,7 @@ Perform case-insensitive string comparison of the first <code>n</code> character
 <p>
 Returns a negative number if the n-character prefix of <code>str1</code> is less than <code>str2</code>, zero if they are equal, or a positive number if the prefix of <code>str1</code> is greater than <code>str2</code>. For best portability, use function rather than strncasecmp() or strnicmp(). 
 <p>
-Referenced by <a class="el" href="csstring_8h-source.html#l00599">csStringBase::CompareNoCase()</a>, <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper::ReportV()</a>, and <a class="el" href="csstring_8h-source.html#l00626">csStringBase::StartsWith()</a>.    </td>
+Referenced by <a class="el" href="csstring_8h-source.html#l00602">csStringBase::CompareNoCase()</a>, <a class="el" href="reporter_8h-source.html#l00337">csReporterHelper::ReportV()</a>, and <a class="el" href="csstring_8h-source.html#l00629">csStringBase::StartsWith()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga95" doxytag="util.h::csStrNew"></a><p>
@@ -5619,7 +5635,7 @@ Allocate a new char [] and copy the string into the newly allocated storage.
 <p>
 This is a handy method for copying strings, in fact it is the C++ analogue of the strdup() function from <a class="el" href="string_8h.html">string.h</a> (strdup() is not present on some platforms). To free the pointer the caller should call delete[]. 
 <p>
-Referenced by <a class="el" href="syspath_8h-source.html#l00199">csPluginPaths::AddOnce()</a>, <a class="el" href="util_8h-source.html#l00095">csWtoC::csWtoC()</a>, <a class="el" href="csstring_8h-source.html#l01023">csStringFast&lt; LEN &gt;::Detach()</a>, <a class="el" href="imagebase_8h-source.html#l00056">csImageBase::SetName()</a>, and <a class="el" href="config_8h-source.html#l00086">csVariant::SetString()</a>.    </td>
+Referenced by <a class="el" href="syspath_8h-source.html#l00199">csPluginPaths::AddOnce()</a>, <a class="el" href="util_8h-source.html#l00095">csWtoC::csWtoC()</a>, <a class="el" href="csstring_8h-source.html#l01026">csStringFast&lt; LEN &gt;::Detach()</a>, <a class="el" href="imagebase_8h-source.html#l00056">csImageBase::SetName()</a>, and <a class="el" href="config_8h-source.html#l00086">csVariant::SetString()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga97" doxytag="util.h::csStrNewW"></a><p>
@@ -5769,11 +5785,12 @@ The function returns false on error.     </td>
 Helper function to use a reporter easily. 
 <p>
 This function will also work if no reporter is present and use stdout in that case. <dl compact><dt><b>Remarks:</b></dt><dd>You can use the <a class="el" href="group__util.html#ga164">csReport</a> macro for even more convenience. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
 
 <p>
-Definition at line <a class="el" href="reporter_8h-source.html#l00367">367</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
+Definition at line <a class="el" href="reporter_8h-source.html#l00376">376</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
-References <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper::ReportV()</a>.    </td>
+References <a class="el" href="reporter_8h-source.html#l00337">csReporterHelper::ReportV()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga172" doxytag="iReporter::ReportBug"></a><p>
@@ -5818,9 +5835,10 @@ References <a class="el" href="reporter_8h-source.html#l00328">csReporterHelper:
 <p>
 Report bug. 
 <p>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
 
 <p>
-Definition at line <a class="el" href="reporter_8h-source.html#l00282">282</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
+Definition at line <a class="el" href="reporter_8h-source.html#l00289">289</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
 References <a class="el" href="reporter_8h-source.html#l00044">CS_REPORTER_SEVERITY_BUG</a>, and <a class="el" href="structiReporter.html#a1">iReporter::ReportV()</a>.    </td>
   </tr>
@@ -5867,9 +5885,10 @@ References <a class="el" href="reporter_8h-source.html#l00044">CS_REPORTER_SEVER
 <p>
 Report debug. 
 <p>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
 
 <p>
-Definition at line <a class="el" href="reporter_8h-source.html#l00291">291</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
+Definition at line <a class="el" href="reporter_8h-source.html#l00298">298</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
 References <a class="el" href="reporter_8h-source.html#l00070">CS_REPORTER_SEVERITY_DEBUG</a>, and <a class="el" href="structiReporter.html#a1">iReporter::ReportV()</a>.    </td>
   </tr>
@@ -5916,9 +5935,10 @@ References <a class="el" href="reporter_8h-source.html#l00070">CS_REPORTER_SEVER
 <p>
 Report error. 
 <p>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
 
 <p>
-Definition at line <a class="el" href="reporter_8h-source.html#l00255">255</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
+Definition at line <a class="el" href="reporter_8h-source.html#l00262">262</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
 References <a class="el" href="reporter_8h-source.html#l00051">CS_REPORTER_SEVERITY_ERROR</a>, and <a class="el" href="structiReporter.html#a1">iReporter::ReportV()</a>.    </td>
   </tr>
@@ -5965,9 +5985,10 @@ References <a class="el" href="reporter_8h-source.html#l00051">CS_REPORTER_SEVER
 <p>
 Report notification. 
 <p>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
 
 <p>
-Definition at line <a class="el" href="reporter_8h-source.html#l00273">273</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
+Definition at line <a class="el" href="reporter_8h-source.html#l00280">280</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
 References <a class="el" href="reporter_8h-source.html#l00063">CS_REPORTER_SEVERITY_NOTIFY</a>, and <a class="el" href="structiReporter.html#a1">iReporter::ReportV()</a>.    </td>
   </tr>
@@ -6027,13 +6048,14 @@ References <a class="el" href="reporter_8h-source.html#l00063">CS_REPORTER_SEVER
 Helper function to use a reporter easily. 
 <p>
 This function will also work if no reporter is present and use stdout in that case. <dl compact><dt><b>Remarks:</b></dt><dd>You can use the <a class="el" href="group__util.html#ga165">csReportV</a> macro for even more convenience. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
 
 <p>
-Definition at line <a class="el" href="reporter_8h-source.html#l00328">328</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
+Definition at line <a class="el" href="reporter_8h-source.html#l00337">337</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
 References <a class="el" href="ansicolor_8h-source.html#l00058">CS_ANSI_BK</a>, <a class="el" href="ansicolor_8h-source.html#l00051">CS_ANSI_FI</a>, <a class="el" href="ansicolor_8h-source.html#l00043">CS_ANSI_FM</a>, <a class="el" href="ansicolor_8h-source.html#l00035">CS_ANSI_FR</a>, <a class="el" href="ansicolor_8h-source.html#l00047">CS_ANSI_FW</a>, <a class="el" href="ansicolor_8h-source.html#l00039">CS_ANSI_FY</a>, <a class="el" href="ansicolor_8h-source.html#l00028">CS_ANSI_RST</a>, <a class="el" href="reporter_8h-source.html#l00044">CS_REPORTER_SEVERITY_BUG</a>, <a class="el" href="reporter_8h-source.html#l00070">CS_REPORTER_SEVERITY_DEBUG</a>, <a class="el" href="reporter_8h-source.html#l00051">CS_REPORTER_SEVERITY_ERROR</a>, <a class="el" href="reporter_8h-source.html#l00063">CS_REPORTER_SEVERITY_NOTIFY</a>, <a class="el" href="reporter_8h-source.html#l00057">CS_REPORTER_SEVERITY_WARNING</a>, <a class="el" href="group__util.html#ga75">csPrintf()</a>, <a class="el" href="group__util.html#ga76">csPrintfV()</a>, and <a class="el" href="group__util.html#ga99">csStrNCaseCmp()</a>.
 <p>
-Referenced by <a class="el" href="reporter_8h-source.html#l00367">csReporterHelper::Report()</a>.    </td>
+Referenced by <a class="el" href="reporter_8h-source.html#l00376">csReporterHelper::Report()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ga170" doxytag="iReporter::ReportWarning"></a><p>
@@ -6078,9 +6100,10 @@ Referenced by <a class="el" href="reporter_8h-source.html#l00367">csReporterHelp
 <p>
 Report warning. 
 <p>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__util.html">Notes about string formatting in CrystalSpace</a> </dd></dl>
 
 <p>
-Definition at line <a class="el" href="reporter_8h-source.html#l00264">264</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
+Definition at line <a class="el" href="reporter_8h-source.html#l00271">271</a> of file <a class="el" href="reporter_8h-source.html">reporter.h</a>.
 <p>
 References <a class="el" href="reporter_8h-source.html#l00057">CS_REPORTER_SEVERITY_WARNING</a>, and <a class="el" href="structiReporter.html#a1">iReporter::ReportV()</a>.    </td>
   </tr>
