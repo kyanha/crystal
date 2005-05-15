@@ -794,6 +794,10 @@ SOURCE=..\..\libs\csutil\strset.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\syspath.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\threadjobqueue.cpp
 # End Source File
 # Begin Source File
