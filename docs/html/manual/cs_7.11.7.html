@@ -60,72 +60,89 @@ ul.toc {list-style: none}
 </tr></table>
 <h3 class="subsection"> 7.11.7 Using QT Designer To Create <small>AWS</small> Definition Files </h3>
 
-<p>On many platforms Trolltechs Designer is available, a tool that lets you create graphical user interfaces like
-Dialogs, Forms etc. It saves the interface description in an easy to read format (XML -  even though i was not 
-able to locate a formal document type description (DTD) for it, it's format is pretty obvious).
+<p>On many platforms TrollTech's Designer is available: a tool that lets you
+create graphical user interfaces like dialogs, forms, etc. It saves the
+interface description in an easy to read format (<small>XML</small>--even though i was
+not able to locate a formal document type description (<small>DTD</small>) for it, it's
+format is pretty obvious).
 </p>
-<p>You should be aware that not all features the Designer is capable of can be translated into <small>AWS</small> simply because
-they are not available in <small>AWS</small>. The same is true for features available in <small>AWS</small> but not in Designer.
+<p>You should be aware that not all features the Designer is capable of can be
+translated into <small>AWS</small>, simply because they are not available in
+<small>AWS</small>. The same is true for features available in <small>AWS</small> but not in
+Designer.
 </p>
 <a name="SEC777"></a>
-<h4 class="subsubheading"> What you need </h4>
+<h4 class="subsubheading"> What You Need </h4>
 
-<p>Since Designer saves its interface description in XML writing an extensible stylesheet to transform it into <small>AWS</small> format
-was an obvious choice. So you will need a XSLT stylesheet processor. You can either choose a commercial product or
-the excellent Xalan which is part of the Apache project. You can get it for free here:
-<a href="http://xml.apache.org">http://xml.apache.org</a>
-For development i used the Xalan Java 2 version at: <a href="http://xml.apache.org/xalan-j/index.html">http://xml.apache.org/xalan-j/index.html</a>
+<p>Since Designer saves its interface description in <small>XML</small> writing an
+extensible stylesheet to transform it into <small>AWS</small> format was an obvious
+choice. So you will need a <small>XSLT</small> stylesheet processor. You can either
+choose a commercial product or the excellent Xalan which is part of the Apache
+project. You can get it for free here:
+</p>
+
+<p><a href="http://xml.apache.org">http://xml.apache.org</a>
+</p>
+
+<p>For development, I used the Xalan Java 2 version at:
+</p>
+
+<p><a href="http://xml.apache.org/xalan-j/index.html">http://xml.apache.org/xalan-j/index.html</a>
 </p>
 <a name="SEC778"></a>
-<h4 class="subsubheading"> How to use it </h4>
+<h4 class="subsubheading"> How To Use It </h4>
 
-<p>Design your dialog or widget in Designer and save it somewhere.
-To process the stylesheet with the java version of Xalan you call:
-</p><table><tr><td>&nbsp;</td><td><pre class="example">java org.apache.xalan.xslt.Process \
+<p>Design your dialog or widget in Designer and save it somewhere.  To process the
+stylesheet with the Java version of Xalan you invoke:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">java org.apache.xalan.xslt.Process \
     -IN path/to/the/saved/designer/file.ui \
     -XSL path/to/CS/scripts/aws/qt2aws.xsl
 </pre></td></tr></table>
-<p>If you use Designer 1.1 (that comes with <small>QT2</small>) you use qt2aws.xsl. The new Designer version 2.0 (which comes with QT3) changed it's .ui DTD slightly. In case you use Designer2.0 use qt3aws.xsl.
+<p>If you use Designer 1.1 (that comes with <small>QT2</small>), use the style sheet
+<tt>`qt2aws.xsl'</tt>. The new Designer version 2.0 (which comes with <small>QT3</small>)
+changed its <samp>`.ui'</samp> <small>DTD</small> slightly. In case you use Designer2.0 specify
+<tt>`qt3aws.xsl'</tt>.
 </p>
 <p>Append the output to a file containing skin definitions.
 </p>
 <a name="SEC779"></a>
-<h4 class="subsubheading"> What controls are converted ? </h4>
+<h4 class="subsubheading"> What Controls Are Converted? </h4>
 
 <table>
 <tr><td><p> <strong>QT Class</strong> </p></td><td> </td><td><p> <strong>AWS Class</strong>
 </p></td></tr>
-<tr><td><p> QPushButton </p></td><td><p> ==&gt; </p></td><td><p> Command Button
+<tr><td><p> QPushButton </p></td><td><p> =&gt; </p></td><td><p> Command Button
 </p></td></tr>
-<tr><td><p> QRadioButton </p></td><td><p> ==&gt; </p></td><td><p> Radio Button
+<tr><td><p> QRadioButton </p></td><td><p> =&gt; </p></td><td><p> Radio Button
 </p></td></tr>
-<tr><td><p> QSlider </p></td><td><p> ==&gt; </p></td><td><p> Scroll Bar
+<tr><td><p> QSlider </p></td><td><p> =&gt; </p></td><td><p> Scroll Bar
 </p></td></tr>
-<tr><td><p> QButtonGroup </p></td><td><p> ==&gt; </p></td><td><p> Group Frame
+<tr><td><p> QButtonGroup </p></td><td><p> =&gt; </p></td><td><p> Group Frame
 </p></td></tr>
-<tr><td><p> QGroupBox </p></td><td><p> ==&gt; </p></td><td><p> Group Frame
+<tr><td><p> QGroupBox </p></td><td><p> =&gt; </p></td><td><p> Group Frame
 </p></td></tr>
-<tr><td><p> QFrame </p></td><td><p> ==&gt; </p></td><td><p> Group Frame
+<tr><td><p> QFrame </p></td><td><p> =&gt; </p></td><td><p> Group Frame
 </p></td></tr>
-<tr><td><p> QCheckBox </p></td><td><p> ==&gt; </p></td><td><p> Check Box
+<tr><td><p> QCheckBox </p></td><td><p> =&gt; </p></td><td><p> Check Box
 </p></td></tr>
-<tr><td><p> QLineEdit </p></td><td><p> ==&gt; </p></td><td><p> Text Box
+<tr><td><p> QLineEdit </p></td><td><p> =&gt; </p></td><td><p> Text Box
 </p></td></tr>
-<tr><td><p> QTextView </p></td><td><p> ==&gt; </p></td><td><p> Multiline Edit
+<tr><td><p> QTextView </p></td><td><p> =&gt; </p></td><td><p> Multiline Edit
 </p></td></tr>
-<tr><td><p> QLabel </p></td><td><p> ==&gt; </p></td><td><p> Label
+<tr><td><p> QLabel </p></td><td><p> =&gt; </p></td><td><p> Label
 </p></td></tr>
-<tr><td><p> QLabel with Pixmap </p></td><td><p> ==&gt; </p></td><td><p> Image View
+<tr><td><p> QLabel with Pixmap </p></td><td><p> =&gt; </p></td><td><p> Image View
 </p></td></tr>
-<tr><td><p> QListBox </p></td><td><p> ==&gt; </p></td><td><p> List Box
+<tr><td><p> QListBox </p></td><td><p> =&gt; </p></td><td><p> List Box
 </p></td></tr>
-<tr><td><p> QListView </p></td><td><p> ==&gt; </p></td><td><p> List Box
+<tr><td><p> QListView </p></td><td><p> =&gt; </p></td><td><p> List Box
 </p></td></tr>
-<tr><td><p> QDialog </p></td><td><p> ==&gt; </p></td><td><p> Window
+<tr><td><p> QDialog </p></td><td><p> =&gt; </p></td><td><p> Window
 </p></td></tr>
-<tr><td><p> QWidget </p></td><td><p> ==&gt; </p></td><td><p> Window
+<tr><td><p> QWidget </p></td><td><p> =&gt; </p></td><td><p> Window
 </p></td></tr>
-<tr><td><p> QTabWidget </p></td><td><p> ==&gt; </p></td><td><p> Notebook
+<tr><td><p> QTabWidget </p></td><td><p> =&gt; </p></td><td><p> Notebook
 </p></td></tr>
 </table>
 
@@ -133,20 +150,26 @@ To process the stylesheet with the java version of Xalan you call:
 <h3 class="subheading"> Special Notes </h3>
 
 <a name="SEC781"></a>
-<h4 class="subsubheading"> <small>AWS</small> Signals and special properties </h4>
+<h4 class="subsubheading"> <small>AWS</small> Signals and Special Properties </h4>
 
-<p>You can place special information in the controls <strong>whatsThis</strong> property. The content will be broken into tokens
-separated by the pipe (<small>&QUOT;|&QUOT;</small>). A token consist of a token identifier, the colon <small>:</small> and token text.
-The following tokens are recognized:
+<p>You can place special information in the control's <samp>`whatsThis'</samp>
+property. The content will be broken into tokens separated by the pipe
+(<samp>`|'</samp>) character or vertical bar. A token consist of a token identifier, a
+colon <samp>`:'</samp> and token text.  The following tokens are recognized:
 </p>
-<ul class="toc">
-<li> connect token
-<ul class="toc">
-<li> token identifier: c
-</li><li> token text: a list of comma separated items
-</li><li> example:
+<ul>
+<li>
+connect token
+<ul>
+<li>
+token identifier: c
+</li><li>
+token text: a list of comma separated items
+</li><li>
+example:
 <table><tr><td>&nbsp;</td><td><pre class="example">c:signalClicked,mySink::OnClick,signalBreak,mySink::ByeBye
 </pre></td></tr></table>
+
 <p>This will be translated into
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">connect 
@@ -156,13 +179,18 @@ The following tokens are recognized:
 }
 </pre></td></tr></table></li></ul>
 
-</li><li> literal token
+</li><li>
+literal token
 <ul class="toc">
-<li> token identifier: l
-</li><li> token text: some text
-</li><li> example:
+<li>
+token identifier: l
+</li><li>
+token text: some text
+</li><li>
+example:
 <table><tr><td>&nbsp;</td><td><pre class="example">l:LeftEye: &quot;Blue&quot;
 </pre></td></tr></table>
+
 <p>This will be translated into
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">LeftEye: &quot;Blue&quot;
@@ -170,33 +198,41 @@ The following tokens are recognized:
 </li></ul>
 
 <p>Both examples from above would be concatenated and placed in the
-<strong>whatsThis</strong> property and would look like this:
+<samp>`whatsThis'</samp> property, and would look like this:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">c:signalClicked,mySink::OnClick,signalBreak,
     mySink::ByeBye|l:LeftEye: &quot;Blue&quot;
 </pre></td></tr></table>
 <a name="SEC782"></a>
-<h4 class="subsubheading"> How to handle your own <small>AWS</small> controls </h4>
+<h4 class="subsubheading"> How to Handle Your Own <small>AWS</small> Controls </h4>
 
-<p>If you coded your own <small>AWS</small> control you can still use <small>QT</small> to layout the control (at least the common parameters 
-like size and position). For this to work simply choose one of the supported controls and use it as a placeholder.
-Additionally you use the  token identifier 't' in the <strong>whatsThis</strong> property of that control to name of your control class.
+<p>If you coded your own <small>AWS</small> control you can still use <small>QT</small> to layout the
+control (at least the common parameters like size and position). For this to
+work simply choose one of the supported controls and use it as a placeholder.
+Additionally you use the token identifier <samp>`t'</samp> in the <samp>`whatsThis'</samp>
+property of that control to name your control class.
 </p>
-<p>Example:
-</p>
-<p>I have created my own push button control. The name of the control class is awsMyFancyPushButtonControl. Since it uses
-all the properties of the standard <small>AWS</small> command button i cleverly use the QPushButton as my placeholder and set all
-the properties i need and QPushButton already offers like size, position, button text and others. Additionally i set the
-t token identifier in property <strong>whatsThis</strong> to awsMyFancyPushButtonControl.
+<p>As an example, I have created my own push button control. The name of the
+control class is <samp>`awsMyFancyPushButtonControl'</samp>. Since it uses all the
+properties of the standard <small>AWS</small> command button, I cleverly use
+<samp>`QPushButton'</samp> as my placeholder and set all the properties I need and
+which <samp>`QPushButton'</samp> already offers, such size, position, button text and
+others. Additionally I set the <samp>`t'</samp> token identifier in property
+<samp>`whatsThis'</samp> to <samp>`awsMyFancyPushButtonControl'</samp>.
 </p>
 <ul class="toc">
-<li> class type token
+<li>
+class type token
 <ul class="toc">
-<li> token identifier: t
-</li><li> token text: the name of your class
-</li><li> example:
+<li>
+token identifier: t
+</li><li>
+token text: the name of your class
+</li><li>
+example:
 <table><tr><td>&nbsp;</td><td><pre class="example">t:awsMyFancyPushButtonControl
 </pre></td></tr></table>
+
 <p>This will be translated into
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">component &quot;hitmehard&quot; is &quot;awsMyFancyPushButtonControl&quot;
