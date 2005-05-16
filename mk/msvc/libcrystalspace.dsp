@@ -386,6 +386,10 @@ SOURCE=..\..\libs\csplugincommon\imageloader\commonimagefile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csplugincommon\imageloader\optionsparser.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csplugincommon\particlesys\partgen.cpp
 # End Source File
 # Begin Source File
@@ -1243,6 +1247,10 @@ SOURCE=..\..\libs\..\include\csplugincommon\canvas\softfontcacheimpl.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csplugincommon\imageloader\commonimagefile.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csplugincommon\imageloader\optionsparser.h
 # End Source File
 # Begin Source File
 
