@@ -54,232 +54,235 @@
 <a name="l00049"></a><a class="code" href="classcsTransform.html#p1">00049</a>   <a class="code" href="classcsVector3.html">csVector3</a> v_o2t;
 00050 
 00051 <span class="keyword">public</span>:
-<a name="l00055"></a><a class="code" href="classcsTransform.html#a0">00055</a>   <a class="code" href="classcsTransform.html">csTransform</a> () : m_o2t (), v_o2t (0, 0, 0) {}
-00056 
-<a name="l00064"></a><a class="code" href="classcsTransform.html#a1">00064</a>   <a class="code" href="classcsTransform.html">csTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; other2this, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; origin_pos) :
-00065         m_o2t (other2this), v_o2t (origin_pos) {}
-00066 
-<a name="l00070"></a><a class="code" href="classcsTransform.html#a2">00070</a>   <span class="keywordtype">void</span> Identity ()
-00071   {
-00072     SetO2TTranslation (<a class="code" href="classcsVector3.html">csVector3</a> (0));
-00073     SetO2T (<a class="code" href="classcsMatrix3.html">csMatrix3</a> ());
-00074   }
-00075 
-<a name="l00080"></a><a class="code" href="classcsTransform.html#a3">00080</a>   <span class="keywordtype">bool</span> IsIdentity ()<span class="keyword"> const</span>
-00081 <span class="keyword">  </span>{
-00082     <span class="keywordflow">if</span> (ABS (v_o2t.x) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00083     <span class="keywordflow">if</span> (ABS (v_o2t.y) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00084     <span class="keywordflow">if</span> (ABS (v_o2t.z) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00085     <span class="keywordflow">if</span> (ABS (m_o2t.m11-1) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00086     <span class="keywordflow">if</span> (ABS (m_o2t.m12) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00087     <span class="keywordflow">if</span> (ABS (m_o2t.m13) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00088     <span class="keywordflow">if</span> (ABS (m_o2t.m21) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00089     <span class="keywordflow">if</span> (ABS (m_o2t.m22-1) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00090     <span class="keywordflow">if</span> (ABS (m_o2t.m23) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00091     <span class="keywordflow">if</span> (ABS (m_o2t.m31) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00092     <span class="keywordflow">if</span> (ABS (m_o2t.m32) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00093     <span class="keywordflow">if</span> (ABS (m_o2t.m33-1) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00094     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00095   }
-00096 
-<a name="l00101"></a><a class="code" href="classcsTransform.html#a4">00101</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; GetO2T ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_o2t; }
-00102 
-<a name="l00108"></a><a class="code" href="classcsTransform.html#a5">00108</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetO2TTranslation ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> v_o2t; }
-00109 
-<a name="l00114"></a><a class="code" href="classcsTransform.html#a6">00114</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetOrigin ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> v_o2t; }
-00115 
-<a name="l00120"></a><a class="code" href="classcsTransform.html#a7">00120</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetO2T (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m) { m_o2t = m; }
-00121 
-<a name="l00127"></a><a class="code" href="classcsTransform.html#a8">00127</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetO2TTranslation (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) { v_o2t = v; }
-00128 
-<a name="l00133"></a><a class="code" href="classcsTransform.html#a9">00133</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetOrigin (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) { SetO2TTranslation (v); }
-00134 
-<a name="l00140"></a><a class="code" href="classcsTransform.html#a10">00140</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Translate (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) { SetO2TTranslation (v_o2t + v); }
-00141 
-<a name="l00147"></a><a class="code" href="classcsTransform.html#a11">00147</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a> Other2This (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
-00148 <span class="keyword">  </span>{
-00149     <span class="keywordflow">return</span> m_o2t * (v - v_o2t);
-00150   }
-00151 
-<a name="l00157"></a><a class="code" href="classcsTransform.html#a12">00157</a>   <a class="code" href="classcsVector3.html">csVector3</a> Other2ThisRelative (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
-00158 <span class="keyword">  </span>{ <span class="keywordflow">return</span> m_o2t * v; }
-00159 
-00165   <a class="code" href="classcsPlane3.html">csPlane3</a> Other2This (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p) <span class="keyword">const</span>;
-00166 
-00173   <a class="code" href="classcsPlane3.html">csPlane3</a> Other2ThisRelative (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p) <span class="keyword">const</span>;
-00174 
-00182   <span class="keywordtype">void</span> Other2This (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point,
-00183         <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; result) <span class="keyword">const</span>;
-00184 
-00188   <a class="code" href="classcsSphere.html">csSphere</a> Other2This (<span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; s) <span class="keyword">const</span>;
-00189 
-00194   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, 
-00195     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
-00196 
-00201   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t, 
-00202     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v);
-00203 
-00208   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a>&amp; operator*= (<a class="code" href="classcsVector3.html">csVector3</a>&amp; v, 
-00209     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
-00210 
-00215   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, 
-00216     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
-00217 
-00222   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t, 
-00223     <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p);
-00224 
-00229   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; operator*= (<a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, 
-00230     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
-00231 
-00236   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSphere.html">csSphere</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; p, 
-00237     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
-00238 
-00243   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSphere.html">csSphere</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t, 
-00244     <span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; p);
-00245 
-00250   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSphere.html">csSphere</a>&amp; operator*= (<a class="code" href="classcsSphere.html">csSphere</a>&amp; p, 
-00251     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
-00252 
-00257   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMatrix3.html">csMatrix3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m, 
-00258     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
-00259 
-00264   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMatrix3.html">csMatrix3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t, 
-00265     <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m);
-00266 
-00271   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; operator*= (<a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m, 
-00272     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
-00273 
-00285   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsTransform.html">csTransform</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t1,
-00286                               <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t2);
-00287 
-00293   <span class="keyword">static</span> <a class="code" href="classcsTransform.html">csTransform</a> GetReflect (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl);
-00294 };
-00295 
-<a name="l00303"></a><a class="code" href="classcsReversibleTransform.html">00303</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csReversibleTransform : <span class="keyword">public</span> <a class="code" href="classcsTransform.html">csTransform</a>
-00304 {
-00305 <span class="keyword">protected</span>:
-<a name="l00307"></a><a class="code" href="classcsReversibleTransform.html#p0">00307</a>   <a class="code" href="classcsMatrix3.html">csMatrix3</a> m_t2o;
-00308 
-<a name="l00312"></a><a class="code" href="classcsReversibleTransform.html#b0">00312</a>   csReversibleTransform (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; o2t, <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; t2o,
-00313     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) : <a class="code" href="classcsTransform.html">csTransform</a> (o2t,pos), m_t2o (t2o) {}
-00314 
-00315 <span class="keyword">public</span>:
-<a name="l00319"></a><a class="code" href="classcsReversibleTransform.html#a0">00319</a>   csReversibleTransform () : <a class="code" href="classcsTransform.html">csTransform</a> (), m_t2o () {}
-00320 
-<a name="l00328"></a><a class="code" href="classcsReversibleTransform.html#a1">00328</a>   csReversibleTransform (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; o2t, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) :
-00329     <a class="code" href="classcsTransform.html">csTransform</a> (o2t,pos) { m_t2o = m_o2t.GetInverse (); }
-00330 
-<a name="l00334"></a><a class="code" href="classcsReversibleTransform.html#a2">00334</a>   csReversibleTransform (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t) :
-00335     <a class="code" href="classcsTransform.html">csTransform</a> (t) { m_t2o = m_o2t.GetInverse (); }
-00336 
-<a name="l00340"></a><a class="code" href="classcsReversibleTransform.html#a3">00340</a>   csReversibleTransform (<span class="keyword">const</span> csReversibleTransform&amp; t) :
-00341     <a class="code" href="classcsTransform.html">csTransform</a> (t) { m_t2o = t.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>; }
-00342 
-<a name="l00347"></a><a class="code" href="classcsReversibleTransform.html#a4">00347</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; GetT2O ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_t2o; }
-00348 
-<a name="l00353"></a><a class="code" href="classcsReversibleTransform.html#a5">00353</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a> GetT2OTranslation ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> -m_o2t*v_o2t; }
-00354 
-<a name="l00358"></a><a class="code" href="classcsReversibleTransform.html#a6">00358</a>   csReversibleTransform GetInverse ()<span class="keyword"> const</span>
-00359 <span class="keyword">  </span>{ <span class="keywordflow">return</span> csReversibleTransform (m_t2o, m_o2t, -m_o2t*v_o2t); }
-00360 
-<a name="l00365"></a><a class="code" href="classcsReversibleTransform.html#a7">00365</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsTransform.html#a7">SetO2T</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
-00366   { m_o2t = m;  m_t2o = m_o2t.<a class="code" href="classcsMatrix3.html#a24">GetInverse</a> (); }
-00367 
-<a name="l00373"></a><a class="code" href="classcsReversibleTransform.html#a8">00373</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetT2O (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
-00374   { m_t2o = m;  m_o2t = m_t2o.<a class="code" href="classcsMatrix3.html#a24">GetInverse</a> (); }
-00375 
-<a name="l00381"></a><a class="code" href="classcsReversibleTransform.html#a9">00381</a>   <a class="code" href="classcsVector3.html">csVector3</a> This2Other (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
-00382 <span class="keyword">  </span>{ <span class="keywordflow">return</span> v_o2t + m_t2o * v; }
-00383 
-<a name="l00389"></a><a class="code" href="classcsReversibleTransform.html#a10">00389</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a> This2OtherRelative (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
-00390 <span class="keyword">  </span>{ <span class="keywordflow">return</span> m_t2o * v; }
-00391 
-00398   <a class="code" href="classcsPlane3.html">csPlane3</a> This2Other (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p) <span class="keyword">const</span>;
-00399 
-00406   <a class="code" href="classcsPlane3.html">csPlane3</a> This2OtherRelative (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p) <span class="keyword">const</span>;
-00407 
-00416   <span class="keywordtype">void</span> This2Other (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point,
-00417         <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; result) <span class="keyword">const</span>;
-00418 
-00422   <a class="code" href="classcsSphere.html">csSphere</a> This2Other (<span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; s) <span class="keyword">const</span>;
-00423 
-00429   <span class="keywordtype">void</span> RotateOther (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keywordtype">float</span> angle);
-00430 
-00436   <span class="keywordtype">void</span> RotateThis (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keywordtype">float</span> angle);
-00437 
-<a name="l00445"></a><a class="code" href="classcsReversibleTransform.html#a17">00445</a>   <span class="keywordtype">void</span> RotateOther (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m) { SetT2O (m * m_t2o); }
-00446 
-<a name="l00454"></a><a class="code" href="classcsReversibleTransform.html#a18">00454</a>   <span class="keywordtype">void</span> RotateThis (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m) { SetT2O (m_t2o * m); }
-00455 
-00464   <span class="keywordtype">void</span> LookAt (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; up);
-00465 
-00470   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a> operator/ (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v,
-00471         <span class="keyword">const</span> csReversibleTransform&amp; t);
-00472 
-00477   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a>&amp; operator/= (<a class="code" href="classcsVector3.html">csVector3</a>&amp; v, 
-00478     <span class="keyword">const</span> csReversibleTransform&amp; t);
-00479 
-00484   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a> operator/ (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, 
-00485     <span class="keyword">const</span> csReversibleTransform&amp; t);
-00486 
-00491   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; operator/= (<a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, 
-00492     <span class="keyword">const</span> csReversibleTransform&amp; t);
-00493 
-00498   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSphere.html">csSphere</a> operator/ (<span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; p, 
-00499     <span class="keyword">const</span> csReversibleTransform&amp; t);
-00500 
-<a name="l00513"></a><a class="code" href="classcsReversibleTransform.html#n5">00513</a>   <span class="keyword">friend</span> csReversibleTransform&amp; <a class="code" href="classcsTransform.html#n2">operator*= </a>(csReversibleTransform&amp; t1,
-00514                                           <span class="keyword">const</span> csReversibleTransform&amp; t2)
-00515   {
-00516     t1.<a class="code" href="classcsTransform.html#p1">v_o2t</a> = t2.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>*t1.<a class="code" href="classcsTransform.html#p1">v_o2t</a>;
-00517     t1.<a class="code" href="classcsTransform.html#p1">v_o2t</a> += t2.<a class="code" href="classcsTransform.html#p1">v_o2t</a>;
-00518     t1.<a class="code" href="classcsTransform.html#p0">m_o2t</a> *= t2.<a class="code" href="classcsTransform.html#p0">m_o2t</a>;
-00519     t1.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a> *= t1.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>;
-00520     <span class="keywordflow">return</span> t1;
-00521   }
-00522 
-<a name="l00535"></a><a class="code" href="classcsReversibleTransform.html#n6">00535</a>   <span class="keyword">friend</span> csReversibleTransform <a class="code" href="classcsTransform.html#n0">operator* </a>(<span class="keyword">const</span> csReversibleTransform&amp; t1,
-00536                                         <span class="keyword">const</span> csReversibleTransform&amp; t2)
-00537   {
-00538     <span class="keywordflow">return</span> csReversibleTransform (t1.<a class="code" href="classcsTransform.html#p0">m_o2t</a>*t2.<a class="code" href="classcsTransform.html#p0">m_o2t</a>, t2.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>*t1.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>,
-00539                              t2.<a class="code" href="classcsTransform.html#p1">v_o2t</a> + t2.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>*t1.<a class="code" href="classcsTransform.html#p1">v_o2t</a>);
-00540   }
-00541 
-00542 <span class="preprocessor">#if !defined(SWIG) </span><span class="comment">/* Otherwise Swig 1.3.22 thinks this is multiply declared */</span>
-00543 
-00555   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsTransform.html">csTransform</a> <a class="code" href="classcsTransform.html#n0">operator* </a>(<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t1,
-00556                               <span class="keyword">const</span> csReversibleTransform&amp; t2);
-00557 <span class="preprocessor">#endif</span>
-00558 <span class="preprocessor"></span>
-00571   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT csReversibleTransform&amp; operator/= (
-00572     csReversibleTransform&amp; t1, <span class="keyword">const</span> csReversibleTransform&amp; t2);
-00573 
-00586   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT csReversibleTransform operator/ (
-00587     <span class="keyword">const</span> csReversibleTransform&amp; t1, <span class="keyword">const</span> csReversibleTransform&amp; t2);
-00588 };
-00589 
-<a name="l00596"></a><a class="code" href="classcsOrthoTransform.html">00596</a> <span class="keyword">class </span><a class="code" href="classcsOrthoTransform.html">csOrthoTransform</a> : <span class="keyword">public</span> csReversibleTransform
-00597 {
-00598 <span class="keyword">public</span>:
-<a name="l00602"></a><a class="code" href="classcsOrthoTransform.html#a0">00602</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> () : csReversibleTransform () {}
-00603 
-<a name="l00607"></a><a class="code" href="classcsOrthoTransform.html#a1">00607</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; o2t, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) :
-00608     csReversibleTransform (o2t, o2t.GetTranspose (), pos) { }
-00609 
-<a name="l00613"></a><a class="code" href="classcsOrthoTransform.html#a2">00613</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t) :
-00614     csReversibleTransform (t.<a class="code" href="classcsTransform.html#a4">GetO2T</a> (), t.<a class="code" href="classcsTransform.html#a4">GetO2T</a> ().GetTranspose (),
-00615         t.<a class="code" href="classcsTransform.html#a5">GetO2TTranslation</a> ())
-00616   { }
-00617 
-<a name="l00622"></a><a class="code" href="classcsOrthoTransform.html#a3">00622</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsOrthoTransform.html#a3">SetO2T</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
-00623   { <a class="code" href="classcsTransform.html#p0">m_o2t</a> = m;  <a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a> = <a class="code" href="classcsTransform.html#p0">m_o2t</a>.<a class="code" href="classcsMatrix3.html#a23">GetTranspose</a> (); }
-00624 
-<a name="l00630"></a><a class="code" href="classcsOrthoTransform.html#a4">00630</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsOrthoTransform.html#a4">SetT2O</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
-00631   { <a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a> = m;  <a class="code" href="classcsTransform.html#p0">m_o2t</a> = <a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>.<a class="code" href="classcsMatrix3.html#a23">GetTranspose</a> (); }
-00632 };
-00633 
-00636 <span class="preprocessor">#endif // __CS_TRANSFORM_H__</span>
-00637 <span class="preprocessor"></span>
+00052   <span class="comment">// Needed for GCC4. Otherwise emits a flood of "virtual functions but</span>
+00053   <span class="comment">// non-virtual destructor" warnings.</span>
+00054   <span class="keyword">virtual</span> ~<a class="code" href="classcsTransform.html">csTransform</a>() {};
+<a name="l00058"></a><a class="code" href="classcsTransform.html#a1">00058</a>   <a class="code" href="classcsTransform.html">csTransform</a> () : m_o2t (), v_o2t (0, 0, 0) {}
+00059 
+<a name="l00067"></a><a class="code" href="classcsTransform.html#a2">00067</a>   <a class="code" href="classcsTransform.html">csTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; other2this, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; origin_pos) :
+00068         m_o2t (other2this), v_o2t (origin_pos) {}
+00069 
+<a name="l00073"></a><a class="code" href="classcsTransform.html#a3">00073</a>   <span class="keywordtype">void</span> Identity ()
+00074   {
+00075     SetO2TTranslation (<a class="code" href="classcsVector3.html">csVector3</a> (0));
+00076     SetO2T (<a class="code" href="classcsMatrix3.html">csMatrix3</a> ());
+00077   }
+00078 
+<a name="l00083"></a><a class="code" href="classcsTransform.html#a4">00083</a>   <span class="keywordtype">bool</span> IsIdentity ()<span class="keyword"> const</span>
+00084 <span class="keyword">  </span>{
+00085     <span class="keywordflow">if</span> (ABS (v_o2t.x) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00086     <span class="keywordflow">if</span> (ABS (v_o2t.y) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00087     <span class="keywordflow">if</span> (ABS (v_o2t.z) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00088     <span class="keywordflow">if</span> (ABS (m_o2t.m11-1) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00089     <span class="keywordflow">if</span> (ABS (m_o2t.m12) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00090     <span class="keywordflow">if</span> (ABS (m_o2t.m13) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00091     <span class="keywordflow">if</span> (ABS (m_o2t.m21) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00092     <span class="keywordflow">if</span> (ABS (m_o2t.m22-1) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00093     <span class="keywordflow">if</span> (ABS (m_o2t.m23) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00094     <span class="keywordflow">if</span> (ABS (m_o2t.m31) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00095     <span class="keywordflow">if</span> (ABS (m_o2t.m32) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00096     <span class="keywordflow">if</span> (ABS (m_o2t.m33-1) &gt;= SMALL_EPSILON) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00097     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00098   }
+00099 
+<a name="l00104"></a><a class="code" href="classcsTransform.html#a5">00104</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; GetO2T ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_o2t; }
+00105 
+<a name="l00111"></a><a class="code" href="classcsTransform.html#a6">00111</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetO2TTranslation ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> v_o2t; }
+00112 
+<a name="l00117"></a><a class="code" href="classcsTransform.html#a7">00117</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetOrigin ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> v_o2t; }
+00118 
+<a name="l00123"></a><a class="code" href="classcsTransform.html#a8">00123</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetO2T (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m) { m_o2t = m; }
+00124 
+<a name="l00130"></a><a class="code" href="classcsTransform.html#a9">00130</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetO2TTranslation (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) { v_o2t = v; }
+00131 
+<a name="l00136"></a><a class="code" href="classcsTransform.html#a10">00136</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetOrigin (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) { SetO2TTranslation (v); }
+00137 
+<a name="l00143"></a><a class="code" href="classcsTransform.html#a11">00143</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Translate (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) { SetO2TTranslation (v_o2t + v); }
+00144 
+<a name="l00150"></a><a class="code" href="classcsTransform.html#a12">00150</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a> Other2This (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
+00151 <span class="keyword">  </span>{
+00152     <span class="keywordflow">return</span> m_o2t * (v - v_o2t);
+00153   }
+00154 
+<a name="l00160"></a><a class="code" href="classcsTransform.html#a13">00160</a>   <a class="code" href="classcsVector3.html">csVector3</a> Other2ThisRelative (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
+00161 <span class="keyword">  </span>{ <span class="keywordflow">return</span> m_o2t * v; }
+00162 
+00168   <a class="code" href="classcsPlane3.html">csPlane3</a> Other2This (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p) <span class="keyword">const</span>;
+00169 
+00176   <a class="code" href="classcsPlane3.html">csPlane3</a> Other2ThisRelative (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p) <span class="keyword">const</span>;
+00177 
+00185   <span class="keywordtype">void</span> Other2This (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point,
+00186         <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; result) <span class="keyword">const</span>;
+00187 
+00191   <a class="code" href="classcsSphere.html">csSphere</a> Other2This (<span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; s) <span class="keyword">const</span>;
+00192 
+00197   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, 
+00198     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
+00199 
+00204   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t, 
+00205     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v);
+00206 
+00211   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a>&amp; operator*= (<a class="code" href="classcsVector3.html">csVector3</a>&amp; v, 
+00212     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
+00213 
+00218   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, 
+00219     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
+00220 
+00225   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t, 
+00226     <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p);
+00227 
+00232   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; operator*= (<a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, 
+00233     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
+00234 
+00239   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSphere.html">csSphere</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; p, 
+00240     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
+00241 
+00246   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSphere.html">csSphere</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t, 
+00247     <span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; p);
+00248 
+00253   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSphere.html">csSphere</a>&amp; operator*= (<a class="code" href="classcsSphere.html">csSphere</a>&amp; p, 
+00254     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
+00255 
+00260   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMatrix3.html">csMatrix3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m, 
+00261     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
+00262 
+00267   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMatrix3.html">csMatrix3</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t, 
+00268     <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m);
+00269 
+00274   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; operator*= (<a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m, 
+00275     <span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t);
+00276 
+00288   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsTransform.html">csTransform</a> operator* (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t1,
+00289                               <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t2);
+00290 
+00296   <span class="keyword">static</span> <a class="code" href="classcsTransform.html">csTransform</a> GetReflect (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl);
+00297 };
+00298 
+<a name="l00306"></a><a class="code" href="classcsReversibleTransform.html">00306</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csReversibleTransform : <span class="keyword">public</span> <a class="code" href="classcsTransform.html">csTransform</a>
+00307 {
+00308 <span class="keyword">protected</span>:
+<a name="l00310"></a><a class="code" href="classcsReversibleTransform.html#p0">00310</a>   <a class="code" href="classcsMatrix3.html">csMatrix3</a> m_t2o;
+00311 
+<a name="l00315"></a><a class="code" href="classcsReversibleTransform.html#b0">00315</a>   csReversibleTransform (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; o2t, <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; t2o,
+00316     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) : <a class="code" href="classcsTransform.html">csTransform</a> (o2t,pos), m_t2o (t2o) {}
+00317 
+00318 <span class="keyword">public</span>:
+<a name="l00322"></a><a class="code" href="classcsReversibleTransform.html#a0">00322</a>   csReversibleTransform () : <a class="code" href="classcsTransform.html">csTransform</a> (), m_t2o () {}
+00323 
+<a name="l00331"></a><a class="code" href="classcsReversibleTransform.html#a1">00331</a>   csReversibleTransform (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; o2t, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) :
+00332     <a class="code" href="classcsTransform.html">csTransform</a> (o2t,pos) { m_t2o = m_o2t.GetInverse (); }
+00333 
+<a name="l00337"></a><a class="code" href="classcsReversibleTransform.html#a2">00337</a>   csReversibleTransform (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t) :
+00338     <a class="code" href="classcsTransform.html">csTransform</a> (t) { m_t2o = m_o2t.GetInverse (); }
+00339 
+<a name="l00343"></a><a class="code" href="classcsReversibleTransform.html#a3">00343</a>   csReversibleTransform (<span class="keyword">const</span> csReversibleTransform&amp; t) :
+00344     <a class="code" href="classcsTransform.html">csTransform</a> (t) { m_t2o = t.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>; }
+00345 
+<a name="l00350"></a><a class="code" href="classcsReversibleTransform.html#a4">00350</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; GetT2O ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_t2o; }
+00351 
+<a name="l00356"></a><a class="code" href="classcsReversibleTransform.html#a5">00356</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a> GetT2OTranslation ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> -m_o2t*v_o2t; }
+00357 
+<a name="l00361"></a><a class="code" href="classcsReversibleTransform.html#a6">00361</a>   csReversibleTransform GetInverse ()<span class="keyword"> const</span>
+00362 <span class="keyword">  </span>{ <span class="keywordflow">return</span> csReversibleTransform (m_t2o, m_o2t, -m_o2t*v_o2t); }
+00363 
+<a name="l00368"></a><a class="code" href="classcsReversibleTransform.html#a7">00368</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsTransform.html#a8">SetO2T</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
+00369   { m_o2t = m;  m_t2o = m_o2t.<a class="code" href="classcsMatrix3.html#a24">GetInverse</a> (); }
+00370 
+<a name="l00376"></a><a class="code" href="classcsReversibleTransform.html#a8">00376</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetT2O (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
+00377   { m_t2o = m;  m_o2t = m_t2o.<a class="code" href="classcsMatrix3.html#a24">GetInverse</a> (); }
+00378 
+<a name="l00384"></a><a class="code" href="classcsReversibleTransform.html#a9">00384</a>   <a class="code" href="classcsVector3.html">csVector3</a> This2Other (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
+00385 <span class="keyword">  </span>{ <span class="keywordflow">return</span> v_o2t + m_t2o * v; }
+00386 
+<a name="l00392"></a><a class="code" href="classcsReversibleTransform.html#a10">00392</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a> This2OtherRelative (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)<span class="keyword"> const</span>
+00393 <span class="keyword">  </span>{ <span class="keywordflow">return</span> m_t2o * v; }
+00394 
+00401   <a class="code" href="classcsPlane3.html">csPlane3</a> This2Other (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p) <span class="keyword">const</span>;
+00402 
+00409   <a class="code" href="classcsPlane3.html">csPlane3</a> This2OtherRelative (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p) <span class="keyword">const</span>;
+00410 
+00419   <span class="keywordtype">void</span> This2Other (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point,
+00420         <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; result) <span class="keyword">const</span>;
+00421 
+00425   <a class="code" href="classcsSphere.html">csSphere</a> This2Other (<span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; s) <span class="keyword">const</span>;
+00426 
+00432   <span class="keywordtype">void</span> RotateOther (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keywordtype">float</span> angle);
+00433 
+00439   <span class="keywordtype">void</span> RotateThis (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keywordtype">float</span> angle);
+00440 
+<a name="l00448"></a><a class="code" href="classcsReversibleTransform.html#a17">00448</a>   <span class="keywordtype">void</span> RotateOther (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m) { SetT2O (m * m_t2o); }
+00449 
+<a name="l00457"></a><a class="code" href="classcsReversibleTransform.html#a18">00457</a>   <span class="keywordtype">void</span> RotateThis (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m) { SetT2O (m_t2o * m); }
+00458 
+00467   <span class="keywordtype">void</span> LookAt (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; up);
+00468 
+00473   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a> operator/ (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v,
+00474         <span class="keyword">const</span> csReversibleTransform&amp; t);
+00475 
+00480   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVector3.html">csVector3</a>&amp; operator/= (<a class="code" href="classcsVector3.html">csVector3</a>&amp; v, 
+00481     <span class="keyword">const</span> csReversibleTransform&amp; t);
+00482 
+00487   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a> operator/ (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, 
+00488     <span class="keyword">const</span> csReversibleTransform&amp; t);
+00489 
+00494   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; operator/= (<a class="code" href="classcsPlane3.html">csPlane3</a>&amp; p, 
+00495     <span class="keyword">const</span> csReversibleTransform&amp; t);
+00496 
+00501   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSphere.html">csSphere</a> operator/ (<span class="keyword">const</span> <a class="code" href="classcsSphere.html">csSphere</a>&amp; p, 
+00502     <span class="keyword">const</span> csReversibleTransform&amp; t);
+00503 
+<a name="l00516"></a><a class="code" href="classcsReversibleTransform.html#n5">00516</a>   <span class="keyword">friend</span> csReversibleTransform&amp; <a class="code" href="classcsTransform.html#n2">operator*= </a>(csReversibleTransform&amp; t1,
+00517                                           <span class="keyword">const</span> csReversibleTransform&amp; t2)
+00518   {
+00519     t1.<a class="code" href="classcsTransform.html#p1">v_o2t</a> = t2.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>*t1.<a class="code" href="classcsTransform.html#p1">v_o2t</a>;
+00520     t1.<a class="code" href="classcsTransform.html#p1">v_o2t</a> += t2.<a class="code" href="classcsTransform.html#p1">v_o2t</a>;
+00521     t1.<a class="code" href="classcsTransform.html#p0">m_o2t</a> *= t2.<a class="code" href="classcsTransform.html#p0">m_o2t</a>;
+00522     t1.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a> *= t1.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>;
+00523     <span class="keywordflow">return</span> t1;
+00524   }
+00525 
+<a name="l00538"></a><a class="code" href="classcsReversibleTransform.html#n6">00538</a>   <span class="keyword">friend</span> csReversibleTransform <a class="code" href="classcsTransform.html#n0">operator* </a>(<span class="keyword">const</span> csReversibleTransform&amp; t1,
+00539                                         <span class="keyword">const</span> csReversibleTransform&amp; t2)
+00540   {
+00541     <span class="keywordflow">return</span> csReversibleTransform (t1.<a class="code" href="classcsTransform.html#p0">m_o2t</a>*t2.<a class="code" href="classcsTransform.html#p0">m_o2t</a>, t2.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>*t1.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>,
+00542                              t2.<a class="code" href="classcsTransform.html#p1">v_o2t</a> + t2.<a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>*t1.<a class="code" href="classcsTransform.html#p1">v_o2t</a>);
+00543   }
+00544 
+00545 <span class="preprocessor">#if !defined(SWIG) </span><span class="comment">/* Otherwise Swig 1.3.22 thinks this is multiply declared */</span>
+00546 
+00558   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsTransform.html">csTransform</a> <a class="code" href="classcsTransform.html#n0">operator* </a>(<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t1,
+00559                               <span class="keyword">const</span> csReversibleTransform&amp; t2);
+00560 <span class="preprocessor">#endif</span>
+00561 <span class="preprocessor"></span>
+00574   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT csReversibleTransform&amp; operator/= (
+00575     csReversibleTransform&amp; t1, <span class="keyword">const</span> csReversibleTransform&amp; t2);
+00576 
+00589   <span class="keyword">friend</span> CS_CRYSTALSPACE_EXPORT csReversibleTransform operator/ (
+00590     <span class="keyword">const</span> csReversibleTransform&amp; t1, <span class="keyword">const</span> csReversibleTransform&amp; t2);
+00591 };
+00592 
+<a name="l00599"></a><a class="code" href="classcsOrthoTransform.html">00599</a> <span class="keyword">class </span><a class="code" href="classcsOrthoTransform.html">csOrthoTransform</a> : <span class="keyword">public</span> csReversibleTransform
+00600 {
+00601 <span class="keyword">public</span>:
+<a name="l00605"></a><a class="code" href="classcsOrthoTransform.html#a0">00605</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> () : csReversibleTransform () {}
+00606 
+<a name="l00610"></a><a class="code" href="classcsOrthoTransform.html#a1">00610</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; o2t, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) :
+00611     csReversibleTransform (o2t, o2t.GetTranspose (), pos) { }
+00612 
+<a name="l00616"></a><a class="code" href="classcsOrthoTransform.html#a2">00616</a>   <a class="code" href="classcsOrthoTransform.html#a0">csOrthoTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsTransform.html">csTransform</a>&amp; t) :
+00617     csReversibleTransform (t.<a class="code" href="classcsTransform.html#a5">GetO2T</a> (), t.<a class="code" href="classcsTransform.html#a5">GetO2T</a> ().GetTranspose (),
+00618         t.<a class="code" href="classcsTransform.html#a6">GetO2TTranslation</a> ())
+00619   { }
+00620 
+<a name="l00625"></a><a class="code" href="classcsOrthoTransform.html#a3">00625</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsOrthoTransform.html#a3">SetO2T</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
+00626   { <a class="code" href="classcsTransform.html#p0">m_o2t</a> = m;  <a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a> = <a class="code" href="classcsTransform.html#p0">m_o2t</a>.<a class="code" href="classcsMatrix3.html#a23">GetTranspose</a> (); }
+00627 
+<a name="l00633"></a><a class="code" href="classcsOrthoTransform.html#a4">00633</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsOrthoTransform.html#a4">SetT2O</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; m)
+00634   { <a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a> = m;  <a class="code" href="classcsTransform.html#p0">m_o2t</a> = <a class="code" href="classcsReversibleTransform.html#p0">m_t2o</a>.<a class="code" href="classcsMatrix3.html#a23">GetTranspose</a> (); }
+00635 };
+00636 
+00639 <span class="preprocessor">#endif // __CS_TRANSFORM_H__</span>
+00640 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
