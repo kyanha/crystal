@@ -144,6 +144,58 @@ SOURCE=..\..\plugins\video\loader\dds\dds.cpp
 
 SOURCE=..\..\plugins\video\loader\dds\ddsloader.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ddssaver.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\ccDoubleHeap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\ccHeap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\Cclist.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\cfVector.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\CodeBook.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\DXTCGen.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\fCodeBook.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\Image.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\ImageDXTC.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\Lloyd.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\MedianCut.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\Table.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -155,6 +207,66 @@ SOURCE=..\..\plugins\video\loader\dds\dds.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\loader\dds\ddsloader.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ddssaver.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ddsutil.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\ccDoubleHeap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\ccHeap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\Cclist.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\cfVector.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\CodeBook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\common.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\DXTCGen.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\fCodeBook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\Image.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\ImageDXTC.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\Lloyd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\MedianCut.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\loader\dds\ImageLib\Table.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
