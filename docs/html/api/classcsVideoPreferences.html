@@ -35,21 +35,18 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsVideoPreferences.html#a3">HandleEvent</a> (<a class="el" href="structiEvent.html">iEvent</a> &amp;Event)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Handle an event for our requester.  <a href="#a3"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsVideoPreferences.html#a4">CleanUp</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">const char *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsVideoPreferences.html#a4">GetModePlugin</a> ()</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clean up the video requester.  <a href="#a4"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsVideoPreferences.html#a5">SelectMode</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Cleanup the video requester and switch to the correct renderer as requested by the user.  <a href="#a5"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the class ID of the requested renderer.  <a href="#a4"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This class is a video preference editor. 
 <p>
-It uses AWS (will load the plugin if not already present in memory) and the current video driver to display a dialog with video preferences. At user request it will replace the current video driver with the new requested one (i.e. OpenGL instead of software) or else it will change modes. Do NOT try to use this class while the engine is already initialized. This will make all registered textures and materials invalid. 
+It uses AWS (will load the plugin if not already present in memory) and the current video driver to display a dialog with video preferences. Once a selection is made the renderer can be queried. To apply the new setting, a restart of CS is required, though. 
 <p>
 
 <p>
-Definition at line <a class="el" href="vidprefs_8h-source.html#l00048">48</a> of file <a class="el" href="vidprefs_8h-source.html">vidprefs.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
+Definition at line <a class="el" href="vidprefs_8h-source.html#l00046">46</a> of file <a class="el" href="vidprefs_8h-source.html">vidprefs.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="a0" doxytag="csVideoPreferences::csVideoPreferences"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -109,17 +106,17 @@ Destructor.
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
-<a class="anchor" name="a4" doxytag="csVideoPreferences::CleanUp"></a><p>
+<a class="anchor" name="a4" doxytag="csVideoPreferences::GetModePlugin"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">void csVideoPreferences::CleanUp           </td>
+          <td class="md" nowrap valign="top">const char* csVideoPreferences::GetModePlugin           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap></td>
+          <td class="md" nowrap><code> [inline]</code></td>
         </tr>
       </table>
     </td>
@@ -133,9 +130,11 @@ Destructor.
     <td>
 
 <p>
-Clean up the video requester. 
+Return the class ID of the requested renderer. 
 <p>
-    </td>
+
+<p>
+Definition at line <a class="el" href="vidprefs_8h-source.html#l00093">93</a> of file <a class="el" href="vidprefs_8h-source.html">vidprefs.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a3" doxytag="csVideoPreferences::HandleEvent"></a><p>
@@ -168,35 +167,6 @@ Handle an event for our requester.
 Return true if the requester is finished.     </td>
   </tr>
 </table>
-<a class="anchor" name="a5" doxytag="csVideoPreferences::SelectMode"></a><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">void csVideoPreferences::SelectMode           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Cleanup the video requester and switch to the correct renderer as requested by the user. 
-<p>
-This will essentially load the 3D renderer and canvas and register them to the object registry.     </td>
-  </tr>
-</table>
 <a class="anchor" name="a2" doxytag="csVideoPreferences::Setup"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -224,8 +194,7 @@ This will essentially load the 3D renderer and canvas and register them to the o
 <p>
 Setup the video requester. 
 <p>
-Returns false if something went wrong. If this function succeeded the application should stop all event handling it normally does on its own. Instead it should call <a class="el" href="classcsVideoPreferences.html#a3">HandleEvent()</a> in this class. If this function returns true then the video requester has finished. <p>
-IMPORTANT! After <a class="el" href="classcsVideoPreferences.html#a3">HandleEvent()</a> returned true the video driver, the canvas and the font server may have changed. You should take care to update your local g3d/g2d/fontserv variables. Also make sure to release the old g3d/g2d/fontserv you may already have.     </td>
+Returns false if something went wrong.     </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>

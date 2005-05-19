@@ -41,58 +41,56 @@
 00022 <span class="preprocessor">#include "csextern.h"</span>
 00023 
 00024 <span class="preprocessor">#include "<a class="code" href="cstypes_8h.html">cstypes.h</a>"</span>
-00025 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
-00026 
-00027 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
-00028 <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a>;
-00029 <span class="keyword">struct </span><a class="code" href="structiVFS.html">iVFS</a>;
-00030 <span class="keyword">struct </span><a class="code" href="structiAws.html">iAws</a>;
-00031 <span class="keyword">struct </span><a class="code" href="structiAwsCanvas.html">iAwsCanvas</a>;
-00032 <span class="keyword">struct </span><a class="code" href="structiAwsSource.html">iAwsSource</a>;
-00033 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
-00034 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
-00035 <span class="keyword">struct </span><a class="code" href="structiFontServer.html">iFontServer</a>;
-00036 <span class="keyword">struct </span><a class="code" href="structiImageIO.html">iImageIO</a>;
-00037 
-<a name="l00048"></a><a class="code" href="classcsVideoPreferences.html">00048</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVideoPreferences.html">csVideoPreferences</a>
-00049 {
-00050 <span class="keyword">private</span>:
-00051   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-00052   <a class="code" href="classcsRef.html">csRef&lt;iVFS&gt;</a> vfs;
-00053   <a class="code" href="classcsRef.html">csRef&lt;iImageIO&gt;</a> imageio;
-00054   <a class="code" href="classcsRef.html">csRef&lt;iAws&gt;</a> aws;
-00055   <a class="code" href="classcsRef.html">csRef&lt;iAwsCanvas&gt;</a> aws_canvas;
-00056   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
-00057   <a class="code" href="classcsRef.html">csRef&lt;iGraphics2D&gt;</a> g2d;
-00058   <a class="code" href="classcsRef.html">csRef&lt;iFontServer&gt;</a> fontserv;
+00025 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
+00026 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
+00027 
+00028 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+00029 <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a>;
+00030 <span class="keyword">struct </span><a class="code" href="structiVFS.html">iVFS</a>;
+00031 <span class="keyword">struct </span><a class="code" href="structiAws.html">iAws</a>;
+00032 <span class="keyword">struct </span><a class="code" href="structiAwsCanvas.html">iAwsCanvas</a>;
+00033 <span class="keyword">struct </span><a class="code" href="structiAwsSource.html">iAwsSource</a>;
+00034 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
+00035 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
+00036 <span class="keyword">struct </span><a class="code" href="structiFontServer.html">iFontServer</a>;
+00037 <span class="keyword">struct </span><a class="code" href="structiImageIO.html">iImageIO</a>;
+00038 
+<a name="l00046"></a><a class="code" href="classcsVideoPreferences.html">00046</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVideoPreferences.html">csVideoPreferences</a>
+00047 {
+00048 <span class="keyword">private</span>:
+00049   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+00050   <a class="code" href="classcsRef.html">csRef&lt;iVFS&gt;</a> vfs;
+00051   <a class="code" href="classcsRef.html">csRef&lt;iAws&gt;</a> aws;
+00052   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
+00053   <a class="code" href="classcsRef.html">csRef&lt;iGraphics2D&gt;</a> g2d;
+00054   <a class="code" href="classcsRef.html">csRef&lt;iFontServer&gt;</a> fontserv;
+00055 
+00056   <a class="code" href="classcsString.html">csString</a> mode;
+00057 
+00058   <span class="keywordtype">bool</span> exit_loop;
 00059 
-00060   <span class="keywordtype">int</span> mode;     <span class="comment">// 0 for software, 1, for OpenGL (@@@ temporary)</span>
+00060   <span class="keywordtype">bool</span> SetupWindow ();
 00061 
-00062   <span class="keywordtype">bool</span> exit_loop;
-00063 
-00064   <span class="keywordtype">bool</span> SetupWindow ();
-00065 
-00066   <span class="keywordtype">void</span> SetSoftwareL (<a class="code" href="structiAwsSource.html">iAwsSource</a> *source);
-00067   <span class="keywordtype">void</span> SetOpenGLL (<a class="code" href="structiAwsSource.html">iAwsSource</a> *source);
-00068   <span class="keyword">static</span> <span class="keywordtype">void</span> SetSoftware (<a class="code" href="group__util.html#ga8">intptr_t</a> vidprefs, <a class="code" href="structiAwsSource.html">iAwsSource</a> *source);
-00069   <span class="keyword">static</span> <span class="keywordtype">void</span> SetOpenGL (<a class="code" href="group__util.html#ga8">intptr_t</a> vidprefs, <a class="code" href="structiAwsSource.html">iAwsSource</a> *source);
-00070 
-00071 <span class="keyword">public</span>:
-00075   <a class="code" href="classcsVideoPreferences.html">csVideoPreferences</a> ();
-00076 
-00080   ~<a class="code" href="classcsVideoPreferences.html">csVideoPreferences</a> ();
-00081 
-00094   <span class="keywordtype">bool</span> Setup (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
-00095 
-00100   <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
-00101 
-00105   <span class="keywordtype">void</span> CleanUp ();
-00106 
-00112   <span class="keywordtype">void</span> SelectMode ();
-00113 };
-00114 
-00115 <span class="preprocessor">#endif // __CS_VIDPREFS_H__</span>
-00116 <span class="preprocessor"></span>
+00062   <span class="keywordtype">void</span> SetSoftwareL (<a class="code" href="structiAwsSource.html">iAwsSource</a> *source);
+00063   <span class="keywordtype">void</span> SetOpenGLL (<a class="code" href="structiAwsSource.html">iAwsSource</a> *source);
+00064   <span class="keyword">static</span> <span class="keywordtype">void</span> SetSoftware (<a class="code" href="group__util.html#ga8">intptr_t</a> vidprefs, <a class="code" href="structiAwsSource.html">iAwsSource</a> *source);
+00065   <span class="keyword">static</span> <span class="keywordtype">void</span> SetOpenGL (<a class="code" href="group__util.html#ga8">intptr_t</a> vidprefs, <a class="code" href="structiAwsSource.html">iAwsSource</a> *source);
+00066 
+00067 <span class="keyword">public</span>:
+00071   <a class="code" href="classcsVideoPreferences.html">csVideoPreferences</a> ();
+00072 
+00076   ~<a class="code" href="classcsVideoPreferences.html">csVideoPreferences</a> ();
+00077 
+00082   <span class="keywordtype">bool</span> Setup (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
+00083 
+00088   <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;Event);
+00089 
+<a name="l00093"></a><a class="code" href="classcsVideoPreferences.html#a4">00093</a>   <span class="keyword">const</span> <span class="keywordtype">char</span>* GetModePlugin()
+00094   { <span class="keywordflow">return</span> mode; }
+00095 };
+00096 
+00097 <span class="preprocessor">#endif // __CS_VIDPREFS_H__</span>
+00098 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
