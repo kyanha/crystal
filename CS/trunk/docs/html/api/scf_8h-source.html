@@ -281,342 +281,352 @@
 00436 <span class="preprocessor">  SCF_IMPLEMENTS_INTERFACE_COMMON (Interface, (&amp;scf##Interface))</span>
 00437 <span class="preprocessor"></span>
 <a name="l00441"></a><a class="code" href="group__scf.html#ga48">00441</a> <span class="preprocessor">#define SCF_IMPLEMENTS_INTERFACE_COMMON(Interface,Object)               \</span>
-00442 <span class="preprocessor">  static scfInterfaceID Interface##_scfID = (scfInterfaceID)-1;         \</span>
-00443 <span class="preprocessor">  if (Interface##_scfID == (scfInterfaceID)-1)                          \</span>
-00444 <span class="preprocessor">    Interface##_scfID = iSCF::SCF-&gt;GetInterfaceID (#Interface);         \</span>
-00445 <span class="preprocessor">  if (iInterfaceID == Interface##_scfID &amp;&amp;                              \</span>
-00446 <span class="preprocessor">    scfCompatibleVersion (iVersion, scfInterface&lt;Interface&gt;::GetVersion())) \</span>
-00447 <span class="preprocessor">  {                                                                     \</span>
-00448 <span class="preprocessor">    (Object)-&gt;IncRef ();                                                \</span>
-00449 <span class="preprocessor">    return CS_STATIC_CAST(Interface*, Object);                          \</span>
-00450 <span class="preprocessor">  }</span>
-00451 <span class="preprocessor"></span>
-<a name="l00462"></a><a class="code" href="group__scf.html#ga49">00462</a> <span class="preprocessor">#define SCF_DECLARE_IBASE_EXT(ParentClass)                              \</span>
-00463 <span class="preprocessor">  typedef ParentClass __scf_superclass;                                 \</span>
-00464 <span class="preprocessor">  virtual void IncRef ();                                               \</span>
-00465 <span class="preprocessor">  virtual void DecRef ();                                               \</span>
-00466 <span class="preprocessor">  virtual int GetRefCount ();                                           \</span>
-00467 <span class="preprocessor">  virtual void AddRefOwner (iBase** ref_owner);                         \</span>
-00468 <span class="preprocessor">  virtual void RemoveRefOwner (iBase** ref_owner);                      \</span>
-00469 <span class="preprocessor">  virtual void *QueryInterface (scfInterfaceID iInterfaceID, int iVersion)</span>
-00470 <span class="preprocessor"></span>
-<a name="l00477"></a><a class="code" href="group__scf.html#ga50">00477</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_INCREF(Class)                           \</span>
-00478 <span class="preprocessor">void Class::IncRef ()                                                   \</span>
-00479 <span class="preprocessor">{                                                                       \</span>
-00480 <span class="preprocessor">  __scf_superclass::IncRef ();                                          \</span>
-00481 <span class="preprocessor">}</span>
-00482 <span class="preprocessor"></span>
-<a name="l00489"></a><a class="code" href="group__scf.html#ga51">00489</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_DECREF(Class)                           \</span>
-00490 <span class="preprocessor">void Class::DecRef ()                                                   \</span>
-00491 <span class="preprocessor">{                                                                       \</span>
-00492 <span class="preprocessor">  __scf_superclass::DecRef ();                                          \</span>
-00493 <span class="preprocessor">}</span>
-00494 <span class="preprocessor"></span>
-<a name="l00501"></a><a class="code" href="group__scf.html#ga52">00501</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_GETREFCOUNT(Class)                      \</span>
-00502 <span class="preprocessor">int Class::GetRefCount ()                                               \</span>
-00503 <span class="preprocessor">{                                                                       \</span>
-00504 <span class="preprocessor">  return __scf_superclass::GetRefCount ();                              \</span>
-00505 <span class="preprocessor">}</span>
-00506 <span class="preprocessor"></span>
-<a name="l00511"></a><a class="code" href="group__scf.html#ga53">00511</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_REFOWNER(Class)                 \</span>
-00512 <span class="preprocessor">void Class::AddRefOwner (iBase** ref_owner)                             \</span>
-00513 <span class="preprocessor">{                                                                       \</span>
-00514 <span class="preprocessor">  __scf_superclass::AddRefOwner (ref_owner);                            \</span>
-00515 <span class="preprocessor">}                                                                       \</span>
-00516 <span class="preprocessor">void Class::RemoveRefOwner (iBase** ref_owner)                          \</span>
-00517 <span class="preprocessor">{                                                                       \</span>
-00518 <span class="preprocessor">  __scf_superclass::RemoveRefOwner (ref_owner);                         \</span>
-00519 <span class="preprocessor">}</span>
-00520 <span class="preprocessor"></span>
-<a name="l00527"></a><a class="code" href="group__scf.html#ga54">00527</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_QUERY(Class)                            \</span>
-00528 <span class="preprocessor">void *Class::QueryInterface (scfInterfaceID iInterfaceID, int iVersion) \</span>
-00529 <span class="preprocessor">{</span>
-00530 <span class="preprocessor"></span>
-<a name="l00537"></a><a class="code" href="group__scf.html#ga55">00537</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_QUERY_END                               \</span>
-00538 <span class="preprocessor">  return __scf_superclass::QueryInterface (iInterfaceID, iVersion);     \</span>
-00539 <span class="preprocessor">}</span>
-00540 <span class="preprocessor"></span>
-<a name="l00545"></a><a class="code" href="group__scf.html#ga56">00545</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT(Class)                                  \</span>
-00546 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_INCREF(Class)                                 \</span>
-00547 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_DECREF(Class)                                 \</span>
-00548 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_GETREFCOUNT(Class)                            \</span>
-00549 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_REFOWNER(Class)                               \</span>
-00550 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_QUERY(Class)</span>
-00551 <span class="preprocessor"></span>
-<a name="l00556"></a><a class="code" href="group__scf.html#ga57">00556</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_END                                     \</span>
-00557 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_QUERY_END</span>
-00558 <span class="preprocessor"></span>
-00574 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
-00575 <span class="preprocessor"></span><span class="comment">// This special version of SCF_IMPLEMENT_FACTORY_INIT will make sure that</span>
-00576 <span class="comment">// the memory tracker for this plugin is implemented.</span>
-00577 <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_INIT(Class)                               \</span>
-00578 <span class="preprocessor">static inline void Class ## _scfUnitInitialize(iSCF* SCF)               \</span>
-00579 <span class="preprocessor">{                                                                       \</span>
-00580 <span class="preprocessor">  iSCF::SCF = SCF;                                                      \</span>
-00581 <span class="preprocessor">  extern void mtiRegisterModule (char*);                                \</span>
-00582 <span class="preprocessor">  mtiRegisterModule (#Class);                                           \</span>
-00583 <span class="preprocessor">}                                                                       \</span>
-00584 <span class="preprocessor">CS_EXPORTED_FUNCTION                                                    \</span>
-00585 <span class="preprocessor">void CS_EXPORTED_NAME(Class,_scfInitialize)(iSCF* SCF)                  \</span>
-00586 <span class="preprocessor">{ Class ## _scfUnitInitialize(SCF); }</span>
-00587 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00588"></a><a class="code" href="group__scf.html#ga58">00588</a> <span class="preprocessor"></span><span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_INIT(Class)                               \</span>
-00589 <span class="preprocessor">static inline void Class ## _scfUnitInitialize(iSCF* SCF)               \</span>
-00590 <span class="preprocessor">{ iSCF::SCF = SCF; }                                                    \</span>
-00591 <span class="preprocessor">CS_EXPORTED_FUNCTION                                                    \</span>
-00592 <span class="preprocessor">void CS_EXPORTED_NAME(Class,_scfInitialize)(iSCF* SCF)                  \</span>
-00593 <span class="preprocessor">{ Class ## _scfUnitInitialize(SCF); }</span>
-00594 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00595 <span class="preprocessor"></span>
-<a name="l00601"></a><a class="code" href="group__scf.html#ga59">00601</a> <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_FINIS(Class)                              \</span>
-00602 <span class="preprocessor">CS_EXPORTED_FUNCTION                                                    \</span>
-00603 <span class="preprocessor">void CS_EXPORTED_NAME(Class,_scfFinalize)()                             \</span>
-00604 <span class="preprocessor">{                                                                       \</span>
-00605 <span class="preprocessor">CS_STATIC_VARIABLE_CLEANUP                                              \</span>
-00606 <span class="preprocessor">}</span>
-00607 <span class="preprocessor"></span>
-<a name="l00614"></a><a class="code" href="group__scf.html#ga60">00614</a> <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_CREATE(Class)                             \</span>
-00615 <span class="preprocessor">CS_EXPORTED_FUNCTION                                                    \</span>
-00616 <span class="preprocessor">void* CS_EXPORTED_NAME(Class,_Create)(iBase *iParent)                   \</span>
-00617 <span class="preprocessor">{                                                                       \</span>
-00618 <span class="preprocessor">  void *ret = new Class (iParent);                                      \</span>
-00619 <span class="preprocessor">  SCF_TRACE (("  %p = new %s ()\n", ret, #Class));                      \</span>
-00620 <span class="preprocessor">  return ret;                                                           \</span>
-00621 <span class="preprocessor">}</span>
-00622 <span class="preprocessor"></span>
-<a name="l00629"></a><a class="code" href="group__scf.html#ga61">00629</a> <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY(Class)                                    \</span>
-00630 <span class="preprocessor">  SCF_IMPLEMENT_FACTORY_INIT(Class)                                     \</span>
-00631 <span class="preprocessor">  SCF_IMPLEMENT_FACTORY_FINIS(Class)                                    \</span>
-00632 <span class="preprocessor">  SCF_IMPLEMENT_FACTORY_CREATE(Class)</span>
-00633 <span class="preprocessor"></span>
-00634 <span class="preprocessor">#define SCF_STATIC_CLASS_CONTEXT      "*static*"</span>
-00635 <span class="preprocessor"></span>
-<a name="l00644"></a><a class="code" href="group__scf.html#ga63">00644</a> <span class="preprocessor">#define SCF_REGISTER_STATIC_CLASS(Class,Ident,Desc,Dep)                 \</span>
-00645 <span class="preprocessor">  CS_EXPORTED_FUNCTION void* CS_EXPORTED_NAME(Class,_Create)(iBase*);   \</span>
-00646 <span class="preprocessor">  class Class##_StaticInit__                                            \</span>
-00647 <span class="preprocessor">  {                                                                     \</span>
-00648 <span class="preprocessor">  public:                                                               \</span>
-00649 <span class="preprocessor">    Class##_StaticInit__()                                              \</span>
-00650 <span class="preprocessor">    {                                                                   \</span>
-00651 <span class="preprocessor">      scfInitialize(0);                                                 \</span>
-00652 <span class="preprocessor">      iSCF::SCF-&gt;RegisterClass(                                         \</span>
-00653 <span class="preprocessor">        CS_EXPORTED_NAME(Class,_Create), Ident, Desc, Dep,              \</span>
-00654 <span class="preprocessor">        SCF_STATIC_CLASS_CONTEXT);                                      \</span>
-00655 <span class="preprocessor">    }                                                                   \</span>
-00656 <span class="preprocessor">  } Class##_static_init__;</span>
-00657 <span class="preprocessor"></span>
-<a name="l00662"></a><a class="code" href="group__scf.html#ga64">00662</a> <span class="preprocessor">#define SCF_REGISTER_STATIC_LIBRARY(Module, MetaInfo)                   \</span>
-00663 <span class="preprocessor">  class Module##_StaticInit                                             \</span>
-00664 <span class="preprocessor">  {                                                                     \</span>
-00665 <span class="preprocessor">  public:                                                               \</span>
-00666 <span class="preprocessor">    Module##_StaticInit()                                               \</span>
-00667 <span class="preprocessor">    {                                                                   \</span>
-00668 <span class="preprocessor">      scfInitialize(0);                                                 \</span>
-00669 <span class="preprocessor">      iSCF::SCF-&gt;RegisterClasses(MetaInfo, SCF_STATIC_CLASS_CONTEXT);   \</span>
-00670 <span class="preprocessor">    }                                                                   \</span>
-00671 <span class="preprocessor">  } Module##_static_init__;</span>
-00672 <span class="preprocessor"></span>
-<a name="l00677"></a><a class="code" href="group__scf.html#ga65">00677</a> <span class="preprocessor">#define SCF_DEFINE_FACTORY_FUNC_REGISTRATION(Class)                     \</span>
-00678 <span class="preprocessor">  CS_EXPORTED_FUNCTION void* CS_EXPORTED_NAME(Class,_Create)(iBase*);   \</span>
-00679 <span class="preprocessor">  class Class##_StaticInit                                              \</span>
-00680 <span class="preprocessor">  {                                                                     \</span>
-00681 <span class="preprocessor">  public:                                                               \</span>
-00682 <span class="preprocessor">    Class##_StaticInit()                                                \</span>
-00683 <span class="preprocessor">    {                                                                   \</span>
-00684 <span class="preprocessor">      scfInitialize(0);                                                 \</span>
-00685 <span class="preprocessor">      iSCF::SCF-&gt;RegisterFactoryFunc(CS_EXPORTED_NAME(Class,_Create),#Class); \</span>
-00686 <span class="preprocessor">    }                                                                   \</span>
-00687 <span class="preprocessor">  };</span>
-00688 <span class="preprocessor"></span>
-<a name="l00693"></a><a class="code" href="group__scf.html#ga66">00693</a> <span class="preprocessor">#define SCF_USE_STATIC_PLUGIN(Module)                                   \</span>
-00694 <span class="preprocessor">  namespace csStaticPluginInit                                          \</span>
-00695 <span class="preprocessor">  {                                                                     \</span>
-00696 <span class="preprocessor">    class Module { public: Module(); };                                 \</span>
-00697 <span class="preprocessor">    Module Module##_StaticInit;                                         \</span>
-00698 <span class="preprocessor">  }</span>
-00699 <span class="preprocessor"></span>
-<a name="l00708"></a><a class="code" href="group__scf.html#ga67">00708</a> <span class="preprocessor">#define SCF_REGISTER_FACTORY_FUNC(Class)                                \</span>
-00709 <span class="preprocessor">  SCF_DEFINE_FACTORY_FUNC_REGISTRATION(Class)                           \</span>
-00710 <span class="preprocessor">  Class##_StaticInit Class##_static_init__;</span>
-00711 <span class="preprocessor"></span>
-00712 <span class="comment">//--------------------------------------------- Class factory interface -----//</span>
-00713 
-<a name="l00727"></a><a class="code" href="structiFactory.html">00727</a> <span class="keyword">struct </span><a class="code" href="structiFactory.html">iFactory</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00728 {
-00730   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiFactory.html#a0">CreateInstance</a> () = 0;
-00732   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiFactory.html#a1">TryUnload</a> () = 0;
-00734   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiFactory.html#a2">QueryDescription</a> () = 0;
-00736   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiFactory.html#a3">QueryDependencies</a> () = 0;
-00738   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiFactory.html#a4">QueryClassID</a> () = 0;
-00740   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiFactory.html#a5">QueryModuleName</a> () = 0;
-00741 };
-00742 
-00743 <span class="comment">//----------------------------------------------- Client-side functions -----//</span>
+00442 <span class="preprocessor">  if (iInterfaceID == scfInterface&lt;Interface&gt;::GetID() &amp;&amp;               \</span>
+00443 <span class="preprocessor">    scfCompatibleVersion (iVersion, scfInterface&lt;Interface&gt;::GetVersion())) \</span>
+00444 <span class="preprocessor">  {                                                                     \</span>
+00445 <span class="preprocessor">    (Object)-&gt;IncRef ();                                                \</span>
+00446 <span class="preprocessor">    return CS_STATIC_CAST(Interface*, Object);                          \</span>
+00447 <span class="preprocessor">  }</span>
+00448 <span class="preprocessor"></span>
+<a name="l00459"></a><a class="code" href="group__scf.html#ga49">00459</a> <span class="preprocessor">#define SCF_DECLARE_IBASE_EXT(ParentClass)                              \</span>
+00460 <span class="preprocessor">  typedef ParentClass __scf_superclass;                                 \</span>
+00461 <span class="preprocessor">  virtual void IncRef ();                                               \</span>
+00462 <span class="preprocessor">  virtual void DecRef ();                                               \</span>
+00463 <span class="preprocessor">  virtual int GetRefCount ();                                           \</span>
+00464 <span class="preprocessor">  virtual void AddRefOwner (iBase** ref_owner);                         \</span>
+00465 <span class="preprocessor">  virtual void RemoveRefOwner (iBase** ref_owner);                      \</span>
+00466 <span class="preprocessor">  virtual void *QueryInterface (scfInterfaceID iInterfaceID, int iVersion)</span>
+00467 <span class="preprocessor"></span>
+<a name="l00474"></a><a class="code" href="group__scf.html#ga50">00474</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_INCREF(Class)                           \</span>
+00475 <span class="preprocessor">void Class::IncRef ()                                                   \</span>
+00476 <span class="preprocessor">{                                                                       \</span>
+00477 <span class="preprocessor">  __scf_superclass::IncRef ();                                          \</span>
+00478 <span class="preprocessor">}</span>
+00479 <span class="preprocessor"></span>
+<a name="l00486"></a><a class="code" href="group__scf.html#ga51">00486</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_DECREF(Class)                           \</span>
+00487 <span class="preprocessor">void Class::DecRef ()                                                   \</span>
+00488 <span class="preprocessor">{                                                                       \</span>
+00489 <span class="preprocessor">  __scf_superclass::DecRef ();                                          \</span>
+00490 <span class="preprocessor">}</span>
+00491 <span class="preprocessor"></span>
+<a name="l00498"></a><a class="code" href="group__scf.html#ga52">00498</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_GETREFCOUNT(Class)                      \</span>
+00499 <span class="preprocessor">int Class::GetRefCount ()                                               \</span>
+00500 <span class="preprocessor">{                                                                       \</span>
+00501 <span class="preprocessor">  return __scf_superclass::GetRefCount ();                              \</span>
+00502 <span class="preprocessor">}</span>
+00503 <span class="preprocessor"></span>
+<a name="l00508"></a><a class="code" href="group__scf.html#ga53">00508</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_REFOWNER(Class)                 \</span>
+00509 <span class="preprocessor">void Class::AddRefOwner (iBase** ref_owner)                             \</span>
+00510 <span class="preprocessor">{                                                                       \</span>
+00511 <span class="preprocessor">  __scf_superclass::AddRefOwner (ref_owner);                            \</span>
+00512 <span class="preprocessor">}                                                                       \</span>
+00513 <span class="preprocessor">void Class::RemoveRefOwner (iBase** ref_owner)                          \</span>
+00514 <span class="preprocessor">{                                                                       \</span>
+00515 <span class="preprocessor">  __scf_superclass::RemoveRefOwner (ref_owner);                         \</span>
+00516 <span class="preprocessor">}</span>
+00517 <span class="preprocessor"></span>
+<a name="l00524"></a><a class="code" href="group__scf.html#ga54">00524</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_QUERY(Class)                            \</span>
+00525 <span class="preprocessor">void *Class::QueryInterface (scfInterfaceID iInterfaceID, int iVersion) \</span>
+00526 <span class="preprocessor">{</span>
+00527 <span class="preprocessor"></span>
+<a name="l00534"></a><a class="code" href="group__scf.html#ga55">00534</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_QUERY_END                               \</span>
+00535 <span class="preprocessor">  return __scf_superclass::QueryInterface (iInterfaceID, iVersion);     \</span>
+00536 <span class="preprocessor">}</span>
+00537 <span class="preprocessor"></span>
+<a name="l00542"></a><a class="code" href="group__scf.html#ga56">00542</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT(Class)                                  \</span>
+00543 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_INCREF(Class)                                 \</span>
+00544 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_DECREF(Class)                                 \</span>
+00545 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_GETREFCOUNT(Class)                            \</span>
+00546 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_REFOWNER(Class)                               \</span>
+00547 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_QUERY(Class)</span>
+00548 <span class="preprocessor"></span>
+<a name="l00553"></a><a class="code" href="group__scf.html#ga57">00553</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_END                                     \</span>
+00554 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_QUERY_END</span>
+00555 <span class="preprocessor"></span>
+00571 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
+00572 <span class="preprocessor"></span><span class="comment">// This special version of SCF_IMPLEMENT_FACTORY_INIT will make sure that</span>
+00573 <span class="comment">// the memory tracker for this plugin is implemented.</span>
+00574 <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_INIT(Class)                               \</span>
+00575 <span class="preprocessor">static inline void Class ## _scfUnitInitialize(iSCF* SCF)               \</span>
+00576 <span class="preprocessor">{                                                                       \</span>
+00577 <span class="preprocessor">  iSCF::SCF = SCF;                                                      \</span>
+00578 <span class="preprocessor">  extern void mtiRegisterModule (char*);                                \</span>
+00579 <span class="preprocessor">  mtiRegisterModule (#Class);                                           \</span>
+00580 <span class="preprocessor">}                                                                       \</span>
+00581 <span class="preprocessor">CS_EXPORTED_FUNCTION                                                    \</span>
+00582 <span class="preprocessor">void CS_EXPORTED_NAME(Class,_scfInitialize)(iSCF* SCF)                  \</span>
+00583 <span class="preprocessor">{ Class ## _scfUnitInitialize(SCF); }</span>
+00584 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00585"></a><a class="code" href="group__scf.html#ga58">00585</a> <span class="preprocessor"></span><span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_INIT(Class)                               \</span>
+00586 <span class="preprocessor">static inline void Class ## _scfUnitInitialize(iSCF* SCF)               \</span>
+00587 <span class="preprocessor">{ iSCF::SCF = SCF; }                                                    \</span>
+00588 <span class="preprocessor">CS_EXPORTED_FUNCTION                                                    \</span>
+00589 <span class="preprocessor">void CS_EXPORTED_NAME(Class,_scfInitialize)(iSCF* SCF)                  \</span>
+00590 <span class="preprocessor">{ Class ## _scfUnitInitialize(SCF); }</span>
+00591 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00592 <span class="preprocessor"></span>
+<a name="l00598"></a><a class="code" href="group__scf.html#ga59">00598</a> <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_FINIS(Class)                              \</span>
+00599 <span class="preprocessor">CS_EXPORTED_FUNCTION                                                    \</span>
+00600 <span class="preprocessor">void CS_EXPORTED_NAME(Class,_scfFinalize)()                             \</span>
+00601 <span class="preprocessor">{                                                                       \</span>
+00602 <span class="preprocessor">CS_STATIC_VARIABLE_CLEANUP                                              \</span>
+00603 <span class="preprocessor">}</span>
+00604 <span class="preprocessor"></span>
+<a name="l00611"></a><a class="code" href="group__scf.html#ga60">00611</a> <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_CREATE(Class)                             \</span>
+00612 <span class="preprocessor">CS_EXPORTED_FUNCTION                                                    \</span>
+00613 <span class="preprocessor">void* CS_EXPORTED_NAME(Class,_Create)(iBase *iParent)                   \</span>
+00614 <span class="preprocessor">{                                                                       \</span>
+00615 <span class="preprocessor">  void *ret = new Class (iParent);                                      \</span>
+00616 <span class="preprocessor">  SCF_TRACE (("  %p = new %s ()\n", ret, #Class));                      \</span>
+00617 <span class="preprocessor">  return ret;                                                           \</span>
+00618 <span class="preprocessor">}</span>
+00619 <span class="preprocessor"></span>
+<a name="l00626"></a><a class="code" href="group__scf.html#ga61">00626</a> <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY(Class)                                    \</span>
+00627 <span class="preprocessor">  SCF_IMPLEMENT_FACTORY_INIT(Class)                                     \</span>
+00628 <span class="preprocessor">  SCF_IMPLEMENT_FACTORY_FINIS(Class)                                    \</span>
+00629 <span class="preprocessor">  SCF_IMPLEMENT_FACTORY_CREATE(Class)</span>
+00630 <span class="preprocessor"></span>
+00631 <span class="preprocessor">#define SCF_STATIC_CLASS_CONTEXT      "*static*"</span>
+00632 <span class="preprocessor"></span>
+<a name="l00641"></a><a class="code" href="group__scf.html#ga63">00641</a> <span class="preprocessor">#define SCF_REGISTER_STATIC_CLASS(Class,Ident,Desc,Dep)                 \</span>
+00642 <span class="preprocessor">  CS_EXPORTED_FUNCTION void* CS_EXPORTED_NAME(Class,_Create)(iBase*);   \</span>
+00643 <span class="preprocessor">  class Class##_StaticInit__                                            \</span>
+00644 <span class="preprocessor">  {                                                                     \</span>
+00645 <span class="preprocessor">  public:                                                               \</span>
+00646 <span class="preprocessor">    Class##_StaticInit__()                                              \</span>
+00647 <span class="preprocessor">    {                                                                   \</span>
+00648 <span class="preprocessor">      scfInitialize(0);                                                 \</span>
+00649 <span class="preprocessor">      iSCF::SCF-&gt;RegisterClass(                                         \</span>
+00650 <span class="preprocessor">        CS_EXPORTED_NAME(Class,_Create), Ident, Desc, Dep,              \</span>
+00651 <span class="preprocessor">        SCF_STATIC_CLASS_CONTEXT);                                      \</span>
+00652 <span class="preprocessor">    }                                                                   \</span>
+00653 <span class="preprocessor">  } Class##_static_init__;</span>
+00654 <span class="preprocessor"></span>
+<a name="l00659"></a><a class="code" href="group__scf.html#ga64">00659</a> <span class="preprocessor">#define SCF_REGISTER_STATIC_LIBRARY(Module, MetaInfo)                   \</span>
+00660 <span class="preprocessor">  class Module##_StaticInit                                             \</span>
+00661 <span class="preprocessor">  {                                                                     \</span>
+00662 <span class="preprocessor">  public:                                                               \</span>
+00663 <span class="preprocessor">    Module##_StaticInit()                                               \</span>
+00664 <span class="preprocessor">    {                                                                   \</span>
+00665 <span class="preprocessor">      scfInitialize(0);                                                 \</span>
+00666 <span class="preprocessor">      iSCF::SCF-&gt;RegisterClasses(MetaInfo, SCF_STATIC_CLASS_CONTEXT);   \</span>
+00667 <span class="preprocessor">    }                                                                   \</span>
+00668 <span class="preprocessor">  } Module##_static_init__;</span>
+00669 <span class="preprocessor"></span>
+<a name="l00674"></a><a class="code" href="group__scf.html#ga65">00674</a> <span class="preprocessor">#define SCF_DEFINE_FACTORY_FUNC_REGISTRATION(Class)                     \</span>
+00675 <span class="preprocessor">  CS_EXPORTED_FUNCTION void* CS_EXPORTED_NAME(Class,_Create)(iBase*);   \</span>
+00676 <span class="preprocessor">  class Class##_StaticInit                                              \</span>
+00677 <span class="preprocessor">  {                                                                     \</span>
+00678 <span class="preprocessor">  public:                                                               \</span>
+00679 <span class="preprocessor">    Class##_StaticInit()                                                \</span>
+00680 <span class="preprocessor">    {                                                                   \</span>
+00681 <span class="preprocessor">      scfInitialize(0);                                                 \</span>
+00682 <span class="preprocessor">      iSCF::SCF-&gt;RegisterFactoryFunc(CS_EXPORTED_NAME(Class,_Create),#Class); \</span>
+00683 <span class="preprocessor">    }                                                                   \</span>
+00684 <span class="preprocessor">  };</span>
+00685 <span class="preprocessor"></span>
+<a name="l00690"></a><a class="code" href="group__scf.html#ga66">00690</a> <span class="preprocessor">#define SCF_USE_STATIC_PLUGIN(Module)                                   \</span>
+00691 <span class="preprocessor">  namespace csStaticPluginInit                                          \</span>
+00692 <span class="preprocessor">  {                                                                     \</span>
+00693 <span class="preprocessor">    class Module { public: Module(); };                                 \</span>
+00694 <span class="preprocessor">    Module Module##_StaticInit;                                         \</span>
+00695 <span class="preprocessor">  }</span>
+00696 <span class="preprocessor"></span>
+<a name="l00705"></a><a class="code" href="group__scf.html#ga67">00705</a> <span class="preprocessor">#define SCF_REGISTER_FACTORY_FUNC(Class)                                \</span>
+00706 <span class="preprocessor">  SCF_DEFINE_FACTORY_FUNC_REGISTRATION(Class)                           \</span>
+00707 <span class="preprocessor">  Class##_StaticInit Class##_static_init__;</span>
+00708 <span class="preprocessor"></span>
+00709 <span class="comment">//--------------------------------------------- Class factory interface -----//</span>
+00710 
+<a name="l00724"></a><a class="code" href="structiFactory.html">00724</a> <span class="keyword">struct </span><a class="code" href="structiFactory.html">iFactory</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00725 {
+00727   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiFactory.html#a0">CreateInstance</a> () = 0;
+00729   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiFactory.html#a1">TryUnload</a> () = 0;
+00731   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiFactory.html#a2">QueryDescription</a> () = 0;
+00733   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiFactory.html#a3">QueryDependencies</a> () = 0;
+00735   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiFactory.html#a4">QueryClassID</a> () = 0;
+00737   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiFactory.html#a5">QueryModuleName</a> () = 0;
+00738 };
+00739 
+00740 <span class="comment">//----------------------------------------------- Client-side functions -----//</span>
+00741 
+00742 <span class="keyword">struct </span><a class="code" href="structiDocument.html">iDocument</a>;
+00743 <span class="keyword">struct </span><a class="code" href="structiStringArray.html">iStringArray</a>;
 00744 
-00745 <span class="keyword">struct </span><a class="code" href="structiDocument.html">iDocument</a>;
-00746 <span class="keyword">struct </span><a class="code" href="structiStringArray.html">iStringArray</a>;
+<a name="l00746"></a><a class="code" href="group__scf.html#ga1">00746</a> <span class="keyword">typedef</span> <span class="keywordtype">void</span>* (*scfFactoryFunc)(<a class="code" href="structiBase.html">iBase</a>*);
 00747 
-<a name="l00749"></a><a class="code" href="group__scf.html#ga1">00749</a> <span class="keyword">typedef</span> <span class="keywordtype">void</span>* (*scfFactoryFunc)(<a class="code" href="structiBase.html">iBase</a>*);
-00750 
-<a name="l00755"></a><a class="code" href="group__scf.html#ga68">00755</a> <span class="preprocessor">#define SCF_CREATE_INSTANCE(ClassID,Interface)                          \</span>
-00756 <span class="preprocessor">  csPtr&lt;Interface&gt; (                                                    \</span>
-00757 <span class="preprocessor">    (Interface *)iSCF::SCF-&gt;CreateInstance (                            \</span>
-00758 <span class="preprocessor">    ClassID, #Interface, scfInterface&lt;Interface&gt;::GetVersion()))</span>
-00759 <span class="preprocessor"></span>
-<a name="l00772"></a><a class="code" href="group__scf.html#ga69">00772</a> <span class="preprocessor">#define SCF_VERSION(Name,Major,Minor,Micro)                             \</span>
-00773 <span class="preprocessor">struct Name;                                                            \</span>
-00774 <span class="preprocessor">CS_SPECIALIZE_TEMPLATE                                                  \</span>
-00775 <span class="preprocessor">class scfInterface&lt;Name&gt;                                                \</span>
-00776 <span class="preprocessor">{                                                                       \</span>
-00777 <span class="preprocessor">public:                                                                 \</span>
-00778 <span class="preprocessor">  static int GetVersion()                                               \</span>
-00779 <span class="preprocessor">  {                                                                     \</span>
-00780 <span class="preprocessor">    return SCF_CONSTRUCT_VERSION(Major, Minor, Micro);                  \</span>
-00781 <span class="preprocessor">  }                                                                     \</span>
-00782 <span class="preprocessor">  static scfInterfaceID GetID()                                         \</span>
-00783 <span class="preprocessor">  {                                                                     \</span>
-00784 <span class="preprocessor">    static scfInterfaceID ID = (scfInterfaceID)-1;                      \</span>
-00785 <span class="preprocessor">    if (ID == (scfInterfaceID)(-1))                                     \</span>
-00786 <span class="preprocessor">      ID = iSCF::SCF-&gt;GetInterfaceID(#Name);                            \</span>
-00787 <span class="preprocessor">    return ID;                                                          \</span>
-00788 <span class="preprocessor">  }                                                                     \</span>
-00789 <span class="preprocessor">  static char const* GetName()                                          \</span>
-00790 <span class="preprocessor">  {                                                                     \</span>
-00791 <span class="preprocessor">    return #Name;                                                       \</span>
-00792 <span class="preprocessor">  }                                                                     \</span>
-00793 <span class="preprocessor">}</span>
-00794 <span class="preprocessor"></span>
-<a name="l00801"></a><a class="code" href="classscfInterface.html">00801</a> <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt; <span class="keyword">class </span><a class="code" href="classscfInterface.html">scfInterface</a>
-00802 {
-00803 <span class="keyword">public</span>:
-<a name="l00808"></a><a class="code" href="classscfInterface.html#e0">00808</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classscfInterface.html#e0">GetVersion</a>()
-00809   {
-00810     CS_ASSERT_MSG(<span class="stringliteral">"illegal invocation of non-specialized "</span>
-00811       <span class="stringliteral">"scfInterface&lt;&gt;::GetVersion()"</span>, 1 == 0);
-00812     <span class="keywordflow">return</span> 0;
-00813   }
-00814 
-<a name="l00822"></a><a class="code" href="classscfInterface.html#e1">00822</a>   <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="classscfInterface.html#e1">GetID</a>()
-00823   {
-00824     CS_ASSERT_MSG(<span class="stringliteral">"illegal invocation of non-specialized "</span>
-00825       <span class="stringliteral">"scfInterface&lt;&gt;::GetID()"</span>, 1 == 0);
-00826     <span class="keywordflow">return</span> (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)(-1);
-00827   }
-00828 
-<a name="l00832"></a><a class="code" href="classscfInterface.html#e2">00832</a>   <span class="keyword">static</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classscfInterface.html#e2">GetName</a>()
+<a name="l00752"></a><a class="code" href="group__scf.html#ga68">00752</a> <span class="preprocessor">#define SCF_CREATE_INSTANCE(ClassID,Interface)                          \</span>
+00753 <span class="preprocessor">  csPtr&lt;Interface&gt; (                                                    \</span>
+00754 <span class="preprocessor">    (Interface *)iSCF::SCF-&gt;CreateInstance (                            \</span>
+00755 <span class="preprocessor">    ClassID, #Interface, scfInterface&lt;Interface&gt;::GetVersion()))</span>
+00756 <span class="preprocessor"></span>
+<a name="l00769"></a><a class="code" href="group__scf.html#ga69">00769</a> <span class="preprocessor">#define SCF_VERSION(Name,Major,Minor,Micro)                             \</span>
+00770 <span class="preprocessor">struct Name;                                                            \</span>
+00771 <span class="preprocessor">CS_SPECIALIZE_TEMPLATE                                                  \</span>
+00772 <span class="preprocessor">class scfInterface&lt;Name&gt;                                                \</span>
+00773 <span class="preprocessor">{                                                                       \</span>
+00774 <span class="preprocessor">  static scfInterfaceID&amp; GetMyID()                                      \</span>
+00775 <span class="preprocessor">  {                                                                     \</span>
+00776 <span class="preprocessor">    static scfInterfaceID ID = (scfInterfaceID)-1;                      \</span>
+00777 <span class="preprocessor">    return ID;                                                          \</span>
+00778 <span class="preprocessor">  }                                                                     \</span>
+00779 <span class="preprocessor">  static void CleanupID()                                               \</span>
+00780 <span class="preprocessor">  {                                                                     \</span>
+00781 <span class="preprocessor">    GetMyID() = (scfInterfaceID)-1;                                     \</span>
+00782 <span class="preprocessor">  }                                                                     \</span>
+00783 <span class="preprocessor">public:                                                                 \</span>
+00784 <span class="preprocessor">  static int GetVersion()                                               \</span>
+00785 <span class="preprocessor">  {                                                                     \</span>
+00786 <span class="preprocessor">    return SCF_CONSTRUCT_VERSION(Major, Minor, Micro);                  \</span>
+00787 <span class="preprocessor">  }                                                                     \</span>
+00788 <span class="preprocessor">  static scfInterfaceID GetID()                                         \</span>
+00789 <span class="preprocessor">  {                                                                     \</span>
+00790 <span class="preprocessor">    scfInterfaceID&amp; ID = GetMyID();                                     \</span>
+00791 <span class="preprocessor">    if (ID == (scfInterfaceID)(-1))                                     \</span>
+00792 <span class="preprocessor">    {                                                                   \</span>
+00793 <span class="preprocessor">      ID = iSCF::SCF-&gt;GetInterfaceID(#Name);                            \</span>
+00794 <span class="preprocessor">      </span><span class="comment">/* Mild hack to reset SCF ID on CS shutdown */</span>                    \
+00795       csStaticVarCleanup (CleanupID);                                   \
+00796     }                                                                   \
+00797     return ID;                                                          \
+00798   }                                                                     \
+00799   static char const* GetName()                                          \
+00800   {                                                                     \
+00801     return #Name;                                                       \
+00802   }                                                                     \
+00803 }
+00804 
+<a name="l00811"></a><a class="code" href="classscfInterface.html">00811</a> <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt; <span class="keyword">class </span><a class="code" href="classscfInterface.html">scfInterface</a>
+00812 {
+00813 <span class="keyword">public</span>:
+<a name="l00818"></a><a class="code" href="classscfInterface.html#e0">00818</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classscfInterface.html#e0">GetVersion</a>()
+00819   {
+00820     CS_ASSERT_MSG(<span class="stringliteral">"illegal invocation of non-specialized "</span>
+00821       <span class="stringliteral">"scfInterface&lt;&gt;::GetVersion()"</span>, 1 == 0);
+00822     <span class="keywordflow">return</span> 0;
+00823   }
+00824 
+<a name="l00832"></a><a class="code" href="classscfInterface.html#e1">00832</a>   <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="classscfInterface.html#e1">GetID</a>()
 00833   {
 00834     CS_ASSERT_MSG(<span class="stringliteral">"illegal invocation of non-specialized "</span>
-00835       <span class="stringliteral">"scfInterface&lt;&gt;::GetName()"</span>, 1 == 0);
-00836     <span class="keywordflow">return</span> 0;
+00835       <span class="stringliteral">"scfInterface&lt;&gt;::GetID()"</span>, 1 == 0);
+00836     <span class="keywordflow">return</span> (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)(-1);
 00837   }
-00838 };
-00839 
-<a name="l00844"></a><a class="code" href="group__scf.html#ga70">00844</a> <span class="preprocessor">#define SCF_QUERY_INTERFACE(Object,Interface)                           \</span>
-00845 <span class="preprocessor">  csPtr&lt;Interface&gt; ((Interface *)(Object)-&gt;QueryInterface (             \</span>
-00846 <span class="preprocessor">  scfInterface&lt;Interface&gt;::GetID (), scfInterface&lt;Interface&gt;::GetVersion()))</span>
-00847 <span class="preprocessor"></span>
-<a name="l00853"></a><a class="code" href="group__scf.html#ga71">00853</a> <span class="preprocessor">#define SCF_QUERY_INTERFACE_SAFE(Object,Interface)                      \</span>
-00854 <span class="preprocessor">  csPtr&lt;Interface&gt; ((Interface *)(iBase::QueryInterfaceSafe ((Object),  \</span>
-00855 <span class="preprocessor">  scfInterface&lt;Interface&gt;::GetID (), scfInterface&lt;Interface&gt;::GetVersion())))</span>
-00856 <span class="preprocessor"></span>
-00861 <span class="keyword">enum</span>
-00862 {
-00863   <a class="code" href="group__scf.html#gga79a56">SCF_VERBOSE_NONE</a>            = 0,      
-00864   <a class="code" href="group__scf.html#gga79a57">SCF_VERBOSE_PLUGIN_SCAN</a>     = 1 &lt;&lt; 0, 
-00865   <a class="code" href="group__scf.html#gga79a58">SCF_VERBOSE_PLUGIN_LOAD</a>     = 1 &lt;&lt; 1, 
-00866   <a class="code" href="group__scf.html#gga79a59">SCF_VERBOSE_PLUGIN_REGISTER</a> = 1 &lt;&lt; 2, 
-00867   <a class="code" href="group__scf.html#gga79a60">SCF_VERBOSE_CLASS_REGISTER</a>  = 1 &lt;&lt; 3, 
-00868   <a class="code" href="group__scf.html#gga79a61">SCF_VERBOSE_ALL</a>             = ~0      
-00869 };
-00870 
-00886 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">void</span> <a class="code" href="group__scf.html#ga2">scfInitialize</a>(<a class="code" href="classcsPathsList.html">csPathsList</a> <span class="keyword">const</span>* pluginPaths,
-00887   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> verbose = <a class="code" href="group__scf.html#gga79a56">SCF_VERBOSE_NONE</a>);
-00888 
-00893 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">void</span> <a class="code" href="group__scf.html#ga2">scfInitialize</a>(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span> argv[]);
-00894 
-<a name="l00901"></a><a class="code" href="group__scf.html#ga4">00901</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="group__scf.html#ga4">scfCompatibleVersion</a> (<span class="keywordtype">int</span> iVersion, <span class="keywordtype">int</span> iItfVersion)
-00902 {
-00903   <span class="keywordflow">return</span> ((iVersion &amp; 0xff000000) == (iItfVersion &amp; 0xff000000))
-00904       &amp;&amp; ((iVersion &amp; 0x00ffffff) &lt;= (iItfVersion &amp; 0x00ffffff));
-00905 }
-00906 
-00907 <span class="preprocessor">#if defined(CS_DEBUG) || defined(CS_MEMORY_TRACKER)</span>
-00908 <span class="preprocessor"></span>  <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
-00909 <span class="preprocessor">#endif</span>
-00910 <span class="preprocessor"></span>
-<a name="l00917"></a><a class="code" href="structiSCF.html">00917</a> <span class="keyword">struct </span><a class="code" href="structiSCF.html">iSCF</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00918 {
-<a name="l00930"></a><a class="code" href="structiSCF.html#s0">00930</a>   <span class="keyword">static</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="structiSCF.html">iSCF</a>* <a class="code" href="structiSCF.html#s0">SCF</a>;
-00931 
-00932 <span class="preprocessor">#if defined(CS_DEBUG) || defined(CS_MEMORY_TRACKER)</span>
-00933 <span class="preprocessor"></span>  <span class="comment">// This is EXTREMELY dirty but I see no other solution for now.</span>
-00934   <span class="comment">// For debugging reasons I must have a global (global over the application</span>
-00935   <span class="comment">// and all plugins)pointer to the object registry. I have no other</span>
-00936   <span class="comment">// global object to tag this pointer on that except for iSCF.</span>
-00937   <span class="comment">// This pointer is only here in debug mode though. That ensures that it</span>
-00938   <span class="comment">// cannot be misused in real code.</span>
-00939   <span class="comment">// If you know another solution for this problem? This global pointer</span>
-00940   <span class="comment">// will be used by csDebuggingGraph in csutil.</span>
-00941   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-00942 <span class="preprocessor">#endif</span>
-00943 <span class="preprocessor"></span>
-00947   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a0">RegisterClasses</a> (<a class="code" href="structiDocument.html">iDocument</a>* metadata,
-00948     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-00949 
-00955   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a0">RegisterClasses</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* xml,
-00956     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-00957 
-00961   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a0">RegisterClasses</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* pluginPath,
-00962     <a class="code" href="structiDocument.html">iDocument</a>* metadata, <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-00963 
-00970   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a3">ClassRegistered</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
-00971 
-00987   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiSCF.html#a4">CreateInstance</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
-00988         <span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface, <span class="keywordtype">int</span> iVersion) = 0;
-00989 
-00995   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiSCF.html#a5">GetClassDescription</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
-00996 
-01002   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiSCF.html#a6">GetClassDependencies</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
-01003 
-01030   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDocument&gt;</a> <a class="code" href="structiSCF.html#a7">GetPluginMetadata</a> (<span class="keywordtype">char</span> <span class="keyword">const</span> *iClassID) = 0;
-01031 
-01038   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a8">UnloadUnusedModules</a> () = 0;
-01039 
-01050   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a9">RegisterClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
-01051         <span class="keyword">const</span> <span class="keywordtype">char</span> *iLibraryName, <span class="keyword">const</span> <span class="keywordtype">char</span> *iFactoryClass,
-01052         <span class="keyword">const</span> <span class="keywordtype">char</span> *Description, <span class="keyword">const</span> <span class="keywordtype">char</span> *Dependencies = 0,
-01053         <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-01054 
-01061   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a9">RegisterClass</a> (<a class="code" href="group__scf.html#ga1">scfFactoryFunc</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
+00838 
+<a name="l00842"></a><a class="code" href="classscfInterface.html#e2">00842</a>   <span class="keyword">static</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classscfInterface.html#e2">GetName</a>()
+00843   {
+00844     CS_ASSERT_MSG(<span class="stringliteral">"illegal invocation of non-specialized "</span>
+00845       <span class="stringliteral">"scfInterface&lt;&gt;::GetName()"</span>, 1 == 0);
+00846     <span class="keywordflow">return</span> 0;
+00847   }
+00848 };
+00849 
+<a name="l00854"></a><a class="code" href="group__scf.html#ga70">00854</a> <span class="preprocessor">#define SCF_QUERY_INTERFACE(Object,Interface)                           \</span>
+00855 <span class="preprocessor">  csPtr&lt;Interface&gt; ((Interface *)(Object)-&gt;QueryInterface (             \</span>
+00856 <span class="preprocessor">  scfInterface&lt;Interface&gt;::GetID (), scfInterface&lt;Interface&gt;::GetVersion()))</span>
+00857 <span class="preprocessor"></span>
+<a name="l00863"></a><a class="code" href="group__scf.html#ga71">00863</a> <span class="preprocessor">#define SCF_QUERY_INTERFACE_SAFE(Object,Interface)                      \</span>
+00864 <span class="preprocessor">  csPtr&lt;Interface&gt; ((Interface *)(iBase::QueryInterfaceSafe ((Object),  \</span>
+00865 <span class="preprocessor">  scfInterface&lt;Interface&gt;::GetID (), scfInterface&lt;Interface&gt;::GetVersion())))</span>
+00866 <span class="preprocessor"></span>
+00871 <span class="keyword">enum</span>
+00872 {
+00873   <a class="code" href="group__scf.html#gga79a56">SCF_VERBOSE_NONE</a>            = 0,      
+00874   <a class="code" href="group__scf.html#gga79a57">SCF_VERBOSE_PLUGIN_SCAN</a>     = 1 &lt;&lt; 0, 
+00875   <a class="code" href="group__scf.html#gga79a58">SCF_VERBOSE_PLUGIN_LOAD</a>     = 1 &lt;&lt; 1, 
+00876   <a class="code" href="group__scf.html#gga79a59">SCF_VERBOSE_PLUGIN_REGISTER</a> = 1 &lt;&lt; 2, 
+00877   <a class="code" href="group__scf.html#gga79a60">SCF_VERBOSE_CLASS_REGISTER</a>  = 1 &lt;&lt; 3, 
+00878   <a class="code" href="group__scf.html#gga79a61">SCF_VERBOSE_ALL</a>             = ~0      
+00879 };
+00880 
+00896 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">void</span> <a class="code" href="group__scf.html#ga2">scfInitialize</a>(<a class="code" href="classcsPathsList.html">csPathsList</a> <span class="keyword">const</span>* pluginPaths,
+00897   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> verbose = <a class="code" href="group__scf.html#gga79a56">SCF_VERBOSE_NONE</a>);
+00898 
+00903 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">void</span> <a class="code" href="group__scf.html#ga2">scfInitialize</a>(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span> argv[]);
+00904 
+<a name="l00911"></a><a class="code" href="group__scf.html#ga4">00911</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="group__scf.html#ga4">scfCompatibleVersion</a> (<span class="keywordtype">int</span> iVersion, <span class="keywordtype">int</span> iItfVersion)
+00912 {
+00913   <span class="keywordflow">return</span> ((iVersion &amp; 0xff000000) == (iItfVersion &amp; 0xff000000))
+00914       &amp;&amp; ((iVersion &amp; 0x00ffffff) &lt;= (iItfVersion &amp; 0x00ffffff));
+00915 }
+00916 
+00917 <span class="preprocessor">#if defined(CS_DEBUG) || defined(CS_MEMORY_TRACKER)</span>
+00918 <span class="preprocessor"></span>  <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+00919 <span class="preprocessor">#endif</span>
+00920 <span class="preprocessor"></span>
+<a name="l00927"></a><a class="code" href="structiSCF.html">00927</a> <span class="keyword">struct </span><a class="code" href="structiSCF.html">iSCF</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00928 {
+<a name="l00940"></a><a class="code" href="structiSCF.html#s0">00940</a>   <span class="keyword">static</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="structiSCF.html">iSCF</a>* <a class="code" href="structiSCF.html#s0">SCF</a>;
+00941 
+00942 <span class="preprocessor">#if defined(CS_DEBUG) || defined(CS_MEMORY_TRACKER)</span>
+00943 <span class="preprocessor"></span>  <span class="comment">// This is EXTREMELY dirty but I see no other solution for now.</span>
+00944   <span class="comment">// For debugging reasons I must have a global (global over the application</span>
+00945   <span class="comment">// and all plugins)pointer to the object registry. I have no other</span>
+00946   <span class="comment">// global object to tag this pointer on that except for iSCF.</span>
+00947   <span class="comment">// This pointer is only here in debug mode though. That ensures that it</span>
+00948   <span class="comment">// cannot be misused in real code.</span>
+00949   <span class="comment">// If you know another solution for this problem? This global pointer</span>
+00950   <span class="comment">// will be used by csDebuggingGraph in csutil.</span>
+00951   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+00952 <span class="preprocessor">#endif</span>
+00953 <span class="preprocessor"></span>
+00957   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a0">RegisterClasses</a> (<a class="code" href="structiDocument.html">iDocument</a>* metadata,
+00958     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+00959 
+00965   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a0">RegisterClasses</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* xml,
+00966     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+00967 
+00971   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a0">RegisterClasses</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* pluginPath,
+00972     <a class="code" href="structiDocument.html">iDocument</a>* metadata, <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+00973 
+00980   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a3">ClassRegistered</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
+00981 
+00997   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiSCF.html#a4">CreateInstance</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
+00998         <span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface, <span class="keywordtype">int</span> iVersion) = 0;
+00999 
+01005   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiSCF.html#a5">GetClassDescription</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
+01006 
+01012   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiSCF.html#a6">GetClassDependencies</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
+01013 
+01040   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDocument&gt;</a> <a class="code" href="structiSCF.html#a7">GetPluginMetadata</a> (<span class="keywordtype">char</span> <span class="keyword">const</span> *iClassID) = 0;
+01041 
+01048   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a8">UnloadUnusedModules</a> () = 0;
+01049 
+01060   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a9">RegisterClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
+01061         <span class="keyword">const</span> <span class="keywordtype">char</span> *iLibraryName, <span class="keyword">const</span> <span class="keywordtype">char</span> *iFactoryClass,
 01062         <span class="keyword">const</span> <span class="keywordtype">char</span> *Description, <span class="keyword">const</span> <span class="keywordtype">char</span> *Dependencies = 0,
 01063         <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
 01064 
-01072   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a11">RegisterFactoryFunc</a> (<a class="code" href="group__scf.html#ga1">scfFactoryFunc</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *FactClass) = 0;
-01073 
-01080   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a12">UnregisterClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
-01081 
-01086   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="structiSCF.html#a13">GetInterfaceName</a> (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>) <span class="keyword">const </span>= 0;
-01087 
-01093   <span class="keyword">virtual</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="structiSCF.html#a14">GetInterfaceID</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface) = 0;
-01094 
-01101   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a15">Finish</a> () = 0;
-01102 
-01112   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iStringArray&gt;</a> <a class="code" href="structiSCF.html#a16">QueryClassList</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* pattern) = 0;
-01113 
-01117   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a17">ScanPluginsPath</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* path, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>,
-01118     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-01119 
-01129   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a18">RegisterPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* path) = 0;
-01130 };
-01131 
-01132 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiFactory.html">iFactory</a>, 0, 0, 2);
-01133 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBase.html">iBase</a>, 0, 1, 0);
-01134 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSCF.html">iSCF</a>, 0, 2, 1);
-01135 
-01136 <span class="comment">// A bit hacky.</span>
-01137 <span class="preprocessor">#include "csutil/reftrackeraccess.h"</span>
-01138 
-01141 <span class="preprocessor">#endif // __CSSCF_H__</span>
+01071   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a9">RegisterClass</a> (<a class="code" href="group__scf.html#ga1">scfFactoryFunc</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
+01072         <span class="keyword">const</span> <span class="keywordtype">char</span> *Description, <span class="keyword">const</span> <span class="keywordtype">char</span> *Dependencies = 0,
+01073         <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+01074 
+01082   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a11">RegisterFactoryFunc</a> (<a class="code" href="group__scf.html#ga1">scfFactoryFunc</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *FactClass) = 0;
+01083 
+01090   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a12">UnregisterClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
+01091 
+01096   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="structiSCF.html#a13">GetInterfaceName</a> (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>) <span class="keyword">const </span>= 0;
+01097 
+01103   <span class="keyword">virtual</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="structiSCF.html#a14">GetInterfaceID</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface) = 0;
+01104 
+01111   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a15">Finish</a> () = 0;
+01112 
+01122   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iStringArray&gt;</a> <a class="code" href="structiSCF.html#a16">QueryClassList</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* pattern) = 0;
+01123 
+01127   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a17">ScanPluginsPath</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* path, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>,
+01128     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+01129 
+01139   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a18">RegisterPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* path) = 0;
+01140 };
+01141 
+01142 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiFactory.html">iFactory</a>, 0, 0, 2);
+01143 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBase.html">iBase</a>, 0, 1, 0);
+01144 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSCF.html">iSCF</a>, 0, 2, 1);
+01145 
+01146 <span class="comment">// A bit hacky.</span>
+01147 <span class="preprocessor">#include "csutil/reftrackeraccess.h"</span>
+01148 
+01151 <span class="preprocessor">#endif // __CSSCF_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

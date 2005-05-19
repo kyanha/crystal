@@ -28,7 +28,7 @@
 <a href="structiVosSector-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiVosSector.html#a0">Load</a> ()=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiVosSector.html#a0">Load</a> (<a class="el" href="structiProgressMeter.html">iProgressMeter</a> *progress=0)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Begin loading this sector in the background.  <a href="#a0"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiSector.html">iSector</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiVosSector.html#a1">GetSector</a> ()=0</td></tr>
@@ -44,7 +44,7 @@ This interface bridges between a VOS sector and a Crystal Space sector.
 <p>
 
 <p>
-Definition at line <a class="el" href="vosa3dl_8h-source.html#l00081">81</a> of file <a class="el" href="vosa3dl_8h-source.html">vosa3dl.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="vosa3dl_8h-source.html#l00082">82</a> of file <a class="el" href="vosa3dl_8h-source.html">vosa3dl.h</a>.<hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="a2" doxytag="iVosSector::GetObject3Ds"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -111,7 +111,8 @@ This will be empty until <a class="el" href="structiVosSector.html#a0">Load()</a
         <tr>
           <td class="md" nowrap valign="top">virtual void iVosSector::Load           </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiProgressMeter.html">iProgressMeter</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>progress</em> = <code>0</code>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap><code> [pure virtual]</code></td>
         </tr>
@@ -129,7 +130,11 @@ This will be empty until <a class="el" href="structiVosSector.html#a0">Load()</a
 <p>
 Begin loading this sector in the background. 
 <p>
-Network activity occurs in another thread, so this method returns immediately. An event is posted to the global event queue when the download is complete. <dl compact><dt><b><a class="el" href="bug.html#_bug000002">Bug:</a></b></dt><dd>the download-complete event is not yet posted.</dd></dl>
+Network activity occurs in another thread, so this method returns immediately. An event is posted to the global event queue when the download is complete. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>progress</em>&nbsp;</td><td>if supplied, this will be called back (in the CS thread) periodically to indicate download progress </td></tr>
+  </table>
+</dl>
     </td>
   </tr>
 </table>
