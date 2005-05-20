@@ -41,94 +41,127 @@
 00022 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
 00023 <span class="preprocessor">#include "<a class="code" href="transfrm_8h.html">csgeom/transfrm.h</a>"</span>
 00024 <span class="preprocessor">#include "<a class="code" href="box_8h.html">csgeom/box.h</a>"</span>
-00025 
-00026 <span class="keyword">struct </span><a class="code" href="structiRigidBody.html">iRigidBody</a>;
-00027 <span class="keyword">struct </span>iGenMeshSkeletonBone;
-00028 <span class="keyword">struct </span>iGenMeshSkeletonScript;
-00029 
-00030 <span class="keyword">enum</span> BoneTransformMode
-00031 {
-00032         BM_SCRIPT = 0,
-00033         BM_PHYSICS,
-00034         BM_NONE
-00035 };
-00036 
-00037 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>  (<a class="code" href="structiGenMeshSkeletonControlState.html">iGenMeshSkeletonControlState</a>, 0, 0, 1);
-00038 
-<a name="l00045"></a><a class="code" href="structiGenMeshSkeletonControlState.html">00045</a> <span class="keyword">struct </span><a class="code" href="structiGenMeshSkeletonControlState.html">iGenMeshSkeletonControlState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00046 {
-00050   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a0">GetBonesCount</a> () = 0;
-00051 
-00055   <span class="keyword">virtual</span> iGenMeshSkeletonBone *<a class="code" href="structiGenMeshSkeletonControlState.html#a1">GetBone</a> (<span class="keywordtype">int</span> i) = 0;
-00056 
-00060   <span class="keyword">virtual</span> iGenMeshSkeletonBone *<a class="code" href="structiGenMeshSkeletonControlState.html#a2">FindBone</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
-00061 
-00067   <span class="keyword">virtual</span> iGenMeshSkeletonScript* <a class="code" href="structiGenMeshSkeletonControlState.html#a3">Execute</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *scriptname) = 0;
-00068 
-00072   <span class="keyword">virtual</span> size_t <a class="code" href="structiGenMeshSkeletonControlState.html#a4">GetScriptsCount</a> () = 0;
-00073 
-00077   <span class="keyword">virtual</span> iGenMeshSkeletonScript* <a class="code" href="structiGenMeshSkeletonControlState.html#a5">GetScript</a> (size_t i) = 0;
-00078 
-00082   <span class="keyword">virtual</span> iGenMeshSkeletonScript* <a class="code" href="structiGenMeshSkeletonControlState.html#a6">FindScript</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *scriptname) = 0;
-00083 
-00087   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a7">StopAll</a> () = 0;
-00088 
-00092   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a8">Stop</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* scriptname) = 0;
-00093 
-00097   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a8">Stop</a> (iGenMeshSkeletonScript *script) = 0;
-00098 
-00104   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a10">SetAlwaysUpdate</a>(<span class="keywordtype">bool</span> always_update) = 0;
-00105 
-00109   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a11">GetAlwaysUpdate</a>() = 0;
-00110 };
-00111 
-00112 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>  (iGenMeshSkeletonBone, 0, 0, 1);
+00025 <span class="preprocessor">#include "imesh/genmesh.h"</span>
+00026 
+00027 <span class="keyword">struct </span><a class="code" href="structiRigidBody.html">iRigidBody</a>;
+00028 <span class="keyword">struct </span>iGenMeshSkeletonBone;
+00029 <span class="keyword">struct </span>iGenMeshSkeletonScript;
+00030 <span class="keyword">struct </span>iGenMeshSkeletonBoneUpdateCallback;
+00031 <span class="keyword">struct </span>iGenMeshSkeletonControlFactory;
+00032 
+00033 <span class="keyword">enum</span> BoneTransformMode
+00034 {
+00035         BM_SCRIPT = 0,
+00036         BM_PHYSICS,
+00037         BM_NONE
+00038 };
+00039 
+00040 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>  (<a class="code" href="structiGenMeshSkeletonControlState.html">iGenMeshSkeletonControlState</a>, 0, 0, 1);
+00041 
+<a name="l00048"></a><a class="code" href="structiGenMeshSkeletonControlState.html">00048</a> <span class="keyword">struct </span><a class="code" href="structiGenMeshSkeletonControlState.html">iGenMeshSkeletonControlState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00049 {
+00053   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a0">GetBonesCount</a> () = 0;
+00054 
+00058   <span class="keyword">virtual</span> iGenMeshSkeletonBone *<a class="code" href="structiGenMeshSkeletonControlState.html#a1">GetBone</a> (<span class="keywordtype">int</span> i) = 0;
+00059 
+00063   <span class="keyword">virtual</span> iGenMeshSkeletonBone *<a class="code" href="structiGenMeshSkeletonControlState.html#a2">FindBone</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
+00064 
+00070   <span class="keyword">virtual</span> iGenMeshSkeletonScript* <a class="code" href="structiGenMeshSkeletonControlState.html#a3">Execute</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *scriptname) = 0;
+00071 
+00075   <span class="keyword">virtual</span> size_t <a class="code" href="structiGenMeshSkeletonControlState.html#a4">GetScriptsCount</a> () = 0;
+00076 
+00080   <span class="keyword">virtual</span> iGenMeshSkeletonScript* <a class="code" href="structiGenMeshSkeletonControlState.html#a5">GetScript</a> (size_t i) = 0;
+00081 
+00085   <span class="keyword">virtual</span> iGenMeshSkeletonScript* <a class="code" href="structiGenMeshSkeletonControlState.html#a6">FindScript</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *scriptname) = 0;
+00086 
+00090   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a7">StopAll</a> () = 0;
+00091 
+00095   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a8">Stop</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* scriptname) = 0;
+00096 
+00100   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a8">Stop</a> (iGenMeshSkeletonScript *script) = 0;
+00101 
+00107   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a10">SetAlwaysUpdate</a>(<span class="keywordtype">bool</span> always_update) = 0;
+00108 
+00112   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiGenMeshSkeletonControlState.html#a11">GetAlwaysUpdate</a>() = 0;
 00113 
-00114 <span class="keyword">struct </span>iGenMeshSkeletonBone : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00115 {
-00119   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetName () <span class="keyword">const </span>= 0;
-00120 
-00124   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetName (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
-00125 
-00129   <span class="keyword">virtual</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;GetTransform () = 0;
-00130 
-00134   <span class="keyword">virtual</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;GetFullTransform () = 0;
-00135 
-00139   <span class="keyword">virtual</span> iGenMeshSkeletonBone *GetParent () = 0;
-00140 
-00145   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetSkinBox (<a class="code" href="classcsBox3.html">csBox3</a> &amp;box, <a class="code" href="classcsVector3.html">csVector3</a> &amp;center) = 0;
-00146 
-00154   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetMode (BoneTransformMode mode) = 0;
-00155 
-00159   <span class="keyword">virtual</span> BoneTransformMode GetMode () = 0;
-00160 
-00164   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetRigidBody (<a class="code" href="structiRigidBody.html">iRigidBody</a> *r_body) = 0;
-00165 
-00169   <span class="keyword">virtual</span> <a class="code" href="structiRigidBody.html">iRigidBody</a> *GetRigidBody () = 0;
-00170 
-00174   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetChildrenCount () = 0;
-00175 
-00179   <span class="keyword">virtual</span> iGenMeshSkeletonBone *GetChild (<span class="keywordtype">int</span> i) = 0;
-00180 
-00184   <span class="keyword">virtual</span> iGenMeshSkeletonBone *FindChild (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
-00185 };
-00186 
-00187 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>  (iGenMeshSkeletonScript, 0, 0, 1);
-00188 
-00189 <span class="keyword">struct </span>iGenMeshSkeletonScript : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00190 {
-00194   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetName () = 0;
-00195 
-00199   <span class="keyword">virtual</span> size_t GetTime () = 0;
-00200 
-00204   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTime (size_t time) = 0;
-00205 
-00240   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFactor (<span class="keywordtype">float</span> factor) = 0;
+00117   <span class="keyword">virtual</span> iGenMeshSkeletonControlFactory *<a class="code" href="structiGenMeshSkeletonControlState.html#a12">GetFactory</a>() = 0;
+00118 };
+00119 
+00120 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>  (iGenMeshSkeletonControlFactory, 0, 0, 1);
+00121 
+00122 <span class="keyword">struct </span>iGenMeshSkeletonControlFactory: <span class="keyword">public</span> <a class="code" href="structiGenMeshAnimationControlFactory.html">iGenMeshAnimationControlFactory</a> 
+00123 {
+00127   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* LoadScriptFile(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename) =0;
+00128   
+00132   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DeleteScript(<span class="keyword">const</span> <span class="keywordtype">char</span> *script_name) = 0;
+00133   
+00137   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DeleteAllScripts() = 0;
+00138   
+00142   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetAlwaysUpdate(<span class="keywordtype">bool</span> always_update) = 0;
+00143   
+00147   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetAlwaysUpdate() = 0;
+00148 };
+00149 
+00150 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>  (iGenMeshSkeletonBone, 0, 0, 1);
+00151 
+00152 <span class="keyword">struct </span>iGenMeshSkeletonBone : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00153 {
+00157   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetName () <span class="keyword">const </span>= 0;
+00158 
+00162   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetName (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
+00163 
+00167   <span class="keyword">virtual</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;GetTransform () = 0;
+00168 
+00172   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTransform (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;transform) = 0;
+00173 
+00177   <span class="keyword">virtual</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;GetFullTransform () = 0;
+00178 
+00182   <span class="keyword">virtual</span> iGenMeshSkeletonBone *GetParent () = 0;
+00183 
+00188   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetSkinBox (<a class="code" href="classcsBox3.html">csBox3</a> &amp;box, <a class="code" href="classcsVector3.html">csVector3</a> &amp;center) = 0;
+00189 
+00197   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetMode (BoneTransformMode mode) = 0;
+00198 
+00202   <span class="keyword">virtual</span> BoneTransformMode GetMode () = 0;
+00203 
+00207   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetRigidBody (<a class="code" href="structiRigidBody.html">iRigidBody</a> *r_body) = 0;
+00208 
+00212   <span class="keyword">virtual</span> <a class="code" href="structiRigidBody.html">iRigidBody</a> *GetRigidBody () = 0;
+00213 
+00217   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetChildrenCount () = 0;
+00218 
+00222   <span class="keyword">virtual</span> iGenMeshSkeletonBone *GetChild (<span class="keywordtype">int</span> i) = 0;
+00223 
+00227   <span class="keyword">virtual</span> iGenMeshSkeletonBone *FindChild (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
+00228 
+00232   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetUpdateCallback (iGenMeshSkeletonBoneUpdateCallback *callback) = 0;
+00233 
+00237   <span class="keyword">virtual</span> iGenMeshSkeletonBoneUpdateCallback *GetUpdateCallback () = 0;
+00238 };
+00239 
+00240 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>  (iGenMeshSkeletonBoneUpdateCallback, 0, 0, 1);
 00241 
-00245   <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetFactor () = 0;
-00246 };
-00247 
-00248 <span class="preprocessor">#endif // __CS_IMESH_GMESHSKEL_H__</span>
+00242 <span class="keyword">struct </span>iGenMeshSkeletonBoneUpdateCallback : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00243 {
+00244         <span class="keyword">virtual</span> <span class="keywordtype">void</span> UpdateTransform(iGenMeshSkeletonBone *bone, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp; transform) = 0;
+00245 };
+00246 
+00247 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>  (iGenMeshSkeletonScript, 0, 0, 1);
+00248 
+00249 <span class="keyword">struct </span>iGenMeshSkeletonScript : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00250 {
+00254   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetName () = 0;
+00255 
+00259   <span class="keyword">virtual</span> size_t GetTime () = 0;
+00260 
+00264   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTime (size_t time) = 0;
+00265 
+00300   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFactor (<span class="keywordtype">float</span> factor) = 0;
+00301 
+00305   <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetFactor () = 0;
+00306 };
+00307 
+00308 <span class="preprocessor">#endif // __CS_IMESH_GMESHSKEL_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
