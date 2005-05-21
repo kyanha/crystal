@@ -21,43 +21,94 @@
 00002 <span class="comment">    Event system related helpers</span>
 00003 <span class="comment">    Copyright (C) 2003 by Jorrit Tyberghein</span>
 00004 <span class="comment">              (C) 2003 by Frank Richter</span>
-00005 <span class="comment"></span>
-00006 <span class="comment">    This library is free software; you can redistribute it and/or</span>
-00007 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
-00008 <span class="comment">    License as published by the Free Software Foundation; either</span>
-00009 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
-00010 <span class="comment">  </span>
-00011 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
-00012 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-00013 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
-00014 <span class="comment">    Library General Public License for more details.</span>
-00015 <span class="comment">  </span>
-00016 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
-00017 <span class="comment">    License along with this library; if not, write to the Free</span>
-00018 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
-00019 <span class="comment">*/</span>
-00020 
-00021 <span class="preprocessor">#ifndef __CS_CSUTIL_EVENT_H__</span>
-00022 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_EVENT_H__</span>
-00023 <span class="preprocessor"></span>
-00024 <span class="preprocessor">#include "csextern.h"</span>
-00025 <span class="preprocessor">#include "<a class="code" href="iutil_2event_8h.html">iutil/event.h</a>"</span>
-00026 
-<a name="l00039"></a><a class="code" href="classcsKeyEventHelper.html">00039</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsKeyEventHelper.html">csKeyEventHelper</a>
-00040 {
-00041 <span class="keyword">public</span>:
-00043   <span class="keyword">static</span> <a class="code" href="group__util.html#ga22">utf32_char</a> GetRawCode (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
-00045   <span class="keyword">static</span> <a class="code" href="group__util.html#ga22">utf32_char</a> GetCookedCode (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
-00047   <span class="keyword">static</span> <span class="keywordtype">void</span> GetModifiers (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event, <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a>&amp; modifiers);
-00049   <span class="keyword">static</span> <a class="code" href="group__event__handling.html#ga1">csKeyEventType</a> GetEventType (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
-00054   <span class="keyword">static</span> <span class="keywordtype">bool</span> GetAutoRepeat (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
-00056   <span class="keyword">static</span> <a class="code" href="group__event__handling.html#ga5">csKeyCharType</a> GetCharacterType (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
-00058   <span class="keyword">static</span> <span class="keywordtype">bool</span> GetEventData (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event, <a class="code" href="structcsKeyEventData.html">csKeyEventData</a>&amp; data);
-00064   <span class="keyword">static</span> <a class="code" href="group__util.html#ga4">uint32</a> GetModifiersBits (<span class="keyword">const</span> <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a>&amp; modifiers);
-00069   <span class="keyword">static</span> <a class="code" href="group__util.html#ga4">uint32</a> GetModifiersBits (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
-00077   <span class="keyword">static</span> <span class="keywordtype">void</span> GetModifiers (<a class="code" href="group__util.html#ga4">uint32</a> mask, <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a>&amp; modifiers);
-00078 };
-00083 <span class="preprocessor">#endif // __CS_CSUTIL_EVENT_H__</span>
+00005 <span class="comment">              (C) 2005 by Adam D. Bradley &lt;artdodge@cs.bu.edu&gt;</span>
+00006 <span class="comment"></span>
+00007 <span class="comment">    This library is free software; you can redistribute it and/or</span>
+00008 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
+00009 <span class="comment">    License as published by the Free Software Foundation; either</span>
+00010 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
+00011 <span class="comment">  </span>
+00012 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
+00013 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+00014 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+00015 <span class="comment">    Library General Public License for more details.</span>
+00016 <span class="comment">  </span>
+00017 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
+00018 <span class="comment">    License along with this library; if not, write to the Free</span>
+00019 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
+00020 <span class="comment">*/</span>
+00021 
+00022 <span class="preprocessor">#ifndef __CS_CSUTIL_EVENT_H__</span>
+00023 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_EVENT_H__</span>
+00024 <span class="preprocessor"></span>
+00025 <span class="preprocessor">#include "csextern.h"</span>
+00026 <span class="preprocessor">#include "<a class="code" href="iutil_2event_8h.html">iutil/event.h</a>"</span>
+00027 
+<a name="l00040"></a><a class="code" href="classcsKeyEventHelper.html">00040</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsKeyEventHelper.html">csKeyEventHelper</a>
+00041 {
+00042 <span class="keyword">public</span>:
+00044   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__util.html#ga22">utf32_char</a> GetRawCode (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
+00046   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__util.html#ga22">utf32_char</a> GetCookedCode (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
+00048   <span class="keyword">static</span> <span class="keywordtype">void</span> GetModifiers (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event, <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a>&amp; modifiers);
+00050   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__event__handling.html#ga1">csKeyEventType</a> GetEventType (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
+00055   CS_PURE_METHOD <span class="keyword">static</span> <span class="keywordtype">bool</span> GetAutoRepeat (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
+00057   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__event__handling.html#ga5">csKeyCharType</a> GetCharacterType (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
+00059   <span class="keyword">static</span> <span class="keywordtype">bool</span> GetEventData (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event, <a class="code" href="structcsKeyEventData.html">csKeyEventData</a>&amp; data);
+00065   CS_CONST_METHOD <span class="keyword">static</span> <a class="code" href="group__util.html#ga4">uint32</a> GetModifiersBits (
+00066     <span class="keyword">const</span> <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a>&amp; modifiers);
+00071   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__util.html#ga4">uint32</a> GetModifiersBits (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event);
+00079   <span class="keyword">static</span> <span class="keywordtype">void</span> GetModifiers (<a class="code" href="group__util.html#ga4">uint32</a> mask, <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a>&amp; modifiers);
+00080 };
+<a name="l00088"></a><a class="code" href="classcsMouseEventHelper.html">00088</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csMouseEventHelper
+00089 {
+00090 <span class="keyword">public</span>:
+00092   CS_PURE_METHOD <span class="keyword">static</span> <span class="keywordtype">int</span> GetX(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event);
+00094   CS_PURE_METHOD <span class="keyword">static</span> <span class="keywordtype">int</span> GetY(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event);
+00096   CS_PURE_METHOD <span class="keyword">static</span> <span class="keywordtype">int</span> GetButton(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event);
+<a name="l00098"></a><a class="code" href="classcsMouseEventHelper.html#e3">00098</a>   CS_PURE_METHOD <span class="keyword">static</span> <span class="keywordtype">void</span> GetModifiers(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event, 
+00099     <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a>&amp; modifiers) 
+00100   { <span class="keywordflow">return</span> <a class="code" href="classcsKeyEventHelper.html#e2">csKeyEventHelper::GetModifiers</a>(event, modifiers); }
+<a name="l00102"></a><a class="code" href="classcsMouseEventHelper.html#e4">00102</a>   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__util.html#ga4">uint32</a> GetModifiers(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event) 
+00103   { 
+00104     <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a> modifiers; 
+00105     <a class="code" href="classcsKeyEventHelper.html#e2">csKeyEventHelper::GetModifiers</a>(event, modifiers); 
+00106     <span class="keywordflow">return</span> <a class="code" href="classcsKeyEventHelper.html#e7">csKeyEventHelper::GetModifiersBits</a>(modifiers); 
+00107   }
+00109   CS_PURE_METHOD <span class="keyword">static</span> <span class="keywordtype">bool</span> GetEventData (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event, 
+00110     <a class="code" href="structcsMouseEventData.html">csMouseEventData</a>&amp; data);
+00111 };
+00112 
+<a name="l00120"></a><a class="code" href="classcsJoystickEventHelper.html">00120</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csJoystickEventHelper
+00121 {
+00122 <span class="keyword">public</span>:
+00124   CS_PURE_METHOD <span class="keyword">static</span> <span class="keywordtype">int</span> GetNumber(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event);
+<a name="l00126"></a><a class="code" href="classcsJoystickEventHelper.html#e1">00126</a>   CS_PURE_METHOD CS_DEPRECATED_METHOD <span class="keyword">static</span> <span class="keywordtype">int</span> GetX(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event) 
+00127   { <span class="keywordflow">return</span> <a class="code" href="classcsJoystickEventHelper.html#e3">csJoystickEventHelper::GetAxis</a>(event, 1); }
+<a name="l00129"></a><a class="code" href="classcsJoystickEventHelper.html#e2">00129</a>   CS_PURE_METHOD CS_DEPRECATED_METHOD <span class="keyword">static</span> <span class="keywordtype">int</span> GetY(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event) 
+00130   { <span class="keywordflow">return</span> <a class="code" href="classcsJoystickEventHelper.html#e3">csJoystickEventHelper::GetAxis</a>(event, 2); }
+00132   CS_PURE_METHOD <span class="keyword">static</span> <span class="keywordtype">int</span> GetAxis(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event, <span class="keywordtype">int</span>);
+00134   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__util.html#ga0">uint8</a> GetNumAxes(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *);
+00136   CS_PURE_METHOD <span class="keyword">static</span> <span class="keywordtype">int</span> GetButton(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event);
+<a name="l00138"></a><a class="code" href="classcsJoystickEventHelper.html#e6">00138</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> GetModifiers(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event, <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a>&amp; modifiers) 
+00139   { <span class="keywordflow">return</span> <a class="code" href="classcsKeyEventHelper.html#e2">csKeyEventHelper::GetModifiers</a>(event, modifiers); }
+<a name="l00141"></a><a class="code" href="classcsJoystickEventHelper.html#e7">00141</a>   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__util.html#ga4">uint32</a> GetModifiers(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event) 
+00142   { 
+00143     <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a> modifiers; 
+00144     <a class="code" href="classcsKeyEventHelper.html#e2">csKeyEventHelper::GetModifiers</a>(event, modifiers); 
+00145     <span class="keywordflow">return</span> <a class="code" href="classcsKeyEventHelper.html#e7">csKeyEventHelper::GetModifiersBits</a>(modifiers); 
+00146   }
+00148   <span class="keyword">static</span> <span class="keywordtype">bool</span> GetEventData (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event, <a class="code" href="structcsJoystickEventData.html">csJoystickEventData</a>&amp; data);
+00149 };
+00150 
+<a name="l00158"></a><a class="code" href="classcsCommandEventHelper.html">00158</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csCommandEventHelper
+00159 {
+00160 <span class="keyword">public</span>:
+00162   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__util.html#ga18">uint</a> GetCode(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event);
+00164   CS_PURE_METHOD <span class="keyword">static</span> <a class="code" href="group__util.html#ga8">intptr_t</a> GetInfo(<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a> *event);
+00166   <span class="keyword">static</span> <span class="keywordtype">bool</span> GetEventData (<span class="keyword">const</span> <a class="code" href="structiEvent.html">iEvent</a>* event, <a class="code" href="structcsCommandEventData.html">csCommandEventData</a>&amp; data);
+00167 };
+00168 
+00173 <span class="preprocessor">#endif // __CS_CSUTIL_EVENT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

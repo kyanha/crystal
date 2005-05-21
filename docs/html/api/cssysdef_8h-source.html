@@ -412,12 +412,12 @@
 00545 <span class="preprocessor">static void Class ## _ ## getterFunc ## _kill_array ();        \</span>
 00546 <span class="preprocessor">void Class ## _ ## getterFunc ## _kill ()                      \</span>
 00547 <span class="preprocessor">{                                                              \</span>
-00548 <span class="preprocessor">  (void) Class ## _ ## getterFunc ## _kill_array;              \</span>
+00548 <span class="preprocessor">  (void) &amp;Class ## _ ## getterFunc ## _kill_array;              \</span>
 00549 <span class="preprocessor">  delete &amp;Class::getterFunc ();                                \</span>
 00550 <span class="preprocessor">}                                                              \</span>
 00551 <span class="preprocessor">void Class ## _ ## getterFunc ## _kill_array ()                \</span>
 00552 <span class="preprocessor">{                                                              \</span>
-00553 <span class="preprocessor">  (void) Class ## _ ## getterFunc ## _kill;                    \</span>
+00553 <span class="preprocessor">  (void) &amp;Class ## _ ## getterFunc ## _kill;                    \</span>
 00554 <span class="preprocessor">  delete [] &amp;Class::getterFunc ();                             \</span>
 00555 <span class="preprocessor">}                                                              \</span>
 00556 <span class="preprocessor">}                                                              \</span>
@@ -531,101 +531,109 @@
 00684 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
 00685 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 00686 <span class="preprocessor"></span>
-00687 <span class="comment">// Check if the csosdefs.h defined either CS_LITTLE_ENDIAN or CS_BIG_ENDIAN</span>
-00688 <span class="preprocessor">#if !defined (CS_LITTLE_ENDIAN) &amp;&amp; !defined (CS_BIG_ENDIAN)</span>
-00689 <span class="preprocessor"></span><span class="preprocessor">#  error No CS_XXX_ENDIAN macro defined in your OS-specific csosdefs.h!</span>
-00690 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00691 <span class="preprocessor"></span>
-00692 <span class="comment">/*</span>
-00693 <span class="comment"> * This is a bit of overkill but if you're sure your CPU doesn't require</span>
-00694 <span class="comment"> * strict alignment add your CPU to the !defined below to get slightly</span>
-00695 <span class="comment"> * smaller and faster code in some cases.</span>
-00696 <span class="comment"> *</span>
-00697 <span class="comment"> * @@@ In the future, this should be moved to csconfig.h and determined as</span>
-00698 <span class="comment"> * part of the configuration process.</span>
-00699 <span class="comment"> */</span>
-00700 <span class="preprocessor">#if !defined (CS_PROCESSOR_X86)</span>
-00701 <span class="preprocessor"></span><span class="preprocessor">#  define CS_STRICT_ALIGNMENT</span>
-00702 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00703 <span class="preprocessor"></span>
-00704 <span class="comment">// Adjust some definitions contained in csconfig.h</span>
-00705 <span class="preprocessor">#if !defined (CS_PROCESSOR_X86) || !defined (CS_HAVE_NASM)</span>
-00706 <span class="preprocessor"></span><span class="preprocessor">#  undef CS_HAVE_MMX</span>
-00707 <span class="preprocessor"></span><span class="preprocessor">#  undef CS_HAVE_NASM</span>
-00708 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00709 <span class="preprocessor"></span>
-00710 <span class="comment">// Use special knowledge of IEEE float format in some cases for CPU's that are</span>
-00711 <span class="comment">// known to support it</span>
-00712 <span class="preprocessor">#if !defined (CS_IEEE_DOUBLE_FORMAT)</span>
-00713 <span class="preprocessor"></span><span class="preprocessor">#  if defined (CS_PROCESSOR_X86) || \</span>
-00714 <span class="preprocessor">      defined (CS_PROCESSOR_POWERPC) || \</span>
-00715 <span class="preprocessor">      defined (CS_PROCESSOR_M68K)</span>
-00716 <span class="preprocessor"></span><span class="preprocessor">#    define CS_IEEE_DOUBLE_FORMAT</span>
-00717 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-00718 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00719 <span class="preprocessor"></span>
-00720 <span class="comment">// gcc can perform usefull checking for printf/scanf format strings, just add</span>
-00721 <span class="comment">// this define at the end of the function declaration</span>
-00722 <span class="preprocessor">#if __GNUC__ &gt; 2 || (__GNUC__ == 2 &amp;&amp; __GNUC_MINOR__ &gt; 4)</span>
-00723 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_PRINTF(format_idx, arg_idx) \</span>
-00724 <span class="preprocessor">     __attribute__((format (__printf__, format_idx, arg_idx)))</span>
-00725 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_SCANF(format_idx, arg_idx) \</span>
-00726 <span class="preprocessor">     __attribute__((format (__scanf__, format_idx, arg_idx)))</span>
-00727 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00728 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_PRINTF(format_idx, arg_idx)</span>
-00729 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_SCANF(format_idx, arg_idx)</span>
-00730 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00731 <span class="preprocessor"></span>
-00732 <span class="comment">// Remove __attribute__ on non GNUC compilers.</span>
-00733 <span class="preprocessor">#ifndef __GNUC__</span>
-00734 <span class="preprocessor"></span><span class="preprocessor">#define __attribute__(x)</span>
-00735 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00736 <span class="preprocessor"></span>
-00737 <span class="comment">// Support for alignment and packing of structures.</span>
-00738 <span class="preprocessor">#if !defined(CS_STRUCT_ALIGN_4BYTE_BEGIN)</span>
-00739 <span class="preprocessor"></span><span class="preprocessor">#  if defined(__GNUC__) &amp;&amp; defined(CS_STRICT_ALIGNMENT)</span>
-00740 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_BEGIN</span>
-00741 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_END __attribute__ ((aligned(4)))</span>
-00742 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
-00743 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_BEGIN</span>
-00744 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_END</span>
-00745 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-00746 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00747 <span class="preprocessor"></span>
-00748 <span class="comment">// Macro used to define static implicit pointer conversion function.</span>
-00749 <span class="comment">// Only use within a class declaration.</span>
-00750 <span class="preprocessor">#ifndef _CS_IMPLICITPTRCAST_NAME</span>
-00751 <span class="preprocessor"></span><span class="preprocessor">#  define _CS_IMPLICITPTRCAST_NAME __ImplicitPtrCast</span>
-00752 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00753 <span class="preprocessor"></span>
-<a name="l00775"></a><a class="code" href="cssysdef_8h.html#a45">00775</a> <span class="preprocessor">#define CS_IMPLEMENT_IMPLICIT_PTR_CAST(classname) \</span>
-00776 <span class="preprocessor">  inline static classname* _CS_IMPLICITPTRCAST_NAME (classname* ptr) \</span>
-00777 <span class="preprocessor">  { \</span>
-00778 <span class="preprocessor">    return ptr;\</span>
-00779 <span class="preprocessor">  }</span>
-00780 <span class="preprocessor"></span>
-<a name="l00789"></a><a class="code" href="cssysdef_8h.html#a46">00789</a> <span class="preprocessor">#define CS_IMPLICIT_PTR_CAST(classname, ptr) \</span>
-00790 <span class="preprocessor">  (classname::_CS_IMPLICITPTRCAST_NAME(ptr))</span>
-00791 <span class="preprocessor"></span>
-00795 <span class="preprocessor">#ifdef CS_HAVE_VA_COPY</span>
-00796 <span class="preprocessor"></span><span class="preprocessor">#  define CS_VA_COPY(dest, src)         va_copy(dest, src)</span>
-00797 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00798 <span class="preprocessor"></span><span class="preprocessor">#  ifdef CS_HAVE___VA_COPY</span>
-00799 <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       __va_copy(dest, src)</span>
-00800 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
-<a name="l00801"></a><a class="code" href="cssysdef_8h.html#a47">00801</a> <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       dest = src;</span>
-00802 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-00803 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00804 <span class="preprocessor"></span>
-00809 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
-<a name="l00810"></a><a class="code" href="cssysdef_8h.html#a48">00810</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __PRETTY_FUNCTION__</span>
-00811 <span class="preprocessor"></span><span class="preprocessor">#elif defined(__FUNCTION__)</span>
-00812 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __FUNCTION__</span>
-00813 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00814 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              "&lt;?\?\?&gt;"</span>
-00815 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00816 <span class="preprocessor"></span>
-00817 <span class="preprocessor">#endif // __CS_CSSYSDEF_H__</span>
+00698 <span class="preprocessor">#ifndef CS_CONST_METHOD</span>
+00699 <span class="preprocessor"></span><span class="preprocessor">#define CS_CONST_METHOD</span>
+00700 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00701 <span class="preprocessor"></span>
+00714 <span class="preprocessor">#ifndef CS_PURE_METHOD</span>
+00715 <span class="preprocessor"></span><span class="preprocessor">#define CS_PURE_METHOD</span>
+00716 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00717 <span class="preprocessor"></span>
+00718 <span class="comment">// Check if the csosdefs.h defined either CS_LITTLE_ENDIAN or CS_BIG_ENDIAN</span>
+00719 <span class="preprocessor">#if !defined (CS_LITTLE_ENDIAN) &amp;&amp; !defined (CS_BIG_ENDIAN)</span>
+00720 <span class="preprocessor"></span><span class="preprocessor">#  error No CS_XXX_ENDIAN macro defined in your OS-specific csosdefs.h!</span>
+00721 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00722 <span class="preprocessor"></span>
+00723 <span class="comment">/*</span>
+00724 <span class="comment"> * This is a bit of overkill but if you're sure your CPU doesn't require</span>
+00725 <span class="comment"> * strict alignment add your CPU to the !defined below to get slightly</span>
+00726 <span class="comment"> * smaller and faster code in some cases.</span>
+00727 <span class="comment"> *</span>
+00728 <span class="comment"> * @@@ In the future, this should be moved to csconfig.h and determined as</span>
+00729 <span class="comment"> * part of the configuration process.</span>
+00730 <span class="comment"> */</span>
+00731 <span class="preprocessor">#if !defined (CS_PROCESSOR_X86)</span>
+00732 <span class="preprocessor"></span><span class="preprocessor">#  define CS_STRICT_ALIGNMENT</span>
+00733 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00734 <span class="preprocessor"></span>
+00735 <span class="comment">// Adjust some definitions contained in csconfig.h</span>
+00736 <span class="preprocessor">#if !defined (CS_PROCESSOR_X86) || !defined (CS_HAVE_NASM)</span>
+00737 <span class="preprocessor"></span><span class="preprocessor">#  undef CS_HAVE_MMX</span>
+00738 <span class="preprocessor"></span><span class="preprocessor">#  undef CS_HAVE_NASM</span>
+00739 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00740 <span class="preprocessor"></span>
+00741 <span class="comment">// Use special knowledge of IEEE float format in some cases for CPU's that are</span>
+00742 <span class="comment">// known to support it</span>
+00743 <span class="preprocessor">#if !defined (CS_IEEE_DOUBLE_FORMAT)</span>
+00744 <span class="preprocessor"></span><span class="preprocessor">#  if defined (CS_PROCESSOR_X86) || \</span>
+00745 <span class="preprocessor">      defined (CS_PROCESSOR_POWERPC) || \</span>
+00746 <span class="preprocessor">      defined (CS_PROCESSOR_M68K)</span>
+00747 <span class="preprocessor"></span><span class="preprocessor">#    define CS_IEEE_DOUBLE_FORMAT</span>
+00748 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+00749 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00750 <span class="preprocessor"></span>
+00751 <span class="comment">// gcc can perform usefull checking for printf/scanf format strings, just add</span>
+00752 <span class="comment">// this define at the end of the function declaration</span>
+00753 <span class="preprocessor">#if __GNUC__ &gt; 2 || (__GNUC__ == 2 &amp;&amp; __GNUC_MINOR__ &gt; 4)</span>
+00754 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_PRINTF(format_idx, arg_idx) \</span>
+00755 <span class="preprocessor">     __attribute__((format (__printf__, format_idx, arg_idx)))</span>
+00756 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_SCANF(format_idx, arg_idx) \</span>
+00757 <span class="preprocessor">     __attribute__((format (__scanf__, format_idx, arg_idx)))</span>
+00758 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00759 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_PRINTF(format_idx, arg_idx)</span>
+00760 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_SCANF(format_idx, arg_idx)</span>
+00761 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00762 <span class="preprocessor"></span>
+00763 <span class="comment">// Remove __attribute__ on non GNUC compilers.</span>
+00764 <span class="preprocessor">#ifndef __GNUC__</span>
+00765 <span class="preprocessor"></span><span class="preprocessor">#define __attribute__(x)</span>
+00766 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00767 <span class="preprocessor"></span>
+00768 <span class="comment">// Support for alignment and packing of structures.</span>
+00769 <span class="preprocessor">#if !defined(CS_STRUCT_ALIGN_4BYTE_BEGIN)</span>
+00770 <span class="preprocessor"></span><span class="preprocessor">#  if defined(__GNUC__) &amp;&amp; defined(CS_STRICT_ALIGNMENT)</span>
+00771 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_BEGIN</span>
+00772 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_END __attribute__ ((aligned(4)))</span>
+00773 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
+00774 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_BEGIN</span>
+00775 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_END</span>
+00776 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+00777 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00778 <span class="preprocessor"></span>
+00779 <span class="comment">// Macro used to define static implicit pointer conversion function.</span>
+00780 <span class="comment">// Only use within a class declaration.</span>
+00781 <span class="preprocessor">#ifndef _CS_IMPLICITPTRCAST_NAME</span>
+00782 <span class="preprocessor"></span><span class="preprocessor">#  define _CS_IMPLICITPTRCAST_NAME __ImplicitPtrCast</span>
+00783 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00784 <span class="preprocessor"></span>
+<a name="l00806"></a><a class="code" href="cssysdef_8h.html#a45">00806</a> <span class="preprocessor">#define CS_IMPLEMENT_IMPLICIT_PTR_CAST(classname) \</span>
+00807 <span class="preprocessor">  inline static classname* _CS_IMPLICITPTRCAST_NAME (classname* ptr) \</span>
+00808 <span class="preprocessor">  { \</span>
+00809 <span class="preprocessor">    return ptr;\</span>
+00810 <span class="preprocessor">  }</span>
+00811 <span class="preprocessor"></span>
+<a name="l00820"></a><a class="code" href="cssysdef_8h.html#a46">00820</a> <span class="preprocessor">#define CS_IMPLICIT_PTR_CAST(classname, ptr) \</span>
+00821 <span class="preprocessor">  (classname::_CS_IMPLICITPTRCAST_NAME(ptr))</span>
+00822 <span class="preprocessor"></span>
+00826 <span class="preprocessor">#ifdef CS_HAVE_VA_COPY</span>
+00827 <span class="preprocessor"></span><span class="preprocessor">#  define CS_VA_COPY(dest, src)         va_copy(dest, src)</span>
+00828 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00829 <span class="preprocessor"></span><span class="preprocessor">#  ifdef CS_HAVE___VA_COPY</span>
+00830 <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       __va_copy(dest, src)</span>
+00831 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
+<a name="l00832"></a><a class="code" href="cssysdef_8h.html#a47">00832</a> <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       dest = src;</span>
+00833 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+00834 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00835 <span class="preprocessor"></span>
+00840 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
+<a name="l00841"></a><a class="code" href="cssysdef_8h.html#a48">00841</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __PRETTY_FUNCTION__</span>
+00842 <span class="preprocessor"></span><span class="preprocessor">#elif defined(__FUNCTION__)</span>
+00843 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __FUNCTION__</span>
+00844 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00845 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              "&lt;?\?\?&gt;"</span>
+00846 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00847 <span class="preprocessor"></span>
+00848 <span class="preprocessor">#endif // __CS_CSSYSDEF_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

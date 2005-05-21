@@ -53,54 +53,66 @@
 00039 <span class="keyword">struct </span><a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>;
 00040 <span class="keyword">struct </span><a class="code" href="structiMeshFactoryWrapper.html">iMeshFactoryWrapper</a>;
 00041 <span class="keyword">struct </span><a class="code" href="structiSoundWrapper.html">iSoundWrapper</a>;
-00042 
-00043 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiLoaderStatus.html">iLoaderStatus</a>, 0, 1, 0);
-00044 
-<a name="l00048"></a><a class="code" href="structiLoaderStatus.html">00048</a> <span class="keyword">struct </span><a class="code" href="structiLoaderStatus.html">iLoaderStatus</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00049 {
-00051   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoaderStatus.html#a0">IsReady</a> () = 0;
-00053   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoaderStatus.html#a1">IsError</a> () = 0;
-00054 };
-00055 
-00056 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiLoader.html">iLoader</a>, 0, 0, 8);
-00057 
-<a name="l00061"></a><a class="code" href="structiLoader.html">00061</a> <span class="keyword">struct </span><a class="code" href="structiLoader.html">iLoader</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00062 {
-00069   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiLoader.html#a0">LoadImage</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* Filename,
-00070     <span class="keywordtype">int</span> Format = <a class="code" href="group__gfx2d.html#ga8">CS_IMGFMT_INVALID</a>) = 0;
-00078   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iTextureHandle&gt;</a> <a class="code" href="structiLoader.html#a1">LoadTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* Filename,
-00079         <span class="keywordtype">int</span> Flags = <a class="code" href="group__gfx3d.html#ga55">CS_TEXTURE_3D</a>, <a class="code" href="structiTextureManager.html">iTextureManager</a> *tm = 0,
-00080         <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a>* image=0) = 0;
-00091   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiLoader.html#a1">LoadTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Name,
-00092         <span class="keyword">const</span> <span class="keywordtype">char</span> *FileName,
-00093         <span class="keywordtype">int</span> Flags = <a class="code" href="group__gfx3d.html#ga55">CS_TEXTURE_3D</a>, <a class="code" href="structiTextureManager.html">iTextureManager</a> *tm = 0,
-00094         <span class="keywordtype">bool</span> reg = <span class="keyword">false</span>, <span class="keywordtype">bool</span> create_material = <span class="keyword">true</span>) = 0;
-00095 
-00097   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSoundData&gt;</a> <a class="code" href="structiLoader.html#a3">LoadSoundData</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *fname) = 0;
-00099   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSoundHandle&gt;</a> <a class="code" href="structiLoader.html#a4">LoadSound</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *fname) = 0;
-00101   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSoundWrapper&gt;</a> <a class="code" href="structiLoader.html#a4">LoadSound</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
-00102         <span class="keyword">const</span> <span class="keywordtype">char</span> *fname) = 0;
-00103 
-00125   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iLoaderStatus&gt;</a> <a class="code" href="structiLoader.html#a6">ThreadedLoadMapFile</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename,
-00126         <a class="code" href="structiRegion.html">iRegion</a>* region = 0, <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>,
-00127         <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
-00128 
-00146   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoader.html#a7">LoadMapFile</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename, <span class="keywordtype">bool</span> clearEngine = <span class="keyword">true</span>,
-00147         <a class="code" href="structiRegion.html">iRegion</a>* region = 0, <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>,
-00148         <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
-00150   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoader.html#a8">LoadLibraryFile</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename, <a class="code" href="structiRegion.html">iRegion</a>* region = 0,
-00151         <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>, <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
-00152 
-00154   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiLoader.html#a9">LoadMeshObjectFactory</a> (
-00155         <span class="keyword">const</span> <span class="keywordtype">char</span>* fname) = 0;
-00160   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiLoader.html#a10">LoadMeshObject</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* fname) = 0;
-00161 
-00184   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoader.html#a11">Load</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* fname, <a class="code" href="structiBase.html">iBase</a>*&amp; result, <a class="code" href="structiRegion.html">iRegion</a>* region = 0,
-00185         <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>, <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
-00186 };
-00187 
-00190 <span class="preprocessor">#endif // __CS_IMAP_PARSER_H__</span>
-00191 <span class="preprocessor"></span>
+00042 <span class="keyword">struct </span><a class="code" href="structiDocumentNode.html">iDocumentNode</a>;
+00043 
+00044 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiLoaderStatus.html">iLoaderStatus</a>, 0, 1, 0);
+00045 
+<a name="l00049"></a><a class="code" href="structiLoaderStatus.html">00049</a> <span class="keyword">struct </span><a class="code" href="structiLoaderStatus.html">iLoaderStatus</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00050 {
+00052   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoaderStatus.html#a0">IsReady</a> () = 0;
+00054   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoaderStatus.html#a1">IsError</a> () = 0;
+00055 };
+00056 
+00057 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiLoader.html">iLoader</a>, 0, 0, 8);
+00058 
+<a name="l00062"></a><a class="code" href="structiLoader.html">00062</a> <span class="keyword">struct </span><a class="code" href="structiLoader.html">iLoader</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00063 {
+00070   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiLoader.html#a0">LoadImage</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* Filename,
+00071     <span class="keywordtype">int</span> Format = <a class="code" href="group__gfx2d.html#ga8">CS_IMGFMT_INVALID</a>) = 0;
+00079   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iTextureHandle&gt;</a> <a class="code" href="structiLoader.html#a1">LoadTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* Filename,
+00080         <span class="keywordtype">int</span> Flags = <a class="code" href="group__gfx3d.html#ga55">CS_TEXTURE_3D</a>, <a class="code" href="structiTextureManager.html">iTextureManager</a> *tm = 0,
+00081         <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a>* image=0) = 0;
+00092   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* <a class="code" href="structiLoader.html#a1">LoadTexture</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Name,
+00093         <span class="keyword">const</span> <span class="keywordtype">char</span> *FileName,
+00094         <span class="keywordtype">int</span> Flags = <a class="code" href="group__gfx3d.html#ga55">CS_TEXTURE_3D</a>, <a class="code" href="structiTextureManager.html">iTextureManager</a> *tm = 0,
+00095         <span class="keywordtype">bool</span> reg = <span class="keyword">false</span>, <span class="keywordtype">bool</span> create_material = <span class="keyword">true</span>) = 0;
+00096 
+00098   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSoundData&gt;</a> <a class="code" href="structiLoader.html#a3">LoadSoundData</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *fname) = 0;
+00100   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSoundHandle&gt;</a> <a class="code" href="structiLoader.html#a4">LoadSound</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *fname) = 0;
+00102   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSoundWrapper&gt;</a> <a class="code" href="structiLoader.html#a4">LoadSound</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name,
+00103         <span class="keyword">const</span> <span class="keywordtype">char</span> *fname) = 0;
+00104 
+00126   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iLoaderStatus&gt;</a> <a class="code" href="structiLoader.html#a6">ThreadedLoadMapFile</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename,
+00127         <a class="code" href="structiRegion.html">iRegion</a>* region = 0, <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>,
+00128         <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
+00129 
+00147   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoader.html#a7">LoadMapFile</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename, <span class="keywordtype">bool</span> clearEngine = <span class="keyword">true</span>,
+00148         <a class="code" href="structiRegion.html">iRegion</a>* region = 0, <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>,
+00149         <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
+00150 
+00168   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoader.html#a8">LoadMap</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* world_node, <span class="keywordtype">bool</span> clearEngine = <span class="keyword">true</span>,
+00169         <a class="code" href="structiRegion.html">iRegion</a>* region = 0, <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>,
+00170         <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
+00171 
+00173   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoader.html#a9">LoadLibraryFile</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename, <a class="code" href="structiRegion.html">iRegion</a>* region = 0,
+00174         <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>, <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
+00175 
+00177   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoader.html#a10">LoadLibrary</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* lib_node, <a class="code" href="structiRegion.html">iRegion</a>* region = 0,
+00178         <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>, <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
+00179 
+00181   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshFactoryWrapper&gt;</a> <a class="code" href="structiLoader.html#a11">LoadMeshObjectFactory</a> (
+00182         <span class="keyword">const</span> <span class="keywordtype">char</span>* fname) = 0;
+00187   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iMeshWrapper&gt;</a> <a class="code" href="structiLoader.html#a12">LoadMeshObject</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* fname) = 0;
+00188 
+00211   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoader.html#a13">Load</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* fname, <a class="code" href="structiBase.html">iBase</a>*&amp; result, <a class="code" href="structiRegion.html">iRegion</a>* region = 0,
+00212         <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>, <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
+00213 
+00236   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiLoader.html#a13">Load</a> (<a class="code" href="structiDocumentNode.html">iDocumentNode</a>* node, <a class="code" href="structiBase.html">iBase</a>*&amp; result, <a class="code" href="structiRegion.html">iRegion</a>* region = 0,
+00237         <span class="keywordtype">bool</span> curRegOnly = <span class="keyword">true</span>, <span class="keywordtype">bool</span> checkDupes = <span class="keyword">false</span>) = 0;
+00238 };
+00239 
+00242 <span class="preprocessor">#endif // __CS_IMAP_PARSER_H__</span>
+00243 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

@@ -44,45 +44,39 @@
 00037 <span class="preprocessor">#include "<a class="code" href="iutil_2event_8h.html">iutil/event.h</a>"</span>
 00038 <span class="preprocessor">#include "<a class="code" href="csunicode_8h.html">csutil/csunicode.h</a>"</span>
 00039 
-<a name="l00041"></a><a class="code" href="group__event__handling.html#ga8">00041</a> <span class="preprocessor">#define CS_MAX_MOUSE_BUTTONS    10</span>
-00042 <span class="preprocessor"></span>
-<a name="l00043"></a><a class="code" href="group__event__handling.html#ga9">00043</a> <span class="preprocessor">#define CS_MAX_JOYSTICK_COUNT   16</span>
-00044 <span class="preprocessor"></span>
-<a name="l00045"></a><a class="code" href="group__event__handling.html#ga10">00045</a> <span class="preprocessor">#define CS_MAX_JOYSTICK_BUTTONS 10</span>
-00046 <span class="preprocessor"></span>
-<a name="l00050"></a><a class="code" href="group__event__handling.html#ga128">00050</a> <span class="keyword">enum</span> <a class="code" href="group__event__handling.html#ga128">csKeyComposeResult</a>
-00051 {
-00053   <a class="code" href="group__event__handling.html#gga128a3">csComposeNoChar</a> = -1,
-00055   <a class="code" href="group__event__handling.html#gga128a4">csComposeNormalChar</a>,
-00057   <a class="code" href="group__event__handling.html#gga128a5">csComposeComposedChar</a>,
-00062   <a class="code" href="group__event__handling.html#gga128a6">csComposeUncomposeable</a>
-00063 };
-00064 
-00065 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiKeyComposer.html">iKeyComposer</a>, 0, 0, 1);
-00066 
-<a name="l00070"></a><a class="code" href="structiKeyComposer.html">00070</a> <span class="keyword">struct </span><a class="code" href="structiKeyComposer.html">iKeyComposer</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00071 {
-00086   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga128">csKeyComposeResult</a> <a class="code" href="structiKeyComposer.html#a0">HandleKey</a> (<span class="keyword">const</span> <a class="code" href="structcsKeyEventData.html">csKeyEventData</a>&amp; keyEventData,
-00087     <a class="code" href="group__util.html#ga22">utf32_char</a>* buf, size_t bufChars, <span class="keywordtype">int</span>* resultChars = 0) = 0;
-00093   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiKeyComposer.html#a1">ResetState</a> () = 0;
-00094 };
-00095 
-00096 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiKeyboardDriver.html">iKeyboardDriver</a>, 0, 0, 2);
-00097 
+<a name="l00043"></a><a class="code" href="group__event__handling.html#ga130">00043</a> <span class="keyword">enum</span> <a class="code" href="group__event__handling.html#ga130">csKeyComposeResult</a>
+00044 {
+00046   <a class="code" href="group__event__handling.html#gga130a0">csComposeNoChar</a> = -1,
+00048   <a class="code" href="group__event__handling.html#gga130a1">csComposeNormalChar</a>,
+00050   <a class="code" href="group__event__handling.html#gga130a2">csComposeComposedChar</a>,
+00055   <a class="code" href="group__event__handling.html#gga130a3">csComposeUncomposeable</a>
+00056 };
+00057 
+00058 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiKeyComposer.html">iKeyComposer</a>, 0, 0, 1);
+00059 
+<a name="l00063"></a><a class="code" href="structiKeyComposer.html">00063</a> <span class="keyword">struct </span><a class="code" href="structiKeyComposer.html">iKeyComposer</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00064 {
+00079   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga130">csKeyComposeResult</a> <a class="code" href="structiKeyComposer.html#a0">HandleKey</a> (<span class="keyword">const</span> <a class="code" href="structcsKeyEventData.html">csKeyEventData</a>&amp; keyEventData,
+00080     <a class="code" href="group__util.html#ga22">utf32_char</a>* buf, size_t bufChars, <span class="keywordtype">int</span>* resultChars = 0) = 0;
+00086   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiKeyComposer.html#a1">ResetState</a> () = 0;
+00087 };
+00088 
+00089 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiKeyboardDriver.html">iKeyboardDriver</a>, 0, 0, 2);
+00090 
 <a name="l00116"></a><a class="code" href="structiKeyboardDriver.html">00116</a> <span class="keyword">struct </span><a class="code" href="structiKeyboardDriver.html">iKeyboardDriver</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
 00117 {
 00122   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiKeyboardDriver.html#a0">Reset</a> () = 0;
 00123 
 00134   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiKeyboardDriver.html#a1">DoKey</a> (<a class="code" href="group__util.html#ga22">utf32_char</a> codeRaw, <a class="code" href="group__util.html#ga22">utf32_char</a> codeCooked, <span class="keywordtype">bool</span> iDown,
-00135     <span class="keywordtype">bool</span> autoRepeat = <span class="keyword">false</span>, <a class="code" href="group__event__handling.html#ga5">csKeyCharType</a> charType = <a class="code" href="group__event__handling.html#gga133a154">csKeyCharTypeNormal</a>) = 0;
+00135     <span class="keywordtype">bool</span> autoRepeat = <span class="keyword">false</span>, <a class="code" href="group__event__handling.html#ga5">csKeyCharType</a> charType = <a class="code" href="group__event__handling.html#gga135a155">csKeyCharTypeNormal</a>) = 0;
 00136 
-00141   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiKeyboardDriver.html#a2">GetKeyState</a> (<a class="code" href="group__util.html#ga22">utf32_char</a> codeRaw) = 0;
+00141   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiKeyboardDriver.html#a2">GetKeyState</a> (<a class="code" href="group__util.html#ga22">utf32_char</a> codeRaw) <span class="keyword">const </span>= 0;
 00142 
-00146   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga4">uint32</a> <a class="code" href="structiKeyboardDriver.html#a3">GetModifierState</a> (<a class="code" href="group__util.html#ga22">utf32_char</a> codeRaw) = 0;
+00146   <span class="keyword">virtual</span> <a class="code" href="group__util.html#ga4">uint32</a> <a class="code" href="structiKeyboardDriver.html#a3">GetModifierState</a> (<a class="code" href="group__util.html#ga22">utf32_char</a> codeRaw) <span class="keyword">const </span>= 0;
 00147 
 00154   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iKeyComposer&gt;</a> <a class="code" href="structiKeyboardDriver.html#a4">CreateKeyComposer</a> () = 0;
 00155 
-00160   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga136">csEventError</a> <a class="code" href="structiKeyboardDriver.html#a5">SynthesizeCooked</a> (<a class="code" href="structiEvent.html">iEvent</a> *) = 0;
+00160   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga138">csEventError</a> <a class="code" href="structiKeyboardDriver.html#a5">SynthesizeCooked</a> (<a class="code" href="structiEvent.html">iEvent</a> *) = 0;
 00161 };
 00162 
 00163 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a>(<a class="code" href="structiMouseDriver.html">iMouseDriver</a>, 0, 0, 1);
@@ -93,9 +87,9 @@
 00190 
 00195   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a1">Reset</a> () = 0;
 00196 
-00198   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiMouseDriver.html#a2">GetLastX</a> () = 0;
-00200   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiMouseDriver.html#a3">GetLastY</a> () = 0;
-00202   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMouseDriver.html#a4">GetLastButton</a> (<span class="keywordtype">int</span> button) = 0;
+00198   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiMouseDriver.html#a2">GetLastX</a> () <span class="keyword">const </span>= 0;
+00200   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiMouseDriver.html#a3">GetLastY</a> () <span class="keyword">const </span>= 0;
+00202   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMouseDriver.html#a4">GetLastButton</a> (<span class="keywordtype">int</span> button) <span class="keyword">const </span>= 0;
 00203 
 00208   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a5">DoButton</a> (<span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
 00210   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a6">DoMotion</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
@@ -107,15 +101,19 @@
 00235 {
 00240   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a0">Reset</a> () = 0;
 00241 
-00243   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a1">GetLastX</a> (<span class="keywordtype">int</span> number) = 0;
-00245   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a2">GetLastY</a> (<span class="keywordtype">int</span> number) = 0;
-00250   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiJoystickDriver.html#a3">GetLastButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button) = 0;
-00251 
-00256   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a4">DoButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
-00258   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a5">DoMotion</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
-00259 };
-00260 
-00263 <span class="preprocessor">#endif // __CS_IUTIL_STDINPUT_H__</span>
+00243   CS_DEPRECATED_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a1">GetLastX</a> (<span class="keywordtype">int</span> number) <span class="keyword">const </span>= 0;
+00245   CS_DEPRECATED_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a2">GetLastY</a> (<span class="keywordtype">int</span> number) <span class="keyword">const </span>= 0;
+00247   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">int</span> *<a class="code" href="structiJoystickDriver.html#a3">GetLast</a> (<span class="keywordtype">int</span> number) <span class="keyword">const </span>= 0;
+00249   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a3">GetLast</a> (<span class="keywordtype">int</span> number, <a class="code" href="group__util.html#ga0">uint8</a> axis) <span class="keyword">const </span>= 0;
+00250 
+00255   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiJoystickDriver.html#a5">GetLastButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button) <span class="keyword">const </span>= 0;
+00256 
+00261   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a6">DoButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, 
+00262     <span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> numAxes) = 0;
+00264   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a7">DoMotion</a> (<span class="keywordtype">int</span> number, <span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> nunmAxes) = 0;
+00265 };
+00266 
+00269 <span class="preprocessor">#endif // __CS_IUTIL_STDINPUT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
