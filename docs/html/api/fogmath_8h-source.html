@@ -38,14 +38,30 @@
 00019 <span class="preprocessor">#ifndef __CS_CSTOOL_FOGMATH_H__</span>
 00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSTOOL_FOGMATH_H__</span>
 00021 <span class="preprocessor"></span>
-<a name="l00029"></a><a class="code" href="fogmath_8h.html#a0">00029</a> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="fogmath_8h.html#a0">csFogRamp</a> (<span class="keywordtype">float</span> depth)
-00030 {
-00031   <span class="keywordflow">return</span> 1.0 - exp (-depth*7);
-00032   <span class="comment">//return depth;</span>
-00033 }
-00034 
-00035 <span class="preprocessor">#endif // __CS_CSTOOL_FOGMATH_H__</span>
-00036 <span class="preprocessor"></span>
+00026 
+<a name="l00027"></a><a class="code" href="classcsFogMath.html">00027</a> <span class="keyword">class </span><a class="code" href="classcsFogMath.html">csFogMath</a>
+00028 {
+00029 <span class="keyword">public</span>:
+<a name="l00033"></a><a class="code" href="classcsFogMath.html#e0">00033</a>   <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classcsFogMath.html#e0">Ramp</a> (<span class="keywordtype">float</span> depth)
+00034   {
+00035     <span class="keywordflow">return</span> 1.0 - exp (-depth*7);
+00036     <span class="comment">//return depth;</span>
+00037   }
+00039   <span class="comment">/* @@@ NOTE: Basically the same computation that's done when using fog</span>
+00040 <span class="comment">   * texgen from the glfixed VP - means, keep this function in sync! */</span>
+<a name="l00041"></a><a class="code" href="classcsFogMath.html#e1">00041</a>   <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classcsFogMath.html#e1">OpacityAtDistance</a> (<span class="keywordtype">float</span> density, <span class="keywordtype">float</span> dist)
+00042   {
+00043     <span class="keywordflow">return</span> <a class="code" href="classcsFogMath.html#e0">Ramp</a> (density*(dist-0.1f));
+00044   }
+<a name="l00046"></a><a class="code" href="classcsFogMath.html#e2">00046</a>   <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classcsFogMath.html#e2">DistanceForOpacity</a> (<span class="keywordtype">float</span> density, <span class="keywordtype">float</span> opacity)
+00047   {
+00048     <span class="keywordflow">return</span> -(log(-opacity+1.0f)/(density * 7.0f)) + 0.1f;
+00049   }
+00050 };
+00051 
+00052 
+00053 <span class="preprocessor">#endif // __CS_CSTOOL_FOGMATH_H__</span>
+00054 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
