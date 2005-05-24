@@ -38,21 +38,27 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a1">Reset</a> ()=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Call to release all mouse buttons * (when focus switches from application window, for example).  <a href="#a1"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a2">GetLastX</a> () const =0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a2">GetLastX</a> (int number) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Query last mouse X position.  <a href="#a2"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a3">GetLastY</a> () const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Query last mouse X position for mouse number (1, 2, ...).  <a href="#a2"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a4">GetLastY</a> (int number) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Query last mouse Y position.  <a href="#a3"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a4">GetLastButton</a> (int button) const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Query last mouse Y position.  <a href="#a4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a6">GetLast</a> (int n, <a class="el" href="group__util.html#ga0">uint8</a> a) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Query the last known mouse button state. Button numbers start at 1.  <a href="#a4"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a5">DoButton</a> (int button, bool down, int x, int y)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Query last mouse position for mouse n on axis a.  <a href="#a6"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual const int *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a7">GetLast</a> (int n) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Call this to add a 'mouse button down/up' event to queue.  <a href="#a5"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a6">DoMotion</a> (int x, int y)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Query last mouse position for mouse n.  <a href="#a7"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a8">GetLastButton</a> (int number, int button) const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Call this to add a 'mouse moved' event to queue.  <a href="#a6"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Query the last known mouse button state. Button numbers start at 1.  <a href="#a8"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a10">DoButton</a> (int number, int button, bool down, const int *axes, <a class="el" href="group__util.html#ga0">uint8</a> numAxes)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Call this to add a 'mouse button down/up' event to queue.  <a href="#a10"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMouseDriver.html#a12">DoMotion</a> (int number, const int *axes, <a class="el" href="group__util.html#ga0">uint8</a> numAxes)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Call this to add a 'mouse moved' event to queue.  <a href="#a12"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Generic Mouse Driver. 
@@ -73,7 +79,7 @@ CS_QUERY_REGISTRY() </li>
 
 <p>
 Definition at line <a class="el" href="iutil_2csinput_8h-source.html#l00186">186</a> of file <a class="el" href="iutil_2csinput_8h-source.html">csinput.h</a>.<hr><h2>Member Function Documentation</h2>
-<a class="anchor" name="a5" doxytag="iMouseDriver::DoButton"></a><p>
+<a class="anchor" name="a10" doxytag="iMouseDriver::DoButton"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -82,6 +88,12 @@ Definition at line <a class="el" href="iutil_2csinput_8h-source.html#l00186">186
           <td class="md" nowrap valign="top">virtual void iMouseDriver::DoButton           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname" nowrap> <em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int&nbsp;</td>
           <td class="mdname" nowrap> <em>button</em>, </td>
         </tr>
         <tr>
@@ -93,14 +105,14 @@ Definition at line <a class="el" href="iutil_2csinput_8h-source.html#l00186">186
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>x</em>, </td>
+          <td class="md" nowrap>const int *&nbsp;</td>
+          <td class="mdname" nowrap> <em>axes</em>, </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>y</em></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#ga0">uint8</a>&nbsp;</td>
+          <td class="mdname" nowrap> <em>numAxes</em></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -123,10 +135,10 @@ Call this to add a 'mouse button down/up' event to queue.
 <p>
 Button numbers start at one. 
 <p>
-Implemented in <a class="el" href="classcsMouseDriver.html#a7">csMouseDriver</a>.    </td>
+Implemented in <a class="el" href="classcsMouseDriver.html#a12">csMouseDriver</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a6" doxytag="iMouseDriver::DoMotion"></a><p>
+<a class="anchor" name="a12" doxytag="iMouseDriver::DoMotion"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -135,13 +147,19 @@ Implemented in <a class="el" href="classcsMouseDriver.html#a7">csMouseDriver</a>
           <td class="md" nowrap valign="top">virtual void iMouseDriver::DoMotion           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">int&nbsp;</td>
-          <td class="mdname" nowrap> <em>x</em>, </td>
+          <td class="mdname" nowrap> <em>number</em>, </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
-          <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>y</em></td>
+          <td class="md" nowrap>const int *&nbsp;</td>
+          <td class="mdname" nowrap> <em>axes</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#ga0">uint8</a>&nbsp;</td>
+          <td class="mdname" nowrap> <em>numAxes</em></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -164,10 +182,83 @@ Call this to add a 'mouse moved' event to queue.
 <p>
 
 <p>
+Implemented in <a class="el" href="classcsMouseDriver.html#a15">csMouseDriver</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a7" doxytag="iMouseDriver::GetLast"></a><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual const int* iMouseDriver::GetLast           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>n</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const<code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Query last mouse position for mouse n. 
+<p>
+
+<p>
+Implemented in <a class="el" href="classcsMouseDriver.html#a9">csMouseDriver</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a6" doxytag="iMouseDriver::GetLast"></a><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual int iMouseDriver::GetLast           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname" nowrap> <em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="group__util.html#ga0">uint8</a>&nbsp;</td>
+          <td class="mdname" nowrap> <em>a</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"> const<code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Query last mouse position for mouse n on axis a. 
+<p>
+
+<p>
 Implemented in <a class="el" href="classcsMouseDriver.html#a8">csMouseDriver</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a4" doxytag="iMouseDriver::GetLastButton"></a><p>
+<a class="anchor" name="a8" doxytag="iMouseDriver::GetLastButton"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -176,9 +267,18 @@ Implemented in <a class="el" href="classcsMouseDriver.html#a8">csMouseDriver</a>
           <td class="md" nowrap valign="top">virtual bool iMouseDriver::GetLastButton           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">int&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>button</em>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap> const<code> [pure virtual]</code></td>
+          <td class="mdname" nowrap> <em>number</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>button</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"> const<code> [pure virtual]</code></td>
         </tr>
       </table>
     </td>
@@ -196,7 +296,9 @@ Query the last known mouse button state. Button numbers start at 1.
 <p>
 
 <p>
-Implemented in <a class="el" href="classcsMouseDriver.html#a6">csMouseDriver</a>.    </td>
+Implemented in <a class="el" href="classcsMouseDriver.html#a11">csMouseDriver</a>.
+<p>
+Referenced by <a class="el" href="csutil_2csinput_8h-source.html#l00249">csMouseDriver::GetLastButton()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a2" doxytag="iMouseDriver::GetLastX"></a><p>
@@ -207,7 +309,8 @@ Implemented in <a class="el" href="classcsMouseDriver.html#a6">csMouseDriver</a>
         <tr>
           <td class="md" nowrap valign="top">virtual int iMouseDriver::GetLastX           </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>number</em>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap> const<code> [pure virtual]</code></td>
         </tr>
@@ -223,14 +326,14 @@ Implemented in <a class="el" href="classcsMouseDriver.html#a6">csMouseDriver</a>
     <td>
 
 <p>
-Query last mouse X position. 
+Query last mouse X position for mouse number (1, 2, ...). 
 <p>
 
 <p>
-Implemented in <a class="el" href="classcsMouseDriver.html#a4">csMouseDriver</a>.    </td>
+Implemented in <a class="el" href="classcsMouseDriver.html#a6">csMouseDriver</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a3" doxytag="iMouseDriver::GetLastY"></a><p>
+<a class="anchor" name="a4" doxytag="iMouseDriver::GetLastY"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -238,7 +341,8 @@ Implemented in <a class="el" href="classcsMouseDriver.html#a4">csMouseDriver</a>
         <tr>
           <td class="md" nowrap valign="top">virtual int iMouseDriver::GetLastY           </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>number</em>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap> const<code> [pure virtual]</code></td>
         </tr>
@@ -258,7 +362,7 @@ Query last mouse Y position.
 <p>
 
 <p>
-Implemented in <a class="el" href="classcsMouseDriver.html#a5">csMouseDriver</a>.    </td>
+Implemented in <a class="el" href="classcsMouseDriver.html#a7">csMouseDriver</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a1" doxytag="iMouseDriver::Reset"></a><p>
@@ -291,7 +395,7 @@ Call to release all mouse buttons * (when focus switches from application window
 <p>
 Implemented in <a class="el" href="classcsMouseDriver.html#a3">csMouseDriver</a>.
 <p>
-Referenced by <a class="el" href="csutil_2csinput_8h-source.html#l00252">csMouseDriver::LostFocus()</a>.    </td>
+Referenced by <a class="el" href="csutil_2csinput_8h-source.html#l00271">csMouseDriver::LostFocus()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a0" doxytag="iMouseDriver::SetDoubleClickTime"></a><p>

@@ -87,7 +87,7 @@
 00071   csKeyComposer ();
 00072   <span class="keyword">virtual</span> ~csKeyComposer ();
 00073 
-00074   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga130">csKeyComposeResult</a> <a class="code" href="structiKeyComposer.html#a0">HandleKey</a> (<span class="keyword">const</span> <a class="code" href="structcsKeyEventData.html">csKeyEventData</a>&amp; keyEventData,
+00074   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga132">csKeyComposeResult</a> <a class="code" href="structiKeyComposer.html#a0">HandleKey</a> (<span class="keyword">const</span> <a class="code" href="structcsKeyEventData.html">csKeyEventData</a>&amp; keyEventData,
 00075     <a class="code" href="group__util.html#ga22">utf32_char</a>* buf, size_t bufChars, <span class="keywordtype">int</span>* resultChars = 0);
 00076   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiKeyComposer.html#a1">ResetState</a> ();
 00077 };
@@ -136,7 +136,7 @@
 00143   <span class="keyword">virtual</span> <span class="keywordtype">void</span> RestoreKeys ();
 00144 
 00155   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DoKey (<a class="code" href="group__util.html#ga22">utf32_char</a> codeRaw, <a class="code" href="group__util.html#ga22">utf32_char</a> codeCooked, <span class="keywordtype">bool</span> iDown,
-00156     <span class="keywordtype">bool</span> autoRepeat = <span class="keyword">false</span>, <a class="code" href="group__event__handling.html#ga5">csKeyCharType</a> charType = <a class="code" href="group__event__handling.html#gga135a155">csKeyCharTypeNormal</a>);
+00156     <span class="keywordtype">bool</span> autoRepeat = <span class="keyword">false</span>, <a class="code" href="group__event__handling.html#ga5">csKeyCharType</a> charType = <a class="code" href="group__event__handling.html#gga137a155">csKeyCharTypeNormal</a>);
 00157 
 00162   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetKeyState (<a class="code" href="group__util.html#ga22">utf32_char</a> codeRaw) <span class="keyword">const</span>;
 00163 
@@ -144,7 +144,7 @@
 00183 
 00184   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iKeyComposer&gt;</a> CreateKeyComposer ();
 00185 
-00187   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga138">csEventError</a> SynthesizeCooked (<a class="code" href="structiEvent.html">iEvent</a> *);
+00187   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga140">csEventError</a> SynthesizeCooked (<a class="code" href="structiEvent.html">iEvent</a> *);
 00188 };
 00189 
 <a name="l00196"></a><a class="code" href="classcsMouseDriver.html">00196</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csMouseDriver :
@@ -155,100 +155,114 @@
 00201   <a class="code" href="classcsRef.html">csRef&lt;iKeyboardDriver&gt;</a> Keyboard;
 00202 
 00203 <span class="keyword">protected</span>:
-<a name="l00205"></a><a class="code" href="classcsMouseDriver.html#p0">00205</a>   <a class="code" href="group__util.html#ga17">csTicks</a> LastClickTime;
-<a name="l00207"></a><a class="code" href="classcsMouseDriver.html#p1">00207</a>   <span class="keywordtype">int</span> LastClickButton;
-<a name="l00209"></a><a class="code" href="classcsMouseDriver.html#p3">00209</a>   <span class="keywordtype">int</span> LastClickX, LastClickY;
-<a name="l00211"></a><a class="code" href="classcsMouseDriver.html#p5">00211</a>   <span class="keywordtype">int</span> LastX, LastY;
-<a name="l00213"></a><a class="code" href="classcsMouseDriver.html#p6">00213</a>   <span class="keywordtype">bool</span> Button [<a class="code" href="group__event__handling.html#ga126">CS_MAX_MOUSE_BUTTONS</a>];
-<a name="l00215"></a><a class="code" href="classcsMouseDriver.html#p7">00215</a>   <a class="code" href="group__util.html#ga17">csTicks</a> DoubleClickTime;
-<a name="l00217"></a><a class="code" href="classcsMouseDriver.html#p8">00217</a>   size_t DoubleClickDist;
-00219   <a class="code" href="structiKeyboardDriver.html">iKeyboardDriver</a>* GetKeyboardDriver();
-00220 
-00221 <span class="keyword">public</span>:
-00222   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
-00223 
-00225   csMouseDriver (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00227   <span class="keyword">virtual</span> ~csMouseDriver ();
-00228 
-00230   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a0">SetDoubleClickTime</a> (<span class="keywordtype">int</span> iTime, size_t iDist);
-00231 
-00233   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a1">Reset</a> ();
-00234 
-<a name="l00236"></a><a class="code" href="classcsMouseDriver.html#a4">00236</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiMouseDriver.html#a2">GetLastX</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> LastX; }
-<a name="l00238"></a><a class="code" href="classcsMouseDriver.html#a5">00238</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiMouseDriver.html#a3">GetLastY</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> LastY; }
-<a name="l00240"></a><a class="code" href="classcsMouseDriver.html#a6">00240</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMouseDriver.html#a4">GetLastButton</a> (<span class="keywordtype">int</span> button)<span class="keyword"> const</span>
-00241 <span class="keyword">  </span>{
-00242     <span class="keywordflow">return</span> (((button &gt; 0) &amp;&amp; (button &lt;= <a class="code" href="group__event__handling.html#ga126">CS_MAX_MOUSE_BUTTONS</a>))) ?
-00243             Button [button - 1] : <span class="keyword">false</span>;
-00244   }
-00245 
-00247   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a5">DoButton</a> (<span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y);
-00249   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a6">DoMotion</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y);
-00250 
-<a name="l00252"></a><a class="code" href="classcsMouseDriver.html#a9">00252</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> LostFocus() { <a class="code" href="structiMouseDriver.html#a1">Reset</a>(); }
-00253   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GainFocus() { }
-00254 
-<a name="l00256"></a><a class="code" href="structcsMouseDriver_1_1eiEventHandler.html">00256</a>   <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT eiEventHandler : <span class="keyword">public</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>
-00257   {
-00258     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a>(csMouseDriver);
-<a name="l00259"></a><a class="code" href="structcsMouseDriver_1_1eiEventHandler.html#a1">00259</a>     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent(<a class="code" href="structiEvent.html">iEvent</a>&amp; e) 
-00260     { <span class="keywordflow">return</span> scfParent-&gt;HandleEvent(e); }
-00261   } scfiEventHandler;
-00262   <span class="keyword">friend</span> <span class="keyword">struct </span>eiEventHandler;
-00263 };
-00264 
-<a name="l00271"></a><a class="code" href="classcsJoystickDriver.html">00271</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csJoystickDriver : <span class="keyword">public</span> <a class="code" href="classcsInputDriver.html">csInputDriver</a>,
-00272   <span class="keyword">public</span> <a class="code" href="structiJoystickDriver.html">iJoystickDriver</a>
-00273 {
-00274 <span class="keyword">private</span>:
-00275   <span class="comment">// Generic keyboard driver (for checking modifier key states).</span>
-00276   <a class="code" href="classcsRef.html">csRef&lt;iKeyboardDriver&gt;</a> Keyboard;
-00277 <span class="keyword">protected</span>:
-<a name="l00279"></a><a class="code" href="classcsJoystickDriver.html#p0">00279</a>   <span class="keywordtype">bool</span> Button [<a class="code" href="group__event__handling.html#ga127">CS_MAX_JOYSTICK_COUNT</a>][<a class="code" href="group__event__handling.html#ga128">CS_MAX_JOYSTICK_BUTTONS</a>];
-<a name="l00281"></a><a class="code" href="classcsJoystickDriver.html#p1">00281</a>   <span class="keywordtype">int</span> Last [<a class="code" href="group__event__handling.html#ga127">CS_MAX_JOYSTICK_COUNT</a>][<a class="code" href="group__event__handling.html#ga129">CS_MAX_JOYSTICK_AXES</a>];
-00282   <a class="code" href="group__util.html#ga0">uint8</a> Axes [<a class="code" href="group__event__handling.html#ga127">CS_MAX_JOYSTICK_COUNT</a>];
-00284   <a class="code" href="structiKeyboardDriver.html">iKeyboardDriver</a>* GetKeyboardDriver();
-00285 
-00286 <span class="keyword">public</span>:
-00287   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
-00288 
-00290   csJoystickDriver (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-00292   <span class="keyword">virtual</span> ~csJoystickDriver ();
-00293 
-00295   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a0">Reset</a> ();
-00296 
-<a name="l00298"></a><a class="code" href="classcsJoystickDriver.html#a3">00298</a>   CS_DEPRECATED_METHOD CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a1">GetLastX</a> (<span class="keywordtype">int</span> number)<span class="keyword"> const </span>
-00299 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number - 1][0]; }
-<a name="l00301"></a><a class="code" href="classcsJoystickDriver.html#a4">00301</a>   CS_DEPRECATED_METHOD CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a2">GetLastY</a> (<span class="keywordtype">int</span> number)<span class="keyword"> const </span>
-00302 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number - 1][1]; }
-<a name="l00303"></a><a class="code" href="classcsJoystickDriver.html#a5">00303</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">int</span> *<a class="code" href="structiJoystickDriver.html#a3">GetLast</a> (<span class="keywordtype">int</span> number)<span class="keyword"> const </span>
-00304 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number - 1]; }
-<a name="l00305"></a><a class="code" href="classcsJoystickDriver.html#a6">00305</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a3">GetLast</a> (<span class="keywordtype">int</span> number, <a class="code" href="group__util.html#ga0">uint8</a> axis)<span class="keyword"> const </span>
-00306 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number - 1][axis - 1]; }
-<a name="l00308"></a><a class="code" href="classcsJoystickDriver.html#a7">00308</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiJoystickDriver.html#a5">GetLastButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button)<span class="keyword"> const</span>
-00309 <span class="keyword">  </span>{
-00310     <span class="keywordflow">return</span> (number &gt; 0 &amp;&amp; number &lt;= <a class="code" href="group__event__handling.html#ga127">CS_MAX_JOYSTICK_COUNT</a>
-00311          &amp;&amp; button &gt; 0 &amp;&amp; button &lt;= <a class="code" href="group__event__handling.html#ga128">CS_MAX_JOYSTICK_BUTTONS</a>) ?
-00312             Button [number - 1][button - 1] : <span class="keyword">false</span>;
-00313   }
-00314 
-00316   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a6">DoButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, 
-00317     <span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> numAxes);
-00319   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a7">DoMotion</a> (<span class="keywordtype">int</span> number, <span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> numAxes);
-00320 
-<a name="l00322"></a><a class="code" href="classcsJoystickDriver.html#a10">00322</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> LostFocus() { <a class="code" href="structiJoystickDriver.html#a0">Reset</a>(); }
-00323   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GainFocus() { }
-00324 
-<a name="l00326"></a><a class="code" href="structcsJoystickDriver_1_1eiEventHandler.html">00326</a>   <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT eiEventHandler : <span class="keyword">public</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>
-00327   {
-00328     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (csJoystickDriver);
-<a name="l00329"></a><a class="code" href="structcsJoystickDriver_1_1eiEventHandler.html#a1">00329</a>     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent(<a class="code" href="structiEvent.html">iEvent</a>&amp; e) 
-00330     { <span class="keywordflow">return</span> scfParent-&gt;HandleEvent(e); }
-00331   } scfiEventHandler;
-00332   <span class="keyword">friend</span> <span class="keyword">struct </span>eiEventHandler;
-00333 };
-00334 
-00335 <span class="preprocessor">#endif // __CS_CSINPUT_H__</span>
+<a name="l00205"></a><a class="code" href="classcsMouseDriver.html#p0">00205</a>   <a class="code" href="group__util.html#ga17">csTicks</a> LastClickTime[<a class="code" href="group__event__handling.html#ga126">CS_MAX_MOUSE_COUNT</a>];
+<a name="l00207"></a><a class="code" href="classcsMouseDriver.html#p1">00207</a>   <span class="keywordtype">int</span> LastClickButton[<a class="code" href="group__event__handling.html#ga126">CS_MAX_MOUSE_COUNT</a>];
+<a name="l00209"></a><a class="code" href="classcsMouseDriver.html#p2">00209</a>   <span class="keywordtype">int</span> LastClick [<a class="code" href="group__event__handling.html#ga126">CS_MAX_MOUSE_COUNT</a>][<a class="code" href="group__event__handling.html#ga127">CS_MAX_MOUSE_AXES</a>];
+<a name="l00211"></a><a class="code" href="classcsMouseDriver.html#p3">00211</a>   <span class="keywordtype">int</span> Last [<a class="code" href="group__event__handling.html#ga126">CS_MAX_MOUSE_COUNT</a>][<a class="code" href="group__event__handling.html#ga127">CS_MAX_MOUSE_AXES</a>];
+00212   <a class="code" href="group__util.html#ga0">uint8</a> Axes [<a class="code" href="group__event__handling.html#ga126">CS_MAX_MOUSE_COUNT</a>];
+<a name="l00214"></a><a class="code" href="classcsMouseDriver.html#p5">00214</a>   <span class="keywordtype">bool</span> Button [<a class="code" href="group__event__handling.html#ga126">CS_MAX_MOUSE_COUNT</a>][<a class="code" href="group__event__handling.html#ga128">CS_MAX_MOUSE_BUTTONS</a>];
+<a name="l00216"></a><a class="code" href="classcsMouseDriver.html#p6">00216</a>   <a class="code" href="group__util.html#ga17">csTicks</a> DoubleClickTime;
+<a name="l00218"></a><a class="code" href="classcsMouseDriver.html#p7">00218</a>   size_t DoubleClickDist;
+00220   <a class="code" href="structiKeyboardDriver.html">iKeyboardDriver</a>* GetKeyboardDriver();
+00221 
+00222 <span class="keyword">public</span>:
+00223   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+00224 
+00226   csMouseDriver (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00228   <span class="keyword">virtual</span> ~csMouseDriver ();
+00229 
+00231   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a0">SetDoubleClickTime</a> (<span class="keywordtype">int</span> iTime, size_t iDist);
+00232 
+00234   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a1">Reset</a> ();
+00235 
+<a name="l00237"></a><a class="code" href="classcsMouseDriver.html#a4">00237</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetLastX ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> GetLastX(1); }
+<a name="l00239"></a><a class="code" href="classcsMouseDriver.html#a5">00239</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetLastY ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> GetLastY(1); }
+<a name="l00241"></a><a class="code" href="classcsMouseDriver.html#a6">00241</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetLastX (<span class="keywordtype">int</span> n)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Last[n - 1][0]; }
+<a name="l00243"></a><a class="code" href="classcsMouseDriver.html#a7">00243</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetLastY (<span class="keywordtype">int</span> n)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Last[n - 1][1]; }
+<a name="l00245"></a><a class="code" href="classcsMouseDriver.html#a8">00245</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiMouseDriver.html#a6">GetLast</a> (<span class="keywordtype">int</span> n, <a class="code" href="group__util.html#ga0">uint8</a> axis)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Last[n - 1][axis - 1]; }
+<a name="l00247"></a><a class="code" href="classcsMouseDriver.html#a9">00247</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">int</span> *<a class="code" href="structiMouseDriver.html#a6">GetLast</a> (<span class="keywordtype">int</span> n)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Last [n - 1]; }
+<a name="l00249"></a><a class="code" href="classcsMouseDriver.html#a10">00249</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMouseDriver.html#a8">GetLastButton</a> (<span class="keywordtype">int</span> button)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="structiMouseDriver.html#a8">GetLastButton</a>(1, button); }
+<a name="l00251"></a><a class="code" href="classcsMouseDriver.html#a11">00251</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMouseDriver.html#a8">GetLastButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button)<span class="keyword"> const</span>
+00252 <span class="keyword">  </span>{
+00253     <span class="keywordflow">return</span> (number &gt; 0 &amp;&amp; number &lt;= <a class="code" href="group__event__handling.html#ga126">CS_MAX_MOUSE_COUNT</a>
+00254             &amp;&amp; button &gt; 0 &amp;&amp; button &lt;= <a class="code" href="group__event__handling.html#ga128">CS_MAX_MOUSE_BUTTONS</a>) ?
+00255             Button [number - 1][button - 1] : <span class="keyword">false</span>;
+00256   }
+00257 
+00259   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a10">DoButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, <span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> numAxes);
+00260   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a10">DoButton</a> (<span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, <span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> numAxes) 
+00261   { <a class="code" href="structiMouseDriver.html#a10">DoButton</a> (1, button, down, axes, numAxes); }
+00262   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a10">DoButton</a> (<span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00263   { <span class="keywordtype">int</span> axes[2] = {x, y}; <a class="code" href="structiMouseDriver.html#a10">DoButton</a> (1, button, down, axes, 2); }
+00265   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a12">DoMotion</a> (<span class="keywordtype">int</span> number, <span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> numAxes);
+00266   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a12">DoMotion</a> (<span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> numAxes) 
+00267   { <a class="code" href="structiMouseDriver.html#a12">DoMotion</a> (1, axes, numAxes); }
+00268   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMouseDriver.html#a12">DoMotion</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)
+00269   { <span class="keywordtype">int</span> axes[2] = {x, y}; <a class="code" href="structiMouseDriver.html#a12">DoMotion</a> (1, axes, 2); }
+<a name="l00271"></a><a class="code" href="classcsMouseDriver.html#a18">00271</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> LostFocus() { <a class="code" href="structiMouseDriver.html#a1">Reset</a>(); }
+00272   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GainFocus() { }
+00273 
+<a name="l00275"></a><a class="code" href="structcsMouseDriver_1_1eiEventHandler.html">00275</a>   <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT eiEventHandler : <span class="keyword">public</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>
+00276   {
+00277     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a>(csMouseDriver);
+<a name="l00278"></a><a class="code" href="structcsMouseDriver_1_1eiEventHandler.html#a1">00278</a>     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent(<a class="code" href="structiEvent.html">iEvent</a>&amp; e) 
+00279     { <span class="keywordflow">return</span> scfParent-&gt;HandleEvent(e); }
+00280   } scfiEventHandler;
+00281   <span class="keyword">friend</span> <span class="keyword">struct </span>eiEventHandler;
+00282 };
+00283 
+<a name="l00290"></a><a class="code" href="classcsJoystickDriver.html">00290</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csJoystickDriver : <span class="keyword">public</span> <a class="code" href="classcsInputDriver.html">csInputDriver</a>,
+00291   <span class="keyword">public</span> <a class="code" href="structiJoystickDriver.html">iJoystickDriver</a>
+00292 {
+00293 <span class="keyword">private</span>:
+00294   <span class="comment">// Generic keyboard driver (for checking modifier key states).</span>
+00295   <a class="code" href="classcsRef.html">csRef&lt;iKeyboardDriver&gt;</a> Keyboard;
+00296 <span class="keyword">protected</span>:
+<a name="l00298"></a><a class="code" href="classcsJoystickDriver.html#p0">00298</a>   <span class="keywordtype">bool</span> Button [<a class="code" href="group__event__handling.html#ga129">CS_MAX_JOYSTICK_COUNT</a>][<a class="code" href="group__event__handling.html#ga130">CS_MAX_JOYSTICK_BUTTONS</a>];
+<a name="l00300"></a><a class="code" href="classcsJoystickDriver.html#p1">00300</a>   <span class="keywordtype">int</span> Last [<a class="code" href="group__event__handling.html#ga129">CS_MAX_JOYSTICK_COUNT</a>][<a class="code" href="group__event__handling.html#ga131">CS_MAX_JOYSTICK_AXES</a>];
+00301   <a class="code" href="group__util.html#ga0">uint8</a> Axes [<a class="code" href="group__event__handling.html#ga129">CS_MAX_JOYSTICK_COUNT</a>];
+00303   <a class="code" href="structiKeyboardDriver.html">iKeyboardDriver</a>* GetKeyboardDriver();
+00304 
+00305 <span class="keyword">public</span>:
+00306   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+00307 
+00309   csJoystickDriver (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+00311   <span class="keyword">virtual</span> ~csJoystickDriver ();
+00312 
+00314   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a0">Reset</a> ();
+00315 
+<a name="l00317"></a><a class="code" href="classcsJoystickDriver.html#a3">00317</a>   CS_DEPRECATED_METHOD CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a1">GetLastX</a> (<span class="keywordtype">int</span> number)<span class="keyword"> const </span>
+00318 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number - 1][0]; }
+<a name="l00320"></a><a class="code" href="classcsJoystickDriver.html#a4">00320</a>   CS_DEPRECATED_METHOD CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a2">GetLastY</a> (<span class="keywordtype">int</span> number)<span class="keyword"> const </span>
+00321 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number - 1][1]; }
+<a name="l00322"></a><a class="code" href="classcsJoystickDriver.html#a5">00322</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">int</span> *<a class="code" href="structiJoystickDriver.html#a3">GetLast</a> (<span class="keywordtype">int</span> number)<span class="keyword"> const </span>
+00323 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number - 1]; }
+<a name="l00324"></a><a class="code" href="classcsJoystickDriver.html#a6">00324</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiJoystickDriver.html#a3">GetLast</a> (<span class="keywordtype">int</span> number, <a class="code" href="group__util.html#ga0">uint8</a> axis)<span class="keyword"> const </span>
+00325 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number - 1][axis - 1]; }
+<a name="l00327"></a><a class="code" href="classcsJoystickDriver.html#a7">00327</a>   CS_PURE_METHOD <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiJoystickDriver.html#a5">GetLastButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button)<span class="keyword"> const</span>
+00328 <span class="keyword">  </span>{
+00329     <span class="keywordflow">return</span> (number &gt; 0 &amp;&amp; number &lt;= <a class="code" href="group__event__handling.html#ga129">CS_MAX_JOYSTICK_COUNT</a>
+00330          &amp;&amp; button &gt; 0 &amp;&amp; button &lt;= <a class="code" href="group__event__handling.html#ga130">CS_MAX_JOYSTICK_BUTTONS</a>) ?
+00331             Button [number - 1][button - 1] : <span class="keyword">false</span>;
+00332   }
+00333 
+00335   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a6">DoButton</a> (<span class="keywordtype">int</span> number, <span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, 
+00336     <span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> numAxes);
+00338   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiJoystickDriver.html#a7">DoMotion</a> (<span class="keywordtype">int</span> number, <span class="keyword">const</span> <span class="keywordtype">int</span> *axes, <a class="code" href="group__util.html#ga0">uint8</a> numAxes);
+00339 
+<a name="l00341"></a><a class="code" href="classcsJoystickDriver.html#a10">00341</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> LostFocus() { <a class="code" href="structiJoystickDriver.html#a0">Reset</a>(); }
+00342   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GainFocus() { }
+00343 
+<a name="l00345"></a><a class="code" href="structcsJoystickDriver_1_1eiEventHandler.html">00345</a>   <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT eiEventHandler : <span class="keyword">public</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>
+00346   {
+00347     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a> (csJoystickDriver);
+<a name="l00348"></a><a class="code" href="structcsJoystickDriver_1_1eiEventHandler.html#a1">00348</a>     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent(<a class="code" href="structiEvent.html">iEvent</a>&amp; e) 
+00349     { <span class="keywordflow">return</span> scfParent-&gt;HandleEvent(e); }
+00350   } scfiEventHandler;
+00351   <span class="keyword">friend</span> <span class="keyword">struct </span>eiEventHandler;
+00352 };
+00353 
+00354 <span class="preprocessor">#endif // __CS_CSINPUT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
