@@ -1434,6 +1434,10 @@ SOURCE=..\..\libs\..\include\cstool\vidprefs.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\algorithms.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\ansicolor.h
 # End Source File
 # Begin Source File
@@ -1723,6 +1727,10 @@ SOURCE=..\..\libs\..\include\csutil\radixsort.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\randomgen.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csutil\redblacktree.h
 # End Source File
 # Begin Source File
 
