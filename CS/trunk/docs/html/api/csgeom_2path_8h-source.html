@@ -46,7 +46,7 @@
 00033 <span class="preprocessor">#include "<a class="code" href="vector3_8h.html">csgeom/vector3.h</a>"</span>
 00034 <span class="preprocessor">#include "<a class="code" href="igeom_2path_8h.html">igeom/path.h</a>"</span>
 00035 
-<a name="l00042"></a><a class="code" href="classcsPath.html">00042</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPath.html">csPath</a> : <span class="keyword">public</span> <a class="code" href="classcsCatmullRomSpline.html">csCatmullRomSpline</a>, <span class="keyword">public</span> <a class="code" href="structiPath.html">iPath</a>
+<a name="l00042"></a><a class="code" href="classcsPath.html">00042</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPath.html">csPath</a> : <span class="keyword">public</span> <a class="code" href="classcsCatmullRomSpline.html">csCatmullRomSpline</a>
 00043 {
 00044 <span class="keyword">private</span>:
 00045   <span class="keywordtype">void</span> SetVectorAsDimensionValues (<span class="keywordtype">int</span> dim, <a class="code" href="classcsVector3.html">csVector3</a>* v)
@@ -76,101 +76,141 @@
 <a name="l00070"></a><a class="code" href="classcsPath.html#a0">00070</a>   <a class="code" href="classcsPath.html">csPath</a> (<span class="keywordtype">int</span> p) : <a class="code" href="classcsCatmullRomSpline.html">csCatmullRomSpline</a> (9, p)
 00071   {
 00072     <a class="code" href="group__scf.html#ga25">SCF_CONSTRUCT_IBASE</a> (0);
-00073   }
-00074 
-<a name="l00076"></a><a class="code" href="classcsPath.html#a1">00076</a>   <span class="keyword">virtual</span> ~<a class="code" href="classcsPath.html">csPath</a> () { <a class="code" href="group__scf.html#ga27">SCF_DESTRUCT_IBASE</a>(); }
-00077 
-<a name="l00079"></a><a class="code" href="classcsPath.html#a2">00079</a>   <span class="keywordtype">int</span> <a class="code" href="structiPath.html#a0">Length</a> ()
-00080   {
-00081     <span class="keywordflow">return</span> <a class="code" href="classcsSpline.html#a3">GetPointCount</a>();
-00082   }
-<a name="l00084"></a><a class="code" href="classcsPath.html#a3">00084</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a1">CalculateAtTime</a> (<span class="keywordtype">float</span> time)
+00073     <a class="code" href="group__scf.html#ga26">SCF_CONSTRUCT_EMBEDDED_IBASE</a> (scfiPath);
+00074   }
+00075 
+<a name="l00077"></a><a class="code" href="classcsPath.html#a1">00077</a>   <span class="keyword">virtual</span> ~<a class="code" href="classcsPath.html">csPath</a> ()
+00078   {
+00079     <a class="code" href="group__scf.html#ga28">SCF_DESTRUCT_EMBEDDED_IBASE</a> (scfiPath);
+00080     <a class="code" href="group__scf.html#ga27">SCF_DESTRUCT_IBASE</a>();
+00081   }
+00082 
+<a name="l00084"></a><a class="code" href="classcsPath.html#a2">00084</a>   <span class="keywordtype">int</span> Length ()
 00085   {
-00086     <a class="code" href="classcsBSpline.html#a2">Calculate</a> (time);
+00086     <span class="keywordflow">return</span> <a class="code" href="classcsSpline.html#a3">GetPointCount</a>();
 00087   }
-<a name="l00088"></a><a class="code" href="classcsPath.html#a4">00088</a>   <span class="keywordtype">int</span> <a class="code" href="classcsSpline.html#a17">GetCurrentIndex</a> ()
-00089   {
-00090     <span class="keywordflow">return</span> <a class="code" href="classcsSpline.html#a17">csCatmullRomSpline::GetCurrentIndex</a>();
-00091   }
-<a name="l00092"></a><a class="code" href="classcsPath.html#a5">00092</a>   <span class="keywordtype">float</span> <a class="code" href="structiPath.html#a12">GetTime</a> (<span class="keywordtype">int</span> idx)
-00093   {
-00094     <span class="keywordflow">return</span> <a class="code" href="classcsSpline.html#a9">GetTimeValue</a>(idx);
-00095   }
-<a name="l00096"></a><a class="code" href="classcsPath.html#a6">00096</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a13">SetTime</a> (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> t)
-00097   {
-00098     <a class="code" href="classcsSpline.html#a7">SetTimeValue</a>(idx,t);
-00099   }
-00100 
-<a name="l00102"></a><a class="code" href="classcsPath.html#a7">00102</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a3">SetPositionVectors</a> (<a class="code" href="classcsVector3.html">csVector3</a>* v)
-00103   {
-00104     SetVectorAsDimensionValues (0, v);
-00105   }
-<a name="l00107"></a><a class="code" href="classcsPath.html#a8">00107</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a4">SetUpVectors</a> (<a class="code" href="classcsVector3.html">csVector3</a>* v)
+<a name="l00089"></a><a class="code" href="classcsPath.html#a3">00089</a>   <span class="keywordtype">void</span> CalculateAtTime (<span class="keywordtype">float</span> time)
+00090   {
+00091     <a class="code" href="classcsBSpline.html#a2">Calculate</a> (time);
+00092   }
+00093   <span class="keywordtype">int</span> <a class="code" href="classcsSpline.html#a17">GetCurrentIndex</a> ()
+00094   {
+00095     <span class="keywordflow">return</span> <a class="code" href="classcsSpline.html#a17">csCatmullRomSpline::GetCurrentIndex</a>();
+00096   }
+00097   <span class="keywordtype">float</span> GetTime (<span class="keywordtype">int</span> idx)
+00098   {
+00099     <span class="keywordflow">return</span> <a class="code" href="classcsSpline.html#a9">GetTimeValue</a>(idx);
+00100   }
+00101   <span class="keywordtype">void</span> SetTime (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> t)
+00102   {
+00103     <a class="code" href="classcsSpline.html#a7">SetTimeValue</a>(idx,t);
+00104   }
+00105 
+<a name="l00107"></a><a class="code" href="classcsPath.html#a7">00107</a>   <span class="keywordtype">void</span> SetPositionVectors (<a class="code" href="classcsVector3.html">csVector3</a>* v)
 00108   {
-00109     SetVectorAsDimensionValues (3, v);
+00109     SetVectorAsDimensionValues (0, v);
 00110   }
-<a name="l00112"></a><a class="code" href="classcsPath.html#a9">00112</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a5">SetForwardVectors</a> (<a class="code" href="classcsVector3.html">csVector3</a>* v)
+<a name="l00112"></a><a class="code" href="classcsPath.html#a8">00112</a>   <span class="keywordtype">void</span> SetUpVectors (<a class="code" href="classcsVector3.html">csVector3</a>* v)
 00113   {
-00114     SetVectorAsDimensionValues (6, v);
+00114     SetVectorAsDimensionValues (3, v);
 00115   }
-<a name="l00117"></a><a class="code" href="classcsPath.html#a10">00117</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a6">SetPositionVector</a> (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+<a name="l00117"></a><a class="code" href="classcsPath.html#a9">00117</a>   <span class="keywordtype">void</span> SetForwardVectors (<a class="code" href="classcsVector3.html">csVector3</a>* v)
 00118   {
-00119     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (0, idx, v.<a class="code" href="classcsVector3.html#o0">x</a>);
-00120     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (1, idx, v.<a class="code" href="classcsVector3.html#o1">y</a>);
-00121     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (2, idx, v.<a class="code" href="classcsVector3.html#o2">z</a>);
-00122   }
-<a name="l00124"></a><a class="code" href="classcsPath.html#a11">00124</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a7">SetUpVector</a> (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-00125   {
-00126     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (3, idx, v.<a class="code" href="classcsVector3.html#o0">x</a>);
-00127     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (4, idx, v.<a class="code" href="classcsVector3.html#o1">y</a>);
-00128     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (5, idx, v.<a class="code" href="classcsVector3.html#o2">z</a>);
-00129   }
-<a name="l00131"></a><a class="code" href="classcsPath.html#a12">00131</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a8">SetForwardVector</a> (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-00132   {
-00133     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (6, idx, v.<a class="code" href="classcsVector3.html#o0">x</a>);
-00134     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (7, idx, v.<a class="code" href="classcsVector3.html#o1">y</a>);
-00135     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (8, idx, v.<a class="code" href="classcsVector3.html#o2">z</a>);
-00136   }
-<a name="l00138"></a><a class="code" href="classcsPath.html#a13">00138</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a9">GetPositionVector</a> (<span class="keywordtype">int</span> idx, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-00139   {
-00140     v.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (0, idx);
-00141     v.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (1, idx);
-00142     v.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (2, idx);
-00143   }
-<a name="l00145"></a><a class="code" href="classcsPath.html#a14">00145</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a10">GetUpVector</a> (<span class="keywordtype">int</span> idx, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-00146   {
-00147     v.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (3, idx);
-00148     v.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (4, idx);
-00149     v.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (5, idx);
-00150   }
-<a name="l00152"></a><a class="code" href="classcsPath.html#a15">00152</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a11">GetForwardVector</a> (<span class="keywordtype">int</span> idx, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-00153   {
-00154     v.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (6, idx);
-00155     v.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (7, idx);
-00156     v.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (8, idx);
-00157   }
-00158 
-<a name="l00160"></a><a class="code" href="classcsPath.html#a16">00160</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a14">GetInterpolatedPosition</a> (<a class="code" href="classcsVector3.html">csVector3</a>&amp; pos)
-00161   {
-00162     pos.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (0);
-00163     pos.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (1);
-00164     pos.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (2);
-00165   }
-<a name="l00167"></a><a class="code" href="classcsPath.html#a17">00167</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a15">GetInterpolatedUp</a> (<a class="code" href="classcsVector3.html">csVector3</a>&amp; pos)
-00168   {
-00169     pos.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (3);
-00170     pos.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (4);
-00171     pos.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (5);
-00172   }
-<a name="l00174"></a><a class="code" href="classcsPath.html#a18">00174</a>   <span class="keywordtype">void</span> <a class="code" href="structiPath.html#a16">GetInterpolatedForward</a> (<a class="code" href="classcsVector3.html">csVector3</a>&amp; pos)
-00175   {
-00176     pos.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (6);
-00177     pos.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (7);
-00178     pos.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (8);
-00179   }
-00180 };
-00181 
-00184 <span class="preprocessor">#endif // __CS_PATH_H__</span>
+00119     SetVectorAsDimensionValues (6, v);
+00120   }
+<a name="l00122"></a><a class="code" href="classcsPath.html#a10">00122</a>   <span class="keywordtype">void</span> SetPositionVector (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00123   {
+00124     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (0, idx, v.<a class="code" href="classcsVector3.html#o0">x</a>);
+00125     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (1, idx, v.<a class="code" href="classcsVector3.html#o1">y</a>);
+00126     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (2, idx, v.<a class="code" href="classcsVector3.html#o2">z</a>);
+00127   }
+<a name="l00129"></a><a class="code" href="classcsPath.html#a11">00129</a>   <span class="keywordtype">void</span> SetUpVector (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00130   {
+00131     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (3, idx, v.<a class="code" href="classcsVector3.html#o0">x</a>);
+00132     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (4, idx, v.<a class="code" href="classcsVector3.html#o1">y</a>);
+00133     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (5, idx, v.<a class="code" href="classcsVector3.html#o2">z</a>);
+00134   }
+<a name="l00136"></a><a class="code" href="classcsPath.html#a12">00136</a>   <span class="keywordtype">void</span> SetForwardVector (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00137   {
+00138     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (6, idx, v.<a class="code" href="classcsVector3.html#o0">x</a>);
+00139     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (7, idx, v.<a class="code" href="classcsVector3.html#o1">y</a>);
+00140     <a class="code" href="classcsSpline.html#a11">SetDimensionValue</a> (8, idx, v.<a class="code" href="classcsVector3.html#o2">z</a>);
+00141   }
+<a name="l00143"></a><a class="code" href="classcsPath.html#a13">00143</a>   <span class="keywordtype">void</span> GetPositionVector (<span class="keywordtype">int</span> idx, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00144   {
+00145     v.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (0, idx);
+00146     v.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (1, idx);
+00147     v.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (2, idx);
+00148   }
+<a name="l00150"></a><a class="code" href="classcsPath.html#a14">00150</a>   <span class="keywordtype">void</span> GetUpVector (<span class="keywordtype">int</span> idx, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00151   {
+00152     v.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (3, idx);
+00153     v.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (4, idx);
+00154     v.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (5, idx);
+00155   }
+<a name="l00157"></a><a class="code" href="classcsPath.html#a15">00157</a>   <span class="keywordtype">void</span> GetForwardVector (<span class="keywordtype">int</span> idx, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00158   {
+00159     v.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (6, idx);
+00160     v.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (7, idx);
+00161     v.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsSpline.html#a13">GetDimensionValue</a> (8, idx);
+00162   }
+00163 
+<a name="l00165"></a><a class="code" href="classcsPath.html#a16">00165</a>   <span class="keywordtype">void</span> GetInterpolatedPosition (<a class="code" href="classcsVector3.html">csVector3</a>&amp; pos)
+00166   {
+00167     pos.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (0);
+00168     pos.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (1);
+00169     pos.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (2);
+00170   }
+<a name="l00172"></a><a class="code" href="classcsPath.html#a17">00172</a>   <span class="keywordtype">void</span> GetInterpolatedUp (<a class="code" href="classcsVector3.html">csVector3</a>&amp; pos)
+00173   {
+00174     pos.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (3);
+00175     pos.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (4);
+00176     pos.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (5);
+00177   }
+<a name="l00179"></a><a class="code" href="classcsPath.html#a18">00179</a>   <span class="keywordtype">void</span> GetInterpolatedForward (<a class="code" href="classcsVector3.html">csVector3</a>&amp; pos)
+00180   {
+00181     pos.<a class="code" href="classcsVector3.html#o0">x</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (6);
+00182     pos.<a class="code" href="classcsVector3.html#o1">y</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (7);
+00183     pos.<a class="code" href="classcsVector3.html#o2">z</a> = <a class="code" href="classcsBSpline.html#a3">GetInterpolatedDimension</a> (8);
+00184   }
+00185 
+00186 <span class="preprocessor">#ifndef SWIG</span>
+00187 <span class="preprocessor"></span>  <span class="keyword">struct </span>PathEmbed : <span class="keyword">public</span> <a class="code" href="structiPath.html">iPath</a>
+00188   {
+00189     <a class="code" href="group__scf.html#ga24">SCF_DECLARE_EMBEDDED_IBASE</a>(<a class="code" href="classcsPath.html">csPath</a>);
+00190     <span class="keyword">virtual</span> <span class="keywordtype">int</span> Length () { <span class="keywordflow">return</span> scfParent-&gt;Length(); }
+00191     <span class="keyword">virtual</span> <span class="keywordtype">void</span> CalculateAtTime (<span class="keywordtype">float</span> t) { scfParent-&gt;CalculateAtTime(t); }
+00192     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetCurrentIndex () { <span class="keywordflow">return</span> scfParent-&gt;GetCurrentIndex(); }
+00193     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetPositionVectors (<a class="code" href="classcsVector3.html">csVector3</a>* v)
+00194     { scfParent-&gt;SetPositionVectors(v); }
+00195     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetUpVectors (<a class="code" href="classcsVector3.html">csVector3</a>* v) { scfParent-&gt;SetUpVectors(v); }
+00196     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetForwardVectors (<a class="code" href="classcsVector3.html">csVector3</a>* v)
+00197     { scfParent-&gt;SetForwardVectors(v); }
+00198     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetPositionVector (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00199     { scfParent-&gt;SetPositionVector(idx,v); }
+00200     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetUpVector (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00201     { scfParent-&gt;SetUpVector(idx,v); }
+00202     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetForwardVector (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00203     { scfParent-&gt;SetForwardVector(idx,v); }
+00204     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetPositionVector (<span class="keywordtype">int</span> idx, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00205     { scfParent-&gt;GetPositionVector(idx,v); }
+00206     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetUpVector (<span class="keywordtype">int</span> idx, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00207     { scfParent-&gt;GetUpVector(idx,v); }
+00208     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetForwardVector (<span class="keywordtype">int</span> idx, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+00209     { scfParent-&gt;GetForwardVector(idx,v); }
+00210     <span class="keyword">virtual</span> <span class="keywordtype">float</span> GetTime (<span class="keywordtype">int</span> idx) { <span class="keywordflow">return</span> scfParent-&gt;GetTime(idx); }
+00211     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTime (<span class="keywordtype">int</span> idx, <span class="keywordtype">float</span> t) { scfParent-&gt;SetTime(idx,t); }
+00212     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetInterpolatedPosition (<a class="code" href="classcsVector3.html">csVector3</a>&amp; pos)
+00213     { scfParent-&gt;GetInterpolatedPosition(pos); }
+00214     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetInterpolatedUp (<a class="code" href="classcsVector3.html">csVector3</a>&amp; pos)
+00215     { scfParent-&gt;GetInterpolatedUp(pos); }
+00216     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetInterpolatedForward (<a class="code" href="classcsVector3.html">csVector3</a>&amp; pos)
+00217     { scfParent-&gt;GetInterpolatedForward(pos); }
+00218   } scfiPath;
+00219 <span class="preprocessor">#endif // SWIG</span>
+00220 <span class="preprocessor"></span>};
+00221 
+00224 <span class="preprocessor">#endif // __CS_PATH_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
