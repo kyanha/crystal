@@ -138,12 +138,20 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\shader\shadermgr\nullshader.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadermgr\nullshader.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\shader\shadermgr\shadermgr.h
