@@ -1141,6 +1141,9 @@ discovered later.
 <a name="SEC835"></a>
 <h3 class="subheading"> <code>iEvent</code> Changes </h3>
 
+<a name="SEC836"></a>
+<h4 class="subsubheading"> Property Bags </h4>
+
 <p>The <code>iEvent::Find()</code> method was renamed to <code>Retrieve()</code> and exhibits
 different return value semantics. Rather than returning a mere boolean result,
 it now returns one of the <samp>`csEventError'</samp> enumeration constants.  Of
@@ -1165,7 +1168,47 @@ if (ev-&gt;Find(...))
   ...
 }
 </pre></td></tr></table>
-<a name="SEC836"></a>
+<a name="SEC837"></a>
+<h4 class="subsubheading"> Mouse, Joystick, and Command event properties </h4>
+
+<p>The <samp>`union'</samp> containing the <samp>`Mouse'</samp>, <samp>`Joystick'</samp>, and <samp>`Command'</samp>
+structures has been removed; all event attributes are now stored and accessed
+using the <code>Add()</code> and <code>Retrieve()</code> mechanisms.  To ease access to
+event data, use the static methods of the <samp>`csMouseEventHelper'</samp>, 
+<samp>`csJoystickEventHelper'</samp>, and <samp>`csCommandEventHelper'</samp> classes.  
+For example, code such as the following:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = ...;
+let X = ev-&gt;Mouse.X;
+</pre></td></tr></table>
+
+<p>should be changed to:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = ...;
+let X = csMouseEventHelper::GetX(ev);
+</pre></td></tr></table>
+
+<p>See the <small>API</small> documentation for details.
+</p>
+<a name="SEC838"></a>
+<h4 class="subsubheading"> Multiple mice </h4>
+
+<p>There is now support for handling input from more than one mouse.
+You can retrieve the identity (basis 1) of the mouse producing a 
+mouse event with <code>csMouseEventHelper::GetNumber()</code>.
+</p>
+<a name="SEC839"></a>
+<h4 class="subsubheading"> Joystick and Mouse axes </h4>
+
+<p>Joysticks can now have up to <samp>`CS_MAX_JOYSTICK_AXES'</samp> axes,
+and mice can have up to <samp>`CS_MAX_MOUSE_AXES'</samp>.  Their values should
+be accessed using the <code>csJoystickEventHelper::GetAxis()</code>
+and <code>csMouseEventHelper::GetAxis()</code> functions, respectively,
+where both devices and axes are enumerated basis 1.
+Each helper class also has <code>GetX()</code> and <code>GetY()</code> methods
+available; for joystick events, these are deprecated.
+</p>
+<a name="SEC840"></a>
 <h3 class="subheading"> Old Renderer Architecture Removal </h3>
 
 <p>The old rendering architecture along with the old renderer plugins have been
@@ -1173,7 +1216,7 @@ removed. Additionally, a few plugins, applications, classes, and methods have
 been deprecated because they are not applicable to the new rendering
 architecture. The results of the old renderer removal are summarized below.
 </p>
-<a name="SEC837"></a>
+<a name="SEC841"></a>
 <h4 class="subsubheading"> Removed Plugins </h4>
 
 <p>The following plugin modules have been removed:
@@ -1189,14 +1232,14 @@ Old <code>soft3d</code> (<tt>`plugins/video/renderer/software'</tt>)
 Old <code>null3d</code> (<tt>`plugins/video/renderer/null'</tt>)
 </li></ul>
 
-<a name="SEC838"></a>
+<a name="SEC842"></a>
 <h4 class="subsubheading"> Removed Application </h4>
 
 <p>The <samp>`perftest'</samp> application has been removed, since it is no longer has any
 purpose.  For the future the <samp>`csbench'</samp> application should be extended to
 provide more information.
 </p>
-<a name="SEC839"></a>
+<a name="SEC843"></a>
 <h4 class="subsubheading"> Removed and Renamed Files </h4>
 
 <p>The following files were removed:
@@ -1222,7 +1265,7 @@ provide more information.
 <code>or_lighting_portal.xml</code> =&gt; <code>std_lighting_portal.xml</code>
 </li></ul>
 
-<a name="SEC840"></a>
+<a name="SEC844"></a>
 <h4 class="subsubheading"> Removed Methods and Classes </h4>
 
 <p>The following methods have been removed from the <samp>`iGraphics3D'</samp> interface:
@@ -1292,7 +1335,7 @@ removed or have become private, and are no longer available to client code:
 <code>G3DTriangleMesh</code>
 </li></ul>
 
-<a name="SEC841"></a>
+<a name="SEC845"></a>
 <h3 class="subheading"> Query Macros </h3>
 
 <p>The macro <code>CS_QUERY_REGISTRY_PLUGIN()</code> has been added to
@@ -1303,7 +1346,7 @@ desired object if it was not found in the object-registry. It also registers
 the object with the object-registry if the plugin manager loads it
 successfully.
 </p>
-<a name="SEC842"></a>
+<a name="SEC846"></a>
 <h3 class="subheading"> Random Number Generator Changes </h3>
 
 <p>The global function <code>csFastRandFloat()</code> has been retired.  In its stead is
@@ -1314,7 +1357,7 @@ controlled and seeded individually, thus making it far more flexible and
 useful.  (Note that the more general-purpose <samp>`csRandomGen'</samp> class is also
 able to vend floating point numbers.)
 </p>
-<a name="SEC843"></a>
+<a name="SEC847"></a>
 <h3 class="subheading"> <samp>`iImage'</samp> Changes </h3>
 
 <p>The <samp>`iImage'</samp> interface has been reduced to a level where it merely serves
@@ -1352,13 +1395,13 @@ by <samp>`csImageMemory'</samp>.
 <p>As a side-effect of these changes, the <samp>`csImageFile'</samp> and 
 <samp>`csImageMemory'</samp> were merged and the former removed.
 </p>
-<a name="SEC844"></a>
+<a name="SEC848"></a>
 <h3 class="subheading"> <samp>`iMaterialList'</samp> Change </h3>
 
 <p>The function <code>iMaterialList::NewMaterial()</code> now needs an additional
 name parameter. It is not recommended to change the name later.
 </p>
-<a name="SEC845"></a>
+<a name="SEC849"></a>
 <h3 class="subheading"> <code>iObjectModel</code> Change </h3>
 
 <p>The function <code>iObjectModel::GetObjectBoundingBox()</code> only has one
@@ -1367,14 +1410,14 @@ was not implemented anywhere. In addition to that the constants
 <code>CS_BBOX_NORMAL</code>, <code>CS_BBOX_ACCURATE</code>, and <code>CS_BBOX_MAX</code>
 are also removed.
 </p>
-<a name="SEC846"></a>
+<a name="SEC850"></a>
 <h3 class="subheading"> <code>iImageIO::Load()</code> Parameter Change </h3>
 
 <p><code>iImageIO::Load()</code> now requires the image source data in an 
 <samp>`iDataBuffer'</samp> object, instead of separate <samp>`buffer'</samp> and <samp>`size'</samp>
 parameters.
 </p>
-<a name="SEC847"></a>
+<a name="SEC851"></a>
 <h3 class="subheading"> <samp>`iLight'</samp> Changes </h3>
 
 <p>The <samp>`iLight'</samp> and its implementation (<samp>`csLight'</samp>) have been extended to
@@ -1395,7 +1438,7 @@ the first attenuation constant. See comments in
 <tt>`CS/include/iengine/light.h'</tt> for exact details of the different
 attenuation modes.
 </p>
-<a name="SEC848"></a>
+<a name="SEC852"></a>
 <h3 class="subheading"> <code>CS_DECLARE_OBJECT_ITERATOR()</code> Removal </h3>
 
 <p>The <samp>`iObject'</samp> iterator creation macro <code>CS_DECLARE_OBJECT_ITERATOR()</code>
@@ -1426,7 +1469,7 @@ while (iter.HasNext())
 while (iter.HasNext())
 {
 </pre></td></tr></table>
-<a name="SEC849"></a>
+<a name="SEC853"></a>
 <h3 class="subheading"> Reference Count Automation </h3>
 
 <p>For consistency with the bulk of the Crystal Space <small>API</small>, and in order to
@@ -1459,7 +1502,7 @@ dispose manually via <code>DecRef()</code>.
 <code>iHazeHullCreation::CreateCone()</code>
 </li></ul>
 
-<a name="SEC850"></a>
+<a name="SEC854"></a>
 <h3 class="subheading"> Render Buffer Changes </h3>
 
 <p>The <samp>`iRenderBuffer'</samp> interface was made renderer-independant. Consequently,
@@ -1527,7 +1570,7 @@ the mesh provides them). They are:
 <samp>`texture coordinate 0'</samp> =&gt; <samp>`texture coordinate 0'</samp>
 </li></ul>
 
-<a name="SEC851"></a>
+<a name="SEC855"></a>
 <h3 class="subheading"> String Changes </h3>
 
 <p>The class hierarchy of <samp>`csString'</samp> has changed. Most functionality is now
@@ -1563,7 +1606,7 @@ methods.
 functionality is provided by <code>SetGrowsBy(0)</code> and <code>GetGrowsBy()</code>.
 </li></ul>
 
-<a name="SEC852"></a>
+<a name="SEC856"></a>
 <h3 class="subheading"> <small>RAPID</small> Collision Detection Plugin Removal </h3>
 
 <p>The <small>RAPID</small> collision detection plugin has been removed. In addition to
@@ -1571,7 +1614,7 @@ being slower than the <small>OPCODE</small> plugin and consuming more memory, it
 prevented its use in commercial applications.  You should instead now use the
 <small>OPCODE</small> plugin.
 </p>
-<a name="SEC853"></a>
+<a name="SEC857"></a>
 <h3 class="subheading"> 64-Bit Portability Changes </h3>
 
 <p>Some changes have been made to the Crystal Space <small>API</small> in order to better
@@ -1665,7 +1708,7 @@ methods will result in compilation errors. Alternately, defining
 supports such deprecation warnings. (Presently, only modern version of the
 <small>GNU</small> compiler are so configured.)
 </p>
-<a name="SEC854"></a>
+<a name="SEC858"></a>
 <h3 class="subheading"> Cg Matrix Bindings </h3>
 
 <p>Previously, the semantics of a Cg vertex program matrix parameter were
@@ -1686,13 +1729,13 @@ specification. For example:
 detailed information, consult the Cg and <samp>`ARB_vertex_program'</samp>
 documentations.
 </p>
-<a name="SEC855"></a>
+<a name="SEC859"></a>
 <h3 class="subheading"> <small>CSWS</small> Removal </h3>
 
 <p>The long-deprecated Crystal Space Windowing System (<small>CSWS</small>) was removed. 
 Instead use <small>AWS</small>. See section <a href="cs_7.11.html#7.11">Alternate Windowing System (<small>AWS</small>)</a>.
 </p>
-<a name="SEC856"></a>
+<a name="SEC860"></a>
 <h3 class="subheading"> Transform Split </h3>
 
 <p>To allow more control over how geometry is transformed when using shaders the
@@ -1702,7 +1745,7 @@ is sent via a shader variable, while <samp>`world2camera'</samp> is specified vi
 <code>iGraphics3D::SetWorldToCamera()</code> (but it is also available as a shader
 variable to shader programs).
 </p>
-<a name="SEC857"></a>
+<a name="SEC861"></a>
 <h3 class="subheading"> <samp>`chunklod'</samp> Terrain Removal </h3>
 
 <p>The <samp>`chunklod'</samp> terrain plugin has been removed:
@@ -1716,7 +1759,7 @@ variable to shader programs).
 
 <p><code>crystalspace.mesh.object.terrain.bruteblock</code>
 </p>
-<a name="SEC858"></a>
+<a name="SEC862"></a>
 <h3 class="subheading"> <samp>`csHashMap'</samp> and <samp>`csHashSet'</samp> Removal </h3>
 
 <p>The long-deprecated <samp>`csHashMap'</samp>, <samp>`csHashMapReversible'</samp>, and
@@ -1725,7 +1768,7 @@ variable to shader programs).
 string-related <em>set</em> functionality, you may also want to consider using
 <samp>`csStringHash'</samp> and <samp>`csStringSet'</samp>.
 </p>
-<a name="SEC859"></a>
+<a name="SEC863"></a>
 <h3 class="subheading"> <code>csObjectPool&lt;&gt;</code> Removal </h3>
 
 <p>The <code>csObjectPool&lt;&gt;</code> utility class has been removed since it managed
@@ -1741,7 +1784,7 @@ drop-in replacement for <code>csObjectPool&lt;&gt;</code> since the <small>API</
 <small>API</small>. A global search and replace should be sufficient to account for this
 change.
 </p>
-<a name="SEC860"></a>
+<a name="SEC864"></a>
 <h3 class="subheading"> <samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> Removal </h3>
 
 <p><samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> have been replaced
@@ -1772,7 +1815,7 @@ while (iter.HasNext())
 <p>Code using <samp>`csStringHashIterator'</samp> can be fixed using the same simple
 transformation.
 </p>
-<a name="SEC861"></a>
+<a name="SEC865"></a>
 <h3 class="subheading"> Miscellaneous Removals </h3>
 
 <p>The following facilities have been removed because they were unused and/or of
@@ -1791,13 +1834,13 @@ questionable use.
 using <samp>`csFrameDataHolder&lt;csDirtyAccessArray&lt;csRenderMesh*&gt; &gt;'</samp>.
 </li></ul>
 
-<a name="SEC862"></a>
+<a name="SEC866"></a>
 <h3 class="subheading"> <code>csRenderMeshHolderSingle</code> Renamed </h3>
 
 <p><samp>`csRenderMeshHolderSingle'</samp> has been renamed to <samp>`csRenderMeshHolder'</samp>
 as a consequence of the removal of <samp>`csRenderMeshHolderMultiple'</samp>.
 </p>
-<a name="SEC863"></a>
+<a name="SEC867"></a>
 <h3 class="subheading"> C++ Standard Conformance </h3>
 
 <p>Crystal Space's public header files are now C++ Language Standard
@@ -1806,7 +1849,7 @@ strictly to the C++ Language Standard (such as those which employ <em>gcc</em>'s
 <samp>`-ansi'</samp> and <samp>`-pedantic'</samp> options) can now include Crystal Space
 headers safely.
 </p>
-<a name="SEC864"></a>
+<a name="SEC868"></a>
 <h3 class="subheading"> <tt>`imap/parser.h'</tt> Deprecated </h3>
 
 <p>All functionality in the header <tt>`imap/parser.h'</tt> was long ago moved to
@@ -1816,7 +1859,7 @@ merely included <tt>`imap/loader.h'</tt> and did nothing more. Since
 <tt>`imap/parser.h'</tt> has no useful purpose, it is now officially deprecated,
 and deprecation warnings have been added. Use <tt>`imap/loader.h'</tt> instead.
 </p>
-<a name="SEC865"></a>
+<a name="SEC869"></a>
 <h3 class="subheading"> <code>csSet&lt;&gt;</code> Relocation and Changes </h3>
 
 <p>The declaration of <code>csSet&lt;&gt;</code> was moved out from <tt>`csutil/hash.h'</tt> and
@@ -1828,7 +1871,7 @@ exposed an underlying implementation detail of <code>csSet&lt;&gt;</code>.
 for storage of pointers in a <code>csSet&lt;&gt;</code> the <code>csPtrKey&lt;&gt;</code> wrapper must
 be used.
 </p>
-<a name="SEC866"></a>
+<a name="SEC870"></a>
 <h3 class="subheading"> <code>csHash&lt;&gt;</code> Changes </h3>
 
 <p>The way <code>csHash&lt;&gt;</code> handles support for arbitrary key types has been
