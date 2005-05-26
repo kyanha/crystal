@@ -66,48 +66,55 @@
 00092 
 00093   <span class="comment">// CHANGED TO ADD SUPPORT FOR CUBEMAPS AND 3D TEXTURES</span>
 00094   <span class="comment">// done by Phil Aumayr (phil@rarebyte.com)</span>
-00095   <span class="keyword">enum</span> { CS_TEX_IMG_1D = 0, CS_TEX_IMG_2D, CS_TEX_IMG_3D, CS_TEX_IMG_CUBEMAP };
-00099   <span class="keyword">enum</span> { CS_TEXTURE_CUBE_POS_X = 0, CS_TEXTURE_CUBE_NEG_X, 
-00100          CS_TEXTURE_CUBE_POS_Y, CS_TEXTURE_CUBE_NEG_Y,
-00101          CS_TEXTURE_CUBE_POS_Z, CS_TEXTURE_CUBE_NEG_Z };
-00102 
-00103 
-00113   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTextureHandle.html#a5">GetRendererDimensions</a> (<span class="keywordtype">int</span> &amp;mw, <span class="keywordtype">int</span> &amp;mh, <span class="keywordtype">int</span> &amp;md) = 0;
-00114 
-00122   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a6">GetOriginalDimensions</a> (<span class="keywordtype">int</span>&amp; mw, <span class="keywordtype">int</span>&amp; mh, <span class="keywordtype">int</span> &amp;md) = 0;
-00123 
-00128   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiTextureHandle.html#a9">GetTextureTarget</a> () <span class="keyword">const </span>= 0;
-00129 
-<a name="l00131"></a><a class="code" href="structiTextureHandle.html#w14">00131</a>   <span class="keyword">enum</span> <a class="code" href="structiTextureHandle.html#w14">TextureBlitDataFormat</a>
-00132   {
-00134     <a class="code" href="structiTextureHandle.html#w14w10">RGBA8888</a> = 0,
-00136     <a class="code" href="structiTextureHandle.html#w14w11">BGRA8888</a>
-00137   };
-00138 
-00143   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a10">Blit</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height,
-00144     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* data, <a class="code" href="structiTextureHandle.html#w14">TextureBlitDataFormat</a> format = <a class="code" href="structiTextureHandle.html#w14w10">RGBA8888</a>) = 0;
+00095   <span class="keyword">enum</span> 
+00096   { 
+00097     CS_TEX_IMG_1D = 0, 
+00098     CS_TEX_IMG_2D, 
+00099     CS_TEX_IMG_3D, 
+00100     CS_TEX_IMG_CUBEMAP,
+00101     CS_TEX_IMG_RECT
+00102   };
+00106   <span class="keyword">enum</span> { CS_TEXTURE_CUBE_POS_X = 0, CS_TEXTURE_CUBE_NEG_X, 
+00107          CS_TEXTURE_CUBE_POS_Y, CS_TEXTURE_CUBE_NEG_Y,
+00108          CS_TEXTURE_CUBE_POS_Z, CS_TEXTURE_CUBE_NEG_Z };
+00109 
+00110 
+00120   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTextureHandle.html#a5">GetRendererDimensions</a> (<span class="keywordtype">int</span> &amp;mw, <span class="keywordtype">int</span> &amp;mh, <span class="keywordtype">int</span> &amp;md) = 0;
+00121 
+00129   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a6">GetOriginalDimensions</a> (<span class="keywordtype">int</span>&amp; mw, <span class="keywordtype">int</span>&amp; mh, <span class="keywordtype">int</span> &amp;md) = 0;
+00130 
+00135   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiTextureHandle.html#a9">GetTextureTarget</a> () <span class="keyword">const </span>= 0;
+00136 
+<a name="l00138"></a><a class="code" href="structiTextureHandle.html#w15">00138</a>   <span class="keyword">enum</span> <a class="code" href="structiTextureHandle.html#w15">TextureBlitDataFormat</a>
+00139   {
+00141     <a class="code" href="structiTextureHandle.html#w15w11">RGBA8888</a> = 0,
+00143     <a class="code" href="structiTextureHandle.html#w15w12">BGRA8888</a>
+00144   };
 00145 
-00149   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiTextureHandle.html#a11">GetImageName</a> () <span class="keyword">const </span>= 0;
-00150 
-00152   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiTextureHandle.html#a12">GetCacheData</a> () = 0;
-00153 
-00155   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a13">SetCacheData</a> (<span class="keywordtype">void</span> *d) = 0;
-00156 
-00161   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiTextureHandle.html#a14">GetPrivateObject</a> () = 0;
-00162 
-00168   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTextureHandle.html#a15">GetAlphaMap</a> () = 0;
+00150   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a10">Blit</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height,
+00151     <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* data, <a class="code" href="structiTextureHandle.html#w15">TextureBlitDataFormat</a> format = <a class="code" href="structiTextureHandle.html#w15w11">RGBA8888</a>) = 0;
+00152 
+00156   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiTextureHandle.html#a11">GetImageName</a> () <span class="keyword">const </span>= 0;
+00157 
+00159   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiTextureHandle.html#a12">GetCacheData</a> () = 0;
+00160 
+00162   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a13">SetCacheData</a> (<span class="keywordtype">void</span> *d) = 0;
+00163 
+00168   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiTextureHandle.html#a14">GetPrivateObject</a> () = 0;
 00169 
-00171   <span class="keyword">virtual</span> <a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> <a class="code" href="structiTextureHandle.html#a16">GetAlphaType</a> () <span class="keyword">const </span>= 0;
-00172 
-00177   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a17">Precache</a> () = 0;
-00178 
-00189   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a18">SetTextureClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* className) = 0;
-00194   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiTextureHandle.html#a19">GetTextureClass</a> () = 0;
-00195 
-00202   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a20">SetAlphaType</a> (<a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> alphaType) = 0;
-00203 };
-00204 
-00207 <span class="preprocessor">#endif // __CS_IVIDEO_TEXTURE_H__</span>
+00175   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTextureHandle.html#a15">GetAlphaMap</a> () = 0;
+00176 
+00178   <span class="keyword">virtual</span> <a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> <a class="code" href="structiTextureHandle.html#a16">GetAlphaType</a> () <span class="keyword">const </span>= 0;
+00179 
+00184   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a17">Precache</a> () = 0;
+00185 
+00196   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a18">SetTextureClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* className) = 0;
+00201   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiTextureHandle.html#a19">GetTextureClass</a> () = 0;
+00202 
+00209   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a20">SetAlphaType</a> (<a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> alphaType) = 0;
+00210 };
+00211 
+00214 <span class="preprocessor">#endif // __CS_IVIDEO_TEXTURE_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>

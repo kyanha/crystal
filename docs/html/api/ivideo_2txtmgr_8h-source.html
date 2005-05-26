@@ -65,49 +65,51 @@
 00078 <span class="preprocessor"></span>
 <a name="l00081"></a><a class="code" href="group__gfx3d.html#ga59">00081</a> <span class="preprocessor">#define CS_TEXTURE_NOFILTER             0x00000020</span>
 00082 <span class="preprocessor"></span>
-00084 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiRendererLightmap.html">iRendererLightmap</a>, 1, 1, 0);
-00085 
-<a name="l00089"></a><a class="code" href="structiRendererLightmap.html">00089</a> <span class="keyword">struct </span><a class="code" href="structiRendererLightmap.html">iRendererLightmap</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00090 {
-00095   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRendererLightmap.html#a0">GetSLMCoords</a> (<span class="keywordtype">int</span>&amp; left, <span class="keywordtype">int</span>&amp; top, 
-00096     <span class="keywordtype">int</span>&amp; width, <span class="keywordtype">int</span>&amp; height) = 0;
-00097     
-00099   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRendererLightmap.html#a1">SetData</a> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* data) = 0;
-00100   
-00101   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetLightCellSize (<span class="keywordtype">int</span> size) = 0;
-00102 };
-00103 
-00104 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSuperLightmap.html">iSuperLightmap</a>, 1, 0, 1);
-00105 
-<a name="l00109"></a><a class="code" href="structiSuperLightmap.html">00109</a> <span class="keyword">struct </span><a class="code" href="structiSuperLightmap.html">iSuperLightmap</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00110 {
-00112   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iRendererLightmap&gt;</a> <a class="code" href="structiSuperLightmap.html#a0">RegisterLightmap</a> (<span class="keywordtype">int</span> left, <span class="keywordtype">int</span> top, 
-00113     <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) = 0;
-00114     
-00116   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiSuperLightmap.html#a1">Dump</a> () = 0;
+<a name="l00095"></a><a class="code" href="group__gfx3d.html#ga60">00095</a> <span class="preprocessor">#define CS_TEXTURE_NPOTS                0x00000040</span>
+00096 <span class="preprocessor"></span>
+00098 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiRendererLightmap.html">iRendererLightmap</a>, 1, 1, 0);
+00099 
+<a name="l00103"></a><a class="code" href="structiRendererLightmap.html">00103</a> <span class="keyword">struct </span><a class="code" href="structiRendererLightmap.html">iRendererLightmap</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00104 {
+00109   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRendererLightmap.html#a0">GetSLMCoords</a> (<span class="keywordtype">int</span>&amp; left, <span class="keywordtype">int</span>&amp; top, 
+00110     <span class="keywordtype">int</span>&amp; width, <span class="keywordtype">int</span>&amp; height) = 0;
+00111     
+00113   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiRendererLightmap.html#a1">SetData</a> (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* data) = 0;
+00114   
+00115   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetLightCellSize (<span class="keywordtype">int</span> size) = 0;
+00116 };
 00117 
-00118   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* GetTexture () = 0;
-00119 };
-00120 
-00121 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiTextureManager.html">iTextureManager</a>, 2, 5, 0);
-00122 
-<a name="l00142"></a><a class="code" href="structiTextureManager.html">00142</a> <span class="keyword">struct </span><a class="code" href="structiTextureManager.html">iTextureManager</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-00143 {
-00171   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iTextureHandle&gt;</a> <a class="code" href="structiTextureManager.html#a0">RegisterTexture</a> (<a class="code" href="structiImage.html">iImage</a> *image, <span class="keywordtype">int</span> flags) = 0;
-00172 
-00180   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiTextureManager.html#a1">GetTextureFormat</a> () = 0;
-00181   
-00185   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSuperLightmap&gt;</a> <a class="code" href="structiTextureManager.html#a2">CreateSuperLightmap</a> (<span class="keywordtype">int</span> width, 
-00186     <span class="keywordtype">int</span> height) = 0;
-00187 
-00191   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureManager.html#a3">GetMaxTextureSize</a> (<span class="keywordtype">int</span>&amp; w, <span class="keywordtype">int</span>&amp; h, <span class="keywordtype">int</span>&amp; aspect) = 0;
-00192 
-00198   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureManager.html#a4">GetLightmapRendererCoords</a> (<span class="keywordtype">int</span> slmWidth, <span class="keywordtype">int</span> slmHeight,
-00199     <span class="keywordtype">int</span> lm_x1, <span class="keywordtype">int</span> lm_y1, <span class="keywordtype">int</span> lm_x2, <span class="keywordtype">int</span> lm_y2,
-00200     <span class="keywordtype">float</span>&amp; lm_u1, <span class="keywordtype">float</span>&amp; lm_v1, <span class="keywordtype">float</span> &amp;lm_u2, <span class="keywordtype">float</span>&amp; lm_v2) = 0;
-00201 };
-00202 
-00205 <span class="preprocessor">#endif // __CS_IVIDEO_TXTMGR_H__</span>
+00118 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiSuperLightmap.html">iSuperLightmap</a>, 1, 0, 1);
+00119 
+<a name="l00123"></a><a class="code" href="structiSuperLightmap.html">00123</a> <span class="keyword">struct </span><a class="code" href="structiSuperLightmap.html">iSuperLightmap</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00124 {
+00126   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iRendererLightmap&gt;</a> <a class="code" href="structiSuperLightmap.html#a0">RegisterLightmap</a> (<span class="keywordtype">int</span> left, <span class="keywordtype">int</span> top, 
+00127     <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height) = 0;
+00128     
+00130   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiSuperLightmap.html#a1">Dump</a> () = 0;
+00131 
+00132   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* GetTexture () = 0;
+00133 };
+00134 
+00135 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiTextureManager.html">iTextureManager</a>, 2, 5, 0);
+00136 
+<a name="l00156"></a><a class="code" href="structiTextureManager.html">00156</a> <span class="keyword">struct </span><a class="code" href="structiTextureManager.html">iTextureManager</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+00157 {
+00185   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iTextureHandle&gt;</a> <a class="code" href="structiTextureManager.html#a0">RegisterTexture</a> (<a class="code" href="structiImage.html">iImage</a> *image, <span class="keywordtype">int</span> flags) = 0;
+00186 
+00194   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiTextureManager.html#a1">GetTextureFormat</a> () = 0;
+00195   
+00199   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSuperLightmap&gt;</a> <a class="code" href="structiTextureManager.html#a2">CreateSuperLightmap</a> (<span class="keywordtype">int</span> width, 
+00200     <span class="keywordtype">int</span> height) = 0;
+00201 
+00205   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureManager.html#a3">GetMaxTextureSize</a> (<span class="keywordtype">int</span>&amp; w, <span class="keywordtype">int</span>&amp; h, <span class="keywordtype">int</span>&amp; aspect) = 0;
+00206 
+00212   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureManager.html#a4">GetLightmapRendererCoords</a> (<span class="keywordtype">int</span> slmWidth, <span class="keywordtype">int</span> slmHeight,
+00213     <span class="keywordtype">int</span> lm_x1, <span class="keywordtype">int</span> lm_y1, <span class="keywordtype">int</span> lm_x2, <span class="keywordtype">int</span> lm_y2,
+00214     <span class="keywordtype">float</span>&amp; lm_u1, <span class="keywordtype">float</span>&amp; lm_v1, <span class="keywordtype">float</span> &amp;lm_u2, <span class="keywordtype">float</span>&amp; lm_v2) = 0;
+00215 };
+00216 
+00219 <span class="preprocessor">#endif // __CS_IVIDEO_TXTMGR_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
