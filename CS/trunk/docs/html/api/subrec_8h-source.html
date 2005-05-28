@@ -78,71 +78,73 @@
 00074       AllocInfo() : node(0), d(0x7fffffff), allocPos(ALLOC_INVALID), 
 00075         res(<span class="keyword">false</span>) {};
 00076     };
-00077 
-00078     <a class="code" href="classcsRect.html">csRect</a> rect;
-00079     <a class="code" href="classcsRect.html">csRect</a> allocedRect;
-00080     <span class="keywordtype">int</span> splitPos;
-00081     SplitType splitType;
-00082 
-00083     <a class="code" href="classcsSubRectangles.html">csSubRectangles</a>* superrect;
-00084     SubRect* parent;
-00085     SubRect* children[2];
-00086 
-00087     SubRect ();
-00088 
-00090     <span class="keywordtype">void</span> TestAlloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, AllocInfo&amp; ai);
-00092     SubRect* Alloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keyword">const</span> AllocInfo&amp; ai, <a class="code" href="classcsRect.html">csRect</a>&amp; r);
-00094     <span class="keywordtype">void</span> Reclaim ();
-00096     <span class="keywordtype">void</span> TestCollapse ();
-00097 
-00100     <span class="keywordtype">void</span> DecideBestSplit (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; rect, <span class="keywordtype">int</span> splitX, <span class="keywordtype">int</span> splitY,
-00101       SubRect::SplitType&amp; splitType);
-00102   };
-00103 
-00104 <span class="keyword">protected</span>:
-<a name="l00106"></a><a class="code" href="classcsSubRectangles.html#p0">00106</a>   <a class="code" href="classcsRect.html">csRect</a> region;
-<a name="l00108"></a><a class="code" href="classcsSubRectangles.html#p1">00108</a>   <a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>* root;
-00109 
-00110   <a class="code" href="classcsBlockAllocator.html">SubRect::SubRectAlloc</a> alloc;
-00111   <span class="keyword">inline</span> <a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>* AllocSubrect ()
-00112   { <span class="keywordflow">return</span> alloc.Alloc(); }
-00113   <span class="keywordtype">void</span> FreeSubrect (SubRect* sr);
-00114 
-<a name="l00116"></a><a class="code" href="classcsSubRectangles.html#p3">00116</a>   <a class="code" href="classcsArray.html">csArray&lt;SubRect*&gt;</a> leaves;
-00117   <span class="keywordtype">void</span> AddLeaf (<a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>* sr)
-00118   {
-00119     leaves.InsertSorted (sr);
-00120   }
-00121   <span class="keywordtype">void</span> RemoveLeaf (SubRect* sr)
-00122   {
-00123     size_t index = leaves.FindSortedKey (
-00124       <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;SubRect*, SubRect*&gt;</a> (sr));
-00125     leaves.DeleteIndex (index);
-00126   }
-00127   
-00128   <span class="keywordtype">void</span> Grow (SubRect* sr, <span class="keywordtype">int</span> ow, <span class="keywordtype">int</span> oh, <span class="keywordtype">int</span> nw, <span class="keywordtype">int</span> nh);
-00129 <span class="keyword">public</span>:
-00131   <a class="code" href="classcsSubRectangles.html">csSubRectangles</a> (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; region);
-00132 
-00134   ~<a class="code" href="classcsSubRectangles.html">csSubRectangles</a> ();
-00135 
-<a name="l00137"></a><a class="code" href="classcsSubRectangles.html#a2">00137</a>   <span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; GetRectangle ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> region; }
-00138 
-00142   <span class="keywordtype">void</span> Clear ();
-00143 
-00147   SubRect* Alloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <a class="code" href="classcsRect.html">csRect</a>&amp; rect);
-00148 
-00153   <span class="keywordtype">void</span> Reclaim (SubRect* subrect);
-00154 
-00159   <span class="keywordtype">bool</span> Grow (<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight);
-00160 
-00164   <span class="keywordtype">void</span> Dump ();
-00165 };
-00166 
-00167 <span class="keyword">typedef</span> <a class="code" href="classcsSubRectangles_1_1SubRect.html">csSubRectangles::SubRect</a> <a class="code" href="classcsSubRectangles_1_1SubRect.html">csSubRect</a>;
+00077     <span class="keyword">friend</span> <span class="keyword">struct </span>AllocInfo; <span class="comment">// Give MSVC6 access to ALLOC_INVALID.</span>
+00078 
+00079     <a class="code" href="classcsRect.html">csRect</a> rect;
+00080     <a class="code" href="classcsRect.html">csRect</a> allocedRect;
+00081     <span class="keywordtype">int</span> splitPos;
+00082     SplitType splitType;
+00083 
+00084     <a class="code" href="classcsSubRectangles.html">csSubRectangles</a>* superrect;
+00085     SubRect* parent;
+00086     SubRect* children[2];
+00087 
+00088     SubRect ();
+00089 
+00091     <span class="keywordtype">void</span> TestAlloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, AllocInfo&amp; ai);
+00093     SubRect* Alloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keyword">const</span> AllocInfo&amp; ai, <a class="code" href="classcsRect.html">csRect</a>&amp; r);
+00095     <span class="keywordtype">void</span> Reclaim ();
+00097     <span class="keywordtype">void</span> TestCollapse ();
+00098 
+00101     <span class="keywordtype">void</span> DecideBestSplit (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; rect, <span class="keywordtype">int</span> splitX, <span class="keywordtype">int</span> splitY,
+00102       SubRect::SplitType&amp; splitType);
+00103   };
+00104   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>; <span class="comment">// Give MSVC6 access to enclosing protected scope.</span>
+00105 
+00106 <span class="keyword">protected</span>:
+<a name="l00108"></a><a class="code" href="classcsSubRectangles.html#p0">00108</a>   <a class="code" href="classcsRect.html">csRect</a> region;
+<a name="l00110"></a><a class="code" href="classcsSubRectangles.html#p1">00110</a>   <a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>* root;
+00111 
+00112   <a class="code" href="classcsBlockAllocator.html">SubRect::SubRectAlloc</a> alloc;
+00113   <span class="keyword">inline</span> <a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>* AllocSubrect ()
+00114   { <span class="keywordflow">return</span> alloc.Alloc(); }
+00115   <span class="keywordtype">void</span> FreeSubrect (SubRect* sr);
+00116 
+<a name="l00118"></a><a class="code" href="classcsSubRectangles.html#p3">00118</a>   <a class="code" href="classcsArray.html">csArray&lt;SubRect*&gt;</a> leaves;
+00119   <span class="keywordtype">void</span> AddLeaf (<a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>* sr)
+00120   {
+00121     leaves.InsertSorted (sr);
+00122   }
+00123   <span class="keywordtype">void</span> RemoveLeaf (SubRect* sr)
+00124   {
+00125     size_t index = leaves.FindSortedKey (
+00126       <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;SubRect*, SubRect*&gt;</a> (sr));
+00127     leaves.DeleteIndex (index);
+00128   }
+00129   
+00130   <span class="keywordtype">void</span> Grow (SubRect* sr, <span class="keywordtype">int</span> ow, <span class="keywordtype">int</span> oh, <span class="keywordtype">int</span> nw, <span class="keywordtype">int</span> nh);
+00131 <span class="keyword">public</span>:
+00133   <a class="code" href="classcsSubRectangles.html">csSubRectangles</a> (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; region);
+00134 
+00136   ~<a class="code" href="classcsSubRectangles.html">csSubRectangles</a> ();
+00137 
+<a name="l00139"></a><a class="code" href="classcsSubRectangles.html#a2">00139</a>   <span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; GetRectangle ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> region; }
+00140 
+00144   <span class="keywordtype">void</span> Clear ();
+00145 
+00149   SubRect* Alloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <a class="code" href="classcsRect.html">csRect</a>&amp; rect);
+00150 
+00155   <span class="keywordtype">void</span> Reclaim (SubRect* subrect);
+00156 
+00161   <span class="keywordtype">bool</span> Grow (<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight);
+00162 
+00166   <span class="keywordtype">void</span> Dump ();
+00167 };
 00168 
-00171 <span class="preprocessor">#endif // __CS_SUBREC_H__</span>
-00172 <span class="preprocessor"></span>
+00169 <span class="keyword">typedef</span> <a class="code" href="classcsSubRectangles_1_1SubRect.html">csSubRectangles::SubRect</a> <a class="code" href="classcsSubRectangles_1_1SubRect.html">csSubRect</a>;
+00170 
+00173 <span class="preprocessor">#endif // __CS_SUBREC_H__</span>
+00174 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
