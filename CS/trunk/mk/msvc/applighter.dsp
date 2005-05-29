@@ -164,6 +164,10 @@ SOURCE=..\..\apps\tools\lighter\litpolygon.cpp
 
 SOURCE=..\..\apps\tools\lighter\lmmapper.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\raytracer.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -199,6 +203,10 @@ SOURCE=..\..\apps\tools\lighter\litpolygon.h
 # Begin Source File
 
 SOURCE=..\..\apps\tools\lighter\lmmapper.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\raytracer.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
