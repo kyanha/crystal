@@ -70,7 +70,7 @@
 <a name="l00062"></a><a class="code" href="classcsShaderVariable.html">00062</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> : <span class="keyword">public</span> <a class="code" href="classcsRefCount.html">csRefCount</a>
 00063 {
 00064 <span class="keyword">public</span>:
-<a name="l00070"></a><a class="code" href="classcsShaderVariable.html#w10">00070</a>   <span class="keyword">enum</span> VariableType
+<a name="l00070"></a><a class="code" href="classcsShaderVariable.html#w11">00070</a>   <span class="keyword">enum</span> VariableType
 00071   {
 00073     INT = 1,
 00075     FLOAT,
@@ -81,247 +81,277 @@
 00085     VECTOR3,
 00087     VECTOR4,
 00089     MATRIX,
-00091     TRANSFORM
-00092   };
-00093 
-00094   <span class="comment">//CS_LEAKGUARD_DECLARE (csShaderVariable);</span>
-00095 <span class="keyword">private</span>:
-00096 
-00097   VariableType Type;
+00091     TRANSFORM,
+00093     ARRAY
+00094   };
+00095 
+00096   <span class="comment">//CS_LEAKGUARD_DECLARE (csShaderVariable);</span>
+00097 <span class="keyword">private</span>:
 00098 
-00099   <a class="code" href="classcsRef.html">csRef&lt;iTextureHandle&gt;</a> TextureHandValue;
-00100   <a class="code" href="classcsRef.html">csRef&lt;iTextureWrapper&gt;</a> TextureWrapValue;
-00101   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> RenderBuffer;
-00102   <a class="code" href="classcsVector4.html">csVector4</a> VectorValue;
-00103   
-00104   <span class="keywordtype">int</span> Int;
-00105   <a class="code" href="classcsMatrix3.html">csMatrix3</a>* MatrixValuePtr;
-00106   <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* TransformPtr;
-00107 
-00108   <a class="code" href="classcsRef.html">csRef&lt;iShaderVariableAccessor&gt;</a> accessor;
+00099   VariableType Type;
+00100 
+00101   <a class="code" href="classcsRef.html">csRef&lt;iTextureHandle&gt;</a> TextureHandValue;
+00102   <a class="code" href="classcsRef.html">csRef&lt;iTextureWrapper&gt;</a> TextureWrapValue;
+00103   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> RenderBuffer;
+00104   <a class="code" href="classcsVector4.html">csVector4</a> VectorValue;
+00105   
+00106   <span class="keywordtype">int</span> Int;
+00107   <a class="code" href="classcsMatrix3.html">csMatrix3</a>* MatrixValuePtr;
+00108   <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* TransformPtr;
 00109 
-00110   <a class="code" href="group__util.html#ga23">csStringID</a> Name;
-00111 <span class="keyword">public</span>:
-00112 
-00114   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> (<a class="code" href="group__util.html#ga23">csStringID</a> name);
-00115   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> (<span class="keyword">const</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>&amp; other)
-00116   { *<span class="keyword">this</span> = other; }
-00117   <span class="keyword">virtual</span> ~<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> ()
-00118   {
-00119     <span class="keyword">delete</span> MatrixValuePtr;
-00120     <span class="keyword">delete</span> TransformPtr;
-00121   }
-00122 
-00123   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>&amp; operator= (<span class="keyword">const</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>&amp; copyFrom);
-00124 
-<a name="l00126"></a><a class="code" href="classcsShaderVariable.html#a4">00126</a>   VariableType GetType()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Type; }
-<a name="l00128"></a><a class="code" href="classcsShaderVariable.html#a5">00128</a>   <span class="keywordtype">void</span> SetType (VariableType t) { Type = t; }
+00110   <a class="code" href="classcsRef.html">csRef&lt;iShaderVariableAccessor&gt;</a> accessor;
+00111 
+00112   <a class="code" href="classcsArray.html">csArray&lt;csShaderVariable&gt;</a> *array;
+00113 
+00114   <a class="code" href="group__util.html#ga23">csStringID</a> Name;
+00115 <span class="keyword">public</span>:
+00116 
+00118   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> (<a class="code" href="group__util.html#ga23">csStringID</a> name);
+00119   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> (<span class="keyword">const</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>&amp; other)
+00120   { *<span class="keyword">this</span> = other; }
+00121   <span class="keyword">virtual</span> ~<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> ()
+00122   {
+00123     <span class="keyword">delete</span> MatrixValuePtr;
+00124     <span class="keyword">delete</span> TransformPtr;
+00125     <span class="keyword">delete</span> array;
+00126   }
+00127 
+00128   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>&amp; operator= (<span class="keyword">const</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>&amp; copyFrom);
 00129 
-<a name="l00131"></a><a class="code" href="classcsShaderVariable.html#a6">00131</a>   <span class="keywordtype">void</span> SetAccessor (<a class="code" href="structiShaderVariableAccessor.html">iShaderVariableAccessor</a>* a) { accessor = a;}
-00132 
-<a name="l00134"></a><a class="code" href="classcsShaderVariable.html#a7">00134</a>   <a class="code" href="group__util.html#ga23">csStringID</a> GetName ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Name; }
-00135 
-<a name="l00137"></a><a class="code" href="classcsShaderVariable.html#a8">00137</a>   <span class="keywordtype">bool</span> GetValue (<span class="keywordtype">int</span>&amp; value)
-00138   { 
-00139     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00140     value = Int; 
-00141     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
-00142   }
-00143 
-<a name="l00145"></a><a class="code" href="classcsShaderVariable.html#a9">00145</a>   <span class="keywordtype">bool</span> GetValue (<span class="keywordtype">float</span>&amp; value)
-00146   { 
-00147     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00148     value = VectorValue.x; 
-00149     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
-00150   }
-00151 
-<a name="l00153"></a><a class="code" href="classcsShaderVariable.html#a10">00153</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>&amp; value)
-00154   {
-00155     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00156     value.red = (char) VectorValue.x;
-00157     value.green = (char) VectorValue.y;
-00158     value.blue = (char) VectorValue.z;
-00159     value.alpha = (char) VectorValue.w;
-00160     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00161   }
-00162 
-<a name="l00164"></a><a class="code" href="classcsShaderVariable.html#a11">00164</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>*&amp; value)
-00165   {
-00166     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00167     value = TextureHandValue;
-00168     <span class="keywordflow">if</span> (!value &amp;&amp; TextureWrapValue)
-00169       value = TextureHandValue = TextureWrapValue-&gt;GetTextureHandle ();
-00170     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00171   }
-00172 
-<a name="l00174"></a><a class="code" href="classcsShaderVariable.html#a12">00174</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>*&amp; value)
-00175   {
-00176     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00177     value = TextureWrapValue;
-00178     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00179   }
-00180 
-<a name="l00182"></a><a class="code" href="classcsShaderVariable.html#a13">00182</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>*&amp; value)
-00183   {
-00184     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00185     value = RenderBuffer;
-00186     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00187   }
-00188 
-<a name="l00190"></a><a class="code" href="classcsShaderVariable.html#a14">00190</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsVector2.html">csVector2</a>&amp; value)
-00191   {
-00192     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00193     value.Set (VectorValue.x, VectorValue.y);
-00194     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00195   }
-00196 
-<a name="l00198"></a><a class="code" href="classcsShaderVariable.html#a15">00198</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsVector3.html">csVector3</a>&amp; value)
-00199   { 
-00200     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00201     value.<a class="code" href="classcsVector3.html#a15">Set</a> (VectorValue.x, VectorValue.y, VectorValue.z);
-00202     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
-00203   }
-00204 
-<a name="l00206"></a><a class="code" href="classcsShaderVariable.html#a16">00206</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsVector4.html">csVector4</a>&amp; value)
-00207   { 
-00208     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00209     value = VectorValue; 
-00210     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
-00211   }
-00212 
-<a name="l00214"></a><a class="code" href="classcsShaderVariable.html#a17">00214</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; value)
-00215   {
-00216     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00217     <span class="keywordflow">if</span> (MatrixValuePtr)
-00218     {
-00219       value = *MatrixValuePtr;
-00220       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00221     }
-00222     <span class="keywordflow">else</span>
+<a name="l00131"></a><a class="code" href="classcsShaderVariable.html#a4">00131</a>   VariableType GetType()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Type; }
+<a name="l00133"></a><a class="code" href="classcsShaderVariable.html#a5">00133</a>   <span class="keywordtype">void</span> SetType (VariableType t) { Type = t; }
+00134 
+<a name="l00136"></a><a class="code" href="classcsShaderVariable.html#a6">00136</a>   <span class="keywordtype">void</span> SetAccessor (<a class="code" href="structiShaderVariableAccessor.html">iShaderVariableAccessor</a>* a) { accessor = a;}
+00137 
+<a name="l00139"></a><a class="code" href="classcsShaderVariable.html#a7">00139</a>   <a class="code" href="group__util.html#ga23">csStringID</a> GetName ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Name; }
+00140 
+<a name="l00142"></a><a class="code" href="classcsShaderVariable.html#a8">00142</a>   <span class="keywordtype">bool</span> GetValue (<span class="keywordtype">int</span>&amp; value)
+00143   { 
+00144     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00145     value = Int; 
+00146     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
+00147   }
+00148 
+<a name="l00150"></a><a class="code" href="classcsShaderVariable.html#a9">00150</a>   <span class="keywordtype">bool</span> GetValue (<span class="keywordtype">float</span>&amp; value)
+00151   { 
+00152     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00153     value = VectorValue.x; 
+00154     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
+00155   }
+00156 
+<a name="l00158"></a><a class="code" href="classcsShaderVariable.html#a10">00158</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>&amp; value)
+00159   {
+00160     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00161     value.red = (char) VectorValue.x;
+00162     value.green = (char) VectorValue.y;
+00163     value.blue = (char) VectorValue.z;
+00164     value.alpha = (char) VectorValue.w;
+00165     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00166   }
+00167 
+<a name="l00169"></a><a class="code" href="classcsShaderVariable.html#a11">00169</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>*&amp; value)
+00170   {
+00171     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00172     value = TextureHandValue;
+00173     <span class="keywordflow">if</span> (!value &amp;&amp; TextureWrapValue)
+00174       value = TextureHandValue = TextureWrapValue-&gt;GetTextureHandle ();
+00175     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00176   }
+00177 
+<a name="l00179"></a><a class="code" href="classcsShaderVariable.html#a12">00179</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>*&amp; value)
+00180   {
+00181     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00182     value = TextureWrapValue;
+00183     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00184   }
+00185 
+<a name="l00187"></a><a class="code" href="classcsShaderVariable.html#a13">00187</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>*&amp; value)
+00188   {
+00189     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00190     value = RenderBuffer;
+00191     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00192   }
+00193 
+<a name="l00195"></a><a class="code" href="classcsShaderVariable.html#a14">00195</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsVector2.html">csVector2</a>&amp; value)
+00196   {
+00197     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00198     value.Set (VectorValue.x, VectorValue.y);
+00199     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00200   }
+00201 
+<a name="l00203"></a><a class="code" href="classcsShaderVariable.html#a15">00203</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsVector3.html">csVector3</a>&amp; value)
+00204   { 
+00205     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00206     value.<a class="code" href="classcsVector3.html#a15">Set</a> (VectorValue.x, VectorValue.y, VectorValue.z);
+00207     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
+00208   }
+00209 
+<a name="l00211"></a><a class="code" href="classcsShaderVariable.html#a16">00211</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsVector4.html">csVector4</a>&amp; value)
+00212   { 
+00213     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00214     value = VectorValue; 
+00215     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
+00216   }
+00217 
+<a name="l00219"></a><a class="code" href="classcsShaderVariable.html#a17">00219</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; value)
+00220   {
+00221     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00222     <span class="keywordflow">if</span> (MatrixValuePtr)
 00223     {
-00224       value = <a class="code" href="classcsMatrix3.html">csMatrix3</a>();
-00225     }
-00226     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00227   }
-00228 
-<a name="l00230"></a><a class="code" href="classcsShaderVariable.html#a18">00230</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; value)
-00231   {
-00232     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
-00233     <span class="keywordflow">if</span> (TransformPtr)
-00234     {
-00235       value = *TransformPtr;
-00236       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00237     }
-00238     <span class="keywordflow">else</span>
+00224       value = *MatrixValuePtr;
+00225       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00226     }
+00227     <span class="keywordflow">else</span>
+00228     {
+00229       value = <a class="code" href="classcsMatrix3.html">csMatrix3</a>();
+00230     }
+00231     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00232   }
+00233 
+<a name="l00235"></a><a class="code" href="classcsShaderVariable.html#a18">00235</a>   <span class="keywordtype">bool</span> GetValue (<a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; value)
+00236   {
+00237     <span class="keywordflow">if</span> (accessor) accessor-&gt;PreGetValue (<span class="keyword">this</span>);
+00238     <span class="keywordflow">if</span> (TransformPtr)
 00239     {
-00240       value = <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>();
-00241     }
-00242     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-00243   }
-00244 
-00245 
-<a name="l00247"></a><a class="code" href="classcsShaderVariable.html#a19">00247</a>   <span class="keywordtype">bool</span> SetValue (<span class="keywordtype">int</span> value) 
-00248   { 
-00249     Type = INT; 
-00250     Int = value; 
-00251     <span class="keywordtype">float</span> f = (float)value;
-00252     VectorValue.Set (f, f, f, f);
-00253     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
-00254   }
-00255 
-<a name="l00257"></a><a class="code" href="classcsShaderVariable.html#a20">00257</a>   <span class="keywordtype">bool</span> SetValue (<span class="keywordtype">float</span> value)
-00258   { 
-00259     Type = FLOAT; 
-00260     Int = (int)value;
-00261     VectorValue.Set (value, value, value, value);
-00262     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
-00263   }
-00264 
-<a name="l00266"></a><a class="code" href="classcsShaderVariable.html#a21">00266</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> &amp;value)
-00267   {
-00268     Type = COLOR;
-00269     VectorValue.x = (float) value.red;
-00270     VectorValue.y = (float) value.green;
-00271     VectorValue.z = (float) value.blue;
-00272     VectorValue.w = (float) value.alpha;
-00273     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00274   }
-00275 
-<a name="l00277"></a><a class="code" href="classcsShaderVariable.html#a22">00277</a>   <span class="keywordtype">bool</span> SetValue (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>* value)
-00278   {
-00279     Type = TEXTURE;
-00280     TextureHandValue = value;
-00281     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00282   }
-00283 
-<a name="l00285"></a><a class="code" href="classcsShaderVariable.html#a23">00285</a>   <span class="keywordtype">bool</span> SetValue (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* value)
-00286   {
-00287     Type = TEXTURE;
-00288     TextureWrapValue = value;
-00289     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00290   }
-00291 
-<a name="l00293"></a><a class="code" href="classcsShaderVariable.html#a24">00293</a>   <span class="keywordtype">bool</span> SetValue (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* value)
-00294   {
-00295     Type = RENDERBUFFER;
-00296     RenderBuffer = value;
-00297     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00298   }
-00299 
-<a name="l00301"></a><a class="code" href="classcsShaderVariable.html#a25">00301</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a> &amp;value)
-00302   {
-00303     Type = VECTOR2;
-00304     VectorValue.Set (value.<a class="code" href="classcsVector2.html#o0">x</a>, value.<a class="code" href="classcsVector2.html#o1">y</a>, 0.0f, 1.0f);
-00305     Int = (int)value.<a class="code" href="classcsVector2.html#o0">x</a>;
-00306     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00307   }
-00308 
-<a name="l00310"></a><a class="code" href="classcsShaderVariable.html#a26">00310</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;value)
-00311   { 
-00312     Type = VECTOR3; 
-00313     VectorValue.Set (value.<a class="code" href="classcsVector3.html#o0">x</a>, value.<a class="code" href="classcsVector3.html#o1">y</a>, value.<a class="code" href="classcsVector3.html#o2">z</a>, 1.0f);
-00314     Int = (int)value.<a class="code" href="classcsVector3.html#o0">x</a>;
-00315     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
-00316   }
-00317 
-<a name="l00319"></a><a class="code" href="classcsShaderVariable.html#a27">00319</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsVector4.html">csVector4</a> &amp;value)
-00320   { 
-00321     Type = VECTOR4; 
-00322     VectorValue.Set (value.<a class="code" href="classcsVector4.html#o0">x</a>, value.<a class="code" href="classcsVector4.html#o1">y</a>, value.<a class="code" href="classcsVector4.html#o2">z</a>, value.<a class="code" href="classcsVector4.html#o3">w</a>);
-00323     Int = (int)value.<a class="code" href="classcsVector4.html#o0">x</a>;
-00324     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
-00325   }
-00326 
-<a name="l00328"></a><a class="code" href="classcsShaderVariable.html#a28">00328</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a> &amp;value)
-00329   {
-00330     Type = MATRIX;
-00331     <span class="keywordflow">if</span> (MatrixValuePtr)
-00332     {
-00333       *MatrixValuePtr = value;
-00334     }
-00335     <span class="keywordflow">else</span>
-00336     {
-00337       MatrixValuePtr = <span class="keyword">new</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a> (value);
-00338     }
-00339     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00340   }
-00341 
-<a name="l00343"></a><a class="code" href="classcsShaderVariable.html#a29">00343</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;value)
-00344   {
-00345     Type = TRANSFORM;
-00346     <span class="keywordflow">if</span> (TransformPtr)
-00347     {
-00348       *TransformPtr = value;
-00349     }
-00350     <span class="keywordflow">else</span>
-00351     {
-00352       TransformPtr = <span class="keyword">new</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> (value);
-00353     }
-00354     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-00355   }
-00356 };
-00357 
-00358 <span class="preprocessor">#endif</span>
+00240       value = *TransformPtr;
+00241       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00242     }
+00243     <span class="keywordflow">else</span>
+00244     {
+00245       value = <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>();
+00246     }
+00247     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+00248   }
+00249 
+00250 
+<a name="l00252"></a><a class="code" href="classcsShaderVariable.html#a19">00252</a>   <span class="keywordtype">bool</span> SetValue (<span class="keywordtype">int</span> value) 
+00253   { 
+00254     Type = INT; 
+00255     Int = value; 
+00256     <span class="keywordtype">float</span> f = (float)value;
+00257     VectorValue.Set (f, f, f, f);
+00258     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
+00259   }
+00260 
+<a name="l00262"></a><a class="code" href="classcsShaderVariable.html#a20">00262</a>   <span class="keywordtype">bool</span> SetValue (<span class="keywordtype">float</span> value)
+00263   { 
+00264     Type = FLOAT; 
+00265     Int = (int)value;
+00266     VectorValue.Set (value, value, value, value);
+00267     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
+00268   }
+00269 
+<a name="l00271"></a><a class="code" href="classcsShaderVariable.html#a21">00271</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> &amp;value)
+00272   {
+00273     Type = COLOR;
+00274     VectorValue.x = (float) value.red;
+00275     VectorValue.y = (float) value.green;
+00276     VectorValue.z = (float) value.blue;
+00277     VectorValue.w = (float) value.alpha;
+00278     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00279   }
+00280 
+<a name="l00282"></a><a class="code" href="classcsShaderVariable.html#a22">00282</a>   <span class="keywordtype">bool</span> SetValue (<a class="code" href="structiTextureHandle.html">iTextureHandle</a>* value)
+00283   {
+00284     Type = TEXTURE;
+00285     TextureHandValue = value;
+00286     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00287   }
+00288 
+<a name="l00290"></a><a class="code" href="classcsShaderVariable.html#a23">00290</a>   <span class="keywordtype">bool</span> SetValue (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* value)
+00291   {
+00292     Type = TEXTURE;
+00293     TextureWrapValue = value;
+00294     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00295   }
+00296 
+<a name="l00298"></a><a class="code" href="classcsShaderVariable.html#a24">00298</a>   <span class="keywordtype">bool</span> SetValue (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* value)
+00299   {
+00300     Type = RENDERBUFFER;
+00301     RenderBuffer = value;
+00302     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00303   }
+00304 
+<a name="l00306"></a><a class="code" href="classcsShaderVariable.html#a25">00306</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a> &amp;value)
+00307   {
+00308     Type = VECTOR2;
+00309     VectorValue.Set (value.<a class="code" href="classcsVector2.html#o0">x</a>, value.<a class="code" href="classcsVector2.html#o1">y</a>, 0.0f, 1.0f);
+00310     Int = (int)value.<a class="code" href="classcsVector2.html#o0">x</a>;
+00311     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00312   }
+00313 
+<a name="l00315"></a><a class="code" href="classcsShaderVariable.html#a26">00315</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;value)
+00316   { 
+00317     Type = VECTOR3; 
+00318     VectorValue.Set (value.<a class="code" href="classcsVector3.html#o0">x</a>, value.<a class="code" href="classcsVector3.html#o1">y</a>, value.<a class="code" href="classcsVector3.html#o2">z</a>, 1.0f);
+00319     Int = (int)value.<a class="code" href="classcsVector3.html#o0">x</a>;
+00320     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
+00321   }
+00322 
+<a name="l00324"></a><a class="code" href="classcsShaderVariable.html#a27">00324</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsVector4.html">csVector4</a> &amp;value)
+00325   { 
+00326     Type = VECTOR4; 
+00327     VectorValue.Set (value.<a class="code" href="classcsVector4.html#o0">x</a>, value.<a class="code" href="classcsVector4.html#o1">y</a>, value.<a class="code" href="classcsVector4.html#o2">z</a>, value.<a class="code" href="classcsVector4.html#o3">w</a>);
+00328     Int = (int)value.<a class="code" href="classcsVector4.html#o0">x</a>;
+00329     <span class="keywordflow">return</span> <span class="keyword">true</span>; 
+00330   }
+00331 
+<a name="l00333"></a><a class="code" href="classcsShaderVariable.html#a28">00333</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a> &amp;value)
+00334   {
+00335     Type = MATRIX;
+00336     <span class="keywordflow">if</span> (MatrixValuePtr)
+00337     {
+00338       *MatrixValuePtr = value;
+00339     }
+00340     <span class="keywordflow">else</span>
+00341     {
+00342       MatrixValuePtr = <span class="keyword">new</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a> (value);
+00343     }
+00344     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00345   }
+00346 
+<a name="l00348"></a><a class="code" href="classcsShaderVariable.html#a29">00348</a>   <span class="keywordtype">bool</span> SetValue (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;value)
+00349   {
+00350     Type = TRANSFORM;
+00351     <span class="keywordflow">if</span> (TransformPtr)
+00352     {
+00353       *TransformPtr = value;
+00354     }
+00355     <span class="keywordflow">else</span>
+00356     {
+00357       TransformPtr = <span class="keyword">new</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> (value);
+00358     }
+00359     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+00360   }
+00361 
+<a name="l00363"></a><a class="code" href="classcsShaderVariable.html#a30">00363</a>   <span class="keywordtype">void</span> SetArraySize (size_t size)
+00364   {
+00365     <span class="keywordflow">if</span> (array == 0)
+00366     {
+00367       array = <span class="keyword">new</span> <a class="code" href="classcsArray.html">csArray&lt;csShaderVariable&gt;</a>;
+00368     }
+00369     array-&gt;SetSize (size, <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> (<a class="code" href="group__util.html#ga24">csInvalidStringID</a>));
+00370   }
+00371 
+<a name="l00373"></a><a class="code" href="classcsShaderVariable.html#a31">00373</a>   size_t GetArraySize ()
+00374   {
+00375     <span class="keywordflow">if</span> (array == 0)
+00376       <span class="keywordflow">return</span> 0;
+00377     <span class="keywordflow">else</span>
+00378       <span class="keywordflow">return</span> array-&gt;Length ();
+00379   }
+00380 
+<a name="l00386"></a><a class="code" href="classcsShaderVariable.html#a32">00386</a>   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *GetArrayElement (size_t element)
+00387   {
+00388     <span class="keywordflow">if</span> (array != 0 &amp;&amp; element&gt;0 &amp;&amp; element&lt;array-&gt;Length ())
+00389     {
+00390       <span class="keywordflow">return</span> &amp;array-&gt;Get (element);
+00391     }
+00392     <span class="keywordflow">return</span> 0;
+00393   }
+00394 };
+00395 
+00396 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
