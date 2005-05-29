@@ -182,6 +182,10 @@ SOURCE=..\..\libs\csplugincommon\opengl\..\..\..\include\csplugincommon\opengl\g
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csplugincommon\opengl\..\..\..\include\csplugincommon\opengl\glhelper.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csplugincommon\opengl\..\..\..\include\csplugincommon\opengl\glss.h
 # End Source File
 # Begin Source File
