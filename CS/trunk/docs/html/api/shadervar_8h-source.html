@@ -94,14 +94,14 @@
 00102   <a class="code" href="classcsRef.html">csRef&lt;iTextureWrapper&gt;</a> TextureWrapValue;
 00103   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> RenderBuffer;
 00104   <a class="code" href="classcsVector4.html">csVector4</a> VectorValue;
-00105   
+00105 
 00106   <span class="keywordtype">int</span> Int;
 00107   <a class="code" href="classcsMatrix3.html">csMatrix3</a>* MatrixValuePtr;
 00108   <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* TransformPtr;
 00109 
 00110   <a class="code" href="classcsRef.html">csRef&lt;iShaderVariableAccessor&gt;</a> accessor;
 00111 
-00112   <a class="code" href="classcsArray.html">csArray&lt;csShaderVariable&gt;</a> *array;
+00112   <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a> *array;
 00113 
 00114   <a class="code" href="group__util.html#ga23">csStringID</a> Name;
 00115 <span class="keyword">public</span>:
@@ -328,9 +328,9 @@
 00364   {
 00365     <span class="keywordflow">if</span> (array == 0)
 00366     {
-00367       array = <span class="keyword">new</span> <a class="code" href="classcsArray.html">csArray&lt;csShaderVariable&gt;</a>;
+00367       array = <span class="keyword">new</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a>;
 00368     }
-00369     array-&gt;SetSize (size, <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> (<a class="code" href="group__util.html#ga24">csInvalidStringID</a>));
+00369     array-&gt;SetSize (size);
 00370   }
 00371 
 <a name="l00373"></a><a class="code" href="classcsShaderVariable.html#a31">00373</a>   size_t GetArraySize ()
@@ -345,13 +345,18 @@
 00387   {
 00388     <span class="keywordflow">if</span> (array != 0 &amp;&amp; element&gt;0 &amp;&amp; element&lt;array-&gt;Length ())
 00389     {
-00390       <span class="keywordflow">return</span> &amp;array-&gt;Get (element);
+00390       <span class="keywordflow">return</span> array-&gt;Get (element);
 00391     }
 00392     <span class="keywordflow">return</span> 0;
 00393   }
-00394 };
-00395 
-00396 <span class="preprocessor">#endif</span>
+00394 
+<a name="l00398"></a><a class="code" href="classcsShaderVariable.html#a33">00398</a>   <span class="keywordtype">void</span> SetArrayElement (size_t element, <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable)
+00399   {
+00400     array-&gt;Put (element, variable);
+00401   }
+00402 };
+00403 
+00404 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.2 
 </small></address> </div></body> </html>
