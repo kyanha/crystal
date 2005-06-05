@@ -140,6 +140,10 @@ SOURCE="$(InputPath)"
 
 SOURCE=..\..\plugins\engine\renderloop\fatrl\fatloop.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\renderloop\fatrl\meshnode.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -147,6 +151,14 @@ SOURCE=..\..\plugins\engine\renderloop\fatrl\fatloop.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\renderloop\fatrl\fatloop.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\renderloop\fatrl\meshnode.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\renderloop\fatrl\rendernode.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
