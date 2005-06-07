@@ -144,6 +144,10 @@ SOURCE=..\..\plugins\engine\renderloop\fatrl\fatloop.cpp
 
 SOURCE=..\..\plugins\engine\renderloop\fatrl\meshnode.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\renderloop\fatrl\portalnode.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -155,6 +159,10 @@ SOURCE=..\..\plugins\engine\renderloop\fatrl\fatloop.h
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\renderloop\fatrl\meshnode.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\renderloop\fatrl\portalnode.h
 # End Source File
 # Begin Source File
 
