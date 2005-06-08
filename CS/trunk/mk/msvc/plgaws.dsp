@@ -290,7 +290,15 @@ SOURCE=..\..\plugins\aws\object.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws\preferences.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws\registrar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\registry.cpp
 # End Source File
 # Begin Source File
 
@@ -299,6 +307,10 @@ SOURCE=..\..\plugins\aws\skinlex.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\skinpars.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\xml_def.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -458,11 +470,19 @@ SOURCE=..\..\plugins\aws\object.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws\preferences.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws\property.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\registrar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\registry.h
 # End Source File
 # Begin Source File
 
@@ -475,6 +495,10 @@ SOURCE=..\..\plugins\aws\skinpars.hpp
 # Begin Source File
 
 SOURCE=..\..\plugins\aws\split.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws\xml_def.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
