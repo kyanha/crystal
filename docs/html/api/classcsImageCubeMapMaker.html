@@ -41,7 +41,7 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a new map and copy the faces from <em>source</em>.  <a href="#a2"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsImageCubeMapMaker.html#a3">csImageCubeMapMaker</a> (<a class="el" href="structiImage.html">iImage</a> *posX, <a class="el" href="structiImage.html">iImage</a> *negX, <a class="el" href="structiImage.html">iImage</a> *posY, <a class="el" href="structiImage.html">iImage</a> *negY, <a class="el" href="structiImage.html">iImage</a> *posZ, <a class="el" href="structiImage.html">iImage</a> *negZ)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a new map from separately specified the Positive X, Positive Y .  <a href="#a3"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create a new map from separately specified Positive X, Positive Y etc.  <a href="#a3"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual const void *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsImageCubeMapMaker.html#a5">GetImageData</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get image data: returns either (<a class="el" href="structcsRGBpixel.html">csRGBpixel</a> *) or (unsigned char *) depending on format.  <a href="#a5"></a><br></td></tr>
@@ -103,13 +103,20 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="o0"></a><!-- doxytag: member="csImageCubeMapMaker::SCF_DECLARE_IBASE" ref="o0" args="" -->
 &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsImageCubeMapMaker.html#o0">SCF_DECLARE_IBASE</a></td></tr>
 
+<tr><td colspan="2"><br><h2>Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsImageCubeMapMaker.html#b0">CheckImage</a> (int index)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Ensure that the image at <em>index</em> is valid.  <a href="#b0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsImageCubeMapMaker.html#b1">UpdateName</a> ()</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Update the image name from the contained images.  <a href="#b1"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="p0"></a><!-- doxytag: member="csImageCubeMapMaker::cubeImages" ref="p0" args="[6]" -->
-<a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiImage.html">iImage</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsImageCubeMapMaker.html#p0">cubeImages</a> [6]</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiImage.html">iImage</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsImageCubeMapMaker.html#p0">cubeImages</a> [6]</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="p1"></a><!-- doxytag: member="csImageCubeMapMaker::manualName" ref="p1" args="" -->
-bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsImageCubeMapMaker.html#p1">manualName</a></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The cube face images.  <a href="#p0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsImageCubeMapMaker.html#p1">manualName</a></td></tr>
 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Whether the name was manually overridden (in this case it is not updated when the contained images are changed).  <a href="#p1"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Wrapper class to create a cube map from a number of 2D images as the cube faces. 
@@ -236,12 +243,42 @@ Create a new map and copy the faces from <em>source</em>.
     <td>
 
 <p>
-Create a new map from separately specified the Positive X, Positive Y . 
+Create a new map from separately specified Positive X, Positive Y etc. 
 <p>
-.. images.    </td>
+images.    </td>
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="b0"></a><!-- doxytag: member="csImageCubeMapMaker::CheckImage" ref="b0" args="(int index)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void csImageCubeMapMaker::CheckImage           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>index</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [protected]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Ensure that the image at <em>index</em> is valid. 
+<p>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="a12"></a><!-- doxytag: member="csImageCubeMapMaker::GetAlpha" ref="a12" args="()" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -396,7 +433,7 @@ Get the type of the contained image.
 <p>
 Reimplemented from <a class="el" href="classcsImageBase.html#a14">csImageBase</a>.
 <p>
-Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00090">90</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.
+Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00097">97</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.
 <p>
 References <a class="el" href="group__gfx2d.html#gga19a9">csimgCube</a>.    </td>
   </tr>
@@ -447,7 +484,7 @@ Get the keycolour stored with the image.
 <p>
 Reimplemented from <a class="el" href="classcsImageBase.html#a8">csImageBase</a>.
 <p>
-Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00083">83</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
+Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00090">90</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a16"></a><!-- doxytag: member="csImageCubeMapMaker::GetMipmap" ref="a16" args="(uint num)" --><p>
@@ -513,7 +550,7 @@ Get the name of the image.
 <p>
 Reimplemented from <a class="el" href="classcsImageBase.html#a3">csImageBase</a>.
 <p>
-Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00076">76</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
+Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00083">83</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a11"></a><!-- doxytag: member="csImageCubeMapMaker::GetPalette" ref="a11" args="()" --><p>
@@ -702,7 +739,7 @@ Check if image has a keycolour stored with it.
 <p>
 Reimplemented from <a class="el" href="classcsImageBase.html#a6">csImageBase</a>.
 <p>
-Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00082">82</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
+Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00089">89</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a15"></a><!-- doxytag: member="csImageCubeMapMaker::HasMipmaps" ref="a15" args="() const " --><p>
@@ -766,7 +803,7 @@ Subimages are usually used for cube map faces.
 <p>
 Reimplemented from <a class="el" href="classcsImageBase.html#a15">csImageBase</a>.
 <p>
-Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00091">91</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
+Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00098">98</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a8"></a><!-- doxytag: member="csImageCubeMapMaker::SetName" ref="a8" args="(const char *iName)" --><p>
@@ -869,7 +906,91 @@ Check whether a face is specified.
 <p>
 The difference from GetSubImage(num) is that <a class="el" href="classcsImageCubeMapMaker.html#a21">GetSubImage()</a> will always return an image != 0, while <a class="el" href="classcsImageCubeMapMaker.html#a23">SubImageSet()</a> checks whether the internal face reference is 0 or not.
 <p>
-Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00102">102</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
+Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00109">109</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="b1"></a><!-- doxytag: member="csImageCubeMapMaker::UpdateName" ref="b1" args="()" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">void csImageCubeMapMaker::UpdateName           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [protected]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Update the image name from the contained images. 
+<p>
+    </td>
+  </tr>
+</table>
+<hr><h2>Member Data Documentation</h2>
+<a class="anchor" name="p0"></a><!-- doxytag: member="csImageCubeMapMaker::cubeImages" ref="p0" args="[6]" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="classcsRef.html">csRef</a>&lt;<a class="el" href="structiImage.html">iImage</a>&gt; <a class="el" href="classcsImageCubeMapMaker.html#p0">csImageCubeMapMaker::cubeImages</a>[6]<code> [protected]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+The cube face images. 
+<p>
+
+<p>
+Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00043">43</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="p1"></a><!-- doxytag: member="csImageCubeMapMaker::manualName" ref="p1" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">bool <a class="el" href="classcsImageCubeMapMaker.html#p1">csImageCubeMapMaker::manualName</a><code> [protected]</code>          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Whether the name was manually overridden (in this case it is not updated when the contained images are changed). 
+<p>
+
+<p>
+Definition at line <a class="el" href="imagecubemapmaker_8h-source.html#l00048">48</a> of file <a class="el" href="imagecubemapmaker_8h-source.html">imagecubemapmaker.h</a>.    </td>
   </tr>
 </table>
 <hr>The documentation for this class was generated from the following file:<ul>
