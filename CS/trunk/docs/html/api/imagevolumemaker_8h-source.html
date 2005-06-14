@@ -47,45 +47,45 @@
 <a name="l00039"></a><a class="code" href="classcsImageVolumeMaker.html">00039</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsImageVolumeMaker.html">csImageVolumeMaker</a> : <span class="keyword">public</span> <a class="code" href="classcsImageBase.html">csImageBase</a>
 <a name="l00040"></a>00040 {
 <a name="l00041"></a>00041 <span class="keyword">protected</span>:
-<a name="l00042"></a><a class="code" href="classcsImageVolumeMaker.html#p0">00042</a>   <span class="keywordtype">bool</span> manualName;
-<a name="l00043"></a><a class="code" href="classcsImageVolumeMaker.html#p1">00043</a>   <a class="code" href="classcsRefArray.html">csRefArray&lt;iImage&gt;</a> pendingImages;
-<a name="l00044"></a><a class="code" href="classcsImageVolumeMaker.html#p2">00044</a>   <span class="keywordtype">int</span> Width;
-<a name="l00045"></a><a class="code" href="classcsImageVolumeMaker.html#p3">00045</a>   <span class="keywordtype">int</span> Height;
-<a name="l00046"></a><a class="code" href="classcsImageVolumeMaker.html#p4">00046</a>   <span class="keywordtype">int</span> Depth;
-<a name="l00047"></a><a class="code" href="classcsImageVolumeMaker.html#p5">00047</a>   <span class="keywordtype">int</span> Format;
-<a name="l00048"></a>00048 
-<a name="l00049"></a><a class="code" href="classcsImageVolumeMaker.html#p6">00049</a>   <span class="keywordtype">void</span>* data;
-<a name="l00050"></a><a class="code" href="classcsImageVolumeMaker.html#p7">00050</a>   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* palette;
-<a name="l00051"></a><a class="code" href="classcsImageVolumeMaker.html#p8">00051</a>   <a class="code" href="group__util.html#ga0">uint8</a>* alpha;
-<a name="l00052"></a>00052 
-<a name="l00053"></a>00053   <span class="keywordtype">void</span> AppendPending ();
-<a name="l00054"></a>00054 <span class="keyword">public</span>:
-<a name="l00055"></a><a class="code" href="classcsImageVolumeMaker.html#o0">00055</a>   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
-<a name="l00056"></a>00056   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsImageVolumeMaker.html">csImageVolumeMaker</a>);
-<a name="l00057"></a>00057 
-<a name="l00063"></a>00063   <a class="code" href="classcsImageVolumeMaker.html">csImageVolumeMaker</a> (<span class="keywordtype">int</span> format = -1, <span class="keywordtype">int</span> width = -1, <span class="keywordtype">int</span> height = -1);
-<a name="l00067"></a>00067   <a class="code" href="classcsImageVolumeMaker.html">csImageVolumeMaker</a> (<a class="code" href="structiImage.html">iImage</a>* source);
-<a name="l00068"></a>00068   <span class="keyword">virtual</span> ~<a class="code" href="classcsImageVolumeMaker.html">csImageVolumeMaker</a>();
-<a name="l00069"></a>00069 
-<a name="l00070"></a>00070   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">void</span> *<a class="code" href="structiImage.html#a0">GetImageData</a> ();
-<a name="l00071"></a><a class="code" href="classcsImageVolumeMaker.html#a5">00071</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a1">GetWidth</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Width &gt; 0 ? Width : 0; }
-<a name="l00072"></a><a class="code" href="classcsImageVolumeMaker.html#a6">00072</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a2">GetHeight</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Height &gt; 0 ? Height : 0; ; }
-<a name="l00073"></a><a class="code" href="classcsImageVolumeMaker.html#a7">00073</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsImageBase.html#a1">GetDepth</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Depth + (int)pendingImages.Length(); }
-<a name="l00075"></a>00075   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsImageBase.html#a2">SetName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName);
-<a name="l00082"></a><a class="code" href="classcsImageVolumeMaker.html#a9">00082</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classcsImageBase.html#a3">GetName</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fName; }
-<a name="l00083"></a>00083 
-<a name="l00084"></a>00084   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a6">GetFormat</a> () <span class="keyword">const</span>;
-<a name="l00085"></a>00085   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="classcsImageBase.html#a4">GetPalette</a> ();
-<a name="l00086"></a>00086   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__util.html#ga0">uint8</a>* <a class="code" href="classcsImageBase.html#a5">GetAlpha</a> ();
-<a name="l00087"></a>00087 
-<a name="l00088"></a><a class="code" href="classcsImageVolumeMaker.html#a13">00088</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsImageBase.html#a12">GetRawFormat</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
-<a name="l00089"></a><a class="code" href="classcsImageVolumeMaker.html#a14">00089</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> <a class="code" href="classcsImageBase.html#a13">GetRawData</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
-<a name="l00090"></a><a class="code" href="classcsImageVolumeMaker.html#a15">00090</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx2d.html#ga19">csImageType</a> <a class="code" href="classcsImageBase.html#a14">GetImageType</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="group__gfx2d.html#gga19a8">csimg3D</a>; }
-<a name="l00091"></a>00091   
-<a name="l00092"></a>00092   <span class="keywordtype">void</span> AddImage (<a class="code" href="structiImage.html">iImage</a>* source);
-<a name="l00093"></a>00093 };
-<a name="l00094"></a>00094 
-<a name="l00097"></a>00097 <span class="preprocessor">#endif // __CS_CSGFX_IMAGEVOLUMEMAKER_H__</span>
+<a name="l00046"></a><a class="code" href="classcsImageVolumeMaker.html#p0">00046</a>   <span class="keywordtype">bool</span> manualName;
+<a name="l00051"></a><a class="code" href="classcsImageVolumeMaker.html#p1">00051</a>   <a class="code" href="classcsRefArray.html">csRefArray&lt;iImage&gt;</a> pendingImages;
+<a name="l00053"></a><a class="code" href="classcsImageVolumeMaker.html#p2">00053</a>   <span class="keywordtype">int</span> Width;
+<a name="l00055"></a><a class="code" href="classcsImageVolumeMaker.html#p3">00055</a>   <span class="keywordtype">int</span> Height;
+<a name="l00057"></a><a class="code" href="classcsImageVolumeMaker.html#p4">00057</a>   <span class="keywordtype">int</span> Depth;
+<a name="l00059"></a><a class="code" href="classcsImageVolumeMaker.html#p5">00059</a>   <span class="keywordtype">int</span> Format;
+<a name="l00060"></a>00060 
+<a name="l00062"></a><a class="code" href="classcsImageVolumeMaker.html#p6">00062</a>   <span class="keywordtype">void</span>* data;
+<a name="l00064"></a><a class="code" href="classcsImageVolumeMaker.html#p7">00064</a>   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* palette;
+<a name="l00066"></a><a class="code" href="classcsImageVolumeMaker.html#p8">00066</a>   <a class="code" href="group__util.html#ga0">uint8</a>* alpha;
+<a name="l00067"></a>00067 
+<a name="l00069"></a>00069   <span class="keywordtype">void</span> AppendPending ();
+<a name="l00070"></a>00070 <span class="keyword">public</span>:
+<a name="l00071"></a><a class="code" href="classcsImageVolumeMaker.html#o0">00071</a>   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+<a name="l00072"></a>00072   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsImageVolumeMaker.html">csImageVolumeMaker</a>);
+<a name="l00073"></a>00073 
+<a name="l00079"></a>00079   <a class="code" href="classcsImageVolumeMaker.html">csImageVolumeMaker</a> (<span class="keywordtype">int</span> format = -1, <span class="keywordtype">int</span> width = -1, <span class="keywordtype">int</span> height = -1);
+<a name="l00083"></a>00083   <a class="code" href="classcsImageVolumeMaker.html">csImageVolumeMaker</a> (<a class="code" href="structiImage.html">iImage</a>* source);
+<a name="l00084"></a>00084   <span class="keyword">virtual</span> ~<a class="code" href="classcsImageVolumeMaker.html">csImageVolumeMaker</a>();
+<a name="l00085"></a>00085 
+<a name="l00086"></a>00086   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">void</span> *<a class="code" href="structiImage.html#a0">GetImageData</a> ();
+<a name="l00087"></a><a class="code" href="classcsImageVolumeMaker.html#a5">00087</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a1">GetWidth</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Width &gt; 0 ? Width : 0; }
+<a name="l00088"></a><a class="code" href="classcsImageVolumeMaker.html#a6">00088</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a2">GetHeight</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Height &gt; 0 ? Height : 0; ; }
+<a name="l00089"></a><a class="code" href="classcsImageVolumeMaker.html#a7">00089</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsImageBase.html#a1">GetDepth</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Depth + (int)pendingImages.Length(); }
+<a name="l00091"></a>00091   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsImageBase.html#a2">SetName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName);
+<a name="l00098"></a><a class="code" href="classcsImageVolumeMaker.html#a9">00098</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classcsImageBase.html#a3">GetName</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> fName; }
+<a name="l00099"></a>00099 
+<a name="l00100"></a>00100   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a6">GetFormat</a> () <span class="keyword">const</span>;
+<a name="l00101"></a>00101   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="classcsImageBase.html#a4">GetPalette</a> ();
+<a name="l00102"></a>00102   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__util.html#ga0">uint8</a>* <a class="code" href="classcsImageBase.html#a5">GetAlpha</a> ();
+<a name="l00103"></a>00103 
+<a name="l00104"></a><a class="code" href="classcsImageVolumeMaker.html#a13">00104</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="classcsImageBase.html#a12">GetRawFormat</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
+<a name="l00105"></a><a class="code" href="classcsImageVolumeMaker.html#a14">00105</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDataBuffer&gt;</a> <a class="code" href="classcsImageBase.html#a13">GetRawData</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> 0; }
+<a name="l00106"></a><a class="code" href="classcsImageVolumeMaker.html#a15">00106</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx2d.html#ga19">csImageType</a> <a class="code" href="classcsImageBase.html#a14">GetImageType</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="group__gfx2d.html#gga19a8">csimg3D</a>; }
+<a name="l00107"></a>00107   
+<a name="l00108"></a>00108   <span class="keywordtype">void</span> AddImage (<a class="code" href="structiImage.html">iImage</a>* source);
+<a name="l00109"></a>00109 };
+<a name="l00110"></a>00110 
+<a name="l00113"></a>00113 <span class="preprocessor">#endif // __CS_CSGFX_IMAGEVOLUMEMAKER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>
