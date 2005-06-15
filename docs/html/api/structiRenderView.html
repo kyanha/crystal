@@ -79,6 +79,9 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="group__util.html#ga18">uint</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiRenderView.html#a15">GetCurrentFrameNumber</a> () const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of the current frame.  <a href="#a15"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiRenderView.html#a16">ClipBSphere</a> (const <a class="el" href="classcsSphere.html">csSphere</a> &amp;cam_sphere, const <a class="el" href="classcsSphere.html">csSphere</a> &amp;world_sphere, int &amp;clip_portal, int &amp;clip_plane, int &amp;clip_z_plane)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if the given bounding sphere (in camera and world space coordinates) is visibile in this render view.  <a href="#a16"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This interface represents all information needed to render some object in a current draw context. 
@@ -197,7 +200,64 @@ Given a frustum_mask, calculate the clip settings.
 <p>
 Check if the object space bounding box of an object is visible in this render view. 
 <p>
-If true is returned (visible) then clip_plane, clip_z_plane, and clip_portal will be set to the right value depending on wether or not clipping is wanted. This function also does far plane clipping. Use <a class="el" href="structiRenderView.html#a10">SetupClipPlanes()</a> to get the clipping planes for this function. The frustum_mask will be modified according to all clip planes that were relevant for the given box. That can be used to hierarchically cull smaller objects.    </td>
+If true is returned (visible) then clip_plane, clip_z_plane, and clip_portal will be set to the right value depending on wether or not clipping is wanted. This function also does far plane clipping. Use SetupClipPlanes() to get the clipping planes for this function. The frustum_mask will be modified according to all clip planes that were relevant for the given box. That can be used to hierarchically cull smaller objects.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a16"></a><!-- doxytag: member="iRenderView::ClipBSphere" ref="a16" args="(const csSphere &amp;cam_sphere, const csSphere &amp;world_sphere, int &amp;clip_portal, int &amp;clip_plane, int &amp;clip_z_plane)=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual bool iRenderView::ClipBSphere           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const <a class="el" href="classcsSphere.html">csSphere</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>cam_sphere</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>const <a class="el" href="classcsSphere.html">csSphere</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>world_sphere</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>clip_portal</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>clip_plane</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>clip_z_plane</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Check if the given bounding sphere (in camera and world space coordinates) is visibile in this render view. 
+<p>
+If the sphere is visible this function will also initialize the clip_plane, clip_z_plane, and clip_portal fields which can be used for DrawTriangleMesh or DrawPolygonMesh.    </td>
   </tr>
 </table>
 <a class="anchor" name="a6"></a><!-- doxytag: member="iRenderView::GetCamera" ref="a6" args="()=0" --><p>
