@@ -106,7 +106,7 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classcsFlags.html">csFlags</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a24">GetFlags</a> ()=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get flags for this meshwrapper.  <a href="#a24"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a25">SetFlagsRecursive</a> (<a class="el" href="group__util.html#ga4">uint32</a> mask, <a class="el" href="group__util.html#ga4">uint32</a> flags)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a25">SetFlagsRecursive</a> (<a class="el" href="group__util.html#ga4">uint32</a> mask, <a class="el" href="group__util.html#ga4">uint32</a> flags=~0)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set some flags with the given mask for this mesh and all children.  <a href="#a25"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a26">SetZBufMode</a> (<a class="el" href="group__gfx3d.html#ga65">csZBufMode</a> mode)=0</td></tr>
@@ -616,6 +616,7 @@ CS_ENTITY_CONVEX: entity is convex. This can help the engine with optimizing ren
 <li>
 <a class="el" href="group__engine3d__meshes.html#ga7">CS_ENTITY_NOCLIP</a>: do not clip this object. </li>
 </ul>
+<dl compact><dt><b>Remarks:</b></dt><dd>Despite the name, this method does not only provide read access to the mesh flags, as the returned reference to a <a class="el" href="classcsFlags.html">csFlags</a> object also provides write access.</dd></dl>
     </td>
   </tr>
 </table>
@@ -1573,7 +1574,7 @@ Set the parent factory (this only sets a pointer).
     </td>
   </tr>
 </table>
-<a class="anchor" name="a25"></a><!-- doxytag: member="iMeshWrapper::SetFlagsRecursive" ref="a25" args="(uint32 mask, uint32 flags)=0" --><p>
+<a class="anchor" name="a25"></a><!-- doxytag: member="iMeshWrapper::SetFlagsRecursive" ref="a25" args="(uint32 mask, uint32 flags=~0)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1588,7 +1589,7 @@ Set the parent factory (this only sets a pointer).
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
           <td class="md" nowrap><a class="el" href="group__util.html#ga4">uint32</a>&nbsp;</td>
-          <td class="mdname" nowrap> <em>flags</em></td>
+          <td class="mdname" nowrap> <em>flags</em> = <code>~0</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -1609,6 +1610,18 @@ Set the parent factory (this only sets a pointer).
 <p>
 Set some flags with the given mask for this mesh and all children. 
 <p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>mask</em>&nbsp;</td><td>The bits to modify; only those bits are affected. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>flags</em>&nbsp;</td><td>The values the bits specified in <em>mask</em> are set to. </td></tr>
+  </table>
+</dl>
+Enabling flags: <div class="fragment"><pre class="fragment"> <a class="code" href="classcsRef.html">csRef&lt;iMeshWrapper&gt;</a> someWrapper = ...;
+ someWrapper-&gt;SetFlags (<a class="code" href="group__engine3d__meshes.html#ga3">CS_ENTITY_INVISIBLE</a> | <a class="code" href="group__engine3d__meshes.html#ga7">CS_ENTITY_NOCLIP</a>);
+</pre></div> <p>
+Disabling flags: <div class="fragment"><pre class="fragment"> <a class="code" href="classcsRef.html">csRef&lt;iMeshWrapper&gt;</a> someWrapper = ...;
+ someWrapper-&gt;SetFlags (<a class="code" href="group__engine3d__meshes.html#ga3">CS_ENTITY_INVISIBLE</a> | <a class="code" href="group__engine3d__meshes.html#ga7">CS_ENTITY_NOCLIP</a>, 0);
+</pre></div> <dl compact><dt><b>Remarks:</b></dt><dd>To set flags non-recursive, use <a class="el" href="structiMeshWrapper.html#a24">GetFlags()</a>.Set().</dd></dl>
     </td>
   </tr>
 </table>
