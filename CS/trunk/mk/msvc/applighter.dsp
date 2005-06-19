@@ -138,6 +138,10 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\apps\tools\lighter\geometryextract.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\apps\tools\lighter\kdtree.cpp
 # End Source File
 # Begin Source File
@@ -174,6 +178,10 @@ SOURCE=..\..\apps\tools\lighter\raytracer.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\apps\tools\lighter\geometryextract.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\apps\tools\lighter\kdtree.h
 # End Source File
 # Begin Source File
@@ -207,6 +215,10 @@ SOURCE=..\..\apps\tools\lighter\lmmapper.h
 # Begin Source File
 
 SOURCE=..\..\apps\tools\lighter\raytracer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter\scene.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
