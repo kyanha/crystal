@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.20.8 AWS Automation: Properties and Scripting</title>
+
+<meta name="description" content="Crystal Space: 4.20.8 AWS Automation: Properties and Scripting">
+<meta name="keywords" content="Crystal Space: 4.20.8 AWS Automation: Properties and Scripting">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="AWS-Automation"></a>
+<a name="4.20.8"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.20.7.html#4.20.7" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.9.html#4.20.9" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.html#4.20" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 4.20.8 <small>AWS</small> Automation: Properties and Scripting </h3>
+
+<p><small>AWS</small> uses an automation mechanism to allow components to respond to each
+other, and to notify the programmer of events based upon user input.
+</p>
+<a name="SEC666"></a>
+<h4 class="subsubheading"> About Properties </h4>
+
+<p>The first mechanism we'll talk about is properties.  Properties perform two
+important roles:
+</p>
+<ol>
+<li>
+<em>Access control</em>: That is, some properties can be read, and some can be
+written.  Others may have both access abilities enabled.
+</li><li>
+<em>Notification</em>: When a property is changed it is possible to get a
+notification of the change.
+</li></ol>
+
+<p>Every property has two signals: <samp>`Changed'</samp> and <samp>`Binding'</samp>.  The first
+signal is fired when the property is set.  The <samp>`Changed'</samp> signal doesn't
+try to differentiate between old values and new values, so the property may
+have been set to the same actual value.  The second signal is fired when the
+property is being bound to some name and property bag.  A property may be bound
+to different names, but it will only be bound to one name at a time.  It is
+possible to register a property with multiple bags, but it is not recommended
+since it will be difficult for a client to know what the property is associated
+with in that case.  (Generally clients can assume that if they are listening
+for a property, they know with what the property is associated.  Perhaps you
+have one slot that listens for a number of change signals for some component.
+In that case, you may take different steps based on the name of the property
+changed--but you <em>know</em> that all the properties belong to one given
+object.)
+</p>
+<a name="SEC667"></a>
+<h4 class="subsubheading"> Using Properties </h4>
+
+<p>Properties are very easy to use.  For example, say you have a window called
+&quot;login&quot;.  All windows have a property called <samp>`Title'</samp>.  You would like to
+set the title of the window regardless of what appears in the window definition
+file.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">login.Title.Set(&quot;Login to System&quot;);
+</pre></td></tr></table>
+<p>That's it.  The window takes care of setting the value, invalidating itself,
+and getting redrawn.  What if you wanted to know when the <samp>`Title'</samp> property
+was changed?  In that case you would have to have a <em>slot</em> for that, and
+all slots must belong to some class.  You can have other things in your class
+besides slots, that way you don't have to have one object set aside for dealing
+with that stuff.  Slots can be where they ought to be: near the data and
+functions that want to know about them.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">class myslots : public autom::has_slots&lt;&gt;
+{
+public:
+  void titleChanged(const std::string &amp;name,
+                    awsPropertyBase *property)
+  {
+    autom::keeper k;
+    if (property-&gt;Get(k))
+    {
+      std::string new_title = k-&gt;toString().Value();
+      csPrintf(&quot;Title changed to: %s\n&quot;, new_title.c_str());
+    }
+    else
+    {
+      csPrintf(&quot;Access to read title denied!\n&quot;);
+    }
+  }
+  
+  void setup(awsWindow *win)
+  {
+    win-&gt;Title.Changed.connect(this, titleChanged);
+  }
+};
+</pre></td></tr></table>
+<p>There's a little bit of code there, but let's look at each of the pieces.  The
+first thing to note is that the class <strong>must</strong> inherit from
+<code>autom::has_slots&lt;&gt;</code>; otherwise it won't have the code needed to host
+slots.
+</p>
+<p>The next thing to notice is the function signature for the slot.  The return
+type <strong>must</strong> be <samp>`void'</samp>, and the other two parameters must be exactly
+as shown.  Different signals may have different slot signatures, but for
+property change signals, the signature is exactly as shown above.
+</p>
+<p><samp>`name'</samp> is the name of the property that changed.  <samp>`property'</samp> is a
+pointer to the property that changed.  In order to get the value of the
+property, you must call the <code>Get()</code> function.  If it returns false, then
+read access is denied for that particular property.  There is no way to read a
+property that is write-only.  Finally, notice the <code>setup()</code> function. It
+calls the <samp>`connect()'</samp> function on the <samp>`Changed'</samp> signal.  This means
+that our <code>titleChanged()</code> function will be called whenever
+<code>Title.Set()</code> succeeds.
+</p>
+<a name="SEC668"></a>
+<h4 class="subsubheading"> Properties Q&amp;A </h4>
+
+
+<p><strong>Question:</strong> <em>How do I know with what component or window a property
+is associated?</em>
+</p>
+
+<p><strong>Answer:</strong> Currently, the code must know that somehow; either because
+you as the developer knows that a certain object's slots only ever connect to a
+given window or component, or through some other previous knowledge.
+Eventually there will be a global registry that will allow you to look up that
+sort of information.
+</p>
+
+<p><strong>Question:</strong> <em>Why don't properties store the component and/or window
+with which they are associated?</em>
+</p>
+
+<p><strong>Answer:</strong> Properties are designed to be used in a number of contexts.
+Building in information about component or window ownership implies that
+properties must belong to a component.  That may or may not be true in the
+future.
+</p>
+
+<p><strong>Question:</strong> <em>Why do I have to use a keeper and do all that
+gobbledygook with the</em> <code>toString()-&gt;Value()</code> <em>stuff?</em>
+</p>
+
+<p><strong>Answer:</strong> Property values are inherently type-agnostic.  In the case of
+a bound property, the value is always converted to the concrete type to which
+the property is bound.  However, the property may still be set with any sort of
+type supported (int, float, string).  The conversions are handled implicitly
+when needed.  The keeper is just a shorter name for <code>csRef&lt;object*&gt;</code>, and
+provides automatic lifespan handling for those types.  They go away when all
+references to them have disappeared.
+</p>
+<a name="SEC669"></a>
+<h4 class="subsubheading"> Scripting </h4>
+
+<p>Scripting is intimately related to properties, because properties use the
+scripting system to store their values.  In fact, it is entirely possible to
+have a property whose value resolves to a dynamically executed function.
+</p>
+<p>For example, imagine that you wanted to have a property that belonged to a
+progress bar widget.  The progress bar widget might be receiving updates from a
+file transfer object.  Perhaps the progress bar widget can display some text.
+For this progress bar we want the text to show below the progress display how
+many bytes have been transferred.  The widget itself doesn't know what the text
+is, or when it has changed.  You don't want to update the text at <em>every</em>
+change, because that might be slow.  Instead, you set a property called
+<samp>`Caption'</samp> as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">autom::keeper k = autom::Compile(&quot;:BytesReceived@FileTransfer()&quot;)
+progress.Caption.Set(k);
+</pre></td></tr></table>
+<p>Then, when the progress bar's status is updated and it redraws, it will do
+something like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">...
+autom::keeper k;
+Caption.Get(k);
+std::string caption_text = k-&gt;toString().Value();
+...
+</pre></td></tr></table>
+<p>Instead of getting the string we set for the property, the string is evaluated
+as a function, and we get the result.  In this case it would happen to be how
+many bytes were received.  Had we set the value as a simple string, that string
+would have been displayed.
+</p>
+<a name="SEC670"></a>
+<h4 class="subsubheading"> Scripting Tutorial </h4>
+
+<p>@@@ FIXME: Write this.
+</p>
+<a name="SEC671"></a>
+<h4 class="subsubheading"> Scripting Q&amp;A </h4>
+
+
+<p><strong>Question:</strong> <em>When I call</em> <code>autom::Compile()</code> <em>with a
+string it doesn't return an automation string object.  It just returns nil.
+Why?</em>
+</p>
+
+<p><strong>Answer:</strong> If you try to compile a string it must have double quotes
+around it, just like in C and C++ and myriad other languages.  If all you are
+trying to do is generate a automation string object from a pre-existing string,
+use <samp>`new autom::string(existing_string)'</samp>.  It understands that the string
+is pre-composed and doesn't parse it.  Therefore it's also much faster.
+</p>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.20.7.html#4.20.7" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.9.html#4.20.9" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.html#4.20" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

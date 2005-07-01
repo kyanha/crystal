@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 6. Facilities</title>
+<title>Crystal Space: 6. Internal Project Structure</title>
 
-<meta name="description" content="Crystal Space: 6. Facilities">
-<meta name="keywords" content="Crystal Space: 6. Facilities">
+<meta name="description" content="Crystal Space: 6. Internal Project Structure">
+<meta name="keywords" content="Crystal Space: 6. Internal Project Structure">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,10 +40,10 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Facilities"></a>
+<a name="Internals"></a>
 <a name="6."></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.8.26.html#5.8.26" title="Previous section in reading order"> &lt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.9.3.html#5.9.3" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_6.1.html#6.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
@@ -58,58 +58,24 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h1 class="chapter"> 6. Facilities </h1>
+<h1 class="chapter"> 6. Internal Project Structure </h1>
 
-<p>This chapter describes the features of the facilities which are linked into
-typical Crystal Space applications and plugins. For convenience, all of these
-facilities are contained in the primary <tt>`crystalspace'</tt> library, so it is
-not strictly necessary to distinguish them for actual usage, however, for
-developers working on Crystal Space itself, it is helpful to understand how
-these facilities are broken down and the relationship between them.
+<p>This chapter describes how Crystal Space works internally.  This information is
+not necessary to utilize Crystal Space in your own project.  Instead, it is
+intended for developers of Crystal Space itself, as well as for those who are
+merely curious about the internal workings of the project.
 </p>
 <table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_6.1.html#6.1">6.1 Utility Module (<code>csUtil</code>)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.html#6.2">6.2 Shared Class Facility (<small>SCF</small>)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.3.html#6.3">6.3 Geometry Module (<code>csGeom</code>)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_6.1.html#6.1">6.1 Platform-Specific Details</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_6.2.html#6.2">6.2 Threads in Crystal Space</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_6.3.html#6.3">6.3 The Engine Internals Explained</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_6.4.html#6.4">6.4 Rendering Loop</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
 </table>
-
-<p>This section presents a quick overview of the facilities provided by Crystal
-Space. More detailed descriptions of these facilities may be found in later
-sections.
-</p>
-<dl compact="compact">
-<dt> cstool</dt>
-<dd><p>This facility contains various high-level classes and utilities. They tend to
-be much more specialized than the general-purpose tools provided elsewhere and
-may even depend upon plugin modules (unlike the other facilities mentioned
-here).
-</p>
-</dd>
-<dt> csutil</dt>
-<dd><p>This facility contains many low-level utilities including string and hash
-classes, to <small>ZIP</small> manipulation tools, plugin management and Unicode support
-modules.
-</p>
-</dd>
-<dt> <small>SCF</small> (Shared Class Facility)</dt>
-<dd><p><small>SCF</small> is actually a component of &quot;csutil&quot;, however, it is explained
-separately since it is both complex (compared to the rest of &quot;csutil&quot;) and
-fundamental to the understanding of plugin modules. See section <a href="cs_6.2.html#6.2">Shared Class Facility (<small>SCF</small>)</a>.
-</p>
-</dd>
-<dt> csgeom</dt>
-<dd><p>A facility for geometric operations. It provides 2D and 3D vectors, polygons
-and bounding boxes, 3D matrices and some other useful tools. See section <a href="cs_6.3.html#6.3">Geometry Module (<code>csGeom</code>)</a>.
-</p>
-</dd>
-<dt> csgfx</dt>
-<dd><p>Basic image support and graphical manipulation tools.
-</p></dd>
-</dl>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.8.26.html#5.8.26" title="Previous section in reading order"> &lt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.9.3.html#5.9.3" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_6.1.html#6.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>

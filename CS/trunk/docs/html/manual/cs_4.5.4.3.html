@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.5.4.3 Engine Configuration</title>
+
+<meta name="description" content="Crystal Space: 4.5.4.3 Engine Configuration">
+<meta name="keywords" content="Crystal Space: 4.5.4.3 Engine Configuration">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Config-Engine"></a>
+<a name="4.5.4.3"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.5.4.2.html#4.5.4.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.5.4.4.html#4.5.4.4" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.5.4.html#4.5.4" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h4 class="subsubsection"> 4.5.4.3 Engine Configuration </h4>
+
+<p>This section describes the configuration keys used by the 3D engine.
+The default values are stored in <tt>`CS/data/config/engine.cfg'</tt>.
+</p>
+<a name="SEC199"></a>
+<h4 class="subsubheading"> Lighting Options </h4>
+
+<dl compact="compact">
+<dt> <code>Engine.Lighting.Ambient.Red = [0..255]</code></dt>
+<dt> <code>Engine.Lighting.Ambient.Green = [0..255]</code></dt>
+<dt> <code>Engine.Lighting.Ambient.Blue = [0..255]</code></dt>
+<dd><p>These keys set the amount of ambient light that is used when lighting is
+calculated. This amount of light is present on all textures even if no light
+source shines on them.  Default values are 20 luminosity units.
+</p>
+</dd>
+<dt> <code>Engine.Lighting.CosinusFactor = [-1..1]</code></dt>
+<dd><p>Control how much the angle of the light with the polygon it hits affects
+the final light value. Values ranges from -1 to 1. With -1 the polygons
+will get no light at all. With 0 it will be perfect cosine rule. With 1 the
+cosine is ignored and it will be like CrystalSpace was in the past. Note
+that changing this value at runtime only has an effect on dynamic lights.
+This option corresponds to the <code>-cosfact</code> commandline option and the
+<samp>`cosfact'</samp> console command. (default: 0)
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Radiosity = &lt;yes/no&gt;</code></dt>
+<dd><p>If this option is set to yes, the pseudo-radiosity system will be enabled.
+This means that the precalculated lighting routines will also reflect light on
+normal polygons (and not only on mirrors). The number of allowed
+reflections depends on the <samp>`Engine.Lighting.Reflections'</samp> variable. Using
+this flag you get a sort of simulation of radiosity. Note that it greatly
+increases the time needed for precalculated lighting. This option only has
+effect in combination with the <code>-relight</code> commandline option. Also note
+that this option is currently broken (i.e. crashes CS).
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Reflections = &lt;number&gt;</code></dt>
+<dd><p>This sets the maximum number of reflections for a light beam. More exactly,
+it sets how often a beam of light may hit a polygon in the same sector.
+Setting this to 0 would produce totally dark polygons (apart from ambient
+light). A value of 1 means that light may hit polygons but is not reflected
+to other polygons. Higher values allow more reflections. This is especially
+useful in combination with mirrors. If pseudo-radiosity is enabled with the
+<samp>`Engine.Lighting.Radiosity'</samp> key, light is also reflected from non-mirror
+polygons. (default: 1)
+</p></dd>
+</dl>
+
+<a name="SEC200"></a>
+<h4 class="subsubheading"> Radiosity Options </h4>
+
+<dl compact="compact">
+<dt> <code>Engine.Lighting.Radiosity.Enable = &lt;yes/no&gt;</code></dt>
+<dd><p>This option activates the new radiosity system. To recalculate
+radiosity run walktest -relight on the level. (default: no)
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Radiosity.StopPriority = &lt;float&gt;</code></dt>
+<dd><p>Internally radiosity computes a priority for each
+polygon. The priority is in the range of 0..256, where 0 means nothing
+to do. When the highest priority become lower then the stoppriority,
+radiosity calculation will stop. (Default: 0.1)
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Radiosity.StopImprovement = &lt;float&gt;</code></dt>
+<dd><p>When the highest priority becomes lower than
+the highest priority at the start of calculation divided by this value
+calculation will stop. (Default: 100.0)
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Radiosity.StopIterations = &lt;number&gt;</code></dt>
+<dd><p>After processing this many polygons the radiosity
+calculation will stop. This will prevent endless loops. If your level has 
+many polygons you may need to increase the value. (Default: 10000)
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Radiosity.SourcePatchSize = &lt;number&gt;</code></dt>
+<dd><p>This value will make radiosity calculation use
+the average of NxN size patches on source polygons when shooting light 
+from one polygon to another (but not on destination polygons). Increasing
+the value will speed up computation considerably, while reducing quality
+only slightly. Try values of 1..256, depending on the LightmapSize. 
+Use only powers of two. (Default: 16)
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Radiosity.ColourBleed = &lt;float&gt;</code></dt>
+<dd><p>This variable controls the amount of color emitted
+by a polygon. The colour is taken by examining the texture of the polygon.
+Thus a blue texture will reflect blueishly. So 0.0 will remove texture
+influence, making the level render as if all white. And high values will
+make colour more important. Try 0.0-4.0. 
+(Default: 1.0)
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Radiosity.DoStaticSpecular = &lt;yesno&gt;</code></dt>
+<dd><p>yes will turn on specular lighting using
+radiosity. Since this is precalculation, only a static 'fake' specular
+effect can be given. Does not seem to give huge effects, but I left
+in the code so you can play with it :-). (Default: no)
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Radiosity.StaticSpecularAmount = &lt;float&gt;</code></dt>
+<dd><p>The amount of specular lighting to add
+when lighting. Try between 0 and 1. (Default: 0.70)
+</p>
+</dd>
+<dt> <code>Engine.Lighting.Radiosity.StaticSpecularTightness = &lt;number&gt;</code></dt>
+<dd><p>tightness of the specular highlight.  a power of 2 of this variable is 
+used for speed. Thus try 0-10. (Default: 4)
+</p></dd>
+</dl>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.5.4.2.html#4.5.4.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.5.4.4.html#4.5.4.4" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.5.4.html#4.5.4" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

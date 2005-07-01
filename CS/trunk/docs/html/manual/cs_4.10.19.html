@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.10.19 Rain Mesh Object</title>
+
+<meta name="description" content="Crystal Space: 4.10.19 Rain Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.10.19 Rain Mesh Object">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="MeshObject-Rain"></a>
+<a name="4.10.19"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.10.18.html#4.10.18" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.20.html#4.10.20" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 4.10.19 Rain Mesh Object </h3>
+
+<p><em>Written by Jorrit Tyberghein,
+<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
+</p>
+<p>Rain is a particle system that emulates rain.  Also see the general particle
+system documentation which is valid for all particle systems.
+See section <a href="cs_4.10.15.html#4.10.15">Particle Systems in General</a>.
+</p>
+<a name="SEC363"></a>
+<h4 class="subsubheading"> Basic Structure </h4>
+
+<p>The following <small>SCF</small> class names are used (for <code>CS_LOAD_PLUGIN()</code>):
+</p>
+<ul>
+<li>
+Type plugin: <samp>`crystalspace.mesh.object.rain'</samp>
+</li><li>
+Loader plugin: <samp>`crystalspace.mesh.loader.rain'</samp>
+</li><li>
+Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.rain'</samp>
+</li></ul>
+
+<p>Objects in this plugin implement the following <small>SCF</small> interfaces (get
+with <code>SCF_QUERY_INTERFACE()</code>):
+</p>
+<ul>
+<li>
+<em>MeshObject</em>
+<ul>
+<li>
+Implements <samp>`iMeshObject'</samp>
+</li><li>
+Implements <samp>`iParticleState'</samp>
+</li><li>
+Implements <samp>`iRainState'</samp>
+</li></ul>
+</li><li>
+<em>MeshObjectFactory</em>
+<ul>
+<li>
+Implements <samp>`iMeshObjectFactory'</samp>
+</li></ul>
+</li><li>
+<em>MeshObjectFactory</em>
+<ul>
+<li>
+Implements <samp>`iMeshObjectType'</samp>
+</li></ul>
+</li></ul>
+
+<a name="SEC364"></a>
+<h4 class="subsubheading"> Factory State Interface </h4>
+
+<p>This plugin has no factory state interface.
+</p>
+<a name="SEC365"></a>
+<h4 class="subsubheading"> Factory Loader </h4>
+
+<p>The fountain mesh factory loader has no parameters.
+</p>
+<a name="SEC366"></a>
+<h4 class="subsubheading"> Object State Interface </h4>
+
+<p><samp>`iRainState'</samp> is the <small>SCF</small> interface that you can
+use to set/get settings for a rain object. The definition of this
+interface can be found in <tt>`CS/include/imesh/rain.h'</tt> and that's also the
+include file you need to include in your applications to use this plugin.
+Using this interface you can access the number of particles, the size
+of the particles, and various other rain parameters.
+</p>
+<p>In addition you can use <samp>`iParticleState'</samp>.
+</p>
+<a name="SEC367"></a>
+<h4 class="subsubheading"> Object Loader </h4>
+
+<p>Also see the general documentation for particle systems for other recognized
+keywords.  See section <a href="cs_4.10.15.html#4.10.15">Particle Systems in General</a>.
+</p>
+<dl compact="compact">
+<dt> <code>&lt;dropsize w=&quot;&quot; h=&quot;&quot; /&gt;</code></dt>
+<dd><p>Size of the droplets for the rain (width and height).
+</p></dd>
+<dt> <code>&lt;box&gt;</code></dt>
+<dd><table><tr><td>&nbsp;</td><td><pre class="example">	&lt;min x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
+	&lt;max x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
+&lt;/box&gt;
+</pre></td></tr></table><p>Box that will contain the rain particles.
+</p></dd>
+<dt> <code>&lt;fallspeed x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Speed of the rain.
+</p></dd>
+<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
+<dd><p>Disable or enable lighting for the rain particles.
+</p></dd>
+<dt> <code>&lt;number&gt;nrParticles&lt;/number&gt;</code></dt>
+<dd><p>Number of particles to use.
+</p></dd>
+</dl>
+
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.10.18.html#4.10.18" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.20.html#4.10.20" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

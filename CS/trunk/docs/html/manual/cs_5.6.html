@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 5.6 md32spr Tutorial</title>
+<title>Crystal Space: 5.6 map2cs Tutorial</title>
 
-<meta name="description" content="Crystal Space: 5.6 md32spr Tutorial">
-<meta name="keywords" content="Crystal Space: 5.6 md32spr Tutorial">
+<meta name="description" content="Crystal Space: 5.6 map2cs Tutorial">
+<meta name="keywords" content="Crystal Space: 5.6 map2cs Tutorial">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="md32spr-Tutorial"></a>
+<a name="map2cs-Tutorial"></a>
 <a name="5.6"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.5.11.html#5.5.11" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.5.4.html#5.5.4" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.6.1.html#5.6.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>
@@ -58,304 +58,43 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 5.6 <code>md32spr</code> Tutorial </h2>
+<h2 class="section"> 5.6 <code>map2cs</code> Tutorial </h2>
 
 
-<p><em>Written by Manjunath Sripadarao, <a href="mailto:msripada@evl.uic.edu">msripada@evl.uic.edu</a>.
-Last updated 17 December 2002.</em>
+<p><em>Originally written by Thomas Hieber, <a href="mailto:thieber@gmx.net">thieber@gmx.net</a>.
+Updated by Philip Wyett, <a href="mailto:philipwyett@redeye-entertainment.co.uk">philipwyett@redeye-entertainment.co.uk</a>.
+12 February, 2001.
+Updated by Leandro Ezequiel Lovisolo, <a href="mailto:lovisolo@datafull.com">lovisolo@datafull.com</a>.
+Last updated 22 February, 2003.</em>
 </p>
-<p>This tutorial provides a brief introduction to <code>md32spr</code> application.  You
-can use this application to convert Quake III <small>MD3</small> models to Crystal Space
-model format.  The <code>md32spr</code> source files can be found in
-<tt>`CS/apps/import/md32spr/'</tt>.  Typing <i><samp>`make md32spr'</samp></i> should build
-the application (after configuring Crystal Space for your particular
-architecture).
+<p>At first look, map making can be pretty complicated, but if you follow this
+tutorial, you will soon walk around in your self-created world.
 </p>
-<a name="SEC185"></a>
-<h3 class="subheading"> Required Resources </h3>
-
-<p>For this tutorial we will be using the &quot;Conni&quot; model from
-<a href="http://www.polycount.com/">http://www.polycount.com/</a>.  The name of the file is
-<tt>`mdl-conni.zip'</tt>.  Download the file to a local directory.
+<p>We assume you follow this tutorial step by step.  We will explain things only
+once, so if you skipped some parts, you might need to go back to them later
+on.  We also assume you are using Windows. We don't have Linux or other
+systems installed, so you need to experiment a little yourself. If you found
+a solution for other systems or using other tools (like QuArK for example) we
+would be happy to hear from you to expand this tutorial.
 </p>
-<a name="SEC186"></a>
-<h3 class="subheading"> Converting the Model </h3>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="cs_5.6.1.html#5.6.1">5.6.1 Step 1: Links to Required Tools and Data</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.2.html#5.6.2">5.6.2 Step 2: Configuring Worldcraft</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.3.html#5.6.3">5.6.3 Step 3: Configuring <tt>`map2cs'</tt></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.4.html#5.6.4">5.6.4 Step 4: Creating a Simple Room in Worldcraft</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.5.html#5.6.5">5.6.5 Step 5: Compiling the Room and Testing It</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.6.html#5.6.6">5.6.6 Step 6: Applying Textures</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.7.html#5.6.7">5.6.7 Step 7: Adding Another Room</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.8.html#5.6.8">5.6.8 Step 8: Adding More Detail</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.9.html#5.6.9">5.6.9 Step 9: Adding Manual Sectors</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.10.html#5.6.10">5.6.10 Generating Skybox Textures</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_5.6.11.html#5.6.11">5.6.11 Tips for Map Creation</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
 
-<ul>
-<li>
-Unzip the contents of <tt>`mdl-conni.zip'</tt> into a temporary directory.
-
-</li><li>
-Among the contents, find the file named <tt>`conni.pk3'</tt> and <em>unzip</em> it
-using a tool which can unpack <small>ZIP</small>-style archives.  (<small>PK3</small> files are
-just <small>ZIP</small> archives in disguise.)
-
-</li><li>
-Next go to the directory <tt>`models/players/conni/'</tt>.
-
-</li><li>
-Zip the contents of this file using a tool for creating <small>ZIP</small>-style
-archives; call this file <tt>`conni.zip'</tt>.
-
-</li><li>
-Copy <tt>`conni.zip'</tt> to the <tt>`CS/data/'</tt> directory.
-
-</li><li>
-Now run the following command:
-
-<table><tr><td>&nbsp;</td><td><pre class="example">./md32spr data/conni.zip -o=data/conni_out.zip -scale=4096
-</pre></td></tr></table>
-</li><li>
-This should give you an output file named <tt>`conni_out.zip'</tt> in the
-<tt>`CS/data/'</tt> directory.
-</li></ul>
-
-<a name="SEC187"></a>
-<h3 class="subheading"> Loading a Model in Walktest </h3>
-
-<p>To load the model into Walktest, copy the sample world file given below to a new file named world.
-Add this <tt>`world'</tt> file to the archive <tt>`conni_out.zip'</tt> using a <small>ZIP</small>-capable archiver, and then
-issue the following command:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">./walktest -recalc data/conni_out.zip
-</pre></td></tr></table>
-<p>This will allow you to view the model in Walktest.  The <tt>`world'</tt> file
-defines a sample map and the <em>mesh objects</em> that make up the model.  If you
-are curious, you can use a text editor to look at the <tt>`world'</tt> for more
-information.  The sample <tt>`world'</tt> file is also reproduced below for
-convenience (see <a href="#Conni-Output">Sample &quot;World&quot; file</a>).
-</p>
-<p><strong>Note</strong>: The model here is loaded into walktest for testing purposes.
-Normally in your application there won't be a <tt>`world'</tt> file for each of
-your models.  You have to load and animate your models using code.
-</p>
-<a name="SEC188"></a>
-<h3 class="subheading"> Description of Archive Contents </h3>
-
-<p>The output sprite archive <tt>`conni_out.zip'</tt> contains the following files.
-</p>
-<ul>
-<li>
-<code>head</code>
-</li><li>
-<code>upper</code>
-</li><li>
-<code>lower</code>
-</li><li>
-<code>head.tag</code>
-</li><li>
-<code>upper.tag</code>
-</li><li>
-<code>lower.tag</code>
-</li><li>
-<code>conni.tga</code>
-</li></ul>
-
-<p>The <tt>`head'</tt>, <tt>`lower'</tt> and <tt>`upper'</tt> files contain the
-<em>meshobjects</em>.  The file <tt>`conni.tga'</tt> is the texture file.  The files
-<tt>`head.tag'</tt>, <tt>`lower.tag'</tt> and <tt>`upper.tag'</tt> contain the <small>MD3</small>
-tags.
-</p>
-<a name="SEC189"></a>
-<h3 class="subheading"> <small>MD3</small> Tags </h3>
-
-<p>The <small>MD3</small> tags are bits of information which specify the spatial location
-and orientation of the mesh objects for each frame.  Here is an example of an
-<small>MD3</small> tag structure represented as C++ code:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">char Name[64];  // Name of the 'tag'.
-Vec3 Position; // Relative position of tag.
-Vec3x3 Rotation;// Direction tag faces relative to rest of model.
-</pre></td></tr></table>
-<p>In the Crystal Space map format (which is <small>XML</small>), these tags are placed in a
-separate file with a <tt>`.tag'</tt> extension.  The format of these tags is shown
-below.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;key name=&quot;md3tag&quot;
-  tag=&quot;&lt;tag_name&gt; &lt;frame_num&gt; &lt;tag_num&gt;
-       &lt;xpos ypos zpos&gt; &lt;3x3 rotation matrix&gt;&quot; /&gt;
-</pre></td></tr></table>
-<p>For example:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;key name=&quot;md3tag&quot; tag=&quot;tag_torso 0 1  1 0 0 0 1 0 0 0 1  0 0 0&quot; /&gt;
-</pre></td></tr></table>
-<p>If your model does not have any animation or your model is made up of only one
-mesh object, then you may not have these tags.
-</p>
-<a name="SEC190"></a>
-<h3 class="subheading"> Miscellaneous <code>md32spr</code> Information </h3>
-
-<p>This section will tell you if there are any special issues to worry about.
-Currently these are the known issues.  If I come across anything else I will
-amend this section.
-</p>
-<ul>
-<li>
-Currently, in the mesh object files at the end, there are example mesh objects
-definition.  These are not required to load the model, but they are left there
-as an example.  You should comment it out manually to reduce memory usage.
-
-</li><li>
-Some <small>MD3</small> model converters do not write any frame number information if a
-model is not animated.  This causes garbage numbers to be read from the
-<small>MD3</small> file.  Subsequently, you may end up with a a large number (possibly in
-the thousands or hundred-thousands) duplicate frames which actually do nothing.
-Until now I have not been able to find a solution to this problem.  Any
-comments, suggestions or corrections are welcome.
-
-</li><li>
-The loading of Crystal Space format <small>XML</small> models is somewhat slow presently.
-You can speed it up by converting your models to binary format using
-<small>VIEWMESH</small>.  I have not personally tried it.  But if anyone wants any help
-let me know.
-
-</li><li>
-Type <code>./md32spr</code> without any arguments to get a brief command line help.
-</li></ul>
-
-<p><a name="Conni-Output"></a>
-</p><a name="SEC191"></a>
-<h3 class="subheading"> Sample &quot;World&quot; file </h3>
-
-<p>Here is the sample <tt>`world'</tt> file for the &quot;Conni&quot; model. You need to copy this
-to a new file and add that file to conni_out.zip. For the model to work in Walktest.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;world&gt;
-  &lt;library&gt;lower&lt;/library&gt;
-  &lt;library&gt;upper&lt;/library&gt;
-  &lt;library&gt;head&lt;/library&gt;
-  &lt;textures&gt;
-    &lt;texture name=&quot;abstract_a032.gif&quot;&gt;
-      &lt;file&gt;/lib/stdtex/abstract_a032.jpg&lt;/file&gt;
-    &lt;/texture&gt;
-    &lt;texture name=&quot;andrew_wood.gif&quot;&gt;
-      &lt;file&gt;/lib/stdtex/andrew_wood.jpg&lt;/file&gt;
-    &lt;/texture&gt;
-  &lt;/textures&gt;
-  &lt;materials&gt;
-    &lt;material name=&quot;wood&quot;&gt;
-      &lt;texture&gt;andrew_wood.gif&lt;/texture&gt;
-    &lt;/material&gt;
-  &lt;/materials&gt;
-  &lt;sector name=&quot;room&quot;&gt;
-    &lt;meshobj name=&quot;walls&quot;&gt;
-      &lt;plugin&gt;crystalspace.mesh.loader.thing&lt;/plugin&gt;
-      &lt;params&gt;
-	&lt;v x=&quot;-10&quot; y=&quot;-1&quot; z=&quot;10&quot; /&gt;
-	&lt;v x=&quot;10&quot; y=&quot;-1&quot; z=&quot;10&quot; /&gt;
-	&lt;v x=&quot;-10&quot; y=&quot;-1&quot; z=&quot;-10&quot; /&gt;
-	&lt;v x=&quot;10&quot; y=&quot;-1&quot; z=&quot;-10&quot; /&gt;
-	&lt;v x=&quot;-10&quot; y=&quot;4&quot; z=&quot;10&quot; /&gt;
-	&lt;v x=&quot;10&quot; y=&quot;4&quot; z=&quot;10&quot; /&gt;
-	&lt;v x=&quot;-10&quot; y=&quot;4&quot; z=&quot;-10&quot; /&gt;
-	&lt;v x=&quot;10&quot; y=&quot;4&quot; z=&quot;-10&quot; /&gt;
-	&lt;material&gt;wood&lt;/material&gt;
-	&lt;texlen&gt;4&lt;/texlen&gt;
-	&lt;p name=&quot;up&quot;&gt;
-	  &lt;v&gt;6&lt;/v&gt;
-	  &lt;v&gt;7&lt;/v&gt;
-	  &lt;v&gt;5&lt;/v&gt;
-	  &lt;v&gt;4&lt;/v&gt;
-	&lt;/p&gt;
-	&lt;p name=&quot;down&quot;&gt;
-	  &lt;v&gt;3&lt;/v&gt;
-	  &lt;v&gt;2&lt;/v&gt;
-	  &lt;v&gt;0&lt;/v&gt;
-	  &lt;v&gt;1&lt;/v&gt;
-	&lt;/p&gt;
-	&lt;p name=&quot;back&quot;&gt;
-	  &lt;v&gt;7&lt;/v&gt;
-	  &lt;v&gt;6&lt;/v&gt;
-	  &lt;v&gt;2&lt;/v&gt;
-	  &lt;v&gt;3&lt;/v&gt;
-	&lt;/p&gt;
-	&lt;p name=&quot;front&quot;&gt;
-	  &lt;v&gt;4&lt;/v&gt;
-	  &lt;v&gt;5&lt;/v&gt;
-	  &lt;v&gt;1&lt;/v&gt;
-	  &lt;v&gt;0&lt;/v&gt;
-	&lt;/p&gt;
-	&lt;p name=&quot;left&quot;&gt;
-	  &lt;v&gt;6&lt;/v&gt;
-	  &lt;v&gt;4&lt;/v&gt;
-	  &lt;v&gt;0&lt;/v&gt;
-	  &lt;v&gt;2&lt;/v&gt;
-	&lt;/p&gt;
-	&lt;p name=&quot;right&quot;&gt;
-	  &lt;v&gt;5&lt;/v&gt;
-	  &lt;v&gt;7&lt;/v&gt;
-	  &lt;v&gt;3&lt;/v&gt;
-	  &lt;v&gt;1&lt;/v&gt;
-	&lt;/p&gt;
-      &lt;/params&gt;
-      &lt;zfill /&gt;
-    &lt;/meshobj&gt;
-    &lt;light&gt;
-      &lt;center x=&quot;0&quot; y=&quot;0&quot; z=&quot;9&quot; /&gt;
-      &lt;radius&gt;40&lt;/radius&gt;
-      &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
-    &lt;/light&gt;
-    &lt;light&gt;
-      &lt;center x=&quot;0&quot; y=&quot;0&quot; z=&quot;-9&quot; /&gt;
-      &lt;radius&gt;20&lt;/radius&gt;
-      &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
-    &lt;/light&gt;
-    &lt;light&gt;
-      &lt;center x=&quot;-9&quot; y=&quot;0&quot; z=&quot;0&quot; /&gt;
-      &lt;radius&gt;20&lt;/radius&gt;
-      &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
-    &lt;/light&gt;
-    &lt;light&gt;
-      &lt;center x=&quot;9&quot; y=&quot;0&quot; z=&quot;0&quot; /&gt;
-      &lt;radius&gt;20&lt;/radius&gt;
-      &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
-    &lt;/light&gt;
-    &lt;meshobj name=&quot;headh_head&quot;&gt;
-      &lt;plugin&gt;crystalspace.mesh.loader.sprite.3d&lt;/plugin&gt;
-      &lt;params&gt;
-	&lt;factory&gt;h_head&lt;/factory&gt;
-	&lt;action&gt;default&lt;/action&gt;
-      &lt;/params&gt;
-      &lt;move&gt;
-	&lt;matrix&gt;
-	  &lt;rotx&gt;-1.5708&lt;/rotx&gt;
-	&lt;/matrix&gt;
-	&lt;v x=&quot;-1&quot; y=&quot;0.45&quot; z=&quot;3&quot; /&gt;
-      &lt;/move&gt;
-    &lt;/meshobj&gt;
-    &lt;meshobj name=&quot;upperu_torso&quot;&gt;
-      &lt;plugin&gt;crystalspace.mesh.loader.sprite.3d&lt;/plugin&gt;
-      &lt;params&gt;
-	&lt;factory&gt;u_torso&lt;/factory&gt;
-	&lt;action&gt;TORSO_STAND&lt;/action&gt;
-      &lt;/params&gt;
-      &lt;move&gt;
-	&lt;matrix&gt;
-	  &lt;rotx&gt;-1.5708&lt;/rotx&gt;
-	&lt;/matrix&gt;
-	&lt;v x=&quot;-1&quot; y=&quot;0.26&quot; z=&quot;3&quot; /&gt;
-      &lt;/move&gt;
-    &lt;/meshobj&gt;
-    &lt;meshobj name=&quot;lowerl_legs&quot;&gt;
-      &lt;plugin&gt;crystalspace.mesh.loader.sprite.3d&lt;/plugin&gt;
-      &lt;params&gt;
-	&lt;factory&gt;l_legs&lt;/factory&gt;
-	&lt;action&gt;LEGS_IDLE&lt;/action&gt;
-      &lt;/params&gt;
-      &lt;move&gt;
-	&lt;matrix&gt;
-	  &lt;rotx&gt;-1.5708&lt;/rotx&gt;
-	&lt;/matrix&gt;
-	&lt;v x=&quot;-1&quot; y=&quot;0&quot; z=&quot;3&quot; /&gt;
-      &lt;/move&gt;
-    &lt;/meshobj&gt;
-  &lt;/sector&gt;
-&lt;/world&gt;
-</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.5.11.html#5.5.11" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.5.4.html#5.5.4" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.6.1.html#5.6.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>

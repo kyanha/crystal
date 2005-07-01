@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 5.2 Simple Tutorial 1</title>
+<title>Crystal Space: 5.2 Simple Map Example</title>
 
-<meta name="description" content="Crystal Space: 5.2 Simple Tutorial 1">
-<meta name="keywords" content="Crystal Space: 5.2 Simple Tutorial 1">
+<meta name="description" content="Crystal Space: 5.2 Simple Map Example">
+<meta name="keywords" content="Crystal Space: 5.2 Simple Map Example">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Tutorial-Simple"></a>
+<a name="Simple-Map-Example"></a>
 <a name="5.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.1.3.html#5.1.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.2.1.html#5.2.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.1.html#5.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.3.html#5.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>
@@ -58,58 +58,140 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 5.2 Simple Tutorial 1 </h2>
+<h2 class="section"> 5.2 Simple Map Example </h2>
 
-<p>This tutorial provides a step-by-step explanation on how you can use Crystal
-Space from within your application.  This tutorial is mainly based on the
-<tt>`simple1'</tt> application which you can compile and run to see what it does.
-To build <tt>`simple1'</tt> which ships with Crystal Space, type <samp>`make
-simple1'</samp> or <samp>`jam simple1'</samp>, or build the <tt>`appsimple1'</tt> project if you
-use <small>MSVC</small>.
+<p>This <small>HOWTO</small> shows you a very simple map you can make by using a world file
+and explains a few of the concepts in it.
 </p>
-<p>When you downloaded the Crystal Space package it contains a <tt>`CS/include'</tt>
-directory. This directory contains all header files you need when using the
-Crystal Space components and libraries in your own applications. On one hand,
-the include directory contains <small>SCF</small> interface definitions.  These pure
-interface file are stored in directories with names starting with the letter
-<samp>`i'</samp> (as in <tt>`iengine/engine.h'</tt>).  On the other hand we also have plain
-C++ include files for interfacing with the libraries of Crystal Space.  When
-you install Crystal Space on your development system (for instance, by invoking
-<samp>`make install'</samp> or <samp>`jam install'</samp>), these headers are placed in a
-location where they can be easily accessed when writing new programs based on
-Crystal Space.  On Unix systems, for instance, these files usually end up in
-<tt>`/usr/local/include/crystalspace'</tt>. Since it can be difficult to remember
-which header files contain which classes and interfaces, you can instead
-include the convenient catch-all header file <tt>`crystalspace.h'</tt>.
+<p>Here is the map:
 </p>
-<p>Crystal Space also has a reference manual and <small>API</small> documentation.  The
-manual is included in <small>HTML</small> form Crystal Space itself in the
-<tt>`CS/docs/html'</tt> directory. After you install Crystal Space, the
-documentation resides at <tt>`/usr/local/share/docs/crystalspace-*'</tt>.
-Documentation is also available online.  The <small>API</small> documentation can be
-generated locally or viewed online.  See section <a href="cs_1.6.html#1.6">Where to Get Crystal Space</a>.
-</p>
-<p>Additionally, note that the source code for some of these tutorials can be
-found in the <tt>`CS/apps/tutorials'</tt> directory. There are also a few
-additional tutorials at that location which are not (yet) covered in the
-documentation.
-</p>
-<p>Before reading this tutorial you should first read the Tutorial Introduction
-(see section <a href="cs_5.1.html#5.1">Developing a Crystal Space Application</a>).
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_5.2.1.html#5.2.1">5.2.1 Simple Header File</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.2.2.html#5.2.2">5.2.2 Event Handling</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.2.3.html#5.2.3">5.2.3 Creating a &quot;World&quot;</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.2.4.html#5.2.4">5.2.4 The Camera</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.2.5.html#5.2.5">5.2.5 Locomotion (Moving Around)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;world&gt;
+  &lt;textures&gt;
+    &lt;texture name=&quot;andrew_wood&quot;&gt;
+      &lt;file&gt;/lib/stdtex/andrew_wood.jpg&lt;/file&gt;
+    &lt;/texture&gt;
+  &lt;/textures&gt;
+  &lt;materials&gt;
+    &lt;material name=&quot;wood&quot;&gt;
+      &lt;texture&gt;andrew_wood&lt;/texture&gt;
+    &lt;/material&gt;
+  &lt;/materials&gt;
+  &lt;plugins&gt;
+    &lt;plugin name=&quot;thing&quot;&gt;crystalspace.mesh.loader.thing&lt;/plugin&gt;
+  &lt;/plugins&gt;
 
+  &lt;sector name=&quot;room&quot;&gt;
+    &lt;meshobj name=&quot;walls&quot;&gt;
+      &lt;plugin&gt;thing&lt;/plugin&gt;
+      &lt;zfill /&gt;
+      &lt;params&gt;
+        &lt;v x=&quot;-10&quot; y=&quot;-1&quot; z=&quot;10&quot;/&gt; &lt;v x=&quot;10&quot; y=&quot;-1&quot; z=&quot;10&quot;/&gt;
+        &lt;v x=&quot;-10&quot; y=&quot;-1&quot; z=&quot;-10&quot;/&gt; &lt;v x=&quot;10&quot; y=&quot;-1&quot; z=&quot;-10&quot;/&gt;
+        &lt;v x=&quot;-10&quot; y=&quot;4&quot; z=&quot;10&quot;/&gt; &lt;v x=&quot;10&quot; y=&quot;4&quot; z=&quot;10&quot;/&gt;
+        &lt;v x=&quot;-10&quot; y=&quot;4&quot; z=&quot;-10&quot;/&gt; &lt;v x=&quot;10&quot; y=&quot;4&quot; z=&quot;-10&quot;/&gt;
+        &lt;material&gt;wood&lt;/material&gt;
+        &lt;texlen&gt;4&lt;/texlen&gt;
+        &lt;p name=&quot;up&quot;&gt;
+          &lt;v&gt;6&lt;/v&gt; &lt;v&gt;7&lt;/v&gt; &lt;v&gt;5&lt;/v&gt; &lt;v&gt;4&lt;/v&gt;
+        &lt;/p&gt;
+        &lt;p name=&quot;down&quot;&gt;
+          &lt;v&gt;3&lt;/v&gt; &lt;v&gt;2&lt;/v&gt; &lt;v&gt;0&lt;/v&gt; &lt;v&gt;1&lt;/v&gt;
+        &lt;/p&gt;
+        &lt;p name=&quot;back&quot;&gt;
+          &lt;v&gt;7&lt;/v&gt; &lt;v&gt;6&lt;/v&gt; &lt;v&gt;2&lt;/v&gt; &lt;v&gt;3&lt;/v&gt;
+        &lt;/p&gt;
+        &lt;p name=&quot;front&quot;&gt;
+          &lt;v&gt;4&lt;/v&gt; &lt;v&gt;5&lt;/v&gt; &lt;v&gt;1&lt;/v&gt; &lt;v&gt;0&lt;/v&gt;
+        &lt;/p&gt;
+        &lt;p name=&quot;left&quot;&gt;
+          &lt;v&gt;6&lt;/v&gt; &lt;v&gt;4&lt;/v&gt; &lt;v&gt;0&lt;/v&gt; &lt;v&gt;2&lt;/v&gt;
+        &lt;/p&gt;
+        &lt;p name=&quot;right&quot;&gt;
+          &lt;v&gt;5&lt;/v&gt; &lt;v&gt;7&lt;/v&gt; &lt;v&gt;3&lt;/v&gt; &lt;v&gt;1&lt;/v&gt;
+        &lt;/p&gt;
+      &lt;/params&gt;
+    &lt;/meshobj&gt;
+    &lt;light&gt;
+      &lt;center x=&quot;0&quot; y=&quot;3&quot; z=&quot;0&quot;/&gt;
+      &lt;radius&gt;40&lt;/radius&gt;
+      &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot;/&gt;
+    &lt;/light&gt;
+  &lt;/sector&gt;
+&lt;/world&gt;
+</pre></td></tr></table>
+<p>The structure of the map file is nested. At the highest level there
+is the <samp>`world'</samp> keyword which represents the entire world. Inside
+the world the two first sections describe the textures and materials.
+A texture is basically a direct representation of an image on disk. In
+this case we define a texture called <samp>`andrew_wood'</samp> which corresponds
+to the texture file <tt>`/lib/stdtex/andrew_wood.jpg'</tt>. Keep in mind that
+the filename is a <small>VFS</small> file! See section <a href="cs_4.7.html#4.7">Virtual File System (<small>VFS</small>)</a>. A texture is not directly
+usable on geometrical objects. Before we can use it we need to make a
+material as well. The reason for this is that with materials we can
+define many other additional effects (like multi-texture materials and
+so on). In this example we define a material called <samp>`wood'</samp> that uses
+the <samp>`andrew_wood'</samp> texture.
+</p>
+<p>The engine itself does not render any geometry. Mesh objects are responsible
+for that. See section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>. These are separate plugins. This duality is
+also present in the map loader. The map loader itself does not know how
+to parse geometrical objects. It will delegate the loading of mesh objects
+to mesh object loaders (again separate plugins). In the <samp>`PLUGINS'</samp>
+section we indicate what plugins we are going to use in this map file. In
+this case we are only going to use the <samp>`crystalspace.mesh.loader.thing'</samp>
+loader which loads generic polygon based objects. We call this plugin
+<samp>`thing'</samp>.
+</p>
+<p>In this simple example we only have one sector in the world called <samp>`room'</samp>.
+If you need multiple sectors you can use multiple <samp>`sector'</samp> statements.
+In the room sector we have one mesh object (<samp>`meshobj'</samp>) and one light
+(<samp>`light'</samp>).
+</p>
+<p>When defining mesh objects there are several things to keep in mind. Aside
+from the geometry which is handled by the mesh object plugin, the engine
+also keeps track of some stuff. Important to know is that everything inside
+the <samp>`params'</samp> block is given to the plugin loader. So the engine doesn't
+know about that. Everything that is outside <samp>`params'</samp> is handled by
+the engine itself. The first thing that has to be said in the <samp>`meshobj'</samp>
+block is which plugin is going to be used for loading this object. In this
+case we use the <samp>`thing'</samp> plugin. Then we tell the engine that we would
+like to use <samp>`ZFILL'</samp> mode for rendering this object. This means that
+the Z-buffer will be filled but not read. This is usually used for exterior
+walls because Crystal Space does not clear the Z-buffer at the start of
+every frame (by default). See section <a href="cs_4.9.1.html#4.9.1">Render Priorities and Objects in Sectors</a>.
+</p>
+<p>The rest of the mesh object is defined inside the <samp>`params'</samp> block and
+this is what will be parsed by the thing loader plugin. Keep in mind that
+different types of plugins will have different syntax. So the discussion
+following here is only relevant for <samp>`thing'</samp> mesh objects.
+</p>
+<p>First we define all vertices that we are going to use in this mesh object.
+In this case we use eight vertices for the eight corners of the room that
+we are creating. Then we say that all following polygons will use the
+<samp>`wood'</samp> material. The <samp>`texlen'</samp> command is a bit more complicated
+to explain. Basically if we had a polygon that was 4x4 units big, then
+a texture using <samp>`texlen(4)'</samp> would be tiled exactly one time on that
+polygon. So the <samp>`texlen'</samp> command directly specifies the texture density
+or the amount of times a texture is tiled. For more information about this
+see see section <a href="cs_4.12.2.html#4.12.2">Texture Mapping</a>.
+</p>
+<p>Finally we define the six polygons that form the walls of our room.
+Polygons don't have to have names but in this case we use names to make
+it clearer what they are. For every polygon we indicate what vertices (from
+0 to 7) it uses. Keep in mind that a polygon is only visible from one side.
+The vertices should be oriented in clock-wise direction from the viewpoint
+where you want the polygon to be visible. So in this case we make a room
+which means that all polygons have to be visible from the inside. If we
+were to make a box then you can do this by reversing the order of all vertices
+of all polygons.
+</p>
+<p>Much more is possible in map files. This howto only shows the very basic
+stuff.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.1.3.html#5.1.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.2.1.html#5.2.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.1.html#5.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.3.html#5.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>

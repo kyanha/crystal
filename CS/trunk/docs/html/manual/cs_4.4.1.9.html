@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.4.1.9 Example</title>
+
+<meta name="description" content="Crystal Space: 4.4.1.9 Example">
+<meta name="keywords" content="Crystal Space: 4.4.1.9 Example">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="SCF-Example"></a>
+<a name="4.4.1.9"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.4.1.8.html#4.4.1.8" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.4.1.10.html#4.4.1.10" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.4.1.html#4.4.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h4 class="subsubsection"> 4.4.1.9 Example </h4>
+
+<p>Here is a complete working example. It implements a shared class that has a
+base and an embedded interface.
+</p>
+<p>These are the interface files for the <samp>`iDog'</samp> interface (the base
+interface of our class) and the <samp>`iName'</samp> interface (the interface
+embedded into our class).
+</p>
+
+<p><em>File</em>: <tt>`idog.h'</tt>
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;csutil/scf.h&quot;
+
+// Version number of our interface.
+SCF_VERSION(iDog, 0, 0, 1)
+
+struct iDog : public iBase
+{
+  virtual void Walk() = 0;
+  virtual void Shout(char const* Message) = 0;
+};
+</pre></td></tr></table>
+
+<p><em>File</em>: <tt>`iname.h'</tt>
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;csutil/scf.h&quot;
+
+// Version number of our interface.
+SCF_VERSION(iName, 0, 0, 1);
+
+struct iName : public iBase
+{
+  virtual char const* GetName() = 0;
+  virtual void SetName(char const*) = 0;
+};
+</pre></td></tr></table>
+<p>Now here is the implementation of a class for both of the mentioned
+interfaces:
+</p>
+
+<p><em>File</em>: <tt>`dog.cpp'</tt>
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+
+#include &quot;cssysdef.h&quot;
+#include &quot;idog.h&quot;
+#include &quot;iname.h&quot;
+
+class csDog : public iDog
+{
+  char* Name;
+
+  // Embedded interface.
+  class csName : public iName
+  {
+  public:
+    SCF_DECLARE_EMBEDDED_IBASE(csDog);
+    virtual char const* GetName();
+    virtual void SetName(char const*);
+  } scfiName;
+  friend class csName;
+
+public:
+  SCF_DECLARE_IBASE;
+  csDog(iBase* Parent);
+  virtual ~csDog();
+  virtual void Walk();
+  virtual void Shout(char const*);
+};
+
+//---------- Implementation ---------
+
+SCF_IMPLEMENT_FACTORY(csDog)
+
+SCF_IMPLEMENT_IBASE(csDog)
+  SCF_IMPLEMENTS_INTERFACE(iDog)
+  SCF_IMPLEMENTS_EMBEDDED_INTERFACE(iName)
+SCF_IMPLEMENT_IBASE_END
+
+SCF_IMPLEMENT_EMBEDDED_IBASE(csDog::csName)
+  SCF_IMPLEMENTS_INTERFACE(iName)
+SCF_IMPLEMENT_EMBEDDED_IBASE_END
+
+csDog::csDog(iBase* Parent)
+{
+  SCF_CONSTRUCT_IBASE(Parent);
+  SCF_CONSTRUCT_EMBEDDED_IBASE(scfiName);
+  Name = strdup(&quot;&lt;noname&gt;&quot;);
+}
+
+csDog::~csDog()
+{
+  free(Name);
+  SCF_DESTRUCT_EMBEDDED_IBASE(scfiName);
+  SCF_DESTRUCT_IBASE();
+}
+
+void csDog::Walk()
+{
+  printf(&quot;%s: I'm walking\n&quot;, Name);
+}
+
+void csDog::Shout(char const* Message)
+{
+  printf(&quot;I'm %s: shout, shout, %s\n&quot;, Name, Message);
+}
+
+// iName interface for dog.
+
+char const* csDog::csName::GetName()
+{
+  return scfParent-&gt;Name;
+}
+
+void csDog::csName::SetName(char const* NewName)
+{
+  if (scfParent-&gt;Name != 0)
+    free(scfParent-&gt;Name);
+  scfParent-&gt;Name = strdup(NewName != 0 ? NewName : &quot;&quot;);
+}
+
+</pre></td></tr></table>
+<p>Since this is a plugin module, it requires a meta-information resource.
+Here is the meta-information for the example plugin:
+</p>
+
+<p><em>File</em>: <tt>`dog.csplugin'</tt>
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!-- dog.csplugin --&gt;
+&lt;plugin&gt;
+  &lt;scf&gt;
+    &lt;classes&gt;
+      &lt;class&gt;
+        &lt;name&gt;dog&lt;/name&gt;
+        &lt;implementation&gt;csDog&lt;/implementation&gt;
+        &lt;description&gt;A rather unusual dog&lt;/description&gt;
+      &lt;/class&gt;
+    &lt;/classes&gt;
+  &lt;/scf&gt;
+&lt;/plugin&gt;
+</pre></td></tr></table>
+<p>The above files should be built to get a plugin module named <tt>`dog.so'</tt>
+(Unix) or <tt>`dog.dll'</tt> (Windows).  The plugin module will export the
+<code>csDog_Create()</code> function which is implemented by the
+<code>SCF_IMPLEMENT_FACTORY()</code> macro, and it will publish the meta-information
+contained in <tt>`dog.csplugin'</tt>.
+</p>
+<p>Finally, here is the source code for a simple client application that uses the
+<samp>`csDog'</samp> plugin.
+</p>
+
+<p><em>File</em>: <tt>`doggy.cpp'</tt>
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;stdio.h&gt;
+
+#include &quot;cssysdef.h&quot;
+#include &quot;csutil/scf.h&quot;
+#include &quot;csutil/cfgfile.h&quot;
+#include &quot;idog.h&quot;
+#include &quot;iname.h&quot;
+
+static void test_dog()
+{
+  csRef&lt;iDog&gt; dog = SCF_CREATE_INSTANCE(&quot;csDog&quot;, iDog);
+  if (!dog)
+    fprintf(stderr, &quot;No csDog shared class!\n&quot;);
+  else
+  {
+    csRef&lt;iName&gt; name = SCF_QUERY_INTERFACE(dog, iName);
+    if (!name)
+      fprintf(stderr,
+        &quot;Dog does not support iName interface!\n&quot;);
+    else
+    {
+      name-&gt;SetName(&quot;Droopy&quot;);
+      dog-&gt;Walk();
+      dog-&gt;Shout(&quot;hello!&quot;);
+      printf(&quot;Dog's name is %s\n&quot;, name-&gt;GetName());
+    }
+  }
+}
+
+int main (int argc, char const* argv[])
+{
+  scfInitialize(argc, argv);
+  test_dog();
+  iSCF::SCF-&gt;Finish();
+}
+</pre></td></tr></table>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.4.1.8.html#4.4.1.8" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.4.1.10.html#4.4.1.10" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.4.1.html#4.4.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 5.5.4 Step 4: Creating a Simple Room in Worldcraft</title>
+<title>Crystal Space: 5.5.4 Game-Specific Data</title>
 
-<meta name="description" content="Crystal Space: 5.5.4 Step 4: Creating a Simple Room in Worldcraft">
-<meta name="keywords" content="Crystal Space: 5.5.4 Step 4: Creating a Simple Room in Worldcraft">
+<meta name="description" content="Crystal Space: 5.5.4 Game-Specific Data">
+<meta name="keywords" content="Crystal Space: 5.5.4 Game-Specific Data">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="map2cs-Tutorial-Step-4"></a>
+<a name="map2cs_002ecfg-Game_002dSpecific-Data"></a>
 <a name="5.5.4"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_5.5.3.html#5.5.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.5.5.html#5.5.5" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.6.html#5.6" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.5.html#5.5" title="Up section"> Up </a>]</td>
@@ -58,98 +58,116 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 5.5.4 Step 4: Creating a Simple Room in Worldcraft </h3>
+<h3 class="subsection"> 5.5.4 Game-Specific Data </h3>
 
-<p>The following steps may seem trivial for somebody who knows Worldcraft in and
-out.  So all the Worldcraft pros just skip to the next step.
+<p>This section describes how to access game-specific data from the Crystal Space
+engine.
 </p>
-<ol>
-<li>
-Open Worldcraft.
+<a name="SEC759"></a>
+<h4 class="subsubheading"> Support in the Crystal Space &quot;map format&quot; </h4>
 
-</li><li>
-Select <em>File/New</em>.
-
-</li><li>
-Select the &quot;Block&quot; tool either by pressing <kbd><kbd>SHIFT</kbd>-b</kbd> or selecting
-it from the toolbar.
-
-<p><img src="tutorial/map2cs/wcblock.png" alt="tutorial/map2cs/wcblock">
+<p>To support game-specific data, the Crystal Space map format has been
+extended, thus allowing you to embed the required data directly in the map
+file.
 </p>
-</li><li>
-Left-click in of of the 2D windows, hold the button down and drag the mouse
-until you have created a box of reasonable size.  Release the mouse button
-once completed.
-
-</li><li>
-Now you should see a block made of dashed lines on every 2D window that
-displays some handles.  Drag these handles until the block has a size of 512-W
-by 512-L by 512-H (shown in the status bar).  Center the block around the
-origin (the crossing of the blue lines).
-
-</li><li>
-When the block has proper size, press <kbd>ENTER</kbd>.  The handles should then
-disappear, and the lines should become solid.
-
-</li><li>
-Switch to the &quot;Selection&quot; tool either by pressing <kbd><kbd>SHIFT</kbd>-s</kbd> or by
-selecting it from the toolbar.
-
-<p><img src="tutorial/map2cs/wcsel.png" alt="tutorial/map2cs/wcsel">
+<p>You can add key / value pairs to the map file itself; both to <em>things</em>
+and <em>sectors</em>.  To do this, just add <samp>`&lt;key name=&quot;<var>keyname</var>&quot;
+value=&quot;<var>keyvalue</var>&quot; /&gt;'</samp> to the appropriate sections.  You can use any
+number of keys.  Because not all game-specific information can be bound to
+actual geometry, (like <samp>`info_deathmatchstart'</samp>, for example) there is
+also an element called <samp>`node'</samp>.
 </p>
-</li><li>
-Select the block by clicking at one of its border lines.  The handles should
-appear again.  (You could change size again if you like by dragging a handle.)
-
-</li><li>
-Invoke the <em>Tools/Make Hollow</em> menu item and select a width of 32 units.
-Now you should have a hollow cube.
-
-</li><li>
-Select the &quot;Entity&quot; tool.  (<kbd><kbd>SHIFT</kbd>-e</kbd> or select it from the
-toolbar.)
-
-<p><img src="tutorial/map2cs/wcentity.png" alt="tutorial/map2cs/wcentity">
+<p>A node looks like this:
 </p>
-</li><li>
-Select &quot;light&quot; in the dialog on the right side:
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;node name=&quot;nodeName&quot;&gt;
+	&lt;position x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
+	&lt;key name=&quot;keyName1&quot; value=&quot;keyValue1&quot; /&gt;
+	&lt;key name=&quot;keyName2&quot; value=&quot;keyValue2&quot; /&gt;
+	&lt;key name=&quot;keyName3&quot; value=&quot;keyValue3&quot; /&gt;
+&lt;/node&gt;
+</pre></td></tr></table>
+<a name="SEC760"></a>
+<h4 class="subsubheading"> How Does <tt>`map2cs'</tt> Support Game-Specific Data? </h4>
 
-<p><img src="tutorial/map2cs/wclight.png" alt="tutorial/map2cs/wclight">
+<p><tt>`map2cs'</tt> takes all key / value pairs found in the original map and
+attaches them to the appropriate Crystal Space object.  So if you have a brush
+based entity, <tt>`map2cs'</tt> will store the data with the &quot;thing&quot; that is
+generated from the entity.  (Every entity corresponds to exactly one
+&quot;thing&quot;.  If there are several sectors, the entity will be split and the
+appropriate &quot;things&quot; all get the same data.)
 </p>
-</li><li>
-Click in the top right view inside the cube, now use one of the bottom views
-to drag it to a position near the top.
-
-</li><li>
-Press <kbd>ENTER</kbd>. A small pink square should appear.
-
-</li><li>
-Select the square by left-clicking on it.  After it is selected use a
-right-click and select &quot;Properties&quot; from the drop down menu.  (Due to a bug
-in WorldCraft, you are forced to change to properties for every light source;
-otherwise it is completely dark.)
-
-</li><li>
-In the &quot;Properties&quot; dialog select &quot;Brightness&quot; and &quot;Pick Color&quot; select a
-white color.  (The light is defined by 4 values.  The first three components
-specify color and the last component specifies brightness / radius.  Normally
-a radius of 200 is okay.)
-
-<p><img src="tutorial/map2cs/wclight2.png" alt="tutorial/map2cs/wclight2">
+<p>If you have a point based entity (lights for example), <tt>`map2cs'</tt> will
+generate a node in the appropriate sector, and store all data there.
 </p>
-</li><li>
-Now select &quot;info_player_start&quot; instead of &quot;light&quot;.
+<p>If you have a manual sector, all data stored with the defining brush gets
+stored in the sector.
+</p>
+<p>For informational purposes, <tt>`map2cs'</tt> stores the scaling factor in the
+Crystal Space world.  (Because otherwise a game could not interpret
+positions.)
+</p>
+<a name="SEC761"></a>
+<h4 class="subsubheading"> How Does Crystal Space Support Game-Specific Data? </h4>
 
-</li><li>
-Place the new entity near the floor.  Now the result should appear as follows:
-
-<p><img src="tutorial/map2cs/wcmap1.png" alt="tutorial/map2cs/wcmap1">
-</p></li></ol>
+<p><samp>`csLoader'</samp> generates an instance of <samp>`csKeyValuePair'</samp> for every
+<em>key</em> found in the map file and attaches it to the appropriate Crystal
+Space object by calling <code>ObjAdd()</code>.  Each nodes generates an instance of
+<samp>`csMapNode'</samp>, and this is added to the sector with <code>ObjAdd()</code> as
+well.
+</p>
+<p>To make access to game-specific data simpler, there are some convenience
+classes and some convenience functions.
+</p>
+<p>To get the value of a game-specific key you can call:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csKeyValuePair::GetValue(csObject* pObject, char const* key);
+</pre></td></tr></table>
+<p>For example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csSector* pSector = GetCurrentSector();
+char const* gravitystr =
+    csKeyValuePair::GetValue(pSector, &quot;gravity&quot;);
+int gravity = atoi(gravitystr);
+</pre></td></tr></table>
+<p>Please note that these operations are pretty expensive, so you should
+<em>not</em> invoke them every frame.  For frequently needed data, you should
+read the values once, and store them in some game-specific data fields.  (But
+it is still okay, to read the values once in a while; for example reading a
+message to be printed, when the user tries to open a locked door without
+having first unlocked it.)
+</p>
+<p>To get a specific node you can call:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csMapNode::GetNode(csSector* pSector, char const* name,
+    char const* classname=0);
+</pre></td></tr></table>
+<p>For example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csSector* pSector = GetCurrentSector();
+csMapNode* pNode = csMapNode::GetNode(
+    pSector, &quot;central&quot;, &quot;cs_dynlight&quot;);
+csVector3 pos = pNode-&gt;GetPosition();
+CreateDynLight(...);
+</pre></td></tr></table>
+<p>A more frequent case for nodes will be to iterate over all nodes in a sector
+(for example to place monsters or weapons).
+</p>
+<p>For example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csSector* pSector = GetCurrentSector();
+csNodeIterator iter (pSector,&quot;cs_medikit&quot;);
+while (iter.HasNext ())
+{
+  csMapNode* pNode = iter.Next();
+  csVector3 pos = pNode-&gt;GetPosition();
+  CreateMedikit(pos);
+}
+</pre></td></tr></table>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_5.5.3.html#5.5.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.5.5.html#5.5.5" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.6.html#5.6" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.5.html#5.5" title="Up section"> Up </a>]</td>

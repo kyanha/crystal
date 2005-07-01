@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.1 Quick Overview</title>
+<title>Crystal Space: 4.1 The Basics</title>
 
-<meta name="description" content="Crystal Space: 4.1 Quick Overview">
-<meta name="keywords" content="Crystal Space: 4.1 Quick Overview">
+<meta name="description" content="Crystal Space: 4.1 The Basics">
+<meta name="keywords" content="Crystal Space: 4.1 The Basics">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Applications-Overview"></a>
+<a name="The-Basics"></a>
 <a name="4.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.html#4." title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.2.html#4.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.1.1.html#4.1.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>
@@ -58,116 +58,255 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 4.1 Quick Overview </h2>
+<h2 class="section"> 4.1 The Basics </h2>
 
-<p>This section provides a quick overview of the various applications which are
-bundled with Crystal Space.  In some cases, more detailed information for a
-particular application may be found in subsequent sections.
+<p>Crystal Space is a package of components and libraries which can all be useful
+for creating computer games.  Although some of the packages are intended more
+for 3D gaming this is not as such a restriction of the package.  Components
+such as the sound driver function just as well in a 2D gaming environment, and
+the Virtual File System plugin (see section <a href="cs_4.7.html#4.7">Virtual File System (<small>VFS</small>)</a>) can be used in non-graphical
+applications.  This highlights one of the important characteristics of Crystal
+Space: the components and libraries are more or less independent of each other.
+If you do not want &quot;real&quot; physics, then just don't use the physics plugin.
+If you don't want scripting then don't include that.  All packages are designed
+to be functional on their own or with a minimal number of other packages.
+There are some dependencies of course.  For example, the 3D engine requires a
+3D renderer to display its output, and a renderer requires a canvas onto which
+to draw.  On the other hand, you could very well use the 3D renderer without
+the 3D engine.
 </p>
-<dl compact="compact">
-<dd><a name="IDX1"></a>
-<a name="IDX2"></a>
-</dd>
-<dt> <code>3ds2lev</code></dt>
-<dd><p>A <small>3DS</small> to Crystal Space map converter (work in progress!).
+<p>Although there is a high level of independence, there is also a high level of
+integration.  The components and libraries were also designed to be used
+together and as such offer a flexible scheme of integration.
 </p>
-<a name="IDX3"></a>
-<a name="IDX4"></a>
-</dd>
-<dt> <code>csdemo</code></dt>
-<dd><p>A self-running space demo. It requires the <tt>`demodata.zip'</tt> file
-that you can get from:
+<p>If you are interested in developing a program using Crystal Space, then it is
+important to understand that Crystal Space is not a single monolithic library,
+but instead consists of several <em>libraries</em> and <em>plug-in modules</em>.
+This manual uses the term <em>module</em> for both libraries and plug-ins when
+the distinction between the two is not important.
 </p>
+<p>A plug-in module is similar to a library, but has some advantages over a
+library.  All plug-ins can be accessed in a common fashion.  They have a pure
+interface, and they can provide this interface even if they are extracted to a
+dynamic load library.  So, they are the better solution as long as speed is not
+the dictator of all decisions as in the math library (access to plug-in
+functions uses virtual methods).  The main difference between the interface of
+a library and a plug-in is that a library may use <small>SCF</small>, the Shared Class
+Facility (see section <a href="cs_4.4.1.html#4.4.1">Shared Class Facility (<small>SCF</small>)</a>), and C++ classes; plug-ins may only use <small>SCF</small>.
+</p>
+<ul>
+<li>
+What is <small>SCF</small>?
 
-<p><a href="http://www.crystalspace3d.org/support/release/cs098/maps/demodata.zip">http://www.crystalspace3d.org/support/release/cs098/maps/demodata.zip</a>
+<p>The main <small>SCF</small> object is the <em>interface</em>.  An interface is the
+solution to strictly decouple the public methods of an object from their
+implementation.  You only get a pointer to an abstract class with only virtual
+methods, called the interface, so your program doesn't know about the actual
+object behind the pointer.  This object is called an <em>implementation</em> of
+the interface.  You as the user of Crystal Space will call functions that
+create the actual object, but only return the interface.  After that you can
+use the interface like a C++ object.  When you don't need it anymore, don't
+<samp>`delete'</samp> it, but call <code>DecRef()</code>.  When you pass a pointer to the
+interface to anywhere, call <code>IncRef()</code> from there, and <code>DecRef()</code>
+when you don't need the interface there anymore.
 </p>
-<a name="IDX5"></a>
-<a name="IDX6"></a>
-</dd>
-<dt> <code>csfedit</code></dt>
-<dd><p>A simple GUI based font editor for Crystal Space.
+<p>Starting with Crystal Space version 0.95 we also have smart pointers.
+A smart pointer is an instance of the class <code>csRef</code>. This class takes
+care of <code>IncRef()</code> and <code>DecRef()</code> for you
+(see section <a href="cs_4.4.2.html#4.4.2">Correctly Using Smart Pointers</a>). It is very important to use smart pointers
+now. They are making life a lot easier and in the future they may become
+required usage (i.e. no longer optional).
 </p>
-<a name="IDX7"></a>
-<a name="IDX8"></a>
-</dd>
-<dt> <code>csfgen</code></dt>
-<dd><p>A <em>TrueType</em> to Crystal Space font converter.
+<p>As the user you'll only have to include a header that defines the interface,
+but not the implementation.  Despite the obvious advantage of having a very
+clear structure in your code, there is the advantage that linking the
+interface to the implementation can be done at run-time, but more about this
+later.
 </p>
-<a name="IDX9"></a>
-<a name="IDX10"></a>
-</dd>
-<dt> <code>csvid</code></dt>
-<dd><p>A test application for the Open DivX video plugin.
+</li><li>
+What are the characteristics of a library?
+
+<p>A library is just a normal C++ library as you know them.  A library can
+optionally provide <small>SCF</small> interfaces.  In the case of a library this is just
+a way to define a clear structure.  But as their main interface, libraries
+provide C++ classes.
 </p>
-<a name="IDX11"></a>
-<a name="IDX12"></a>
-</dd>
-<dt> <code>g2dtest</code></dt>
-<dd><p>The Crystal Space canvas plugin test application.
+</li><li>
+What are the characteristics of a plug-in?
+
+<p>A plug-in, on the other hand, will only provide <small>SCF</small> interfaces, no normal
+C++ classes. The plug-in itself will also appear as an <small>SCF</small> interface.
+This is part of the definition of a plug-in.  A plug-in can be organized as
+static library or <small>DLL</small>; this only makes a small difference in how you use
+it in your program.
 </p>
-<a name="IDX13"></a>
-<a name="IDX14"></a>
-</dd>
-<dt> <code>gfxtest</code></dt>
-<dd><p>The Crystal Space image manipulator.
+<p>As the user of Crystal Space, you have to do
+the following steps to use a plug-in:
 </p>
-<a name="IDX15"></a>
-<a name="IDX16"></a>
-</dd>
-<dt> <code>isotest</code></dt>
-<dd><p>An application demonstrating how you can use the 3D engine to simulate
-a semi-isometric view.
+<ul class="toc">
+<li>-
+First, do all these steps for the dependencies (other plug-ins) that this
+plug-in relies on.
+
+</li><li>-
+Register the library that contains the plug-in.
+
+</li><li>-
+Load the plug-in.  This will also initialize the plug-in.  It will fail if you
+forgot any dependencies.
+
+</li><li>-
+Query the plug-in interface.  This is an <small>SCF</small> interface, so you now have
+access to the functions of the plug-in.
+</li></ul>
+
+</li><li>
+How can I register the plug-in library?
+
+<p><em>Registering</em> means to tell <small>SCF</small> the name of the plug-in that was given
+to it by its author, and a class or a dynamic library to associate it with.
+Plugin libraries can contain multiple named <small>SCF</small> classes.  For example, to
+use the software graphics renderer <small>SCF</small> must know that the <small>SCF</small> class
+<samp>`crystalspace.graphics3d.software'</samp> can be found in <tt>`soft3d.dll'</tt>
+(Windows) or <tt>`soft3d.so'</tt> (Unix).  <small>SCF</small> determines dynamically which
+plugin libraries contain which <small>SCF</small> classes by consulting meta-information
+associated with each plugin.  Depending upon the platform, the associated
+meta-information may be bundled into the plugin itself, or it might exist in a
+separate file with a <tt>`.csplugin'</tt> extension alongside the plugin module.
 </p>
-<a name="IDX17"></a>
-<a name="IDX18"></a>
-</dd>
-<dt> <code>map2cs</code></dt>
-<dd><p>A map converter which converts between Quake style <tt>`.map'</tt> format to the
-native Crystal Space map format. It is known to work with WorldCraft
-2.1 Beta and QuArK (Quake Army Knife). See section <a href="cs_4.3.html#4.3">Quake Map Converter (<code>map2cs</code>)</a>.
+<p>How you register a library depends on whether it is a static library or a
+dynamic library (<tt>`.dll'</tt> or <tt>`.so'</tt>).  For a static library, that is,
+one which is linked directly into the application rather than loaded
+dynamically at run-time, put the following macro invocation at top-level in one
+of your C++ files once for each <small>SCF</small> class contained in your library:
 </p>
-<a name="IDX19"></a>
-<a name="IDX20"></a>
-</dd>
-<dt> <code>mdl2spr</code></dt>
-<dd><p>This application is a Quake <tt>`.mdl'</tt> and <tt>`.md2'</tt> model converter.  It
-converts model files into native Crystal Space sprites. See section <a href="cs_4.4.html#4.4">Quake Model Converter (<code>mdl2spr</code>)</a>.
+<table><tr><td>&nbsp;</td><td><pre class="example">SCF_REGISTER_STATIC_CLASS(
+  <var>cxx-class</var>,
+  <var>scf-name</var>,
+  <var>description</var>,
+  <var>dependencies</var>)
+</pre></td></tr></table>
+<p>Here, <var>cxx-class</var> is the name of the C++ class which implements the
+factory for this particular <small>SCF</small> class.  <var>cxx-class</var> is the same name
+given to the <code>SCF_IMPLEMENT_FACTORY()</code> macro.  <var>scf-name</var> is the
+<small>SCF</small> class name corrsponding to <var>cxx-class</var>, <var>description</var> is a
+human-readable string describing the purpose of the class, and
+<var>dependencies</var> is a comma-separated list of other <small>SCF</small> class upon which
+this class depends.
 </p>
-<a name="IDX21"></a>
-<a name="IDX22"></a>
-</dd>
-<dt> <code>perftest</code></dt>
-<dd><p>This is a tool to test graphics performance.
+<p>For a dynamic library, <small>SCF</small> will discover the plugin and register the
+contained classes automatically by consulting the associated meta-information.
 </p>
-<a name="IDX23"></a>
-<a name="IDX24"></a>
-</dd>
-<dt> <code>pysimp</code></dt>
-<dd><p>An extremely simple example demonstrating use of the Python plug-in module.
+</li><li>
+How can I load the plug-in?
+
+<p>To load a plug-in, you must tell the plug-in manager the name
+of the plug-in as it was registered in the previous step. In the most
+common case you will probably use the plug-in loader to load the plug-in.
+This is a convenience class that is able to load plug-in as specified
+in a config file, from the commandline, or as requested by the application
+programmer. In addition to loading the plug-in (the plug-in loader will
+use the plug-in manager to do that), the plug-in loader will optionally
+also register the plug-in with the <em>Object Registry</em>.
 </p>
-<a name="IDX25"></a>
-<a name="IDX26"></a>
-</dd>
-<dt> <code>vsh</code></dt>
-<dd><p>This is the test application for the Virtual File System (<small>VFS</small>).  It works
-very similar to the standard Unix shell programs.  See section <a href="cs_7.2.html#7.2">Virtual File System (<small>VFS</small>)</a>.
+<p>The object registry is a central location in the Crystal Space framework
+where any module can register <small>SCF</small> objects. The object registry is not
+only for plug-ins. It can contain any <small>SCF</small> object. Objects in the
+object registry also have a tag name associated with them. By convention
+the <em>default</em> object for a given <small>SCF</small> interface will be
+added to the object registry with the tag name equal to the interface
+name. For example, a 3D renderer is a plug-in module that
+implements (among others) the <samp>`iGraphics3D'</samp> interface. At the same
+time there can be multiple 3D renderers in memory (for example, for
+procedural textures). But the default 3D renderer will be registered
+with the tag name <samp>`iGraphics3D'</samp>.
 </p>
-<a name="IDX27"></a>
-<a name="IDX28"></a>
-</dd>
-<dt> <code>walktest</code></dt>
-<dd><p>The quintessential Crystal Space test program.  <tt>`walktest'</tt> is the test
-harness for most of the features which get added to the engine.  It is not
-necessarily a good programming example, but if you are interested in seeing
-an engine feature in action, this is probably the place to look.
-See section <a href="cs_4.2.html#4.2">Walktest</a>.
-</p></dd>
-</dl>
+<p>Note that the decision which graphics driver you use (e.g. Software or
+OpenGL) is done at the time you load the plug-in by passing the name of
+that driver. At the time you ask for the plug-in interface and use it in
+your program, this does not make a difference anymore. This makes it possible
+to exchange the driver simply by loading another driver, but without changing
+your main program.
+</p>
+<p>The Crystal Space modules themselves will use the standard plug-ins with the
+default tag name as explained above. For example, the 3d engine looks
+for the graphics driver by looking in the object registry for an object
+with the tag <samp>`iGraphics3D'</samp>.
+</p>
+<p>Now how can you actually load the plug-in? You can either load them
+manually in the code using the <code>CS_LOAD_PLUGIN()</code> macro or else
+you can use the plugin loader. As explained above, the plugin loader
+can load plugins specified on the commandline, a config file, or else
+explicitly requested in the code. This is done in a specific way:
+The commandline has highest priority. i.e. if the user specified the
+OpenGL video driver on the commandline then this will be the plugin that
+is loaded on the <samp>`iGraphics3D'</samp> tag. The config file and plugins requested
+from the code are ignored then (for that tag at least). The plugins
+requested from the code have lowest priority and only serve as a default
+if neither the commandline nor the config file specified a plug-in for
+the given tag.
+</p>
+<p>There is a class called <code>csInitializer()</code> which contains various
+convenience routines to help initialize a Crystal Space application.
+This class also contains a routine (<code>RequestPlugins()</code>) which will
+use the plugin loader automatically.
+</p>
+<p>There are several advantages to using the plugin loader as opposed
+to manually loading plug-ins using <code>CS_LOAD_PLUGIN()</code>:
+</p>
+<ul class="toc">
+<li>-
+The plugin loader will sort all plug-ins based on dependencies.
+For example, the engine depends on a 3D rasterizer so the plugin
+loader will make sure that the engine is loaded later. If you manually
+load plugins you risk that the loading will fail because a plugin
+that it needs is not yet present.
+</li><li>-
+The user is able to override the plug-ins loaded by the plugin loader.
+He or she can modify the config file or specify an alternative
+plug-in on the commandline. There is no way to change what plugin is
+loaded using <code>CS_LOAD_PLUGIN()</code> unless by recompilation (unless of course
+you use some other way to read the config file and find out what plugin
+to load).
+</li></ul>
+
+</li><li>
+How can I query the plug-in interface?
+
+<p>This is the last step before you can use the plug-in. It means that inside
+your program you ask the object registry for an object registered with
+the desired tag. The easiest way to do this is as follows:
+<code>CS_QUERY_REGISTRY(<var>object_reg</var>,<var>iInterface</var>)</code>.
+This macro will search the object registry for the default object
+implementing the given interface (i.e. the object registered with the
+tag equal to the interface name). Alternatively you can also use
+<code>CS_QUERY_REGISTRY_TAG()</code> to get an object with a specific tag.
+</p>
+</li><li>
+Conclusion
+
+<p>To sum it up, <small>SCF</small> is mainly used to provide common interfaces for
+<small>DLL</small>s, but it can also be used by statically linked libraries. If you
+want to know how to write a plug-in yourself, you should read the complete
+<small>SCF</small> documentation. See section <a href="cs_4.4.1.html#4.4.1">Shared Class Facility (<small>SCF</small>)</a>.
+</p></li></ul>
+
+<p>For further information about modules and plug-in drivers, see the sections
+on using Crystal Space (see section <a href="cs_4.html#4.">Using Crystal Space</a>).
+</p>
+<p>Now that you have learned some basics about the Crystal Space environment,
+you can try writing your first program.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="cs_4.1.1.html#4.1.1">4.1.1 Basic Crystal Space Concepts</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.1.2.html#4.1.2">4.1.2 Minimum Application Requirements</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.1.3.html#4.1.3">4.1.3 Compiling the Application</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.html#4." title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.2.html#4.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.1.1.html#4.1.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>

@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 2.4 Platform Specific Instructions</title>
+<title>Crystal Space: 2.4 External Libraries</title>
 
-<meta name="description" content="Crystal Space: 2.4 Platform Specific Instructions">
-<meta name="keywords" content="Crystal Space: 2.4 Platform Specific Instructions">
+<meta name="description" content="Crystal Space: 2.4 External Libraries">
+<meta name="keywords" content="Crystal Space: 2.4 External Libraries">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Platform-Instructions"></a>
+<a name="External-Libraries"></a>
 <a name="2.4"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_2.3.html#2.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_2.4.1.html#2.4.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_2.5.html#2.5" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_2.html#2." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_2.html#2." title="Up section"> Up </a>]</td>
@@ -58,33 +58,140 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 2.4 Platform Specific Instructions </h2>
+<h2 class="section"> 2.4 External Libraries </h2>
 
-<p>When working with Crystal Space, always keep in mind that this is a
-multi-platform project.  Sometimes not all features will work correctly or be
-available on all platforms.  If you are using the <small>CVS</small> version of Crystal
-Space and run across a problem, it usually pays off to post a message to the
-Crystal Space mailing list describing you problem along with relevant
-diagnostic messages.  See section <a href="cs_1.7.html#1.7">Mailing Lists</a>.
+<p>Crystal Space may utilize several optional external, and publicly available
+development libraries.  These libraries are:
 </p>
-<p>For some ports there is additional reference information explaining the
-internal workings of the port. When such detailed information exists, you will
-find a reference to it from within the instructions in this section.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_2.4.1.html#2.4.1">2.4.1 Unix</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-<tr><td align="left" valign="top"><a href="cs_2.4.2.html#2.4.2">2.4.2 Windows using Microsoft Visual C++</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_2.4.3.html#2.4.3">2.4.3 Windows using MinGW</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_2.4.4.html#2.4.4">2.4.4 Windows using Cygwin</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_2.4.5.html#2.4.5">2.4.5 MacOS/X</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
+<ul>
+<li>
+zlib
+</li><li>
+libpng
+</li><li>
+libjpeg
+</li><li>
+Freetype2
+</li><li>
+<small>ODE</small>
+</li><li>
+Cal3D
+</li><li>
+lib3ds
+</li><li>
+Ogg/Vorbis
+</li><li>
+libmng
+</li><li>
+MikMod
+</li></ul>
 
+<p>Most of these libraries are optional.  If you do not have them installed, then
+Crystal Space will still function, though features related to the missing
+libraries will be disabled.  Despite being optional, at the very minimum, you
+should at least ensure that zlib, libpng, and libjpeg are installed since much
+useful functionality depends upon those libraries.  Many computer systems come
+with these libraries pre-installed.  If the libraries are not already available
+on your system, then see the following sections for information about how to
+obtain them.
+</p>
+<a name="SEC36"></a>
+<h3 class="subheading"> The &quot;cs-win32libs&quot; Package </h3>
+<p><a name="cs_002dwin32libs"></a>
+</p>
+<p>Rather than having to install these components manually, Microsoft Visual C++ 6
+&amp; 7, MinGW/MSYS, and Cygwin users can download a single package which contains
+all common headers, pre-built library files, and dynamic link libraries in
+pre-compiled form from the following location:
+</p>
+
+<p><a href="http://www.crystalspace3d.org/support/win32/cs-win32libs-0.99r0_011.exe">http://www.crystalspace3d.org/support/win32/cs-win32libs-0.99r0_011.exe</a>
+</p>
+<a name="SEC37"></a>
+<h3 class="subheading"> zlib </h3>
+
+<p>Crystal Space relies upon the <code>zlib</code> library for reading <small>ZIP</small> files,
+and for a few other uses.  You can download <code>zlib</code> from:
+</p>
+
+<p><a href="http://www.gzip.org/zlib/">http://www.gzip.org/zlib/</a>
+</p>
+<p>After downloading you can either install the package normally (i.e. <samp>`make
+install'</samp>) or unpack it into the directory <tt>`CS/libs/zlib*'</tt>.  In general, if
+you have permission to do so, it is best to install the library.
+</p>
+<a name="SEC38"></a>
+<h3 class="subheading"> libpng </h3>
+
+<p>Crystal Space relies upon the <code>libpng</code> library for reading <small>PNG</small>
+graphic files.  You can download <code>libpng</code> from:
+</p>
+
+<p><a href="http://www.libpng.org/pub/png/libpng.html">http://www.libpng.org/pub/png/libpng.html</a>
+</p>
+<p>After downloading you can either install the package normally (i.e. <samp>`make
+-f scripts/makefile.std install'</samp>) or unpack it into the directory
+<tt>`CS/libs/libpng*'</tt>.  In general, if you have permission to do so, it is
+best to install the library.
+</p>
+<a name="SEC39"></a>
+<h3 class="subheading"> libjpeg </h3>
+
+<p>Crystal Space relies upon the <code>libjpeg</code> library for reading <small>JPEG</small>
+graphic files.  You can download <code>libjpeg</code> from:
+</p>
+
+<p><a href="http://www.ijg.org/files/">http://www.ijg.org/files/</a>
+</p>
+<p>After downloading you can either install the package normally (i.e. <samp>`make
+install'</samp>) or unpack it into the directory <tt>`CS/libs/jpeg*'</tt>.  In general,
+if you have permission to do so, it is best to install the library.
+</p>
+<a name="SEC40"></a>
+<h3 class="subheading"> Freetype2 </h3>
+
+<p>Crystal Space can utilize the FreeType2 library to display TrueType fonts. You
+can get the latest version at:
+</p>
+
+<p><a href="http://www.freetype.org/">http://www.freetype.org/</a>
+</p>
+<a name="SEC41"></a>
+<h3 class="subheading"> <small>ODE</small> </h3>
+
+<p>Crystal Space contains a plugin providing physics through <small>ODE</small>. You can get
+the latest version at:
+</p>
+
+<p><a href="http://www.ode.org/">http://www.ode.org/</a>
+</p>
+<a name="SEC42"></a>
+<h3 class="subheading"> Ogg/Vorbis libraries </h3>
+
+<p>With this libraries you can use the Ogg/Vorbis sound plugin. You can get the
+latest version at:
+</p>
+
+<p><a href="http://www.vorbis.com/download.psp">http://www.vorbis.com/download.psp</a>
+</p>
+<a name="SEC43"></a>
+<h3 class="subheading"> libmng </h3>
+<p><a name="GettingLibmng"></a>
+</p>
+<p>Crystal Space can optionally utilize the <code>libmng</code> library for reading
+<small>MNG</small>/<small>JNG</small> graphic files.  You can download <code>libmng</code> from:
+</p>
+
+<p><a href="http://www.libmng.com/">http://www.libmng.com/</a>
+</p>
+<p>After downloading you can either install the package normally (i.e. <samp>`make
+install'</samp>) or unpack it into the directory <tt>`CS/libs/libmng*'</tt>.  In general,
+if you have permission to do so, it is best to install the library.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_2.3.html#2.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_2.4.1.html#2.4.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_2.5.html#2.5" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_2.html#2." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_2.html#2." title="Up section"> Up </a>]</td>
