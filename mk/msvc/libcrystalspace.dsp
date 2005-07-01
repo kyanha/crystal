@@ -502,6 +502,10 @@ SOURCE=..\..\libs\cstool\meshobjtmpl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\pen.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\proctex.cpp
 # End Source File
 # Begin Source File
@@ -1391,6 +1395,10 @@ SOURCE=..\..\libs\..\include\cstool\mdltool.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\cstool\meshobjtmpl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\cstool\pen.h
 # End Source File
 # Begin Source File
 
