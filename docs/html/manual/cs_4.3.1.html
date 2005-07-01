@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.3.1 Reference for map2cs.cfg</title>
+<title>Crystal Space: 4.3.1 Simple Tutorial 1</title>
 
-<meta name="description" content="Crystal Space: 4.3.1 Reference for map2cs.cfg">
-<meta name="keywords" content="Crystal Space: 4.3.1 Reference for map2cs.cfg">
+<meta name="description" content="Crystal Space: 4.3.1 Simple Tutorial 1">
+<meta name="keywords" content="Crystal Space: 4.3.1 Simple Tutorial 1">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="map2cs_002ecfg"></a>
+<a name="Tutorial-Simple"></a>
 <a name="4.3.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.html#4.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.3.2.html#4.3.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.3.1.1.html#4.3.1.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.3.html#4.3" title="Up section"> Up </a>]</td>
@@ -58,127 +58,58 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.3.1 Reference for <tt>`map2cs.cfg'</tt> </h3>
+<h3 class="subsection"> 4.3.1 Simple Tutorial 1 </h3>
 
-<p>The <tt>`map2cs.cfg'</tt> file is the most important way to configure
-<tt>`map2cs'</tt> I will explain all possible settings here.
+<p>This tutorial provides a step-by-step explanation on how you can use Crystal
+Space from within your application.  This tutorial is mainly based on the
+<tt>`simple1'</tt> application which you can compile and run to see what it does.
+To build <tt>`simple1'</tt> which ships with Crystal Space, type <samp>`make
+simple1'</samp> or <samp>`jam simple1'</samp>, or build the <tt>`appsimple1'</tt> project if you
+use <small>MSVC</small>.
 </p>
-<p>A sample <tt>`map2cs.cfg'</tt> will look like this:
+<p>When you downloaded the Crystal Space package it contains a <tt>`CS/include'</tt>
+directory. This directory contains all header files you need when using the
+Crystal Space components and libraries in your own applications. On one hand,
+the include directory contains <small>SCF</small> interface definitions.  These pure
+interface file are stored in directories with names starting with the letter
+<samp>`i'</samp> (as in <tt>`iengine/engine.h'</tt>).  On the other hand we also have plain
+C++ include files for interfacing with the libraries of Crystal Space.  When
+you install Crystal Space on your development system (for instance, by invoking
+<samp>`make install'</samp> or <samp>`jam install'</samp>), these headers are placed in a
+location where they can be easily accessed when writing new programs based on
+Crystal Space.  On Unix systems, for instance, these files usually end up in
+<tt>`/usr/local/include/crystalspace'</tt>. Since it can be difficult to remember
+which header files contain which classes and interfaces, you can instead
+include the convenient catch-all header file <tt>`crystalspace.h'</tt>.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">Map2CS.TextureSettings.DefaultTexture = a_4hewn
-Map2CS.TextureSettings.wad1 = E:\Sierra\Half-Life\valve\halflife.wad
-Map2CS.TextureSettings.wad2 = E:\Sierra\Half-Life\valve\xeno.wad
-Map2CS.TextureSettings.wad3 = E:\Sierra\Half-Life\valve\liquids.wad
-Map2CS.TextureSettings.wad4 = E:\Sierra\Half-Life\valve\texpack.wad
-Map2CS.TextureSettings.zip1 = E:\Cryst\skybox.zip
-Map2CS.TextureSettings.zip2 = E:\Cryst\skybox2.zip
-Map2CS.TextureSettings.pk1 = D:\Quake III Arena\baseq3\pak0.pk3
-Map2CS.TextureSettings.pk2 = D:\Quake III Arena\baseq3\mapmedia.pk3
-
-Map2CS.General.Scaling = 0.025
-Map2CS.General.UseBSP = 1
-Map2CS.General.RemoveHidden = 1
-Map2CS.General.LightScale = 30
-
-System.ApplicationID = Map2CS
-</pre></td></tr></table>
-<p>The following sections describe the various configuration file entries and the
-associated values which may appear in each section.
+<p>Crystal Space also has a reference manual and <small>API</small> documentation.  The
+manual is included in <small>HTML</small> form Crystal Space itself in the
+<tt>`CS/docs/html'</tt> directory. After you install Crystal Space, the
+documentation resides at <tt>`/usr/local/share/docs/crystalspace-*'</tt>.
+Documentation is also available online.  The <small>API</small> documentation can be
+generated locally or viewed online.  See section <a href="cs_1.6.html#1.6">Where to Get Crystal Space</a>.
 </p>
-<a name="SEC129"></a>
-<h4 class="subsubheading"> Texture Settings </h4>
-
-
-<p><code>texturesettings</code>
+<p>Additionally, note that the source code for some of these tutorials can be
+found in the <tt>`CS/apps/tutorials'</tt> directory. There are also a few
+additional tutorials at that location which are not (yet) covered in the
+documentation.
 </p>
-<ul>
-<li>
-<code>DefaultTexture</code>
-
-<p>Specifies the name of the texture, that will be used, when the original
-texture is not found.  If the default texture will not be found, the resulting
-map will not be usable.  You need to manually edit the map file then.  (I
-don't recommend doing so, but there are users, who just want to do that.)
+<p>Before reading this tutorial you should first read the basics
+(see section <a href="cs_4.1.html#4.1">The Basics</a>).
 </p>
-</li><li>
-<code>wad</code>
-
-<p>Specifies all possible wad files.  You need to give the full path here.  If
-there are several wad files, you need to number them: <samp>`wad1'</samp>,
-<samp>`wad2'</samp>, and so on.  You can use any number of wad files with
-<tt>`map2cs'</tt>.  The wad files need to be <small>WAD3</small> format, which means the
-format used by Half-Life, not the format used by Quake 1 or 2!
-</p>
-</li><li>
-<code>pk</code>
-
-<p>Specifies all possible pk3 files.  These files are the archives, that Quake3
-uses.  You can create a pk3 file for use with <tt>`map2cs'</tt>, if you create a
-zip archive, in which you create a subdirectory called textures.  Put all your
-textures below that, and use <small>TGA</small> or <small>JPG</small> as texture formats.  When
-you rename that zip file to pk3, you have a valid Quake3 texture archive.  (At
-least it is a valid archive for <tt>`map2cs'</tt>.)
-</p>
-</li><li>
-<code>zip</code>
-
-<p>Specifies all possible zip files.  You need to give the full path here.  If
-there are several zip files, you need to number them: <samp>`zip1'</samp>,
-<samp>`zip2'</samp>, and so on..  The zip files need to contain the textures in the
-main directory of the zip file (or a subdirectory equivalent to the name used
-in the map file).  <tt>`map2cs'</tt> will look for the following formats in the
-zip file (in this order): <small>TGA</small>, <small>JPG</small>, <small>JPEG</small>, <small>BMP</small>, <small>WAL</small>.
-</p></li></ul>
-
-<a name="SEC130"></a>
-<h4 class="subsubheading"> General Settings </h4>
-
-
-<p><code>general</code>
-</p>
-<ul>
-<li><a name="map2cs_002ecfg-scaling"></a>
-</li><li>
-<code>scaling</code>
-
-<p>Quake uses a scale of 1 unit equals 1 inch.  Crystal Space uses 1 unit equals
-1 meter, so obviously, we need some scaling.  0.025 is a very good factor to
-scale quake maps, but if you need a different factor, just use another value.
-</p>
-</li><li>
-<code>usebsp</code>
-
-<p>Set this to true, to enable <small>BSP</small>-tree generation in all sectors.  That
-should normally be 1 in all cases.  You can set it to 0 for testing purposes
-though.
-</p>
-</li><li>
-<code>removehidden</code>
-
-<p>Set this to 1 is you want <small>MAP2CS</small> to remove hidden surfaces.  This is very
-useful for complex maps, because you have no chance to create maps without
-having hidden surfaces, but by removing these surfaces <tt>`map2cs'</tt> must
-sometimes split a polygon into smaller pieces, so polygon count can even raise
-but this setting.  I recommend using it anyway, because it will reduce
-required fillrate.  Also the engine can possibly cull away parts of the larger
-polygon which will speed up things.  I recommend setting this to 1 for release
-maps and setting it to 0 for fast testings, because removal of hidden surfaces
-is pretty slow.
-</p>
-<p><a name="map2cs_002ecfg-lightscale"></a>
-</p></li><li>
-<code>lightscale</code>
-
-<p>This is a difficult setting.  Because Quake and Crystal Space lighting differs
-very much there is no real translation.  I assume 15 is a good value, some map
-will appear too bright then.  In these cases set this value lower.  If there
-is not enough light, increase the value.
-</p></li></ul>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="cs_4.3.1.1.html#4.3.1.1">4.3.1.1 Simple Header File</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.3.1.2.html#4.3.1.2">4.3.1.2 Event Handling</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.3.1.3.html#4.3.1.3">4.3.1.3 Creating a &quot;World&quot;</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.3.1.4.html#4.3.1.4">4.3.1.4 The Camera</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.3.1.5.html#4.3.1.5">4.3.1.5 Locomotion (Moving Around)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.html#4.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.3.2.html#4.3.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.3.1.1.html#4.3.1.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.3.html#4.3" title="Up section"> Up </a>]</td>

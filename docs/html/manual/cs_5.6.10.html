@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 5.6.10 Generating Skybox Textures</title>
+
+<meta name="description" content="Crystal Space: 5.6.10 Generating Skybox Textures">
+<meta name="keywords" content="Crystal Space: 5.6.10 Generating Skybox Textures">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="map2cs-Tutorial-Skybox"></a>
+<a name="5.6.10"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_5.6.9.html#5.6.9" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.6.11.html#5.6.11" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.6.html#5.6" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_6.html#6." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 5.6.10 Generating Skybox Textures </h3>
+
+<p>If you don't like the idea of keeping the player always inside a building and
+never allowing him to look outside, then you need a skybox.  A skybox will
+give the player a good illusion that there is an outside to your level.  A
+skybox is a huge box with textures that shows what is outside.  However,
+creating these textures is a bit tricky, otherwise, it might just look like
+the inside of a textured cube.
+</p>
+<p>But there is good news, because there is a free tool that is great for making
+these textures.  It is called Terragen.
+</p>
+<p><a href="http://www.planetside.co.uk/">http://www.planetside.co.uk/</a>
+</p>
+<p>Please consult the terragen documentation about how to create a world, as
+I will only explain, how to export the map file to Crystal Space.
+</p>
+<a name="SEC775"></a>
+<h4 class="subsubheading"> Exporting to Crystal Space </h4>
+
+<p>When you are done creating your world perform the following steps:
+</p>
+
+<p>Open the &quot;Rendering Controls&quot; panel.
+</p>
+<ol>
+<li>
+Move your camera to the desired point in your map.
+</li><li>
+Disable the &quot;Fixed Height Above Surface&quot; switch.
+</li><li>
+Set &quot;Detail&quot; to <em>Maximum</em>.
+</li><li>
+In the &quot;Camera Settings&quot; dialog set &quot;Zoom Magnification&quot; to &quot;1&quot;.
+</li><li>
+Set &quot;Image Size&quot; to 512x512 or 256x256.
+</li></ol>
+
+<p><img src="tutorial/map2cs/terra1.jpg" alt="tutorial/map2cs/terra1">
+</p>
+<p>Now create six images and store them.  Use the following settings for these
+images:
+</p>
+<blockquote><table>
+<tr><td><p> <em>Texture Name Suffix</em>
+</p></td><td><p> <em>Camera Head</em>
+</p></td><td><p> <em>Camera Pitch</em>
+</p></td><td><p> <em>Camera Bank</em>
+</p></td></tr>
+<tr><td><p> <code>_f</code> </p></td><td><p> 0 </p></td><td><p> 0 </p></td><td><p> 0
+</p></td></tr>
+<tr><td><p> <code>_r</code> </p></td><td><p> 90 </p></td><td><p> 0 </p></td><td><p> 0
+</p></td></tr>
+<tr><td><p> <code>_b</code> </p></td><td><p> 180 </p></td><td><p> 0 </p></td><td><p> 0
+</p></td></tr>
+<tr><td><p> <code>_l</code> </p></td><td><p> 270 </p></td><td><p> 0 </p></td><td><p> 0
+</p></td></tr>
+<tr><td><p> <code>_u</code> </p></td><td><p> 0 </p></td><td><p> 90 </p></td><td><p> 0
+</p></td></tr>
+<tr><td><p> <code>_d</code> </p></td><td><p> 0 </p></td><td><p> 270 </p></td><td><p> 0
+</p></td></tr>
+</table>
+</blockquote>
+
+<p>Convert the generated bitmaps to a format readable by <tt>`map2cs'</tt> (<small>TGA</small>,
+<small>JPG</small>, <small>JPEG</small>, <small>BMP</small>, <small>WAL</small>).
+</p>
+<p>Then you need to add a setting &quot;skybox&quot; with the value of your basename in
+the general world properties.  (For example, if your textures are called
+<tt>`sample_f.bmp'</tt>, <tt>`sample_r.bmp'</tt>, you will set &quot;skybox&quot; to
+&quot;sample&quot;).  Now every brush you assign a key &quot;sky&quot; with a value of &quot;1&quot; 
+will look like your skybox. 
+</p>
+<p>In addition, faces whose texture is &quot;sky&quot; will also let you see the skybox.
+</p>
+<p>Now you have to let map2cs know where <tt>`sample_f.bmp'</tt>, <tt>`sample_r.bmp'</tt>, etc.
+are located. We will put all the <tt>`sample_*.bmp'</tt> files on a single <small>ZIP</small> file.
+Launch WinZip, WinRAR, or the program you use to open <small>ZIP</small>
+files. Create a new file, store all the <tt>`sample_*.bmp'</tt> files on it, and save it
+as <tt>`C:\Crystal\Maps\sample.zip'</tt>.
+</p>
+<p>Open the file <tt>`C:\Crystal\CS\data\config\map2cs.cfg'</tt> in your favorite text
+editor, then add a line like this: 
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example"><samp>`Map2CS.TextureSettings.zip1 = C:\Crystal\Maps\sample.zip'</samp>.
+</pre></td></tr></table>
+<p><tt>`map2cs.cfg'</tt> should now look like the following example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">Map2CS.TextureSettings.DefaultTexture = liquids/bubbles
+Map2CS.TextureSettings.wad1 = C:\Crystal\WADs\cstex_1.wad
+Map2CS.TextureSettings.wad2 = C:\Crystal\WADs\cstex_2.wad
+Map2CS.TextureSettings.wad3 = C:\Sierra\HalfLife\valve\halflife.wad
+Map2CS.TextureSettings.wad4 = C:\Sierra\HalfLife\valve\xeno.wad
+Map2CS.TextureSettings.wad5 = C:\Sierra\HalfLife\valve\liquids.wad
+Map2CS.TextureSettings.wad6 = C:\Sierra\HalfLife\valve\texpack.wad
+Map2CS.TextureSettings.zip1 = C:\Crystal\Maps\sample.zip
+
+Map2CS.General.Scaling = 0.025
+Map2CS.General.UseBSP = 0
+Map2CS.General.RemoveHidden = 0
+Map2CS.General.LightScale=30
+
+System.ApplicationID = Map2CS
+</pre></td></tr></table>
+<p>Ready! Just try this out.  It is a really amazing effect.
+</p>
+<p>This screenshot doesn't really do justice to the skybox effect, but it looks
+quite nice, never-the-less.  To really appreciate the effect you will need to
+move around a world in Crystal Space using a map enclosed within a skybox.
+</p>
+<p><img src="tutorial/map2cs/terra2.jpg" alt="tutorial/map2cs/terra2">
+</p>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_5.6.9.html#5.6.9" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.6.11.html#5.6.11" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.6.html#5.6" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_6.html#6." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

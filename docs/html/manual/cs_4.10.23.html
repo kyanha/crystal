@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.10.23 Terrain Mesh Object</title>
+
+<meta name="description" content="Crystal Space: 4.10.23 Terrain Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.10.23 Terrain Mesh Object">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="MeshObject-TerrFunc"></a>
+<a name="4.10.23"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.10.22.html#4.10.22" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.24.html#4.10.24" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 4.10.23 Terrain Mesh Object </h3>
+
+<p><em>Written by Jorrit Tyberghein,
+(<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>).</em>
+</p>
+<p><strong>THIS MANUAL SECTION IS HEAVILY OUTDATED!</strong>
+</p>
+<p>This mesh object represents a landscape engine. It features four static
+<small>LOD</small> levels and dynamic lighting for one directional light. In future
+it will also have support for dynamic shadows but this is still a todo
+at this moment.
+</p>
+<p>The basic principle behind the terrain engine is that the entire terrain
+is divided in a number of blocks. Usually this is equal to 8x8 blocks
+for the terrain but this is something that you can control. The division
+into blocks is important for three reasons. The first reason is that <small>LOD</small>
+selection happens on a block level. i.e. every block is shown at one level
+of <small>LOD</small> independent from the other blocks. The second reason is that
+visibility culling for terrain engine also works on block granularity (also
+the visibility algo itself goes deeper for doing the actual tests). The
+last reason for the blocks is that every block can have a separate texture.
+This is important because some hardware has texture limitations and you
+often want to overlay a very big texture on a landscape. Since very block
+has its own texture you can do this easily.
+</p>
+<p>The terrain engine is based on a height function (as opposed to a heightmap
+alone). Support for heightmaps is provided too by converting a heightmap
+to a height function. But in general you can feed the terrain engine with
+any function <code>height=heightfunc(x,y)</code>. You can also optionally give
+a normal function. If not given the landscape engine will calculate normals
+from the height function automatically.
+</p>
+<p>Every block is further divided into a grid. For example, with a grid
+of 16x16 every block will have 16x16 quads or 16x16x2 triangles at the
+highest detail level. The combination of blocks and grids control how
+many triangles the entire terrain will have.
+</p>
+<p>The terrain engine supports four levels of <small>LOD</small> which it will use
+independently for every block. Level 0 is highest detail. You can control
+the distance at which every <small>LOD</small> level kicks in and you can also
+control the quality of every level.
+</p>
+<p>The terrain engine supports a visibility algorithm based on a quad-tree.
+The visibility algorithm will cull away geometry on a blocks level (i.e.
+either an entire block is visible or not). But internally it will use
+a quad-tree which can (and should) go deeper than the blocks resolution
+to make sure that the visibility testing is fine enough.
+</p>
+<p>Every block has its own texture. You can use a big texture and split it
+into individual parts. One part for every block. Crystal Space also has
+a texture generation utility which is able to create realistic terrain
+textures given several base textures and a heightmap.
+</p>
+<p>The terrain engine also supports one colored directional light without
+shadows. In the future we will have support for dynamic shadows.
+</p>
+<a name="SEC382"></a>
+<h4 class="subsubheading"> Basic Structure </h4>
+
+<p>The following <small>SCF</small> class names are used (for <code>CS_LOAD_PLUGIN()</code>):
+</p>
+<ul>
+<li>
+Type plugin: <samp>`crystalspace.mesh.object.terrfunc'</samp>
+</li><li>
+Loader plugin: <samp>`crystalspace.mesh.loader.terrfunc'</samp>
+</li><li>
+Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.terrfunc'</samp>
+</li></ul>
+
+<p>Objects in this plugin implement the following <small>SCF</small> interfaces (get
+with <code>SCF_QUERY_INTERFACE()</code>):
+</p>
+<ul>
+<li>
+<em>MeshObject</em>
+<ul>
+<li>
+Implements <samp>`iMeshObject'</samp>
+</li><li>
+Implements <samp>`iTerrFuncState'</samp>
+</li></ul>
+</li><li>
+<em>MeshObjectFactory</em>
+<ul>
+<li>
+Implements <samp>`iMeshObjectFactory'</samp>
+</li></ul>
+</li><li>
+<em>MeshObjectFactory</em>
+<ul>
+<li>
+Implements <samp>`iMeshObjectType'</samp>
+</li></ul>
+</li></ul>
+
+<a name="SEC383"></a>
+<h4 class="subsubheading"> Factory State Interface </h4>
+
+<p>This plugin has no factory state interface.
+</p>
+<a name="SEC384"></a>
+<h4 class="subsubheading"> Factory Loader </h4>
+
+<p>The fire mesh factory loader has no parameters.
+</p>
+<a name="SEC385"></a>
+<h4 class="subsubheading"> Object State Interface </h4>
+
+<p><samp>`iTerrFuncState'</samp> is the <small>SCF</small> interface that you can
+use to set/get settings for a landscape object. The definition of this
+interface can be found in <tt>`CS/include/imesh/terrfunc.h'</tt> and that's also
+the include file you need to include in your applications to use this plugin.
+Using this interface you can access the terrain parameters.
+</p>
+<a name="SEC386"></a>
+<h4 class="subsubheading"> Object Loader </h4>
+
+<p>The terrain loader recognizes the following keywords:
+</p>
+<dl compact="compact">
+<dt> <code>&lt;factory&gt;factoryName&lt;/factory&gt;</code></dt>
+<dd><p>Name of the factory to use for creation of this instance.
+</p></dd>
+<dt> <code>&lt;material index=&quot;&quot; /&gt;</code></dt>
+<dd><p>The material to use for the given block of the terrain. The
+block number is 0 to the total number of blocks (see the
+<samp>`blocks'</samp> command).
+</p></dd>
+<dt> <code>&lt;material&gt;materialName&lt;/material&gt;</code></dt>
+<dd><p>The material to use for all blocks of the terrain.
+</p></dd>
+<dt> <code>&lt;material start=&quot;&quot; end=&quot;&quot;&gt;materialName%d&lt;/material&gt;</code></dt>
+<dd><p><samp>`materialName'</samp> is a <code>printf</code> style string
+containing a <code>%d</code> to indicate the number used for the material
+name. <samp>`start'</samp> and <samp>`end'</samp> indicate the range of materials
+to set (block numbers).
+</p></dd>
+<dt> <code>&lt;correctseams w=&quot;&quot; h=&quot;&quot; /&gt;</code></dt>
+<dd><p>When the given materials are split from a big texture you can use
+<samp>`correctseams'</samp> to make sure the textures line up correctly at
+the borders of blocks. Here is an example. Given a terrain of 8x8
+blocks (64 total) and given a texture size of 128x128 for every block
+you would have to generate a total big texture with horizontal and
+vertical dimensions equal to <code>(partsize-2)*8+2</code>. In this case (with
+partsize equal to 128) this would mean a total texture of 1010x1010 where
+every block gets a 128x128 texture where the borders are shared with the
+adjacent block (hence the 126x126 that is really allocated for one block).
+If you follow these guidelines you can then use <code>&lt;correctseams w=&quot;128&quot; h=&quot;128&quot; /&gt;</code>
+and you will have perfectly aligned textures for all 8x8 blocks.
+</p></dd>
+<dt> <code>&lt;blocks x=&quot;&quot; y=&quot;&quot; /&gt;</code></dt>
+<dd><p>The number of blocks in horizontal and vertical direction. Blocks are
+important for visibility culling and <small>LOD</small> selection because these happen
+on a block level. So you should use enough blocks to make sure that
+everything works smoothly. 8x8 is probably a good bet in most cases.
+4x4 is a default though.
+Warning! Due to a current limitation in the terrain
+engine the number of horizontal blocks must be equal to the number of
+vertical blocks.
+</p></dd>
+<dt> <code>&lt;grid x=&quot;&quot; y=&quot;&quot; /&gt;</code></dt>
+<dd><p>With <samp>`grid'</samp> you control the highest detail resolution of every
+block. For example <code>&lt;grid x=&quot;16 y=&quot;16&quot; /&gt;</code> means that every block will use
+16x16 quads (or 16x16x2 triangles) at highest detail. The default value
+for <samp>`grid'</samp> is 8x8.
+</p></dd>
+<dt> <code>&lt;topleft x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>The top-left coordinate of the terrain. By default this is (0,0,0).
+For <samp>`x'</samp> and <samp>`z'</samp> the terrain will be generated from 0 to
+<samp>`xblocks-1'</samp> and <samp>`yblocks-1'</samp> respectively. Use <samp>`scale'</samp>
+to scale this first and then use <samp>`topleft'</samp> to relocate.
+The <samp>`y'</samp> value in <samp>`topleft'</samp> will be added to the height
+function (after scaling).
+</p></dd>
+<dt> <code>&lt;scale x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Scale the entire terrain. <samp>`x'</samp> and <samp>`z'</samp> will scale the
+default 0 to <samp>`xblocks-1'</samp> and <samp>`yblocks-1'</samp>. The <samp>`y'</samp>
+scale will be used to multiply with the value from the height function.
+</p></dd>
+<dt> <code>&lt;color red=&quot;&quot; green=&quot;&quot; blue=&quot;&quot; /&gt;</code></dt>
+<dd><p>This is the base color which will be added to all triangle of the
+terrain. Consider this a kind of ambient lighting. Default is black.
+Full bright would be <code>1,1,1</code>.
+</p></dd>
+<dt> <code>&lt;dirlight&gt;</code></dt>
+<dd><table><tr><td>&nbsp;</td><td><pre class="example">	&lt;position x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
+	&lt;color red=&quot;&quot; green=&quot;&quot; blue=&quot;&quot; /&gt;
+&lt;/dirlight&gt;
+</pre></td></tr></table><p>Set a directional light. <code>x,y,z</code> is a normal vector for the light.
+<code>red,green,blue</code> is the color of the light.
+</p></dd>
+<dt> <code>&lt;loddist level=&quot;&quot; distance=&quot;&quot; /&gt;</code></dt>
+<dd><p>Set the distance at which we switch to the given <small>LOD</small> level. <small>LOD</small>
+level 0 (highest detail) is always used for very close viewpoints but you
+can control distance for levels 1, 2, and 3. Default values are 100,
+400, and 800 for the three levels. Note that <small>LOD</small> happens on a
+block basis so for every block the distance here will be used to see
+what <small>LOD</small> level to select.
+</p></dd>
+<dt> <code>&lt;lodcost level=&quot;&quot; cost=&quot;&quot; /&gt;</code></dt>
+<dd><p>Set the cost factor to use for going from the previous <small>LOD</small> level
+to the new one. High values for <samp>`cost'</samp> mean that more triangles
+will be removed (i.e. better <small>LOD</small> but worse quality). The default
+values are <code>0.03</code>, <code>0.08</code>, and <code>0.2</code>. So <samp>`loddist'</samp>
+controls at which distance a new <small>LOD</small> level is selected while
+<samp>`lodcost'</samp> controls the quality of every <small>LOD</small> level. The base
+quality (i.e. highest quality) of every block is controlled with the
+<samp>`grid'</samp> command.
+</p></dd>
+<dt> <code>&lt;quaddepth&gt;quaddepthValue&lt;/quaddepth&gt;</code></dt>
+<dd><p>Control the depth of the quad-tree which is used for visibility culling.
+This depth is measured from the entire terrain. Usually you make sure
+that the depth is high enough so that individual blocks are at least
+sub-divided about three extra times. i.e. given a terrain with 8x8 blocks
+you would probably want to use a depth of six (which is default). Higher
+quadtree depth's will increase the cost of visibility culling but also
+increase the accuracy. So a higher depth will be more important for a
+slow renderer (software renderer for example).
+</p></dd>
+<dt> <code>&lt;vistest /&gt;</code></dt>
+<dd><p>Enable or disable visibility culling. Default is on.
+</p></dd>
+<dt> <code>&lt;heightmap&gt;</code></dt>
+<dd><table><tr><td>&nbsp;</td><td><pre class="example">	&lt;image&gt;imageFile&lt;/image&gt;
+	&lt;scale&gt;scaleValue&lt;/scale&gt;
+	&lt;shift&gt;shiftValue&lt;/shift&gt;
+&lt;/heightmap&gt;
+</pre></td></tr></table><p>Use the given image file as a heightmap for the landscape. Values from
+this heightmap will go between 0 and 256. You can alter the range by
+playing with <samp>`scale'</samp> (default 1) and <samp>`shift'</samp> (default 0).
+</p></dd>
+</dl>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.10.22.html#4.10.22" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.24.html#4.10.24" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

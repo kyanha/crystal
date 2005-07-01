@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.17.2.2 World Element Section</title>
+
+<meta name="description" content="Crystal Space: 4.17.2.2 World Element Section">
+<meta name="keywords" content="Crystal Space: 4.17.2.2 World Element Section">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="XML-World-Element-Section"></a>
+<a name="4.17.2.2"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.17.2.1.html#4.17.2.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.17.2.3.html#4.17.2.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.17.2.html#4.17.2" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h4 class="subsubsection"> 4.17.2.2 World Element Section </h4>
+
+<p>This section describes the world element section.
+</p>
+<a name="SEC476"></a>
+<h4 class="subsubheading"> Addon Section </h4>
+
+<p>Addons are loader plugins that can be used to extend the loading
+capabilities. Like keys, addons can also be loaded from almost any
+Crystal Space object. The difference is that the loaded information
+is not automatically attached to the object. Instead the object in which
+the addon is called is given as a <em>context</em> to the addon loader
+so that it can choose to do with it whatever it wants. For example, you
+could make an addon plugin for your own game that sets up a physics
+object for a mesh object. To do that you would have to create a plugin
+that implements the <samp>`iLoaderPlugin'</samp> interface. In the plugin
+implementation you can examine the context and based on that create some
+information that you can attach to that context (if it is a mesh object
+for example). The addon plugin will also get an <small>XML</small> node that it
+can parse for additional parameters.
+</p>
+<p>Crystal Space itself currently defines two addon loaders itself. The
+first one is useful for defining bezier templates that you can later use
+in a bezier curve. The second one is useful for creating named texture
+planes that can be used to define texture mapping for a number of polygons
+that are all on the same plane. Here is an example of both:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;addon&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.thing.bezier&lt;/plugin&gt;
+    &lt;params&gt;
+        &lt;name&gt;b1&lt;/name&gt;
+        &lt;material&gt;mosaic&lt;/material&gt;
+        &lt;v&gt;0&lt;/v&gt;
+        &lt;v&gt;1&lt;/v&gt;
+        &lt;v&gt;2&lt;/v&gt;
+        &lt;v&gt;8&lt;/v&gt;
+        &lt;v&gt;9&lt;/v&gt;
+        &lt;v&gt;10&lt;/v&gt;
+        &lt;v&gt;16&lt;/v&gt;
+        &lt;v&gt;17&lt;/v&gt;
+        &lt;v&gt;18&lt;/v&gt;
+    &lt;/params&gt;
+&lt;/addon&gt;
+
+&lt;addon&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.thing.plane&lt;/plugin&gt;
+    &lt;params&gt;
+        &lt;name&gt;floor_plane&lt;/name&gt;
+        &lt;orig x=&quot;-20&quot; y=&quot;-1&quot; z=&quot;20&quot; /&gt;
+        &lt;first x=&quot;-19&quot; y=&quot;-1&quot; z=&quot;20&quot; /&gt;
+        &lt;firstlen&gt;5&lt;/firstlen&gt;
+        &lt;second x=&quot;-20&quot; y=&quot;-1&quot; z=&quot;19&quot; /&gt;
+        &lt;secondlen&gt;5&lt;/secondlen&gt;
+    &lt;/params&gt;
+&lt;/addon&gt;
+</pre></td></tr></table>
+<p>I will only explain the second example here as bezier curves are likely
+to change in the not-too-distant future. Important in both examples is
+that the part inside the <samp>`params'</samp> block is parsed by the addon itself.
+It is also possible to specify the parameters of a plugin in another
+<small>XML</small> file in which case you can use <samp>`paramsfile'</samp>.
+</p>
+<p>The plane addon that is used above defines a horizontal texture plane at
+location <em>y</em> equal to <samp>`-1'</samp>. The dimension of the texture on
+that plane will be 5x5 units. This means that in the space of a 5x5 unit
+block the texture will be shown exactly one time. If the polygons are bigger
+then that then tiling will be used. When you define <samp>`thing'</samp> mesh objects
+you can use this plane if the polygon happens to be at <em>y</em> equal to
+<samp>`-1'</samp>.
+</p>
+<a name="SEC477"></a>
+<h4 class="subsubheading"> Mesh Factory Section </h4>
+
+<p>In a map file you can define zero or more mesh factories. A mesh factory
+itself is not an object that you can see. It only defines a blue-print
+for creating mesh objects later. How a mesh factory and mesh object
+interact depends on the specific type of mesh object. For some types
+factories are required but for others you can just define the object
+directly as a mesh object (see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).
+</p>
+<p>Here is an example mesh factory:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;square&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.factory.genmesh&lt;/plugin&gt;
+    &lt;params&gt;
+        &lt;numvt&gt;4&lt;/numvt&gt;
+        &lt;numtri&gt;4&lt;/numtri&gt;
+        &lt;v x=&quot;-2&quot; y=&quot;0&quot; z=&quot;-2&quot; u=&quot;0&quot; v=&quot;0&quot; /&gt;
+        &lt;v x=&quot;2&quot; y=&quot;0&quot; z=&quot;-2&quot; u=&quot;1&quot; v=&quot;0&quot; /&gt;
+        &lt;v x=&quot;2&quot; y=&quot;0&quot; z=&quot;2&quot; u=&quot;1&quot; v=&quot;1&quot; /&gt;
+        &lt;v x=&quot;-2&quot; y=&quot;0&quot; z=&quot;2&quot; u=&quot;0&quot; v=&quot;1&quot; /&gt;
+        &lt;t v1=&quot;3&quot; v2=&quot;0&quot; v3=&quot;1&quot; /&gt;
+        &lt;t v1=&quot;1&quot; v2=&quot;2&quot; v3=&quot;3&quot; /&gt;
+        &lt;t v1=&quot;1&quot; v2=&quot;0&quot; v3=&quot;3&quot; /&gt;
+        &lt;t v1=&quot;3&quot; v2=&quot;2&quot; v3=&quot;1&quot; /&gt;
+        &lt;autonormals /&gt;
+    &lt;/params&gt;
+&lt;/meshfact&gt;
+</pre></td></tr></table>
+<p>In the example above we use the <samp>`genmesh'</samp> factory loader plugin.
+Everything inside the <samp>`params'</samp> block is specific to that loader. If
+you use other loaders you will need other stuff in there.
+It is also possible to specify the parameters of a plugin in another
+<small>XML</small> file in which case you can use <samp>`paramsfile'</samp>. The use
+of <samp>`paramsfile'</samp> is required if the other file is binary or not
+<small>XML</small>.
+</p>
+<p>The example above defines a factory called <samp>`square'</samp>. When you later
+define mesh objects you can create them from that factory. In case of
+<samp>`genmesh'</samp> which is used here you must use factories.
+</p>
+<p>Mesh factories can contain keys and addons.
+</p>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.17.2.1.html#4.17.2.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.17.2.3.html#4.17.2.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.17.2.html#4.17.2" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

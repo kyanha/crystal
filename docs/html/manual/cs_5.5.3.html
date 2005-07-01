@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 5.5.3 Step 3: Configuring map2cs</title>
+<title>Crystal Space: 5.5.3 Invoking</title>
 
-<meta name="description" content="Crystal Space: 5.5.3 Step 3: Configuring map2cs">
-<meta name="keywords" content="Crystal Space: 5.5.3 Step 3: Configuring map2cs">
+<meta name="description" content="Crystal Space: 5.5.3 Invoking">
+<meta name="keywords" content="Crystal Space: 5.5.3 Invoking">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="map2cs-Tutorial-Step-3"></a>
+<a name="map2cs-Invoking"></a>
 <a name="5.5.3"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_5.5.2.html#5.5.2" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,70 +58,24 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 5.5.3 Step 3: Configuring <tt>`map2cs'</tt> </h3>
+<h3 class="subsection"> 5.5.3 Invoking </h3>
 
-<p><tt>`map2cs'</tt> is configured by a special configuration file called
-<tt>`map2cs.cfg'</tt>, located within the 'C:\Crystal\CS\data\config\' directory.
-If you need support for multiple configurations, you can use several
-configuration files, but for now we will restrict ourselves to just one file.
-Open up <tt>`map2cs.cfg'</tt> in you favorite editor and edit it, so it looks like
-the following template:
+<p><tt>`map2cs'</tt> doesn't really have many options, but they should be mentioned
+anyway:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">Map2CS.TextureSettings.DefaultTexture = liquids/bubbles
-Map2CS.TextureSettings.wad1 = C:\Crystal\WADs\cstex_1.wad
-Map2CS.TextureSettings.wad2 = C:\Crystal\WADs\cstex_2.wad
-Map2CS.TextureSettings.wad3 = C:\Sierra\HalfLife\valve\halflife.wad
-Map2CS.TextureSettings.wad4 = C:\Sierra\HalfLife\valve\xeno.wad
-Map2CS.TextureSettings.wad5 = C:\Sierra\HalfLife\valve\liquids.wad
-Map2CS.TextureSettings.wad6 = C:\Sierra\HalfLife\valve\texpack.wad
-
-
-Map2CS.General.Scaling = 0.025
-Map2CS.General.UseBSP = 0
-Map2CS.General.RemoveHidden = 0
-Map2CS.General.LightScale=30
-
-System.ApplicationID = Map2CS
+<table><tr><td>&nbsp;</td><td><pre class="example">map2cs <var>mapfile</var> <var>worldfile</var> [<var>configfile</var>]
 </pre></td></tr></table>
-<p>The only thing you will probably need to adjust in the supplied
-<tt>`map2cs.cfg'</tt> is the texture path (setting for
-<samp>`Map2CS.TextureSettings.wad1'</samp> etc.). If you need more wads, you need to
-add them as <tt>`wad5'</tt>, <tt>`wad6'</tt> and so on. If you have Quake3-style
-texture files, you can add them by <tt>`Map2CS.TextureSettings.pk3=<small class="dots">...</small>'</tt>,
-<tt>`Map2CS.TextureSettings.pk4=<small class="dots">...</small>'</tt>, and so on.
+<p>You must specify the name of the <code><var>mapfile</var></code> and the
+<code><var>worldfile</var></code>.  (You can use relative paths here if you want.)
 </p>
-<p>Now Windows and <small>DOS</small> users need to create a batch file to compile and run
-a map. The batch file should be stored as <tt>`C:\Crystal\LevBuild.bat'</tt>
-and contain the following commands:
+<p>You can optionally override the configuration file by specifying
+<code><var>configfile</var></code>.  If you don't specify an alternate configuration
+file, <tt>`map2cs.cfg'</tt> is being used.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">set CRYSTAL=C:\Crystal\CS
-cd CS
-map2cs ..\maps\%1.map data\%1.zip
-levtool - data\%1.zip
-walktest %1 -relight
-cd ..
+<p>Example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">map2cs ..\maps\mymap.map data\mymap.map mymyp.cfg
 </pre></td></tr></table>
-<p>From the command-line (the <small>MS-DOS</small> prompt for Windows and <small>DOS</small> users)
-change to the directory <tt>`C:\Crystal'</tt>.  Type <samp>`LevBuild.bat
-yourmapsname'</samp>.  Now, if everything is properly installed and you have a file
-<tt>`yourmapsname.map'</tt> in your <tt>`maps'</tt> directory (if you have downloaded
-the binary Crystal Space distribution for map making, you have), then you
-should see the following output:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">map2cs, Copyright (C) 1999 by Thomas Hieber
-
-Reading map `..\Maps\yourmapsname.map'
-Map contains:
-6 Entities
-26 Brushes
-118 Unique planes
-Writing world `data\yourmapsname.zip'
-done.
-</pre></td></tr></table>
-<p>Right after that, a new window should appear, that contains the Crystal Space
-startup console with lots of text in it.  After some time, you should have
-loaded you first self-compiled map.
-</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_5.5.2.html#5.5.2" title="Previous section in reading order"> &lt; </a>]</td>

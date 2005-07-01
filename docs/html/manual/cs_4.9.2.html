@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.9.2 Components of a World</title>
+
+<meta name="description" content="Crystal Space: 4.9.2 Components of a World">
+<meta name="keywords" content="Crystal Space: 4.9.2 Components of a World">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="World-Components"></a>
+<a name="4.9.2"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.9.1.html#4.9.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.3.html#4.9.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.html#4.9" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 4.9.2 Components of a World </h3>
+
+<p>This section describes the objects used to build a world.  This is useful to
+understand the format of the Crystal Space map file
+(see section <a href="cs_4.17.2.html#4.17.2">Format of Map File (<small>XML</small>)</a>).  To understand this you should know the basics of
+the <a href="cs_4.9.3.html#4.9.3">Portal Engine</a>.  This section describes the components of the world
+independent from the file format, so it is also useful if you want to build a
+world from within your program.
+</p>
+<p>The world is built up from the following objects:
+</p>
+<ul>
+<li>
+<em>Sectors</em> (<code>iSector</code>). For details, see the portal engine discussion
+(see section <a href="cs_4.9.3.html#4.9.3">Portal Engine</a>). Basically sectors define an area
+that can contain several geometrical objects. As opposed to earlier
+versions of Crystal Space, a sector does not itself represent geometry.
+Instead all geometry in a sector is made from <em>Mesh Objects</em>.
+Theoretically a sector is infinite although in practice it is usually
+logically bounded by sector walls or a sky object.
+
+</li><li>
+<em>Mesh Objects</em> (<code>iMeshWrapper</code>, <code>iMeshObject</code>). See the mesh
+object section for more specific information
+about them (see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>). Mesh objects represent geometry in some
+sector. Everything you can see (walls, actors, particle systems, <small class="dots">...</small>) is
+represented by some kind of mesh object. This is a very important concept
+in the Crystal Space engine. Mesh objects can also be hierarchical.
+A mesh object can have several children which in turn can also have children
+and so on. The children of a mesh object are positioned relative to the
+parent. So when you move the parent the children will automatically move
+with the parent.
+
+</li><li>
+<em>Mesh Object Factories</em> (<code>iMeshFactoryWrapper</code>,
+<code>iMeshObjectFactory</code>). Mesh object factories are objects that
+can be used to create mesh objects that inherit characteristics
+from their mesh factory. Basically a mesh object factory is like
+a blue-print for creating a mesh object. Mesh factories can also
+be hierarchical like mesh objects.
+
+</li><li>
+<em>Portals</em> (<code>iPortal</code>, <code>iPortalContainer</code>). Again see the
+portal discussion (see section <a href="cs_4.9.3.html#4.9.3">Portal Engine</a>) but
+the idea is that sectors are normally totally independent areas
+unless you connect them through portals.
+
+</li><li>
+<em>Light Sources</em> (<code>iLight</code>). There are different ways how light
+is applied to objects to increase performance.  See section <a href="cs_4.11.1.html#4.11.1">Lighting</a>.
+
+</li><li>
+<em>Collection Objects</em> (<code>iCollection</code>). These are simply groups
+of other objects. Do not confuse them with hierarchical objects.
+
+</li><li>
+<em>Regions</em> (<code>iRegion</code>). A region is also a collection of objects but
+the purpose is different (as opposed to collections). A region can contain
+textures, materials, mesh objects, mesh factories, lights, collections, sectors,
+sequences, triggers, shared variables, <small class="dots">...</small>. Regions are useful when you
+want to load/unload big parts of a world dynamically. This can be used in
+cases where the world is too big to fit in memory and you want to use dynamic
+loading.
+
+</li><li>
+<em>Key/value Pairs</em> (<code>iKeyValuePair</code>). A key/value pair is a
+{<var>key</var>,<var>value</var>} tuple describing some game specific concept.
+Key/value tuples are represented by a pair of strings. If you have
+built levels for Quake before, you are probably familiar with this concept
+from Quake's <em>Entities</em>. Almost all objects in the Crystal Space
+engine support these key/value pairs so you can attach this kind of
+information to anything. Crystal Space itself will not use this information
+but your game can query it and perform the appropriate actions.
+In theory it is up to your program as to how these key-value tuples
+are interpreted.  However, Crystal Space has set some standards to make life
+easier for level designers and also to make levels as portable as possible
+between different Crystal Space games. Note that key value pairs actually
+allow multiple named values for a single key. See <a href="#Keylist-Standards">Keylist Standards</a>.
+
+</li><li>
+<em>Nodes</em> (<code>iMapNode</code>). A node represents a point in space. The engine
+itself will not use nodes but a game can use them to represent game specific
+data.
+</li></ul>
+
+<p>The <em>Thing Mesh Object</em> is probably the most important mesh object
+as it can be used to define how the basic structure of your world looks
+like. Here is a list of concepts that are related to <em>Things</em>:
+</p>
+<ul>
+<li>
+<em>Polygons</em>. <em>Things</em> are made from polygons. To define such an
+object you enumerate all polygons that make up the geometry of such thing.
+
+</li><li>
+<em>Texture Planes</em>. Polygons in a thing are texture mapped
+using a transformation from object to texture space. A texture
+plane describes this transformation. You can directly specify texture
+planes but more usually you use uv mapping coordinates to do this.
+
+</li></ul>
+
+<p><a name="Keylist-Standards"></a>
+</p><a name="SEC234"></a>
+<h4 class="subsubheading"> Keylist Standards </h4>
+
+<p>This section describes some guidelines for key/value tuples.
+</p>
+<p>The most important key is the <samp>`classname'</samp> key.  It tells the program the
+type of an object.  All the following guidelines are set for special object
+classes.  If you don't agree with them, you should use different classnames.
+</p>
+<p>The following classnames are standardized:
+</p>
+
+<p>@@@FIXME: <em>Write this.</em>
+</p>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.9.1.html#4.9.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.3.html#4.9.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.html#4.9" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

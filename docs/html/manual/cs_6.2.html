@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 6.2 Shared Class Facility (SCF)</title>
+<title>Crystal Space: 6.2 Threads in Crystal Space</title>
 
-<meta name="description" content="Crystal Space: 6.2 Shared Class Facility (SCF)">
-<meta name="keywords" content="Crystal Space: 6.2 Shared Class Facility (SCF)">
+<meta name="description" content="Crystal Space: 6.2 Threads in Crystal Space">
+<meta name="keywords" content="Crystal Space: 6.2 Threads in Crystal Space">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="SCF"></a>
+<a name="Threads-in-CS"></a>
 <a name="6.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_6.1.2.html#6.1.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_6.2.1.html#6.2.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_6.1.1.3.html#6.1.1.3" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_6.3.html#6.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_6.html#6." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_6.html#6." title="Up section"> Up </a>]</td>
@@ -58,58 +58,111 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 6.2 Shared Class Facility (<small>SCF</small>) </h2>
+<h2 class="section"> 6.2 Threads in Crystal Space </h2>
 
 
-<p><em>Original <small>SCF</small> design and concept by Andrew Zabolotny, 1999.  This
-document and Crystal Space's particular <small>SCF</small> implementation were written,
-and are copyright &copy; 1999 by Andrew Zabolotny,
-<a href="mailto:bit@eltech.ru">bit@eltech.ru</a>.  <small>SCF</small> is distributed under the <small>GNU</small> Library
-General Public License (<small>LGPL</small>).  See section <a href="cs_D.html#D.">Licenses</a>.</em>
+<p><em>Written by Jorrit Tyberghein.</em>
 </p>
+<p>The Crystal Space project as such is not thread-safe. So when using
+threads in combination with Crystal Space you have to be careful. However,
+several parts of Crystal Space are thread-safe to some degree. This is
+documented in this section. However, by default you must assume that some
+Crystal Space plugin or module is not thread-safe unless it is mentioned here.
+</p>
+<a name="SEC799"></a>
+<h4 class="subsubheading"> Threadsafe parts of Crystal Space </h4>
 
-<p><em>Documentation revised significantly by Eric Sunshine,
-<a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a>.  Last updated September 24, 2003.</em>
+<ul>
+<li>
+<small>SCF</small> (see section <a href="cs_4.4.1.html#4.4.1">Shared Class Facility (<small>SCF</small>)</a>) class loading/unloading is safe. This means that
+<code>SCF_CREATE_INSTANCE()</code> and all the routines in <samp>`iSCF'</samp> that have
+to do with loaded classes are safe.
+
+</li><li>
+The plugin manager is safe, thus macros such as <code>CS_LOAD_PLUGIN()</code>,
+<code>CS_LOAD_PLUGIN_ALWAYS()</code>, and <code>CS_QUERY_PLUGIN_CLASS()</code> are safe.
+
+</li><li>
+The object registry is safe, thus macros like <code>CS_QUERY_REGISTRY()</code>
+are safe. The <code>iObjectRegistryIterator</code> takes a copy of the data
+over which it iterates so it will not even lock.
+
+</li><li>
+<small>VFS</small> (see section <a href="cs_4.7.html#4.7">Virtual File System (<small>VFS</small>)</a>) is thread-safe for most operations.  But do not work on
+the same <samp>`iFile'</samp> from different threads!  That is not thread-safe.  Also
+the concept of the current directory is not really valid with threads.
+
+</li><li>
+The TinyXML, XMLRead, and BinaryXML parsers are thread safe in the sense
+that it is okay to create and work on separate documents in separate threads.
+However it is <em>not</em> okay to work on the same document in different
+threads.
+
+</li><li>
+The syntax services plugin is safe for the basic parsing tools (vectors,
+matrices, reporting errors, etc.). For polygons and thing related objects
+this has not yet been checked for safety.
+
+</li><li>
+The <samp>`simpcon'</samp> and <samp>`csconout'</samp> output consoles are thread-safe provided
+auto-updating is disabled which you can set like this:
+
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iConsoleOutput&gt; con = ...;
+con-&gt;AutoUpdate(false);
+</pre></td></tr></table>
+
+<p>Note that by default auto-updating is enabled!
 </p>
-<p>This library is intended for separating C++ class implementations from programs
-that use them.  This is achieved by separating class implementations into a
-separate module in the form of shared libraries, which are also called
-<em>plugin modules</em>.  Separating the implementation of a class from the
-program helps to address problems regarding shared library facility
-incompatibilities on different platforms.  It also makes it possible to use
-different mechanisms for <small>SCF</small>, for example inter-process communication
-(through pipes, shared memory, or whatever); communication through network or
-through a <small>COM</small> or <small>CORBA</small> request broker; although currently only two
-minimal configurations supported: using shared libraries and using static
-linkage (for platforms that don't have shared library support).
+</li><li>
+The reporter plugin is fully thread-safe.
+
+</li><li>
+The standard reporter listener plugin is thread-safe for basic operations
+but not for initialization. That should be done from the main thread.
+Also note that thread-safety of the standard reporter listener depends
+on thread-safety of the output console that is being used.
+
+</li><li>
+The following mesh object and factory loaders are thread-safe provided that the
+implementation of <samp>`iLoaderContext'</samp> is thread-safe.  Please note that the
+default <code>iLoaderContext</code> is <em>not</em> thread-safe which makes all loader
+plugins unsafe by default.
+
+<ul>
+<li>
+<em>Genmesh loader</em>: Aside from a small design mistake with streams in
+case the new renderer is used, the genmesh loader plugin is perfectly
+thread-safe.
+</li></ul>
+
+</li></ul>
+
+<a name="SEC800"></a>
+<h4 class="subsubheading"> Threaded Loading </h4>
+
+<p>One important threaded section of Crystal Space is the threaded loader.  In
+order to ensure that the threaded loader works correctly you must make sure
+that you use thread-safe versions of the following modules in Crystal Space:
 </p>
-<p>There is a <small>HOWTO</small> which explains how to create a plugin module from the
-ground up using <small>SCF</small> technology (see section <a href="cs_5.8.22.html#5.8.22">Create Your Own Plugin</a>).
-The <small>HOWTO</small> provides a much more concise explanation about how to create and
-utilize a plugin than what you will find here, since this section is more
-interested in exposing <small>SCF</small> in gory detail.  There is also a <small>HOWTO</small>
-which explains how to make using <small>SCF</small> interfaces easier by using smart
-pointers (see section <a href="cs_5.8.1.html#5.8.1">Correctly Using Smart Pointers</a>).
-</p>
-<p>The <small>SCF</small> implementation is resides within the <tt>`CS/libs/csutil'</tt> module.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_6.2.1.html#6.2.1">6.2.1 How it Works</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.2.html#6.2.2">6.2.2 Using <small>SCF</small></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.3.html#6.2.3">6.2.3 Classes Implementing Multiple Interfaces</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.4.html#6.2.4">6.2.4 Interface Versions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.5.html#6.2.5">6.2.5 Client Side</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.6.html#6.2.6">6.2.6 Plugin Meta-Information</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.7.html#6.2.7">6.2.7 Meta-Information Embedding</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.8.html#6.2.8">6.2.8 Plugin Discovery</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.9.html#6.2.9">6.2.9 Example</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_6.2.10.html#6.2.10">6.2.10 Advanced Techniques</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+<ul class="toc">
+<li>
+<code>iReporter</code> (the standard reporter is okay).
+</li><li>
+<code>iReporterListener</code> (the standard reporter listener is okay).
+</li><li>
+<code>iConsoleOutput</code> (<tt>`simpcon'</tt> and <tt>`csconout'</tt> are okay provided
+auto-updating is disabled).
+</li><li>
+<code>iLoaderContext</code> (the threaded loader provides a thread-safe version
+of this one).
+</li><li>
+<code>iDocumentSystem</code> (TinyXML, XMLRead, and BinaryXML are all okay).
+</li></ul>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_6.1.2.html#6.1.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_6.2.1.html#6.2.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_6.1.1.3.html#6.1.1.3" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_6.3.html#6.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_6.html#6." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_6.html#6." title="Up section"> Up </a>]</td>

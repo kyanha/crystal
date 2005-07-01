@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.10.4 Creating a Thing Mesh</title>
+
+<meta name="description" content="Crystal Space: 4.10.4 Creating a Thing Mesh">
+<meta name="keywords" content="Crystal Space: 4.10.4 Creating a Thing Mesh">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="HOWTO-Create-Thing"></a>
+<a name="4.10.4"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.10.3.html#4.10.3" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.5.html#4.10.5" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 4.10.4 Creating a Thing Mesh </h3>
+
+<p>This section describes how to create a thing mesh.
+</p>
+<a name="SEC279"></a>
+<h4 class="subsubheading"> What are Things? </h4>
+
+<p>A <samp>`thing'</samp> mesh object (see section <a href="cs_4.10.24.html#4.10.24">Thing Mesh Object</a>) is an object made
+out of polygons. Every polygon can have another material and the polygons
+can have three or more vertices. A thing uses lightmapping
+for lighting (roughly this means that every polygon gets another texture
+which contains light and shadow information for that polygon).
+</p>
+<p>Things are useful for static geometry objects or objects that don't animate.
+You can use it for walls, floor, staircases, and even doors that open. As
+long as the object itself doesn't have to animate (but just moves) a thing
+is perfectly fine. For very high detail objects it is probably better to
+use the <samp>`genmesh'</samp> mesh object (see section <a href="cs_4.10.12.html#4.10.12">Genmesh Mesh Object</a> instead. Also
+if you want to use internal animation (like an actor or a creature in your
+game) you should use the <samp>`sprite3d'</samp> mesh object (see section <a href="cs_4.10.10.html#4.10.10">Sprite3D Mesh Object</a>).
+</p>
+<p>Things can share geometry if they are made from the same factory. Note that
+information like lightmaps is not shared because a lightmap is position
+dependent (i.e. the amount of light a polygon receives depends on where the
+object instance actually is).
+</p>
+<p>Note that you can hardtransform things (hardmove in maps). If you do this
+on a mesh object instance then the factory will be cloned if it is used
+by multiple mesh objects. That's because hardtransform essentially modifies
+the original geometry and the geometry of a thing is always in the factory.
+So beware of this because it may mean a lot of extra memory usage if you
+hardtransform every instance created from a factory.
+</p>
+<p>Note that individual polygons can have names. This can be useful for debugging
+and also for attaching specific game features to some polygons (like indicating
+if some polygon is a light switch button or something) but be aware that these
+names add some memory overhead.
+</p>
+<a name="SEC280"></a>
+<h4 class="subsubheading"> Creating a Thing in a Map </h4>
+
+<p>Here is an example of how to create a cube thing in a map file. Note that
+in this example we avoid the use of a factory. We load a mesh object directly.
+A factory will be created invisibly to support the thing geometry:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;cube&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.thing&lt;/plugin&gt;
+  &lt;params&gt;
+    &lt;v x=&quot;-0.5&quot; y=&quot;-0.5&quot; z=&quot;-0.5&quot; /&gt;
+    &lt;v x=&quot;-0.5&quot; y=&quot;-0.5&quot; z=&quot;0.5&quot; /&gt;
+    &lt;v x=&quot;-0.5&quot; y=&quot;0.5&quot; z=&quot;-0.5&quot; /&gt;
+    &lt;v x=&quot;-0.5&quot; y=&quot;0.5&quot; z=&quot;0.5&quot; /&gt;
+    &lt;v x=&quot;0.5&quot; y=&quot;-0.5&quot; z=&quot;-0.5&quot; /&gt;
+    &lt;v x=&quot;0.5&quot; y=&quot;-0.5&quot; z=&quot;0.5&quot; /&gt;
+    &lt;v x=&quot;0.5&quot; y=&quot;0.5&quot; z=&quot;-0.5&quot; /&gt;
+    &lt;v x=&quot;0.5&quot; y=&quot;0.5&quot; z=&quot;0.5&quot; /&gt;
+
+    &lt;material&gt;upMaterial&lt;/material&gt;
+    &lt;p name=&quot;up&quot;&gt;
+      &lt;v&gt;3&lt;/v&gt; &lt;v&gt;7&lt;/v&gt; &lt;v&gt;6&lt;/v&gt; &lt;v&gt;2&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;material&gt;otherMaterial&lt;/material&gt;
+    &lt;p name=&quot;north&quot;&gt;
+      &lt;v&gt;1&lt;/v&gt; &lt;v&gt;5&lt;/v&gt; &lt;v&gt;7&lt;/v&gt; &lt;v&gt;3&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;p name=&quot;east&quot;&gt;
+      &lt;v&gt;5&lt;/v&gt; &lt;v&gt;4&lt;/v&gt; &lt;v&gt;6&lt;/v&gt; &lt;v&gt;7&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;p name=&quot;south&quot;&gt;
+      &lt;v&gt;4&lt;/v&gt; &lt;v&gt;0&lt;/v&gt; &lt;v&gt;2&lt;/v&gt; &lt;v&gt;6&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;p name=&quot;west&quot;&gt;
+      &lt;v&gt;0&lt;/v&gt; &lt;v&gt;1&lt;/v&gt; &lt;v&gt;3&lt;/v&gt; &lt;v&gt;2&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;p name=&quot;down&quot;&gt;
+      &lt;v&gt;0&lt;/v&gt; &lt;v&gt;4&lt;/v&gt; &lt;v&gt;5&lt;/v&gt; &lt;v&gt;1&lt;/v&gt;
+    &lt;/p&gt;
+  &lt;/params&gt;
+  &lt;move&gt;
+    &lt;v x=&quot;1&quot; y=&quot;0&quot; z=&quot;3&quot; /&gt;
+  &lt;/move&gt;
+&lt;/meshobj&gt;
+</pre></td></tr></table>
+<p>There is a lot more you can do in a thing. For example you can specify
+exactly how you want to map the texture on the polygons.
+In this particular example we create a cube that
+has another material for the upper polygon.
+</p>
+<a name="SEC281"></a>
+<h4 class="subsubheading"> Creating a Thing from Code </h4>
+
+<p>Here we create the same thing from code. We use a convenience function in
+the engine to create a thing (<code>CreateThingMesh</code>).
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iMaterialWrapper* upMaterial = ...
+iMaterialWrapper* otherMaterial = ...
+csRef&lt;iMeshWrapper&gt; walls = engine-&gt;CreateThingMesh (room, &quot;cube&quot;));
+csRef&lt;iThingState&gt; ws =
+  SCF_QUERY_INTERFACE (walls-&gt;GetMeshObject (), iThingState);
+csRef&lt;iThingFactoryState&gt; walls_state = ws-&gt;GetFactory ();
+walls_state-&gt;AddQuad (
+  csVector3 (-.5, .5, -.5),
+  csVector3 (.5, .5, -.5),
+  csVector3 (.5, .5, .5),
+  csVector3 (-.5, .5, .5));
+walls_state-&gt;SetPolygonMaterial (CS_POLYRANGE_LAST, upMaterial);
+walls_state-&gt;SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+...
+</pre></td></tr></table>
+<p>This is only an extract of the example but you can easily see how to create
+additional polygons here.
+</p>
+<a name="SEC282"></a>
+<h4 class="subsubheading"> Include Files </h4>
+
+<p>The include files useful for this section are:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;imesh/thing.h&gt;
+</pre></td></tr></table>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.10.3.html#4.10.3" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.5.html#4.10.5" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

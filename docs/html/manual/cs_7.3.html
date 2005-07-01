@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 7.3 Graphics Drivers</title>
+<title>Crystal Space: 7.3 Coding Style</title>
 
-<meta name="description" content="Crystal Space: 7.3 Graphics Drivers">
-<meta name="keywords" content="Crystal Space: 7.3 Graphics Drivers">
+<meta name="description" content="Crystal Space: 7.3 Coding Style">
+<meta name="keywords" content="Crystal Space: 7.3 Coding Style">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,15 +40,15 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Graphics-Drivers"></a>
+<a name="Coding-Style"></a>
 <a name="7.3"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_7.2.2.html#7.2.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_7.3.1.html#7.3.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_7.2.html#7.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.4.html#7.4" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_7.html#7." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_7.html#7." title="Up section"> Up </a>]</td>
-<td valign="middle" align="left">[<a href="cs_8.html#8." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_A.html#A." title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -58,53 +58,144 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 7.3 Graphics Drivers </h2>
+<h2 class="section"> 7.3 Coding Style </h2>
 
-<p>The graphics system consists of two or three drivers:
+<p>For consistency and ease of future maintenance, when working on Crystal Space
+source code, please follow the following guidelines.  Also be sure to read
+important portability guidelines presented in the <cite>Portability</cite> section.
+See section <a href="cs_7.2.html#7.2">Portability</a>.
 </p>
-<ul>
+<ol>
 <li>
-2D Driver or Canvas
+<em>Indentation</em>
 
-<p>This component manages the low-level access to the screen.  It supports
-primitive functions such as drawing pixels and lines, text output and direct
-access to the video memory.  There are several implementations of this
-component.  All are specific to some 3D Rasterizer (for example, the OpenGL 3D
-Rasterizer on Unix requires the OpenGL 2D XLib Driver).
+<p>Indent with two (2) spaces. If you use tabs then they must be interpreted as
+eight (8) spaces. This means that you should not use the tab character for
+indentation since that would indent by eight characters rather than two. Also
+consider avoiding tabs altogether in order to eliminate tab-related problems.
+Here is an example of proper indentation:
 </p>
-<p><em>Note</em>: You need not load the 2D driver yourself.  It is loaded
-automatically by the according 3D driver.
+<table><tr><td>&nbsp;</td><td><pre class="example">void foo()
+{
+  int a;
+  for (a = 0; a &lt; 10; a++)
+  {
+    int b = bar();
+    if (a &lt; b)
+      printf (&quot;Hello\n&quot;);
+  }
+}
+</pre></td></tr></table>
+<p>This example also illustrates how to place curly braces and where to add
+spaces, for example <samp>`for_('</samp> rather than <samp>`for(_'</samp>, where <samp>`_'</samp>
+represents whitespace in this context.  Also add sufficient whitespace between
+tokens.
+</p>
+<p>In cases you are unsure what specific coding style to employ, just follow the
+style in the code you're editing or your personal preference. Always try to 
+keep it both readable and consistent. 
 </p>
 </li><li>
-3D Rasterizer
+<em>Class and Method Naming</em>
 
-<p>This component is required by the 3D Engine but is also useful standalone.
-This driver is used to draw 3d graphics and also 2D bitmaps on screen.  It
-automatically loads a 2D driver on startup.  There are currently several
-implementations of this component: Software, OpenGL, and Null (for applications
-that don't need 3D rendering but still want to use Crystal Space). Additionally
-there is also a new OpenGL renderer that is in development right now.
+<p>Classes should be named in this fashion: <code>csThisIsAClass</code>. The name
+starts with lower-case <samp>`cs'</samp> and has every word capitalized (also known
+as &quot;CamelCase&quot;).
+</p>
+<p>Methods and functions should be named in this fashion: <code>ThisIsAMethod()</code>.
+Each word in the name is capitalized.
 </p>
 </li><li>
-Shader System
+<em><small>SCF</small> Interfaces</em>
 
-<p>Some of the renderers (currently the OpenGL renderer) also require an
-additional shader system. When this is present it is possible
-to make more advanced texture effects using shaders.
-</p></li></ul>
+<p><small>SCF</small> interfaces always start with a lower <samp>`i'</samp>, as in
+<code>iThisIsAnInterface</code>.  See section <a href="cs_4.4.1.html#4.4.1">Shared Class Facility (<small>SCF</small>)</a>.
+</p>
+</li><li>
+<em>Doxygen and Comments</em>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_7.3.1.html#7.3.1">7.3.1 Procedural Texture System</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+<p>Use Doxygen comments in header files to document classes, methods, and
+functions. These comments are extracted with the Doxygen tool and <small>HTML</small>
+documentation is generated from them.
+</p>
+<p><strong>Warning</strong>: Always use Doxygen comments for a class. If you fail to do so
+then Doxygen will ignore comments for methods within the class itself.
+</p>
+<p>A one line Doxygen comment uses three slashes (<samp>`///'</samp>) rather than two as
+is typical for normal C++ comments.  Multi-line Doxygen comments are specified
+with <samp>`/** <small class="dots">...</small> */'</samp> rather than <samp>`/* <small class="dots">...</small> */'</samp>.  Here is an
+example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">/**
+ * This class represents a blue ball.
+ * Blue balls bounce higher than red balls.
+ */
+class csBlueBall
+{
+private:
+  // A private function, so no Doxygen comment here,
+  // but still commented for readers of the header file.
+  void PrivateFunction();
+
+public:
+  /// This is the constructor which initializes the blue ball.
+  csBlueBall();
+
+  /**
+   * This is a multi-line comment.
+   * And this is the second line of the multi-line comment.
+   */
+  void Deflate();
+};
+</pre></td></tr></table>
+</li><li>
+<em>Maximum Line Length</em>
+
+<p>In general, lines in source code should be no longer than 78 characters.  This
+facilitates generation of hard-copy and works better with certain tools which
+process code or text files.
+</p>
+</li><li>
+<em>Multiple-Inclusion Protection for Headers</em>
+
+<p>Be certain to insert multiple-inclusion protection in all header files.  These
+controls should take this form:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#ifndef __CS_FILENAME_H__
+#define __CS_FILENAME_H__
+...
+#endif // __CS_FILENAME_H__
+</pre></td></tr></table>
+</li><li>
+<em>Include <tt>`cssysdef.h'</tt></em>
+
+<p>Always include <tt>`cssysdef.h'</tt> in each source or header file as the very 
+first file included.  The latter is recommended, as it makes headers more
+self-contained.
+</p>
+</li><li>
+<em>Module and Facility Dependencies</em>
+
+<p>Although most facilities from <tt>`CS/libs'</tt> end up in the same link library
+(<tt>`crystalspace.lib'</tt>), you should not introduce unnecessary dependencies
+between these facilities. There are clean lines between the various libraries
+and their levels of generality or specialization which we prefer to maintain.
+Absolutely avoid introducing circular dependencies.
+</p>
+<p>For instance, code in the &quot;csutil&quot; module should never refer to code
+from the &quot;cstool&quot; module.  The other way around is okay, however,
+since &quot;cstool&quot; is at a higher level within the dependency hierarchy than
+&quot;csutil&quot;.
+</p></li></ol>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_7.2.2.html#7.2.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_7.3.1.html#7.3.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_7.2.html#7.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_7.4.html#7.4" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_7.html#7." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_7.html#7." title="Up section"> Up </a>]</td>
-<td valign="middle" align="left">[<a href="cs_8.html#8." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_A.html#A." title="Next chapter"> &gt;&gt; </a>]</td>
 </tr></table>
 <p>
  <font size="-1">

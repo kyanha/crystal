@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.16 Importing Model Files</title>
+
+<meta name="description" content="Crystal Space: 4.16 Importing Model Files">
+<meta name="keywords" content="Crystal Space: 4.16 Importing Model Files">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Model-Conversion"></a>
+<a name="4.16"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.15.5.html#4.15.5" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.16.1.html#4.16.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h2 class="section"> 4.16 Importing Model Files </h2>
+
+<p>Crystal Space is able to read other file formats than the native world files.
+For example, it is possible to read a file in the common <tt>`3ds'</tt> file
+format from <em>3d Studio</em> and build mesh objects from it. This happens in
+two steps: First the file is read and the data is stored in a
+format-independent, meshobject-independent structure. Then this structure is
+used to build a mesh object. In this section, I will call this structure
+<small>IDS</small> (independent data structure). The details of the <small>IDS</small> are
+explained in the next section.
+</p>
+<p>Loading a file is done by the <em>converter plugins</em>. There are different
+converters for different file formats, but <em>not</em> for different types of
+mesh objects. This is not needed as the converters don't deal with mesh
+objects but only create the <small>IDS</small>. Converters can also provide file saving
+in their formats. Using this feature you can for example convert files of
+different formats into another format, such as to convert a <tt>`3ds'</tt> file
+into a <tt>`pov'</tt> file.
+</p>
+<p>After loading a model you will usually need to prepare the data a bit. This
+is needed because the <small>IDS</small> is not completely independent. In some cases
+this was not possible, while in others this makes things faster and more
+simple. However, Crystal Space provides functions to do this preparation for
+you. They are grouped together in a namespace wrapper called
+<code>csModelDataTools</code>. As an example, this includes a function to split
+objects using more than one material into objects that don't. 3d sprites in
+Crystal Space are limited to one material per sprite.
+</p>
+<p>Finally, you have to build a mesh object from the <small>IDS</small>. This is done using
+the so-called <em>cross-builder plugin</em> (historical name, I don't know why
+the original author used it :-). I have not tried yet to find a nice and
+common-for-all-meshes interface, so currently the crossbuilder is simply a
+set of three functions: The first function builds a simple thing mesh from
+a single <small>IDS</small> sub-object, the second function does the same for sprites,
+and the third one creates a hierarchy of sprites from all objects in an
+<small>IDS</small>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="cs_4.16.1.html#4.16.1">4.16.1 Common Model Data Structure (<code>iModelData</code>)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.15.5.html#4.15.5" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.16.1.html#4.16.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

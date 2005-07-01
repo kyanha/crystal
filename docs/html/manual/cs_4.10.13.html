@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.10.13 Ball Mesh Object</title>
+
+<meta name="description" content="Crystal Space: 4.10.13 Ball Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.10.13 Ball Mesh Object">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="MeshObject-Ball"></a>
+<a name="4.10.13"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.10.12.html#4.10.12" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.14.html#4.10.14" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 4.10.13 Ball Mesh Object </h3>
+
+<p><em>Written by Jorrit Tyberghein,
+<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
+</p>
+<p>A ball is a ball shaped object made out of triangles. You can specify
+the detail (i.e. number of triangles used).
+</p>
+<a name="SEC330"></a>
+<h4 class="subsubheading"> Basic Structure </h4>
+
+<p>The following <small>SCF</small> class names are used (for <code>CS_LOAD_PLUGIN()</code>):
+</p>
+<ul>
+<li>
+Type plugin: <samp>`crystalspace.mesh.object.ball'</samp>
+</li><li>
+Loader plugin: <samp>`crystalspace.mesh.loader.ball'</samp>
+</li><li>
+Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.ball'</samp>
+</li></ul>
+
+<p>Objects in this plugin implement the following <small>SCF</small> interfaces (get
+with <code>SCF_QUERY_INTERFACE()</code>):
+</p>
+<ul>
+<li>
+<em>MeshObject</em>
+<ul>
+<li>
+Implements <samp>`iMeshObject'</samp>
+</li><li>
+Implements <samp>`iBallState'</samp>
+</li></ul>
+</li><li>
+<em>MeshObjectFactory</em>
+<ul>
+<li>
+Implements <samp>`iMeshObjectFactory'</samp>
+</li></ul>
+</li><li>
+<em>MeshObjectFactory</em>
+<ul>
+<li>
+Implements <samp>`iMeshObjectType'</samp>
+</li></ul>
+</li></ul>
+
+<a name="SEC331"></a>
+<h4 class="subsubheading"> Factory State Interface </h4>
+
+<p>The ball mesh object plugin has no factory state interface.
+</p>
+<a name="SEC332"></a>
+<h4 class="subsubheading"> Factory Loader </h4>
+
+<p>The ball mesh factory loader has no parameters.
+</p>
+<a name="SEC333"></a>
+<h4 class="subsubheading"> Object State Interface </h4>
+
+<p><samp>`iBallState'</samp> is the <small>SCF</small> interface that you can
+use to set/get settings for a ball object. The definition of this
+interface can be found in <code>include/imesh/ball.h</code> and that's also the
+include file you need to include in your applications to use this plugin.
+Using this interface you can access the material, blending mode (mixmode),
+and radius.
+</p>
+<a name="SEC334"></a>
+<h4 class="subsubheading"> Object Loader </h4>
+
+<dl compact="compact">
+<dt> <code>&lt;factory&gt;factoryname&lt;/factory&gt;</code></dt>
+<dd><p>Name of the factory to use for creation of this instance.
+</p></dd>
+<dt> <code>&lt;mixmode&gt;&lt;mode /&gt;&lt;/mixmode&gt;</code></dt>
+<dd><p>Blending mode, one of <samp>`add'</samp>, <samp>`alpha'</samp>, <samp>`copy'</samp>, <samp>`keycolor'</samp>,
+<samp>`multiply2'</samp>, <samp>`multiply'</samp>, or <samp>`transparent'</samp>.
+</p></dd>
+<dt> <code>&lt;material&gt;materialname&lt;/material&gt;</code></dt>
+<dd><p>Material to use for the ball.
+</p></dd>
+<dt> <code>&lt;numrim&gt;number&lt;/numrim&gt;</code></dt>
+<dd><p>Number of vertices on the rim of the ball (i.e. the number of vertices along
+the equator).  A good default is 6.
+</p></dd>
+<dt> <code>&lt;radius x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Three parameters for x, y, and z radius.
+</p></dd>
+<dt> <code>&lt;shift x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Three parameters for x, y, and z shift.
+</p></dd>
+<dt> <code>&lt;reversed&gt;yes/no&lt;/reversed&gt;</code></dt>
+<dd><p>Reverse the order of the triangles so that the ball is visible from the
+inside instead of the outside.
+</p></dd>
+<dt> <code>&lt;toponly&gt;yes/no&lt;/toponly&gt;</code></dt>
+<dd><p>Only generate the top triangles instead of two halves.
+</p></dd>
+<dt> <code>&lt;cylindrical&gt;yes/no&lt;/cylindrical&gt;</code></dt>
+<dd><p>Use cylindrical texture mapping instead of only a circle from the
+texture (default off).
+</p></dd>
+<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
+<dd><p>Enable/disable lighting. Default on.
+</p></dd>
+<dt> <code>&lt;color red=&quot;&quot; green=&quot;&quot; blue=&quot;&quot; /&gt;</code></dt>
+<dd><p>Set the base color to use for the ball. This color will be added to the
+color calculated by lighting (if lighting is enabled).
+</p></dd>
+</dl>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.10.12.html#4.10.12" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.14.html#4.10.14" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

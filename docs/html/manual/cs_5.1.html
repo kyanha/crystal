@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 5.1 Developing a Crystal Space Application</title>
+<title>Crystal Space: 5.1 How to Create Optimal Maps for Crystal Space</title>
 
-<meta name="description" content="Crystal Space: 5.1 Developing a Crystal Space Application">
-<meta name="keywords" content="Crystal Space: 5.1 Developing a Crystal Space Application">
+<meta name="description" content="Crystal Space: 5.1 How to Create Optimal Maps for Crystal Space">
+<meta name="keywords" content="Crystal Space: 5.1 How to Create Optimal Maps for Crystal Space">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Tutorial-Introduction"></a>
+<a name="Map-Creation"></a>
 <a name="5.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_5.html#5." title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.1.1.html#5.1.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.2.html#5.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>
@@ -58,256 +58,382 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 5.1 Developing a Crystal Space Application </h2>
+<h2 class="section"> 5.1 How to Create Optimal Maps for Crystal Space </h2>
 
-<p>Crystal Space is a package of components and libraries which can all be useful
-for creating computer games.  Although some of the packages are intended more
-for 3D gaming this is not as such a restriction of the package.  Components
-such as the sound driver function just as well in a 2D gaming environment, and
-the Virtual File System plugin (see section <a href="cs_7.2.html#7.2">Virtual File System (<small>VFS</small>)</a>) can be used in non-graphical
-applications.  This highlights one of the important characteristics of Crystal
-Space: the components and libraries are more or less independent of each other.
-If you do not want &quot;real&quot; physics, then just don't use the physics plugin.
-If you don't want scripting then don't include that.  All packages are designed
-to be functional on their own or with a minimal number of other packages.
-There are some dependencies of course.  For example, the 3D engine requires a
-3D renderer to display its output, and a renderer requires a canvas onto which
-to draw.  On the other hand, you could very well use the 3D renderer without
-the 3D engine.
+
+<p><em>Written by Jorrit Tyberghein,
+<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
 </p>
-<p>Although there is a high level of independence, there is also a high level of
-integration.  The components and libraries were also designed to be used
-together and as such offer a flexible scheme of integration.
+<p><em>Note</em>: Creating optimal maps is not very easy as there are
+a lot of factors to consider. Crystal Space has a lot of tools to offer
+(like sectors, portals, visibility cullers, etc.) but using these tools
+effectively is an art. In this chapter we will not talk about how to create
+maps. For that you use external tools like Blender, Quark, or some other
+suitable tool.  This chapter focuses on how you should partition your map into
+sectors, the kind of mesh objects you should use, the visibility cullers, etc.
 </p>
-<p>If you are interested in developing a program using Crystal Space, then it is
-important to understand that Crystal Space is not a single monolithic library,
-but instead consists of several <em>libraries</em> and <em>plug-in modules</em>.
-This manual uses the term <em>module</em> for both libraries and plug-ins when
-the distinction between the two is not important.
+<p>For a good discussion about sectors and visibility cullers, see
+<a href="cs_4.9.7.html#4.9.7">Visibility Culling In Detail</a>.
 </p>
-<p>A plug-in module is similar to a library, but has some advantages over a
-library.  All plug-ins can be accessed in a common fashion.  They have a pure
-interface, and they can provide this interface even if they are extracted to a
-dynamic load library.  So, they are the better solution as long as speed is not
-the dictator of all decisions as in the math library (access to plug-in
-functions uses virtual methods).  The main difference between the interface of
-a library and a plug-in is that a library may use <small>SCF</small>, the Shared Class
-Facility (see section <a href="cs_6.2.html#6.2">Shared Class Facility (<small>SCF</small>)</a>), and C++ classes; plug-ins may only use <small>SCF</small>.
+<a name="SEC740"></a>
+<h4 class="subsubheading"> Sectors and Portals </h4>
+
+<p>A sector is the basic building block in a map (see section <a href="cs_4.9.7.html#4.9.7">Visibility Culling In Detail</a>).
+When you create a map you should decide upon how to partition your map in
+sectors. The easiest solution is to use a single sector. In many cases that may
+even be acceptable. Here are some points to consider when deciding upon how to
+partition your map into sectors:
 </p>
 <ul>
 <li>
-What is <small>SCF</small>?
+Creating multiple sectors complicates map design a bit since you have to
+think about placing portals between the sectors. On the other hand it can
+ease map design since you can delegate map creation by assigning different
+portions of amap to other designers.
 
-<p>The main <small>SCF</small> object is the <em>interface</em>.  An interface is the
-solution to strictly decouple the public methods of an object from their
-implementation.  You only get a pointer to an abstract class with only virtual
-methods, called the interface, so your program doesn't know about the actual
-object behind the pointer.  This object is called an <em>implementation</em> of
-the interface.  You as the user of Crystal Space will call functions that
-create the actual object, but only return the interface.  After that you can
-use the interface like a C++ object.  When you don't need it anymore, don't
-<samp>`delete'</samp> it, but call <code>DecRef()</code>.  When you pass a pointer to the
-interface to anywhere, call <code>IncRef()</code> from there, and <code>DecRef()</code>
-when you don't need the interface there anymore.
-</p>
-<p>Starting with Crystal Space version 0.95 we also have smart pointers.
-A smart pointer is an instance of the class <code>csRef</code>. This class takes
-care of <code>IncRef()</code> and <code>DecRef()</code> for you
-(see section <a href="cs_5.8.1.html#5.8.1">Correctly Using Smart Pointers</a>). It is very important to use smart pointers
-now. They are making life a lot easier and in the future they may become
-required usage (i.e. no longer optional).
-</p>
-<p>As the user you'll only have to include a header that defines the interface,
-but not the implementation.  Despite the obvious advantage of having a very
-clear structure in your code, there is the advantage that linking the
-interface to the implementation can be done at run-time, but more about this
-later.
-</p>
 </li><li>
-What are the characteristics of a library?
+It is easier to implement dynamic loading when you use more sectors since you
+can easily load/unload a sector.
 
-<p>A library is just a normal C++ library as you know them.  A library can
-optionally provide <small>SCF</small> interfaces.  In the case of a library this is just
-a way to define a clear structure.  But as their main interface, libraries
-provide C++ classes.
-</p>
 </li><li>
-What are the characteristics of a plug-in?
+Portals help with visibility culling in two ways. When a portal is not visible
+the destination sector of that portal is ignored completely; the complexity
+of the portal's destination is totally ignored if the portal is not visible.
+Even if the portal is visible, the portal still restricts the view frustum (i.e.
+you can only see what is inside the portal's outline) and this will cause many
+objects to be culled away very easily.  Thus, one good reason to use more
+sectors is that doing so may improve visibility culling.  This works best if
+the portals are small (i.e. doorways or windows).
 
-<p>A plug-in, on the other hand, will only provide <small>SCF</small> interfaces, no normal
-C++ classes. The plug-in itself will also appear as an <small>SCF</small> interface.
-This is part of the definition of a plug-in.  A plug-in can be organized as
-static library or <small>DLL</small>; this only makes a small difference in how you use
-it in your program.
-</p>
-<p>As the user of Crystal Space, you have to do
-the following steps to use a plug-in:
-</p>
-<ul class="toc">
-<li>-
-First, do all these steps for the dependencies (other plug-ins) that this
-plug-in relies on.
+</li><li>
+Open space maps are hard to partition into sectors.  There is also little
+benefit in portal culling and dynamic loading with large open spaces.  So, in
+general, it is probably best to use a single sector for an outdoor world.
 
-</li><li>-
-Register the library that contains the plug-in.
+</li><li>
+The insides of buildings are best represented using seperate sectors. This
+makes it possible to design them seperately and it is also very good for
+the visibility culler. Doorways and windows make excellent portals.
 
-</li><li>-
-Load the plug-in.  This will also initialize the plug-in.  It will fail if you
-forgot any dependencies.
-
-</li><li>-
-Query the plug-in interface.  This is an <small>SCF</small> interface, so you now have
-access to the functions of the plug-in.
+</li><li>
+Whether or not you should further partition an indoor world into multiple
+sectors is hard to say and really depends on the complexity of the map.
 </li></ul>
 
-</li><li>
-How can I register the plug-in library?
+<a name="SEC741"></a>
+<h4 class="subsubheading"> Visibility Cullers </h4>
 
-<p><em>Registering</em> means to tell <small>SCF</small> the name of the plug-in that was given
-to it by its author, and a class or a dynamic library to associate it with.
-Plugin libraries can contain multiple named <small>SCF</small> classes.  For example, to
-use the software graphics renderer <small>SCF</small> must know that the <small>SCF</small> class
-<samp>`crystalspace.graphics3d.software'</samp> can be found in <tt>`soft3d.dll'</tt>
-(Windows) or <tt>`soft3d.so'</tt> (Unix).  <small>SCF</small> determines dynamically which
-plugin libraries contain which <small>SCF</small> classes by consulting meta-information
-associated with each plugin.  Depending upon the platform, the associated
-meta-information may be bundled into the plugin itself, or it might exist in a
-separate file with a <tt>`.csplugin'</tt> extension alongside the plugin module.
+<p>Every sector has its own visibility culler.
+Crystal Space currently supports two kinds of visibility cullers:
+<em>Frustvis</em> and <em>Dynavis</em>. Dynavis attempts to work more
+on culling but it also has more overhead. So, you should use Frustvis in
+cases when you have the following kinds of maps:
 </p>
-<p>How you register a library depends on whether it is a static library or a
-dynamic library (<tt>`.dll'</tt> or <tt>`.so'</tt>).  For a static library, that is,
-one which is linked directly into the application rather than loaded
-dynamically at run-time, put the following macro invocation at top-level in one
-of your C++ files once for each <small>SCF</small> class contained in your library:
+<ul>
+<li>
+Simple sectors that only contain a few objects.
+
+</li><li>
+Large sectors that are mostly open-space (i.e. for a space game).
+Dynavis works by finding which objects occlude (cover) other objects.
+In open space sectors this is rare so the extra work needed for this
+coverage test is usually wasted.
+
+</li><li>
+Complex sectors that nevertheless do not have sufficient objects which
+can occlude other objects. This is on account of the same reason as described
+in the previous case.
+</li></ul>
+
+<p>On the other hand, if you have a complex map with lots of large objects then
+you should consider using Dynavis.  If you do decided to use
+Dynavis for a sector you should follow the following guidelines for that
+sector:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">SCF_REGISTER_STATIC_CLASS(
-  <var>cxx-class</var>,
-  <var>scf-name</var>,
-  <var>description</var>,
-  <var>dependencies</var>)
+<ul>
+<li>
+Dynavis works best with closed and mostly convex large occluder objects
+that do not have a lot of polygons. For example, a big wall is usually a good
+occluder. However, it is possible that the wall is created using lots of
+detailed polygons. That does not make the wall a bad occluder but it increases
+the cost of using that wall as an occluder.  To help alleviate the cost, you
+should add a dummy polygon mesh (this is called an <samp>`occlusion mesh'</samp>) to
+that object.  This occlusion mesh should have roughly the shape of the wall but
+it should only have a few polygons, which means that Dynavis can use it in a
+more efficient manner.  Below is an example on how to set an occlusion
+mesh in a map file.  Note that you should not replace the occlusion mesh if the
+base mesh is already good enough.
+
+</li><li>
+If you have complex objects that have very little chance of occluding
+other objects (for example a star shaped object) then you should disable
+the visibility culling mesh (see below for example). This is called
+<em>disabling occlusion writing</em>. Dynavis will
+still cull the object away if needed but it will not use the object for
+culling other objects. This helps to improve performance of Dynavis.
+
+</li><li>
+For culling objects Dynavis prefers small objects. Keep in mind that
+culling always happens on entire objects; that is, either the object is
+(partially) visible and it will be rendered completely or else the object is
+invisible.  So, a large object has less chance of being culled away since it
+needs to be covered entirely before it can be considered invisible.  Note that
+this guidelines conflicts with the next guideline, as well as with what OpenGL
+actually prefers.
+
+</li><li>
+For occluding other objects Dynavis prefers large objects. Large
+objects are also prefered for other reasons (i.e. OpenGL is most efficient
+at rendering large objects; more on this later).
+
+</li><li>
+There is a special optimization that follows from the previous two items.
+If you have a number of smaller objects that are themselves not very good
+occluders, but together they are very good (for example, a wall made
+out of seperate segments) then it would be best to disable occlusion writing
+for the individual wall segments and add a new null object with a single
+occlusion mesh that represents the entire wall.
+
+</li><li>
+It is sometimes useful to add dummy occluders to help with occlusion.
+For example, if you have a large dungeon-like map then you can put
+large simple occluding objects in the <em>void space</em> between the dungeon
+corridors (this is space where the camera should normally not be able
+to see).  When used properly, this optimization can provide a lot of gain for
+performance.  You can use standalone <em>polymesh</em> objects (see example
+below) to construct this, so you don't need to make a real mesh for it.
+This optimization can also be used when you have a complex multi-part
+object. You can then put a dummy occluder inside that object which will help
+with visibility culling.
+</li></ul>
+
+<p>Here is an example showing how you can replace the occlusion mesh of some mesh
+object in a map file:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;complexWall&quot;&gt;
+  &lt;plugin&gt;thing&lt;/plugin&gt;
+  &lt;params&gt;
+    ...
+  &lt;/params&gt;
+  &lt;polymesh&gt;
+    &lt;mesh&gt;
+      &lt;v x=&quot;-1&quot; y=&quot;-1&quot; z=&quot;-1&quot; /&gt;
+      &lt;v x=&quot;1&quot; y=&quot;-1&quot; z=&quot;-1&quot; /&gt;
+      &lt;v x=&quot;1&quot; y=&quot;4&quot; z=&quot;-1&quot; /&gt;
+      &lt;v x=&quot;-1&quot; y=&quot;4&quot; z=&quot;-1&quot; /&gt;
+      &lt;t v1=&quot;0&quot; v2=&quot;1&quot; v3=&quot;2&quot; /&gt;
+      &lt;t v1=&quot;0&quot; v2=&quot;2&quot; v3=&quot;3&quot; /&gt;
+    &lt;/mesh&gt;
+    &lt;viscull /&gt;
+  &lt;/polymesh&gt;
+&lt;/meshobj&gt;
 </pre></td></tr></table>
-<p>Here, <var>cxx-class</var> is the name of the C++ class which implements the
-factory for this particular <small>SCF</small> class.  <var>cxx-class</var> is the same name
-given to the <code>SCF_IMPLEMENT_FACTORY()</code> macro.  <var>scf-name</var> is the
-<small>SCF</small> class name corrsponding to <var>cxx-class</var>, <var>description</var> is a
-human-readable string describing the purpose of the class, and
-<var>dependencies</var> is a comma-separated list of other <small>SCF</small> class upon which
-this class depends.
+<p>And this is an example of how you can disable the occlusion mesh for an object:
 </p>
-<p>For a dynamic library, <small>SCF</small> will discover the plugin and register the
-contained classes automatically by consulting the associated meta-information.
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;wallSegment&quot;&gt;
+  &lt;plugin&gt;thing&lt;/plugin&gt;
+  &lt;params&gt;
+    ...
+  &lt;/params&gt;
+  &lt;polymesh&gt;
+    &lt;viscull /&gt;
+  &lt;/polymesh&gt;
+&lt;/meshobj&gt;
+</pre></td></tr></table>
+<p>Here is a special note about closed versus non-closed objects in Dynavis.
+A closed object is an object that has no holes in it (i.e. a cube is a closed
+object). A cube with one of the six sides removed is not closed. When
+Dynavis writes an object to the occlusion buffer (coverage buffer)
+it will choose a technique based upon whether the object is closed or not.
 </p>
-</li><li>
-How can I load the plug-in?
+<ul>
+<li>
+If the object is closed, then Dynavis will calculate the outline of
+the object and render that in the coverage buffer. Dynavis also has
+a depth buffer and, in this case, the maximum depth of the object will be
+used to update the depth buffer.
 
-<p>To load a plug-in, you must tell the plug-in manager the name
-of the plug-in as it was registered in the previous step. In the most
-common case you will probably use the plug-in loader to load the plug-in.
-This is a convenience class that is able to load plug-in as specified
-in a config file, from the commandline, or as requested by the application
-programmer. In addition to loading the plug-in (the plug-in loader will
-use the plug-in manager to do that), the plug-in loader will optionally
-also register the plug-in with the <em>Object Registry</em>.
-</p>
-<p>The object registry is a central location in the Crystal Space framework
-where any module can register <small>SCF</small> objects. The object registry is not
-only for plug-ins. It can contain any <small>SCF</small> object. Objects in the
-object registry also have a tag name associated with them. By convention
-the <em>default</em> object for a given <small>SCF</small> interface will be
-added to the object registry with the tag name equal to the interface
-name. For example, a 3D renderer is a plug-in module that
-implements (among others) the <samp>`iGraphics3D'</samp> interface. At the same
-time there can be multiple 3D renderers in memory (for example, for
-procedural textures). But the default 3D renderer will be registered
-with the tag name <samp>`iGraphics3D'</samp>.
-</p>
-<p>Note that the decision which graphics driver you use (e.g. Software or
-OpenGL) is done at the time you load the plug-in by passing the name of
-that driver. At the time you ask for the plug-in interface and use it in
-your program, this does not make a difference anymore. This makes it possible
-to exchange the driver simply by loading another driver, but without changing
-your main program.
-</p>
-<p>The Crystal Space modules themselves will use the standard plug-ins with the
-default tag name as explained above. For example, the 3d engine looks
-for the graphics driver by looking in the object registry for an object
-with the tag <samp>`iGraphics3D'</samp>.
-</p>
-<p>Now how can you actually load the plug-in? You can either load them
-manually in the code using the <code>CS_LOAD_PLUGIN()</code> macro or else
-you can use the plugin loader. As explained above, the plugin loader
-can load plugins specified on the commandline, a config file, or else
-explicitly requested in the code. This is done in a specific way:
-The commandline has highest priority. i.e. if the user specified the
-OpenGL video driver on the commandline then this will be the plugin that
-is loaded on the <samp>`iGraphics3D'</samp> tag. The config file and plugins requested
-from the code are ignored then (for that tag at least). The plugins
-requested from the code have lowest priority and only serve as a default
-if neither the commandline nor the config file specified a plug-in for
-the given tag.
-</p>
-<p>There is a class called <code>csInitializer()</code> which contains various
-convenience routines to help initialize a Crystal Space application.
-This class also contains a routine (<code>RequestPlugins()</code>) which will
-use the plugin loader automatically.
-</p>
-<p>There are several advantages to using the plugin loader as opposed
-to manually loading plug-ins using <code>CS_LOAD_PLUGIN()</code>:
-</p>
-<ul class="toc">
-<li>-
-The plugin loader will sort all plug-ins based on dependencies.
-For example, the engine depends on a 3D rasterizer so the plugin
-loader will make sure that the engine is loaded later. If you manually
-load plugins you risk that the loading will fail because a plugin
-that it needs is not yet present.
-</li><li>-
-The user is able to override the plug-ins loaded by the plugin loader.
-He or she can modify the config file or specify an alternative
-plug-in on the commandline. There is no way to change what plugin is
-loaded using <code>CS_LOAD_PLUGIN()</code> unless by recompilation (unless of course
-you use some other way to read the config file and find out what plugin
-to load).
+</li><li>
+If the object is not closed, then every individual polygon of the object
+is written separately to the coverage buffer. For depth, the maximum depth
+of every polygon will be used instead of the maximum depth of the entire
+object.
 </li></ul>
 
+<p>Here is an example which illustrates what this means in practice.  Assume you
+have a highly tesselated sphere (a sphere mesh that has a large number of
+triangles).  Also assume that there is another object inside the sphere.  If
+the first technique is used (closed object) then Dynavis will be most optimal
+for updating the coverage buffer since writing an outline is very cheap.  On
+the other hand it will not be able to cull away the object inside the sphere
+since the depth buffer is set too deep (i.e. the object in the sphere will be
+in front of the depth that is set in the depth buffer).
+</p>
+<p>On the other hand, if the second (non-closed) technique is used then
+Dynavis will need to use a lot of <small>CPU</small> processing in order to update
+the coverage buffer but it will be able to cull away the object inside the
+sphere since the depth buffer will now contain accurate values per triangle.
+</p>
+<p>We have not done any performance tests to find out which is better. If you have
+a really complex object (highly tesselated sphere) then the first technique
+will probably be better since the cost of writing the object to the coverage
+buffer will probably be higher then the cost of rendering the object inside
+the sphere.  But we do not know where exactly the threshold is.
+</p>
+<a name="SEC742"></a>
+<h4 class="subsubheading"> Object Types </h4>
+
+<p>Regardless of sector partitioning and visibility culling requirements, the
+choice of objects you use can also be important for performance. Crystal
+Space supports many mesh objects but the most important ones are:
+</p>
+<ul>
+<li>
+<code>thing</code>: A polygon mesh object that supports multiple
+materials and lightmapped, vertex based, or stencil based lighting. It is not
+easy to animate them internally so they are usually used for static
+objects. If you use lightmaps then these also will not be updated if the
+object moves, so that is another consideration. <samp>`thing'</samp> objects are
+heavy-weight (use more memory than many other mesh types).  Their main
+advantage is that they support lightmaps which means that they can cast and
+receive shadows even if they only have a few polygons.  In contrast, an object
+that only supports vertex lighting can not have shadows on a single polygon or
+triangle (except if stencil-based lighting is used) (see section <a href="cs_4.10.24.html#4.10.24">Thing Mesh Object</a>).
+
 </li><li>
-How can I query the plug-in interface?
+<code>genmesh</code>: A triangle mesh object with a single
+material. It only supports vertex- or stencil-based lighting and it is also
+not designed for internal animation (although it is possible to do so).
+Genmeshes are very efficient with regards to memory usage and rendering speed
+(see section <a href="cs_4.10.12.html#4.10.12">Genmesh Mesh Object</a>).
 
-<p>This is the last step before you can use the plug-in. It means that inside
-your program you ask the object registry for an object registered with
-the desired tag. The easiest way to do this is as follows:
-<code>CS_QUERY_REGISTRY(<var>object_reg</var>,<var>iInterface</var>)</code>.
-This macro will search the object registry for the default object
-implementing the given interface (i.e. the object registered with the
-tag equal to the interface name). Alternatively you can also use
-<code>CS_QUERY_REGISTRY_TAG()</code> to get an object with a specific tag.
-</p>
 </li><li>
-Conclusion
+<code>sprite3d</code>: Similar to a <samp>`genmesh'</samp> except
+that it also supports frame-based animation
+(see section <a href="cs_4.10.10.html#4.10.10">Sprite3D Mesh Object</a>).
 
-<p>To sum it up, <small>SCF</small> is mainly used to provide common interfaces for
-<small>DLL</small>s, but it can also be used by statically linked libraries. If you
-want to know how to write a plug-in yourself, you should read the complete
-<small>SCF</small> documentation. See section <a href="cs_6.2.html#6.2">Shared Class Facility (<small>SCF</small>)</a>.
-</p></li></ul>
+</li><li>
+<code>sprcal3d</code>: Similar to <samp>`sprite3d'</samp> except
+that skeletal or bone based animation is supported.
+(see section <a href="cs_4.10.11.html#4.10.11">SpriteCal3D Mesh Object</a>).
+</li></ul>
 
-<p>For further information about modules and plug-in drivers, see the sections
-on Libraries (see section <a href="cs_6.html#6.">Facilities</a>) and plug-in modules
-(see section <a href="cs_7.html#7.">Plug-In Modules and Drivers</a>).
+<p>Here are some guidelines on using and choosing these meshes:
 </p>
-<p>Now that you have learned some basics about the Crystal Space environment,
-you can try writing your first program.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_5.1.1.html#5.1.1">5.1.1 Basic Crystal Space Concepts</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.1.2.html#5.1.2">5.1.2 Minimum Application Requirements</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.1.3.html#5.1.3">5.1.3 Compiling the Application</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+<ul>
+<li>
+For static geometry, <samp>`thing'</samp> or <samp>`genmesh'</samp> objects are ideal.
+<samp>`genmesh'</samp> typically is used for high-detail objects that only need a
+single material (every triangle can use other parts of the texture) and where
+there is no need for detailed shadows on the individual triangles (usually a
+<samp>`genmesh'</samp> object is either small or highly detailed so that shadows are
+accurately represented using vertex lighting only). <samp>`thing'</samp> is used in
+case you want large objects that have little detail but require detailed
+lighting.
 
+</li><li>
+If you plan on using stencil lighting only, then it is probably best to
+use mostly <samp>`genmesh'</samp> objects.
+
+</li><li>
+For moving objects you can also use <samp>`thing'</samp> or <samp>`genmesh'</samp> as long
+as there is no need to change the object's appearance (i.e. no internal
+animation is required). You have to be aware of lighting problems mentioned
+above, though.
+
+</li><li>
+There are two flags that can also help performance considerably. If you have
+a mesh that will never move then you should use the <code>&lt;staticpos&gt;</code> flag
+on the mesh object in the map (or <samp>`CS_MESH_STATICPOS'</samp> flag for
+<samp>`iMeshObject'</samp>). This is a hint for the engine and the mesh object so that
+it may optimize performance based on the fact that the object will never
+move. The other flag is <code>&lt;staticshape&gt;</code>. This flag can be set on factories
+and mesh objects and indicates that the object will not animate (never changes
+shape). This corresponds with the <samp>`CS_MESH_STATICSHAPE'</samp> and
+<samp>`CS_FACTORY_STATICSHAPE'</samp> flags.
+
+</li><li>
+Game actors and creatures should use <samp>`sprite3d'</samp> or <samp>`sprcal3d'</samp>.
+</li></ul>
+
+<p>One important note when using <samp>`thing'</samp> meshes: it is <em>very</em> important
+to try to use quads instead of triangles. This is because lightmaps are
+rectangular. If you have a wall made out of two triangles then you will have
+two full square lightmaps (one for every triangle) which is a waste given
+that half of these lightmaps will be unusued. If you use a single quad
+polygon for the wall then only one lightmap will be used. Lightmaps can be
+big so this really can make a huge difference on performance.
+</p>
+<a name="SEC743"></a>
+<h4 class="subsubheading"> Assisting the Renderer </h4>
+
+<p>When considering on how to design your objects you should keep in mind
+what the renderer prefers. For the renderer a <em>mesh</em> is defined
+as a polygon or triangle mesh with a single material and/or shader. So, if
+you are using a <samp>`thing'</samp> mesh that uses multiple materials then this is
+actually a set of different meshes for the renderer. To avoid confusion we
+will call the single-material mesh that the renderer uses a <em>render-mesh</em>.
+</p>
+<p>With OpenGL, and especially if you have a 3D card that supports the <small>VBO</small>
+(Vertex Buffer Objects) extension, the renderer prefers render-meshes that have
+a lot of polygons. So, for the renderer it is better to use 10 render-meshes
+with 10000 polygons each, as opposed to 100 render-meshes with 1000 polygons
+each, even though the total number of polygons is the same.
+</p>
+<p>On the other hand, this requirement conflicts with some of the guidelines
+for the visibility culler. Getting an optimal setup depends on the minimum
+hardware you want to support. If you are writing a game for the future and
+decide to require <small>VBO</small> support in the 3D hardware then you should use
+fewer but larger objects. For the current crop of 3D card, finding a good
+compromize is best.
+</p>
+<p>One other technique you can use to help increase the size of render-meshes
+is to try to fit several materials on one material. For example, if you have
+a house with three textures: wall, roof, and doorway then you can create
+a new texture that contains those three textures. The end result of this is
+that every house will be a single render-mesh instead of three which is
+more optimal for OpenGL. There are some disadvantages to this technique,
+however:
+</p>
+<ol>
+<li>
+You have to be able to fit the smaller textures in the big texture without
+too much waste. Fitting four 64x64 textures in one 128x128 texture is easy
+but fitting three 64x64 textures in one 128x128 texture is going to waste
+some precious texture memory. Of course, you could try to use the
+remaining 64x64 space for textures on other objects.
+
+</li><li>
+It is possible that you have to use lower quality textures since combining
+them on a bigger texture may otherwise overflow hardware limitations.
+
+</li><li>
+It is harder for the artist to create models with this technique.
+
+</li><li>
+This technique is not possible if you have a tiling texture; i.e. a wall
+texture that is repeated accross a large surface.
+</li></ol>
+
+<a name="SEC744"></a>
+<h4 class="subsubheading"> Lighting Considerations </h4>
+
+<p>When designing a map you also have to think about where to place lights.
+If you plan to use stencil-based lighting or hardware-based vertex lighting
+then you must be very careful to not exagerate the number of lights.
+Runtime performance with those two techniques depends on the number of lights
+and their influence radius. For this reason you are probably better off using
+lightmapped lighting in case you have a big map with a lot of lights.
+</p>
+<p>With lightmapped lighting there is no runtime cost associated with having
+multiple lights (there is a slight memory cost associated with having many
+pseudo-dynamic lightmaps). A higher number of lights simply means that
+recalculating lighting will take longer.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_5.html#5." title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.1.1.html#5.1.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.2.html#5.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>

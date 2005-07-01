@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.20.3.1 Parameter Delivery</title>
+
+<meta name="description" content="Crystal Space: 4.20.3.1 Parameter Delivery">
+<meta name="keywords" content="Crystal Space: 4.20.3.1 Parameter Delivery">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="AWS-Component-Parameter-Delivery"></a>
+<a name="4.20.3.1"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.20.3.html#4.20.3" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.3.2.html#4.20.3.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.3.html#4.20.3" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h4 class="subsubsection"> 4.20.3.1 Parameter Delivery </h4>
+
+<p>This section describes automatic <em>parameter delivery</em>, which provides a
+mechanism for extracting component parameters from a window definition.
+</p>
+<p>In <small>AWS</small>, all windows are defined by a window definition.
+There may be multiple definitions in a file, or you may have
+multiple files. That's all up to the end user. For a component
+writer, however, you need to be able to get at this information.
+Furthermore, you need to be able to get the information for the
+window that's being created, and for the current instance of the
+component. How does that happen?
+</p>
+<p>It's very easy, actually. The window manager knows everything about everything,
+and it particularly knows where the component is in the window's setup process.
+You should only need to get your parameters once per creation of a window, and
+that happens at setup time.
+</p>
+<p>Each component <strong>must</strong> override a function called <code>Setup()</code> in
+<samp>`awsComponent'</samp>. You should always called the base
+<code>awsComponent::Setup()</code> first, because there is some important work for it
+to do. You must never release or delete the parameters passed in to you,
+because they are not yours. You should never store the settings parameter,
+because it is only on loan and strange things may happen to it. Next, you are
+free to do whatever setup your component needs. This is primarily accomplished
+by using the <code>GetBlah()</code> functions of the preference manager. The
+<code>Setup()</code>
+function is passed two important parameters: a pointer to the window manager,
+and a pointer to the current settings container that contains all the settings
+for this instance of this component. The prototype for the setup function is
+as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool awsComponent::Setup(iAws* wmgr, awsComponentNode *settings)
+</pre></td></tr></table>
+<p>The default <code>Setup()</code> in <samp>`awsComponent'</samp> sets an internal variable
+that stores the pointer to the window manager, which may then be retrieved
+afterward from the accessor function <code>WindowManager()</code>.  The first
+statement in a setup function should always be:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">if (!awsComponent::Setup(wmgr, settings))
+  return false;
+</pre></td></tr></table>
+<p>This lets the lower level setup code do some important initialization, and also
+keeps us from proceeding if something cataclysmic happens during initial setup.
+Returning <samp>`false'</samp> from the <code>Setup()</code> function at any time gracefully
+aborts construction of the component.  It does not, however, abort construction
+of the entire container or window.  It <em>does</em> abort construction of any
+children this component may have.
+</p>
+<p>After the initial call to the base version of <code>Setup()</code>, you may do
+whatever you like. It is common to retrieve any important settings for your
+component here. For example, the base <samp>`awsComponent'</samp> retrieves the
+component's frame rectangle by performing the following:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iAwsPrefs *pm = WindowManager()-&gt;GetPrefMgr();
+pm-&gt;GetRect(settings, &quot;Frame&quot;, frame);
+</pre></td></tr></table>
+<p>The preference manager supports two other versions of this
+command, altogether providing <code>GetInt()</code>, <code>GetRect()</code>,
+and <code>GetString()</code>. The first parameter is always provided
+for you: it is the settings container passed as a parameter. The
+second parameter is the text name of the attribute you wish to
+query, like <samp>`Frame'</samp> or <samp>`Style'</samp>, etc. The final
+parameter is a variable of the type corresponding to the
+function, in which the results will be stored. For
+<code>GetInt()</code> this is always a signed integer, for
+<code>GetRect()</code> this is a <samp>`csRect'</samp> structure, and for
+<code>GetString()</code> this is an <samp>`iString'</samp> pointer.
+</p>
+<p>If your component needs to get information about the default
+skin, it can do so using some other, very similar functions for
+the skin definition:
+</p>
+<ul>
+<li>
+<code>LookupIntKey()</code>
+</li><li>
+<code>LookupRectKey()</code>
+</li><li>
+<code>LookupStringKey()</code>
+</li><li>
+<code>LookupRGBKey()</code>
+</li></ul>
+
+<p>These functions operate in a fashion identical to the
+<code>GetBlah()</code> functions, except that they know where their
+information is coming from, so they don't need a settings
+parameter. Also, <code>LookupRGBKey()</code> requires a reference to
+three value parameters: red, green, and blue in that order. Each
+is an unsigned character. Note that the preference manager also
+supports a <code>Get()</code> for colors, textures, and fonts. It is
+preferred to use these functions for actually getting those
+resources for use. Please consult the <small>API</small> reference for
+<samp>`awsPreferenceManager'</samp> for further information on those
+functions.
+</p>
+<p>Once you have finished your setup process, you should always
+exit by returning <samp>`true'</samp>. This means that everything went well and
+you are ready to work.
+</p>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.20.3.html#4.20.3" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.3.2.html#4.20.3.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.3.html#4.20.3" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
