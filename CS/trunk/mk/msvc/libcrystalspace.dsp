@@ -1438,6 +1438,10 @@ SOURCE=..\..\libs\..\include\cstool\userrndbuf.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\cstool\vfsdirchange.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\cstool\vidprefs.h
 # End Source File
 # Begin Source File
