@@ -79,6 +79,18 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiODEDynamicSystemState.html#a34">RemoveJoint</a> (<a class="el" href="structiODESliderJoint.html">iODESliderJoint</a> *joint)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove a Slider joint from the simulation.  <a href="#a34"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiODEDynamicSystemState.html#a35">SetContactMaxCorrectingVel</a> (float v)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the maximum correcting velocity that contacts are allowed to generate.  <a href="#a35"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiODEDynamicSystemState.html#a36">GetContactMaxCorrectingVel</a> ()=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the maximum correcting velocity that contacts are allowed to generate.  <a href="#a36"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiODEDynamicSystemState.html#a37">SetContactSurfaceLayer</a> (float depth)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the depth of the surface layer around all geometry objects.  <a href="#a37"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiODEDynamicSystemState.html#a38">GetContactSurfaceLayer</a> ()=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the depth of the surface layer around all geometry objects.  <a href="#a38"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This class exposes parameters specific to odedynam as an implementation of <a class="el" href="structiDynamics.html">iDynamics</a>. 
@@ -353,6 +365,65 @@ Enables the experimental StepFast code in ode Setting this in ODEDynamicState se
     </td>
   </tr>
 </table>
+<a class="anchor" name="a36"></a><!-- doxytag: member="iODEDynamicSystemState::GetContactMaxCorrectingVel" ref="a36" args="()=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual float iODEDynamicSystemState::GetContactMaxCorrectingVel           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Get the maximum correcting velocity that contacts are allowed to generate. 
+<p>
+The default value is infinity (i.e. no limit). Reducing this value can help prevent "popping" of deeply embedded objects.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a38"></a><!-- doxytag: member="iODEDynamicSystemState::GetContactSurfaceLayer" ref="a38" args="()=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual float iODEDynamicSystemState::GetContactSurfaceLayer           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Get the depth of the surface layer around all geometry objects. 
+<p>
+Contacts are allowed to sink into the surface layer up to the given depth before coming to rest. The default value is zero. Increasing this to some small value (e.g. 0.001) can help prevent jittering problems due to contacts being repeatedly made and broken. <dl compact><dt><b>Returns:</b></dt><dd>the distance two bodies are allowed to interpenetrate</dd></dl>
+    </td>
+  </tr>
+</table>
 <a class="anchor" name="a34"></a><!-- doxytag: member="iODEDynamicSystemState::RemoveJoint" ref="a34" args="(iODESliderJoint *joint)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -581,6 +652,76 @@ Set the parameters for AutoDisable.
 <p>
 Sets ODE's Constraint Force Mixing (see ode docs for details) Setting this in <a class="el" href="structiODEDynamicState.html">iODEDynamicState</a> will set it for each System Use this only if you want a specific system to behave differently. 
 <p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="a35"></a><!-- doxytag: member="iODEDynamicSystemState::SetContactMaxCorrectingVel" ref="a35" args="(float v)=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual void iODEDynamicSystemState::SetContactMaxCorrectingVel           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">float&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>v</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Set the maximum correcting velocity that contacts are allowed to generate. 
+<p>
+The default value is infinity (i.e. no limit). Reducing this value can help prevent "popping" of deeply embedded objects. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>v</em>&nbsp;</td><td>velocity</td></tr>
+  </table>
+</dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="a37"></a><!-- doxytag: member="iODEDynamicSystemState::SetContactSurfaceLayer" ref="a37" args="(float depth)=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual void iODEDynamicSystemState::SetContactSurfaceLayer           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">float&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>depth</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Set the depth of the surface layer around all geometry objects. 
+<p>
+Contacts are allowed to sink into the surface layer up to the given depth before coming to rest. The default value is zero. Increasing this to some small value (e.g. 0.001) can help prevent jittering problems due to contacts being repeatedly made and broken. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>depth</em>&nbsp;</td><td>the distance two bodies are allowed to interpenetrate</td></tr>
+  </table>
+</dl>
     </td>
   </tr>
 </table>
