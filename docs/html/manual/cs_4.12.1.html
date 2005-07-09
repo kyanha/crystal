@@ -71,9 +71,17 @@ to set the <samp>`back2front'</samp> flag if the object is a genmesh
 (see section <a href="cs_4.10.12.html#4.10.12">Genmesh Mesh Object</a>).
 </p>
 <p>It is often hard to get things correct with such a setup so in many cases
-it is preferable to use <em>keycolor</em> instead of alpha. This is only possible
-if the alpha channel only contains 0% and 100% transparency values. The
-easiest way to do that is to mark the texture as follows in your world file:
+it is preferable to use a method named <em>binary alpha</em>. This means that
+a pixel is either treated as <em>fully opaque</em> or <em>fully transparent</em> -
+the former for alpha values greater than 50%, the latter for alpha values
+lower than 50%. In practice, it is probably desireable to only use 0% and 
+100% transparency values in the alpha channel. Also, the transparent area(s)
+should be filled with a color that is similar to its adjacent opaque pixels, 
+as, due texture filtering, this color will slightly bleed into the neighboring
+opaque pixels. Choosing an approriate color makes this bleeding non-obvious.
+</p>
+<p>The easiest way to activate binary alpha is to mark the texture as follows in 
+your world file:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;texture name=&quot;transparent&quot;&gt;
     &lt;file&gt;mytexture.png&lt;/file&gt;
@@ -84,7 +92,23 @@ easiest way to do that is to mark the texture as follows in your world file:
 So the object can simply use <samp>`object'</samp> render priority and <samp>`zuse'</samp>
 Z-buffer mode.
 </p>
-
+<p>An alternative way to enable binary alpha is by using a <em>keycolor</em> for the
+texture; that is, all pixels of the specified color (in the example magenta)
+will be rendered transparent.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;texture name=&quot;transparent&quot;&gt;
+    &lt;file&gt;mytexture.png&lt;/file&gt;
+    &lt;transparent r=&quot;1&quot; g=&quot;0&quot; b=&quot;1&quot; /&gt;
+&lt;/texture&gt;
+</pre></td></tr></table>
+<p>However, using this technique is discouraged as it is less performant than the 
+using binary alpha as described above; specifically, when loading a texture
+with a keycolor, CrystalSpace will scan the image for pixels of that color and
+set their alpha value to 0. Internally, binary alpha and keycolor work in the 
+same way (transparency of a pixel is based on whether the alpha value is 
+above or below 50%), however, keycolored textures come with a load-time 
+performance penalty due to the required processing step.
+</p>
 
 
 <hr size="1">
