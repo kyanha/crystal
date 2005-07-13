@@ -150,6 +150,10 @@ SOURCE=..\..\apps\tests\awstest\awstest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\apps\tests\awstest\awstest2.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\apps\tests\awstest\cuscomp.cpp
 # End Source File
 # End Group
@@ -163,6 +167,14 @@ SOURCE=..\..\apps\tests\awstest\awssktst.h
 # Begin Source File
 
 SOURCE=..\..\apps\tests\awstest\awstest.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tests\awstest\awstest2.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tests\awstest\awstest_config.h
 # End Source File
 # Begin Source File
 
