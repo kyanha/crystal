@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.13 The Rendering System</title>
+<title>Crystal Space: 4.13.2 Drawing Text</title>
 
-<meta name="description" content="Crystal Space: 4.13 The Rendering System">
-<meta name="keywords" content="Crystal Space: 4.13 The Rendering System">
+<meta name="description" content="Crystal Space: 4.13.2 Drawing Text">
+<meta name="keywords" content="Crystal Space: 4.13.2 Drawing Text">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,14 +40,14 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="g_t3D-Renderer"></a>
-<a name="4.13"></a>
+<a name="HOWTO-Draw-Text"></a>
+<a name="4.13.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_4.12.3.3.html#4.12.3.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.13.1.html#4.13.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_4.13.1.html#4.13.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.14.html#4.14" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.13.html#4.13" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -58,53 +58,46 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 4.13 The Rendering System </h2>
+<h3 class="subsection"> 4.13.2 Drawing Text </h3>
 
-<p>The graphics system consists of two or three drivers:
+<p>This section describes how to draw text.
 </p>
-<ul>
-<li>
-2D Driver or Canvas
+<a name="SEC425"></a>
+<h4 class="subsubheading"> Loading a Font </h4>
 
-<p>This component manages the low-level access to the screen.  It supports
-primitive functions such as drawing pixels and lines, text output and direct
-access to the video memory.  There are several implementations of this
-component.  All are specific to some 3D Rasterizer (for example, the OpenGL 3D
-Rasterizer on Unix requires the OpenGL 2D XLib Driver).
+<p>Before you can use text you need a font first. Typically you load a font
+in an initialization routine. Here is an example:
 </p>
-<p><em>Note</em>: You need not load the 2D driver yourself.  It is loaded
-automatically by the according 3D driver.
+<table><tr><td>&nbsp;</td><td><pre class="example">iGraphics2D* g2d = ...;
+iFontServer* fontserver = g2d-&gt;GetFontServer ();
+iFont* font = fontserver-&gt;LoadFont (CSFONT_COURIER);
+</pre></td></tr></table>
+<p>See section <a href="cs_4.13.1.html#4.13.1">Using a Custom Font</a> for more information on what fonts are
+possible.
 </p>
-</li><li>
-3D Rasterizer
+<a name="SEC426"></a>
+<h4 class="subsubheading"> Actually Drawing the Text </h4>
 
-<p>This component is required by the 3D Engine but is also useful standalone.
-This driver is used to draw 3d graphics and also 2D bitmaps on screen.  It
-automatically loads a 2D driver on startup.  There are currently several
-implementations of this component: Software, OpenGL, and Null (for applications
-that don't need 3D rendering but still want to use Crystal Space). Additionally
-there is also a new OpenGL renderer that is in development right now.
+<p>To draw the text you must first make sure you are in 2D mode. Here is
+how it would work (this code could be put after the call to let the engine
+draw (<code>view-&gt;Draw()</code>):
 </p>
-</li><li>
-Shader System
+<table><tr><td>&nbsp;</td><td><pre class="example">g3d-&gt;BeginDraw (CSDRAW_2DGRAPHICS);
+int fg = g2d-&gt;FindRGB (255, 0, 0);  // Red.
+int bg = -1;   // Transparent.
+g2d-&gt;Write (font, x, y, fg, bg, &quot;This is text&quot;);
+</pre></td></tr></table>
 
-<p>Some of the renderers (currently the OpenGL renderer) also require an
-additional shader system. When this is present it is possible
-to make more advanced texture effects using shaders.
-</p></li></ul>
 
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_4.13.1.html#4.13.1">4.13.1 Using a Custom Font</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.13.2.html#4.13.2">4.13.2 Drawing Text</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_4.12.3.3.html#4.12.3.3" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.13.1.html#4.13.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_4.13.1.html#4.13.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.14.html#4.14" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.13.html#4.13" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
 </tr></table>
 <p>
