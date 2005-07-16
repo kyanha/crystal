@@ -434,6 +434,10 @@ SOURCE=..\..\plugins\aws\awsslot.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws\awssmpt.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws\awsstbar.h
 # End Source File
 # Begin Source File

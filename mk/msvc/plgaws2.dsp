@@ -142,6 +142,10 @@ SOURCE=..\..\plugins\aws2\builtin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws2\frame.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws2\functor.cpp
 # End Source File
 # Begin Source File
@@ -162,11 +166,23 @@ SOURCE=..\..\plugins\aws2\preferences.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws2\property.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws2\registrar.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\aws2\registry.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws2\widget.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws2\window.cpp
 # End Source File
 # Begin Source File
 
@@ -215,6 +231,14 @@ SOURCE=..\..\plugins\aws2\sigslot.h
 # Begin Source File
 
 SOURCE=..\..\plugins\aws2\split.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws2\widget.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws2\window.h
 # End Source File
 # Begin Source File
 
