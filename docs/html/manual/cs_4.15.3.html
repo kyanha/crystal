@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.15.3 GenMesh Animation</title>
+<title>Crystal Space: 4.15.3 Socket Animation</title>
 
-<meta name="description" content="Crystal Space: 4.15.3 GenMesh Animation">
-<meta name="keywords" content="Crystal Space: 4.15.3 GenMesh Animation">
+<meta name="description" content="Crystal Space: 4.15.3 Socket Animation">
+<meta name="keywords" content="Crystal Space: 4.15.3 Socket Animation">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="GenMesh-Animation"></a>
+<a name="Socket-Animation"></a>
 <a name="4.15.3"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.15.2.html#4.15.2" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,10 +58,99 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.15.3 GenMesh Animation </h3>
+<h3 class="subsection"> 4.15.3 Socket Animation </h3>
 
-<p>TODO!
+<p>When you have an animated actor you often want that actor to hold something
+in its hands. Or put a helmet on its head. For this purpose Crystal Space
+has the concept of <em>sockets</em>. Basically a socket is a triangle of the
+mesh on which you can attach other meshes. So when the triangle moves (because
+the model animates) the other mesh (like a weapon) will move with it.
+At this moment both 3D sprites (see section <a href="cs_4.10.10.html#4.10.10">Sprite3D Mesh Object</a>, and Cal3D sprites
+(see section <a href="cs_4.10.11.html#4.10.11">SpriteCal3D Mesh Object</a>) support this feature.
 </p>
+<a name="SEC457"></a>
+<h4 class="subsubheading"> Defining the Socket </h4>
+
+<p>To define the socket you can specify it in the mesh factory file of the model.
+For Cal3D models this happens with something like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;model&quot;&gt;
+  ...
+  &lt;params&gt;
+    ...
+    &lt;socket name=&quot;lefthand&quot; tri=&quot;3&quot; mesh=&quot;0&quot; submesh=&quot;1&quot; /&gt;
+    &lt;socket name=&quot;righthand&quot; tri=&quot;5&quot; mesh=&quot;0&quot; submesh=&quot;2&quot; /&gt;
+  &lt;/params&gt;
+&lt;/meshfact&gt;
+</pre></td></tr></table>
+<p>Basically you have to find out the mesh, submesh, and triangle that specifies
+the place where you want to attach things. In the example above we created
+two sockets, one for the left hand and one for the right hand.
+</p>
+<p>For Spr3D models you have to do it like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;model&quot;&gt;
+  ...
+  &lt;params&gt;
+    ...
+    &lt;socket name=&quot;lefthand&quot; tri=&quot;3&quot; /&gt;
+    &lt;socket name=&quot;righthand&quot; tri=&quot;5&quot; /&gt;
+  &lt;/params&gt;
+&lt;/meshfact&gt;
+</pre></td></tr></table>
+<p>So it is the same but Spr3D doesn't have the concept of meshes and submeshes.
+</p>
+<a name="SEC458"></a>
+<h4 class="subsubheading"> Attaching a Mesh to a Socket </h4>
+
+<p>With this function you can attach a mesh to a socket for a Cal3D model:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool AttachMesh (iMeshWrapper* actorMesh, const char* socketName,
+	const char* objectFactoryName)
+{
+  csRef&lt;iSpriteCal3DState&gt; cal3dstate = SCF_QUERY_INTERFACE (
+  	actorMesh-&gt;GetMeshObject (), iSpriteCal3DState);
+  if (!cal3dstate) return false;
+  iSpriteCal3DSocket* socket = cal3dstate-&gt;FindSocket (socketName);
+  if (!socket) return false;
+  iMeshFactoryWrapper* objectFactory = engine-&gt;GetMeshFactories ()
+  	-&gt;FindByName (objectFactoryName);
+  if (!objectFactory) return false;
+  csRef&lt;iMeshWrapper&gt; object = engine-&gt;CreateMeshWrapper (objectFactory,
+  	objectFactoryName);
+  actorMesh-&gt;GetChildren ()-&gt;Add (object);
+  socket-&gt;SetMeshWrapper (object);
+  // Set a relative transform to correct the orientation of the object
+  // relative to the socket orientation.
+  csTransform trans = ...;
+  socket-&gt;SetTransform (trans);
+  return true;
+}
+</pre></td></tr></table>
+<p>For Spr3D it is exactly the same except that you have to use
+<code>iSpriteSocket</code> instead of <code>iSpriteCal3DSocket</code> and you can't
+currently change the relative transform.
+</p>
+<a name="SEC459"></a>
+<h4 class="subsubheading"> Detaching a Mesh from a Socket </h4>
+
+<p>To remove a mesh from a socket you can do this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">bool DetachMesh (iMeshWrapper* actorMesh, const char* socketName)
+{
+  csRef&lt;iSpriteCal3DState&gt; cal3dstate = SCF_QUERY_INTERFACE (
+  	actorMesh-&gt;GetMeshObject (), iSpriteCal3DState);
+  if (!cal3dstate) return false;
+  iSpriteCal3DSocket* socket = cal3dstate-&gt;FindSocket (socketName);
+  if (!socket) return false;
+  iMeshWrapper* object = socket-&gt;GetMeshWrapper ();
+  if (!object) return false;
+  actorMesh-&gt;GetChildren ()-&gt;Remove (object);
+  socket-&gt;SetMeshWrapper (0);
+  engine-&gt;RemoveObject (object);
+  return true;
+}
+</pre></td></tr></table>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
