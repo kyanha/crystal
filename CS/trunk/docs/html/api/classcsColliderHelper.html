@@ -38,13 +38,16 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">static float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsColliderHelper.html#e4">TraceBeam</a> (<a class="el" href="structiCollideSystem.html">iCollideSystem</a> *cdsys, <a class="el" href="structiSector.html">iSector</a> *sector, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end, bool traverse_portals, <a class="el" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a> &amp;closest_tri, <a class="el" href="classcsVector3.html">csVector3</a> &amp;closest_isect, <a class="el" href="structiMeshWrapper.html">iMeshWrapper</a> **closest_mesh=0)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Trace a beam from 'start' to 'end' and return the first hit.  <a href="#e4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">static <a class="el" href="structcsTraceBeamResult.html">csTraceBeamResult</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsColliderHelper.html#e5">TraceBeam</a> (<a class="el" href="structiCollideSystem.html">iCollideSystem</a> *cdsys, <a class="el" href="structiSector.html">iSector</a> *sector, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end, bool traverse_portals)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Trace a beam from 'start' to 'end' and return the first hit.  <a href="#e5"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This is a class containing a few static member functions to help work with <a class="el" href="classcsColliderWrapper.html">csColliderWrapper</a> and collision detection in general. 
 <p>
 
 <p>
-Definition at line <a class="el" href="cstool_2collider_8h-source.html#l00151">151</a> of file <a class="el" href="cstool_2collider_8h-source.html">collider.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="cstool_2collider_8h-source.html#l00179">179</a> of file <a class="el" href="cstool_2collider_8h-source.html">collider.h</a>.<hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="e2"></a><!-- doxytag: member="csColliderHelper::CollideArray" ref="e2" args="(iCollideSystem *colsys, iCollider *collider, const csReversibleTransform *trans, int num_colliders, iCollider **colliders, csReversibleTransform **transforms)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -299,6 +302,74 @@ This function will also initialize colliders for the children of the mesh. <dl c
 Initialize collision detection (i.e. 
 <p>
 create <a class="el" href="classcsColliderWrapper.html">csColliderWrapper</a>) for all objects in the engine. If the optional region is given only the objects from that region will be initialized.    </td>
+  </tr>
+</table>
+<a class="anchor" name="e5"></a><!-- doxytag: member="csColliderHelper::TraceBeam" ref="e5" args="(iCollideSystem *cdsys, iSector *sector, const csVector3 &amp;start, const csVector3 &amp;end, bool traverse_portals)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">static <a class="el" href="structcsTraceBeamResult.html">csTraceBeamResult</a> csColliderHelper::TraceBeam           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiCollideSystem.html">iCollideSystem</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>cdsys</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="structiSector.html">iSector</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>sector</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>const <a class="el" href="classcsVector3.html">csVector3</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>const <a class="el" href="classcsVector3.html">csVector3</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>end</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap> <em>traverse_portals</em></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"><code> [static]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Trace a beam from 'start' to 'end' and return the first hit. 
+<p>
+This function will use CollideRay() from the collision detection system and is pretty fast. Note that only OPCODE plugin currently supports this! A special note about portals! Portal traversal will NOT be used on portals that have a collider! The idea there is that the portal itself is a surface that cannot be penetrated. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cdsys</em>&nbsp;</td><td>is the collider system. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>sector</em>&nbsp;</td><td>is the starting sector for the beam. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>start</em>&nbsp;</td><td>is the start of the beam. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>end</em>&nbsp;</td><td>is the end of the beam. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>traverse_portals</em>&nbsp;</td><td>set to true in case you want the beam to traverse portals. </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>a result instance of <a class="el" href="structcsTraceBeamResult.html">csTraceBeamResult</a>. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="structcsTraceBeamResult.html">csTraceBeamResult</a></dd></dl>
+    </td>
   </tr>
 </table>
 <a class="anchor" name="e4"></a><!-- doxytag: member="csColliderHelper::TraceBeam" ref="e4" args="(iCollideSystem *cdsys, iSector *sector, const csVector3 &amp;start, const csVector3 &amp;end, bool traverse_portals, csIntersectingTriangle &amp;closest_tri, csVector3 &amp;closest_isect, iMeshWrapper **closest_mesh=0)" --><p>
