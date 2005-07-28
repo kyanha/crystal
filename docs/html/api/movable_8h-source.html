@@ -39,73 +39,74 @@
 <a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IENGINE_MOVABLE_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="transfrm_8h.html">csgeom/transfrm.h</a>"</span>
-<a name="l00030"></a>00030 
-<a name="l00031"></a>00031 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
-<a name="l00032"></a>00032 <span class="keyword">class </span><a class="code" href="classcsMatrix3.html">csMatrix3</a>;
-<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structiSector.html">iSector</a>;
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030 <span class="keyword">class </span><a class="code" href="classcsMatrix3.html">csMatrix3</a>;
+<a name="l00031"></a>00031 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
+<a name="l00032"></a>00032 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
+<a name="l00033"></a>00033 
 <a name="l00034"></a>00034 <span class="keyword">struct </span><a class="code" href="structiMovable.html">iMovable</a>;
-<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiSectorList.html">iSectorList</a>;
-<a name="l00036"></a>00036 
-<a name="l00037"></a>00037 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiMovableListener.html">iMovableListener</a>, 0, 0, 1);
-<a name="l00038"></a>00038 
-<a name="l00043"></a><a class="code" href="structiMovableListener.html">00043</a> <span class="keyword">struct </span><a class="code" href="structiMovableListener.html">iMovableListener</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00044"></a>00044 {
-<a name="l00049"></a>00049   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovableListener.html#a0">MovableChanged</a> (<a class="code" href="structiMovable.html">iMovable</a>* movable) = 0;
-<a name="l00051"></a>00051   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovableListener.html#a1">MovableDestroyed</a> (<a class="code" href="structiMovable.html">iMovable</a>* movable) = 0;
-<a name="l00052"></a>00052 };
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiMovable.html">iMovable</a>, 0, 1, 2);
-<a name="l00055"></a>00055 
-<a name="l00084"></a><a class="code" href="structiMovable.html">00084</a> <span class="keyword">struct </span><a class="code" href="structiMovable.html">iMovable</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00085"></a>00085 {
-<a name="l00090"></a>00090   <span class="keyword">virtual</span> <a class="code" href="structiMovable.html">iMovable</a>* <a class="code" href="structiMovable.html#a0">GetParent</a> () <span class="keyword">const </span>= 0;
-<a name="l00096"></a>00096   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a1">SetParent</a> (<a class="code" href="structiMovable.html">iMovable</a>* parent) = 0;
-<a name="l00097"></a>00097 
-<a name="l00107"></a>00107   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a2">SetSector</a> (<a class="code" href="structiSector.html">iSector</a>* sector) = 0;
-<a name="l00108"></a>00108 
-<a name="l00117"></a>00117   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a3">ClearSectors</a> () = 0;
-<a name="l00118"></a>00118 
-<a name="l00131"></a>00131   <span class="keyword">virtual</span> <a class="code" href="structiSectorList.html">iSectorList</a>* <a class="code" href="structiMovable.html#a4">GetSectors</a> () = 0;
-<a name="l00132"></a>00132 
-<a name="l00136"></a>00136   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMovable.html#a5">InSector</a> () <span class="keyword">const </span>= 0;
-<a name="l00137"></a>00137 
-<a name="l00148"></a>00148   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a6">SetPosition</a> (<a class="code" href="structiSector.html">iSector</a>* home, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
-<a name="l00149"></a>00149 
-<a name="l00160"></a>00160   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a6">SetPosition</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
-<a name="l00161"></a>00161 
-<a name="l00170"></a>00170   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiMovable.html#a8">GetPosition</a> () <span class="keyword">const </span>= 0;
-<a name="l00171"></a>00171 
-<a name="l00177"></a>00177   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> <a class="code" href="structiMovable.html#a9">GetFullPosition</a> () <span class="keyword">const </span>= 0;
-<a name="l00178"></a>00178 
-<a name="l00193"></a>00193   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a10">SetTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; matrix) = 0;
-<a name="l00194"></a>00194 
-<a name="l00208"></a>00208   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a10">SetTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t) = 0;
-<a name="l00209"></a>00209 
-<a name="l00220"></a>00220   <span class="keyword">virtual</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; <a class="code" href="structiMovable.html#a12">GetTransform</a> () = 0;
-<a name="l00221"></a>00221 
-<a name="l00226"></a>00226   <span class="keyword">virtual</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> <a class="code" href="structiMovable.html#a13">GetFullTransform</a> () <span class="keyword">const </span>= 0;
-<a name="l00227"></a>00227 
-<a name="l00238"></a>00238   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a14">MovePosition</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
-<a name="l00239"></a>00239 
-<a name="l00247"></a>00247   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a15">Transform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; matrix) = 0;
-<a name="l00248"></a>00248 
-<a name="l00254"></a>00254   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a16">AddListener</a> (<a class="code" href="structiMovableListener.html">iMovableListener</a>* listener) = 0;
-<a name="l00255"></a>00255 
-<a name="l00259"></a>00259   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a17">RemoveListener</a> (<a class="code" href="structiMovableListener.html">iMovableListener</a>* listener) = 0;
-<a name="l00260"></a>00260 
-<a name="l00272"></a>00272   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a18">UpdateMove</a> () = 0;
-<a name="l00273"></a>00273 
-<a name="l00279"></a>00279   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiMovable.html#a19">GetUpdateNumber</a> () <span class="keyword">const </span>= 0;
-<a name="l00280"></a>00280 
-<a name="l00297"></a>00297   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMovable.html#a20">IsTransformIdentity</a> () <span class="keyword">const </span>= 0;
-<a name="l00298"></a>00298 
-<a name="l00307"></a>00307   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMovable.html#a21">IsFullTransformIdentity</a> () <span class="keyword">const </span>= 0;
-<a name="l00308"></a>00308 
-<a name="l00318"></a>00318   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a22">TransformIdentity</a> () = 0;
-<a name="l00319"></a>00319 };
-<a name="l00320"></a>00320 
-<a name="l00323"></a>00323 <span class="preprocessor">#endif // __CS_IENGINE_MOVABLE_H__</span>
+<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiSector.html">iSector</a>;
+<a name="l00036"></a>00036 <span class="keyword">struct </span><a class="code" href="structiSectorList.html">iSectorList</a>;
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiMovableListener.html">iMovableListener</a>, 0, 0, 1);
+<a name="l00039"></a>00039 
+<a name="l00044"></a><a class="code" href="structiMovableListener.html">00044</a> <span class="keyword">struct </span><a class="code" href="structiMovableListener.html">iMovableListener</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00045"></a>00045 {
+<a name="l00050"></a>00050   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovableListener.html#a0">MovableChanged</a> (<a class="code" href="structiMovable.html">iMovable</a>* movable) = 0;
+<a name="l00052"></a>00052   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovableListener.html#a1">MovableDestroyed</a> (<a class="code" href="structiMovable.html">iMovable</a>* movable) = 0;
+<a name="l00053"></a>00053 };
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiMovable.html">iMovable</a>, 0, 1, 2);
+<a name="l00056"></a>00056 
+<a name="l00085"></a><a class="code" href="structiMovable.html">00085</a> <span class="keyword">struct </span><a class="code" href="structiMovable.html">iMovable</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00086"></a>00086 {
+<a name="l00091"></a>00091   <span class="keyword">virtual</span> <a class="code" href="structiMovable.html">iMovable</a>* <a class="code" href="structiMovable.html#a0">GetParent</a> () <span class="keyword">const </span>= 0;
+<a name="l00097"></a>00097   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a1">SetParent</a> (<a class="code" href="structiMovable.html">iMovable</a>* parent) = 0;
+<a name="l00098"></a>00098 
+<a name="l00108"></a>00108   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a2">SetSector</a> (<a class="code" href="structiSector.html">iSector</a>* sector) = 0;
+<a name="l00109"></a>00109 
+<a name="l00118"></a>00118   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a3">ClearSectors</a> () = 0;
+<a name="l00119"></a>00119 
+<a name="l00132"></a>00132   <span class="keyword">virtual</span> <a class="code" href="structiSectorList.html">iSectorList</a>* <a class="code" href="structiMovable.html#a4">GetSectors</a> () = 0;
+<a name="l00133"></a>00133 
+<a name="l00137"></a>00137   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMovable.html#a5">InSector</a> () <span class="keyword">const </span>= 0;
+<a name="l00138"></a>00138 
+<a name="l00149"></a>00149   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a6">SetPosition</a> (<a class="code" href="structiSector.html">iSector</a>* home, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
+<a name="l00150"></a>00150 
+<a name="l00161"></a>00161   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a6">SetPosition</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
+<a name="l00162"></a>00162 
+<a name="l00171"></a>00171   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiMovable.html#a8">GetPosition</a> () <span class="keyword">const </span>= 0;
+<a name="l00172"></a>00172 
+<a name="l00178"></a>00178   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> <a class="code" href="structiMovable.html#a9">GetFullPosition</a> () <span class="keyword">const </span>= 0;
+<a name="l00179"></a>00179 
+<a name="l00194"></a>00194   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a10">SetTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; matrix) = 0;
+<a name="l00195"></a>00195 
+<a name="l00209"></a>00209   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a10">SetTransform</a> (<span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; t) = 0;
+<a name="l00210"></a>00210 
+<a name="l00221"></a>00221   <span class="keyword">virtual</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; <a class="code" href="structiMovable.html#a12">GetTransform</a> () = 0;
+<a name="l00222"></a>00222 
+<a name="l00227"></a>00227   <span class="keyword">virtual</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> <a class="code" href="structiMovable.html#a13">GetFullTransform</a> () <span class="keyword">const </span>= 0;
+<a name="l00228"></a>00228 
+<a name="l00239"></a>00239   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a14">MovePosition</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) = 0;
+<a name="l00240"></a>00240 
+<a name="l00248"></a>00248   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a15">Transform</a> (<span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a>&amp; matrix) = 0;
+<a name="l00249"></a>00249 
+<a name="l00255"></a>00255   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a16">AddListener</a> (<a class="code" href="structiMovableListener.html">iMovableListener</a>* listener) = 0;
+<a name="l00256"></a>00256 
+<a name="l00260"></a>00260   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a17">RemoveListener</a> (<a class="code" href="structiMovableListener.html">iMovableListener</a>* listener) = 0;
+<a name="l00261"></a>00261 
+<a name="l00273"></a>00273   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a18">UpdateMove</a> () = 0;
+<a name="l00274"></a>00274 
+<a name="l00280"></a>00280   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="structiMovable.html#a19">GetUpdateNumber</a> () <span class="keyword">const </span>= 0;
+<a name="l00281"></a>00281 
+<a name="l00298"></a>00298   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMovable.html#a20">IsTransformIdentity</a> () <span class="keyword">const </span>= 0;
+<a name="l00299"></a>00299 
+<a name="l00308"></a>00308   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMovable.html#a21">IsFullTransformIdentity</a> () <span class="keyword">const </span>= 0;
+<a name="l00309"></a>00309 
+<a name="l00319"></a>00319   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMovable.html#a22">TransformIdentity</a> () = 0;
+<a name="l00320"></a>00320 };
+<a name="l00321"></a>00321 
+<a name="l00324"></a>00324 <span class="preprocessor">#endif // __CS_IENGINE_MOVABLE_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>

@@ -18,8 +18,6 @@
 <div class="nav">
 <a class="el" href="dir_000003.html">igeom</a></div>
 <h1>clip2d.h File Reference</h1><code>#include &quot;<a class="el" href="scf_8h-source.html">csutil/scf.h</a>&quot;</code><br>
-<code>#include &quot;<a class="el" href="vector2_8h-source.html">csgeom/vector2.h</a>&quot;</code><br>
-<code>#include &quot;<a class="el" href="box_8h-source.html">csgeom/box.h</a>&quot;</code><br>
 
 <p>
 <a href="clip2d_8h-source.html">Go to the source code of this file.</a><table border="0" cellpadding="0" cellspacing="0">
@@ -32,30 +30,22 @@
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">This interfaces represents a 2D clipper for polygons.  <a href="structiClipper2D.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Clipper return codes</h2></td></tr>
-<tr><td colspan="2">The clipper routines return one of <code><a class="el" href="group__geom__utils.html#ga88">CS_CLIP_OUTSIDE</a></code>, <code><a class="el" href="group__geom__utils.html#ga89">CS_CLIP_INSIDE</a></code>, <code><a class="el" href="group__geom__utils.html#ga90">CS_CLIP_CLIPPED</a></code> so that we can distinguish between the cases when input polygon is completely outside the clipping polygon (thus it is not visible), completely inside the clipping polygon (thus it has not changed) and partially outside, partially inside (thus it was clipped). <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__geom__utils.html#ga88">CS_CLIP_OUTSIDE</a>&nbsp;&nbsp;&nbsp;0</td></tr>
+<tr><td colspan="2">The clipper routines return one of <code><a class="el" href="group__geom__utils.html#gga27a1">CS_CLIP_OUTSIDE</a></code>, <code><a class="el" href="group__geom__utils.html#gga27a2">CS_CLIP_INSIDE</a></code>, <code><a class="el" href="group__geom__utils.html#gga27a3">CS_CLIP_CLIPPED</a></code> so that we can distinguish between the cases when input polygon is completely outside the clipping polygon (thus it is not visible), completely inside the clipping polygon (thus it has not changed) and partially outside, partially inside (thus it was clipped). <br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__geom__utils.html#gga27a1">CS_CLIP_OUTSIDE</a> =  0, 
+<a class="el" href="group__geom__utils.html#gga27a2">CS_CLIP_INSIDE</a> =  1, 
+<a class="el" href="group__geom__utils.html#gga27a3">CS_CLIP_CLIPPED</a> =  2
+ }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The input polygon is completely outside of clipper polygon.  <a href="group__geom__utils.html#ga88"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__geom__utils.html#ga89">CS_CLIP_INSIDE</a>&nbsp;&nbsp;&nbsp;1</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The input polygon is completely inside (thus has not changed).  <a href="group__geom__utils.html#ga89"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__geom__utils.html#ga90">CS_CLIP_CLIPPED</a>&nbsp;&nbsp;&nbsp;2</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The input polygon was partially inside, partially outside.  <a href="group__geom__utils.html#ga90"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Additional vertex informations</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__geom__utils.html#ga91">CS_VERTEX_ORIGINAL</a>&nbsp;&nbsp;&nbsp;0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__geom__utils.html#gga28a4">CS_VERTEX_ORIGINAL</a> =  0, 
+<a class="el" href="group__geom__utils.html#gga28a5">CS_VERTEX_ONEDGE</a> =  1, 
+<a class="el" href="group__geom__utils.html#gga28a6">CS_VERTEX_INSIDE</a> =  2
+ }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The output vertex is one of the input vertices.  <a href="group__geom__utils.html#ga91"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__geom__utils.html#ga92">CS_VERTEX_ONEDGE</a>&nbsp;&nbsp;&nbsp;1</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The output vertex is located on one of the edges of the original polygon.  <a href="group__geom__utils.html#ga92"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__geom__utils.html#ga93">CS_VERTEX_INSIDE</a>&nbsp;&nbsp;&nbsp;2</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The output vertex is located somewhere inside the original polygon.  <a href="group__geom__utils.html#ga93"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Defines</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__geom__utils.html#ga87">MAX_OUTPUT_VERTICES</a>&nbsp;&nbsp;&nbsp;64</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__geom__utils.html#ga16">MAX_OUTPUT_VERTICES</a>&nbsp;&nbsp;&nbsp;64</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Maximal number of vertices in output (clipped) polygons.  <a href="group__geom__utils.html#ga87"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Maximal number of vertices in output (clipped) polygons.  <a href="group__geom__utils.html#ga16"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 

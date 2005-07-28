@@ -41,86 +41,89 @@
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
 <a name="l00030"></a>00030 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00031"></a>00031 
-<a name="l00032"></a>00032 <span class="preprocessor">#include "igeom/polymesh.h"</span>
-<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="igeom_2objmodel_8h.html">igeom/objmodel.h</a>"</span>
-<a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="refarr_8h.html">csutil/refarr.h</a>"</span>
-<a name="l00035"></a>00035 
-<a name="l00042"></a><a class="code" href="classcsObjectModel.html">00042</a> <span class="keyword">class </span><a class="code" href="classcsObjectModel.html">csObjectModel</a> : <span class="keyword">public</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>
-<a name="l00043"></a>00043 {
-<a name="l00044"></a>00044 <span class="keyword">private</span>:
-<a name="l00045"></a>00045   <span class="keywordtype">long</span> shapenr;
-<a name="l00046"></a>00046   <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh_base;
-<a name="l00047"></a>00047   <a class="code" href="classcsRef.html">csRef&lt;iPolygonMesh&gt;</a> polymesh_colldet;
-<a name="l00048"></a>00048   <a class="code" href="classcsRef.html">csRef&lt;iPolygonMesh&gt;</a> polymesh_viscull;
-<a name="l00049"></a>00049   <a class="code" href="classcsRef.html">csRef&lt;iPolygonMesh&gt;</a> polymesh_shadows;
-<a name="l00050"></a>00050   <a class="code" href="classcsRefArray.html">csRefArray&lt;iObjectModelListener&gt;</a> listeners;
-<a name="l00051"></a>00051 
-<a name="l00052"></a>00052 <span class="keyword">public</span>:
-<a name="l00057"></a><a class="code" href="classcsObjectModel.html#a0">00057</a>   <a class="code" href="classcsObjectModel.html#a0">csObjectModel</a> ()
-<a name="l00058"></a>00058   {
-<a name="l00059"></a>00059     shapenr = -1;
-<a name="l00060"></a>00060     polymesh_base = 0;
-<a name="l00061"></a>00061   }
-<a name="l00062"></a>00062 
-<a name="l00063"></a><a class="code" href="classcsObjectModel.html#a1">00063</a>   <span class="keyword">virtual</span> <a class="code" href="classcsObjectModel.html#a1">~csObjectModel</a> () { }
-<a name="l00064"></a>00064 
-<a name="l00068"></a><a class="code" href="classcsObjectModel.html#a2">00068</a>   <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a2">SetPolygonMeshBase</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* base)
-<a name="l00069"></a>00069   {
-<a name="l00070"></a>00070     polymesh_base = base;
-<a name="l00071"></a>00071   }
-<a name="l00072"></a>00072 
-<a name="l00076"></a><a class="code" href="classcsObjectModel.html#a3">00076</a>   <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a3">ShapeChanged</a> ()
-<a name="l00077"></a>00077   {
-<a name="l00078"></a>00078     shapenr++;
-<a name="l00079"></a>00079     <a class="code" href="classcsObjectModel.html#a5">FireListeners</a> ();
-<a name="l00080"></a>00080   }
-<a name="l00081"></a>00081 
-<a name="l00085"></a><a class="code" href="classcsObjectModel.html#a4">00085</a>   <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a4">SetShapeNumber</a> (<span class="keywordtype">long</span> n)
-<a name="l00086"></a>00086   {
-<a name="l00087"></a>00087     shapenr = n;
-<a name="l00088"></a>00088   }
-<a name="l00089"></a>00089 
-<a name="l00093"></a><a class="code" href="classcsObjectModel.html#a5">00093</a>   <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a5">FireListeners</a> ()
-<a name="l00094"></a>00094   {
-<a name="l00095"></a>00095     size_t i;
-<a name="l00096"></a>00096     <span class="keywordflow">for</span> (i = 0 ; i &lt; listeners.<a class="code" href="classcsArray.html#a5">Length</a> () ; i++)
-<a name="l00097"></a>00097       listeners[i]-&gt;ObjectModelChanged (<span class="keyword">this</span>);
-<a name="l00098"></a>00098   }
-<a name="l00099"></a>00099 
-<a name="l00100"></a><a class="code" href="classcsObjectModel.html#a6">00100</a>   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="classcsObjectModel.html#a6">GetShapeNumber</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> shapenr; }
-<a name="l00101"></a><a class="code" href="classcsObjectModel.html#a7">00101</a>   <span class="keyword">virtual</span> <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* <a class="code" href="classcsObjectModel.html#a7">GetPolygonMeshBase</a> () { <span class="keywordflow">return</span> polymesh_base; }
-<a name="l00102"></a><a class="code" href="classcsObjectModel.html#a8">00102</a>   <span class="keyword">virtual</span> <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* <a class="code" href="classcsObjectModel.html#a8">GetPolygonMeshColldet</a> () { <span class="keywordflow">return</span> polymesh_colldet; }
-<a name="l00103"></a><a class="code" href="classcsObjectModel.html#a9">00103</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a9">SetPolygonMeshColldet</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh)
-<a name="l00104"></a>00104   {
-<a name="l00105"></a>00105     polymesh_colldet = polymesh;
-<a name="l00106"></a>00106   }
-<a name="l00107"></a><a class="code" href="classcsObjectModel.html#a10">00107</a>   <span class="keyword">virtual</span> <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* <a class="code" href="classcsObjectModel.html#a10">GetPolygonMeshViscull</a> () { <span class="keywordflow">return</span> polymesh_viscull; }
-<a name="l00108"></a><a class="code" href="classcsObjectModel.html#a11">00108</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a11">SetPolygonMeshViscull</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh)
-<a name="l00109"></a>00109   {
-<a name="l00110"></a>00110     polymesh_viscull = polymesh;
-<a name="l00111"></a>00111   }
-<a name="l00112"></a><a class="code" href="classcsObjectModel.html#a12">00112</a>   <span class="keyword">virtual</span> <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* <a class="code" href="classcsObjectModel.html#a12">GetPolygonMeshShadows</a> () { <span class="keywordflow">return</span> polymesh_shadows; }
-<a name="l00113"></a><a class="code" href="classcsObjectModel.html#a13">00113</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a13">SetPolygonMeshShadows</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh)
-<a name="l00114"></a>00114   {
-<a name="l00115"></a>00115     polymesh_shadows = polymesh;
-<a name="l00116"></a>00116   }
-<a name="l00117"></a><a class="code" href="classcsObjectModel.html#a14">00117</a>   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonMesh&gt;</a> <a class="code" href="classcsObjectModel.html#a14">CreateLowerDetailPolygonMesh</a> (<span class="keywordtype">float</span>)
-<a name="l00118"></a>00118   {
-<a name="l00119"></a>00119     <span class="keywordflow">return</span> 0;
-<a name="l00120"></a>00120   }
-<a name="l00121"></a><a class="code" href="classcsObjectModel.html#a15">00121</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a15">AddListener</a> (<a class="code" href="structiObjectModelListener.html">iObjectModelListener</a>* listener)
-<a name="l00122"></a>00122   {
-<a name="l00123"></a>00123     <a class="code" href="classcsObjectModel.html#a16">RemoveListener</a> (listener);
-<a name="l00124"></a>00124     listeners.<a class="code" href="classcsArray.html#a16">Push</a> (listener);
-<a name="l00125"></a>00125   }
-<a name="l00126"></a><a class="code" href="classcsObjectModel.html#a16">00126</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a16">RemoveListener</a> (<a class="code" href="structiObjectModelListener.html">iObjectModelListener</a>* listener)
-<a name="l00127"></a>00127   {
-<a name="l00128"></a>00128     listeners.<a class="code" href="classcsArray.html#a38">Delete</a> (listener);
-<a name="l00129"></a>00129   }
-<a name="l00130"></a>00130 };
-<a name="l00131"></a>00131 
-<a name="l00134"></a>00134 <span class="preprocessor">#endif // __CS_CSGEOM_OBJMODEL_H__</span>
-<a name="l00135"></a>00135 <span class="preprocessor"></span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="refarr_8h.html">csutil/refarr.h</a>"</span>
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="igeom_2objmodel_8h.html">igeom/objmodel.h</a>"</span>
+<a name="l00035"></a>00035 <span class="preprocessor">#include "igeom/polymesh.h"</span>
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038 
+<a name="l00045"></a><a class="code" href="classcsObjectModel.html">00045</a> <span class="keyword">class </span><a class="code" href="classcsObjectModel.html">csObjectModel</a> : <span class="keyword">public</span> <a class="code" href="structiObjectModel.html">iObjectModel</a>
+<a name="l00046"></a>00046 {
+<a name="l00047"></a>00047 <span class="keyword">private</span>:
+<a name="l00048"></a>00048   <span class="keywordtype">long</span> shapenr;
+<a name="l00049"></a>00049   <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh_base;
+<a name="l00050"></a>00050   <a class="code" href="classcsRef.html">csRef&lt;iPolygonMesh&gt;</a> polymesh_colldet;
+<a name="l00051"></a>00051   <a class="code" href="classcsRef.html">csRef&lt;iPolygonMesh&gt;</a> polymesh_viscull;
+<a name="l00052"></a>00052   <a class="code" href="classcsRef.html">csRef&lt;iPolygonMesh&gt;</a> polymesh_shadows;
+<a name="l00053"></a>00053   <a class="code" href="classcsRefArray.html">csRefArray&lt;iObjectModelListener&gt;</a> listeners;
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055 <span class="keyword">public</span>:
+<a name="l00060"></a><a class="code" href="classcsObjectModel.html#a0">00060</a>   <a class="code" href="classcsObjectModel.html#a0">csObjectModel</a> ()
+<a name="l00061"></a>00061   {
+<a name="l00062"></a>00062     shapenr = -1;
+<a name="l00063"></a>00063     polymesh_base = 0;
+<a name="l00064"></a>00064   }
+<a name="l00065"></a>00065 
+<a name="l00066"></a><a class="code" href="classcsObjectModel.html#a1">00066</a>   <span class="keyword">virtual</span> <a class="code" href="classcsObjectModel.html#a1">~csObjectModel</a> () { }
+<a name="l00067"></a>00067 
+<a name="l00071"></a><a class="code" href="classcsObjectModel.html#a2">00071</a>   <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a2">SetPolygonMeshBase</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* base)
+<a name="l00072"></a>00072   {
+<a name="l00073"></a>00073     polymesh_base = base;
+<a name="l00074"></a>00074   }
+<a name="l00075"></a>00075 
+<a name="l00079"></a><a class="code" href="classcsObjectModel.html#a3">00079</a>   <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a3">ShapeChanged</a> ()
+<a name="l00080"></a>00080   {
+<a name="l00081"></a>00081     shapenr++;
+<a name="l00082"></a>00082     <a class="code" href="classcsObjectModel.html#a5">FireListeners</a> ();
+<a name="l00083"></a>00083   }
+<a name="l00084"></a>00084 
+<a name="l00088"></a><a class="code" href="classcsObjectModel.html#a4">00088</a>   <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a4">SetShapeNumber</a> (<span class="keywordtype">long</span> n)
+<a name="l00089"></a>00089   {
+<a name="l00090"></a>00090     shapenr = n;
+<a name="l00091"></a>00091   }
+<a name="l00092"></a>00092 
+<a name="l00096"></a><a class="code" href="classcsObjectModel.html#a5">00096</a>   <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a5">FireListeners</a> ()
+<a name="l00097"></a>00097   {
+<a name="l00098"></a>00098     size_t i;
+<a name="l00099"></a>00099     <span class="keywordflow">for</span> (i = 0 ; i &lt; listeners.<a class="code" href="classcsArray.html#a5">Length</a> () ; i++)
+<a name="l00100"></a>00100       listeners[i]-&gt;ObjectModelChanged (<span class="keyword">this</span>);
+<a name="l00101"></a>00101   }
+<a name="l00102"></a>00102 
+<a name="l00103"></a><a class="code" href="classcsObjectModel.html#a6">00103</a>   <span class="keyword">virtual</span> <span class="keywordtype">long</span> <a class="code" href="classcsObjectModel.html#a6">GetShapeNumber</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> shapenr; }
+<a name="l00104"></a><a class="code" href="classcsObjectModel.html#a7">00104</a>   <span class="keyword">virtual</span> <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* <a class="code" href="classcsObjectModel.html#a7">GetPolygonMeshBase</a> () { <span class="keywordflow">return</span> polymesh_base; }
+<a name="l00105"></a><a class="code" href="classcsObjectModel.html#a8">00105</a>   <span class="keyword">virtual</span> <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* <a class="code" href="classcsObjectModel.html#a8">GetPolygonMeshColldet</a> () { <span class="keywordflow">return</span> polymesh_colldet; }
+<a name="l00106"></a><a class="code" href="classcsObjectModel.html#a9">00106</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a9">SetPolygonMeshColldet</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh)
+<a name="l00107"></a>00107   {
+<a name="l00108"></a>00108     polymesh_colldet = polymesh;
+<a name="l00109"></a>00109   }
+<a name="l00110"></a><a class="code" href="classcsObjectModel.html#a10">00110</a>   <span class="keyword">virtual</span> <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* <a class="code" href="classcsObjectModel.html#a10">GetPolygonMeshViscull</a> () { <span class="keywordflow">return</span> polymesh_viscull; }
+<a name="l00111"></a><a class="code" href="classcsObjectModel.html#a11">00111</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a11">SetPolygonMeshViscull</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh)
+<a name="l00112"></a>00112   {
+<a name="l00113"></a>00113     polymesh_viscull = polymesh;
+<a name="l00114"></a>00114   }
+<a name="l00115"></a><a class="code" href="classcsObjectModel.html#a12">00115</a>   <span class="keyword">virtual</span> <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* <a class="code" href="classcsObjectModel.html#a12">GetPolygonMeshShadows</a> () { <span class="keywordflow">return</span> polymesh_shadows; }
+<a name="l00116"></a><a class="code" href="classcsObjectModel.html#a13">00116</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a13">SetPolygonMeshShadows</a> (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh)
+<a name="l00117"></a>00117   {
+<a name="l00118"></a>00118     polymesh_shadows = polymesh;
+<a name="l00119"></a>00119   }
+<a name="l00120"></a><a class="code" href="classcsObjectModel.html#a14">00120</a>   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPolygonMesh&gt;</a> <a class="code" href="classcsObjectModel.html#a14">CreateLowerDetailPolygonMesh</a> (<span class="keywordtype">float</span>)
+<a name="l00121"></a>00121   {
+<a name="l00122"></a>00122     <span class="keywordflow">return</span> 0;
+<a name="l00123"></a>00123   }
+<a name="l00124"></a><a class="code" href="classcsObjectModel.html#a15">00124</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a15">AddListener</a> (<a class="code" href="structiObjectModelListener.html">iObjectModelListener</a>* listener)
+<a name="l00125"></a>00125   {
+<a name="l00126"></a>00126     <a class="code" href="classcsObjectModel.html#a16">RemoveListener</a> (listener);
+<a name="l00127"></a>00127     listeners.<a class="code" href="classcsArray.html#a16">Push</a> (listener);
+<a name="l00128"></a>00128   }
+<a name="l00129"></a><a class="code" href="classcsObjectModel.html#a16">00129</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsObjectModel.html#a16">RemoveListener</a> (<a class="code" href="structiObjectModelListener.html">iObjectModelListener</a>* listener)
+<a name="l00130"></a>00130   {
+<a name="l00131"></a>00131     listeners.<a class="code" href="classcsArray.html#a38">Delete</a> (listener);
+<a name="l00132"></a>00132   }
+<a name="l00133"></a>00133 };
+<a name="l00134"></a>00134 
+<a name="l00137"></a>00137 <span class="preprocessor">#endif // __CS_CSGEOM_OBJMODEL_H__</span>
+<a name="l00138"></a>00138 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>

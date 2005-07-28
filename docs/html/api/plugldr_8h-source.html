@@ -39,53 +39,54 @@
 <a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_PLUGLDR_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00022"></a>00022 <span class="preprocessor">#include "csextern.h"</span>
-<a name="l00023"></a>00023 <span class="preprocessor">#include "<a class="code" href="parray_8h.html">parray.h</a>"</span>
-<a name="l00024"></a>00024 <span class="preprocessor">#include "<a class="code" href="util_8h.html">util.h</a>"</span>
-<a name="l00025"></a>00025 
-<a name="l00026"></a>00026 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
-<a name="l00027"></a>00027 
-<a name="l00031"></a><a class="code" href="structcsPluginLoadRec.html">00031</a> <span class="keyword">struct </span><a class="code" href="structcsPluginLoadRec.html">csPluginLoadRec</a>
-<a name="l00032"></a>00032 {
-<a name="l00033"></a><a class="code" href="structcsPluginLoadRec.html#o0">00033</a>   <span class="keywordtype">char</span>* <a class="code" href="structcsPluginLoadRec.html#o0">Tag</a>;
-<a name="l00034"></a><a class="code" href="structcsPluginLoadRec.html#o1">00034</a>   <span class="keywordtype">char</span>* <a class="code" href="structcsPluginLoadRec.html#o1">ClassID</a>;
-<a name="l00035"></a><a class="code" href="structcsPluginLoadRec.html#o2">00035</a>   <a class="code" href="classcsRef.html">csRef&lt;iBase&gt;</a> <a class="code" href="structcsPluginLoadRec.html#o2">plugin</a>;
-<a name="l00036"></a>00036 
-<a name="l00037"></a><a class="code" href="structcsPluginLoadRec.html#a0">00037</a>   <a class="code" href="structcsPluginLoadRec.html#a0">csPluginLoadRec</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* iTag, <span class="keyword">const</span> <span class="keywordtype">char</span>* iClassID)
-<a name="l00038"></a>00038   { <a class="code" href="structcsPluginLoadRec.html#o0">Tag</a> = <a class="code" href="group__util.html#ga98">csStrNew</a> (iTag); <a class="code" href="structcsPluginLoadRec.html#o1">ClassID</a> = <a class="code" href="group__util.html#ga98">csStrNew</a> (iClassID); }
-<a name="l00039"></a><a class="code" href="structcsPluginLoadRec.html#a1">00039</a>   <a class="code" href="structcsPluginLoadRec.html#a1">~csPluginLoadRec</a> ()
-<a name="l00040"></a>00040   { <span class="keyword">delete</span> [] <a class="code" href="structcsPluginLoadRec.html#o1">ClassID</a>; <span class="keyword">delete</span> [] <a class="code" href="structcsPluginLoadRec.html#o0">Tag</a>; }
-<a name="l00041"></a>00041 };
-<a name="l00042"></a>00042 
-<a name="l00046"></a><a class="code" href="classcsPluginList.html">00046</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPluginList.html">csPluginList</a> : <span class="keyword">public</span> <a class="code" href="classcsPDelArray.html">csPDelArray</a>&lt;csPluginLoadRec&gt;
-<a name="l00047"></a>00047 {
-<a name="l00048"></a>00048 <span class="keyword">public</span>:
-<a name="l00049"></a>00049   <span class="keywordtype">bool</span> <a class="code" href="classcsArray.html#a28">Sort</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
-<a name="l00050"></a>00050 <span class="keyword">private</span>:
-<a name="l00051"></a>00051   <span class="keywordtype">bool</span> RecurseSort (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, size_t row, size_t* order, size_t* loop,
-<a name="l00052"></a>00052     <span class="keywordtype">bool</span> *matrix);
-<a name="l00053"></a>00053 };
-<a name="l00054"></a>00054 
-<a name="l00059"></a><a class="code" href="classcsPluginLoader.html">00059</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPluginLoader
-<a name="l00060"></a>00060 {
-<a name="l00061"></a><a class="code" href="classcsPluginLoader.html#n0">00061</a>   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsPluginList.html">csPluginList</a>;
-<a name="l00062"></a>00062 
-<a name="l00063"></a>00063 <span class="keyword">private</span>:
-<a name="l00064"></a>00064   <span class="comment">// The object registry.</span>
-<a name="l00065"></a>00065   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-<a name="l00066"></a>00066   <span class="comment">// Requested plugins.</span>
-<a name="l00067"></a>00067   <a class="code" href="classcsPluginList.html">csPluginList</a> requested_plugins;
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069 <span class="keyword">public</span>:
-<a name="l00071"></a>00071   csPluginLoader (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
-<a name="l00073"></a>00073   <span class="keyword">virtual</span> ~csPluginLoader ();
-<a name="l00074"></a>00074 
-<a name="l00085"></a>00085   <span class="keywordtype">void</span> RequestPlugin (<span class="keyword">const</span> <span class="keywordtype">char</span>* pluginName, <span class="keyword">const</span> <span class="keywordtype">char</span>* tagName);
-<a name="l00086"></a>00086 
-<a name="l00088"></a>00088   <span class="keywordtype">bool</span> LoadPlugins ();
-<a name="l00089"></a>00089 };
-<a name="l00090"></a>00090 
-<a name="l00091"></a>00091 <span class="preprocessor">#endif // __CS_PLUGLDR_H__</span>
-<a name="l00092"></a>00092 <span class="preprocessor"></span>
+<a name="l00023"></a>00023 <span class="preprocessor">#include "<a class="code" href="parray_8h.html">csutil/parray.h</a>"</span>
+<a name="l00024"></a>00024 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+<a name="l00028"></a>00028 
+<a name="l00032"></a><a class="code" href="structcsPluginLoadRec.html">00032</a> <span class="keyword">struct </span><a class="code" href="structcsPluginLoadRec.html">csPluginLoadRec</a>
+<a name="l00033"></a>00033 {
+<a name="l00034"></a><a class="code" href="structcsPluginLoadRec.html#o0">00034</a>   <span class="keywordtype">char</span>* <a class="code" href="structcsPluginLoadRec.html#o0">Tag</a>;
+<a name="l00035"></a><a class="code" href="structcsPluginLoadRec.html#o1">00035</a>   <span class="keywordtype">char</span>* <a class="code" href="structcsPluginLoadRec.html#o1">ClassID</a>;
+<a name="l00036"></a><a class="code" href="structcsPluginLoadRec.html#o2">00036</a>   <a class="code" href="classcsRef.html">csRef&lt;iBase&gt;</a> <a class="code" href="structcsPluginLoadRec.html#o2">plugin</a>;
+<a name="l00037"></a>00037 
+<a name="l00038"></a><a class="code" href="structcsPluginLoadRec.html#a0">00038</a>   <a class="code" href="structcsPluginLoadRec.html#a0">csPluginLoadRec</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* iTag, <span class="keyword">const</span> <span class="keywordtype">char</span>* iClassID)
+<a name="l00039"></a>00039   { <a class="code" href="structcsPluginLoadRec.html#o0">Tag</a> = <a class="code" href="group__util.html#ga98">csStrNew</a> (iTag); <a class="code" href="structcsPluginLoadRec.html#o1">ClassID</a> = <a class="code" href="group__util.html#ga98">csStrNew</a> (iClassID); }
+<a name="l00040"></a><a class="code" href="structcsPluginLoadRec.html#a1">00040</a>   <a class="code" href="structcsPluginLoadRec.html#a1">~csPluginLoadRec</a> ()
+<a name="l00041"></a>00041   { <span class="keyword">delete</span> [] <a class="code" href="structcsPluginLoadRec.html#o1">ClassID</a>; <span class="keyword">delete</span> [] <a class="code" href="structcsPluginLoadRec.html#o0">Tag</a>; }
+<a name="l00042"></a>00042 };
+<a name="l00043"></a>00043 
+<a name="l00047"></a><a class="code" href="classcsPluginList.html">00047</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPluginList.html">csPluginList</a> : <span class="keyword">public</span> <a class="code" href="classcsPDelArray.html">csPDelArray</a>&lt;csPluginLoadRec&gt;
+<a name="l00048"></a>00048 {
+<a name="l00049"></a>00049 <span class="keyword">public</span>:
+<a name="l00050"></a>00050   <span class="keywordtype">bool</span> <a class="code" href="classcsArray.html#a28">Sort</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
+<a name="l00051"></a>00051 <span class="keyword">private</span>:
+<a name="l00052"></a>00052   <span class="keywordtype">bool</span> RecurseSort (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*, size_t row, size_t* order, size_t* loop,
+<a name="l00053"></a>00053     <span class="keywordtype">bool</span> *matrix);
+<a name="l00054"></a>00054 };
+<a name="l00055"></a>00055 
+<a name="l00060"></a><a class="code" href="classcsPluginLoader.html">00060</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPluginLoader
+<a name="l00061"></a>00061 {
+<a name="l00062"></a><a class="code" href="classcsPluginLoader.html#n0">00062</a>   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsPluginList.html">csPluginList</a>;
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 <span class="keyword">private</span>:
+<a name="l00065"></a>00065   <span class="comment">// The object registry.</span>
+<a name="l00066"></a>00066   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+<a name="l00067"></a>00067   <span class="comment">// Requested plugins.</span>
+<a name="l00068"></a>00068   <a class="code" href="classcsPluginList.html">csPluginList</a> requested_plugins;
+<a name="l00069"></a>00069 
+<a name="l00070"></a>00070 <span class="keyword">public</span>:
+<a name="l00072"></a>00072   csPluginLoader (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
+<a name="l00074"></a>00074   <span class="keyword">virtual</span> ~csPluginLoader ();
+<a name="l00075"></a>00075 
+<a name="l00086"></a>00086   <span class="keywordtype">void</span> RequestPlugin (<span class="keyword">const</span> <span class="keywordtype">char</span>* pluginName, <span class="keyword">const</span> <span class="keywordtype">char</span>* tagName);
+<a name="l00087"></a>00087 
+<a name="l00089"></a>00089   <span class="keywordtype">bool</span> LoadPlugins ();
+<a name="l00090"></a>00090 };
+<a name="l00091"></a>00091 
+<a name="l00092"></a>00092 <span class="preprocessor">#endif // __CS_PLUGLDR_H__</span>
+<a name="l00093"></a>00093 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>

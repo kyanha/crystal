@@ -39,75 +39,74 @@
 <a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IMESH_BEZIER_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00022"></a>00022 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-<a name="l00023"></a>00023 <span class="preprocessor">#include "csutil/flags.h"</span>
-<a name="l00024"></a>00024 
-<a name="l00025"></a>00025 <span class="keyword">class </span>csCurve;
-<a name="l00026"></a>00026 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
-<a name="l00027"></a>00027 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
-<a name="l00028"></a>00028 <span class="keyword">class </span><a class="code" href="classcsMatrix3.html">csMatrix3</a>;
-<a name="l00029"></a>00029 <span class="keyword">struct </span><a class="code" href="structiSector.html">iSector</a>;
-<a name="l00030"></a>00030 <span class="keyword">struct </span><a class="code" href="structiCurve.html">iCurve</a>;
-<a name="l00031"></a>00031 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
-<a name="l00032"></a>00032 <span class="keyword">struct </span><a class="code" href="structiMovable.html">iMovable</a>;
-<a name="l00033"></a>00033 
-<a name="l00046"></a><a class="code" href="structiCurve.html">00046</a> <span class="keyword">struct </span><a class="code" href="structiCurve.html">iCurve</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00047"></a>00047 {
-<a name="l00049"></a>00049   <span class="keyword">virtual</span> csCurve* <a class="code" href="structiCurve.html#a0">GetOriginalObject</a> () = 0;
-<a name="l00051"></a>00051   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *<a class="code" href="structiCurve.html#a1">QueryObject</a>() = 0;
-<a name="l00053"></a>00053   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCurve.html#a2">SetMaterial</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat) = 0;
-<a name="l00055"></a>00055   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiCurve.html#a3">GetMaterial</a> () = 0;
-<a name="l00057"></a>00057   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCurve.html#a4">SetControlPoint</a> (<span class="keywordtype">int</span> idx, <span class="keywordtype">int</span> control_id) = 0;
-<a name="l00058"></a>00058 
-<a name="l00060"></a>00060   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiCurve.html#a5">GetVertexCount</a> () <span class="keyword">const </span>= 0;
-<a name="l00062"></a>00062   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiCurve.html#a6">GetVertex</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
-<a name="l00064"></a>00064   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCurve.html#a7">SetVertex</a> (<span class="keywordtype">int</span> idx, <span class="keywordtype">int</span> vt) = 0;
-<a name="l00065"></a>00065 };
-<a name="l00066"></a>00066 
-<a name="l00067"></a>00067 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBezierFactoryState.html">iBezierFactoryState</a>, 0, 0, 1);
-<a name="l00068"></a>00068 
-<a name="l00088"></a><a class="code" href="structiBezierFactoryState.html">00088</a> <span class="keyword">struct </span><a class="code" href="structiBezierFactoryState.html">iBezierFactoryState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00089"></a>00089 {
-<a name="l00093"></a>00093   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiBezierFactoryState.html#a0">GetCurvesCenter</a> () <span class="keyword">const </span>= 0;
-<a name="l00097"></a>00097   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a1">SetCurvesCenter</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; cen) = 0;
-<a name="l00098"></a>00098 
-<a name="l00102"></a>00102   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiBezierFactoryState.html#a2">GetCurvesScale</a> () <span class="keyword">const </span>= 0;
-<a name="l00106"></a>00106   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a3">SetCurvesScale</a> (<span class="keywordtype">float</span> scale) = 0;
-<a name="l00107"></a>00107 
-<a name="l00109"></a>00109   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a4">AddCurveVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv) = 0;
-<a name="l00111"></a>00111   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBezierFactoryState.html#a5">GetCurveCount</a> () <span class="keyword">const </span>= 0;
-<a name="l00113"></a>00113   <span class="keyword">virtual</span> <a class="code" href="structiCurve.html">iCurve</a>* <a class="code" href="structiBezierFactoryState.html#a6">GetCurve</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
-<a name="l00115"></a>00115   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBezierFactoryState.html#a7">GetCurveVertexCount</a> () <span class="keyword">const </span>= 0;
-<a name="l00117"></a>00117   <span class="keyword">virtual</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiBezierFactoryState.html#a8">GetCurveVertex</a> (<span class="keywordtype">int</span> i) <span class="keyword">const </span>= 0;
-<a name="l00119"></a>00119   <span class="keyword">virtual</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structiBezierFactoryState.html#a9">GetCurveVertices</a> () <span class="keyword">const </span>= 0;
-<a name="l00121"></a>00121   <span class="keyword">virtual</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; <a class="code" href="structiBezierFactoryState.html#a10">GetCurveTexel</a> (<span class="keywordtype">int</span> i) <span class="keyword">const </span>= 0;
-<a name="l00123"></a>00123   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a11">SetCurveVertex</a> (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vt) = 0;
-<a name="l00125"></a>00125   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a12">SetCurveTexel</a> (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; vt) = 0;
-<a name="l00127"></a>00127   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a13">ClearCurveVertices</a> () = 0;
-<a name="l00128"></a>00128 
-<a name="l00130"></a>00130   <span class="keyword">virtual</span> <a class="code" href="structiCurve.html">iCurve</a>* <a class="code" href="structiBezierFactoryState.html#a14">CreateCurve</a> () = 0;
-<a name="l00132"></a>00132   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBezierFactoryState.html#a15">FindCurveIndex</a> (<a class="code" href="structiCurve.html">iCurve</a>* curve) <span class="keyword">const </span>= 0;
-<a name="l00134"></a>00134   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a16">RemoveCurve</a> (<span class="keywordtype">int</span> idx) = 0;
-<a name="l00136"></a>00136   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a17">RemoveCurves</a> () = 0;
-<a name="l00137"></a>00137 
-<a name="l00141"></a>00141   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiBezierFactoryState.html#a18">GetCosinusFactor</a> () <span class="keyword">const </span>= 0;
-<a name="l00147"></a>00147   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a19">SetCosinusFactor</a> (<span class="keywordtype">float</span> cosfact) = 0;
-<a name="l00148"></a>00148 
-<a name="l00152"></a>00152   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a20">MergeTemplate</a> (<a class="code" href="structiBezierFactoryState.html">iBezierFactoryState</a>* tpl,
-<a name="l00153"></a>00153         <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* default_material = 0,
-<a name="l00154"></a>00154         <a class="code" href="classcsVector3.html">csVector3</a>* shift = 0, <a class="code" href="classcsMatrix3.html">csMatrix3</a>* transform = 0) = 0;
-<a name="l00155"></a>00155 };
-<a name="l00156"></a>00156 
-<a name="l00157"></a>00157 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBezierState.html">iBezierState</a>, 0, 0, 1);
-<a name="l00158"></a>00158 
-<a name="l00177"></a><a class="code" href="structiBezierState.html">00177</a> <span class="keyword">struct </span><a class="code" href="structiBezierState.html">iBezierState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00178"></a>00178 {
-<a name="l00180"></a>00180   <span class="keyword">virtual</span> <a class="code" href="structiBezierFactoryState.html">iBezierFactoryState</a>* <a class="code" href="structiBezierState.html#a0">GetFactory</a> () = 0;
-<a name="l00181"></a>00181 };
-<a name="l00182"></a>00182 
-<a name="l00183"></a>00183 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiCurve.html">iCurve</a>, 0, 1, 0);
-<a name="l00184"></a>00184 
-<a name="l00185"></a>00185 <span class="preprocessor">#endif // __CS_IMESH_BEZIER_H__</span>
-<a name="l00186"></a>00186 <span class="preprocessor"></span>
+<a name="l00023"></a>00023 
+<a name="l00024"></a>00024 <span class="keyword">class </span>csCurve;
+<a name="l00025"></a>00025 <span class="keyword">class </span><a class="code" href="classcsFlags.html">csFlags</a>;
+<a name="l00026"></a>00026 <span class="keyword">class </span><a class="code" href="classcsMatrix3.html">csMatrix3</a>;
+<a name="l00027"></a>00027 <span class="keyword">class </span><a class="code" href="classcsVector2.html">csVector2</a>;
+<a name="l00028"></a>00028 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
+<a name="l00031"></a>00031 <span class="keyword">struct </span><a class="code" href="structiObject.html">iObject</a>;
+<a name="l00032"></a>00032 
+<a name="l00045"></a><a class="code" href="structiCurve.html">00045</a> <span class="keyword">struct </span><a class="code" href="structiCurve.html">iCurve</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00046"></a>00046 {
+<a name="l00048"></a>00048   <span class="keyword">virtual</span> csCurve* <a class="code" href="structiCurve.html#a0">GetOriginalObject</a> () = 0;
+<a name="l00050"></a>00050   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *<a class="code" href="structiCurve.html#a1">QueryObject</a>() = 0;
+<a name="l00052"></a>00052   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCurve.html#a2">SetMaterial</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat) = 0;
+<a name="l00054"></a>00054   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiCurve.html#a3">GetMaterial</a> () = 0;
+<a name="l00056"></a>00056   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCurve.html#a4">SetControlPoint</a> (<span class="keywordtype">int</span> idx, <span class="keywordtype">int</span> control_id) = 0;
+<a name="l00057"></a>00057 
+<a name="l00059"></a>00059   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiCurve.html#a5">GetVertexCount</a> () <span class="keyword">const </span>= 0;
+<a name="l00061"></a>00061   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiCurve.html#a6">GetVertex</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
+<a name="l00063"></a>00063   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiCurve.html#a7">SetVertex</a> (<span class="keywordtype">int</span> idx, <span class="keywordtype">int</span> vt) = 0;
+<a name="l00064"></a>00064 };
+<a name="l00065"></a>00065 
+<a name="l00066"></a>00066 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBezierFactoryState.html">iBezierFactoryState</a>, 0, 0, 1);
+<a name="l00067"></a>00067 
+<a name="l00087"></a><a class="code" href="structiBezierFactoryState.html">00087</a> <span class="keyword">struct </span><a class="code" href="structiBezierFactoryState.html">iBezierFactoryState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00088"></a>00088 {
+<a name="l00092"></a>00092   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiBezierFactoryState.html#a0">GetCurvesCenter</a> () <span class="keyword">const </span>= 0;
+<a name="l00096"></a>00096   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a1">SetCurvesCenter</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; cen) = 0;
+<a name="l00097"></a>00097 
+<a name="l00101"></a>00101   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiBezierFactoryState.html#a2">GetCurvesScale</a> () <span class="keyword">const </span>= 0;
+<a name="l00105"></a>00105   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a3">SetCurvesScale</a> (<span class="keywordtype">float</span> scale) = 0;
+<a name="l00106"></a>00106 
+<a name="l00108"></a>00108   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a4">AddCurveVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; uv) = 0;
+<a name="l00110"></a>00110   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBezierFactoryState.html#a5">GetCurveCount</a> () <span class="keyword">const </span>= 0;
+<a name="l00112"></a>00112   <span class="keyword">virtual</span> <a class="code" href="structiCurve.html">iCurve</a>* <a class="code" href="structiBezierFactoryState.html#a6">GetCurve</a> (<span class="keywordtype">int</span> idx) <span class="keyword">const </span>= 0;
+<a name="l00114"></a>00114   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBezierFactoryState.html#a7">GetCurveVertexCount</a> () <span class="keyword">const </span>= 0;
+<a name="l00116"></a>00116   <span class="keyword">virtual</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; <a class="code" href="structiBezierFactoryState.html#a8">GetCurveVertex</a> (<span class="keywordtype">int</span> i) <span class="keyword">const </span>= 0;
+<a name="l00118"></a>00118   <span class="keyword">virtual</span> <a class="code" href="classcsVector3.html">csVector3</a>* <a class="code" href="structiBezierFactoryState.html#a9">GetCurveVertices</a> () <span class="keyword">const </span>= 0;
+<a name="l00120"></a>00120   <span class="keyword">virtual</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; <a class="code" href="structiBezierFactoryState.html#a10">GetCurveTexel</a> (<span class="keywordtype">int</span> i) <span class="keyword">const </span>= 0;
+<a name="l00122"></a>00122   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a11">SetCurveVertex</a> (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vt) = 0;
+<a name="l00124"></a>00124   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a12">SetCurveTexel</a> (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; vt) = 0;
+<a name="l00126"></a>00126   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a13">ClearCurveVertices</a> () = 0;
+<a name="l00127"></a>00127 
+<a name="l00129"></a>00129   <span class="keyword">virtual</span> <a class="code" href="structiCurve.html">iCurve</a>* <a class="code" href="structiBezierFactoryState.html#a14">CreateCurve</a> () = 0;
+<a name="l00131"></a>00131   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBezierFactoryState.html#a15">FindCurveIndex</a> (<a class="code" href="structiCurve.html">iCurve</a>* curve) <span class="keyword">const </span>= 0;
+<a name="l00133"></a>00133   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a16">RemoveCurve</a> (<span class="keywordtype">int</span> idx) = 0;
+<a name="l00135"></a>00135   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a17">RemoveCurves</a> () = 0;
+<a name="l00136"></a>00136 
+<a name="l00140"></a>00140   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiBezierFactoryState.html#a18">GetCosinusFactor</a> () <span class="keyword">const </span>= 0;
+<a name="l00146"></a>00146   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a19">SetCosinusFactor</a> (<span class="keywordtype">float</span> cosfact) = 0;
+<a name="l00147"></a>00147 
+<a name="l00151"></a>00151   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBezierFactoryState.html#a20">MergeTemplate</a> (<a class="code" href="structiBezierFactoryState.html">iBezierFactoryState</a>* tpl,
+<a name="l00152"></a>00152         <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* default_material = 0,
+<a name="l00153"></a>00153         <a class="code" href="classcsVector3.html">csVector3</a>* shift = 0, <a class="code" href="classcsMatrix3.html">csMatrix3</a>* transform = 0) = 0;
+<a name="l00154"></a>00154 };
+<a name="l00155"></a>00155 
+<a name="l00156"></a>00156 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiBezierState.html">iBezierState</a>, 0, 0, 1);
+<a name="l00157"></a>00157 
+<a name="l00176"></a><a class="code" href="structiBezierState.html">00176</a> <span class="keyword">struct </span><a class="code" href="structiBezierState.html">iBezierState</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00177"></a>00177 {
+<a name="l00179"></a>00179   <span class="keyword">virtual</span> <a class="code" href="structiBezierFactoryState.html">iBezierFactoryState</a>* <a class="code" href="structiBezierState.html#a0">GetFactory</a> () = 0;
+<a name="l00180"></a>00180 };
+<a name="l00181"></a>00181 
+<a name="l00182"></a>00182 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiCurve.html">iCurve</a>, 0, 1, 0);
+<a name="l00183"></a>00183 
+<a name="l00184"></a>00184 <span class="preprocessor">#endif // __CS_IMESH_BEZIER_H__</span>
+<a name="l00185"></a>00185 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>
