@@ -41,64 +41,65 @@
 <a name="l00022"></a>00022 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00023"></a>00023 
 <a name="l00024"></a>00024 <span class="preprocessor">#include "<a class="code" href="tri_8h.html">csgeom/tri.h</a>"</span>
-<a name="l00025"></a>00025 <span class="preprocessor">#include "<a class="code" href="math3d_8h.html">csgeom/math3d.h</a>"</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="dirtyaccessarray_8h.html">csutil/dirtyaccessarray.h</a>"</span>
-<a name="l00028"></a>00028 
-<a name="l00034"></a><a class="code" href="classcsTriangleMesh.html">00034</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>
-<a name="l00035"></a>00035 {
-<a name="l00036"></a>00036 <span class="keyword">protected</span>:
-<a name="l00038"></a><a class="code" href="classcsTriangleMesh.html#p0">00038</a>   <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;csTriangle&gt;</a> triangles;
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040 <span class="keyword">public</span>:
-<a name="l00042"></a><a class="code" href="classcsTriangleMesh.html#a0">00042</a>   <a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a> () { }
-<a name="l00044"></a>00044   <a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a> (<span class="keyword">const</span> <a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>&amp; mesh);
-<a name="l00046"></a>00046   ~<a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a> ();
-<a name="l00047"></a>00047 
-<a name="l00049"></a>00049   <span class="keywordtype">void</span> AddTriangle (<span class="keywordtype">int</span> a, <span class="keywordtype">int</span> b, <span class="keywordtype">int</span> c);
-<a name="l00051"></a><a class="code" href="classcsTriangleMesh.html#a4">00051</a>   <a class="code" href="structcsTriangle.html">csTriangle</a>* GetTriangles () { <span class="keywordflow">return</span> triangles.GetArray (); }
-<a name="l00053"></a><a class="code" href="classcsTriangleMesh.html#a5">00053</a>   <span class="keyword">const</span> <a class="code" href="structcsTriangle.html">csTriangle</a>* GetTriangles ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> triangles.GetArray (); }
-<a name="l00055"></a><a class="code" href="classcsTriangleMesh.html#a6">00055</a>   <a class="code" href="structcsTriangle.html">csTriangle</a>&amp; GetTriangle (<span class="keywordtype">int</span> i) { <span class="keywordflow">return</span> triangles[i]; }
-<a name="l00057"></a><a class="code" href="classcsTriangleMesh.html#a7">00057</a>   size_t GetTriangleCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> triangles.Length (); }
-<a name="l00058"></a>00058 
-<a name="l00060"></a>00060   <span class="keywordtype">void</span> Clear ();
-<a name="l00062"></a>00062   <span class="keywordtype">void</span> SetSize (<span class="keywordtype">int</span> count);
-<a name="l00064"></a>00064   <span class="keywordtype">void</span> SetTriangles (<a class="code" href="structcsTriangle.html">csTriangle</a> <span class="keyword">const</span>* trigs, <span class="keywordtype">int</span> count);
-<a name="l00065"></a>00065 };
-<a name="l00066"></a>00066 
-<a name="l00072"></a><a class="code" href="classcsTriangleVertex.html">00072</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTriangleVertex
-<a name="l00073"></a>00073 {
-<a name="l00074"></a>00074 <span class="keyword">public</span>:
-<a name="l00076"></a><a class="code" href="classcsTriangleVertex.html#o0">00076</a>   <a class="code" href="classcsVector3.html">csVector3</a> pos;
-<a name="l00078"></a><a class="code" href="classcsTriangleVertex.html#o1">00078</a>   <span class="keywordtype">int</span> idx;
-<a name="l00079"></a>00079 
-<a name="l00081"></a><a class="code" href="classcsTriangleVertex.html#o2">00081</a>   <a class="code" href="classcsArray.html">csArray&lt;size_t&gt;</a> con_triangles;
-<a name="l00082"></a>00082 
-<a name="l00084"></a><a class="code" href="classcsTriangleVertex.html#o3">00084</a>   <a class="code" href="classcsArray.html">csArray&lt;int&gt;</a> con_vertices;
-<a name="l00085"></a>00085 
-<a name="l00087"></a><a class="code" href="classcsTriangleVertex.html#a0">00087</a>   csTriangleVertex () { }
-<a name="l00089"></a><a class="code" href="classcsTriangleVertex.html#a1">00089</a>   ~csTriangleVertex () { }
-<a name="l00091"></a>00091   <span class="keywordtype">void</span> AddTriangle (size_t idx);
-<a name="l00093"></a>00093   <span class="keywordtype">void</span> AddVertex (<span class="keywordtype">int</span> idx);
-<a name="l00094"></a>00094 };
-<a name="l00095"></a>00095 
-<a name="l00100"></a><a class="code" href="classcsTriangleVertices.html">00100</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTriangleVertices
-<a name="l00101"></a>00101 {
-<a name="l00102"></a>00102 <span class="keyword">protected</span>:
-<a name="l00103"></a><a class="code" href="classcsTriangleVertices.html#p0">00103</a>   csTriangleVertex* vertices;
-<a name="l00104"></a><a class="code" href="classcsTriangleVertices.html#p1">00104</a>   <span class="keywordtype">int</span> num_vertices;
-<a name="l00105"></a>00105 
-<a name="l00106"></a>00106 <span class="keyword">public</span>:
-<a name="l00108"></a>00108   csTriangleVertices (<a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>* mesh, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts);
-<a name="l00110"></a>00110   ~csTriangleVertices ();
-<a name="l00115"></a>00115   <span class="keywordtype">void</span> UpdateVertices (<a class="code" href="classcsVector3.html">csVector3</a>* verts);
-<a name="l00116"></a>00116 
-<a name="l00118"></a><a class="code" href="classcsTriangleVertices.html#a3">00118</a>   <span class="keywordtype">int</span> GetVertexCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_vertices; }
-<a name="l00120"></a><a class="code" href="classcsTriangleVertices.html#a4">00120</a>   csTriangleVertex&amp; GetVertex (<span class="keywordtype">int</span> idx) { <span class="keywordflow">return</span> vertices[idx]; }
-<a name="l00121"></a>00121 };
-<a name="l00122"></a>00122 
-<a name="l00123"></a>00123 <span class="preprocessor">#endif // __CS_TRIMESH_H__</span>
-<a name="l00124"></a>00124 <span class="preprocessor"></span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include "<a class="code" href="vector3_8h.html">csgeom/vector3.h</a>"</span>
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="dirtyaccessarray_8h.html">csutil/dirtyaccessarray.h</a>"</span>
+<a name="l00029"></a>00029 
+<a name="l00035"></a><a class="code" href="classcsTriangleMesh.html">00035</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>
+<a name="l00036"></a>00036 {
+<a name="l00037"></a>00037 <span class="keyword">protected</span>:
+<a name="l00039"></a><a class="code" href="classcsTriangleMesh.html#p0">00039</a>   <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray&lt;csTriangle&gt;</a> triangles;
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041 <span class="keyword">public</span>:
+<a name="l00043"></a><a class="code" href="classcsTriangleMesh.html#a0">00043</a>   <a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a> () { }
+<a name="l00045"></a>00045   <a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a> (<span class="keyword">const</span> <a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>&amp; mesh);
+<a name="l00047"></a>00047   ~<a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a> ();
+<a name="l00048"></a>00048 
+<a name="l00050"></a>00050   <span class="keywordtype">void</span> AddTriangle (<span class="keywordtype">int</span> a, <span class="keywordtype">int</span> b, <span class="keywordtype">int</span> c);
+<a name="l00052"></a><a class="code" href="classcsTriangleMesh.html#a4">00052</a>   <a class="code" href="structcsTriangle.html">csTriangle</a>* GetTriangles () { <span class="keywordflow">return</span> triangles.GetArray (); }
+<a name="l00054"></a><a class="code" href="classcsTriangleMesh.html#a5">00054</a>   <span class="keyword">const</span> <a class="code" href="structcsTriangle.html">csTriangle</a>* GetTriangles ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> triangles.GetArray (); }
+<a name="l00056"></a><a class="code" href="classcsTriangleMesh.html#a6">00056</a>   <a class="code" href="structcsTriangle.html">csTriangle</a>&amp; GetTriangle (<span class="keywordtype">int</span> i) { <span class="keywordflow">return</span> triangles[i]; }
+<a name="l00058"></a><a class="code" href="classcsTriangleMesh.html#a7">00058</a>   size_t GetTriangleCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> triangles.Length (); }
+<a name="l00059"></a>00059 
+<a name="l00061"></a>00061   <span class="keywordtype">void</span> Clear ();
+<a name="l00063"></a>00063   <span class="keywordtype">void</span> SetSize (<span class="keywordtype">int</span> count);
+<a name="l00065"></a>00065   <span class="keywordtype">void</span> SetTriangles (<a class="code" href="structcsTriangle.html">csTriangle</a> <span class="keyword">const</span>* trigs, <span class="keywordtype">int</span> count);
+<a name="l00066"></a>00066 };
+<a name="l00067"></a>00067 
+<a name="l00073"></a><a class="code" href="classcsTriangleVertex.html">00073</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTriangleVertex
+<a name="l00074"></a>00074 {
+<a name="l00075"></a>00075 <span class="keyword">public</span>:
+<a name="l00077"></a><a class="code" href="classcsTriangleVertex.html#o0">00077</a>   <a class="code" href="classcsVector3.html">csVector3</a> pos;
+<a name="l00079"></a><a class="code" href="classcsTriangleVertex.html#o1">00079</a>   <span class="keywordtype">int</span> idx;
+<a name="l00080"></a>00080 
+<a name="l00082"></a><a class="code" href="classcsTriangleVertex.html#o2">00082</a>   <a class="code" href="classcsArray.html">csArray&lt;size_t&gt;</a> con_triangles;
+<a name="l00083"></a>00083 
+<a name="l00085"></a><a class="code" href="classcsTriangleVertex.html#o3">00085</a>   <a class="code" href="classcsArray.html">csArray&lt;int&gt;</a> con_vertices;
+<a name="l00086"></a>00086 
+<a name="l00088"></a><a class="code" href="classcsTriangleVertex.html#a0">00088</a>   csTriangleVertex () { }
+<a name="l00090"></a><a class="code" href="classcsTriangleVertex.html#a1">00090</a>   ~csTriangleVertex () { }
+<a name="l00092"></a>00092   <span class="keywordtype">void</span> AddTriangle (size_t idx);
+<a name="l00094"></a>00094   <span class="keywordtype">void</span> AddVertex (<span class="keywordtype">int</span> idx);
+<a name="l00095"></a>00095 };
+<a name="l00096"></a>00096 
+<a name="l00101"></a><a class="code" href="classcsTriangleVertices.html">00101</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTriangleVertices
+<a name="l00102"></a>00102 {
+<a name="l00103"></a>00103 <span class="keyword">protected</span>:
+<a name="l00104"></a><a class="code" href="classcsTriangleVertices.html#p0">00104</a>   csTriangleVertex* vertices;
+<a name="l00105"></a><a class="code" href="classcsTriangleVertices.html#p1">00105</a>   <span class="keywordtype">int</span> num_vertices;
+<a name="l00106"></a>00106 
+<a name="l00107"></a>00107 <span class="keyword">public</span>:
+<a name="l00109"></a>00109   csTriangleVertices (<a class="code" href="classcsTriangleMesh.html">csTriangleMesh</a>* mesh, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts);
+<a name="l00111"></a>00111   ~csTriangleVertices ();
+<a name="l00116"></a>00116   <span class="keywordtype">void</span> UpdateVertices (<a class="code" href="classcsVector3.html">csVector3</a>* verts);
+<a name="l00117"></a>00117 
+<a name="l00119"></a><a class="code" href="classcsTriangleVertices.html#a3">00119</a>   <span class="keywordtype">int</span> GetVertexCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_vertices; }
+<a name="l00121"></a><a class="code" href="classcsTriangleVertices.html#a4">00121</a>   csTriangleVertex&amp; GetVertex (<span class="keywordtype">int</span> idx) { <span class="keywordflow">return</span> vertices[idx]; }
+<a name="l00122"></a>00122 };
+<a name="l00123"></a>00123 
+<a name="l00124"></a>00124 <span class="preprocessor">#endif // __CS_TRIMESH_H__</span>
+<a name="l00125"></a>00125 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>

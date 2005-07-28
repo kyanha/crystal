@@ -178,24 +178,12 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a48">RemoveMeshFromStaticLOD</a> (<a class="el" href="structiMeshWrapper.html">iMeshWrapper</a> *mesh)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove a child mesh from all lod levels.  <a href="#a48"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a49">DrawShadow</a> (<a class="el" href="structiRenderView.html">iRenderView</a> *rview, <a class="el" href="structiLight.html">iLight</a> *light)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a49">CastHardwareShadow</a> (bool castShadow)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Draws the shadow buffer pass.  <a href="#a49"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a50">DrawLight</a> (<a class="el" href="structiRenderView.html">iRenderView</a> *rview, <a class="el" href="structiLight.html">iLight</a> *light)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Enable/disable hardware based shadows alltogheter.  <a href="#a49"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiShaderVariableContext.html">iShaderVariableContext</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a50">GetSVContext</a> ()=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Draws the diffuse light mesh object.  <a href="#a50"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a51">CastHardwareShadow</a> (bool castShadow)=0</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Enable/disable hardware based shadows alltogheter.  <a href="#a51"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a52">SetDrawAfterShadow</a> (bool drawAfter)=0</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Sets so that the meshobject is rendered after all fancy HW-shadow-stuff.  <a href="#a52"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a53">GetDrawAfterShadow</a> ()=0</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get if the meshobject is rendered after all fancy HW-shadow-stuff.  <a href="#a53"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiShaderVariableContext.html">iShaderVariableContext</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshWrapper.html#a54">GetSVContext</a> ()=0</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the shader variable context of the mesh object.  <a href="#a54"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the shader variable context of the mesh object.  <a href="#a50"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 A mesh wrapper is an engine-level object that wraps around an actual mesh object (<a class="el" href="structiMeshObject.html">iMeshObject</a>). 
@@ -239,7 +227,7 @@ Main users of this interface: <ul>
 <p>
 
 <p>
-Definition at line <a class="el" href="mesh_8h-source.html#l00242">242</a> of file <a class="el" href="mesh_8h-source.html">mesh.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="mesh_8h-source.html#l00247">247</a> of file <a class="el" href="mesh_8h-source.html">mesh.h</a>.<hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="a47"></a><!-- doxytag: member="iMeshWrapper::AddMeshToStaticLOD" ref="a47" args="(int lod, iMeshWrapper *mesh)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -279,7 +267,7 @@ Set a given child mesh at a specific lod level.
 Note that a mesh can be at several lod levels at once.    </td>
   </tr>
 </table>
-<a class="anchor" name="a51"></a><!-- doxytag: member="iMeshWrapper::CastHardwareShadow" ref="a51" args="(bool castShadow)=0" --><p>
+<a class="anchor" name="a49"></a><!-- doxytag: member="iMeshWrapper::CastHardwareShadow" ref="a49" args="(bool castShadow)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -367,84 +355,6 @@ Destroy the LOD control for this mesh.
 After this call the hierarchical mesh will act as usual.    </td>
   </tr>
 </table>
-<a class="anchor" name="a50"></a><!-- doxytag: member="iMeshWrapper::DrawLight" ref="a50" args="(iRenderView *rview, iLight *light)=0" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">virtual void iMeshWrapper::DrawLight           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structiRenderView.html">iRenderView</a> *&nbsp;</td>
-          <td class="mdname" nowrap> <em>rview</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="structiLight.html">iLight</a> *&nbsp;</td>
-          <td class="mdname" nowrap> <em>light</em></td>
-        </tr>
-        <tr>
-          <td class="md"></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"><code> [pure virtual]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Draws the diffuse light mesh object. 
-<p>
-    </td>
-  </tr>
-</table>
-<a class="anchor" name="a49"></a><!-- doxytag: member="iMeshWrapper::DrawShadow" ref="a49" args="(iRenderView *rview, iLight *light)=0" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">virtual void iMeshWrapper::DrawShadow           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structiRenderView.html">iRenderView</a> *&nbsp;</td>
-          <td class="mdname" nowrap> <em>rview</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap><a class="el" href="structiLight.html">iLight</a> *&nbsp;</td>
-          <td class="mdname" nowrap> <em>light</em></td>
-        </tr>
-        <tr>
-          <td class="md"></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"><code> [pure virtual]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Draws the shadow buffer pass. 
-<p>
-This sets of the stencil for the lights    </td>
-  </tr>
-</table>
 <a class="anchor" name="a39"></a><!-- doxytag: member="iMeshWrapper::GetChildren" ref="a39" args="()=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -472,35 +382,6 @@ This sets of the stencil for the lights    </td>
 Get all the children of this mesh object. 
 <p>
 This is used for hierarchical meshes. If you want to make a hierarchical mesh you can call GetChildren ()-&gt;Add (mesh).    </td>
-  </tr>
-</table>
-<a class="anchor" name="a53"></a><!-- doxytag: member="iMeshWrapper::GetDrawAfterShadow" ref="a53" args="()=0" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">virtual bool iMeshWrapper::GetDrawAfterShadow           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Get if the meshobject is rendered after all fancy HW-shadow-stuff. 
-<p>
-    </td>
   </tr>
 </table>
 <a class="anchor" name="a23"></a><!-- doxytag: member="iMeshWrapper::GetDrawCallback" ref="a23" args="(int idx) const =0" --><p>
@@ -1049,7 +930,7 @@ Get the LOD control for this mesh.
 This will return 0 if this is a normal (hierarchical) mesh. Otherwise it will return an object with which you can control the static LOD of this object.    </td>
   </tr>
 </table>
-<a class="anchor" name="a54"></a><!-- doxytag: member="iMeshWrapper::GetSVContext" ref="a54" args="()=0" --><p>
+<a class="anchor" name="a50"></a><!-- doxytag: member="iMeshWrapper::GetSVContext" ref="a50" args="()=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1760,36 +1641,6 @@ Remove a draw callback.
 Remove a child mesh from all lod levels. 
 <p>
 The mesh is not removed from the list of child meshes however.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a52"></a><!-- doxytag: member="iMeshWrapper::SetDrawAfterShadow" ref="a52" args="(bool drawAfter)=0" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">virtual void iMeshWrapper::SetDrawAfterShadow           </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">bool&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap> <em>drawAfter</em>          </td>
-          <td class="md" valign="top">&nbsp;)&nbsp;</td>
-          <td class="md" nowrap><code> [pure virtual]</code></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Sets so that the meshobject is rendered after all fancy HW-shadow-stuff. 
-<p>
-    </td>
   </tr>
 </table>
 <a class="anchor" name="a20"></a><!-- doxytag: member="iMeshWrapper::SetDrawCallback" ref="a20" args="(iMeshDrawCallback *cb)=0" --><p>

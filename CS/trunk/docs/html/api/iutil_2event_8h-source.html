@@ -39,217 +39,218 @@
 <a name="l00020"></a>00020 <span class="preprocessor">#ifndef __CS_IUTIL_EVENT_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IUTIL_EVENT_H__</span>
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
-<a name="l00023"></a>00023 <span class="preprocessor">#include "<a class="code" href="evdefs_8h.html">iutil/evdefs.h</a>"</span>
-<a name="l00024"></a>00024 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
-<a name="l00025"></a>00025 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#include "<a class="code" href="csunicode_8h.html">csutil/csunicode.h</a>"</span>
+<a name="l00023"></a>00023 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
+<a name="l00024"></a>00024 <span class="preprocessor">#include "<a class="code" href="csunicode_8h.html">csutil/csunicode.h</a>"</span>
+<a name="l00025"></a>00025 
+<a name="l00026"></a>00026 <span class="preprocessor">#include "<a class="code" href="evdefs_8h.html">iutil/evdefs.h</a>"</span>
 <a name="l00027"></a>00027 
-<a name="l00035"></a>00035 
-<a name="l00036"></a><a class="code" href="group__event__handling.html#ga127">00036</a> <span class="preprocessor">#define CS_MAX_MOUSE_COUNT      4</span>
-<a name="l00037"></a>00037 <span class="preprocessor"></span>
-<a name="l00038"></a><a class="code" href="group__event__handling.html#ga128">00038</a> <span class="preprocessor">#define CS_MAX_MOUSE_AXES       8</span>
-<a name="l00039"></a>00039 <span class="preprocessor"></span>
-<a name="l00040"></a><a class="code" href="group__event__handling.html#ga129">00040</a> <span class="preprocessor">#define CS_MAX_MOUSE_BUTTONS    10</span>
-<a name="l00041"></a>00041 <span class="preprocessor"></span>
-<a name="l00042"></a><a class="code" href="group__event__handling.html#ga130">00042</a> <span class="preprocessor">#define CS_MAX_JOYSTICK_COUNT   16</span>
-<a name="l00043"></a>00043 <span class="preprocessor"></span>
-<a name="l00044"></a><a class="code" href="group__event__handling.html#ga131">00044</a> <span class="preprocessor">#define CS_MAX_JOYSTICK_BUTTONS 10</span>
-<a name="l00045"></a>00045 <span class="preprocessor"></span>
-<a name="l00046"></a><a class="code" href="group__event__handling.html#ga132">00046</a> <span class="preprocessor">#define CS_MAX_JOYSTICK_AXES    8</span>
-<a name="l00047"></a>00047 <span class="preprocessor"></span><span class="comment">/* Architecturally, AXES can go as high as 32 (limited by the uint32 change mask). */</span>
-<a name="l00048"></a>00048 
-<a name="l00049"></a>00049 <span class="keyword">struct </span><a class="code" href="structiEventHandler.html">iEventHandler</a>;
-<a name="l00050"></a>00050 <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a>;
-<a name="l00051"></a>00051 
-<a name="l00052"></a>00052 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEventAttributeIterator.html">iEventAttributeIterator</a>, 0, 0, 1);
-<a name="l00053"></a>00053 
-<a name="l00058"></a><a class="code" href="structiEventAttributeIterator.html">00058</a> <span class="keyword">struct </span><a class="code" href="structiEventAttributeIterator.html">iEventAttributeIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00059"></a>00059 {
-<a name="l00061"></a>00061   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventAttributeIterator.html#a0">HasNext</a>() = 0;
-<a name="l00063"></a>00063   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiEventAttributeIterator.html#a1">Next</a>() = 0;
-<a name="l00065"></a>00065   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventAttributeIterator.html#z560_0">Reset</a>() = 0;
-<a name="l00066"></a>00066 };
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEvent.html">iEvent</a>, 0, 2, 0);
-<a name="l00069"></a>00069 
-<a name="l00070"></a>00070 <span class="comment">// Event data structs. Defined outside of iEvent to allow SWIG to</span>
-<a name="l00071"></a>00071 <span class="comment">// handle the nested structs and union. Does not break any code.</span>
-<a name="l00072"></a>00072 
-<a name="l00128"></a><a class="code" href="structcsKeyEventData.html">00128</a> <span class="keyword">struct </span><a class="code" href="structcsKeyEventData.html">csKeyEventData</a>
-<a name="l00129"></a>00129 {
-<a name="l00131"></a><a class="code" href="structcsKeyEventData.html#o0">00131</a>   <a class="code" href="group__event__handling.html#ga1">csKeyEventType</a> <a class="code" href="structcsKeyEventData.html#o0">eventType</a>;
-<a name="l00133"></a><a class="code" href="structcsKeyEventData.html#o1">00133</a>   <a class="code" href="group__util.html#ga22">utf32_char</a> <a class="code" href="structcsKeyEventData.html#o1">codeRaw</a>;
-<a name="l00135"></a><a class="code" href="structcsKeyEventData.html#o2">00135</a>   <a class="code" href="group__util.html#ga22">utf32_char</a> <a class="code" href="structcsKeyEventData.html#o2">codeCooked</a>;
-<a name="l00137"></a><a class="code" href="structcsKeyEventData.html#o3">00137</a>   <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a> <a class="code" href="structcsKeyEventData.html#o3">modifiers</a>;
-<a name="l00139"></a><a class="code" href="structcsKeyEventData.html#o4">00139</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsKeyEventData.html#o4">autoRepeat</a>;
-<a name="l00141"></a><a class="code" href="structcsKeyEventData.html#o5">00141</a>   <a class="code" href="group__event__handling.html#ga5">csKeyCharType</a> <a class="code" href="structcsKeyEventData.html#o5">charType</a>;
-<a name="l00142"></a>00142 };
-<a name="l00143"></a>00143 
-<a name="l00149"></a><a class="code" href="group__event__handling.html#ga140">00149</a> <span class="keyword">enum</span> <a class="code" href="group__event__handling.html#ga140">csMouseButton</a>
-<a name="l00150"></a>00150 {
-<a name="l00152"></a>00152   <a class="code" href="group__event__handling.html#gga140a6">csmbLeft</a> = 1,
-<a name="l00154"></a>00154   <a class="code" href="group__event__handling.html#gga140a7">csmbRight</a> = 2,
-<a name="l00156"></a>00156   <a class="code" href="group__event__handling.html#gga140a8">csmbMiddle</a> = 3,
-<a name="l00158"></a>00158   <a class="code" href="group__event__handling.html#gga140a9">csmbWheelUp</a> = 4,
-<a name="l00160"></a>00160   <a class="code" href="group__event__handling.html#gga140a10">csmbWheelDown</a> = 5,
-<a name="l00162"></a>00162   <a class="code" href="group__event__handling.html#gga140a11">csmbExtra1</a> = 6,
-<a name="l00164"></a>00164   <a class="code" href="group__event__handling.html#gga140a12">csmbExtra2</a> = 7
-<a name="l00165"></a>00165 };
-<a name="l00166"></a>00166 
-<a name="l00174"></a><a class="code" href="structcsMouseEventData.html">00174</a> <span class="keyword">struct </span><a class="code" href="structcsMouseEventData.html">csMouseEventData</a>
-<a name="l00175"></a>00175 {
-<a name="l00177"></a><a class="code" href="structcsMouseEventData.html#o0">00177</a>   <span class="keywordtype">int</span> <a class="code" href="structcsMouseEventData.html#o0">x</a>;
-<a name="l00179"></a><a class="code" href="structcsMouseEventData.html#o1">00179</a>   <span class="keywordtype">int</span> <a class="code" href="structcsMouseEventData.html#o1">y</a>;
-<a name="l00181"></a><a class="code" href="structcsMouseEventData.html#o2">00181</a>   <a class="code" href="group__util.html#ga5">int32</a> <a class="code" href="structcsMouseEventData.html#o2">axes</a>[<a class="code" href="group__event__handling.html#ga128">CS_MAX_MOUSE_AXES</a>];
-<a name="l00183"></a><a class="code" href="structcsMouseEventData.html#o3">00183</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsMouseEventData.html#o3">numAxes</a>;
-<a name="l00188"></a><a class="code" href="structcsMouseEventData.html#o4">00188</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsMouseEventData.html#o4">Button</a>;
-<a name="l00190"></a><a class="code" href="structcsMouseEventData.html#o5">00190</a>   <a class="code" href="group__util.html#ga4">uint32</a> <a class="code" href="structcsMouseEventData.html#o5">Modifiers</a>;
-<a name="l00191"></a>00191 };
-<a name="l00192"></a>00192 
-<a name="l00200"></a><a class="code" href="structcsJoystickEventData.html">00200</a> <span class="keyword">struct </span><a class="code" href="structcsJoystickEventData.html">csJoystickEventData</a>
-<a name="l00201"></a>00201 {
-<a name="l00203"></a><a class="code" href="structcsJoystickEventData.html#o0">00203</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsJoystickEventData.html#o0">number</a>;
-<a name="l00205"></a><a class="code" href="structcsJoystickEventData.html#o1">00205</a>   <a class="code" href="group__util.html#ga5">int32</a> <a class="code" href="structcsJoystickEventData.html#o1">axes</a>[<a class="code" href="group__event__handling.html#ga132">CS_MAX_JOYSTICK_AXES</a>];
-<a name="l00207"></a><a class="code" href="structcsJoystickEventData.html#o2">00207</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsJoystickEventData.html#o2">numAxes</a>;
-<a name="l00209"></a><a class="code" href="structcsJoystickEventData.html#o3">00209</a>   <a class="code" href="group__util.html#ga4">uint32</a> <a class="code" href="structcsJoystickEventData.html#o3">axesChanged</a>;
-<a name="l00211"></a><a class="code" href="structcsJoystickEventData.html#o4">00211</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsJoystickEventData.html#o4">Button</a>;
-<a name="l00213"></a><a class="code" href="structcsJoystickEventData.html#o5">00213</a>   <a class="code" href="group__util.html#ga4">uint32</a> <a class="code" href="structcsJoystickEventData.html#o5">Modifiers</a>;
-<a name="l00214"></a>00214 };
-<a name="l00215"></a>00215 
-<a name="l00223"></a><a class="code" href="structcsCommandEventData.html">00223</a> <span class="keyword">struct </span><a class="code" href="structcsCommandEventData.html">csCommandEventData</a>
-<a name="l00224"></a>00224 {
-<a name="l00226"></a><a class="code" href="structcsCommandEventData.html#o0">00226</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsCommandEventData.html#o0">Code</a>;
-<a name="l00228"></a><a class="code" href="structcsCommandEventData.html#o1">00228</a>   <a class="code" href="group__util.html#ga8">intptr_t</a> <a class="code" href="structcsCommandEventData.html#o1">Info</a>;
-<a name="l00229"></a>00229 };
-<a name="l00230"></a>00230 
-<a name="l00234"></a><a class="code" href="group__event__handling.html#ga141">00234</a> <span class="keyword">enum</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a>
-<a name="l00235"></a>00235 {
-<a name="l00237"></a>00237   <a class="code" href="group__event__handling.html#gga141a13">csEventErrNone</a>,
-<a name="l00242"></a>00242   <a class="code" href="group__event__handling.html#gga141a14">csEventErrLossy</a>,
-<a name="l00244"></a>00244   <a class="code" href="group__event__handling.html#gga141a15">csEventErrNotFound</a>,
-<a name="l00246"></a>00246 
-<a name="l00250"></a>00250   <a class="code" href="group__event__handling.html#gga141a16">csEventErrMismatchInt</a>,
-<a name="l00251"></a>00251   <a class="code" href="group__event__handling.html#gga141a143">csEventErrMismatchUInt</a>,
-<a name="l00252"></a>00252   <a class="code" href="group__event__handling.html#gga141a144">csEventErrMismatchFloat</a>,
-<a name="l00253"></a>00253   <a class="code" href="group__event__handling.html#gga141a145">csEventErrMismatchBuffer</a>,
-<a name="l00254"></a>00254   <a class="code" href="group__event__handling.html#gga141a146">csEventErrMismatchEvent</a>,
-<a name="l00255"></a>00255   <a class="code" href="group__event__handling.html#gga141a147">csEventErrMismatchIBase</a>,
-<a name="l00257"></a>00257 
-<a name="l00260"></a>00260   <a class="code" href="group__event__handling.html#gga141a22">csEventErrUhOhUnknown</a>
-<a name="l00261"></a>00261 };
-<a name="l00262"></a>00262 
-<a name="l00264"></a><a class="code" href="group__event__handling.html#ga142">00264</a> <span class="keyword">enum</span> <a class="code" href="group__event__handling.html#ga142">csEventAttributeType</a>
-<a name="l00265"></a>00265 {
-<a name="l00269"></a>00269   <a class="code" href="group__event__handling.html#gga142a23">csEventAttrUnknown</a>,
-<a name="l00271"></a>00271   <a class="code" href="group__event__handling.html#gga142a24">csEventAttrInt</a>,
-<a name="l00273"></a>00273   <a class="code" href="group__event__handling.html#gga142a25">csEventAttrUInt</a>,
-<a name="l00275"></a>00275   <a class="code" href="group__event__handling.html#gga142a26">csEventAttrFloat</a>,
-<a name="l00277"></a>00277   <a class="code" href="group__event__handling.html#gga142a27">csEventAttrDatabuffer</a>,
-<a name="l00279"></a>00279   <a class="code" href="group__event__handling.html#gga142a28">csEventAttrEvent</a>,
-<a name="l00281"></a>00281   <a class="code" href="group__event__handling.html#gga142a29">csEventAttriBase</a>
-<a name="l00282"></a>00282 };
-<a name="l00283"></a>00283 
-<a name="l00299"></a><a class="code" href="structiEvent.html">00299</a> <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00300"></a>00300 {
-<a name="l00304"></a><a class="code" href="structiEvent.html#o0">00304</a>   <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="structiEvent.html#o0">Type</a>;                   
-<a name="l00306"></a><a class="code" href="structiEvent.html#o1">00306</a>   <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="structiEvent.html#o1">Category</a>;               
-<a name="l00308"></a><a class="code" href="structiEvent.html#o2">00308</a>   <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="structiEvent.html#o2">SubCategory</a>;            
-<a name="l00310"></a><a class="code" href="structiEvent.html#o3">00310</a>   <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="structiEvent.html#o3">Flags</a>;                  
-<a name="l00312"></a><a class="code" href="structiEvent.html#o4">00312</a>   <a class="code" href="group__util.html#ga17">csTicks</a> <a class="code" href="structiEvent.html#o4">Time</a>;                 
-<a name="l00313"></a>00313 
-<a name="l00315"></a>00315 
-<a name="l00318"></a>00318   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga1">int8</a> v) = 0;
-<a name="l00319"></a>00319   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga0">uint8</a> v) = 0;
-<a name="l00320"></a>00320   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga3">int16</a> v) = 0;
-<a name="l00321"></a>00321   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga2">uint16</a> v) = 0;
-<a name="l00322"></a>00322   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga5">int32</a> v) = 0;
-<a name="l00323"></a>00323   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga4">uint32</a> v) = 0;
-<a name="l00324"></a>00324   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga7">int64</a> v) = 0;
-<a name="l00325"></a>00325   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga6">uint64</a> v) = 0;
-<a name="l00326"></a>00326   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> v) = 0;
-<a name="l00327"></a>00327   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">double</span> v) = 0;
-<a name="l00328"></a>00328   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *v) = 0;
-<a name="l00329"></a>00329   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">void</span> *v, size_t size) = 0;
-<a name="l00330"></a>00330   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">bool</span> v) = 0;
-<a name="l00331"></a>00331   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="structiEvent.html">iEvent</a>* v) = 0;
-<a name="l00332"></a>00332   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z561_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="structiBase.html">iBase</a>* v) = 0;
-<a name="l00334"></a>00334 
-<a name="l00336"></a>00336 
-<a name="l00339"></a>00339   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga1">int8</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00340"></a>00340   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga0">uint8</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00341"></a>00341   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga3">int16</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00342"></a>00342   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga2">uint16</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00343"></a>00343   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga5">int32</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00344"></a>00344   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga4">uint32</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00345"></a>00345   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga7">int64</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00346"></a>00346   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga6">uint64</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00347"></a>00347   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00348"></a>00348   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">double</span> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00349"></a>00349   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *&amp;v) <span class="keyword">const </span>= 0;
-<a name="l00350"></a>00350   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">void</span> *&amp;v, 
-<a name="l00351"></a>00351     size_t&amp; size) <span class="keyword">const </span>= 0;
-<a name="l00352"></a>00352   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">bool</span> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00353"></a>00353   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classcsRef.html">csRef&lt;iEvent&gt;</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00354"></a>00354   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z562_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classcsRef.html">csRef&lt;iBase&gt;</a> &amp;v) <span class="keyword">const </span>= 0;
-<a name="l00356"></a>00356 
-<a name="l00358"></a>00358   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a0">AttributeExists</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-<a name="l00360"></a>00360   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga142">csEventAttributeType</a> <a class="code" href="structiEvent.html#a1">GetAttributeType</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
-<a name="l00361"></a>00361 
-<a name="l00363"></a>00363   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a2">Remove</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
-<a name="l00365"></a>00365   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a3">RemoveAll</a>() = 0;
-<a name="l00366"></a>00366 
-<a name="l00368"></a>00368   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iEventAttributeIterator&gt;</a> <a class="code" href="structiEvent.html#a4">GetAttributeIterator</a>() = 0;
-<a name="l00369"></a>00369 };
-<a name="l00370"></a>00370 
-<a name="l00408"></a>00408 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEventPlug.html">iEventPlug</a>, 0, 0, 1);
-<a name="l00409"></a>00409 
-<a name="l00418"></a><a class="code" href="structiEventPlug.html">00418</a> <span class="keyword">struct </span><a class="code" href="structiEventPlug.html">iEventPlug</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00419"></a>00419 {
-<a name="l00428"></a>00428   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <a class="code" href="structiEventPlug.html#a0">GetPotentiallyConflictingEvents</a> () = 0;
-<a name="l00429"></a>00429 
-<a name="l00438"></a>00438   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <a class="code" href="structiEventPlug.html#a1">QueryEventPriority</a> (<span class="keywordtype">unsigned</span> iType) = 0;
-<a name="l00439"></a>00439 
-<a name="l00447"></a><a class="code" href="structiEventPlug.html#a2">00447</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventPlug.html#a2">EnableEvents</a> (<span class="keywordtype">unsigned</span> <span class="comment">/*iType*/</span>, <span class="keywordtype">bool</span> <span class="comment">/*iEnable*/</span>) {}
-<a name="l00448"></a>00448 };
-<a name="l00449"></a>00449 
-<a name="l00450"></a>00450 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEventOutlet.html">iEventOutlet</a>, 0, 1, 0);
-<a name="l00451"></a>00451 
-<a name="l00466"></a><a class="code" href="structiEventOutlet.html">00466</a> <span class="keyword">struct </span><a class="code" href="structiEventOutlet.html">iEventOutlet</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00467"></a>00467 {
-<a name="l00476"></a>00476   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iEvent&gt;</a> <a class="code" href="structiEventOutlet.html#a0">CreateEvent</a> () = 0;
-<a name="l00477"></a>00477 
-<a name="l00489"></a>00489   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a1">Post</a> (<a class="code" href="structiEvent.html">iEvent</a>*) = 0;
-<a name="l00490"></a>00490 
-<a name="l00504"></a>00504   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a2">Key</a> (<a class="code" href="group__util.html#ga22">utf32_char</a> codeRaw, <a class="code" href="group__util.html#ga22">utf32_char</a> codeCooked, <span class="keywordtype">bool</span> iDown) = 0;
-<a name="l00505"></a>00505 
-<a name="l00513"></a>00513   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a3">Mouse</a> (<a class="code" href="group__util.html#ga18">uint</a> iButton, <span class="keywordtype">bool</span> iDown, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
-<a name="l00514"></a>00514 
-<a name="l00523"></a>00523   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a4">Joystick</a>(<a class="code" href="group__util.html#ga18">uint</a> iNumber, <a class="code" href="group__util.html#ga18">uint</a> iButton, <span class="keywordtype">bool</span> iDown, 
-<a name="l00524"></a>00524     <span class="keyword">const</span> <a class="code" href="group__util.html#ga5">int32</a> *axes, <a class="code" href="group__util.html#ga18">uint</a> numAxes) = 0;
-<a name="l00525"></a>00525 
-<a name="l00535"></a>00535   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a5">Broadcast</a> (<a class="code" href="group__util.html#ga18">uint</a> iCode, <a class="code" href="group__util.html#ga8">intptr_t</a> iInfo = 0) = 0;
-<a name="l00536"></a>00536 
-<a name="l00552"></a>00552   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a6">ImmediateBroadcast</a> (<a class="code" href="group__util.html#ga18">uint</a> iCode, <a class="code" href="group__util.html#ga8">intptr_t</a> iInfo) = 0;
-<a name="l00553"></a>00553 };
-<a name="l00554"></a>00554 
-<a name="l00555"></a>00555 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEventCord.html">iEventCord</a>, 0, 0, 3);
-<a name="l00556"></a>00556 
-<a name="l00564"></a><a class="code" href="structiEventCord.html">00564</a> <span class="keyword">struct </span><a class="code" href="structiEventCord.html">iEventCord</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00565"></a>00565 {
-<a name="l00573"></a>00573   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEventCord.html#a0">Insert</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a>*, <span class="keywordtype">int</span> priority) = 0;
-<a name="l00574"></a>00574 
-<a name="l00578"></a>00578   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventCord.html#a1">Remove</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a>*) = 0;
-<a name="l00579"></a>00579 
-<a name="l00584"></a>00584   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventCord.html#a2">GetPass</a> () <span class="keyword">const </span>= 0;
-<a name="l00585"></a>00585 
-<a name="l00590"></a>00590   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventCord.html#a3">SetPass</a> (<span class="keywordtype">bool</span>) = 0;
-<a name="l00591"></a>00591 
-<a name="l00593"></a>00593   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEventCord.html#a4">GetCategory</a>() <span class="keyword">const </span>= 0;
-<a name="l00594"></a>00594   <span class="comment">// Get the subcategory of this cord.</span>
-<a name="l00595"></a>00595   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetSubcategory() <span class="keyword">const </span>= 0;
-<a name="l00596"></a>00596 };
-<a name="l00597"></a>00597 
-<a name="l00600"></a>00600 <span class="preprocessor">#endif // __CS_IUTIL_EVENT_H__</span>
+<a name="l00028"></a>00028 
+<a name="l00036"></a>00036 
+<a name="l00037"></a><a class="code" href="group__event__handling.html#ga127">00037</a> <span class="preprocessor">#define CS_MAX_MOUSE_COUNT      4</span>
+<a name="l00038"></a>00038 <span class="preprocessor"></span>
+<a name="l00039"></a><a class="code" href="group__event__handling.html#ga128">00039</a> <span class="preprocessor">#define CS_MAX_MOUSE_AXES       8</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>
+<a name="l00041"></a><a class="code" href="group__event__handling.html#ga129">00041</a> <span class="preprocessor">#define CS_MAX_MOUSE_BUTTONS    10</span>
+<a name="l00042"></a>00042 <span class="preprocessor"></span>
+<a name="l00043"></a><a class="code" href="group__event__handling.html#ga130">00043</a> <span class="preprocessor">#define CS_MAX_JOYSTICK_COUNT   16</span>
+<a name="l00044"></a>00044 <span class="preprocessor"></span>
+<a name="l00045"></a><a class="code" href="group__event__handling.html#ga131">00045</a> <span class="preprocessor">#define CS_MAX_JOYSTICK_BUTTONS 10</span>
+<a name="l00046"></a>00046 <span class="preprocessor"></span>
+<a name="l00047"></a><a class="code" href="group__event__handling.html#ga132">00047</a> <span class="preprocessor">#define CS_MAX_JOYSTICK_AXES    8</span>
+<a name="l00048"></a>00048 <span class="preprocessor"></span><span class="comment">/* Architecturally, AXES can go as high as 32 (limited by the uint32 change mask). */</span>
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 <span class="keyword">struct </span><a class="code" href="structiEventHandler.html">iEventHandler</a>;
+<a name="l00051"></a>00051 <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a>;
+<a name="l00052"></a>00052 
+<a name="l00053"></a>00053 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEventAttributeIterator.html">iEventAttributeIterator</a>, 0, 0, 1);
+<a name="l00054"></a>00054 
+<a name="l00059"></a><a class="code" href="structiEventAttributeIterator.html">00059</a> <span class="keyword">struct </span><a class="code" href="structiEventAttributeIterator.html">iEventAttributeIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00060"></a>00060 {
+<a name="l00062"></a>00062   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventAttributeIterator.html#a0">HasNext</a>() = 0;
+<a name="l00064"></a>00064   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiEventAttributeIterator.html#a1">Next</a>() = 0;
+<a name="l00066"></a>00066   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventAttributeIterator.html#z568_0">Reset</a>() = 0;
+<a name="l00067"></a>00067 };
+<a name="l00068"></a>00068 
+<a name="l00069"></a>00069 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEvent.html">iEvent</a>, 0, 2, 0);
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071 <span class="comment">// Event data structs. Defined outside of iEvent to allow SWIG to</span>
+<a name="l00072"></a>00072 <span class="comment">// handle the nested structs and union. Does not break any code.</span>
+<a name="l00073"></a>00073 
+<a name="l00129"></a><a class="code" href="structcsKeyEventData.html">00129</a> <span class="keyword">struct </span><a class="code" href="structcsKeyEventData.html">csKeyEventData</a>
+<a name="l00130"></a>00130 {
+<a name="l00132"></a><a class="code" href="structcsKeyEventData.html#o0">00132</a>   <a class="code" href="group__event__handling.html#ga1">csKeyEventType</a> <a class="code" href="structcsKeyEventData.html#o0">eventType</a>;
+<a name="l00134"></a><a class="code" href="structcsKeyEventData.html#o1">00134</a>   <a class="code" href="group__util.html#ga22">utf32_char</a> <a class="code" href="structcsKeyEventData.html#o1">codeRaw</a>;
+<a name="l00136"></a><a class="code" href="structcsKeyEventData.html#o2">00136</a>   <a class="code" href="group__util.html#ga22">utf32_char</a> <a class="code" href="structcsKeyEventData.html#o2">codeCooked</a>;
+<a name="l00138"></a><a class="code" href="structcsKeyEventData.html#o3">00138</a>   <a class="code" href="struct__csKeyModifiers.html">csKeyModifiers</a> <a class="code" href="structcsKeyEventData.html#o3">modifiers</a>;
+<a name="l00140"></a><a class="code" href="structcsKeyEventData.html#o4">00140</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsKeyEventData.html#o4">autoRepeat</a>;
+<a name="l00142"></a><a class="code" href="structcsKeyEventData.html#o5">00142</a>   <a class="code" href="group__event__handling.html#ga5">csKeyCharType</a> <a class="code" href="structcsKeyEventData.html#o5">charType</a>;
+<a name="l00143"></a>00143 };
+<a name="l00144"></a>00144 
+<a name="l00150"></a><a class="code" href="group__event__handling.html#ga140">00150</a> <span class="keyword">enum</span> <a class="code" href="group__event__handling.html#ga140">csMouseButton</a>
+<a name="l00151"></a>00151 {
+<a name="l00153"></a>00153   <a class="code" href="group__event__handling.html#gga140a6">csmbLeft</a> = 1,
+<a name="l00155"></a>00155   <a class="code" href="group__event__handling.html#gga140a7">csmbRight</a> = 2,
+<a name="l00157"></a>00157   <a class="code" href="group__event__handling.html#gga140a8">csmbMiddle</a> = 3,
+<a name="l00159"></a>00159   <a class="code" href="group__event__handling.html#gga140a9">csmbWheelUp</a> = 4,
+<a name="l00161"></a>00161   <a class="code" href="group__event__handling.html#gga140a10">csmbWheelDown</a> = 5,
+<a name="l00163"></a>00163   <a class="code" href="group__event__handling.html#gga140a11">csmbExtra1</a> = 6,
+<a name="l00165"></a>00165   <a class="code" href="group__event__handling.html#gga140a12">csmbExtra2</a> = 7
+<a name="l00166"></a>00166 };
+<a name="l00167"></a>00167 
+<a name="l00175"></a><a class="code" href="structcsMouseEventData.html">00175</a> <span class="keyword">struct </span><a class="code" href="structcsMouseEventData.html">csMouseEventData</a>
+<a name="l00176"></a>00176 {
+<a name="l00178"></a><a class="code" href="structcsMouseEventData.html#o0">00178</a>   <span class="keywordtype">int</span> <a class="code" href="structcsMouseEventData.html#o0">x</a>;
+<a name="l00180"></a><a class="code" href="structcsMouseEventData.html#o1">00180</a>   <span class="keywordtype">int</span> <a class="code" href="structcsMouseEventData.html#o1">y</a>;
+<a name="l00182"></a><a class="code" href="structcsMouseEventData.html#o2">00182</a>   <a class="code" href="group__util.html#ga5">int32</a> <a class="code" href="structcsMouseEventData.html#o2">axes</a>[<a class="code" href="group__event__handling.html#ga128">CS_MAX_MOUSE_AXES</a>];
+<a name="l00184"></a><a class="code" href="structcsMouseEventData.html#o3">00184</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsMouseEventData.html#o3">numAxes</a>;
+<a name="l00189"></a><a class="code" href="structcsMouseEventData.html#o4">00189</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsMouseEventData.html#o4">Button</a>;
+<a name="l00191"></a><a class="code" href="structcsMouseEventData.html#o5">00191</a>   <a class="code" href="group__util.html#ga4">uint32</a> <a class="code" href="structcsMouseEventData.html#o5">Modifiers</a>;
+<a name="l00192"></a>00192 };
+<a name="l00193"></a>00193 
+<a name="l00201"></a><a class="code" href="structcsJoystickEventData.html">00201</a> <span class="keyword">struct </span><a class="code" href="structcsJoystickEventData.html">csJoystickEventData</a>
+<a name="l00202"></a>00202 {
+<a name="l00204"></a><a class="code" href="structcsJoystickEventData.html#o0">00204</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsJoystickEventData.html#o0">number</a>;
+<a name="l00206"></a><a class="code" href="structcsJoystickEventData.html#o1">00206</a>   <a class="code" href="group__util.html#ga5">int32</a> <a class="code" href="structcsJoystickEventData.html#o1">axes</a>[<a class="code" href="group__event__handling.html#ga132">CS_MAX_JOYSTICK_AXES</a>];
+<a name="l00208"></a><a class="code" href="structcsJoystickEventData.html#o2">00208</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsJoystickEventData.html#o2">numAxes</a>;
+<a name="l00210"></a><a class="code" href="structcsJoystickEventData.html#o3">00210</a>   <a class="code" href="group__util.html#ga4">uint32</a> <a class="code" href="structcsJoystickEventData.html#o3">axesChanged</a>;
+<a name="l00212"></a><a class="code" href="structcsJoystickEventData.html#o4">00212</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsJoystickEventData.html#o4">Button</a>;
+<a name="l00214"></a><a class="code" href="structcsJoystickEventData.html#o5">00214</a>   <a class="code" href="group__util.html#ga4">uint32</a> <a class="code" href="structcsJoystickEventData.html#o5">Modifiers</a>;
+<a name="l00215"></a>00215 };
+<a name="l00216"></a>00216 
+<a name="l00224"></a><a class="code" href="structcsCommandEventData.html">00224</a> <span class="keyword">struct </span><a class="code" href="structcsCommandEventData.html">csCommandEventData</a>
+<a name="l00225"></a>00225 {
+<a name="l00227"></a><a class="code" href="structcsCommandEventData.html#o0">00227</a>   <a class="code" href="group__util.html#ga18">uint</a> <a class="code" href="structcsCommandEventData.html#o0">Code</a>;
+<a name="l00229"></a><a class="code" href="structcsCommandEventData.html#o1">00229</a>   <a class="code" href="group__util.html#ga8">intptr_t</a> <a class="code" href="structcsCommandEventData.html#o1">Info</a>;
+<a name="l00230"></a>00230 };
+<a name="l00231"></a>00231 
+<a name="l00235"></a><a class="code" href="group__event__handling.html#ga141">00235</a> <span class="keyword">enum</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a>
+<a name="l00236"></a>00236 {
+<a name="l00238"></a>00238   <a class="code" href="group__event__handling.html#gga141a13">csEventErrNone</a>,
+<a name="l00243"></a>00243   <a class="code" href="group__event__handling.html#gga141a14">csEventErrLossy</a>,
+<a name="l00245"></a>00245   <a class="code" href="group__event__handling.html#gga141a15">csEventErrNotFound</a>,
+<a name="l00247"></a>00247 
+<a name="l00251"></a>00251   <a class="code" href="group__event__handling.html#gga141a16">csEventErrMismatchInt</a>,
+<a name="l00252"></a>00252   <a class="code" href="group__event__handling.html#gga141a143">csEventErrMismatchUInt</a>,
+<a name="l00253"></a>00253   <a class="code" href="group__event__handling.html#gga141a144">csEventErrMismatchFloat</a>,
+<a name="l00254"></a>00254   <a class="code" href="group__event__handling.html#gga141a145">csEventErrMismatchBuffer</a>,
+<a name="l00255"></a>00255   <a class="code" href="group__event__handling.html#gga141a146">csEventErrMismatchEvent</a>,
+<a name="l00256"></a>00256   <a class="code" href="group__event__handling.html#gga141a147">csEventErrMismatchIBase</a>,
+<a name="l00258"></a>00258 
+<a name="l00261"></a>00261   <a class="code" href="group__event__handling.html#gga141a22">csEventErrUhOhUnknown</a>
+<a name="l00262"></a>00262 };
+<a name="l00263"></a>00263 
+<a name="l00265"></a><a class="code" href="group__event__handling.html#ga142">00265</a> <span class="keyword">enum</span> <a class="code" href="group__event__handling.html#ga142">csEventAttributeType</a>
+<a name="l00266"></a>00266 {
+<a name="l00270"></a>00270   <a class="code" href="group__event__handling.html#gga142a23">csEventAttrUnknown</a>,
+<a name="l00272"></a>00272   <a class="code" href="group__event__handling.html#gga142a24">csEventAttrInt</a>,
+<a name="l00274"></a>00274   <a class="code" href="group__event__handling.html#gga142a25">csEventAttrUInt</a>,
+<a name="l00276"></a>00276   <a class="code" href="group__event__handling.html#gga142a26">csEventAttrFloat</a>,
+<a name="l00278"></a>00278   <a class="code" href="group__event__handling.html#gga142a27">csEventAttrDatabuffer</a>,
+<a name="l00280"></a>00280   <a class="code" href="group__event__handling.html#gga142a28">csEventAttrEvent</a>,
+<a name="l00282"></a>00282   <a class="code" href="group__event__handling.html#gga142a29">csEventAttriBase</a>
+<a name="l00283"></a>00283 };
+<a name="l00284"></a>00284 
+<a name="l00300"></a><a class="code" href="structiEvent.html">00300</a> <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00301"></a>00301 {
+<a name="l00305"></a><a class="code" href="structiEvent.html#o0">00305</a>   <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="structiEvent.html#o0">Type</a>;                   
+<a name="l00307"></a><a class="code" href="structiEvent.html#o1">00307</a>   <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="structiEvent.html#o1">Category</a>;               
+<a name="l00309"></a><a class="code" href="structiEvent.html#o2">00309</a>   <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="structiEvent.html#o2">SubCategory</a>;            
+<a name="l00311"></a><a class="code" href="structiEvent.html#o3">00311</a>   <a class="code" href="group__util.html#ga0">uint8</a> <a class="code" href="structiEvent.html#o3">Flags</a>;                  
+<a name="l00313"></a><a class="code" href="structiEvent.html#o4">00313</a>   <a class="code" href="group__util.html#ga17">csTicks</a> <a class="code" href="structiEvent.html#o4">Time</a>;                 
+<a name="l00314"></a>00314 
+<a name="l00316"></a>00316 
+<a name="l00319"></a>00319   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga1">int8</a> v) = 0;
+<a name="l00320"></a>00320   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga0">uint8</a> v) = 0;
+<a name="l00321"></a>00321   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga3">int16</a> v) = 0;
+<a name="l00322"></a>00322   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga2">uint16</a> v) = 0;
+<a name="l00323"></a>00323   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga5">int32</a> v) = 0;
+<a name="l00324"></a>00324   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga4">uint32</a> v) = 0;
+<a name="l00325"></a>00325   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga7">int64</a> v) = 0;
+<a name="l00326"></a>00326   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga6">uint64</a> v) = 0;
+<a name="l00327"></a>00327   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> v) = 0;
+<a name="l00328"></a>00328   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">double</span> v) = 0;
+<a name="l00329"></a>00329   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *v) = 0;
+<a name="l00330"></a>00330   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">void</span> *v, size_t size) = 0;
+<a name="l00331"></a>00331   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">bool</span> v) = 0;
+<a name="l00332"></a>00332   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="structiEvent.html">iEvent</a>* v) = 0;
+<a name="l00333"></a>00333   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#z569_0">Add</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="structiBase.html">iBase</a>* v) = 0;
+<a name="l00335"></a>00335 
+<a name="l00337"></a>00337 
+<a name="l00340"></a>00340   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga1">int8</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00341"></a>00341   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga0">uint8</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00342"></a>00342   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga3">int16</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00343"></a>00343   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga2">uint16</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00344"></a>00344   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga5">int32</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00345"></a>00345   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga4">uint32</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00346"></a>00346   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga7">int64</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00347"></a>00347   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="group__util.html#ga6">uint64</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00348"></a>00348   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">float</span> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00349"></a>00349   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">double</span> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00350"></a>00350   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">char</span> *&amp;v) <span class="keyword">const </span>= 0;
+<a name="l00351"></a>00351   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keyword">const</span> <span class="keywordtype">void</span> *&amp;v, 
+<a name="l00352"></a>00352     size_t&amp; size) <span class="keyword">const </span>= 0;
+<a name="l00353"></a>00353   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <span class="keywordtype">bool</span> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00354"></a>00354   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classcsRef.html">csRef&lt;iEvent&gt;</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00355"></a>00355   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga141">csEventError</a> <a class="code" href="structiEvent.html#z570_0">Retrieve</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name, <a class="code" href="classcsRef.html">csRef&lt;iBase&gt;</a> &amp;v) <span class="keyword">const </span>= 0;
+<a name="l00357"></a>00357 
+<a name="l00359"></a>00359   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a0">AttributeExists</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+<a name="l00361"></a>00361   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ga142">csEventAttributeType</a> <a class="code" href="structiEvent.html#a1">GetAttributeType</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name) = 0;
+<a name="l00362"></a>00362 
+<a name="l00364"></a>00364   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a2">Remove</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *name) = 0;
+<a name="l00366"></a>00366   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEvent.html#a3">RemoveAll</a>() = 0;
+<a name="l00367"></a>00367 
+<a name="l00369"></a>00369   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iEventAttributeIterator&gt;</a> <a class="code" href="structiEvent.html#a4">GetAttributeIterator</a>() = 0;
+<a name="l00370"></a>00370 };
+<a name="l00371"></a>00371 
+<a name="l00409"></a>00409 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEventPlug.html">iEventPlug</a>, 0, 0, 1);
+<a name="l00410"></a>00410 
+<a name="l00419"></a><a class="code" href="structiEventPlug.html">00419</a> <span class="keyword">struct </span><a class="code" href="structiEventPlug.html">iEventPlug</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00420"></a>00420 {
+<a name="l00429"></a>00429   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <a class="code" href="structiEventPlug.html#a0">GetPotentiallyConflictingEvents</a> () = 0;
+<a name="l00430"></a>00430 
+<a name="l00439"></a>00439   <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> <a class="code" href="structiEventPlug.html#a1">QueryEventPriority</a> (<span class="keywordtype">unsigned</span> iType) = 0;
+<a name="l00440"></a>00440 
+<a name="l00448"></a><a class="code" href="structiEventPlug.html#a2">00448</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventPlug.html#a2">EnableEvents</a> (<span class="keywordtype">unsigned</span> <span class="comment">/*iType*/</span>, <span class="keywordtype">bool</span> <span class="comment">/*iEnable*/</span>) {}
+<a name="l00449"></a>00449 };
+<a name="l00450"></a>00450 
+<a name="l00451"></a>00451 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEventOutlet.html">iEventOutlet</a>, 0, 1, 0);
+<a name="l00452"></a>00452 
+<a name="l00467"></a><a class="code" href="structiEventOutlet.html">00467</a> <span class="keyword">struct </span><a class="code" href="structiEventOutlet.html">iEventOutlet</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00468"></a>00468 {
+<a name="l00477"></a>00477   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iEvent&gt;</a> <a class="code" href="structiEventOutlet.html#a0">CreateEvent</a> () = 0;
+<a name="l00478"></a>00478 
+<a name="l00490"></a>00490   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a1">Post</a> (<a class="code" href="structiEvent.html">iEvent</a>*) = 0;
+<a name="l00491"></a>00491 
+<a name="l00505"></a>00505   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a2">Key</a> (<a class="code" href="group__util.html#ga22">utf32_char</a> codeRaw, <a class="code" href="group__util.html#ga22">utf32_char</a> codeCooked, <span class="keywordtype">bool</span> iDown) = 0;
+<a name="l00506"></a>00506 
+<a name="l00514"></a>00514   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a3">Mouse</a> (<a class="code" href="group__util.html#ga18">uint</a> iButton, <span class="keywordtype">bool</span> iDown, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) = 0;
+<a name="l00515"></a>00515 
+<a name="l00524"></a>00524   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a4">Joystick</a>(<a class="code" href="group__util.html#ga18">uint</a> iNumber, <a class="code" href="group__util.html#ga18">uint</a> iButton, <span class="keywordtype">bool</span> iDown, 
+<a name="l00525"></a>00525     <span class="keyword">const</span> <a class="code" href="group__util.html#ga5">int32</a> *axes, <a class="code" href="group__util.html#ga18">uint</a> numAxes) = 0;
+<a name="l00526"></a>00526 
+<a name="l00536"></a>00536   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a5">Broadcast</a> (<a class="code" href="group__util.html#ga18">uint</a> iCode, <a class="code" href="group__util.html#ga8">intptr_t</a> iInfo = 0) = 0;
+<a name="l00537"></a>00537 
+<a name="l00553"></a>00553   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventOutlet.html#a6">ImmediateBroadcast</a> (<a class="code" href="group__util.html#ga18">uint</a> iCode, <a class="code" href="group__util.html#ga8">intptr_t</a> iInfo) = 0;
+<a name="l00554"></a>00554 };
+<a name="l00555"></a>00555 
+<a name="l00556"></a>00556 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiEventCord.html">iEventCord</a>, 0, 0, 3);
+<a name="l00557"></a>00557 
+<a name="l00565"></a><a class="code" href="structiEventCord.html">00565</a> <span class="keyword">struct </span><a class="code" href="structiEventCord.html">iEventCord</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00566"></a>00566 {
+<a name="l00574"></a>00574   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEventCord.html#a0">Insert</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a>*, <span class="keywordtype">int</span> priority) = 0;
+<a name="l00575"></a>00575 
+<a name="l00579"></a>00579   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventCord.html#a1">Remove</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a>*) = 0;
+<a name="l00580"></a>00580 
+<a name="l00585"></a>00585   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventCord.html#a2">GetPass</a> () <span class="keyword">const </span>= 0;
+<a name="l00586"></a>00586 
+<a name="l00591"></a>00591   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventCord.html#a3">SetPass</a> (<span class="keywordtype">bool</span>) = 0;
+<a name="l00592"></a>00592 
+<a name="l00594"></a>00594   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiEventCord.html#a4">GetCategory</a>() <span class="keyword">const </span>= 0;
+<a name="l00595"></a>00595   <span class="comment">// Get the subcategory of this cord.</span>
+<a name="l00596"></a>00596   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetSubcategory() <span class="keyword">const </span>= 0;
+<a name="l00597"></a>00597 };
+<a name="l00598"></a>00598 
+<a name="l00601"></a>00601 <span class="preprocessor">#endif // __CS_IUTIL_EVENT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>

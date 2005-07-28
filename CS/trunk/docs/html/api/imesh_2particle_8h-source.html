@@ -41,34 +41,38 @@
 <a name="l00022"></a>00022 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
 <a name="l00023"></a>00023 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
 <a name="l00024"></a>00024 
-<a name="l00025"></a>00025 <span class="keyword">class </span><a class="code" href="classcsColor.html">csColor</a>;
-<a name="l00026"></a>00026 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
-<a name="l00027"></a>00027 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
-<a name="l00028"></a>00028 <span class="keyword">struct </span><a class="code" href="structiRenderView.html">iRenderView</a>;
-<a name="l00029"></a>00029 <span class="keyword">struct </span><a class="code" href="structiLight.html">iLight</a>;
-<a name="l00030"></a>00030 
-<a name="l00031"></a>00031 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiParticle.html">iParticle</a>, 0, 1, 0);
+<a name="l00025"></a>00025 <span class="keyword">struct </span><a class="code" href="structiLight.html">iLight</a>;
+<a name="l00026"></a>00026 <span class="keyword">struct </span><a class="code" href="structiMovable.html">iMovable</a>;
+<a name="l00027"></a>00027 <span class="keyword">struct </span><a class="code" href="structiRenderView.html">iRenderView</a>;
+<a name="l00028"></a>00028 
+<a name="l00029"></a>00029 <span class="keyword">class </span><a class="code" href="classcsColor.html">csColor</a>;
+<a name="l00030"></a>00030 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
+<a name="l00031"></a>00031 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
 <a name="l00032"></a>00032 
-<a name="l00040"></a><a class="code" href="structiParticle.html">00040</a> <span class="keyword">struct </span><a class="code" href="structiParticle.html">iParticle</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00041"></a>00041 {
-<a name="l00046"></a>00046   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a0">SetPosition</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) = 0;
-<a name="l00047"></a>00047   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetPosition () <span class="keyword">const </span>= 0;
-<a name="l00051"></a>00051   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a2">MovePosition</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; move) = 0;
-<a name="l00052"></a>00052 
-<a name="l00054"></a>00054   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a3">SetColor</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col) = 0;
-<a name="l00056"></a>00056   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a4">AddColor</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col) = 0;
-<a name="l00058"></a>00058   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a5">ScaleBy</a> (<span class="keywordtype">float</span> factor) = 0;
-<a name="l00060"></a>00060   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a6">SetMixMode</a> (<a class="code" href="group__util.html#ga18">uint</a> mode) = 0;
-<a name="l00062"></a>00062   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a7">Rotate</a> (<span class="keywordtype">float</span> angle) = 0;
-<a name="l00063"></a>00063 
-<a name="l00069"></a>00069   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a8">UpdateLighting</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;iLight*&gt;</a>&amp; lights,
-<a name="l00070"></a>00070       <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; transform) = 0;
-<a name="l00071"></a>00071 
-<a name="l00073"></a>00073   <span class="keyword">virtual</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>** <a class="code" href="structiParticle.html#a9">GetRenderMeshes</a> (<span class="keywordtype">int</span>&amp; n, <a class="code" href="structiRenderView.html">iRenderView</a>* rview, 
-<a name="l00074"></a>00074     <a class="code" href="structiMovable.html">iMovable</a>* movable, <a class="code" href="group__util.html#ga4">uint32</a> frustum_mask) = 0;
-<a name="l00075"></a>00075 };
-<a name="l00076"></a>00076 
-<a name="l00077"></a>00077 <span class="preprocessor">#endif // __CS_IMESH_PARTICLE_H__</span>
+<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structcsRenderMesh.html">csRenderMesh</a>;
+<a name="l00034"></a>00034 
+<a name="l00035"></a>00035 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiParticle.html">iParticle</a>, 0, 1, 0);
+<a name="l00036"></a>00036 
+<a name="l00044"></a><a class="code" href="structiParticle.html">00044</a> <span class="keyword">struct </span><a class="code" href="structiParticle.html">iParticle</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00045"></a>00045 {
+<a name="l00050"></a>00050   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a0">SetPosition</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos) = 0;
+<a name="l00051"></a>00051   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetPosition () <span class="keyword">const </span>= 0;
+<a name="l00055"></a>00055   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a2">MovePosition</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; move) = 0;
+<a name="l00056"></a>00056 
+<a name="l00058"></a>00058   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a3">SetColor</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col) = 0;
+<a name="l00060"></a>00060   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a4">AddColor</a> (<span class="keyword">const</span> <a class="code" href="classcsColor.html">csColor</a>&amp; col) = 0;
+<a name="l00062"></a>00062   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a5">ScaleBy</a> (<span class="keywordtype">float</span> factor) = 0;
+<a name="l00064"></a>00064   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a6">SetMixMode</a> (<a class="code" href="group__util.html#ga18">uint</a> mode) = 0;
+<a name="l00066"></a>00066   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a7">Rotate</a> (<span class="keywordtype">float</span> angle) = 0;
+<a name="l00067"></a>00067 
+<a name="l00073"></a>00073   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiParticle.html#a8">UpdateLighting</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;iLight*&gt;</a>&amp; lights,
+<a name="l00074"></a>00074       <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; transform) = 0;
+<a name="l00075"></a>00075 
+<a name="l00077"></a>00077   <span class="keyword">virtual</span> <a class="code" href="structcsRenderMesh.html">csRenderMesh</a>** <a class="code" href="structiParticle.html#a9">GetRenderMeshes</a> (<span class="keywordtype">int</span>&amp; n, <a class="code" href="structiRenderView.html">iRenderView</a>* rview, 
+<a name="l00078"></a>00078     <a class="code" href="structiMovable.html">iMovable</a>* movable, <a class="code" href="group__util.html#ga4">uint32</a> frustum_mask) = 0;
+<a name="l00079"></a>00079 };
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081 <span class="preprocessor">#endif // __CS_IMESH_PARTICLE_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>

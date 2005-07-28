@@ -42,77 +42,78 @@
 <a name="l00023"></a>00023 
 <a name="l00030"></a>00030 <span class="preprocessor">#include &lt;<a class="code" href="iutil_2event_8h.html">iutil/event.h</a>&gt;</span>
 <a name="l00031"></a>00031 <span class="preprocessor">#include &lt;<a class="code" href="eventh_8h.html">iutil/eventh.h</a>&gt;</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#include &lt;<a class="code" href="eventq_8h.html">iutil/eventq.h</a>&gt;</span>
-<a name="l00033"></a>00033 <span class="preprocessor">#include &lt;<a class="code" href="iutil_2objreg_8h.html">iutil/objreg.h</a>&gt;</span>
+<a name="l00032"></a>00032 
+<a name="l00033"></a>00033 <span class="preprocessor">#include &lt;limits.h&gt;</span>
 <a name="l00034"></a>00034 
-<a name="l00035"></a>00035 <span class="preprocessor">#include &lt;limits.h&gt;</span>
-<a name="l00036"></a>00036 
-<a name="l00037"></a>00037 <span class="comment">// Max event type (in event type enumeration) that will be handled.</span>
-<a name="l00038"></a><a class="code" href="group__event__handling.html#ga7">00038</a> <span class="preprocessor">#define _CSBASEEVENT_MAXARRAYINDEX csevFrameStart</span>
-<a name="l00039"></a>00039 <span class="preprocessor"></span>
-<a name="l00052"></a><a class="code" href="classcsBaseEventHandler.html">00052</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsBaseEventHandler.html">csBaseEventHandler</a> : <span class="keyword">public</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>
-<a name="l00053"></a>00053 {
-<a name="l00054"></a>00054 <span class="keyword">private</span>:
-<a name="l00055"></a>00055   <a class="code" href="classcsRef.html">csRef&lt;iEventQueue&gt;</a> queue;
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057 <span class="keyword">protected</span>:
-<a name="l00067"></a>00067   <a class="code" href="classcsBaseEventHandler.html">csBaseEventHandler</a> ();
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069 <span class="keyword">public</span>:
-<a name="l00071"></a>00071   <span class="keyword">virtual</span> ~<a class="code" href="classcsBaseEventHandler.html">csBaseEventHandler</a> ();
-<a name="l00072"></a>00072 
-<a name="l00073"></a>00073 <span class="keyword">protected</span>:
-<a name="l00074"></a><a class="code" href="classcsBaseEventHandler.html#p0">00074</a>   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
-<a name="l00075"></a>00075 
-<a name="l00076"></a>00076 <span class="keyword">public</span>:
-<a name="l00086"></a>00086   <span class="keywordtype">bool</span> RegisterQueue (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* registry,
-<a name="l00087"></a>00087         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> trigger = UINT_MAX);
-<a name="l00088"></a>00088 
-<a name="l00097"></a>00097   <span class="keywordtype">bool</span> RegisterQueue (<a class="code" href="structiEventQueue.html">iEventQueue</a>* queue, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> trigger = UINT_MAX);
-<a name="l00098"></a>00098 
-<a name="l00099"></a>00099 <span class="keyword">private</span>:
-<a name="l00100"></a>00100   <span class="comment">// This contains an array of trigger functions which are used to dispatch</span>
-<a name="l00101"></a>00101   <span class="comment">// events based on event type.</span>
-<a name="l00102"></a>00102   <span class="keyword">static</span> bool (csBaseEventHandler::*pmfnTriggers[
-<a name="l00103"></a>00103         <a class="code" href="group__event__handling.html#ga7">_CSBASEEVENT_MAXARRAYINDEX</a>+1])(<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00104"></a>00104 
-<a name="l00105"></a>00105 <span class="keyword">protected</span>:
-<a name="l00126"></a>00126   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventHandler.html#a0">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00127"></a>00127 
-<a name="l00144"></a>00144   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnBroadcast (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00145"></a>00145 
-<a name="l00147"></a>00147   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnCommand (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00148"></a>00148 
-<a name="l00150"></a>00150   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnJoystickMove (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00151"></a>00151 
-<a name="l00156"></a>00156   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnJoystickDown (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00157"></a>00157 
-<a name="l00159"></a>00159   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnJoystickUp (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00160"></a>00160 
-<a name="l00162"></a>00162   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnKeyboard (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00163"></a>00163 
-<a name="l00165"></a>00165   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseMove (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00166"></a>00166 
-<a name="l00168"></a>00168   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseDown (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00169"></a>00169 
-<a name="l00171"></a>00171   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseUp (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00172"></a>00172 
-<a name="l00174"></a>00174   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseClick (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00175"></a>00175 
-<a name="l00180"></a>00180   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseDoubleClick (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00181"></a>00181 
-<a name="l00188"></a>00188   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnUnhandledEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
-<a name="l00189"></a>00189 
-<a name="l00191"></a>00191   <span class="keyword">virtual</span> <span class="keywordtype">void</span> PreProcessFrame ();
-<a name="l00192"></a>00192 
-<a name="l00194"></a>00194   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ProcessFrame ();
-<a name="l00195"></a>00195 
-<a name="l00197"></a>00197   <span class="keyword">virtual</span> <span class="keywordtype">void</span> PostProcessFrame ();
-<a name="l00198"></a>00198 
-<a name="l00200"></a>00200   <span class="keyword">virtual</span> <span class="keywordtype">void</span> FinishFrame ();
-<a name="l00201"></a>00201 };
-<a name="l00202"></a>00202 
-<a name="l00205"></a>00205 <span class="preprocessor">#endif //__CS_CSBASEEVENTH_H__</span>
+<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiEventQueue.html">iEventQueue</a>;
+<a name="l00036"></a>00036 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038 <span class="comment">// Max event type (in event type enumeration) that will be handled.</span>
+<a name="l00039"></a><a class="code" href="group__event__handling.html#ga7">00039</a> <span class="preprocessor">#define _CSBASEEVENT_MAXARRAYINDEX csevFrameStart</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>
+<a name="l00053"></a><a class="code" href="classcsBaseEventHandler.html">00053</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsBaseEventHandler.html">csBaseEventHandler</a> : <span class="keyword">public</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>
+<a name="l00054"></a>00054 {
+<a name="l00055"></a>00055 <span class="keyword">private</span>:
+<a name="l00056"></a>00056   <a class="code" href="classcsRef.html">csRef&lt;iEventQueue&gt;</a> queue;
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058 <span class="keyword">protected</span>:
+<a name="l00068"></a>00068   <a class="code" href="classcsBaseEventHandler.html">csBaseEventHandler</a> ();
+<a name="l00069"></a>00069 
+<a name="l00070"></a>00070 <span class="keyword">public</span>:
+<a name="l00072"></a>00072   <span class="keyword">virtual</span> ~<a class="code" href="classcsBaseEventHandler.html">csBaseEventHandler</a> ();
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074 <span class="keyword">protected</span>:
+<a name="l00075"></a><a class="code" href="classcsBaseEventHandler.html#p0">00075</a>   <a class="code" href="group__scf.html#ga23">SCF_DECLARE_IBASE</a>;
+<a name="l00076"></a>00076 
+<a name="l00077"></a>00077 <span class="keyword">public</span>:
+<a name="l00087"></a>00087   <span class="keywordtype">bool</span> RegisterQueue (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* registry,
+<a name="l00088"></a>00088         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> trigger = UINT_MAX);
+<a name="l00089"></a>00089 
+<a name="l00098"></a>00098   <span class="keywordtype">bool</span> RegisterQueue (<a class="code" href="structiEventQueue.html">iEventQueue</a>* queue, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> trigger = UINT_MAX);
+<a name="l00099"></a>00099 
+<a name="l00100"></a>00100 <span class="keyword">private</span>:
+<a name="l00101"></a>00101   <span class="comment">// This contains an array of trigger functions which are used to dispatch</span>
+<a name="l00102"></a>00102   <span class="comment">// events based on event type.</span>
+<a name="l00103"></a>00103   <span class="keyword">static</span> bool (csBaseEventHandler::*pmfnTriggers[
+<a name="l00104"></a>00104         <a class="code" href="group__event__handling.html#ga7">_CSBASEEVENT_MAXARRAYINDEX</a>+1])(<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00105"></a>00105 
+<a name="l00106"></a>00106 <span class="keyword">protected</span>:
+<a name="l00127"></a>00127   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventHandler.html#a0">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00128"></a>00128 
+<a name="l00145"></a>00145   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnBroadcast (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00146"></a>00146 
+<a name="l00148"></a>00148   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnCommand (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00149"></a>00149 
+<a name="l00151"></a>00151   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnJoystickMove (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00152"></a>00152 
+<a name="l00157"></a>00157   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnJoystickDown (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00158"></a>00158 
+<a name="l00160"></a>00160   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnJoystickUp (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00161"></a>00161 
+<a name="l00163"></a>00163   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnKeyboard (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00164"></a>00164 
+<a name="l00166"></a>00166   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseMove (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00167"></a>00167 
+<a name="l00169"></a>00169   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseDown (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00170"></a>00170 
+<a name="l00172"></a>00172   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseUp (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00173"></a>00173 
+<a name="l00175"></a>00175   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseClick (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00176"></a>00176 
+<a name="l00181"></a>00181   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnMouseDoubleClick (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00182"></a>00182 
+<a name="l00189"></a>00189   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> OnUnhandledEvent (<a class="code" href="structiEvent.html">iEvent</a> &amp;event);
+<a name="l00190"></a>00190 
+<a name="l00192"></a>00192   <span class="keyword">virtual</span> <span class="keywordtype">void</span> PreProcessFrame ();
+<a name="l00193"></a>00193 
+<a name="l00195"></a>00195   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ProcessFrame ();
+<a name="l00196"></a>00196 
+<a name="l00198"></a>00198   <span class="keyword">virtual</span> <span class="keywordtype">void</span> PostProcessFrame ();
+<a name="l00199"></a>00199 
+<a name="l00201"></a>00201   <span class="keyword">virtual</span> <span class="keywordtype">void</span> FinishFrame ();
+<a name="l00202"></a>00202 };
+<a name="l00203"></a>00203 
+<a name="l00206"></a>00206 <span class="preprocessor">#endif //__CS_CSBASEEVENTH_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>

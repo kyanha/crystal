@@ -41,216 +41,220 @@
 <a name="l00028"></a>00028 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00029"></a>00029 
 <a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="cstypes_8h.html">cstypes.h</a>"</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="vector3_8h.html">csgeom/vector3.h</a>"</span>
-<a name="l00033"></a>00033 
-<a name="l00034"></a>00034 <span class="keyword">class </span><a class="code" href="classcsTransform.html">csTransform</a>;
-<a name="l00035"></a>00035 <span class="keyword">class </span><a class="code" href="classcsPlane3.html">csPlane3</a>;
-<a name="l00036"></a>00036 
-<a name="l00042"></a>00042 
-<a name="l00043"></a><a class="code" href="group__geom__utils.html#ga68">00043</a> <span class="preprocessor">#define CS_FRUST_OUTSIDE  0</span>
-<a name="l00044"></a>00044 <span class="preprocessor"></span>
-<a name="l00045"></a><a class="code" href="group__geom__utils.html#ga69">00045</a> <span class="preprocessor">#define CS_FRUST_INSIDE   1</span>
-<a name="l00046"></a>00046 <span class="preprocessor"></span>
-<a name="l00047"></a><a class="code" href="group__geom__utils.html#ga70">00047</a> <span class="preprocessor">#define CS_FRUST_COVERED  2</span>
-<a name="l00048"></a>00048 <span class="preprocessor"></span>
-<a name="l00049"></a><a class="code" href="group__geom__utils.html#ga71">00049</a> <span class="preprocessor">#define CS_FRUST_PARTIAL  3</span>
-<a name="l00050"></a>00050 <span class="preprocessor"></span>
-<a name="l00058"></a><a class="code" href="structcsClipInfo.html">00058</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="structcsClipInfo.html">csClipInfo</a>
-<a name="l00059"></a>00059 {
-<a name="l00060"></a><a class="code" href="frustum_8h.html#a4">00060</a> <span class="preprocessor"># define CS_CLIPINFO_ORIGINAL 0</span>
-<a name="l00061"></a><a class="code" href="frustum_8h.html#a5">00061</a> <span class="preprocessor"></span><span class="preprocessor"># define CS_CLIPINFO_ONEDGE 1</span>
-<a name="l00062"></a><a class="code" href="frustum_8h.html#a6">00062</a> <span class="preprocessor"></span><span class="preprocessor"># define CS_CLIPINFO_INSIDE 2</span>
-<a name="l00063"></a><a class="code" href="structcsClipInfo.html#o0">00063</a> <span class="preprocessor"></span>  <span class="keywordtype">int</span> type; <span class="comment">// One of CS_CLIPINFO_???</span>
-<a name="l00064"></a>00064   <span class="keyword">union</span>
-<a name="l00065"></a>00065 <span class="keyword">  </span>{
-<a name="l00066"></a><a class="code" href="structcsClipInfo.html#o1">00066</a>     <span class="keyword">struct </span>{ <span class="keywordtype">int</span> idx; } original;
-<a name="l00067"></a><a class="code" href="structcsClipInfo.html#o4">00067</a>     <span class="keyword">struct </span>{ <span class="keywordtype">int</span> i1, i2; <span class="keywordtype">float</span> r; } onedge;
-<a name="l00068"></a><a class="code" href="structcsClipInfo.html#o5">00068</a>     <span class="keyword">struct </span>{ <a class="code" href="structcsClipInfo.html">csClipInfo</a>* ci1, * ci2; <span class="keywordtype">float</span> r; } inside;
-<a name="l00069"></a>00069   };
-<a name="l00070"></a>00070 
-<a name="l00071"></a><a class="code" href="structcsClipInfo.html#a0">00071</a>   <a class="code" href="structcsClipInfo.html">csClipInfo</a> () : type (<a class="code" href="frustum_8h.html#a4">CS_CLIPINFO_ORIGINAL</a>) { }
-<a name="l00072"></a>00072   <span class="keywordtype">void</span> Clear ();
-<a name="l00073"></a><a class="code" href="structcsClipInfo.html#a2">00073</a>   ~<a class="code" href="structcsClipInfo.html">csClipInfo</a> () { Clear (); }
-<a name="l00074"></a>00074 
-<a name="l00076"></a><a class="code" href="structcsClipInfo.html#a3">00076</a>   <span class="keywordtype">void</span> Copy (<a class="code" href="structcsClipInfo.html">csClipInfo</a>&amp; other)
-<a name="l00077"></a>00077   {
-<a name="l00078"></a>00078     <span class="keywordflow">if</span> (&amp;other == <span class="keyword">this</span>) <span class="keywordflow">return</span>;
-<a name="l00079"></a>00079     Clear ();
-<a name="l00080"></a>00080     type = other.<a class="code" href="structcsClipInfo.html#o0">type</a>;
-<a name="l00081"></a>00081     <span class="keywordflow">if</span> (type == <a class="code" href="frustum_8h.html#a6">CS_CLIPINFO_INSIDE</a>)
-<a name="l00082"></a>00082     {
-<a name="l00083"></a>00083       inside.r = other.<a class="code" href="structcsClipInfo.html#o9">inside</a>.r;
-<a name="l00084"></a>00084       inside.ci1 = <span class="keyword">new</span> <a class="code" href="structcsClipInfo.html">csClipInfo</a> ();
-<a name="l00085"></a>00085       inside.ci1-&gt;Copy (*other.<a class="code" href="structcsClipInfo.html#o9">inside</a>.ci1);
-<a name="l00086"></a>00086       inside.ci2 = <span class="keyword">new</span> <a class="code" href="structcsClipInfo.html">csClipInfo</a> ();
-<a name="l00087"></a>00087       inside.ci2-&gt;Copy (*other.<a class="code" href="structcsClipInfo.html#o9">inside</a>.ci2);
-<a name="l00088"></a>00088     }
-<a name="l00089"></a>00089     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (type == <a class="code" href="frustum_8h.html#a4">CS_CLIPINFO_ORIGINAL</a>)
-<a name="l00090"></a>00090       original.idx = other.<a class="code" href="structcsClipInfo.html#o2">original</a>.idx;
-<a name="l00091"></a>00091     <span class="keywordflow">else</span>
-<a name="l00092"></a>00092       onedge = other.<a class="code" href="structcsClipInfo.html#o6">onedge</a>;
-<a name="l00093"></a>00093   }
-<a name="l00094"></a>00094 
-<a name="l00096"></a><a class="code" href="structcsClipInfo.html#a4">00096</a>   <span class="keywordtype">void</span> Move (<a class="code" href="structcsClipInfo.html">csClipInfo</a>&amp; other)
-<a name="l00097"></a>00097   {
-<a name="l00098"></a>00098     <span class="keywordflow">if</span> (&amp;other == <span class="keyword">this</span>) <span class="keywordflow">return</span>;
-<a name="l00099"></a>00099     Clear ();
-<a name="l00100"></a>00100     type = other.<a class="code" href="structcsClipInfo.html#o0">type</a>;
-<a name="l00101"></a>00101     <span class="keywordflow">if</span> (type == <a class="code" href="frustum_8h.html#a6">CS_CLIPINFO_INSIDE</a>)
-<a name="l00102"></a>00102       inside = other.<a class="code" href="structcsClipInfo.html#o9">inside</a>;
-<a name="l00103"></a>00103     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (type == <a class="code" href="frustum_8h.html#a4">CS_CLIPINFO_ORIGINAL</a>)
-<a name="l00104"></a>00104       original.idx = other.<a class="code" href="structcsClipInfo.html#o2">original</a>.idx;
-<a name="l00105"></a>00105     <span class="keywordflow">else</span>
-<a name="l00106"></a>00106       onedge = other.<a class="code" href="structcsClipInfo.html#o6">onedge</a>;
-<a name="l00107"></a>00107     other.<a class="code" href="structcsClipInfo.html#o0">type</a> = <a class="code" href="frustum_8h.html#a4">CS_CLIPINFO_ORIGINAL</a>;
-<a name="l00108"></a>00108   }
-<a name="l00109"></a>00109 
-<a name="l00110"></a><a class="code" href="structcsClipInfo.html#a5">00110</a>   <span class="keywordtype">void</span> Dump (<span class="keywordtype">int</span> indent)
-<a name="l00111"></a>00111   {
-<a name="l00112"></a>00112     <span class="keywordtype">char</span> ind[255];
-<a name="l00113"></a>00113     <span class="keywordtype">int</span> i;
-<a name="l00114"></a>00114     <span class="keywordflow">for</span> (i = 0 ; i &lt; indent ; i++) ind[i] = <span class="charliteral">' '</span>;
-<a name="l00115"></a>00115     ind[i] = 0;
-<a name="l00116"></a>00116     <span class="keywordflow">switch</span> (type)
-<a name="l00117"></a>00117     {
-<a name="l00118"></a>00118       <span class="keywordflow">case</span> <a class="code" href="frustum_8h.html#a4">CS_CLIPINFO_ORIGINAL</a>:
-<a name="l00119"></a>00119         printf (<span class="stringliteral">"%s ORIGINAL idx=%d\n"</span>, ind, original.idx);
-<a name="l00120"></a>00120         <span class="keywordflow">break</span>;
-<a name="l00121"></a>00121       <span class="keywordflow">case</span> <a class="code" href="frustum_8h.html#a5">CS_CLIPINFO_ONEDGE</a>:
-<a name="l00122"></a>00122         printf (<span class="stringliteral">"%s ONEDGE i1=%d i2=%d r=%g\n"</span>, ind, onedge.i1, onedge.i2,
-<a name="l00123"></a>00123           onedge.r);
-<a name="l00124"></a>00124         <span class="keywordflow">break</span>;
-<a name="l00125"></a>00125       <span class="keywordflow">case</span> <a class="code" href="frustum_8h.html#a6">CS_CLIPINFO_INSIDE</a>:
-<a name="l00126"></a>00126         printf (<span class="stringliteral">"%s INSIDE r=%g\n"</span>, ind, inside.r);
-<a name="l00127"></a>00127         inside.ci1-&gt;Dump (indent+2);
-<a name="l00128"></a>00128         inside.ci2-&gt;Dump (indent+2);
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="vector3_8h.html">csgeom/vector3.h</a>"</span>
+<a name="l00032"></a>00032 
+<a name="l00033"></a>00033 <span class="keyword">class </span><a class="code" href="classcsPlane3.html">csPlane3</a>;
+<a name="l00034"></a>00034 <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+<a name="l00035"></a>00035 <span class="keyword">class </span><a class="code" href="classcsPtr.html">csPtr</a>;
+<a name="l00036"></a>00036 <span class="keyword">class </span><a class="code" href="classcsTransform.html">csTransform</a>;
+<a name="l00037"></a>00037 
+<a name="l00043"></a>00043 <span class="keyword">enum</span>
+<a name="l00044"></a>00044 {
+<a name="l00046"></a>00046   <a class="code" href="group__geom__utils.html#gga22a0">CS_FRUST_OUTSIDE</a> = 0,
+<a name="l00048"></a>00048   <a class="code" href="group__geom__utils.html#gga22a1">CS_FRUST_INSIDE</a> = 1,
+<a name="l00050"></a>00050   <a class="code" href="group__geom__utils.html#gga22a2">CS_FRUST_COVERED</a> = 2,
+<a name="l00052"></a>00052   <a class="code" href="group__geom__utils.html#gga22a3">CS_FRUST_PARTIAL</a> = 3
+<a name="l00053"></a>00053 };
+<a name="l00056"></a><a class="code" href="group__geom__utils.html#ga23">00056</a> <span class="keyword">enum</span> <a class="code" href="group__geom__utils.html#ga23">csClipType</a>
+<a name="l00057"></a>00057 {
+<a name="l00058"></a>00058   CS_CLIPINFO_ORIGINAL = 0,
+<a name="l00059"></a>00059   CS_CLIPINFO_ONEDGE = 1,
+<a name="l00060"></a>00060   CS_CLIPINFO_INSIDE = 2
+<a name="l00061"></a>00061 };
+<a name="l00062"></a>00062 
+<a name="l00069"></a><a class="code" href="structcsClipInfo.html">00069</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="structcsClipInfo.html">csClipInfo</a>
+<a name="l00070"></a>00070 {
+<a name="l00071"></a>00071 
+<a name="l00072"></a><a class="code" href="structcsClipInfo.html#o0">00072</a>   <a class="code" href="group__geom__utils.html#ga23">csClipType</a> type; <span class="comment">// One of CS_CLIPINFO_???</span>
+<a name="l00073"></a>00073   <span class="keyword">union</span>
+<a name="l00074"></a>00074 <span class="keyword">  </span>{
+<a name="l00075"></a><a class="code" href="structcsClipInfo.html#o1">00075</a>     <span class="keyword">struct </span>{ <span class="keywordtype">int</span> idx; } original;
+<a name="l00076"></a><a class="code" href="structcsClipInfo.html#o4">00076</a>     <span class="keyword">struct </span>{ <span class="keywordtype">int</span> i1, i2; <span class="keywordtype">float</span> r; } onedge;
+<a name="l00077"></a><a class="code" href="structcsClipInfo.html#o5">00077</a>     <span class="keyword">struct </span>{ <a class="code" href="structcsClipInfo.html">csClipInfo</a>* ci1, * ci2; <span class="keywordtype">float</span> r; } inside;
+<a name="l00078"></a>00078   };
+<a name="l00079"></a>00079 
+<a name="l00080"></a><a class="code" href="structcsClipInfo.html#a0">00080</a>   <a class="code" href="structcsClipInfo.html">csClipInfo</a> () : type (CS_CLIPINFO_ORIGINAL) { }
+<a name="l00081"></a>00081   <span class="keywordtype">void</span> Clear ();
+<a name="l00082"></a><a class="code" href="structcsClipInfo.html#a2">00082</a>   ~<a class="code" href="structcsClipInfo.html">csClipInfo</a> () { Clear (); }
+<a name="l00083"></a>00083 
+<a name="l00085"></a><a class="code" href="structcsClipInfo.html#a3">00085</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Copy (<a class="code" href="structcsClipInfo.html">csClipInfo</a>&amp; other)
+<a name="l00086"></a>00086   {
+<a name="l00087"></a>00087     <span class="keywordflow">if</span> (&amp;other == <span class="keyword">this</span>) <span class="keywordflow">return</span>;
+<a name="l00088"></a>00088     Clear ();
+<a name="l00089"></a>00089     type = other.<a class="code" href="structcsClipInfo.html#o0">type</a>;
+<a name="l00090"></a>00090     <span class="keywordflow">if</span> (type == CS_CLIPINFO_INSIDE)
+<a name="l00091"></a>00091     {
+<a name="l00092"></a>00092       inside.r = other.<a class="code" href="structcsClipInfo.html#o9">inside</a>.r;
+<a name="l00093"></a>00093       inside.ci1 = <span class="keyword">new</span> <a class="code" href="structcsClipInfo.html">csClipInfo</a> ();
+<a name="l00094"></a>00094       inside.ci1-&gt;Copy (*other.<a class="code" href="structcsClipInfo.html#o9">inside</a>.ci1);
+<a name="l00095"></a>00095       inside.ci2 = <span class="keyword">new</span> <a class="code" href="structcsClipInfo.html">csClipInfo</a> ();
+<a name="l00096"></a>00096       inside.ci2-&gt;Copy (*other.<a class="code" href="structcsClipInfo.html#o9">inside</a>.ci2);
+<a name="l00097"></a>00097     }
+<a name="l00098"></a>00098     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (type == CS_CLIPINFO_ORIGINAL)
+<a name="l00099"></a>00099       original.idx = other.<a class="code" href="structcsClipInfo.html#o2">original</a>.idx;
+<a name="l00100"></a>00100     <span class="keywordflow">else</span>
+<a name="l00101"></a>00101       onedge = other.<a class="code" href="structcsClipInfo.html#o6">onedge</a>;
+<a name="l00102"></a>00102   }
+<a name="l00103"></a>00103 
+<a name="l00105"></a><a class="code" href="structcsClipInfo.html#a4">00105</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Move (<a class="code" href="structcsClipInfo.html">csClipInfo</a>&amp; other)
+<a name="l00106"></a>00106   {
+<a name="l00107"></a>00107     <span class="keywordflow">if</span> (&amp;other == <span class="keyword">this</span>) <span class="keywordflow">return</span>;
+<a name="l00108"></a>00108     Clear ();
+<a name="l00109"></a>00109     type = other.<a class="code" href="structcsClipInfo.html#o0">type</a>;
+<a name="l00110"></a>00110     <span class="keywordflow">if</span> (type == CS_CLIPINFO_INSIDE)
+<a name="l00111"></a>00111       inside = other.<a class="code" href="structcsClipInfo.html#o9">inside</a>;
+<a name="l00112"></a>00112     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (type == CS_CLIPINFO_ORIGINAL)
+<a name="l00113"></a>00113       original.idx = other.<a class="code" href="structcsClipInfo.html#o2">original</a>.idx;
+<a name="l00114"></a>00114     <span class="keywordflow">else</span>
+<a name="l00115"></a>00115       onedge = other.<a class="code" href="structcsClipInfo.html#o6">onedge</a>;
+<a name="l00116"></a>00116     other.<a class="code" href="structcsClipInfo.html#o0">type</a> = CS_CLIPINFO_ORIGINAL;
+<a name="l00117"></a>00117   }
+<a name="l00118"></a>00118 
+<a name="l00119"></a><a class="code" href="structcsClipInfo.html#a5">00119</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Dump (<span class="keywordtype">int</span> indent)
+<a name="l00120"></a>00120   {
+<a name="l00121"></a>00121     <span class="keywordtype">char</span> ind[255];
+<a name="l00122"></a>00122     <span class="keywordtype">int</span> i;
+<a name="l00123"></a>00123     <span class="keywordflow">for</span> (i = 0 ; i &lt; indent ; i++) ind[i] = <span class="charliteral">' '</span>;
+<a name="l00124"></a>00124     ind[i] = 0;
+<a name="l00125"></a>00125     <span class="keywordflow">switch</span> (type)
+<a name="l00126"></a>00126     {
+<a name="l00127"></a>00127       <span class="keywordflow">case</span> CS_CLIPINFO_ORIGINAL:
+<a name="l00128"></a>00128         printf (<span class="stringliteral">"%s ORIGINAL idx=%d\n"</span>, ind, original.idx);
 <a name="l00129"></a>00129         <span class="keywordflow">break</span>;
-<a name="l00130"></a>00130     }
-<a name="l00131"></a>00131     fflush (stdout);
-<a name="l00132"></a>00132   }
-<a name="l00133"></a>00133 };
-<a name="l00134"></a>00134 
-<a name="l00145"></a><a class="code" href="classcsFrustum.html">00145</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csFrustum
-<a name="l00146"></a>00146 {
-<a name="l00147"></a>00147 <span class="keyword">private</span>:
-<a name="l00149"></a>00149   <a class="code" href="classcsVector3.html">csVector3</a> origin;
-<a name="l00150"></a>00150 
-<a name="l00156"></a>00156   <a class="code" href="classcsVector3.html">csVector3</a>* vertices;
-<a name="l00158"></a>00158   <span class="keywordtype">int</span> num_vertices;
-<a name="l00160"></a>00160   <span class="keywordtype">int</span> max_vertices;
-<a name="l00161"></a>00161 
-<a name="l00163"></a>00163   <a class="code" href="classcsPlane3.html">csPlane3</a>* backplane;
-<a name="l00164"></a>00164 
-<a name="l00172"></a>00172   <span class="keywordtype">bool</span> wide;
+<a name="l00130"></a>00130       <span class="keywordflow">case</span> CS_CLIPINFO_ONEDGE:
+<a name="l00131"></a>00131         printf (<span class="stringliteral">"%s ONEDGE i1=%d i2=%d r=%g\n"</span>, ind, onedge.i1, onedge.i2,
+<a name="l00132"></a>00132           onedge.r);
+<a name="l00133"></a>00133         <span class="keywordflow">break</span>;
+<a name="l00134"></a>00134       <span class="keywordflow">case</span> CS_CLIPINFO_INSIDE:
+<a name="l00135"></a>00135         printf (<span class="stringliteral">"%s INSIDE r=%g\n"</span>, ind, inside.r);
+<a name="l00136"></a>00136         inside.ci1-&gt;Dump (indent+2);
+<a name="l00137"></a>00137         inside.ci2-&gt;Dump (indent+2);
+<a name="l00138"></a>00138         <span class="keywordflow">break</span>;
+<a name="l00139"></a>00139     }
+<a name="l00140"></a>00140     fflush (stdout);
+<a name="l00141"></a>00141   }
+<a name="l00142"></a>00142 };
+<a name="l00143"></a>00143 
+<a name="l00154"></a><a class="code" href="classcsFrustum.html">00154</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csFrustum
+<a name="l00155"></a>00155 {
+<a name="l00156"></a>00156 <span class="keyword">private</span>:
+<a name="l00158"></a>00158   <a class="code" href="classcsVector3.html">csVector3</a> origin;
+<a name="l00159"></a>00159 
+<a name="l00165"></a>00165   <a class="code" href="classcsVector3.html">csVector3</a>* vertices;
+<a name="l00167"></a>00167   <span class="keywordtype">int</span> num_vertices;
+<a name="l00169"></a>00169   <span class="keywordtype">int</span> max_vertices;
+<a name="l00170"></a>00170 
+<a name="l00172"></a>00172   <a class="code" href="classcsPlane3.html">csPlane3</a>* backplane;
 <a name="l00173"></a>00173 
-<a name="l00178"></a>00178   <span class="keywordtype">bool</span> mirrored;
-<a name="l00179"></a>00179 
-<a name="l00181"></a>00181   <span class="keywordtype">int</span> ref_count;
+<a name="l00181"></a>00181   <span class="keywordtype">bool</span> wide;
 <a name="l00182"></a>00182 
-<a name="l00184"></a>00184   <span class="keywordtype">void</span> Clear ();
-<a name="l00185"></a>00185 
-<a name="l00187"></a>00187   <span class="keywordtype">void</span> ExtendVertexArray (<span class="keywordtype">int</span> num);
+<a name="l00187"></a>00187   <span class="keywordtype">bool</span> mirrored;
 <a name="l00188"></a>00188 
-<a name="l00189"></a>00189 <span class="keyword">public</span>:
-<a name="l00190"></a>00190 
-<a name="l00192"></a><a class="code" href="classcsFrustum.html#a0">00192</a>   csFrustum (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; o) :
-<a name="l00193"></a>00193     origin (o), vertices (0), num_vertices (0), max_vertices (0),
-<a name="l00194"></a>00194     backplane (0), wide (false), mirrored (false), ref_count (1)
-<a name="l00195"></a>00195   { }
-<a name="l00196"></a>00196 
-<a name="l00202"></a>00202   csFrustum (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; o, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts,
-<a name="l00203"></a>00203         <a class="code" href="classcsPlane3.html">csPlane3</a>* backp = 0);
-<a name="l00204"></a>00204 
-<a name="l00210"></a>00210   csFrustum (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; o, <span class="keywordtype">int</span> num_verts,
-<a name="l00211"></a>00211         <a class="code" href="classcsPlane3.html">csPlane3</a>* backp = 0);
-<a name="l00212"></a>00212 
-<a name="l00214"></a>00214   csFrustum (<span class="keyword">const</span> csFrustum &amp;copy);
-<a name="l00215"></a>00215 
-<a name="l00217"></a>00217   <span class="keyword">virtual</span> ~csFrustum ();
-<a name="l00218"></a>00218 
-<a name="l00220"></a><a class="code" href="classcsFrustum.html#a5">00220</a>   <span class="keywordtype">void</span> SetOrigin (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; o) { origin = o; }
+<a name="l00190"></a>00190   <span class="keywordtype">int</span> ref_count;
+<a name="l00191"></a>00191 
+<a name="l00193"></a>00193   <span class="keywordtype">void</span> Clear ();
+<a name="l00194"></a>00194 
+<a name="l00196"></a>00196   <span class="keywordtype">void</span> ExtendVertexArray (<span class="keywordtype">int</span> num);
+<a name="l00197"></a>00197 
+<a name="l00198"></a>00198 <span class="keyword">public</span>:
+<a name="l00199"></a>00199 
+<a name="l00201"></a><a class="code" href="classcsFrustum.html#a0">00201</a>   csFrustum (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; o) :
+<a name="l00202"></a>00202     origin (o), vertices (0), num_vertices (0), max_vertices (0),
+<a name="l00203"></a>00203     backplane (0), wide (false), mirrored (false), ref_count (1)
+<a name="l00204"></a>00204   { }
+<a name="l00205"></a>00205 
+<a name="l00211"></a>00211   csFrustum (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; o, <a class="code" href="classcsVector3.html">csVector3</a>* verts, <span class="keywordtype">int</span> num_verts,
+<a name="l00212"></a>00212         <a class="code" href="classcsPlane3.html">csPlane3</a>* backp = 0);
+<a name="l00213"></a>00213 
+<a name="l00219"></a>00219   csFrustum (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; o, <span class="keywordtype">int</span> num_verts,
+<a name="l00220"></a>00220         <a class="code" href="classcsPlane3.html">csPlane3</a>* backp = 0);
 <a name="l00221"></a>00221 
-<a name="l00223"></a><a class="code" href="classcsFrustum.html#a6">00223</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetOrigin () { <span class="keywordflow">return</span> origin; }
+<a name="l00223"></a>00223   csFrustum (<span class="keyword">const</span> csFrustum &amp;copy);
 <a name="l00224"></a>00224 
-<a name="l00226"></a><a class="code" href="classcsFrustum.html#a7">00226</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetOrigin ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> origin; }
+<a name="l00226"></a>00226   <span class="keyword">virtual</span> ~csFrustum ();
 <a name="l00227"></a>00227 
-<a name="l00233"></a><a class="code" href="classcsFrustum.html#a8">00233</a>   <span class="keywordtype">void</span> SetMirrored (<span class="keywordtype">bool</span> m) { mirrored = m; }
-<a name="l00234"></a>00234 
-<a name="l00236"></a><a class="code" href="classcsFrustum.html#a9">00236</a>   <span class="keywordtype">bool</span> IsMirrored ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mirrored; }
-<a name="l00237"></a>00237 
-<a name="l00244"></a>00244   <span class="keywordtype">void</span> SetBackPlane (<a class="code" href="classcsPlane3.html">csPlane3</a>&amp; plane);
-<a name="l00245"></a>00245 
-<a name="l00249"></a><a class="code" href="classcsFrustum.html#a11">00249</a>   <a class="code" href="classcsPlane3.html">csPlane3</a>* GetBackPlane () { <span class="keywordflow">return</span> backplane; }
-<a name="l00250"></a>00250 
-<a name="l00254"></a>00254   <span class="keywordtype">void</span> RemoveBackPlane ();
-<a name="l00255"></a>00255 
-<a name="l00259"></a>00259   <span class="keywordtype">void</span> AddVertex (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v);
-<a name="l00260"></a>00260 
-<a name="l00264"></a><a class="code" href="classcsFrustum.html#a14">00264</a>   <span class="keywordtype">int</span> GetVertexCount () { <span class="keywordflow">return</span> num_vertices; }
-<a name="l00265"></a>00265 
-<a name="l00269"></a><a class="code" href="classcsFrustum.html#a15">00269</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetVertex (<span class="keywordtype">int</span> idx)
-<a name="l00270"></a>00270   {
-<a name="l00271"></a>00271     <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a> (idx &gt;= 0 &amp;&amp; idx &lt; num_vertices);
-<a name="l00272"></a>00272     <span class="keywordflow">return</span> vertices[idx];
-<a name="l00273"></a>00273   }
+<a name="l00229"></a><a class="code" href="classcsFrustum.html#a5">00229</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetOrigin (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; o) { origin = o; }
+<a name="l00230"></a>00230 
+<a name="l00232"></a><a class="code" href="classcsFrustum.html#a6">00232</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetOrigin () { <span class="keywordflow">return</span> origin; }
+<a name="l00233"></a>00233 
+<a name="l00235"></a><a class="code" href="classcsFrustum.html#a7">00235</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetOrigin ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> origin; }
+<a name="l00236"></a>00236 
+<a name="l00242"></a><a class="code" href="classcsFrustum.html#a8">00242</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetMirrored (<span class="keywordtype">bool</span> m) { mirrored = m; }
+<a name="l00243"></a>00243 
+<a name="l00245"></a><a class="code" href="classcsFrustum.html#a9">00245</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsMirrored ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mirrored; }
+<a name="l00246"></a>00246 
+<a name="l00253"></a>00253   <span class="keywordtype">void</span> SetBackPlane (<a class="code" href="classcsPlane3.html">csPlane3</a>&amp; plane);
+<a name="l00254"></a>00254 
+<a name="l00258"></a><a class="code" href="classcsFrustum.html#a11">00258</a>   <span class="keyword">inline</span> <a class="code" href="classcsPlane3.html">csPlane3</a>* GetBackPlane () { <span class="keywordflow">return</span> backplane; }
+<a name="l00259"></a>00259 
+<a name="l00263"></a>00263   <span class="keywordtype">void</span> RemoveBackPlane ();
+<a name="l00264"></a>00264 
+<a name="l00268"></a>00268   <span class="keywordtype">void</span> AddVertex (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v);
+<a name="l00269"></a>00269 
+<a name="l00273"></a><a class="code" href="classcsFrustum.html#a14">00273</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> GetVertexCount () { <span class="keywordflow">return</span> num_vertices; }
 <a name="l00274"></a>00274 
-<a name="l00278"></a><a class="code" href="classcsFrustum.html#a16">00278</a>   <a class="code" href="classcsVector3.html">csVector3</a>* GetVertices () { <span class="keywordflow">return</span> vertices; }
-<a name="l00279"></a>00279 
-<a name="l00283"></a>00283   <span class="keywordtype">void</span> Transform (<a class="code" href="classcsTransform.html">csTransform</a>* trans);
-<a name="l00284"></a>00284 
-<a name="l00290"></a>00290   <span class="keywordtype">void</span> ClipToPlane (<a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2);
-<a name="l00291"></a>00291 
-<a name="l00300"></a>00300   <span class="keyword">static</span> <span class="keywordtype">void</span> ClipToPlane (<a class="code" href="classcsVector3.html">csVector3</a>* vertices, <span class="keywordtype">int</span>&amp; num_vertices,
-<a name="l00301"></a>00301     <a class="code" href="structcsClipInfo.html">csClipInfo</a>* clipinfo, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2);
-<a name="l00302"></a>00302 
-<a name="l00311"></a>00311   <span class="keyword">static</span> <span class="keywordtype">void</span> ClipToPlane (<a class="code" href="classcsVector3.html">csVector3</a>* vertices, <span class="keywordtype">int</span>&amp; num_vertices,
-<a name="l00312"></a>00312     <a class="code" href="structcsClipInfo.html">csClipInfo</a>* clipinfo, <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; plane);
-<a name="l00313"></a>00313 
-<a name="l00320"></a>00320   <span class="keywordtype">void</span> ClipPolyToPlane (<a class="code" href="classcsPlane3.html">csPlane3</a>* plane);
-<a name="l00321"></a>00321 
-<a name="l00330"></a>00330   <a class="code" href="classcsPtr.html">csPtr&lt;csFrustum&gt;</a> Intersect (<span class="keyword">const</span> csFrustum&amp; other) <span class="keyword">const</span>;
-<a name="l00331"></a>00331 
-<a name="l00346"></a>00346   <a class="code" href="classcsPtr.html">csPtr&lt;csFrustum&gt;</a> Intersect (<a class="code" href="classcsVector3.html">csVector3</a>* poly, <span class="keywordtype">int</span> num) <span class="keyword">const</span>;
-<a name="l00347"></a>00347 
-<a name="l00362"></a>00362   <span class="keyword">static</span> <a class="code" href="classcsPtr.html">csPtr&lt;csFrustum&gt;</a> Intersect (
-<a name="l00363"></a>00363     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; frust_origin, <a class="code" href="classcsVector3.html">csVector3</a>* frust, <span class="keywordtype">int</span> num_frust,
-<a name="l00364"></a>00364     <a class="code" href="classcsVector3.html">csVector3</a>* poly, <span class="keywordtype">int</span> num);
-<a name="l00365"></a>00365 
-<a name="l00380"></a>00380   <span class="keyword">static</span> <a class="code" href="classcsPtr.html">csPtr&lt;csFrustum&gt;</a> Intersect (
-<a name="l00381"></a>00381     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; frust_origin, <a class="code" href="classcsVector3.html">csVector3</a>* frust, <span class="keywordtype">int</span> num_frust,
-<a name="l00382"></a>00382     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3);
-<a name="l00383"></a>00383 
-<a name="l00389"></a>00389   <span class="keyword">static</span> <span class="keywordtype">int</span> Classify (<a class="code" href="classcsVector3.html">csVector3</a>* frustum, <span class="keywordtype">int</span> num_frust,
-<a name="l00390"></a>00390     <a class="code" href="classcsVector3.html">csVector3</a>* poly, <span class="keywordtype">int</span> num_poly);
-<a name="l00391"></a>00391 
-<a name="l00398"></a>00398   <span class="keyword">static</span> <span class="keywordtype">int</span> BatchClassify (<a class="code" href="classcsVector3.html">csVector3</a>* frustum, <a class="code" href="classcsVector3.html">csVector3</a>* frustumNormals,
-<a name="l00399"></a>00399         <span class="keywordtype">int</span> num_frust, <a class="code" href="classcsVector3.html">csVector3</a>* poly, <span class="keywordtype">int</span> num_poly);
+<a name="l00278"></a><a class="code" href="classcsFrustum.html#a15">00278</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetVertex (<span class="keywordtype">int</span> idx)
+<a name="l00279"></a>00279   {
+<a name="l00280"></a>00280     <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a> (idx &gt;= 0 &amp;&amp; idx &lt; num_vertices);
+<a name="l00281"></a>00281     <span class="keywordflow">return</span> vertices[idx];
+<a name="l00282"></a>00282   }
+<a name="l00283"></a>00283 
+<a name="l00287"></a><a class="code" href="classcsFrustum.html#a16">00287</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a>* GetVertices () { <span class="keywordflow">return</span> vertices; }
+<a name="l00288"></a>00288 
+<a name="l00292"></a>00292   <span class="keywordtype">void</span> Transform (<a class="code" href="classcsTransform.html">csTransform</a>* trans);
+<a name="l00293"></a>00293 
+<a name="l00299"></a>00299   <span class="keywordtype">void</span> ClipToPlane (<a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2);
+<a name="l00300"></a>00300 
+<a name="l00309"></a>00309   <span class="keyword">static</span> <span class="keywordtype">void</span> ClipToPlane (<a class="code" href="classcsVector3.html">csVector3</a>* vertices, <span class="keywordtype">int</span>&amp; num_vertices,
+<a name="l00310"></a>00310     <a class="code" href="structcsClipInfo.html">csClipInfo</a>* clipinfo, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2);
+<a name="l00311"></a>00311 
+<a name="l00320"></a>00320   <span class="keyword">static</span> <span class="keywordtype">void</span> ClipToPlane (<a class="code" href="classcsVector3.html">csVector3</a>* vertices, <span class="keywordtype">int</span>&amp; num_vertices,
+<a name="l00321"></a>00321     <a class="code" href="structcsClipInfo.html">csClipInfo</a>* clipinfo, <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; plane);
+<a name="l00322"></a>00322 
+<a name="l00329"></a>00329   <span class="keywordtype">void</span> ClipPolyToPlane (<a class="code" href="classcsPlane3.html">csPlane3</a>* plane);
+<a name="l00330"></a>00330 
+<a name="l00339"></a>00339   <a class="code" href="classcsPtr.html">csPtr&lt;csFrustum&gt;</a> Intersect (<span class="keyword">const</span> csFrustum&amp; other) <span class="keyword">const</span>;
+<a name="l00340"></a>00340 
+<a name="l00355"></a>00355   <a class="code" href="classcsPtr.html">csPtr&lt;csFrustum&gt;</a> Intersect (<a class="code" href="classcsVector3.html">csVector3</a>* poly, <span class="keywordtype">int</span> num) <span class="keyword">const</span>;
+<a name="l00356"></a>00356 
+<a name="l00371"></a>00371   <span class="keyword">static</span> <a class="code" href="classcsPtr.html">csPtr&lt;csFrustum&gt;</a> Intersect (
+<a name="l00372"></a>00372     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; frust_origin, <a class="code" href="classcsVector3.html">csVector3</a>* frust, <span class="keywordtype">int</span> num_frust,
+<a name="l00373"></a>00373     <a class="code" href="classcsVector3.html">csVector3</a>* poly, <span class="keywordtype">int</span> num);
+<a name="l00374"></a>00374 
+<a name="l00389"></a>00389   <span class="keyword">static</span> <a class="code" href="classcsPtr.html">csPtr&lt;csFrustum&gt;</a> Intersect (
+<a name="l00390"></a>00390     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; frust_origin, <a class="code" href="classcsVector3.html">csVector3</a>* frust, <span class="keywordtype">int</span> num_frust,
+<a name="l00391"></a>00391     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v2, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v3);
+<a name="l00392"></a>00392 
+<a name="l00398"></a>00398   <span class="keyword">static</span> <span class="keywordtype">int</span> Classify (<a class="code" href="classcsVector3.html">csVector3</a>* frustum, <span class="keywordtype">int</span> num_frust,
+<a name="l00399"></a>00399     <a class="code" href="classcsVector3.html">csVector3</a>* poly, <span class="keywordtype">int</span> num_poly);
 <a name="l00400"></a>00400 
-<a name="l00405"></a>00405   <span class="keywordtype">bool</span> Contains (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
-<a name="l00406"></a>00406 
-<a name="l00413"></a>00413   <span class="keyword">static</span> <span class="keywordtype">bool</span> Contains (<a class="code" href="classcsVector3.html">csVector3</a>* frustum, <span class="keywordtype">int</span> num_frust,
-<a name="l00414"></a>00414     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
+<a name="l00407"></a>00407   <span class="keyword">static</span> <span class="keywordtype">int</span> BatchClassify (<a class="code" href="classcsVector3.html">csVector3</a>* frustum, <a class="code" href="classcsVector3.html">csVector3</a>* frustumNormals,
+<a name="l00408"></a>00408         <span class="keywordtype">int</span> num_frust, <a class="code" href="classcsVector3.html">csVector3</a>* poly, <span class="keywordtype">int</span> num_poly);
+<a name="l00409"></a>00409 
+<a name="l00414"></a>00414   <span class="keywordtype">bool</span> Contains (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
 <a name="l00415"></a>00415 
-<a name="l00421"></a>00421   <span class="keyword">static</span> <span class="keywordtype">bool</span> Contains (<a class="code" href="classcsVector3.html">csVector3</a>* frustum, <span class="keywordtype">int</span> num_frust,
-<a name="l00422"></a>00422     <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; plane, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
-<a name="l00423"></a>00423 
-<a name="l00425"></a><a class="code" href="classcsFrustum.html#a23">00425</a>   <span class="keywordtype">bool</span> IsEmpty ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !wide &amp;&amp; vertices == 0; }
-<a name="l00426"></a>00426 
-<a name="l00428"></a><a class="code" href="classcsFrustum.html#a24">00428</a>   <span class="keywordtype">bool</span> IsInfinite ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> wide &amp;&amp; vertices == 0 &amp;&amp; backplane == 0; }
-<a name="l00429"></a>00429 
-<a name="l00434"></a><a class="code" href="classcsFrustum.html#a25">00434</a>   <span class="keywordtype">bool</span> IsWide ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> wide &amp;&amp; vertices == 0; }
+<a name="l00422"></a>00422   <span class="keyword">static</span> <span class="keywordtype">bool</span> Contains (<a class="code" href="classcsVector3.html">csVector3</a>* frustum, <span class="keywordtype">int</span> num_frust,
+<a name="l00423"></a>00423     <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
+<a name="l00424"></a>00424 
+<a name="l00430"></a>00430   <span class="keyword">static</span> <span class="keywordtype">bool</span> Contains (<a class="code" href="classcsVector3.html">csVector3</a>* frustum, <span class="keywordtype">int</span> num_frust,
+<a name="l00431"></a>00431     <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; plane, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point);
+<a name="l00432"></a>00432 
+<a name="l00434"></a><a class="code" href="classcsFrustum.html#a23">00434</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsEmpty ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !wide &amp;&amp; vertices == 0; }
 <a name="l00435"></a>00435 
-<a name="l00440"></a>00440   <span class="keywordtype">void</span> MakeInfinite ();
-<a name="l00441"></a>00441 
-<a name="l00445"></a>00445   <span class="keywordtype">void</span> MakeEmpty ();
-<a name="l00446"></a>00446 
-<a name="l00448"></a><a class="code" href="classcsFrustum.html#a28">00448</a>   <span class="keywordtype">void</span> IncRef () { ref_count++; }
-<a name="l00450"></a><a class="code" href="classcsFrustum.html#a29">00450</a>   <span class="keywordtype">void</span> DecRef () { <span class="keywordflow">if</span> (ref_count == 1) <span class="keyword">delete</span> <span class="keyword">this</span>; <span class="keywordflow">else</span> ref_count--; }
-<a name="l00452"></a><a class="code" href="classcsFrustum.html#a30">00452</a>   <span class="keywordtype">int</span> GetRefCount () { <span class="keywordflow">return</span> ref_count; }
-<a name="l00453"></a>00453 };
-<a name="l00454"></a>00454 
-<a name="l00457"></a>00457 <span class="preprocessor">#endif // __CS_FRUSTRUM_H__</span>
+<a name="l00437"></a><a class="code" href="classcsFrustum.html#a24">00437</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsInfinite ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> wide &amp;&amp; vertices == 0 &amp;&amp; backplane == 0; }
+<a name="l00438"></a>00438 
+<a name="l00443"></a><a class="code" href="classcsFrustum.html#a25">00443</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsWide ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> wide &amp;&amp; vertices == 0; }
+<a name="l00444"></a>00444 
+<a name="l00449"></a>00449   <span class="keywordtype">void</span> MakeInfinite ();
+<a name="l00450"></a>00450 
+<a name="l00454"></a>00454   <span class="keywordtype">void</span> MakeEmpty ();
+<a name="l00455"></a>00455 
+<a name="l00457"></a><a class="code" href="classcsFrustum.html#a28">00457</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> IncRef () { ref_count++; }
+<a name="l00459"></a><a class="code" href="classcsFrustum.html#a29">00459</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> DecRef () { <span class="keywordflow">if</span> (ref_count == 1) <span class="keyword">delete</span> <span class="keyword">this</span>; <span class="keywordflow">else</span> ref_count--; }
+<a name="l00461"></a><a class="code" href="classcsFrustum.html#a30">00461</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> GetRefCount () { <span class="keywordflow">return</span> ref_count; }
+<a name="l00462"></a>00462 };
+<a name="l00463"></a>00463 
+<a name="l00466"></a>00466 <span class="preprocessor">#endif // __CS_FRUSTRUM_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>

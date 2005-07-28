@@ -40,43 +40,45 @@
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
 <a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="image_8h.html">igraphic/image.h</a>"</span>
-<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="databuff_8h.html">iutil/databuff.h</a>"</span>
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiImageIO.html">iImageIO</a>, 1, 0, 1);
+<a name="l00032"></a>00032 
+<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structiDataBuffer.html">iDataBuffer</a>;
+<a name="l00034"></a>00034 <span class="keyword">struct </span><a class="code" href="structiImage.html">iImage</a>;
+<a name="l00035"></a>00035 
 <a name="l00036"></a>00036 
-<a name="l00040"></a><a class="code" href="group__gfx2d.html#ga9">00040</a> <span class="preprocessor">#define CS_IMAGEIO_LOAD 1</span>
-<a name="l00041"></a>00041 <span class="preprocessor"></span>
-<a name="l00044"></a><a class="code" href="group__gfx2d.html#ga10">00044</a> <span class="preprocessor">#define CS_IMAGEIO_SAVE 2</span>
-<a name="l00045"></a>00045 <span class="preprocessor"></span>
-<a name="l00047"></a><a class="code" href="structcsImageIOFileFormatDescription.html">00047</a> <span class="keyword">struct </span><a class="code" href="structcsImageIOFileFormatDescription.html">csImageIOFileFormatDescription</a>
-<a name="l00048"></a>00048 {
-<a name="l00050"></a><a class="code" href="structcsImageIOFileFormatDescription.html#o0">00050</a>   <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structcsImageIOFileFormatDescription.html#o0">mime</a>;
-<a name="l00052"></a><a class="code" href="structcsImageIOFileFormatDescription.html#o1">00052</a>   <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structcsImageIOFileFormatDescription.html#o1">subtype</a>;
-<a name="l00054"></a><a class="code" href="structcsImageIOFileFormatDescription.html#o2">00054</a>   <span class="keywordtype">int</span> <a class="code" href="structcsImageIOFileFormatDescription.html#o2">cap</a>;
-<a name="l00055"></a>00055 };
-<a name="l00056"></a>00056 
-<a name="l00058"></a>00058 <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;csImageIOFileFormatDescription const*&gt;</a>
-<a name="l00059"></a><a class="code" href="group__gfx2d.html#ga0">00059</a>         <a class="code" href="classcsArray.html">csImageIOFileFormatDescriptions</a>;
-<a name="l00060"></a>00060 
-<a name="l00064"></a><a class="code" href="structiImageIO.html">00064</a> <span class="keyword">struct </span><a class="code" href="structiImageIO.html">iImageIO</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00065"></a>00065 {
-<a name="l00067"></a><a class="code" href="structiImageIO.html#w0">00067</a>   <span class="keyword">typedef</span> <a class="code" href="structcsImageIOFileFormatDescription.html">csImageIOFileFormatDescription</a> <a class="code" href="structcsImageIOFileFormatDescription.html">FileFormatDescription</a>;
-<a name="l00068"></a>00068 
-<a name="l00072"></a>00072   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsArray.html">csImageIOFileFormatDescriptions</a>&amp; <a class="code" href="structiImageIO.html#a0">GetDescription</a> () = 0;
-<a name="l00073"></a>00073 
-<a name="l00085"></a>00085   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiImageIO.html#a1">Load</a> (<a class="code" href="structiDataBuffer.html">iDataBuffer</a>* buf, <span class="keywordtype">int</span> iFormat) = 0;
-<a name="l00086"></a>00086 
-<a name="l00093"></a>00093   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImageIO.html#a2">SetDithering</a> (<span class="keywordtype">bool</span> iEnable) = 0;
-<a name="l00094"></a>00094 
-<a name="l00109"></a>00109   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iDataBuffer&gt;</a> <a class="code" href="structiImageIO.html#a3">Save</a> (<a class="code" href="structiImage.html">iImage</a> *image, <a class="code" href="structcsImageIOFileFormatDescription.html">FileFormatDescription</a> *format,
-<a name="l00110"></a>00110     <span class="keyword">const</span> <span class="keywordtype">char</span>* extraoptions = 0) = 0;
-<a name="l00111"></a>00111 
-<a name="l00116"></a>00116   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iDataBuffer&gt;</a> <a class="code" href="structiImageIO.html#a3">Save</a> (<a class="code" href="structiImage.html">iImage</a> *image, <span class="keyword">const</span> <span class="keywordtype">char</span> *mime = 0,
-<a name="l00117"></a>00117     <span class="keyword">const</span> <span class="keywordtype">char</span>* extraoptions = 0) = 0;
-<a name="l00118"></a>00118 };
-<a name="l00119"></a>00119 
-<a name="l00122"></a>00122 <span class="preprocessor">#endif // __CS_IGRAPHIC_IMAGEIO_H__</span>
+<a name="l00037"></a>00037 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="structiImageIO.html">iImageIO</a>, 1, 0, 1);
+<a name="l00038"></a>00038 
+<a name="l00042"></a><a class="code" href="group__gfx2d.html#ga2">00042</a> <span class="preprocessor">#define CS_IMAGEIO_LOAD 1</span>
+<a name="l00043"></a>00043 <span class="preprocessor"></span>
+<a name="l00046"></a><a class="code" href="group__gfx2d.html#ga3">00046</a> <span class="preprocessor">#define CS_IMAGEIO_SAVE 2</span>
+<a name="l00047"></a>00047 <span class="preprocessor"></span>
+<a name="l00049"></a><a class="code" href="structcsImageIOFileFormatDescription.html">00049</a> <span class="keyword">struct </span><a class="code" href="structcsImageIOFileFormatDescription.html">csImageIOFileFormatDescription</a>
+<a name="l00050"></a>00050 {
+<a name="l00052"></a><a class="code" href="structcsImageIOFileFormatDescription.html#o0">00052</a>   <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structcsImageIOFileFormatDescription.html#o0">mime</a>;
+<a name="l00054"></a><a class="code" href="structcsImageIOFileFormatDescription.html#o1">00054</a>   <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structcsImageIOFileFormatDescription.html#o1">subtype</a>;
+<a name="l00056"></a><a class="code" href="structcsImageIOFileFormatDescription.html#o2">00056</a>   <span class="keywordtype">int</span> <a class="code" href="structcsImageIOFileFormatDescription.html#o2">cap</a>;
+<a name="l00057"></a>00057 };
+<a name="l00058"></a>00058 
+<a name="l00060"></a>00060 <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray&lt;csImageIOFileFormatDescription const*&gt;</a>
+<a name="l00061"></a><a class="code" href="group__gfx2d.html#ga0">00061</a>         <a class="code" href="classcsArray.html">csImageIOFileFormatDescriptions</a>;
+<a name="l00062"></a>00062 
+<a name="l00066"></a><a class="code" href="structiImageIO.html">00066</a> <span class="keyword">struct </span><a class="code" href="structiImageIO.html">iImageIO</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00067"></a>00067 {
+<a name="l00069"></a><a class="code" href="structiImageIO.html#w0">00069</a>   <span class="keyword">typedef</span> <a class="code" href="structcsImageIOFileFormatDescription.html">csImageIOFileFormatDescription</a> <a class="code" href="structcsImageIOFileFormatDescription.html">FileFormatDescription</a>;
+<a name="l00070"></a>00070 
+<a name="l00074"></a>00074   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classcsArray.html">csImageIOFileFormatDescriptions</a>&amp; <a class="code" href="structiImageIO.html#a0">GetDescription</a> () = 0;
+<a name="l00075"></a>00075 
+<a name="l00087"></a>00087   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iImage&gt;</a> <a class="code" href="structiImageIO.html#a1">Load</a> (<a class="code" href="structiDataBuffer.html">iDataBuffer</a>* buf, <span class="keywordtype">int</span> iFormat) = 0;
+<a name="l00088"></a>00088 
+<a name="l00095"></a>00095   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiImageIO.html#a2">SetDithering</a> (<span class="keywordtype">bool</span> iEnable) = 0;
+<a name="l00096"></a>00096 
+<a name="l00111"></a>00111   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iDataBuffer&gt;</a> <a class="code" href="structiImageIO.html#a3">Save</a> (<a class="code" href="structiImage.html">iImage</a> *image, <a class="code" href="structcsImageIOFileFormatDescription.html">FileFormatDescription</a> *format,
+<a name="l00112"></a>00112     <span class="keyword">const</span> <span class="keywordtype">char</span>* extraoptions = 0) = 0;
+<a name="l00113"></a>00113 
+<a name="l00118"></a>00118   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iDataBuffer&gt;</a> <a class="code" href="structiImageIO.html#a3">Save</a> (<a class="code" href="structiImage.html">iImage</a> *image, <span class="keyword">const</span> <span class="keywordtype">char</span> *mime = 0,
+<a name="l00119"></a>00119     <span class="keyword">const</span> <span class="keywordtype">char</span>* extraoptions = 0) = 0;
+<a name="l00120"></a>00120 };
+<a name="l00121"></a>00121 
+<a name="l00124"></a>00124 <span class="preprocessor">#endif // __CS_IGRAPHIC_IMAGEIO_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>

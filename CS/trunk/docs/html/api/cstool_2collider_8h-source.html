@@ -40,211 +40,212 @@
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00022"></a>00022 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00023"></a>00023 
-<a name="l00024"></a>00024 <span class="preprocessor">#include "csutil/csobject.h"</span>
-<a name="l00025"></a>00025 <span class="preprocessor">#include "csutil/leakguard.h"</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="math3d_8h.html">csgeom/math3d.h</a>"</span>
-<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="matrix3_8h.html">csgeom/matrix3.h</a>"</span>
-<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="vector3_8h.html">csgeom/vector3.h</a>"</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include "ivaria/collider.h"</span>
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
-<a name="l00033"></a>00033 <span class="keyword">class </span><a class="code" href="structcsCollisionPair.html">csCollisionPair</a>;
-<a name="l00034"></a>00034 <span class="keyword">struct </span><a class="code" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a>;
-<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>;
-<a name="l00036"></a>00036 <span class="keyword">struct </span><a class="code" href="structiCollideSystem.html">iCollideSystem</a>;
-<a name="l00037"></a>00037 <span class="keyword">struct </span><a class="code" href="structiCollider.html">iCollider</a>;
-<a name="l00038"></a>00038 <span class="keyword">struct </span><a class="code" href="structiObject.html">iObject</a>;
-<a name="l00039"></a>00039 <span class="keyword">struct </span><a class="code" href="structiEngine.html">iEngine</a>;
-<a name="l00040"></a>00040 <span class="keyword">struct </span><a class="code" href="structiRegion.html">iRegion</a>;
-<a name="l00041"></a>00041 <span class="keyword">struct </span><a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>;
-<a name="l00042"></a>00042 <span class="keyword">struct </span><a class="code" href="structiMovable.html">iMovable</a>;
-<a name="l00043"></a>00043 <span class="keyword">struct </span><a class="code" href="structiSector.html">iSector</a>;
-<a name="l00044"></a>00044 <span class="keyword">struct </span><a class="code" href="structiCamera.html">iCamera</a>;
-<a name="l00045"></a>00045 
-<a name="l00046"></a>00046 <span class="comment">/* The 'class csColliderWrapper' is here to work around a VC7.0 issue. It </span>
-<a name="l00047"></a>00047 <span class="comment"> * seems that, depending on whether VC7.0 sees a compound declared as</span>
-<a name="l00048"></a>00048 <span class="comment"> * 'struct' or 'class' first, it sometimes generated different decorated</span>
-<a name="l00049"></a>00049 <span class="comment"> * symbol names. 'csColliderWrapper' is a class, so commonly, in headers</span>
-<a name="l00050"></a>00050 <span class="comment"> * etc. it would be forward-declared as 'class csColliderWrapper'. However,</span>
-<a name="l00051"></a>00051 <span class="comment"> * the SCF_VERSION causes a forward declaration as a 'struct', with the</span>
-<a name="l00052"></a>00052 <span class="comment"> * consequence that when csColliderWrapper was not already forward-declared</span>
-<a name="l00053"></a>00053 <span class="comment"> * all decorated name will refer to 'struct csColliderWrapper' in some files.</span>
-<a name="l00054"></a>00054 <span class="comment"> * But possibly, when forward-declaration was used, 'class csColliderWrapper'</span>
-<a name="l00055"></a>00055 <span class="comment"> * will be used in other objects, causing linking errors. This is worked</span>
-<a name="l00056"></a>00056 <span class="comment"> * around by having a 'class' forward declaration here.</span>
-<a name="l00057"></a>00057 <span class="comment"> */</span>
-<a name="l00058"></a>00058 <span class="keyword">class </span><a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>;
-<a name="l00059"></a>00059 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>, 0, 0, 3);
-<a name="l00060"></a>00060 
-<a name="l00074"></a><a class="code" href="classcsColliderWrapper.html">00074</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> : <span class="keyword">public</span> <a class="code" href="classcsObject.html">csObject</a>
-<a name="l00075"></a>00075 {
-<a name="l00076"></a>00076 <span class="keyword">private</span>:
-<a name="l00077"></a>00077   <a class="code" href="classcsRef.html">csRef&lt;iCollideSystem&gt;</a> collide_system;
-<a name="l00078"></a>00078   <a class="code" href="classcsRef.html">csRef&lt;iCollider&gt;</a> collider;
-<a name="l00079"></a>00079 
-<a name="l00080"></a>00080 <span class="keyword">public</span>:
-<a name="l00081"></a>00081   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>);
-<a name="l00082"></a>00082 
-<a name="l00084"></a>00084   <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> (<a class="code" href="classcsObject.html">csObject</a>&amp; parent, <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* collide_system,
-<a name="l00085"></a>00085         <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh);
-<a name="l00086"></a>00086 
-<a name="l00088"></a>00088   <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> (<a class="code" href="structiObject.html">iObject</a>* parent, <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* collide_system,
-<a name="l00089"></a>00089         <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh);
-<a name="l00090"></a>00090 
-<a name="l00096"></a>00096   <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> (<a class="code" href="structiObject.html">iObject</a>* parent, <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* collide_system,
-<a name="l00097"></a>00097         <a class="code" href="structiCollider.html">iCollider</a>* collider);
-<a name="l00098"></a>00098 
-<a name="l00100"></a>00100   <span class="keyword">virtual</span> ~<a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> ();
-<a name="l00101"></a>00101 
-<a name="l00103"></a><a class="code" href="classcsColliderWrapper.html#a5">00103</a>   <a class="code" href="structiCollider.html">iCollider</a>* GetCollider () { <span class="keywordflow">return</span> collider; }
-<a name="l00104"></a>00104 
-<a name="l00106"></a><a class="code" href="classcsColliderWrapper.html#a6">00106</a>   <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* GetCollideSystem () { <span class="keywordflow">return</span> collide_system; }
-<a name="l00107"></a>00107 
-<a name="l00115"></a>00115   <span class="keywordtype">bool</span> Collide (<a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>&amp; pOtherCollider,
-<a name="l00116"></a>00116                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pThisTransform = 0,
-<a name="l00117"></a>00117                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pOtherTransform = 0);
-<a name="l00122"></a>00122   <span class="keywordtype">bool</span> Collide (<a class="code" href="classcsObject.html">csObject</a>&amp; otherObject,
-<a name="l00123"></a>00123                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pThisTransform = 0,
-<a name="l00124"></a>00124                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pOtherTransform = 0);
-<a name="l00129"></a>00129   <span class="keywordtype">bool</span> Collide (<a class="code" href="structiObject.html">iObject</a>* otherObject,
-<a name="l00130"></a>00130                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pThisTransform = 0,
-<a name="l00131"></a>00131                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pOtherTransform = 0);
-<a name="l00132"></a>00132 
-<a name="l00137"></a>00137   <span class="keyword">static</span> <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>* GetColliderWrapper (<a class="code" href="classcsObject.html">csObject</a>&amp; object);
-<a name="l00138"></a>00138 
-<a name="l00143"></a>00143   <span class="keyword">static</span> <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>* GetColliderWrapper (<a class="code" href="structiObject.html">iObject</a>* object);
-<a name="l00144"></a>00144 
-<a name="l00145"></a>00145   <a class="code" href="group__scf.html#ga49">SCF_DECLARE_IBASE_EXT</a> (<a class="code" href="classcsObject.html">csObject</a>);
-<a name="l00146"></a>00146 };
-<a name="l00147"></a>00147 
-<a name="l00151"></a><a class="code" href="structcsTraceBeamResult.html">00151</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csTraceBeamResult
-<a name="l00152"></a>00152 {
-<a name="l00154"></a>00154 
-<a name="l00158"></a><a class="code" href="structcsTraceBeamResult.html#o0">00158</a>   <a class="code" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a> closest_tri;
-<a name="l00163"></a><a class="code" href="structcsTraceBeamResult.html#o1">00163</a>   <a class="code" href="classcsVector3.html">csVector3</a> closest_isect;
-<a name="l00167"></a><a class="code" href="structcsTraceBeamResult.html#o2">00167</a>   <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* closest_mesh;
-<a name="l00172"></a><a class="code" href="structcsTraceBeamResult.html#o3">00172</a>   <span class="keywordtype">float</span> sqdistance;
-<a name="l00173"></a>00173 };
-<a name="l00174"></a>00174 
-<a name="l00179"></a><a class="code" href="classcsColliderHelper.html">00179</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csColliderHelper
-<a name="l00180"></a>00180 {
-<a name="l00181"></a>00181 <span class="keyword">public</span>:
-<a name="l00193"></a>00193   <span class="keyword">static</span> <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>* InitializeCollisionWrapper (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* colsys,
-<a name="l00194"></a>00194         <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh);
-<a name="l00195"></a>00195 
-<a name="l00201"></a>00201   <span class="keyword">static</span> <span class="keywordtype">void</span> InitializeCollisionWrappers (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* colsys,
-<a name="l00202"></a>00202         <a class="code" href="structiEngine.html">iEngine</a>* engine, <a class="code" href="structiRegion.html">iRegion</a>* region = 0);
-<a name="l00203"></a>00203 
-<a name="l00221"></a>00221   <span class="keyword">static</span> <span class="keywordtype">bool</span> CollideArray (
-<a name="l00222"></a>00222         <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* colsys,
-<a name="l00223"></a>00223         <a class="code" href="structiCollider.html">iCollider</a>* collider,
-<a name="l00224"></a>00224         <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* trans,
-<a name="l00225"></a>00225         <span class="keywordtype">int</span> num_colliders,
-<a name="l00226"></a>00226         <a class="code" href="structiCollider.html">iCollider</a>** colliders,
-<a name="l00227"></a>00227         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> **transforms);
-<a name="l00228"></a>00228 
-<a name="l00266"></a>00266   <span class="keyword">static</span> <span class="keywordtype">int</span> CollidePath (
-<a name="l00267"></a>00267         <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* colsys,
-<a name="l00268"></a>00268         <a class="code" href="structiCollider.html">iCollider</a>* collider, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* trans,
-<a name="l00269"></a>00269         <span class="keywordtype">float</span> nbrsteps,
-<a name="l00270"></a>00270         <a class="code" href="classcsVector3.html">csVector3</a>&amp; newpos,
-<a name="l00271"></a>00271         <span class="keywordtype">int</span> num_colliders,
-<a name="l00272"></a>00272         <a class="code" href="structiCollider.html">iCollider</a>** colliders,
-<a name="l00273"></a>00273         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>** transforms);
-<a name="l00274"></a>00274 
-<a name="l00296"></a>00296   <span class="keyword">static</span> <span class="keywordtype">float</span> TraceBeam (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys, <a class="code" href="structiSector.html">iSector</a>* sector,
-<a name="l00297"></a>00297         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end,
-<a name="l00298"></a>00298         <span class="keywordtype">bool</span> traverse_portals,
-<a name="l00299"></a>00299         <a class="code" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a>&amp; closest_tri,
-<a name="l00300"></a>00300         <a class="code" href="classcsVector3.html">csVector3</a>&amp; closest_isect,
-<a name="l00301"></a>00301         <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>** closest_mesh = 0);
-<a name="l00302"></a>00302 
-<a name="l00319"></a>00319   <span class="keyword">static</span> csTraceBeamResult TraceBeam (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys, <a class="code" href="structiSector.html">iSector</a>* sector,
-<a name="l00320"></a>00320         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end,
-<a name="l00321"></a>00321         <span class="keywordtype">bool</span> traverse_portals);
-<a name="l00322"></a>00322 };
-<a name="l00323"></a>00323 
-<a name="l00328"></a><a class="code" href="classcsColliderActor.html">00328</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csColliderActor
-<a name="l00329"></a>00329 {
-<a name="l00330"></a>00330 <span class="keyword">private</span>:
-<a name="l00331"></a>00331   <span class="keywordtype">bool</span> revertMove;
-<a name="l00332"></a>00332   <span class="keywordtype">bool</span> onground;
-<a name="l00333"></a>00333   <a class="code" href="classcsArray.html">csArray&lt;csCollisionPair&gt;</a> our_cd_contact;
-<a name="l00334"></a>00334   <span class="keywordtype">float</span> gravity;
-<a name="l00335"></a>00335   <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh;
-<a name="l00336"></a>00336   <a class="code" href="structiCamera.html">iCamera</a>* camera;
-<a name="l00337"></a>00337   <a class="code" href="structiMovable.html">iMovable</a>* movable;
-<a name="l00338"></a>00338   <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys;
-<a name="l00339"></a>00339   <a class="code" href="structiEngine.html">iEngine</a>* engine;
-<a name="l00340"></a>00340   <a class="code" href="classcsVector3.html">csVector3</a> velWorld;
-<a name="l00341"></a>00341 
-<a name="l00342"></a>00342   <span class="comment">// For rotation.</span>
-<a name="l00343"></a>00343   <span class="keywordtype">float</span> rotX, rotY, rotZ;
-<a name="l00344"></a>00344 
-<a name="l00345"></a>00345   <a class="code" href="classcsRef.html">csRef&lt;iCollider&gt;</a> topCollider;
-<a name="l00346"></a>00346   <a class="code" href="classcsRef.html">csRef&lt;iCollider&gt;</a> bottomCollider;
-<a name="l00347"></a>00347   <a class="code" href="classcsBox3.html">csBox3</a> boundingBox;
-<a name="l00348"></a>00348   <a class="code" href="classcsVector3.html">csVector3</a> shift;
-<a name="l00349"></a>00349   <a class="code" href="classcsVector3.html">csVector3</a> topSize;
-<a name="l00350"></a>00350   <a class="code" href="classcsVector3.html">csVector3</a> bottomSize;
-<a name="l00351"></a>00351   <a class="code" href="classcsVector3.html">csVector3</a> intervalSize;
-<a name="l00352"></a>00352 
-<a name="l00376"></a>00376   <span class="keywordtype">int</span> CollisionDetect (
-<a name="l00377"></a>00377         <a class="code" href="structiCollider.html">iCollider</a> *collider,
-<a name="l00378"></a>00378         <a class="code" href="structiSector.html">iSector</a>* sector,
-<a name="l00379"></a>00379         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* transform,
-<a name="l00380"></a>00380         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* old_transform);
-<a name="l00381"></a>00381 
-<a name="l00403"></a>00403   <span class="keywordtype">int</span> CollisionDetectIterative (
-<a name="l00404"></a>00404         <a class="code" href="structiCollider.html">iCollider</a> *collider,
-<a name="l00405"></a>00405         <a class="code" href="structiSector.html">iSector</a>* sector,
-<a name="l00406"></a>00406         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* transform,
-<a name="l00407"></a>00407         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* old_transform, <a class="code" href="classcsVector3.html">csVector3</a>&amp; maxmove);
-<a name="l00408"></a>00408   <span class="keywordtype">bool</span> MoveV (<span class="keywordtype">float</span> delta, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; velBody);
-<a name="l00409"></a>00409   <span class="keywordtype">bool</span> RotateV (<span class="keywordtype">float</span> delta, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; angularVelocity);
-<a name="l00410"></a>00410   <span class="keywordtype">void</span> InitializeColliders (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
-<a name="l00411"></a>00411         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
-<a name="l00412"></a>00412 
-<a name="l00413"></a>00413 <span class="keyword">public</span>:
-<a name="l00415"></a>00415   csColliderActor ();
-<a name="l00416"></a>00416 
-<a name="l00418"></a><a class="code" href="classcsColliderActor.html#a1">00418</a>   <span class="keywordtype">void</span> SetCollideSystem (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys)
-<a name="l00419"></a>00419   {
-<a name="l00420"></a>00420     csColliderActor::cdsys = cdsys;
-<a name="l00421"></a>00421   }
-<a name="l00422"></a>00422 
-<a name="l00424"></a><a class="code" href="classcsColliderActor.html#a2">00424</a>   <span class="keywordtype">void</span> SetEngine (<a class="code" href="structiEngine.html">iEngine</a>* engine)
-<a name="l00425"></a>00425   {
-<a name="l00426"></a>00426     csColliderActor::engine = engine;
-<a name="l00427"></a>00427   }
-<a name="l00428"></a>00428 
-<a name="l00438"></a>00438   <span class="keywordtype">void</span> InitializeColliders (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
-<a name="l00439"></a>00439         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
-<a name="l00440"></a>00440 
-<a name="l00452"></a>00452   <span class="keywordtype">void</span> InitializeColliders (<a class="code" href="structiCamera.html">iCamera</a>* camera, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
-<a name="l00453"></a>00453         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
-<a name="l00454"></a>00454 
-<a name="l00458"></a><a class="code" href="classcsColliderActor.html#a5">00458</a>   <span class="keywordtype">void</span> SetGravity (<span class="keywordtype">float</span> g) { gravity = g; }
-<a name="l00459"></a>00459 
-<a name="l00463"></a><a class="code" href="classcsColliderActor.html#a6">00463</a>   <span class="keywordtype">float</span> GetGravity ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> gravity; }
-<a name="l00464"></a>00464 
-<a name="l00468"></a><a class="code" href="classcsColliderActor.html#a7">00468</a>   <span class="keywordtype">bool</span> IsOnGround ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> onground; }
-<a name="l00469"></a>00469 
-<a name="l00473"></a><a class="code" href="classcsColliderActor.html#a8">00473</a>   <span class="keywordtype">void</span> SetOnGround (<span class="keywordtype">bool</span> og) { onground = og; }
-<a name="l00474"></a>00474 
-<a name="l00478"></a><a class="code" href="classcsColliderActor.html#a9">00478</a>   <span class="keywordtype">bool</span> CheckRevertMove ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> revertMove; }
-<a name="l00479"></a>00479 
-<a name="l00491"></a>00491   <span class="keywordtype">bool</span> Move (<span class="keywordtype">float</span> delta, <span class="keywordtype">float</span> speed, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; velBody,
-<a name="l00492"></a>00492         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; angularVelocity);
-<a name="l00493"></a>00493 
-<a name="l00499"></a>00499   <span class="keywordtype">bool</span> AdjustForCollisions (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; oldpos,
-<a name="l00500"></a>00500         <a class="code" href="classcsVector3.html">csVector3</a>&amp; newpos,
-<a name="l00501"></a>00501         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vel,
-<a name="l00502"></a>00502         <span class="keywordtype">float</span> delta);
-<a name="l00503"></a>00503 };
-<a name="l00504"></a>00504 
-<a name="l00505"></a>00505 <span class="preprocessor">#endif // __CS_COLLIDER_H__</span>
+<a name="l00024"></a>00024 <span class="preprocessor">#include "<a class="code" href="box_8h.html">csgeom/box.h</a>"</span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include "csutil/csobject.h"</span>
+<a name="l00026"></a>00026 <span class="preprocessor">#include "csutil/leakguard.h"</span>
+<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
+<a name="l00028"></a>00028 
+<a name="l00029"></a>00029 <span class="preprocessor">#include "ivaria/collider.h"</span>
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="keyword">struct </span><a class="code" href="structiCamera.html">iCamera</a>;
+<a name="l00032"></a>00032 <span class="keyword">struct </span><a class="code" href="structiCollider.html">iCollider</a>;
+<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structiCollideSystem.html">iCollideSystem</a>;
+<a name="l00034"></a>00034 <span class="keyword">struct </span><a class="code" href="structiEngine.html">iEngine</a>;
+<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>;
+<a name="l00036"></a>00036 <span class="keyword">struct </span><a class="code" href="structiMovable.html">iMovable</a>;
+<a name="l00037"></a>00037 <span class="keyword">struct </span><a class="code" href="structiObject.html">iObject</a>;
+<a name="l00038"></a>00038 <span class="keyword">struct </span><a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>;
+<a name="l00039"></a>00039 <span class="keyword">struct </span><a class="code" href="structiRegion.html">iRegion</a>;
+<a name="l00040"></a>00040 <span class="keyword">struct </span><a class="code" href="structiSector.html">iSector</a>;
+<a name="l00041"></a>00041 
+<a name="l00042"></a>00042 <span class="keyword">class </span><a class="code" href="structcsCollisionPair.html">csCollisionPair</a>;
+<a name="l00043"></a>00043 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
+<a name="l00044"></a>00044 
+<a name="l00045"></a>00045 <span class="keyword">struct </span><a class="code" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a>;
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047 <span class="comment">/* The 'class csColliderWrapper' is here to work around a VC7.0 issue. It </span>
+<a name="l00048"></a>00048 <span class="comment"> * seems that, depending on whether VC7.0 sees a compound declared as</span>
+<a name="l00049"></a>00049 <span class="comment"> * 'struct' or 'class' first, it sometimes generated different decorated</span>
+<a name="l00050"></a>00050 <span class="comment"> * symbol names. 'csColliderWrapper' is a class, so commonly, in headers</span>
+<a name="l00051"></a>00051 <span class="comment"> * etc. it would be forward-declared as 'class csColliderWrapper'. However,</span>
+<a name="l00052"></a>00052 <span class="comment"> * the SCF_VERSION causes a forward declaration as a 'struct', with the</span>
+<a name="l00053"></a>00053 <span class="comment"> * consequence that when csColliderWrapper was not already forward-declared</span>
+<a name="l00054"></a>00054 <span class="comment"> * all decorated name will refer to 'struct csColliderWrapper' in some files.</span>
+<a name="l00055"></a>00055 <span class="comment"> * But possibly, when forward-declaration was used, 'class csColliderWrapper'</span>
+<a name="l00056"></a>00056 <span class="comment"> * will be used in other objects, causing linking errors. This is worked</span>
+<a name="l00057"></a>00057 <span class="comment"> * around by having a 'class' forward declaration here.</span>
+<a name="l00058"></a>00058 <span class="comment"> */</span>
+<a name="l00059"></a>00059 <span class="keyword">class </span><a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>;
+<a name="l00060"></a>00060 <a class="code" href="group__scf.html#ga69">SCF_VERSION</a> (<a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>, 0, 0, 3);
+<a name="l00061"></a>00061 
+<a name="l00075"></a><a class="code" href="classcsColliderWrapper.html">00075</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> : <span class="keyword">public</span> <a class="code" href="classcsObject.html">csObject</a>
+<a name="l00076"></a>00076 {
+<a name="l00077"></a>00077 <span class="keyword">private</span>:
+<a name="l00078"></a>00078   <a class="code" href="classcsRef.html">csRef&lt;iCollideSystem&gt;</a> collide_system;
+<a name="l00079"></a>00079   <a class="code" href="classcsRef.html">csRef&lt;iCollider&gt;</a> collider;
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081 <span class="keyword">public</span>:
+<a name="l00082"></a>00082   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>);
+<a name="l00083"></a>00083 
+<a name="l00085"></a>00085   <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> (<a class="code" href="classcsObject.html">csObject</a>&amp; parent, <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* collide_system,
+<a name="l00086"></a>00086         <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh);
+<a name="l00087"></a>00087 
+<a name="l00089"></a>00089   <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> (<a class="code" href="structiObject.html">iObject</a>* parent, <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* collide_system,
+<a name="l00090"></a>00090         <a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh);
+<a name="l00091"></a>00091 
+<a name="l00097"></a>00097   <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> (<a class="code" href="structiObject.html">iObject</a>* parent, <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* collide_system,
+<a name="l00098"></a>00098         <a class="code" href="structiCollider.html">iCollider</a>* collider);
+<a name="l00099"></a>00099 
+<a name="l00101"></a>00101   <span class="keyword">virtual</span> ~<a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a> ();
+<a name="l00102"></a>00102 
+<a name="l00104"></a><a class="code" href="classcsColliderWrapper.html#a5">00104</a>   <a class="code" href="structiCollider.html">iCollider</a>* GetCollider () { <span class="keywordflow">return</span> collider; }
+<a name="l00105"></a>00105 
+<a name="l00107"></a><a class="code" href="classcsColliderWrapper.html#a6">00107</a>   <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* GetCollideSystem () { <span class="keywordflow">return</span> collide_system; }
+<a name="l00108"></a>00108 
+<a name="l00116"></a>00116   <span class="keywordtype">bool</span> Collide (<a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>&amp; pOtherCollider,
+<a name="l00117"></a>00117                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pThisTransform = 0,
+<a name="l00118"></a>00118                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pOtherTransform = 0);
+<a name="l00123"></a>00123   <span class="keywordtype">bool</span> Collide (<a class="code" href="classcsObject.html">csObject</a>&amp; otherObject,
+<a name="l00124"></a>00124                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pThisTransform = 0,
+<a name="l00125"></a>00125                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pOtherTransform = 0);
+<a name="l00130"></a>00130   <span class="keywordtype">bool</span> Collide (<a class="code" href="structiObject.html">iObject</a>* otherObject,
+<a name="l00131"></a>00131                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pThisTransform = 0,
+<a name="l00132"></a>00132                 <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* pOtherTransform = 0);
+<a name="l00133"></a>00133 
+<a name="l00138"></a>00138   <span class="keyword">static</span> <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>* GetColliderWrapper (<a class="code" href="classcsObject.html">csObject</a>&amp; object);
+<a name="l00139"></a>00139 
+<a name="l00144"></a>00144   <span class="keyword">static</span> <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>* GetColliderWrapper (<a class="code" href="structiObject.html">iObject</a>* object);
+<a name="l00145"></a>00145 
+<a name="l00146"></a>00146   <a class="code" href="group__scf.html#ga49">SCF_DECLARE_IBASE_EXT</a> (<a class="code" href="classcsObject.html">csObject</a>);
+<a name="l00147"></a>00147 };
+<a name="l00148"></a>00148 
+<a name="l00152"></a><a class="code" href="structcsTraceBeamResult.html">00152</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csTraceBeamResult
+<a name="l00153"></a>00153 {
+<a name="l00155"></a>00155 
+<a name="l00159"></a><a class="code" href="structcsTraceBeamResult.html#o0">00159</a>   <a class="code" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a> closest_tri;
+<a name="l00164"></a><a class="code" href="structcsTraceBeamResult.html#o1">00164</a>   <a class="code" href="classcsVector3.html">csVector3</a> closest_isect;
+<a name="l00168"></a><a class="code" href="structcsTraceBeamResult.html#o2">00168</a>   <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* closest_mesh;
+<a name="l00173"></a><a class="code" href="structcsTraceBeamResult.html#o3">00173</a>   <span class="keywordtype">float</span> sqdistance;
+<a name="l00174"></a>00174 };
+<a name="l00175"></a>00175 
+<a name="l00180"></a><a class="code" href="classcsColliderHelper.html">00180</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csColliderHelper
+<a name="l00181"></a>00181 {
+<a name="l00182"></a>00182 <span class="keyword">public</span>:
+<a name="l00194"></a>00194   <span class="keyword">static</span> <a class="code" href="classcsColliderWrapper.html">csColliderWrapper</a>* InitializeCollisionWrapper (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* colsys,
+<a name="l00195"></a>00195         <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh);
+<a name="l00196"></a>00196 
+<a name="l00202"></a>00202   <span class="keyword">static</span> <span class="keywordtype">void</span> InitializeCollisionWrappers (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* colsys,
+<a name="l00203"></a>00203         <a class="code" href="structiEngine.html">iEngine</a>* engine, <a class="code" href="structiRegion.html">iRegion</a>* region = 0);
+<a name="l00204"></a>00204 
+<a name="l00222"></a>00222   <span class="keyword">static</span> <span class="keywordtype">bool</span> CollideArray (
+<a name="l00223"></a>00223         <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* colsys,
+<a name="l00224"></a>00224         <a class="code" href="structiCollider.html">iCollider</a>* collider,
+<a name="l00225"></a>00225         <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* trans,
+<a name="l00226"></a>00226         <span class="keywordtype">int</span> num_colliders,
+<a name="l00227"></a>00227         <a class="code" href="structiCollider.html">iCollider</a>** colliders,
+<a name="l00228"></a>00228         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> **transforms);
+<a name="l00229"></a>00229 
+<a name="l00267"></a>00267   <span class="keyword">static</span> <span class="keywordtype">int</span> CollidePath (
+<a name="l00268"></a>00268         <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* colsys,
+<a name="l00269"></a>00269         <a class="code" href="structiCollider.html">iCollider</a>* collider, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* trans,
+<a name="l00270"></a>00270         <span class="keywordtype">float</span> nbrsteps,
+<a name="l00271"></a>00271         <a class="code" href="classcsVector3.html">csVector3</a>&amp; newpos,
+<a name="l00272"></a>00272         <span class="keywordtype">int</span> num_colliders,
+<a name="l00273"></a>00273         <a class="code" href="structiCollider.html">iCollider</a>** colliders,
+<a name="l00274"></a>00274         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>** transforms);
+<a name="l00275"></a>00275 
+<a name="l00297"></a>00297   <span class="keyword">static</span> <span class="keywordtype">float</span> TraceBeam (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys, <a class="code" href="structiSector.html">iSector</a>* sector,
+<a name="l00298"></a>00298         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end,
+<a name="l00299"></a>00299         <span class="keywordtype">bool</span> traverse_portals,
+<a name="l00300"></a>00300         <a class="code" href="structcsIntersectingTriangle.html">csIntersectingTriangle</a>&amp; closest_tri,
+<a name="l00301"></a>00301         <a class="code" href="classcsVector3.html">csVector3</a>&amp; closest_isect,
+<a name="l00302"></a>00302         <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>** closest_mesh = 0);
+<a name="l00303"></a>00303 
+<a name="l00320"></a>00320   <span class="keyword">static</span> csTraceBeamResult TraceBeam (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys, <a class="code" href="structiSector.html">iSector</a>* sector,
+<a name="l00321"></a>00321         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; start, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; end,
+<a name="l00322"></a>00322         <span class="keywordtype">bool</span> traverse_portals);
+<a name="l00323"></a>00323 };
+<a name="l00324"></a>00324 
+<a name="l00329"></a><a class="code" href="classcsColliderActor.html">00329</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csColliderActor
+<a name="l00330"></a>00330 {
+<a name="l00331"></a>00331 <span class="keyword">private</span>:
+<a name="l00332"></a>00332   <span class="keywordtype">bool</span> revertMove;
+<a name="l00333"></a>00333   <span class="keywordtype">bool</span> onground;
+<a name="l00334"></a>00334   <a class="code" href="classcsArray.html">csArray&lt;csCollisionPair&gt;</a> our_cd_contact;
+<a name="l00335"></a>00335   <span class="keywordtype">float</span> gravity;
+<a name="l00336"></a>00336   <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh;
+<a name="l00337"></a>00337   <a class="code" href="structiCamera.html">iCamera</a>* camera;
+<a name="l00338"></a>00338   <a class="code" href="structiMovable.html">iMovable</a>* movable;
+<a name="l00339"></a>00339   <a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys;
+<a name="l00340"></a>00340   <a class="code" href="structiEngine.html">iEngine</a>* engine;
+<a name="l00341"></a>00341   <a class="code" href="classcsVector3.html">csVector3</a> velWorld;
+<a name="l00342"></a>00342 
+<a name="l00343"></a>00343   <span class="comment">// For rotation.</span>
+<a name="l00344"></a>00344   <span class="keywordtype">float</span> rotX, rotY, rotZ;
+<a name="l00345"></a>00345 
+<a name="l00346"></a>00346   <a class="code" href="classcsRef.html">csRef&lt;iCollider&gt;</a> topCollider;
+<a name="l00347"></a>00347   <a class="code" href="classcsRef.html">csRef&lt;iCollider&gt;</a> bottomCollider;
+<a name="l00348"></a>00348   <a class="code" href="classcsBox3.html">csBox3</a> boundingBox;
+<a name="l00349"></a>00349   <a class="code" href="classcsVector3.html">csVector3</a> shift;
+<a name="l00350"></a>00350   <a class="code" href="classcsVector3.html">csVector3</a> topSize;
+<a name="l00351"></a>00351   <a class="code" href="classcsVector3.html">csVector3</a> bottomSize;
+<a name="l00352"></a>00352   <a class="code" href="classcsVector3.html">csVector3</a> intervalSize;
+<a name="l00353"></a>00353 
+<a name="l00377"></a>00377   <span class="keywordtype">int</span> CollisionDetect (
+<a name="l00378"></a>00378         <a class="code" href="structiCollider.html">iCollider</a> *collider,
+<a name="l00379"></a>00379         <a class="code" href="structiSector.html">iSector</a>* sector,
+<a name="l00380"></a>00380         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* transform,
+<a name="l00381"></a>00381         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* old_transform);
+<a name="l00382"></a>00382 
+<a name="l00404"></a>00404   <span class="keywordtype">int</span> CollisionDetectIterative (
+<a name="l00405"></a>00405         <a class="code" href="structiCollider.html">iCollider</a> *collider,
+<a name="l00406"></a>00406         <a class="code" href="structiSector.html">iSector</a>* sector,
+<a name="l00407"></a>00407         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* transform,
+<a name="l00408"></a>00408         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* old_transform, <a class="code" href="classcsVector3.html">csVector3</a>&amp; maxmove);
+<a name="l00409"></a>00409   <span class="keywordtype">bool</span> MoveV (<span class="keywordtype">float</span> delta, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; velBody);
+<a name="l00410"></a>00410   <span class="keywordtype">bool</span> RotateV (<span class="keywordtype">float</span> delta, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; angularVelocity);
+<a name="l00411"></a>00411   <span class="keywordtype">void</span> InitializeColliders (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
+<a name="l00412"></a>00412         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
+<a name="l00413"></a>00413 
+<a name="l00414"></a>00414 <span class="keyword">public</span>:
+<a name="l00416"></a>00416   csColliderActor ();
+<a name="l00417"></a>00417 
+<a name="l00419"></a><a class="code" href="classcsColliderActor.html#a1">00419</a>   <span class="keywordtype">void</span> SetCollideSystem (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys)
+<a name="l00420"></a>00420   {
+<a name="l00421"></a>00421     csColliderActor::cdsys = cdsys;
+<a name="l00422"></a>00422   }
+<a name="l00423"></a>00423 
+<a name="l00425"></a><a class="code" href="classcsColliderActor.html#a2">00425</a>   <span class="keywordtype">void</span> SetEngine (<a class="code" href="structiEngine.html">iEngine</a>* engine)
+<a name="l00426"></a>00426   {
+<a name="l00427"></a>00427     csColliderActor::engine = engine;
+<a name="l00428"></a>00428   }
+<a name="l00429"></a>00429 
+<a name="l00439"></a>00439   <span class="keywordtype">void</span> InitializeColliders (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
+<a name="l00440"></a>00440         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
+<a name="l00441"></a>00441 
+<a name="l00453"></a>00453   <span class="keywordtype">void</span> InitializeColliders (<a class="code" href="structiCamera.html">iCamera</a>* camera, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
+<a name="l00454"></a>00454         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
+<a name="l00455"></a>00455 
+<a name="l00459"></a><a class="code" href="classcsColliderActor.html#a5">00459</a>   <span class="keywordtype">void</span> SetGravity (<span class="keywordtype">float</span> g) { gravity = g; }
+<a name="l00460"></a>00460 
+<a name="l00464"></a><a class="code" href="classcsColliderActor.html#a6">00464</a>   <span class="keywordtype">float</span> GetGravity ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> gravity; }
+<a name="l00465"></a>00465 
+<a name="l00469"></a><a class="code" href="classcsColliderActor.html#a7">00469</a>   <span class="keywordtype">bool</span> IsOnGround ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> onground; }
+<a name="l00470"></a>00470 
+<a name="l00474"></a><a class="code" href="classcsColliderActor.html#a8">00474</a>   <span class="keywordtype">void</span> SetOnGround (<span class="keywordtype">bool</span> og) { onground = og; }
+<a name="l00475"></a>00475 
+<a name="l00479"></a><a class="code" href="classcsColliderActor.html#a9">00479</a>   <span class="keywordtype">bool</span> CheckRevertMove ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> revertMove; }
+<a name="l00480"></a>00480 
+<a name="l00492"></a>00492   <span class="keywordtype">bool</span> Move (<span class="keywordtype">float</span> delta, <span class="keywordtype">float</span> speed, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; velBody,
+<a name="l00493"></a>00493         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; angularVelocity);
+<a name="l00494"></a>00494 
+<a name="l00500"></a>00500   <span class="keywordtype">bool</span> AdjustForCollisions (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; oldpos,
+<a name="l00501"></a>00501         <a class="code" href="classcsVector3.html">csVector3</a>&amp; newpos,
+<a name="l00502"></a>00502         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vel,
+<a name="l00503"></a>00503         <span class="keywordtype">float</span> delta);
+<a name="l00504"></a>00504 };
+<a name="l00505"></a>00505 
+<a name="l00506"></a>00506 <span class="preprocessor">#endif // __CS_COLLIDER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>
