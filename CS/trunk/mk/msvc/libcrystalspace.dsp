@@ -158,10 +158,6 @@ SOURCE=..\..\libs\csgeom\csrectrg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\fastsqrt.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgeom\frustum.cpp
 # End Source File
 # Begin Source File
@@ -631,6 +627,10 @@ SOURCE=..\..\libs\csutil\datastrm.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\debug.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\documentcommon.cpp
 # End Source File
 # Begin Source File
 
@@ -1606,6 +1606,10 @@ SOURCE=..\..\libs\..\include\csutil\dirtyaccessarray.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\documentcommon.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\event.h
 # End Source File
 # Begin Source File
@@ -1802,10 +1806,6 @@ SOURCE=..\..\libs\..\include\csutil\snprintf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\csutil\sockets.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csutil\sparse3d.h
 # End Source File
 # Begin Source File
@@ -1843,10 +1843,6 @@ SOURCE=..\..\libs\..\include\csutil\threadjobqueue.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\timer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\..\include\csutil\tree.h
 # End Source File
 # Begin Source File
 
