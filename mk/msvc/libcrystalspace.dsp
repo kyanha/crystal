@@ -1778,6 +1778,14 @@ SOURCE=..\..\libs\..\include\csutil\scf.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\scf_impl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csutil\scf_new.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\scfstr.h
 # End Source File
 # Begin Source File
