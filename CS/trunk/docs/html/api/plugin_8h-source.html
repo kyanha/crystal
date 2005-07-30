@@ -44,73 +44,75 @@
 <a name="l00033"></a>00033 
 <a name="l00034"></a>00034 <span class="keyword">struct </span><a class="code" href="structiComponent.html">iComponent</a>;
 <a name="l00035"></a>00035 
-<a name="l00044"></a><a class="code" href="group__scf.html#ga97">00044</a> <span class="preprocessor">#define CS_QUERY_PLUGIN_CLASS(Object,ClassID,Interface)                 \</span>
+<a name="l00044"></a><a class="code" href="group__scf.html#ga88">00044</a> <span class="preprocessor">#define CS_QUERY_PLUGIN_CLASS(Object,ClassID,Interface)                 \</span>
 <a name="l00045"></a>00045 <span class="preprocessor">  csPtr&lt;Interface&gt; ((Interface *)((Object)-&gt;QueryPlugin                 \</span>
-<a name="l00046"></a>00046 <span class="preprocessor">  (ClassID, #Interface, scfInterface&lt;Interface&gt;::GetVersion())))</span>
-<a name="l00047"></a>00047 <span class="preprocessor"></span>
-<a name="l00054"></a><a class="code" href="group__scf.html#ga98">00054</a> <span class="preprocessor">#define CS_LOAD_PLUGIN(Object,ClassID,Interface)                        \</span>
-<a name="l00055"></a>00055 <span class="preprocessor">  csPtr&lt;Interface&gt; ((Interface *)((Object)-&gt;LoadPlugin                  \</span>
-<a name="l00056"></a>00056 <span class="preprocessor">  (ClassID, #Interface, scfInterface&lt;Interface&gt;::GetVersion())))</span>
-<a name="l00057"></a>00057 <span class="preprocessor"></span>
-<a name="l00062"></a><a class="code" href="group__scf.html#ga99">00062</a> <span class="preprocessor">#define CS_LOAD_PLUGIN_ALWAYS(Object,ClassID)                           \</span>
-<a name="l00063"></a>00063 <span class="preprocessor">  csPtr&lt;iBase&gt; ((Object)-&gt;LoadPlugin (ClassID, 0, 0))</span>
-<a name="l00064"></a>00064 <span class="preprocessor"></span>
-<a name="l00088"></a><a class="code" href="group__scf.html#ga100">00088</a> <span class="preprocessor">#define CS_QUERY_REGISTRY_PLUGIN(obj,object_reg,scf_id,interface) \</span>
-<a name="l00089"></a>00089 <span class="preprocessor">do { \</span>
-<a name="l00090"></a>00090 <span class="preprocessor">  obj = CS_QUERY_REGISTRY(object_reg, interface); \</span>
-<a name="l00091"></a>00091 <span class="preprocessor">  if (!obj.IsValid()) \</span>
-<a name="l00092"></a>00092 <span class="preprocessor">  { \</span>
-<a name="l00093"></a>00093 <span class="preprocessor">    csRef&lt;iPluginManager&gt; mgr = CS_QUERY_REGISTRY(object_reg,iPluginManager); \</span>
-<a name="l00094"></a>00094 <span class="preprocessor">    if (!mgr.IsValid()) \</span>
-<a name="l00095"></a>00095 <span class="preprocessor">    { \</span>
-<a name="l00096"></a>00096 <span class="preprocessor">      csReport(object_reg, CS_REPORTER_SEVERITY_ERROR, \</span>
-<a name="l00097"></a>00097 <span class="preprocessor">        "crystalspace.plugin.query", "Plugin manager missing from " \</span>
-<a name="l00098"></a>00098 <span class="preprocessor">        "object-registry when attempting to query/load class: %s", scf_id); \</span>
-<a name="l00099"></a>00099 <span class="preprocessor">    } \</span>
-<a name="l00100"></a>00100 <span class="preprocessor">    obj = CS_LOAD_PLUGIN(mgr, scf_id, interface); \</span>
-<a name="l00101"></a>00101 <span class="preprocessor">    if (!obj.IsValid()) \</span>
-<a name="l00102"></a>00102 <span class="preprocessor">    { \</span>
-<a name="l00103"></a>00103 <span class="preprocessor">      csReport(object_reg, CS_REPORTER_SEVERITY_WARNING, \</span>
-<a name="l00104"></a>00104 <span class="preprocessor">        "crystalspace.plugin.query", "Failed to load class \"%s\" with " \</span>
-<a name="l00105"></a>00105 <span class="preprocessor">        "interface \"" #interface "\"", scf_id); \</span>
-<a name="l00106"></a>00106 <span class="preprocessor">    } \</span>
-<a name="l00107"></a>00107 <span class="preprocessor">    if (!object_reg-&gt;Register(obj, #interface)) \</span>
-<a name="l00108"></a>00108 <span class="preprocessor">    { \</span>
-<a name="l00109"></a>00109 <span class="preprocessor">      csReport(object_reg, CS_REPORTER_SEVERITY_WARNING, \</span>
-<a name="l00110"></a>00110 <span class="preprocessor">        "crystalspace.plugin.query", "Failed to register class \"%s\" with " \</span>
-<a name="l00111"></a>00111 <span class="preprocessor">        "tag \"" #interface "\" in the object-registry.", scf_id); \</span>
-<a name="l00112"></a>00112 <span class="preprocessor">    } \</span>
-<a name="l00113"></a>00113 <span class="preprocessor">  } \</span>
-<a name="l00114"></a>00114 <span class="preprocessor">} while (0)</span>
-<a name="l00115"></a>00115 <span class="preprocessor"></span>
-<a name="l00116"></a>00116 <a class="code" href="group__scf.html#ga71">SCF_VERSION</a> (<a class="code" href="structiPluginIterator.html">iPluginIterator</a>, 0, 0, 1);
-<a name="l00117"></a>00117 
-<a name="l00121"></a><a class="code" href="structiPluginIterator.html">00121</a> <span class="keyword">struct </span><a class="code" href="structiPluginIterator.html">iPluginIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00122"></a>00122 {
-<a name="l00124"></a>00124   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiPluginIterator.html#a0">HasNext</a> () = 0;
-<a name="l00126"></a>00126   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>* <a class="code" href="structiPluginIterator.html#a1">Next</a> () = 0;
-<a name="l00127"></a>00127 };
-<a name="l00128"></a>00128 
-<a name="l00129"></a>00129 <a class="code" href="group__scf.html#ga71">SCF_VERSION</a> (<a class="code" href="structiPluginManager.html">iPluginManager</a>, 0, 2, 0);
+<a name="l00046"></a>00046 <span class="preprocessor">  (ClassID, scfInterfaceTraits&lt;Interface&gt;::GetName(),                   \</span>
+<a name="l00047"></a>00047 <span class="preprocessor">  scfInterfaceTraits&lt;Interface&gt;::GetVersion())))  </span>
+<a name="l00048"></a>00048 <span class="preprocessor"></span>
+<a name="l00055"></a><a class="code" href="group__scf.html#ga89">00055</a> <span class="preprocessor">#define CS_LOAD_PLUGIN(Object,ClassID,Interface)                        \</span>
+<a name="l00056"></a>00056 <span class="preprocessor">  csPtr&lt;Interface&gt; ((Interface *)((Object)-&gt;LoadPlugin                  \</span>
+<a name="l00057"></a>00057 <span class="preprocessor">  (ClassID, scfInterfaceTraits&lt;Interface&gt;::GetName(),                   \</span>
+<a name="l00058"></a>00058 <span class="preprocessor">  scfInterfaceTraits&lt;Interface&gt;::GetVersion())))</span>
+<a name="l00059"></a>00059 <span class="preprocessor"></span>
+<a name="l00064"></a><a class="code" href="group__scf.html#ga90">00064</a> <span class="preprocessor">#define CS_LOAD_PLUGIN_ALWAYS(Object,ClassID)                           \</span>
+<a name="l00065"></a>00065 <span class="preprocessor">  csPtr&lt;iBase&gt; ((Object)-&gt;LoadPlugin (ClassID, 0, 0))</span>
+<a name="l00066"></a>00066 <span class="preprocessor"></span>
+<a name="l00090"></a><a class="code" href="group__scf.html#ga91">00090</a> <span class="preprocessor">#define CS_QUERY_REGISTRY_PLUGIN(obj,object_reg,scf_id,interface) \</span>
+<a name="l00091"></a>00091 <span class="preprocessor">do { \</span>
+<a name="l00092"></a>00092 <span class="preprocessor">  obj = CS_QUERY_REGISTRY(object_reg, interface); \</span>
+<a name="l00093"></a>00093 <span class="preprocessor">  if (!obj.IsValid()) \</span>
+<a name="l00094"></a>00094 <span class="preprocessor">  { \</span>
+<a name="l00095"></a>00095 <span class="preprocessor">    csRef&lt;iPluginManager&gt; mgr = CS_QUERY_REGISTRY(object_reg,iPluginManager); \</span>
+<a name="l00096"></a>00096 <span class="preprocessor">    if (!mgr.IsValid()) \</span>
+<a name="l00097"></a>00097 <span class="preprocessor">    { \</span>
+<a name="l00098"></a>00098 <span class="preprocessor">      csReport(object_reg, CS_REPORTER_SEVERITY_ERROR, \</span>
+<a name="l00099"></a>00099 <span class="preprocessor">        "crystalspace.plugin.query", "Plugin manager missing from " \</span>
+<a name="l00100"></a>00100 <span class="preprocessor">        "object-registry when attempting to query/load class: %s", scf_id); \</span>
+<a name="l00101"></a>00101 <span class="preprocessor">    } \</span>
+<a name="l00102"></a>00102 <span class="preprocessor">    obj = CS_LOAD_PLUGIN(mgr, scf_id, interface); \</span>
+<a name="l00103"></a>00103 <span class="preprocessor">    if (!obj.IsValid()) \</span>
+<a name="l00104"></a>00104 <span class="preprocessor">    { \</span>
+<a name="l00105"></a>00105 <span class="preprocessor">      csReport(object_reg, CS_REPORTER_SEVERITY_WARNING, \</span>
+<a name="l00106"></a>00106 <span class="preprocessor">        "crystalspace.plugin.query", "Failed to load class \"%s\" with " \</span>
+<a name="l00107"></a>00107 <span class="preprocessor">        "interface \"" #interface "\"", scf_id); \</span>
+<a name="l00108"></a>00108 <span class="preprocessor">    } \</span>
+<a name="l00109"></a>00109 <span class="preprocessor">    if (!object_reg-&gt;Register(obj, #interface)) \</span>
+<a name="l00110"></a>00110 <span class="preprocessor">    { \</span>
+<a name="l00111"></a>00111 <span class="preprocessor">      csReport(object_reg, CS_REPORTER_SEVERITY_WARNING, \</span>
+<a name="l00112"></a>00112 <span class="preprocessor">        "crystalspace.plugin.query", "Failed to register class \"%s\" with " \</span>
+<a name="l00113"></a>00113 <span class="preprocessor">        "tag \"" #interface "\" in the object-registry.", scf_id); \</span>
+<a name="l00114"></a>00114 <span class="preprocessor">    } \</span>
+<a name="l00115"></a>00115 <span class="preprocessor">  } \</span>
+<a name="l00116"></a>00116 <span class="preprocessor">} while (0)</span>
+<a name="l00117"></a>00117 <span class="preprocessor"></span>
+<a name="l00118"></a>00118 <a class="code" href="group__scf.html#ga87">SCF_VERSION</a> (<a class="code" href="structiPluginIterator.html">iPluginIterator</a>, 0, 0, 1);
+<a name="l00119"></a>00119 
+<a name="l00123"></a><a class="code" href="structiPluginIterator.html">00123</a> <span class="keyword">struct </span><a class="code" href="structiPluginIterator.html">iPluginIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00124"></a>00124 {
+<a name="l00126"></a>00126   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiPluginIterator.html#a0">HasNext</a> () = 0;
+<a name="l00128"></a>00128   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>* <a class="code" href="structiPluginIterator.html#a1">Next</a> () = 0;
+<a name="l00129"></a>00129 };
 <a name="l00130"></a>00130 
-<a name="l00145"></a><a class="code" href="structiPluginManager.html">00145</a> <span class="keyword">struct </span><a class="code" href="structiPluginManager.html">iPluginManager</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00146"></a>00146 {
-<a name="l00152"></a>00152   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a> *<a class="code" href="structiPluginManager.html#a0">LoadPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *classID,
-<a name="l00153"></a>00153     <span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface = 0, <span class="keywordtype">int</span> iVersion = 0, <span class="keywordtype">bool</span> init = <span class="keyword">true</span>) = 0;
-<a name="l00154"></a>00154 
-<a name="l00162"></a>00162   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a> *<a class="code" href="structiPluginManager.html#a1">QueryPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface, <span class="keywordtype">int</span> iVersion) = 0;
-<a name="l00164"></a>00164   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a> *<a class="code" href="structiPluginManager.html#a1">QueryPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* classID,
-<a name="l00165"></a>00165         <span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface, <span class="keywordtype">int</span> iVersion) = 0;
-<a name="l00167"></a>00167   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiPluginManager.html#a3">UnloadPlugin</a> (<a class="code" href="structiComponent.html">iComponent</a> *obj) = 0;
-<a name="l00169"></a>00169   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiPluginManager.html#a4">RegisterPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *classID, <a class="code" href="structiComponent.html">iComponent</a> *obj) = 0;
-<a name="l00170"></a>00170 
-<a name="l00176"></a>00176   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPluginIterator&gt;</a> <a class="code" href="structiPluginManager.html#a5">GetPlugins</a> () = 0;
-<a name="l00178"></a>00178   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiPluginManager.html#a6">Clear</a> () = 0;
-<a name="l00179"></a>00179 
-<a name="l00186"></a>00186   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiPluginManager.html#a7">QueryOptions</a> (<a class="code" href="structiComponent.html">iComponent</a>* object) = 0;
-<a name="l00187"></a>00187 };
-<a name="l00188"></a>00188 
-<a name="l00191"></a>00191 <span class="preprocessor">#endif // __CS_IUTIL_PLUGIN_H__</span>
+<a name="l00131"></a>00131 <a class="code" href="group__scf.html#ga87">SCF_VERSION</a> (<a class="code" href="structiPluginManager.html">iPluginManager</a>, 0, 2, 0);
+<a name="l00132"></a>00132 
+<a name="l00147"></a><a class="code" href="structiPluginManager.html">00147</a> <span class="keyword">struct </span><a class="code" href="structiPluginManager.html">iPluginManager</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00148"></a>00148 {
+<a name="l00154"></a>00154   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a> *<a class="code" href="structiPluginManager.html#a0">LoadPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *classID,
+<a name="l00155"></a>00155     <span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface = 0, <span class="keywordtype">int</span> iVersion = 0, <span class="keywordtype">bool</span> init = <span class="keyword">true</span>) = 0;
+<a name="l00156"></a>00156 
+<a name="l00164"></a>00164   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a> *<a class="code" href="structiPluginManager.html#a1">QueryPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface, <span class="keywordtype">int</span> iVersion) = 0;
+<a name="l00166"></a>00166   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a> *<a class="code" href="structiPluginManager.html#a1">QueryPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* classID,
+<a name="l00167"></a>00167         <span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface, <span class="keywordtype">int</span> iVersion) = 0;
+<a name="l00169"></a>00169   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiPluginManager.html#a3">UnloadPlugin</a> (<a class="code" href="structiComponent.html">iComponent</a> *obj) = 0;
+<a name="l00171"></a>00171   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiPluginManager.html#a4">RegisterPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *classID, <a class="code" href="structiComponent.html">iComponent</a> *obj) = 0;
+<a name="l00172"></a>00172 
+<a name="l00178"></a>00178   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPluginIterator&gt;</a> <a class="code" href="structiPluginManager.html#a5">GetPlugins</a> () = 0;
+<a name="l00180"></a>00180   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiPluginManager.html#a6">Clear</a> () = 0;
+<a name="l00181"></a>00181 
+<a name="l00188"></a>00188   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiPluginManager.html#a7">QueryOptions</a> (<a class="code" href="structiComponent.html">iComponent</a>* object) = 0;
+<a name="l00189"></a>00189 };
+<a name="l00190"></a>00190 
+<a name="l00193"></a>00193 <span class="preprocessor">#endif // __CS_IUTIL_PLUGIN_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>
