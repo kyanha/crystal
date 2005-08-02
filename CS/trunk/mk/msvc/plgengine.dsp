@@ -146,10 +146,6 @@ SOURCE=..\..\plugins\engine\3d\campos.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\config.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\engine\3d\cscoll.cpp
 # End Source File
 # Begin Source File
@@ -215,10 +211,6 @@ SOURCE=..\..\plugins\engine\3d\portal.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\3d\portalcontainer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\3d\radiosty.cpp
 # End Source File
 # Begin Source File
 
@@ -323,10 +315,6 @@ SOURCE=..\..\plugins\engine\3d\portal.h
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\3d\portalcontainer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\3d\radiosty.h
 # End Source File
 # Begin Source File
 
