@@ -42,63 +42,64 @@
 <a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
 <a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="iutil_2object_8h.html">iutil/object.h</a>"</span>
 <a name="l00029"></a>00029 
-<a name="l00033"></a><a class="code" href="classcsTypedObjectIterator.html">00033</a> <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keyword">class </span><a class="code" href="classcsTypedObjectIterator.html">csTypedObjectIterator</a>
-<a name="l00034"></a>00034 {
-<a name="l00035"></a>00035 <span class="keyword">protected</span>:
-<a name="l00036"></a><a class="code" href="classcsTypedObjectIterator.html#p0">00036</a>   <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="classcsTypedObjectIterator.html#p0">scf_id</a>;
-<a name="l00037"></a><a class="code" href="classcsTypedObjectIterator.html#p1">00037</a>   <span class="keywordtype">int</span> <a class="code" href="classcsTypedObjectIterator.html#p1">scf_ver</a>;
-<a name="l00038"></a><a class="code" href="classcsTypedObjectIterator.html#p2">00038</a>   <a class="code" href="classcsRef.html">csRef&lt;iObjectIterator&gt;</a> <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>;
-<a name="l00039"></a><a class="code" href="classcsTypedObjectIterator.html#p3">00039</a>   <a class="code" href="classcsRef.html">csRef&lt;iBase&gt;</a> <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>;
-<a name="l00040"></a>00040 
-<a name="l00041"></a><a class="code" href="classcsTypedObjectIterator.html#b0">00041</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTypedObjectIterator.html#b0">FetchObject</a>()
-<a name="l00042"></a>00042   {
-<a name="l00043"></a>00043     <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.<a class="code" href="classcsRef.html#a15">Invalidate</a>();
-<a name="l00044"></a>00044     <span class="keywordflow">while</span> (<a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;HasNext())
-<a name="l00045"></a>00045     {
-<a name="l00046"></a>00046       <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a> =
-<a name="l00047"></a>00047         <a class="code" href="classcsPtr.html">csPtr&lt;iBase&gt;</a>((<a class="code" href="structiBase.html">iBase</a>*)(<a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;Next()-&gt;QueryInterface(<a class="code" href="classcsTypedObjectIterator.html#p0">scf_id</a>, <a class="code" href="classcsTypedObjectIterator.html#p1">scf_ver</a>)));
-<a name="l00048"></a>00048       <span class="keywordflow">if</span> (<a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.<a class="code" href="classcsRef.html#a14">IsValid</a>())
-<a name="l00049"></a>00049         <span class="keywordflow">return</span>;
-<a name="l00050"></a>00050     }
-<a name="l00051"></a>00051   }
-<a name="l00052"></a>00052 
-<a name="l00053"></a>00053 <span class="keyword">public</span>:
-<a name="l00055"></a><a class="code" href="classcsTypedObjectIterator.html#a0">00055</a>   <a class="code" href="classcsTypedObjectIterator.html#a0">csTypedObjectIterator</a>(<a class="code" href="structiObject.html">iObject</a>* parent)
-<a name="l00056"></a>00056   {
-<a name="l00057"></a>00057     <a class="code" href="classcsTypedObjectIterator.html#p0">scf_id</a> = <a class="code" href="classscfInterfaceTraits.html#e1">scfInterfaceTraits&lt;T&gt;::GetID</a>();
-<a name="l00058"></a>00058     <a class="code" href="classcsTypedObjectIterator.html#p1">scf_ver</a> = <a class="code" href="classscfInterfaceTraits.html#e0">scfInterfaceTraits&lt;T&gt;::GetVersion</a>();
-<a name="l00059"></a>00059     <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a> = parent-&gt;<a class="code" href="structiObject.html#a11">GetIterator</a>();
-<a name="l00060"></a>00060     <a class="code" href="classcsTypedObjectIterator.html#b0">FetchObject</a>();
-<a name="l00061"></a>00061   }
-<a name="l00062"></a>00062 
-<a name="l00064"></a><a class="code" href="classcsTypedObjectIterator.html#a1">00064</a>   <a class="code" href="classcsTypedObjectIterator.html#a1">~csTypedObjectIterator</a>() {}
-<a name="l00065"></a>00065 
-<a name="l00067"></a><a class="code" href="classcsTypedObjectIterator.html#a2">00067</a>   T* <a class="code" href="classcsTypedObjectIterator.html#a2">Next</a>()
-<a name="l00068"></a>00068   {
-<a name="l00069"></a>00069     <a class="code" href="structiBase.html">iBase</a>* cur = <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>;
-<a name="l00070"></a>00070     <a class="code" href="classcsTypedObjectIterator.html#b0">FetchObject</a>();
-<a name="l00071"></a>00071     <span class="keywordflow">return</span> (T*)cur;
-<a name="l00072"></a>00072   }
-<a name="l00073"></a>00073 
-<a name="l00075"></a><a class="code" href="classcsTypedObjectIterator.html#a3">00075</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTypedObjectIterator.html#a3">Reset</a>() { <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;Reset(); <a class="code" href="classcsTypedObjectIterator.html#b0">FetchObject</a>(); }
-<a name="l00076"></a>00076 
-<a name="l00078"></a><a class="code" href="classcsTypedObjectIterator.html#a4">00078</a>   <a class="code" href="structiObject.html">iObject</a>* <a class="code" href="classcsTypedObjectIterator.html#a4">GetParentObj</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;GetParentObj(); }
-<a name="l00079"></a>00079 
-<a name="l00081"></a><a class="code" href="classcsTypedObjectIterator.html#a5">00081</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsTypedObjectIterator.html#a5">HasNext</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.<a class="code" href="classcsRef.html#a14">IsValid</a>(); }
-<a name="l00082"></a>00082 
-<a name="l00084"></a><a class="code" href="classcsTypedObjectIterator.html#a6">00084</a>   T* <a class="code" href="classcsTypedObjectIterator.html#a6">FindName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name)
-<a name="l00085"></a>00085   {
-<a name="l00086"></a>00086     <a class="code" href="structiObject.html">iObject</a>* obj = <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;FindName(name);
-<a name="l00087"></a>00087     <span class="keywordflow">if</span> (obj != 0)
-<a name="l00088"></a>00088       <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.<a class="code" href="classcsRef.html#a8">AttachNew</a>(
-<a name="l00089"></a>00089         (<a class="code" href="structiBase.html">iBase</a>*)(obj-&gt;<a class="code" href="structiBase.html#a4">QueryInterface</a>(<a class="code" href="classcsTypedObjectIterator.html#p0">scf_id</a>, <a class="code" href="classcsTypedObjectIterator.html#p1">scf_ver</a>)));
-<a name="l00090"></a>00090     <span class="keywordflow">else</span>
-<a name="l00091"></a>00091       <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.<a class="code" href="classcsRef.html#a15">Invalidate</a>();
-<a name="l00092"></a>00092     <span class="keywordflow">return</span> (T*)(<a class="code" href="structiBase.html">iBase</a>*)<a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>;
-<a name="l00093"></a>00093   }
-<a name="l00094"></a>00094 };
-<a name="l00095"></a>00095 
-<a name="l00096"></a>00096 <span class="preprocessor">#endif // __CS_OBJITER_H__</span>
+<a name="l00033"></a>00033 <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; 
+<a name="l00034"></a><a class="code" href="classcsTypedObjectIterator.html">00034</a> <span class="keyword">class </span><a class="code" href="classcsTypedObjectIterator.html">csTypedObjectIterator</a>
+<a name="l00035"></a>00035 {
+<a name="l00036"></a>00036 <span class="keyword">protected</span>:
+<a name="l00037"></a><a class="code" href="classcsTypedObjectIterator.html#p0">00037</a>   <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="classcsTypedObjectIterator.html#p0">scf_id</a>;
+<a name="l00038"></a><a class="code" href="classcsTypedObjectIterator.html#p1">00038</a>   <span class="keywordtype">int</span> <a class="code" href="classcsTypedObjectIterator.html#p1">scf_ver</a>;
+<a name="l00039"></a><a class="code" href="classcsTypedObjectIterator.html#p2">00039</a>   <a class="code" href="classcsRef.html">csRef&lt;iObjectIterator&gt;</a> <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>;
+<a name="l00040"></a><a class="code" href="classcsTypedObjectIterator.html#p3">00040</a>   <a class="code" href="classcsRef.html">csRef&lt;T&gt;</a> <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>;
+<a name="l00041"></a>00041 
+<a name="l00042"></a><a class="code" href="classcsTypedObjectIterator.html#b0">00042</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTypedObjectIterator.html#b0">FetchObject</a>()
+<a name="l00043"></a>00043   {
+<a name="l00044"></a>00044     <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.Invalidate();
+<a name="l00045"></a>00045     <span class="keywordflow">while</span> (<a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;HasNext())
+<a name="l00046"></a>00046     {
+<a name="l00047"></a>00047       <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a> =
+<a name="l00048"></a>00048         <a class="code" href="classcsPtr.html">csPtr&lt;T&gt;</a>((T*)(<a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;Next()-&gt;QueryInterface(<a class="code" href="classcsTypedObjectIterator.html#p0">scf_id</a>, <a class="code" href="classcsTypedObjectIterator.html#p1">scf_ver</a>)));
+<a name="l00049"></a>00049       <span class="keywordflow">if</span> (<a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.IsValid())
+<a name="l00050"></a>00050         <span class="keywordflow">return</span>;
+<a name="l00051"></a>00051     }
+<a name="l00052"></a>00052   }
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054 <span class="keyword">public</span>:
+<a name="l00056"></a><a class="code" href="classcsTypedObjectIterator.html#a0">00056</a>   <a class="code" href="classcsTypedObjectIterator.html#a0">csTypedObjectIterator</a>(<a class="code" href="structiObject.html">iObject</a>* parent)
+<a name="l00057"></a>00057   {
+<a name="l00058"></a>00058     <a class="code" href="classcsTypedObjectIterator.html#p0">scf_id</a> = <a class="code" href="classscfInterfaceTraits.html#e1">scfInterfaceTraits&lt;T&gt;::GetID</a>();
+<a name="l00059"></a>00059     <a class="code" href="classcsTypedObjectIterator.html#p1">scf_ver</a> = <a class="code" href="classscfInterfaceTraits.html#e0">scfInterfaceTraits&lt;T&gt;::GetVersion</a>();
+<a name="l00060"></a>00060     <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a> = parent-&gt;<a class="code" href="structiObject.html#a12">GetIterator</a>();
+<a name="l00061"></a>00061     <a class="code" href="classcsTypedObjectIterator.html#b0">FetchObject</a>();
+<a name="l00062"></a>00062   }
+<a name="l00063"></a>00063 
+<a name="l00065"></a><a class="code" href="classcsTypedObjectIterator.html#a1">00065</a>   <a class="code" href="classcsTypedObjectIterator.html#a1">~csTypedObjectIterator</a>() {}
+<a name="l00066"></a>00066 
+<a name="l00068"></a><a class="code" href="classcsTypedObjectIterator.html#a2">00068</a>   T* <a class="code" href="classcsTypedObjectIterator.html#a2">Next</a>()
+<a name="l00069"></a>00069   {
+<a name="l00070"></a>00070     <a class="code" href="structiBase.html">iBase</a>* cur = <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>;
+<a name="l00071"></a>00071     <a class="code" href="classcsTypedObjectIterator.html#b0">FetchObject</a>();
+<a name="l00072"></a>00072     <span class="keywordflow">return</span> (T*)cur;
+<a name="l00073"></a>00073   }
+<a name="l00074"></a>00074 
+<a name="l00076"></a><a class="code" href="classcsTypedObjectIterator.html#a3">00076</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTypedObjectIterator.html#a3">Reset</a>() { <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;Reset(); <a class="code" href="classcsTypedObjectIterator.html#b0">FetchObject</a>(); }
+<a name="l00077"></a>00077 
+<a name="l00079"></a><a class="code" href="classcsTypedObjectIterator.html#a4">00079</a>   <a class="code" href="structiObject.html">iObject</a>* <a class="code" href="classcsTypedObjectIterator.html#a4">GetParentObj</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;GetParentObj(); }
+<a name="l00080"></a>00080 
+<a name="l00082"></a><a class="code" href="classcsTypedObjectIterator.html#a5">00082</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsTypedObjectIterator.html#a5">HasNext</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.IsValid(); }
+<a name="l00083"></a>00083 
+<a name="l00085"></a><a class="code" href="classcsTypedObjectIterator.html#a6">00085</a>   T* <a class="code" href="classcsTypedObjectIterator.html#a6">FindName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* name)
+<a name="l00086"></a>00086   {
+<a name="l00087"></a>00087     <a class="code" href="structiObject.html">iObject</a>* obj = <a class="code" href="classcsTypedObjectIterator.html#p2">iter</a>-&gt;FindName(name);
+<a name="l00088"></a>00088     <span class="keywordflow">if</span> (obj != 0)
+<a name="l00089"></a>00089       <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.AttachNew(
+<a name="l00090"></a>00090         (T*)(obj-&gt;<a class="code" href="structiBase.html#a4">QueryInterface</a>(<a class="code" href="classcsTypedObjectIterator.html#p0">scf_id</a>, <a class="code" href="classcsTypedObjectIterator.html#p1">scf_ver</a>)));
+<a name="l00091"></a>00091     <span class="keywordflow">else</span>
+<a name="l00092"></a>00092       <a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>.Invalidate();
+<a name="l00093"></a>00093     <span class="keywordflow">return</span> (T*)<a class="code" href="classcsTypedObjectIterator.html#p3">CurrentTypedObject</a>;
+<a name="l00094"></a>00094   }
+<a name="l00095"></a>00095 };
+<a name="l00096"></a>00096 
+<a name="l00097"></a>00097 <span class="preprocessor">#endif // __CS_OBJITER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>
