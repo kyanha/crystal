@@ -81,34 +81,50 @@
 <a name="l00160"></a>00160 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Interface&gt;
 <a name="l00161"></a><a class="code" href="iutil_2objreg_8h.html#a3">00161</a> <span class="keyword">inline</span> <a class="code" href="classcsPtr.html">csPtr&lt;Interface&gt;</a> <a class="code" href="iutil_2objreg_8h.html#a3">csQueryRegistry</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *Reg)
 <a name="l00162"></a>00162 { 
-<a name="l00163"></a>00163   <span class="keywordflow">return</span> scfQueryInterfaceSafe&lt;Interface&gt; (
-<a name="l00164"></a>00164     Reg-&gt;<a class="code" href="structiObjectRegistry.html#a4">Get</a> (<a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetName (),
-<a name="l00165"></a>00165               <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetID (),
-<a name="l00166"></a>00166               <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetVersion ()));
-<a name="l00167"></a>00167 }  
-<a name="l00168"></a>00168   
-<a name="l00169"></a><a class="code" href="iutil_2objreg_8h.html#a4">00169</a> <span class="keyword">inline</span> <a class="code" href="classcsPtr.html">csPtr&lt;iBase&gt;</a> <a class="code" href="iutil_2objreg_8h.html#a4">csQueryRegistryTag</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *Reg, <span class="keyword">const</span> <span class="keywordtype">char</span>* Tag)
-<a name="l00170"></a>00170 {  
-<a name="l00171"></a>00171   <span class="keywordflow">return</span> <a class="code" href="classcsPtr.html">csPtr&lt;iBase&gt;</a> (Reg-&gt;<a class="code" href="structiObjectRegistry.html#a4">Get</a> (Tag));
-<a name="l00172"></a>00172 }  
-<a name="l00173"></a>00173    
-<a name="l00174"></a>00174 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Interface&gt;
-<a name="l00175"></a><a class="code" href="iutil_2objreg_8h.html#a5">00175</a> <span class="keyword">inline</span> <a class="code" href="classcsPtr.html">csPtr&lt;Interface&gt;</a> <a class="code" href="iutil_2objreg_8h.html#a5">csQueryRegistryTagInterface</a> (
-<a name="l00176"></a>00176   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *Reg, <span class="keyword">const</span> <span class="keywordtype">char</span>* Tag)
-<a name="l00177"></a>00177 {  
-<a name="l00178"></a>00178   <span class="keywordflow">return</span> scfQueryInterfaceSafe&lt;Interface&gt; (
-<a name="l00179"></a>00179     Reg-&gt;<a class="code" href="structiObjectRegistry.html#a4">Get</a> (Tag,
-<a name="l00180"></a>00180               <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetID (),
-<a name="l00181"></a>00181               <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetVersion ()));
-<a name="l00182"></a>00182 }  
-<a name="l00183"></a>00183 
-<a name="l00185"></a><a class="code" href="iutil_2objreg_8h.html#a0">00185</a> <span class="preprocessor">#define CS_QUERY_REGISTRY_TAG(Reg, Tag) (csQueryRegistryTag(Reg, Tag))</span>
-<a name="l00186"></a><a class="code" href="iutil_2objreg_8h.html#a1">00186</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_QUERY_REGISTRY(Reg,Interface) (csQueryRegistry&lt;Interface&gt;(Reg))</span>
-<a name="l00187"></a><a class="code" href="iutil_2objreg_8h.html#a2">00187</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_QUERY_REGISTRY_TAG_INTERFACE(Reg, Tag, Interface) \</span>
-<a name="l00188"></a>00188 <span class="preprocessor">  (csQueryRegistryTagInterface&lt;Interface&gt;(Reg, Tag))</span>
-<a name="l00189"></a>00189 <span class="preprocessor"></span>
-<a name="l00190"></a>00190 <span class="preprocessor">#endif // __CS_IUTIL_OBJREG_H__</span>
-<a name="l00191"></a>00191 <span class="preprocessor"></span>
+<a name="l00163"></a>00163   <a class="code" href="structiBase.html">iBase</a> *base = Reg-&gt;<a class="code" href="structiObjectRegistry.html#a4">Get</a> (<a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetName (),
+<a name="l00164"></a>00164               <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetID (),
+<a name="l00165"></a>00165               <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetVersion ());
+<a name="l00166"></a>00166 
+<a name="l00167"></a>00167   <span class="keywordflow">if</span> (base == 0) <span class="keywordflow">return</span> <a class="code" href="classcsPtr.html">csPtr&lt;Interface&gt;</a> (0);
+<a name="l00168"></a>00168 
+<a name="l00169"></a>00169   Interface *x = (Interface*)base-&gt;<a class="code" href="structiBase.html#a4">QueryInterface</a> (
+<a name="l00170"></a>00170     <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetID (),
+<a name="l00171"></a>00171     <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetVersion ());
+<a name="l00172"></a>00172 
+<a name="l00173"></a>00173   <span class="keywordflow">if</span> (x) base-&gt;<a class="code" href="structiBase.html#a2">DecRef</a> (); <span class="comment">//release our base interface</span>
+<a name="l00174"></a>00174   <span class="keywordflow">return</span> <a class="code" href="classcsPtr.html">csPtr&lt;Interface&gt;</a> (x);
+<a name="l00175"></a>00175 }  
+<a name="l00176"></a>00176   
+<a name="l00177"></a><a class="code" href="iutil_2objreg_8h.html#a4">00177</a> <span class="keyword">inline</span> <a class="code" href="classcsPtr.html">csPtr&lt;iBase&gt;</a> <a class="code" href="iutil_2objreg_8h.html#a4">csQueryRegistryTag</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *Reg, <span class="keyword">const</span> <span class="keywordtype">char</span>* Tag)
+<a name="l00178"></a>00178 {  
+<a name="l00179"></a>00179   <span class="keywordflow">return</span> <a class="code" href="classcsPtr.html">csPtr&lt;iBase&gt;</a> (Reg-&gt;<a class="code" href="structiObjectRegistry.html#a4">Get</a> (Tag));
+<a name="l00180"></a>00180 }  
+<a name="l00181"></a>00181    
+<a name="l00182"></a>00182 <span class="keyword">template</span>&lt;<span class="keyword">class</span> Interface&gt;
+<a name="l00183"></a><a class="code" href="iutil_2objreg_8h.html#a5">00183</a> <span class="keyword">inline</span> <a class="code" href="classcsPtr.html">csPtr&lt;Interface&gt;</a> <a class="code" href="iutil_2objreg_8h.html#a5">csQueryRegistryTagInterface</a> (
+<a name="l00184"></a>00184   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *Reg, <span class="keyword">const</span> <span class="keywordtype">char</span>* Tag)
+<a name="l00185"></a>00185 {  
+<a name="l00186"></a>00186   <a class="code" href="structiBase.html">iBase</a> *base = Reg-&gt;<a class="code" href="structiObjectRegistry.html#a4">Get</a> (Tag,
+<a name="l00187"></a>00187               <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetID (),
+<a name="l00188"></a>00188               <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetVersion ());
+<a name="l00189"></a>00189 
+<a name="l00190"></a>00190   <span class="keywordflow">if</span> (base == 0) <span class="keywordflow">return</span> <a class="code" href="classcsPtr.html">csPtr&lt;Interface&gt;</a> (0);
+<a name="l00191"></a>00191 
+<a name="l00192"></a>00192   Interface *x = (Interface*)base-&gt;<a class="code" href="structiBase.html#a4">QueryInterface</a> (
+<a name="l00193"></a>00193     <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetID (),
+<a name="l00194"></a>00194     <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;Interface&gt;</a>::GetVersion ());
+<a name="l00195"></a>00195 
+<a name="l00196"></a>00196   <span class="keywordflow">if</span> (x) base-&gt;<a class="code" href="structiBase.html#a2">DecRef</a> (); <span class="comment">//release our base interface</span>
+<a name="l00197"></a>00197   <span class="keywordflow">return</span> <a class="code" href="classcsPtr.html">csPtr&lt;Interface&gt;</a> (x);
+<a name="l00198"></a>00198 }  
+<a name="l00199"></a>00199 
+<a name="l00201"></a><a class="code" href="iutil_2objreg_8h.html#a0">00201</a> <span class="preprocessor">#define CS_QUERY_REGISTRY_TAG(Reg, Tag) (csQueryRegistryTag(Reg, Tag))</span>
+<a name="l00202"></a><a class="code" href="iutil_2objreg_8h.html#a1">00202</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_QUERY_REGISTRY(Reg,Interface) (csQueryRegistry&lt;Interface&gt;(Reg))</span>
+<a name="l00203"></a><a class="code" href="iutil_2objreg_8h.html#a2">00203</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_QUERY_REGISTRY_TAG_INTERFACE(Reg, Tag, Interface) \</span>
+<a name="l00204"></a>00204 <span class="preprocessor">  (csQueryRegistryTagInterface&lt;Interface&gt;(Reg, Tag))</span>
+<a name="l00205"></a>00205 <span class="preprocessor"></span>
+<a name="l00206"></a>00206 <span class="preprocessor">#endif // __CS_IUTIL_OBJREG_H__</span>
+<a name="l00207"></a>00207 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>
