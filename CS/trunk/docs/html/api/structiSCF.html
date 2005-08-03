@@ -43,7 +43,7 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSCF.html#a4">ClassRegistered</a> (const char *iClassID)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check whenever the class is present in SCF registry.  <a href="#a4"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiBase.html">iBase</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSCF.html#a5">CreateInstance</a> (const char *iClassID, const char *iInterface, int iVersion)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiBase.html">iBase</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSCF.html#a5">CreateInstance</a> (const char *iClassID)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create an instance of a class that supports given interface.  <a href="#a5"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual const char *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSCF.html#a6">GetClassDescription</a> (const char *iClassID)=0</td></tr>
@@ -131,7 +131,7 @@ Check whenever the class is present in SCF registry.
 You can use this function to check whenever a class instance creation failed because the class is not present at all in the class registry, or it just doesn't support the requested interface.    </td>
   </tr>
 </table>
-<a class="anchor" name="a5"></a><!-- doxytag: member="iSCF::CreateInstance" ref="a5" args="(const char *iClassID, const char *iInterface, int iVersion)=0" --><p>
+<a class="anchor" name="a5"></a><!-- doxytag: member="iSCF::CreateInstance" ref="a5" args="(const char *iClassID)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -140,24 +140,9 @@ You can use this function to check whenever a class instance creation failed bec
           <td class="md" nowrap valign="top">virtual <a class="el" href="structiBase.html">iBase</a>* iSCF::CreateInstance           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">const char *&nbsp;</td>
-          <td class="mdname" nowrap> <em>iClassID</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap> <em>iInterface</em>, </td>
-        </tr>
-        <tr>
-          <td class="md" nowrap align="right"></td>
-          <td class="md"></td>
-          <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>iVersion</em></td>
-        </tr>
-        <tr>
-          <td class="md"></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"><code> [pure virtual]</code></td>
+          <td class="mdname1" valign="top" nowrap> <em>iClassID</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
         </tr>
       </table>
     </td>
@@ -174,9 +159,9 @@ You can use this function to check whenever a class instance creation failed bec
 Create an instance of a class that supports given interface. 
 <p>
 The function returns 0 either if such a class ID is not found in class registry, or a object of given class does not support given interface or supports an incompatible version of given interface. If you want to make a difference between these error conditions, you can check whenever such a class exists using scfClassRegistered() function. <p>
-If you specify 0 as iInterfaceID, you'll receive a pointer to the basic interface, no matter what it is. <b>The reference count will be zero thus you should increment it yourself if you use this approach.</b> You can treat the pointer returned just as an iBase*, not more. If you need more, do <a class="el" href="structiBase.html#a4">QueryInterface()</a> on received pointer (this will also increment the reference counter).
+The returned pointer will be to a <a class="el" href="structiBase.html">iBase</a>, and thus you need to use scfQueryInterface if you want to get a specific interface.
 <p>
-Referenced by <a class="el" href="scf_8h-source.html#l00789">scfCreateInstance()</a>.    </td>
+Referenced by <a class="el" href="scf_8h-source.html#l00791">scfCreateInstance()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a16"></a><!-- doxytag: member="iSCF::Finish" ref="a16" args="()=0" --><p>
@@ -297,7 +282,7 @@ Return the interface ID number that belongs to the given interface.
 <p>
 If the interface is unknown, a new ID is allocated. This number can be used to quickly determine whether two interfaces are equal.
 <p>
-Referenced by <a class="el" href="scf__interface_8h-source.html#l00388">scfInterfaceTraits&lt; Interface &gt;::GetID()</a>.    </td>
+Referenced by <a class="el" href="scf__interface_8h-source.html#l00383">scfInterfaceTraits&lt; Interface &gt;::GetID()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a14"></a><!-- doxytag: member="iSCF::GetInterfaceName" ref="a14" args="(scfInterfaceID) const =0" --><p>
@@ -842,7 +827,7 @@ On most platforms, this variable is module-global; for instance, the application
 <p>
 Definition at line <a class="el" href="scf__interface_8h-source.html#l00155">155</a> of file <a class="el" href="scf__interface_8h-source.html">scf_interface.h</a>.
 <p>
-Referenced by <a class="el" href="debugimagewriter_8h-source.html#l00060">csDebugImageWriter::DebugImageWrite()</a>, <a class="el" href="scf__interface_8h-source.html#l00388">scfInterfaceTraits&lt; Interface &gt;::GetID()</a>, and <a class="el" href="scf_8h-source.html#l00789">scfCreateInstance()</a>.    </td>
+Referenced by <a class="el" href="debugimagewriter_8h-source.html#l00060">csDebugImageWriter::DebugImageWrite()</a>, <a class="el" href="scf__interface_8h-source.html#l00383">scfInterfaceTraits&lt; Interface &gt;::GetID()</a>, and <a class="el" href="scf_8h-source.html#l00791">scfCreateInstance()</a>.    </td>
   </tr>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
