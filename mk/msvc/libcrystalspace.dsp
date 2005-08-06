@@ -474,6 +474,14 @@ SOURCE=..\..\libs\cstool\gentrtex.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\importkit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\importkit_glue.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\initapp.cpp
 # End Source File
 # Begin Source File
@@ -1374,6 +1382,10 @@ SOURCE=..\..\libs\..\include\cstool\identstrings.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\cstool\importkit.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\cstool\initapp.h
 # End Source File
 # Begin Source File
@@ -1927,6 +1939,10 @@ SOURCE=..\..\libs\..\include\csutil\zip.h
 # Begin Source File
 
 SOURCE=..\..\libs\csgeom\obb_priv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\importkit_glue.h
 # End Source File
 # Begin Source File
 
