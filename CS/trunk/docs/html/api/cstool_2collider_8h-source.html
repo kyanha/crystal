@@ -192,73 +192,75 @@
 <a name="l00352"></a>00352   <a class="code" href="classcsVector3.html">csVector3</a> bottomSize;
 <a name="l00353"></a>00353   <a class="code" href="classcsVector3.html">csVector3</a> intervalSize;
 <a name="l00354"></a>00354 
-<a name="l00378"></a>00378   <span class="keywordtype">int</span> CollisionDetect (
-<a name="l00379"></a>00379         <a class="code" href="structiCollider.html">iCollider</a> *collider,
-<a name="l00380"></a>00380         <a class="code" href="structiSector.html">iSector</a>* sector,
-<a name="l00381"></a>00381         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* transform,
-<a name="l00382"></a>00382         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* old_transform);
-<a name="l00383"></a>00383 
-<a name="l00405"></a>00405   <span class="keywordtype">int</span> CollisionDetectIterative (
-<a name="l00406"></a>00406         <a class="code" href="structiCollider.html">iCollider</a> *collider,
-<a name="l00407"></a>00407         <a class="code" href="structiSector.html">iSector</a>* sector,
-<a name="l00408"></a>00408         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* transform,
-<a name="l00409"></a>00409         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* old_transform, <a class="code" href="classcsVector3.html">csVector3</a>&amp; maxmove);
-<a name="l00410"></a>00410   <span class="keywordtype">bool</span> MoveV (<span class="keywordtype">float</span> delta, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; velBody);
-<a name="l00411"></a>00411   <span class="keywordtype">bool</span> RotateV (<span class="keywordtype">float</span> delta, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; angularVelocity);
-<a name="l00412"></a>00412   <span class="keywordtype">void</span> InitializeColliders (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
-<a name="l00413"></a>00413         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
-<a name="l00414"></a>00414 
-<a name="l00415"></a>00415 <span class="keyword">public</span>:
-<a name="l00417"></a>00417   csColliderActor ();
-<a name="l00418"></a>00418 
-<a name="l00420"></a><a class="code" href="classcsColliderActor.html#a1">00420</a>   <span class="keywordtype">void</span> SetCollideSystem (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys)
-<a name="l00421"></a>00421   {
-<a name="l00422"></a>00422     csColliderActor::cdsys = cdsys;
-<a name="l00423"></a>00423   }
-<a name="l00424"></a>00424 
-<a name="l00426"></a><a class="code" href="classcsColliderActor.html#a2">00426</a>   <span class="keywordtype">void</span> SetEngine (<a class="code" href="structiEngine.html">iEngine</a>* engine)
-<a name="l00427"></a>00427   {
-<a name="l00428"></a>00428     csColliderActor::engine = engine;
-<a name="l00429"></a>00429   }
-<a name="l00430"></a>00430 
-<a name="l00440"></a>00440   <span class="keywordtype">void</span> InitializeColliders (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
-<a name="l00441"></a>00441         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
-<a name="l00442"></a>00442 
-<a name="l00454"></a>00454   <span class="keywordtype">void</span> InitializeColliders (<a class="code" href="structiCamera.html">iCamera</a>* camera, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
-<a name="l00455"></a>00455         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
-<a name="l00456"></a>00456 
-<a name="l00460"></a><a class="code" href="classcsColliderActor.html#a5">00460</a>   <span class="keywordtype">void</span> SetGravity (<span class="keywordtype">float</span> g)
-<a name="l00461"></a>00461   {
-<a name="l00462"></a>00462     gravity = g;
-<a name="l00463"></a>00463     velWorld.y = 0;
-<a name="l00464"></a>00464   }
-<a name="l00465"></a>00465 
-<a name="l00469"></a><a class="code" href="classcsColliderActor.html#a6">00469</a>   <span class="keywordtype">float</span> GetGravity ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> gravity; }
-<a name="l00470"></a>00470 
-<a name="l00474"></a><a class="code" href="classcsColliderActor.html#a7">00474</a>   <span class="keywordtype">bool</span> IsOnGround ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> onground; }
-<a name="l00475"></a>00475 
-<a name="l00479"></a><a class="code" href="classcsColliderActor.html#a8">00479</a>   <span class="keywordtype">void</span> SetOnGround (<span class="keywordtype">bool</span> og) { onground = og; }
-<a name="l00480"></a>00480 
-<a name="l00484"></a><a class="code" href="classcsColliderActor.html#a9">00484</a>   <span class="keywordtype">bool</span> HasCD ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> cd; }
-<a name="l00485"></a>00485 
-<a name="l00489"></a><a class="code" href="classcsColliderActor.html#a10">00489</a>   <span class="keywordtype">void</span> SetCD (<span class="keywordtype">bool</span> c) { cd = c; }
-<a name="l00490"></a>00490 
-<a name="l00494"></a><a class="code" href="classcsColliderActor.html#a11">00494</a>   <span class="keywordtype">bool</span> CheckRevertMove ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> revertMove; }
-<a name="l00495"></a>00495 
-<a name="l00507"></a>00507   <span class="keywordtype">bool</span> Move (<span class="keywordtype">float</span> delta, <span class="keywordtype">float</span> speed, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; velBody,
-<a name="l00508"></a>00508         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; angularVelocity);
-<a name="l00509"></a>00509 
-<a name="l00514"></a><a class="code" href="classcsColliderActor.html#a13">00514</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetRotation () { <span class="keywordflow">return</span> rotation; }
-<a name="l00515"></a>00515 
-<a name="l00520"></a>00520   <span class="keywordtype">void</span> SetRotation (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; rot);
-<a name="l00521"></a>00521 
-<a name="l00527"></a>00527   <span class="keywordtype">bool</span> AdjustForCollisions (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; oldpos,
-<a name="l00528"></a>00528         <a class="code" href="classcsVector3.html">csVector3</a>&amp; newpos,
-<a name="l00529"></a>00529         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vel,
-<a name="l00530"></a>00530         <span class="keywordtype">float</span> delta);
-<a name="l00531"></a>00531 };
-<a name="l00532"></a>00532 
-<a name="l00533"></a>00533 <span class="preprocessor">#endif // __CS_COLLIDER_H__</span>
+<a name="l00355"></a>00355   <span class="keywordtype">int</span> revertCount;
+<a name="l00356"></a>00356 
+<a name="l00380"></a>00380   <span class="keywordtype">int</span> CollisionDetect (
+<a name="l00381"></a>00381         <a class="code" href="structiCollider.html">iCollider</a> *collider,
+<a name="l00382"></a>00382         <a class="code" href="structiSector.html">iSector</a>* sector,
+<a name="l00383"></a>00383         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* transform,
+<a name="l00384"></a>00384         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* old_transform);
+<a name="l00385"></a>00385 
+<a name="l00407"></a>00407   <span class="keywordtype">int</span> CollisionDetectIterative (
+<a name="l00408"></a>00408         <a class="code" href="structiCollider.html">iCollider</a> *collider,
+<a name="l00409"></a>00409         <a class="code" href="structiSector.html">iSector</a>* sector,
+<a name="l00410"></a>00410         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* transform,
+<a name="l00411"></a>00411         <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>* old_transform, <a class="code" href="classcsVector3.html">csVector3</a>&amp; maxmove);
+<a name="l00412"></a>00412   <span class="keywordtype">bool</span> MoveV (<span class="keywordtype">float</span> delta, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; velBody);
+<a name="l00413"></a>00413   <span class="keywordtype">bool</span> RotateV (<span class="keywordtype">float</span> delta, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; angularVelocity);
+<a name="l00414"></a>00414   <span class="keywordtype">void</span> InitializeColliders (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
+<a name="l00415"></a>00415         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
+<a name="l00416"></a>00416 
+<a name="l00417"></a>00417 <span class="keyword">public</span>:
+<a name="l00419"></a>00419   csColliderActor ();
+<a name="l00420"></a>00420 
+<a name="l00422"></a><a class="code" href="classcsColliderActor.html#a1">00422</a>   <span class="keywordtype">void</span> SetCollideSystem (<a class="code" href="structiCollideSystem.html">iCollideSystem</a>* cdsys)
+<a name="l00423"></a>00423   {
+<a name="l00424"></a>00424     csColliderActor::cdsys = cdsys;
+<a name="l00425"></a>00425   }
+<a name="l00426"></a>00426 
+<a name="l00428"></a><a class="code" href="classcsColliderActor.html#a2">00428</a>   <span class="keywordtype">void</span> SetEngine (<a class="code" href="structiEngine.html">iEngine</a>* engine)
+<a name="l00429"></a>00429   {
+<a name="l00430"></a>00430     csColliderActor::engine = engine;
+<a name="l00431"></a>00431   }
+<a name="l00432"></a>00432 
+<a name="l00442"></a>00442   <span class="keywordtype">void</span> InitializeColliders (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
+<a name="l00443"></a>00443         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
+<a name="l00444"></a>00444 
+<a name="l00456"></a>00456   <span class="keywordtype">void</span> InitializeColliders (<a class="code" href="structiCamera.html">iCamera</a>* camera, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; legs,
+<a name="l00457"></a>00457         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; body, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; shift);
+<a name="l00458"></a>00458 
+<a name="l00462"></a><a class="code" href="classcsColliderActor.html#a5">00462</a>   <span class="keywordtype">void</span> SetGravity (<span class="keywordtype">float</span> g)
+<a name="l00463"></a>00463   {
+<a name="l00464"></a>00464     gravity = g;
+<a name="l00465"></a>00465     velWorld.y = 0;
+<a name="l00466"></a>00466   }
+<a name="l00467"></a>00467 
+<a name="l00471"></a><a class="code" href="classcsColliderActor.html#a6">00471</a>   <span class="keywordtype">float</span> GetGravity ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> gravity; }
+<a name="l00472"></a>00472 
+<a name="l00476"></a><a class="code" href="classcsColliderActor.html#a7">00476</a>   <span class="keywordtype">bool</span> IsOnGround ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> onground; }
+<a name="l00477"></a>00477 
+<a name="l00481"></a><a class="code" href="classcsColliderActor.html#a8">00481</a>   <span class="keywordtype">void</span> SetOnGround (<span class="keywordtype">bool</span> og) { onground = og; }
+<a name="l00482"></a>00482 
+<a name="l00486"></a><a class="code" href="classcsColliderActor.html#a9">00486</a>   <span class="keywordtype">bool</span> HasCD ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> cd; }
+<a name="l00487"></a>00487 
+<a name="l00491"></a><a class="code" href="classcsColliderActor.html#a10">00491</a>   <span class="keywordtype">void</span> SetCD (<span class="keywordtype">bool</span> c) { cd = c; }
+<a name="l00492"></a>00492 
+<a name="l00496"></a><a class="code" href="classcsColliderActor.html#a11">00496</a>   <span class="keywordtype">bool</span> CheckRevertMove ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> revertMove; }
+<a name="l00497"></a>00497 
+<a name="l00509"></a>00509   <span class="keywordtype">bool</span> Move (<span class="keywordtype">float</span> delta, <span class="keywordtype">float</span> speed, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; velBody,
+<a name="l00510"></a>00510         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; angularVelocity);
+<a name="l00511"></a>00511 
+<a name="l00516"></a><a class="code" href="classcsColliderActor.html#a13">00516</a>   <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetRotation () { <span class="keywordflow">return</span> rotation; }
+<a name="l00517"></a>00517 
+<a name="l00522"></a>00522   <span class="keywordtype">void</span> SetRotation (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; rot);
+<a name="l00523"></a>00523 
+<a name="l00529"></a>00529   <span class="keywordtype">bool</span> AdjustForCollisions (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; oldpos,
+<a name="l00530"></a>00530         <a class="code" href="classcsVector3.html">csVector3</a>&amp; newpos,
+<a name="l00531"></a>00531         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; vel,
+<a name="l00532"></a>00532         <span class="keywordtype">float</span> delta);
+<a name="l00533"></a>00533 };
+<a name="l00534"></a>00534 
+<a name="l00535"></a>00535 <span class="preprocessor">#endif // __CS_COLLIDER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.3-20050530 
 </small></address> </div></body> </html>
