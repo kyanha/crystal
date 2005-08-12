@@ -23,24 +23,24 @@ static char const metainfo_aws2[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.window.alternatemanager2</name>"
-"        <implementation>awsManager</implementation>"
+"        <implementation>awsManager2</implementation>"
 "        <description>Crystal Space alternate window manager version 2.0.alpha</description>"
 "      </class>      "
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef awsManager_FACTORY_REGISTER_DEFINED 
-  #define awsManager_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(awsManager) 
+  #ifndef awsManager2_FACTORY_REGISTER_DEFINED 
+  #define awsManager2_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(awsManager2) 
   #endif
 
 class aws2
 {
 SCF_REGISTER_STATIC_LIBRARY(aws2,metainfo_aws2)
-  #ifndef awsManager_FACTORY_REGISTERED 
-  #define awsManager_FACTORY_REGISTERED 
-    awsManager_StaticInit awsManager_static_init__; 
+  #ifndef awsManager2_FACTORY_REGISTERED 
+  #define awsManager2_FACTORY_REGISTERED 
+    awsManager2_StaticInit awsManager2_static_init__; 
   #endif
 public:
  aws2();
