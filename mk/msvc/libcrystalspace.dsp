@@ -1622,6 +1622,10 @@ SOURCE=..\..\libs\..\include\csutil\documentcommon.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\documenthelper.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\event.h
 # End Source File
 # Begin Source File
