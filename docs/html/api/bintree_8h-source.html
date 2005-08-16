@@ -64,7 +64,7 @@
 <a name="l00048"></a>00048   <span class="keyword">inline</span> Element* New (<a class="code" href="cstypes_8h.html#a13">uint32</a> key,
 <a name="l00049"></a>00049     Element *left = 0, Element *right = 0)
 <a name="l00050"></a>00050   {
-<a name="l00051"></a>00051     Element *e = Pool.<a class="code" href="classcsBlockAllocator.html#a4">Alloc</a> ();
+<a name="l00051"></a>00051     Element *e = Pool.<a class="code" href="classcsBlockAllocator.html#a0">Alloc</a> ();
 <a name="l00052"></a>00052     e-&gt;key = key;
 <a name="l00053"></a>00053     e-&gt;left = left;
 <a name="l00054"></a>00054     e-&gt;right = right;
@@ -74,7 +74,7 @@
 <a name="l00058"></a>00058   <span class="keyword">inline</span> Element* New (<a class="code" href="cstypes_8h.html#a13">uint32</a> key, <span class="keyword">const</span> T &amp;value,
 <a name="l00059"></a>00059     Element *left = 0, Element *right = 0)
 <a name="l00060"></a>00060   {
-<a name="l00061"></a>00061     Element *e = Pool.<a class="code" href="classcsBlockAllocator.html#a4">Alloc</a> ();
+<a name="l00061"></a>00061     Element *e = Pool.<a class="code" href="classcsBlockAllocator.html#a0">Alloc</a> ();
 <a name="l00062"></a>00062     e-&gt;key = key;
 <a name="l00063"></a>00063     e-&gt;value = value;
 <a name="l00064"></a>00064     e-&gt;left = left;
@@ -86,9 +86,9 @@
 <a name="l00070"></a>00070   {
 <a name="l00071"></a>00071     dest-&gt;key = src-&gt;key;
 <a name="l00072"></a>00072     dest-&gt;value = src-&gt;value;
-<a name="l00073"></a>00073     <span class="keywordflow">if</span> (src-&gt;left) Copy (dest-&gt;left = Pool.<a class="code" href="classcsBlockAllocator.html#a4">Alloc</a> (), src-&gt;left);
+<a name="l00073"></a>00073     <span class="keywordflow">if</span> (src-&gt;left) Copy (dest-&gt;left = Pool.<a class="code" href="classcsBlockAllocator.html#a0">Alloc</a> (), src-&gt;left);
 <a name="l00074"></a>00074     <span class="keywordflow">else</span> dest-&gt;left = 0;
-<a name="l00075"></a>00075     <span class="keywordflow">if</span> (src-&gt;right) Copy (dest-&gt;right = Pool.<a class="code" href="classcsBlockAllocator.html#a4">Alloc</a> (), src-&gt;right);
+<a name="l00075"></a>00075     <span class="keywordflow">if</span> (src-&gt;right) Copy (dest-&gt;right = Pool.<a class="code" href="classcsBlockAllocator.html#a0">Alloc</a> (), src-&gt;right);
 <a name="l00076"></a>00076     <span class="keywordflow">else</span> dest-&gt;right = 0;
 <a name="l00077"></a>00077   }
 <a name="l00078"></a>00078 
@@ -96,17 +96,17 @@
 <a name="l00080"></a>00080   {
 <a name="l00081"></a>00081     <span class="keywordflow">if</span> (e-&gt;left) DeleteTree (e-&gt;left);
 <a name="l00082"></a>00082     <span class="keywordflow">if</span> (e-&gt;right) DeleteTree (e-&gt;right);
-<a name="l00083"></a>00083     Pool.<a class="code" href="classcsBlockAllocator.html#a5">Free</a> (e);
+<a name="l00083"></a>00083     Pool.<a class="code" href="classcsBlockAllocator.html#a4">Free</a> (e);
 <a name="l00084"></a>00084   }
 <a name="l00085"></a>00085 
 <a name="l00086"></a>00086   Element* Populate (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;uint32&gt;</a> &amp;keys, <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> &amp;values)
 <a name="l00087"></a>00087   {
-<a name="l00088"></a>00088     <span class="keywordtype">int</span> len = keys.<a class="code" href="classcsArray.html#a5">Length</a> ();
+<a name="l00088"></a>00088     <span class="keywordtype">int</span> len = keys.<a class="code" href="classcsArray.html#a23">Length</a> ();
 <a name="l00089"></a>00089     <span class="keywordflow">if</span> (! len) <span class="keywordflow">return</span> 0;
 <a name="l00090"></a>00090     <span class="keywordtype">int</span> mid = len / 2;
 <a name="l00091"></a>00091     <span class="keywordflow">return</span> New (keys[mid], values[mid],
-<a name="l00092"></a>00092       Populate (keys.<a class="code" href="classcsArray.html#a23">Section</a> (0, mid-1), values.<a class="code" href="classcsArray.html#a23">Section</a> (0, mid-1)),
-<a name="l00093"></a>00093       Populate (keys.<a class="code" href="classcsArray.html#a23">Section</a> (mid+1, len-1), values.<a class="code" href="classcsArray.html#a23">Section</a> (mid+1, len-1)));
+<a name="l00092"></a>00092       Populate (keys.<a class="code" href="classcsArray.html#a31">Section</a> (0, mid-1), values.<a class="code" href="classcsArray.html#a31">Section</a> (0, mid-1)),
+<a name="l00093"></a>00093       Populate (keys.<a class="code" href="classcsArray.html#a31">Section</a> (mid+1, len-1), values.<a class="code" href="classcsArray.html#a31">Section</a> (mid+1, len-1)));
 <a name="l00094"></a>00094   }
 <a name="l00095"></a>00095 
 <a name="l00097"></a>00097   <span class="keyword">typedef</span> <span class="keywordtype">void</span> TraverseFunc (<a class="code" href="cstypes_8h.html#a13">uint32</a> key, <span class="keyword">const</span> T &amp;value, <span class="keywordtype">void</span> *some);
@@ -119,29 +119,29 @@
 <a name="l00104"></a>00104   }
 <a name="l00105"></a>00105 
 <a name="l00106"></a>00106 <span class="keyword">public</span>:
-<a name="l00111"></a><a class="code" href="classcsTree.html#a0">00111</a>   <a class="code" href="classcsTree.html#a0">csTree</a> (<span class="keywordtype">int</span> blocksize = 15)
+<a name="l00111"></a><a class="code" href="classcsTree.html#a1">00111</a>   <a class="code" href="classcsTree.html#a1">csTree</a> (<span class="keywordtype">int</span> blocksize = 15)
 <a name="l00112"></a>00112     : Pool (blocksize), BS (blocksize), Size (0), Root (0) {}
 <a name="l00113"></a>00113 
-<a name="l00115"></a><a class="code" href="classcsTree.html#a1">00115</a>   <a class="code" href="classcsTree.html#a0">csTree</a> (<span class="keyword">const</span> <a class="code" href="classcsTree.html">csTree&lt;T&gt;</a> &amp;other)
+<a name="l00115"></a><a class="code" href="classcsTree.html#a0">00115</a>   <a class="code" href="classcsTree.html#a1">csTree</a> (<span class="keyword">const</span> <a class="code" href="classcsTree.html">csTree&lt;T&gt;</a> &amp;other)
 <a name="l00116"></a>00116     : Pool (other.BS), BS (other.BS), Size (other.Size)
 <a name="l00117"></a>00117   {
-<a name="l00118"></a>00118     <span class="keywordflow">if</span> (other.<a class="code" href="classcsTree.html#r0">Root</a>) Copy (Root = Pool.<a class="code" href="classcsBlockAllocator.html#a4">Alloc</a> (), other.<a class="code" href="classcsTree.html#r0">Root</a>);
+<a name="l00118"></a>00118     <span class="keywordflow">if</span> (other.<a class="code" href="classcsTree.html#r2">Root</a>) Copy (Root = Pool.<a class="code" href="classcsBlockAllocator.html#a0">Alloc</a> (), other.<a class="code" href="classcsTree.html#r2">Root</a>);
 <a name="l00119"></a>00119     <span class="keywordflow">else</span> Root = 0;
 <a name="l00120"></a>00120   }
 <a name="l00121"></a>00121 
-<a name="l00123"></a><a class="code" href="classcsTree.html#a2">00123</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTree.html#a2">PopulateWith</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;uint32&gt;</a> &amp;keys, <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> &amp;values)
+<a name="l00123"></a><a class="code" href="classcsTree.html#a7">00123</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTree.html#a7">PopulateWith</a> (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;uint32&gt;</a> &amp;keys, <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T&gt;</a> &amp;values)
 <a name="l00124"></a>00124   {
 <a name="l00125"></a>00125     <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a> (! Root);
-<a name="l00126"></a>00126     <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a> (keys.<a class="code" href="classcsArray.html#a5">Length</a> () == values.<a class="code" href="classcsArray.html#a5">Length</a> ());
+<a name="l00126"></a>00126     <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a> (keys.<a class="code" href="classcsArray.html#a23">Length</a> () == values.<a class="code" href="classcsArray.html#a23">Length</a> ());
 <a name="l00127"></a>00127     Root = Populate (keys, values);
 <a name="l00128"></a>00128   }
 <a name="l00129"></a>00129 
-<a name="l00131"></a><a class="code" href="classcsTree.html#a3">00131</a>   <span class="keywordtype">void</span> Traverse (TraverseFunc *func, <span class="keywordtype">void</span> *some)<span class="keyword"> const</span>
+<a name="l00131"></a><a class="code" href="classcsTree.html#a9">00131</a>   <span class="keywordtype">void</span> Traverse (TraverseFunc *func, <span class="keywordtype">void</span> *some)<span class="keyword"> const</span>
 <a name="l00132"></a>00132 <span class="keyword">  </span>{
 <a name="l00133"></a>00133     <span class="keywordflow">if</span> (Root) Traverse (Root, func, some);
 <a name="l00134"></a>00134   }
 <a name="l00135"></a>00135 
-<a name="l00137"></a><a class="code" href="classcsTree.html#a4">00137</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTree.html#a4">Put</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> key, <span class="keyword">const</span> T &amp;value)
+<a name="l00137"></a><a class="code" href="classcsTree.html#a8">00137</a>   <span class="keywordtype">void</span> <a class="code" href="classcsTree.html#a8">Put</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> key, <span class="keyword">const</span> T &amp;value)
 <a name="l00138"></a>00138   {
 <a name="l00139"></a>00139     <span class="keywordflow">if</span> (! Root)
 <a name="l00140"></a>00140     {
@@ -211,7 +211,7 @@
 <a name="l00205"></a>00205       <span class="keywordflow">else</span> <span class="keywordflow">return</span> e-&gt;value;
 <a name="l00206"></a>00206   }
 <a name="l00207"></a>00207 
-<a name="l00209"></a><a class="code" href="classcsTree.html#a6">00209</a>   <span class="keyword">const</span> T&amp; <a class="code" href="classcsTree.html#a5">Find</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> key)<span class="keyword"> const</span>
+<a name="l00209"></a><a class="code" href="classcsTree.html#a4">00209</a>   <span class="keyword">const</span> T&amp; <a class="code" href="classcsTree.html#a5">Find</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> key)<span class="keyword"> const</span>
 <a name="l00210"></a>00210 <span class="keyword">  </span>{
 <a name="l00211"></a>00211     <span class="keyword">static</span> <span class="keyword">const</span> T zero (0);
 <a name="l00212"></a>00212     <span class="keywordflow">if</span> (! Root) <span class="keywordflow">return</span> zero;
@@ -230,12 +230,12 @@
 <a name="l00225"></a>00225       <span class="keywordflow">else</span> <span class="keywordflow">return</span> e-&gt;value;
 <a name="l00226"></a>00226   }
 <a name="l00227"></a>00227 
-<a name="l00229"></a><a class="code" href="classcsTree.html#a7">00229</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsTree.html#a7">Delete</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> key)
+<a name="l00229"></a><a class="code" href="classcsTree.html#a2">00229</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsTree.html#a2">Delete</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> key)
 <a name="l00230"></a>00230   {
 <a name="l00231"></a>00231     <span class="keywordflow">if</span> (! Root) <span class="keywordflow">return</span> <span class="keyword">false</span>;
 <a name="l00232"></a>00232     <span class="keywordflow">if</span> (Root-&gt;key == key)
 <a name="l00233"></a>00233     {
-<a name="l00234"></a>00234       Pool.<a class="code" href="classcsBlockAllocator.html#a5">Free</a> (Root);
+<a name="l00234"></a>00234       Pool.<a class="code" href="classcsBlockAllocator.html#a4">Free</a> (Root);
 <a name="l00235"></a>00235       Root = 0;
 <a name="l00236"></a>00236       <span class="keywordflow">return</span> <span class="keyword">true</span>;
 <a name="l00237"></a>00237     }
@@ -272,13 +272,13 @@
 <a name="l00268"></a>00268             promoteold-&gt;left = 0;
 <a name="l00269"></a>00269             e-&gt;key = promote-&gt;key;
 <a name="l00270"></a>00270             e-&gt;value = promote-&gt;value;
-<a name="l00271"></a>00271             Pool.<a class="code" href="classcsBlockAllocator.html#a5">Free</a> (promote);
+<a name="l00271"></a>00271             Pool.<a class="code" href="classcsBlockAllocator.html#a4">Free</a> (promote);
 <a name="l00272"></a>00272           }
 <a name="l00273"></a>00273           <span class="keywordflow">else</span>
 <a name="l00274"></a>00274           {
 <a name="l00275"></a>00275             <span class="keywordflow">if</span> (left) old-&gt;left = e-&gt;left;
 <a name="l00276"></a>00276             <span class="keywordflow">else</span> old-&gt;right = e-&gt;left;
-<a name="l00277"></a>00277             Pool.<a class="code" href="classcsBlockAllocator.html#a5">Free</a> (e);
+<a name="l00277"></a>00277             Pool.<a class="code" href="classcsBlockAllocator.html#a4">Free</a> (e);
 <a name="l00278"></a>00278           }
 <a name="l00279"></a>00279         }
 <a name="l00280"></a>00280         <span class="keywordflow">else</span>
@@ -293,21 +293,21 @@
 <a name="l00289"></a>00289             <span class="keywordflow">if</span> (left) old-&gt;left = 0;
 <a name="l00290"></a>00290             <span class="keywordflow">else</span> old-&gt;right = 0;
 <a name="l00291"></a>00291           }
-<a name="l00292"></a>00292           Pool.<a class="code" href="classcsBlockAllocator.html#a5">Free</a> (e);
+<a name="l00292"></a>00292           Pool.<a class="code" href="classcsBlockAllocator.html#a4">Free</a> (e);
 <a name="l00293"></a>00293         }
 <a name="l00294"></a>00294         Size--;
 <a name="l00295"></a>00295         <span class="keywordflow">return</span> <span class="keyword">true</span>;
 <a name="l00296"></a>00296       }
 <a name="l00297"></a>00297   }
 <a name="l00298"></a>00298 
-<a name="l00300"></a><a class="code" href="classcsTree.html#a8">00300</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsTree.html#a8">DeleteAll</a> ()
+<a name="l00300"></a><a class="code" href="classcsTree.html#a3">00300</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsTree.html#a3">DeleteAll</a> ()
 <a name="l00301"></a>00301   {
 <a name="l00302"></a>00302     <span class="keywordflow">if</span> (! Root) <span class="keywordflow">return</span> <span class="keyword">false</span>;
 <a name="l00303"></a>00303     DeleteTree (Root);
 <a name="l00304"></a>00304     <span class="keywordflow">return</span> <span class="keyword">true</span>;
 <a name="l00305"></a>00305   }
 <a name="l00306"></a>00306 
-<a name="l00308"></a><a class="code" href="classcsTree.html#a9">00308</a>   <span class="keywordtype">int</span> <a class="code" href="classcsTree.html#a9">GetSize</a> ()<span class="keyword"> const</span>
+<a name="l00308"></a><a class="code" href="classcsTree.html#a6">00308</a>   <span class="keywordtype">int</span> <a class="code" href="classcsTree.html#a6">GetSize</a> ()<span class="keyword"> const</span>
 <a name="l00309"></a>00309 <span class="keyword">  </span>{
 <a name="l00310"></a>00310     <span class="keywordflow">return</span> Size;
 <a name="l00311"></a>00311   }

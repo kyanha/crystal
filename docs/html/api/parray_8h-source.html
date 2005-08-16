@@ -81,50 +81,50 @@
 <a name="l00077"></a><a class="code" href="classcsPDelArray.html#a0">00077</a>   <a class="code" href="classcsPDelArray.html">csPDelArray</a> (<span class="keywordtype">int</span> ilimit = 0, <span class="keywordtype">int</span> ithreshold = 0) :
 <a name="l00078"></a>00078     <a class="code" href="classcsArray.html">csArray</a>&lt;T*, <a class="code" href="classcsPDelArrayElementHandler.html">csPDelArrayElementHandler</a>&lt;T*&gt; &gt; (ilimit, ithreshold) {}
 <a name="l00079"></a>00079 
-<a name="l00085"></a><a class="code" href="classcsPDelArray.html#a1">00085</a>   T* <a class="code" href="classcsPDelArray.html#a1">GetAndClear</a> (size_t n)
+<a name="l00085"></a><a class="code" href="classcsPDelArray.html#a2">00085</a>   T* <a class="code" href="classcsPDelArray.html#a2">GetAndClear</a> (size_t n)
 <a name="l00086"></a>00086   {
-<a name="l00087"></a>00087     T* ret = this-&gt;<a class="code" href="classcsArray.html#a10">Get</a> (n); <span class="comment">// see *1*</span>
+<a name="l00087"></a>00087     T* ret = this-&gt;<a class="code" href="classcsArray.html#a15">Get</a> (n); <span class="comment">// see *1*</span>
 <a name="l00088"></a>00088     this-&gt;<a class="code" href="classcsArray.html#b0">InitRegion</a> (n, 1);
 <a name="l00089"></a>00089     <span class="keywordflow">return</span> ret;
 <a name="l00090"></a>00090   }
 <a name="l00091"></a>00091 
-<a name="l00097"></a><a class="code" href="classcsPDelArray.html#a2">00097</a>   T* <a class="code" href="classcsPDelArray.html#a2">Extract</a> (size_t n)
+<a name="l00097"></a><a class="code" href="classcsPDelArray.html#a1">00097</a>   T* <a class="code" href="classcsPDelArray.html#a1">Extract</a> (size_t n)
 <a name="l00098"></a>00098   {
-<a name="l00099"></a>00099     T* ret = <a class="code" href="classcsPDelArray.html#a1">GetAndClear</a> (n);
-<a name="l00100"></a>00100     this-&gt;<a class="code" href="classcsArray.html#a36">DeleteIndex</a> (n); <span class="comment">// see *1*</span>
+<a name="l00099"></a>00099     T* ret = <a class="code" href="classcsPDelArray.html#a2">GetAndClear</a> (n);
+<a name="l00100"></a>00100     this-&gt;<a class="code" href="classcsArray.html#a7">DeleteIndex</a> (n); <span class="comment">// see *1*</span>
 <a name="l00101"></a>00101     <span class="keywordflow">return</span> ret;
 <a name="l00102"></a>00102   }
 <a name="l00103"></a>00103 
 <a name="l00105"></a><a class="code" href="classcsPDelArray.html#a3">00105</a>   T* <a class="code" href="classcsPDelArray.html#a3">Pop</a> ()
 <a name="l00106"></a>00106   {
 <a name="l00107"></a>00107     <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a> (this-&gt;Length () &gt; 0);
-<a name="l00108"></a>00108     T* ret = <a class="code" href="classcsPDelArray.html#a1">GetAndClear</a> (this-&gt;Length () - 1); <span class="comment">// see *1*</span>
-<a name="l00109"></a>00109     <a class="code" href="classcsArray.html#a31">Truncate</a> (this-&gt;Length () - 1);
+<a name="l00108"></a>00108     T* ret = <a class="code" href="classcsPDelArray.html#a2">GetAndClear</a> (this-&gt;Length () - 1); <span class="comment">// see *1*</span>
+<a name="l00109"></a>00109     <a class="code" href="classcsArray.html#a40">Truncate</a> (this-&gt;Length () - 1);
 <a name="l00110"></a>00110     <span class="keywordflow">return</span> ret;
 <a name="l00111"></a>00111   }
 <a name="l00112"></a>00112 
-<a name="l00115"></a><a class="code" href="classcsPDelArray.html#a4">00115</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPDelArray.html#a4">SetLength</a> (size_t n, T <span class="keyword">const</span> &amp;what)
+<a name="l00115"></a><a class="code" href="classcsPDelArray.html#a6">00115</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPDelArray.html#a6">SetLength</a> (size_t n, T <span class="keyword">const</span> &amp;what)
 <a name="l00116"></a>00116   {
-<a name="l00117"></a>00117     <span class="keywordflow">if</span> (n &lt;= this-&gt;<a class="code" href="classcsArray.html#a5">Length</a> ()) <span class="comment">// see *1*</span>
+<a name="l00117"></a>00117     <span class="keywordflow">if</span> (n &lt;= this-&gt;<a class="code" href="classcsArray.html#a23">Length</a> ()) <span class="comment">// see *1*</span>
 <a name="l00118"></a>00118     {
-<a name="l00119"></a>00119       this-&gt;<a class="code" href="classcsArray.html#a31">Truncate</a> (n);
+<a name="l00119"></a>00119       this-&gt;<a class="code" href="classcsArray.html#a40">Truncate</a> (n);
 <a name="l00120"></a>00120     }
 <a name="l00121"></a>00121     <span class="keywordflow">else</span>
 <a name="l00122"></a>00122     {
-<a name="l00123"></a>00123       size_t old_len = this-&gt;<a class="code" href="classcsArray.html#a5">Length</a> (); <span class="comment">// see *1*</span>
-<a name="l00124"></a>00124       <a class="code" href="classcsArray.html#z503_0">superclass::SetLength</a> (n);
-<a name="l00125"></a>00125       <span class="keywordflow">for</span> (size_t i = old_len ; i &lt; n ; i++) this-&gt;<a class="code" href="classcsArray.html#a10">Get</a>(i) = <span class="keyword">new</span> T (what);
+<a name="l00123"></a>00123       size_t old_len = this-&gt;<a class="code" href="classcsArray.html#a23">Length</a> (); <span class="comment">// see *1*</span>
+<a name="l00124"></a>00124       <a class="code" href="classcsArray.html#z503_1">superclass::SetLength</a> (n);
+<a name="l00125"></a>00125       <span class="keywordflow">for</span> (size_t i = old_len ; i &lt; n ; i++) this-&gt;<a class="code" href="classcsArray.html#a15">Get</a>(i) = <span class="keyword">new</span> T (what);
 <a name="l00126"></a>00126     }
 <a name="l00127"></a>00127   }
 <a name="l00128"></a>00128 
-<a name="l00130"></a><a class="code" href="classcsPDelArray.html#a5">00130</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPDelArray.html#a4">SetLength</a> (size_t n, T* <span class="keyword">const</span> &amp;w)
+<a name="l00130"></a><a class="code" href="classcsPDelArray.html#a5">00130</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPDelArray.html#a6">SetLength</a> (size_t n, T* <span class="keyword">const</span> &amp;w)
 <a name="l00131"></a>00131   {
-<a name="l00132"></a>00132     <a class="code" href="classcsArray.html#z503_0">superclass::SetLength</a>(n, w);
+<a name="l00132"></a>00132     <a class="code" href="classcsArray.html#z503_1">superclass::SetLength</a>(n, w);
 <a name="l00133"></a>00133   }
 <a name="l00134"></a>00134 
-<a name="l00136"></a><a class="code" href="classcsPDelArray.html#a6">00136</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPDelArray.html#a4">SetLength</a> (size_t n)
+<a name="l00136"></a><a class="code" href="classcsPDelArray.html#a4">00136</a>   <span class="keywordtype">void</span> <a class="code" href="classcsPDelArray.html#a6">SetLength</a> (size_t n)
 <a name="l00137"></a>00137   {
-<a name="l00138"></a>00138     <a class="code" href="classcsArray.html#z503_0">superclass::SetLength</a>(n);
+<a name="l00138"></a>00138     <a class="code" href="classcsArray.html#z503_1">superclass::SetLength</a>(n);
 <a name="l00139"></a>00139   }
 <a name="l00140"></a>00140 };
 <a name="l00141"></a>00141 

@@ -32,28 +32,28 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a0">AddEmitter</a> (float weight, <a class="el" href="structiEmitGen3D.html">iEmitGen3D</a> *emit)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">add a weighted emitter to the mix  <a href="#a0"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a1">RemoveEmitter</a> (int num)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a1">AdjustEmitterWeight</a> (int num, float weight)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">removes an emitter from the mix given a zero based emitter number.  <a href="#a1"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a2">GetTotalWeight</a> ()=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">adjust the weight of an emitter given a zero based emitter number Use <a class="el" href="structiEmitMix.html#a3">GetEmitterCount()</a> and <a class="el" href="structiEmitMix.html#a2">GetContent()</a> to enumerate through the mix and find the index of an emitter.  <a href="#a1"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a2">GetContent</a> (int num, float &amp;weight, <a class="el" href="structiEmitGen3D.html">iEmitGen3D</a> *&amp;emit)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">get the total weight in this mix  <a href="#a2"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">get content, returns emitters and their weight by a number (0..number-1)  <a href="#a2"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a3">GetEmitterCount</a> ()=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">get the number of emitters in this mix  <a href="#a3"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a4">AdjustEmitterWeight</a> (int num, float weight)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a4">GetTotalWeight</a> ()=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">adjust the weight of an emitter given a zero based emitter number Use <a class="el" href="structiEmitMix.html#a3">GetEmitterCount()</a> and <a class="el" href="structiEmitMix.html#a5">GetContent()</a> to enumerate through the mix and find the index of an emitter.  <a href="#a4"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a5">GetContent</a> (int num, float &amp;weight, <a class="el" href="structiEmitGen3D.html">iEmitGen3D</a> *&amp;emit)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">get the total weight in this mix  <a href="#a4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEmitMix.html#a5">RemoveEmitter</a> (int num)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">get content, returns emitters and their weight by a number (0..number-1)  <a href="#a5"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">removes an emitter from the mix given a zero based emitter number.  <a href="#a5"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Mix value emitter - returns a weighted random mix of other emitters. 
 <p>
 Main creators of instances implementing this interface: <ul>
 <li>
-<a class="el" href="structiEmitFactoryState.html#a4">iEmitFactoryState::CreateMix()</a> </li>
+<a class="el" href="structiEmitFactoryState.html#a6">iEmitFactoryState::CreateMix()</a> </li>
 </ul>
 Main users of this interface: <ul>
 <li>
@@ -103,7 +103,7 @@ add a weighted emitter to the mix
     </td>
   </tr>
 </table>
-<a class="anchor" name="a4"></a><!-- doxytag: member="iEmitMix::AdjustEmitterWeight" ref="a4" args="(int num, float weight)=0" --><p>
+<a class="anchor" name="a1"></a><!-- doxytag: member="iEmitMix::AdjustEmitterWeight" ref="a1" args="(int num, float weight)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -137,12 +137,12 @@ add a weighted emitter to the mix
     <td>
 
 <p>
-adjust the weight of an emitter given a zero based emitter number Use <a class="el" href="structiEmitMix.html#a3">GetEmitterCount()</a> and <a class="el" href="structiEmitMix.html#a5">GetContent()</a> to enumerate through the mix and find the index of an emitter. 
+adjust the weight of an emitter given a zero based emitter number Use <a class="el" href="structiEmitMix.html#a3">GetEmitterCount()</a> and <a class="el" href="structiEmitMix.html#a2">GetContent()</a> to enumerate through the mix and find the index of an emitter. 
 <p>
     </td>
   </tr>
 </table>
-<a class="anchor" name="a5"></a><!-- doxytag: member="iEmitMix::GetContent" ref="a5" args="(int num, float &amp;weight, iEmitGen3D *&amp;emit)=0" --><p>
+<a class="anchor" name="a2"></a><!-- doxytag: member="iEmitMix::GetContent" ref="a2" args="(int num, float &amp;weight, iEmitGen3D *&amp;emit)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -216,7 +216,7 @@ get the number of emitters in this mix
     </td>
   </tr>
 </table>
-<a class="anchor" name="a2"></a><!-- doxytag: member="iEmitMix::GetTotalWeight" ref="a2" args="()=0" --><p>
+<a class="anchor" name="a4"></a><!-- doxytag: member="iEmitMix::GetTotalWeight" ref="a4" args="()=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -245,7 +245,7 @@ get the total weight in this mix
     </td>
   </tr>
 </table>
-<a class="anchor" name="a1"></a><!-- doxytag: member="iEmitMix::RemoveEmitter" ref="a1" args="(int num)=0" --><p>
+<a class="anchor" name="a5"></a><!-- doxytag: member="iEmitMix::RemoveEmitter" ref="a5" args="(int num)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -272,7 +272,7 @@ get the total weight in this mix
 <p>
 removes an emitter from the mix given a zero based emitter number. 
 <p>
-Use <a class="el" href="structiEmitMix.html#a3">GetEmitterCount()</a> and <a class="el" href="structiEmitMix.html#a5">GetContent()</a> to enumerate through the mix and find the index of an emitter.    </td>
+Use <a class="el" href="structiEmitMix.html#a3">GetEmitterCount()</a> and <a class="el" href="structiEmitMix.html#a2">GetContent()</a> to enumerate through the mix and find the index of an emitter.    </td>
   </tr>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>

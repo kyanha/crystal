@@ -54,22 +54,22 @@
 <a name="l00046"></a>00046   <a class="code" href="cstypes_8h.html#a27">uint</a> nextShrink;
 <a name="l00047"></a>00047   <a class="code" href="cstypes_8h.html#a27">uint</a> lastFrame, clearReq;
 <a name="l00048"></a>00048 <span class="keyword">public</span>:
-<a name="l00049"></a><a class="code" href="classcsFrameDataHolder.html#a0">00049</a>   <a class="code" href="classcsFrameDataHolder.html#a0">csFrameDataHolder</a> () : lastData(0), nextShrink(0), lastFrame((<a class="code" href="cstypes_8h.html#a27">uint</a>)~0), clearReq((<a class="code" href="cstypes_8h.html#a27">uint</a>)~0)
+<a name="l00049"></a><a class="code" href="classcsFrameDataHolder.html#a1">00049</a>   <a class="code" href="classcsFrameDataHolder.html#a1">csFrameDataHolder</a> () : lastData(0), nextShrink(0), lastFrame((<a class="code" href="cstypes_8h.html#a27">uint</a>)~0), clearReq((<a class="code" href="cstypes_8h.html#a27">uint</a>)~0)
 <a name="l00050"></a>00050   { }
-<a name="l00051"></a><a class="code" href="classcsFrameDataHolder.html#a1">00051</a>   <a class="code" href="classcsFrameDataHolder.html#a1">~csFrameDataHolder</a> () { }
+<a name="l00051"></a><a class="code" href="classcsFrameDataHolder.html#a3">00051</a>   <a class="code" href="classcsFrameDataHolder.html#a3">~csFrameDataHolder</a> () { }
 <a name="l00052"></a>00052 
 <a name="l00060"></a><a class="code" href="classcsFrameDataHolder.html#a2">00060</a>   T&amp; <a class="code" href="classcsFrameDataHolder.html#a2">GetUnusedData</a> (<span class="keywordtype">bool</span>&amp; created, <a class="code" href="cstypes_8h.html#a27">uint</a> frameNumber)
 <a name="l00061"></a>00061   {
 <a name="l00062"></a>00062     <span class="keywordflow">if</span> ((clearReq != (<a class="code" href="cstypes_8h.html#a27">uint</a>)~0) &amp;&amp; (clearReq != frameNumber))
-<a name="l00063"></a>00063       data.<a class="code" href="classcsArray.html#a30">DeleteAll</a>();
+<a name="l00063"></a>00063       data.<a class="code" href="classcsArray.html#a5">DeleteAll</a>();
 <a name="l00064"></a>00064     lastFrame = frameNumber;
 <a name="l00065"></a>00065     created = <span class="keyword">false</span>;
-<a name="l00066"></a>00066     <span class="keywordflow">if</span> ((data.<a class="code" href="classcsArray.html#a5">Length</a>() == 0) || (data[lastData].lastFrame == frameNumber))
+<a name="l00066"></a>00066     <span class="keywordflow">if</span> ((data.<a class="code" href="classcsArray.html#a23">Length</a>() == 0) || (data[lastData].lastFrame == frameNumber))
 <a name="l00067"></a>00067     {
 <a name="l00068"></a>00068       lastData = (size_t)-1;
 <a name="l00069"></a>00069       <span class="comment">//check the list</span>
 <a name="l00070"></a>00070       size_t i;
-<a name="l00071"></a>00071       <span class="keywordflow">for</span>(i = 0; i &lt; data.<a class="code" href="classcsArray.html#a5">Length</a> (); i++)
+<a name="l00071"></a>00071       <span class="keywordflow">for</span>(i = 0; i &lt; data.<a class="code" href="classcsArray.html#a23">Length</a> (); i++)
 <a name="l00072"></a>00072       {
 <a name="l00073"></a>00073         <span class="keywordflow">if</span> (data[i].lastFrame != frameNumber)
 <a name="l00074"></a>00074         {
@@ -79,7 +79,7 @@
 <a name="l00078"></a>00078       }
 <a name="l00079"></a>00079       <span class="keywordflow">if</span> (lastData == (size_t)-1)
 <a name="l00080"></a>00080       {
-<a name="l00081"></a>00081         data.<a class="code" href="classcsArray.html#z503_0">SetLength</a> ((lastData = data.<a class="code" href="classcsArray.html#a5">Length</a> ()) + 1);
+<a name="l00081"></a>00081         data.<a class="code" href="classcsArray.html#z503_1">SetLength</a> ((lastData = data.<a class="code" href="classcsArray.html#a23">Length</a> ()) + 1);
 <a name="l00082"></a>00082         created = <span class="keyword">true</span>;
 <a name="l00083"></a>00083         nextShrink = frameNumber + 1;
 <a name="l00084"></a>00084       }
@@ -96,7 +96,7 @@
 <a name="l00095"></a>00095     <span class="keywordflow">return</span> frameData.data;
 <a name="l00096"></a>00096   }
 <a name="l00097"></a>00097   
-<a name="l00106"></a><a class="code" href="classcsFrameDataHolder.html#a3">00106</a>   <span class="keywordtype">void</span> <a class="code" href="classcsFrameDataHolder.html#a3">Clear</a> ()
+<a name="l00106"></a><a class="code" href="classcsFrameDataHolder.html#a0">00106</a>   <span class="keywordtype">void</span> <a class="code" href="classcsFrameDataHolder.html#a0">Clear</a> ()
 <a name="l00107"></a>00107   {
 <a name="l00108"></a>00108     <span class="comment">// Don't clear just yet, rather, clear when we enter the next frame.</span>
 <a name="l00109"></a>00109     clearReq = lastFrame;
