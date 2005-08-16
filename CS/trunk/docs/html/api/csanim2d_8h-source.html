@@ -61,24 +61,24 @@
 <a name="l00049"></a>00049   <a class="code" href="classcsAnimationTemplate.html">csAnimationTemplate</a>();
 <a name="l00051"></a>00051   ~<a class="code" href="classcsAnimationTemplate.html">csAnimationTemplate</a>();
 <a name="l00052"></a>00052 
-<a name="l00054"></a><a class="code" href="classcsAnimationTemplate.html#a2">00054</a>   <span class="keyword">inline</span> size_t GetFrameCount()<span class="keyword"> const</span>
+<a name="l00054"></a><a class="code" href="classcsAnimationTemplate.html#a7">00054</a>   <span class="keyword">inline</span> size_t GetFrameCount()<span class="keyword"> const</span>
 <a name="l00055"></a>00055 <span class="keyword">  </span>{<span class="keywordflow">return</span> Frames.Length();}
-<a name="l00057"></a><a class="code" href="classcsAnimationTemplate.html#a3">00057</a>   <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a26">csTicks</a> GetLength()<span class="keyword"> const</span>
+<a name="l00057"></a><a class="code" href="classcsAnimationTemplate.html#a8">00057</a>   <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a26">csTicks</a> GetLength()<span class="keyword"> const</span>
 <a name="l00058"></a>00058 <span class="keyword">  </span>{ 
 <a name="l00059"></a>00059     <span class="keywordflow">if</span> (GetFrameCount() == 0)
 <a name="l00060"></a>00060       <span class="keywordflow">return</span> 0;
 <a name="l00061"></a>00061     <span class="keywordflow">else</span>
 <a name="l00062"></a>00062       <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a26">csTicks</a>)(FinishTimes.Get (GetFrameCount()-1)); 
 <a name="l00063"></a>00063   }
-<a name="l00065"></a><a class="code" href="classcsAnimationTemplate.html#a4">00065</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> AddFrame(<a class="code" href="cstypes_8h.html#a26">csTicks</a> Delay, <a class="code" href="classcsPixmap.html">csPixmap</a> *s)
+<a name="l00065"></a><a class="code" href="classcsAnimationTemplate.html#a2">00065</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> AddFrame(<a class="code" href="cstypes_8h.html#a26">csTicks</a> Delay, <a class="code" href="classcsPixmap.html">csPixmap</a> *s)
 <a name="l00066"></a>00066   {FinishTimes.Push(GetLength() + Delay); Frames.Push (s);}
-<a name="l00068"></a><a class="code" href="classcsAnimationTemplate.html#a5">00068</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> AddFrame(<a class="code" href="cstypes_8h.html#a26">csTicks</a> Delay, <a class="code" href="structiTextureHandle.html">iTextureHandle</a> *Tex)
+<a name="l00068"></a><a class="code" href="classcsAnimationTemplate.html#a1">00068</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> AddFrame(<a class="code" href="cstypes_8h.html#a26">csTicks</a> Delay, <a class="code" href="structiTextureHandle.html">iTextureHandle</a> *Tex)
 <a name="l00069"></a>00069   {AddFrame(Delay, <span class="keyword">new</span> <a class="code" href="classcsSimplePixmap.html">csSimplePixmap</a>(Tex));}
-<a name="l00071"></a><a class="code" href="classcsAnimationTemplate.html#a6">00071</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> AddFrame(<a class="code" href="cstypes_8h.html#a26">csTicks</a> Delay, <a class="code" href="structiTextureHandle.html">iTextureHandle</a> *Tex, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y,
+<a name="l00071"></a><a class="code" href="classcsAnimationTemplate.html#a0">00071</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> AddFrame(<a class="code" href="cstypes_8h.html#a26">csTicks</a> Delay, <a class="code" href="structiTextureHandle.html">iTextureHandle</a> *Tex, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y,
 <a name="l00072"></a>00072         <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h)
 <a name="l00073"></a>00073   {AddFrame(Delay, <span class="keyword">new</span> <a class="code" href="classcsSimplePixmap.html">csSimplePixmap</a>(Tex, x, y, w, h));}
 <a name="l00074"></a>00074 
-<a name="l00076"></a><a class="code" href="classcsAnimationTemplate.html#a7">00076</a>   <span class="keyword">inline</span> <a class="code" href="classcsPixmap.html">csPixmap</a> *GetFrame(size_t n)<span class="keyword"> const</span>
+<a name="l00076"></a><a class="code" href="classcsAnimationTemplate.html#a5">00076</a>   <span class="keyword">inline</span> <a class="code" href="classcsPixmap.html">csPixmap</a> *GetFrame(size_t n)<span class="keyword"> const</span>
 <a name="l00077"></a>00077 <span class="keyword">  </span>{<span class="keywordflow">return</span> Frames.Get(n);}
 <a name="l00079"></a>00079   <a class="code" href="classcsPixmap.html">csPixmap</a> *GetFrameByTime(<a class="code" href="cstypes_8h.html#a26">csTicks</a> Time);
 <a name="l00080"></a>00080 
@@ -93,14 +93,14 @@
 <a name="l00093"></a>00093   <span class="keyword">virtual</span> ~csAnimatedPixmap();
 <a name="l00094"></a>00094 
 <a name="l00095"></a>00095   <span class="comment">// Implementation of csPixmap.</span>
-<a name="l00096"></a>00096   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsPixmap.html#a1">Width</a>();
-<a name="l00097"></a>00097   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsPixmap.html#a2">Height</a>();
-<a name="l00098"></a>00098   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a> *<a class="code" href="classcsPixmap.html#a4">GetTextureHandle</a>();
-<a name="l00099"></a>00099   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsPixmap.html#a5">DrawScaled</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy, <span class="keywordtype">int</span> sw, <span class="keywordtype">int</span> sh,
+<a name="l00096"></a>00096   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsPixmap.html#a9">Width</a>();
+<a name="l00097"></a>00097   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsPixmap.html#a8">Height</a>();
+<a name="l00098"></a>00098   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a> *<a class="code" href="classcsPixmap.html#a7">GetTextureHandle</a>();
+<a name="l00099"></a>00099   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsPixmap.html#a3">DrawScaled</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy, <span class="keywordtype">int</span> sw, <span class="keywordtype">int</span> sh,
 <a name="l00100"></a>00100     <a class="code" href="cstypes_8h.html#a9">uint8</a> Alpha = 0);
-<a name="l00101"></a>00101   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsPixmap.html#a9">DrawTiled</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy, <span class="keywordtype">int</span> sw, <span class="keywordtype">int</span> sh,
+<a name="l00101"></a>00101   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsPixmap.html#a6">DrawTiled</a> (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* g3d, <span class="keywordtype">int</span> sx, <span class="keywordtype">int</span> sy, <span class="keywordtype">int</span> sw, <span class="keywordtype">int</span> sh,
 <a name="l00102"></a>00102     <span class="keywordtype">int</span> orgx, <span class="keywordtype">int</span> orgy, <a class="code" href="cstypes_8h.html#a9">uint8</a> Alpha = 0);
-<a name="l00103"></a>00103   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsPixmap.html#a3">Advance</a>(<a class="code" href="cstypes_8h.html#a26">csTicks</a> ElapsedTime);
+<a name="l00103"></a>00103   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsPixmap.html#a0">Advance</a>(<a class="code" href="cstypes_8h.html#a26">csTicks</a> ElapsedTime);
 <a name="l00104"></a>00104 
 <a name="l00105"></a>00105 <span class="keyword">private</span>:
 <a name="l00106"></a>00106   <a class="code" href="classcsAnimationTemplate.html">csAnimationTemplate</a> *Template;

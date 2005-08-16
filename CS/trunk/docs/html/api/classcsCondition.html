@@ -28,15 +28,15 @@
 <a href="classcsCondition-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsCondition.html#a0">Signal</a> (bool WakeAll=false)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual char const *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsCondition.html#a0">GetLastError</a> () const =0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wake up one or all threads waiting upon a change of condition.  <a href="#a0"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsCondition.html#a1">Wait</a> (<a class="el" href="classcsMutex.html">csMutex</a> *mutex, <a class="el" href="cstypes_8h.html#a26">csTicks</a> timeout=0)=0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the last error description, else null if there was none.  <a href="#a0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsCondition.html#a1">Signal</a> (bool WakeAll=false)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wait for some change of condition.  <a href="#a1"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual char const *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsCondition.html#a2">GetLastError</a> () const =0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wake up one or all threads waiting upon a change of condition.  <a href="#a1"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsCondition.html#a2">Wait</a> (<a class="el" href="classcsMutex.html">csMutex</a> *mutex, <a class="el" href="cstypes_8h.html#a26">csTicks</a> timeout=0)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the last error description, else null if there was none.  <a href="#a2"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wait for some change of condition.  <a href="#a2"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">static <a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="classcsCondition.html">csCondition</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsCondition.html#e0">Create</a> (<a class="el" href="cstypes_8h.html#a13">uint32</a> conditionAttributes=0)</td></tr>
 
@@ -78,7 +78,7 @@ Create a condition with specific attributes.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a2"></a><!-- doxytag: member="csCondition::GetLastError" ref="a2" args="() const =0" --><p>
+<a class="anchor" name="a0"></a><!-- doxytag: member="csCondition::GetLastError" ref="a0" args="() const =0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -107,7 +107,7 @@ Return the last error description, else null if there was none.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a0"></a><!-- doxytag: member="csCondition::Signal" ref="a0" args="(bool WakeAll=false)=0" --><p>
+<a class="anchor" name="a1"></a><!-- doxytag: member="csCondition::Signal" ref="a1" args="(bool WakeAll=false)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -137,7 +137,7 @@ Wake up one or all threads waiting upon a change of condition.
 If WakeAll is false, only one waiting thread will be awakened and given access to the associated mutex. If WakeAll is true, all threads waiting on the condition will be awakened and will vie for the associated mutex. Only one thread will win the mutex (thus gaining access to the condition); all other waiting threads will be re-suspended.    </td>
   </tr>
 </table>
-<a class="anchor" name="a1"></a><!-- doxytag: member="csCondition::Wait" ref="a1" args="(csMutex *mutex, csTicks timeout=0)=0" --><p>
+<a class="anchor" name="a2"></a><!-- doxytag: member="csCondition::Wait" ref="a2" args="(csMutex *mutex, csTicks timeout=0)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -173,14 +173,14 @@ If WakeAll is false, only one waiting thread will be awakened and given access t
 <p>
 Wait for some change of condition. 
 <p>
-Suspends the calling thread until some other thread invokes <a class="el" href="classcsCondition.html#a0">Signal()</a> to notify a change of condition. <dl compact><dt><b>Parameters:</b></dt><dd>
+Suspends the calling thread until some other thread invokes <a class="el" href="classcsCondition.html#a1">Signal()</a> to notify a change of condition. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>mutex</em>&nbsp;</td><td>The mutex to associate with this condition. The caller must already hold a lock on the mutex before calling <a class="el" href="classcsCondition.html#a1">Wait()</a>, and all threads waiting on the condition must be using the same mutex. The mutex must <b>not</b> be locked recursively within the same thread. When called, <a class="el" href="classcsCondition.html#a1">Wait()</a> releases the caller's lock on the mutex and suspends the caller's thread. Upon return from <a class="el" href="classcsCondition.html#a1">Wait()</a>, the caller's lock on the mutex is restored. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>mutex</em>&nbsp;</td><td>The mutex to associate with this condition. The caller must already hold a lock on the mutex before calling <a class="el" href="classcsCondition.html#a2">Wait()</a>, and all threads waiting on the condition must be using the same mutex. The mutex must <b>not</b> be locked recursively within the same thread. When called, <a class="el" href="classcsCondition.html#a2">Wait()</a> releases the caller's lock on the mutex and suspends the caller's thread. Upon return from <a class="el" href="classcsCondition.html#a2">Wait()</a>, the caller's lock on the mutex is restored. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>timeout</em>&nbsp;</td><td>The amount of time in milliseconds to wait for the the condition's state to change. If zero, the default, then it waits for a state change without timing-out. If non-zero, and the indicated time elapses without a state change being signaled, then false is returned. </td></tr>
   </table>
 </dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Returns true if the caller was wakened normally. Returns false if the wait timed out, or if invoked with a recursive mutex, which is an invalid invocation style. </dd></dl>
-<dl compact><dt><b>Remarks:</b></dt><dd>The reason that the mutex must not be locked recursively is because the implicit unlock performed by <a class="el" href="classcsCondition.html#a1">Wait()</a> <em>must</em> actually release the mutex in order for other threads to be able to satisfy the condition. With recursively locked mutexes, there is no guarantee that the one implicit unlock operation performed by <a class="el" href="classcsCondition.html#a1">Wait()</a> will actually release the mutex since it might have been locked multiple times within the same thread.</dd></dl>
+<dl compact><dt><b>Remarks:</b></dt><dd>The reason that the mutex must not be locked recursively is because the implicit unlock performed by <a class="el" href="classcsCondition.html#a2">Wait()</a> <em>must</em> actually release the mutex in order for other threads to be able to satisfy the condition. With recursively locked mutexes, there is no guarantee that the one implicit unlock operation performed by <a class="el" href="classcsCondition.html#a2">Wait()</a> will actually release the mutex since it might have been locked multiple times within the same thread.</dd></dl>
     </td>
   </tr>
 </table>
