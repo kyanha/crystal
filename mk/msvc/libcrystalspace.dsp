@@ -350,6 +350,10 @@ SOURCE=..\..\libs\csgfx\shadervarcontext.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\shadervarframeholder.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\xorpat.cpp
 # End Source File
 # Begin Source File
@@ -411,6 +415,10 @@ SOURCE=..\..\libs\csplugincommon\renderstep\basesteptype.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csplugincommon\renderstep\parserenderstep.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csplugincommon\shader\lightsvcache.cpp
 # End Source File
 # Begin Source File
 
@@ -1202,7 +1210,15 @@ SOURCE=..\..\libs\..\include\csgfx\shadervar.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csgfx\shadervarblockalloc.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csgfx\shadervarcontext.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csgfx\shadervarframeholder.h
 # End Source File
 # Begin Source File
 
@@ -1299,6 +1315,10 @@ SOURCE=..\..\libs\..\include\csplugincommon\renderstep\basesteptype.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csplugincommon\renderstep\parserenderstep.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csplugincommon\shader\lightsvcache.h
 # End Source File
 # Begin Source File
 
