@@ -318,6 +318,10 @@ SOURCE=..\..\libs\csgfx\inv_cmap.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgfx\lightsvcache.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgfx\memimage.cpp
 # End Source File
 # Begin Source File
@@ -415,10 +419,6 @@ SOURCE=..\..\libs\csplugincommon\renderstep\basesteptype.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csplugincommon\renderstep\parserenderstep.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csplugincommon\shader\lightsvcache.cpp
 # End Source File
 # Begin Source File
 
@@ -1174,6 +1174,10 @@ SOURCE=..\..\libs\..\include\csgfx\inv_cmap.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csgfx\lightsvcache.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csgfx\memimage.h
 # End Source File
 # Begin Source File
@@ -1315,10 +1319,6 @@ SOURCE=..\..\libs\..\include\csplugincommon\renderstep\basesteptype.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csplugincommon\renderstep\parserenderstep.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\..\include\csplugincommon\shader\lightsvcache.h
 # End Source File
 # Begin Source File
 
