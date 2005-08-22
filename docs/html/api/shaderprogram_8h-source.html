@@ -137,19 +137,55 @@
 <a name="l00144"></a>00144 
 <a name="l00146"></a>00146   <span class="keywordtype">void</span> DumpProgramInfo (<a class="code" href="classcsString.html">csString</a>&amp; output);
 <a name="l00148"></a>00148   <span class="keywordtype">void</span> DumpVariableMappings (<a class="code" href="classcsString.html">csString</a>&amp; output);
-<a name="l00149"></a>00149 <span class="keyword">public</span>:
-<a name="l00150"></a><a class="code" href="classcsShaderProgram.html#o0">00150</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
+<a name="l00149"></a>00149 
 <a name="l00151"></a>00151 
-<a name="l00152"></a>00152   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsShaderProgram.html">csShaderProgram</a>);
-<a name="l00153"></a>00153 
-<a name="l00154"></a>00154   <a class="code" href="classcsShaderProgram.html">csShaderProgram</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* objectReg);
-<a name="l00155"></a>00155   <span class="keyword">virtual</span> ~<a class="code" href="classcsShaderProgram.html">csShaderProgram</a> ();
-<a name="l00156"></a>00156 
-<a name="l00157"></a><a class="code" href="classcsShaderProgram.html#a2">00157</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiShaderTUResolver.html#a0">ResolveTextureBinding</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="comment">/*binding*/</span>)
-<a name="l00158"></a>00158   { <span class="keywordflow">return</span> -1; }
-<a name="l00159"></a>00159 };
-<a name="l00160"></a>00160 
-<a name="l00161"></a>00161 <span class="preprocessor">#endif // __CS_SHADERPLUGINS_COMMON_SHADERPROGRAM_H__</span>
+<a name="l00155"></a><a class="code" href="classcsShaderProgram.html#z497_1">00155</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector4.html">csVector4</a> GetParamVectorVal (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks, 
+<a name="l00156"></a>00156     <span class="keyword">const</span> <a class="code" href="structcsShaderProgram_1_1ProgramParam.html">ProgramParam</a> &amp;param, <span class="keyword">const</span> <a class="code" href="classcsVector4.html">csVector4</a>&amp; defVal)
+<a name="l00157"></a>00157   {
+<a name="l00158"></a>00158     <a class="code" href="classcsRef.html">csRef&lt;csShaderVariable&gt;</a> var;
+<a name="l00159"></a>00159   
+<a name="l00160"></a>00160     var = <a class="code" href="shader_8h.html#a4">csGetShaderVariableFromStack</a> (stacks, param.<a class="code" href="structcsShaderProgram_1_1ProgramParam.html#o0">name</a>);
+<a name="l00161"></a>00161     <span class="keywordflow">if</span> (!var.<a class="code" href="classcsRef.html#a8">IsValid</a> ())
+<a name="l00162"></a>00162       var = param.<a class="code" href="structcsShaderProgram_1_1ProgramParam.html#o2">var</a>;
+<a name="l00163"></a>00163   
+<a name="l00164"></a>00164     <span class="comment">// If var is null now we have no const nor any passed value, ignore it</span>
+<a name="l00165"></a>00165     <span class="keywordflow">if</span> (!var.<a class="code" href="classcsRef.html#a8">IsValid</a> ())
+<a name="l00166"></a>00166       <span class="keywordflow">return</span> defVal;
+<a name="l00167"></a>00167   
+<a name="l00168"></a>00168     <a class="code" href="classcsVector4.html">csVector4</a> v;
+<a name="l00169"></a>00169     var-&gt;GetValue (v);
+<a name="l00170"></a>00170     <span class="keywordflow">return</span> v;
+<a name="l00171"></a>00171   }
+<a name="l00172"></a><a class="code" href="classcsShaderProgram.html#z497_0">00172</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> GetParamFloatVal (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks, 
+<a name="l00173"></a>00173     <span class="keyword">const</span> <a class="code" href="structcsShaderProgram_1_1ProgramParam.html">ProgramParam</a> &amp;param, <span class="keywordtype">float</span> defVal)
+<a name="l00174"></a>00174   {
+<a name="l00175"></a>00175     <a class="code" href="classcsRef.html">csRef&lt;csShaderVariable&gt;</a> var;
+<a name="l00176"></a>00176   
+<a name="l00177"></a>00177     var = <a class="code" href="shader_8h.html#a4">csGetShaderVariableFromStack</a> (stacks, param.<a class="code" href="structcsShaderProgram_1_1ProgramParam.html#o0">name</a>);
+<a name="l00178"></a>00178     <span class="keywordflow">if</span> (!var.<a class="code" href="classcsRef.html#a8">IsValid</a> ())
+<a name="l00179"></a>00179       var = param.<a class="code" href="structcsShaderProgram_1_1ProgramParam.html#o2">var</a>;
+<a name="l00180"></a>00180   
+<a name="l00181"></a>00181     <span class="comment">// If var is null now we have no const nor any passed value, ignore it</span>
+<a name="l00182"></a>00182     <span class="keywordflow">if</span> (!var.<a class="code" href="classcsRef.html#a8">IsValid</a> ())
+<a name="l00183"></a>00183       <span class="keywordflow">return</span> defVal;
+<a name="l00184"></a>00184   
+<a name="l00185"></a>00185     <span class="keywordtype">float</span> f;
+<a name="l00186"></a>00186     var-&gt;GetValue (f);
+<a name="l00187"></a>00187     <span class="keywordflow">return</span> f;
+<a name="l00188"></a>00188   }
+<a name="l00190"></a>00190 <span class="keyword">public</span>:
+<a name="l00191"></a><a class="code" href="classcsShaderProgram.html#o0">00191</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
+<a name="l00192"></a>00192 
+<a name="l00193"></a>00193   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsShaderProgram.html">csShaderProgram</a>);
+<a name="l00194"></a>00194 
+<a name="l00195"></a>00195   <a class="code" href="classcsShaderProgram.html">csShaderProgram</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* objectReg);
+<a name="l00196"></a>00196   <span class="keyword">virtual</span> ~<a class="code" href="classcsShaderProgram.html">csShaderProgram</a> ();
+<a name="l00197"></a>00197 
+<a name="l00198"></a><a class="code" href="classcsShaderProgram.html#a2">00198</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiShaderTUResolver.html#a0">ResolveTextureBinding</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="comment">/*binding*/</span>)
+<a name="l00199"></a>00199   { <span class="keywordflow">return</span> -1; }
+<a name="l00200"></a>00200 };
+<a name="l00201"></a>00201 
+<a name="l00202"></a>00202 <span class="preprocessor">#endif // __CS_SHADERPLUGINS_COMMON_SHADERPROGRAM_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
