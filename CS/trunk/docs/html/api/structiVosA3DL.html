@@ -28,9 +28,12 @@
 <a href="structiVosA3DL-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiVosSector.html">iVosSector</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiVosA3DL.html#a0">GetSector</a> (const char *)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiVosObject3D.html">iVosObject3D</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiVosA3DL.html#a0">FindVosObject3D</a> (const char *url)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a VOS sector given a VOS URL (such as "vop://interreality.org/world") for a sector object.  <a href="#a0"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Takes a URL path for an A3DL::Object3D Vobject and returns the <a class="el" href="structiVosObject3D.html">iVosObject3D</a> interface (suitable for fetching the mesh wrapper).  <a href="#a0"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiVosSector.html">iVosSector</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiVosA3DL.html#a1">GetSector</a> (const char *url)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a VOS sector given a VOS URL (such as "vip://interreality.org/world") for a sector object.  <a href="#a1"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 This is the initial component you retrieve from the registry to access the VOS A3DL plugin. 
@@ -49,16 +52,16 @@ Here's how to get it: <div class="fragment"><pre class="fragment">    <a class="
 
 <p>
 Definition at line <a class="el" href="vosa3dl_8h-source.html#l00127">127</a> of file <a class="el" href="vosa3dl_8h-source.html">vosa3dl.h</a>.<hr><h2>Member Function Documentation</h2>
-<a class="anchor" name="a0"></a><!-- doxytag: member="iVosA3DL::GetSector" ref="a0" args="(const char *)=0" --><p>
+<a class="anchor" name="a0"></a><!-- doxytag: member="iVosA3DL::FindVosObject3D" ref="a0" args="(const char *url)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">virtual <a class="el" href="classcsRef.html">csRef</a>&lt;<a class="el" href="structiVosSector.html">iVosSector</a>&gt; iVosA3DL::GetSector           </td>
+          <td class="md" nowrap valign="top">virtual <a class="el" href="classcsRef.html">csRef</a>&lt;<a class="el" href="structiVosObject3D.html">iVosObject3D</a>&gt; iVosA3DL::FindVosObject3D           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">const char *&nbsp;</td>
-          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="mdname1" valign="top" nowrap> <em>url</em>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
           <td class="md" nowrap><code> [pure virtual]</code></td>
         </tr>
@@ -74,10 +77,51 @@ Definition at line <a class="el" href="vosa3dl_8h-source.html#l00127">127</a> of
     <td>
 
 <p>
-Get a VOS sector given a VOS URL (such as "vop://interreality.org/world") for a sector object. 
+Takes a URL path for an A3DL::Object3D Vobject and returns the <a class="el" href="structiVosObject3D.html">iVosObject3D</a> interface (suitable for fetching the mesh wrapper). 
 <p>
-Doesn't load it (call <a class="el" href="structiVosSector.html#a3">iVosSector::Load()</a> to do that).<p>
-<dl compact><dt><b><a class="el" href="bug.html#_bug000002">Bug:</a></b></dt><dd>no way (yet) to tell you if the sector doesn't exist </dd></dl>
+As of this writing, it does not load the object into the engine, it must be loaded by loading the sector it is in. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>url</em>&nbsp;</td><td>the url path to the object to fetch </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>the <a class="el" href="structiVosObject3D.html">iVosObject3D</a> wrapper</dd></dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="a1"></a><!-- doxytag: member="iVosA3DL::GetSector" ref="a1" args="(const char *url)=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual <a class="el" href="classcsRef.html">csRef</a>&lt;<a class="el" href="structiVosSector.html">iVosSector</a>&gt; iVosA3DL::GetSector           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const char *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>url</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Get a VOS sector given a VOS URL (such as "vip://interreality.org/world") for a sector object. 
+<p>
+Doesn't load it (call <a class="el" href="structiVosSector.html#a3">iVosSector::Load()</a> to do that). <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>url</em>&nbsp;</td><td>the VOS url to the sector object </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>the <a class="el" href="structiVosSector.html">iVosSector</a> wrapper </dd></dl>
+<dl compact><dt><b><a class="el" href="bug.html#_bug000002">Bug:</a></b></dt><dd>no way (yet) to specify specific failure in accessing sector (just returns an empty <a class="el" href="classcsRef.html">csRef</a>) </dd></dl>
     </td>
   </tr>
 </table>

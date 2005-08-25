@@ -54,324 +54,308 @@
 <a name="l00042"></a>00042 {
 <a name="l00044"></a><a class="code" href="structcsLightProperties.html#o0">00044</a>   <a class="code" href="classcsVector3.html">csVector3</a> attenuationConsts;
 <a name="l00046"></a><a class="code" href="structcsLightProperties.html#o4">00046</a>   <a class="code" href="classcsVector3.html">csVector3</a> posObject;
-<a name="l00048"></a><a class="code" href="structcsLightProperties.html#o3">00048</a>   <a class="code" href="classcsVector3.html">csVector3</a> dirObject;
-<a name="l00050"></a><a class="code" href="structcsLightProperties.html#o2">00050</a>   <a class="code" href="classcsColor.html">csColor</a> color;
-<a name="l00052"></a><a class="code" href="structcsLightProperties.html#o5">00052</a>   <span class="keywordtype">float</span> spotFalloffInner;
-<a name="l00054"></a><a class="code" href="structcsLightProperties.html#o6">00054</a>   <span class="keywordtype">float</span> spotFalloffOuter;
-<a name="l00056"></a><a class="code" href="structcsLightProperties.html#o7">00056</a>   <a class="code" href="light_8h.html#a17">csLightType</a> type;
-<a name="l00058"></a><a class="code" href="structcsLightProperties.html#o1">00058</a>   <a class="code" href="light_8h.html#a16">csLightAttenuationMode</a> attenuationMode;
-<a name="l00059"></a>00059 
-<a name="l00060"></a><a class="code" href="structcsLightProperties.html#a1">00060</a>   <a class="code" href="structcsLightProperties.html">csLightProperties</a> () : spotFalloffInner(0.0f), spotFalloffOuter(0.0f),
-<a name="l00061"></a>00061     type(<a class="code" href="light_8h.html#a17a12">CS_LIGHT_POINTLIGHT</a>) {}
-<a name="l00066"></a><a class="code" href="structcsLightProperties.html#a0">00066</a>   <a class="code" href="structcsLightProperties.html">csLightProperties</a> (size_t lightNum, <a class="code" href="classcsLightShaderVarCache.html">csLightShaderVarCache</a>&amp; svcache,
-<a name="l00067"></a>00067     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks)
-<a name="l00068"></a>00068   {
-<a name="l00069"></a>00069     <a class="code" href="group__util.html#ga3">csStringID</a> id;
-<a name="l00070"></a>00070 
-<a name="l00071"></a>00071     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
-<a name="l00072"></a>00072       <a class="code" href="classcsLightShaderVarCache.html#w13w3">csLightShaderVarCache::lightAttenuation</a>);
-<a name="l00073"></a>00073     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
-<a name="l00074"></a>00074       stacks[id]-&gt;GetValue (attenuationConsts);
-<a name="l00075"></a>00075 
-<a name="l00076"></a>00076     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
-<a name="l00077"></a>00077       <a class="code" href="classcsLightShaderVarCache.html#w13w10">csLightShaderVarCache::lightPosition</a>);
-<a name="l00078"></a>00078     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
-<a name="l00079"></a>00079       stacks[id]-&gt;GetValue (posObject);
-<a name="l00080"></a>00080 
-<a name="l00081"></a>00081     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
-<a name="l00082"></a>00082       <a class="code" href="classcsLightShaderVarCache.html#w13w7">csLightShaderVarCache::lightDirection</a>);
-<a name="l00083"></a>00083     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
-<a name="l00084"></a>00084       stacks[id]-&gt;GetValue (dirObject);
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
-<a name="l00087"></a>00087       <a class="code" href="classcsLightShaderVarCache.html#w13w6">csLightShaderVarCache::lightDiffuse</a>);
-<a name="l00088"></a>00088     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
-<a name="l00089"></a>00089       stacks[id]-&gt;GetValue (color);
-<a name="l00090"></a>00090 
-<a name="l00091"></a>00091     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
-<a name="l00092"></a>00092       <a class="code" href="classcsLightShaderVarCache.html#w13w8">csLightShaderVarCache::lightInnerFalloff</a>);
-<a name="l00093"></a>00093     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
-<a name="l00094"></a>00094       stacks[id]-&gt;GetValue (spotFalloffInner);
-<a name="l00095"></a>00095 
-<a name="l00096"></a>00096     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
-<a name="l00097"></a>00097       <a class="code" href="classcsLightShaderVarCache.html#w13w9">csLightShaderVarCache::lightOuterFalloff</a>);
-<a name="l00098"></a>00098     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
-<a name="l00099"></a>00099       stacks[id]-&gt;GetValue (spotFalloffOuter);
-<a name="l00100"></a>00100 
-<a name="l00101"></a>00101     <span class="keywordtype">int</span> t = <a class="code" href="light_8h.html#a17a12">CS_LIGHT_POINTLIGHT</a>;
-<a name="l00102"></a>00102     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
-<a name="l00103"></a>00103       <a class="code" href="classcsLightShaderVarCache.html#w13w15">csLightShaderVarCache::lightType</a>);
-<a name="l00104"></a>00104     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
-<a name="l00105"></a>00105       stacks[id]-&gt;GetValue (t);
-<a name="l00106"></a>00106     type = (<a class="code" href="light_8h.html#a17">csLightType</a>)t;
-<a name="l00107"></a>00107 
-<a name="l00108"></a>00108     t = <a class="code" href="light_8h.html#a16a7">CS_ATTN_NONE</a>;
-<a name="l00109"></a>00109     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
-<a name="l00110"></a>00110       <a class="code" href="classcsLightShaderVarCache.html#w13w4">csLightShaderVarCache::lightAttenuationMode</a>);
-<a name="l00111"></a>00111     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
-<a name="l00112"></a>00112       stacks[id]-&gt;GetValue (t);
-<a name="l00113"></a>00113     attenuationMode = (<a class="code" href="light_8h.html#a16">csLightAttenuationMode</a>)t;
-<a name="l00114"></a>00114   }
-<a name="l00115"></a>00115 };
-<a name="l00116"></a>00116 
-<a name="l00120"></a><a class="code" href="structcsNoAttenuation.html">00120</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csNoAttenuation
-<a name="l00121"></a>00121 {
-<a name="l00122"></a><a class="code" href="structcsNoAttenuation.html#a0">00122</a>   csNoAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; <span class="comment">/*light*/</span>)
-<a name="l00123"></a>00123   {}
-<a name="l00124"></a>00124 
-<a name="l00125"></a><a class="code" href="structcsNoAttenuation.html#a1">00125</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> <span class="comment">/*distance*/</span>, <span class="keywordtype">float</span> &amp; <span class="comment">/*dp*/</span>)<span class="keyword"> const</span>
-<a name="l00126"></a>00126 <span class="keyword">  </span>{}
-<a name="l00127"></a>00127 };
-<a name="l00128"></a>00128 
-<a name="l00133"></a><a class="code" href="structcsLinearAttenuation.html">00133</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csLinearAttenuation
-<a name="l00134"></a>00134 {
-<a name="l00135"></a><a class="code" href="structcsLinearAttenuation.html#a0">00135</a>   csLinearAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light)
-<a name="l00136"></a>00136   {
-<a name="l00137"></a>00137     invrad = 1/light.<a class="code" href="structcsLightProperties.html#o0">attenuationConsts</a>.<a class="code" href="classcsVector3.html#o1">x</a>;
-<a name="l00138"></a>00138   }
-<a name="l00139"></a>00139 
-<a name="l00140"></a><a class="code" href="structcsLinearAttenuation.html#a1">00140</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> distance, <span class="keywordtype">float</span>&amp; dp)<span class="keyword"> const</span>
-<a name="l00141"></a>00141 <span class="keyword">  </span>{
-<a name="l00142"></a>00142     dp = <a class="code" href="group__geom__utils.html#ga7">csMax</a> (dp * (1 - distance * invrad), 0.0f);
-<a name="l00143"></a>00143   }
-<a name="l00144"></a>00144 
-<a name="l00145"></a><a class="code" href="structcsLinearAttenuation.html#o0">00145</a>   <span class="keywordtype">float</span> invrad;
-<a name="l00146"></a>00146 };
+<a name="l00051"></a><a class="code" href="structcsLightProperties.html#o3">00051</a>   <a class="code" href="classcsVector3.html">csVector3</a> dirObject;
+<a name="l00053"></a><a class="code" href="structcsLightProperties.html#o2">00053</a>   <a class="code" href="classcsColor.html">csColor</a> color;
+<a name="l00055"></a><a class="code" href="structcsLightProperties.html#o5">00055</a>   <span class="keywordtype">float</span> spotFalloffInner;
+<a name="l00057"></a><a class="code" href="structcsLightProperties.html#o6">00057</a>   <span class="keywordtype">float</span> spotFalloffOuter;
+<a name="l00059"></a><a class="code" href="structcsLightProperties.html#o7">00059</a>   <a class="code" href="light_8h.html#a17">csLightType</a> type;
+<a name="l00061"></a><a class="code" href="structcsLightProperties.html#o1">00061</a>   <a class="code" href="light_8h.html#a16">csLightAttenuationMode</a> attenuationMode;
+<a name="l00062"></a>00062 
+<a name="l00063"></a><a class="code" href="structcsLightProperties.html#a1">00063</a>   <a class="code" href="structcsLightProperties.html">csLightProperties</a> () : spotFalloffInner(0.0f), spotFalloffOuter(0.0f),
+<a name="l00064"></a>00064     type(<a class="code" href="light_8h.html#a17a12">CS_LIGHT_POINTLIGHT</a>) {}
+<a name="l00069"></a><a class="code" href="structcsLightProperties.html#a0">00069</a>   <a class="code" href="structcsLightProperties.html">csLightProperties</a> (size_t lightNum, <a class="code" href="classcsLightShaderVarCache.html">csLightShaderVarCache</a>&amp; svcache,
+<a name="l00070"></a>00070     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks)
+<a name="l00071"></a>00071   {
+<a name="l00072"></a>00072     <a class="code" href="group__util.html#ga3">csStringID</a> id;
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
+<a name="l00075"></a>00075       <a class="code" href="classcsLightShaderVarCache.html#w15w3">csLightShaderVarCache::lightAttenuation</a>);
+<a name="l00076"></a>00076     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
+<a name="l00077"></a>00077       stacks[id]-&gt;GetValue (attenuationConsts);
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
+<a name="l00080"></a>00080       <a class="code" href="classcsLightShaderVarCache.html#w15w12">csLightShaderVarCache::lightPosition</a>);
+<a name="l00081"></a>00081     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
+<a name="l00082"></a>00082       stacks[id]-&gt;GetValue (posObject);
+<a name="l00083"></a>00083 
+<a name="l00084"></a>00084     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
+<a name="l00085"></a>00085       <a class="code" href="classcsLightShaderVarCache.html#w15w7">csLightShaderVarCache::lightDirection</a>);
+<a name="l00086"></a>00086     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
+<a name="l00087"></a>00087       stacks[id]-&gt;GetValue (dirObject);
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
+<a name="l00090"></a>00090       <a class="code" href="classcsLightShaderVarCache.html#w15w6">csLightShaderVarCache::lightDiffuse</a>);
+<a name="l00091"></a>00091     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
+<a name="l00092"></a>00092       stacks[id]-&gt;GetValue (color);
+<a name="l00093"></a>00093 
+<a name="l00094"></a>00094     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
+<a name="l00095"></a>00095       <a class="code" href="classcsLightShaderVarCache.html#w15w10">csLightShaderVarCache::lightInnerFalloff</a>);
+<a name="l00096"></a>00096     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
+<a name="l00097"></a>00097       stacks[id]-&gt;GetValue (spotFalloffInner);
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
+<a name="l00100"></a>00100       <a class="code" href="classcsLightShaderVarCache.html#w15w11">csLightShaderVarCache::lightOuterFalloff</a>);
+<a name="l00101"></a>00101     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
+<a name="l00102"></a>00102       stacks[id]-&gt;GetValue (spotFalloffOuter);
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104     <span class="keywordtype">int</span> t = <a class="code" href="light_8h.html#a17a12">CS_LIGHT_POINTLIGHT</a>;
+<a name="l00105"></a>00105     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
+<a name="l00106"></a>00106       <a class="code" href="classcsLightShaderVarCache.html#w15w17">csLightShaderVarCache::lightType</a>);
+<a name="l00107"></a>00107     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
+<a name="l00108"></a>00108       stacks[id]-&gt;GetValue (t);
+<a name="l00109"></a>00109     type = (<a class="code" href="light_8h.html#a17">csLightType</a>)t;
+<a name="l00110"></a>00110 
+<a name="l00111"></a>00111     t = <a class="code" href="light_8h.html#a16a7">CS_ATTN_NONE</a>;
+<a name="l00112"></a>00112     <span class="keywordtype">id</span> = svcache.<a class="code" href="classcsLightShaderVarCache.html#a2">GetLightSVId</a> (lightNum, 
+<a name="l00113"></a>00113       <a class="code" href="classcsLightShaderVarCache.html#w15w4">csLightShaderVarCache::lightAttenuationMode</a>);
+<a name="l00114"></a>00114     <span class="keywordflow">if</span> ((stacks.<a class="code" href="classcsArray.html#a23">Length</a>() &gt; id) &amp;&amp; (stacks[id] != 0))
+<a name="l00115"></a>00115       stacks[id]-&gt;GetValue (t);
+<a name="l00116"></a>00116     attenuationMode = (<a class="code" href="light_8h.html#a16">csLightAttenuationMode</a>)t;
+<a name="l00117"></a>00117   }
+<a name="l00118"></a>00118 };
+<a name="l00119"></a>00119 
+<a name="l00123"></a><a class="code" href="structcsNoAttenuation.html">00123</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csNoAttenuation
+<a name="l00124"></a>00124 {
+<a name="l00125"></a><a class="code" href="structcsNoAttenuation.html#a0">00125</a>   csNoAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; <span class="comment">/*light*/</span>)
+<a name="l00126"></a>00126   {}
+<a name="l00127"></a>00127 
+<a name="l00128"></a><a class="code" href="structcsNoAttenuation.html#a1">00128</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> <span class="comment">/*distance*/</span>, <span class="keywordtype">float</span> &amp; <span class="comment">/*dp*/</span>)<span class="keyword"> const</span>
+<a name="l00129"></a>00129 <span class="keyword">  </span>{}
+<a name="l00130"></a>00130 };
+<a name="l00131"></a>00131 
+<a name="l00136"></a><a class="code" href="structcsLinearAttenuation.html">00136</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csLinearAttenuation
+<a name="l00137"></a>00137 {
+<a name="l00138"></a><a class="code" href="structcsLinearAttenuation.html#a0">00138</a>   csLinearAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light)
+<a name="l00139"></a>00139   {
+<a name="l00140"></a>00140     invrad = 1/light.<a class="code" href="structcsLightProperties.html#o0">attenuationConsts</a>.<a class="code" href="classcsVector3.html#o1">x</a>;
+<a name="l00141"></a>00141   }
+<a name="l00142"></a>00142 
+<a name="l00143"></a><a class="code" href="structcsLinearAttenuation.html#a1">00143</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> distance, <span class="keywordtype">float</span>&amp; dp)<span class="keyword"> const</span>
+<a name="l00144"></a>00144 <span class="keyword">  </span>{
+<a name="l00145"></a>00145     dp = <a class="code" href="group__geom__utils.html#ga7">csMax</a> (dp * (1 - distance * invrad), 0.0f);
+<a name="l00146"></a>00146   }
 <a name="l00147"></a>00147 
-<a name="l00152"></a><a class="code" href="structcsInverseAttenuation.html">00152</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csInverseAttenuation
-<a name="l00153"></a>00153 {
-<a name="l00154"></a><a class="code" href="structcsInverseAttenuation.html#a0">00154</a>   csInverseAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; <span class="comment">/*light*/</span>)
-<a name="l00155"></a>00155   {}
-<a name="l00156"></a>00156 
-<a name="l00157"></a><a class="code" href="structcsInverseAttenuation.html#a1">00157</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> distance, <span class="keywordtype">float</span>&amp; dp)<span class="keyword"> const</span>
-<a name="l00158"></a>00158 <span class="keyword">  </span>{
-<a name="l00159"></a>00159     dp = dp / distance;
-<a name="l00160"></a>00160   }
-<a name="l00161"></a>00161 };
-<a name="l00162"></a>00162 
-<a name="l00163"></a>00163 
-<a name="l00168"></a><a class="code" href="structcsRealisticAttenuation.html">00168</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csRealisticAttenuation
-<a name="l00169"></a>00169 {
-<a name="l00170"></a><a class="code" href="structcsRealisticAttenuation.html#a0">00170</a>   csRealisticAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; <span class="comment">/*light*/</span>)
-<a name="l00171"></a>00171   {}
-<a name="l00172"></a>00172 
-<a name="l00173"></a><a class="code" href="structcsRealisticAttenuation.html#a1">00173</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> distance, <span class="keywordtype">float</span>&amp; dp)<span class="keyword"> const</span>
-<a name="l00174"></a>00174 <span class="keyword">  </span>{
-<a name="l00175"></a>00175     dp = dp / (distance*distance);
-<a name="l00176"></a>00176   }
-<a name="l00177"></a>00177 };
-<a name="l00178"></a>00178 
-<a name="l00183"></a><a class="code" href="structcsCLQAttenuation.html">00183</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csCLQAttenuation
-<a name="l00184"></a>00184 {
-<a name="l00185"></a><a class="code" href="structcsCLQAttenuation.html#a0">00185</a>   csCLQAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light)
-<a name="l00186"></a>00186     : attnVec (light.attenuationConsts)
-<a name="l00187"></a>00187   {}
-<a name="l00188"></a>00188 
-<a name="l00189"></a><a class="code" href="structcsCLQAttenuation.html#a1">00189</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> distance, <span class="keywordtype">float</span>&amp; dp)<span class="keyword"> const</span>
-<a name="l00190"></a>00190 <span class="keyword">  </span>{
-<a name="l00191"></a>00191     dp = dp/(<a class="code" href="classcsVector3.html">csVector3</a> (1.0, distance, distance*distance)*attnVec);
-<a name="l00192"></a>00192   }
-<a name="l00193"></a>00193 
-<a name="l00194"></a><a class="code" href="structcsCLQAttenuation.html#o0">00194</a>   <a class="code" href="classcsVector3.html">csVector3</a> attnVec;
-<a name="l00195"></a>00195 };
+<a name="l00148"></a><a class="code" href="structcsLinearAttenuation.html#o0">00148</a>   <span class="keywordtype">float</span> invrad;
+<a name="l00149"></a>00149 };
+<a name="l00150"></a>00150 
+<a name="l00155"></a><a class="code" href="structcsInverseAttenuation.html">00155</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csInverseAttenuation
+<a name="l00156"></a>00156 {
+<a name="l00157"></a><a class="code" href="structcsInverseAttenuation.html#a0">00157</a>   csInverseAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; <span class="comment">/*light*/</span>)
+<a name="l00158"></a>00158   {}
+<a name="l00159"></a>00159 
+<a name="l00160"></a><a class="code" href="structcsInverseAttenuation.html#a1">00160</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> distance, <span class="keywordtype">float</span>&amp; dp)<span class="keyword"> const</span>
+<a name="l00161"></a>00161 <span class="keyword">  </span>{
+<a name="l00162"></a>00162     dp = dp / distance;
+<a name="l00163"></a>00163   }
+<a name="l00164"></a>00164 };
+<a name="l00165"></a>00165 
+<a name="l00166"></a>00166 
+<a name="l00171"></a><a class="code" href="structcsRealisticAttenuation.html">00171</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csRealisticAttenuation
+<a name="l00172"></a>00172 {
+<a name="l00173"></a><a class="code" href="structcsRealisticAttenuation.html#a0">00173</a>   csRealisticAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; <span class="comment">/*light*/</span>)
+<a name="l00174"></a>00174   {}
+<a name="l00175"></a>00175 
+<a name="l00176"></a><a class="code" href="structcsRealisticAttenuation.html#a1">00176</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> distance, <span class="keywordtype">float</span>&amp; dp)<span class="keyword"> const</span>
+<a name="l00177"></a>00177 <span class="keyword">  </span>{
+<a name="l00178"></a>00178     dp = dp / (distance*distance);
+<a name="l00179"></a>00179   }
+<a name="l00180"></a>00180 };
+<a name="l00181"></a>00181 
+<a name="l00186"></a><a class="code" href="structcsCLQAttenuation.html">00186</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csCLQAttenuation
+<a name="l00187"></a>00187 {
+<a name="l00188"></a><a class="code" href="structcsCLQAttenuation.html#a0">00188</a>   csCLQAttenuation (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light)
+<a name="l00189"></a>00189     : attnVec (light.attenuationConsts)
+<a name="l00190"></a>00190   {}
+<a name="l00191"></a>00191 
+<a name="l00192"></a><a class="code" href="structcsCLQAttenuation.html#a1">00192</a>   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">void</span> operator() (<span class="keywordtype">float</span> distance, <span class="keywordtype">float</span>&amp; dp)<span class="keyword"> const</span>
+<a name="l00193"></a>00193 <span class="keyword">  </span>{
+<a name="l00194"></a>00194     dp = dp/(<a class="code" href="classcsVector3.html">csVector3</a> (1.0, distance, distance*distance)*attnVec);
+<a name="l00195"></a>00195   }
 <a name="l00196"></a>00196 
-<a name="l00197"></a>00197 
-<a name="l00203"></a>00203 <span class="keyword">template</span>&lt;<span class="keyword">class</span> AttenuationProc&gt;
-<a name="l00204"></a><a class="code" href="classcsPointLightProc.html">00204</a> <span class="keyword">class </span><a class="code" href="classcsPointLightProc.html">csPointLightProc</a>
-<a name="l00205"></a>00205 {
-<a name="l00206"></a>00206 <span class="keyword">public</span>:
-<a name="l00207"></a><a class="code" href="classcsPointLightProc.html#a0">00207</a>   <a class="code" href="classcsPointLightProc.html#a0">csPointLightProc</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;objT,
-<a name="l00208"></a>00208     <span class="keywordtype">float</span> blackLimit = 0.0001f)
-<a name="l00209"></a>00209     : attn (light), nullColor (0.0f, 0.0f, 0.0f), blackLimit (blackLimit)
-<a name="l00210"></a>00210   {    
-<a name="l00211"></a>00211     lightPos = light.<a class="code" href="structcsLightProperties.html#o4">posObject</a>;
-<a name="l00212"></a>00212     lightCol = light.<a class="code" href="structcsLightProperties.html#o2">color</a>;
-<a name="l00213"></a>00213   }
-<a name="l00214"></a>00214 
-<a name="l00215"></a>00215   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a>
-<a name="l00216"></a><a class="code" href="classcsPointLightProc.html#a1">00216</a>   <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="classcsPointLightProc.html#a1">ProcessVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v,<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;n)<span class="keyword"> const</span>
-<a name="l00217"></a>00217 <span class="keyword">  </span>{
-<a name="l00218"></a>00218     <span class="comment">//compute gouraud shading..</span>
-<a name="l00219"></a>00219     <a class="code" href="classcsVector3.html">csVector3</a> direction = lightPos-v;
-<a name="l00220"></a>00220     <span class="keywordtype">float</span> distance = <a class="code" href="group__floating__point.html#ga5">csQsqrt</a>(direction.<a class="code" href="classcsVector3.html#a23">SquaredNorm</a> ());
-<a name="l00221"></a>00221     <span class="keywordtype">float</span> dp = (direction*n)/distance;
-<a name="l00222"></a>00222     <span class="keywordflow">if</span> (dp &gt; blackLimit)
-<a name="l00223"></a>00223     {
-<a name="l00224"></a>00224       attn (distance, dp);
-<a name="l00225"></a>00225       <span class="keywordflow">return</span> lightCol*dp;
-<a name="l00226"></a>00226     }
-<a name="l00227"></a>00227     <span class="keywordflow">return</span> nullColor;
-<a name="l00228"></a>00228   }
-<a name="l00229"></a>00229 
-<a name="l00230"></a>00230 <span class="keyword">private</span>:
-<a name="l00231"></a>00231   AttenuationProc attn;
-<a name="l00232"></a>00232   <a class="code" href="classcsVector3.html">csVector3</a> lightPos; <span class="comment">//localspace</span>
-<a name="l00233"></a>00233   <a class="code" href="classcsColor.html">csColor</a> lightCol;
-<a name="l00234"></a>00234   <a class="code" href="classcsColor.html">csColor</a> nullColor;
-<a name="l00235"></a>00235   <span class="keywordtype">float</span> blackLimit;
-<a name="l00236"></a>00236 };
-<a name="l00237"></a>00237 
-<a name="l00243"></a>00243 <span class="keyword">template</span>&lt;<span class="keyword">class</span> AttenuationProc&gt;
-<a name="l00244"></a><a class="code" href="classcsDirectionalLightProc.html">00244</a> <span class="keyword">class </span><a class="code" href="classcsDirectionalLightProc.html">csDirectionalLightProc</a>
-<a name="l00245"></a>00245 {
-<a name="l00246"></a>00246 <span class="keyword">public</span>:
-<a name="l00247"></a><a class="code" href="classcsDirectionalLightProc.html#a0">00247</a>   <a class="code" href="classcsDirectionalLightProc.html#a0">csDirectionalLightProc</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;objT,
-<a name="l00248"></a>00248     <span class="keywordtype">float</span> blackLimit = 0.0001f)
-<a name="l00249"></a>00249     : attn (light), nullColor (0.0f, 0.0f, 0.0f), blackLimit (blackLimit)
-<a name="l00250"></a>00250   {
-<a name="l00251"></a>00251     <span class="comment">//csReversibleTransform lightT = light-&gt;GetMovable ()-&gt;GetFullTransform ();</span>
-<a name="l00252"></a>00252     lightPos = light.<a class="code" href="structcsLightProperties.html#o4">posObject</a>;<span class="comment">//objT.Other2This (lightT.GetOrigin ());</span>
-<a name="l00253"></a>00253     <span class="comment">/*lightDir = objT.Other2ThisRelative (lightT.This2OtherRelative (</span>
-<a name="l00254"></a>00254 <span class="comment">      light-&gt;GetDirection ()));</span>
-<a name="l00255"></a>00255 <span class="comment">    lightDir = lightDir.Unit ();*/</span>
-<a name="l00256"></a>00256     lightDir = light.<a class="code" href="structcsLightProperties.html#o3">dirObject</a>;
-<a name="l00257"></a>00257     lightCol = light.<a class="code" href="structcsLightProperties.html#o2">color</a>;
-<a name="l00258"></a>00258   }
-<a name="l00259"></a>00259 
-<a name="l00260"></a>00260   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a>
-<a name="l00261"></a><a class="code" href="classcsDirectionalLightProc.html#a1">00261</a>   <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="classcsDirectionalLightProc.html#a1">ProcessVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v,<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;n)<span class="keyword"> const</span>
-<a name="l00262"></a>00262 <span class="keyword">  </span>{
-<a name="l00263"></a>00263     <span class="comment">//compute gouraud shading..</span>
-<a name="l00264"></a>00264     <span class="keywordtype">float</span> dp = lightDir*n;
-<a name="l00265"></a>00265     <span class="keywordflow">if</span> (dp &gt; blackLimit)
-<a name="l00266"></a>00266     {
-<a name="l00267"></a>00267       <a class="code" href="classcsVector3.html">csVector3</a> direction = lightPos-v;
-<a name="l00268"></a>00268       <span class="keywordtype">float</span> distance = <a class="code" href="group__floating__point.html#ga5">csQsqrt</a>(direction.<a class="code" href="classcsVector3.html#a23">SquaredNorm</a> ());
-<a name="l00269"></a>00269       attn (distance, dp);
-<a name="l00270"></a>00270       <span class="keywordflow">return</span> lightCol*dp;
-<a name="l00271"></a>00271     }
-<a name="l00272"></a>00272     <span class="keywordflow">return</span> nullColor;
-<a name="l00273"></a>00273   }
-<a name="l00274"></a>00274 
-<a name="l00275"></a>00275 <span class="keyword">private</span>:
-<a name="l00276"></a>00276   AttenuationProc attn;
-<a name="l00277"></a>00277   <a class="code" href="classcsVector3.html">csVector3</a> lightPos; <span class="comment">//localspace</span>
-<a name="l00278"></a>00278   <a class="code" href="classcsVector3.html">csVector3</a> lightDir; <span class="comment">//localspace</span>
-<a name="l00279"></a>00279   <a class="code" href="classcsColor.html">csColor</a> lightCol;
-<a name="l00280"></a>00280   <a class="code" href="classcsColor.html">csColor</a> nullColor;
-<a name="l00281"></a>00281   <span class="keywordtype">float</span> blackLimit;
-<a name="l00282"></a>00282 };
-<a name="l00283"></a>00283 
-<a name="l00289"></a>00289 <span class="keyword">template</span>&lt;<span class="keyword">class</span> AttenuationProc&gt;
-<a name="l00290"></a><a class="code" href="classcsSpotLightProc.html">00290</a> <span class="keyword">class </span><a class="code" href="classcsSpotLightProc.html">csSpotLightProc</a>
-<a name="l00291"></a>00291 {
-<a name="l00292"></a>00292 <span class="keyword">public</span>:
-<a name="l00293"></a><a class="code" href="classcsSpotLightProc.html#a0">00293</a>   <a class="code" href="classcsSpotLightProc.html#a0">csSpotLightProc</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;objT,
-<a name="l00294"></a>00294     <span class="keywordtype">float</span> blackLimit = 0.0001f)
-<a name="l00295"></a>00295     : attn (light), nullColor (0.0f, 0.0f, 0.0f), blackLimit (blackLimit)
-<a name="l00296"></a>00296   {
-<a name="l00297"></a>00297     <span class="comment">//csReversibleTransform lightT = light-&gt;GetMovable ()-&gt;GetFullTransform ();</span>
-<a name="l00298"></a>00298     lightPos = light.<a class="code" href="structcsLightProperties.html#o4">posObject</a>;
-<a name="l00299"></a>00299     lightDir = light.<a class="code" href="structcsLightProperties.html#o3">dirObject</a>;
-<a name="l00300"></a>00300 
-<a name="l00301"></a>00301     lightCol = light.<a class="code" href="structcsLightProperties.html#o2">color</a>;
-<a name="l00302"></a>00302     falloffInner = light.<a class="code" href="structcsLightProperties.html#o5">spotFalloffInner</a>;
-<a name="l00303"></a>00303     falloffOuter = light.<a class="code" href="structcsLightProperties.html#o6">spotFalloffOuter</a>;
-<a name="l00304"></a>00304     <span class="comment">//light-&gt;GetSpotLightFalloff (falloffInner, falloffOuter);</span>
-<a name="l00305"></a>00305   }
-<a name="l00306"></a>00306 
-<a name="l00307"></a>00307   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a>
-<a name="l00308"></a><a class="code" href="classcsSpotLightProc.html#a1">00308</a>   <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="classcsSpotLightProc.html#a1">ProcessVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v,<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;n)<span class="keyword"> const</span>
-<a name="l00309"></a>00309 <span class="keyword">  </span>{
-<a name="l00310"></a>00310     <a class="code" href="classcsVector3.html">csVector3</a> direction = (lightPos-v).Unit ();
-<a name="l00311"></a>00311 
-<a name="l00312"></a>00312     <span class="comment">//compute gouraud shading..</span>
-<a name="l00313"></a>00313     <span class="keywordtype">float</span> dp = direction*n;
-<a name="l00314"></a>00314     <span class="keywordflow">if</span> (dp &gt; blackLimit)
-<a name="l00315"></a>00315     {
-<a name="l00316"></a>00316       <span class="keywordtype">float</span> cosfact =
-<a name="l00317"></a>00317         <a class="code" href="group__geom__utils.html#ga10">csSmoothStep</a> (-(direction*lightDir), falloffOuter, falloffInner);
-<a name="l00318"></a>00318       <span class="keywordtype">float</span> distance = <a class="code" href="group__floating__point.html#ga5">csQsqrt</a>(direction.<a class="code" href="classcsVector3.html#a23">SquaredNorm</a> ());
-<a name="l00319"></a>00319       <span class="keywordflow">if</span> (cosfact &gt; 0)
-<a name="l00320"></a>00320       {
-<a name="l00321"></a>00321         attn (distance, dp);
-<a name="l00322"></a>00322         <span class="keywordflow">return</span> lightCol*dp*cosfact;
-<a name="l00323"></a>00323       }
-<a name="l00324"></a>00324     }
-<a name="l00325"></a>00325     <span class="keywordflow">return</span> nullColor;
-<a name="l00326"></a>00326   }
-<a name="l00327"></a>00327 
-<a name="l00328"></a>00328 <span class="keyword">private</span>:
-<a name="l00329"></a>00329   AttenuationProc attn;
-<a name="l00330"></a>00330   <a class="code" href="classcsVector3.html">csVector3</a> lightPos; <span class="comment">//localspace</span>
-<a name="l00331"></a>00331   <a class="code" href="classcsVector3.html">csVector3</a> lightDir; <span class="comment">//localspace</span>
-<a name="l00332"></a>00332   <a class="code" href="classcsColor.html">csColor</a> lightCol;
-<a name="l00333"></a>00333   <a class="code" href="classcsColor.html">csColor</a> nullColor;
-<a name="l00334"></a>00334   <span class="keywordtype">float</span> blackLimit;
-<a name="l00335"></a>00335   <span class="keywordtype">float</span> falloffInner, falloffOuter;
-<a name="l00336"></a>00336 };
-<a name="l00337"></a>00337 
+<a name="l00197"></a><a class="code" href="structcsCLQAttenuation.html#o0">00197</a>   <a class="code" href="classcsVector3.html">csVector3</a> attnVec;
+<a name="l00198"></a>00198 };
+<a name="l00199"></a>00199 
+<a name="l00200"></a>00200 
+<a name="l00206"></a>00206 <span class="keyword">template</span>&lt;<span class="keyword">class</span> AttenuationProc&gt;
+<a name="l00207"></a><a class="code" href="classcsPointLightProc.html">00207</a> <span class="keyword">class </span><a class="code" href="classcsPointLightProc.html">csPointLightProc</a>
+<a name="l00208"></a>00208 {
+<a name="l00209"></a>00209 <span class="keyword">public</span>:
+<a name="l00210"></a><a class="code" href="classcsPointLightProc.html#a0">00210</a>   <a class="code" href="classcsPointLightProc.html#a0">csPointLightProc</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00211"></a>00211     <span class="keywordtype">float</span> blackLimit = 0.0001f)
+<a name="l00212"></a>00212     : attn (light), nullColor (0.0f, 0.0f, 0.0f), blackLimit (blackLimit)
+<a name="l00213"></a>00213   {    
+<a name="l00214"></a>00214     lightPos = light.<a class="code" href="structcsLightProperties.html#o4">posObject</a>;
+<a name="l00215"></a>00215     lightCol = light.<a class="code" href="structcsLightProperties.html#o2">color</a>;
+<a name="l00216"></a>00216   }
+<a name="l00217"></a>00217 
+<a name="l00218"></a>00218   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a>
+<a name="l00219"></a><a class="code" href="classcsPointLightProc.html#a1">00219</a>   <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="classcsPointLightProc.html#a1">ProcessVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v,<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;n)<span class="keyword"> const</span>
+<a name="l00220"></a>00220 <span class="keyword">  </span>{
+<a name="l00221"></a>00221     <span class="comment">//compute gouraud shading..</span>
+<a name="l00222"></a>00222     <a class="code" href="classcsVector3.html">csVector3</a> direction = lightPos-v;
+<a name="l00223"></a>00223     <span class="keywordtype">float</span> distance = <a class="code" href="group__floating__point.html#ga5">csQsqrt</a>(direction.<a class="code" href="classcsVector3.html#a23">SquaredNorm</a> ());
+<a name="l00224"></a>00224     <span class="keywordtype">float</span> dp = (direction*n)/distance;
+<a name="l00225"></a>00225     <span class="keywordflow">if</span> (dp &gt; blackLimit)
+<a name="l00226"></a>00226     {
+<a name="l00227"></a>00227       attn (distance, dp);
+<a name="l00228"></a>00228       <span class="keywordflow">return</span> lightCol*dp;
+<a name="l00229"></a>00229     }
+<a name="l00230"></a>00230     <span class="keywordflow">return</span> nullColor;
+<a name="l00231"></a>00231   }
+<a name="l00232"></a>00232 
+<a name="l00233"></a>00233 <span class="keyword">private</span>:
+<a name="l00234"></a>00234   AttenuationProc attn;
+<a name="l00235"></a>00235   <a class="code" href="classcsVector3.html">csVector3</a> lightPos; <span class="comment">//localspace</span>
+<a name="l00236"></a>00236   <a class="code" href="classcsColor.html">csColor</a> lightCol;
+<a name="l00237"></a>00237   <a class="code" href="classcsColor.html">csColor</a> nullColor;
+<a name="l00238"></a>00238   <span class="keywordtype">float</span> blackLimit;
+<a name="l00239"></a>00239 };
+<a name="l00240"></a>00240 
+<a name="l00246"></a>00246 <span class="keyword">template</span>&lt;<span class="keyword">class</span> AttenuationProc&gt;
+<a name="l00247"></a><a class="code" href="classcsDirectionalLightProc.html">00247</a> <span class="keyword">class </span><a class="code" href="classcsDirectionalLightProc.html">csDirectionalLightProc</a>
+<a name="l00248"></a>00248 {
+<a name="l00249"></a>00249 <span class="keyword">public</span>:
+<a name="l00250"></a><a class="code" href="classcsDirectionalLightProc.html#a0">00250</a>   <a class="code" href="classcsDirectionalLightProc.html#a0">csDirectionalLightProc</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00251"></a>00251     <span class="keywordtype">float</span> blackLimit = 0.0001f)
+<a name="l00252"></a>00252     : attn (light), nullColor (0.0f, 0.0f, 0.0f), blackLimit (blackLimit)
+<a name="l00253"></a>00253   {
+<a name="l00254"></a>00254     lightPos = light.<a class="code" href="structcsLightProperties.html#o4">posObject</a>;
+<a name="l00255"></a>00255     lightDir = light.<a class="code" href="structcsLightProperties.html#o3">dirObject</a>;
+<a name="l00256"></a>00256     lightCol = light.<a class="code" href="structcsLightProperties.html#o2">color</a>;
+<a name="l00257"></a>00257   }
+<a name="l00258"></a>00258 
+<a name="l00259"></a>00259   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a>
+<a name="l00260"></a><a class="code" href="classcsDirectionalLightProc.html#a1">00260</a>   <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="classcsDirectionalLightProc.html#a1">ProcessVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v,<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;n)<span class="keyword"> const</span>
+<a name="l00261"></a>00261 <span class="keyword">  </span>{
+<a name="l00262"></a>00262     <span class="comment">//compute gouraud shading..</span>
+<a name="l00263"></a>00263     <span class="keywordtype">float</span> dp = -lightDir*n;
+<a name="l00264"></a>00264     <span class="keywordflow">if</span> (dp &gt; blackLimit)
+<a name="l00265"></a>00265     {
+<a name="l00266"></a>00266       <a class="code" href="classcsVector3.html">csVector3</a> direction = lightPos-v;
+<a name="l00267"></a>00267       <span class="keywordtype">float</span> distance = <a class="code" href="group__floating__point.html#ga5">csQsqrt</a>(direction.<a class="code" href="classcsVector3.html#a23">SquaredNorm</a> ());
+<a name="l00268"></a>00268       attn (distance, dp);
+<a name="l00269"></a>00269       <span class="keywordflow">return</span> lightCol*dp;
+<a name="l00270"></a>00270     }
+<a name="l00271"></a>00271     <span class="keywordflow">return</span> nullColor;
+<a name="l00272"></a>00272   }
+<a name="l00273"></a>00273 
+<a name="l00274"></a>00274 <span class="keyword">private</span>:
+<a name="l00275"></a>00275   AttenuationProc attn;
+<a name="l00276"></a>00276   <a class="code" href="classcsVector3.html">csVector3</a> lightPos; <span class="comment">//localspace</span>
+<a name="l00277"></a>00277   <a class="code" href="classcsVector3.html">csVector3</a> lightDir; <span class="comment">//localspace</span>
+<a name="l00278"></a>00278   <a class="code" href="classcsColor.html">csColor</a> lightCol;
+<a name="l00279"></a>00279   <a class="code" href="classcsColor.html">csColor</a> nullColor;
+<a name="l00280"></a>00280   <span class="keywordtype">float</span> blackLimit;
+<a name="l00281"></a>00281 };
+<a name="l00282"></a>00282 
+<a name="l00288"></a>00288 <span class="keyword">template</span>&lt;<span class="keyword">class</span> AttenuationProc&gt;
+<a name="l00289"></a><a class="code" href="classcsSpotLightProc.html">00289</a> <span class="keyword">class </span><a class="code" href="classcsSpotLightProc.html">csSpotLightProc</a>
+<a name="l00290"></a>00290 {
+<a name="l00291"></a>00291 <span class="keyword">public</span>:
+<a name="l00292"></a><a class="code" href="classcsSpotLightProc.html#a0">00292</a>   <a class="code" href="classcsSpotLightProc.html#a0">csSpotLightProc</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00293"></a>00293     <span class="keywordtype">float</span> blackLimit = 0.0001f)
+<a name="l00294"></a>00294     : attn (light), nullColor (0.0f, 0.0f, 0.0f), blackLimit (blackLimit)
+<a name="l00295"></a>00295   {
+<a name="l00296"></a>00296     lightPos = light.<a class="code" href="structcsLightProperties.html#o4">posObject</a>;
+<a name="l00297"></a>00297     lightDir = light.<a class="code" href="structcsLightProperties.html#o3">dirObject</a>;
+<a name="l00298"></a>00298 
+<a name="l00299"></a>00299     lightCol = light.<a class="code" href="structcsLightProperties.html#o2">color</a>;
+<a name="l00300"></a>00300     falloffInner = light.<a class="code" href="structcsLightProperties.html#o5">spotFalloffInner</a>;
+<a name="l00301"></a>00301     falloffOuter = light.<a class="code" href="structcsLightProperties.html#o6">spotFalloffOuter</a>;
+<a name="l00302"></a>00302   }
+<a name="l00303"></a>00303 
+<a name="l00304"></a>00304   <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a>
+<a name="l00305"></a><a class="code" href="classcsSpotLightProc.html#a1">00305</a>   <a class="code" href="classcsColor.html">csColor</a> <a class="code" href="classcsSpotLightProc.html#a1">ProcessVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v,<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;n)<span class="keyword"> const</span>
+<a name="l00306"></a>00306 <span class="keyword">  </span>{
+<a name="l00307"></a>00307     <a class="code" href="classcsVector3.html">csVector3</a> direction = (lightPos-v).Unit ();
+<a name="l00308"></a>00308 
+<a name="l00309"></a>00309     <span class="comment">//compute gouraud shading..</span>
+<a name="l00310"></a>00310     <span class="keywordtype">float</span> dp = direction*n;
+<a name="l00311"></a>00311     <span class="keywordflow">if</span> (dp &gt; blackLimit)
+<a name="l00312"></a>00312     {
+<a name="l00313"></a>00313       <span class="keywordtype">float</span> cosfact =
+<a name="l00314"></a>00314         <a class="code" href="group__geom__utils.html#ga10">csSmoothStep</a> (-(direction*lightDir), falloffOuter, falloffInner);
+<a name="l00315"></a>00315       <span class="keywordtype">float</span> distance = <a class="code" href="group__floating__point.html#ga5">csQsqrt</a>(direction.<a class="code" href="classcsVector3.html#a23">SquaredNorm</a> ());
+<a name="l00316"></a>00316       <span class="keywordflow">if</span> (cosfact &gt; 0)
+<a name="l00317"></a>00317       {
+<a name="l00318"></a>00318         attn (distance, dp);
+<a name="l00319"></a>00319         <span class="keywordflow">return</span> lightCol*dp*cosfact;
+<a name="l00320"></a>00320       }
+<a name="l00321"></a>00321     }
+<a name="l00322"></a>00322     <span class="keywordflow">return</span> nullColor;
+<a name="l00323"></a>00323   }
+<a name="l00324"></a>00324 
+<a name="l00325"></a>00325 <span class="keyword">private</span>:
+<a name="l00326"></a>00326   AttenuationProc attn;
+<a name="l00327"></a>00327   <a class="code" href="classcsVector3.html">csVector3</a> lightPos; <span class="comment">//localspace</span>
+<a name="l00328"></a>00328   <a class="code" href="classcsVector3.html">csVector3</a> lightDir; <span class="comment">//localspace</span>
+<a name="l00329"></a>00329   <a class="code" href="classcsColor.html">csColor</a> lightCol;
+<a name="l00330"></a>00330   <a class="code" href="classcsColor.html">csColor</a> nullColor;
+<a name="l00331"></a>00331   <span class="keywordtype">float</span> blackLimit;
+<a name="l00332"></a>00332   <span class="keywordtype">float</span> falloffInner, falloffOuter;
+<a name="l00333"></a>00333 };
+<a name="l00334"></a>00334 
 <a name="l00338"></a><a class="code" href="structiVertexLightCalculator.html">00338</a> <span class="keyword">struct </span><a class="code" href="structiVertexLightCalculator.html">iVertexLightCalculator</a>
 <a name="l00339"></a>00339 {
 <a name="l00340"></a>00340 <span class="keyword">public</span>:
-<a name="l00341"></a>00341   <span class="keyword">virtual</span> <span class="keywordtype">void</span> CalculateLighting (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00342"></a>00342     <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;objtransform,
-<a name="l00343"></a>00343     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00344"></a>00344     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
-<a name="l00345"></a>00345 
-<a name="l00346"></a>00346   <span class="keyword">virtual</span> <span class="keywordtype">void</span> CalculateLightingAdd (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00347"></a>00347     <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;objtransform,
-<a name="l00348"></a>00348     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00349"></a>00349     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
-<a name="l00350"></a>00350 
-<a name="l00351"></a>00351   <span class="keyword">virtual</span> <span class="keywordtype">void</span> CalculateLightingMul (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00352"></a>00352     <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;objtransform,
-<a name="l00353"></a>00353     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00354"></a>00354     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
-<a name="l00355"></a>00355 };
-<a name="l00356"></a>00356 
-<a name="l00357"></a>00357 <span class="keyword">template</span>&lt;<span class="keyword">class</span> LightProc&gt;
-<a name="l00358"></a><a class="code" href="classcsVertexLightCalculator.html">00358</a> <span class="keyword">class </span><a class="code" href="classcsVertexLightCalculator.html">csVertexLightCalculator</a> : <span class="keyword">public</span> <a class="code" href="structiVertexLightCalculator.html">iVertexLightCalculator</a>
-<a name="l00359"></a>00359 {
-<a name="l00360"></a>00360 <span class="keyword">public</span>:
-<a name="l00361"></a><a class="code" href="classcsVertexLightCalculator.html#a3">00361</a>   <a class="code" href="classcsVertexLightCalculator.html#a3">csVertexLightCalculator</a> ()
-<a name="l00362"></a>00362   {
-<a name="l00363"></a>00363   }
-<a name="l00364"></a>00364 
-<a name="l00365"></a><a class="code" href="classcsVertexLightCalculator.html#a0">00365</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a0">CalculateLighting</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00366"></a>00366     <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;objtransform,
-<a name="l00367"></a>00367     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00368"></a>00368     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
-<a name="l00369"></a>00369 <span class="keyword">  </span>{
-<a name="l00370"></a>00370     <span class="comment">// setup the light calculator</span>
-<a name="l00371"></a>00371     LightProc lighter (light, objtransform);
-<a name="l00372"></a>00372 
-<a name="l00373"></a>00373     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
-<a name="l00374"></a>00374     {
-<a name="l00375"></a>00375       litColor[n] = lighter.ProcessVertex (vb[n], nb[n]);
-<a name="l00376"></a>00376     }
-<a name="l00377"></a>00377   }
-<a name="l00378"></a>00378 
-<a name="l00379"></a><a class="code" href="classcsVertexLightCalculator.html#a1">00379</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a1">CalculateLightingAdd</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00380"></a>00380     <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;objtransform,
-<a name="l00381"></a>00381     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00382"></a>00382     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
-<a name="l00383"></a>00383 <span class="keyword">  </span>{
-<a name="l00384"></a>00384     <span class="comment">// setup the light calculator</span>
-<a name="l00385"></a>00385     LightProc lighter (light, objtransform);
-<a name="l00386"></a>00386 
-<a name="l00387"></a>00387     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
-<a name="l00388"></a>00388     {
-<a name="l00389"></a>00389       litColor[n] += lighter.ProcessVertex (vb[n], nb[n]);
-<a name="l00390"></a>00390     }
-<a name="l00391"></a>00391   }
-<a name="l00392"></a>00392 
-<a name="l00393"></a><a class="code" href="classcsVertexLightCalculator.html#a2">00393</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a2">CalculateLightingMul</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00394"></a>00394     <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;objtransform,
-<a name="l00395"></a>00395     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00396"></a>00396     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
-<a name="l00397"></a>00397 <span class="keyword">  </span>{
-<a name="l00398"></a>00398     <span class="comment">// setup the light calculator</span>
-<a name="l00399"></a>00399     LightProc lighter (light, objtransform);
-<a name="l00400"></a>00400 
-<a name="l00401"></a>00401     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
-<a name="l00402"></a>00402     {
-<a name="l00403"></a>00403       litColor[n] *= lighter.ProcessVertex (vb[n], nb[n]);
-<a name="l00404"></a>00404     }
-<a name="l00405"></a>00405   }
-<a name="l00406"></a>00406 };
-<a name="l00407"></a>00407 
-<a name="l00408"></a>00408 <span class="preprocessor">#endif //__CS_VERTEXLIGHT_H__</span>
+<a name="l00349"></a>00349   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVertexLightCalculator.html#a0">CalculateLighting</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00350"></a>00350     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
+<a name="l00351"></a>00351     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
+<a name="l00352"></a>00352 
+<a name="l00357"></a>00357   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVertexLightCalculator.html#a1">CalculateLightingAdd</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00358"></a>00358     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
+<a name="l00359"></a>00359     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
+<a name="l00360"></a>00360 
+<a name="l00365"></a>00365   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVertexLightCalculator.html#a2">CalculateLightingMul</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00366"></a>00366     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
+<a name="l00367"></a>00367     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
+<a name="l00368"></a>00368 };
+<a name="l00369"></a>00369 
+<a name="l00375"></a>00375 <span class="keyword">template</span>&lt;<span class="keyword">class</span> LightProc&gt;
+<a name="l00376"></a><a class="code" href="classcsVertexLightCalculator.html">00376</a> <span class="keyword">class </span><a class="code" href="classcsVertexLightCalculator.html">csVertexLightCalculator</a> : <span class="keyword">public</span> <a class="code" href="structiVertexLightCalculator.html">iVertexLightCalculator</a>
+<a name="l00377"></a>00377 {
+<a name="l00378"></a>00378 <span class="keyword">public</span>:
+<a name="l00379"></a><a class="code" href="classcsVertexLightCalculator.html#a0">00379</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a0">CalculateLighting</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00380"></a>00380     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
+<a name="l00381"></a>00381     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
+<a name="l00382"></a>00382 <span class="keyword">  </span>{
+<a name="l00383"></a>00383     <span class="comment">// setup the light calculator</span>
+<a name="l00384"></a>00384     LightProc lighter (light);
+<a name="l00385"></a>00385 
+<a name="l00386"></a>00386     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
+<a name="l00387"></a>00387     {
+<a name="l00388"></a>00388       litColor[n] = lighter.ProcessVertex (vb[n], nb[n]);
+<a name="l00389"></a>00389     }
+<a name="l00390"></a>00390   }
+<a name="l00391"></a>00391 
+<a name="l00392"></a><a class="code" href="classcsVertexLightCalculator.html#a1">00392</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a1">CalculateLightingAdd</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00393"></a>00393     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
+<a name="l00394"></a>00394     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
+<a name="l00395"></a>00395 <span class="keyword">  </span>{
+<a name="l00396"></a>00396     <span class="comment">// setup the light calculator</span>
+<a name="l00397"></a>00397     LightProc lighter (light);
+<a name="l00398"></a>00398 
+<a name="l00399"></a>00399     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
+<a name="l00400"></a>00400     {
+<a name="l00401"></a>00401       litColor[n] += lighter.ProcessVertex (vb[n], nb[n]);
+<a name="l00402"></a>00402     }
+<a name="l00403"></a>00403   }
+<a name="l00404"></a>00404 
+<a name="l00405"></a><a class="code" href="classcsVertexLightCalculator.html#a2">00405</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a2">CalculateLightingMul</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00406"></a>00406     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
+<a name="l00407"></a>00407     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
+<a name="l00408"></a>00408 <span class="keyword">  </span>{
+<a name="l00409"></a>00409     <span class="comment">// setup the light calculator</span>
+<a name="l00410"></a>00410     LightProc lighter (light);
+<a name="l00411"></a>00411 
+<a name="l00412"></a>00412     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
+<a name="l00413"></a>00413     {
+<a name="l00414"></a>00414       litColor[n] *= lighter.ProcessVertex (vb[n], nb[n]);
+<a name="l00415"></a>00415     }
+<a name="l00416"></a>00416   }
+<a name="l00417"></a>00417 };
+<a name="l00418"></a>00418 
+<a name="l00419"></a>00419 <span class="preprocessor">#endif //__CS_VERTEXLIGHT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
