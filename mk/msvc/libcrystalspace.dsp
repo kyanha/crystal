@@ -1582,10 +1582,6 @@ SOURCE=..\..\libs\..\include\csutil\csmd5.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\csutil\csmmap.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csutil\csobject.h
 # End Source File
 # Begin Source File
@@ -1939,6 +1935,10 @@ SOURCE=..\..\libs\..\include\csutil\win32\DbgHelpAPI.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\win32\minidump.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csutil\win32\mmap.h
 # End Source File
 # Begin Source File
 
