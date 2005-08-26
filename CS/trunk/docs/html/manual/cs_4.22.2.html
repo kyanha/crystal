@@ -91,9 +91,10 @@ shared-object registry for a handle to the image loader:
 This is accomplished by loading the image as raw data and then asking the image
 loader to re-interpret the raw data as an actual <samp>`iImage'</samp> resource.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iDataBuffer&gt; buf = VFS-&gt;ReadFile (&quot;/lib/mydata/test.jpg&quot;);
-csRef&lt;iImage&gt; ifile = imgldr-&gt;Load (buf-&gt;GetUint8 (),
-  buf-&gt;GetSize (), txtmgr-&gt;GetTextureFormat ());
+<table><tr><td>&nbsp;</td><td><pre class="example">iGraphics3D* g3d = ...
+iTextureManager* txtmgr = g3d-&gt;GetTextureManager ();
+csRef&lt;iDataBuffer&gt; buf = VFS-&gt;ReadFile (&quot;/lib/mydata/test.jpg&quot;);
+csRef&lt;iImage&gt; ifile = imgldr-&gt;Load (buf, txtmgr-&gt;GetTextureFormat ());
 csRef&lt;iTextureHandle&gt; txt =
   txtmgr-&gt;RegisterTexture (ifile, CS_TEXTURE_2D);
 </pre></td></tr></table>
