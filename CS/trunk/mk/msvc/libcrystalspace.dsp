@@ -1714,6 +1714,14 @@ SOURCE=..\..\libs\..\include\csutil\mempool.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\mmap_dummy.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csutil\mmap_posix.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\mmapio.h
 # End Source File
 # Begin Source File
