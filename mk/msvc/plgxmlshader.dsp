@@ -146,6 +146,10 @@ SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\docwrap.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\docwrap_replacer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\expparser.cpp
 # End Source File
 # Begin Source File
@@ -163,6 +167,10 @@ SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\condeval.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\docwrap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shadercompiler\xmlshader\docwrap_replacer.h
 # End Source File
 # Begin Source File
 

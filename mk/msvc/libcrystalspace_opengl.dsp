@@ -192,10 +192,6 @@ SOURCE=..\..\libs\csplugincommon\opengl\..\..\..\include\csplugincommon\opengl\g
 
 SOURCE=..\..\libs\csplugincommon\opengl\..\..\..\include\csplugincommon\opengl\glstates.h
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csplugincommon\opengl\..\..\..\include\csplugincommon\opengl\iogl.h
-# End Source File
 # End Group
 # End Target
 # End Project
