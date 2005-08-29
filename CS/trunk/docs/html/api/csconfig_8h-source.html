@@ -115,16 +115,26 @@
 <a name="l00096"></a>00096 <span class="comment">//#define CS_REF_TRACKER</span>
 <a name="l00097"></a>00097 <span class="comment">//#define CS_MEMORY_TRACKER</span>
 <a name="l00098"></a>00098 
-<a name="l00099"></a>00099 <span class="preprocessor">#if defined(CS_COMPILER_MSVC) &amp;&amp; (_MSC_VER &gt;= 1400)</span>
-<a name="l00100"></a>00100 <span class="preprocessor"></span><span class="preprocessor">#  define _CRT_SECURE_NO_DEPRECATE</span>
-<a name="l00101"></a>00101 <span class="preprocessor"></span>        <span class="comment">/* In VC8, a lot of CRT methods were marked "deprecated" b/c they're </span>
-<a name="l00102"></a>00102 <span class="comment">         * deemed "insecure". Silence those warnings. </span>
-<a name="l00103"></a>00103 <span class="comment">         * NB: This is here b/c it needs to be set before any standard headers</span>
-<a name="l00104"></a>00104 <span class="comment">         * are included. */</span>
-<a name="l00105"></a>00105 <span class="preprocessor">#  define _CRT_NONSTDC_NO_DEPRECATE </span><span class="comment">/* Similar. */</span>
-<a name="l00106"></a>00106 <span class="preprocessor">#endif</span>
-<a name="l00107"></a>00107 <span class="preprocessor"></span>
-<a name="l00108"></a>00108 <span class="preprocessor">#endif // __CS_WIN32_CSCONFIG_H__</span>
+<a name="l00099"></a>00099 <span class="comment">// --- Stuff that needs to go before *any* inclusion of VC standard headers:</span>
+<a name="l00100"></a>00100 
+<a name="l00101"></a>00101 <span class="preprocessor">#if defined(CS_COMPILER_MSVC) &amp;&amp; (_MSC_VER &gt;= 1400)</span>
+<a name="l00102"></a>00102 <span class="preprocessor"></span><span class="preprocessor">#  define _CRT_SECURE_NO_DEPRECATE</span>
+<a name="l00103"></a>00103 <span class="preprocessor"></span>        <span class="comment">/* In VC8, a lot of CRT methods were marked "deprecated" b/c they're </span>
+<a name="l00104"></a>00104 <span class="comment">         * deemed "insecure". Silence those warnings. </span>
+<a name="l00105"></a>00105 <span class="comment">         * NB: This is here b/c it needs to be set before any standard headers</span>
+<a name="l00106"></a>00106 <span class="comment">         * are included. */</span>
+<a name="l00107"></a>00107 <span class="preprocessor">#  define _CRT_NONSTDC_NO_DEPRECATE </span><span class="comment">/* Similar. */</span>
+<a name="l00108"></a>00108 <span class="preprocessor">#endif</span>
+<a name="l00109"></a>00109 <span class="preprocessor"></span>
+<a name="l00110"></a>00110 <span class="preprocessor">#if defined(CS_COMPILER_MSVC) &amp;&amp; defined(_WCHAR_T_DEFINED)</span>
+<a name="l00111"></a>00111 <span class="preprocessor"></span>  <span class="comment">/* Attempt to detect built-in wchar_t - needed for some templates that</span>
+<a name="l00112"></a>00112 <span class="comment">   * are templated for both utf16_char(short) and wchar_t(short as well if </span>
+<a name="l00113"></a>00113 <span class="comment">   * not built-in). </span>
+<a name="l00114"></a>00114 <span class="comment">   * NB: only works if cssysdef.h is included first in sources */</span>
+<a name="l00115"></a>00115 <span class="preprocessor">  #define CS_MSVC_WCHAR_T_BUILTIN</span>
+<a name="l00116"></a>00116 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00117"></a>00117 <span class="preprocessor"></span>  
+<a name="l00118"></a>00118 <span class="preprocessor">#endif // __CS_WIN32_CSCONFIG_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
