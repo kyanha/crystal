@@ -1950,6 +1950,10 @@ SOURCE=..\..\libs\..\include\csutil\win32\mmap.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\win32\psdk-compat.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\win32\registrycfg.h
 # End Source File
 # Begin Source File
