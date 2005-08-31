@@ -60,12 +60,12 @@
 <a name="l00053"></a>00053   {
 <a name="l00054"></a>00054   }
 <a name="l00055"></a>00055   
-<a name="l00059"></a><a class="code" href="classcsRenderBufferLock.html#a6">00059</a>   <a class="code" href="classcsRenderBufferLock.html#a6">~csRenderBufferLock</a>()
+<a name="l00059"></a><a class="code" href="classcsRenderBufferLock.html#a7">00059</a>   <a class="code" href="classcsRenderBufferLock.html#a7">~csRenderBufferLock</a>()
 <a name="l00060"></a>00060   {
-<a name="l00061"></a>00061     <a class="code" href="classcsRenderBufferLock.html#a5">Unlock</a>();
+<a name="l00061"></a>00061     <a class="code" href="classcsRenderBufferLock.html#a6">Unlock</a>();
 <a name="l00062"></a>00062   }
 <a name="l00063"></a>00063   
-<a name="l00068"></a><a class="code" href="classcsRenderBufferLock.html#a2">00068</a>   T* <a class="code" href="classcsRenderBufferLock.html#a2">Lock</a> ()
+<a name="l00068"></a><a class="code" href="classcsRenderBufferLock.html#a3">00068</a>   T* <a class="code" href="classcsRenderBufferLock.html#a3">Lock</a> ()
 <a name="l00069"></a>00069   {
 <a name="l00070"></a>00070     <span class="keywordflow">if</span> (!isLocked)
 <a name="l00071"></a>00071     {
@@ -75,7 +75,7 @@
 <a name="l00075"></a>00075     <span class="keywordflow">return</span> lockBuf;
 <a name="l00076"></a>00076   }
 <a name="l00077"></a>00077   
-<a name="l00079"></a><a class="code" href="classcsRenderBufferLock.html#a5">00079</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferLock.html#a5">Unlock</a> ()
+<a name="l00079"></a><a class="code" href="classcsRenderBufferLock.html#a6">00079</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferLock.html#a6">Unlock</a> ()
 <a name="l00080"></a>00080   {
 <a name="l00081"></a>00081     <span class="keywordflow">if</span> (isLocked)
 <a name="l00082"></a>00082     {
@@ -84,23 +84,28 @@
 <a name="l00085"></a>00085     }
 <a name="l00086"></a>00086   }
 <a name="l00087"></a>00087   
-<a name="l00092"></a><a class="code" href="classcsRenderBufferLock.html#a3">00092</a>   <a class="code" href="classcsRenderBufferLock.html#a3">operator T* </a>()
+<a name="l00092"></a><a class="code" href="classcsRenderBufferLock.html#a4">00092</a>   <a class="code" href="classcsRenderBufferLock.html#a4">operator T* </a>()
 <a name="l00093"></a>00093   {
-<a name="l00094"></a>00094     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a2">Lock</a>();
+<a name="l00094"></a>00094     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a3">Lock</a>();
 <a name="l00095"></a>00095   }
 <a name="l00096"></a>00096 
-<a name="l00098"></a><a class="code" href="classcsRenderBufferLock.html#a4">00098</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a4">operator [] </a>(size_t n)
+<a name="l00098"></a><a class="code" href="classcsRenderBufferLock.html#a5">00098</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a5">operator [] </a>(size_t n)
 <a name="l00099"></a>00099   {
 <a name="l00100"></a>00100     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a1">Get</a> (n);
 <a name="l00101"></a>00101   }
 <a name="l00102"></a>00102 
 <a name="l00104"></a><a class="code" href="classcsRenderBufferLock.html#a1">00104</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a1">Get</a> (size_t n)
 <a name="l00105"></a>00105   {
-<a name="l00106"></a>00106     <span class="keywordflow">return</span> *((T*)((<a class="code" href="cstypes_8h.html#a9">uint8</a>*)<a class="code" href="classcsRenderBufferLock.html#a2">Lock</a>() + n * bufStride));
+<a name="l00106"></a>00106     <span class="keywordflow">return</span> *((T*)((<a class="code" href="cstypes_8h.html#a9">uint8</a>*)<a class="code" href="classcsRenderBufferLock.html#a3">Lock</a>() + n * bufStride));
 <a name="l00107"></a>00107   }
-<a name="l00108"></a>00108 };
-<a name="l00109"></a>00109 
-<a name="l00110"></a>00110 <span class="preprocessor">#endif // __CS_CSTOOL_RBUFLOCK_H__</span>
+<a name="l00108"></a>00108   
+<a name="l00110"></a><a class="code" href="classcsRenderBufferLock.html#a2">00110</a>   size_t <a class="code" href="classcsRenderBufferLock.html#a2">GetSize</a>()<span class="keyword"> const</span>
+<a name="l00111"></a>00111 <span class="keyword">  </span>{
+<a name="l00112"></a>00112     <span class="keywordflow">return</span> buffer-&gt;GetElementCount();
+<a name="l00113"></a>00113   }
+<a name="l00114"></a>00114 };
+<a name="l00115"></a>00115 
+<a name="l00116"></a>00116 <span class="preprocessor">#endif // __CS_CSTOOL_RBUFLOCK_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
