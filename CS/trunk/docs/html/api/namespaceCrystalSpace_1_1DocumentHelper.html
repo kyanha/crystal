@@ -17,7 +17,7 @@
 <div class="qindex"><a class="qindex" href="index.html">Main&nbsp;Page</a> | <a class="qindex" href="modules.html">Modules</a> | <a class="qindex" href="namespaces.html">Namespace List</a> | <a class="qindex" href="hierarchy.html">Class&nbsp;Hierarchy</a> | <a class="qindex" href="classes.html">Alphabetical&nbsp;List</a> | <a class="qindex" href="annotated.html">Class&nbsp;List</a> | <a class="qindex" href="dirs.html">Directories</a> | <a class="qindex" href="files.html">File&nbsp;List</a> | <a class="qindex" href="namespacemembers.html">Namespace&nbsp;Members</a> | <a class="qindex" href="functions.html">Class&nbsp;Members</a> | <a class="qindex" href="globals.html">File&nbsp;Members</a> | <a class="qindex" href="pages.html">Related&nbsp;Pages</a></div>
 <div class="nav">
 <a class="el" href="namespaceCrystalSpace.html">CrystalSpace</a>::<a class="el" href="namespaceCrystalSpace_1_1DocumentHelper.html">DocumentHelper</a></div>
-<h1>CrystalSpace::DocumentHelper Namespace Reference</h1>Namespace to group helpers operating on iDocument*.  
+<h1>CrystalSpace::DocumentHelper Namespace Reference</h1>Namespace contains helper functions and classes which operates on <a class="el" href="structiDocumentNode.html">iDocumentNode</a> and <a class="el" href="structiDocumentNodeIterator.html">iDocumentNodeIterator</a>.  
 <a href="#_details">More...</a>
 <p>
 <table border="0" cellpadding="0" cellspacing="0">
@@ -45,7 +45,7 @@
 <tr><td class="memTemplParams" nowrap colspan="2">template&lt;class T&gt; </td></tr>
 <tr><td class="memTemplItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsPtr.html">csPtr</a>&lt; <a class="el" href="structiDocumentNodeIterator.html">iDocumentNodeIterator</a> &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceCrystalSpace_1_1DocumentHelper.html#a2">FilterDocumentNodeIterator</a> (<a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiDocumentNodeIterator.html">iDocumentNodeIterator</a> &gt; parent, T filter)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a filtering <a class="el" href="structiDocumentNodeIterator.html">iDocumentNodeIterator</a>.  <a href="#a2"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a filtering <a class="el" href="structiDocumentNodeIterator.html">iDocumentNodeIterator</a> Example usage:.  <a href="#a2"></a><br></td></tr>
 <tr><td class="memTemplParams" nowrap colspan="2">template&lt;class T&gt; </td></tr>
 <tr><td class="memTemplItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceCrystalSpace_1_1DocumentHelper.html#a1">RemoveDuplicateChildren</a> (<a class="el" href="structiDocumentNode.html">iDocumentNode</a> *rootNode, <a class="el" href="classcsRef.html">csRef</a>&lt; <a class="el" href="structiDocumentNodeIterator.html">iDocumentNodeIterator</a> &gt; childIt, T eq)</td></tr>
 
@@ -56,7 +56,7 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove duplicate child-nodes.  <a href="#a0"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-Namespace to group helpers operating on iDocument*. <hr><h2>Function Documentation</h2>
+Namespace contains helper functions and classes which operates on <a class="el" href="structiDocumentNode.html">iDocumentNode</a> and <a class="el" href="structiDocumentNodeIterator.html">iDocumentNodeIterator</a>. <hr><h2>Function Documentation</h2>
 <a class="anchor" name="a2"></a><!-- doxytag: member="CrystalSpace::DocumentHelper::FilterDocumentNodeIterator" ref="a2" args="(csRef&lt; iDocumentNodeIterator &gt; parent, T filter)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -95,11 +95,16 @@ template&lt;class T&gt; </td>
     <td>
 
 <p>
-Get a filtering <a class="el" href="structiDocumentNodeIterator.html">iDocumentNodeIterator</a>. 
+Get a filtering <a class="el" href="structiDocumentNodeIterator.html">iDocumentNodeIterator</a> Example usage:. 
 <p>
-
+<div class="fragment"><pre class="fragment"> DocumentHelper::NodeAttributeValueTest test (<span class="stringliteral">"name"</span>, <span class="stringliteral">"Marten"</span>);
+ <a class="code" href="classcsRef.html">csRef&lt;iDocumentNodeIterator&gt;</a> it = 
+   <a class="code" href="namespaceCrystalSpace_1_1DocumentHelper.html#a2">DocumentHelper::FilterDocumentNodeIterator</a> (node-&gt;GetNodes(), test);
+ <span class="keywordflow">while</span> (it-&gt;HasNext ())
+ { ... }
+</pre></div>
 <p>
-Definition at line <a class="el" href="documenthelper_8h-source.html#l00282">282</a> of file <a class="el" href="documenthelper_8h-source.html">documenthelper.h</a>.    </td>
+Definition at line <a class="el" href="documenthelper_8h-source.html#l00295">295</a> of file <a class="el" href="documenthelper_8h-source.html">documenthelper.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a1"></a><!-- doxytag: member="CrystalSpace::DocumentHelper::RemoveDuplicateChildren" ref="a1" args="(iDocumentNode *rootNode, csRef&lt; iDocumentNodeIterator &gt; childIt, T eq)" --><p>
@@ -148,9 +153,9 @@ template&lt;class T&gt; </td>
 <p>
 Remove duplicate child-nodes. 
 <p>
-The functor T is used to determine what should be seen as equal nodes. This is a O(n^2) operation!
+The functor T is used to determine what should be seen as equal nodes. This is potentially an O(n^2) operation!
 <p>
-Definition at line <a class="el" href="documenthelper_8h-source.html#l00111">111</a> of file <a class="el" href="documenthelper_8h-source.html">documenthelper.h</a>.
+Definition at line <a class="el" href="documenthelper_8h-source.html#l00114">114</a> of file <a class="el" href="documenthelper_8h-source.html">documenthelper.h</a>.
 <p>
 References <a class="el" href="structiDocumentNode.html#a19">iDocumentNode::RemoveNode()</a>.    </td>
   </tr>
@@ -195,9 +200,9 @@ template&lt;class T&gt; </td>
 <p>
 Remove duplicate child-nodes. 
 <p>
-The functor T is used to determine what should be seen as equal nodes. This is a O(n^2) operation!
+The functor T is used to determine what should be seen as equal nodes. This is potentially an O(n^2) operation!
 <p>
-Definition at line <a class="el" href="documenthelper_8h-source.html#l00098">98</a> of file <a class="el" href="documenthelper_8h-source.html">documenthelper.h</a>.
+Definition at line <a class="el" href="documenthelper_8h-source.html#l00101">101</a> of file <a class="el" href="documenthelper_8h-source.html">documenthelper.h</a>.
 <p>
 References <a class="el" href="structiDocumentNode.html#a13">iDocumentNode::GetNodes()</a>.    </td>
   </tr>
