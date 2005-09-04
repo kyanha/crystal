@@ -162,6 +162,10 @@ SOURCE=..\..\apps\tools\lighter2\radprimitive.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\apps\tools\lighter2\raytracer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\apps\tools\lighter2\scene.cpp
 # End Source File
 # End Group
@@ -199,6 +203,14 @@ SOURCE=..\..\apps\tools\lighter2\radpatch.h
 # Begin Source File
 
 SOURCE=..\..\apps\tools\lighter2\radprimitive.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter2\raygenerator.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tools\lighter2\raytracer.h
 # End Source File
 # Begin Source File
 
