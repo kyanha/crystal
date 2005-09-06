@@ -70,7 +70,7 @@
 <a name="l00062"></a>00062 <span class="keyword">protected</span>:
 <a name="l00063"></a><a class="code" href="classcsParticleSystem.html#p23">00063</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
 <a name="l00064"></a><a class="code" href="classcsParticleSystem.html#p13">00064</a>   <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* factory;
-<a name="l00065"></a><a class="code" href="classcsParticleSystem.html#p19">00065</a>   <a class="code" href="structiBase.html">iBase</a>* logparent;
+<a name="l00065"></a><a class="code" href="classcsParticleSystem.html#p19">00065</a>   <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* logparent;
 <a name="l00066"></a><a class="code" href="classcsParticleSystem.html#p12">00066</a>   <a class="code" href="structiEngine.html">iEngine</a>* engine;
 <a name="l00067"></a><a class="code" href="classcsParticleSystem.html#p18">00067</a>   <a class="code" href="classcsRef.html">csRef&lt;iLightManager&gt;</a> light_mgr;
 <a name="l00069"></a><a class="code" href="classcsParticleSystem.html#p29">00069</a>   <a class="code" href="classcsVector3.html">csVector3</a> radius;
@@ -262,8 +262,8 @@
 <a name="l00328"></a>00328   { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
 <a name="l00329"></a><a class="code" href="classcsParticleSystem.html#a28">00329</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a10">HitBeamObject</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp;,
 <a name="l00330"></a>00330         <a class="code" href="classcsVector3.html">csVector3</a>&amp;, <span class="keywordtype">float</span>*, <span class="keywordtype">int</span>* = 0) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
-<a name="l00331"></a><a class="code" href="classcsParticleSystem.html#a43">00331</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a16">SetLogicalParent</a> (<a class="code" href="structiBase.html">iBase</a>* lp) { logparent = lp; }
-<a name="l00332"></a><a class="code" href="classcsParticleSystem.html#a15">00332</a>   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>* <a class="code" href="structiMeshObject.html#a4">GetLogicalParent</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> logparent; }
+<a name="l00331"></a><a class="code" href="classcsParticleSystem.html#a44">00331</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a17">SetMeshWrapper</a> (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* lp) { logparent = lp; }
+<a name="l00332"></a><a class="code" href="classcsParticleSystem.html#a16">00332</a>   <span class="keyword">virtual</span> <a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* <a class="code" href="structiMeshObject.html#a5">GetMeshWrapper</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> logparent; }
 <a name="l00333"></a>00333 
 <a name="l00334"></a>00334   <span class="comment">//------------------------- iObjectModel implementation ----------------</span>
 <a name="l00335"></a><a class="code" href="classcsParticleSystem_1_1ObjectModel.html">00335</a>   <span class="keyword">class </span><a class="code" href="classcsParticleSystem_1_1ObjectModel.html">ObjectModel</a> : <span class="keyword">public</span> <a class="code" href="classcsObjectModel.html">csObjectModel</a>
@@ -296,13 +296,13 @@
 <a name="l00362"></a>00362     col = color;
 <a name="l00363"></a>00363     <span class="keywordflow">return</span> <span class="keyword">true</span>;
 <a name="l00364"></a>00364   }
-<a name="l00365"></a><a class="code" href="classcsParticleSystem.html#a44">00365</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a17">SetMaterialWrapper</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat)
+<a name="l00365"></a><a class="code" href="classcsParticleSystem.html#a43">00365</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiMeshObject.html#a16">SetMaterialWrapper</a> (<a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* mat)
 <a name="l00366"></a>00366   {
 <a name="l00367"></a>00367     initialized = <span class="keyword">false</span>;
 <a name="l00368"></a>00368     <a class="code" href="classcsParticleSystem.html#p20">csParticleSystem::mat</a> = mat;
 <a name="l00369"></a>00369     <span class="keywordflow">return</span> <span class="keyword">true</span>;
 <a name="l00370"></a>00370   }
-<a name="l00371"></a><a class="code" href="classcsParticleSystem.html#a16">00371</a>   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiMeshObject.html#a5">GetMaterialWrapper</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mat; }
+<a name="l00371"></a><a class="code" href="classcsParticleSystem.html#a15">00371</a>   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* <a class="code" href="structiMeshObject.html#a4">GetMaterialWrapper</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mat; }
 <a name="l00372"></a><a class="code" href="classcsParticleSystem.html#a30">00372</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a12">InvalidateMaterialHandles</a> () { }
 <a name="l00377"></a><a class="code" href="classcsParticleSystem.html#a32">00377</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiMeshObject.html#a14">PositionChild</a> (<a class="code" href="structiMeshObject.html">iMeshObject</a>* <span class="comment">/*child*/</span>,<a class="code" href="cstypes_8h.html#a26">csTicks</a> <span class="comment">/*current_time*/</span>) { }
 <a name="l00378"></a>00378 
