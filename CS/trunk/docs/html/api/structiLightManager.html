@@ -31,7 +31,7 @@
 <a href="structiLightManager-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual const <a class="el" href="classcsArray.html">csArray</a>&lt; <a class="el" href="structiLight.html">iLight</a> * &gt; &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiLightManager.html#a0">GetRelevantLights</a> (<a class="el" href="structiBase.html">iBase</a> *logObject, int maxLights, bool desireSorting)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual const <a class="el" href="classcsArray.html">csArray</a>&lt; <a class="el" href="structiLight.html">iLight</a> * &gt; &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiLightManager.html#a0">GetRelevantLights</a> (<a class="el" href="structiMeshWrapper.html">iMeshWrapper</a> *logObject, int maxLights, bool desireSorting)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return all 'relevant' lights that hit this object.  <a href="#a0"></a><br></td></tr>
 </table>
@@ -43,8 +43,8 @@ The engine registers an implementation of this object in the object registry wit
 <p>
 
 <p>
-Definition at line <a class="el" href="lightmgr_8h-source.html#l00046">46</a> of file <a class="el" href="lightmgr_8h-source.html">lightmgr.h</a>.<hr><h2>Member Function Documentation</h2>
-<a class="anchor" name="a0"></a><!-- doxytag: member="iLightManager::GetRelevantLights" ref="a0" args="(iBase *logObject, int maxLights, bool desireSorting)=0" --><p>
+Definition at line <a class="el" href="lightmgr_8h-source.html#l00047">47</a> of file <a class="el" href="lightmgr_8h-source.html">lightmgr.h</a>.<hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="a0"></a><!-- doxytag: member="iLightManager::GetRelevantLights" ref="a0" args="(iMeshWrapper *logObject, int maxLights, bool desireSorting)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -52,7 +52,7 @@ Definition at line <a class="el" href="lightmgr_8h-source.html#l00046">46</a> of
         <tr>
           <td class="md" nowrap valign="top">virtual const <a class="el" href="classcsArray.html">csArray</a>&lt;<a class="el" href="structiLight.html">iLight</a>*&gt;&amp; iLightManager::GetRelevantLights           </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structiBase.html">iBase</a> *&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiMeshWrapper.html">iMeshWrapper</a> *&nbsp;</td>
           <td class="mdname" nowrap> <em>logObject</em>, </td>
         </tr>
         <tr>
@@ -88,7 +88,7 @@ Return all 'relevant' lights that hit this object.
 <p>
 Depending on implementation in the engine this can simply mean a list of all lights that affect the object or it can be a list of the N most relevant lights (with N a parameter set by the user on that object). <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>logObject</em>&nbsp;</td><td>logObject is the logical parent for the mesh object as set by the mesh object creator. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>logObject</em>&nbsp;</td><td>logObject is the mesh wrapper. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>maxLights</em>&nbsp;</td><td>maxLights is the maximum number of lights that you (as the caller of this function) are interested in. Even with this set the light manager may still return an array containing more lights. You just have to ignore the additional lights then. If you don't want to limit the number of lights you can set maxLights to -1. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>desireSorting</em>&nbsp;</td><td>if this is true then you will get a list sorted on light relevance. Light relevance is a function of influence radius, and intensity. If you don't need sorting then don't set this as it will decrease performance somewhat.</td></tr>
   </table>
