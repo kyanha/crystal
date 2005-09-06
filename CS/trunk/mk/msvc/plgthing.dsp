@@ -154,6 +154,10 @@ SOURCE=..\..\plugins\mesh\thing\object\polygon.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\mesh\thing\object\polyrender.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\mesh\thing\object\polytext.cpp
 # End Source File
 # Begin Source File
@@ -179,6 +183,10 @@ SOURCE=..\..\plugins\mesh\thing\object\parrays.h
 # Begin Source File
 
 SOURCE=..\..\plugins\mesh\thing\object\polygon.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\mesh\thing\object\polyrender.h
 # End Source File
 # Begin Source File
 

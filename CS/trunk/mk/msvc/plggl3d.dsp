@@ -138,10 +138,6 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\opengl\gl_polyrender.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\opengl\gl_r2t_backend.cpp
 # End Source File
 # Begin Source File
@@ -168,10 +164,6 @@ SOURCE=..\..\plugins\video\render3d\opengl\gl_txtmgr.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\opengl\gl_polyrender.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\opengl\gl_r2t_backend.h

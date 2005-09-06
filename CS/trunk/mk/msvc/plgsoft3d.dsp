@@ -166,10 +166,6 @@ SOURCE=..\..\plugins\video\render3d\software\soft_g3d.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\soft_polyrender.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\software\soft_txt.cpp
 # End Source File
 # Begin Source File
@@ -191,10 +187,6 @@ SOURCE=..\..\plugins\video\render3d\software\sft3dcom.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\software\soft_g3d.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\soft_polyrender.h
 # End Source File
 # Begin Source File
 
