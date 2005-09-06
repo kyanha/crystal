@@ -150,6 +150,10 @@ SOURCE=..\..\plugins\gui\cegui\ceguiresourceprovider.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\gui\cegui\ceguiscriptmodule.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\gui\cegui\ceguitexture.cpp
 # End Source File
 # End Group
@@ -167,6 +171,10 @@ SOURCE=..\..\plugins\gui\cegui\ceguirenderer.h
 # Begin Source File
 
 SOURCE=..\..\plugins\gui\cegui\ceguiresourceprovider.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\gui\cegui\ceguiscriptmodule.h
 # End Source File
 # Begin Source File
 
