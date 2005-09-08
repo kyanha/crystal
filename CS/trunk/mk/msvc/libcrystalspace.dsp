@@ -562,6 +562,10 @@ SOURCE=..\..\libs\csutil\binder.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\callstack.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\cfgacc.cpp
 # End Source File
 # Begin Source File
@@ -862,7 +866,7 @@ SOURCE=..\..\libs\csutil\virtclk.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\win32\callstack.cpp
+SOURCE=..\..\libs\csutil\win32\callstack-dbghelp.cpp
 # End Source File
 # Begin Source File
 
@@ -1894,6 +1898,10 @@ SOURCE=..\..\libs\..\include\csutil\threadjobqueue.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\timemeasure.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\timer.h
 # End Source File
 # Begin Source File
@@ -1982,11 +1990,19 @@ SOURCE=..\..\libs\cstool\importkit_glue.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\callstack.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\cskey_identstrs.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\csucmappings.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\demangle.h
 # End Source File
 # Begin Source File
 
@@ -2014,7 +2030,7 @@ SOURCE=..\..\libs\csutil\win32\cachedll.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\win32\callstack.h
+SOURCE=..\..\libs\csutil\win32\callstack-dbghelp.h
 # End Source File
 # Begin Source File
 
