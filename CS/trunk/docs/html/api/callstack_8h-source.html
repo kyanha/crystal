@@ -58,7 +58,7 @@
 <a name="l00043"></a>00043   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetFunctionName (size_t num, <a class="code" href="classcsString.html">csString</a>&amp; str) = 0;
 <a name="l00044"></a>00044   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetLineNumber (size_t num, <a class="code" href="classcsString.html">csString</a>&amp; str) = 0;
 <a name="l00045"></a>00045   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetParameters (size_t num, <a class="code" href="classcsString.html">csString</a>&amp; str) = 0;
-<a name="l00046"></a><a class="code" href="classcsCallStack.html#a5">00046</a>   <span class="keywordtype">void</span> Print (FILE* f = stdout, <span class="keywordtype">bool</span> Short = <span class="keyword">false</span>)
+<a name="l00046"></a><a class="code" href="classcsCallStack.html#a6">00046</a>   <span class="keywordtype">void</span> Print (FILE* f = stdout, <span class="keywordtype">bool</span> Short = <span class="keyword">false</span>)
 <a name="l00047"></a>00047   {
 <a name="l00048"></a>00048     <span class="keywordflow">for</span> (size_t i = 0; i &lt; GetEntryCount(); i++)
 <a name="l00049"></a>00049     {
@@ -73,16 +73,28 @@
 <a name="l00058"></a>00058     }
 <a name="l00059"></a>00059     fflush (f);
 <a name="l00060"></a>00060   }
-<a name="l00061"></a>00061 };
-<a name="l00062"></a>00062 
-<a name="l00063"></a>00063 <span class="comment">// @@@ Document me</span>
-<a name="l00064"></a><a class="code" href="classcsCallStackHelper.html">00064</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csCallStackHelper
-<a name="l00065"></a>00065 {
-<a name="l00066"></a>00066 <span class="keyword">public</span>:
-<a name="l00075"></a>00075   <span class="keyword">static</span> <a class="code" href="classcsCallStack.html">csCallStack</a>* CreateCallStack (<span class="keywordtype">int</span> skip = 0);
-<a name="l00076"></a>00076 };
-<a name="l00077"></a>00077 
-<a name="l00078"></a>00078 <span class="preprocessor">#endif // __CS_UTIL_CALLSTACK_H__</span>
+<a name="l00061"></a><a class="code" href="classcsCallStack.html#a1">00061</a>   <a class="code" href="classcsString.html">csString</a> GetEntryAll (size_t i, <span class="keywordtype">bool</span> Short = <span class="keyword">false</span>)
+<a name="l00062"></a>00062   {
+<a name="l00063"></a>00063     <a class="code" href="classcsString.html">csString</a> line;
+<a name="l00064"></a>00064     <a class="code" href="classcsString.html">csString</a> s;
+<a name="l00065"></a>00065     <span class="keywordtype">bool</span> hasFunc = GetFunctionName (i, s);
+<a name="l00066"></a>00066     line &lt;&lt; (hasFunc ? (<span class="keyword">const</span> <span class="keywordtype">char</span>*)s : <span class="stringliteral">"&lt;unknown&gt;"</span>);
+<a name="l00067"></a>00067     <span class="keywordflow">if</span> (GetLineNumber (i, s))
+<a name="l00068"></a>00068       line &lt;&lt; <span class="stringliteral">" @"</span> &lt;&lt; s;
+<a name="l00069"></a>00069     <span class="keywordflow">if</span> (GetParameters (i, s))
+<a name="l00070"></a>00070       line &lt;&lt; <span class="stringliteral">" ("</span> &lt;&lt; s &lt;&lt; <span class="stringliteral">")"</span>;
+<a name="l00071"></a>00071     <span class="keywordflow">return</span> line;
+<a name="l00072"></a>00072   }
+<a name="l00073"></a>00073 };
+<a name="l00074"></a>00074 
+<a name="l00075"></a>00075 <span class="comment">// @@@ Document me</span>
+<a name="l00076"></a><a class="code" href="classcsCallStackHelper.html">00076</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csCallStackHelper
+<a name="l00077"></a>00077 {
+<a name="l00078"></a>00078 <span class="keyword">public</span>:
+<a name="l00089"></a>00089   <span class="keyword">static</span> <a class="code" href="classcsCallStack.html">csCallStack</a>* CreateCallStack (<span class="keywordtype">int</span> skip = 0, <span class="keywordtype">bool</span> fast = <span class="keyword">false</span>);
+<a name="l00090"></a>00090 };
+<a name="l00091"></a>00091 
+<a name="l00092"></a>00092 <span class="preprocessor">#endif // __CS_UTIL_CALLSTACK_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

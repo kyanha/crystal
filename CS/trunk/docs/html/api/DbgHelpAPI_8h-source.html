@@ -100,317 +100,377 @@
 <a name="l00081"></a>00081 };
 <a name="l00082"></a>00082 <span class="keyword">typedef</span> <a class="code" href="structSYMBOL__INFO.html">SYMBOL_INFO</a>* <a class="code" href="structSYMBOL__INFO.html">PSYMBOL_INFO</a>;
 <a name="l00083"></a>00083 
-<a name="l00084"></a>00084 <span class="preprocessor">#define SYMFLAG_PARAMETER        0x00000040</span>
-<a name="l00085"></a>00085 <span class="preprocessor"></span>
-<a name="l00086"></a>00086 <span class="preprocessor">#define SYMOPT_UNDNAME                  0x00000002</span>
-<a name="l00087"></a>00087 <span class="preprocessor"></span><span class="preprocessor">#define SYMOPT_DEFERRED_LOADS           0x00000004</span>
-<a name="l00088"></a>00088 <span class="preprocessor"></span><span class="preprocessor">#define SYMOPT_LOAD_LINES               0x00000010</span>
-<a name="l00089"></a>00089 <span class="preprocessor"></span><span class="preprocessor">#define SYMOPT_FAIL_CRITICAL_ERRORS     0x00000200</span>
-<a name="l00090"></a>00090 <span class="preprocessor"></span>
-<a name="l00091"></a>00091 <span class="keyword">enum</span> SYM_TYPE
-<a name="l00092"></a>00092 {
-<a name="l00093"></a>00093     SymNone = 0,
-<a name="l00094"></a>00094     SymCoff,
-<a name="l00095"></a>00095     SymCv,
-<a name="l00096"></a>00096     SymPdb,
-<a name="l00097"></a>00097     SymExport,
-<a name="l00098"></a>00098     SymDeferred,
-<a name="l00099"></a>00099     SymSym,
-<a name="l00100"></a>00100     SymDia,
-<a name="l00101"></a>00101     SymVirtual,
-<a name="l00102"></a>00102     NumSymTypes
-<a name="l00103"></a>00103 };
-<a name="l00104"></a>00104 
-<a name="l00105"></a><a class="code" href="structIMAGEHLP__MODULE64.html">00105</a> <span class="keyword">struct </span><a class="code" href="structIMAGEHLP__MODULE64.html">IMAGEHLP_MODULE64</a> 
-<a name="l00106"></a>00106 {  
-<a name="l00107"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o7">00107</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o7">SizeOfStruct</a>;  
-<a name="l00108"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o0">00108</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__MODULE64.html#o0">BaseOfImage</a>;  
-<a name="l00109"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o3">00109</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o3">ImageSize</a>;  
-<a name="l00110"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o9">00110</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o9">TimeDateStamp</a>;  
-<a name="l00111"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o1">00111</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o1">CheckSum</a>;  
-<a name="l00112"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o6">00112</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o6">NumSyms</a>;  
-<a name="l00113"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o8">00113</a>   SYM_TYPE <a class="code" href="structIMAGEHLP__MODULE64.html#o8">SymType</a>;  
-<a name="l00114"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o5">00114</a>   CHAR <a class="code" href="structIMAGEHLP__MODULE64.html#o5">ModuleName</a>[32];  
-<a name="l00115"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o2">00115</a>   CHAR <a class="code" href="structIMAGEHLP__MODULE64.html#o2">ImageName</a>[256];  
-<a name="l00116"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o4">00116</a>   CHAR <a class="code" href="structIMAGEHLP__MODULE64.html#o4">LoadedImageName</a>[256];  
-<a name="l00117"></a>00117   <span class="comment">/*</span>
-<a name="l00118"></a>00118 <span class="comment">    The following fields are only supported on newer versions of dbghelp.dll,</span>
-<a name="l00119"></a>00119 <span class="comment">    but the versions shipped with W2k resp. WXP lack them.</span>
-<a name="l00120"></a>00120 <span class="comment">   */</span>
-<a name="l00121"></a>00121   <span class="comment">/*CHAR LoadedPdbName[256];  </span>
-<a name="l00122"></a>00122 <span class="comment">  DWORD CVSig;  </span>
-<a name="l00123"></a>00123 <span class="comment">  CHAR CVData[MAX_PATH*3];  </span>
-<a name="l00124"></a>00124 <span class="comment">  DWORD PdbSig;  </span>
-<a name="l00125"></a>00125 <span class="comment">  GUID PdbSig70;  </span>
-<a name="l00126"></a>00126 <span class="comment">  DWORD PdbAge;  </span>
-<a name="l00127"></a>00127 <span class="comment">  BOOL PdbUnmatched;  </span>
-<a name="l00128"></a>00128 <span class="comment">  BOOL DbgUnmatched;  </span>
-<a name="l00129"></a>00129 <span class="comment">  BOOL LineNumbers;  </span>
-<a name="l00130"></a>00130 <span class="comment">  BOOL GlobalSymbols;  </span>
-<a name="l00131"></a>00131 <span class="comment">  BOOL TypeInfo;*/</span>
-<a name="l00132"></a>00132 };
-<a name="l00133"></a>00133 <span class="keyword">typedef</span> <a class="code" href="structIMAGEHLP__MODULE64.html">IMAGEHLP_MODULE64</a>* <a class="code" href="structIMAGEHLP__MODULE64.html">PIMAGEHLP_MODULE64</a>;
-<a name="l00134"></a>00134 
-<a name="l00135"></a><a class="code" href="structIMAGEHLP__LINE64.html">00135</a> <span class="keyword">struct </span><a class="code" href="structIMAGEHLP__LINE64.html">IMAGEHLP_LINE64</a>
-<a name="l00136"></a>00136 {  
-<a name="l00137"></a><a class="code" href="structIMAGEHLP__LINE64.html#o4">00137</a>   DWORD <a class="code" href="structIMAGEHLP__LINE64.html#o4">SizeOfStruct</a>;  
-<a name="l00138"></a><a class="code" href="structIMAGEHLP__LINE64.html#o2">00138</a>   PVOID <a class="code" href="structIMAGEHLP__LINE64.html#o2">Key</a>;  
-<a name="l00139"></a><a class="code" href="structIMAGEHLP__LINE64.html#o3">00139</a>   DWORD <a class="code" href="structIMAGEHLP__LINE64.html#o3">LineNumber</a>;  
-<a name="l00140"></a><a class="code" href="structIMAGEHLP__LINE64.html#o1">00140</a>   PCHAR <a class="code" href="structIMAGEHLP__LINE64.html#o1">FileName</a>;  
-<a name="l00141"></a><a class="code" href="structIMAGEHLP__LINE64.html#o0">00141</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__LINE64.html#o0">Address</a>;
-<a name="l00142"></a>00142 };
-<a name="l00143"></a>00143 <span class="keyword">typedef</span> <a class="code" href="structIMAGEHLP__LINE64.html">IMAGEHLP_LINE64</a>* <a class="code" href="structIMAGEHLP__LINE64.html">PIMAGEHLP_LINE64</a>;
-<a name="l00144"></a>00144 
-<a name="l00145"></a>00145 <span class="keyword">typedef</span> BOOL (CALLBACK* PSYM_ENUMERATESYMBOLS_CALLBACK) (<a class="code" href="structSYMBOL__INFO.html">PSYMBOL_INFO</a> pSymInfo,
-<a name="l00146"></a>00146   ULONG SymbolSize, PVOID UserContext);
-<a name="l00147"></a>00147 <span class="keyword">typedef</span> BOOL (CALLBACK* PSYM_ENUMMODULES_CALLBACK64) (PSTR ModuleName,
-<a name="l00148"></a>00148   <a class="code" href="cstypes_8h.html#a15">uint64</a> BaseOfDll, PVOID UserContext);
-<a name="l00149"></a>00149 
-<a name="l00150"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html">00150</a> <span class="keyword">struct </span><a class="code" href="structIMAGEHLP__STACK__FRAME.html">IMAGEHLP_STACK_FRAME</a> 
-<a name="l00151"></a>00151 {  
-<a name="l00152"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o3">00152</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o3">InstructionOffset</a>;  
-<a name="l00153"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o7">00153</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o7">ReturnOffset</a>;  
-<a name="l00154"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o1">00154</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o1">FrameOffset</a>;  
-<a name="l00155"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o8">00155</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o8">StackOffset</a>;  
-<a name="l00156"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o0">00156</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o0">BackingStoreOffset</a>;  
-<a name="l00157"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o2">00157</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o2">FuncTableEntry</a>;  
-<a name="l00158"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o4">00158</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o4">Params</a>[4];  
-<a name="l00159"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o5">00159</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o5">Reserved</a>[5];  
-<a name="l00160"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o9">00160</a>   BOOL <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o9">Virtual</a>;  
-<a name="l00161"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o6">00161</a>   ULONG <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o6">Reserved2</a>;
-<a name="l00162"></a>00162 };
-<a name="l00163"></a>00163 <span class="keyword">typedef</span> <a class="code" href="structIMAGEHLP__STACK__FRAME.html">IMAGEHLP_STACK_FRAME</a>* <a class="code" href="structIMAGEHLP__STACK__FRAME.html">PIMAGEHLP_STACK_FRAME</a>;
-<a name="l00164"></a>00164 <span class="keyword">typedef</span> <span class="keywordtype">void</span>* PIMAGEHLP_CONTEXT;
-<a name="l00165"></a>00165 
-<a name="l00166"></a><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html">00166</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html">MINIDUMP_EXCEPTION_INFORMATION</a> 
-<a name="l00167"></a>00167 {  
-<a name="l00168"></a><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o2">00168</a>   DWORD <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o2">ThreadId</a>;  
-<a name="l00169"></a><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o1">00169</a>   PEXCEPTION_POINTERS <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o1">ExceptionPointers</a>;  
-<a name="l00170"></a><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o0">00170</a>   BOOL <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o0">ClientPointers</a>;
-<a name="l00171"></a>00171 };
-<a name="l00172"></a>00172 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html">MINIDUMP_EXCEPTION_INFORMATION</a>* <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html">PMINIDUMP_EXCEPTION_INFORMATION</a>;
-<a name="l00173"></a>00173 
-<a name="l00174"></a><a class="code" href="structMINIDUMP__USER__STREAM.html">00174</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__USER__STREAM.html">MINIDUMP_USER_STREAM</a> 
-<a name="l00175"></a>00175 {  
-<a name="l00176"></a><a class="code" href="structMINIDUMP__USER__STREAM.html#o2">00176</a>   ULONG32 <a class="code" href="structMINIDUMP__USER__STREAM.html#o2">Type</a>;  
-<a name="l00177"></a><a class="code" href="structMINIDUMP__USER__STREAM.html#o1">00177</a>   ULONG <a class="code" href="structMINIDUMP__USER__STREAM.html#o1">BufferSize</a>;  
-<a name="l00178"></a><a class="code" href="structMINIDUMP__USER__STREAM.html#o0">00178</a>   PVOID <a class="code" href="structMINIDUMP__USER__STREAM.html#o0">Buffer</a>;
-<a name="l00179"></a>00179 };
-<a name="l00180"></a>00180 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__USER__STREAM.html">MINIDUMP_USER_STREAM</a>* <a class="code" href="structMINIDUMP__USER__STREAM.html">PMINIDUMP_USER_STREAM</a>;
-<a name="l00181"></a>00181                                                     
-<a name="l00182"></a><a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html">00182</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html">MINIDUMP_USER_STREAM_INFORMATION</a> 
-<a name="l00183"></a>00183 {  
-<a name="l00184"></a><a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html#o1">00184</a>   ULONG <a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html#o1">UserStreamCount</a>;  
-<a name="l00185"></a><a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html#o0">00185</a>   <a class="code" href="structMINIDUMP__USER__STREAM.html">PMINIDUMP_USER_STREAM</a> <a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html#o0">UserStreamArray</a>;
-<a name="l00186"></a>00186 };
-<a name="l00187"></a>00187 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html">MINIDUMP_USER_STREAM_INFORMATION</a>* <a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html">PMINIDUMP_USER_STREAM_INFORMATION</a>;
-<a name="l00188"></a>00188 
-<a name="l00189"></a>00189 <span class="keyword">enum</span> MINIDUMP_CALLBACK_TYPE
-<a name="l00190"></a>00190 {
-<a name="l00191"></a>00191   ModuleCallback, 
-<a name="l00192"></a>00192   ThreadCallback, 
-<a name="l00193"></a>00193   ThreadExCallback, 
-<a name="l00194"></a>00194   IncludeThreadCallback, 
-<a name="l00195"></a>00195   IncludeModuleCallback
-<a name="l00196"></a>00196 };
-<a name="l00197"></a>00197 
-<a name="l00198"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">00198</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">MINIDUMP_THREAD_CALLBACK</a> 
-<a name="l00199"></a>00199 {  
-<a name="l00200"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o5">00200</a>   ULONG <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o5">ThreadId</a>;  
-<a name="l00201"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o4">00201</a>   HANDLE <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o4">ThreadHandle</a>;  
-<a name="l00202"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o0">00202</a>   CONTEXT <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o0">Context</a>;  
-<a name="l00203"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o1">00203</a>   ULONG <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o1">SizeOfContext</a>;  
-<a name="l00204"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o2">00204</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o2">StackBase</a>;  
-<a name="l00205"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o3">00205</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o3">StackEnd</a>;
-<a name="l00206"></a>00206 };
-<a name="l00207"></a>00207 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">MINIDUMP_THREAD_CALLBACK</a>* <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">PMINIDUMP_THREAD_CALLBACK</a>;
-<a name="l00208"></a>00208 
-<a name="l00209"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">00209</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">MINIDUMP_THREAD_EX_CALLBACK</a> 
-<a name="l00210"></a>00210 {  
-<a name="l00211"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o7">00211</a>   ULONG <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o7">ThreadId</a>;  
-<a name="l00212"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o6">00212</a>   HANDLE <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o6">ThreadHandle</a>;  
-<a name="l00213"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o2">00213</a>   CONTEXT <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o2">Context</a>;  
-<a name="l00214"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o3">00214</a>   ULONG <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o3">SizeOfContext</a>;  
-<a name="l00215"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o4">00215</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o4">StackBase</a>;  
-<a name="l00216"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o5">00216</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o5">StackEnd</a>;  
-<a name="l00217"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o0">00217</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o0">BackingStoreBase</a>;  
-<a name="l00218"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o1">00218</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o1">BackingStoreEnd</a>;
-<a name="l00219"></a>00219 };
-<a name="l00220"></a>00220 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">MINIDUMP_THREAD_EX_CALLBACK</a>* <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">PMINIDUMP_THREAD_EX_CALLBACK</a>;
-<a name="l00221"></a>00221 
-<a name="l00222"></a>00222 <span class="preprocessor">#include &lt;winver.h&gt;</span>
-<a name="l00223"></a>00223 <span class="preprocessor">#include "sanity.inc"</span>
-<a name="l00224"></a>00224 
-<a name="l00225"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">00225</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">MINIDUMP_MODULE_CALLBACK</a> 
-<a name="l00226"></a>00226 {  
-<a name="l00227"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o3">00227</a>   PWCHAR <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o3">FullPath</a>;  
-<a name="l00228"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o0">00228</a>   ULONG64 <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o0">BaseOfImage</a>;  
-<a name="l00229"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o6">00229</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o6">SizeOfImage</a>;  
-<a name="l00230"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o1">00230</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o1">CheckSum</a>;  
-<a name="l00231"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o8">00231</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o8">TimeDateStamp</a>;  
-<a name="l00232"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o9">00232</a>   VS_FIXEDFILEINFO <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o9">VersionInfo</a>;  
-<a name="l00233"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o2">00233</a>   PVOID <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o2">CvRecord</a>;  
-<a name="l00234"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o5">00234</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o5">SizeOfCvRecord</a>;  
-<a name="l00235"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o4">00235</a>   PVOID <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o4">MiscRecord</a>;  
-<a name="l00236"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o7">00236</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o7">SizeOfMiscRecord</a>;
-<a name="l00237"></a>00237 };
-<a name="l00238"></a>00238 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">MINIDUMP_MODULE_CALLBACK</a>* <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">PMINIDUMP_MODULE_CALLBACK</a>;
-<a name="l00239"></a>00239 
-<a name="l00240"></a><a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">00240</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">MINIDUMP_INCLUDE_THREAD_CALLBACK</a> 
-<a name="l00241"></a>00241 {  
-<a name="l00242"></a><a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html#o0">00242</a>   ULONG <a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html#o0">ThreadId</a>;
-<a name="l00243"></a>00243 };
-<a name="l00244"></a>00244 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">MINIDUMP_INCLUDE_THREAD_CALLBACK</a>* <a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">PMINIDUMP_INCLUDE_THREAD_CALLBACK</a>;
-<a name="l00245"></a>00245 
-<a name="l00246"></a><a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">00246</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">MINIDUMP_INCLUDE_MODULE_CALLBACK</a> 
-<a name="l00247"></a>00247 {  
-<a name="l00248"></a><a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html#o0">00248</a>   ULONG64 <a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html#o0">BaseOfImage</a>;
-<a name="l00249"></a>00249 };
-<a name="l00250"></a>00250 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">MINIDUMP_INCLUDE_MODULE_CALLBACK</a>* <a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">PMINIDUMP_INCLUDE_MODULE_CALLBACK</a>;
-<a name="l00251"></a>00251 
-<a name="l00252"></a>00252 
-<a name="l00253"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">00253</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">MINIDUMP_CALLBACK_INPUT</a>       
-<a name="l00254"></a>00254 {  
-<a name="l00255"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o5">00255</a>   ULONG <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o5">ProcessId</a>;  
-<a name="l00256"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o4">00256</a>   HANDLE <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o4">ProcessHandle</a>;  
-<a name="l00257"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o0">00257</a>   ULONG <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o0">CallbackType</a>;  
-<a name="l00258"></a>00258   <span class="keyword">union </span>
-<a name="l00259"></a>00259 <span class="keyword">  </span>{    
-<a name="l00260"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o6">00260</a>     <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">MINIDUMP_THREAD_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o6">Thread</a>;    
-<a name="l00261"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o7">00261</a>     <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">MINIDUMP_THREAD_EX_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o7">ThreadEx</a>;    
-<a name="l00262"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o3">00262</a>     <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">MINIDUMP_MODULE_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o3">Module</a>;    
-<a name="l00263"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o2">00263</a>     <a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">MINIDUMP_INCLUDE_THREAD_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o2">IncludeThread</a>;    
-<a name="l00264"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o1">00264</a>     <a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">MINIDUMP_INCLUDE_MODULE_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o1">IncludeModule</a>;  
-<a name="l00265"></a>00265   };
+<a name="l00084"></a><a class="code" href="structSYMBOL__INFOW.html">00084</a> <span class="keyword">struct </span><a class="code" href="structSYMBOL__INFOW.html">SYMBOL_INFOW</a>
+<a name="l00085"></a>00085 {  
+<a name="l00086"></a><a class="code" href="structSYMBOL__INFOW.html#o11">00086</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o11">SizeOfStruct</a>;  
+<a name="l00087"></a><a class="code" href="structSYMBOL__INFOW.html#o13">00087</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o13">TypeIndex</a>;  
+<a name="l00088"></a><a class="code" href="structSYMBOL__INFOW.html#o7">00088</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structSYMBOL__INFOW.html#o7">Reserved</a>[2];  
+<a name="l00089"></a><a class="code" href="structSYMBOL__INFOW.html#o8">00089</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o8">Reserved2</a>;  
+<a name="l00090"></a><a class="code" href="structSYMBOL__INFOW.html#o10">00090</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o10">Size</a>;  
+<a name="l00091"></a><a class="code" href="structSYMBOL__INFOW.html#o3">00091</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structSYMBOL__INFOW.html#o3">ModBase</a>;  
+<a name="l00092"></a><a class="code" href="structSYMBOL__INFOW.html#o1">00092</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o1">Flags</a>;  
+<a name="l00093"></a><a class="code" href="structSYMBOL__INFOW.html#o14">00093</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structSYMBOL__INFOW.html#o14">Value</a>;  
+<a name="l00094"></a><a class="code" href="structSYMBOL__INFOW.html#o0">00094</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structSYMBOL__INFOW.html#o0">Address</a>;  
+<a name="l00095"></a><a class="code" href="structSYMBOL__INFOW.html#o6">00095</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o6">Register</a>;  
+<a name="l00096"></a><a class="code" href="structSYMBOL__INFOW.html#o9">00096</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o9">Scope</a>;  
+<a name="l00097"></a><a class="code" href="structSYMBOL__INFOW.html#o12">00097</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o12">Tag</a>;  
+<a name="l00098"></a><a class="code" href="structSYMBOL__INFOW.html#o5">00098</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o5">NameLen</a>;  
+<a name="l00099"></a><a class="code" href="structSYMBOL__INFOW.html#o2">00099</a>   ULONG <a class="code" href="structSYMBOL__INFOW.html#o2">MaxNameLen</a>;  
+<a name="l00100"></a><a class="code" href="structSYMBOL__INFOW.html#o4">00100</a>   WCHAR <a class="code" href="structSYMBOL__INFOW.html#o4">Name</a>[1];
+<a name="l00101"></a>00101 };
+<a name="l00102"></a>00102 <span class="keyword">typedef</span> <a class="code" href="structSYMBOL__INFOW.html">SYMBOL_INFOW</a>* <a class="code" href="structSYMBOL__INFOW.html">PSYMBOL_INFOW</a>;
+<a name="l00103"></a>00103 
+<a name="l00104"></a>00104 <span class="preprocessor">#define SYMFLAG_PARAMETER        0x00000040</span>
+<a name="l00105"></a>00105 <span class="preprocessor"></span>
+<a name="l00106"></a>00106 <span class="preprocessor">#define SYMOPT_UNDNAME                  0x00000002</span>
+<a name="l00107"></a>00107 <span class="preprocessor"></span><span class="preprocessor">#define SYMOPT_DEFERRED_LOADS           0x00000004</span>
+<a name="l00108"></a>00108 <span class="preprocessor"></span><span class="preprocessor">#define SYMOPT_LOAD_LINES               0x00000010</span>
+<a name="l00109"></a>00109 <span class="preprocessor"></span><span class="preprocessor">#define SYMOPT_FAIL_CRITICAL_ERRORS     0x00000200</span>
+<a name="l00110"></a>00110 <span class="preprocessor"></span>
+<a name="l00111"></a>00111 <span class="keyword">enum</span> SYM_TYPE
+<a name="l00112"></a>00112 {
+<a name="l00113"></a>00113     SymNone = 0,
+<a name="l00114"></a>00114     SymCoff,
+<a name="l00115"></a>00115     SymCv,
+<a name="l00116"></a>00116     SymPdb,
+<a name="l00117"></a>00117     SymExport,
+<a name="l00118"></a>00118     SymDeferred,
+<a name="l00119"></a>00119     SymSym,
+<a name="l00120"></a>00120     SymDia,
+<a name="l00121"></a>00121     SymVirtual,
+<a name="l00122"></a>00122     NumSymTypes
+<a name="l00123"></a>00123 };
+<a name="l00124"></a>00124 
+<a name="l00125"></a><a class="code" href="structIMAGEHLP__MODULE64.html">00125</a> <span class="keyword">struct </span><a class="code" href="structIMAGEHLP__MODULE64.html">IMAGEHLP_MODULE64</a> 
+<a name="l00126"></a>00126 {  
+<a name="l00127"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o17">00127</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o17">SizeOfStruct</a>;  
+<a name="l00128"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o0">00128</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__MODULE64.html#o0">BaseOfImage</a>;  
+<a name="l00129"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o7">00129</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o7">ImageSize</a>;  
+<a name="l00130"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o19">00130</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o19">TimeDateStamp</a>;  
+<a name="l00131"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o1">00131</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o1">CheckSum</a>;  
+<a name="l00132"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o12">00132</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o12">NumSyms</a>;  
+<a name="l00133"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o18">00133</a>   SYM_TYPE <a class="code" href="structIMAGEHLP__MODULE64.html#o18">SymType</a>;  
+<a name="l00134"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o11">00134</a>   CHAR <a class="code" href="structIMAGEHLP__MODULE64.html#o11">ModuleName</a>[32];  
+<a name="l00135"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o6">00135</a>   CHAR <a class="code" href="structIMAGEHLP__MODULE64.html#o6">ImageName</a>[256];
+<a name="l00136"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o9">00136</a>   CHAR <a class="code" href="structIMAGEHLP__MODULE64.html#o9">LoadedImageName</a>[256];  
+<a name="l00137"></a>00137   <span class="comment">/*</span>
+<a name="l00138"></a>00138 <span class="comment">    The following fields are only supported on newer versions of dbghelp.dll,</span>
+<a name="l00139"></a>00139 <span class="comment">    but the versions shipped with W2k resp. WXP lack them.</span>
+<a name="l00140"></a>00140 <span class="comment">   */</span>
+<a name="l00141"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o10">00141</a>   CHAR <a class="code" href="structIMAGEHLP__MODULE64.html#o10">LoadedPdbName</a>[256];  
+<a name="l00142"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o3">00142</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o3">CVSig</a>;  
+<a name="l00143"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o2">00143</a>   CHAR <a class="code" href="structIMAGEHLP__MODULE64.html#o2">CVData</a>[MAX_PATH*3];  
+<a name="l00144"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o14">00144</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o14">PdbSig</a>;  
+<a name="l00145"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o15">00145</a>   GUID <a class="code" href="structIMAGEHLP__MODULE64.html#o15">PdbSig70</a>;  
+<a name="l00146"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o13">00146</a>   DWORD <a class="code" href="structIMAGEHLP__MODULE64.html#o13">PdbAge</a>;  
+<a name="l00147"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o16">00147</a>   BOOL <a class="code" href="structIMAGEHLP__MODULE64.html#o16">PdbUnmatched</a>;  
+<a name="l00148"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o4">00148</a>   BOOL <a class="code" href="structIMAGEHLP__MODULE64.html#o4">DbgUnmatched</a>;  
+<a name="l00149"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o8">00149</a>   BOOL <a class="code" href="structIMAGEHLP__MODULE64.html#o8">LineNumbers</a>;  
+<a name="l00150"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o5">00150</a>   BOOL <a class="code" href="structIMAGEHLP__MODULE64.html#o5">GlobalSymbols</a>;  
+<a name="l00151"></a><a class="code" href="structIMAGEHLP__MODULE64.html#o20">00151</a>   BOOL <a class="code" href="structIMAGEHLP__MODULE64.html#o20">TypeInfo</a>;
+<a name="l00152"></a>00152 };
+<a name="l00153"></a>00153 <span class="keyword">typedef</span> <a class="code" href="structIMAGEHLP__MODULE64.html">IMAGEHLP_MODULE64</a>* <a class="code" href="structIMAGEHLP__MODULE64.html">PIMAGEHLP_MODULE64</a>;
+<a name="l00154"></a>00154 
+<a name="l00155"></a><a class="code" href="structIMAGEHLP__MODULEW64.html">00155</a> <span class="keyword">struct </span><a class="code" href="structIMAGEHLP__MODULEW64.html">IMAGEHLP_MODULEW64</a>
+<a name="l00156"></a>00156 {  
+<a name="l00157"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o17">00157</a>   DWORD <a class="code" href="structIMAGEHLP__MODULEW64.html#o17">SizeOfStruct</a>;  
+<a name="l00158"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o0">00158</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__MODULEW64.html#o0">BaseOfImage</a>;  
+<a name="l00159"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o7">00159</a>   DWORD <a class="code" href="structIMAGEHLP__MODULEW64.html#o7">ImageSize</a>;  
+<a name="l00160"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o19">00160</a>   DWORD <a class="code" href="structIMAGEHLP__MODULEW64.html#o19">TimeDateStamp</a>;  
+<a name="l00161"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o1">00161</a>   DWORD <a class="code" href="structIMAGEHLP__MODULEW64.html#o1">CheckSum</a>;  
+<a name="l00162"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o12">00162</a>   DWORD <a class="code" href="structIMAGEHLP__MODULEW64.html#o12">NumSyms</a>;  
+<a name="l00163"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o18">00163</a>   SYM_TYPE <a class="code" href="structIMAGEHLP__MODULEW64.html#o18">SymType</a>;  
+<a name="l00164"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o11">00164</a>   WCHAR <a class="code" href="structIMAGEHLP__MODULEW64.html#o11">ModuleName</a>[32];  
+<a name="l00165"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o6">00165</a>   WCHAR <a class="code" href="structIMAGEHLP__MODULEW64.html#o6">ImageName</a>[256];  
+<a name="l00166"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o9">00166</a>   WCHAR <a class="code" href="structIMAGEHLP__MODULEW64.html#o9">LoadedImageName</a>[256];
+<a name="l00167"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o10">00167</a>   WCHAR <a class="code" href="structIMAGEHLP__MODULEW64.html#o10">LoadedPdbName</a>[256];  
+<a name="l00168"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o3">00168</a>   DWORD <a class="code" href="structIMAGEHLP__MODULEW64.html#o3">CVSig</a>;  
+<a name="l00169"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o2">00169</a>   WCHAR <a class="code" href="structIMAGEHLP__MODULEW64.html#o2">CVData</a>[MAX_PATH*3];  
+<a name="l00170"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o14">00170</a>   DWORD <a class="code" href="structIMAGEHLP__MODULEW64.html#o14">PdbSig</a>;  
+<a name="l00171"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o15">00171</a>   GUID <a class="code" href="structIMAGEHLP__MODULEW64.html#o15">PdbSig70</a>;  
+<a name="l00172"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o13">00172</a>   DWORD <a class="code" href="structIMAGEHLP__MODULEW64.html#o13">PdbAge</a>;  
+<a name="l00173"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o16">00173</a>   BOOL <a class="code" href="structIMAGEHLP__MODULEW64.html#o16">PdbUnmatched</a>;  
+<a name="l00174"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o4">00174</a>   BOOL <a class="code" href="structIMAGEHLP__MODULEW64.html#o4">DbgUnmatched</a>;  
+<a name="l00175"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o8">00175</a>   BOOL <a class="code" href="structIMAGEHLP__MODULEW64.html#o8">LineNumbers</a>;  
+<a name="l00176"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o5">00176</a>   BOOL <a class="code" href="structIMAGEHLP__MODULEW64.html#o5">GlobalSymbols</a>;  
+<a name="l00177"></a><a class="code" href="structIMAGEHLP__MODULEW64.html#o20">00177</a>   BOOL <a class="code" href="structIMAGEHLP__MODULEW64.html#o20">TypeInfo</a>;
+<a name="l00178"></a>00178 };
+<a name="l00179"></a>00179 <span class="keyword">typedef</span> <a class="code" href="structIMAGEHLP__MODULEW64.html">IMAGEHLP_MODULEW64</a>* <a class="code" href="structIMAGEHLP__MODULEW64.html">PIMAGEHLP_MODULEW64</a>;
+<a name="l00180"></a>00180 
+<a name="l00181"></a><a class="code" href="structIMAGEHLP__LINE64.html">00181</a> <span class="keyword">struct </span><a class="code" href="structIMAGEHLP__LINE64.html">IMAGEHLP_LINE64</a>
+<a name="l00182"></a>00182 {  
+<a name="l00183"></a><a class="code" href="structIMAGEHLP__LINE64.html#o4">00183</a>   DWORD <a class="code" href="structIMAGEHLP__LINE64.html#o4">SizeOfStruct</a>;  
+<a name="l00184"></a><a class="code" href="structIMAGEHLP__LINE64.html#o2">00184</a>   PVOID <a class="code" href="structIMAGEHLP__LINE64.html#o2">Key</a>;  
+<a name="l00185"></a><a class="code" href="structIMAGEHLP__LINE64.html#o3">00185</a>   DWORD <a class="code" href="structIMAGEHLP__LINE64.html#o3">LineNumber</a>;  
+<a name="l00186"></a><a class="code" href="structIMAGEHLP__LINE64.html#o1">00186</a>   PCHAR <a class="code" href="structIMAGEHLP__LINE64.html#o1">FileName</a>;  
+<a name="l00187"></a><a class="code" href="structIMAGEHLP__LINE64.html#o0">00187</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__LINE64.html#o0">Address</a>;
+<a name="l00188"></a>00188 };
+<a name="l00189"></a>00189 <span class="keyword">typedef</span> <a class="code" href="structIMAGEHLP__LINE64.html">IMAGEHLP_LINE64</a>* <a class="code" href="structIMAGEHLP__LINE64.html">PIMAGEHLP_LINE64</a>;
+<a name="l00190"></a>00190 
+<a name="l00191"></a><a class="code" href="structIMAGEHLP__LINEW64.html">00191</a> <span class="keyword">struct </span><a class="code" href="structIMAGEHLP__LINEW64.html">IMAGEHLP_LINEW64</a>
+<a name="l00192"></a>00192 {  
+<a name="l00193"></a><a class="code" href="structIMAGEHLP__LINEW64.html#o4">00193</a>   DWORD <a class="code" href="structIMAGEHLP__LINEW64.html#o4">SizeOfStruct</a>;  
+<a name="l00194"></a><a class="code" href="structIMAGEHLP__LINEW64.html#o2">00194</a>   PVOID <a class="code" href="structIMAGEHLP__LINEW64.html#o2">Key</a>;  
+<a name="l00195"></a><a class="code" href="structIMAGEHLP__LINEW64.html#o3">00195</a>   DWORD <a class="code" href="structIMAGEHLP__LINEW64.html#o3">LineNumber</a>;  
+<a name="l00196"></a><a class="code" href="structIMAGEHLP__LINEW64.html#o1">00196</a>   PWCHAR <a class="code" href="structIMAGEHLP__LINEW64.html#o1">FileName</a>;  
+<a name="l00197"></a><a class="code" href="structIMAGEHLP__LINEW64.html#o0">00197</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__LINEW64.html#o0">Address</a>;
+<a name="l00198"></a>00198 };
+<a name="l00199"></a>00199 <span class="keyword">typedef</span> <a class="code" href="structIMAGEHLP__LINEW64.html">IMAGEHLP_LINEW64</a>* <a class="code" href="structIMAGEHLP__LINEW64.html">PIMAGEHLP_LINEW64</a>;
+<a name="l00200"></a>00200 
+<a name="l00201"></a>00201 <span class="keyword">typedef</span> BOOL (CALLBACK* PSYM_ENUMERATESYMBOLS_CALLBACK) (<a class="code" href="structSYMBOL__INFO.html">PSYMBOL_INFO</a> pSymInfo,
+<a name="l00202"></a>00202   ULONG SymbolSize, PVOID UserContext);
+<a name="l00203"></a>00203 <span class="keyword">typedef</span> BOOL (CALLBACK* PSYM_ENUMERATESYMBOLS_CALLBACKW) (<a class="code" href="structSYMBOL__INFOW.html">PSYMBOL_INFOW</a> pSymInfo,
+<a name="l00204"></a>00204   ULONG SymbolSize, PVOID UserContext);
+<a name="l00205"></a>00205 <span class="keyword">typedef</span> BOOL (CALLBACK* PSYM_ENUMMODULES_CALLBACK64) (PSTR ModuleName,
+<a name="l00206"></a>00206   <a class="code" href="cstypes_8h.html#a15">uint64</a> BaseOfDll, PVOID UserContext);
+<a name="l00207"></a>00207 <span class="keyword">typedef</span> BOOL (CALLBACK* PSYM_ENUMMODULES_CALLBACKW64) (PWSTR ModuleName,
+<a name="l00208"></a>00208   <a class="code" href="cstypes_8h.html#a15">uint64</a> BaseOfDll, PVOID UserContext);
+<a name="l00209"></a>00209 
+<a name="l00210"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html">00210</a> <span class="keyword">struct </span><a class="code" href="structIMAGEHLP__STACK__FRAME.html">IMAGEHLP_STACK_FRAME</a> 
+<a name="l00211"></a>00211 {  
+<a name="l00212"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o3">00212</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o3">InstructionOffset</a>;  
+<a name="l00213"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o7">00213</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o7">ReturnOffset</a>;  
+<a name="l00214"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o1">00214</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o1">FrameOffset</a>;  
+<a name="l00215"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o8">00215</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o8">StackOffset</a>;  
+<a name="l00216"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o0">00216</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o0">BackingStoreOffset</a>;  
+<a name="l00217"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o2">00217</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o2">FuncTableEntry</a>;  
+<a name="l00218"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o4">00218</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o4">Params</a>[4];  
+<a name="l00219"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o5">00219</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o5">Reserved</a>[5];  
+<a name="l00220"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o9">00220</a>   BOOL <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o9">Virtual</a>;  
+<a name="l00221"></a><a class="code" href="structIMAGEHLP__STACK__FRAME.html#o6">00221</a>   ULONG <a class="code" href="structIMAGEHLP__STACK__FRAME.html#o6">Reserved2</a>;
+<a name="l00222"></a>00222 };
+<a name="l00223"></a>00223 <span class="keyword">typedef</span> <a class="code" href="structIMAGEHLP__STACK__FRAME.html">IMAGEHLP_STACK_FRAME</a>* <a class="code" href="structIMAGEHLP__STACK__FRAME.html">PIMAGEHLP_STACK_FRAME</a>;
+<a name="l00224"></a>00224 <span class="keyword">typedef</span> <span class="keywordtype">void</span>* PIMAGEHLP_CONTEXT;
+<a name="l00225"></a>00225 
+<a name="l00226"></a><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html">00226</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html">MINIDUMP_EXCEPTION_INFORMATION</a> 
+<a name="l00227"></a>00227 {  
+<a name="l00228"></a><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o2">00228</a>   DWORD <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o2">ThreadId</a>;  
+<a name="l00229"></a><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o1">00229</a>   PEXCEPTION_POINTERS <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o1">ExceptionPointers</a>;  
+<a name="l00230"></a><a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o0">00230</a>   BOOL <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html#o0">ClientPointers</a>;
+<a name="l00231"></a>00231 };
+<a name="l00232"></a>00232 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html">MINIDUMP_EXCEPTION_INFORMATION</a>* <a class="code" href="structMINIDUMP__EXCEPTION__INFORMATION.html">PMINIDUMP_EXCEPTION_INFORMATION</a>;
+<a name="l00233"></a>00233 
+<a name="l00234"></a><a class="code" href="structMINIDUMP__USER__STREAM.html">00234</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__USER__STREAM.html">MINIDUMP_USER_STREAM</a> 
+<a name="l00235"></a>00235 {  
+<a name="l00236"></a><a class="code" href="structMINIDUMP__USER__STREAM.html#o2">00236</a>   ULONG32 <a class="code" href="structMINIDUMP__USER__STREAM.html#o2">Type</a>;  
+<a name="l00237"></a><a class="code" href="structMINIDUMP__USER__STREAM.html#o1">00237</a>   ULONG <a class="code" href="structMINIDUMP__USER__STREAM.html#o1">BufferSize</a>;  
+<a name="l00238"></a><a class="code" href="structMINIDUMP__USER__STREAM.html#o0">00238</a>   PVOID <a class="code" href="structMINIDUMP__USER__STREAM.html#o0">Buffer</a>;
+<a name="l00239"></a>00239 };
+<a name="l00240"></a>00240 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__USER__STREAM.html">MINIDUMP_USER_STREAM</a>* <a class="code" href="structMINIDUMP__USER__STREAM.html">PMINIDUMP_USER_STREAM</a>;
+<a name="l00241"></a>00241                                                     
+<a name="l00242"></a><a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html">00242</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html">MINIDUMP_USER_STREAM_INFORMATION</a> 
+<a name="l00243"></a>00243 {  
+<a name="l00244"></a><a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html#o1">00244</a>   ULONG <a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html#o1">UserStreamCount</a>;  
+<a name="l00245"></a><a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html#o0">00245</a>   <a class="code" href="structMINIDUMP__USER__STREAM.html">PMINIDUMP_USER_STREAM</a> <a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html#o0">UserStreamArray</a>;
+<a name="l00246"></a>00246 };
+<a name="l00247"></a>00247 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html">MINIDUMP_USER_STREAM_INFORMATION</a>* <a class="code" href="structMINIDUMP__USER__STREAM__INFORMATION.html">PMINIDUMP_USER_STREAM_INFORMATION</a>;
+<a name="l00248"></a>00248 
+<a name="l00249"></a>00249 <span class="keyword">enum</span> MINIDUMP_CALLBACK_TYPE
+<a name="l00250"></a>00250 {
+<a name="l00251"></a>00251   ModuleCallback, 
+<a name="l00252"></a>00252   ThreadCallback, 
+<a name="l00253"></a>00253   ThreadExCallback, 
+<a name="l00254"></a>00254   IncludeThreadCallback, 
+<a name="l00255"></a>00255   IncludeModuleCallback
+<a name="l00256"></a>00256 };
+<a name="l00257"></a>00257 
+<a name="l00258"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">00258</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">MINIDUMP_THREAD_CALLBACK</a> 
+<a name="l00259"></a>00259 {  
+<a name="l00260"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o5">00260</a>   ULONG <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o5">ThreadId</a>;  
+<a name="l00261"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o4">00261</a>   HANDLE <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o4">ThreadHandle</a>;  
+<a name="l00262"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o0">00262</a>   CONTEXT <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o0">Context</a>;  
+<a name="l00263"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o1">00263</a>   ULONG <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o1">SizeOfContext</a>;  
+<a name="l00264"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o2">00264</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o2">StackBase</a>;  
+<a name="l00265"></a><a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o3">00265</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html#o3">StackEnd</a>;
 <a name="l00266"></a>00266 };
-<a name="l00267"></a>00267 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">MINIDUMP_CALLBACK_INPUT</a>* <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">PMINIDUMP_CALLBACK_INPUT</a>;
+<a name="l00267"></a>00267 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">MINIDUMP_THREAD_CALLBACK</a>* <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">PMINIDUMP_THREAD_CALLBACK</a>;
 <a name="l00268"></a>00268 
-<a name="l00269"></a>00269 <span class="keyword">enum</span> MODULE_WRITE_FLAGS
-<a name="l00270"></a>00270 {
-<a name="l00271"></a>00271   ModuleWriteModule                     = 0x0001, 
-<a name="l00272"></a>00272   ModuleWriteDataSeg                    = 0x0002, 
-<a name="l00273"></a>00273   ModuleWriteMiscRecord                 = 0x0004, 
-<a name="l00274"></a>00274   ModuleWriteCvRecord                   = 0x0008, 
-<a name="l00275"></a>00275   ModuleReferencedByMemory              = 0x0010
-<a name="l00276"></a>00276 };
-<a name="l00277"></a>00277 
-<a name="l00278"></a>00278 <span class="keyword">enum</span> THREAD_WRITE_FLAGS
-<a name="l00279"></a>00279 {
-<a name="l00280"></a>00280   ThreadWriteThread                     = 0x0001, 
-<a name="l00281"></a>00281   ThreadWriteStack                      = 0x0002, 
-<a name="l00282"></a>00282   ThreadWriteContext                    = 0x0004, 
-<a name="l00283"></a>00283   ThreadWriteBackingStore               = 0x0008, 
-<a name="l00284"></a>00284   ThreadWriteInstructionWindow          = 0x0010, 
-<a name="l00285"></a>00285   ThreadWriteThreadData                 = 0x0020
-<a name="l00286"></a>00286 };
-<a name="l00287"></a>00287 
-<a name="l00288"></a><a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">00288</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">MINIDUMP_CALLBACK_OUTPUT</a> 
-<a name="l00289"></a>00289 {  
-<a name="l00290"></a>00290   <span class="keyword">union </span>
-<a name="l00291"></a>00291 <span class="keyword">  </span>{    
-<a name="l00292"></a><a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html#o0">00292</a>     ULONG <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html#o0">ModuleWriteFlags</a>;    
-<a name="l00293"></a><a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html#o1">00293</a>     ULONG <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html#o1">ThreadWriteFlags</a>;  
-<a name="l00294"></a>00294   };
-<a name="l00295"></a>00295 }; 
-<a name="l00296"></a>00296 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">MINIDUMP_CALLBACK_OUTPUT</a>* <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">PMINIDUMP_CALLBACK_OUTPUT</a>;
-<a name="l00297"></a>00297 
-<a name="l00298"></a>00298 
-<a name="l00299"></a>00299 <span class="keyword">typedef</span> BOOL (CALLBACK* MINIDUMP_CALLBACK_ROUTINE) (PVOID CallbackParam, 
-<a name="l00300"></a>00300   <span class="keyword">const</span> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">PMINIDUMP_CALLBACK_INPUT</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">CallbackInput</a>, 
-<a name="l00301"></a>00301   <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">PMINIDUMP_CALLBACK_OUTPUT</a> CallbackOutput);
-<a name="l00302"></a>00302 
-<a name="l00303"></a><a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html">00303</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html">MINIDUMP_CALLBACK_INFORMATION</a> 
-<a name="l00304"></a>00304 {  
-<a name="l00305"></a><a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html#o1">00305</a>   MINIDUMP_CALLBACK_ROUTINE <a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html#o1">CallbackRoutine</a>;  
-<a name="l00306"></a><a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html#o0">00306</a>   PVOID <a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html#o0">CallbackParam</a>;
-<a name="l00307"></a>00307 };
-<a name="l00308"></a>00308 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html">MINIDUMP_CALLBACK_INFORMATION</a>* <a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html">PMINIDUMP_CALLBACK_INFORMATION</a>;
-<a name="l00309"></a>00309 
-<a name="l00310"></a>00310 <span class="keyword">enum</span> MINIDUMP_TYPE
-<a name="l00311"></a>00311 {
-<a name="l00312"></a>00312   MiniDumpNormal                          = 0x0000, 
-<a name="l00313"></a>00313   MiniDumpWithDataSegs                    = 0x0001, 
-<a name="l00314"></a>00314   MiniDumpWithFullMemory                  = 0x0002, 
-<a name="l00315"></a>00315   MiniDumpWithHandleData                  = 0x0004, 
-<a name="l00316"></a>00316   MiniDumpFilterMemory                    = 0x0008, 
-<a name="l00317"></a>00317   MiniDumpScanMemory                      = 0x0010, 
-<a name="l00318"></a>00318   MiniDumpWithUnloadedModules             = 0x0020, 
-<a name="l00319"></a>00319   MiniDumpWithIndirectlyReferencedMemory  = 0x0040, 
-<a name="l00320"></a>00320   MiniDumpFilterModulePaths               = 0x0080, 
-<a name="l00321"></a>00321   MiniDumpWithProcessThreadData           = 0x0100, 
-<a name="l00322"></a>00322   MiniDumpWithPrivateReadWriteMemory      = 0x0200
-<a name="l00323"></a>00323 };
-<a name="l00324"></a>00324 
-<a name="l00325"></a>00325 <span class="keyword">enum</span> MINIDUMP_STREAM_TYPE
-<a name="l00326"></a>00326 {
-<a name="l00327"></a>00327   UnusedStream             = 0, 
-<a name="l00328"></a>00328   ReservedStream0          = 1, 
-<a name="l00329"></a>00329   ReservedStream1          = 2, 
-<a name="l00330"></a>00330   ThreadListStream         = 3, 
-<a name="l00331"></a>00331   ModuleListStream         = 4, 
-<a name="l00332"></a>00332   MemoryListStream         = 5, 
-<a name="l00333"></a>00333   ExceptionStream          = 6, 
-<a name="l00334"></a>00334   SystemInfoStream         = 7, 
-<a name="l00335"></a>00335   ThreadExListStream       = 8, 
-<a name="l00336"></a>00336   Memory64ListStream       = 9, 
-<a name="l00337"></a>00337   CommentStreamA           = 10, 
-<a name="l00338"></a>00338   CommentStreamW           = 11, 
-<a name="l00339"></a>00339   HandleDataStream         = 12, 
-<a name="l00340"></a>00340   FunctionTableStream      = 13, 
-<a name="l00341"></a>00341   UnloadedModuleListStream = 14, 
-<a name="l00342"></a>00342   MiscInfoStream           = 15, 
-<a name="l00343"></a>00343   LastReservedStream = 0xffff
-<a name="l00344"></a>00344 };
-<a name="l00345"></a>00345 
-<a name="l00346"></a><a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html">00346</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html">MINIDUMP_LOCATION_DESCRIPTOR</a> 
-<a name="l00347"></a>00347 {  
-<a name="l00348"></a><a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html#o0">00348</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html#o0">DataSize</a>;  
-<a name="l00349"></a><a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html#o1">00349</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html#o1">Rva</a>;
-<a name="l00350"></a>00350 };
-<a name="l00351"></a>00351 
-<a name="l00352"></a><a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html">00352</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html">MINIDUMP_MEMORY_DESCRIPTOR</a> 
-<a name="l00353"></a>00353 {  
-<a name="l00354"></a><a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html#o1">00354</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html#o1">StartOfMemoryRange</a>;  
-<a name="l00355"></a><a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html#o0">00355</a>   <a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html">MINIDUMP_LOCATION_DESCRIPTOR</a> <a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html#o0">Memory</a>;
-<a name="l00356"></a>00356 };
-<a name="l00357"></a>00357 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html">MINIDUMP_MEMORY_DESCRIPTOR</a>* <a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html">PMINIDUMP_MEMORY_DESCRIPTOR</a>;
+<a name="l00269"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">00269</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">MINIDUMP_THREAD_EX_CALLBACK</a> 
+<a name="l00270"></a>00270 {  
+<a name="l00271"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o7">00271</a>   ULONG <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o7">ThreadId</a>;  
+<a name="l00272"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o6">00272</a>   HANDLE <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o6">ThreadHandle</a>;  
+<a name="l00273"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o2">00273</a>   CONTEXT <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o2">Context</a>;  
+<a name="l00274"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o3">00274</a>   ULONG <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o3">SizeOfContext</a>;  
+<a name="l00275"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o4">00275</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o4">StackBase</a>;  
+<a name="l00276"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o5">00276</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o5">StackEnd</a>;  
+<a name="l00277"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o0">00277</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o0">BackingStoreBase</a>;  
+<a name="l00278"></a><a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o1">00278</a>   ULONG64 <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html#o1">BackingStoreEnd</a>;
+<a name="l00279"></a>00279 };
+<a name="l00280"></a>00280 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">MINIDUMP_THREAD_EX_CALLBACK</a>* <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">PMINIDUMP_THREAD_EX_CALLBACK</a>;
+<a name="l00281"></a>00281 
+<a name="l00282"></a>00282 <span class="preprocessor">#include &lt;winver.h&gt;</span>
+<a name="l00283"></a>00283 <span class="preprocessor">#include "sanity.inc"</span>
+<a name="l00284"></a>00284 
+<a name="l00285"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">00285</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">MINIDUMP_MODULE_CALLBACK</a> 
+<a name="l00286"></a>00286 {  
+<a name="l00287"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o3">00287</a>   PWCHAR <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o3">FullPath</a>;  
+<a name="l00288"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o0">00288</a>   ULONG64 <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o0">BaseOfImage</a>;  
+<a name="l00289"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o6">00289</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o6">SizeOfImage</a>;  
+<a name="l00290"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o1">00290</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o1">CheckSum</a>;  
+<a name="l00291"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o8">00291</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o8">TimeDateStamp</a>;  
+<a name="l00292"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o9">00292</a>   VS_FIXEDFILEINFO <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o9">VersionInfo</a>;  
+<a name="l00293"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o2">00293</a>   PVOID <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o2">CvRecord</a>;  
+<a name="l00294"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o5">00294</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o5">SizeOfCvRecord</a>;  
+<a name="l00295"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o4">00295</a>   PVOID <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o4">MiscRecord</a>;  
+<a name="l00296"></a><a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o7">00296</a>   ULONG <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html#o7">SizeOfMiscRecord</a>;
+<a name="l00297"></a>00297 };
+<a name="l00298"></a>00298 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">MINIDUMP_MODULE_CALLBACK</a>* <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">PMINIDUMP_MODULE_CALLBACK</a>;
+<a name="l00299"></a>00299 
+<a name="l00300"></a><a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">00300</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">MINIDUMP_INCLUDE_THREAD_CALLBACK</a> 
+<a name="l00301"></a>00301 {  
+<a name="l00302"></a><a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html#o0">00302</a>   ULONG <a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html#o0">ThreadId</a>;
+<a name="l00303"></a>00303 };
+<a name="l00304"></a>00304 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">MINIDUMP_INCLUDE_THREAD_CALLBACK</a>* <a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">PMINIDUMP_INCLUDE_THREAD_CALLBACK</a>;
+<a name="l00305"></a>00305 
+<a name="l00306"></a><a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">00306</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">MINIDUMP_INCLUDE_MODULE_CALLBACK</a> 
+<a name="l00307"></a>00307 {  
+<a name="l00308"></a><a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html#o0">00308</a>   ULONG64 <a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html#o0">BaseOfImage</a>;
+<a name="l00309"></a>00309 };
+<a name="l00310"></a>00310 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">MINIDUMP_INCLUDE_MODULE_CALLBACK</a>* <a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">PMINIDUMP_INCLUDE_MODULE_CALLBACK</a>;
+<a name="l00311"></a>00311 
+<a name="l00312"></a>00312 
+<a name="l00313"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">00313</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">MINIDUMP_CALLBACK_INPUT</a>       
+<a name="l00314"></a>00314 {  
+<a name="l00315"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o5">00315</a>   ULONG <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o5">ProcessId</a>;  
+<a name="l00316"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o4">00316</a>   HANDLE <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o4">ProcessHandle</a>;  
+<a name="l00317"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o0">00317</a>   ULONG <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o0">CallbackType</a>;  
+<a name="l00318"></a>00318   <span class="keyword">union </span>
+<a name="l00319"></a>00319 <span class="keyword">  </span>{    
+<a name="l00320"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o6">00320</a>     <a class="code" href="structMINIDUMP__THREAD__CALLBACK.html">MINIDUMP_THREAD_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o6">Thread</a>;    
+<a name="l00321"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o7">00321</a>     <a class="code" href="structMINIDUMP__THREAD__EX__CALLBACK.html">MINIDUMP_THREAD_EX_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o7">ThreadEx</a>;    
+<a name="l00322"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o3">00322</a>     <a class="code" href="structMINIDUMP__MODULE__CALLBACK.html">MINIDUMP_MODULE_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o3">Module</a>;    
+<a name="l00323"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o2">00323</a>     <a class="code" href="structMINIDUMP__INCLUDE__THREAD__CALLBACK.html">MINIDUMP_INCLUDE_THREAD_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o2">IncludeThread</a>;    
+<a name="l00324"></a><a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o1">00324</a>     <a class="code" href="structMINIDUMP__INCLUDE__MODULE__CALLBACK.html">MINIDUMP_INCLUDE_MODULE_CALLBACK</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html#o1">IncludeModule</a>;  
+<a name="l00325"></a>00325   };
+<a name="l00326"></a>00326 };
+<a name="l00327"></a>00327 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">MINIDUMP_CALLBACK_INPUT</a>* <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">PMINIDUMP_CALLBACK_INPUT</a>;
+<a name="l00328"></a>00328 
+<a name="l00329"></a>00329 <span class="keyword">enum</span> MODULE_WRITE_FLAGS
+<a name="l00330"></a>00330 {
+<a name="l00331"></a>00331   ModuleWriteModule                     = 0x0001, 
+<a name="l00332"></a>00332   ModuleWriteDataSeg                    = 0x0002, 
+<a name="l00333"></a>00333   ModuleWriteMiscRecord                 = 0x0004, 
+<a name="l00334"></a>00334   ModuleWriteCvRecord                   = 0x0008, 
+<a name="l00335"></a>00335   ModuleReferencedByMemory              = 0x0010
+<a name="l00336"></a>00336 };
+<a name="l00337"></a>00337 
+<a name="l00338"></a>00338 <span class="keyword">enum</span> THREAD_WRITE_FLAGS
+<a name="l00339"></a>00339 {
+<a name="l00340"></a>00340   ThreadWriteThread                     = 0x0001, 
+<a name="l00341"></a>00341   ThreadWriteStack                      = 0x0002, 
+<a name="l00342"></a>00342   ThreadWriteContext                    = 0x0004, 
+<a name="l00343"></a>00343   ThreadWriteBackingStore               = 0x0008, 
+<a name="l00344"></a>00344   ThreadWriteInstructionWindow          = 0x0010, 
+<a name="l00345"></a>00345   ThreadWriteThreadData                 = 0x0020
+<a name="l00346"></a>00346 };
+<a name="l00347"></a>00347 
+<a name="l00348"></a><a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">00348</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">MINIDUMP_CALLBACK_OUTPUT</a> 
+<a name="l00349"></a>00349 {  
+<a name="l00350"></a>00350   <span class="keyword">union </span>
+<a name="l00351"></a>00351 <span class="keyword">  </span>{    
+<a name="l00352"></a><a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html#o0">00352</a>     ULONG <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html#o0">ModuleWriteFlags</a>;    
+<a name="l00353"></a><a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html#o1">00353</a>     ULONG <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html#o1">ThreadWriteFlags</a>;  
+<a name="l00354"></a>00354   };
+<a name="l00355"></a>00355 }; 
+<a name="l00356"></a>00356 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">MINIDUMP_CALLBACK_OUTPUT</a>* <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">PMINIDUMP_CALLBACK_OUTPUT</a>;
+<a name="l00357"></a>00357 
 <a name="l00358"></a>00358 
-<a name="l00359"></a><a class="code" href="structMINIDUMP__MEMORY__LIST.html">00359</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__MEMORY__LIST.html">MINIDUMP_MEMORY_LIST</a> 
-<a name="l00360"></a>00360 {  
-<a name="l00361"></a><a class="code" href="structMINIDUMP__MEMORY__LIST.html#o0">00361</a>   ULONG32 <a class="code" href="structMINIDUMP__MEMORY__LIST.html#o0">NumberOfMemoryRanges</a>;  
-<a name="l00362"></a>00362   <span class="comment">/*MINIDUMP_MEMORY_DESCRIPTOR MemoryRanges[];*/</span>
-<a name="l00363"></a>00363 };
-<a name="l00364"></a>00364 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__MEMORY__LIST.html">MINIDUMP_MEMORY_LIST</a>* <a class="code" href="structMINIDUMP__MEMORY__LIST.html">PMINIDUMP_MEMORY_LIST</a>;
-<a name="l00365"></a>00365 
-<a name="l00366"></a><a class="code" href="structMINIDUMP__HEADER.html">00366</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__HEADER.html">MINIDUMP_HEADER</a> 
-<a name="l00367"></a>00367 {
-<a name="l00368"></a><a class="code" href="structMINIDUMP__HEADER.html#o4">00368</a>   ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o4">Signature</a>;
-<a name="l00369"></a><a class="code" href="structMINIDUMP__HEADER.html#o7">00369</a>   ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o7">Version</a>;
-<a name="l00370"></a><a class="code" href="structMINIDUMP__HEADER.html#o2">00370</a>   ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o2">NumberOfStreams</a>;
-<a name="l00371"></a><a class="code" href="structMINIDUMP__HEADER.html#o5">00371</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structMINIDUMP__HEADER.html#o5">StreamDirectoryRva</a>;
-<a name="l00372"></a><a class="code" href="structMINIDUMP__HEADER.html#o0">00372</a>   ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o0">CheckSum</a>;
-<a name="l00373"></a>00373   <span class="keyword">union </span>
-<a name="l00374"></a>00374 <span class="keyword">  </span>{
-<a name="l00375"></a><a class="code" href="structMINIDUMP__HEADER.html#o3">00375</a>     ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o3">Reserved</a>;
-<a name="l00376"></a><a class="code" href="structMINIDUMP__HEADER.html#o6">00376</a>     ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o6">TimeDateStamp</a>;
-<a name="l00377"></a>00377   };
-<a name="l00378"></a><a class="code" href="structMINIDUMP__HEADER.html#o1">00378</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structMINIDUMP__HEADER.html#o1">Flags</a>;
-<a name="l00379"></a>00379 };
-<a name="l00380"></a>00380 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__HEADER.html">MINIDUMP_HEADER</a>* <a class="code" href="structMINIDUMP__HEADER.html">PMINIDUMP_HEADER</a>;
-<a name="l00381"></a>00381 
-<a name="l00382"></a><a class="code" href="structMINIDUMP__DIRECTORY.html">00382</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__DIRECTORY.html">MINIDUMP_DIRECTORY</a> 
-<a name="l00383"></a>00383 {
-<a name="l00384"></a><a class="code" href="structMINIDUMP__DIRECTORY.html#o1">00384</a>   ULONG32 <a class="code" href="structMINIDUMP__DIRECTORY.html#o1">StreamType</a>;
-<a name="l00385"></a><a class="code" href="structMINIDUMP__DIRECTORY.html#o0">00385</a>   <a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html">MINIDUMP_LOCATION_DESCRIPTOR</a> <a class="code" href="structMINIDUMP__DIRECTORY.html#o0">Location</a>;
-<a name="l00386"></a>00386 };
-<a name="l00387"></a>00387 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__DIRECTORY.html">MINIDUMP_DIRECTORY</a>* <a class="code" href="structMINIDUMP__DIRECTORY.html">PMINIDUMP_DIRECTORY</a>;
-<a name="l00388"></a>00388 
-<a name="l00389"></a>00389 <span class="preprocessor">#define CS_API_NAME             DbgHelp</span>
-<a name="l00390"></a>00390 <span class="preprocessor"></span><span class="preprocessor">#define CS_API_FUNCTIONS        "csutil/win32/DbgHelpAPI.fun"</span>
-<a name="l00391"></a>00391 <span class="preprocessor"></span>
-<a name="l00392"></a>00392 <span class="preprocessor">#include "APIdeclare.inc"</span>
-<a name="l00393"></a>00393 
-<a name="l00394"></a>00394 <span class="preprocessor">#endif //__CSUTIL_DEBGHELPAPI_H__</span>
+<a name="l00359"></a>00359 <span class="keyword">typedef</span> BOOL (CALLBACK* MINIDUMP_CALLBACK_ROUTINE) (PVOID CallbackParam, 
+<a name="l00360"></a>00360   <span class="keyword">const</span> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">PMINIDUMP_CALLBACK_INPUT</a> <a class="code" href="structMINIDUMP__CALLBACK__INPUT.html">CallbackInput</a>, 
+<a name="l00361"></a>00361   <a class="code" href="structMINIDUMP__CALLBACK__OUTPUT.html">PMINIDUMP_CALLBACK_OUTPUT</a> CallbackOutput);
+<a name="l00362"></a>00362 
+<a name="l00363"></a><a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html">00363</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html">MINIDUMP_CALLBACK_INFORMATION</a> 
+<a name="l00364"></a>00364 {  
+<a name="l00365"></a><a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html#o1">00365</a>   MINIDUMP_CALLBACK_ROUTINE <a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html#o1">CallbackRoutine</a>;  
+<a name="l00366"></a><a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html#o0">00366</a>   PVOID <a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html#o0">CallbackParam</a>;
+<a name="l00367"></a>00367 };
+<a name="l00368"></a>00368 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html">MINIDUMP_CALLBACK_INFORMATION</a>* <a class="code" href="structMINIDUMP__CALLBACK__INFORMATION.html">PMINIDUMP_CALLBACK_INFORMATION</a>;
+<a name="l00369"></a>00369 
+<a name="l00370"></a>00370 <span class="keyword">enum</span> MINIDUMP_TYPE
+<a name="l00371"></a>00371 {
+<a name="l00372"></a>00372   MiniDumpNormal                          = 0x0000, 
+<a name="l00373"></a>00373   MiniDumpWithDataSegs                    = 0x0001, 
+<a name="l00374"></a>00374   MiniDumpWithFullMemory                  = 0x0002, 
+<a name="l00375"></a>00375   MiniDumpWithHandleData                  = 0x0004, 
+<a name="l00376"></a>00376   MiniDumpFilterMemory                    = 0x0008, 
+<a name="l00377"></a>00377   MiniDumpScanMemory                      = 0x0010, 
+<a name="l00378"></a>00378   MiniDumpWithUnloadedModules             = 0x0020, 
+<a name="l00379"></a>00379   MiniDumpWithIndirectlyReferencedMemory  = 0x0040, 
+<a name="l00380"></a>00380   MiniDumpFilterModulePaths               = 0x0080, 
+<a name="l00381"></a>00381   MiniDumpWithProcessThreadData           = 0x0100, 
+<a name="l00382"></a>00382   MiniDumpWithPrivateReadWriteMemory      = 0x0200
+<a name="l00383"></a>00383 };
+<a name="l00384"></a>00384 
+<a name="l00385"></a>00385 <span class="keyword">enum</span> MINIDUMP_STREAM_TYPE
+<a name="l00386"></a>00386 {
+<a name="l00387"></a>00387   UnusedStream             = 0, 
+<a name="l00388"></a>00388   ReservedStream0          = 1, 
+<a name="l00389"></a>00389   ReservedStream1          = 2, 
+<a name="l00390"></a>00390   ThreadListStream         = 3, 
+<a name="l00391"></a>00391   ModuleListStream         = 4, 
+<a name="l00392"></a>00392   MemoryListStream         = 5, 
+<a name="l00393"></a>00393   ExceptionStream          = 6, 
+<a name="l00394"></a>00394   SystemInfoStream         = 7, 
+<a name="l00395"></a>00395   ThreadExListStream       = 8, 
+<a name="l00396"></a>00396   Memory64ListStream       = 9, 
+<a name="l00397"></a>00397   CommentStreamA           = 10, 
+<a name="l00398"></a>00398   CommentStreamW           = 11, 
+<a name="l00399"></a>00399   HandleDataStream         = 12, 
+<a name="l00400"></a>00400   FunctionTableStream      = 13, 
+<a name="l00401"></a>00401   UnloadedModuleListStream = 14, 
+<a name="l00402"></a>00402   MiscInfoStream           = 15, 
+<a name="l00403"></a>00403   LastReservedStream = 0xffff
+<a name="l00404"></a>00404 };
+<a name="l00405"></a>00405 
+<a name="l00406"></a><a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html">00406</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html">MINIDUMP_LOCATION_DESCRIPTOR</a> 
+<a name="l00407"></a>00407 {  
+<a name="l00408"></a><a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html#o0">00408</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html#o0">DataSize</a>;  
+<a name="l00409"></a><a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html#o1">00409</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html#o1">Rva</a>;
+<a name="l00410"></a>00410 };
+<a name="l00411"></a>00411 
+<a name="l00412"></a><a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html">00412</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html">MINIDUMP_MEMORY_DESCRIPTOR</a> 
+<a name="l00413"></a>00413 {  
+<a name="l00414"></a><a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html#o1">00414</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html#o1">StartOfMemoryRange</a>;  
+<a name="l00415"></a><a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html#o0">00415</a>   <a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html">MINIDUMP_LOCATION_DESCRIPTOR</a> <a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html#o0">Memory</a>;
+<a name="l00416"></a>00416 };
+<a name="l00417"></a>00417 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html">MINIDUMP_MEMORY_DESCRIPTOR</a>* <a class="code" href="structMINIDUMP__MEMORY__DESCRIPTOR.html">PMINIDUMP_MEMORY_DESCRIPTOR</a>;
+<a name="l00418"></a>00418 
+<a name="l00419"></a><a class="code" href="structMINIDUMP__MEMORY__LIST.html">00419</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__MEMORY__LIST.html">MINIDUMP_MEMORY_LIST</a> 
+<a name="l00420"></a>00420 {  
+<a name="l00421"></a><a class="code" href="structMINIDUMP__MEMORY__LIST.html#o0">00421</a>   ULONG32 <a class="code" href="structMINIDUMP__MEMORY__LIST.html#o0">NumberOfMemoryRanges</a>;  
+<a name="l00422"></a>00422   <span class="comment">/*MINIDUMP_MEMORY_DESCRIPTOR MemoryRanges[];*/</span>
+<a name="l00423"></a>00423 };
+<a name="l00424"></a>00424 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__MEMORY__LIST.html">MINIDUMP_MEMORY_LIST</a>* <a class="code" href="structMINIDUMP__MEMORY__LIST.html">PMINIDUMP_MEMORY_LIST</a>;
+<a name="l00425"></a>00425 
+<a name="l00426"></a><a class="code" href="structMINIDUMP__HEADER.html">00426</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__HEADER.html">MINIDUMP_HEADER</a> 
+<a name="l00427"></a>00427 {
+<a name="l00428"></a><a class="code" href="structMINIDUMP__HEADER.html#o4">00428</a>   ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o4">Signature</a>;
+<a name="l00429"></a><a class="code" href="structMINIDUMP__HEADER.html#o7">00429</a>   ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o7">Version</a>;
+<a name="l00430"></a><a class="code" href="structMINIDUMP__HEADER.html#o2">00430</a>   ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o2">NumberOfStreams</a>;
+<a name="l00431"></a><a class="code" href="structMINIDUMP__HEADER.html#o5">00431</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structMINIDUMP__HEADER.html#o5">StreamDirectoryRva</a>;
+<a name="l00432"></a><a class="code" href="structMINIDUMP__HEADER.html#o0">00432</a>   ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o0">CheckSum</a>;
+<a name="l00433"></a>00433   <span class="keyword">union </span>
+<a name="l00434"></a>00434 <span class="keyword">  </span>{
+<a name="l00435"></a><a class="code" href="structMINIDUMP__HEADER.html#o3">00435</a>     ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o3">Reserved</a>;
+<a name="l00436"></a><a class="code" href="structMINIDUMP__HEADER.html#o6">00436</a>     ULONG32 <a class="code" href="structMINIDUMP__HEADER.html#o6">TimeDateStamp</a>;
+<a name="l00437"></a>00437   };
+<a name="l00438"></a><a class="code" href="structMINIDUMP__HEADER.html#o1">00438</a>   <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structMINIDUMP__HEADER.html#o1">Flags</a>;
+<a name="l00439"></a>00439 };
+<a name="l00440"></a>00440 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__HEADER.html">MINIDUMP_HEADER</a>* <a class="code" href="structMINIDUMP__HEADER.html">PMINIDUMP_HEADER</a>;
+<a name="l00441"></a>00441 
+<a name="l00442"></a><a class="code" href="structMINIDUMP__DIRECTORY.html">00442</a> <span class="keyword">struct </span><a class="code" href="structMINIDUMP__DIRECTORY.html">MINIDUMP_DIRECTORY</a> 
+<a name="l00443"></a>00443 {
+<a name="l00444"></a><a class="code" href="structMINIDUMP__DIRECTORY.html#o1">00444</a>   ULONG32 <a class="code" href="structMINIDUMP__DIRECTORY.html#o1">StreamType</a>;
+<a name="l00445"></a><a class="code" href="structMINIDUMP__DIRECTORY.html#o0">00445</a>   <a class="code" href="structMINIDUMP__LOCATION__DESCRIPTOR.html">MINIDUMP_LOCATION_DESCRIPTOR</a> <a class="code" href="structMINIDUMP__DIRECTORY.html#o0">Location</a>;
+<a name="l00446"></a>00446 };
+<a name="l00447"></a>00447 <span class="keyword">typedef</span> <a class="code" href="structMINIDUMP__DIRECTORY.html">MINIDUMP_DIRECTORY</a>* <a class="code" href="structMINIDUMP__DIRECTORY.html">PMINIDUMP_DIRECTORY</a>;
+<a name="l00448"></a>00448 
+<a name="l00449"></a>00449 <span class="preprocessor">#define CS_API_NAME             DbgHelp</span>
+<a name="l00450"></a>00450 <span class="preprocessor"></span><span class="preprocessor">#define CS_API_FUNCTIONS        "csutil/win32/DbgHelpAPI.fun"</span>
+<a name="l00451"></a>00451 <span class="preprocessor"></span>
+<a name="l00452"></a>00452 <span class="preprocessor">#include "APIdeclare.inc"</span>
+<a name="l00453"></a>00453 
+<a name="l00454"></a>00454 <span class="preprocessor">#endif //__CSUTIL_DEBGHELPAPI_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
