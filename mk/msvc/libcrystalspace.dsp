@@ -910,6 +910,10 @@ SOURCE=..\..\libs\csutil\win32\setenv.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\win32\syminit.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\win32\sysroot.cpp
 # End Source File
 # Begin Source File
@@ -2035,6 +2039,10 @@ SOURCE=..\..\libs\csutil\win32\callstack-dbghelp.h
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\win32\shellstuff.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\win32\syminit.h
 # End Source File
 # Begin Source File
 
