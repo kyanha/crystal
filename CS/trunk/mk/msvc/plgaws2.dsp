@@ -194,6 +194,10 @@ SOURCE=..\..\plugins\aws2\xml_def.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\aws2\border.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws2\frame.h
 # End Source File
 # Begin Source File
