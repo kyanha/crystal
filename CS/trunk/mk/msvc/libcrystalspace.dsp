@@ -590,6 +590,10 @@ SOURCE=..\..\libs\csutil\cmdline.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\csassert.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\csbaseeventh.cpp
 # End Source File
 # Begin Source File
