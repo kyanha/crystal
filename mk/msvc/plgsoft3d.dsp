@@ -178,6 +178,14 @@ SOURCE=..\..\plugins\video\render3d\software\tcache.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\software\clip_znear.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\software\clipper.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\software\scan.h
 # End Source File
 # Begin Source File
