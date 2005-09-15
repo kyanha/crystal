@@ -62,174 +62,177 @@
 <a name="l00057"></a>00057 <span class="comment">// -- Some helpers needed below</span>
 <a name="l00071"></a><a class="code" href="group__scf.html#ga94">00071</a> <span class="comment"></span><span class="preprocessor">#define SCF_INTERFACE(Name,Major,Minor,Micro)             \</span>
 <a name="l00072"></a>00072 <span class="preprocessor">struct InterfaceTraits {                                  \</span>
-<a name="l00073"></a>00073 <span class="preprocessor">  static CS_FORCEINLINE scfInterfaceVersion GetVersion()          \</span>
+<a name="l00073"></a>00073 <span class="preprocessor">  static CS_FORCEINLINE scfInterfaceVersion GetVersion()  \</span>
 <a name="l00074"></a>00074 <span class="preprocessor">  { return SCF_CONSTRUCT_VERSION(Major, Minor, Micro); }  \</span>
 <a name="l00075"></a>00075 <span class="preprocessor">  static CS_FORCEINLINE char const * GetName() { return #Name; }  \</span>
-<a name="l00076"></a>00076 <span class="preprocessor">}</span>
-<a name="l00077"></a>00077 <span class="preprocessor"></span>
-<a name="l00078"></a>00078 
-<a name="l00080"></a><a class="code" href="group__scf.html#ga95">00080</a> <span class="preprocessor">#define SCF_CONSTRUCT_VERSION(Major,Minor,Micro)          \</span>
-<a name="l00081"></a>00081 <span class="preprocessor">  ((Major &lt;&lt; 24) | (Minor &lt;&lt; 16) | Micro)</span>
-<a name="l00082"></a>00082 <span class="preprocessor"></span>
-<a name="l00083"></a>00083 
-<a name="l00090"></a><a class="code" href="group__scf.html#ga11">00090</a> <span class="keyword">static</span> <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">bool</span> <a class="code" href="group__scf.html#ga11">scfCompatibleVersion</a> (
-<a name="l00091"></a>00091   <a class="code" href="group__scf.html#ga1">scfInterfaceVersion</a> iVersion, <a class="code" href="group__scf.html#ga1">scfInterfaceVersion</a> iItfVersion)
-<a name="l00092"></a>00092 {
-<a name="l00093"></a>00093   <span class="keywordflow">return</span> (((iVersion &amp; 0xff000000) == (iItfVersion &amp; 0xff000000))
-<a name="l00094"></a>00094      &amp;&amp; ((iVersion &amp; 0x00ffffff) &lt;= (iItfVersion &amp; 0x00ffffff))) || iVersion == 0;
-<a name="l00095"></a>00095 }
-<a name="l00096"></a>00096 
-<a name="l00097"></a>00097 <span class="comment">// -- The main two SCF interfaces, iBase and iSCF</span>
-<a name="l00098"></a>00098 
-<a name="l00104"></a><a class="code" href="structiBase.html">00104</a> <span class="keyword">struct </span><a class="code" href="structiBase.html">iBase</a>
-<a name="l00105"></a>00105 {
-<a name="l00106"></a>00106   <span class="comment">// Jorrit: removed the code below as it causes 'pure virtual' method</span>
-<a name="l00107"></a>00107   <span class="comment">// calls to happen upon destruction.</span>
-<a name="l00108"></a>00108   <span class="comment">//protected:</span>
-<a name="l00111"></a>00111 <span class="comment"></span>  <span class="comment">//virtual ~iBase() {}</span>
-<a name="l00112"></a>00112 <span class="keyword">public</span>:
-<a name="l00113"></a>00113   SCF_INTERFACE(<a class="code" href="structiBase.html">iBase</a>, 1, 0, 0);
-<a name="l00115"></a>00115   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a3">IncRef</a> () = 0;
-<a name="l00117"></a>00117   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a1">DecRef</a> () = 0;
-<a name="l00119"></a>00119   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBase.html#a2">GetRefCount</a> () = 0;
-<a name="l00126"></a>00126   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiBase.html#a4">QueryInterface</a> (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a> iInterfaceID, <span class="keywordtype">int</span> iVersion) = 0;
-<a name="l00128"></a>00128   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a0">AddRefOwner</a> (<a class="code" href="structiBase.html">iBase</a>** ref_owner) = 0;
-<a name="l00130"></a>00130   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a5">RemoveRefOwner</a> (<a class="code" href="structiBase.html">iBase</a>** ref_owner) = 0;
-<a name="l00131"></a>00131 };
-<a name="l00132"></a>00132 
-<a name="l00134"></a><a class="code" href="group__scf.html#ga2">00134</a> <span class="keyword">typedef</span> <a class="code" href="structiBase.html">iBase</a>* (*scfFactoryFunc)(<a class="code" href="structiBase.html">iBase</a>*);
+<a name="l00076"></a>00076 <span class="preprocessor">private:                                                  \</span>
+<a name="l00077"></a>00077 <span class="preprocessor">  </span><span class="comment">/* Check that Name is really a type to catch typos. */</span>  \
+<a name="l00078"></a>00078   typedef Name Type;                                      \
+<a name="l00079"></a>00079 }
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081 
+<a name="l00083"></a><a class="code" href="group__scf.html#ga95">00083</a> <span class="preprocessor">#define SCF_CONSTRUCT_VERSION(Major,Minor,Micro)          \</span>
+<a name="l00084"></a>00084 <span class="preprocessor">  ((Major &lt;&lt; 24) | (Minor &lt;&lt; 16) | Micro)</span>
+<a name="l00085"></a>00085 <span class="preprocessor"></span>
+<a name="l00086"></a>00086 
+<a name="l00093"></a><a class="code" href="group__scf.html#ga11">00093</a> <span class="keyword">static</span> <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">bool</span> <a class="code" href="group__scf.html#ga11">scfCompatibleVersion</a> (
+<a name="l00094"></a>00094   <a class="code" href="group__scf.html#ga1">scfInterfaceVersion</a> iVersion, <a class="code" href="group__scf.html#ga1">scfInterfaceVersion</a> iItfVersion)
+<a name="l00095"></a>00095 {
+<a name="l00096"></a>00096   <span class="keywordflow">return</span> (((iVersion &amp; 0xff000000) == (iItfVersion &amp; 0xff000000))
+<a name="l00097"></a>00097      &amp;&amp; ((iVersion &amp; 0x00ffffff) &lt;= (iItfVersion &amp; 0x00ffffff))) || iVersion == 0;
+<a name="l00098"></a>00098 }
+<a name="l00099"></a>00099 
+<a name="l00100"></a>00100 <span class="comment">// -- The main two SCF interfaces, iBase and iSCF</span>
+<a name="l00101"></a>00101 
+<a name="l00107"></a><a class="code" href="structiBase.html">00107</a> <span class="keyword">struct </span><a class="code" href="structiBase.html">iBase</a>
+<a name="l00108"></a>00108 {
+<a name="l00109"></a>00109   <span class="comment">// Jorrit: removed the code below as it causes 'pure virtual' method</span>
+<a name="l00110"></a>00110   <span class="comment">// calls to happen upon destruction.</span>
+<a name="l00111"></a>00111   <span class="comment">//protected:</span>
+<a name="l00114"></a>00114 <span class="comment"></span>  <span class="comment">//virtual ~iBase() {}</span>
+<a name="l00115"></a>00115 <span class="keyword">public</span>:
+<a name="l00116"></a>00116   SCF_INTERFACE(<a class="code" href="structiBase.html">iBase</a>, 1, 0, 0);
+<a name="l00118"></a>00118   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a3">IncRef</a> () = 0;
+<a name="l00120"></a>00120   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a1">DecRef</a> () = 0;
+<a name="l00122"></a>00122   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiBase.html#a2">GetRefCount</a> () = 0;
+<a name="l00129"></a>00129   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiBase.html#a4">QueryInterface</a> (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a> iInterfaceID, <span class="keywordtype">int</span> iVersion) = 0;
+<a name="l00131"></a>00131   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a0">AddRefOwner</a> (<a class="code" href="structiBase.html">iBase</a>** ref_owner) = 0;
+<a name="l00133"></a>00133   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#a5">RemoveRefOwner</a> (<a class="code" href="structiBase.html">iBase</a>** ref_owner) = 0;
+<a name="l00134"></a>00134 };
 <a name="l00135"></a>00135 
-<a name="l00142"></a><a class="code" href="structiSCF.html">00142</a> <span class="keyword">struct </span><a class="code" href="structiSCF.html">iSCF</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00143"></a>00143 {
-<a name="l00144"></a>00144   SCF_INTERFACE(<a class="code" href="structiSCF.html">iSCF</a>, 2, 0,0);
-<a name="l00156"></a><a class="code" href="structiSCF.html#s0">00156</a>   <span class="keyword">static</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="structiSCF.html">iSCF</a>* <a class="code" href="structiSCF.html#s0">SCF</a>;
-<a name="l00157"></a>00157 
-<a name="l00158"></a>00158 <span class="preprocessor">#if defined(CS_DEBUG) || defined(CS_MEMORY_TRACKER)</span>
-<a name="l00159"></a>00159 <span class="preprocessor"></span>  <span class="comment">// This is EXTREMELY dirty but I see no other solution for now.</span>
-<a name="l00160"></a>00160   <span class="comment">// For debugging reasons I must have a global (global over the application</span>
-<a name="l00161"></a>00161   <span class="comment">// and all plugins)pointer to the object registry. I have no other</span>
-<a name="l00162"></a>00162   <span class="comment">// global object to tag this pointer on that except for iSCF.</span>
-<a name="l00163"></a>00163   <span class="comment">// This pointer is only here in debug mode though. That ensures that it</span>
-<a name="l00164"></a>00164   <span class="comment">// cannot be misused in real code.</span>
-<a name="l00165"></a>00165   <span class="comment">// If you know another solution for this problem? This global pointer</span>
-<a name="l00166"></a>00166   <span class="comment">// will be used by csDebuggingGraph in csutil.</span>
-<a name="l00167"></a>00167   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-<a name="l00168"></a>00168 <span class="preprocessor">#endif</span>
-<a name="l00169"></a>00169 <span class="preprocessor"></span>
-<a name="l00173"></a>00173   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a13">RegisterClasses</a> (<a class="code" href="structiDocument.html">iDocument</a>* metadata,
-<a name="l00174"></a>00174     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-<a name="l00175"></a>00175 
-<a name="l00181"></a>00181   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a13">RegisterClasses</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* xml,
-<a name="l00182"></a>00182     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-<a name="l00183"></a>00183 
-<a name="l00187"></a>00187   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a13">RegisterClasses</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* pluginPath,
-<a name="l00188"></a>00188     <a class="code" href="structiDocument.html">iDocument</a>* metadata, <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-<a name="l00189"></a>00189 
-<a name="l00196"></a>00196   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a0">ClassRegistered</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
-<a name="l00197"></a>00197 
-<a name="l00209"></a>00209   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a> *<a class="code" href="structiSCF.html#a1">CreateInstance</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
-<a name="l00210"></a>00210 
-<a name="l00216"></a>00216   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiSCF.html#a4">GetClassDescription</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
-<a name="l00217"></a>00217 
-<a name="l00223"></a>00223   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiSCF.html#a3">GetClassDependencies</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
-<a name="l00224"></a>00224 
-<a name="l00251"></a>00251   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDocument&gt;</a> <a class="code" href="structiSCF.html#a7">GetPluginMetadata</a> (<span class="keywordtype">char</span> <span class="keyword">const</span> *iClassID) = 0;
-<a name="l00252"></a>00252 
-<a name="l00259"></a>00259   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a18">UnloadUnusedModules</a> () = 0;
-<a name="l00260"></a>00260 
-<a name="l00271"></a>00271   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a10">RegisterClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
-<a name="l00272"></a>00272     <span class="keyword">const</span> <span class="keywordtype">char</span> *iLibraryName, <span class="keyword">const</span> <span class="keywordtype">char</span> *iFactoryClass,
-<a name="l00273"></a>00273     <span class="keyword">const</span> <span class="keywordtype">char</span> *Description, <span class="keyword">const</span> <span class="keywordtype">char</span> *Dependencies = 0,
-<a name="l00274"></a>00274     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-<a name="l00275"></a>00275 
-<a name="l00282"></a>00282   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a10">RegisterClass</a> (<a class="code" href="group__scf.html#ga2">scfFactoryFunc</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
-<a name="l00283"></a>00283     <span class="keyword">const</span> <span class="keywordtype">char</span> *Description, <span class="keyword">const</span> <span class="keywordtype">char</span> *Dependencies = 0,
-<a name="l00284"></a>00284     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-<a name="l00285"></a>00285 
-<a name="l00293"></a>00293   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a14">RegisterFactoryFunc</a> (<a class="code" href="group__scf.html#ga2">scfFactoryFunc</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *FactClass) = 0;
-<a name="l00294"></a>00294 
-<a name="l00301"></a>00301   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a19">UnregisterClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
-<a name="l00302"></a>00302 
-<a name="l00307"></a>00307   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="structiSCF.html#a6">GetInterfaceName</a> (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>) <span class="keyword">const </span>= 0;
-<a name="l00308"></a>00308 
-<a name="l00314"></a>00314   <span class="keyword">virtual</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="structiSCF.html#a5">GetInterfaceID</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface) = 0;
-<a name="l00315"></a>00315 
-<a name="l00322"></a>00322   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a2">Finish</a> () = 0;
-<a name="l00323"></a>00323 
-<a name="l00333"></a>00333   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iStringArray&gt;</a> <a class="code" href="structiSCF.html#a8">QueryClassList</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* pattern) = 0;
-<a name="l00334"></a>00334 
-<a name="l00338"></a>00338   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a16">ScanPluginsPath</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* path, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>,
-<a name="l00339"></a>00339     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
-<a name="l00340"></a>00340 
-<a name="l00350"></a>00350   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a15">RegisterPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* path) = 0;
-<a name="l00351"></a>00351 };
-<a name="l00352"></a>00352 
-<a name="l00353"></a>00353 
-<a name="l00354"></a>00354 <span class="comment">//-- Interface traits</span>
+<a name="l00137"></a><a class="code" href="group__scf.html#ga2">00137</a> <span class="keyword">typedef</span> <a class="code" href="structiBase.html">iBase</a>* (*scfFactoryFunc)(<a class="code" href="structiBase.html">iBase</a>*);
+<a name="l00138"></a>00138 
+<a name="l00145"></a><a class="code" href="structiSCF.html">00145</a> <span class="keyword">struct </span><a class="code" href="structiSCF.html">iSCF</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00146"></a>00146 {
+<a name="l00147"></a>00147   SCF_INTERFACE(<a class="code" href="structiSCF.html">iSCF</a>, 2, 0,0);
+<a name="l00159"></a><a class="code" href="structiSCF.html#s0">00159</a>   <span class="keyword">static</span> CS_CRYSTALSPACE_EXPORT <a class="code" href="structiSCF.html">iSCF</a>* <a class="code" href="structiSCF.html#s0">SCF</a>;
+<a name="l00160"></a>00160 
+<a name="l00161"></a>00161 <span class="preprocessor">#if defined(CS_DEBUG) || defined(CS_MEMORY_TRACKER)</span>
+<a name="l00162"></a>00162 <span class="preprocessor"></span>  <span class="comment">// This is EXTREMELY dirty but I see no other solution for now.</span>
+<a name="l00163"></a>00163   <span class="comment">// For debugging reasons I must have a global (global over the application</span>
+<a name="l00164"></a>00164   <span class="comment">// and all plugins)pointer to the object registry. I have no other</span>
+<a name="l00165"></a>00165   <span class="comment">// global object to tag this pointer on that except for iSCF.</span>
+<a name="l00166"></a>00166   <span class="comment">// This pointer is only here in debug mode though. That ensures that it</span>
+<a name="l00167"></a>00167   <span class="comment">// cannot be misused in real code.</span>
+<a name="l00168"></a>00168   <span class="comment">// If you know another solution for this problem? This global pointer</span>
+<a name="l00169"></a>00169   <span class="comment">// will be used by csDebuggingGraph in csutil.</span>
+<a name="l00170"></a>00170   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+<a name="l00171"></a>00171 <span class="preprocessor">#endif</span>
+<a name="l00172"></a>00172 <span class="preprocessor"></span>
+<a name="l00176"></a>00176   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a13">RegisterClasses</a> (<a class="code" href="structiDocument.html">iDocument</a>* metadata,
+<a name="l00177"></a>00177     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+<a name="l00178"></a>00178 
+<a name="l00184"></a>00184   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a13">RegisterClasses</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* xml,
+<a name="l00185"></a>00185     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+<a name="l00186"></a>00186 
+<a name="l00190"></a>00190   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a13">RegisterClasses</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* pluginPath,
+<a name="l00191"></a>00191     <a class="code" href="structiDocument.html">iDocument</a>* metadata, <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+<a name="l00192"></a>00192 
+<a name="l00199"></a>00199   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a0">ClassRegistered</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
+<a name="l00200"></a>00200 
+<a name="l00212"></a>00212   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a> *<a class="code" href="structiSCF.html#a1">CreateInstance</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
+<a name="l00213"></a>00213 
+<a name="l00219"></a>00219   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiSCF.html#a4">GetClassDescription</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
+<a name="l00220"></a>00220 
+<a name="l00226"></a>00226   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiSCF.html#a3">GetClassDependencies</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
+<a name="l00227"></a>00227 
+<a name="l00254"></a>00254   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iDocument&gt;</a> <a class="code" href="structiSCF.html#a7">GetPluginMetadata</a> (<span class="keywordtype">char</span> <span class="keyword">const</span> *iClassID) = 0;
+<a name="l00255"></a>00255 
+<a name="l00262"></a>00262   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a18">UnloadUnusedModules</a> () = 0;
+<a name="l00263"></a>00263 
+<a name="l00274"></a>00274   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a10">RegisterClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
+<a name="l00275"></a>00275     <span class="keyword">const</span> <span class="keywordtype">char</span> *iLibraryName, <span class="keyword">const</span> <span class="keywordtype">char</span> *iFactoryClass,
+<a name="l00276"></a>00276     <span class="keyword">const</span> <span class="keywordtype">char</span> *Description, <span class="keyword">const</span> <span class="keywordtype">char</span> *Dependencies = 0,
+<a name="l00277"></a>00277     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+<a name="l00278"></a>00278 
+<a name="l00285"></a>00285   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a10">RegisterClass</a> (<a class="code" href="group__scf.html#ga2">scfFactoryFunc</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
+<a name="l00286"></a>00286     <span class="keyword">const</span> <span class="keywordtype">char</span> *Description, <span class="keyword">const</span> <span class="keywordtype">char</span> *Dependencies = 0,
+<a name="l00287"></a>00287     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+<a name="l00288"></a>00288 
+<a name="l00296"></a>00296   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a14">RegisterFactoryFunc</a> (<a class="code" href="group__scf.html#ga2">scfFactoryFunc</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *FactClass) = 0;
+<a name="l00297"></a>00297 
+<a name="l00304"></a>00304   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a19">UnregisterClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID) = 0;
+<a name="l00305"></a>00305 
+<a name="l00310"></a>00310   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="structiSCF.html#a6">GetInterfaceName</a> (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>) <span class="keyword">const </span>= 0;
+<a name="l00311"></a>00311 
+<a name="l00317"></a>00317   <span class="keyword">virtual</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="structiSCF.html#a5">GetInterfaceID</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface) = 0;
+<a name="l00318"></a>00318 
+<a name="l00325"></a>00325   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a2">Finish</a> () = 0;
+<a name="l00326"></a>00326 
+<a name="l00336"></a>00336   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iStringArray&gt;</a> <a class="code" href="structiSCF.html#a8">QueryClassList</a> (<span class="keywordtype">char</span> <span class="keyword">const</span>* pattern) = 0;
+<a name="l00337"></a>00337 
+<a name="l00341"></a>00341   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSCF.html#a16">ScanPluginsPath</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* path, <span class="keywordtype">bool</span> recursive = <span class="keyword">false</span>,
+<a name="l00342"></a>00342     <span class="keyword">const</span> <span class="keywordtype">char</span>* context = 0) = 0;
+<a name="l00343"></a>00343 
+<a name="l00353"></a>00353   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSCF.html#a15">RegisterPlugin</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* path) = 0;
+<a name="l00354"></a>00354 };
 <a name="l00355"></a>00355 
-<a name="l00365"></a>00365 <span class="keyword">template</span> &lt;<span class="keyword">class</span> Interface&gt; 
-<a name="l00366"></a><a class="code" href="classscfInterfaceTraits.html">00366</a> <span class="keyword">class </span><a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits</a>
-<a name="l00367"></a>00367 {
-<a name="l00368"></a>00368 <span class="keyword">public</span>:
-<a name="l00372"></a><a class="code" href="classscfInterfaceTraits.html#e2">00372</a>   <span class="keyword">static</span> <a class="code" href="group__scf.html#ga1">scfInterfaceVersion</a> <a class="code" href="classscfInterfaceTraits.html#e2">GetVersion</a> ()
-<a name="l00373"></a>00373   {
-<a name="l00374"></a>00374     <span class="keywordflow">return</span> Interface::InterfaceTraits::GetVersion ();
-<a name="l00375"></a>00375   }
-<a name="l00376"></a>00376 
-<a name="l00384"></a><a class="code" href="classscfInterfaceTraits.html#e0">00384</a>   <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="classscfInterfaceTraits.html#e0">GetID</a> ()
-<a name="l00385"></a>00385   {
-<a name="l00386"></a>00386     <a class="code" href="group__scf.html#ga0">scfInterfaceID</a>&amp; ID = GetMyID ();
-<a name="l00387"></a>00387     <span class="keywordflow">if</span> (ID == (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)(-1))
-<a name="l00388"></a>00388     {
-<a name="l00389"></a>00389       ID = <a class="code" href="structiSCF.html#s0">iSCF::SCF</a>-&gt;<a class="code" href="structiSCF.html#a5">GetInterfaceID</a> (<a class="code" href="classscfInterfaceTraits.html#e1">GetName</a> ());
-<a name="l00390"></a>00390       csStaticVarCleanup (CleanupID);
-<a name="l00391"></a>00391     }
-<a name="l00392"></a>00392     <span class="keywordflow">return</span> ID;
-<a name="l00393"></a>00393   }
-<a name="l00394"></a>00394 
-<a name="l00398"></a><a class="code" href="classscfInterfaceTraits.html#e1">00398</a>   <span class="keyword">static</span> <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classscfInterfaceTraits.html#e1">GetName</a> ()
-<a name="l00399"></a>00399   { 
-<a name="l00400"></a>00400     <span class="keywordflow">return</span> Interface::InterfaceTraits::GetName ();
-<a name="l00401"></a>00401   }
-<a name="l00402"></a>00402 <span class="keyword">private</span>:
-<a name="l00403"></a>00403   <span class="comment">// This idiom is a Meyers singleton</span>
-<a name="l00404"></a>00404   <span class="keyword">static</span> <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a>&amp; GetMyID ()
-<a name="l00405"></a>00405   {
-<a name="l00406"></a>00406     <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> ID = (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)-1;
-<a name="l00407"></a>00407     <span class="keywordflow">return</span> ID;
-<a name="l00408"></a>00408   }
-<a name="l00409"></a>00409   <span class="keyword">static</span> <span class="keywordtype">void</span> CleanupID ()
-<a name="l00410"></a>00410   {
-<a name="l00411"></a>00411     GetMyID () = (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)-1;
-<a name="l00412"></a>00412   }
-<a name="l00413"></a>00413 };
-<a name="l00414"></a>00414 
-<a name="l00428"></a><a class="code" href="group__scf.html#ga96">00428</a> <span class="preprocessor">#define SCF_VERSION(Name,Major,Minor,Micro)                \</span>
-<a name="l00429"></a>00429 <span class="preprocessor">struct Name;                                               \</span>
-<a name="l00430"></a>00430 <span class="preprocessor">CS_SPECIALIZE_TEMPLATE                                     \</span>
-<a name="l00431"></a>00431 <span class="preprocessor">class scfInterfaceTraits&lt;Name&gt;                             \</span>
-<a name="l00432"></a>00432 <span class="preprocessor">{                                                          \</span>
-<a name="l00433"></a>00433 <span class="preprocessor">public:                                                    \</span>
-<a name="l00434"></a>00434 <span class="preprocessor">  static scfInterfaceVersion GetVersion()                  \</span>
-<a name="l00435"></a>00435 <span class="preprocessor">  { return SCF_CONSTRUCT_VERSION(Major, Minor, Micro); }   \</span>
-<a name="l00436"></a>00436 <span class="preprocessor">  static char const* GetName ()                            \</span>
-<a name="l00437"></a>00437 <span class="preprocessor">  { return #Name; }                                        \</span>
-<a name="l00438"></a>00438 <span class="preprocessor">  static scfInterfaceID GetID ()                           \</span>
-<a name="l00439"></a>00439 <span class="preprocessor">  { scfInterfaceID&amp; ID = GetMyID ();                       \</span>
-<a name="l00440"></a>00440 <span class="preprocessor">    if (ID == (scfInterfaceID)(-1))                        \</span>
-<a name="l00441"></a>00441 <span class="preprocessor">    { ID = iSCF::SCF-&gt;GetInterfaceID (GetName ());         \</span>
-<a name="l00442"></a>00442 <span class="preprocessor">      csStaticVarCleanup (CleanupID);    }                 \</span>
-<a name="l00443"></a>00443 <span class="preprocessor">    return ID;                                             \</span>
-<a name="l00444"></a>00444 <span class="preprocessor">  }                                                        \</span>
-<a name="l00445"></a>00445 <span class="preprocessor">private:                                                   \</span>
-<a name="l00446"></a>00446 <span class="preprocessor">  static scfInterfaceID&amp; GetMyID ()                        \</span>
-<a name="l00447"></a>00447 <span class="preprocessor">  { static scfInterfaceID ID = (scfInterfaceID)-1; return ID; } \</span>
-<a name="l00448"></a>00448 <span class="preprocessor">  static void CleanupID ()                                 \</span>
-<a name="l00449"></a>00449 <span class="preprocessor">  { GetMyID () = (scfInterfaceID)-1; }                     \</span>
-<a name="l00450"></a>00450 <span class="preprocessor">}</span>
-<a name="l00451"></a>00451 <span class="preprocessor"></span>
-<a name="l00454"></a>00454 <span class="preprocessor">#endif</span>
-<a name="l00455"></a>00455 <span class="preprocessor"></span>
+<a name="l00356"></a>00356 
+<a name="l00357"></a>00357 <span class="comment">//-- Interface traits</span>
+<a name="l00358"></a>00358 
+<a name="l00368"></a>00368 <span class="keyword">template</span> &lt;<span class="keyword">class</span> Interface&gt; 
+<a name="l00369"></a><a class="code" href="classscfInterfaceTraits.html">00369</a> <span class="keyword">class </span><a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits</a>
+<a name="l00370"></a>00370 {
+<a name="l00371"></a>00371 <span class="keyword">public</span>:
+<a name="l00375"></a><a class="code" href="classscfInterfaceTraits.html#e2">00375</a>   <span class="keyword">static</span> <a class="code" href="group__scf.html#ga1">scfInterfaceVersion</a> <a class="code" href="classscfInterfaceTraits.html#e2">GetVersion</a> ()
+<a name="l00376"></a>00376   {
+<a name="l00377"></a>00377     <span class="keywordflow">return</span> Interface::InterfaceTraits::GetVersion ();
+<a name="l00378"></a>00378   }
+<a name="l00379"></a>00379 
+<a name="l00387"></a><a class="code" href="classscfInterfaceTraits.html#e0">00387</a>   <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="classscfInterfaceTraits.html#e0">GetID</a> ()
+<a name="l00388"></a>00388   {
+<a name="l00389"></a>00389     <a class="code" href="group__scf.html#ga0">scfInterfaceID</a>&amp; ID = GetMyID ();
+<a name="l00390"></a>00390     <span class="keywordflow">if</span> (ID == (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)(-1))
+<a name="l00391"></a>00391     {
+<a name="l00392"></a>00392       ID = <a class="code" href="structiSCF.html#s0">iSCF::SCF</a>-&gt;<a class="code" href="structiSCF.html#a5">GetInterfaceID</a> (<a class="code" href="classscfInterfaceTraits.html#e1">GetName</a> ());
+<a name="l00393"></a>00393       csStaticVarCleanup (CleanupID);
+<a name="l00394"></a>00394     }
+<a name="l00395"></a>00395     <span class="keywordflow">return</span> ID;
+<a name="l00396"></a>00396   }
+<a name="l00397"></a>00397 
+<a name="l00401"></a><a class="code" href="classscfInterfaceTraits.html#e1">00401</a>   <span class="keyword">static</span> <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classscfInterfaceTraits.html#e1">GetName</a> ()
+<a name="l00402"></a>00402   { 
+<a name="l00403"></a>00403     <span class="keywordflow">return</span> Interface::InterfaceTraits::GetName ();
+<a name="l00404"></a>00404   }
+<a name="l00405"></a>00405 <span class="keyword">private</span>:
+<a name="l00406"></a>00406   <span class="comment">// This idiom is a Meyers singleton</span>
+<a name="l00407"></a>00407   <span class="keyword">static</span> <a class="code" href="cssysdef_8h.html#a3">CS_FORCEINLINE</a> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a>&amp; GetMyID ()
+<a name="l00408"></a>00408   {
+<a name="l00409"></a>00409     <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> ID = (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)-1;
+<a name="l00410"></a>00410     <span class="keywordflow">return</span> ID;
+<a name="l00411"></a>00411   }
+<a name="l00412"></a>00412   <span class="keyword">static</span> <span class="keywordtype">void</span> CleanupID ()
+<a name="l00413"></a>00413   {
+<a name="l00414"></a>00414     GetMyID () = (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)-1;
+<a name="l00415"></a>00415   }
+<a name="l00416"></a>00416 };
+<a name="l00417"></a>00417 
+<a name="l00431"></a><a class="code" href="group__scf.html#ga96">00431</a> <span class="preprocessor">#define SCF_VERSION(Name,Major,Minor,Micro)                \</span>
+<a name="l00432"></a>00432 <span class="preprocessor">struct Name;                                               \</span>
+<a name="l00433"></a>00433 <span class="preprocessor">CS_SPECIALIZE_TEMPLATE                                     \</span>
+<a name="l00434"></a>00434 <span class="preprocessor">class scfInterfaceTraits&lt;Name&gt;                             \</span>
+<a name="l00435"></a>00435 <span class="preprocessor">{                                                          \</span>
+<a name="l00436"></a>00436 <span class="preprocessor">public:                                                    \</span>
+<a name="l00437"></a>00437 <span class="preprocessor">  static scfInterfaceVersion GetVersion()                  \</span>
+<a name="l00438"></a>00438 <span class="preprocessor">  { return SCF_CONSTRUCT_VERSION(Major, Minor, Micro); }   \</span>
+<a name="l00439"></a>00439 <span class="preprocessor">  static char const* GetName ()                            \</span>
+<a name="l00440"></a>00440 <span class="preprocessor">  { return #Name; }                                        \</span>
+<a name="l00441"></a>00441 <span class="preprocessor">  static scfInterfaceID GetID ()                           \</span>
+<a name="l00442"></a>00442 <span class="preprocessor">  { scfInterfaceID&amp; ID = GetMyID ();                       \</span>
+<a name="l00443"></a>00443 <span class="preprocessor">    if (ID == (scfInterfaceID)(-1))                        \</span>
+<a name="l00444"></a>00444 <span class="preprocessor">    { ID = iSCF::SCF-&gt;GetInterfaceID (GetName ());         \</span>
+<a name="l00445"></a>00445 <span class="preprocessor">      csStaticVarCleanup (CleanupID);    }                 \</span>
+<a name="l00446"></a>00446 <span class="preprocessor">    return ID;                                             \</span>
+<a name="l00447"></a>00447 <span class="preprocessor">  }                                                        \</span>
+<a name="l00448"></a>00448 <span class="preprocessor">private:                                                   \</span>
+<a name="l00449"></a>00449 <span class="preprocessor">  static scfInterfaceID&amp; GetMyID ()                        \</span>
+<a name="l00450"></a>00450 <span class="preprocessor">  { static scfInterfaceID ID = (scfInterfaceID)-1; return ID; } \</span>
+<a name="l00451"></a>00451 <span class="preprocessor">  static void CleanupID ()                                 \</span>
+<a name="l00452"></a>00452 <span class="preprocessor">  { GetMyID () = (scfInterfaceID)-1; }                     \</span>
+<a name="l00453"></a>00453 <span class="preprocessor">}</span>
+<a name="l00454"></a>00454 <span class="preprocessor"></span>
+<a name="l00457"></a>00457 <span class="preprocessor">#endif</span>
+<a name="l00458"></a>00458 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

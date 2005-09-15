@@ -41,33 +41,34 @@
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
 <a name="l00023"></a>00023 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00024"></a>00024 
-<a name="l00025"></a>00025 <span class="preprocessor">#include "<a class="code" href="shader_8h.html">ivideo/shader/shader.h</a>"</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#include "shadervar.h"</span>
-<a name="l00027"></a>00027 
-<a name="l00035"></a><a class="code" href="classcsShaderVariableContext.html">00035</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a> : <span class="keyword">public</span> <a class="code" href="structiShaderVariableContext.html">iShaderVariableContext</a>
-<a name="l00036"></a>00036 {
-<a name="l00037"></a>00037 <span class="keyword">private</span>:
-<a name="l00038"></a>00038   <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a> variables;
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040 <span class="keyword">public</span>:
-<a name="l00041"></a>00041   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a>);
-<a name="l00042"></a>00042   
-<a name="l00043"></a><a class="code" href="classcsShaderVariableContext.html#o0">00043</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
-<a name="l00044"></a>00044 
-<a name="l00045"></a>00045   <a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a> ();
-<a name="l00046"></a>00046   <span class="keyword">virtual</span> ~<a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a> ();
-<a name="l00047"></a>00047 
-<a name="l00048"></a><a class="code" href="classcsShaderVariableContext.html#a4">00048</a>   <span class="keyword">const</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a>&amp; <a class="code" href="structiShaderVariableContext.html#a2">GetShaderVariables</a> ()<span class="keyword"> const</span>
-<a name="l00049"></a>00049 <span class="keyword">  </span>{ <span class="keywordflow">return</span> variables; }
-<a name="l00050"></a>00050   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a0">AddVariable</a> (<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable);
-<a name="l00051"></a>00051   <span class="keyword">virtual</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* <a class="code" href="structiShaderVariableContext.html#a3">GetVariable</a> (<a class="code" href="group__util.html#ga3">csStringID</a> name) <span class="keyword">const</span>;
-<a name="l00052"></a>00052   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a6">PushVariables</a> (<a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks) <span class="keyword">const</span>;
-<a name="l00053"></a><a class="code" href="classcsShaderVariableContext.html#a6">00053</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiShaderVariableContext.html#a5">IsEmpty</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> variables.Length() == 0; }  
-<a name="l00054"></a>00054   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a7">ReplaceVariable</a> (<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable);
-<a name="l00055"></a><a class="code" href="classcsShaderVariableContext.html#a1">00055</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiShaderVariableContext.html#a1">Clear</a> () { variables.Empty(); }
-<a name="l00056"></a>00056 };
-<a name="l00057"></a>00057 
-<a name="l00058"></a>00058 <span class="preprocessor">#endif // __CS_CSGFX_SHADERVARCONTEXT_H__</span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="shader_8h.html">ivideo/shader/shader.h</a>"</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include "shadervar.h"</span>
+<a name="l00029"></a>00029 
+<a name="l00037"></a><a class="code" href="classcsShaderVariableContext.html">00037</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a> :
+<a name="l00038"></a>00038   <span class="keyword">public</span> scfImplementation1&lt;csShaderVariableContext, iShaderVariableContext&gt;
+<a name="l00039"></a>00039 {
+<a name="l00040"></a>00040 <span class="keyword">private</span>:
+<a name="l00041"></a>00041   <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a> variables;
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043 <span class="keyword">public</span>:
+<a name="l00044"></a>00044   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a>);
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046   <a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a> ();
+<a name="l00047"></a>00047   <span class="keyword">virtual</span> ~<a class="code" href="classcsShaderVariableContext.html">csShaderVariableContext</a> ();
+<a name="l00048"></a>00048 
+<a name="l00049"></a><a class="code" href="classcsShaderVariableContext.html#a4">00049</a>   <span class="keyword">const</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a>&amp; GetShaderVariables ()<span class="keyword"> const</span>
+<a name="l00050"></a>00050 <span class="keyword">  </span>{ <span class="keywordflow">return</span> variables; }
+<a name="l00051"></a>00051   <span class="keyword">virtual</span> <span class="keywordtype">void</span> AddVariable (<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable);
+<a name="l00052"></a>00052   <span class="keyword">virtual</span> <a class="code" href="classcsShaderVariable.html">csShaderVariable</a>* GetVariable (<a class="code" href="group__util.html#ga3">csStringID</a> name) <span class="keyword">const</span>;
+<a name="l00053"></a>00053   <span class="keyword">virtual</span> <span class="keywordtype">void</span> PushVariables (<a class="code" href="classcsArray.html">csShaderVarStack</a> &amp;stacks) <span class="keyword">const</span>;
+<a name="l00054"></a><a class="code" href="classcsShaderVariableContext.html#a6">00054</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsEmpty()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> variables.Length() == 0; }  
+<a name="l00055"></a>00055   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ReplaceVariable (<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable);
+<a name="l00056"></a><a class="code" href="classcsShaderVariableContext.html#a1">00056</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Clear () { variables.Empty(); }
+<a name="l00057"></a>00057 };
+<a name="l00058"></a>00058 
+<a name="l00059"></a>00059 <span class="preprocessor">#endif // __CS_CSGFX_SHADERVARCONTEXT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
