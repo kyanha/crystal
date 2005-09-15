@@ -41,123 +41,124 @@
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
 <a name="l00023"></a>00023 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00024"></a>00024 <span class="preprocessor">#include "csutil/leakguard.h"</span>
-<a name="l00025"></a>00025 
-<a name="l00026"></a>00026 <span class="preprocessor">#include "<a class="code" href="imagebase_8h.html">csgfx/imagebase.h</a>"</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="imagetools_8h.html">csgfx/imagetools.h</a>"</span>
-<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="rgbpixel_8h.html">csgfx/rgbpixel.h</a>"</span>
-<a name="l00029"></a>00029 
-<a name="l00033"></a><a class="code" href="classcsImageMemory.html">00033</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsImageMemory.html">csImageMemory</a> : <span class="keyword">public</span> <a class="code" href="classcsImageBase.html">csImageBase</a>
-<a name="l00034"></a>00034 {
-<a name="l00035"></a>00035 <span class="keyword">private</span>:
-<a name="l00037"></a>00037   <span class="keywordtype">void</span> ConstructCommon();
-<a name="l00039"></a>00039   <span class="keywordtype">void</span> ConstructWHDF (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">int</span> depth, <span class="keywordtype">int</span> format);
-<a name="l00041"></a>00041   <span class="keywordtype">void</span> ConstructSource (<a class="code" href="structiImage.html">iImage</a>* source);
-<a name="l00043"></a>00043   <span class="keywordtype">void</span> ConstructBuffers (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">void</span>* buffer, 
-<a name="l00044"></a>00044     <span class="keywordtype">bool</span> destroy, <span class="keywordtype">int</span> format, <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *palette);
-<a name="l00045"></a>00045 <span class="keyword">protected</span>:
-<a name="l00047"></a><a class="code" href="classcsImageMemory.html#p11">00047</a>   <span class="keywordtype">int</span> Width;
-<a name="l00049"></a><a class="code" href="classcsImageMemory.html#p5">00049</a>   <span class="keywordtype">int</span> Height;
-<a name="l00051"></a><a class="code" href="classcsImageMemory.html#p1">00051</a>   <span class="keywordtype">int</span> Depth;
-<a name="l00058"></a><a class="code" href="classcsImageMemory.html#p6">00058</a>   <span class="keywordtype">void</span>* Image;
-<a name="l00060"></a><a class="code" href="classcsImageMemory.html#p10">00060</a>   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *Palette;
-<a name="l00062"></a><a class="code" href="classcsImageMemory.html#p0">00062</a>   <a class="code" href="cstypes_8h.html#a9">uint8</a> *Alpha;
-<a name="l00064"></a><a class="code" href="classcsImageMemory.html#p3">00064</a>   <span class="keywordtype">int</span> Format;
-<a name="l00066"></a><a class="code" href="classcsImageMemory.html#p4">00066</a>   <span class="keywordtype">bool</span> has_keycolour;
-<a name="l00068"></a><a class="code" href="classcsImageMemory.html#p8">00068</a>   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> keycolour;
-<a name="l00070"></a><a class="code" href="classcsImageMemory.html#p2">00070</a>   <span class="keywordtype">bool</span> destroy_image;
-<a name="l00072"></a><a class="code" href="classcsImageMemory.html#p7">00072</a>   <a class="code" href="group__gfx2d.html#ga5">csImageType</a> imageType;
-<a name="l00074"></a>00074   <span class="comment">/* @@@ This is not csRefArray&lt;iImage&gt; as this does not return csRef&lt;iImage&gt;&amp;</span>
-<a name="l00075"></a>00075 <span class="comment">   * from GetExtend() or operator[], which is needed here.</span>
-<a name="l00076"></a>00076 <span class="comment">   */</span>
-<a name="l00077"></a><a class="code" href="classcsImageMemory.html#p9">00077</a>   <a class="code" href="classcsArray.html">csArray&lt;csRef&lt;iImage&gt;</a> &gt; mipmaps;
-<a name="l00078"></a>00078 
-<a name="l00083"></a>00083   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> iFormat);
-<a name="l00093"></a>00093   <span class="keywordtype">void</span> SetDimensions (<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight);
-<a name="l00094"></a>00094   <span class="keywordtype">void</span> SetDimensions (<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight, <span class="keywordtype">int</span> newDepth);
-<a name="l00095"></a>00095 
-<a name="l00097"></a>00097   <span class="keywordtype">void</span> AllocImage();
-<a name="l00099"></a>00099   <span class="keywordtype">void</span> EnsureImage();
-<a name="l00103"></a>00103   <span class="keywordtype">void</span> FreeImage ();
-<a name="l00104"></a>00104 <span class="keyword">public</span>:
-<a name="l00105"></a><a class="code" href="classcsImageMemory.html#o0">00105</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
-<a name="l00106"></a>00106   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsImageMemory.html">csImageMemory</a>);
-<a name="l00107"></a>00107 
-<a name="l00115"></a>00115   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">int</span> format = <a class="code" href="group__gfx2d.html#gga4a2">CS_IMGFMT_TRUECOLOR</a>);
-<a name="l00124"></a>00124   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">int</span> depth, <span class="keywordtype">int</span> format);
-<a name="l00137"></a>00137   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">void</span>* buffer, <span class="keywordtype">bool</span> destroy,
-<a name="l00138"></a>00138     <span class="keywordtype">int</span> format = <a class="code" href="group__gfx2d.html#gga4a2">CS_IMGFMT_TRUECOLOR</a>, <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *palette = 0);
-<a name="l00149"></a>00149   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keyword">const</span> <span class="keywordtype">void</span>* buffer, 
-<a name="l00150"></a>00150     <span class="keywordtype">int</span> format = <a class="code" href="group__gfx2d.html#gga4a2">CS_IMGFMT_TRUECOLOR</a>, <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *palette = 0);
-<a name="l00155"></a>00155   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<a class="code" href="structiImage.html">iImage</a>* source);
-<a name="l00160"></a>00160   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<a class="code" href="structiImage.html">iImage</a>* source, <span class="keywordtype">int</span> newFormat);
-<a name="l00161"></a>00161 
-<a name="l00162"></a>00162   <span class="keyword">virtual</span> ~<a class="code" href="classcsImageMemory.html">csImageMemory</a> ();
-<a name="l00163"></a>00163 
-<a name="l00165"></a>00165   <span class="keywordtype">void</span>* GetImagePtr ();
-<a name="l00167"></a>00167   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* GetPalettePtr ();
-<a name="l00169"></a>00169   <a class="code" href="cstypes_8h.html#a9">uint8</a>* GetAlphaPtr ();
-<a name="l00170"></a>00170 
-<a name="l00171"></a><a class="code" href="classcsImageMemory.html#a24">00171</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">void</span> *<a class="code" href="structiImage.html#a4">GetImageData</a> () { <span class="keywordflow">return</span> GetImagePtr(); }
-<a name="l00172"></a><a class="code" href="classcsImageMemory.html#a31">00172</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a14">GetWidth</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Width; }
-<a name="l00173"></a><a class="code" href="classcsImageMemory.html#a23">00173</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a3">GetHeight</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Height; }
-<a name="l00174"></a><a class="code" href="classcsImageMemory.html#a21">00174</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classcsImageBase.html#a1">GetDepth</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Depth; }
-<a name="l00175"></a>00175 
-<a name="l00176"></a><a class="code" href="classcsImageMemory.html#a22">00176</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiImage.html#a2">GetFormat</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Format; }
-<a name="l00177"></a><a class="code" href="classcsImageMemory.html#a29">00177</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="classcsImageBase.html#a7">GetPalette</a> () { <span class="keywordflow">return</span> GetPalettePtr(); }
-<a name="l00178"></a><a class="code" href="classcsImageMemory.html#a19">00178</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="cstypes_8h.html#a9">uint8</a>* <a class="code" href="classcsImageBase.html#a0">GetAlpha</a> () { <span class="keywordflow">return</span> GetAlphaPtr(); }
-<a name="l00179"></a>00179 
-<a name="l00180"></a><a class="code" href="classcsImageMemory.html#a32">00180</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcsImageBase.html#a12">HasKeyColor</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> has_keycolour; }
-<a name="l00181"></a>00181 
-<a name="l00182"></a><a class="code" href="classcsImageMemory.html#a27">00182</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsImageBase.html#a4">GetKeyColor</a> (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b)<span class="keyword"> const</span>
-<a name="l00183"></a>00183 <span class="keyword">  </span>{ r = keycolour.red; g = keycolour.green; b = keycolour.blue; }
-<a name="l00184"></a>00184 
-<a name="l00186"></a>00186   <span class="keywordtype">void</span> Clear (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> &amp;colour);
-<a name="l00187"></a>00187 
-<a name="l00189"></a>00189   <span class="keywordtype">void</span> CheckAlpha ();
-<a name="l00199"></a>00199   <span class="keywordtype">void</span> SetFormat (<span class="keywordtype">int</span> iFormat);
-<a name="l00200"></a>00200 
-<a name="l00202"></a>00202   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> r, <span class="keywordtype">int</span> g, <span class="keywordtype">int</span> b);
-<a name="l00203"></a><a class="code" href="classcsImageMemory.html#a36">00203</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeycolor (<span class="keywordtype">int</span> r, <span class="keywordtype">int</span> g, <span class="keywordtype">int</span> b) { SetKeyColor(r,g,b); }
-<a name="l00205"></a>00205   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ClearKeyColor ();
-<a name="l00206"></a><a class="code" href="classcsImageMemory.html#a4">00206</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ClearKeycolor () { ClearKeyColor(); }
-<a name="l00207"></a>00207 
-<a name="l00212"></a>00212   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ApplyKeyColor ();
-<a name="l00213"></a><a class="code" href="classcsImageMemory.html#a0">00213</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ApplyKeycolor () { ApplyKeyColor(); }
-<a name="l00214"></a>00214 
-<a name="l00215"></a><a class="code" href="classcsImageMemory.html#a26">00215</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx2d.html#ga5">csImageType</a> <a class="code" href="classcsImageBase.html#a2">GetImageType</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> imageType; }
-<a name="l00216"></a><a class="code" href="classcsImageMemory.html#a35">00216</a>   <span class="keywordtype">void</span> SetImageType (<a class="code" href="group__gfx2d.html#ga5">csImageType</a> type) { imageType = type; }
-<a name="l00217"></a>00217 
-<a name="l00218"></a><a class="code" href="classcsImageMemory.html#a33">00218</a>   <span class="keyword">virtual</span> <a class="code" href="cstypes_8h.html#a27">uint</a> <a class="code" href="classcsImageBase.html#a13">HasMipmaps</a> ()<span class="keyword"> const </span>
-<a name="l00219"></a>00219 <span class="keyword">  </span>{ 
-<a name="l00220"></a>00220     size_t num = mipmaps.Length();
-<a name="l00221"></a>00221     <span class="keywordflow">while</span> ((num &gt; 0) &amp;&amp; (mipmaps[num-1] == 0)) num--;
-<a name="l00222"></a>00222     <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a27">uint</a>)num; 
-<a name="l00223"></a>00223   }
-<a name="l00224"></a><a class="code" href="classcsImageMemory.html#a28">00224</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> <a class="code" href="classcsImageBase.html#a5">GetMipmap</a> (<a class="code" href="cstypes_8h.html#a27">uint</a> num) 
-<a name="l00225"></a>00225   { 
-<a name="l00226"></a>00226     <span class="keywordflow">if</span> (num == 0) <span class="keywordflow">return</span> <span class="keyword">this</span>;
-<a name="l00227"></a>00227     <span class="keywordflow">if</span> (num &lt;= mipmaps.Length()) <span class="keywordflow">return</span> mipmaps[num-1];
-<a name="l00228"></a>00228     <span class="keywordflow">return</span> 0; 
-<a name="l00229"></a>00229   }
-<a name="l00238"></a><a class="code" href="classcsImageMemory.html#a38">00238</a>   <span class="keywordtype">bool</span> SetMipmap (<a class="code" href="cstypes_8h.html#a27">uint</a> num, <a class="code" href="structiImage.html">iImage</a>* mip)
-<a name="l00239"></a>00239   {
-<a name="l00240"></a>00240     <span class="keywordflow">if</span> (num == 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00241"></a>00241     mipmaps.GetExtend (num-1) = mip;
-<a name="l00242"></a>00242     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00243"></a>00243   }
-<a name="l00244"></a>00244 
-<a name="l00246"></a>00246   <span class="keywordtype">bool</span> Copy (<a class="code" href="structiImage.html">iImage</a>* srcImage, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
-<a name="l00251"></a>00251   <span class="keywordtype">bool</span> CopyScale (<a class="code" href="structiImage.html">iImage</a>* srcImage, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
-<a name="l00256"></a>00256   <span class="keywordtype">bool</span> CopyTile (<a class="code" href="structiImage.html">iImage</a>* srcImage, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
-<a name="l00257"></a>00257 
-<a name="l00269"></a>00269   <span class="keywordtype">void</span> ConvertFromRGBA (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="structiImage.html">iImage</a>);
-<a name="l00280"></a>00280   <span class="keywordtype">void</span> ConvertFromPal8 (<a class="code" href="cstypes_8h.html#a9">uint8</a>* <a class="code" href="structiImage.html">iImage</a>, <a class="code" href="cstypes_8h.html#a9">uint8</a>* alpha, <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* iPalette,
-<a name="l00281"></a>00281     <span class="keywordtype">int</span> nPalColors = 256);
-<a name="l00292"></a>00292   <span class="keywordtype">void</span> ConvertFromPal8 (<a class="code" href="cstypes_8h.html#a9">uint8</a>* <a class="code" href="structiImage.html">iImage</a>, <a class="code" href="cstypes_8h.html#a9">uint8</a>* alpha, 
-<a name="l00293"></a>00293     <span class="keyword">const</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* iPalette, <span class="keywordtype">int</span> nPalColors = 256);
-<a name="l00294"></a>00294 };
-<a name="l00295"></a>00295 
-<a name="l00296"></a>00296 <span class="preprocessor">#endif // __CS_CSGFX_MEMIMAGE_H__</span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="imagebase_8h.html">csgfx/imagebase.h</a>"</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="imagetools_8h.html">csgfx/imagetools.h</a>"</span>
+<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="rgbpixel_8h.html">csgfx/rgbpixel.h</a>"</span>
+<a name="l00030"></a>00030 
+<a name="l00034"></a><a class="code" href="classcsImageMemory.html">00034</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsImageMemory.html">csImageMemory</a> :
+<a name="l00035"></a>00035   <span class="keyword">public</span> scfImplementationExt0&lt;csImageMemory, csImageBase&gt;
+<a name="l00036"></a>00036 {
+<a name="l00037"></a>00037 <span class="keyword">private</span>:
+<a name="l00039"></a>00039   <span class="keywordtype">void</span> ConstructCommon();
+<a name="l00041"></a>00041   <span class="keywordtype">void</span> ConstructWHDF (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">int</span> depth, <span class="keywordtype">int</span> format);
+<a name="l00043"></a>00043   <span class="keywordtype">void</span> ConstructSource (<a class="code" href="structiImage.html">iImage</a>* source);
+<a name="l00045"></a>00045   <span class="keywordtype">void</span> ConstructBuffers (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">void</span>* buffer, 
+<a name="l00046"></a>00046     <span class="keywordtype">bool</span> destroy, <span class="keywordtype">int</span> format, <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *palette);
+<a name="l00047"></a>00047 <span class="keyword">protected</span>:
+<a name="l00049"></a><a class="code" href="classcsImageMemory.html#p11">00049</a>   <span class="keywordtype">int</span> Width;
+<a name="l00051"></a><a class="code" href="classcsImageMemory.html#p5">00051</a>   <span class="keywordtype">int</span> Height;
+<a name="l00053"></a><a class="code" href="classcsImageMemory.html#p1">00053</a>   <span class="keywordtype">int</span> Depth;
+<a name="l00060"></a><a class="code" href="classcsImageMemory.html#p6">00060</a>   <span class="keywordtype">void</span>* Image;
+<a name="l00062"></a><a class="code" href="classcsImageMemory.html#p10">00062</a>   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *Palette;
+<a name="l00064"></a><a class="code" href="classcsImageMemory.html#p0">00064</a>   <a class="code" href="cstypes_8h.html#a9">uint8</a> *Alpha;
+<a name="l00066"></a><a class="code" href="classcsImageMemory.html#p3">00066</a>   <span class="keywordtype">int</span> Format;
+<a name="l00068"></a><a class="code" href="classcsImageMemory.html#p4">00068</a>   <span class="keywordtype">bool</span> has_keycolour;
+<a name="l00070"></a><a class="code" href="classcsImageMemory.html#p8">00070</a>   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> keycolour;
+<a name="l00072"></a><a class="code" href="classcsImageMemory.html#p2">00072</a>   <span class="keywordtype">bool</span> destroy_image;
+<a name="l00074"></a><a class="code" href="classcsImageMemory.html#p7">00074</a>   <a class="code" href="group__gfx2d.html#ga5">csImageType</a> imageType;
+<a name="l00076"></a>00076   <span class="comment">/* @@@ This is not csRefArray&lt;iImage&gt; as this does not return csRef&lt;iImage&gt;&amp;</span>
+<a name="l00077"></a>00077 <span class="comment">   * from GetExtend() or operator[], which is needed here.</span>
+<a name="l00078"></a>00078 <span class="comment">   */</span>
+<a name="l00079"></a><a class="code" href="classcsImageMemory.html#p9">00079</a>   <a class="code" href="classcsArray.html">csArray&lt;csRef&lt;iImage&gt;</a> &gt; mipmaps;
+<a name="l00080"></a>00080 
+<a name="l00085"></a>00085   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> iFormat);
+<a name="l00095"></a>00095   <span class="keywordtype">void</span> SetDimensions (<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight);
+<a name="l00096"></a>00096   <span class="keywordtype">void</span> SetDimensions (<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight, <span class="keywordtype">int</span> newDepth);
+<a name="l00097"></a>00097 
+<a name="l00099"></a>00099   <span class="keywordtype">void</span> AllocImage();
+<a name="l00101"></a>00101   <span class="keywordtype">void</span> EnsureImage();
+<a name="l00105"></a>00105   <span class="keywordtype">void</span> FreeImage ();
+<a name="l00106"></a>00106 <span class="keyword">public</span>:
+<a name="l00107"></a>00107   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsImageMemory.html">csImageMemory</a>);
+<a name="l00108"></a>00108 
+<a name="l00116"></a>00116   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">int</span> format = <a class="code" href="group__gfx2d.html#gga4a2">CS_IMGFMT_TRUECOLOR</a>);
+<a name="l00125"></a>00125   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">int</span> depth, <span class="keywordtype">int</span> format);
+<a name="l00138"></a>00138   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">void</span>* buffer, <span class="keywordtype">bool</span> destroy,
+<a name="l00139"></a>00139     <span class="keywordtype">int</span> format = <a class="code" href="group__gfx2d.html#gga4a2">CS_IMGFMT_TRUECOLOR</a>, <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *palette = 0);
+<a name="l00150"></a>00150   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keyword">const</span> <span class="keywordtype">void</span>* buffer, 
+<a name="l00151"></a>00151     <span class="keywordtype">int</span> format = <a class="code" href="group__gfx2d.html#gga4a2">CS_IMGFMT_TRUECOLOR</a>, <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> *palette = 0);
+<a name="l00156"></a>00156   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<a class="code" href="structiImage.html">iImage</a>* source);
+<a name="l00161"></a>00161   <a class="code" href="classcsImageMemory.html">csImageMemory</a> (<a class="code" href="structiImage.html">iImage</a>* source, <span class="keywordtype">int</span> newFormat);
+<a name="l00162"></a>00162 
+<a name="l00163"></a>00163   <span class="keyword">virtual</span> ~<a class="code" href="classcsImageMemory.html">csImageMemory</a> ();
+<a name="l00164"></a>00164 
+<a name="l00166"></a>00166   <span class="keywordtype">void</span>* GetImagePtr ();
+<a name="l00168"></a>00168   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* GetPalettePtr ();
+<a name="l00170"></a>00170   <a class="code" href="cstypes_8h.html#a9">uint8</a>* GetAlphaPtr ();
+<a name="l00171"></a>00171 
+<a name="l00172"></a><a class="code" href="classcsImageMemory.html#a24">00172</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">void</span> *GetImageData () { <span class="keywordflow">return</span> GetImagePtr(); }
+<a name="l00173"></a><a class="code" href="classcsImageMemory.html#a31">00173</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetWidth ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Width; }
+<a name="l00174"></a><a class="code" href="classcsImageMemory.html#a23">00174</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetHeight ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Height; }
+<a name="l00175"></a><a class="code" href="classcsImageMemory.html#a21">00175</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetDepth ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Depth; }
+<a name="l00176"></a>00176 
+<a name="l00177"></a><a class="code" href="classcsImageMemory.html#a22">00177</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetFormat ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> Format; }
+<a name="l00178"></a><a class="code" href="classcsImageMemory.html#a29">00178</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* GetPalette () { <span class="keywordflow">return</span> GetPalettePtr(); }
+<a name="l00179"></a><a class="code" href="classcsImageMemory.html#a19">00179</a>   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="cstypes_8h.html#a9">uint8</a>* GetAlpha () { <span class="keywordflow">return</span> GetAlphaPtr(); }
+<a name="l00180"></a>00180 
+<a name="l00181"></a><a class="code" href="classcsImageMemory.html#a32">00181</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HasKeyColor ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> has_keycolour; }
+<a name="l00182"></a>00182 
+<a name="l00183"></a><a class="code" href="classcsImageMemory.html#a27">00183</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetKeyColor (<span class="keywordtype">int</span> &amp;r, <span class="keywordtype">int</span> &amp;g, <span class="keywordtype">int</span> &amp;b)<span class="keyword"> const</span>
+<a name="l00184"></a>00184 <span class="keyword">  </span>{ r = keycolour.red; g = keycolour.green; b = keycolour.blue; }
+<a name="l00185"></a>00185 
+<a name="l00187"></a>00187   <span class="keywordtype">void</span> Clear (<span class="keyword">const</span> <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> &amp;colour);
+<a name="l00188"></a>00188 
+<a name="l00190"></a>00190   <span class="keywordtype">void</span> CheckAlpha ();
+<a name="l00200"></a>00200   <span class="keywordtype">void</span> SetFormat (<span class="keywordtype">int</span> iFormat);
+<a name="l00201"></a>00201 
+<a name="l00203"></a>00203   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> r, <span class="keywordtype">int</span> g, <span class="keywordtype">int</span> b);
+<a name="l00204"></a><a class="code" href="classcsImageMemory.html#a36">00204</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeycolor (<span class="keywordtype">int</span> r, <span class="keywordtype">int</span> g, <span class="keywordtype">int</span> b) { SetKeyColor(r,g,b); }
+<a name="l00206"></a>00206   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ClearKeyColor ();
+<a name="l00207"></a><a class="code" href="classcsImageMemory.html#a4">00207</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ClearKeycolor () { ClearKeyColor(); }
+<a name="l00208"></a>00208 
+<a name="l00213"></a>00213   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ApplyKeyColor ();
+<a name="l00214"></a><a class="code" href="classcsImageMemory.html#a0">00214</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ApplyKeycolor () { ApplyKeyColor(); }
+<a name="l00215"></a>00215 
+<a name="l00216"></a><a class="code" href="classcsImageMemory.html#a26">00216</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx2d.html#ga5">csImageType</a> GetImageType()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> imageType; }
+<a name="l00217"></a><a class="code" href="classcsImageMemory.html#a35">00217</a>   <span class="keywordtype">void</span> SetImageType (<a class="code" href="group__gfx2d.html#ga5">csImageType</a> type) { imageType = type; }
+<a name="l00218"></a>00218 
+<a name="l00219"></a><a class="code" href="classcsImageMemory.html#a33">00219</a>   <span class="keyword">virtual</span> <a class="code" href="cstypes_8h.html#a27">uint</a> HasMipmaps ()<span class="keyword"> const </span>
+<a name="l00220"></a>00220 <span class="keyword">  </span>{ 
+<a name="l00221"></a>00221     size_t num = mipmaps.Length();
+<a name="l00222"></a>00222     <span class="keywordflow">while</span> ((num &gt; 0) &amp;&amp; (mipmaps[num-1] == 0)) num--;
+<a name="l00223"></a>00223     <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a27">uint</a>)num; 
+<a name="l00224"></a>00224   }
+<a name="l00225"></a><a class="code" href="classcsImageMemory.html#a28">00225</a>   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> GetMipmap (<a class="code" href="cstypes_8h.html#a27">uint</a> num) 
+<a name="l00226"></a>00226   { 
+<a name="l00227"></a>00227     <span class="keywordflow">if</span> (num == 0) <span class="keywordflow">return</span> <span class="keyword">this</span>;
+<a name="l00228"></a>00228     <span class="keywordflow">if</span> (num &lt;= mipmaps.Length()) <span class="keywordflow">return</span> mipmaps[num-1];
+<a name="l00229"></a>00229     <span class="keywordflow">return</span> 0; 
+<a name="l00230"></a>00230   }
+<a name="l00239"></a><a class="code" href="classcsImageMemory.html#a38">00239</a>   <span class="keywordtype">bool</span> SetMipmap (<a class="code" href="cstypes_8h.html#a27">uint</a> num, <a class="code" href="structiImage.html">iImage</a>* mip)
+<a name="l00240"></a>00240   {
+<a name="l00241"></a>00241     <span class="keywordflow">if</span> (num == 0) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00242"></a>00242     mipmaps.GetExtend (num-1) = mip;
+<a name="l00243"></a>00243     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00244"></a>00244   }
+<a name="l00245"></a>00245 
+<a name="l00247"></a>00247   <span class="keywordtype">bool</span> Copy (<a class="code" href="structiImage.html">iImage</a>* srcImage, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
+<a name="l00252"></a>00252   <span class="keywordtype">bool</span> CopyScale (<a class="code" href="structiImage.html">iImage</a>* srcImage, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
+<a name="l00257"></a>00257   <span class="keywordtype">bool</span> CopyTile (<a class="code" href="structiImage.html">iImage</a>* srcImage, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);
+<a name="l00258"></a>00258 
+<a name="l00270"></a>00270   <span class="keywordtype">void</span> ConvertFromRGBA (<a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* <a class="code" href="structiImage.html">iImage</a>);
+<a name="l00281"></a>00281   <span class="keywordtype">void</span> ConvertFromPal8 (<a class="code" href="cstypes_8h.html#a9">uint8</a>* <a class="code" href="structiImage.html">iImage</a>, <a class="code" href="cstypes_8h.html#a9">uint8</a>* alpha, <a class="code" href="structcsRGBpixel.html">csRGBpixel</a>* iPalette,
+<a name="l00282"></a>00282     <span class="keywordtype">int</span> nPalColors = 256);
+<a name="l00293"></a>00293   <span class="keywordtype">void</span> ConvertFromPal8 (<a class="code" href="cstypes_8h.html#a9">uint8</a>* <a class="code" href="structiImage.html">iImage</a>, <a class="code" href="cstypes_8h.html#a9">uint8</a>* alpha, 
+<a name="l00294"></a>00294     <span class="keyword">const</span> <a class="code" href="structcsRGBcolor.html">csRGBcolor</a>* iPalette, <span class="keywordtype">int</span> nPalColors = 256);
+<a name="l00295"></a>00295 };
+<a name="l00296"></a>00296 
+<a name="l00297"></a>00297 <span class="preprocessor">#endif // __CS_CSGFX_MEMIMAGE_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
