@@ -60,10 +60,10 @@ ul.toc {list-style: none}
 </tr></table>
 <h2 class="appendixsec"> D.2 Portions of Crystal Space Covered Under Different Licenses </h2>
 
-<p>Some portions of CrystalSpace are <em>not</em> covered by <small>LGPL</small> license. You
+<p>Some portions of Crystal Space are <em>not</em> covered by <small>LGPL</small> license. You
 might have to consider this, depending on how you intend to distribute your
 finished product. However, this is usually not problematic, as the modular 
-design of CrystalSpace allows to simply exclude the plugins in question.
+design of Crystal Space allows to simply exclude the components in question.
 </p>
 <ul>
 <li> 
@@ -79,13 +79,33 @@ design of CrystalSpace allows to simply exclude the plugins in question.
 </p>
 </li></ul>
 
-<p>In addition, some plugins may need to link to external libraries covered 
+<p>In addition, some components may need to link to external libraries covered 
 under a license other than the <small>LGPL</small>.
 </p>
 <ul>
 <li>
-<em>None yet.</em>
-</li></ul>
+Debugging/developing aids on MinGW
+
+<p>Crystal Space contains facilities to aid in the debugging and developing of 
+both the engine and client products; one of those is the ability to create
+call stacks. On MinGW, in order to obtain meaningful symbol names for call
+stacks, the <small>BFD</small> library is used, which is licensed under the <small>GNU</small> 
+General Public License (see section <a href="cs_D.3.html#D.3"><small>GNU</small> General Public License</a>).
+</p>
+<p>Call stacks are provided by the very core of Crystal Space, this means that any
+plugin or application linking against Crystal Space also links against
+<small>BFD</small>.  However, since this facility is only sensible for debug builds,
+<small>BFD</small> is only used by &quot;debug&quot; builds, not &quot;profile&quot; or &quot;optimize&quot;
+builds.
+</p>
+<p>As linking against <small>BFD</small> &quot;infects&quot; a project with the <small>GPL</small>, you need
+to be careful when shipping debug builds compiled on MinGW if you use a license
+that is not <small>GPL</small>-compatible. You can avert such problems by disabling the
+use of <small>BFD</small>; this is done by passing <code>--without-bfd</code> as a parameter to
+<code>configure</code>. Again, note that this only affects debug builds on MinGW;
+optimize builds or builds on any other platform are by default &quot;safe&quot; as they
+won't use <small>BFD</small>.
+</p></li></ul>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
