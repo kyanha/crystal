@@ -1766,6 +1766,10 @@ SOURCE=..\..\libs\..\include\csutil\parray.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\partialorder.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\physfile.h
 # End Source File
 # Begin Source File
@@ -1911,6 +1915,10 @@ SOURCE=..\..\libs\..\include\csutil\timemeasure.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\timer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csutil\tree.h
 # End Source File
 # Begin Source File
 
