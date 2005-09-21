@@ -426,6 +426,14 @@ SOURCE=..\..\libs\csplugincommon\shader\shaderprogram.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csplugincommon\sndsys\convert.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csplugincommon\sndsys\cyclicbuf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csplugincommon\soundloader\sndload.cpp
 # End Source File
 # Begin Source File
@@ -1339,6 +1347,14 @@ SOURCE=..\..\libs\..\include\csplugincommon\shader\shaderplugin.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csplugincommon\shader\shaderprogram.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csplugincommon\sndsys\convert.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csplugincommon\sndsys\cyclicbuf.h
 # End Source File
 # Begin Source File
 
