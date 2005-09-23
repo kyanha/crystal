@@ -23,7 +23,7 @@ static char const metainfo_sndsyssoft[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.sndsys.renderer.software</name>"
-"        <implementation>SndSysRendererSoftware</implementation>"
+"        <implementation>csSndSysRendererSoftware</implementation>"
 "        <description>Sound System Software Renderer</description>"
 "      </class>"
 "    </classes>"
@@ -31,17 +31,17 @@ static char const metainfo_sndsyssoft[] =
 "</plugin>"
 ""
 ;
-  #ifndef SndSysRendererSoftware_FACTORY_REGISTER_DEFINED 
-  #define SndSysRendererSoftware_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(SndSysRendererSoftware) 
+  #ifndef csSndSysRendererSoftware_FACTORY_REGISTER_DEFINED 
+  #define csSndSysRendererSoftware_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csSndSysRendererSoftware) 
   #endif
 
 class sndsyssoft
 {
 SCF_REGISTER_STATIC_LIBRARY(sndsyssoft,metainfo_sndsyssoft)
-  #ifndef SndSysRendererSoftware_FACTORY_REGISTERED 
-  #define SndSysRendererSoftware_FACTORY_REGISTERED 
-    SndSysRendererSoftware_StaticInit SndSysRendererSoftware_static_init__; 
+  #ifndef csSndSysRendererSoftware_FACTORY_REGISTERED 
+  #define csSndSysRendererSoftware_FACTORY_REGISTERED 
+    csSndSysRendererSoftware_StaticInit csSndSysRendererSoftware_static_init__; 
   #endif
 public:
  sndsyssoft();
