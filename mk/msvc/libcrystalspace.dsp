@@ -1858,6 +1858,10 @@ SOURCE=..\..\libs\..\include\csutil\scf_implementation.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\scf_implgen.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\scf_interface.h
 # End Source File
 # Begin Source File
