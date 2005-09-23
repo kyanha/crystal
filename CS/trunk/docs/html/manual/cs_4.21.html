@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.21 Making Projects Using Crystal Space</title>
+<title>Crystal Space: 4.21 CEGUI Introduction</title>
 
-<meta name="description" content="Crystal Space: 4.21 Making Projects Using Crystal Space">
-<meta name="keywords" content="Crystal Space: 4.21 Making Projects Using Crystal Space">
+<meta name="description" content="Crystal Space: 4.21 CEGUI Introduction">
+<meta name="keywords" content="Crystal Space: 4.21 CEGUI Introduction">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Making-Own-Projects"></a>
+<a name="CEGUI"></a>
 <a name="4.21"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.20.10.html#4.20.10" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.21.1.html#4.21.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.22.html#4.22" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>
@@ -58,25 +58,78 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 4.21 Making Projects Using Crystal Space </h2>
+<h2 class="section"> 4.21 CEGUI Introduction </h2>
 
-<p>Here you can find some useful information on how to make projects for Crystal
-Space with various development platforms.
+<p><em>Written by Seth Yastrov, <a href="mailto:syastrov@users.sourceforge.net">syastrov@users.sourceforge.net</a> and
+Dan Hardfeldt,<a href="mailto:swedishcoder@users.sourceforge.net">swedishcoder@users.sourceforge.net</a>.</em>
 </p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_4.21.1.html#4.21.1">4.21.1 Creating an External Crystal Space Application</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.21.2.html#4.21.2">4.21.2 Creating an External <small>MSVC</small> 6 Application</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.21.3.html#4.21.3">4.21.3 Creating an External <small>MSVC</small> 7 Application</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.21.4.html#4.21.4">4.21.4 Creating an External Application using KDevelop</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.21.5.html#4.21.5">4.21.5 Creating an External Crystal Space Application Using Dev-CPP</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.21.6.html#4.21.6">4.21.6 Creating Crystal Space <small>RPM</small>'s</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.21.7.html#4.21.7">4.21.7 Setting the CRYSTAL environment variable</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+<a name="SEC695"></a>
+<h3 class="subheading"> The <small>CEGUI</small> Plugin </h3>
 
+<p>The <small>CEGUI</small> plugin is a wrapper around <small>CEGUI</small>, an embeddable widget
+library, so it can be easily used from within Crystal Space applications. The
+plugin provides a renderer, a <small>VFS</small> resource provider, and an event handler
+for <small>CEGUI</small>.
+</p>
+
+<p><a href="http://www.cegui.org.uk/">http://www.cegui.org.uk/</a>
+</p>
+<a name="SEC696"></a>
+<h3 class="subheading"> Initialization </h3>
+
+<p>All components of the <small>CEGUI</small> plugin are set up when the application calls
+<code>iCEGUI::Initialize()</code>. This function will initialize <small>CEGUI</small> and tell
+it to use the <small>CEGUI</small> plugin renderer and event handler. It is not necessary
+to create a new <code>CEGUI::System()</code> in your application as this is
+performed automatically by the Crystal Space <small>CEGUI</small> plugin.
+</p>
+<a name="SEC697"></a>
+<h3 class="subheading"> Renderer </h3>
+
+<p>To render the graphical user interface (<small>GUI</small>), use convenience function,
+<code>iCEGUI::Render()</code>.  This function may be called from anywhere in the
+application to allow the ability to render to an alternate render target (like
+procedural textures).  In applications based upon <samp>`csBaseEventHandler'</samp>, it
+is called typically in <code>ProcessFrame()</code>, sandwiched somewhere between
+<code>BeginDraw()</code> and <samp>`FinishDraw()'</samp> calls.
+</p>
+<a name="SEC698"></a>
+<h3 class="subheading"> Singletons </h3>
+
+<p>It is important that applications using <small>CEGUI</small> from Crystal Space do not
+use any of the <small>CEGUI</small> <code>getSingleton()</code> or <code>getSingletonPtr()</code>
+calls, such as <code>CEGUI::Singleton&lt;T&gt;::getSingleton()</code> or
+<code>CEGUI::System::getSingleton()</code>.  The reason for this is that global and
+static variables (declared in methods, classes, namespaces, or globally) are
+not normally shared between modules.  Calling <code>getSingleton()</code> from the
+Crystal Space application will not necessarrily return the same instance as
+calling <code>getSingleton()</code> from the <small>CEGUI</small> plugin.
+</p>
+<p>To remedy this, there are <samp>`Get*'</samp> functions in the <samp>`iCEGUI'</samp> interface
+that return a reference or pointer to the <small>CEGUI</small> singletons so that they
+may be used safely from a Crystal Space application. <code>iCEGUI::GetSystem()</code>
+and <code>GetSystemPtr()</code> are the most commonly used.
+</p>
+<a name="SEC699"></a>
+<h3 class="subheading"> Resource Provider </h3>
+
+<p>The <small>CEGUI</small> plugin provides a <small>VFS</small> implementation of the <small>CEGUI</small>
+resource provider.  This means that all paths passed to <small>CEGUI</small> functions
+should be <small>VFS</small> paths.  Textures, scheme files, layout files, etc, will all
+be loaded through the <small>VFS</small>.  Paths within these files should be <small>VFS</small>
+paths as well.
+</p>
+<a name="SEC700"></a>
+<h3 class="subheading"> Event Handler </h3>
+
+<p>Keyboard and mouse input is automatically injected into the <small>CEGUI</small> event
+system by the <small>CEGUI</small> plugin event handler. The <small>CEGUI</small> display area is
+automatically resized when the Crystal Space canvas is resized.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.20.10.html#4.20.10" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.21.1.html#4.21.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.22.html#4.22" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>
