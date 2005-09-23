@@ -74,12 +74,12 @@
 <a name="l00075"></a>00075 <span class="keyword">public</span>:
 <a name="l00079"></a><a class="code" href="classcsBlockAllocatorAlignPolicy.html#e0">00079</a>   <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a9">uint8</a>* <a class="code" href="classcsBlockAllocatorAlignPolicy.html#e0">AllocBlock</a>(size_t blocksize) 
 <a name="l00080"></a>00080   {
-<a name="l00081"></a>00081     <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a9">uint8</a>*)<a class="code" href="cssysdef_8h.html#a57">csAlignedMalloc</a> (blocksize, A);
+<a name="l00081"></a>00081     <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a9">uint8</a>*)<a class="code" href="cssysdef_8h.html#a56">csAlignedMalloc</a> (blocksize, A);
 <a name="l00082"></a>00082   }
 <a name="l00083"></a>00083 
 <a name="l00088"></a><a class="code" href="classcsBlockAllocatorAlignPolicy.html#e1">00088</a>   <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsBlockAllocatorAlignPolicy.html#e1">FreeBlock</a>(<a class="code" href="cstypes_8h.html#a9">uint8</a>* p)
 <a name="l00089"></a>00089   {
-<a name="l00090"></a>00090     <a class="code" href="cssysdef_8h.html#a58">csAlignedFree</a> (p);
+<a name="l00090"></a>00090     <a class="code" href="cssysdef_8h.html#a57">csAlignedFree</a> (p);
 <a name="l00091"></a>00091   }
 <a name="l00092"></a>00092 };
 <a name="l00093"></a>00093 
@@ -163,7 +163,7 @@
 <a name="l00216"></a>00216       slot-&gt;next = nextfree;
 <a name="l00217"></a>00217       nextfree = slot;
 <a name="l00218"></a>00218     }
-<a name="l00219"></a>00219     <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a>((<a class="code" href="cstypes_8h.html#a9">uint8</a>*)nextfree == block);
+<a name="l00219"></a>00219     <a class="code" href="cssysdef_8h.html#a37">CS_ASSERT</a>((<a class="code" href="cstypes_8h.html#a9">uint8</a>*)nextfree == block);
 <a name="l00220"></a>00220     <span class="keywordflow">return</span> block;
 <a name="l00221"></a>00221   }
 <a name="l00222"></a>00222 
@@ -194,7 +194,7 @@
 <a name="l00257"></a>00257     <span class="keywordflow">for</span> (FreeNode* p = <a class="code" href="classcsBlockAllocator.html#p3">freenode</a>; p != 0; p = p-&gt;<a class="code" href="structcsBlockAllocator_1_1FreeNode.html#o0">next</a>)
 <a name="l00258"></a>00258     {
 <a name="l00259"></a>00259       size_t <span class="keyword">const</span> n = <a class="code" href="classcsBlockAllocator.html#b3">FindBlock</a>(p);
-<a name="l00260"></a>00260       <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a>(n != <a class="code" href="group__util__containers.html#ga0">csArrayItemNotFound</a>);
+<a name="l00260"></a>00260       <a class="code" href="cssysdef_8h.html#a37">CS_ASSERT</a>(n != <a class="code" href="group__util__containers.html#ga0">csArrayItemNotFound</a>);
 <a name="l00261"></a>00261       size_t <span class="keyword">const</span> slot = ((<a class="code" href="cstypes_8h.html#a9">uint8</a>*)p - <a class="code" href="classcsBlockAllocator.html#p0">blocks</a>[n]) / <a class="code" href="classcsBlockAllocator.html#p2">elsize</a>; <span class="comment">// Slot in block.</span>
 <a name="l00262"></a>00262       mask.<a class="code" href="classcsBitArray.html#a3">ClearBit</a>(n * <a class="code" href="classcsBlockAllocator.html#p6">size</a> + slot);
 <a name="l00263"></a>00263     }
@@ -284,7 +284,7 @@
 <a name="l00388"></a>00388     <span class="keywordflow">if</span> (<a class="code" href="classcsBlockAllocator.html#p4">insideDisposeAll</a>)
 <a name="l00389"></a>00389     {
 <a name="l00390"></a>00390       <a class="code" href="sysfunc_8h.html#a8">csPrintfErr</a>(<span class="stringliteral">"ERROR: csBlockAllocator(%p) tried to allocate memory while inside DisposeAll()"</span>, (<span class="keywordtype">void</span>*)<span class="keyword">this</span>);
-<a name="l00391"></a>00391       <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a>(<span class="keyword">false</span>);
+<a name="l00391"></a>00391       <a class="code" href="cssysdef_8h.html#a37">CS_ASSERT</a>(<span class="keyword">false</span>);
 <a name="l00392"></a>00392     }
 <a name="l00393"></a>00393 
 <a name="l00394"></a>00394     <span class="keywordflow">if</span> (<a class="code" href="classcsBlockAllocator.html#p3">freenode</a> == 0)
@@ -302,7 +302,7 @@
 <a name="l00409"></a>00409   {
 <a name="l00410"></a>00410     <span class="keywordflow">if</span> (p != 0 &amp;&amp; !<a class="code" href="classcsBlockAllocator.html#p4">insideDisposeAll</a>)
 <a name="l00411"></a>00411     {
-<a name="l00412"></a>00412       <a class="code" href="cssysdef_8h.html#a38">CS_ASSERT</a>(<a class="code" href="classcsBlockAllocator.html#b3">FindBlock</a>(p) != <a class="code" href="group__util__containers.html#ga0">csArrayItemNotFound</a>);
+<a name="l00412"></a>00412       <a class="code" href="cssysdef_8h.html#a37">CS_ASSERT</a>(<a class="code" href="classcsBlockAllocator.html#b3">FindBlock</a>(p) != <a class="code" href="group__util__containers.html#ga0">csArrayItemNotFound</a>);
 <a name="l00413"></a>00413       <a class="code" href="classcsBlockAllocator.html#b1">DestroyObject</a>(p, <span class="keyword">false</span>);
 <a name="l00414"></a>00414       FreeNode* f = (FreeNode*)p;
 <a name="l00415"></a>00415       f-&gt;next = <a class="code" href="classcsBlockAllocator.html#p3">freenode</a>;
