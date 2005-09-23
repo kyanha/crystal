@@ -74,99 +74,107 @@
 <a name="l00237"></a>00237   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Application () = 0;
 <a name="l00238"></a>00238 
 <a name="l00247"></a>00247   <span class="keyword">virtual</span> <span class="keywordtype">void</span> OnExit ();
-<a name="l00248"></a>00248 <span class="keyword">public</span>:
-<a name="l00249"></a>00249   <span class="comment">// Inline Helper Functions</span>
-<a name="l00253"></a><a class="code" href="classcsApplicationFramework.html#e1">00253</a> <span class="comment"></span>  <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* GetObjectRegistry () { <span class="keywordflow">return</span> object_reg; };
-<a name="l00254"></a>00254 
-<a name="l00263"></a><a class="code" href="classcsApplicationFramework.html#a3">00263</a>   operator iObjectRegistry* () { <span class="keywordflow">return</span> object_reg; }
-<a name="l00264"></a>00264 
-<a name="l00268"></a><a class="code" href="classcsApplicationFramework.html#a2">00268</a>   <span class="keywordtype">bool</span> Open () { <span class="keywordflow">return</span> <a class="code" href="classcsInitializer.html#e13">OpenApplication</a> (object_reg); }
-<a name="l00269"></a>00269 
-<a name="l00285"></a><a class="code" href="classcsApplicationFramework.html#e7">00285</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> SetApplicationName (<span class="keywordtype">char</span> *name)
-<a name="l00286"></a>00286   {
-<a name="l00287"></a>00287     m_ApplicationStringName = name;
-<a name="l00288"></a>00288   }
-<a name="l00289"></a>00289 
-<a name="l00296"></a><a class="code" href="classcsApplicationFramework.html#e0">00296</a>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetApplicationName ()
-<a name="l00297"></a>00297   {
-<a name="l00298"></a>00298     <span class="keywordflow">return</span> m_ApplicationStringName;
-<a name="l00299"></a>00299   }
-<a name="l00300"></a>00300 
-<a name="l00306"></a><a class="code" href="classcsApplicationFramework.html#e6">00306</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> Run ()
-<a name="l00307"></a>00307   {
-<a name="l00308"></a>00308     <a class="code" href="sysfunc_8h.html#a0">csDefaultRunLoop</a> (object_reg);
-<a name="l00309"></a>00309   }
-<a name="l00310"></a>00310 
-<a name="l00316"></a>00316   <span class="keywordtype">void</span> Restart();
-<a name="l00317"></a>00317 <span class="keyword">private</span>:
-<a name="l00325"></a>00325   <span class="keyword">static</span> <span class="keywordtype">bool</span> ReportLibError (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-<a name="l00326"></a>00326   {
-<a name="l00327"></a>00327     va_list args;
-<a name="l00328"></a>00328     va_start (args, description);
-<a name="l00329"></a>00329     <a class="code" href="reporter_8h.html#a6">csReportV</a> (object_reg, <a class="code" href="reporter_8h.html#a1">CS_REPORTER_SEVERITY_ERROR</a>,
-<a name="l00330"></a>00330       m_FoundationStringName,
-<a name="l00331"></a>00331       description, args);
-<a name="l00332"></a>00332     va_end (args);
-<a name="l00333"></a>00333     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00334"></a>00334   }
-<a name="l00335"></a>00335 
-<a name="l00336"></a>00336 <span class="keyword">public</span>:
-<a name="l00344"></a><a class="code" href="classcsApplicationFramework.html#e3">00344</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> ReportError (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-<a name="l00345"></a>00345   {
-<a name="l00346"></a>00346     va_list args;
-<a name="l00347"></a>00347     va_start (args, description);
-<a name="l00348"></a>00348     <a class="code" href="reporter_8h.html#a6">csReportV</a> (object_reg, <a class="code" href="reporter_8h.html#a1">CS_REPORTER_SEVERITY_ERROR</a>,
-<a name="l00349"></a>00349       m_ApplicationStringName,
-<a name="l00350"></a>00350       description, args);
-<a name="l00351"></a>00351     va_end (args);
-<a name="l00352"></a>00352     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00353"></a>00353   }
-<a name="l00354"></a>00354 
-<a name="l00362"></a><a class="code" href="classcsApplicationFramework.html#e5">00362</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> ReportWarning (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-<a name="l00363"></a>00363   {
-<a name="l00364"></a>00364     va_list args;
-<a name="l00365"></a>00365     va_start (args, description);
-<a name="l00366"></a>00366     <a class="code" href="reporter_8h.html#a6">csReportV</a> (object_reg, <a class="code" href="reporter_8h.html#a2">CS_REPORTER_SEVERITY_WARNING</a>,
-<a name="l00367"></a>00367       m_ApplicationStringName,
-<a name="l00368"></a>00368       description, args);
-<a name="l00369"></a>00369     va_end (args);
-<a name="l00370"></a>00370   }
-<a name="l00371"></a>00371   
-<a name="l00379"></a><a class="code" href="classcsApplicationFramework.html#e4">00379</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> ReportInfo (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
-<a name="l00380"></a>00380   {
-<a name="l00381"></a>00381     va_list args;
-<a name="l00382"></a>00382     va_start (args, description);
-<a name="l00383"></a>00383     <a class="code" href="reporter_8h.html#a6">csReportV</a> (object_reg, <a class="code" href="reporter_8h.html#a3">CS_REPORTER_SEVERITY_NOTIFY</a>,
-<a name="l00384"></a>00384       m_ApplicationStringName,
-<a name="l00385"></a>00385       description, args);
-<a name="l00386"></a>00386     va_end (args);
-<a name="l00387"></a>00387   }
-<a name="l00388"></a>00388   
-<a name="l00398"></a>00398   <span class="keywordtype">int</span> Main (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
-<a name="l00399"></a>00399 
-<a name="l00401"></a>00401   <span class="keywordtype">bool</span> DoRestart();
-<a name="l00402"></a>00402 };
-<a name="l00403"></a>00403 
-<a name="l00407"></a>00407 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00408"></a><a class="code" href="classcsApplicationRunner.html">00408</a> <span class="keyword">class </span><a class="code" href="classcsApplicationRunner.html">csApplicationRunner</a>
-<a name="l00409"></a>00409 {
-<a name="l00410"></a>00410 <span class="keyword">public</span>:
-<a name="l00412"></a><a class="code" href="classcsApplicationRunner.html#e0">00412</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsApplicationRunner.html#e0">Run</a> (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[])
-<a name="l00413"></a>00413   {
-<a name="l00414"></a>00414     <span class="keywordtype">int</span> result;
-<a name="l00415"></a>00415     <span class="keywordtype">bool</span> again;
-<a name="l00416"></a>00416     <span class="keywordflow">do</span>
-<a name="l00417"></a>00417     {
-<a name="l00418"></a>00418       T app;
-<a name="l00419"></a>00419       result = app.Main (argc, argv);
-<a name="l00420"></a>00420       again = app.DoRestart();
-<a name="l00421"></a>00421     }
-<a name="l00422"></a>00422     <span class="keywordflow">while</span> (again);
-<a name="l00423"></a>00423     <span class="keywordflow">return</span> result;
-<a name="l00424"></a>00424   }
-<a name="l00425"></a>00425 };
-<a name="l00426"></a>00426 
-<a name="l00429"></a>00429 <span class="preprocessor">#endif //__CS_CSAPPLICATIONFRAMEWORK_H__</span>
+<a name="l00248"></a>00248 
+<a name="l00255"></a><a class="code" href="classcsApplicationFramework.html#f2">00255</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classcsInitializer.html#e18">SetupConfigManager</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, 
+<a name="l00256"></a>00256     <span class="keyword">const</span> <span class="keywordtype">char</span>* configName)
+<a name="l00257"></a>00257   { 
+<a name="l00258"></a>00258     <span class="keywordflow">return</span> <a class="code" href="classcsInitializer.html#e18">csInitializer::SetupConfigManager</a> (object_reg, configName, 
+<a name="l00259"></a>00259       GetApplicationName());
+<a name="l00260"></a>00260   }
+<a name="l00261"></a>00261 <span class="keyword">public</span>:
+<a name="l00262"></a>00262   <span class="comment">// Inline Helper Functions</span>
+<a name="l00266"></a><a class="code" href="classcsApplicationFramework.html#e1">00266</a> <span class="comment"></span>  <span class="keyword">static</span> <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* GetObjectRegistry () { <span class="keywordflow">return</span> object_reg; };
+<a name="l00267"></a>00267 
+<a name="l00276"></a><a class="code" href="classcsApplicationFramework.html#a3">00276</a>   operator iObjectRegistry* () { <span class="keywordflow">return</span> object_reg; }
+<a name="l00277"></a>00277 
+<a name="l00281"></a><a class="code" href="classcsApplicationFramework.html#a2">00281</a>   <span class="keywordtype">bool</span> Open () { <span class="keywordflow">return</span> <a class="code" href="classcsInitializer.html#e14">OpenApplication</a> (object_reg); }
+<a name="l00282"></a>00282 
+<a name="l00298"></a><a class="code" href="classcsApplicationFramework.html#e7">00298</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> SetApplicationName (<span class="keywordtype">char</span> *name)
+<a name="l00299"></a>00299   {
+<a name="l00300"></a>00300     m_ApplicationStringName = name;
+<a name="l00301"></a>00301   }
+<a name="l00302"></a>00302 
+<a name="l00309"></a><a class="code" href="classcsApplicationFramework.html#e0">00309</a>   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetApplicationName ()
+<a name="l00310"></a>00310   {
+<a name="l00311"></a>00311     <span class="keywordflow">return</span> m_ApplicationStringName ? m_ApplicationStringName : 
+<a name="l00312"></a>00312       <a class="code" href="classcsInitializer.html#e12">GetDefaultAppID</a>();
+<a name="l00313"></a>00313   }
+<a name="l00314"></a>00314 
+<a name="l00320"></a><a class="code" href="classcsApplicationFramework.html#e6">00320</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> Run ()
+<a name="l00321"></a>00321   {
+<a name="l00322"></a>00322     <a class="code" href="sysfunc_8h.html#a0">csDefaultRunLoop</a> (object_reg);
+<a name="l00323"></a>00323   }
+<a name="l00324"></a>00324 
+<a name="l00330"></a>00330   <span class="keywordtype">void</span> Restart();
+<a name="l00331"></a>00331 <span class="keyword">private</span>:
+<a name="l00339"></a>00339   <span class="keyword">static</span> <span class="keywordtype">bool</span> ReportLibError (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+<a name="l00340"></a>00340   {
+<a name="l00341"></a>00341     va_list args;
+<a name="l00342"></a>00342     va_start (args, description);
+<a name="l00343"></a>00343     <a class="code" href="reporter_8h.html#a6">csReportV</a> (object_reg, <a class="code" href="reporter_8h.html#a1">CS_REPORTER_SEVERITY_ERROR</a>,
+<a name="l00344"></a>00344       m_FoundationStringName,
+<a name="l00345"></a>00345       description, args);
+<a name="l00346"></a>00346     va_end (args);
+<a name="l00347"></a>00347     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00348"></a>00348   }
+<a name="l00349"></a>00349 
+<a name="l00350"></a>00350 <span class="keyword">public</span>:
+<a name="l00358"></a><a class="code" href="classcsApplicationFramework.html#e3">00358</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> ReportError (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+<a name="l00359"></a>00359   {
+<a name="l00360"></a>00360     va_list args;
+<a name="l00361"></a>00361     va_start (args, description);
+<a name="l00362"></a>00362     <a class="code" href="reporter_8h.html#a6">csReportV</a> (object_reg, <a class="code" href="reporter_8h.html#a1">CS_REPORTER_SEVERITY_ERROR</a>,
+<a name="l00363"></a>00363       GetApplicationName(),
+<a name="l00364"></a>00364       description, args);
+<a name="l00365"></a>00365     va_end (args);
+<a name="l00366"></a>00366     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00367"></a>00367   }
+<a name="l00368"></a>00368 
+<a name="l00376"></a><a class="code" href="classcsApplicationFramework.html#e5">00376</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> ReportWarning (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+<a name="l00377"></a>00377   {
+<a name="l00378"></a>00378     va_list args;
+<a name="l00379"></a>00379     va_start (args, description);
+<a name="l00380"></a>00380     <a class="code" href="reporter_8h.html#a6">csReportV</a> (object_reg, <a class="code" href="reporter_8h.html#a2">CS_REPORTER_SEVERITY_WARNING</a>,
+<a name="l00381"></a>00381       GetApplicationName(),
+<a name="l00382"></a>00382       description, args);
+<a name="l00383"></a>00383     va_end (args);
+<a name="l00384"></a>00384   }
+<a name="l00385"></a>00385   
+<a name="l00393"></a><a class="code" href="classcsApplicationFramework.html#e4">00393</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> ReportInfo (<span class="keyword">const</span> <span class="keywordtype">char</span>* description, ...)
+<a name="l00394"></a>00394   {
+<a name="l00395"></a>00395     va_list args;
+<a name="l00396"></a>00396     va_start (args, description);
+<a name="l00397"></a>00397     <a class="code" href="reporter_8h.html#a6">csReportV</a> (object_reg, <a class="code" href="reporter_8h.html#a3">CS_REPORTER_SEVERITY_NOTIFY</a>,
+<a name="l00398"></a>00398       GetApplicationName(),
+<a name="l00399"></a>00399       description, args);
+<a name="l00400"></a>00400     va_end (args);
+<a name="l00401"></a>00401   }
+<a name="l00402"></a>00402   
+<a name="l00412"></a>00412   <span class="keywordtype">int</span> Main (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[]);
+<a name="l00413"></a>00413 
+<a name="l00415"></a>00415   <span class="keywordtype">bool</span> DoRestart();
+<a name="l00416"></a>00416 };
+<a name="l00417"></a>00417 
+<a name="l00421"></a>00421 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00422"></a><a class="code" href="classcsApplicationRunner.html">00422</a> <span class="keyword">class </span><a class="code" href="classcsApplicationRunner.html">csApplicationRunner</a>
+<a name="l00423"></a>00423 {
+<a name="l00424"></a>00424 <span class="keyword">public</span>:
+<a name="l00426"></a><a class="code" href="classcsApplicationRunner.html#e0">00426</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classcsApplicationRunner.html#e0">Run</a> (<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[])
+<a name="l00427"></a>00427   {
+<a name="l00428"></a>00428     <span class="keywordtype">int</span> result;
+<a name="l00429"></a>00429     <span class="keywordtype">bool</span> again;
+<a name="l00430"></a>00430     <span class="keywordflow">do</span>
+<a name="l00431"></a>00431     {
+<a name="l00432"></a>00432       T app;
+<a name="l00433"></a>00433       result = app.Main (argc, argv);
+<a name="l00434"></a>00434       again = app.DoRestart();
+<a name="l00435"></a>00435     }
+<a name="l00436"></a>00436     <span class="keywordflow">while</span> (again);
+<a name="l00437"></a>00437     <span class="keywordflow">return</span> result;
+<a name="l00438"></a>00438   }
+<a name="l00439"></a>00439 };
+<a name="l00440"></a>00440 
+<a name="l00443"></a>00443 <span class="preprocessor">#endif //__CS_CSAPPLICATIONFRAMEWORK_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
