@@ -39,130 +39,130 @@
 <a name="l00020"></a>00020 <span class="preprocessor">#ifndef __CS_MATH2D_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_MATH2D_H__</span>
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include "csextern.h"</span>
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="plane2_8h.html">csgeom/plane2.h</a>"</span>
-<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="segment_8h.html">csgeom/segment.h</a>"</span>
-<a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="vector2_8h.html">csgeom/vector2.h</a>"</span>
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036 <span class="keyword">class </span><a class="code" href="classcsBox2.html">csBox2</a>;
-<a name="l00037"></a>00037 <span class="keyword">class </span><a class="code" href="classcsPoly2D.html">csPoly2D</a>;
-<a name="l00038"></a>00038 
-<a name="l00043"></a><a class="code" href="classcsMath2.html">00043</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMath2.html">csMath2</a>
-<a name="l00044"></a>00044 {
-<a name="l00045"></a>00045 <span class="keyword">public</span>:
-<a name="l00052"></a><a class="code" href="classcsMath2.html#e8">00052</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> WhichSide2D (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
-<a name="l00053"></a>00053                           <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; s1, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; s2)
-<a name="l00054"></a>00054   {
-<a name="l00055"></a>00055     <span class="keywordtype">float</span> k  = (s1.<a class="code" href="classcsVector2.html#o1">y</a> - v.<a class="code" href="classcsVector2.html#o1">y</a>)*(s2.<a class="code" href="classcsVector2.html#o0">x</a> - s1.<a class="code" href="classcsVector2.html#o0">x</a>);
-<a name="l00056"></a>00056     <span class="keywordtype">float</span> k1 = (s1.<a class="code" href="classcsVector2.html#o0">x</a> - v.<a class="code" href="classcsVector2.html#o0">x</a>)*(s2.<a class="code" href="classcsVector2.html#o1">y</a> - s1.<a class="code" href="classcsVector2.html#o1">y</a>);
-<a name="l00057"></a>00057     <span class="keywordflow">if</span> (k &lt; k1) <span class="keywordflow">return</span> -1;
-<a name="l00058"></a>00058     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (k &gt; k1) <span class="keywordflow">return</span> 1;
-<a name="l00059"></a>00059     <span class="keywordflow">else</span> <span class="keywordflow">return</span> 0;
-<a name="l00060"></a>00060   }
-<a name="l00061"></a>00061 
-<a name="l00068"></a><a class="code" href="classcsMath2.html#e7">00068</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> WhichSide2D (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
-<a name="l00069"></a>00069                           <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; s)
-<a name="l00070"></a>00070   {
-<a name="l00071"></a>00071     <span class="keywordflow">return</span> WhichSide2D (v, s.<a class="code" href="classcsSegment2.html#a8">Start</a> (), s.<a class="code" href="classcsSegment2.html#a3">End</a> ());
-<a name="l00072"></a>00072   }
-<a name="l00073"></a>00073 
-<a name="l00081"></a>00081   <span class="keyword">static</span> <span class="keywordtype">int</span> InPoly2D (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
-<a name="l00082"></a>00082                        <a class="code" href="classcsVector2.html">csVector2</a>* P, <span class="keywordtype">int</span> n, <a class="code" href="classcsBox2.html">csBox2</a>* bounding_box);
-<a name="l00083"></a>00083 
-<a name="l00089"></a><a class="code" href="classcsMath2.html#e0">00089</a>   <span class="keyword">static</span> <span class="keywordtype">float</span> Area2 (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; a,
-<a name="l00090"></a>00090                       <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; b,
-<a name="l00091"></a>00091                       <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; c)
-<a name="l00092"></a>00092   {
-<a name="l00093"></a>00093     <span class="keywordflow">return</span>
-<a name="l00094"></a>00094       a.<a class="code" href="classcsVector2.html#o0">x</a> * b.<a class="code" href="classcsVector2.html#o1">y</a> - a.<a class="code" href="classcsVector2.html#o1">y</a> * b.<a class="code" href="classcsVector2.html#o0">x</a> +
-<a name="l00095"></a>00095       a.<a class="code" href="classcsVector2.html#o1">y</a> * c.<a class="code" href="classcsVector2.html#o0">x</a> - a.<a class="code" href="classcsVector2.html#o0">x</a> * c.<a class="code" href="classcsVector2.html#o1">y</a> +
-<a name="l00096"></a>00096       b.<a class="code" href="classcsVector2.html#o0">x</a> * c.<a class="code" href="classcsVector2.html#o1">y</a> - c.<a class="code" href="classcsVector2.html#o0">x</a> * b.<a class="code" href="classcsVector2.html#o1">y</a>;
-<a name="l00097"></a>00097   }
-<a name="l00098"></a>00098 
-<a name="l00104"></a><a class="code" href="classcsMath2.html#e5">00104</a>   <span class="keyword">static</span> <span class="keywordtype">float</span> Right (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; a,
-<a name="l00105"></a>00105                       <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; b,
-<a name="l00106"></a>00106                       <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; c)
-<a name="l00107"></a>00107   {
-<a name="l00108"></a>00108     <span class="keywordflow">return</span> Area2 (a, b, c) &lt;= -SMALL_EPSILON;
-<a name="l00109"></a>00109   }
-<a name="l00110"></a>00110 
-<a name="l00116"></a><a class="code" href="classcsMath2.html#e2">00116</a>   <span class="keyword">static</span> <span class="keywordtype">float</span> Left (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; a,
-<a name="l00117"></a>00117                      <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; b,
-<a name="l00118"></a>00118                      <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; c)
-<a name="l00119"></a>00119   {
-<a name="l00120"></a>00120     <span class="keywordflow">return</span> Area2 (a, b, c) &gt;= SMALL_EPSILON;
-<a name="l00121"></a>00121   }
-<a name="l00122"></a>00122 
-<a name="l00128"></a><a class="code" href="classcsMath2.html#e6">00128</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> Visible (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; p, <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; pl)
-<a name="l00129"></a>00129   { <span class="keywordflow">return</span> pl.<a class="code" href="classcsPlane2.html#a6">Classify</a> (p) &lt;= 0; }
-<a name="l00130"></a>00130 
-<a name="l00137"></a><a class="code" href="classcsMath2.html#e4">00137</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanesEqual (<span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p2)
-<a name="l00138"></a>00138   {
-<a name="l00139"></a>00139     <span class="keywordflow">return</span> ( ( p1.<a class="code" href="classcsPlane2.html#o1">norm</a> - p2.<a class="code" href="classcsPlane2.html#o1">norm</a>) &lt; (<span class="keywordtype">float</span>).001 ) &amp;&amp;
-<a name="l00140"></a>00140              (  <a class="code" href="group__geom__utils.html#ga15">ABS</a> (p1.<a class="code" href="classcsPlane2.html#o0">CC</a>-p2.<a class="code" href="classcsPlane2.html#o0">CC</a>) &lt; (float).001 );
-<a name="l00141"></a>00141   }
-<a name="l00142"></a>00142 
-<a name="l00148"></a>00148   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanesClose (<span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p2);
-<a name="l00149"></a>00149 };
-<a name="l00150"></a>00150 
-<a name="l00156"></a><a class="code" href="classcsIntersect2.html">00156</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csIntersect2
-<a name="l00157"></a>00157 {
-<a name="l00158"></a>00158 <span class="keyword">public</span>:
-<a name="l00165"></a>00165   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanePolygon (<span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; plane, <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly,
-<a name="l00166"></a>00166         <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; segment);
-<a name="l00167"></a>00167 
-<a name="l00173"></a>00173   <span class="keyword">static</span> <span class="keywordtype">bool</span> SegmentSegment (
-<a name="l00174"></a>00174     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; b,   <span class="comment">// Two segments.</span>
-<a name="l00175"></a>00175     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect, <span class="keywordtype">float</span>&amp; dist);         <span class="comment">// intersection point and distance</span>
-<a name="l00176"></a>00176 
-<a name="l00182"></a>00182   <span class="keyword">static</span> <span class="keywordtype">bool</span> SegmentLine (
-<a name="l00183"></a>00183     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; a,                <span class="comment">// First segment.</span>
-<a name="l00184"></a>00184     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; b,                <span class="comment">// A line (end is only direction)</span>
-<a name="l00185"></a>00185     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect, <span class="keywordtype">float</span>&amp; dist);     <span class="comment">// intersection point and distance</span>
-<a name="l00186"></a>00186 
-<a name="l00191"></a>00191   <span class="keyword">static</span> <span class="keywordtype">bool</span> LineLine (
-<a name="l00192"></a>00192     <span class="comment">// Two lines (end is only direction).</span>
-<a name="l00193"></a>00193     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; b,
-<a name="l00194"></a>00194     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect);                      <span class="comment">// intersection point</span>
-<a name="l00195"></a>00195 
-<a name="l00204"></a>00204   <span class="keyword">static</span> <span class="keywordtype">bool</span> SegmentPlane (
-<a name="l00205"></a>00205     <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
-<a name="l00206"></a>00206     <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p,                     <span class="comment">// plane Ax+By+Cz+D=0</span>
-<a name="l00207"></a>00207     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect,                     <span class="comment">// intersection point</span>
-<a name="l00208"></a>00208     <span class="keywordtype">float</span>&amp; dist);                       <span class="comment">// distance from u to isect</span>
-<a name="l00209"></a>00209 
-<a name="l00218"></a><a class="code" href="classcsIntersect2.html#e4">00218</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> SegmentPlane (
-<a name="l00219"></a>00219     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; uv,       <span class="comment">// Segment.</span>
-<a name="l00220"></a>00220     <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p,                     <span class="comment">// plane Ax+By+Cz+D=0</span>
-<a name="l00221"></a>00221     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect,                     <span class="comment">// intersection point</span>
-<a name="l00222"></a>00222     <span class="keywordtype">float</span>&amp; dist)                        <span class="comment">// distance from u to isect</span>
-<a name="l00223"></a>00223   {
-<a name="l00224"></a>00224     <span class="keywordflow">return</span> SegmentPlane (uv.<a class="code" href="classcsSegment2.html#a8">Start</a> (), uv.<a class="code" href="classcsSegment2.html#a3">End</a> (), p, isect, dist);
-<a name="l00225"></a>00225   }
-<a name="l00226"></a>00226 
-<a name="l00231"></a><a class="code" href="classcsIntersect2.html#e7">00231</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> SegmentPlaneNoTest (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
-<a name="l00232"></a>00232                      <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p, <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect, <span class="keywordtype">float</span>&amp; dist)
-<a name="l00233"></a>00233   {
-<a name="l00234"></a>00234     <span class="keywordtype">float</span> x,y, denom;
-<a name="l00235"></a>00235     x = v.<a class="code" href="classcsVector2.html#o0">x</a>-u.<a class="code" href="classcsVector2.html#o0">x</a>;  y = v.<a class="code" href="classcsVector2.html#o1">y</a>-u.<a class="code" href="classcsVector2.html#o1">y</a>;
-<a name="l00236"></a>00236     denom = p.<a class="code" href="classcsPlane2.html#o1">norm</a>.<a class="code" href="classcsVector2.html#o0">x</a>*x + p.<a class="code" href="classcsPlane2.html#o1">norm</a>.<a class="code" href="classcsVector2.html#o1">y</a>*y;
-<a name="l00237"></a>00237     dist = -(p.<a class="code" href="classcsPlane2.html#o1">norm</a>*u + p.<a class="code" href="classcsPlane2.html#o0">CC</a>) / denom;
-<a name="l00238"></a>00238     isect.<a class="code" href="classcsVector2.html#o0">x</a> = u.<a class="code" href="classcsVector2.html#o0">x</a> + dist*x;  isect.<a class="code" href="classcsVector2.html#o1">y</a> = u.<a class="code" href="classcsVector2.html#o1">y</a> + dist*y;
-<a name="l00239"></a>00239   }
-<a name="l00240"></a>00240 
-<a name="l00245"></a><a class="code" href="classcsIntersect2.html#e6">00245</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> SegmentPlaneNoTest (<span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; uv,
-<a name="l00246"></a>00246                      <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p, <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect, <span class="keywordtype">float</span>&amp; dist)
-<a name="l00247"></a>00247   {
-<a name="l00248"></a>00248     SegmentPlaneNoTest (uv.<a class="code" href="classcsSegment2.html#a8">Start</a> (), uv.<a class="code" href="classcsSegment2.html#a3">End</a> (), p, isect, dist);
-<a name="l00249"></a>00249   }
-<a name="l00250"></a>00250 
-<a name="l00256"></a>00256   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanePlane (<span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p2,
-<a name="l00257"></a>00257                       <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect);
-<a name="l00258"></a>00258 
-<a name="l00259"></a>00259 };
-<a name="l00260"></a>00260 
-<a name="l00263"></a>00263 <span class="preprocessor">#endif // __CS_MATH2D_H__</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include "csextern.h"</span>
+<a name="l00032"></a>00032 
+<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="plane2_8h.html">csgeom/plane2.h</a>"</span>
+<a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="segment_8h.html">csgeom/segment.h</a>"</span>
+<a name="l00035"></a>00035 <span class="preprocessor">#include "<a class="code" href="vector2_8h.html">csgeom/vector2.h</a>"</span>
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037 <span class="keyword">class </span><a class="code" href="classcsBox2.html">csBox2</a>;
+<a name="l00038"></a>00038 <span class="keyword">class </span><a class="code" href="classcsPoly2D.html">csPoly2D</a>;
+<a name="l00039"></a>00039 
+<a name="l00044"></a><a class="code" href="classcsMath2.html">00044</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMath2.html">csMath2</a>
+<a name="l00045"></a>00045 {
+<a name="l00046"></a>00046 <span class="keyword">public</span>:
+<a name="l00053"></a><a class="code" href="classcsMath2.html#e8">00053</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> WhichSide2D (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
+<a name="l00054"></a>00054                           <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; s1, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; s2)
+<a name="l00055"></a>00055   {
+<a name="l00056"></a>00056     <span class="keywordtype">float</span> k  = (s1.<a class="code" href="classcsVector2.html#o1">y</a> - v.<a class="code" href="classcsVector2.html#o1">y</a>)*(s2.<a class="code" href="classcsVector2.html#o0">x</a> - s1.<a class="code" href="classcsVector2.html#o0">x</a>);
+<a name="l00057"></a>00057     <span class="keywordtype">float</span> k1 = (s1.<a class="code" href="classcsVector2.html#o0">x</a> - v.<a class="code" href="classcsVector2.html#o0">x</a>)*(s2.<a class="code" href="classcsVector2.html#o1">y</a> - s1.<a class="code" href="classcsVector2.html#o1">y</a>);
+<a name="l00058"></a>00058     <span class="keywordflow">if</span> (k &lt; k1) <span class="keywordflow">return</span> -1;
+<a name="l00059"></a>00059     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (k &gt; k1) <span class="keywordflow">return</span> 1;
+<a name="l00060"></a>00060     <span class="keywordflow">else</span> <span class="keywordflow">return</span> 0;
+<a name="l00061"></a>00061   }
+<a name="l00062"></a>00062 
+<a name="l00069"></a><a class="code" href="classcsMath2.html#e7">00069</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> WhichSide2D (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
+<a name="l00070"></a>00070                           <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; s)
+<a name="l00071"></a>00071   {
+<a name="l00072"></a>00072     <span class="keywordflow">return</span> WhichSide2D (v, s.<a class="code" href="classcsSegment2.html#a8">Start</a> (), s.<a class="code" href="classcsSegment2.html#a3">End</a> ());
+<a name="l00073"></a>00073   }
+<a name="l00074"></a>00074 
+<a name="l00082"></a>00082   <span class="keyword">static</span> <span class="keywordtype">int</span> InPoly2D (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
+<a name="l00083"></a>00083                        <a class="code" href="classcsVector2.html">csVector2</a>* P, <span class="keywordtype">int</span> n, <a class="code" href="classcsBox2.html">csBox2</a>* bounding_box);
+<a name="l00084"></a>00084 
+<a name="l00090"></a><a class="code" href="classcsMath2.html#e0">00090</a>   <span class="keyword">static</span> <span class="keywordtype">float</span> Area2 (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; a,
+<a name="l00091"></a>00091                       <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; b,
+<a name="l00092"></a>00092                       <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; c)
+<a name="l00093"></a>00093   {
+<a name="l00094"></a>00094     <span class="keywordflow">return</span>
+<a name="l00095"></a>00095       a.<a class="code" href="classcsVector2.html#o0">x</a> * b.<a class="code" href="classcsVector2.html#o1">y</a> - a.<a class="code" href="classcsVector2.html#o1">y</a> * b.<a class="code" href="classcsVector2.html#o0">x</a> +
+<a name="l00096"></a>00096       a.<a class="code" href="classcsVector2.html#o1">y</a> * c.<a class="code" href="classcsVector2.html#o0">x</a> - a.<a class="code" href="classcsVector2.html#o0">x</a> * c.<a class="code" href="classcsVector2.html#o1">y</a> +
+<a name="l00097"></a>00097       b.<a class="code" href="classcsVector2.html#o0">x</a> * c.<a class="code" href="classcsVector2.html#o1">y</a> - c.<a class="code" href="classcsVector2.html#o0">x</a> * b.<a class="code" href="classcsVector2.html#o1">y</a>;
+<a name="l00098"></a>00098   }
+<a name="l00099"></a>00099 
+<a name="l00105"></a><a class="code" href="classcsMath2.html#e5">00105</a>   <span class="keyword">static</span> <span class="keywordtype">float</span> Right (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; a,
+<a name="l00106"></a>00106                       <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; b,
+<a name="l00107"></a>00107                       <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; c)
+<a name="l00108"></a>00108   {
+<a name="l00109"></a>00109     <span class="keywordflow">return</span> Area2 (a, b, c) &lt;= -SMALL_EPSILON;
+<a name="l00110"></a>00110   }
+<a name="l00111"></a>00111 
+<a name="l00117"></a><a class="code" href="classcsMath2.html#e2">00117</a>   <span class="keyword">static</span> <span class="keywordtype">float</span> Left (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; a,
+<a name="l00118"></a>00118                      <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; b,
+<a name="l00119"></a>00119                      <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; c)
+<a name="l00120"></a>00120   {
+<a name="l00121"></a>00121     <span class="keywordflow">return</span> Area2 (a, b, c) &gt;= SMALL_EPSILON;
+<a name="l00122"></a>00122   }
+<a name="l00123"></a>00123 
+<a name="l00129"></a><a class="code" href="classcsMath2.html#e6">00129</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> Visible (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; p, <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; pl)
+<a name="l00130"></a>00130   { <span class="keywordflow">return</span> pl.<a class="code" href="classcsPlane2.html#a6">Classify</a> (p) &lt;= 0; }
+<a name="l00131"></a>00131 
+<a name="l00138"></a><a class="code" href="classcsMath2.html#e4">00138</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanesEqual (<span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p2)
+<a name="l00139"></a>00139   {
+<a name="l00140"></a>00140     <span class="keywordflow">return</span> ( ( p1.<a class="code" href="classcsPlane2.html#o1">norm</a> - p2.<a class="code" href="classcsPlane2.html#o1">norm</a>) &lt; (<span class="keywordtype">float</span>).001 ) &amp;&amp;
+<a name="l00141"></a>00141              (  <a class="code" href="group__geom__utils.html#ga17">ABS</a> (p1.<a class="code" href="classcsPlane2.html#o0">CC</a>-p2.<a class="code" href="classcsPlane2.html#o0">CC</a>) &lt; (float).001 );
+<a name="l00142"></a>00142   }
+<a name="l00143"></a>00143 
+<a name="l00149"></a>00149   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanesClose (<span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p2);
+<a name="l00150"></a>00150 };
+<a name="l00151"></a>00151 
+<a name="l00157"></a><a class="code" href="classcsIntersect2.html">00157</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csIntersect2
+<a name="l00158"></a>00158 {
+<a name="l00159"></a>00159 <span class="keyword">public</span>:
+<a name="l00166"></a>00166   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanePolygon (<span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; plane, <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly,
+<a name="l00167"></a>00167         <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; segment);
+<a name="l00168"></a>00168 
+<a name="l00174"></a>00174   <span class="keyword">static</span> <span class="keywordtype">bool</span> SegmentSegment (
+<a name="l00175"></a>00175     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; b,   <span class="comment">// Two segments.</span>
+<a name="l00176"></a>00176     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect, <span class="keywordtype">float</span>&amp; dist);         <span class="comment">// intersection point and distance</span>
+<a name="l00177"></a>00177 
+<a name="l00183"></a>00183   <span class="keyword">static</span> <span class="keywordtype">bool</span> SegmentLine (
+<a name="l00184"></a>00184     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; a,                <span class="comment">// First segment.</span>
+<a name="l00185"></a>00185     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; b,                <span class="comment">// A line (end is only direction)</span>
+<a name="l00186"></a>00186     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect, <span class="keywordtype">float</span>&amp; dist);     <span class="comment">// intersection point and distance</span>
+<a name="l00187"></a>00187 
+<a name="l00192"></a>00192   <span class="keyword">static</span> <span class="keywordtype">bool</span> LineLine (
+<a name="l00193"></a>00193     <span class="comment">// Two lines (end is only direction).</span>
+<a name="l00194"></a>00194     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; b,
+<a name="l00195"></a>00195     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect);                      <span class="comment">// intersection point</span>
+<a name="l00196"></a>00196 
+<a name="l00205"></a>00205   <span class="keyword">static</span> <span class="keywordtype">bool</span> SegmentPlane (
+<a name="l00206"></a>00206     <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
+<a name="l00207"></a>00207     <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p,                     <span class="comment">// plane Ax+By+Cz+D=0</span>
+<a name="l00208"></a>00208     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect,                     <span class="comment">// intersection point</span>
+<a name="l00209"></a>00209     <span class="keywordtype">float</span>&amp; dist);                       <span class="comment">// distance from u to isect</span>
+<a name="l00210"></a>00210 
+<a name="l00219"></a><a class="code" href="classcsIntersect2.html#e4">00219</a>   <span class="keyword">static</span> <span class="keywordtype">bool</span> SegmentPlane (
+<a name="l00220"></a>00220     <span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; uv,       <span class="comment">// Segment.</span>
+<a name="l00221"></a>00221     <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p,                     <span class="comment">// plane Ax+By+Cz+D=0</span>
+<a name="l00222"></a>00222     <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect,                     <span class="comment">// intersection point</span>
+<a name="l00223"></a>00223     <span class="keywordtype">float</span>&amp; dist)                        <span class="comment">// distance from u to isect</span>
+<a name="l00224"></a>00224   {
+<a name="l00225"></a>00225     <span class="keywordflow">return</span> SegmentPlane (uv.<a class="code" href="classcsSegment2.html#a8">Start</a> (), uv.<a class="code" href="classcsSegment2.html#a3">End</a> (), p, isect, dist);
+<a name="l00226"></a>00226   }
+<a name="l00227"></a>00227 
+<a name="l00232"></a><a class="code" href="classcsIntersect2.html#e7">00232</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> SegmentPlaneNoTest (<span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; u, <span class="keyword">const</span> <a class="code" href="classcsVector2.html">csVector2</a>&amp; v,
+<a name="l00233"></a>00233                      <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p, <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect, <span class="keywordtype">float</span>&amp; dist)
+<a name="l00234"></a>00234   {
+<a name="l00235"></a>00235     <span class="keywordtype">float</span> x,y, denom;
+<a name="l00236"></a>00236     x = v.<a class="code" href="classcsVector2.html#o0">x</a>-u.<a class="code" href="classcsVector2.html#o0">x</a>;  y = v.<a class="code" href="classcsVector2.html#o1">y</a>-u.<a class="code" href="classcsVector2.html#o1">y</a>;
+<a name="l00237"></a>00237     denom = p.<a class="code" href="classcsPlane2.html#o1">norm</a>.<a class="code" href="classcsVector2.html#o0">x</a>*x + p.<a class="code" href="classcsPlane2.html#o1">norm</a>.<a class="code" href="classcsVector2.html#o1">y</a>*y;
+<a name="l00238"></a>00238     dist = -(p.<a class="code" href="classcsPlane2.html#o1">norm</a>*u + p.<a class="code" href="classcsPlane2.html#o0">CC</a>) / denom;
+<a name="l00239"></a>00239     isect.<a class="code" href="classcsVector2.html#o0">x</a> = u.<a class="code" href="classcsVector2.html#o0">x</a> + dist*x;  isect.<a class="code" href="classcsVector2.html#o1">y</a> = u.<a class="code" href="classcsVector2.html#o1">y</a> + dist*y;
+<a name="l00240"></a>00240   }
+<a name="l00241"></a>00241 
+<a name="l00246"></a><a class="code" href="classcsIntersect2.html#e6">00246</a>   <span class="keyword">static</span> <span class="keywordtype">void</span> SegmentPlaneNoTest (<span class="keyword">const</span> <a class="code" href="classcsSegment2.html">csSegment2</a>&amp; uv,
+<a name="l00247"></a>00247                      <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p, <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect, <span class="keywordtype">float</span>&amp; dist)
+<a name="l00248"></a>00248   {
+<a name="l00249"></a>00249     SegmentPlaneNoTest (uv.<a class="code" href="classcsSegment2.html#a8">Start</a> (), uv.<a class="code" href="classcsSegment2.html#a3">End</a> (), p, isect, dist);
+<a name="l00250"></a>00250   }
+<a name="l00251"></a>00251 
+<a name="l00257"></a>00257   <span class="keyword">static</span> <span class="keywordtype">bool</span> PlanePlane (<span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsPlane2.html">csPlane2</a>&amp; p2,
+<a name="l00258"></a>00258                       <a class="code" href="classcsVector2.html">csVector2</a>&amp; isect);
+<a name="l00259"></a>00259 
+<a name="l00260"></a>00260 };
+<a name="l00261"></a>00261 
+<a name="l00264"></a>00264 <span class="preprocessor">#endif // __CS_MATH2D_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
