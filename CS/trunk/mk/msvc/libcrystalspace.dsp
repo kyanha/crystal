@@ -1162,10 +1162,6 @@ SOURCE=..\..\libs\..\include\csgfx\csimgvec.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\csgfx\csrgbvct.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csgfx\gradient.h
 # End Source File
 # Begin Source File
