@@ -39,84 +39,84 @@
 <a name="l00020"></a>00020 <span class="preprocessor">#ifndef __CS_OBB_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_OBB_H__</span>
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
-<a name="l00029"></a>00029 <span class="preprocessor">#include "csextern.h"</span>
-<a name="l00030"></a>00030 
-<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="box_8h.html">csgeom/box.h</a>"</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="matrix3_8h.html">csgeom/matrix3.h</a>"</span>
-<a name="l00033"></a>00033 
-<a name="l00034"></a>00034 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
-<a name="l00035"></a>00035 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
-<a name="l00036"></a>00036 
-<a name="l00041"></a><a class="code" href="classcsOBB.html">00041</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsOBB.html">csOBB</a> : <span class="keyword">public</span> <a class="code" href="classcsBox3.html">csBox3</a>
-<a name="l00042"></a>00042 {
-<a name="l00043"></a>00043 <span class="keyword">private</span>:
-<a name="l00044"></a>00044   <a class="code" href="classcsMatrix3.html">csMatrix3</a> mMat;
-<a name="l00045"></a>00045 
-<a name="l00046"></a>00046 <span class="keyword">public</span>:
-<a name="l00050"></a><a class="code" href="classcsOBB.html#a4">00050</a>   <a class="code" href="classcsOBB.html">csOBB</a> () {}
-<a name="l00051"></a>00051 
-<a name="l00055"></a><a class="code" href="classcsOBB.html#a3">00055</a>   <a class="code" href="classcsOBB.html">csOBB</a> (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a> &amp;b) : <a class="code" href="classcsBox3.html">csBox3</a> (b), mMat (b.mMat) { }
-<a name="l00056"></a>00056 
-<a name="l00060"></a><a class="code" href="classcsOBB.html#a2">00060</a>   <a class="code" href="classcsOBB.html">csOBB</a> (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a> &amp;b) : <a class="code" href="classcsBox3.html">csBox3</a> (b) { }
-<a name="l00061"></a>00061 
-<a name="l00069"></a>00069   <a class="code" href="classcsOBB.html">csOBB</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;dir1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;dir2,
-<a name="l00070"></a>00070         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;dir3);
-<a name="l00071"></a>00071 
-<a name="l00072"></a>00072   <span class="keywordtype">void</span> <a class="code" href="classcsBox3.html#a1">AddBoundingVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v);
-<a name="l00073"></a>00073   <a class="code" href="classcsVector3.html">csVector3</a> <a class="code" href="classcsBox3.html#a24">GetCorner</a> (<span class="keywordtype">int</span> corner) <span class="keyword">const</span>; 
-<a name="l00074"></a><a class="code" href="classcsOBB.html#a9">00074</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a> &amp;GetMatrix ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mMat; }
-<a name="l00075"></a>00075 
-<a name="l00079"></a>00079   <span class="keywordtype">float</span> Diameter ();
-<a name="l00080"></a>00080 
-<a name="l00084"></a>00084   <span class="keywordtype">float</span> <a class="code" href="classcsBox3.html#a67">Volume</a> ();
-<a name="l00085"></a>00085 
-<a name="l00091"></a>00091   <span class="keywordtype">void</span> FindOBB (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> *vertex_table, <span class="keywordtype">int</span> num, <span class="keywordtype">float</span> eps = 0.0);
-<a name="l00092"></a>00092 
-<a name="l00098"></a>00098   <span class="keywordtype">void</span> FindOBBAccurate (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> *vertex_table, <span class="keywordtype">int</span> num);
-<a name="l00099"></a>00099 };
-<a name="l00100"></a>00100 
-<a name="l00104"></a><a class="code" href="classcsOBBFrozen.html">00104</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csOBBFrozen
-<a name="l00105"></a>00105 {
-<a name="l00106"></a>00106 <span class="keyword">private</span>:
-<a name="l00107"></a>00107   <a class="code" href="classcsVector3.html">csVector3</a> corners[8];
-<a name="l00108"></a>00108 
-<a name="l00109"></a>00109 <span class="keyword">public</span>:
-<a name="l00113"></a><a class="code" href="classcsOBBFrozen.html#a1">00113</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Copy (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a>&amp; obb)
-<a name="l00114"></a>00114   {
-<a name="l00115"></a>00115     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; 8 ; i++)
-<a name="l00116"></a>00116     {
-<a name="l00117"></a>00117       corners[i] = obb.<a class="code" href="classcsOBB.html#a8">GetCorner</a> (i);
-<a name="l00118"></a>00118     }
-<a name="l00119"></a>00119   }
-<a name="l00120"></a>00120 
-<a name="l00124"></a>00124   <span class="keywordtype">void</span> Copy (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a>&amp; obb, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans);
-<a name="l00125"></a>00125 
-<a name="l00129"></a><a class="code" href="classcsOBBFrozen.html#a4">00129</a>   csOBBFrozen ()
-<a name="l00130"></a>00130   {
-<a name="l00131"></a>00131   }
-<a name="l00132"></a>00132 
-<a name="l00136"></a><a class="code" href="classcsOBBFrozen.html#a3">00136</a>   csOBBFrozen (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a>&amp; obb)
-<a name="l00137"></a>00137   {
-<a name="l00138"></a>00138     Copy (obb);
-<a name="l00139"></a>00139   }
-<a name="l00140"></a>00140 
-<a name="l00147"></a><a class="code" href="classcsOBBFrozen.html#a2">00147</a>   csOBBFrozen (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a>&amp; obb, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans)
-<a name="l00148"></a>00148   {
-<a name="l00149"></a>00149     Copy (obb, trans);
-<a name="l00150"></a>00150   }
-<a name="l00151"></a>00151 
-<a name="l00155"></a><a class="code" href="classcsOBBFrozen.html#a5">00155</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetCorner (<span class="keywordtype">int</span> corner)<span class="keyword"> const</span>
-<a name="l00156"></a>00156 <span class="keyword">  </span>{
-<a name="l00157"></a>00157     <a class="code" href="cssysdef_8h.html#a37">CS_ASSERT</a> (corner &gt;= 0 &amp;&amp; corner &lt; 8);
-<a name="l00158"></a>00158     <span class="keywordflow">return</span> corners[corner];
-<a name="l00159"></a>00159   }
-<a name="l00160"></a>00160 
-<a name="l00165"></a>00165   <span class="keywordtype">bool</span> ProjectOBB (<span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <a class="code" href="classcsBox2.html">csBox2</a>&amp; sbox,
-<a name="l00166"></a>00166         <span class="keywordtype">float</span>&amp; min_z, <span class="keywordtype">float</span>&amp; max_z);
-<a name="l00167"></a>00167 };
-<a name="l00168"></a>00168 
-<a name="l00171"></a>00171 <span class="preprocessor">#endif // __CS_OBB_H__</span>
-<a name="l00172"></a>00172 <span class="preprocessor"></span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include "csextern.h"</span>
+<a name="l00031"></a>00031 
+<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="box_8h.html">csgeom/box.h</a>"</span>
+<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="matrix3_8h.html">csgeom/matrix3.h</a>"</span>
+<a name="l00034"></a>00034 
+<a name="l00035"></a>00035 <span class="keyword">class </span><a class="code" href="classcsVector3.html">csVector3</a>;
+<a name="l00036"></a>00036 <span class="keyword">class </span><a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>;
+<a name="l00037"></a>00037 
+<a name="l00042"></a><a class="code" href="classcsOBB.html">00042</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsOBB.html">csOBB</a> : <span class="keyword">public</span> <a class="code" href="classcsBox3.html">csBox3</a>
+<a name="l00043"></a>00043 {
+<a name="l00044"></a>00044 <span class="keyword">private</span>:
+<a name="l00045"></a>00045   <a class="code" href="classcsMatrix3.html">csMatrix3</a> mMat;
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047 <span class="keyword">public</span>:
+<a name="l00051"></a><a class="code" href="classcsOBB.html#a4">00051</a>   <a class="code" href="classcsOBB.html">csOBB</a> () {}
+<a name="l00052"></a>00052 
+<a name="l00056"></a><a class="code" href="classcsOBB.html#a3">00056</a>   <a class="code" href="classcsOBB.html">csOBB</a> (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a> &amp;b) : <a class="code" href="classcsBox3.html">csBox3</a> (b), mMat (b.mMat) { }
+<a name="l00057"></a>00057 
+<a name="l00061"></a><a class="code" href="classcsOBB.html#a2">00061</a>   <a class="code" href="classcsOBB.html">csOBB</a> (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a> &amp;b) : <a class="code" href="classcsBox3.html">csBox3</a> (b) { }
+<a name="l00062"></a>00062 
+<a name="l00070"></a>00070   <a class="code" href="classcsOBB.html">csOBB</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;dir1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;dir2,
+<a name="l00071"></a>00071         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;dir3);
+<a name="l00072"></a>00072 
+<a name="l00073"></a>00073   <span class="keywordtype">void</span> <a class="code" href="classcsBox3.html#a1">AddBoundingVertex</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v);
+<a name="l00074"></a>00074   <a class="code" href="classcsVector3.html">csVector3</a> <a class="code" href="classcsBox3.html#a24">GetCorner</a> (<span class="keywordtype">int</span> corner) <span class="keyword">const</span>; 
+<a name="l00075"></a><a class="code" href="classcsOBB.html#a9">00075</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsMatrix3.html">csMatrix3</a> &amp;GetMatrix ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mMat; }
+<a name="l00076"></a>00076 
+<a name="l00080"></a>00080   <span class="keywordtype">float</span> Diameter ();
+<a name="l00081"></a>00081 
+<a name="l00085"></a>00085   <span class="keywordtype">float</span> <a class="code" href="classcsBox3.html#a67">Volume</a> ();
+<a name="l00086"></a>00086 
+<a name="l00092"></a>00092   <span class="keywordtype">void</span> FindOBB (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> *vertex_table, <span class="keywordtype">int</span> num, <span class="keywordtype">float</span> eps = 0.0);
+<a name="l00093"></a>00093 
+<a name="l00099"></a>00099   <span class="keywordtype">void</span> FindOBBAccurate (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> *vertex_table, <span class="keywordtype">int</span> num);
+<a name="l00100"></a>00100 };
+<a name="l00101"></a>00101 
+<a name="l00105"></a><a class="code" href="classcsOBBFrozen.html">00105</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csOBBFrozen
+<a name="l00106"></a>00106 {
+<a name="l00107"></a>00107 <span class="keyword">private</span>:
+<a name="l00108"></a>00108   <a class="code" href="classcsVector3.html">csVector3</a> corners[8];
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110 <span class="keyword">public</span>:
+<a name="l00114"></a><a class="code" href="classcsOBBFrozen.html#a1">00114</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Copy (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a>&amp; obb)
+<a name="l00115"></a>00115   {
+<a name="l00116"></a>00116     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0 ; i &lt; 8 ; i++)
+<a name="l00117"></a>00117     {
+<a name="l00118"></a>00118       corners[i] = obb.<a class="code" href="classcsOBB.html#a8">GetCorner</a> (i);
+<a name="l00119"></a>00119     }
+<a name="l00120"></a>00120   }
+<a name="l00121"></a>00121 
+<a name="l00125"></a>00125   <span class="keywordtype">void</span> Copy (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a>&amp; obb, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans);
+<a name="l00126"></a>00126 
+<a name="l00130"></a><a class="code" href="classcsOBBFrozen.html#a4">00130</a>   csOBBFrozen ()
+<a name="l00131"></a>00131   {
+<a name="l00132"></a>00132   }
+<a name="l00133"></a>00133 
+<a name="l00137"></a><a class="code" href="classcsOBBFrozen.html#a3">00137</a>   csOBBFrozen (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a>&amp; obb)
+<a name="l00138"></a>00138   {
+<a name="l00139"></a>00139     Copy (obb);
+<a name="l00140"></a>00140   }
+<a name="l00141"></a>00141 
+<a name="l00148"></a><a class="code" href="classcsOBBFrozen.html#a2">00148</a>   csOBBFrozen (<span class="keyword">const</span> <a class="code" href="classcsOBB.html">csOBB</a>&amp; obb, <span class="keyword">const</span> <a class="code" href="classcsReversibleTransform.html">csReversibleTransform</a>&amp; trans)
+<a name="l00149"></a>00149   {
+<a name="l00150"></a>00150     Copy (obb, trans);
+<a name="l00151"></a>00151   }
+<a name="l00152"></a>00152 
+<a name="l00156"></a><a class="code" href="classcsOBBFrozen.html#a5">00156</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetCorner (<span class="keywordtype">int</span> corner)<span class="keyword"> const</span>
+<a name="l00157"></a>00157 <span class="keyword">  </span>{
+<a name="l00158"></a>00158     <a class="code" href="cssysdef_8h.html#a37">CS_ASSERT</a> (corner &gt;= 0 &amp;&amp; corner &lt; 8);
+<a name="l00159"></a>00159     <span class="keywordflow">return</span> corners[corner];
+<a name="l00160"></a>00160   }
+<a name="l00161"></a>00161 
+<a name="l00166"></a>00166   <span class="keywordtype">bool</span> ProjectOBB (<span class="keywordtype">float</span> fov, <span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <a class="code" href="classcsBox2.html">csBox2</a>&amp; sbox,
+<a name="l00167"></a>00167         <span class="keywordtype">float</span>&amp; min_z, <span class="keywordtype">float</span>&amp; max_z);
+<a name="l00168"></a>00168 };
+<a name="l00169"></a>00169 
+<a name="l00172"></a>00172 <span class="preprocessor">#endif // __CS_OBB_H__</span>
+<a name="l00173"></a>00173 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
