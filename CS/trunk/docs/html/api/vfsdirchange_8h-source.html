@@ -36,38 +36,38 @@
 <a name="l00017"></a>00017 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
 <a name="l00018"></a>00018 <span class="comment">*/</span>
 <a name="l00019"></a>00019 
-<a name="l00023"></a>00023 <span class="preprocessor">#include "<a class="code" href="vfs_8h.html">iutil/vfs.h</a>"</span>
-<a name="l00024"></a>00024 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
-<a name="l00025"></a>00025 
-<a name="l00030"></a><a class="code" href="classcsVfsDirectoryChanger.html">00030</a> <span class="keyword">class </span><a class="code" href="classcsVfsDirectoryChanger.html">csVfsDirectoryChanger</a>
-<a name="l00031"></a>00031 {
-<a name="l00032"></a>00032   <a class="code" href="classcsRef.html">csRef&lt;iVFS&gt;</a> vfs;
-<a name="l00037"></a>00037   <a class="code" href="cstypes_8h.html#a27">uint</a> popCount;
-<a name="l00038"></a>00038 <span class="keyword">public</span>:
-<a name="l00040"></a><a class="code" href="classcsVfsDirectoryChanger.html#a1">00040</a>   <a class="code" href="classcsVfsDirectoryChanger.html#a1">csVfsDirectoryChanger</a> (<a class="code" href="structiVFS.html">iVFS</a>* vfs) : vfs(vfs), popCount(0) { }
-<a name="l00042"></a><a class="code" href="classcsVfsDirectoryChanger.html#a3">00042</a>   <a class="code" href="classcsVfsDirectoryChanger.html#a3">~csVfsDirectoryChanger</a>()
-<a name="l00043"></a>00043   {
-<a name="l00044"></a>00044     <span class="keywordflow">while</span> (popCount--) vfs-&gt;PopDir();
-<a name="l00045"></a>00045   }
-<a name="l00052"></a><a class="code" href="classcsVfsDirectoryChanger.html#a0">00052</a>   <span class="keywordtype">void</span> <a class="code" href="classcsVfsDirectoryChanger.html#a0">ChangeTo</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename)
-<a name="l00053"></a>00053   {
-<a name="l00054"></a>00054     <span class="keywordflow">if</span> (!vfs) <span class="keywordflow">return</span>;
-<a name="l00055"></a>00055     <span class="keyword">const</span> <span class="keywordtype">char</span>* slash = strrchr (filename, <span class="charliteral">'/'</span>);
-<a name="l00056"></a>00056     <span class="keywordflow">if</span> (slash != 0)
-<a name="l00057"></a>00057     {
-<a name="l00058"></a>00058       <a class="code" href="classcsString.html">csString</a> dir;
-<a name="l00059"></a>00059       dir.<a class="code" href="classcsStringBase.html#a68">Replace</a> (filename, slash - filename);
-<a name="l00060"></a>00060       vfs-&gt;PushDir ();
-<a name="l00061"></a>00061       vfs-&gt;ChDir (dir);
-<a name="l00062"></a>00062       popCount++;
-<a name="l00063"></a>00063     }
-<a name="l00064"></a>00064   }
-<a name="l00071"></a><a class="code" href="classcsVfsDirectoryChanger.html#a2">00071</a>   <span class="keywordtype">void</span> <a class="code" href="classcsVfsDirectoryChanger.html#a2">PushDir</a> ()
-<a name="l00072"></a>00072   {
-<a name="l00073"></a>00073     vfs-&gt;PushDir ();
-<a name="l00074"></a>00074     popCount++;
-<a name="l00075"></a>00075   }
-<a name="l00076"></a>00076 };
+<a name="l00024"></a>00024 <span class="preprocessor">#include "<a class="code" href="vfs_8h.html">iutil/vfs.h</a>"</span>
+<a name="l00025"></a>00025 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
+<a name="l00026"></a>00026 
+<a name="l00031"></a><a class="code" href="classcsVfsDirectoryChanger.html">00031</a> <span class="keyword">class </span><a class="code" href="classcsVfsDirectoryChanger.html">csVfsDirectoryChanger</a>
+<a name="l00032"></a>00032 {
+<a name="l00033"></a>00033   <a class="code" href="classcsRef.html">csRef&lt;iVFS&gt;</a> vfs;
+<a name="l00038"></a>00038   <a class="code" href="cstypes_8h.html#a27">uint</a> popCount;
+<a name="l00039"></a>00039 <span class="keyword">public</span>:
+<a name="l00041"></a><a class="code" href="classcsVfsDirectoryChanger.html#a1">00041</a>   <a class="code" href="classcsVfsDirectoryChanger.html#a1">csVfsDirectoryChanger</a> (<a class="code" href="structiVFS.html">iVFS</a>* vfs) : vfs(vfs), popCount(0) { }
+<a name="l00043"></a><a class="code" href="classcsVfsDirectoryChanger.html#a3">00043</a>   <a class="code" href="classcsVfsDirectoryChanger.html#a3">~csVfsDirectoryChanger</a>()
+<a name="l00044"></a>00044   {
+<a name="l00045"></a>00045     <span class="keywordflow">while</span> (popCount--) vfs-&gt;PopDir();
+<a name="l00046"></a>00046   }
+<a name="l00053"></a><a class="code" href="classcsVfsDirectoryChanger.html#a0">00053</a>   <span class="keywordtype">void</span> <a class="code" href="classcsVfsDirectoryChanger.html#a0">ChangeTo</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* filename)
+<a name="l00054"></a>00054   {
+<a name="l00055"></a>00055     <span class="keywordflow">if</span> (!vfs) <span class="keywordflow">return</span>;
+<a name="l00056"></a>00056     <span class="keyword">const</span> <span class="keywordtype">char</span>* slash = strrchr (filename, <span class="charliteral">'/'</span>);
+<a name="l00057"></a>00057     <span class="keywordflow">if</span> (slash != 0)
+<a name="l00058"></a>00058     {
+<a name="l00059"></a>00059       <a class="code" href="classcsString.html">csString</a> dir;
+<a name="l00060"></a>00060       dir.<a class="code" href="classcsStringBase.html#a68">Replace</a> (filename, slash - filename);
+<a name="l00061"></a>00061       vfs-&gt;PushDir ();
+<a name="l00062"></a>00062       vfs-&gt;ChDir (dir);
+<a name="l00063"></a>00063       popCount++;
+<a name="l00064"></a>00064     }
+<a name="l00065"></a>00065   }
+<a name="l00072"></a><a class="code" href="classcsVfsDirectoryChanger.html#a2">00072</a>   <span class="keywordtype">void</span> <a class="code" href="classcsVfsDirectoryChanger.html#a2">PushDir</a> ()
+<a name="l00073"></a>00073   {
+<a name="l00074"></a>00074     vfs-&gt;PushDir ();
+<a name="l00075"></a>00075     popCount++;
+<a name="l00076"></a>00076   }
+<a name="l00077"></a>00077 };
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

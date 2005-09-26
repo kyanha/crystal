@@ -45,70 +45,98 @@
 <a name="l00039"></a>00039 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T, <span class="keyword">class</span> TbufferKeeper = csRef&lt;iRenderBuffer&gt; &gt;
 <a name="l00040"></a><a class="code" href="classcsRenderBufferLock.html">00040</a> <span class="keyword">class </span><a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock</a>
 <a name="l00041"></a>00041 {
-<a name="l00042"></a>00042   TbufferKeeper buffer;
-<a name="l00043"></a>00043   <a class="code" href="group__gfx3d.html#ga16">csRenderBufferLockType</a> lockType;
-<a name="l00044"></a>00044   <span class="keywordtype">bool</span> isLocked;
-<a name="l00045"></a>00045   T* lockBuf;
-<a name="l00046"></a>00046   size_t bufStride;
-<a name="l00047"></a>00047   
-<a name="l00048"></a>00048   <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock</a>() {}
-<a name="l00049"></a>00049 <span class="keyword">public</span>:
-<a name="l00053"></a><a class="code" href="classcsRenderBufferLock.html#a0">00053</a>   <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock</a> (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* buf, 
-<a name="l00054"></a>00054     <a class="code" href="group__gfx3d.html#ga16">csRenderBufferLockType</a> lock = <a class="code" href="group__gfx3d.html#gga16a16">CS_BUF_LOCK_NORMAL</a>) : buffer(buf),
-<a name="l00055"></a>00055     lockType(lock), isLocked(false), lockBuf(0), 
-<a name="l00056"></a>00056     bufStride(buf ? buf-&gt;GetElementDistance() : 0)
-<a name="l00057"></a>00057   {
-<a name="l00058"></a>00058   }
-<a name="l00059"></a>00059   
-<a name="l00063"></a><a class="code" href="classcsRenderBufferLock.html#a8">00063</a>   <a class="code" href="classcsRenderBufferLock.html#a8">~csRenderBufferLock</a>()
-<a name="l00064"></a>00064   {
-<a name="l00065"></a>00065     <a class="code" href="classcsRenderBufferLock.html#a7">Unlock</a>();
-<a name="l00066"></a>00066   }
-<a name="l00067"></a>00067   
-<a name="l00072"></a><a class="code" href="classcsRenderBufferLock.html#a4">00072</a>   T* <a class="code" href="classcsRenderBufferLock.html#a4">Lock</a> ()
-<a name="l00073"></a>00073   {
-<a name="l00074"></a>00074     <span class="keywordflow">if</span> (!isLocked)
-<a name="l00075"></a>00075     {
-<a name="l00076"></a>00076       lockBuf = 
-<a name="l00077"></a>00077         buffer ? ((T*)((<a class="code" href="cstypes_8h.html#a9">uint8</a>*)buffer-&gt;Lock (lockType))) : (T*)-1;
-<a name="l00078"></a>00078       isLocked = <span class="keyword">true</span>;
-<a name="l00079"></a>00079     }
-<a name="l00080"></a>00080     <span class="keywordflow">return</span> lockBuf;
-<a name="l00081"></a>00081   }
-<a name="l00082"></a>00082   
-<a name="l00084"></a><a class="code" href="classcsRenderBufferLock.html#a7">00084</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferLock.html#a7">Unlock</a> ()
-<a name="l00085"></a>00085   {
-<a name="l00086"></a>00086     <span class="keywordflow">if</span> (isLocked)
-<a name="l00087"></a>00087     {
-<a name="l00088"></a>00088       <span class="keywordflow">if</span> (buffer) buffer-&gt;Release();
-<a name="l00089"></a>00089       isLocked = <span class="keyword">false</span>;
-<a name="l00090"></a>00090     }
-<a name="l00091"></a>00091   }
-<a name="l00092"></a>00092   
-<a name="l00097"></a><a class="code" href="classcsRenderBufferLock.html#a5">00097</a>   <a class="code" href="classcsRenderBufferLock.html#a5">operator T* </a>()
-<a name="l00098"></a>00098   {
-<a name="l00099"></a>00099     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a4">Lock</a>();
-<a name="l00100"></a>00100   }
-<a name="l00101"></a>00101 
-<a name="l00103"></a><a class="code" href="classcsRenderBufferLock.html#a6">00103</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a6">operator [] </a>(size_t n)
-<a name="l00104"></a>00104   {
-<a name="l00105"></a>00105     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a1">Get</a> (n);
-<a name="l00106"></a>00106   }
-<a name="l00107"></a>00107 
-<a name="l00109"></a><a class="code" href="classcsRenderBufferLock.html#a1">00109</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a1">Get</a> (size_t n)
-<a name="l00110"></a>00110   {
-<a name="l00111"></a>00111     <span class="keywordflow">return</span> *((T*)((<a class="code" href="cstypes_8h.html#a9">uint8</a>*)<a class="code" href="classcsRenderBufferLock.html#a4">Lock</a>() + n * bufStride));
-<a name="l00112"></a>00112   }
-<a name="l00113"></a>00113   
-<a name="l00115"></a><a class="code" href="classcsRenderBufferLock.html#a2">00115</a>   size_t <a class="code" href="classcsRenderBufferLock.html#a2">GetSize</a>()<span class="keyword"> const</span>
-<a name="l00116"></a>00116 <span class="keyword">  </span>{
-<a name="l00117"></a>00117     <span class="keywordflow">return</span> buffer ? buffer-&gt;GetElementCount() : 0;
-<a name="l00118"></a>00118   }
-<a name="l00119"></a>00119 
-<a name="l00121"></a><a class="code" href="classcsRenderBufferLock.html#a3">00121</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsRenderBufferLock.html#a3">IsValid</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> buffer.IsValid(); }
-<a name="l00122"></a>00122 };
-<a name="l00123"></a>00123 
-<a name="l00124"></a>00124 <span class="preprocessor">#endif // __CS_CSTOOL_RBUFLOCK_H__</span>
+<a name="l00043"></a>00043   TbufferKeeper buffer;
+<a name="l00045"></a>00045   <a class="code" href="cstypes_8h.html#a27">uint</a> lockState;
+<a name="l00047"></a>00047   T* lockBuf;
+<a name="l00049"></a>00049   size_t bufStride;
+<a name="l00050"></a>00050 <span class="preprocessor">#ifdef CS_DEBUG</span>
+<a name="l00051"></a>00051 <span class="preprocessor"></span>
+<a name="l00052"></a>00052   size_t elements;
+<a name="l00053"></a>00053 <span class="preprocessor">#endif</span>
+<a name="l00054"></a>00054 <span class="preprocessor"></span>
+<a name="l00055"></a>00055   size_t currElement;
+<a name="l00056"></a>00056   
+<a name="l00057"></a>00057   <span class="keyword">enum</span> { LockedFlag = 0x10000, LockTypeMask = 0xffff };
+<a name="l00058"></a>00058   <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsLocked() { <span class="keywordflow">return</span> lockState &amp; LockedFlag; }
+<a name="l00059"></a>00059   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetLocked (<span class="keywordtype">bool</span> b) 
+<a name="l00060"></a>00060   { lockState = b ? (lockState | LockedFlag) : (lockState &amp; ~LockedFlag); }
+<a name="l00061"></a>00061   <span class="keyword">inline</span> <a class="code" href="group__gfx3d.html#ga12">csRenderBufferLockType</a> LockType() 
+<a name="l00062"></a>00062   { <span class="keywordflow">return</span> (<a class="code" href="group__gfx3d.html#ga12">csRenderBufferLockType</a>)(lockState &amp; LockTypeMask); }
+<a name="l00063"></a>00063   
+<a name="l00064"></a>00064   <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock</a>() {}
+<a name="l00065"></a>00065 <span class="keyword">public</span>:
+<a name="l00069"></a><a class="code" href="classcsRenderBufferLock.html#a0">00069</a>   <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock</a> (<a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* buf, 
+<a name="l00070"></a>00070     <a class="code" href="group__gfx3d.html#ga12">csRenderBufferLockType</a> lock = <a class="code" href="group__gfx3d.html#gga12a16">CS_BUF_LOCK_NORMAL</a>) : buffer(buf),
+<a name="l00071"></a>00071     lockState(lock), lockBuf(0), 
+<a name="l00072"></a>00072     bufStride(buf ? buf-&gt;GetElementDistance() : 0),
+<a name="l00073"></a>00073     currElement(0)
+<a name="l00074"></a>00074   {
+<a name="l00075"></a>00075 <span class="preprocessor">#ifdef CS_DEBUG</span>
+<a name="l00076"></a>00076 <span class="preprocessor"></span>    elements = buf-&gt;<a class="code" href="structiRenderBuffer.html#a4">GetElementCount</a>();
+<a name="l00077"></a>00077 <span class="preprocessor">#endif</span>
+<a name="l00078"></a>00078 <span class="preprocessor"></span>  }
+<a name="l00079"></a>00079   
+<a name="l00083"></a><a class="code" href="classcsRenderBufferLock.html#a10">00083</a>   <a class="code" href="classcsRenderBufferLock.html#a10">~csRenderBufferLock</a>()
+<a name="l00084"></a>00084   {
+<a name="l00085"></a>00085     <a class="code" href="classcsRenderBufferLock.html#a9">Unlock</a>();
+<a name="l00086"></a>00086   }
+<a name="l00087"></a>00087   
+<a name="l00092"></a><a class="code" href="classcsRenderBufferLock.html#a4">00092</a>   T* <a class="code" href="classcsRenderBufferLock.html#a4">Lock</a> ()
+<a name="l00093"></a>00093   {
+<a name="l00094"></a>00094     <span class="keywordflow">if</span> (!IsLocked())
+<a name="l00095"></a>00095     {
+<a name="l00096"></a>00096       lockBuf = 
+<a name="l00097"></a>00097         buffer ? ((T*)((<a class="code" href="cstypes_8h.html#a9">uint8</a>*)buffer-&gt;Lock (LockType()))) : (T*)-1;
+<a name="l00098"></a>00098       SetLocked (<span class="keyword">true</span>);
+<a name="l00099"></a>00099     }
+<a name="l00100"></a>00100     <span class="keywordflow">return</span> lockBuf;
+<a name="l00101"></a>00101   }
+<a name="l00102"></a>00102   
+<a name="l00104"></a><a class="code" href="classcsRenderBufferLock.html#a9">00104</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferLock.html#a9">Unlock</a> ()
+<a name="l00105"></a>00105   {
+<a name="l00106"></a>00106     <span class="keywordflow">if</span> (IsLocked ())
+<a name="l00107"></a>00107     {
+<a name="l00108"></a>00108       <span class="keywordflow">if</span> (buffer) buffer-&gt;Release();
+<a name="l00109"></a>00109       SetLocked (<span class="keyword">false</span>);
+<a name="l00110"></a>00110     }
+<a name="l00111"></a>00111   }
+<a name="l00112"></a>00112   
+<a name="l00117"></a><a class="code" href="classcsRenderBufferLock.html#a6">00117</a>   <a class="code" href="classcsRenderBufferLock.html#a6">operator T* </a>()
+<a name="l00118"></a>00118   {
+<a name="l00119"></a>00119     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a4">Lock</a>();
+<a name="l00120"></a>00120   }
+<a name="l00121"></a>00121 
+<a name="l00123"></a><a class="code" href="classcsRenderBufferLock.html#a5">00123</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a5">operator*</a>()
+<a name="l00124"></a>00124   {
+<a name="l00125"></a>00125     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a1">Get</a> (currElement);
+<a name="l00126"></a>00126   }
+<a name="l00127"></a>00127 
+<a name="l00129"></a><a class="code" href="classcsRenderBufferLock.html#a7">00129</a>   <span class="keywordtype">void</span> <a class="code" href="classcsRenderBufferLock.html#a7">operator++ </a>()
+<a name="l00130"></a>00130   {
+<a name="l00131"></a>00131     currElement++;
+<a name="l00132"></a>00132     <a class="code" href="cssysdef_8h.html#a37">CS_ASSERT</a>(currElement&lt;elements);
+<a name="l00133"></a>00133   }
+<a name="l00134"></a>00134 
+<a name="l00136"></a><a class="code" href="classcsRenderBufferLock.html#a8">00136</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a8">operator [] </a>(size_t n)
+<a name="l00137"></a>00137   {
+<a name="l00138"></a>00138     <span class="keywordflow">return</span> <a class="code" href="classcsRenderBufferLock.html#a1">Get</a> (n);
+<a name="l00139"></a>00139   }
+<a name="l00140"></a>00140 
+<a name="l00142"></a><a class="code" href="classcsRenderBufferLock.html#a1">00142</a>   T&amp; <a class="code" href="classcsRenderBufferLock.html#a1">Get</a> (size_t n)
+<a name="l00143"></a>00143   {
+<a name="l00144"></a>00144     <a class="code" href="cssysdef_8h.html#a37">CS_ASSERT</a> (n &lt; elements);
+<a name="l00145"></a>00145     <span class="keywordflow">return</span> *((T*)((<a class="code" href="cstypes_8h.html#a9">uint8</a>*)<a class="code" href="classcsRenderBufferLock.html#a4">Lock</a>() + n * bufStride));
+<a name="l00146"></a>00146   }
+<a name="l00147"></a>00147   
+<a name="l00149"></a><a class="code" href="classcsRenderBufferLock.html#a2">00149</a>   size_t <a class="code" href="classcsRenderBufferLock.html#a2">GetSize</a>()<span class="keyword"> const</span>
+<a name="l00150"></a>00150 <span class="keyword">  </span>{
+<a name="l00151"></a>00151     <span class="keywordflow">return</span> buffer ? buffer-&gt;GetElementCount() : 0;
+<a name="l00152"></a>00152   }
+<a name="l00153"></a>00153 
+<a name="l00155"></a><a class="code" href="classcsRenderBufferLock.html#a3">00155</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsRenderBufferLock.html#a3">IsValid</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> buffer.IsValid(); }
+<a name="l00156"></a>00156 };
+<a name="l00157"></a>00157 
+<a name="l00158"></a>00158 <span class="preprocessor">#endif // __CS_CSTOOL_RBUFLOCK_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

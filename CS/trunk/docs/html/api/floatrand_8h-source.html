@@ -17,7 +17,7 @@
 <div class="qindex"><a class="qindex" href="index.html">Main&nbsp;Page</a> | <a class="qindex" href="modules.html">Modules</a> | <a class="qindex" href="namespaces.html">Namespace List</a> | <a class="qindex" href="hierarchy.html">Class&nbsp;Hierarchy</a> | <a class="qindex" href="classes.html">Alphabetical&nbsp;List</a> | <a class="qindex" href="annotated.html">Class&nbsp;List</a> | <a class="qindex" href="dirs.html">Directories</a> | <a class="qindex" href="files.html">File&nbsp;List</a> | <a class="qindex" href="namespacemembers.html">Namespace&nbsp;Members</a> | <a class="qindex" href="functions.html">Class&nbsp;Members</a> | <a class="qindex" href="globals.html">File&nbsp;Members</a> | <a class="qindex" href="pages.html">Related&nbsp;Pages</a></div>
 <div class="nav">
 <a class="el" href="dir_000024.html">csutil</a></div>
-<h1>floatrand.h</h1><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
+<h1>floatrand.h</h1><a href="floatrand_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
 <a name="l00002"></a>00002 <span class="comment">    Copyright (C) 2004 by Jorrit Tyberghein</span>
 <a name="l00003"></a>00003 <span class="comment">    Copyright (C) 2005 by Eric Sunshine</span>
 <a name="l00004"></a>00004 <span class="comment"></span>
@@ -39,50 +39,50 @@
 <a name="l00020"></a>00020 <span class="preprocessor">#ifndef __CS_CSUTIL_FLOATRAND_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_FLOATRAND_H__</span>
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
-<a name="l00023"></a>00023 <span class="preprocessor">#include "csextern.h"</span>
-<a name="l00024"></a>00024 
-<a name="l00028"></a><a class="code" href="classcsRandomFloatGen.html">00028</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsRandomFloatGen.html">csRandomFloatGen</a>
-<a name="l00029"></a>00029 {
-<a name="l00030"></a>00030 <span class="keyword">private</span>:
-<a name="l00031"></a>00031   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> seed;
-<a name="l00032"></a>00032 
-<a name="l00033"></a>00033 <span class="keyword">public</span>:
-<a name="l00035"></a><a class="code" href="classcsRandomFloatGen.html#a1">00035</a>   <a class="code" href="classcsRandomFloatGen.html">csRandomFloatGen</a> ()
-<a name="l00036"></a>00036   { Initialize(); }
-<a name="l00038"></a><a class="code" href="classcsRandomFloatGen.html#a0">00038</a>   <a class="code" href="classcsRandomFloatGen.html">csRandomFloatGen</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> seed)
-<a name="l00039"></a>00039   { Initialize(seed); }
-<a name="l00040"></a>00040 
-<a name="l00042"></a>00042   <span class="keywordtype">void</span> Initialize();
-<a name="l00044"></a><a class="code" href="classcsRandomFloatGen.html#a6">00044</a>   <span class="keywordtype">void</span> Initialize(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> new_seed)
-<a name="l00045"></a>00045   { seed = new_seed; }
-<a name="l00046"></a>00046 
-<a name="l00048"></a><a class="code" href="classcsRandomFloatGen.html#a4">00048</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> Get()
-<a name="l00049"></a>00049   {
-<a name="l00050"></a>00050     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <span class="keyword">const</span> b = 1664525;
-<a name="l00051"></a>00051     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <span class="keyword">const</span> c = 1013904223;
-<a name="l00052"></a>00052     seed = b * seed + c;
-<a name="l00053"></a>00053     <a class="code" href="cstypes_8h.html#a13">uint32</a> temp = 0x3f800000 | (0x007fffff &amp; seed);
-<a name="l00054"></a>00054     <span class="keywordflow">return</span> (*(<span class="keywordtype">float</span>*)&amp;temp) - 1.0;
-<a name="l00055"></a>00055   }
-<a name="l00056"></a>00056 
-<a name="l00058"></a><a class="code" href="classcsRandomFloatGen.html#a3">00058</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> Get(<span class="keywordtype">float</span> max)
-<a name="l00059"></a>00059   {
-<a name="l00060"></a>00060     <span class="keywordflow">return</span> max * Get();
-<a name="l00061"></a>00061   }
-<a name="l00062"></a>00062 
-<a name="l00064"></a><a class="code" href="classcsRandomFloatGen.html#a2">00064</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> Get(<span class="keywordtype">float</span> min, <span class="keywordtype">float</span> max)
-<a name="l00065"></a>00065   {
-<a name="l00066"></a>00066     <span class="keywordtype">float</span> <span class="keyword">const</span> w = max - min;
-<a name="l00067"></a>00067     <span class="keywordflow">return</span> min + w * Get();
-<a name="l00068"></a>00068   }
-<a name="l00069"></a>00069 
-<a name="l00071"></a><a class="code" href="classcsRandomFloatGen.html#a5">00071</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> GetAngle()
-<a name="l00072"></a>00072   {
-<a name="l00073"></a>00073     <span class="keywordflow">return</span> TWO_PI * Get();
-<a name="l00074"></a>00074   }
-<a name="l00075"></a>00075 };
-<a name="l00076"></a>00076 
-<a name="l00077"></a>00077 <span class="preprocessor">#endif // __CS_CSUTIL_FLOATRAND_H__</span>
+<a name="l00027"></a>00027 <span class="preprocessor">#include "csextern.h"</span>
+<a name="l00028"></a>00028 
+<a name="l00032"></a><a class="code" href="classcsRandomFloatGen.html">00032</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsRandomFloatGen.html">csRandomFloatGen</a>
+<a name="l00033"></a>00033 {
+<a name="l00034"></a>00034 <span class="keyword">private</span>:
+<a name="l00035"></a>00035   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> seed;
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037 <span class="keyword">public</span>:
+<a name="l00039"></a><a class="code" href="classcsRandomFloatGen.html#a1">00039</a>   <a class="code" href="classcsRandomFloatGen.html">csRandomFloatGen</a> ()
+<a name="l00040"></a>00040   { Initialize(); }
+<a name="l00042"></a><a class="code" href="classcsRandomFloatGen.html#a0">00042</a>   <a class="code" href="classcsRandomFloatGen.html">csRandomFloatGen</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> seed)
+<a name="l00043"></a>00043   { Initialize(seed); }
+<a name="l00044"></a>00044 
+<a name="l00046"></a>00046   <span class="keywordtype">void</span> Initialize();
+<a name="l00048"></a><a class="code" href="classcsRandomFloatGen.html#a6">00048</a>   <span class="keywordtype">void</span> Initialize(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> new_seed)
+<a name="l00049"></a>00049   { seed = new_seed; }
+<a name="l00050"></a>00050 
+<a name="l00052"></a><a class="code" href="classcsRandomFloatGen.html#a4">00052</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> Get()
+<a name="l00053"></a>00053   {
+<a name="l00054"></a>00054     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <span class="keyword">const</span> b = 1664525;
+<a name="l00055"></a>00055     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <span class="keyword">const</span> c = 1013904223;
+<a name="l00056"></a>00056     seed = b * seed + c;
+<a name="l00057"></a>00057     <a class="code" href="cstypes_8h.html#a13">uint32</a> temp = 0x3f800000 | (0x007fffff &amp; seed);
+<a name="l00058"></a>00058     <span class="keywordflow">return</span> (*(<span class="keywordtype">float</span>*)&amp;temp) - 1.0;
+<a name="l00059"></a>00059   }
+<a name="l00060"></a>00060 
+<a name="l00062"></a><a class="code" href="classcsRandomFloatGen.html#a3">00062</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> Get(<span class="keywordtype">float</span> max)
+<a name="l00063"></a>00063   {
+<a name="l00064"></a>00064     <span class="keywordflow">return</span> max * Get();
+<a name="l00065"></a>00065   }
+<a name="l00066"></a>00066 
+<a name="l00068"></a><a class="code" href="classcsRandomFloatGen.html#a2">00068</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> Get(<span class="keywordtype">float</span> min, <span class="keywordtype">float</span> max)
+<a name="l00069"></a>00069   {
+<a name="l00070"></a>00070     <span class="keywordtype">float</span> <span class="keyword">const</span> w = max - min;
+<a name="l00071"></a>00071     <span class="keywordflow">return</span> min + w * Get();
+<a name="l00072"></a>00072   }
+<a name="l00073"></a>00073 
+<a name="l00075"></a><a class="code" href="classcsRandomFloatGen.html#a5">00075</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> GetAngle()
+<a name="l00076"></a>00076   {
+<a name="l00077"></a>00077     <span class="keywordflow">return</span> TWO_PI * Get();
+<a name="l00078"></a>00078   }
+<a name="l00079"></a>00079 };
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081 <span class="preprocessor">#endif // __CS_CSUTIL_FLOATRAND_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

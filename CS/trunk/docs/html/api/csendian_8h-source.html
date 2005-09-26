@@ -41,331 +41,351 @@
 <a name="l00029"></a>00029 <span class="preprocessor">#include &lt;<a class="code" href="math_8h.html">math.h</a>&gt;</span>
 <a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="cstypes_8h.html">cstypes.h</a>"</span>
 <a name="l00031"></a>00031 
-<a name="l00032"></a><a class="code" href="group__util.html#ga40">00032</a> <span class="preprocessor">#define csQroundSure(x) (int ((x) + ((x &lt; 0) ? -0.5 : +0.5)))</span>
+<a name="l00032"></a><a class="code" href="group__util.html#ga26">00032</a> <span class="preprocessor">#define csQroundSure(x) (int ((x) + ((x &lt; 0) ? -0.5 : +0.5)))</span>
 <a name="l00033"></a>00033 <span class="preprocessor"></span>
-<a name="l00035"></a><a class="code" href="group__util.html#ga5">00035</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="group__util.html#ga5">csFloatToIEEE</a> (<span class="keywordtype">float</span> f)
-<a name="l00036"></a>00036 {
-<a name="l00037"></a>00037 <span class="preprocessor">#ifdef CS_IEEE_DOUBLE_FORMAT</span>
-<a name="l00038"></a>00038 <span class="preprocessor"></span>  <span class="keywordflow">return</span> *(<a class="code" href="cstypes_8h.html#a13">uint32</a>*)&amp;f;
-<a name="l00039"></a>00039 <span class="preprocessor">#else</span>
-<a name="l00040"></a>00040 <span class="preprocessor"></span><span class="preprocessor">  #error Do not know how to convert to IEEE floats</span>
-<a name="l00041"></a>00041 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00042"></a>00042 <span class="preprocessor"></span>}
-<a name="l00043"></a>00043 
-<a name="l00045"></a><a class="code" href="group__util.html#ga6">00045</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="group__util.html#ga6">csIEEEToFloat</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> f)
-<a name="l00046"></a>00046 {
-<a name="l00047"></a>00047 <span class="preprocessor">#ifdef CS_IEEE_DOUBLE_FORMAT</span>
-<a name="l00048"></a>00048 <span class="preprocessor"></span>  <span class="keywordflow">return</span> *(<span class="keywordtype">float</span>*)&amp;f;
-<a name="l00049"></a>00049 <span class="preprocessor">#else</span>
-<a name="l00050"></a>00050 <span class="preprocessor"></span><span class="preprocessor">  #error Do not know how to convert from IEEE floats</span>
-<a name="l00051"></a>00051 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00052"></a>00052 <span class="preprocessor"></span>}
-<a name="l00053"></a>00053 
-<a name="l00054"></a><a class="code" href="structcsEndianSwap4.html">00054</a> <span class="keyword">struct </span><a class="code" href="structcsEndianSwap4.html">csEndianSwap4</a>
-<a name="l00055"></a>00055 {
-<a name="l00056"></a><a class="code" href="structcsEndianSwap4.html#o3">00056</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="structcsEndianSwap4.html#o0">b1</a>, <a class="code" href="structcsEndianSwap4.html#o1">b2</a>, <a class="code" href="structcsEndianSwap4.html#o2">b3</a>, <a class="code" href="structcsEndianSwap4.html#o3">b4</a>;
-<a name="l00057"></a>00057 };
-<a name="l00058"></a>00058 
-<a name="l00059"></a><a class="code" href="structcsEndianSwap8.html">00059</a> <span class="keyword">struct </span><a class="code" href="structcsEndianSwap8.html">csEndianSwap8</a>
-<a name="l00060"></a>00060 {
-<a name="l00061"></a><a class="code" href="structcsEndianSwap8.html#o7">00061</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="structcsEndianSwap8.html#o0">b1</a>, <a class="code" href="structcsEndianSwap8.html#o1">b2</a>, <a class="code" href="structcsEndianSwap8.html#o2">b3</a>, <a class="code" href="structcsEndianSwap8.html#o3">b4</a>,
-<a name="l00062"></a>00062                 <a class="code" href="structcsEndianSwap8.html#o4">b5</a>, <a class="code" href="structcsEndianSwap8.html#o5">b6</a>, <a class="code" href="structcsEndianSwap8.html#o6">b7</a>, <a class="code" href="structcsEndianSwap8.html#o7">b8</a>;
-<a name="l00063"></a>00063 };
-<a name="l00064"></a>00064 
-<a name="l00065"></a>00065 <span class="preprocessor">#ifdef CS_BIG_ENDIAN</span>
-<a name="l00066"></a>00066 <span class="preprocessor"></span><span class="preprocessor">#  define csBigEndianLongLong(x) x</span>
-<a name="l00067"></a>00067 <span class="preprocessor"></span><span class="preprocessor">#  define csBigEndianLong(x)  x</span>
-<a name="l00068"></a>00068 <span class="preprocessor"></span><span class="preprocessor">#  define csBigEndianShort(x) x</span>
-<a name="l00069"></a>00069 <span class="preprocessor"></span><span class="preprocessor">#  define csBigEndianFloat(x) x</span>
-<a name="l00070"></a>00070 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00071"></a>00071 <span class="preprocessor"></span>
-<a name="l00073"></a><a class="code" href="group__util.html#ga7">00073</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="group__util.html#ga7">csBigEndianLongLong</a> (<a class="code" href="cstypes_8h.html#a15">uint64</a> l)
-<a name="l00074"></a>00074 {
-<a name="l00075"></a>00075   <a class="code" href="cstypes_8h.html#a15">uint64</a> r;
-<a name="l00076"></a>00076   <a class="code" href="structcsEndianSwap8.html">csEndianSwap8</a> *p1 = (<a class="code" href="structcsEndianSwap8.html">csEndianSwap8</a> *)&amp;l;
-<a name="l00077"></a>00077   <a class="code" href="structcsEndianSwap8.html">csEndianSwap8</a> *p2 = (<a class="code" href="structcsEndianSwap8.html">csEndianSwap8</a> *)&amp;r;
-<a name="l00078"></a>00078   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o0">b1</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o7">b8</a>;
-<a name="l00079"></a>00079   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o1">b2</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o6">b7</a>;
-<a name="l00080"></a>00080   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o2">b3</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o5">b6</a>;
-<a name="l00081"></a>00081   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o3">b4</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o4">b5</a>;
-<a name="l00082"></a>00082   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o4">b5</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o3">b4</a>;
-<a name="l00083"></a>00083   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o5">b6</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o2">b3</a>;
-<a name="l00084"></a>00084   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o6">b7</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o1">b2</a>;
-<a name="l00085"></a>00085   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o7">b8</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o0">b1</a>;
-<a name="l00086"></a>00086   <span class="keywordflow">return</span> r;
-<a name="l00087"></a>00087 }
-<a name="l00088"></a>00088 
-<a name="l00089"></a>00089 
-<a name="l00091"></a><a class="code" href="group__util.html#ga8">00091</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="group__util.html#ga8">csBigEndianLong</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> l)
-<a name="l00092"></a>00092 { <span class="keywordflow">return</span> (l &gt;&gt; 24) | ((l &gt;&gt; 8) &amp; 0xff00) | ((l &lt;&lt; 8) &amp; 0xff0000) | (l &lt;&lt; 24); }
-<a name="l00093"></a>00093 
-<a name="l00095"></a><a class="code" href="group__util.html#ga9">00095</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="group__util.html#ga9">csBigEndianShort</a> (<a class="code" href="cstypes_8h.html#a11">uint16</a> s)
-<a name="l00096"></a>00096 { <span class="keywordflow">return</span> <a class="code" href="cstypes_8h.html#a11">uint16</a>((s &gt;&gt; 8) | (s &lt;&lt; 8)); }
-<a name="l00097"></a>00097 
-<a name="l00099"></a><a class="code" href="group__util.html#ga10">00099</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="group__util.html#ga10">csBigEndianFloat</a> (<span class="keywordtype">float</span> f)
-<a name="l00100"></a>00100 {
-<a name="l00101"></a>00101   <span class="comment">//@@WARNING: Should be removed -- use csFloatToLong instead</span>
-<a name="l00102"></a>00102   <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> tmp;
-<a name="l00103"></a>00103   <a class="code" href="structcsEndianSwap4.html">csEndianSwap4</a> *pf = (<a class="code" href="structcsEndianSwap4.html">csEndianSwap4</a> *)&amp;f;
-<a name="l00104"></a>00104   tmp = pf-&gt;<a class="code" href="structcsEndianSwap4.html#o0">b1</a>; pf-&gt;<a class="code" href="structcsEndianSwap4.html#o0">b1</a> = pf-&gt;<a class="code" href="structcsEndianSwap4.html#o3">b4</a>; pf-&gt;<a class="code" href="structcsEndianSwap4.html#o3">b4</a> = tmp;
-<a name="l00105"></a>00105   tmp = pf-&gt;<a class="code" href="structcsEndianSwap4.html#o1">b2</a>; pf-&gt;<a class="code" href="structcsEndianSwap4.html#o1">b2</a> = pf-&gt;<a class="code" href="structcsEndianSwap4.html#o2">b3</a>; pf-&gt;<a class="code" href="structcsEndianSwap4.html#o2">b3</a> = tmp;
-<a name="l00106"></a>00106   <span class="keywordflow">return</span> f;
-<a name="l00107"></a>00107 }
-<a name="l00108"></a>00108 
-<a name="l00109"></a>00109 <span class="preprocessor">#endif // CS_BIG_ENDIAN</span>
-<a name="l00110"></a>00110 <span class="preprocessor"></span>
+<a name="l00037"></a><a class="code" href="structcsSwapBytes.html">00037</a> <span class="keyword">struct </span><a class="code" href="structcsSwapBytes.html">csSwapBytes</a>
+<a name="l00038"></a>00038 {
+<a name="l00039"></a>00039 <span class="keyword">private</span>:
+<a name="l00040"></a>00040   <span class="keyword">struct </span>Swap8
+<a name="l00041"></a>00041   {
+<a name="l00042"></a>00042     <a class="code" href="cstypes_8h.html#a9">uint8</a> b1, b2, b3, b4, b5, b6, b7, b8;
+<a name="l00043"></a>00043   };
+<a name="l00044"></a>00044 <span class="keyword">public</span>:
+<a name="l00046"></a>00046 
+<a name="l00047"></a><a class="code" href="structcsSwapBytes.html#z514_8">00047</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (<a class="code" href="cstypes_8h.html#a11">uint16</a> s) 
+<a name="l00048"></a>00048   { <span class="keywordflow">return</span> (s &gt;&gt; 8) | (s &lt;&lt; 8); }
+<a name="l00049"></a><a class="code" href="structcsSwapBytes.html#z514_7">00049</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a12">int16</a>  <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (<a class="code" href="cstypes_8h.html#a12">int16</a> s)
+<a name="l00050"></a>00050   { <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a12">int16</a>)<a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> ((<a class="code" href="cstypes_8h.html#a11">uint16</a>)s); }
+<a name="l00051"></a><a class="code" href="structcsSwapBytes.html#z514_6">00051</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> l)
+<a name="l00052"></a>00052   { <span class="keywordflow">return</span> (l &gt;&gt; 24) | ((l &gt;&gt; 8) &amp; 0xff00) | ((l &lt;&lt; 8) &amp; 0xff0000) | (l &lt;&lt; 24); }
+<a name="l00053"></a><a class="code" href="structcsSwapBytes.html#z514_5">00053</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a14">int32</a>  <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (<a class="code" href="cstypes_8h.html#a14">int32</a> l)
+<a name="l00054"></a>00054   { <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a14">int32</a>)<a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> ((<a class="code" href="cstypes_8h.html#a13">uint32</a>)l); }
+<a name="l00055"></a><a class="code" href="structcsSwapBytes.html#z514_4">00055</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (<a class="code" href="cstypes_8h.html#a15">uint64</a> l)
+<a name="l00056"></a>00056   {
+<a name="l00057"></a>00057     <a class="code" href="cstypes_8h.html#a15">uint64</a> r;
+<a name="l00058"></a>00058     Swap8 *p1 = (Swap8 *)&amp;l;
+<a name="l00059"></a>00059     Swap8 *p2 = (Swap8 *)&amp;r;
+<a name="l00060"></a>00060     p2-&gt;b1 = p1-&gt;b8;
+<a name="l00061"></a>00061     p2-&gt;b2 = p1-&gt;b7;
+<a name="l00062"></a>00062     p2-&gt;b3 = p1-&gt;b6;
+<a name="l00063"></a>00063     p2-&gt;b4 = p1-&gt;b5;
+<a name="l00064"></a>00064     p2-&gt;b5 = p1-&gt;b4;
+<a name="l00065"></a>00065     p2-&gt;b6 = p1-&gt;b3;
+<a name="l00066"></a>00066     p2-&gt;b7 = p1-&gt;b2;
+<a name="l00067"></a>00067     p2-&gt;b8 = p1-&gt;b1;
+<a name="l00068"></a>00068     <span class="keywordflow">return</span> r;
+<a name="l00069"></a>00069   }
+<a name="l00070"></a><a class="code" href="structcsSwapBytes.html#z514_3">00070</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a16">int64</a>  <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (<a class="code" href="cstypes_8h.html#a16">int64</a> l)
+<a name="l00071"></a>00071   { <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a16">int64</a>)<a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> ((<a class="code" href="cstypes_8h.html#a15">uint64</a>)l); }
+<a name="l00072"></a>00072   
+<a name="l00073"></a><a class="code" href="structcsSwapBytes.html#z514_9">00073</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsSwapBytes.html#z514_9">UInt16</a> (<a class="code" href="cstypes_8h.html#a11">uint16</a> x) { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (x); }
+<a name="l00074"></a><a class="code" href="structcsSwapBytes.html#z514_0">00074</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a12">int16</a>  <a class="code" href="structcsSwapBytes.html#z514_0">Int16</a>  (<a class="code" href="cstypes_8h.html#a12">int16</a> x)  { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (x); }
+<a name="l00075"></a><a class="code" href="structcsSwapBytes.html#z514_10">00075</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structcsSwapBytes.html#z514_10">UInt32</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> x) { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (x); }
+<a name="l00076"></a><a class="code" href="structcsSwapBytes.html#z514_1">00076</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a14">int32</a>  <a class="code" href="structcsSwapBytes.html#z514_1">Int32</a>  (<a class="code" href="cstypes_8h.html#a14">int32</a> x)  { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (x); }
+<a name="l00077"></a><a class="code" href="structcsSwapBytes.html#z514_11">00077</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structcsSwapBytes.html#z514_11">UInt64</a> (<a class="code" href="cstypes_8h.html#a15">uint64</a> x) { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (x); }
+<a name="l00078"></a><a class="code" href="structcsSwapBytes.html#z514_2">00078</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a16">int64</a>  <a class="code" href="structcsSwapBytes.html#z514_2">Int64</a>  (<a class="code" href="cstypes_8h.html#a16">int64</a> x)  { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">Swap</a> (x); }
+<a name="l00080"></a>00080 };
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082 <span class="preprocessor">#ifdef CS_BIG_ENDIAN</span>
+<a name="l00083"></a>00083 <span class="preprocessor"></span><span class="keyword">struct </span>csBigEndian
+<a name="l00084"></a>00084 #else
+<a name="l00090"></a><a class="code" href="structcsLittleEndian.html">00090</a> struct <a class="code" href="structcsLittleEndian.html">csLittleEndian</a>
+<a name="l00091"></a>00091 #endif
+<a name="l00092"></a>00092 {
+<a name="l00094"></a>00094 
+<a name="l00095"></a><a class="code" href="structcsLittleEndian.html#z515_5">00095</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a11">uint16</a> Convert (<a class="code" href="cstypes_8h.html#a11">uint16</a> x) { <span class="keywordflow">return</span> x; }
+<a name="l00096"></a><a class="code" href="structcsLittleEndian.html#z515_4">00096</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a12">int16</a>  Convert (<a class="code" href="cstypes_8h.html#a12">int16</a> x)  { <span class="keywordflow">return</span> x; }
+<a name="l00097"></a><a class="code" href="structcsLittleEndian.html#z515_3">00097</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a13">uint32</a> Convert (<a class="code" href="cstypes_8h.html#a13">uint32</a> x) { <span class="keywordflow">return</span> x; }
+<a name="l00098"></a><a class="code" href="structcsLittleEndian.html#z515_2">00098</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a14">int32</a>  Convert (<a class="code" href="cstypes_8h.html#a14">int32</a> x)  { <span class="keywordflow">return</span> x; }
+<a name="l00099"></a><a class="code" href="structcsLittleEndian.html#z515_1">00099</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a15">uint64</a> Convert (<a class="code" href="cstypes_8h.html#a15">uint64</a> x) { <span class="keywordflow">return</span> x; }
+<a name="l00100"></a><a class="code" href="structcsLittleEndian.html#z515_0">00100</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a16">int64</a>  Convert (<a class="code" href="cstypes_8h.html#a16">int64</a> x)  { <span class="keywordflow">return</span> x; }
+<a name="l00101"></a>00101   
+<a name="l00102"></a><a class="code" href="structcsLittleEndian.html#z515_9">00102</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a11">uint16</a> UInt16 (<a class="code" href="cstypes_8h.html#a11">uint16</a> x) { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00103"></a><a class="code" href="structcsLittleEndian.html#z515_6">00103</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a12">int16</a>  Int16  (<a class="code" href="cstypes_8h.html#a12">int16</a> x)  { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00104"></a><a class="code" href="structcsLittleEndian.html#z515_10">00104</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a13">uint32</a> UInt32 (<a class="code" href="cstypes_8h.html#a13">uint32</a> x) { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00105"></a><a class="code" href="structcsLittleEndian.html#z515_7">00105</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a14">int32</a>  Int32  (<a class="code" href="cstypes_8h.html#a14">int32</a> x)  { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00106"></a><a class="code" href="structcsLittleEndian.html#z515_11">00106</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a15">uint64</a> UInt64 (<a class="code" href="cstypes_8h.html#a15">uint64</a> x) { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00107"></a><a class="code" href="structcsLittleEndian.html#z515_8">00107</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a16">int64</a>  Int64  (<a class="code" href="cstypes_8h.html#a16">int64</a> x)  { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00109"></a>00109 };
+<a name="l00110"></a>00110 
 <a name="l00111"></a>00111 <span class="preprocessor">#ifdef CS_LITTLE_ENDIAN</span>
-<a name="l00112"></a>00112 <span class="preprocessor"></span><span class="preprocessor">#  define csLittleEndianLongLong(x) x</span>
-<a name="l00113"></a>00113 <span class="preprocessor"></span><span class="preprocessor">#  define csLittleEndianLong(x)  x</span>
-<a name="l00114"></a>00114 <span class="preprocessor"></span><span class="preprocessor">#  define csLittleEndianShort(x) x</span>
-<a name="l00115"></a>00115 <span class="preprocessor"></span><span class="preprocessor">#  define csLittleEndianFloat(x) x</span>
-<a name="l00116"></a>00116 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00117"></a>00117 <span class="preprocessor"></span>
-<a name="l00119"></a><a class="code" href="group__util.html#ga11">00119</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="group__util.html#ga11">csLittleEndianLongLong</a> (<a class="code" href="cstypes_8h.html#a15">uint64</a> l)
-<a name="l00120"></a>00120 {
-<a name="l00121"></a>00121   <a class="code" href="cstypes_8h.html#a15">uint64</a> r;
-<a name="l00122"></a>00122   <a class="code" href="structcsEndianSwap8.html">csEndianSwap8</a> *p1 = (<a class="code" href="structcsEndianSwap8.html">csEndianSwap8</a> *)&amp;l;
-<a name="l00123"></a>00123   <a class="code" href="structcsEndianSwap8.html">csEndianSwap8</a> *p2 = (<a class="code" href="structcsEndianSwap8.html">csEndianSwap8</a> *)&amp;r;
-<a name="l00124"></a>00124   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o0">b1</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o7">b8</a>;
-<a name="l00125"></a>00125   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o1">b2</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o6">b7</a>;
-<a name="l00126"></a>00126   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o2">b3</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o5">b6</a>;
-<a name="l00127"></a>00127   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o3">b4</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o4">b5</a>;
-<a name="l00128"></a>00128   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o4">b5</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o3">b4</a>;
-<a name="l00129"></a>00129   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o5">b6</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o2">b3</a>;
-<a name="l00130"></a>00130   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o6">b7</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o1">b2</a>;
-<a name="l00131"></a>00131   p2-&gt;<a class="code" href="structcsEndianSwap8.html#o7">b8</a> = p1-&gt;<a class="code" href="structcsEndianSwap8.html#o0">b1</a>;
-<a name="l00132"></a>00132   <span class="keywordflow">return</span> r;
-<a name="l00133"></a>00133 }
-<a name="l00134"></a>00134 
-<a name="l00136"></a><a class="code" href="group__util.html#ga12">00136</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="group__util.html#ga12">csLittleEndianLong</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> l)
-<a name="l00137"></a>00137 { <span class="keywordflow">return</span> (l &gt;&gt; 24) | ((l &gt;&gt; 8) &amp; 0xff00) | ((l &lt;&lt; 8) &amp; 0xff0000) | (l &lt;&lt; 24); }
-<a name="l00138"></a>00138 
-<a name="l00140"></a><a class="code" href="group__util.html#ga13">00140</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="group__util.html#ga13">csLittleEndianShort</a> (<a class="code" href="cstypes_8h.html#a11">uint16</a> s)
-<a name="l00141"></a>00141 { <span class="keywordflow">return</span> (s &gt;&gt; 8) | (s &lt;&lt; 8); }
-<a name="l00142"></a>00142 
-<a name="l00144"></a><a class="code" href="group__util.html#ga14">00144</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="group__util.html#ga14">csLittleEndianFloat</a> (<span class="keywordtype">float</span> f)
-<a name="l00145"></a>00145 {
-<a name="l00146"></a>00146   <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> tmp;
-<a name="l00147"></a>00147   <a class="code" href="structcsEndianSwap4.html">csEndianSwap4</a> *pf = (<a class="code" href="structcsEndianSwap4.html">csEndianSwap4</a> *)&amp;f;
-<a name="l00148"></a>00148   tmp = pf-&gt;<a class="code" href="structcsEndianSwap4.html#o0">b1</a>; pf-&gt;<a class="code" href="structcsEndianSwap4.html#o0">b1</a> = pf-&gt;<a class="code" href="structcsEndianSwap4.html#o3">b4</a>; pf-&gt;<a class="code" href="structcsEndianSwap4.html#o3">b4</a> = tmp;
-<a name="l00149"></a>00149   tmp = pf-&gt;<a class="code" href="structcsEndianSwap4.html#o1">b2</a>; pf-&gt;<a class="code" href="structcsEndianSwap4.html#o1">b2</a> = pf-&gt;<a class="code" href="structcsEndianSwap4.html#o2">b3</a>; pf-&gt;<a class="code" href="structcsEndianSwap4.html#o2">b3</a> = tmp;
-<a name="l00150"></a>00150   <span class="keywordflow">return</span> f;
-<a name="l00151"></a>00151 }
-<a name="l00152"></a>00152 
-<a name="l00153"></a>00153 <span class="preprocessor">#endif // CS_LITTLE_ENDIAN</span>
-<a name="l00154"></a>00154 <span class="preprocessor"></span>
-<a name="l00155"></a>00155 <span class="comment">/*</span>
-<a name="l00156"></a>00156 <span class="comment">    To be able to painlessly transfer files betwen platforms, we should</span>
-<a name="l00157"></a>00157 <span class="comment">    avoid using native floating-point format. Here are a couple of routines</span>
-<a name="l00158"></a>00158 <span class="comment">    that are guaranteed to work on all platforms.</span>
-<a name="l00159"></a>00159 <span class="comment"></span>
-<a name="l00160"></a>00160 <span class="comment">    The floating point is converted to a fixed 1.7.25 bits format</span>
-<a name="l00161"></a>00161 <span class="comment">    (one bit sign, 7 bits exponent, 25 bits mantissa) and back,</span>
-<a name="l00162"></a>00162 <span class="comment">    so that we can binary store floating-point number without</span>
-<a name="l00163"></a>00163 <span class="comment">    cross-platform problems. If you wonder why 1+7+25 = 33 while we</span>
-<a name="l00164"></a>00164 <span class="comment">    only have 32 bits, we'll ommit the most significant bit of mantissa</span>
-<a name="l00165"></a>00165 <span class="comment">    since it is always 1 (we use normalized numbers). This increases the</span>
-<a name="l00166"></a>00166 <span class="comment">    precision twice.</span>
-<a name="l00167"></a>00167 <span class="comment"></span>
-<a name="l00168"></a>00168 <span class="comment">    For double, we use one bit sign, 15 bits exponent, 49 bits mantissa.</span>
-<a name="l00169"></a>00169 <span class="comment">*/</span>
-<a name="l00170"></a>00170 
-<a name="l00175"></a><a class="code" href="group__util.html#ga15">00175</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a14">int32</a> <a class="code" href="group__util.html#ga15">csFloatToLong</a> (<span class="keywordtype">float</span> f)
-<a name="l00176"></a>00176 {
-<a name="l00177"></a>00177   <span class="keywordtype">int</span> exp;
-<a name="l00178"></a>00178   <a class="code" href="cstypes_8h.html#a14">int32</a> mant = <a class="code" href="group__util.html#ga40">csQroundSure</a> (frexp (f, &amp;exp) * 0x1000000);
-<a name="l00179"></a>00179   <a class="code" href="cstypes_8h.html#a14">int32</a> sign = mant &amp; 0x80000000;
-<a name="l00180"></a>00180   <span class="keywordflow">if</span> (mant &lt; 0) mant = -mant;
-<a name="l00181"></a>00181   <span class="keywordflow">if</span> (exp &gt; 63) exp = 63; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (exp &lt; -64) exp = -64;
-<a name="l00182"></a>00182   <span class="keywordflow">return</span> sign | ((exp &amp; 0x7f) &lt;&lt; 24) | (mant &amp; 0xffffff);
-<a name="l00183"></a>00183 }
-<a name="l00184"></a>00184 
-<a name="l00186"></a><a class="code" href="group__util.html#ga16">00186</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="group__util.html#ga16">csLongToFloat</a> (<a class="code" href="cstypes_8h.html#a14">int32</a> l)
-<a name="l00187"></a>00187 {
-<a name="l00188"></a>00188   <span class="keywordtype">int</span> exp = (l &gt;&gt; 24) &amp; 0x7f;
-<a name="l00189"></a>00189   <span class="keywordflow">if</span> (exp &amp; 0x40) exp = exp | ~0x7f;
-<a name="l00190"></a>00190   <span class="keywordtype">float</span> mant = float (l &amp; 0x00ffffff) / 0x1000000;
-<a name="l00191"></a>00191   <span class="keywordflow">if</span> (l &amp; 0x80000000) mant = -mant;
-<a name="l00192"></a>00192   <span class="keywordflow">return</span> (<span class="keywordtype">float</span>) ldexp (mant, exp);
-<a name="l00193"></a>00193 }
-<a name="l00194"></a>00194 
-<a name="l00195"></a>00195 <span class="comment">/* Implementation note: csDoubleToLongLong() and csLongLongToDouble()</span>
-<a name="l00196"></a>00196 <span class="comment"> *</span>
-<a name="l00197"></a>00197 <span class="comment"> * We avoid use of CONST_INT64() because 64-bit constants are illegal with g++</span>
-<a name="l00198"></a>00198 <span class="comment"> * under -ansi -pedantic, and we want this header to be useful to external</span>
-<a name="l00199"></a>00199 <span class="comment"> * projects which use -ansi -pedantic.  Instead, we use bit shifts, such as (1</span>
-<a name="l00200"></a>00200 <span class="comment"> * &lt;&lt; 59), and construct `mask' manually.</span>
-<a name="l00201"></a>00201 <span class="comment"> */</span>
-<a name="l00202"></a>00202 
-<a name="l00204"></a><a class="code" href="group__util.html#ga17">00204</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a16">int64</a> <a class="code" href="group__util.html#ga17">csDoubleToLongLong</a> (<span class="keywordtype">double</span> d)
-<a name="l00205"></a>00205 {
-<a name="l00206"></a>00206   <span class="keywordtype">int</span> exp;
-<a name="l00207"></a>00207   <a class="code" href="cstypes_8h.html#a16">int64</a> mant = (<a class="code" href="cstypes_8h.html#a16">int64</a>) (frexp (d, &amp;exp) * ((<a class="code" href="cstypes_8h.html#a16">int64</a>)1 &lt;&lt; 48));
-<a name="l00208"></a>00208   <a class="code" href="cstypes_8h.html#a16">int64</a> sign = mant &amp; ((<a class="code" href="cstypes_8h.html#a16">int64</a>)1 &lt;&lt; 59);
-<a name="l00209"></a>00209   <span class="keywordflow">if</span> (mant &lt; 0) mant = -mant;
-<a name="l00210"></a>00210   <span class="keywordflow">if</span> (exp &gt; 32767) exp = 32767; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (exp &lt; -32768) exp = -32768;
-<a name="l00211"></a>00211   <a class="code" href="cstypes_8h.html#a16">int64</a> <span class="keyword">const</span> mask = ((<a class="code" href="cstypes_8h.html#a15">uint64</a>)0xffff &lt;&lt; 32) | (<a class="code" href="cstypes_8h.html#a15">uint64</a>)0xffffffff;
-<a name="l00212"></a>00212   <span class="keywordflow">return</span> sign | ((<a class="code" href="cstypes_8h.html#a16">int64</a> (exp) &amp; 0x7fff) &lt;&lt; 48) | (mant &amp; mask);
-<a name="l00213"></a>00213 }
-<a name="l00214"></a>00214 
-<a name="l00216"></a><a class="code" href="group__util.html#ga18">00216</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code" href="group__util.html#ga18">csLongLongToDouble</a> (<a class="code" href="cstypes_8h.html#a16">int64</a> i)
-<a name="l00217"></a>00217 {
-<a name="l00218"></a>00218   <span class="keywordtype">int</span> exp = (i &gt;&gt; 48) &amp; 0x7fff;
-<a name="l00219"></a>00219   <span class="keywordflow">if</span> (exp &amp; 0x4000) exp = exp | ~0x7fff;
-<a name="l00220"></a>00220   <a class="code" href="cstypes_8h.html#a16">int64</a> <span class="keyword">const</span> mask = ((<a class="code" href="cstypes_8h.html#a15">uint64</a>)0xffff &lt;&lt; 32) | (<a class="code" href="cstypes_8h.html#a15">uint64</a>)0xffffffff;
-<a name="l00221"></a>00221   <span class="keywordtype">double</span> mant = double (i &amp; mask) / ((<a class="code" href="cstypes_8h.html#a16">int64</a>)1 &lt;&lt; 48);
-<a name="l00222"></a>00222   <span class="keywordflow">if</span> (i &amp; ((<a class="code" href="cstypes_8h.html#a16">int64</a>)1 &lt;&lt; 59)) mant = -mant;
-<a name="l00223"></a>00223   <span class="keywordflow">return</span> ldexp (mant, exp);
-<a name="l00224"></a>00224 }
-<a name="l00225"></a>00225 
-<a name="l00234"></a>00234 
-<a name="l00235"></a><a class="code" href="csendian_8h.html#a15">00235</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">short</span> <a class="code" href="csendian_8h.html#a15">csFloatToShort</a> (<span class="keywordtype">float</span> f)
-<a name="l00236"></a>00236 {
-<a name="l00237"></a>00237   <span class="keywordtype">int</span> exp;
-<a name="l00238"></a>00238   <span class="keywordtype">long</span> mant = <a class="code" href="group__util.html#ga40">csQroundSure</a> (frexp (f, &amp;exp) * 0x1000);
-<a name="l00239"></a>00239   <span class="keywordtype">long</span> sign = mant &amp; 0x8000;
-<a name="l00240"></a>00240   <span class="keywordflow">if</span> (mant &lt; 0) mant = -mant;
-<a name="l00241"></a>00241   <span class="keywordflow">if</span> (exp &gt; 7) mant = 0x7ff, exp = 7; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (exp &lt; -8) mant = 0, exp = -8;
-<a name="l00242"></a>00242   <span class="keywordflow">return</span> short(sign | ((exp &amp; 0xf) &lt;&lt; 11) | (mant &amp; 0x7ff));
-<a name="l00243"></a>00243 }
-<a name="l00244"></a>00244 
-<a name="l00246"></a><a class="code" href="csendian_8h.html#a16">00246</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a16">csShortToFloat</a> (<span class="keywordtype">short</span> s)
-<a name="l00247"></a>00247 {
-<a name="l00248"></a>00248   <span class="keywordtype">int</span> exp = (s &gt;&gt; 11) &amp; 0xf;
-<a name="l00249"></a>00249   <span class="keywordflow">if</span> (exp &amp; 0x8) exp = exp | ~0xf;
-<a name="l00250"></a>00250   <span class="keywordtype">float</span> mant = float ((s &amp; 0x07ff) | 0x0800) / 0x1000;
-<a name="l00251"></a>00251   <span class="keywordflow">if</span> (s &amp; 0x8000) mant = -mant;
-<a name="l00252"></a>00252   <span class="keywordflow">return</span> (<span class="keywordtype">float</span>) ldexp (mant, exp);
-<a name="l00253"></a>00253 }
-<a name="l00254"></a>00254 
-<a name="l00257"></a>00257 
-<a name="l00258"></a><a class="code" href="csendian_8h.html#a17">00258</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="csendian_8h.html#a17">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a15">uint64</a> l)
-<a name="l00259"></a>00259 { <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga11">csLittleEndianLongLong</a> (l); }
-<a name="l00260"></a>00260 
-<a name="l00262"></a><a class="code" href="csendian_8h.html#a18">00262</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a16">int64</a> <a class="code" href="csendian_8h.html#a17">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a16">int64</a> l)
-<a name="l00263"></a>00263 { <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga11">csLittleEndianLongLong</a> (l); }
-<a name="l00264"></a>00264 
-<a name="l00266"></a><a class="code" href="csendian_8h.html#a19">00266</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="csendian_8h.html#a17">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> l)
-<a name="l00267"></a>00267 { <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga12">csLittleEndianLong</a> (l); }
-<a name="l00268"></a>00268 
-<a name="l00270"></a><a class="code" href="csendian_8h.html#a20">00270</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a14">int32</a> <a class="code" href="csendian_8h.html#a17">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a14">int32</a> l)
-<a name="l00271"></a>00271 { <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga12">csLittleEndianLong</a> (l); }
-<a name="l00272"></a>00272 
-<a name="l00274"></a><a class="code" href="csendian_8h.html#a21">00274</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a12">int16</a> <a class="code" href="csendian_8h.html#a17">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a12">int16</a> s)
-<a name="l00275"></a>00275 { <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga13">csLittleEndianShort</a> (s); }
-<a name="l00276"></a>00276 
-<a name="l00278"></a><a class="code" href="csendian_8h.html#a22">00278</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="csendian_8h.html#a17">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a11">uint16</a> s)
-<a name="l00279"></a>00279 { <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga13">csLittleEndianShort</a> (s); }
+<a name="l00112"></a>00112 <span class="preprocessor"></span>
+<a name="l00117"></a>00117 <span class="keyword">struct </span>csBigEndian
+<a name="l00118"></a>00118 #else
+<a name="l00119"></a>00119 struct csLittleEndian
+<a name="l00120"></a>00120 #endif
+<a name="l00121"></a>00121 {
+<a name="l00122"></a>00122 <span class="keyword">public</span>:
+<a name="l00124"></a>00124 
+<a name="l00125"></a><a class="code" href="structcsLittleEndian.html#z516_5">00125</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a11">uint16</a> Convert (<a class="code" href="cstypes_8h.html#a11">uint16</a> s) 
+<a name="l00126"></a>00126   { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">csSwapBytes::Swap</a> (s); }
+<a name="l00127"></a><a class="code" href="structcsLittleEndian.html#z516_4">00127</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a12">int16</a>  Convert (<a class="code" href="cstypes_8h.html#a12">int16</a> s)
+<a name="l00128"></a>00128   { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">csSwapBytes::Swap</a> (s); }
+<a name="l00129"></a><a class="code" href="structcsLittleEndian.html#z516_3">00129</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a13">uint32</a> Convert (<a class="code" href="cstypes_8h.html#a13">uint32</a> l)
+<a name="l00130"></a>00130   { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">csSwapBytes::Swap</a> (l); }
+<a name="l00131"></a><a class="code" href="structcsLittleEndian.html#z516_2">00131</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a14">int32</a>  Convert (<a class="code" href="cstypes_8h.html#a14">int32</a> l)
+<a name="l00132"></a>00132   { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">csSwapBytes::Swap</a> (l); }
+<a name="l00133"></a><a class="code" href="structcsLittleEndian.html#z516_1">00133</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a15">uint64</a> Convert (<a class="code" href="cstypes_8h.html#a15">uint64</a> l)
+<a name="l00134"></a>00134   { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">csSwapBytes::Swap</a> (l); }
+<a name="l00135"></a><a class="code" href="structcsLittleEndian.html#z516_0">00135</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a16">int64</a>  Convert (<a class="code" href="cstypes_8h.html#a16">int64</a> l)
+<a name="l00136"></a>00136   { <span class="keywordflow">return</span> <a class="code" href="structcsSwapBytes.html#z514_8">csSwapBytes::Swap</a> (l); }
+<a name="l00137"></a>00137   
+<a name="l00138"></a><a class="code" href="structcsLittleEndian.html#z516_9">00138</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a11">uint16</a> UInt16 (<a class="code" href="cstypes_8h.html#a11">uint16</a> x) { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00139"></a><a class="code" href="structcsLittleEndian.html#z516_6">00139</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a12">int16</a>  Int16  (<a class="code" href="cstypes_8h.html#a12">int16</a> x)  { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00140"></a><a class="code" href="structcsLittleEndian.html#z516_10">00140</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a13">uint32</a> UInt32 (<a class="code" href="cstypes_8h.html#a13">uint32</a> x) { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00141"></a><a class="code" href="structcsLittleEndian.html#z516_7">00141</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a14">int32</a>  Int32  (<a class="code" href="cstypes_8h.html#a14">int32</a> x)  { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00142"></a><a class="code" href="structcsLittleEndian.html#z516_11">00142</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a15">uint64</a> UInt64 (<a class="code" href="cstypes_8h.html#a15">uint64</a> x) { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00143"></a><a class="code" href="structcsLittleEndian.html#z516_8">00143</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a16">int64</a>  Int64  (<a class="code" href="cstypes_8h.html#a16">int64</a> x)  { <span class="keywordflow">return</span> Convert (x); }
+<a name="l00145"></a>00145 };
+<a name="l00146"></a>00146 
+<a name="l00150"></a><a class="code" href="structcsIEEEfloat.html">00150</a> <span class="keyword">struct </span><a class="code" href="structcsIEEEfloat.html">csIEEEfloat</a>
+<a name="l00151"></a>00151 {
+<a name="l00152"></a>00152 <span class="preprocessor">#ifdef CS_IEEE_DOUBLE_FORMAT</span>
+<a name="l00153"></a>00153 <span class="preprocessor"></span>
+<a name="l00154"></a><a class="code" href="structcsIEEEfloat.html#e0">00154</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structcsIEEEfloat.html#e0">FromNative</a> (<span class="keywordtype">float</span> f)
+<a name="l00155"></a>00155   { <span class="keywordflow">return</span> *(<a class="code" href="cstypes_8h.html#a13">uint32</a>*)&amp;f; }
+<a name="l00157"></a><a class="code" href="structcsIEEEfloat.html#e1">00157</a>   <span class="keyword">static</span> CS_FORCEINLINE <span class="keywordtype">float</span> <a class="code" href="structcsIEEEfloat.html#e1">ToNative</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> f)
+<a name="l00158"></a>00158   { <span class="keywordflow">return</span> *(<span class="keywordtype">float</span>*)&amp;f; }
+<a name="l00159"></a>00159 <span class="preprocessor">#else</span>
+<a name="l00160"></a>00160 <span class="preprocessor"></span><span class="preprocessor">  #error Do not know how to convert to IEEE floats</span>
+<a name="l00161"></a>00161 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00162"></a>00162 <span class="preprocessor"></span>};
+<a name="l00163"></a>00163 
+<a name="l00172"></a><a class="code" href="structcsGetFromAddress.html">00172</a> <span class="keyword">struct </span><a class="code" href="structcsGetFromAddress.html">csGetFromAddress</a>
+<a name="l00173"></a>00173 {
+<a name="l00175"></a>00175 
+<a name="l00176"></a><a class="code" href="structcsGetFromAddress.html#z517_3">00176</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsGetFromAddress.html#z517_3">UInt16</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00177"></a>00177   {
+<a name="l00178"></a>00178 <span class="preprocessor">  #ifdef CS_STRICT_ALIGNMENT</span>
+<a name="l00179"></a>00179 <span class="preprocessor"></span>    <a class="code" href="cstypes_8h.html#a11">uint16</a> s; memcpy (&amp;s, buff, <span class="keyword">sizeof</span> (s));
+<a name="l00180"></a>00180     <span class="keywordflow">return</span> s;
+<a name="l00181"></a>00181 <span class="preprocessor">  #else</span>
+<a name="l00182"></a>00182 <span class="preprocessor"></span>    <span class="keywordflow">return</span> *(<a class="code" href="cstypes_8h.html#a11">uint16</a> *)buff;
+<a name="l00183"></a>00183 <span class="preprocessor">  #endif</span>
+<a name="l00184"></a>00184 <span class="preprocessor"></span>  }
+<a name="l00185"></a><a class="code" href="structcsGetFromAddress.html#z517_0">00185</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a12">int16</a>  <a class="code" href="structcsGetFromAddress.html#z517_0">Int16</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00186"></a>00186   { <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a12">int16</a>)<a class="code" href="structcsGetFromAddress.html#z517_3">UInt16</a> (buff); }
+<a name="l00187"></a><a class="code" href="structcsGetFromAddress.html#z517_4">00187</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structcsGetFromAddress.html#z517_4">UInt32</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00188"></a>00188   {
+<a name="l00189"></a>00189 <span class="preprocessor">  #ifdef CS_STRICT_ALIGNMENT</span>
+<a name="l00190"></a>00190 <span class="preprocessor"></span>    <a class="code" href="cstypes_8h.html#a13">uint32</a> s; memcpy (&amp;s, buff, <span class="keyword">sizeof</span> (s));
+<a name="l00191"></a>00191     <span class="keywordflow">return</span> s;
+<a name="l00192"></a>00192 <span class="preprocessor">  #else</span>
+<a name="l00193"></a>00193 <span class="preprocessor"></span>    <span class="keywordflow">return</span> *(<a class="code" href="cstypes_8h.html#a13">uint32</a> *)buff;
+<a name="l00194"></a>00194 <span class="preprocessor">  #endif</span>
+<a name="l00195"></a>00195 <span class="preprocessor"></span>  }
+<a name="l00196"></a><a class="code" href="structcsGetFromAddress.html#z517_1">00196</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a14">int32</a>  <a class="code" href="structcsGetFromAddress.html#z517_1">Int32</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00197"></a>00197   { <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a14">int32</a>)<a class="code" href="structcsGetFromAddress.html#z517_4">UInt32</a> (buff); }
+<a name="l00198"></a><a class="code" href="structcsGetFromAddress.html#z517_5">00198</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="structcsGetFromAddress.html#z517_5">UInt64</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00199"></a>00199   {
+<a name="l00200"></a>00200 <span class="preprocessor">  #ifdef CS_STRICT_ALIGNMENT</span>
+<a name="l00201"></a>00201 <span class="preprocessor"></span>    <a class="code" href="cstypes_8h.html#a15">uint64</a> s; memcpy (&amp;s, buff, <span class="keyword">sizeof</span> (s));
+<a name="l00202"></a>00202     <span class="keywordflow">return</span> s;
+<a name="l00203"></a>00203 <span class="preprocessor">  #else</span>
+<a name="l00204"></a>00204 <span class="preprocessor"></span>    <span class="keywordflow">return</span> *(<a class="code" href="cstypes_8h.html#a15">uint64</a> *)buff;
+<a name="l00205"></a>00205 <span class="preprocessor">  #endif</span>
+<a name="l00206"></a>00206 <span class="preprocessor"></span>  }
+<a name="l00207"></a><a class="code" href="structcsGetFromAddress.html#z517_2">00207</a>   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="cstypes_8h.html#a16">int64</a>  <a class="code" href="structcsGetFromAddress.html#z517_2">Int64</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00208"></a>00208   { <span class="keywordflow">return</span> (<a class="code" href="cstypes_8h.html#a16">int64</a>)<a class="code" href="structcsGetFromAddress.html#z517_5">UInt64</a> (buff); }
+<a name="l00210"></a>00210 };
+<a name="l00211"></a>00211 
+<a name="l00220"></a><a class="code" href="structcsSetToAddress.html">00220</a> <span class="keyword">struct </span><a class="code" href="structcsSetToAddress.html">csSetToAddress</a>
+<a name="l00221"></a>00221 {
+<a name="l00223"></a>00223 
+<a name="l00224"></a><a class="code" href="structcsSetToAddress.html#z518_3">00224</a>   <span class="keyword">static</span> CS_FORCEINLINE <span class="keywordtype">void</span> <a class="code" href="structcsSetToAddress.html#z518_3">UInt16</a> (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a11">uint16</a> s)
+<a name="l00225"></a>00225   {
+<a name="l00226"></a>00226 <span class="preprocessor">  #ifdef CS_STRICT_ALIGNMENT</span>
+<a name="l00227"></a>00227 <span class="preprocessor"></span>    memcpy (buff, &amp;s, <span class="keyword">sizeof</span> (s));
+<a name="l00228"></a>00228 <span class="preprocessor">  #else</span>
+<a name="l00229"></a>00229 <span class="preprocessor"></span>    *((<a class="code" href="cstypes_8h.html#a11">uint16</a> *)buff) = s;
+<a name="l00230"></a>00230 <span class="preprocessor">  #endif</span>
+<a name="l00231"></a>00231 <span class="preprocessor"></span>  }
+<a name="l00232"></a><a class="code" href="structcsSetToAddress.html#z518_0">00232</a>   <span class="keyword">static</span> CS_FORCEINLINE <span class="keywordtype">void</span> <a class="code" href="structcsSetToAddress.html#z518_0">Int16</a>  (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a12">int16</a> s)
+<a name="l00233"></a>00233   { <a class="code" href="structcsSetToAddress.html#z518_3">UInt16</a> (buff, (<a class="code" href="cstypes_8h.html#a11">uint16</a>)s); }
+<a name="l00234"></a><a class="code" href="structcsSetToAddress.html#z518_4">00234</a>   <span class="keyword">static</span> CS_FORCEINLINE <span class="keywordtype">void</span> <a class="code" href="structcsSetToAddress.html#z518_4">UInt32</a> (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a13">uint32</a> s)
+<a name="l00235"></a>00235   {
+<a name="l00236"></a>00236 <span class="preprocessor">  #ifdef CS_STRICT_ALIGNMENT</span>
+<a name="l00237"></a>00237 <span class="preprocessor"></span>    memcpy (buff, &amp;s, <span class="keyword">sizeof</span> (s));
+<a name="l00238"></a>00238 <span class="preprocessor">  #else</span>
+<a name="l00239"></a>00239 <span class="preprocessor"></span>    *((<a class="code" href="cstypes_8h.html#a13">uint32</a> *)buff) = s;
+<a name="l00240"></a>00240 <span class="preprocessor">  #endif</span>
+<a name="l00241"></a>00241 <span class="preprocessor"></span>  }
+<a name="l00242"></a><a class="code" href="structcsSetToAddress.html#z518_1">00242</a>   <span class="keyword">static</span> CS_FORCEINLINE <span class="keywordtype">void</span> <a class="code" href="structcsSetToAddress.html#z518_1">Int32</a>  (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a14">int32</a> s)
+<a name="l00243"></a>00243   { <a class="code" href="structcsSetToAddress.html#z518_4">UInt32</a> (buff, (<a class="code" href="cstypes_8h.html#a13">uint32</a>)s); }
+<a name="l00244"></a><a class="code" href="structcsSetToAddress.html#z518_5">00244</a>   <span class="keyword">static</span> CS_FORCEINLINE <span class="keywordtype">void</span> <a class="code" href="structcsSetToAddress.html#z518_5">UInt64</a> (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a15">uint64</a> s)
+<a name="l00245"></a>00245   {
+<a name="l00246"></a>00246 <span class="preprocessor">  #ifdef CS_STRICT_ALIGNMENT</span>
+<a name="l00247"></a>00247 <span class="preprocessor"></span>    memcpy (buff, &amp;s, <span class="keyword">sizeof</span> (s));
+<a name="l00248"></a>00248 <span class="preprocessor">  #else</span>
+<a name="l00249"></a>00249 <span class="preprocessor"></span>    *((<a class="code" href="cstypes_8h.html#a15">uint64</a> *)buff) = s;
+<a name="l00250"></a>00250 <span class="preprocessor">  #endif</span>
+<a name="l00251"></a>00251 <span class="preprocessor"></span>  }
+<a name="l00252"></a><a class="code" href="structcsSetToAddress.html#z518_2">00252</a>   <span class="keyword">static</span> CS_FORCEINLINE <span class="keywordtype">void</span> <a class="code" href="structcsSetToAddress.html#z518_2">Int64</a>  (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a16">int64</a> s)
+<a name="l00253"></a>00253   { <a class="code" href="structcsSetToAddress.html#z518_5">UInt64</a> (buff, (<a class="code" href="cstypes_8h.html#a15">uint64</a>)s); }
+<a name="l00255"></a>00255 };
+<a name="l00256"></a>00256 
+<a name="l00262"></a>00262 
+<a name="l00263"></a><a class="code" href="csendian_8h.html#a1">00263</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="csendian_8h.html#a1">csBigEndianLongLong</a> (<a class="code" href="cstypes_8h.html#a15">uint64</a> l)
+<a name="l00264"></a>00264 { <span class="keywordflow">return</span> csBigEndian::Convert (l); }
+<a name="l00265"></a>00265 
+<a name="l00267"></a><a class="code" href="csendian_8h.html#a2">00267</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="csendian_8h.html#a2">csBigEndianLong</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> l)
+<a name="l00268"></a>00268 { <span class="keywordflow">return</span> csBigEndian::Convert (l); }
+<a name="l00269"></a>00269 
+<a name="l00271"></a><a class="code" href="csendian_8h.html#a3">00271</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="csendian_8h.html#a3">csBigEndianShort</a> (<a class="code" href="cstypes_8h.html#a11">uint16</a> s)
+<a name="l00272"></a>00272 { <span class="keywordflow">return</span> csBigEndian::Convert (s); }
+<a name="l00273"></a>00273 
+<a name="l00275"></a><a class="code" href="csendian_8h.html#a4">00275</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a4">csBigEndianFloat</a> (<span class="keywordtype">float</span> f)
+<a name="l00276"></a>00276 { 
+<a name="l00277"></a>00277   <a class="code" href="cstypes_8h.html#a13">uint32</a> u = csBigEndian::Convert (*(<a class="code" href="cstypes_8h.html#a13">uint32</a>*)&amp;f); 
+<a name="l00278"></a>00278   <span class="keywordflow">return</span> *(<span class="keywordtype">float</span>*)&amp;u;
+<a name="l00279"></a>00279 }
 <a name="l00280"></a>00280 
-<a name="l00282"></a><a class="code" href="csendian_8h.html#a23">00282</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a17">csConvertEndian</a> (<span class="keywordtype">float</span> f)
-<a name="l00283"></a>00283 { <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga14">csLittleEndianFloat</a> (f); }
+<a name="l00282"></a><a class="code" href="csendian_8h.html#a5">00282</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="csendian_8h.html#a5">csLittleEndianLongLong</a> (<a class="code" href="cstypes_8h.html#a15">uint64</a> l)
+<a name="l00283"></a>00283 { <span class="keywordflow">return</span> <a class="code" href="structcsLittleEndian.html#z515_5">csLittleEndian::Convert</a> (l); }
 <a name="l00284"></a>00284 
-<a name="l00286"></a><a class="code" href="csendian_8h.html#a24">00286</a> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="csendian_8h.html#a24">csGetLittleEndianShort</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
-<a name="l00287"></a>00287 {
-<a name="l00288"></a>00288 <span class="preprocessor">#ifdef CS_STRICT_ALIGNMENT</span>
-<a name="l00289"></a>00289 <span class="preprocessor"></span>  <a class="code" href="cstypes_8h.html#a11">uint16</a> s; memcpy (&amp;s, buff, <span class="keyword">sizeof</span> (s));
-<a name="l00290"></a>00290   <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga13">csLittleEndianShort</a> (s);
-<a name="l00291"></a>00291 <span class="preprocessor">#else</span>
-<a name="l00292"></a>00292 <span class="preprocessor"></span>  <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga13">csLittleEndianShort</a> (*(<a class="code" href="cstypes_8h.html#a11">uint16</a> *)buff);
-<a name="l00293"></a>00293 <span class="preprocessor">#endif</span>
-<a name="l00294"></a>00294 <span class="preprocessor"></span>}
-<a name="l00295"></a>00295 
-<a name="l00297"></a><a class="code" href="csendian_8h.html#a25">00297</a> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="csendian_8h.html#a25">csGetLittleEndianLong</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
-<a name="l00298"></a>00298 {
-<a name="l00299"></a>00299 <span class="preprocessor">#ifdef CS_STRICT_ALIGNMENT</span>
-<a name="l00300"></a>00300 <span class="preprocessor"></span>  <a class="code" href="cstypes_8h.html#a13">uint32</a> l; memcpy (&amp;l, buff, <span class="keyword">sizeof</span> (l));
-<a name="l00301"></a>00301   <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga12">csLittleEndianLong</a> (l);
-<a name="l00302"></a>00302 <span class="preprocessor">#else</span>
-<a name="l00303"></a>00303 <span class="preprocessor"></span>  <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga12">csLittleEndianLong</a> (*(<a class="code" href="cstypes_8h.html#a13">uint32</a> *)buff);
-<a name="l00304"></a>00304 <span class="preprocessor">#endif</span>
-<a name="l00305"></a>00305 <span class="preprocessor"></span>}
-<a name="l00306"></a>00306 
-<a name="l00308"></a><a class="code" href="csendian_8h.html#a26">00308</a> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a26">csGetLittleEndianFloat32</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
-<a name="l00309"></a>00309 { <a class="code" href="cstypes_8h.html#a13">uint32</a> l = <a class="code" href="csendian_8h.html#a25">csGetLittleEndianLong</a> (buff); <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga16">csLongToFloat</a> (l); }
-<a name="l00310"></a>00310 
-<a name="l00312"></a><a class="code" href="csendian_8h.html#a27">00312</a> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a27">csGetLittleEndianFloat16</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
-<a name="l00313"></a>00313 { <a class="code" href="cstypes_8h.html#a11">uint16</a> s = <a class="code" href="csendian_8h.html#a24">csGetLittleEndianShort</a> (buff); <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a16">csShortToFloat</a> (s); }
-<a name="l00314"></a>00314 
-<a name="l00316"></a><a class="code" href="csendian_8h.html#a28">00316</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="csendian_8h.html#a28">csSetLittleEndianShort</a> (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a11">uint16</a> s)
-<a name="l00317"></a>00317 {
-<a name="l00318"></a>00318 <span class="preprocessor">#ifdef CS_STRICT_ALIGNMENT</span>
-<a name="l00319"></a>00319 <span class="preprocessor"></span>  s = <a class="code" href="group__util.html#ga13">csLittleEndianShort</a> (s);
-<a name="l00320"></a>00320   memcpy (buff, &amp;s, <span class="keyword">sizeof</span> (s));
-<a name="l00321"></a>00321 <span class="preprocessor">#else</span>
-<a name="l00322"></a>00322 <span class="preprocessor"></span>  *((<a class="code" href="cstypes_8h.html#a11">uint16</a> *)buff) = <a class="code" href="group__util.html#ga13">csLittleEndianShort</a> (s);
-<a name="l00323"></a>00323 <span class="preprocessor">#endif</span>
-<a name="l00324"></a>00324 <span class="preprocessor"></span>}
-<a name="l00325"></a>00325 
-<a name="l00327"></a><a class="code" href="csendian_8h.html#a29">00327</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="csendian_8h.html#a29">csSetLittleEndianLong</a> (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a13">uint32</a> l)
-<a name="l00328"></a>00328 {
-<a name="l00329"></a>00329 <span class="preprocessor">#ifdef CS_STRICT_ALIGNMENT</span>
-<a name="l00330"></a>00330 <span class="preprocessor"></span>  l = <a class="code" href="group__util.html#ga12">csLittleEndianLong</a> (l);
-<a name="l00331"></a>00331   memcpy (buff, &amp;l, <span class="keyword">sizeof</span> (l));
-<a name="l00332"></a>00332 <span class="preprocessor">#else</span>
-<a name="l00333"></a>00333 <span class="preprocessor"></span>  *((<a class="code" href="cstypes_8h.html#a13">uint32</a> *)buff) = <a class="code" href="group__util.html#ga12">csLittleEndianLong</a> (l);
-<a name="l00334"></a>00334 <span class="preprocessor">#endif</span>
-<a name="l00335"></a>00335 <span class="preprocessor"></span>}
-<a name="l00336"></a>00336 
-<a name="l00338"></a><a class="code" href="csendian_8h.html#a30">00338</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="csendian_8h.html#a30">csSetLittleEndianFloat32</a> (<span class="keywordtype">void</span> *buff, <span class="keywordtype">float</span> f)
-<a name="l00339"></a>00339 { <a class="code" href="csendian_8h.html#a29">csSetLittleEndianLong</a> (buff, <a class="code" href="group__util.html#ga15">csFloatToLong</a> (f)); }
-<a name="l00340"></a>00340 
-<a name="l00342"></a><a class="code" href="csendian_8h.html#a31">00342</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="csendian_8h.html#a31">csSetLittleEndianFloat16</a> (<span class="keywordtype">void</span> *buff, <span class="keywordtype">float</span> f)
-<a name="l00343"></a>00343 { <a class="code" href="csendian_8h.html#a28">csSetLittleEndianShort</a> (buff, <a class="code" href="csendian_8h.html#a15">csFloatToShort</a> (f)); }
-<a name="l00344"></a>00344 
-<a name="l00345"></a>00345 
-<a name="l00347"></a><a class="code" href="csendian_8h.html#a32">00347</a> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="csendian_8h.html#a32">csGetBigEndianShort</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
-<a name="l00348"></a>00348 {
-<a name="l00349"></a>00349 <span class="preprocessor">#ifdef CS_STRICT_ALIGNMENT</span>
-<a name="l00350"></a>00350 <span class="preprocessor"></span>  <a class="code" href="cstypes_8h.html#a11">uint16</a> s; memcpy (&amp;s, buff, <span class="keyword">sizeof</span> (s));
-<a name="l00351"></a>00351   <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga9">csBigEndianShort</a> (s);
-<a name="l00352"></a>00352 <span class="preprocessor">#else</span>
-<a name="l00353"></a>00353 <span class="preprocessor"></span>  <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga9">csBigEndianShort</a> (*(<a class="code" href="cstypes_8h.html#a11">uint16</a> *)buff);
-<a name="l00354"></a>00354 <span class="preprocessor">#endif</span>
-<a name="l00355"></a>00355 <span class="preprocessor"></span>}
-<a name="l00356"></a>00356 
-<a name="l00358"></a><a class="code" href="csendian_8h.html#a33">00358</a> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="csendian_8h.html#a33">csGetBigEndianLong</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
-<a name="l00359"></a>00359 {
-<a name="l00360"></a>00360 <span class="preprocessor">#ifdef CS_STRICT_ALIGNMENT</span>
-<a name="l00361"></a>00361 <span class="preprocessor"></span>  <a class="code" href="cstypes_8h.html#a13">uint32</a> l; memcpy (&amp;l, buff, <span class="keyword">sizeof</span> (l));
-<a name="l00362"></a>00362   <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga8">csBigEndianLong</a> (l);
-<a name="l00363"></a>00363 <span class="preprocessor">#else</span>
-<a name="l00364"></a>00364 <span class="preprocessor"></span>  <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga8">csBigEndianLong</a> (*(<a class="code" href="cstypes_8h.html#a13">uint32</a> *)buff);
-<a name="l00365"></a>00365 <span class="preprocessor">#endif</span>
-<a name="l00366"></a>00366 <span class="preprocessor"></span>}
-<a name="l00367"></a>00367 
-<a name="l00369"></a><a class="code" href="csendian_8h.html#a34">00369</a> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a34">csGetBigEndianFloat32</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
-<a name="l00370"></a>00370 { <a class="code" href="cstypes_8h.html#a13">uint32</a> l = <a class="code" href="csendian_8h.html#a33">csGetBigEndianLong</a> (buff); <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga16">csLongToFloat</a> (l); }
-<a name="l00371"></a>00371 
-<a name="l00373"></a><a class="code" href="csendian_8h.html#a35">00373</a> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a35">csGetBigEndianFloat16</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
-<a name="l00374"></a>00374 { <a class="code" href="cstypes_8h.html#a11">uint16</a> s = <a class="code" href="csendian_8h.html#a32">csGetBigEndianShort</a> (buff); <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a16">csShortToFloat</a> (s); }
-<a name="l00375"></a>00375 
-<a name="l00377"></a><a class="code" href="csendian_8h.html#a36">00377</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="csendian_8h.html#a36">csSetBigEndianShort</a> (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a11">uint16</a> s)
-<a name="l00378"></a>00378 {
-<a name="l00379"></a>00379 <span class="preprocessor">#ifdef CS_STRICT_ALIGNMENT</span>
-<a name="l00380"></a>00380 <span class="preprocessor"></span>  s = <a class="code" href="group__util.html#ga9">csBigEndianShort</a> (s);
-<a name="l00381"></a>00381   memcpy (buff, &amp;s, <span class="keyword">sizeof</span> (s));
-<a name="l00382"></a>00382 <span class="preprocessor">#else</span>
-<a name="l00383"></a>00383 <span class="preprocessor"></span>  *((<a class="code" href="cstypes_8h.html#a11">uint16</a> *)buff) = <a class="code" href="group__util.html#ga9">csBigEndianShort</a> (s);
-<a name="l00384"></a>00384 <span class="preprocessor">#endif</span>
-<a name="l00385"></a>00385 <span class="preprocessor"></span>}
-<a name="l00386"></a>00386 
-<a name="l00388"></a><a class="code" href="csendian_8h.html#a37">00388</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="csendian_8h.html#a37">csSetBigEndianLong</a> (<span class="keywordtype">void</span> *buff, <a class="code" href="cstypes_8h.html#a13">uint32</a> l)
-<a name="l00389"></a>00389 {
-<a name="l00390"></a>00390 <span class="preprocessor">#ifdef CS_STRICT_ALIGNMENT</span>
-<a name="l00391"></a>00391 <span class="preprocessor"></span>  l = <a class="code" href="group__util.html#ga8">csBigEndianLong</a> (l);
-<a name="l00392"></a>00392   memcpy (buff, &amp;l, <span class="keyword">sizeof</span> (l));
-<a name="l00393"></a>00393 <span class="preprocessor">#else</span>
-<a name="l00394"></a>00394 <span class="preprocessor"></span>  *((<a class="code" href="cstypes_8h.html#a13">uint32</a> *)buff) = <a class="code" href="group__util.html#ga8">csBigEndianLong</a> (l);
-<a name="l00395"></a>00395 <span class="preprocessor">#endif</span>
-<a name="l00396"></a>00396 <span class="preprocessor"></span>}
-<a name="l00397"></a>00397 
-<a name="l00399"></a><a class="code" href="csendian_8h.html#a38">00399</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="csendian_8h.html#a38">csSetBigEndianFloat32</a> (<span class="keywordtype">void</span> *buff, <span class="keywordtype">float</span> f)
-<a name="l00400"></a>00400 { <a class="code" href="csendian_8h.html#a37">csSetBigEndianLong</a> (buff, <a class="code" href="group__util.html#ga15">csFloatToLong</a> (f)); }
+<a name="l00286"></a><a class="code" href="csendian_8h.html#a6">00286</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="csendian_8h.html#a6">csLittleEndianLong</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> l)
+<a name="l00287"></a>00287 { <span class="keywordflow">return</span> <a class="code" href="structcsLittleEndian.html#z515_5">csLittleEndian::Convert</a> (l); }
+<a name="l00288"></a>00288 
+<a name="l00290"></a><a class="code" href="csendian_8h.html#a7">00290</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="csendian_8h.html#a7">csLittleEndianShort</a> (<a class="code" href="cstypes_8h.html#a11">uint16</a> s)
+<a name="l00291"></a>00291 { <span class="keywordflow">return</span> <a class="code" href="structcsLittleEndian.html#z515_5">csLittleEndian::Convert</a> (s); }
+<a name="l00292"></a>00292 
+<a name="l00294"></a><a class="code" href="csendian_8h.html#a8">00294</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a8">csLittleEndianFloat</a> (<span class="keywordtype">float</span> f)
+<a name="l00295"></a>00295 {
+<a name="l00296"></a>00296   <a class="code" href="cstypes_8h.html#a13">uint32</a> u = <a class="code" href="structcsLittleEndian.html#z515_5">csLittleEndian::Convert</a> (*(<a class="code" href="cstypes_8h.html#a13">uint32</a>*)&amp;f); 
+<a name="l00297"></a>00297   <span class="keywordflow">return</span> *(<span class="keywordtype">float</span>*)&amp;u;
+<a name="l00298"></a>00298 }
+<a name="l00299"></a>00299 
+<a name="l00300"></a>00300 <span class="comment">/*</span>
+<a name="l00301"></a>00301 <span class="comment">    To be able to painlessly transfer files betwen platforms, we should</span>
+<a name="l00302"></a>00302 <span class="comment">    avoid using native floating-point format. Here are a couple of routines</span>
+<a name="l00303"></a>00303 <span class="comment">    that are guaranteed to work on all platforms.</span>
+<a name="l00304"></a>00304 <span class="comment"></span>
+<a name="l00305"></a>00305 <span class="comment">    The floating point is converted to a fixed 1.7.25 bits format</span>
+<a name="l00306"></a>00306 <span class="comment">    (one bit sign, 7 bits exponent, 25 bits mantissa) and back,</span>
+<a name="l00307"></a>00307 <span class="comment">    so that we can binary store floating-point number without</span>
+<a name="l00308"></a>00308 <span class="comment">    cross-platform problems. If you wonder why 1+7+25 = 33 while we</span>
+<a name="l00309"></a>00309 <span class="comment">    only have 32 bits, we'll ommit the most significant bit of mantissa</span>
+<a name="l00310"></a>00310 <span class="comment">    since it is always 1 (we use normalized numbers). This increases the</span>
+<a name="l00311"></a>00311 <span class="comment">    precision twice.</span>
+<a name="l00312"></a>00312 <span class="comment"></span>
+<a name="l00313"></a>00313 <span class="comment">    For double, we use one bit sign, 15 bits exponent, 49 bits mantissa.</span>
+<a name="l00314"></a>00314 <span class="comment">*/</span>
+<a name="l00315"></a>00315 
+<a name="l00320"></a><a class="code" href="csendian_8h.html#a9">00320</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a14">int32</a> <a class="code" href="csendian_8h.html#a9">csFloatToLong</a> (<span class="keywordtype">float</span> f)
+<a name="l00321"></a>00321 {
+<a name="l00322"></a>00322   <span class="keywordtype">int</span> exp;
+<a name="l00323"></a>00323   <a class="code" href="cstypes_8h.html#a14">int32</a> mant = <a class="code" href="group__util.html#ga26">csQroundSure</a> (frexp (f, &amp;exp) * 0x1000000);
+<a name="l00324"></a>00324   <a class="code" href="cstypes_8h.html#a14">int32</a> sign = mant &amp; 0x80000000;
+<a name="l00325"></a>00325   <span class="keywordflow">if</span> (mant &lt; 0) mant = -mant;
+<a name="l00326"></a>00326   <span class="keywordflow">if</span> (exp &gt; 63) exp = 63; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (exp &lt; -64) exp = -64;
+<a name="l00327"></a>00327   <span class="keywordflow">return</span> sign | ((exp &amp; 0x7f) &lt;&lt; 24) | (mant &amp; 0xffffff);
+<a name="l00328"></a>00328 }
+<a name="l00329"></a>00329 
+<a name="l00331"></a><a class="code" href="csendian_8h.html#a10">00331</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a10">csLongToFloat</a> (<a class="code" href="cstypes_8h.html#a14">int32</a> l)
+<a name="l00332"></a>00332 {
+<a name="l00333"></a>00333   <span class="keywordtype">int</span> exp = (l &gt;&gt; 24) &amp; 0x7f;
+<a name="l00334"></a>00334   <span class="keywordflow">if</span> (exp &amp; 0x40) exp = exp | ~0x7f;
+<a name="l00335"></a>00335   <span class="keywordtype">float</span> mant = float (l &amp; 0x00ffffff) / 0x1000000;
+<a name="l00336"></a>00336   <span class="keywordflow">if</span> (l &amp; 0x80000000) mant = -mant;
+<a name="l00337"></a>00337   <span class="keywordflow">return</span> (<span class="keywordtype">float</span>) ldexp (mant, exp);
+<a name="l00338"></a>00338 }
+<a name="l00339"></a>00339 
+<a name="l00340"></a>00340 <span class="comment">/* Implementation note: csDoubleToLongLong() and csLongLongToDouble()</span>
+<a name="l00341"></a>00341 <span class="comment"> *</span>
+<a name="l00342"></a>00342 <span class="comment"> * We avoid use of CONST_INT64() because 64-bit constants are illegal with g++</span>
+<a name="l00343"></a>00343 <span class="comment"> * under -ansi -pedantic, and we want this header to be useful to external</span>
+<a name="l00344"></a>00344 <span class="comment"> * projects which use -ansi -pedantic.  Instead, we use bit shifts, such as (1</span>
+<a name="l00345"></a>00345 <span class="comment"> * &lt;&lt; 59), and construct `mask' manually.</span>
+<a name="l00346"></a>00346 <span class="comment"> */</span>
+<a name="l00347"></a>00347 
+<a name="l00349"></a><a class="code" href="csendian_8h.html#a11">00349</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a16">int64</a> <a class="code" href="csendian_8h.html#a11">csDoubleToLongLong</a> (<span class="keywordtype">double</span> d)
+<a name="l00350"></a>00350 {
+<a name="l00351"></a>00351   <span class="keywordtype">int</span> exp;
+<a name="l00352"></a>00352   <a class="code" href="cstypes_8h.html#a16">int64</a> mant = (<a class="code" href="cstypes_8h.html#a16">int64</a>) (frexp (d, &amp;exp) * ((<a class="code" href="cstypes_8h.html#a16">int64</a>)1 &lt;&lt; 48));
+<a name="l00353"></a>00353   <a class="code" href="cstypes_8h.html#a16">int64</a> sign = mant &amp; ((<a class="code" href="cstypes_8h.html#a16">int64</a>)1 &lt;&lt; 59);
+<a name="l00354"></a>00354   <span class="keywordflow">if</span> (mant &lt; 0) mant = -mant;
+<a name="l00355"></a>00355   <span class="keywordflow">if</span> (exp &gt; 32767) exp = 32767; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (exp &lt; -32768) exp = -32768;
+<a name="l00356"></a>00356   <a class="code" href="cstypes_8h.html#a16">int64</a> <span class="keyword">const</span> mask = ((<a class="code" href="cstypes_8h.html#a15">uint64</a>)0xffff &lt;&lt; 32) | (<a class="code" href="cstypes_8h.html#a15">uint64</a>)0xffffffff;
+<a name="l00357"></a>00357   <span class="keywordflow">return</span> sign | ((<a class="code" href="cstypes_8h.html#a16">int64</a> (exp) &amp; 0x7fff) &lt;&lt; 48) | (mant &amp; mask);
+<a name="l00358"></a>00358 }
+<a name="l00359"></a>00359 
+<a name="l00361"></a><a class="code" href="csendian_8h.html#a12">00361</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code" href="csendian_8h.html#a12">csLongLongToDouble</a> (<a class="code" href="cstypes_8h.html#a16">int64</a> i)
+<a name="l00362"></a>00362 {
+<a name="l00363"></a>00363   <span class="keywordtype">int</span> exp = (i &gt;&gt; 48) &amp; 0x7fff;
+<a name="l00364"></a>00364   <span class="keywordflow">if</span> (exp &amp; 0x4000) exp = exp | ~0x7fff;
+<a name="l00365"></a>00365   <a class="code" href="cstypes_8h.html#a16">int64</a> <span class="keyword">const</span> mask = ((<a class="code" href="cstypes_8h.html#a15">uint64</a>)0xffff &lt;&lt; 32) | (<a class="code" href="cstypes_8h.html#a15">uint64</a>)0xffffffff;
+<a name="l00366"></a>00366   <span class="keywordtype">double</span> mant = double (i &amp; mask) / ((<a class="code" href="cstypes_8h.html#a16">int64</a>)1 &lt;&lt; 48);
+<a name="l00367"></a>00367   <span class="keywordflow">if</span> (i &amp; ((<a class="code" href="cstypes_8h.html#a16">int64</a>)1 &lt;&lt; 59)) mant = -mant;
+<a name="l00368"></a>00368   <span class="keywordflow">return</span> ldexp (mant, exp);
+<a name="l00369"></a>00369 }
+<a name="l00370"></a>00370 
+<a name="l00371"></a>00371 <span class="comment">/* *\name Floating point conversions</span>
+<a name="l00372"></a>00372 <span class="comment"> * The following routines are used for converting floating-point numbers</span>
+<a name="l00373"></a>00373 <span class="comment"> * into 16-bit shorts and back. This is useful for low-precision data.</span>
+<a name="l00374"></a>00374 <span class="comment"> * They use the 1.4.12 format. The range of numbers that can be represented</span>
+<a name="l00375"></a>00375 <span class="comment"> * in this format is from 2^-8 to 2^7. The precision for numbers near to</span>
+<a name="l00376"></a>00376 <span class="comment"> * 2^-8 (0.00390625) is near 0.000001, for numbers near 2^7 (128) is near 0.03.</span>
+<a name="l00377"></a>00377 <span class="comment"> * @{ */</span>
+<a name="l00378"></a>00378 
+<a name="l00380"></a><a class="code" href="csendian_8h.html#a13">00380</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">short</span> <a class="code" href="csendian_8h.html#a13">csFloatToShort</a> (<span class="keywordtype">float</span> f)
+<a name="l00381"></a>00381 {
+<a name="l00382"></a>00382   <span class="keywordtype">int</span> exp;
+<a name="l00383"></a>00383   <span class="keywordtype">long</span> mant = <a class="code" href="group__util.html#ga26">csQroundSure</a> (frexp (f, &amp;exp) * 0x1000);
+<a name="l00384"></a>00384   <span class="keywordtype">long</span> sign = mant &amp; 0x8000;
+<a name="l00385"></a>00385   <span class="keywordflow">if</span> (mant &lt; 0) mant = -mant;
+<a name="l00386"></a>00386   <span class="keywordflow">if</span> (exp &gt; 7) mant = 0x7ff, exp = 7; <span class="keywordflow">else</span> <span class="keywordflow">if</span> (exp &lt; -8) mant = 0, exp = -8;
+<a name="l00387"></a>00387   <span class="keywordflow">return</span> short(sign | ((exp &amp; 0xf) &lt;&lt; 11) | (mant &amp; 0x7ff));
+<a name="l00388"></a>00388 }
+<a name="l00389"></a>00389 
+<a name="l00391"></a><a class="code" href="csendian_8h.html#a14">00391</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a14">csShortToFloat</a> (<span class="keywordtype">short</span> s)
+<a name="l00392"></a>00392 {
+<a name="l00393"></a>00393   <span class="keywordtype">int</span> exp = (s &gt;&gt; 11) &amp; 0xf;
+<a name="l00394"></a>00394   <span class="keywordflow">if</span> (exp &amp; 0x8) exp = exp | ~0xf;
+<a name="l00395"></a>00395   <span class="keywordtype">float</span> mant = float ((s &amp; 0x07ff) | 0x0800) / 0x1000;
+<a name="l00396"></a>00396   <span class="keywordflow">if</span> (s &amp; 0x8000) mant = -mant;
+<a name="l00397"></a>00397   <span class="keywordflow">return</span> (<span class="keywordtype">float</span>) ldexp (mant, exp);
+<a name="l00398"></a>00398 }
+<a name="l00399"></a>00399 
+<a name="l00400"></a>00400 <span class="comment">/* * @} */</span>
 <a name="l00401"></a>00401 
-<a name="l00403"></a><a class="code" href="csendian_8h.html#a39">00403</a> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="csendian_8h.html#a39">csSetBigEndianFloat16</a> (<span class="keywordtype">void</span> *buff, <span class="keywordtype">float</span> f)
-<a name="l00404"></a>00404 { <a class="code" href="csendian_8h.html#a36">csSetBigEndianShort</a> (buff, <a class="code" href="csendian_8h.html#a15">csFloatToShort</a> (f)); }
+<a name="l00403"></a><a class="code" href="csendian_8h.html#a15">00403</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a15">uint64</a> <a class="code" href="csendian_8h.html#a15">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a15">uint64</a> l)
+<a name="l00404"></a>00404 { <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a5">csLittleEndianLongLong</a> (l); }
 <a name="l00405"></a>00405 
-<a name="l00408"></a>00408 <span class="preprocessor">#endif // __CS_CSENDIAN_H__</span>
+<a name="l00407"></a><a class="code" href="csendian_8h.html#a16">00407</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a16">int64</a> <a class="code" href="csendian_8h.html#a15">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a16">int64</a> l)
+<a name="l00408"></a>00408 { <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a5">csLittleEndianLongLong</a> (l); }
+<a name="l00409"></a>00409 
+<a name="l00411"></a><a class="code" href="csendian_8h.html#a17">00411</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="csendian_8h.html#a15">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> l)
+<a name="l00412"></a>00412 { <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a6">csLittleEndianLong</a> (l); }
+<a name="l00413"></a>00413 
+<a name="l00415"></a><a class="code" href="csendian_8h.html#a18">00415</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a14">int32</a> <a class="code" href="csendian_8h.html#a15">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a14">int32</a> l)
+<a name="l00416"></a>00416 { <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a6">csLittleEndianLong</a> (l); }
+<a name="l00417"></a>00417 
+<a name="l00419"></a><a class="code" href="csendian_8h.html#a19">00419</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a12">int16</a> <a class="code" href="csendian_8h.html#a15">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a12">int16</a> s)
+<a name="l00420"></a>00420 { <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a7">csLittleEndianShort</a> (s); }
+<a name="l00421"></a>00421 
+<a name="l00423"></a><a class="code" href="csendian_8h.html#a20">00423</a> <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="csendian_8h.html#a15">csConvertEndian</a> (<a class="code" href="cstypes_8h.html#a11">uint16</a> s)
+<a name="l00424"></a>00424 { <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a7">csLittleEndianShort</a> (s); }
+<a name="l00425"></a>00425 
+<a name="l00427"></a><a class="code" href="csendian_8h.html#a21">00427</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a15">csConvertEndian</a> (<span class="keywordtype">float</span> f)
+<a name="l00428"></a>00428 { <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a8">csLittleEndianFloat</a> (f); }
+<a name="l00429"></a>00429 
+<a name="l00431"></a><a class="code" href="csendian_8h.html#a22">00431</a> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="csendian_8h.html#a22">csGetLittleEndianShort</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00432"></a>00432 {
+<a name="l00433"></a>00433   <span class="keywordflow">return</span> <a class="code" href="structcsGetFromAddress.html#z517_3">csGetFromAddress::UInt16</a> (buff);
+<a name="l00434"></a>00434 }
+<a name="l00435"></a>00435 
+<a name="l00437"></a><a class="code" href="csendian_8h.html#a23">00437</a> <span class="keyword">inline</span> <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="csendian_8h.html#a23">csGetLittleEndianLong</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00438"></a>00438 {
+<a name="l00439"></a>00439   <span class="keywordflow">return</span> <a class="code" href="structcsGetFromAddress.html#z517_4">csGetFromAddress::UInt32</a> (buff);
+<a name="l00440"></a>00440 }
+<a name="l00441"></a>00441 
+<a name="l00443"></a><a class="code" href="csendian_8h.html#a24">00443</a> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a24">csGetLittleEndianFloat32</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00444"></a>00444 { <a class="code" href="cstypes_8h.html#a13">uint32</a> l = <a class="code" href="csendian_8h.html#a23">csGetLittleEndianLong</a> (buff); <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a10">csLongToFloat</a> (l); }
+<a name="l00445"></a>00445 
+<a name="l00447"></a><a class="code" href="csendian_8h.html#a25">00447</a> <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="csendian_8h.html#a25">csGetLittleEndianFloat16</a> (<span class="keyword">const</span> <span class="keywordtype">void</span> *buff)
+<a name="l00448"></a>00448 { <a class="code" href="cstypes_8h.html#a11">uint16</a> s = <a class="code" href="csendian_8h.html#a22">csGetLittleEndianShort</a> (buff); <span class="keywordflow">return</span> <a class="code" href="csendian_8h.html#a14">csShortToFloat</a> (s); }
+<a name="l00449"></a>00449 
+<a name="l00454"></a>00454 <span class="preprocessor">#endif // __CS_CSENDIAN_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
