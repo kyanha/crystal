@@ -290,10 +290,6 @@ SOURCE=..\..\libs\csgfx\bakekeycolor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgfx\csimgvec.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgfx\gradient.cpp
 # End Source File
 # Begin Source File
@@ -554,10 +550,6 @@ SOURCE=..\..\libs\cstool\userrndbuf.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\cstool\vidprefs.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\ansiparse.cpp
 # End Source File
 # Begin Source File
@@ -654,10 +646,6 @@ SOURCE=..\..\libs\csutil\databuf.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\datastrm.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\debug.cpp
 # End Source File
 # Begin Source File
@@ -671,6 +659,10 @@ SOURCE=..\..\libs\csutil\event.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\evoutlet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\filereadhelper.cpp
 # End Source File
 # Begin Source File
 
@@ -1158,10 +1150,6 @@ SOURCE=..\..\libs\..\include\csgfx\bakekeycolor.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\csgfx\csimgvec.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csgfx\gradient.h
 # End Source File
 # Begin Source File
@@ -1243,10 +1231,6 @@ SOURCE=..\..\libs\..\include\csgfx\shadervarframeholder.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csgfx\vertexlight.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\..\include\csgfx\vertexlistwalker.h
 # End Source File
 # Begin Source File
 
@@ -1498,10 +1482,6 @@ SOURCE=..\..\libs\..\include\cstool\vfsdirchange.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\cstool\vidprefs.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csutil\algorithms.h
 # End Source File
 # Begin Source File
@@ -1646,10 +1626,6 @@ SOURCE=..\..\libs\..\include\csutil\databuf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\csutil\datastrm.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csutil\debug.h
 # End Source File
 # Begin Source File
@@ -1675,6 +1651,10 @@ SOURCE=..\..\libs\..\include\csutil\evoutlet.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\fifo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csutil\filereadhelper.h
 # End Source File
 # Begin Source File
 

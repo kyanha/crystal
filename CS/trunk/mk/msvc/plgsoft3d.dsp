@@ -202,6 +202,10 @@ SOURCE=..\..\plugins\video\render3d\software\scanindex.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\software\scanline.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\software\sft3dcom.h
 # End Source File
 # Begin Source File
@@ -219,6 +223,10 @@ SOURCE=..\..\plugins\video\render3d\software\sttest.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\software\tcache.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\software\types.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

@@ -140,6 +140,10 @@ SOURCE="$(InputPath)"
 
 SOURCE=..\..\apps\tutorial\simpvs\simpvs.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tutorial\simpvs\vidprefs.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -147,6 +151,10 @@ SOURCE=..\..\apps\tutorial\simpvs\simpvs.cpp
 # Begin Source File
 
 SOURCE=..\..\apps\tutorial\simpvs\simpvs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\apps\tutorial\simpvs\vidprefs.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
