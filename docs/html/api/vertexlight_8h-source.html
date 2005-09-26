@@ -43,8 +43,8 @@
 <a name="l00024"></a>00024 <span class="preprocessor">#include "<a class="code" href="transfrm_8h.html">csgeom/transfrm.h</a>"</span>
 <a name="l00025"></a>00025 <span class="preprocessor">#include "<a class="code" href="vector3_8h.html">csgeom/vector3.h</a>"</span>
 <a name="l00026"></a>00026 <span class="preprocessor">#include "<a class="code" href="lightsvcache_8h.html">csgfx/lightsvcache.h</a>"</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="vertexlistwalker_8h.html">csgfx/vertexlistwalker.h</a>"</span>
-<a name="l00028"></a>00028 <span class="preprocessor">#include "csutil/cscolor.h"</span>
+<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="cscolor_8h.html">csutil/cscolor.h</a>"</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="rbuflock_8h.html">cstool/rbuflock.h</a>"</span>
 <a name="l00029"></a>00029 
 <a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="light_8h.html">iengine/light.h</a>"</span>
 <a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="movable_8h.html">iengine/movable.h</a>"</span>
@@ -299,16 +299,16 @@
 <a name="l00339"></a>00339 {
 <a name="l00340"></a>00340 <span class="keyword">public</span>:
 <a name="l00349"></a>00349   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVertexLightCalculator.html#a0">CalculateLighting</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00350"></a>00350     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00351"></a>00351     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
+<a name="l00350"></a>00350     size_t numvert, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* vb, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* nb, 
+<a name="l00351"></a>00351     <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
 <a name="l00352"></a>00352 
 <a name="l00357"></a>00357   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVertexLightCalculator.html#a1">CalculateLightingAdd</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00358"></a>00358     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00359"></a>00359     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
+<a name="l00358"></a>00358     size_t numvert, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* vb, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* nb, 
+<a name="l00359"></a>00359     <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
 <a name="l00360"></a>00360 
 <a name="l00365"></a>00365   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVertexLightCalculator.html#a2">CalculateLightingMul</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00366"></a>00366     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00367"></a>00367     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
+<a name="l00366"></a>00366     size_t numvert, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* vb, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* nb, 
+<a name="l00367"></a>00367     <a class="code" href="classcsColor.html">csColor</a> *litColor) <span class="keyword">const </span>= 0;
 <a name="l00368"></a>00368 };
 <a name="l00369"></a>00369 
 <a name="l00375"></a>00375 <span class="keyword">template</span>&lt;<span class="keyword">class</span> LightProc&gt;
@@ -316,46 +316,54 @@
 <a name="l00377"></a>00377 {
 <a name="l00378"></a>00378 <span class="keyword">public</span>:
 <a name="l00379"></a><a class="code" href="classcsVertexLightCalculator.html#a0">00379</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a0">CalculateLighting</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00380"></a>00380     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00381"></a>00381     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
+<a name="l00380"></a>00380     size_t numvert, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* vb, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* nb, 
+<a name="l00381"></a>00381     <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
 <a name="l00382"></a>00382 <span class="keyword">  </span>{
 <a name="l00383"></a>00383     <span class="comment">// setup the light calculator</span>
 <a name="l00384"></a>00384     LightProc lighter (light);
-<a name="l00385"></a>00385 
-<a name="l00386"></a>00386     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
-<a name="l00387"></a>00387     {
-<a name="l00388"></a>00388       litColor[n] = lighter.ProcessVertex (vb[n], nb[n]);
-<a name="l00389"></a>00389     }
-<a name="l00390"></a>00390   }
-<a name="l00391"></a>00391 
-<a name="l00392"></a><a class="code" href="classcsVertexLightCalculator.html#a1">00392</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a1">CalculateLightingAdd</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00393"></a>00393     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00394"></a>00394     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
-<a name="l00395"></a>00395 <span class="keyword">  </span>{
-<a name="l00396"></a>00396     <span class="comment">// setup the light calculator</span>
-<a name="l00397"></a>00397     LightProc lighter (light);
-<a name="l00398"></a>00398 
-<a name="l00399"></a>00399     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
-<a name="l00400"></a>00400     {
-<a name="l00401"></a>00401       litColor[n] += lighter.ProcessVertex (vb[n], nb[n]);
-<a name="l00402"></a>00402     }
-<a name="l00403"></a>00403   }
-<a name="l00404"></a>00404 
-<a name="l00405"></a><a class="code" href="classcsVertexLightCalculator.html#a2">00405</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a2">CalculateLightingMul</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
-<a name="l00406"></a>00406     size_t numvert, <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> vb, 
-<a name="l00407"></a>00407     <a class="code" href="classcsVertexListWalker.html">csVertexListWalker&lt;csVector3&gt;</a> nb, <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
-<a name="l00408"></a>00408 <span class="keyword">  </span>{
-<a name="l00409"></a>00409     <span class="comment">// setup the light calculator</span>
-<a name="l00410"></a>00410     LightProc lighter (light);
-<a name="l00411"></a>00411 
-<a name="l00412"></a>00412     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
-<a name="l00413"></a>00413     {
-<a name="l00414"></a>00414       litColor[n] *= lighter.ProcessVertex (vb[n], nb[n]);
-<a name="l00415"></a>00415     }
-<a name="l00416"></a>00416   }
-<a name="l00417"></a>00417 };
+<a name="l00385"></a>00385     <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock&lt;csVector3, iRenderBuffer*&gt;</a> vbLock (vb);
+<a name="l00386"></a>00386     <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock&lt;csVector3, iRenderBuffer*&gt;</a> nbLock (nb);
+<a name="l00387"></a>00387 
+<a name="l00388"></a>00388     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
+<a name="l00389"></a>00389     {
+<a name="l00390"></a>00390       litColor[n] = lighter.ProcessVertex (vbLock[n], nbLock[n]);
+<a name="l00391"></a>00391     }
+<a name="l00392"></a>00392   }
+<a name="l00393"></a>00393 
+<a name="l00394"></a><a class="code" href="classcsVertexLightCalculator.html#a1">00394</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a1">CalculateLightingAdd</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00395"></a>00395     size_t numvert, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* vb, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* nb, 
+<a name="l00396"></a>00396     <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
+<a name="l00397"></a>00397 <span class="keyword">  </span>{
+<a name="l00398"></a>00398     <span class="comment">// setup the light calculator</span>
+<a name="l00399"></a>00399     LightProc lighter (light);
+<a name="l00400"></a>00400     <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock&lt;csVector3, iRenderBuffer*&gt;</a> vbLock (vb);
+<a name="l00401"></a>00401     <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock&lt;csVector3, iRenderBuffer*&gt;</a> nbLock (nb);
+<a name="l00402"></a>00402 
+<a name="l00403"></a>00403 
+<a name="l00404"></a>00404     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
+<a name="l00405"></a>00405     {
+<a name="l00406"></a>00406       litColor[n] += lighter.ProcessVertex (vbLock[n], nbLock[n]);
+<a name="l00407"></a>00407     }
+<a name="l00408"></a>00408   }
+<a name="l00409"></a>00409 
+<a name="l00410"></a><a class="code" href="classcsVertexLightCalculator.html#a2">00410</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsVertexLightCalculator.html#a2">CalculateLightingMul</a> (<span class="keyword">const</span> <a class="code" href="structcsLightProperties.html">csLightProperties</a>&amp; light, 
+<a name="l00411"></a>00411     size_t numvert, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* vb, <a class="code" href="structiRenderBuffer.html">iRenderBuffer</a>* nb, 
+<a name="l00412"></a>00412     <a class="code" href="classcsColor.html">csColor</a> *litColor)<span class="keyword"> const</span>
+<a name="l00413"></a>00413 <span class="keyword">  </span>{
+<a name="l00414"></a>00414     <span class="comment">// setup the light calculator</span>
+<a name="l00415"></a>00415     LightProc lighter (light);
+<a name="l00416"></a>00416     <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock&lt;csVector3, iRenderBuffer*&gt;</a> vbLock (vb);
+<a name="l00417"></a>00417     <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock&lt;csVector3, iRenderBuffer*&gt;</a> nbLock (nb);
 <a name="l00418"></a>00418 
-<a name="l00419"></a>00419 <span class="preprocessor">#endif //__CS_VERTEXLIGHT_H__</span>
+<a name="l00419"></a>00419 
+<a name="l00420"></a>00420     <span class="keywordflow">for</span> (size_t n = 0; n &lt; numvert; n++)
+<a name="l00421"></a>00421     {
+<a name="l00422"></a>00422       litColor[n] *= lighter.ProcessVertex (vbLock[n], nbLock[n]);
+<a name="l00423"></a>00423     }
+<a name="l00424"></a>00424   }
+<a name="l00425"></a>00425 };
+<a name="l00426"></a>00426 
+<a name="l00427"></a>00427 <span class="preprocessor">#endif //__CS_VERTEXLIGHT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

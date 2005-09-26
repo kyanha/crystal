@@ -46,7 +46,6 @@
 <a name="l00027"></a>00027 <span class="preprocessor">#include &lt;ApplicationServices/ApplicationServices.h&gt;</span>
 <a name="l00028"></a>00028 
 <a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <span class="comment">// Table for storing gamma values</span>
 <a name="l00031"></a>00031 <span class="keyword">struct </span>GammaTable
 <a name="l00032"></a>00032 {
 <a name="l00033"></a>00033   <span class="keywordtype">float</span> r[256];
@@ -59,38 +58,27 @@
 <a name="l00040"></a>00040 <span class="keyword">class </span>OSXDriver2D
 <a name="l00041"></a>00041 {
 <a name="l00042"></a>00042 <span class="keyword">public</span>:
-<a name="l00043"></a>00043   <span class="comment">// Constructor</span>
 <a name="l00044"></a>00044   OSXDriver2D(<a class="code" href="classcsGraphics2D.html">csGraphics2D</a> *inCanvas);
 <a name="l00045"></a>00045 
-<a name="l00046"></a>00046   <span class="comment">// Destructor</span>
 <a name="l00047"></a>00047   <span class="keyword">virtual</span> ~OSXDriver2D();
 <a name="l00048"></a>00048 
-<a name="l00049"></a>00049   <span class="comment">// Initialize 2D plugin</span>
 <a name="l00050"></a>00050   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Initialize(<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *reg);
 <a name="l00051"></a>00051 
-<a name="l00052"></a>00052   <span class="comment">// Open graphics system (set mode, open window, etc)</span>
 <a name="l00053"></a>00053   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Open();
 <a name="l00054"></a>00054 
-<a name="l00055"></a>00055   <span class="comment">// Close graphics system</span>
 <a name="l00056"></a>00056   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Close();
 <a name="l00057"></a>00057 
-<a name="l00058"></a>00058   <span class="comment">// Flip video page (or dump to framebuffer) - pure virtual</span>
 <a name="l00059"></a>00059   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Print(<a class="code" href="classcsRect.html">csRect</a> <span class="keyword">const</span>* area = 0) = 0;
 <a name="l00060"></a>00060 
-<a name="l00061"></a>00061   <span class="comment">// Pure virtual function - the driver must invlude code to handle resizing</span>
 <a name="l00062"></a>00062   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Resize(<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h) = 0;
 <a name="l00063"></a>00063 
-<a name="l00064"></a>00064   <span class="comment">// Handle an event</span>
 <a name="l00065"></a>00065   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent(<a class="code" href="structiEvent.html">iEvent</a> &amp;ev);
 <a name="l00066"></a>00066 
-<a name="l00067"></a>00067   <span class="comment">// Dispatch an event to the assistant</span>
 <a name="l00068"></a>00068   <span class="keywordtype">void</span> DispatchEvent(<a class="code" href="OSXAssistant_8h.html#a0">OSXEvent</a> ev, <a class="code" href="interfaceOSXView.html">OSXView</a> view);
 <a name="l00069"></a>00069 
-<a name="l00070"></a>00070   <span class="comment">// Show/Hide the mouse</span>
 <a name="l00071"></a>00071   <span class="keyword">virtual</span> <span class="keywordtype">void</span> HideMouse();
 <a name="l00072"></a>00072   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ShowMouse();
 <a name="l00073"></a>00073 
-<a name="l00074"></a>00074   <span class="comment">// Event handler</span>
 <a name="l00075"></a>00075   <span class="keyword">struct </span>EventHandler : <span class="keyword">public</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>
 <a name="l00076"></a>00076   {
 <a name="l00077"></a>00077   <span class="keyword">private</span>:
@@ -110,69 +98,59 @@
 <a name="l00091"></a>00091   } *scfiEventHandler;
 <a name="l00092"></a>00092 
 <a name="l00093"></a>00093 <span class="keyword">protected</span>:
-<a name="l00094"></a>00094   <span class="comment">// Initialize pixel format for 16 bit depth</span>
 <a name="l00095"></a>00095   <span class="keywordtype">void</span> Initialize16();
 <a name="l00096"></a>00096 
-<a name="l00097"></a>00097   <span class="comment">// Initialize pixel format for 32 bit depth</span>
 <a name="l00098"></a>00098   <span class="keywordtype">void</span> Initialize32();
 <a name="l00099"></a>00099 
-<a name="l00100"></a>00100   <span class="comment">// Switch to fullscreen mode</span>
 <a name="l00101"></a>00101   <span class="keywordtype">bool</span> EnterFullscreenMode();
 <a name="l00102"></a>00102 
-<a name="l00103"></a>00103   <span class="comment">// Switch out of fullscreen mode, to mode stored in originalMode</span>
 <a name="l00104"></a>00104   <span class="keywordtype">void</span> ExitFullscreenMode();
 <a name="l00105"></a>00105 
-<a name="l00106"></a>00106   <span class="comment">// Toggle current state of fullscreen</span>
 <a name="l00107"></a>00107   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> ToggleFullscreen();
 <a name="l00108"></a>00108 
-<a name="l00109"></a>00109   <span class="comment">// Uses CoreGraphics to fade to a given color </span>
 <a name="l00110"></a>00110   <span class="keywordtype">void</span> FadeToRGB(CGDirectDisplayID disp, <span class="keywordtype">float</span> r, <span class="keywordtype">float</span> g, <span class="keywordtype">float</span> b);
 <a name="l00111"></a>00111   
-<a name="l00112"></a>00112   <span class="comment">// Fade to a given gamma table</span>
 <a name="l00113"></a>00113   <span class="keywordtype">void</span> FadeToGammaTable(CGDirectDisplayID disp, GammaTable table);
 <a name="l00114"></a>00114   
-<a name="l00115"></a>00115   <span class="comment">// Save the current gamma values to the given table</span>
 <a name="l00116"></a>00116   <span class="keywordtype">void</span> SaveGamma(CGDirectDisplayID disp, GammaTable &amp;table);
 <a name="l00117"></a>00117 
-<a name="l00118"></a>00118   <span class="comment">// Choose which display to use</span>
 <a name="l00119"></a>00119   <span class="keywordtype">void</span> ChooseDisplay();
 <a name="l00120"></a>00120 
-<a name="l00121"></a>00121   CFDictionaryRef originalMode;         <span class="comment">// Original display mode</span>
-<a name="l00122"></a>00122   GammaTable originalGamma;             <span class="comment">// Original gamma values</span>
-<a name="l00123"></a>00123   <span class="keywordtype">bool</span> inFullscreenMode;                <span class="comment">// In full-screen mode</span>
-<a name="l00124"></a>00124   CGDirectDisplayID display;            <span class="comment">// Screen to display on</span>
-<a name="l00125"></a>00125   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> screen;                  <span class="comment">// Screen number to display on</span>
-<a name="l00126"></a>00126   
-<a name="l00127"></a>00127   <span class="keywordtype">int</span> origWidth, origHeight;            <span class="comment">// Original dimensions kept so they can</span>
-<a name="l00128"></a>00128                                         <span class="comment">// be restored when switching modes</span>
-<a name="l00129"></a>00129 
-<a name="l00130"></a>00130   <a class="code" href="interfaceOSXDelegate2D.html">OSXDelegate2D</a> delegate;               <span class="comment">// Delegate for ObjC stuff</span>
-<a name="l00131"></a>00131   <a class="code" href="classcsGraphics2D.html">csGraphics2D</a> *canvas;                 <span class="comment">// Canvas (parent class)</span>
-<a name="l00132"></a>00132 
-<a name="l00133"></a>00133   <a class="code" href="classcsRef.html">csRef&lt;iOSXAssistant&gt;</a> assistant;       <span class="comment">// Assistant for dispatching events</span>
-<a name="l00134"></a>00134   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *objectReg;           <span class="comment">// Object registry</span>
-<a name="l00135"></a>00135 };
-<a name="l00136"></a>00136 
-<a name="l00137"></a>00137 <span class="preprocessor">#else // __cplusplus</span>
-<a name="l00138"></a>00138 <span class="preprocessor"></span>
-<a name="l00139"></a>00139 <span class="preprocessor">#define DRV2D_FUNC(ret, func) __private_extern__ ret OSXDriver2D_##func</span>
-<a name="l00140"></a>00140 <span class="preprocessor"></span>
-<a name="l00141"></a>00141 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *OSXDriver2D;
-<a name="l00142"></a>00142 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *OSXEventHandle;
-<a name="l00143"></a>00143 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *OSXViewHandle;
-<a name="l00144"></a>00144 
-<a name="l00145"></a>00145 <span class="comment">// C API to driver class</span>
-<a name="l00146"></a>00146 DRV2D_FUNC(<span class="keywordtype">void</span>, DispatchEvent)(OSXDriver2D driver, OSXEventHandle ev,
-<a name="l00147"></a>00147   OSXViewHandle view);
-<a name="l00148"></a>00148 DRV2D_FUNC(<span class="keywordtype">bool</span>, Resize)(OSXDriver2D driver, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
-<a name="l00149"></a>00149 DRV2D_FUNC(<span class="keywordtype">void</span>, HideMouse)(OSXDriver2D driver);
-<a name="l00150"></a>00150 DRV2D_FUNC(<span class="keywordtype">void</span>, ShowMouse)(OSXDriver2D driver);
-<a name="l00151"></a>00151 
-<a name="l00152"></a>00152 <span class="preprocessor">#undef DRV2D_FUNC</span>
-<a name="l00153"></a>00153 <span class="preprocessor"></span>
-<a name="l00154"></a>00154 <span class="preprocessor">#endif // __cplusplus</span>
-<a name="l00155"></a>00155 <span class="preprocessor"></span>
-<a name="l00156"></a>00156 <span class="preprocessor">#endif // __CS_OSXDRIVER2D_H__</span>
+<a name="l00122"></a>00122   CFDictionaryRef originalMode; 
+<a name="l00124"></a>00124   GammaTable originalGamma;
+<a name="l00126"></a>00126   <span class="keywordtype">bool</span> inFullscreenMode;
+<a name="l00128"></a>00128   CGDirectDisplayID display;
+<a name="l00130"></a>00130   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> screen;
+<a name="l00131"></a>00131   
+<a name="l00133"></a>00133   <span class="keywordtype">int</span> origWidth, origHeight;
+<a name="l00134"></a>00134 
+<a name="l00136"></a>00136   <a class="code" href="interfaceOSXDelegate2D.html">OSXDelegate2D</a> delegate;
+<a name="l00138"></a>00138   <a class="code" href="classcsGraphics2D.html">csGraphics2D</a> *canvas;
+<a name="l00139"></a>00139 
+<a name="l00141"></a>00141   <a class="code" href="classcsRef.html">csRef&lt;iOSXAssistant&gt;</a> assistant;
+<a name="l00143"></a>00143   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *objectReg;
+<a name="l00144"></a>00144 };
+<a name="l00145"></a>00145 
+<a name="l00146"></a>00146 <span class="preprocessor">#else // __cplusplus</span>
+<a name="l00147"></a>00147 <span class="preprocessor"></span>
+<a name="l00148"></a>00148 <span class="preprocessor">#define DRV2D_FUNC(ret, func) __private_extern__ ret OSXDriver2D_##func</span>
+<a name="l00149"></a>00149 <span class="preprocessor"></span>
+<a name="l00150"></a>00150 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *OSXDriver2D;
+<a name="l00151"></a>00151 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *OSXEventHandle;
+<a name="l00152"></a>00152 <span class="keyword">typedef</span> <span class="keywordtype">void</span> *OSXViewHandle;
+<a name="l00153"></a>00153 
+<a name="l00154"></a>00154 <span class="comment">// C API to driver class</span>
+<a name="l00155"></a>00155 DRV2D_FUNC(<span class="keywordtype">void</span>, DispatchEvent)(OSXDriver2D driver, OSXEventHandle ev,
+<a name="l00156"></a>00156   OSXViewHandle view);
+<a name="l00157"></a>00157 DRV2D_FUNC(<span class="keywordtype">bool</span>, Resize)(OSXDriver2D driver, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
+<a name="l00158"></a>00158 DRV2D_FUNC(<span class="keywordtype">void</span>, HideMouse)(OSXDriver2D driver);
+<a name="l00159"></a>00159 DRV2D_FUNC(<span class="keywordtype">void</span>, ShowMouse)(OSXDriver2D driver);
+<a name="l00160"></a>00160 
+<a name="l00161"></a>00161 <span class="preprocessor">#undef DRV2D_FUNC</span>
+<a name="l00162"></a>00162 <span class="preprocessor"></span>
+<a name="l00163"></a>00163 <span class="preprocessor">#endif // __cplusplus</span>
+<a name="l00164"></a>00164 <span class="preprocessor"></span>
+<a name="l00165"></a>00165 <span class="preprocessor">#endif // __CS_OSXDRIVER2D_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

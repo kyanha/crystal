@@ -38,124 +38,120 @@
 <a name="l00019"></a>00019 <span class="preprocessor">#ifndef __CS_IVIDEO_CODEC_H__</span>
 <a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IVIDEO_CODEC_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
-<a name="l00024"></a>00024 <span class="comment">/*</span>
-<a name="l00025"></a>00025 <span class="comment"> * This is an interface for playing video.</span>
-<a name="l00026"></a>00026 <span class="comment"> */</span>
+<a name="l00026"></a>00026 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
 <a name="l00027"></a>00027 
-<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <span class="keyword">struct </span><a class="code" href="structiFile.html">iFile</a>;
-<a name="l00031"></a>00031 <span class="keyword">struct </span><a class="code" href="structiStream.html">iStream</a>;
-<a name="l00032"></a>00032 <span class="keyword">struct </span><a class="code" href="structiVideoStream.html">iVideoStream</a>;
-<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structiAudioStream.html">iAudioStream</a>;
-<a name="l00034"></a>00034 <span class="keyword">struct </span>iCodec;
-<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiTextureHandle.html">iTextureHandle</a>;
-<a name="l00036"></a>00036 
-<a name="l00040"></a><a class="code" href="codec_8h.html#a15">00040</a> <span class="keyword">enum</span> <a class="code" href="codec_8h.html#a15">csStreamFormatCap</a>
-<a name="l00041"></a>00041 {
-<a name="l00045"></a>00045   <a class="code" href="codec_8h.html#a15a11">CS_POS_BY_FRAME</a> = 1,
-<a name="l00049"></a>00049   <a class="code" href="codec_8h.html#a15a12">CS_POS_BY_TIME</a> = 2,
-<a name="l00053"></a>00053   <a class="code" href="codec_8h.html#a15a13">CS_DECODE_SPAN</a> = 4,
-<a name="l00057"></a>00057   <a class="code" href="codec_8h.html#a15a14">CS_DYNAMIC_FRAMESIZE</a> = 8
-<a name="l00058"></a>00058 };
-<a name="l00059"></a>00059 
-<a name="l00060"></a><a class="code" href="codec_8h.html#a0">00060</a> <span class="preprocessor">#define CS_STREAMTYPE_AUDIO 1</span>
-<a name="l00061"></a><a class="code" href="codec_8h.html#a1">00061</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_STREAMTYPE_VIDEO 2</span>
-<a name="l00062"></a><a class="code" href="codec_8h.html#a2">00062</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_STREAMTYPE_MIDI 3</span>
-<a name="l00063"></a><a class="code" href="codec_8h.html#a3">00063</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_STREAMTYPE_TEXT 4</span>
-<a name="l00064"></a>00064 <span class="preprocessor"></span>
-<a name="l00068"></a><a class="code" href="structcsStreamDescription.html">00068</a> <span class="keyword">struct </span><a class="code" href="structcsStreamDescription.html">csStreamDescription</a>
-<a name="l00069"></a>00069 {
-<a name="l00073"></a><a class="code" href="structcsStreamDescription.html#o2">00073</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsStreamDescription.html#o2">type</a>;
-<a name="l00077"></a><a class="code" href="structcsStreamDescription.html#o0">00077</a>   <span class="keywordtype">char</span> <a class="code" href="structcsStreamDescription.html#o0">codec</a>[64];
-<a name="l00081"></a><a class="code" href="structcsStreamDescription.html#o1">00081</a>   <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structcsStreamDescription.html#o1">name</a>;
-<a name="l00082"></a>00082 };
-<a name="l00083"></a>00083 
-<a name="l00087"></a><a class="code" href="structcsVideoStreamDescription.html">00087</a> <span class="keyword">struct </span><a class="code" href="structcsVideoStreamDescription.html">csVideoStreamDescription</a> : <span class="keyword">public</span> <a class="code" href="structcsStreamDescription.html">csStreamDescription</a>
-<a name="l00088"></a>00088 {
-<a name="l00092"></a><a class="code" href="structcsVideoStreamDescription.html#o0">00092</a>   <a class="code" href="cstypes_8h.html#a10">int8</a> <a class="code" href="structcsVideoStreamDescription.html#o0">colordepth</a>;
-<a name="l00096"></a><a class="code" href="structcsVideoStreamDescription.html#o2">00096</a>   <a class="code" href="cstypes_8h.html#a14">int32</a> <a class="code" href="structcsVideoStreamDescription.html#o2">framecount</a>;
-<a name="l00100"></a><a class="code" href="structcsVideoStreamDescription.html#o5">00100</a>   <span class="keywordtype">int</span> <a class="code" href="structcsVideoStreamDescription.html#o5">width</a>, <a class="code" href="structcsVideoStreamDescription.html#o4">height</a>;
-<a name="l00104"></a><a class="code" href="structcsVideoStreamDescription.html#o3">00104</a>   <span class="keywordtype">float</span> <a class="code" href="structcsVideoStreamDescription.html#o3">framerate</a>;
-<a name="l00108"></a><a class="code" href="structcsVideoStreamDescription.html#o1">00108</a>   <a class="code" href="cstypes_8h.html#a14">int32</a> <a class="code" href="structcsVideoStreamDescription.html#o1">duration</a>;
-<a name="l00109"></a>00109 };
-<a name="l00110"></a>00110 
-<a name="l00114"></a><a class="code" href="structcsAudioStreamDescription.html">00114</a> <span class="keyword">struct </span><a class="code" href="structcsAudioStreamDescription.html">csAudioStreamDescription</a> : <span class="keyword">public</span> <a class="code" href="structcsStreamDescription.html">csStreamDescription</a>
-<a name="l00115"></a>00115 {
-<a name="l00116"></a><a class="code" href="structcsAudioStreamDescription.html#o3">00116</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsAudioStreamDescription.html#o3">formattag</a>;
-<a name="l00117"></a><a class="code" href="structcsAudioStreamDescription.html#o1">00117</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsAudioStreamDescription.html#o1">channels</a>;
-<a name="l00118"></a><a class="code" href="structcsAudioStreamDescription.html#o4">00118</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structcsAudioStreamDescription.html#o4">samplespersecond</a>;
-<a name="l00119"></a><a class="code" href="structcsAudioStreamDescription.html#o0">00119</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsAudioStreamDescription.html#o0">bitspersample</a>;
-<a name="l00123"></a><a class="code" href="structcsAudioStreamDescription.html#o2">00123</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structcsAudioStreamDescription.html#o2">duration</a>;
-<a name="l00124"></a>00124 };
-<a name="l00125"></a>00125 
-<a name="l00126"></a>00126 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiStreamIterator.html">iStreamIterator</a>, 0, 0, 1);
-<a name="l00127"></a><a class="code" href="structiStreamIterator.html">00127</a> <span class="keyword">struct </span><a class="code" href="structiStreamIterator.html">iStreamIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00128"></a>00128 {
-<a name="l00129"></a>00129   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HasNext () = 0;
-<a name="l00130"></a>00130   <span class="keyword">virtual</span> <a class="code" href="structiStream.html">iStream</a> *Next () = 0;
-<a name="l00131"></a>00131 };
+<a name="l00028"></a>00028 <span class="keyword">struct </span><a class="code" href="structiFile.html">iFile</a>;
+<a name="l00029"></a>00029 <span class="keyword">struct </span><a class="code" href="structiStream.html">iStream</a>;
+<a name="l00030"></a>00030 <span class="keyword">struct </span><a class="code" href="structiVideoStream.html">iVideoStream</a>;
+<a name="l00031"></a>00031 <span class="keyword">struct </span><a class="code" href="structiAudioStream.html">iAudioStream</a>;
+<a name="l00032"></a>00032 <span class="keyword">struct </span>iCodec;
+<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structiTextureHandle.html">iTextureHandle</a>;
+<a name="l00034"></a>00034 
+<a name="l00038"></a><a class="code" href="codec_8h.html#a15">00038</a> <span class="keyword">enum</span> <a class="code" href="codec_8h.html#a15">csStreamFormatCap</a>
+<a name="l00039"></a>00039 {
+<a name="l00043"></a>00043   <a class="code" href="codec_8h.html#a15a11">CS_POS_BY_FRAME</a> = 1,
+<a name="l00047"></a>00047   <a class="code" href="codec_8h.html#a15a12">CS_POS_BY_TIME</a> = 2,
+<a name="l00051"></a>00051   <a class="code" href="codec_8h.html#a15a13">CS_DECODE_SPAN</a> = 4,
+<a name="l00055"></a>00055   <a class="code" href="codec_8h.html#a15a14">CS_DYNAMIC_FRAMESIZE</a> = 8
+<a name="l00056"></a>00056 };
+<a name="l00057"></a>00057 
+<a name="l00058"></a><a class="code" href="codec_8h.html#a0">00058</a> <span class="preprocessor">#define CS_STREAMTYPE_AUDIO 1</span>
+<a name="l00059"></a><a class="code" href="codec_8h.html#a1">00059</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_STREAMTYPE_VIDEO 2</span>
+<a name="l00060"></a><a class="code" href="codec_8h.html#a2">00060</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_STREAMTYPE_MIDI 3</span>
+<a name="l00061"></a><a class="code" href="codec_8h.html#a3">00061</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_STREAMTYPE_TEXT 4</span>
+<a name="l00062"></a>00062 <span class="preprocessor"></span>
+<a name="l00066"></a><a class="code" href="structcsStreamDescription.html">00066</a> <span class="keyword">struct </span><a class="code" href="structcsStreamDescription.html">csStreamDescription</a>
+<a name="l00067"></a>00067 {
+<a name="l00071"></a><a class="code" href="structcsStreamDescription.html#o2">00071</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsStreamDescription.html#o2">type</a>;
+<a name="l00075"></a><a class="code" href="structcsStreamDescription.html#o0">00075</a>   <span class="keywordtype">char</span> <a class="code" href="structcsStreamDescription.html#o0">codec</a>[64];
+<a name="l00079"></a><a class="code" href="structcsStreamDescription.html#o1">00079</a>   <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structcsStreamDescription.html#o1">name</a>;
+<a name="l00080"></a>00080 };
+<a name="l00081"></a>00081 
+<a name="l00085"></a><a class="code" href="structcsVideoStreamDescription.html">00085</a> <span class="keyword">struct </span><a class="code" href="structcsVideoStreamDescription.html">csVideoStreamDescription</a> : <span class="keyword">public</span> <a class="code" href="structcsStreamDescription.html">csStreamDescription</a>
+<a name="l00086"></a>00086 {
+<a name="l00090"></a><a class="code" href="structcsVideoStreamDescription.html#o0">00090</a>   <a class="code" href="cstypes_8h.html#a10">int8</a> <a class="code" href="structcsVideoStreamDescription.html#o0">colordepth</a>;
+<a name="l00094"></a><a class="code" href="structcsVideoStreamDescription.html#o2">00094</a>   <a class="code" href="cstypes_8h.html#a14">int32</a> <a class="code" href="structcsVideoStreamDescription.html#o2">framecount</a>;
+<a name="l00098"></a><a class="code" href="structcsVideoStreamDescription.html#o5">00098</a>   <span class="keywordtype">int</span> <a class="code" href="structcsVideoStreamDescription.html#o5">width</a>, <a class="code" href="structcsVideoStreamDescription.html#o4">height</a>;
+<a name="l00102"></a><a class="code" href="structcsVideoStreamDescription.html#o3">00102</a>   <span class="keywordtype">float</span> <a class="code" href="structcsVideoStreamDescription.html#o3">framerate</a>;
+<a name="l00106"></a><a class="code" href="structcsVideoStreamDescription.html#o1">00106</a>   <a class="code" href="cstypes_8h.html#a14">int32</a> <a class="code" href="structcsVideoStreamDescription.html#o1">duration</a>;
+<a name="l00107"></a>00107 };
+<a name="l00108"></a>00108 
+<a name="l00112"></a><a class="code" href="structcsAudioStreamDescription.html">00112</a> <span class="keyword">struct </span><a class="code" href="structcsAudioStreamDescription.html">csAudioStreamDescription</a> : <span class="keyword">public</span> <a class="code" href="structcsStreamDescription.html">csStreamDescription</a>
+<a name="l00113"></a>00113 {
+<a name="l00114"></a><a class="code" href="structcsAudioStreamDescription.html#o3">00114</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsAudioStreamDescription.html#o3">formattag</a>;
+<a name="l00115"></a><a class="code" href="structcsAudioStreamDescription.html#o1">00115</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsAudioStreamDescription.html#o1">channels</a>;
+<a name="l00116"></a><a class="code" href="structcsAudioStreamDescription.html#o4">00116</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structcsAudioStreamDescription.html#o4">samplespersecond</a>;
+<a name="l00117"></a><a class="code" href="structcsAudioStreamDescription.html#o0">00117</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsAudioStreamDescription.html#o0">bitspersample</a>;
+<a name="l00121"></a><a class="code" href="structcsAudioStreamDescription.html#o2">00121</a>   <a class="code" href="cstypes_8h.html#a13">uint32</a> <a class="code" href="structcsAudioStreamDescription.html#o2">duration</a>;
+<a name="l00122"></a>00122 };
+<a name="l00123"></a>00123 
+<a name="l00124"></a>00124 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiStreamIterator.html">iStreamIterator</a>, 0, 0, 1);
+<a name="l00125"></a><a class="code" href="structiStreamIterator.html">00125</a> <span class="keyword">struct </span><a class="code" href="structiStreamIterator.html">iStreamIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00126"></a>00126 {
+<a name="l00127"></a>00127   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HasNext () = 0;
+<a name="l00128"></a>00128   <span class="keyword">virtual</span> <a class="code" href="structiStream.html">iStream</a> *Next () = 0;
+<a name="l00129"></a>00129 };
+<a name="l00130"></a>00130 
+<a name="l00131"></a>00131 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiStreamFormat.html">iStreamFormat</a>, 0, 0, 1);
 <a name="l00132"></a>00132 
-<a name="l00133"></a>00133 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiStreamFormat.html">iStreamFormat</a>, 0, 0, 1);
-<a name="l00134"></a>00134 
-<a name="l00138"></a><a class="code" href="structiStreamFormat.html">00138</a> <span class="keyword">struct </span><a class="code" href="structiStreamFormat.html">iStreamFormat</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00139"></a>00139 {
-<a name="l00143"></a>00143   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStreamFormat.html#a0">GetCaps</a> (<a class="code" href="codec_8h.html#a15">csStreamFormatCap</a> &amp;caps) = 0;
-<a name="l00147"></a>00147   <span class="keyword">virtual</span> <a class="code" href="structiStreamIterator.html">iStreamIterator</a>* <a class="code" href="structiStreamFormat.html#a1">GetStreamIterator</a> () = 0;
-<a name="l00151"></a>00151   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStreamFormat.html#a4">Select</a> (<a class="code" href="structiAudioStream.html">iAudioStream</a> *pAudio, <a class="code" href="structiVideoStream.html">iVideoStream</a> *pVideo) = 0;
-<a name="l00158"></a>00158   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStreamFormat.html#a3">NextFrame</a> () = 0;
-<a name="l00162"></a>00162   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStreamFormat.html#a2">Load</a> (<a class="code" href="structiFile.html">iFile</a> *pVideoData) = 0;
-<a name="l00168"></a>00168   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStreamFormat.html#a5">Unload</a> () = 0;
-<a name="l00169"></a>00169 };
+<a name="l00136"></a><a class="code" href="structiStreamFormat.html">00136</a> <span class="keyword">struct </span><a class="code" href="structiStreamFormat.html">iStreamFormat</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00137"></a>00137 {
+<a name="l00141"></a>00141   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStreamFormat.html#a0">GetCaps</a> (<a class="code" href="codec_8h.html#a15">csStreamFormatCap</a> &amp;caps) = 0;
+<a name="l00145"></a>00145   <span class="keyword">virtual</span> <a class="code" href="structiStreamIterator.html">iStreamIterator</a>* <a class="code" href="structiStreamFormat.html#a1">GetStreamIterator</a> () = 0;
+<a name="l00149"></a>00149   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStreamFormat.html#a4">Select</a> (<a class="code" href="structiAudioStream.html">iAudioStream</a> *pAudio, <a class="code" href="structiVideoStream.html">iVideoStream</a> *pVideo) = 0;
+<a name="l00156"></a>00156   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStreamFormat.html#a3">NextFrame</a> () = 0;
+<a name="l00160"></a>00160   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStreamFormat.html#a2">Load</a> (<a class="code" href="structiFile.html">iFile</a> *pVideoData) = 0;
+<a name="l00166"></a>00166   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStreamFormat.html#a5">Unload</a> () = 0;
+<a name="l00167"></a>00167 };
+<a name="l00168"></a>00168 
+<a name="l00169"></a>00169 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiStream.html">iStream</a>, 0, 0, 1);
 <a name="l00170"></a>00170 
-<a name="l00171"></a>00171 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiStream.html">iStream</a>, 0, 0, 1);
-<a name="l00172"></a>00172 
-<a name="l00176"></a><a class="code" href="structiStream.html">00176</a> <span class="keyword">struct </span><a class="code" href="structiStream.html">iStream</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00177"></a>00177 {
-<a name="l00181"></a>00181   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStream.html#a0">GetStreamDescription</a> (<a class="code" href="structcsStreamDescription.html">csStreamDescription</a> &amp;desc) = 0;
-<a name="l00187"></a>00187   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStream.html#a1">GotoFrame</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> frameindex) = 0;
-<a name="l00191"></a>00191   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStream.html#a2">GotoTime</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> timeindex) = 0;
-<a name="l00196"></a>00196   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStream.html#a4">SetPlayMethod</a> (<span class="keywordtype">bool</span> bTimeSynced) = 0;
-<a name="l00201"></a>00201   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStream.html#a3">NextFrame</a> () = 0;
-<a name="l00202"></a>00202 };
+<a name="l00174"></a><a class="code" href="structiStream.html">00174</a> <span class="keyword">struct </span><a class="code" href="structiStream.html">iStream</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00175"></a>00175 {
+<a name="l00179"></a>00179   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStream.html#a0">GetStreamDescription</a> (<a class="code" href="structcsStreamDescription.html">csStreamDescription</a> &amp;desc) = 0;
+<a name="l00185"></a>00185   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStream.html#a1">GotoFrame</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> frameindex) = 0;
+<a name="l00189"></a>00189   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStream.html#a2">GotoTime</a> (<a class="code" href="cstypes_8h.html#a13">uint32</a> timeindex) = 0;
+<a name="l00194"></a>00194   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiStream.html#a4">SetPlayMethod</a> (<span class="keywordtype">bool</span> bTimeSynced) = 0;
+<a name="l00199"></a>00199   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiStream.html#a3">NextFrame</a> () = 0;
+<a name="l00200"></a>00200 };
+<a name="l00201"></a>00201 
+<a name="l00202"></a>00202 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiVideoStream.html">iVideoStream</a>, 0, 0, 1);
 <a name="l00203"></a>00203 
-<a name="l00204"></a>00204 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiVideoStream.html">iVideoStream</a>, 0, 0, 1);
-<a name="l00205"></a>00205 
-<a name="l00209"></a><a class="code" href="structiVideoStream.html">00209</a> <span class="keyword">struct </span><a class="code" href="structiVideoStream.html">iVideoStream</a> : <span class="keyword">public</span> <a class="code" href="structiStream.html">iStream</a>
-<a name="l00210"></a>00210 {
-<a name="l00214"></a>00214   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVideoStream.html#a0">GetStreamDescription</a> (<a class="code" href="structcsVideoStreamDescription.html">csVideoStreamDescription</a> &amp;desc) = 0;
-<a name="l00218"></a>00218   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVideoStream.html#a3">SetRect</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h) = 0;
-<a name="l00223"></a>00223   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVideoStream.html#a2">SetFXMode</a> (<a class="code" href="cstypes_8h.html#a27">uint</a> mode) = 0;
-<a name="l00227"></a>00227   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* <a class="code" href="structiVideoStream.html#a1">NextFrameGetTexture</a> () = 0;
+<a name="l00207"></a><a class="code" href="structiVideoStream.html">00207</a> <span class="keyword">struct </span><a class="code" href="structiVideoStream.html">iVideoStream</a> : <span class="keyword">public</span> <a class="code" href="structiStream.html">iStream</a>
+<a name="l00208"></a>00208 {
+<a name="l00212"></a>00212   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVideoStream.html#a0">GetStreamDescription</a> (<a class="code" href="structcsVideoStreamDescription.html">csVideoStreamDescription</a> &amp;desc) = 0;
+<a name="l00216"></a>00216   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVideoStream.html#a3">SetRect</a> (<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y, <span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h) = 0;
+<a name="l00221"></a>00221   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVideoStream.html#a2">SetFXMode</a> (<a class="code" href="cstypes_8h.html#a27">uint</a> mode) = 0;
+<a name="l00225"></a>00225   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* <a class="code" href="structiVideoStream.html#a1">NextFrameGetTexture</a> () = 0;
+<a name="l00226"></a>00226 
+<a name="l00227"></a>00227 };
 <a name="l00228"></a>00228 
-<a name="l00229"></a>00229 };
+<a name="l00229"></a>00229 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiAudioStream.html">iAudioStream</a>, 0, 0, 1);
 <a name="l00230"></a>00230 
-<a name="l00231"></a>00231 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiAudioStream.html">iAudioStream</a>, 0, 0, 1);
-<a name="l00232"></a>00232 
-<a name="l00236"></a><a class="code" href="structiAudioStream.html">00236</a> <span class="keyword">struct </span><a class="code" href="structiAudioStream.html">iAudioStream</a> : <span class="keyword">public</span> <a class="code" href="structiStream.html">iStream</a>
-<a name="l00237"></a>00237 {
-<a name="l00241"></a>00241   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAudioStream.html#a0">GetStreamDescription</a> (<a class="code" href="structcsAudioStreamDescription.html">csAudioStreamDescription</a> &amp;desc) = 0;
-<a name="l00242"></a>00242 };
-<a name="l00243"></a>00243 
-<a name="l00252"></a><a class="code" href="codec_8h.html#a4">00252</a> <span class="preprocessor">#define CS_CODECFORMAT_RGB_CHANNEL       1</span>
-<a name="l00253"></a><a class="code" href="codec_8h.html#a5">00253</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_RGBA_CHANNEL      2</span>
-<a name="l00254"></a><a class="code" href="codec_8h.html#a6">00254</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_YUV_CHANNEL       3</span>
-<a name="l00255"></a><a class="code" href="codec_8h.html#a7">00255</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_RGB_INTERLEAVED   4</span>
-<a name="l00256"></a><a class="code" href="codec_8h.html#a8">00256</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_RGBA_INTERLEAVED  5</span>
-<a name="l00257"></a><a class="code" href="codec_8h.html#a9">00257</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_YUV_INTERLEAVED   6</span>
-<a name="l00258"></a>00258 <span class="preprocessor"></span>
-<a name="l00260"></a><a class="code" href="codec_8h.html#a10">00260</a> <span class="preprocessor">#define CS_CODECFORMAT_PCM</span>
-<a name="l00261"></a>00261 <span class="preprocessor"></span>
-<a name="l00265"></a><a class="code" href="structcsCodecDescription.html">00265</a> <span class="keyword">struct </span><a class="code" href="structcsCodecDescription.html">csCodecDescription</a>
-<a name="l00266"></a>00266 {
-<a name="l00270"></a><a class="code" href="structcsCodecDescription.html#o2">00270</a>   <span class="keywordtype">char</span> <a class="code" href="structcsCodecDescription.html#o2">codec</a>[64];
-<a name="l00274"></a><a class="code" href="structcsCodecDescription.html#o1">00274</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsCodecDescription.html#o1">bEncode</a>;
-<a name="l00278"></a><a class="code" href="structcsCodecDescription.html#o0">00278</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsCodecDescription.html#o0">bDecode</a>;
-<a name="l00282"></a><a class="code" href="structcsCodecDescription.html#o3">00282</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsCodecDescription.html#o3">decodeoutput</a>;
-<a name="l00286"></a><a class="code" href="structcsCodecDescription.html#o4">00286</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsCodecDescription.html#o4">encodeinput</a>;
-<a name="l00287"></a>00287 };
-<a name="l00288"></a>00288 
-<a name="l00289"></a>00289 <span class="preprocessor">#endif // __CS_IVIDEO_CODEC_H__</span>
+<a name="l00234"></a><a class="code" href="structiAudioStream.html">00234</a> <span class="keyword">struct </span><a class="code" href="structiAudioStream.html">iAudioStream</a> : <span class="keyword">public</span> <a class="code" href="structiStream.html">iStream</a>
+<a name="l00235"></a>00235 {
+<a name="l00239"></a>00239   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAudioStream.html#a0">GetStreamDescription</a> (<a class="code" href="structcsAudioStreamDescription.html">csAudioStreamDescription</a> &amp;desc) = 0;
+<a name="l00240"></a>00240 };
+<a name="l00241"></a>00241 
+<a name="l00250"></a><a class="code" href="codec_8h.html#a4">00250</a> <span class="preprocessor">#define CS_CODECFORMAT_RGB_CHANNEL       1</span>
+<a name="l00251"></a><a class="code" href="codec_8h.html#a5">00251</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_RGBA_CHANNEL      2</span>
+<a name="l00252"></a><a class="code" href="codec_8h.html#a6">00252</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_YUV_CHANNEL       3</span>
+<a name="l00253"></a><a class="code" href="codec_8h.html#a7">00253</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_RGB_INTERLEAVED   4</span>
+<a name="l00254"></a><a class="code" href="codec_8h.html#a8">00254</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_RGBA_INTERLEAVED  5</span>
+<a name="l00255"></a><a class="code" href="codec_8h.html#a9">00255</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_CODECFORMAT_YUV_INTERLEAVED   6</span>
+<a name="l00256"></a>00256 <span class="preprocessor"></span>
+<a name="l00258"></a><a class="code" href="codec_8h.html#a10">00258</a> <span class="preprocessor">#define CS_CODECFORMAT_PCM</span>
+<a name="l00259"></a>00259 <span class="preprocessor"></span>
+<a name="l00263"></a><a class="code" href="structcsCodecDescription.html">00263</a> <span class="keyword">struct </span><a class="code" href="structcsCodecDescription.html">csCodecDescription</a>
+<a name="l00264"></a>00264 {
+<a name="l00268"></a><a class="code" href="structcsCodecDescription.html#o2">00268</a>   <span class="keywordtype">char</span> <a class="code" href="structcsCodecDescription.html#o2">codec</a>[64];
+<a name="l00272"></a><a class="code" href="structcsCodecDescription.html#o1">00272</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsCodecDescription.html#o1">bEncode</a>;
+<a name="l00276"></a><a class="code" href="structcsCodecDescription.html#o0">00276</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsCodecDescription.html#o0">bDecode</a>;
+<a name="l00280"></a><a class="code" href="structcsCodecDescription.html#o3">00280</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsCodecDescription.html#o3">decodeoutput</a>;
+<a name="l00284"></a><a class="code" href="structcsCodecDescription.html#o4">00284</a>   <a class="code" href="cstypes_8h.html#a11">uint16</a> <a class="code" href="structcsCodecDescription.html#o4">encodeinput</a>;
+<a name="l00285"></a>00285 };
+<a name="l00286"></a>00286 
+<a name="l00287"></a>00287 <span class="preprocessor">#endif // __CS_IVIDEO_CODEC_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

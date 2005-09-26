@@ -48,28 +48,27 @@
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 The csSchedule class provides an easy way to get timers in applications. 
 <p>
-It can handle both repeating and single-shot callbacks. It is useful for handling time in 3D virtual worlds. <p>
-Use it like this: <pre>
- class myEntity {
-   public:
-   virtual void Update();
+It can handle both repeating and single-shot callbacks. It is useful for handling time in 3D virtual worlds.<p>
+Use it like this: <div class="fragment"><pre class="fragment"> <span class="keyword">class </span>myEntity 
+ {
+   <span class="keyword">public</span>:
+   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Update();
  };
- </pre> <p>
-Suppose you have an object of class myEntity, which looks like a button in your virtual world, and you want the button to blink. Calling Update every NextFrame would look bad, and handling the timing yourself is a hassle (and can be lots slower then mass-handling by csSchedule). So you can use the csSchedule to call the myEntity::Update method every second. <p>
-You can do it this way: <pre>
- void call_entity_update(void *arg)
+</pre></div><p>
+Suppose you have an object of class myEntity, which looks like a button in your virtual world, and you want the button to blink. Calling Update every NextFrame would look bad, and handling the timing yourself is a hassle (and can be lots slower then mass-handling by csSchedule). So you can use the csSchedule to call the myEntity::Update method every second.<p>
+You can do it this way: <div class="fragment"><pre class="fragment"> <span class="keywordtype">void</span> call_entity_update(<span class="keywordtype">void</span> *arg)
  {
    myEntity *mp = (myEntity*)arg;
    mp-&gt;Update();
  }
- </pre> <p>
-You would then use the csSchedule method AddCallback(call_entity_update, (void*)my_entity, 1000); to have it call the function with the object pointer as argument after 1000 milliseconds (= 1 second) once. or you can use: AddRepeatCallback(call_entity_update, (void*)my_entity, 1000); to have the function called repeatedly, every 1000 msec (= second). <p>
-To notify the schedule that time has passed, each frame, for example in the NextFrame() method, you must call the TimePassed(elapsed_time) function. <p>
+</pre></div><p>
+You would then use the csSchedule method AddCallback(call_entity_update, (void*)my_entity, 1000); to have it call the function with the object pointer as argument after 1000 milliseconds (= 1 second) once. or you can use: AddRepeatCallback(call_entity_update, (void*)my_entity, 1000); to have the function called repeatedly, every 1000 msec (= second).<p>
+To notify the schedule that time has passed, each frame, for example in the NextFrame() method, you must call the TimePassed(elapsed_time) function.<p>
 This class is useful for callbacks in 3D virtual worlds, but the callbacks can have some jitter due to framerates. For mission-critical hardware IO calls (like controlling a floppy drive or controlling the UART) this jitter will be too big. In those cases use interrupt-driven callbacks, and place the controlling code in some platform-specific implementation file, since this type of use is typically platform-dependent. However, although this class cannot give callbacks inside a single frame, it will behave as best as possible using callbacks every frame.
 <p>
 
 <p>
-Definition at line <a class="el" href="schedule_8h-source.html#l00076">76</a> of file <a class="el" href="schedule_8h-source.html">schedule.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
+Definition at line <a class="el" href="schedule_8h-source.html#l00081">81</a> of file <a class="el" href="schedule_8h-source.html">schedule.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="a2"></a><!-- doxytag: member="csSchedule::csSchedule" ref="a2" args="()" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
