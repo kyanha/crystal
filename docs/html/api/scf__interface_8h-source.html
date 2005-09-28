@@ -62,9 +62,9 @@
 <a name="l00057"></a>00057 <span class="comment">// -- Some helpers needed below</span>
 <a name="l00071"></a><a class="code" href="group__scf.html#ga81">00071</a> <span class="comment"></span><span class="preprocessor">#define SCF_INTERFACE(Name,Major,Minor,Micro)             \</span>
 <a name="l00072"></a>00072 <span class="preprocessor">struct InterfaceTraits {                                  \</span>
-<a name="l00073"></a>00073 <span class="preprocessor">  static CS_FORCEINLINE scfInterfaceVersion GetVersion()  \</span>
+<a name="l00073"></a>00073 <span class="preprocessor">  CS_FORCEINLINE static scfInterfaceVersion GetVersion() \</span>
 <a name="l00074"></a>00074 <span class="preprocessor">  { return SCF_CONSTRUCT_VERSION(Major, Minor, Micro); }  \</span>
-<a name="l00075"></a>00075 <span class="preprocessor">  static CS_FORCEINLINE char const * GetName() { return #Name; }  \</span>
+<a name="l00075"></a>00075 <span class="preprocessor">  CS_FORCEINLINE static char const * GetName() { return #Name; }  \</span>
 <a name="l00076"></a>00076 <span class="preprocessor">private:                                                  \</span>
 <a name="l00077"></a>00077 <span class="preprocessor">  </span><span class="comment">/* Check that Name is really a type to catch typos. */</span>  \
 <a name="l00078"></a>00078   typedef Name Type;                                      \
@@ -174,12 +174,12 @@
 <a name="l00369"></a><a class="code" href="classscfInterfaceTraits.html">00369</a> <span class="keyword">class </span><a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits</a>
 <a name="l00370"></a>00370 {
 <a name="l00371"></a>00371 <span class="keyword">public</span>:
-<a name="l00375"></a><a class="code" href="classscfInterfaceTraits.html#e2">00375</a>   <span class="keyword">static</span> <a class="code" href="group__scf.html#ga1">scfInterfaceVersion</a> <a class="code" href="classscfInterfaceTraits.html#e2">GetVersion</a> ()
+<a name="l00375"></a><a class="code" href="classscfInterfaceTraits.html#e2">00375</a>   CS_FORCEINLINE <span class="keyword">static</span> <a class="code" href="group__scf.html#ga1">scfInterfaceVersion</a> <a class="code" href="classscfInterfaceTraits.html#e2">GetVersion</a> ()
 <a name="l00376"></a>00376   {
 <a name="l00377"></a>00377     <span class="keywordflow">return</span> Interface::InterfaceTraits::GetVersion ();
 <a name="l00378"></a>00378   }
 <a name="l00379"></a>00379 
-<a name="l00387"></a><a class="code" href="classscfInterfaceTraits.html#e0">00387</a>   <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="classscfInterfaceTraits.html#e0">GetID</a> ()
+<a name="l00387"></a><a class="code" href="classscfInterfaceTraits.html#e0">00387</a>   CS_FORCEINLINE <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> <a class="code" href="classscfInterfaceTraits.html#e0">GetID</a> ()
 <a name="l00388"></a>00388   {
 <a name="l00389"></a>00389     <a class="code" href="group__scf.html#ga0">scfInterfaceID</a>&amp; ID = GetMyID ();
 <a name="l00390"></a>00390     <span class="keywordflow">if</span> (ID == (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)(-1))
@@ -190,49 +190,50 @@
 <a name="l00395"></a>00395     <span class="keywordflow">return</span> ID;
 <a name="l00396"></a>00396   }
 <a name="l00397"></a>00397 
-<a name="l00401"></a><a class="code" href="classscfInterfaceTraits.html#e1">00401</a>   <span class="keyword">static</span> CS_FORCEINLINE <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classscfInterfaceTraits.html#e1">GetName</a> ()
+<a name="l00401"></a><a class="code" href="classscfInterfaceTraits.html#e1">00401</a>   CS_FORCEINLINE <span class="keyword">static</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classscfInterfaceTraits.html#e1">GetName</a> ()
 <a name="l00402"></a>00402   { 
 <a name="l00403"></a>00403     <span class="keywordflow">return</span> Interface::InterfaceTraits::GetName ();
 <a name="l00404"></a>00404   }
-<a name="l00405"></a>00405 <span class="keyword">private</span>:
-<a name="l00406"></a>00406   <span class="comment">// This idiom is a Meyers singleton</span>
-<a name="l00407"></a>00407   <span class="keyword">static</span> CS_FORCEINLINE <a class="code" href="group__scf.html#ga0">scfInterfaceID</a>&amp; GetMyID ()
-<a name="l00408"></a>00408   {
-<a name="l00409"></a>00409     <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> ID = (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)-1;
-<a name="l00410"></a>00410     <span class="keywordflow">return</span> ID;
-<a name="l00411"></a>00411   }
-<a name="l00412"></a>00412   <span class="keyword">static</span> <span class="keywordtype">void</span> CleanupID ()
-<a name="l00413"></a>00413   {
-<a name="l00414"></a>00414     GetMyID () = (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)-1;
-<a name="l00415"></a>00415   }
-<a name="l00416"></a>00416 };
-<a name="l00417"></a>00417 
-<a name="l00431"></a><a class="code" href="group__scf.html#ga83">00431</a> <span class="preprocessor">#define SCF_VERSION(Name,Major,Minor,Micro)                \</span>
-<a name="l00432"></a>00432 <span class="preprocessor">struct Name;                                               \</span>
-<a name="l00433"></a>00433 <span class="preprocessor">CS_SPECIALIZE_TEMPLATE                                     \</span>
-<a name="l00434"></a>00434 <span class="preprocessor">class scfInterfaceTraits&lt;Name&gt;                             \</span>
-<a name="l00435"></a>00435 <span class="preprocessor">{                                                          \</span>
-<a name="l00436"></a>00436 <span class="preprocessor">public:                                                    \</span>
-<a name="l00437"></a>00437 <span class="preprocessor">  static scfInterfaceVersion GetVersion()                  \</span>
-<a name="l00438"></a>00438 <span class="preprocessor">  { return SCF_CONSTRUCT_VERSION(Major, Minor, Micro); }   \</span>
-<a name="l00439"></a>00439 <span class="preprocessor">  static char const* GetName ()                            \</span>
-<a name="l00440"></a>00440 <span class="preprocessor">  { return #Name; }                                        \</span>
-<a name="l00441"></a>00441 <span class="preprocessor">  static scfInterfaceID GetID ()                           \</span>
-<a name="l00442"></a>00442 <span class="preprocessor">  { scfInterfaceID&amp; ID = GetMyID ();                       \</span>
-<a name="l00443"></a>00443 <span class="preprocessor">    if (ID == (scfInterfaceID)(-1))                        \</span>
-<a name="l00444"></a>00444 <span class="preprocessor">    { ID = iSCF::SCF-&gt;GetInterfaceID (GetName ());         \</span>
-<a name="l00445"></a>00445 <span class="preprocessor">      csStaticVarCleanup (CleanupID);    }                 \</span>
-<a name="l00446"></a>00446 <span class="preprocessor">    return ID;                                             \</span>
-<a name="l00447"></a>00447 <span class="preprocessor">  }                                                        \</span>
-<a name="l00448"></a>00448 <span class="preprocessor">private:                                                   \</span>
-<a name="l00449"></a>00449 <span class="preprocessor">  static scfInterfaceID&amp; GetMyID ()                        \</span>
-<a name="l00450"></a>00450 <span class="preprocessor">  { static scfInterfaceID ID = (scfInterfaceID)-1; return ID; } \</span>
-<a name="l00451"></a>00451 <span class="preprocessor">  static void CleanupID ()                                 \</span>
-<a name="l00452"></a>00452 <span class="preprocessor">  { GetMyID () = (scfInterfaceID)-1; }                     \</span>
-<a name="l00453"></a>00453 <span class="preprocessor">}</span>
-<a name="l00454"></a>00454 <span class="preprocessor"></span>
-<a name="l00457"></a>00457 <span class="preprocessor">#endif</span>
-<a name="l00458"></a>00458 <span class="preprocessor"></span>
+<a name="l00405"></a>00405 
+<a name="l00406"></a>00406 <span class="keyword">private</span>:
+<a name="l00407"></a>00407   <span class="comment">// This idiom is a Meyers singleton</span>
+<a name="l00408"></a>00408   CS_FORCEINLINE <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a>&amp; GetMyID ()
+<a name="l00409"></a>00409   {
+<a name="l00410"></a>00410     <span class="keyword">static</span> <a class="code" href="group__scf.html#ga0">scfInterfaceID</a> ID = (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)-1;
+<a name="l00411"></a>00411     <span class="keywordflow">return</span> ID;
+<a name="l00412"></a>00412   }
+<a name="l00413"></a>00413   <span class="keyword">static</span> <span class="keywordtype">void</span> CleanupID ()
+<a name="l00414"></a>00414   {
+<a name="l00415"></a>00415     GetMyID () = (<a class="code" href="group__scf.html#ga0">scfInterfaceID</a>)-1;
+<a name="l00416"></a>00416   }
+<a name="l00417"></a>00417 };
+<a name="l00418"></a>00418 
+<a name="l00432"></a><a class="code" href="group__scf.html#ga83">00432</a> <span class="preprocessor">#define SCF_VERSION(Name,Major,Minor,Micro)                \</span>
+<a name="l00433"></a>00433 <span class="preprocessor">struct Name;                                               \</span>
+<a name="l00434"></a>00434 <span class="preprocessor">CS_SPECIALIZE_TEMPLATE                                     \</span>
+<a name="l00435"></a>00435 <span class="preprocessor">class scfInterfaceTraits&lt;Name&gt;                             \</span>
+<a name="l00436"></a>00436 <span class="preprocessor">{                                                          \</span>
+<a name="l00437"></a>00437 <span class="preprocessor">public:                                                    \</span>
+<a name="l00438"></a>00438 <span class="preprocessor">  static scfInterfaceVersion GetVersion()                  \</span>
+<a name="l00439"></a>00439 <span class="preprocessor">  { return SCF_CONSTRUCT_VERSION(Major, Minor, Micro); }   \</span>
+<a name="l00440"></a>00440 <span class="preprocessor">  static char const* GetName ()                            \</span>
+<a name="l00441"></a>00441 <span class="preprocessor">  { return #Name; }                                        \</span>
+<a name="l00442"></a>00442 <span class="preprocessor">  static scfInterfaceID GetID ()                           \</span>
+<a name="l00443"></a>00443 <span class="preprocessor">  { scfInterfaceID&amp; ID = GetMyID ();                       \</span>
+<a name="l00444"></a>00444 <span class="preprocessor">    if (ID == (scfInterfaceID)(-1))                        \</span>
+<a name="l00445"></a>00445 <span class="preprocessor">    { ID = iSCF::SCF-&gt;GetInterfaceID (GetName ());         \</span>
+<a name="l00446"></a>00446 <span class="preprocessor">      csStaticVarCleanup (CleanupID);    }                 \</span>
+<a name="l00447"></a>00447 <span class="preprocessor">    return ID;                                             \</span>
+<a name="l00448"></a>00448 <span class="preprocessor">  }                                                        \</span>
+<a name="l00449"></a>00449 <span class="preprocessor">private:                                                   \</span>
+<a name="l00450"></a>00450 <span class="preprocessor">  static scfInterfaceID&amp; GetMyID ()                        \</span>
+<a name="l00451"></a>00451 <span class="preprocessor">  { static scfInterfaceID ID = (scfInterfaceID)-1; return ID; } \</span>
+<a name="l00452"></a>00452 <span class="preprocessor">  static void CleanupID ()                                 \</span>
+<a name="l00453"></a>00453 <span class="preprocessor">  { GetMyID () = (scfInterfaceID)-1; }                     \</span>
+<a name="l00454"></a>00454 <span class="preprocessor">}</span>
+<a name="l00455"></a>00455 <span class="preprocessor"></span>
+<a name="l00458"></a>00458 <span class="preprocessor">#endif</span>
+<a name="l00459"></a>00459 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
