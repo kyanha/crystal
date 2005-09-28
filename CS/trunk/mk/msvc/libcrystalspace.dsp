@@ -262,6 +262,10 @@ SOURCE=..\..\libs\csgeom\transfrm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\triangulate.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\trimesh.cpp
 # End Source File
 # Begin Source File
@@ -1123,6 +1127,10 @@ SOURCE=..\..\libs\..\include\csgeom\transfrm.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csgeom\tri.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csgeom\triangulate.h
 # End Source File
 # Begin Source File
 
