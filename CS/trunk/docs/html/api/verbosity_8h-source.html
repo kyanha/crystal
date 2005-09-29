@@ -44,79 +44,79 @@
 <a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
 <a name="l00029"></a>00029 <span class="keyword">class </span><a class="code" href="classcsStringArray.html">csStringArray</a>;
 <a name="l00030"></a>00030 
-<a name="l00103"></a><a class="code" href="classcsVerbosityParser.html">00103</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>
-<a name="l00104"></a>00104 {
-<a name="l00105"></a>00105 <span class="keyword">private</span>:
-<a name="l00106"></a>00106   <a class="code" href="classcsStringHash.html">csStringHash</a> flags;
-<a name="l00107"></a>00107 
-<a name="l00108"></a>00108   <span class="keyword">typedef</span> <a class="code" href="classcsStringFast.html">csStringFast&lt;128&gt;</a> <a class="code" href="classcsStringFast.html">Str</a>;
-<a name="l00109"></a>00109   <span class="keyword">typedef</span> bool (*SplitPredicate)(<span class="keywordtype">char</span> c, size_t pos);
-<a name="l00110"></a>00110   <span class="keyword">static</span> <span class="keywordtype">bool</span> Split(<span class="keywordtype">char</span> <span class="keyword">const</span>*, <span class="keywordtype">char</span> delim, SplitPredicate, <span class="keywordtype">bool</span> empty_okay,
-<a name="l00111"></a>00111                     <a class="code" href="classcsStringArray.html">csStringArray</a>&amp;);
-<a name="l00112"></a>00112   <span class="keyword">static</span> <a class="code" href="classcsStringFast.html">Str</a>  Join(<a class="code" href="classcsStringArray.html">csStringArray</a> <span class="keyword">const</span>&amp;, <a class="code" href="classcsStringFast.html">Str</a> delim);
-<a name="l00113"></a>00113   <span class="keyword">static</span> <span class="keywordtype">bool</span> Error(<span class="keywordtype">char</span> <span class="keyword">const</span>* msg, <span class="keywordtype">char</span> <span class="keyword">const</span>* s, size_t pos);
-<a name="l00114"></a>00114   <span class="keyword">static</span> <span class="keywordtype">bool</span> ParseToggle(<span class="keywordtype">char</span> <span class="keyword">const</span>*&amp;);
-<a name="l00115"></a>00115   <span class="keyword">static</span> <span class="keywordtype">bool</span> ParseFlag(<span class="keywordtype">char</span> <span class="keyword">const</span>*, <a class="code" href="classcsStringArray.html">csStringArray</a>&amp;, <span class="keywordtype">bool</span> empty_okay);
-<a name="l00116"></a>00116   <span class="keywordtype">bool</span> TestFlag(<a class="code" href="classcsStringFast.html">Str</a> name, <span class="keywordtype">bool</span>&amp; enable) <span class="keyword">const</span>;
-<a name="l00117"></a>00117   <span class="keywordtype">void</span> Copy(<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <span class="keyword">const</span>&amp; v) { flags = v.<a class="code" href="classcsVerbosityParser.html#r0">flags</a>; }
-<a name="l00118"></a>00118 
-<a name="l00119"></a>00119 <span class="keyword">public</span>:
-<a name="l00134"></a>00134   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags = 0);
-<a name="l00135"></a>00135   
-<a name="l00139"></a><a class="code" href="classcsVerbosityParser.html#a1">00139</a>   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>(<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <span class="keyword">const</span>&amp; v) { Copy(v); }
-<a name="l00140"></a>00140 
-<a name="l00144"></a><a class="code" href="classcsVerbosityParser.html#a6">00144</a>   ~<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>() {}
-<a name="l00145"></a>00145 
-<a name="l00149"></a><a class="code" href="classcsVerbosityParser.html#a4">00149</a>   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>&amp; operator=(<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <span class="keyword">const</span>&amp; v)
-<a name="l00150"></a>00150   { Copy(v); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l00151"></a>00151 
-<a name="l00162"></a>00162   <span class="keywordtype">void</span> Parse(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags);
-<a name="l00163"></a>00163 
-<a name="l00184"></a>00184   <span class="keywordtype">bool</span> Enabled(<span class="keywordtype">char</span> <span class="keyword">const</span>* flag = 0, <span class="keywordtype">bool</span> fuzzy = <span class="keyword">true</span>) <span class="keyword">const</span>;
-<a name="l00185"></a>00185 
-<a name="l00192"></a>00192   <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a>
-<a name="l00193"></a><a class="code" href="classcsVerbosityParser.html#a0">00193</a>   <span class="keywordtype">bool</span> CheckFlag(<span class="keywordtype">char</span> <span class="keyword">const</span>* major, <span class="keywordtype">char</span> <span class="keyword">const</span>* minor)<span class="keyword"> const</span>
-<a name="l00194"></a>00194 <span class="keyword">  </span>{
-<a name="l00195"></a>00195     <a class="code" href="classcsStringFast.html">Str</a> flag; flag &lt;&lt; major &lt;&lt; <span class="charliteral">'.'</span> &lt;&lt; minor;
-<a name="l00196"></a>00196     <span class="keywordflow">return</span> Enabled(flag);
-<a name="l00197"></a>00197   }
-<a name="l00198"></a>00198 };
-<a name="l00199"></a>00199 
-<a name="l00219"></a>00219 CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <a class="code" href="verbosity_8h.html#a0">csParseVerbosity</a> (
-<a name="l00220"></a>00220   <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[]);
-<a name="l00221"></a>00221   
-<a name="l00234"></a>00234 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="verbosity_8h.html#a1">csCheckVerbosity</a> (
-<a name="l00235"></a>00235   <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[], <span class="keywordtype">char</span> <span class="keyword">const</span>* flag = 0, <span class="keywordtype">bool</span> fuzzy = <span class="keyword">true</span>);
-<a name="l00236"></a>00236   
-<a name="l00244"></a>00244 <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a>
-<a name="l00245"></a>00245 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="verbosity_8h.html#a1">csCheckVerbosity</a> (
-<a name="l00246"></a>00246   <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[], <span class="keywordtype">char</span> <span class="keyword">const</span>* major, <span class="keywordtype">char</span> <span class="keyword">const</span>* minor);
-<a name="l00247"></a>00247   
-<a name="l00258"></a><a class="code" href="classcsVerbosityManager.html">00258</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csVerbosityManager : <span class="keyword">public</span> <a class="code" href="structiVerbosityManager.html">iVerbosityManager</a>
-<a name="l00259"></a>00259 {
-<a name="l00260"></a>00260 <span class="keyword">private</span>:
-<a name="l00261"></a>00261   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> vp;
-<a name="l00262"></a>00262 <span class="keyword">public</span>:
-<a name="l00263"></a><a class="code" href="classcsVerbosityManager.html#o0">00263</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
-<a name="l00264"></a>00264 
-<a name="l00270"></a><a class="code" href="classcsVerbosityManager.html#a1">00270</a>   csVerbosityManager(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags = 0) : vp(flags)
-<a name="l00271"></a>00271   { <a class="code" href="group__scf.html#ga34">SCF_CONSTRUCT_IBASE</a>(0); }
-<a name="l00273"></a><a class="code" href="classcsVerbosityManager.html#a4">00273</a>   <span class="keyword">virtual</span> ~csVerbosityManager() { <a class="code" href="group__scf.html#ga36">SCF_DESTRUCT_IBASE</a>(); }
-<a name="l00274"></a>00274 
-<a name="l00280"></a><a class="code" href="classcsVerbosityManager.html#a3">00280</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVerbosityManager.html#a2">Parse</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags) { vp.Parse(flags); }
-<a name="l00281"></a>00281 
-<a name="l00293"></a><a class="code" href="classcsVerbosityManager.html#a2">00293</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVerbosityManager.html#a1">Enabled</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* flag = 0, <span class="keywordtype">bool</span> fuzzy = <span class="keyword">true</span>)<span class="keyword"> const</span>
-<a name="l00294"></a>00294 <span class="keyword">  </span>{ <span class="keywordflow">return</span> vp.Enabled(flag, fuzzy); }
-<a name="l00295"></a>00295 
-<a name="l00302"></a>00302   <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a>
-<a name="l00303"></a><a class="code" href="classcsVerbosityManager.html#a0">00303</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVerbosityManager.html#a0">CheckFlag</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* major, <span class="keywordtype">char</span> <span class="keyword">const</span>* minor)<span class="keyword"> const</span>
-<a name="l00304"></a>00304 <span class="keyword">  </span>{
-<a name="l00305"></a>00305     <a class="code" href="classcsStringFast.html">csStringFast&lt;128&gt;</a> flag; flag &lt;&lt; major &lt;&lt; <span class="charliteral">'.'</span> &lt;&lt; minor;
-<a name="l00306"></a>00306     <span class="keywordflow">return</span> <a class="code" href="structiVerbosityManager.html#a1">Enabled</a>(flag);
-<a name="l00307"></a>00307   }
-<a name="l00308"></a>00308 };
-<a name="l00309"></a>00309 
-<a name="l00310"></a>00310 <span class="preprocessor">#endif // __CS_CSUTIL_VERBOSITY_H__</span>
+<a name="l00102"></a><a class="code" href="classcsVerbosityParser.html">00102</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>
+<a name="l00103"></a>00103 {
+<a name="l00104"></a>00104 <span class="keyword">private</span>:
+<a name="l00105"></a>00105   <a class="code" href="classcsStringHash.html">csStringHash</a> flags;
+<a name="l00106"></a>00106 
+<a name="l00107"></a>00107   <span class="keyword">typedef</span> <a class="code" href="classcsStringFast.html">csStringFast&lt;128&gt;</a> <a class="code" href="classcsStringFast.html">Str</a>;
+<a name="l00108"></a>00108   <span class="keyword">typedef</span> bool (*SplitPredicate)(<span class="keywordtype">char</span> c, size_t pos);
+<a name="l00109"></a>00109   <span class="keyword">static</span> <span class="keywordtype">bool</span> Split(<span class="keywordtype">char</span> <span class="keyword">const</span>*, <span class="keywordtype">char</span> delim, SplitPredicate, <span class="keywordtype">bool</span> empty_okay,
+<a name="l00110"></a>00110                     <a class="code" href="classcsStringArray.html">csStringArray</a>&amp;);
+<a name="l00111"></a>00111   <span class="keyword">static</span> <a class="code" href="classcsStringFast.html">Str</a>  Join(<a class="code" href="classcsStringArray.html">csStringArray</a> <span class="keyword">const</span>&amp;, <a class="code" href="classcsStringFast.html">Str</a> delim);
+<a name="l00112"></a>00112   <span class="keyword">static</span> <span class="keywordtype">bool</span> Error(<span class="keywordtype">char</span> <span class="keyword">const</span>* msg, <span class="keywordtype">char</span> <span class="keyword">const</span>* s, size_t pos);
+<a name="l00113"></a>00113   <span class="keyword">static</span> <span class="keywordtype">bool</span> ParseToggle(<span class="keywordtype">char</span> <span class="keyword">const</span>*&amp;);
+<a name="l00114"></a>00114   <span class="keyword">static</span> <span class="keywordtype">bool</span> ParseFlag(<span class="keywordtype">char</span> <span class="keyword">const</span>*, <a class="code" href="classcsStringArray.html">csStringArray</a>&amp;, <span class="keywordtype">bool</span> empty_okay);
+<a name="l00115"></a>00115   <span class="keywordtype">bool</span> TestFlag(<a class="code" href="classcsStringFast.html">Str</a> name, <span class="keywordtype">bool</span>&amp; enable) <span class="keyword">const</span>;
+<a name="l00116"></a>00116   <span class="keywordtype">void</span> Copy(<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <span class="keyword">const</span>&amp; v) { flags = v.<a class="code" href="classcsVerbosityParser.html#r0">flags</a>; }
+<a name="l00117"></a>00117 
+<a name="l00118"></a>00118 <span class="keyword">public</span>:
+<a name="l00133"></a>00133   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags = 0);
+<a name="l00134"></a>00134   
+<a name="l00138"></a><a class="code" href="classcsVerbosityParser.html#a1">00138</a>   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>(<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <span class="keyword">const</span>&amp; v) { Copy(v); }
+<a name="l00139"></a>00139 
+<a name="l00143"></a><a class="code" href="classcsVerbosityParser.html#a6">00143</a>   ~<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>() {}
+<a name="l00144"></a>00144 
+<a name="l00148"></a><a class="code" href="classcsVerbosityParser.html#a4">00148</a>   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a>&amp; operator=(<a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <span class="keyword">const</span>&amp; v)
+<a name="l00149"></a>00149   { Copy(v); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l00150"></a>00150 
+<a name="l00161"></a>00161   <span class="keywordtype">void</span> Parse(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags);
+<a name="l00162"></a>00162 
+<a name="l00183"></a>00183   <span class="keywordtype">bool</span> Enabled(<span class="keywordtype">char</span> <span class="keyword">const</span>* flag = 0, <span class="keywordtype">bool</span> fuzzy = <span class="keyword">true</span>) <span class="keyword">const</span>;
+<a name="l00184"></a>00184 
+<a name="l00191"></a>00191   <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a>
+<a name="l00192"></a><a class="code" href="classcsVerbosityParser.html#a0">00192</a>   <span class="keywordtype">bool</span> CheckFlag(<span class="keywordtype">char</span> <span class="keyword">const</span>* major, <span class="keywordtype">char</span> <span class="keyword">const</span>* minor)<span class="keyword"> const</span>
+<a name="l00193"></a>00193 <span class="keyword">  </span>{
+<a name="l00194"></a>00194     <a class="code" href="classcsStringFast.html">Str</a> flag; flag &lt;&lt; major &lt;&lt; <span class="charliteral">'.'</span> &lt;&lt; minor;
+<a name="l00195"></a>00195     <span class="keywordflow">return</span> Enabled(flag);
+<a name="l00196"></a>00196   }
+<a name="l00197"></a>00197 };
+<a name="l00198"></a>00198 
+<a name="l00218"></a>00218 CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> <a class="code" href="verbosity_8h.html#a0">csParseVerbosity</a> (
+<a name="l00219"></a>00219   <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[]);
+<a name="l00220"></a>00220   
+<a name="l00233"></a>00233 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="verbosity_8h.html#a1">csCheckVerbosity</a> (
+<a name="l00234"></a>00234   <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[], <span class="keywordtype">char</span> <span class="keyword">const</span>* flag = 0, <span class="keywordtype">bool</span> fuzzy = <span class="keyword">true</span>);
+<a name="l00235"></a>00235   
+<a name="l00243"></a>00243 <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a>
+<a name="l00244"></a>00244 CS_CRYSTALSPACE_EXPORT <span class="keywordtype">bool</span> <a class="code" href="verbosity_8h.html#a1">csCheckVerbosity</a> (
+<a name="l00245"></a>00245   <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> <span class="keyword">const</span>* <span class="keyword">const</span> argv[], <span class="keywordtype">char</span> <span class="keyword">const</span>* major, <span class="keywordtype">char</span> <span class="keyword">const</span>* minor);
+<a name="l00246"></a>00246   
+<a name="l00257"></a><a class="code" href="classcsVerbosityManager.html">00257</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csVerbosityManager : <span class="keyword">public</span> <a class="code" href="structiVerbosityManager.html">iVerbosityManager</a>
+<a name="l00258"></a>00258 {
+<a name="l00259"></a>00259 <span class="keyword">private</span>:
+<a name="l00260"></a>00260   <a class="code" href="classcsVerbosityParser.html">csVerbosityParser</a> vp;
+<a name="l00261"></a>00261 <span class="keyword">public</span>:
+<a name="l00262"></a><a class="code" href="classcsVerbosityManager.html#o0">00262</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
+<a name="l00263"></a>00263 
+<a name="l00269"></a><a class="code" href="classcsVerbosityManager.html#a1">00269</a>   csVerbosityManager(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags = 0) : vp(flags)
+<a name="l00270"></a>00270   { <a class="code" href="group__scf.html#ga34">SCF_CONSTRUCT_IBASE</a>(0); }
+<a name="l00272"></a><a class="code" href="classcsVerbosityManager.html#a4">00272</a>   <span class="keyword">virtual</span> ~csVerbosityManager() { <a class="code" href="group__scf.html#ga36">SCF_DESTRUCT_IBASE</a>(); }
+<a name="l00273"></a>00273 
+<a name="l00279"></a><a class="code" href="classcsVerbosityManager.html#a3">00279</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiVerbosityManager.html#a2">Parse</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* flags) { vp.Parse(flags); }
+<a name="l00280"></a>00280 
+<a name="l00292"></a><a class="code" href="classcsVerbosityManager.html#a2">00292</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVerbosityManager.html#a1">Enabled</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* flag = 0, <span class="keywordtype">bool</span> fuzzy = <span class="keyword">true</span>)<span class="keyword"> const</span>
+<a name="l00293"></a>00293 <span class="keyword">  </span>{ <span class="keywordflow">return</span> vp.Enabled(flag, fuzzy); }
+<a name="l00294"></a>00294 
+<a name="l00301"></a>00301   <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a>
+<a name="l00302"></a><a class="code" href="classcsVerbosityManager.html#a0">00302</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiVerbosityManager.html#a0">CheckFlag</a>(<span class="keywordtype">char</span> <span class="keyword">const</span>* major, <span class="keywordtype">char</span> <span class="keyword">const</span>* minor)<span class="keyword"> const</span>
+<a name="l00303"></a>00303 <span class="keyword">  </span>{
+<a name="l00304"></a>00304     <a class="code" href="classcsStringFast.html">csStringFast&lt;128&gt;</a> flag; flag &lt;&lt; major &lt;&lt; <span class="charliteral">'.'</span> &lt;&lt; minor;
+<a name="l00305"></a>00305     <span class="keywordflow">return</span> <a class="code" href="structiVerbosityManager.html#a1">Enabled</a>(flag);
+<a name="l00306"></a>00306   }
+<a name="l00307"></a>00307 };
+<a name="l00308"></a>00308 
+<a name="l00309"></a>00309 <span class="preprocessor">#endif // __CS_CSUTIL_VERBOSITY_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

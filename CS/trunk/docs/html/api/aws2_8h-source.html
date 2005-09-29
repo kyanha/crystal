@@ -17,86 +17,105 @@
 <div class="qindex"><a class="qindex" href="index.html">Main&nbsp;Page</a> | <a class="qindex" href="modules.html">Modules</a> | <a class="qindex" href="namespaces.html">Namespace List</a> | <a class="qindex" href="hierarchy.html">Class&nbsp;Hierarchy</a> | <a class="qindex" href="classes.html">Alphabetical&nbsp;List</a> | <a class="qindex" href="annotated.html">Class&nbsp;List</a> | <a class="qindex" href="dirs.html">Directories</a> | <a class="qindex" href="files.html">File&nbsp;List</a> | <a class="qindex" href="namespacemembers.html">Namespace&nbsp;Members</a> | <a class="qindex" href="functions.html">Class&nbsp;Members</a> | <a class="qindex" href="globals.html">File&nbsp;Members</a> | <a class="qindex" href="pages.html">Related&nbsp;Pages</a></div>
 <div class="nav">
 <a class="el" href="dir_000029.html">iaws</a></div>
-<h1>aws2.h</h1><a href="aws2_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef __AWS_INTERFACE_20_H__</span>
-<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define __AWS_INTERFACE_20_H__</span>
-<a name="l00003"></a>00003 <span class="preprocessor"></span>
-<a name="l00004"></a>00004 <span class="preprocessor">#ifdef __AWS_INTERFACE_10_H__</span>
-<a name="l00005"></a>00005 <span class="preprocessor"></span><span class="preprocessor"># error "aws.h included before aws2.h.  You cannot mix and match the two versions!"</span>
-<a name="l00006"></a>00006 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00007"></a>00007 <span class="preprocessor"></span>
-<a name="l00012"></a>00012 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-<a name="l00013"></a>00013 <span class="preprocessor">#include "<a class="code" href="refarr_8h.html">csutil/refarr.h</a>"</span>
-<a name="l00014"></a>00014 <span class="preprocessor">#include "<a class="code" href="csutil_2stringarray_8h.html">csutil/stringarray.h</a>"</span>
-<a name="l00015"></a>00015 <span class="preprocessor">#include "<a class="code" href="scfstr_8h.html">csutil/scfstr.h</a>"</span>
-<a name="l00016"></a>00016 <span class="preprocessor">#include "<a class="code" href="csrect_8h.html">csgeom/csrect.h</a>"</span>
-<a name="l00017"></a>00017 <span class="preprocessor">#include "<a class="code" href="vector2_8h.html">csgeom/vector2.h</a>"</span>
-<a name="l00018"></a>00018 <span class="preprocessor">#include "<a class="code" href="iutil_2event_8h.html">iutil/event.h</a>"</span>
-<a name="l00019"></a>00019 <span class="preprocessor">#include "<a class="code" href="string_8h.html">iutil/string.h</a>"</span>
-<a name="l00020"></a>00020 <span class="preprocessor">#include "<a class="code" href="ivideo_2graph2d_8h.html">ivideo/graph2d.h</a>"</span>
-<a name="l00021"></a>00021 <span class="preprocessor">#include "<a class="code" href="graph3d_8h.html">ivideo/graph3d.h</a>"</span>
-<a name="l00022"></a>00022 
-<a name="l00023"></a>00023 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
-<a name="l00024"></a>00024 
-<a name="l00025"></a><a class="code" href="namespaceaws.html">00025</a> <span class="keyword">namespace </span>aws
-<a name="l00026"></a>00026 {
-<a name="l00027"></a>00027 
-<a name="l00028"></a><a class="code" href="namespaceaws_1_1autom.html">00028</a> <span class="keyword">namespace </span>autom
-<a name="l00029"></a>00029 {
-<a name="l00030"></a>00030   <span class="keyword">class </span>string;
-<a name="l00031"></a>00031   <span class="keyword">class </span>integer;
-<a name="l00032"></a>00032   <span class="keyword">class </span>floating;
-<a name="l00033"></a>00033   
-<a name="l00035"></a><a class="code" href="structaws_1_1autom_1_1iObject.html">00035</a>   <span class="keyword">struct </span><a class="code" href="structaws_1_1autom_1_1iObject.html">iObject</a> 
-<a name="l00036"></a>00036   {    
-<a name="l00037"></a>00037     SCF_INTERFACE(<a class="code" href="structaws_1_1autom_1_1iObject.html">autom::iObject</a>,0,0,1);
-<a name="l00038"></a><a class="code" href="structaws_1_1autom_1_1iObject.html#w9">00038</a>       <span class="keyword">enum</span> <a class="code" href="structaws_1_1autom_1_1iObject.html#w9">TYPE</a> { T_STRING, T_INT, T_FLOAT, T_LIST, T_MAP, T_FUNCTION, T_REFERENCE, T_BLOB, T_NIL };
-<a name="l00039"></a>00039 
-<a name="l00041"></a>00041       <span class="keyword">virtual</span> <a class="code" href="structaws_1_1autom_1_1iObject.html#w9">TYPE</a> <a class="code" href="structaws_1_1autom_1_1iObject.html#a1">ObjectType</a>() = 0;
-<a name="l00042"></a>00042       
-<a name="l00044"></a>00044       <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structaws_1_1autom_1_1iObject.html#a4">SetName</a>(<a class="code" href="structiString.html">iString</a>* _name) = 0;
-<a name="l00045"></a>00045       
-<a name="l00047"></a>00047       <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iString&gt;</a> <a class="code" href="structaws_1_1autom_1_1iObject.html#a0">GetName</a>() = 0;
-<a name="l00048"></a>00048       
-<a name="l00050"></a>00050       <span class="keyword">virtual</span> string <a class="code" href="structaws_1_1autom_1_1iObject.html#a7">ToString</a>() = 0;
-<a name="l00051"></a>00051       
-<a name="l00053"></a>00053       <span class="keyword">virtual</span> integer <a class="code" href="structaws_1_1autom_1_1iObject.html#a6">ToInt</a>() = 0;
-<a name="l00054"></a>00054       
-<a name="l00056"></a>00056       <span class="keyword">virtual</span> floating <a class="code" href="structaws_1_1autom_1_1iObject.html#a5">ToFloat</a>() = 0;   
-<a name="l00057"></a>00057       
-<a name="l00059"></a>00059       <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iString&gt;</a> <a class="code" href="structaws_1_1autom_1_1iObject.html#a2">ReprObject</a>() = 0;      
-<a name="l00060"></a>00060   };
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062 } <span class="comment">// namespace autom</span>
-<a name="l00063"></a>00063 
-<a name="l00064"></a>00064 } <span class="comment">// namespace aws</span>
-<a name="l00065"></a>00065 
-<a name="l00066"></a>00066 <span class="comment">/*SCF_VERSION(aws::autom::iObject, 1, 0, 1);*/</span>
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a>(<a class="code" href="structiAwsWindow.html">iAwsWindow</a>, 1, 0, 1);
-<a name="l00070"></a><a class="code" href="structiAwsWindow.html">00070</a> <span class="keyword">struct </span><a class="code" href="structiAwsWindow.html">iAwsWindow</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00071"></a>00071 {
-<a name="l00072"></a><a class="code" href="structiAwsWindow.html#o0">00072</a>   <span class="keywordtype">int</span> <a class="code" href="structiAwsWindow.html#o0">empty</a>;
-<a name="l00073"></a>00073 
-<a name="l00074"></a>00074 };
-<a name="l00075"></a>00075 
-<a name="l00076"></a>00076 
-<a name="l00077"></a>00077 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a>(<a class="code" href="structiAws.html">iAws</a>, 1, 0, 1);
-<a name="l00078"></a>00078 <span class="keyword">struct </span><a class="code" href="structiAws.html">iAws</a>  : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00079"></a>00079 {
-<a name="l00081"></a>00081   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#a27">Initialize</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *_object_reg)=0;
-<a name="l00082"></a>00082 
-<a name="l00084"></a>00084   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAws.html#a39">SetDrawTarget</a>(<a class="code" href="structiGraphics2D.html">iGraphics2D</a> *_g2d, <a class="code" href="structiGraphics3D.html">iGraphics3D</a> *_g3d)=0;
-<a name="l00085"></a>00085 
-<a name="l00087"></a>00087   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#a29">Load</a>(<span class="keyword">const</span> <a class="code" href="classscfString.html">scfString</a> &amp;_filename)=0;
+<h1>aws2.h</h1><a href="aws2_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/**************************************************************************</span>
+<a name="l00002"></a>00002 <span class="comment">    Copyright (C) 2005 by Christopher Nelson</span>
+<a name="l00003"></a>00003 <span class="comment"></span>
+<a name="l00004"></a>00004 <span class="comment">    This library is free software; you can redistribute it and/or</span>
+<a name="l00005"></a>00005 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
+<a name="l00006"></a>00006 <span class="comment">    License as published by the Free Software Foundation; either</span>
+<a name="l00007"></a>00007 <span class="comment">    version 2 of the License, or (at your option) any later version.</span>
+<a name="l00008"></a>00008 <span class="comment"></span>
+<a name="l00009"></a>00009 <span class="comment">    This library is distributed in the hope that it will be useful,</span>
+<a name="l00010"></a>00010 <span class="comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<a name="l00011"></a>00011 <span class="comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+<a name="l00012"></a>00012 <span class="comment">    Library General Public License for more details.</span>
+<a name="l00013"></a>00013 <span class="comment"></span>
+<a name="l00014"></a>00014 <span class="comment">    You should have received a copy of the GNU Library General Public</span>
+<a name="l00015"></a>00015 <span class="comment">    License along with this library; if not, write to the Free</span>
+<a name="l00016"></a>00016 <span class="comment">    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span>
+<a name="l00017"></a>00017 <span class="comment">*****************************************************************************/</span>
+<a name="l00018"></a>00018 
+<a name="l00019"></a>00019 <span class="preprocessor">#ifndef __AWS_INTERFACE_20_H__</span>
+<a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __AWS_INTERFACE_20_H__</span>
+<a name="l00021"></a>00021 <span class="preprocessor"></span>
+<a name="l00022"></a>00022 <span class="preprocessor">#ifdef __AWS_INTERFACE_10_H__</span>
+<a name="l00023"></a>00023 <span class="preprocessor"></span><span class="preprocessor"># error "aws.h included before aws2.h.  You cannot mix and match the two versions!"</span>
+<a name="l00024"></a>00024 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00025"></a>00025 <span class="preprocessor"></span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="refarr_8h.html">csutil/refarr.h</a>"</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="csutil_2stringarray_8h.html">csutil/stringarray.h</a>"</span>
+<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="scfstr_8h.html">csutil/scfstr.h</a>"</span>
+<a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="csrect_8h.html">csgeom/csrect.h</a>"</span>
+<a name="l00035"></a>00035 <span class="preprocessor">#include "<a class="code" href="vector2_8h.html">csgeom/vector2.h</a>"</span>
+<a name="l00036"></a>00036 <span class="preprocessor">#include "<a class="code" href="iutil_2event_8h.html">iutil/event.h</a>"</span>
+<a name="l00037"></a>00037 <span class="preprocessor">#include "<a class="code" href="string_8h.html">iutil/string.h</a>"</span>
+<a name="l00038"></a>00038 <span class="preprocessor">#include "<a class="code" href="ivideo_2graph2d_8h.html">ivideo/graph2d.h</a>"</span>
+<a name="l00039"></a>00039 <span class="preprocessor">#include "<a class="code" href="graph3d_8h.html">ivideo/graph3d.h</a>"</span>
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+<a name="l00042"></a>00042 
+<a name="l00043"></a><a class="code" href="namespaceaws.html">00043</a> <span class="keyword">namespace </span>aws
+<a name="l00044"></a>00044 {
+<a name="l00045"></a>00045 
+<a name="l00046"></a><a class="code" href="namespaceaws_1_1autom.html">00046</a> <span class="keyword">namespace </span>autom
+<a name="l00047"></a>00047 {
+<a name="l00048"></a>00048   <span class="keyword">class </span>string;
+<a name="l00049"></a>00049   <span class="keyword">class </span>integer;
+<a name="l00050"></a>00050   <span class="keyword">class </span>floating;
+<a name="l00051"></a>00051   
+<a name="l00053"></a><a class="code" href="structaws_1_1autom_1_1iObject.html">00053</a>   <span class="keyword">struct </span><a class="code" href="structaws_1_1autom_1_1iObject.html">iObject</a> 
+<a name="l00054"></a>00054   {    
+<a name="l00055"></a>00055     SCF_INTERFACE(<a class="code" href="structaws_1_1autom_1_1iObject.html">autom::iObject</a>,0,0,1);
+<a name="l00056"></a><a class="code" href="structaws_1_1autom_1_1iObject.html#w10">00056</a>     <span class="keyword">enum</span> <a class="code" href="structaws_1_1autom_1_1iObject.html#w10">TYPE</a> { T_STRING, T_INT, T_FLOAT, T_LIST, T_MAP, T_FUNCTION,
+<a name="l00057"></a>00057         T_REFERENCE, T_BLOB, T_VAR, T_NIL };
+<a name="l00058"></a>00058 
+<a name="l00063"></a>00063     <span class="keyword">virtual</span> <a class="code" href="structaws_1_1autom_1_1iObject.html#w10">TYPE</a> <a class="code" href="structaws_1_1autom_1_1iObject.html#a1">ObjectType</a>() = 0;
+<a name="l00064"></a>00064       
+<a name="l00066"></a>00066     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structaws_1_1autom_1_1iObject.html#a4">SetName</a>(<a class="code" href="structiString.html">iString</a>* _name) = 0;
+<a name="l00067"></a>00067       
+<a name="l00069"></a>00069     <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iString&gt;</a> <a class="code" href="structaws_1_1autom_1_1iObject.html#a0">GetName</a>() = 0;
+<a name="l00070"></a>00070       
+<a name="l00072"></a>00072     <span class="keyword">virtual</span> string <a class="code" href="structaws_1_1autom_1_1iObject.html#a7">ToString</a>() = 0;
+<a name="l00073"></a>00073       
+<a name="l00075"></a>00075     <span class="keyword">virtual</span> integer <a class="code" href="structaws_1_1autom_1_1iObject.html#a6">ToInt</a>() = 0;
+<a name="l00076"></a>00076       
+<a name="l00078"></a>00078     <span class="keyword">virtual</span> floating <a class="code" href="structaws_1_1autom_1_1iObject.html#a5">ToFloat</a>() = 0;     
+<a name="l00079"></a>00079       
+<a name="l00084"></a>00084     <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iString&gt;</a> <a class="code" href="structaws_1_1autom_1_1iObject.html#a2">ReprObject</a>() = 0;      
+<a name="l00085"></a>00085   };
+<a name="l00086"></a>00086 
+<a name="l00087"></a>00087 } <span class="comment">// namespace autom</span>
 <a name="l00088"></a>00088 
-<a name="l00090"></a>00090   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#a26">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a> &amp;)=0;  
-<a name="l00091"></a>00091 
-<a name="l00093"></a>00093   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAws.html#a36">Redraw</a>()=0;
-<a name="l00094"></a>00094 };
-<a name="l00095"></a>00095 
-<a name="l00096"></a>00096 
-<a name="l00097"></a>00097 <span class="preprocessor">#endif</span>
+<a name="l00089"></a>00089 } <span class="comment">// namespace aws</span>
+<a name="l00090"></a>00090 
+<a name="l00091"></a>00091 <span class="comment">/*SCF_VERSION(aws::autom::iObject, 1, 0, 1);*/</span>
+<a name="l00092"></a>00092 
+<a name="l00093"></a>00093 
+<a name="l00094"></a>00094 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a>(<a class="code" href="structiAwsWindow.html">iAwsWindow</a>, 1, 0, 1);
+<a name="l00095"></a><a class="code" href="structiAwsWindow.html">00095</a> <span class="keyword">struct </span><a class="code" href="structiAwsWindow.html">iAwsWindow</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00096"></a>00096 {
+<a name="l00097"></a><a class="code" href="structiAwsWindow.html#o0">00097</a>   <span class="keywordtype">int</span> <a class="code" href="structiAwsWindow.html#o0">empty</a>;
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099 };
+<a name="l00100"></a>00100 
+<a name="l00101"></a>00101 
+<a name="l00102"></a>00102 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a>(<a class="code" href="structiAws.html">iAws</a>, 1, 0, 1);
+<a name="l00103"></a>00103 <span class="keyword">struct </span><a class="code" href="structiAws.html">iAws</a>  : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00104"></a>00104 {
+<a name="l00106"></a>00106   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#a27">Initialize</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *_object_reg)=0;
+<a name="l00107"></a>00107 
+<a name="l00109"></a>00109   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAws.html#a39">SetDrawTarget</a>(<a class="code" href="structiGraphics2D.html">iGraphics2D</a> *_g2d, <a class="code" href="structiGraphics3D.html">iGraphics3D</a> *_g3d)=0;
+<a name="l00110"></a>00110 
+<a name="l00112"></a>00112   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#a29">Load</a>(<span class="keyword">const</span> <a class="code" href="classscfString.html">scfString</a> &amp;_filename)=0;
+<a name="l00113"></a>00113 
+<a name="l00115"></a>00115   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#a26">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a> &amp;)=0;  
+<a name="l00116"></a>00116 
+<a name="l00118"></a>00118   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAws.html#a36">Redraw</a>()=0;
+<a name="l00119"></a>00119 };
+<a name="l00120"></a>00120 
+<a name="l00121"></a>00121 
+<a name="l00122"></a>00122 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

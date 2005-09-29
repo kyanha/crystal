@@ -103,28 +103,20 @@ Inheritance diagram for iVFS:<p><center><img src="structiVFS__inherit__graph.png
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 The Virtual Filesystem Class is intended to be the only way for Crystal Space engine to access the files. 
 <p>
-This gives unified control over the way how files are found, read and written. VFS gives the following goodies over the standard file i/o functions: <ul>
-<li>
-Multiple search directories. Several "real" directories can be collected together into one "virtual" directory. </li>
-<li>
-Directories can be mapped to "real" directories as well as to archives (.zip files). Files are compressed/decompressed transparently for clients. </li>
-<li>
-The Virtual File System is unique across all operating systems Crystal Space supports, no matter of features of the underlying OS. </li>
-</ul>
-This class has only most basic features of a real filesystem: file reading and writing (no simultaneous read and write mode are allowed because it would be rather complex to implement it for archives). However, most programs don't even need such functionality, and for sure Crystal Space itself doesn't need it. Files open for writing are always truncated. A simple meaning for getting a list of files in a virtual directory is implemented; however the user is presented with only a list of file names; no fancy things like file size, time etc (file size can be determined after opening it for reading). <p>
-Main creators of instances implementing this interface: <ul>
-<li>
-The VFS plugin (crystalspace.kernel.vfs) </li>
-</ul>
-Main ways to get pointers to this interface: <ul>
-<li>
-<a class="el" href="iutil_2objreg_8h.html#a1">CS_QUERY_REGISTRY()</a> </li>
-</ul>
+This gives unified control over the way how files are found, read and written. VFS gives the following goodies over the standard file i/o functions:<ul>
+<li>Multiple search directories. Several "real" directories can be collected together into one "virtual" directory.</li><li>Directories can be mapped to "real" directories as well as to archives (.zip files). Files are compressed/decompressed transparently for clients.</li><li>The Virtual File System is unique across all operating systems Crystal Space supports, no matter of features of the underlying OS.</li></ul>
+<p>
+This class has only most basic features of a real filesystem: file reading and writing (no simultaneous read and write mode are allowed because it would be rather complex to implement it for archives). However, most programs don't even need such functionality, and for sure Crystal Space itself doesn't need it. Files open for writing are always truncated. A simple meaning for getting a list of files in a virtual directory is implemented; however the user is presented with only a list of file names; no fancy things like file size, time etc (file size can be determined after opening it for reading).<p>
+Main creators of instances implementing this interface:<ul>
+<li>The VFS plugin (crystalspace.kernel.vfs)</li></ul>
+<p>
+Main ways to get pointers to this interface:<ul>
+<li><a class="el" href="iutil_2objreg_8h.html#a1">CS_QUERY_REGISTRY()</a></li></ul>
 
 <p>
 
 <p>
-Definition at line <a class="el" href="vfs_8h-source.html#l00211">211</a> of file <a class="el" href="vfs_8h-source.html">vfs.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="vfs_8h-source.html#l00205">205</a> of file <a class="el" href="vfs_8h-source.html">vfs.h</a>.<hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="a0"></a><!-- doxytag: member="iVFS::ChDir" ref="a0" args="(const char *Path)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -203,14 +195,9 @@ Set current working directory.
 <p>
 Convenience function to set the current VFS directory to the given path. 
 <p>
-The path can be any of the following: <ul>
-<li>
-A valid VFS path. In that case this is equivalent to calling ChDir(path). </li>
-<li>
-A real path (using '/', '\', or '$/' for path delimiter). In this case this path will be mounted on the 'vfspath' parameter and a ChDir(vfspath) will happen. </li>
-<li>
-A real path to a zip file. In this case the zip file will be mounted on the 'vfspath' parameter and a ChDir(vfspath) will happen. </li>
-</ul>
+The path can be any of the following:<ul>
+<li>A valid VFS path. In that case this is equivalent to calling ChDir(path).</li><li>A real path (using '/', '\', or '$/' for path delimiter). In this case this path will be mounted on the 'vfspath' parameter and a ChDir(vfspath) will happen.</li><li>A real path to a zip file. In this case the zip file will be mounted on the 'vfspath' parameter and a ChDir(vfspath) will happen.</li></ul>
+<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>path</em>&nbsp;</td><td>is the path to mount (VFS, real, zip, ...) </td></tr>
