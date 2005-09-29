@@ -150,6 +150,10 @@ SOURCE=..\..\plugins\aws2\functor.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\aws2\fvg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\aws2\manager.cpp
 # End Source File
 # Begin Source File
@@ -203,6 +207,14 @@ SOURCE=..\..\plugins\aws2\frame.h
 # Begin Source File
 
 SOURCE=..\..\plugins\aws2\functor.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws2\fvg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\aws2\fvg_shape.h
 # End Source File
 # Begin Source File
 
