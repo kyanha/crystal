@@ -53,83 +53,75 @@
 <a name="l00041"></a>00041 
 <a name="l00045"></a><a class="code" href="structcsPolygonMeshEdge.html">00045</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>
 <a name="l00046"></a>00046 {
-<a name="l00047"></a>00047   <span class="comment">// Indices of the two vertices forming the edge.</span>
-<a name="l00048"></a>00048   <span class="comment">// vt1 &lt; vt2.</span>
-<a name="l00049"></a><a class="code" href="structcsPolygonMeshEdge.html#o4">00049</a>   <span class="keywordtype">int</span> vt1, vt2;
-<a name="l00050"></a>00050   <span class="comment">// Indices of the two polygons sharing this edge.</span>
-<a name="l00051"></a>00051   <span class="comment">// If poly2 == -1 then this is an edge with only one polygon attached.</span>
-<a name="l00052"></a><a class="code" href="structcsPolygonMeshEdge.html#o2">00052</a>   <span class="keywordtype">int</span> poly1, poly2;
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054   <span class="comment">// Active or not. If this flag is true the edge is active in the sense</span>
-<a name="l00055"></a>00055   <span class="comment">// that it actually connects two non-coplanar polygons (or is only</span>
-<a name="l00056"></a>00056   <span class="comment">// connected to one polygon). Edges that are not active are not relevant</span>
-<a name="l00057"></a>00057   <span class="comment">// for outline calculation.</span>
-<a name="l00058"></a><a class="code" href="structcsPolygonMeshEdge.html#o0">00058</a>   <span class="keywordtype">bool</span> active;
-<a name="l00059"></a>00059 };
-<a name="l00060"></a>00060 
-<a name="l00064"></a><a class="code" href="structcsTriangleMinMax.html">00064</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csTriangleMinMax : <span class="keyword">public</span> <a class="code" href="structcsTriangle.html">csTriangle</a>
-<a name="l00065"></a>00065 {
-<a name="l00066"></a><a class="code" href="structcsTriangleMinMax.html#o1">00066</a>   <span class="keywordtype">float</span> minx, maxx;
-<a name="l00067"></a>00067 };
-<a name="l00068"></a>00068 
-<a name="l00072"></a><a class="code" href="classcsPolygonMeshTools.html">00072</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPolygonMeshTools
-<a name="l00073"></a>00073 {
-<a name="l00074"></a>00074 <span class="keyword">private</span>:
-<a name="l00075"></a>00075   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculatePlanes (<a class="code" href="classcsVector3.html">csVector3</a>* vertices,
-<a name="l00076"></a>00076         csTriangleMinMax* tris, <span class="keywordtype">int</span> num_tris, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
-<a name="l00077"></a>00077 
-<a name="l00078"></a>00078 <span class="keyword">public</span>:
-<a name="l00084"></a>00084   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculateNormals (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh, <a class="code" href="classcsVector3.html">csVector3</a>* normals);
-<a name="l00085"></a>00085 
-<a name="l00091"></a>00091   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculatePlanes (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
-<a name="l00092"></a>00092 
-<a name="l00100"></a>00100   <span class="keyword">static</span> <a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>* CalculateEdges (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>*, <span class="keywordtype">int</span>&amp; num_edges);
-<a name="l00101"></a>00101 
-<a name="l00107"></a>00107   <span class="keyword">static</span> <span class="keywordtype">int</span> CheckActiveEdges (<a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>* edges, <span class="keywordtype">int</span> num_edges,
-<a name="l00108"></a>00108         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
-<a name="l00109"></a>00109 
-<a name="l00131"></a>00131   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculateOutline (<a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>* edges, <span class="keywordtype">int</span> num_edges,
-<a name="l00132"></a>00132         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes, <span class="keywordtype">int</span> num_vertices,
-<a name="l00133"></a>00133         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos,
-<a name="l00134"></a>00134         <span class="keywordtype">int</span>* outline_edges, <span class="keywordtype">int</span>&amp; num_outline_edges,
-<a name="l00135"></a>00135         <span class="keywordtype">bool</span>* outline_verts,
-<a name="l00136"></a>00136         <span class="keywordtype">float</span>&amp; valid_radius);
-<a name="l00137"></a>00137 
-<a name="l00142"></a>00142   <span class="keyword">static</span> <span class="keywordtype">bool</span> IsMeshClosed (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh);
+<a name="l00051"></a><a class="code" href="structcsPolygonMeshEdge.html#o4">00051</a>   <span class="keywordtype">int</span> vt1, vt2;
+<a name="l00056"></a><a class="code" href="structcsPolygonMeshEdge.html#o2">00056</a>   <span class="keywordtype">int</span> poly1, poly2;
+<a name="l00057"></a>00057 
+<a name="l00064"></a><a class="code" href="structcsPolygonMeshEdge.html#o0">00064</a>   <span class="keywordtype">bool</span> active;
+<a name="l00065"></a>00065 };
+<a name="l00066"></a>00066 
+<a name="l00070"></a><a class="code" href="structcsTriangleMinMax.html">00070</a> <span class="keyword">struct </span>CS_CRYSTALSPACE_EXPORT csTriangleMinMax : <span class="keyword">public</span> <a class="code" href="structcsTriangle.html">csTriangle</a>
+<a name="l00071"></a>00071 {
+<a name="l00072"></a><a class="code" href="structcsTriangleMinMax.html#o1">00072</a>   <span class="keywordtype">float</span> minx, maxx;
+<a name="l00073"></a>00073 };
+<a name="l00074"></a>00074 
+<a name="l00078"></a><a class="code" href="classcsPolygonMeshTools.html">00078</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPolygonMeshTools
+<a name="l00079"></a>00079 {
+<a name="l00080"></a>00080 <span class="keyword">private</span>:
+<a name="l00081"></a>00081   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculatePlanes (<a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+<a name="l00082"></a>00082         csTriangleMinMax* tris, <span class="keywordtype">int</span> num_tris, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+<a name="l00083"></a>00083 
+<a name="l00084"></a>00084 <span class="keyword">public</span>:
+<a name="l00090"></a>00090   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculateNormals (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh, <a class="code" href="classcsVector3.html">csVector3</a>* normals);
+<a name="l00091"></a>00091 
+<a name="l00097"></a>00097   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculatePlanes (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* mesh, <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+<a name="l00098"></a>00098 
+<a name="l00106"></a>00106   <span class="keyword">static</span> <a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>* CalculateEdges (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>*, <span class="keywordtype">int</span>&amp; num_edges);
+<a name="l00107"></a>00107 
+<a name="l00113"></a>00113   <span class="keyword">static</span> <span class="keywordtype">int</span> CheckActiveEdges (<a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>* edges, <span class="keywordtype">int</span> num_edges,
+<a name="l00114"></a>00114         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+<a name="l00115"></a>00115 
+<a name="l00137"></a>00137   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculateOutline (<a class="code" href="structcsPolygonMeshEdge.html">csPolygonMeshEdge</a>* edges, <span class="keywordtype">int</span> num_edges,
+<a name="l00138"></a>00138         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes, <span class="keywordtype">int</span> num_vertices,
+<a name="l00139"></a>00139         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos,
+<a name="l00140"></a>00140         <span class="keywordtype">int</span>* outline_edges, <span class="keywordtype">int</span>&amp; num_outline_edges,
+<a name="l00141"></a>00141         <span class="keywordtype">bool</span>* outline_verts,
+<a name="l00142"></a>00142         <span class="keywordtype">float</span>&amp; valid_radius);
 <a name="l00143"></a>00143 
-<a name="l00149"></a>00149   <span class="keyword">static</span> <span class="keywordtype">bool</span> IsMeshConvex (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh);
-<a name="l00150"></a>00150 
-<a name="l00157"></a>00157   <span class="keyword">static</span> <span class="keywordtype">void</span> CloseMesh (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh, 
-<a name="l00158"></a>00158     <a class="code" href="classcsArray.html">csArray&lt;csMeshedPolygon&gt;</a>&amp; newPolys, <span class="keywordtype">int</span>*&amp; vertidx, <span class="keywordtype">int</span>&amp; vertidx_len);
-<a name="l00159"></a>00159 
-<a name="l00167"></a>00167   <span class="keyword">static</span> <span class="keywordtype">void</span> Triangulate (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
-<a name="l00168"></a>00168         <a class="code" href="structcsTriangle.html">csTriangle</a>*&amp; tris, <span class="keywordtype">int</span>&amp; tri_count);
-<a name="l00169"></a>00169 
-<a name="l00175"></a>00175   <span class="keyword">static</span> <span class="keywordtype">void</span> Polygonize (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
-<a name="l00176"></a>00176         <a class="code" href="structcsMeshedPolygon.html">csMeshedPolygon</a>*&amp; polygons, <span class="keywordtype">int</span>&amp; poly_count);
-<a name="l00177"></a>00177 
-<a name="l00186"></a>00186   <span class="keyword">static</span> <span class="keywordtype">void</span> SortTrianglesX (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
-<a name="l00187"></a>00187         csTriangleMinMax*&amp; tris, <span class="keywordtype">int</span>&amp; tri_count,
-<a name="l00188"></a>00188         <a class="code" href="classcsPlane3.html">csPlane3</a>*&amp; planes);
-<a name="l00189"></a>00189 
-<a name="l00197"></a>00197   <span class="keyword">static</span> <span class="keywordtype">bool</span> PointInClosedMesh (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point,
-<a name="l00198"></a>00198         <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
-<a name="l00199"></a>00199         csTriangleMinMax* tris, <span class="keywordtype">int</span> tri_count,
-<a name="l00200"></a>00200         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
-<a name="l00201"></a>00201 
-<a name="l00214"></a>00214   <span class="keyword">static</span> <span class="keywordtype">bool</span> LineInClosedMesh (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p2,
-<a name="l00215"></a>00215         <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
-<a name="l00216"></a>00216         csTriangleMinMax* tris, <span class="keywordtype">int</span> tri_count,
-<a name="l00217"></a>00217         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
-<a name="l00218"></a>00218 
-<a name="l00231"></a>00231   <span class="keyword">static</span> <span class="keywordtype">bool</span> BoxInClosedMesh (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; box,
-<a name="l00232"></a>00232         <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
-<a name="l00233"></a>00233         csTriangleMinMax* tris, <span class="keywordtype">int</span> tri_count,
-<a name="l00234"></a>00234         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
-<a name="l00235"></a>00235 };
-<a name="l00236"></a>00236 
-<a name="l00239"></a>00239 <span class="preprocessor">#endif // __CS_PMTOOLS_H__</span>
-<a name="l00240"></a>00240 <span class="preprocessor"></span>
+<a name="l00148"></a>00148   <span class="keyword">static</span> <span class="keywordtype">bool</span> IsMeshClosed (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh);
+<a name="l00149"></a>00149 
+<a name="l00155"></a>00155   <span class="keyword">static</span> <span class="keywordtype">bool</span> IsMeshConvex (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh);
+<a name="l00156"></a>00156 
+<a name="l00163"></a>00163   <span class="keyword">static</span> <span class="keywordtype">void</span> CloseMesh (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polyMesh, 
+<a name="l00164"></a>00164     <a class="code" href="classcsArray.html">csArray&lt;csMeshedPolygon&gt;</a>&amp; newPolys, <span class="keywordtype">int</span>*&amp; vertidx, <span class="keywordtype">int</span>&amp; vertidx_len);
+<a name="l00165"></a>00165 
+<a name="l00173"></a>00173   <span class="keyword">static</span> <span class="keywordtype">void</span> Triangulate (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
+<a name="l00174"></a>00174         <a class="code" href="structcsTriangle.html">csTriangle</a>*&amp; tris, <span class="keywordtype">int</span>&amp; tri_count);
+<a name="l00175"></a>00175 
+<a name="l00181"></a>00181   <span class="keyword">static</span> <span class="keywordtype">void</span> Polygonize (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
+<a name="l00182"></a>00182         <a class="code" href="structcsMeshedPolygon.html">csMeshedPolygon</a>*&amp; polygons, <span class="keywordtype">int</span>&amp; poly_count);
+<a name="l00183"></a>00183 
+<a name="l00192"></a>00192   <span class="keyword">static</span> <span class="keywordtype">void</span> SortTrianglesX (<a class="code" href="structiPolygonMesh.html">iPolygonMesh</a>* polymesh,
+<a name="l00193"></a>00193         csTriangleMinMax*&amp; tris, <span class="keywordtype">int</span>&amp; tri_count,
+<a name="l00194"></a>00194         <a class="code" href="classcsPlane3.html">csPlane3</a>*&amp; planes);
+<a name="l00195"></a>00195 
+<a name="l00203"></a>00203   <span class="keyword">static</span> <span class="keywordtype">bool</span> PointInClosedMesh (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point,
+<a name="l00204"></a>00204         <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+<a name="l00205"></a>00205         csTriangleMinMax* tris, <span class="keywordtype">int</span> tri_count,
+<a name="l00206"></a>00206         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+<a name="l00207"></a>00207 
+<a name="l00220"></a>00220   <span class="keyword">static</span> <span class="keywordtype">bool</span> LineInClosedMesh (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p1, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; p2,
+<a name="l00221"></a>00221         <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+<a name="l00222"></a>00222         csTriangleMinMax* tris, <span class="keywordtype">int</span> tri_count,
+<a name="l00223"></a>00223         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+<a name="l00224"></a>00224 
+<a name="l00237"></a>00237   <span class="keyword">static</span> <span class="keywordtype">bool</span> BoxInClosedMesh (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; box,
+<a name="l00238"></a>00238         <a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+<a name="l00239"></a>00239         csTriangleMinMax* tris, <span class="keywordtype">int</span> tri_count,
+<a name="l00240"></a>00240         <a class="code" href="classcsPlane3.html">csPlane3</a>* planes);
+<a name="l00241"></a>00241 };
+<a name="l00242"></a>00242 
+<a name="l00245"></a>00245 <span class="preprocessor">#endif // __CS_PMTOOLS_H__</span>
+<a name="l00246"></a>00246 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

@@ -115,129 +115,132 @@
 <a name="l00156"></a>00156     vertices.SetLength (n); 
 <a name="l00157"></a>00157   }
 <a name="l00158"></a>00158 
-<a name="l00163"></a><a class="code" href="classcsPoly3D.html#a1">00163</a>   <span class="keyword">inline</span> size_t AddVertex (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v) { <span class="keywordflow">return</span> AddVertex (v.<a class="code" href="classcsVector3.html#o1">x</a>, v.<a class="code" href="classcsVector3.html#o2">y</a>, v.<a class="code" href="classcsVector3.html#o3">z</a>); }
-<a name="l00164"></a>00164 
-<a name="l00169"></a>00169   size_t AddVertex (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z);
-<a name="l00170"></a>00170 
-<a name="l00174"></a><a class="code" href="classcsPoly3D.html#a32">00174</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetVertices (<a class="code" href="classcsVector3.html">csVector3</a> <span class="keyword">const</span>* v, size_t num)
-<a name="l00175"></a>00175   {
-<a name="l00176"></a>00176     MakeRoom (num);
-<a name="l00177"></a>00177     memcpy (vertices.GetArray (), v, num * <span class="keyword">sizeof</span> (<a class="code" href="classcsVector3.html">csVector3</a>));
-<a name="l00178"></a>00178   }
-<a name="l00179"></a>00179 
-<a name="l00187"></a>00187   <span class="keywordtype">bool</span> ProjectXPlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, <span class="keywordtype">float</span> plane_x,
-<a name="l00188"></a>00188         <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly2d) <span class="keyword">const</span>;
-<a name="l00189"></a>00189 
-<a name="l00197"></a>00197   <span class="keywordtype">bool</span> ProjectYPlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, <span class="keywordtype">float</span> plane_y,
-<a name="l00198"></a>00198         <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly2d) <span class="keyword">const</span>;
-<a name="l00199"></a>00199 
-<a name="l00207"></a>00207   <span class="keywordtype">bool</span> ProjectZPlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, <span class="keywordtype">float</span> plane_z,
-<a name="l00208"></a>00208         <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly2d) <span class="keyword">const</span>;
-<a name="l00209"></a>00209 
-<a name="l00217"></a><a class="code" href="classcsPoly3D.html#a27">00217</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> ProjectAxisPlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, <span class="keywordtype">int</span> plane_nr,
-<a name="l00218"></a>00218         <span class="keywordtype">float</span> plane_pos, <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly2d)<span class="keyword"> const</span>
-<a name="l00219"></a>00219 <span class="keyword">  </span>{
-<a name="l00220"></a>00220     <span class="keywordflow">switch</span> (plane_nr)
-<a name="l00221"></a>00221     {
-<a name="l00222"></a>00222       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a1">CS_AXIS_X</a>: <span class="keywordflow">return</span> ProjectXPlane (point, plane_pos, poly2d);
-<a name="l00223"></a>00223       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a2">CS_AXIS_Y</a>: <span class="keywordflow">return</span> ProjectYPlane (point, plane_pos, poly2d);
-<a name="l00224"></a>00224       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a3">CS_AXIS_Z</a>: <span class="keywordflow">return</span> ProjectZPlane (point, plane_pos, poly2d);
-<a name="l00225"></a>00225     }
-<a name="l00226"></a>00226     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00227"></a>00227   }
-<a name="l00228"></a>00228 
-<a name="l00236"></a>00236   <span class="keyword">static</span> <span class="keywordtype">int</span> Classify (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl,
-<a name="l00237"></a>00237         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, size_t num_vertices);
-<a name="l00238"></a>00238 
-<a name="l00246"></a><a class="code" href="classcsPoly3D.html#a2">00246</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> Classify (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl)<span class="keyword"> const</span>
-<a name="l00247"></a>00247 <span class="keyword">  </span>{
-<a name="l00248"></a>00248     <span class="keywordflow">return</span> Classify (pl, vertices.GetArray (), vertices.Length ());
-<a name="l00249"></a>00249   }
-<a name="l00250"></a>00250 
-<a name="l00252"></a>00252   <span class="keywordtype">int</span> ClassifyX (<span class="keywordtype">float</span> x) <span class="keyword">const</span>;
+<a name="l00163"></a><a class="code" href="classcsPoly3D.html#a1">00163</a>   <span class="keyword">inline</span> size_t AddVertex (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+<a name="l00164"></a>00164   {
+<a name="l00165"></a>00165     <span class="keywordflow">return</span> AddVertex (v.<a class="code" href="classcsVector3.html#o1">x</a>, v.<a class="code" href="classcsVector3.html#o2">y</a>, v.<a class="code" href="classcsVector3.html#o3">z</a>);
+<a name="l00166"></a>00166   }
+<a name="l00167"></a>00167 
+<a name="l00172"></a>00172   size_t AddVertex (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z);
+<a name="l00173"></a>00173 
+<a name="l00177"></a><a class="code" href="classcsPoly3D.html#a32">00177</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> SetVertices (<a class="code" href="classcsVector3.html">csVector3</a> <span class="keyword">const</span>* v, size_t num)
+<a name="l00178"></a>00178   {
+<a name="l00179"></a>00179     MakeRoom (num);
+<a name="l00180"></a>00180     memcpy (vertices.GetArray (), v, num * <span class="keyword">sizeof</span> (<a class="code" href="classcsVector3.html">csVector3</a>));
+<a name="l00181"></a>00181   }
+<a name="l00182"></a>00182 
+<a name="l00190"></a>00190   <span class="keywordtype">bool</span> ProjectXPlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, <span class="keywordtype">float</span> plane_x,
+<a name="l00191"></a>00191         <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly2d) <span class="keyword">const</span>;
+<a name="l00192"></a>00192 
+<a name="l00200"></a>00200   <span class="keywordtype">bool</span> ProjectYPlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, <span class="keywordtype">float</span> plane_y,
+<a name="l00201"></a>00201         <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly2d) <span class="keyword">const</span>;
+<a name="l00202"></a>00202 
+<a name="l00210"></a>00210   <span class="keywordtype">bool</span> ProjectZPlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, <span class="keywordtype">float</span> plane_z,
+<a name="l00211"></a>00211         <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly2d) <span class="keyword">const</span>;
+<a name="l00212"></a>00212 
+<a name="l00220"></a><a class="code" href="classcsPoly3D.html#a27">00220</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> ProjectAxisPlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; point, <span class="keywordtype">int</span> plane_nr,
+<a name="l00221"></a>00221         <span class="keywordtype">float</span> plane_pos, <a class="code" href="classcsPoly2D.html">csPoly2D</a>* poly2d)<span class="keyword"> const</span>
+<a name="l00222"></a>00222 <span class="keyword">  </span>{
+<a name="l00223"></a>00223     <span class="keywordflow">switch</span> (plane_nr)
+<a name="l00224"></a>00224     {
+<a name="l00225"></a>00225       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a1">CS_AXIS_X</a>: <span class="keywordflow">return</span> ProjectXPlane (point, plane_pos, poly2d);
+<a name="l00226"></a>00226       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a2">CS_AXIS_Y</a>: <span class="keywordflow">return</span> ProjectYPlane (point, plane_pos, poly2d);
+<a name="l00227"></a>00227       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a3">CS_AXIS_Z</a>: <span class="keywordflow">return</span> ProjectZPlane (point, plane_pos, poly2d);
+<a name="l00228"></a>00228     }
+<a name="l00229"></a>00229     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00230"></a>00230   }
+<a name="l00231"></a>00231 
+<a name="l00239"></a>00239   <span class="keyword">static</span> <span class="keywordtype">int</span> Classify (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl,
+<a name="l00240"></a>00240         <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, size_t num_vertices);
+<a name="l00241"></a>00241 
+<a name="l00249"></a><a class="code" href="classcsPoly3D.html#a2">00249</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> Classify (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; pl)<span class="keyword"> const</span>
+<a name="l00250"></a>00250 <span class="keyword">  </span>{
+<a name="l00251"></a>00251     <span class="keywordflow">return</span> Classify (pl, vertices.GetArray (), vertices.Length ());
+<a name="l00252"></a>00252   }
 <a name="l00253"></a>00253 
-<a name="l00255"></a>00255   <span class="keywordtype">int</span> ClassifyY (<span class="keywordtype">float</span> y) <span class="keyword">const</span>;
+<a name="l00255"></a>00255   <span class="keywordtype">int</span> ClassifyX (<span class="keywordtype">float</span> x) <span class="keyword">const</span>;
 <a name="l00256"></a>00256 
-<a name="l00258"></a>00258   <span class="keywordtype">int</span> ClassifyZ (<span class="keywordtype">float</span> z) <span class="keyword">const</span>;
+<a name="l00258"></a>00258   <span class="keywordtype">int</span> ClassifyY (<span class="keywordtype">float</span> y) <span class="keyword">const</span>;
 <a name="l00259"></a>00259 
-<a name="l00261"></a><a class="code" href="classcsPoly3D.html#a3">00261</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> ClassifyAxis (<span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where)<span class="keyword"> const</span>
-<a name="l00262"></a>00262 <span class="keyword">  </span>{
-<a name="l00263"></a>00263     <span class="keywordflow">switch</span> (axis)
-<a name="l00264"></a>00264     {
-<a name="l00265"></a>00265       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a1">CS_AXIS_X</a>: <span class="keywordflow">return</span> ClassifyX (where);
-<a name="l00266"></a>00266       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a2">CS_AXIS_Y</a>: <span class="keywordflow">return</span> ClassifyY (where);
-<a name="l00267"></a>00267       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a3">CS_AXIS_Z</a>: <span class="keywordflow">return</span> ClassifyZ (where);
-<a name="l00268"></a>00268     }
-<a name="l00269"></a>00269     <span class="keywordflow">return</span> 0;
-<a name="l00270"></a>00270   }
-<a name="l00271"></a>00271 
-<a name="l00279"></a>00279   <span class="keywordtype">int</span> IsAxisAligned (<span class="keywordtype">float</span>&amp; where, <span class="keywordtype">float</span> epsilon = SMALL_EPSILON) <span class="keyword">const</span>;
-<a name="l00280"></a>00280 
-<a name="l00285"></a>00285   <span class="keywordtype">int</span> ComputeMainNormalAxis () <span class="keyword">const</span>;
-<a name="l00286"></a>00286 
-<a name="l00288"></a>00288   <span class="keywordtype">void</span> CutToPlane (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; split_plane);
+<a name="l00261"></a>00261   <span class="keywordtype">int</span> ClassifyZ (<span class="keywordtype">float</span> z) <span class="keyword">const</span>;
+<a name="l00262"></a>00262 
+<a name="l00264"></a><a class="code" href="classcsPoly3D.html#a3">00264</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> ClassifyAxis (<span class="keywordtype">int</span> axis, <span class="keywordtype">float</span> where)<span class="keyword"> const</span>
+<a name="l00265"></a>00265 <span class="keyword">  </span>{
+<a name="l00266"></a>00266     <span class="keywordflow">switch</span> (axis)
+<a name="l00267"></a>00267     {
+<a name="l00268"></a>00268       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a1">CS_AXIS_X</a>: <span class="keywordflow">return</span> ClassifyX (where);
+<a name="l00269"></a>00269       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a2">CS_AXIS_Y</a>: <span class="keywordflow">return</span> ClassifyY (where);
+<a name="l00270"></a>00270       <span class="keywordflow">case</span> <a class="code" href="group__geom__utils.html#gga24a3">CS_AXIS_Z</a>: <span class="keywordflow">return</span> ClassifyZ (where);
+<a name="l00271"></a>00271     }
+<a name="l00272"></a>00272     <span class="keywordflow">return</span> 0;
+<a name="l00273"></a>00273   }
+<a name="l00274"></a>00274 
+<a name="l00282"></a>00282   <span class="keywordtype">int</span> IsAxisAligned (<span class="keywordtype">float</span>&amp; where, <span class="keywordtype">float</span> epsilon = SMALL_EPSILON) <span class="keyword">const</span>;
+<a name="l00283"></a>00283 
+<a name="l00288"></a>00288   <span class="keywordtype">int</span> ComputeMainNormalAxis () <span class="keyword">const</span>;
 <a name="l00289"></a>00289 
-<a name="l00291"></a>00291   <span class="keywordtype">void</span> SplitWithPlane (<a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; front, <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; back,
-<a name="l00292"></a>00292         <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; split_plane) <span class="keyword">const</span>;
-<a name="l00293"></a>00293 
-<a name="l00295"></a>00295   <span class="keywordtype">void</span> SplitWithPlaneX (<a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; front, <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; back, <span class="keywordtype">float</span> x) <span class="keyword">const</span>;
+<a name="l00291"></a>00291   <span class="keywordtype">void</span> CutToPlane (<span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; split_plane);
+<a name="l00292"></a>00292 
+<a name="l00294"></a>00294   <span class="keywordtype">void</span> SplitWithPlane (<a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; front, <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; back,
+<a name="l00295"></a>00295         <span class="keyword">const</span> <a class="code" href="classcsPlane3.html">csPlane3</a>&amp; split_plane) <span class="keyword">const</span>;
 <a name="l00296"></a>00296 
-<a name="l00298"></a>00298   <span class="keywordtype">void</span> SplitWithPlaneY (<a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; front, <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; back, <span class="keywordtype">float</span> y) <span class="keyword">const</span>;
+<a name="l00298"></a>00298   <span class="keywordtype">void</span> SplitWithPlaneX (<a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; front, <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; back, <span class="keywordtype">float</span> x) <span class="keyword">const</span>;
 <a name="l00299"></a>00299 
-<a name="l00301"></a>00301   <span class="keywordtype">void</span> SplitWithPlaneZ (<a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; front, <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; back, <span class="keywordtype">float</span> z) <span class="keyword">const</span>;
+<a name="l00301"></a>00301   <span class="keywordtype">void</span> SplitWithPlaneY (<a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; front, <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; back, <span class="keywordtype">float</span> y) <span class="keyword">const</span>;
 <a name="l00302"></a>00302 
-<a name="l00304"></a>00304   <span class="keyword">static</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, size_t num);
+<a name="l00304"></a>00304   <span class="keywordtype">void</span> SplitWithPlaneZ (<a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; front, <a class="code" href="classcsPoly3D.html">csPoly3D</a>&amp; back, <span class="keywordtype">float</span> z) <span class="keyword">const</span>;
 <a name="l00305"></a>00305 
-<a name="l00307"></a>00307   <span class="keyword">static</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;csVector3&gt;</a>&amp; poly);
+<a name="l00307"></a>00307   <span class="keyword">static</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, size_t num);
 <a name="l00308"></a>00308 
-<a name="l00310"></a>00310   <span class="keyword">static</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal (<span class="keywordtype">int</span>* poly, size_t num, <a class="code" href="classcsVector3.html">csVector3</a>* vertices);
+<a name="l00310"></a>00310   <span class="keyword">static</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;csVector3&gt;</a>&amp; poly);
 <a name="l00311"></a>00311 
-<a name="l00313"></a><a class="code" href="classcsPoly3D.html#a8">00313</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal ()<span class="keyword"> const</span>
-<a name="l00314"></a>00314 <span class="keyword">  </span>{
-<a name="l00315"></a>00315     <span class="keywordflow">return</span> ComputeNormal (vertices.GetArray (), vertices.Length ());
-<a name="l00316"></a>00316   }
-<a name="l00317"></a>00317 
-<a name="l00319"></a>00319   <span class="keyword">static</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, size_t num);
+<a name="l00313"></a>00313   <span class="keyword">static</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal (<span class="keywordtype">int</span>* poly, size_t num, <a class="code" href="classcsVector3.html">csVector3</a>* vertices);
+<a name="l00314"></a>00314 
+<a name="l00316"></a><a class="code" href="classcsPoly3D.html#a8">00316</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector3.html">csVector3</a> ComputeNormal ()<span class="keyword"> const</span>
+<a name="l00317"></a>00317 <span class="keyword">  </span>{
+<a name="l00318"></a>00318     <span class="keywordflow">return</span> ComputeNormal (vertices.GetArray (), vertices.Length ());
+<a name="l00319"></a>00319   }
 <a name="l00320"></a>00320 
-<a name="l00322"></a>00322   <span class="keyword">static</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;csVector3&gt;</a>&amp; poly);
+<a name="l00322"></a>00322   <span class="keyword">static</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>* vertices, size_t num);
 <a name="l00323"></a>00323 
-<a name="l00325"></a>00325   <span class="keyword">static</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane (<span class="keywordtype">int</span>* poly, size_t num, <a class="code" href="classcsVector3.html">csVector3</a>* vertices);
+<a name="l00325"></a>00325   <span class="keyword">static</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane (<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;csVector3&gt;</a>&amp; poly);
 <a name="l00326"></a>00326 
-<a name="l00328"></a><a class="code" href="classcsPoly3D.html#a9">00328</a>   <span class="keyword">inline</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane ()<span class="keyword"> const</span>
-<a name="l00329"></a>00329 <span class="keyword">  </span>{
-<a name="l00330"></a>00330     <span class="keywordflow">return</span> ComputePlane (vertices.GetArray (), vertices.Length ());
-<a name="l00331"></a>00331   }
-<a name="l00332"></a>00332 
-<a name="l00336"></a>00336   <span class="keywordtype">float</span> GetArea() <span class="keyword">const</span>;
-<a name="l00337"></a>00337 
-<a name="l00341"></a>00341   <a class="code" href="classcsVector3.html">csVector3</a> GetCenter () <span class="keyword">const</span>;
-<a name="l00342"></a>00342 };
-<a name="l00343"></a>00343 
-<a name="l00345"></a><a class="code" href="structcsCompressVertex.html">00345</a> <span class="keyword">struct </span><a class="code" href="structcsCompressVertex.html">csCompressVertex</a>
-<a name="l00346"></a>00346 {
-<a name="l00347"></a><a class="code" href="structcsCompressVertex.html#o1">00347</a>   size_t <a class="code" href="structcsCompressVertex.html#o1">orig_idx</a>;
-<a name="l00348"></a><a class="code" href="structcsCompressVertex.html#o5">00348</a>   <span class="keywordtype">float</span> <a class="code" href="structcsCompressVertex.html#o3">x</a>, <a class="code" href="structcsCompressVertex.html#o4">y</a>, <a class="code" href="structcsCompressVertex.html#o5">z</a>;
-<a name="l00349"></a><a class="code" href="structcsCompressVertex.html#o0">00349</a>   size_t <a class="code" href="structcsCompressVertex.html#o0">new_idx</a>;
-<a name="l00350"></a><a class="code" href="structcsCompressVertex.html#o2">00350</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsCompressVertex.html#o2">used</a>;
-<a name="l00351"></a>00351 };
-<a name="l00352"></a>00352 
-<a name="l00359"></a><a class="code" href="classcsVector3Array.html">00359</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csVector3Array : <span class="keyword">public</span> <a class="code" href="classcsPoly3D.html">csPoly3D</a>
-<a name="l00360"></a>00360 {
-<a name="l00361"></a>00361 <span class="keyword">public</span>:
-<a name="l00362"></a><a class="code" href="classcsVector3Array.html#a2">00362</a>   csVector3Array (size_t start_size = 10) : <a class="code" href="classcsPoly3D.html">csPoly3D</a> (start_size) { }
-<a name="l00363"></a>00363 
-<a name="l00368"></a><a class="code" href="classcsVector3Array.html#a1">00368</a>   <span class="keyword">inline</span> size_t AddVertexSmart (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
-<a name="l00369"></a>00369   { <span class="keywordflow">return</span> AddVertexSmart (v.<a class="code" href="classcsVector3.html#o1">x</a>, v.<a class="code" href="classcsVector3.html#o2">y</a>, v.<a class="code" href="classcsVector3.html#o3">z</a>); }
-<a name="l00370"></a>00370 
-<a name="l00375"></a>00375   size_t AddVertexSmart (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z);
-<a name="l00376"></a>00376 
-<a name="l00388"></a>00388   <span class="keyword">static</span> <a class="code" href="structcsCompressVertex.html">csCompressVertex</a>* CompressVertices (<a class="code" href="classcsVector3.html">csVector3</a>* vertices,
-<a name="l00389"></a>00389         size_t num_vertices, <a class="code" href="classcsVector3.html">csVector3</a>*&amp; new_vertices, size_t&amp; new_count);
-<a name="l00390"></a>00390 
-<a name="l00399"></a>00399   <span class="keyword">static</span> <a class="code" href="structcsCompressVertex.html">csCompressVertex</a>* CompressVertices (<a class="code" href="classcsArray.html">csArray&lt;csVector3&gt;</a>&amp; vertices);
-<a name="l00400"></a>00400 };
-<a name="l00401"></a>00401 
-<a name="l00404"></a>00404 <span class="preprocessor">#endif // __CS_POLY3D_H__</span>
+<a name="l00328"></a>00328   <span class="keyword">static</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane (<span class="keywordtype">int</span>* poly, size_t num, <a class="code" href="classcsVector3.html">csVector3</a>* vertices);
+<a name="l00329"></a>00329 
+<a name="l00331"></a><a class="code" href="classcsPoly3D.html#a9">00331</a>   <span class="keyword">inline</span> <a class="code" href="classcsPlane3.html">csPlane3</a> ComputePlane ()<span class="keyword"> const</span>
+<a name="l00332"></a>00332 <span class="keyword">  </span>{
+<a name="l00333"></a>00333     <span class="keywordflow">return</span> ComputePlane (vertices.GetArray (), vertices.Length ());
+<a name="l00334"></a>00334   }
+<a name="l00335"></a>00335 
+<a name="l00339"></a>00339   <span class="keywordtype">float</span> GetArea() <span class="keyword">const</span>;
+<a name="l00340"></a>00340 
+<a name="l00344"></a>00344   <a class="code" href="classcsVector3.html">csVector3</a> GetCenter () <span class="keyword">const</span>;
+<a name="l00345"></a>00345 };
+<a name="l00346"></a>00346 
+<a name="l00348"></a><a class="code" href="structcsCompressVertex.html">00348</a> <span class="keyword">struct </span><a class="code" href="structcsCompressVertex.html">csCompressVertex</a>
+<a name="l00349"></a>00349 {
+<a name="l00350"></a><a class="code" href="structcsCompressVertex.html#o1">00350</a>   size_t <a class="code" href="structcsCompressVertex.html#o1">orig_idx</a>;
+<a name="l00351"></a><a class="code" href="structcsCompressVertex.html#o5">00351</a>   <span class="keywordtype">float</span> <a class="code" href="structcsCompressVertex.html#o3">x</a>, <a class="code" href="structcsCompressVertex.html#o4">y</a>, <a class="code" href="structcsCompressVertex.html#o5">z</a>;
+<a name="l00352"></a><a class="code" href="structcsCompressVertex.html#o0">00352</a>   size_t <a class="code" href="structcsCompressVertex.html#o0">new_idx</a>;
+<a name="l00353"></a><a class="code" href="structcsCompressVertex.html#o2">00353</a>   <span class="keywordtype">bool</span> <a class="code" href="structcsCompressVertex.html#o2">used</a>;
+<a name="l00354"></a>00354 };
+<a name="l00355"></a>00355 
+<a name="l00362"></a><a class="code" href="classcsVector3Array.html">00362</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csVector3Array : <span class="keyword">public</span> <a class="code" href="classcsPoly3D.html">csPoly3D</a>
+<a name="l00363"></a>00363 {
+<a name="l00364"></a>00364 <span class="keyword">public</span>:
+<a name="l00365"></a><a class="code" href="classcsVector3Array.html#a2">00365</a>   csVector3Array (size_t start_size = 10) : <a class="code" href="classcsPoly3D.html">csPoly3D</a> (start_size) { }
+<a name="l00366"></a>00366 
+<a name="l00371"></a><a class="code" href="classcsVector3Array.html#a1">00371</a>   <span class="keyword">inline</span> size_t AddVertexSmart (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; v)
+<a name="l00372"></a>00372   { <span class="keywordflow">return</span> AddVertexSmart (v.<a class="code" href="classcsVector3.html#o1">x</a>, v.<a class="code" href="classcsVector3.html#o2">y</a>, v.<a class="code" href="classcsVector3.html#o3">z</a>); }
+<a name="l00373"></a>00373 
+<a name="l00378"></a>00378   size_t AddVertexSmart (<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> z);
+<a name="l00379"></a>00379 
+<a name="l00391"></a>00391   <span class="keyword">static</span> <a class="code" href="structcsCompressVertex.html">csCompressVertex</a>* CompressVertices (<a class="code" href="classcsVector3.html">csVector3</a>* vertices,
+<a name="l00392"></a>00392         size_t num_vertices, <a class="code" href="classcsVector3.html">csVector3</a>*&amp; new_vertices, size_t&amp; new_count);
+<a name="l00393"></a>00393 
+<a name="l00402"></a>00402   <span class="keyword">static</span> <a class="code" href="structcsCompressVertex.html">csCompressVertex</a>* CompressVertices (<a class="code" href="classcsArray.html">csArray&lt;csVector3&gt;</a>&amp; vertices);
+<a name="l00403"></a>00403 };
+<a name="l00404"></a>00404 
+<a name="l00407"></a>00407 <span class="preprocessor">#endif // __CS_POLY3D_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

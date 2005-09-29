@@ -103,35 +103,21 @@ Inheritance diagram for iMeshFactoryWrapper:<p><center><img src="structiMeshFact
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 A mesh factory wrapper is an engine-level object that wraps around a mesh object factory (<a class="el" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>). 
 <p>
-Every mesh object factory in the engine is represented by a mesh factory wrapper, which keeps the pointer to the mesh factory, its name, etc. <p>
-Think of the mesh factory wrapper as the hook that holds the mesh factory in the engine. An effect of this is that the i???FactoryState interfaces (e.g. <a class="el" href="structiSprite3DFactoryState.html">iSprite3DFactoryState</a>) must be queried from the mesh *factories*, not the wrappers! <p>
-Main creators of instances implementing this interface: <ul>
-<li>
-<a class="el" href="structiEngine.html#z566_2">iEngine::CreateMeshFactory()</a> </li>
-<li>
-<a class="el" href="structiEngine.html#z566_5">iEngine::LoadMeshFactory()</a> </li>
-<li>
-<a class="el" href="structiLoader.html#a9">iLoader::LoadMeshObjectFactory()</a> </li>
-</ul>
-Main ways to get pointers to this interface: <ul>
-<li>
-<a class="el" href="structiEngine.html#z566_3">iEngine::FindMeshFactory()</a> </li>
-<li>
-<a class="el" href="structiMeshFactoryList.html#a3">iMeshFactoryList::Get()</a> </li>
-<li>
-<a class="el" href="structiMeshFactoryList.html#a2">iMeshFactoryList::FindByName()</a> </li>
-<li>
-<a class="el" href="structiLoaderContext.html#a4">iLoaderContext::FindMeshFactory()</a> </li>
-</ul>
-Main users of this interface: <ul>
-<li>
-<a class="el" href="structiEngine.html">iEngine</a> </li>
-</ul>
+Every mesh object factory in the engine is represented by a mesh factory wrapper, which keeps the pointer to the mesh factory, its name, etc.<p>
+Think of the mesh factory wrapper as the hook that holds the mesh factory in the engine. An effect of this is that the i???FactoryState interfaces (e.g. <a class="el" href="structiSprite3DFactoryState.html">iSprite3DFactoryState</a>) must be queried from the mesh *factories*, not the wrappers!<p>
+Main creators of instances implementing this interface:<ul>
+<li><a class="el" href="structiEngine.html#z566_2">iEngine::CreateMeshFactory()</a></li><li><a class="el" href="structiEngine.html#z566_5">iEngine::LoadMeshFactory()</a></li><li><a class="el" href="structiLoader.html#a9">iLoader::LoadMeshObjectFactory()</a></li></ul>
+<p>
+Main ways to get pointers to this interface:<ul>
+<li><a class="el" href="structiEngine.html#z566_3">iEngine::FindMeshFactory()</a></li><li><a class="el" href="structiMeshFactoryList.html#a3">iMeshFactoryList::Get()</a></li><li><a class="el" href="structiMeshFactoryList.html#a2">iMeshFactoryList::FindByName()</a></li><li><a class="el" href="structiLoaderContext.html#a4">iLoaderContext::FindMeshFactory()</a></li></ul>
+<p>
+Main users of this interface:<ul>
+<li><a class="el" href="structiEngine.html">iEngine</a></li></ul>
 
 <p>
 
 <p>
-Definition at line <a class="el" href="mesh_8h-source.html#l00751">751</a> of file <a class="el" href="mesh_8h-source.html">mesh.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="mesh_8h-source.html#l00737">737</a> of file <a class="el" href="mesh_8h-source.html">mesh.h</a>.<hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="a0"></a><!-- doxytag: member="iMeshFactoryWrapper::AddFactoryToStaticLOD" ref="a0" args="(int lod, iMeshFactoryWrapper *fact)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -705,16 +691,8 @@ This will only change the 'parent' pointer but not add the factory as a child! I
 <p>
 The renderer will render all objects in a sector based on this number. 
 <p>
-Low numbers get rendered first. High numbers get rendered later. The value for the factory is used as a default for objects created from that factory. There are a few often used slots: <ul>
-<li>
-1. Sky objects are rendered before everything else. Usually they are rendered using ZFILL (or ZNONE). </li>
-<li>
-2. Walls are rendered after that. They usually use ZFILL. </li>
-<li>
-3. After that normal objects are rendered using the Z-buffer (ZUSE). </li>
-<li>
-4. Alpha transparent objects or objects using some other transparency system are rendered after that. They are usually rendered using ZTEST. </li>
-</ul>
+Low numbers get rendered first. High numbers get rendered later. The value for the factory is used as a default for objects created from that factory. There are a few often used slots:<ul>
+<li>1. Sky objects are rendered before everything else. Usually they are rendered using ZFILL (or ZNONE).</li><li>2. Walls are rendered after that. They usually use ZFILL.</li><li>3. After that normal objects are rendered using the Z-buffer (ZUSE).</li><li>4. Alpha transparent objects or objects using some other transparency system are rendered after that. They are usually rendered using ZTEST.</li></ul>
     </td>
   </tr>
 </table>
@@ -846,16 +824,8 @@ Set optional relative transform (relative to parent).
 <p>
 Set the Z-buf drawing mode to use for this factory. 
 <p>
-All objects created from this factory will have this mode as default. Possible values are: <ul>
-<li>
-<a class="el" href="graph3d_8h.html#a113a48">CS_ZBUF_NONE</a>: do not read nor write the Z-buffer. </li>
-<li>
-<a class="el" href="graph3d_8h.html#a113a49">CS_ZBUF_FILL</a>: only write the Z-buffer but do not read. </li>
-<li>
-<a class="el" href="graph3d_8h.html#a113a51">CS_ZBUF_USE</a>: write and read the Z-buffer. </li>
-<li>
-<a class="el" href="graph3d_8h.html#a113a50">CS_ZBUF_TEST</a>: only read the Z-buffer but do not write. </li>
-</ul>
+All objects created from this factory will have this mode as default. Possible values are:<ul>
+<li><a class="el" href="graph3d_8h.html#a113a48">CS_ZBUF_NONE</a>: do not read nor write the Z-buffer.</li><li><a class="el" href="graph3d_8h.html#a113a49">CS_ZBUF_FILL</a>: only write the Z-buffer but do not read.</li><li><a class="el" href="graph3d_8h.html#a113a51">CS_ZBUF_USE</a>: write and read the Z-buffer.</li><li><a class="el" href="graph3d_8h.html#a113a50">CS_ZBUF_TEST</a>: only read the Z-buffer but do not write.</li></ul>
     </td>
   </tr>
 </table>

@@ -52,18 +52,9 @@ The general format of a verbosity flag is an optional <code>+</code> or <code>-<
 Period-delimited verbosity names form a sort of parent/child relationship hierarchy which makes it possible to specify both coarse- and fine-grained verbosity settings easily. When the <a class="el" href="classcsVerbosityParser.html#a3">Enabled()</a> method tests if a verbosity class is enabled, it first checks the most specific child flag. If no such flag is found, it tries a less specific option by backing up to the child's parent. If that fails, it attempts the grandparent, and so on. For example, given the command-line verbosity setting `<code>-foo,+foo.bar</code>', if client code invokes <code>Enabled("foo.bar.baz")</code>, it will first look for <code>foo.bar.baz</code>. When that fails to produce a result, it will look for <code>foo.bar</code>, which will succeed, reporting that verbosity is enabled for <code>foo.bar.baz</code> on account of the explicit <code>+foo.bar</code> from the command-line. Thus, though not specified explicitly, <code>foo.bar.baz</code> implicitly inherits the setting of its parent <code>foo.bar</code>. Likewise, <code>Enabled("foo.beep.bop")</code> will attempt, in order, <code>foo.beep.bop</code>, then <code>foo.beep</code>, and ultimately <code>foo</code>, which finally succeeds, reporting that verbosity is disabled for <code>foo.beep.bop</code> on account of the <code>-foo</code> from the command-line. <p>
 If an invocation of <a class="el" href="classcsVerbosityParser.html#a3">Enabled()</a> is unable to find any matching verbosity class, even after traveling up the inheritance hierarchy, it instead reports the global verbosity setting. The global verbosity setting is derived inversely from the very first verbosity specification seen by the constructor or by <a class="el" href="classcsVerbosityParser.html#a5">Parse()</a>. If the first verbosity flag is `true' (via the optional <code>+</code>), then the global verbosity setting is `false'. Conversely, if the first verbosity flag is `false' (via <code>-</code>), then the global setting is `true'. The upshot of this heuristic is that command-line verbosity settings work in an intuitive fashion. For instance, <code>--verbose=scf</code> (or <code>+scf</code>) enables verbosity for only the `scf' module and disables it for all other modules. Likewise, <code>--verbose=-scf</code> enables verbosity for all modules except `scf'. <p>
 If only the empty-string "" is passed to the constructor or <a class="el" href="classcsVerbosityParser.html#a5">Parse()</a>, then <a class="el" href="classcsVerbosityParser.html#a3">Enabled()</a> returns `true' for all queries. This gives the intuitive interpretation to a bare <code>--verbose</code> without any flags, which means to enable verbosity for all modules. If only a null is passed to the constructor or <a class="el" href="classcsVerbosityParser.html#a5">Parse()</a>, then <a class="el" href="classcsVerbosityParser.html#a3">Enabled()</a> returns `false' for all queries. This is interpreted intuitively as meaning that no modules should be verbose in the absence of <code>--verbose</code> on the command-line. <p>
-Examples: <ul>
-<li>
-<code>--verbose</code> Enables verbosity for all modules. </li>
-<li>
-<code>--verbose=scf,vfs</code> Enables verbosity for only `scf' and `vfs'. </li>
-<li>
-<code>--verbose=-scf,-vfs</code> Enables verbosity for all modules except `scf' and `vfs'. </li>
-<li>
-<code>--verbose=+scf.register.class</code> Enables verbosity for only `scf.register.class'. </li>
-<li>
-<code>--verbose=+scf,-scf.register,+scf.register.class</code> Enables verbosity for only `scf' and its children except `scf.register' or any of its children other than `scf.register.class which is explicitly enabled. </li>
-</ul>
+Examples:<ul>
+<li><code>--verbose</code> Enables verbosity for all modules.</li><li><code>--verbose=scf,vfs</code> Enables verbosity for only `scf' and `vfs'.</li><li><code>--verbose=-scf,-vfs</code> Enables verbosity for all modules except `scf' and `vfs'.</li><li><code>--verbose=+scf.register.class</code> Enables verbosity for only `scf.register.class'.</li><li><code>--verbose=+scf,-scf.register,+scf.register.class</code> Enables verbosity for only `scf' and its children except `scf.register' or any of its children other than `scf.register.class which is explicitly enabled.</li></ul>
+<p>
 <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="classcsVerbosityManager.html">csVerbosityManager</a> <p>
 <a class="el" href="verbosity_8h.html#a2">csCheckVerbosity</a> <p>
 <a class="el" href="verbosity_8h.html#a0">csParseVerbosity</a>; <p>
@@ -72,7 +63,7 @@ Examples: <ul>
 <p>
 
 <p>
-Definition at line <a class="el" href="verbosity_8h-source.html#l00103">103</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
+Definition at line <a class="el" href="verbosity_8h-source.html#l00102">102</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.<hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="a2"></a><!-- doxytag: member="csVerbosityParser::csVerbosityParser" ref="a2" args="(char const *flags=0)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -139,7 +130,7 @@ Copy constructor.
 <p>
 
 <p>
-Definition at line <a class="el" href="verbosity_8h-source.html#l00139">139</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.    </td>
+Definition at line <a class="el" href="verbosity_8h-source.html#l00138">138</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a6"></a><!-- doxytag: member="csVerbosityParser::~csVerbosityParser" ref="a6" args="()" --><p>
@@ -170,7 +161,7 @@ Destructor.
 <p>
 
 <p>
-Definition at line <a class="el" href="verbosity_8h-source.html#l00144">144</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.    </td>
+Definition at line <a class="el" href="verbosity_8h-source.html#l00143">143</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.    </td>
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
@@ -210,10 +201,10 @@ Definition at line <a class="el" href="verbosity_8h-source.html#l00144">144</a> 
 <p>
 Given major and minor components, check if the verbosity class "major.minor" is enabled. 
 <p>
-<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000028">Deprecated:</a></b></dt><dd>Use instead the more generic <a class="el" href="classcsVerbosityParser.html#a3">Enabled()</a> method, which accepts any granularity of class breakdown; not just major and minor components.</dd></dl>
+<dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000029">Deprecated:</a></b></dt><dd>Use instead the more generic <a class="el" href="classcsVerbosityParser.html#a3">Enabled()</a> method, which accepts any granularity of class breakdown; not just major and minor components.</dd></dl>
 
 <p>
-Definition at line <a class="el" href="verbosity_8h-source.html#l00193">193</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.    </td>
+Definition at line <a class="el" href="verbosity_8h-source.html#l00192">192</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a3"></a><!-- doxytag: member="csVerbosityParser::Enabled" ref="a3" args="(char const *flag=0, bool fuzzy=true) const " --><p>
@@ -291,7 +282,7 @@ Assignment operator.
 <p>
 
 <p>
-Definition at line <a class="el" href="verbosity_8h-source.html#l00149">149</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.    </td>
+Definition at line <a class="el" href="verbosity_8h-source.html#l00148">148</a> of file <a class="el" href="verbosity_8h-source.html">verbosity.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a5"></a><!-- doxytag: member="csVerbosityParser::Parse" ref="a5" args="(char const *flags)" --><p>

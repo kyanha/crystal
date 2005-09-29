@@ -54,59 +54,60 @@
 <a name="l00046"></a>00046   <a class="code" href="cstypes_8h.html#a27">uint</a> nextShrink;
 <a name="l00047"></a>00047   <a class="code" href="cstypes_8h.html#a27">uint</a> lastFrame, clearReq;
 <a name="l00048"></a>00048 <span class="keyword">public</span>:
-<a name="l00049"></a><a class="code" href="classcsFrameDataHolder.html#a1">00049</a>   <a class="code" href="classcsFrameDataHolder.html#a1">csFrameDataHolder</a> () : lastData(0), nextShrink(0), lastFrame((<a class="code" href="cstypes_8h.html#a27">uint</a>)~0), clearReq((<a class="code" href="cstypes_8h.html#a27">uint</a>)~0)
-<a name="l00050"></a>00050   { }
-<a name="l00051"></a><a class="code" href="classcsFrameDataHolder.html#a3">00051</a>   <a class="code" href="classcsFrameDataHolder.html#a3">~csFrameDataHolder</a> () { }
-<a name="l00052"></a>00052 
-<a name="l00060"></a><a class="code" href="classcsFrameDataHolder.html#a2">00060</a>   T&amp; <a class="code" href="classcsFrameDataHolder.html#a2">GetUnusedData</a> (<span class="keywordtype">bool</span>&amp; created, <a class="code" href="cstypes_8h.html#a27">uint</a> frameNumber)
-<a name="l00061"></a>00061   {
-<a name="l00062"></a>00062     <span class="keywordflow">if</span> ((clearReq != (<a class="code" href="cstypes_8h.html#a27">uint</a>)~0) &amp;&amp; (clearReq != frameNumber))
-<a name="l00063"></a>00063       data.<a class="code" href="classcsArray.html#a5">DeleteAll</a>();
-<a name="l00064"></a>00064     lastFrame = frameNumber;
-<a name="l00065"></a>00065     created = <span class="keyword">false</span>;
-<a name="l00066"></a>00066     <span class="keywordflow">if</span> ((data.<a class="code" href="classcsArray.html#a19">GetSize</a>() == 0) || (data[lastData].lastFrame == frameNumber))
-<a name="l00067"></a>00067     {
-<a name="l00068"></a>00068       lastData = (size_t)-1;
-<a name="l00069"></a>00069       <span class="comment">//check the list</span>
-<a name="l00070"></a>00070       size_t i;
-<a name="l00071"></a>00071       <span class="keywordflow">for</span>(i = 0; i &lt; data.<a class="code" href="classcsArray.html#a19">GetSize</a> (); i++)
-<a name="l00072"></a>00072       {
-<a name="l00073"></a>00073         <span class="keywordflow">if</span> (data[i].lastFrame != frameNumber)
-<a name="l00074"></a>00074         {
-<a name="l00075"></a>00075           lastData = i;
-<a name="l00076"></a>00076           <span class="keywordflow">break</span>;
-<a name="l00077"></a>00077         }
-<a name="l00078"></a>00078       }
-<a name="l00079"></a>00079       <span class="keywordflow">if</span> (lastData == (size_t)-1)
-<a name="l00080"></a>00080       {
-<a name="l00081"></a>00081         data.<a class="code" href="classcsArray.html#a34">SetSize</a> ((lastData = data.<a class="code" href="classcsArray.html#a19">GetSize</a> ()) + 1);
-<a name="l00082"></a>00082         created = <span class="keyword">true</span>;
-<a name="l00083"></a>00083         nextShrink = frameNumber + 1;
-<a name="l00084"></a>00084       }
-<a name="l00085"></a>00085     }
-<a name="l00086"></a>00086   
-<a name="l00087"></a>00087     <span class="comment">// Conserve some memory</span>
-<a name="l00088"></a>00088     <span class="keywordflow">if</span> (!created &amp;&amp; (frameNumber &lt;= nextShrink))
-<a name="l00089"></a>00089     {
-<a name="l00090"></a>00090       data.<a class="code" href="classcsArray.html#a35">ShrinkBestFit</a> ();
-<a name="l00091"></a>00091     }
-<a name="l00092"></a>00092   
-<a name="l00093"></a>00093     FrameData&amp; frameData = data[lastData];
-<a name="l00094"></a>00094     frameData.lastFrame = frameNumber;
-<a name="l00095"></a>00095     <span class="keywordflow">return</span> frameData.data;
-<a name="l00096"></a>00096   }
-<a name="l00097"></a>00097   
-<a name="l00107"></a><a class="code" href="classcsFrameDataHolder.html#a0">00107</a>   <span class="keywordtype">void</span> <a class="code" href="classcsFrameDataHolder.html#a0">Clear</a> (<span class="keywordtype">bool</span> instaClear = <span class="keyword">false</span>)
-<a name="l00108"></a>00108   {
-<a name="l00109"></a>00109     <span class="keywordflow">if</span> (instaClear)
-<a name="l00110"></a>00110       data.<a class="code" href="classcsArray.html#a5">DeleteAll</a>();
-<a name="l00111"></a>00111     <span class="keywordflow">else</span>
-<a name="l00112"></a>00112       <span class="comment">// Don't clear just yet, rather, clear when we enter the next frame.</span>
-<a name="l00113"></a>00113       clearReq = lastFrame;
-<a name="l00114"></a>00114   }
-<a name="l00115"></a>00115 };
-<a name="l00116"></a>00116 
-<a name="l00117"></a>00117 <span class="preprocessor">#endif // __CS_CSTOOL_FRAMEDATAHOLDER_H__</span>
+<a name="l00049"></a><a class="code" href="classcsFrameDataHolder.html#a1">00049</a>   <a class="code" href="classcsFrameDataHolder.html#a1">csFrameDataHolder</a> () : lastData(0), nextShrink(0),
+<a name="l00050"></a>00050         lastFrame((<a class="code" href="cstypes_8h.html#a27">uint</a>)~0), clearReq((<a class="code" href="cstypes_8h.html#a27">uint</a>)~0)
+<a name="l00051"></a>00051   { }
+<a name="l00052"></a><a class="code" href="classcsFrameDataHolder.html#a3">00052</a>   <a class="code" href="classcsFrameDataHolder.html#a3">~csFrameDataHolder</a> () { }
+<a name="l00053"></a>00053 
+<a name="l00061"></a><a class="code" href="classcsFrameDataHolder.html#a2">00061</a>   T&amp; <a class="code" href="classcsFrameDataHolder.html#a2">GetUnusedData</a> (<span class="keywordtype">bool</span>&amp; created, <a class="code" href="cstypes_8h.html#a27">uint</a> frameNumber)
+<a name="l00062"></a>00062   {
+<a name="l00063"></a>00063     <span class="keywordflow">if</span> ((clearReq != (<a class="code" href="cstypes_8h.html#a27">uint</a>)~0) &amp;&amp; (clearReq != frameNumber))
+<a name="l00064"></a>00064       data.<a class="code" href="classcsArray.html#a5">DeleteAll</a>();
+<a name="l00065"></a>00065     lastFrame = frameNumber;
+<a name="l00066"></a>00066     created = <span class="keyword">false</span>;
+<a name="l00067"></a>00067     <span class="keywordflow">if</span> ((data.<a class="code" href="classcsArray.html#a19">GetSize</a>() == 0) || (data[lastData].lastFrame == frameNumber))
+<a name="l00068"></a>00068     {
+<a name="l00069"></a>00069       lastData = (size_t)-1;
+<a name="l00070"></a>00070       <span class="comment">//check the list</span>
+<a name="l00071"></a>00071       size_t i;
+<a name="l00072"></a>00072       <span class="keywordflow">for</span>(i = 0; i &lt; data.<a class="code" href="classcsArray.html#a19">GetSize</a> (); i++)
+<a name="l00073"></a>00073       {
+<a name="l00074"></a>00074         <span class="keywordflow">if</span> (data[i].lastFrame != frameNumber)
+<a name="l00075"></a>00075         {
+<a name="l00076"></a>00076           lastData = i;
+<a name="l00077"></a>00077           <span class="keywordflow">break</span>;
+<a name="l00078"></a>00078         }
+<a name="l00079"></a>00079       }
+<a name="l00080"></a>00080       <span class="keywordflow">if</span> (lastData == (size_t)-1)
+<a name="l00081"></a>00081       {
+<a name="l00082"></a>00082         data.<a class="code" href="classcsArray.html#a34">SetSize</a> ((lastData = data.<a class="code" href="classcsArray.html#a19">GetSize</a> ()) + 1);
+<a name="l00083"></a>00083         created = <span class="keyword">true</span>;
+<a name="l00084"></a>00084         nextShrink = frameNumber + 1;
+<a name="l00085"></a>00085       }
+<a name="l00086"></a>00086     }
+<a name="l00087"></a>00087   
+<a name="l00088"></a>00088     <span class="comment">// Conserve some memory</span>
+<a name="l00089"></a>00089     <span class="keywordflow">if</span> (!created &amp;&amp; (frameNumber &lt;= nextShrink))
+<a name="l00090"></a>00090     {
+<a name="l00091"></a>00091       data.<a class="code" href="classcsArray.html#a35">ShrinkBestFit</a> ();
+<a name="l00092"></a>00092     }
+<a name="l00093"></a>00093   
+<a name="l00094"></a>00094     FrameData&amp; frameData = data[lastData];
+<a name="l00095"></a>00095     frameData.lastFrame = frameNumber;
+<a name="l00096"></a>00096     <span class="keywordflow">return</span> frameData.data;
+<a name="l00097"></a>00097   }
+<a name="l00098"></a>00098   
+<a name="l00108"></a><a class="code" href="classcsFrameDataHolder.html#a0">00108</a>   <span class="keywordtype">void</span> <a class="code" href="classcsFrameDataHolder.html#a0">Clear</a> (<span class="keywordtype">bool</span> instaClear = <span class="keyword">false</span>)
+<a name="l00109"></a>00109   {
+<a name="l00110"></a>00110     <span class="keywordflow">if</span> (instaClear)
+<a name="l00111"></a>00111       data.<a class="code" href="classcsArray.html#a5">DeleteAll</a>();
+<a name="l00112"></a>00112     <span class="keywordflow">else</span>
+<a name="l00113"></a>00113       <span class="comment">// Don't clear just yet, rather, clear when we enter the next frame.</span>
+<a name="l00114"></a>00114       clearReq = lastFrame;
+<a name="l00115"></a>00115   }
+<a name="l00116"></a>00116 };
+<a name="l00117"></a>00117 
+<a name="l00118"></a>00118 <span class="preprocessor">#endif // __CS_CSTOOL_FRAMEDATAHOLDER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
