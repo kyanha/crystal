@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.20.11.5 FVG Path</title>
+
+<meta name="description" content="Crystal Space: 4.20.11.5 FVG Path">
+<meta name="keywords" content="Crystal Space: 4.20.11.5 FVG Path">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="AWS-FVG-Path"></a>
+<a name="4.20.11.5"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.20.11.4.html#4.20.11.4" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.21.html#4.21" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.11.html#4.20.11" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h4 class="subsubsection"> 4.20.11.5 <small>FVG</small> Path </h4>
+
+<p>Defines a path.  Paths are complex shapes that may or may
+not be filled.  Paths can have multiple contours defined
+in each one, but they cannot currently carve holes in the
+path.
+</p>
+<a name="SEC711"></a>
+<h4 class="subsubheading"> Defining the Shape </h4>
+
+<p>Example: This defines a path by first moving to a point, drawing a line
+relative to that point, and a second line relative to the end of the first
+line. The area defined by this path is then filled white with its outline
+painted red.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;path d=&quot;M 100 100 L 300 100 L 200 300 z&quot;
+      stroke=&quot;#ff0000&quot;
+      fill=&quot;#ffffff&quot; /&gt;
+</pre></td></tr></table>
+<a name="SEC712"></a>
+<h4 class="subsubheading"> Differences from <small>SVG</small> </h4>
+
+<p>The <small>FVG</small> path command differs from its <small>SVG</small> relative in the following
+ways:
+</p>
+<ul>
+<li>
+Each command expects one, and only one, set of parameters.  In <small>SVG</small> many
+commands allow you to specify repeated coordinates for the same command.  This
+is currently not the case in <small>FVG</small>, though this limitation may be lifted in
+the future.
+
+</li><li>
+<small>SVG</small> supports several curving commands, beziers, arcs, etc.  These are not
+currently supported in <small>FVG</small>, though this limitation may be lifted in the
+future.
+</li></ul>
+
+<a name="SEC713"></a>
+<h4 class="subsubheading"> Allowed Parameters </h4>
+
+<table>
+<tr><td><p> <em>Name</em> </p></td><td><p> <em>Required</em> </p></td><td><p> <em>Example</em> </p></td><td><p> <em>Description</em>
+</p></td></tr>
+<tr><td><p> <code>d</code>
+</p></td><td><p>  yes
+</p></td><td><p>  <code>d=&quot;M 100 100 L 300 100 L 200 300 z&quot;</code>
+</p></td><td><p>  Defines the countour of the path (see below).
+</p>
+</td></tr>
+<tr><td><p> <code>stroke</code>
+</p></td><td><p>  no
+</p></td><td><p>  <code>stroke=&quot;#ff0000&quot;</code>
+</p></td><td><p> Turns on stroking of the shape, and sets the color.  If this is not
+present, the shape will not be stroked.  Either this value or <samp>`fill'</samp> must
+be present or the shape will be invisible.
+</p>
+</td></tr>
+<tr><td><p> <code>fill</code>
+</p></td><td><p>  no
+</p></td><td><p>  <code>fill=&quot;#ff0000&quot;</code>
+</p></td><td><p> Turns on filling of the shape, and sets the color.  If this is not
+present, the shape will not be filled.  Either this value or <samp>`stroke'</samp> must
+be present or the shape will be invisible.  Note that if a path is not closed,
+it will not be filled.  A path's contour is closed by using the <samp>`z'</samp>
+command.
+</p></td></tr>
+</table>
+
+<a name="SEC714"></a>
+<h4 class="subsubheading"> Path Commands </h4>
+
+<table>
+<tr><td><p> <em>Name</em> </p></td><td><p> <em>Example</em> </p></td><td><p> <em>Description</em>
+</p></td></tr>
+<tr><td><p> <code>M</code> or <code>m</code>
+</p></td><td><p>  <code>M 100 100</code>
+</p></td><td><p> Start a new sub-path at the given (x,y) coordinate. <samp>`M'</samp> (uppercase)
+indicates that absolute coordinates will follow; <samp>`m'</samp> (lowercase) indicates
+that relative coordinates will follow. If a relative moveto (<samp>`m'</samp>) appears
+as the first element of the path, then it is treated as a pair of absolute
+coordinates. If a moveto is followed by multiple pairs of coordinates, the
+subsequent pairs are treated as implicit lineto commands.
+</p>
+</td></tr>
+<tr><td><p> <code>Z</code> or <code>z</code>
+</p></td><td><p>  <code>z</code>
+</p></td><td><p> Close the current subpath by drawing a straight line from the current
+point to current subpath's initial point.  A new contour (subpath) will start
+after this command is encountered.  If this command is present at the end of a
+contour, then that path may be filled. <samp>`Z'</samp> (uppercase) and <samp>`z'</samp>
+(lowercase) produce the same result.
+</p>
+</td></tr>
+<tr><td><p> <code>L</code> or <code>l</code>
+</p></td><td><p>  <code>L 200 200</code>
+</p></td><td><p> Draw a line from the current point to the given (x,y) coordinate which
+becomes the new current point. <samp>`L'</samp> (uppercase) indicates that absolute
+coordinates will follow; <samp>`l'</samp> (lowercase) indicates that relative
+coordinates will follow.
+</p>
+</td></tr>
+<tr><td><p> <code>H</code> or <code>h</code>
+</p></td><td><p>  <code>H 300</code>
+</p></td><td><p> Draws a horizontal line from the current point (cpx,cpy) to (x,cpy), where
+&quot;x&quot; is the supplied x coordinate.  <samp>`H'</samp> (uppercase) indicates that
+absolute coordinates will follow; <samp>`h'</samp> (lowercase) indicates that relative
+coordinates will follow. At the end of the command, the new current point
+becomes (x,cpy) for the final value of x.
+</p>
+</td></tr>
+<tr><td><p> <code>V</code> or <code>v</code>
+</p></td><td><p>  <code>V 300</code>
+</p></td><td><p> Draws a vertical line from the current point (cpx,cpy) to (cpx,y), where
+&quot;y&quot; is the supplied y coordinate.  <samp>`V'</samp> (uppercase) indicates that
+absolute coordinates will follow; <samp>`v'</samp> (lowercase) indicates that relative
+coordinates will follow.  At the end of the command, the new point becomes
+(cpx,y) for the final value of y.
+</p></td></tr>
+</table>
+
+
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.20.11.4.html#4.20.11.4" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.21.html#4.21" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.20.11.html#4.20.11" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
