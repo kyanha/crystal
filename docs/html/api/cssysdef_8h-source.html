@@ -137,7 +137,7 @@
 <a name="l00145"></a>00145 <span class="preprocessor"></span>
 <a name="l00154"></a>00154 <span class="comment">// Handle platforms with no native aligned malloc</span>
 <a name="l00155"></a>00155 <span class="preprocessor">#ifndef CS_HAVE_CSALIGNED_MALLOC</span>
-<a name="l00156"></a><a class="code" href="cssysdef_8h.html#a56">00156</a> <span class="preprocessor"></span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="cssysdef_8h.html#a56">csAlignedMalloc</a> (size_t size, size_t align)
+<a name="l00156"></a><a class="code" href="cssysdef_8h.html#a57">00156</a> <span class="preprocessor"></span><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="cssysdef_8h.html#a57">csAlignedMalloc</a> (size_t size, size_t align)
 <a name="l00157"></a>00157 {
 <a name="l00158"></a>00158   <span class="keywordtype">void</span> *mallocPtr = malloc(size + align + <span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*));
 <a name="l00159"></a>00159   size_t ptrInt = (size_t)mallocPtr;
@@ -148,7 +148,7 @@
 <a name="l00164"></a>00164   <span class="keywordflow">return</span> (<span class="keywordtype">void</span>*)ptrInt;
 <a name="l00165"></a>00165 }
 <a name="l00166"></a>00166 
-<a name="l00167"></a><a class="code" href="cssysdef_8h.html#a57">00167</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="cssysdef_8h.html#a57">csAlignedFree</a> (<span class="keywordtype">void</span>* ptr)
+<a name="l00167"></a><a class="code" href="cssysdef_8h.html#a58">00167</a> <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="cssysdef_8h.html#a58">csAlignedFree</a> (<span class="keywordtype">void</span>* ptr)
 <a name="l00168"></a>00168 {
 <a name="l00169"></a>00169   free(*(((<span class="keywordtype">void</span>**)ptr) - 1));
 <a name="l00170"></a>00170 }
@@ -190,8 +190,8 @@
 <a name="l00255"></a>00255 <span class="comment"> */</span>
 <a name="l00256"></a>00256 <span class="preprocessor">#endif</span>
 <a name="l00257"></a>00257 <span class="preprocessor"></span>
-<a name="l00258"></a><a class="code" href="cssysdef_8h.html#a54">00258</a> <span class="keyword">typedef</span> void (*<a class="code" href="cssysdef_8h.html#a54">csStaticVarCleanupFN</a>) (void (*p)());
-<a name="l00259"></a>00259 <span class="keyword">extern</span> <a class="code" href="cssysdef_8h.html#a54">csStaticVarCleanupFN</a> csStaticVarCleanup;
+<a name="l00258"></a><a class="code" href="cssysdef_8h.html#a55">00258</a> <span class="keyword">typedef</span> void (*<a class="code" href="cssysdef_8h.html#a55">csStaticVarCleanupFN</a>) (void (*p)());
+<a name="l00259"></a>00259 <span class="keyword">extern</span> <a class="code" href="cssysdef_8h.html#a55">csStaticVarCleanupFN</a> csStaticVarCleanup;
 <a name="l00260"></a>00260 
 <a name="l00261"></a>00261 <span class="preprocessor">#ifndef CS_IMPLEMENT_STATIC_VARIABLE_REGISTRATION</span>
 <a name="l00262"></a><a class="code" href="cssysdef_8h.html#a15">00262</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_IMPLEMENT_STATIC_VARIABLE_REGISTRATION(Name)              \</span>
@@ -606,44 +606,55 @@
 <a name="l00801"></a>00801 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
 <a name="l00802"></a>00802 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 <a name="l00803"></a>00803 <span class="preprocessor"></span>
-<a name="l00804"></a>00804 <span class="comment">// Macro used to define static implicit pointer conversion function.</span>
-<a name="l00805"></a>00805 <span class="comment">// Only use within a class declaration.</span>
-<a name="l00806"></a>00806 <span class="preprocessor">#ifndef _CS_IMPLICITPTRCAST_NAME</span>
-<a name="l00807"></a><a class="code" href="cssysdef_8h.html#a47">00807</a> <span class="preprocessor"></span><span class="preprocessor">#  define _CS_IMPLICITPTRCAST_NAME __ImplicitPtrCast</span>
-<a name="l00808"></a>00808 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00809"></a>00809 <span class="preprocessor"></span>
-<a name="l00831"></a><a class="code" href="cssysdef_8h.html#a48">00831</a> <span class="preprocessor">#define CS_IMPLEMENT_IMPLICIT_PTR_CAST(classname) \</span>
-<a name="l00832"></a>00832 <span class="preprocessor">  inline static classname* _CS_IMPLICITPTRCAST_NAME (classname* ptr) \</span>
-<a name="l00833"></a>00833 <span class="preprocessor">  { \</span>
-<a name="l00834"></a>00834 <span class="preprocessor">    return ptr;\</span>
-<a name="l00835"></a>00835 <span class="preprocessor">  }</span>
-<a name="l00836"></a>00836 <span class="preprocessor"></span>
-<a name="l00845"></a><a class="code" href="cssysdef_8h.html#a49">00845</a> <span class="preprocessor">#define CS_IMPLICIT_PTR_CAST(classname, ptr) \</span>
-<a name="l00846"></a>00846 <span class="preprocessor">  (classname::_CS_IMPLICITPTRCAST_NAME(ptr))</span>
-<a name="l00847"></a>00847 <span class="preprocessor"></span>
-<a name="l00851"></a>00851 <span class="preprocessor">#ifdef CS_HAVE_VA_COPY</span>
-<a name="l00852"></a>00852 <span class="preprocessor"></span><span class="preprocessor">#  define CS_VA_COPY(dest, src)         va_copy(dest, src)</span>
-<a name="l00853"></a>00853 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00854"></a>00854 <span class="preprocessor"></span><span class="preprocessor">#  ifdef CS_HAVE___VA_COPY</span>
-<a name="l00855"></a>00855 <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       __va_copy(dest, src)</span>
-<a name="l00856"></a>00856 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
-<a name="l00857"></a><a class="code" href="cssysdef_8h.html#a50">00857</a> <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       dest = src;</span>
-<a name="l00858"></a>00858 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-<a name="l00859"></a>00859 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00860"></a>00860 <span class="preprocessor"></span>
-<a name="l00865"></a>00865 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
-<a name="l00866"></a><a class="code" href="cssysdef_8h.html#a51">00866</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __PRETTY_FUNCTION__</span>
-<a name="l00867"></a>00867 <span class="preprocessor"></span><span class="preprocessor">#elif defined(__FUNCTION__)</span>
-<a name="l00868"></a>00868 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __FUNCTION__</span>
-<a name="l00869"></a>00869 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00870"></a>00870 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              "&lt;?\?\?&gt;"</span>
-<a name="l00871"></a>00871 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00872"></a>00872 <span class="preprocessor"></span>
-<a name="l00873"></a><a class="code" href="cssysdef_8h.html#a52">00873</a> <span class="preprocessor">#define CS_STRING_TO_WIDE_(x)   L ## x</span>
-<a name="l00874"></a>00874 <span class="preprocessor"></span>
-<a name="l00881"></a><a class="code" href="cssysdef_8h.html#a53">00881</a> <span class="preprocessor">#define CS_STRING_TO_WIDE(x)    CS_STRING_TO_WIDE_(x)</span>
+<a name="l00804"></a>00804 <span class="preprocessor">#if defined(CS_COMPILER_MSVC)</span>
+<a name="l00805"></a>00805 <span class="preprocessor"></span><span class="preprocessor">  #define CS_ALIGNED_MEMBER(Member, Align)                              \</span>
+<a name="l00806"></a>00806 <span class="preprocessor">    __declspec(align(Align)) Member</span>
+<a name="l00807"></a>00807 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_COMPILER_GCC)</span>
+<a name="l00808"></a>00808 <span class="preprocessor"></span>
+<a name="l00820"></a><a class="code" href="cssysdef_8h.html#a47">00820</a> <span class="preprocessor">  #define CS_ALIGNED_MEMBER(Member, Align)                              \</span>
+<a name="l00821"></a>00821 <span class="preprocessor">    Member __attribute((aligned(Align)))</span>
+<a name="l00822"></a>00822 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00823"></a>00823 <span class="preprocessor"></span><span class="preprocessor">  #define CS_ALIGNED_MEMBER(Member, Align)      Member</span>
+<a name="l00824"></a>00824 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00825"></a>00825 <span class="preprocessor"></span>
+<a name="l00826"></a>00826 <span class="comment">// Macro used to define static implicit pointer conversion function.</span>
+<a name="l00827"></a>00827 <span class="comment">// Only use within a class declaration.</span>
+<a name="l00828"></a>00828 <span class="preprocessor">#ifndef _CS_IMPLICITPTRCAST_NAME</span>
+<a name="l00829"></a><a class="code" href="cssysdef_8h.html#a48">00829</a> <span class="preprocessor"></span><span class="preprocessor">#  define _CS_IMPLICITPTRCAST_NAME __ImplicitPtrCast</span>
+<a name="l00830"></a>00830 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00831"></a>00831 <span class="preprocessor"></span>
+<a name="l00853"></a><a class="code" href="cssysdef_8h.html#a49">00853</a> <span class="preprocessor">#define CS_IMPLEMENT_IMPLICIT_PTR_CAST(classname) \</span>
+<a name="l00854"></a>00854 <span class="preprocessor">  inline static classname* _CS_IMPLICITPTRCAST_NAME (classname* ptr) \</span>
+<a name="l00855"></a>00855 <span class="preprocessor">  { \</span>
+<a name="l00856"></a>00856 <span class="preprocessor">    return ptr;\</span>
+<a name="l00857"></a>00857 <span class="preprocessor">  }</span>
+<a name="l00858"></a>00858 <span class="preprocessor"></span>
+<a name="l00867"></a><a class="code" href="cssysdef_8h.html#a50">00867</a> <span class="preprocessor">#define CS_IMPLICIT_PTR_CAST(classname, ptr) \</span>
+<a name="l00868"></a>00868 <span class="preprocessor">  (classname::_CS_IMPLICITPTRCAST_NAME(ptr))</span>
+<a name="l00869"></a>00869 <span class="preprocessor"></span>
+<a name="l00873"></a>00873 <span class="preprocessor">#ifdef CS_HAVE_VA_COPY</span>
+<a name="l00874"></a>00874 <span class="preprocessor"></span><span class="preprocessor">#  define CS_VA_COPY(dest, src)         va_copy(dest, src)</span>
+<a name="l00875"></a>00875 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00876"></a>00876 <span class="preprocessor"></span><span class="preprocessor">#  ifdef CS_HAVE___VA_COPY</span>
+<a name="l00877"></a>00877 <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       __va_copy(dest, src)</span>
+<a name="l00878"></a>00878 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
+<a name="l00879"></a><a class="code" href="cssysdef_8h.html#a51">00879</a> <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       dest = src;</span>
+<a name="l00880"></a>00880 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+<a name="l00881"></a>00881 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
 <a name="l00882"></a>00882 <span class="preprocessor"></span>
-<a name="l00883"></a>00883 <span class="preprocessor">#endif // __CS_CSSYSDEF_H__</span>
+<a name="l00887"></a>00887 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
+<a name="l00888"></a><a class="code" href="cssysdef_8h.html#a52">00888</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __PRETTY_FUNCTION__</span>
+<a name="l00889"></a>00889 <span class="preprocessor"></span><span class="preprocessor">#elif defined(__FUNCTION__)</span>
+<a name="l00890"></a>00890 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __FUNCTION__</span>
+<a name="l00891"></a>00891 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00892"></a>00892 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              "&lt;?\?\?&gt;"</span>
+<a name="l00893"></a>00893 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00894"></a>00894 <span class="preprocessor"></span>
+<a name="l00895"></a><a class="code" href="cssysdef_8h.html#a53">00895</a> <span class="preprocessor">#define CS_STRING_TO_WIDE_(x)   L ## x</span>
+<a name="l00896"></a>00896 <span class="preprocessor"></span>
+<a name="l00903"></a><a class="code" href="cssysdef_8h.html#a54">00903</a> <span class="preprocessor">#define CS_STRING_TO_WIDE(x)    CS_STRING_TO_WIDE_(x)</span>
+<a name="l00904"></a>00904 <span class="preprocessor"></span>
+<a name="l00905"></a>00905 <span class="preprocessor">#endif // __CS_CSSYSDEF_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

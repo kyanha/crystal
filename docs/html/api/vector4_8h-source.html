@@ -20,8 +20,8 @@
 <h1>vector4.h</h1><a href="vector4_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
 <a name="l00002"></a>00002 <span class="comment">    Copyright (C) 1998,1999,2000 by Jorrit Tyberghein</span>
 <a name="l00003"></a>00003 <span class="comment">    Largely rewritten by Ivan Avramovic &lt;ivan@avramovic.com&gt;</span>
-<a name="l00004"></a>00004 <span class="comment">    Extended (and some methods removed) to 4 component by Marten</span>
-<a name="l00005"></a>00005 <span class="comment">    Svanfeldt</span>
+<a name="l00004"></a>00004 <span class="comment">    Extended (and some methods removed) to 4 component by Marten Svanfeldt</span>
+<a name="l00005"></a>00005 <span class="comment">    Templatized by Frank Richter</span>
 <a name="l00006"></a>00006 <span class="comment"></span>
 <a name="l00007"></a>00007 <span class="comment">    This library is free software; you can redistribute it and/or</span>
 <a name="l00008"></a>00008 <span class="comment">    modify it under the terms of the GNU Library General Public</span>
@@ -43,316 +43,242 @@
 <a name="l00024"></a>00024 <span class="preprocessor"></span>
 <a name="l00032"></a>00032 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="vector3_8h.html">csgeom/vector3.h</a>"</span>
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035 <span class="keyword">class </span><a class="code" href="classcsVector4.html">csVector4</a>;
-<a name="l00036"></a>00036 
-<a name="l00037"></a>00037 
-<a name="l00041"></a><a class="code" href="classcsDVector4.html">00041</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsDVector4.html">csDVector4</a>
-<a name="l00042"></a>00042 {
-<a name="l00043"></a>00043 <span class="keyword">public</span>:
-<a name="l00045"></a><a class="code" href="classcsDVector4.html#o1">00045</a>   <span class="keywordtype">double</span> x;
-<a name="l00047"></a><a class="code" href="classcsDVector4.html#o2">00047</a>   <span class="keywordtype">double</span> y;
-<a name="l00049"></a><a class="code" href="classcsDVector4.html#o3">00049</a>   <span class="keywordtype">double</span> z;
-<a name="l00051"></a><a class="code" href="classcsDVector4.html#o0">00051</a>   <span class="keywordtype">double</span> w;
-<a name="l00052"></a>00052 
-<a name="l00057"></a><a class="code" href="classcsDVector4.html#a6">00057</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> () {}
-<a name="l00058"></a>00058 
-<a name="l00064"></a><a class="code" href="classcsDVector4.html#a5">00064</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> (<span class="keywordtype">double</span> m) : x(m), y(m), z(m), w(m) {}
-<a name="l00065"></a>00065 
-<a name="l00067"></a><a class="code" href="classcsDVector4.html#a4">00067</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> (<span class="keywordtype">double</span> ix, <span class="keywordtype">double</span> iy, <span class="keywordtype">double</span> iz = 0, <span class="keywordtype">double</span> iw = 1)
-<a name="l00068"></a>00068   { x = ix; y = iy; z = iz; w = iw;}
-<a name="l00069"></a>00069 
-<a name="l00071"></a><a class="code" href="classcsDVector4.html#a3">00071</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v) { x = v.<a class="code" href="classcsDVector4.html#o1">x</a>; y = v.<a class="code" href="classcsDVector4.html#o2">y</a>; z = v.<a class="code" href="classcsDVector4.html#o3">z</a>; w = v.<a class="code" href="classcsDVector4.html#o0">w</a>; }
-<a name="l00072"></a>00072 
-<a name="l00074"></a>00074   <a class="code" href="classcsDVector4.html">csDVector4</a> (<span class="keyword">const</span> <a class="code" href="classcsVector4.html">csVector4</a>&amp;);
-<a name="l00075"></a>00075 
-<a name="l00077"></a><a class="code" href="classcsDVector4.html#a1">00077</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> (<span class="keyword">const</span> <a class="code" href="classcsDVector3.html">csDVector3</a>&amp; v) { x = v.<a class="code" href="classcsDVector3.html#o0">x</a>; y = v.<a class="code" href="classcsDVector3.html#o1">y</a>; z = v.<a class="code" href="classcsDVector3.html#o2">z</a>; w = 1.0; }
-<a name="l00078"></a>00078 
-<a name="l00080"></a>00080   <span class="keyword">inline</span> <span class="keyword">friend</span>
-<a name="l00081"></a><a class="code" href="classcsDVector4.html#n5">00081</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a4">operator+ </a>(<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00082"></a>00082   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v1.<a class="code" href="classcsDVector4.html#o1">x</a>+v2.<a class="code" href="classcsDVector4.html#o1">x</a>, v1.<a class="code" href="classcsDVector4.html#o2">y</a>+v2.<a class="code" href="classcsDVector4.html#o2">y</a>, v1.<a class="code" href="classcsDVector4.html#o3">z</a>+v2.<a class="code" href="classcsDVector4.html#o3">z</a>, v1.<a class="code" href="classcsDVector4.html#o0">w</a>+v2.<a class="code" href="classcsDVector4.html#o0">w</a>); }
-<a name="l00083"></a>00083 
-<a name="l00085"></a>00085   <span class="keyword">inline</span> <span class="keyword">friend</span>
-<a name="l00086"></a><a class="code" href="classcsDVector4.html#n6">00086</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a5">operator- </a>(<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00087"></a>00087   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v1.<a class="code" href="classcsDVector4.html#o1">x</a>-v2.<a class="code" href="classcsDVector4.html#o1">x</a>, v1.<a class="code" href="classcsDVector4.html#o2">y</a>-v2.<a class="code" href="classcsDVector4.html#o2">y</a>, v1.<a class="code" href="classcsDVector4.html#o3">z</a>-v2.<a class="code" href="classcsDVector4.html#o3">z</a>, v1.<a class="code" href="classcsDVector4.html#o0">w</a>-v2.<a class="code" href="classcsDVector4.html#o0">w</a>); }
+<a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
+<a name="l00035"></a>00035 
+<a name="l00039"></a>00039 <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;
+<a name="l00040"></a><a class="code" href="classcsVector4T.html">00040</a> <span class="keyword">class </span><a class="code" href="classcsVector4T.html">csVector4T</a>
+<a name="l00041"></a>00041 {
+<a name="l00042"></a>00042 <span class="keyword">public</span>:
+<a name="l00043"></a>00043 <span class="preprocessor">#if !defined(__STRICT_ANSI__) &amp;&amp; !defined(SWIG)</span>
+<a name="l00044"></a>00044 <span class="preprocessor"></span>  <span class="keyword">union</span>
+<a name="l00045"></a>00045 <span class="keyword">  </span>{
+<a name="l00046"></a>00046     <span class="keyword">struct </span>
+<a name="l00047"></a>00047 <span class="keyword">    </span>{
+<a name="l00048"></a>00048 <span class="preprocessor">#endif</span>
+<a name="l00049"></a>00049 <span class="preprocessor"></span>
+<a name="l00050"></a><a class="code" href="classcsVector4T.html#o2">00050</a>       T <a class="code" href="classcsVector4T.html#o2">x</a>;
+<a name="l00052"></a><a class="code" href="classcsVector4T.html#o3">00052</a>       T <a class="code" href="classcsVector4T.html#o3">y</a>;
+<a name="l00054"></a><a class="code" href="classcsVector4T.html#o4">00054</a>       T <a class="code" href="classcsVector4T.html#o4">z</a>;
+<a name="l00056"></a><a class="code" href="classcsVector4T.html#o1">00056</a>       T <a class="code" href="classcsVector4T.html#o1">w</a>;
+<a name="l00057"></a>00057 <span class="preprocessor">#if !defined(__STRICT_ANSI__) &amp;&amp; !defined(SWIG)</span>
+<a name="l00058"></a>00058 <span class="preprocessor"></span>    };
+<a name="l00060"></a><a class="code" href="classcsVector4T.html#o0">00060</a>     T <a class="code" href="classcsVector4T.html#o0">m</a>[4];
+<a name="l00061"></a>00061   };
+<a name="l00062"></a>00062 <span class="preprocessor">#endif</span>
+<a name="l00063"></a>00063 <span class="preprocessor"></span>  <span class="comment">/* Note: since T is used in an union above, it cannot have custom ctors.</span>
+<a name="l00064"></a>00064 <span class="comment">   * So be careful when creating new Ts; e.g.: don't use T(x), but something</span>
+<a name="l00065"></a>00065 <span class="comment">   * like T y = x.</span>
+<a name="l00066"></a>00066 <span class="comment">   */</span>
+<a name="l00067"></a>00067   
+<a name="l00072"></a><a class="code" href="classcsVector4T.html#a5">00072</a>   <a class="code" href="classcsVector4T.html#a5">csVector4T</a> () {}
+<a name="l00073"></a>00073 
+<a name="l00079"></a><a class="code" href="classcsVector4T.html#a4">00079</a>   <a class="code" href="classcsVector4T.html#a5">csVector4T</a> (<span class="keyword">const</span> T&amp; <a class="code" href="classcsVector4T.html#o0">m</a>) : <a class="code" href="classcsVector4T.html#o2">x</a>(m), <a class="code" href="classcsVector4T.html#o3">y</a>(m), <a class="code" href="classcsVector4T.html#o4">z</a>(m), <a class="code" href="classcsVector4T.html#o1">w</a>(m) {}
+<a name="l00080"></a>00080 
+<a name="l00082"></a><a class="code" href="classcsVector4T.html#a3">00082</a>   <a class="code" href="classcsVector4T.html#a5">csVector4T</a> (<span class="keyword">const</span> T&amp; ix, <span class="keyword">const</span> T&amp; iy, <span class="keyword">const</span> T&amp; iz = T(0), 
+<a name="l00083"></a>00083     <span class="keyword">const</span> T&amp; iw = T(1))
+<a name="l00084"></a>00084         : <a class="code" href="classcsVector4T.html#o2">x</a>(ix), <a class="code" href="classcsVector4T.html#o3">y</a>(iy), <a class="code" href="classcsVector4T.html#o4">z</a>(iz), <a class="code" href="classcsVector4T.html#o1">w</a>(iw) {}
+<a name="l00085"></a>00085 
+<a name="l00087"></a><a class="code" href="classcsVector4T.html#a2">00087</a>   <a class="code" href="classcsVector4T.html#a5">csVector4T</a> (<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v) : <a class="code" href="classcsVector4T.html#o2">x</a>(v.<a class="code" href="classcsVector4T.html#o2">x</a>), <a class="code" href="classcsVector4T.html#o3">y</a>(v.<a class="code" href="classcsVector4T.html#o3">y</a>), <a class="code" href="classcsVector4T.html#o4">z</a>(v.<a class="code" href="classcsVector4T.html#o4">z</a>), <a class="code" href="classcsVector4T.html#o1">w</a>(v.<a class="code" href="classcsVector4T.html#o1">w</a>) {}
 <a name="l00088"></a>00088 
-<a name="l00090"></a><a class="code" href="classcsDVector4.html#n2">00090</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">double</span> <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00091"></a>00091   { <span class="keywordflow">return</span> v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a> + v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a> + v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a> + v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>; }
-<a name="l00092"></a>00092 
-<a name="l00094"></a><a class="code" href="classcsDVector4.html#n4">00094</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> operator% (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1,
-<a name="l00095"></a>00095         <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00096"></a>00096   {
-<a name="l00097"></a>00097     <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a> (
-<a name="l00098"></a>00098       (v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>-v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>-v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>-v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>),
-<a name="l00099"></a>00099       (v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>-v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>) + (v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>-v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>) + (v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>-v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>),
-<a name="l00100"></a>00100       (v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>-v1.<a class="code" href="classcsDVector4.html#o3">z</a>-v2.<a class="code" href="classcsDVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>-v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>) + (v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>-v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>),
-<a name="l00101"></a>00101       (v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>-v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>) + (v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>-v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>) + (v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>-v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>) );
-<a name="l00102"></a>00102   }
-<a name="l00103"></a>00103 
-<a name="l00105"></a><a class="code" href="classcsDVector4.html#a0">00105</a>   <span class="keywordtype">void</span> Cross (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a> &amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a> &amp; v2)
-<a name="l00106"></a>00106   {
-<a name="l00107"></a>00107     x = (v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>-v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>-v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>-v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>);
-<a name="l00108"></a>00108     y = (v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>-v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>) + (v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>-v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>) + (v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>-v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>);
-<a name="l00109"></a>00109     z = (v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>-v1.<a class="code" href="classcsDVector4.html#o3">z</a>-v2.<a class="code" href="classcsDVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>-v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>) + (v1.<a class="code" href="classcsDVector4.html#o3">z</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>-v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o3">z</a>);
-<a name="l00110"></a>00110     w = (v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>-v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>) + (v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o1">x</a>-v1.<a class="code" href="classcsDVector4.html#o1">x</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>) + (v1.<a class="code" href="classcsDVector4.html#o0">w</a>*v2.<a class="code" href="classcsDVector4.html#o2">y</a>-v1.<a class="code" href="classcsDVector4.html#o2">y</a>*v2.<a class="code" href="classcsDVector4.html#o0">w</a>);
-<a name="l00111"></a>00111   }
-<a name="l00112"></a>00112 
-<a name="l00114"></a><a class="code" href="classcsDVector4.html#n1">00114</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v, <span class="keywordtype">double</span> f)
-<a name="l00115"></a>00115   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v.<a class="code" href="classcsDVector4.html#o1">x</a>*f, v.<a class="code" href="classcsDVector4.html#o2">y</a>*f, v.<a class="code" href="classcsDVector4.html#o3">z</a>*f, v.<a class="code" href="classcsDVector4.html#o0">w</a>*f); }
-<a name="l00116"></a>00116 
-<a name="l00118"></a><a class="code" href="classcsDVector4.html#n0">00118</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keywordtype">double</span> f, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v)
-<a name="l00119"></a>00119   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v.<a class="code" href="classcsDVector4.html#o1">x</a>*f, v.<a class="code" href="classcsDVector4.html#o2">y</a>*f, v.<a class="code" href="classcsDVector4.html#o3">z</a>*f, v.<a class="code" href="classcsDVector4.html#o0">w</a>*f); }
+<a name="l00090"></a><a class="code" href="classcsVector4T.html#a1">00090</a>   <a class="code" href="classcsVector4T.html#a5">csVector4T</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v) : <a class="code" href="classcsVector4T.html#o2">x</a>(v.<a class="code" href="classcsVector4T.html#o2">x</a>), <a class="code" href="classcsVector4T.html#o3">y</a>(v.<a class="code" href="classcsVector4T.html#o3">y</a>), <a class="code" href="classcsVector4T.html#o4">z</a>(v.<a class="code" href="classcsVector4T.html#o4">z</a>), <a class="code" href="classcsVector4T.html#o1">w</a>(1.0f) {}
+<a name="l00091"></a>00091 
+<a name="l00093"></a>00093   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T2&gt;
+<a name="l00094"></a><a class="code" href="classcsVector4T.html#a17">00094</a>   <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; <a class="code" href="classcsVector4T.html#a17">operator= </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T&lt;T2&gt;</a>&amp; other)
+<a name="l00095"></a>00095   {
+<a name="l00096"></a>00096     <a class="code" href="classcsVector4T.html#o2">x</a> = other.<a class="code" href="classcsVector4T.html#o2">x</a>;
+<a name="l00097"></a>00097     <a class="code" href="classcsVector4T.html#o3">y</a> = other.<a class="code" href="classcsVector4T.html#o3">y</a>;
+<a name="l00098"></a>00098     <a class="code" href="classcsVector4T.html#o4">z</a> = other.<a class="code" href="classcsVector4T.html#o4">z</a>;
+<a name="l00099"></a>00099     <a class="code" href="classcsVector4T.html#o1">w</a> = other.<a class="code" href="classcsVector4T.html#o1">w</a>;
+<a name="l00100"></a>00100     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+<a name="l00101"></a>00101   }
+<a name="l00102"></a>00102 
+<a name="l00104"></a><a class="code" href="classcsVector4T.html#a6">00104</a>   <a class="code" href="classcsString.html">csString</a> <a class="code" href="classcsVector4T.html#a6">Description</a>()<span class="keyword"> const</span>
+<a name="l00105"></a>00105 <span class="keyword">  </span>{ 
+<a name="l00106"></a>00106     <a class="code" href="classcsString.html">csString</a> str;
+<a name="l00107"></a>00107     str &lt;&lt; <a class="code" href="classcsVector4T.html#o2">x</a> &lt;&lt; <span class="stringliteral">","</span> &lt;&lt; <a class="code" href="classcsVector4T.html#o3">y</a> &lt;&lt; <span class="stringliteral">","</span> &lt;&lt; <a class="code" href="classcsVector4T.html#o4">z</a> &lt;&lt; <span class="stringliteral">","</span> &lt;&lt; <a class="code" href="classcsVector4T.html#o1">w</a>;
+<a name="l00108"></a>00108     <span class="keywordflow">return</span> str;
+<a name="l00109"></a>00109   }
+<a name="l00110"></a>00110     
+<a name="l00112"></a><a class="code" href="classcsVector4T.html#n7">00112</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#a12">operator+ </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v1, 
+<a name="l00113"></a>00113     <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v2)
+<a name="l00114"></a>00114   { <span class="keywordflow">return</span> <a class="code" href="classcsVector4T.html#a5">csVector4T</a>(v1.<a class="code" href="classcsVector4T.html#o2">x</a>+v2.<a class="code" href="classcsVector4T.html#o2">x</a>, v1.<a class="code" href="classcsVector4T.html#o3">y</a>+v2.<a class="code" href="classcsVector4T.html#o3">y</a>, v1.<a class="code" href="classcsVector4T.html#o4">z</a>+v2.<a class="code" href="classcsVector4T.html#o4">z</a>, v1.<a class="code" href="classcsVector4T.html#o1">w</a>+v2.<a class="code" href="classcsVector4T.html#o1">w</a>); }
+<a name="l00115"></a>00115 
+<a name="l00117"></a><a class="code" href="classcsVector4T.html#n8">00117</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#a14">operator- </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v1, 
+<a name="l00118"></a>00118     <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v2)
+<a name="l00119"></a>00119   { <span class="keywordflow">return</span> <a class="code" href="classcsVector4T.html#a5">csVector4T</a>(v1.<a class="code" href="classcsVector4T.html#o2">x</a>-v2.<a class="code" href="classcsVector4T.html#o2">x</a>, v1.<a class="code" href="classcsVector4T.html#o3">y</a>-v2.<a class="code" href="classcsVector4T.html#o3">y</a>, v1.<a class="code" href="classcsVector4T.html#o4">z</a>-v2.<a class="code" href="classcsVector4T.html#o4">z</a>, v1.<a class="code" href="classcsVector4T.html#o1">w</a>-v2.<a class="code" href="classcsVector4T.html#o1">w</a>); }
 <a name="l00120"></a>00120 
-<a name="l00122"></a><a class="code" href="classcsDVector4.html#n7">00122</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a0">operator/ </a>(<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v, <span class="keywordtype">double</span> f)
-<a name="l00123"></a>00123   { f = 1.0f/f; <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v.<a class="code" href="classcsDVector4.html#o1">x</a>*f, v.<a class="code" href="classcsDVector4.html#o2">y</a>*f, v.<a class="code" href="classcsDVector4.html#o3">z</a>*f, v.<a class="code" href="classcsDVector4.html#o0">w</a>*f); }
-<a name="l00124"></a>00124 
-<a name="l00126"></a><a class="code" href="classcsDVector4.html#n10">00126</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00127"></a>00127   { <span class="keywordflow">return</span> v1.<a class="code" href="classcsDVector4.html#o1">x</a>==v2.<a class="code" href="classcsDVector4.html#o1">x</a> &amp;&amp; v1.<a class="code" href="classcsDVector4.html#o2">y</a>==v2.<a class="code" href="classcsDVector4.html#o2">y</a> &amp;&amp; v1.<a class="code" href="classcsDVector4.html#o3">z</a>==v2.<a class="code" href="classcsDVector4.html#o3">z</a> &amp;&amp; v1.<a class="code" href="classcsDVector4.html#o0">w</a> == v2.<a class="code" href="classcsDVector4.html#o0">w</a>; }
-<a name="l00128"></a>00128 
-<a name="l00130"></a><a class="code" href="classcsDVector4.html#n3">00130</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00131"></a>00131   { <span class="keywordflow">return</span> v1.<a class="code" href="classcsDVector4.html#o1">x</a>!=v2.<a class="code" href="classcsDVector4.html#o1">x</a> || v1.<a class="code" href="classcsDVector4.html#o2">y</a>!=v2.<a class="code" href="classcsDVector4.html#o2">y</a> || v1.<a class="code" href="classcsDVector4.html#o3">z</a>!=v2.<a class="code" href="classcsDVector4.html#o3">z</a> || v1.<a class="code" href="classcsDVector4.html#o0">w</a>!=v2.<a class="code" href="classcsDVector4.html#o0">w</a>; }
-<a name="l00132"></a>00132 
-<a name="l00134"></a>00134   <span class="keyword">inline</span> <span class="keyword">friend</span>
-<a name="l00135"></a><a class="code" href="classcsDVector4.html#n12">00135</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> operator&gt;&gt; (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00136"></a>00136   { <span class="keywordflow">return</span> v2*(v1*v2)/(v2*v2); }
+<a name="l00121"></a>00121 
+<a name="l00123"></a><a class="code" href="classcsVector4T.html#n4">00123</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">float</span> <a class="code" href="classcsVector4T.html#n4">operator* </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v1, 
+<a name="l00124"></a>00124     <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v2)
+<a name="l00125"></a>00125   { <span class="keywordflow">return</span> v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a> + v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a> + v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a> + v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>; }
+<a name="l00126"></a>00126 
+<a name="l00128"></a><a class="code" href="classcsVector4T.html#n6">00128</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#n6">operator% </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v1, 
+<a name="l00129"></a>00129     <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v2)
+<a name="l00130"></a>00130   {
+<a name="l00131"></a>00131     <span class="keywordflow">return</span> <a class="code" href="classcsVector4T.html">csVector4T&lt;T&gt;</a> (
+<a name="l00132"></a>00132       (v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>-v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>) + (v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>-v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>) + (v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>-v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>),
+<a name="l00133"></a>00133       (v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>-v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>) + (v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>-v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>) + (v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>-v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>),
+<a name="l00134"></a>00134       (v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>-v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>) + (v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>-v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>) + (v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>-v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>),
+<a name="l00135"></a>00135       (v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>-v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>) + (v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>-v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>) + (v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>-v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>) );
+<a name="l00136"></a>00136   }
 <a name="l00137"></a>00137 
-<a name="l00139"></a>00139   <span class="keyword">inline</span> <span class="keyword">friend</span>
-<a name="l00140"></a><a class="code" href="classcsDVector4.html#n9">00140</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> operator&lt;&lt; (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00141"></a>00141   { <span class="keywordflow">return</span> v1*(v1*v2)/(v1*v1); }
-<a name="l00142"></a>00142 
-<a name="l00144"></a><a class="code" href="classcsDVector4.html#n8">00144</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v, <span class="keywordtype">double</span> f)
-<a name="l00145"></a>00145   { <span class="keywordflow">return</span> <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsDVector4.html#o1">x</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsDVector4.html#o2">y</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsDVector4.html#o3">z</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsDVector4.html#o0">w</a>)&lt;f; }
+<a name="l00139"></a><a class="code" href="classcsVector4T.html#a0">00139</a>   <span class="keywordtype">void</span> <a class="code" href="classcsVector4T.html#a0">Cross</a> (<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a> &amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a> &amp; v2)
+<a name="l00140"></a>00140   {
+<a name="l00141"></a>00141     <a class="code" href="classcsVector4T.html#o2">x</a> = (v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>-v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>) + (v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>-v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>) + (v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>-v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>);
+<a name="l00142"></a>00142     <a class="code" href="classcsVector4T.html#o3">y</a> = (v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>-v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>) + (v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>-v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>) + (v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>-v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>);
+<a name="l00143"></a>00143     <a class="code" href="classcsVector4T.html#o4">z</a> = (v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>-v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>) + (v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>-v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>) + (v1.<a class="code" href="classcsVector4T.html#o4">z</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>-v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o4">z</a>);
+<a name="l00144"></a>00144     <a class="code" href="classcsVector4T.html#o1">w</a> = (v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>-v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>) + (v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o2">x</a>-v1.<a class="code" href="classcsVector4T.html#o2">x</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>) + (v1.<a class="code" href="classcsVector4T.html#o1">w</a>*v2.<a class="code" href="classcsVector4T.html#o3">y</a>-v1.<a class="code" href="classcsVector4T.html#o3">y</a>*v2.<a class="code" href="classcsVector4T.html#o1">w</a>);
+<a name="l00145"></a>00145   }
 <a name="l00146"></a>00146 
-<a name="l00148"></a><a class="code" href="classcsDVector4.html#n11">00148</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator&gt; (<span class="keywordtype">double</span> f, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v)
-<a name="l00149"></a>00149   { <span class="keywordflow">return</span> <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsDVector4.html#o1">x</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsDVector4.html#o2">y</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsDVector4.html#o3">z</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsDVector4.html#o0">w</a>)&lt;f; }
+<a name="l00148"></a><a class="code" href="classcsVector4T.html#n3">00148</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#n4">operator* </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v, T f)
+<a name="l00149"></a>00149   { <span class="keywordflow">return</span> <a class="code" href="classcsVector4T.html#a5">csVector4T</a>(v.<a class="code" href="classcsVector4T.html#o2">x</a>*f, v.<a class="code" href="classcsVector4T.html#o3">y</a>*f, v.<a class="code" href="classcsVector4T.html#o4">z</a>*f, v.<a class="code" href="classcsVector4T.html#o1">w</a>*f); }
 <a name="l00150"></a>00150 
-<a name="l00152"></a><a class="code" href="classcsDVector4.html#a16">00152</a>   <span class="keyword">inline</span> <span class="keywordtype">double</span> operator[](<span class="keywordtype">int</span> n)<span class="keyword"> const</span>
-<a name="l00153"></a>00153 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !n?x:n&amp;1?y:n&amp;2?z:w; }
+<a name="l00152"></a><a class="code" href="classcsVector4T.html#n2">00152</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#n4">operator* </a>(<span class="keywordtype">float</span> f, <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v)
+<a name="l00153"></a>00153   { <span class="keywordflow">return</span> <a class="code" href="classcsVector4.html">csVector4</a>(v.<a class="code" href="classcsVector4T.html#o2">x</a>*f, v.<a class="code" href="classcsVector4T.html#o3">y</a>*f, v.<a class="code" href="classcsVector4T.html#o4">z</a>*f, v.<a class="code" href="classcsVector4T.html#o1">w</a>*f); }
 <a name="l00154"></a>00154 
-<a name="l00156"></a><a class="code" href="classcsDVector4.html#a15">00156</a>   <span class="keyword">inline</span> <span class="keywordtype">double</span> &amp; operator[](<span class="keywordtype">int</span> n)
-<a name="l00157"></a>00157   { <span class="keywordflow">return</span> !n?x:n&amp;1?y:n&amp;2?z:w; }
+<a name="l00156"></a><a class="code" href="classcsVector4T.html#n1">00156</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#n4">operator* </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v, <span class="keywordtype">int</span> f)
+<a name="l00157"></a>00157   { T _f = f; <span class="keywordflow">return</span> v * _f; }
 <a name="l00158"></a>00158 
-<a name="l00160"></a><a class="code" href="classcsDVector4.html#a11">00160</a>   <span class="keyword">inline</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; operator+= (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v)
-<a name="l00161"></a>00161   {
-<a name="l00162"></a>00162     x += v.<a class="code" href="classcsDVector4.html#o1">x</a>;
-<a name="l00163"></a>00163     y += v.<a class="code" href="classcsDVector4.html#o2">y</a>;
-<a name="l00164"></a>00164     z += v.<a class="code" href="classcsDVector4.html#o3">z</a>;
-<a name="l00165"></a>00165     w += v.<a class="code" href="classcsDVector4.html#o0">w</a>;
+<a name="l00160"></a><a class="code" href="classcsVector4T.html#n0">00160</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#n4">operator* </a>(<span class="keywordtype">int</span> f, <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v)
+<a name="l00161"></a>00161   { T _f = f; <span class="keywordflow">return</span> v * _f; }
+<a name="l00162"></a>00162 
+<a name="l00164"></a><a class="code" href="classcsVector4T.html#n10">00164</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#n10">operator/ </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v, T f)
+<a name="l00165"></a>00165   { f = 1.0f/f; <span class="keywordflow">return</span> <a class="code" href="classcsVector4T.html#a5">csVector4T</a>(v.<a class="code" href="classcsVector4T.html#o2">x</a>*f, v.<a class="code" href="classcsVector4T.html#o3">y</a>*f, v.<a class="code" href="classcsVector4T.html#o4">z</a>*f, v.<a class="code" href="classcsVector4T.html#o1">w</a>*f); }
 <a name="l00166"></a>00166 
-<a name="l00167"></a>00167     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-<a name="l00168"></a>00168   }
-<a name="l00169"></a>00169 
-<a name="l00171"></a><a class="code" href="classcsDVector4.html#a13">00171</a>   <span class="keyword">inline</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; operator-= (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v)
-<a name="l00172"></a>00172   {
-<a name="l00173"></a>00173     x -= v.<a class="code" href="classcsDVector4.html#o1">x</a>;
-<a name="l00174"></a>00174     y -= v.<a class="code" href="classcsDVector4.html#o2">y</a>;
-<a name="l00175"></a>00175     z -= v.<a class="code" href="classcsDVector4.html#o3">z</a>;
-<a name="l00176"></a>00176     w -= v.<a class="code" href="classcsDVector4.html#o0">w</a>;
-<a name="l00177"></a>00177 
-<a name="l00178"></a>00178     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-<a name="l00179"></a>00179   }
-<a name="l00180"></a>00180 
-<a name="l00182"></a><a class="code" href="classcsDVector4.html#a9">00182</a>   <span class="keyword">inline</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; operator*= (<span class="keywordtype">double</span> f)
-<a name="l00183"></a>00183   { x *= f; y *= f; z *= f; w *= f; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l00184"></a>00184 
-<a name="l00186"></a><a class="code" href="classcsDVector4.html#a14">00186</a>   <span class="keyword">inline</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; operator/= (<span class="keywordtype">double</span> f)
-<a name="l00187"></a>00187   { x /= f; y /= f; z /= f; w /= f; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l00188"></a>00188 
-<a name="l00190"></a><a class="code" href="classcsDVector4.html#a10">00190</a>   <span class="keyword">inline</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a4">operator+ </a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l00191"></a>00191 
-<a name="l00193"></a><a class="code" href="classcsDVector4.html#a12">00193</a>   <span class="keyword">inline</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a5">operator- </a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(-x,-y,-z,-w); }
+<a name="l00168"></a><a class="code" href="classcsVector4T.html#n9">00168</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#n10">operator/ </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v, <span class="keywordtype">int</span> f)
+<a name="l00169"></a>00169   { T _f = f; <span class="keywordflow">return</span> v / _f; }
+<a name="l00170"></a>00170 
+<a name="l00172"></a><a class="code" href="classcsVector4T.html#n13">00172</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsVector4T.html#n13">operator== </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v2)
+<a name="l00173"></a>00173   { <span class="keywordflow">return</span> v1.<a class="code" href="classcsVector4T.html#o2">x</a>==v2.<a class="code" href="classcsVector4T.html#o2">x</a> &amp;&amp; v1.<a class="code" href="classcsVector4T.html#o3">y</a>==v2.<a class="code" href="classcsVector4T.html#o3">y</a> &amp;&amp; v1.<a class="code" href="classcsVector4T.html#o4">z</a>==v2.<a class="code" href="classcsVector4T.html#o4">z</a> &amp;&amp; v1.<a class="code" href="classcsVector4T.html#o1">w</a>==v2.<a class="code" href="classcsVector4T.html#o1">w</a>; }
+<a name="l00174"></a>00174 
+<a name="l00176"></a><a class="code" href="classcsVector4T.html#n5">00176</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsVector4T.html#n5">operator!= </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v2)
+<a name="l00177"></a>00177   { <span class="keywordflow">return</span> v1.<a class="code" href="classcsVector4T.html#o2">x</a>!=v2.<a class="code" href="classcsVector4T.html#o2">x</a> || v1.<a class="code" href="classcsVector4T.html#o3">y</a>!=v2.<a class="code" href="classcsVector4T.html#o3">y</a> || v1.<a class="code" href="classcsVector4T.html#o4">z</a>!=v2.<a class="code" href="classcsVector4T.html#o4">z</a> || v1.<a class="code" href="classcsVector4T.html#o1">w</a>!=v2.<a class="code" href="classcsVector4T.html#o1">w</a>; }
+<a name="l00178"></a>00178 
+<a name="l00180"></a><a class="code" href="classcsVector4T.html#n15">00180</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#n15">operator&gt;&gt; </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v2)
+<a name="l00181"></a>00181   { <span class="keywordflow">return</span> v2*(v1*v2)/(v2*v2); }
+<a name="l00182"></a>00182 
+<a name="l00184"></a><a class="code" href="classcsVector4T.html#n12">00184</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#n12">operator&lt;&lt; </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v2)
+<a name="l00185"></a>00185   { <span class="keywordflow">return</span> v1*(v1*v2)/(v1*v1); }
+<a name="l00186"></a>00186 
+<a name="l00188"></a><a class="code" href="classcsVector4T.html#n11">00188</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsVector4T.html#n11">operator&lt; </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v, <span class="keywordtype">float</span> f)
+<a name="l00189"></a>00189   { <span class="keywordflow">return</span> <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4T.html#o2">x</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4T.html#o3">y</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4T.html#o4">z</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4T.html#o1">w</a>)&lt;f; }
+<a name="l00190"></a>00190 
+<a name="l00192"></a><a class="code" href="classcsVector4T.html#n14">00192</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="classcsVector4T.html#n14">operator&gt; </a>(<span class="keywordtype">float</span> f, <span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v)
+<a name="l00193"></a>00193   { <span class="keywordflow">return</span> <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4T.html#o2">x</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4T.html#o3">y</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4T.html#o4">z</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4T.html#o1">w</a>)&lt;f; }
 <a name="l00194"></a>00194 
-<a name="l00196"></a><a class="code" href="classcsDVector4.html#a17">00196</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Set (<span class="keywordtype">double</span> sx, <span class="keywordtype">double</span> sy, <span class="keywordtype">double</span> sz, <span class="keywordtype">double</span> sw)
-<a name="l00197"></a>00197   { x = sx; y = sy; z = sz; w = sw; }
-<a name="l00198"></a>00198 
-<a name="l00200"></a>00200   <span class="keywordtype">double</span> Norm () <span class="keyword">const</span>;
-<a name="l00201"></a>00201 
-<a name="l00203"></a>00203   <span class="keywordtype">double</span> SquaredNorm () <span class="keyword">const</span>;
-<a name="l00204"></a>00204 
-<a name="l00210"></a><a class="code" href="classcsDVector4.html#a19">00210</a>   <a class="code" href="classcsDVector4.html">csDVector4</a> Unit ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (*<span class="keyword">this</span>)/(this-&gt;Norm()); }
-<a name="l00211"></a>00211 
-<a name="l00213"></a><a class="code" href="classcsDVector4.html#e0">00213</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">double</span> Norm (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsDVector4.html#a7">Norm</a>(); }
-<a name="l00214"></a>00214 
-<a name="l00216"></a><a class="code" href="classcsDVector4.html#e1">00216</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <a class="code" href="classcsDVector4.html">csDVector4</a> Unit (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsDVector4.html#a19">Unit</a>(); }
-<a name="l00217"></a>00217 
-<a name="l00219"></a>00219   <span class="keywordtype">void</span> Normalize();
-<a name="l00220"></a>00220 };
+<a name="l00196"></a>00196 <span class="preprocessor">#ifdef __STRICT_ANSI__</span>
+<a name="l00197"></a>00197 <span class="preprocessor"></span>  <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classcsVector4T.html#a19">operator[] </a>(<span class="keywordtype">int</span> n)<span class="keyword"> const </span>
+<a name="l00198"></a>00198 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (n&amp;2)?((n&amp;1)?<a class="code" href="classcsVector4T.html#o1">w</a>:<a class="code" href="classcsVector4T.html#o4">z</a>):((n&amp;1)?<a class="code" href="classcsVector4T.html#o3">y</a>:<a class="code" href="classcsVector4T.html#o2">x</a>); }
+<a name="l00199"></a>00199 <span class="preprocessor">#else</span>
+<a name="l00200"></a><a class="code" href="classcsVector4T.html#a19">00200</a> <span class="preprocessor"></span>  <span class="keyword">inline</span> <span class="keywordtype">float</span> <a class="code" href="classcsVector4T.html#a19">operator[] </a>(<span class="keywordtype">int</span> n)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsVector4T.html#o0">m</a>[n]; }
+<a name="l00201"></a>00201 <span class="preprocessor">#endif</span>
+<a name="l00202"></a>00202 <span class="preprocessor"></span>
+<a name="l00204"></a>00204 <span class="preprocessor">#ifdef __STRICT_ANSI__</span>
+<a name="l00205"></a>00205 <span class="preprocessor"></span>  <span class="keyword">inline</span> <span class="keywordtype">float</span> &amp; <a class="code" href="classcsVector4T.html#a19">operator[] </a>(<span class="keywordtype">int</span> n) 
+<a name="l00206"></a>00206   { <span class="keywordflow">return</span> (n&amp;2)?((n&amp;1)?<a class="code" href="classcsVector4T.html#o1">w</a>:<a class="code" href="classcsVector4T.html#o4">z</a>):((n&amp;1)?<a class="code" href="classcsVector4T.html#o3">y</a>:<a class="code" href="classcsVector4T.html#o2">x</a>); }
+<a name="l00207"></a>00207 <span class="preprocessor">#else</span>
+<a name="l00208"></a><a class="code" href="classcsVector4T.html#a18">00208</a> <span class="preprocessor"></span>  <span class="keyword">inline</span> <span class="keywordtype">float</span> &amp; <a class="code" href="classcsVector4T.html#a19">operator[] </a>(<span class="keywordtype">int</span> n) { <span class="keywordflow">return</span> <a class="code" href="classcsVector4T.html#o0">m</a>[n]; }
+<a name="l00209"></a>00209 <span class="preprocessor">#endif</span>
+<a name="l00210"></a>00210 <span class="preprocessor"></span>
+<a name="l00212"></a><a class="code" href="classcsVector4T.html#a13">00212</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; <a class="code" href="classcsVector4T.html#a13">operator+= </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v)
+<a name="l00213"></a>00213   {
+<a name="l00214"></a>00214     <a class="code" href="classcsVector4T.html#o2">x</a> += v.<a class="code" href="classcsVector4T.html#o2">x</a>;
+<a name="l00215"></a>00215     <a class="code" href="classcsVector4T.html#o3">y</a> += v.<a class="code" href="classcsVector4T.html#o3">y</a>;
+<a name="l00216"></a>00216     <a class="code" href="classcsVector4T.html#o4">z</a> += v.<a class="code" href="classcsVector4T.html#o4">z</a>;
+<a name="l00217"></a>00217     <a class="code" href="classcsVector4T.html#o1">w</a> += v.<a class="code" href="classcsVector4T.html#o1">w</a>;
+<a name="l00218"></a>00218 
+<a name="l00219"></a>00219     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+<a name="l00220"></a>00220   }
 <a name="l00221"></a>00221 
-<a name="l00222"></a>00222 
-<a name="l00226"></a><a class="code" href="classcsVector4.html">00226</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csVector4
-<a name="l00227"></a>00227 {
-<a name="l00228"></a>00228 <span class="keyword">public</span>:
-<a name="l00230"></a><a class="code" href="classcsVector4.html#o1">00230</a>   <span class="keywordtype">float</span> x;
-<a name="l00232"></a><a class="code" href="classcsVector4.html#o2">00232</a>   <span class="keywordtype">float</span> y;
-<a name="l00234"></a><a class="code" href="classcsVector4.html#o3">00234</a>   <span class="keywordtype">float</span> z;
-<a name="l00236"></a><a class="code" href="classcsVector4.html#o0">00236</a>   <span class="keywordtype">float</span> w;
-<a name="l00237"></a>00237 
-<a name="l00242"></a><a class="code" href="classcsVector4.html#a6">00242</a>   csVector4 () {}
+<a name="l00223"></a><a class="code" href="classcsVector4T.html#a15">00223</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; <a class="code" href="classcsVector4T.html#a15">operator-= </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v)
+<a name="l00224"></a>00224   {
+<a name="l00225"></a>00225     <a class="code" href="classcsVector4T.html#o2">x</a> -= v.<a class="code" href="classcsVector4T.html#o2">x</a>;
+<a name="l00226"></a>00226     <a class="code" href="classcsVector4T.html#o3">y</a> -= v.<a class="code" href="classcsVector4T.html#o3">y</a>;
+<a name="l00227"></a>00227     <a class="code" href="classcsVector4T.html#o4">z</a> -= v.<a class="code" href="classcsVector4T.html#o4">z</a>;
+<a name="l00228"></a>00228     <a class="code" href="classcsVector4T.html#o1">w</a> -= v.<a class="code" href="classcsVector4T.html#o1">w</a>;
+<a name="l00229"></a>00229 
+<a name="l00230"></a>00230     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+<a name="l00231"></a>00231   }
+<a name="l00232"></a>00232 
+<a name="l00234"></a><a class="code" href="classcsVector4T.html#a11">00234</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; <a class="code" href="classcsVector4T.html#a11">operator*= </a>(T f)
+<a name="l00235"></a>00235   { <a class="code" href="classcsVector4T.html#o2">x</a> *= f; <a class="code" href="classcsVector4T.html#o3">y</a> *= f; <a class="code" href="classcsVector4T.html#o4">z</a> *= f; <a class="code" href="classcsVector4T.html#o1">w</a> *= f; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l00236"></a>00236 
+<a name="l00238"></a><a class="code" href="classcsVector4T.html#a16">00238</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; <a class="code" href="classcsVector4T.html#a16">operator/= </a>(T f)
+<a name="l00239"></a>00239   { f = 1.0f / f; <a class="code" href="classcsVector4T.html#o2">x</a> *= f; <a class="code" href="classcsVector4T.html#o3">y</a> *= f; <a class="code" href="classcsVector4T.html#o4">z</a> *= f; <a class="code" href="classcsVector4T.html#o1">w</a> *= f; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l00240"></a>00240 
+<a name="l00242"></a><a class="code" href="classcsVector4T.html#a12">00242</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#a12">operator+ </a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
 <a name="l00243"></a>00243 
-<a name="l00249"></a><a class="code" href="classcsVector4.html#a5">00249</a>   csVector4 (<span class="keywordtype">float</span> m) : x(m), y(m), z(m), w(m) {}
+<a name="l00245"></a><a class="code" href="classcsVector4T.html#a14">00245</a>   <span class="keyword">inline</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#a14">operator- </a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsVector4.html">csVector4</a>(-<a class="code" href="classcsVector4T.html#o2">x</a>,-<a class="code" href="classcsVector4T.html#o3">y</a>,-<a class="code" href="classcsVector4T.html#o4">z</a>, -<a class="code" href="classcsVector4T.html#o1">w</a>); }
+<a name="l00246"></a>00246 
+<a name="l00248"></a><a class="code" href="classcsVector4T.html#a23">00248</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsVector4T.html#a23">Set</a> (T sx, T sy, T sz, T sw)
+<a name="l00249"></a>00249   { <a class="code" href="classcsVector4T.html#o2">x</a> = sx; <a class="code" href="classcsVector4T.html#o3">y</a> = sy; <a class="code" href="classcsVector4T.html#o4">z</a> = sz; <a class="code" href="classcsVector4T.html#o1">w</a> = sw; }
 <a name="l00250"></a>00250 
-<a name="l00252"></a><a class="code" href="classcsVector4.html#a4">00252</a>   csVector4 (<span class="keywordtype">float</span> ix, <span class="keywordtype">float</span> iy, <span class="keywordtype">float</span> iz = 0, <span class="keywordtype">float</span> iw = 1)
-<a name="l00253"></a>00253         : x(ix), y(iy), z(iz), w(iw) {}
-<a name="l00254"></a>00254 
-<a name="l00256"></a><a class="code" href="classcsVector4.html#a3">00256</a>   csVector4 (<span class="keyword">const</span> csVector4&amp; v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
-<a name="l00257"></a>00257 
-<a name="l00259"></a>00259   csVector4 (<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a> &amp;v);
-<a name="l00260"></a>00260 
-<a name="l00262"></a><a class="code" href="classcsVector4.html#a1">00262</a>   csVector4 (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v) : x(v.x), y(v.y), z(v.z), w(1.0f) {}
-<a name="l00263"></a>00263 
-<a name="l00265"></a>00265   <a class="code" href="classcsString.html">csString</a> Description() <span class="keyword">const</span>;
-<a name="l00266"></a>00266     
-<a name="l00268"></a><a class="code" href="classcsVector4.html#n11">00268</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 <a class="code" href="cscolor_8h.html#a4">operator+ </a>(<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00269"></a>00269   { <span class="keywordflow">return</span> csVector4(v1.<a class="code" href="classcsVector4.html#o1">x</a>+v2.<a class="code" href="classcsVector4.html#o1">x</a>, v1.<a class="code" href="classcsVector4.html#o2">y</a>+v2.<a class="code" href="classcsVector4.html#o2">y</a>, v1.<a class="code" href="classcsVector4.html#o3">z</a>+v2.<a class="code" href="classcsVector4.html#o3">z</a>, v1.<a class="code" href="classcsVector4.html#o0">w</a>+v2.<a class="code" href="classcsVector4.html#o0">w</a>); }
-<a name="l00270"></a>00270 
-<a name="l00272"></a><a class="code" href="classcsVector4.html#n10">00272</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a4">operator+ </a>(<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00273"></a>00273   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v1.<a class="code" href="classcsDVector4.html#o1">x</a>+v2.<a class="code" href="classcsVector4.html#o1">x</a>, v1.<a class="code" href="classcsDVector4.html#o2">y</a>+v2.<a class="code" href="classcsVector4.html#o2">y</a>, v1.<a class="code" href="classcsDVector4.html#o3">z</a>+v2.<a class="code" href="classcsVector4.html#o3">z</a>, v1.<a class="code" href="classcsDVector4.html#o0">w</a>+v2.<a class="code" href="classcsVector4.html#o0">w</a>); }
-<a name="l00274"></a>00274 
-<a name="l00276"></a><a class="code" href="classcsVector4.html#n9">00276</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a4">operator+ </a>(<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00277"></a>00277   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v1.<a class="code" href="classcsVector4.html#o1">x</a>+v2.<a class="code" href="classcsDVector4.html#o1">x</a>, v1.<a class="code" href="classcsVector4.html#o2">y</a>+v2.<a class="code" href="classcsDVector4.html#o2">y</a>, v1.<a class="code" href="classcsVector4.html#o3">z</a>+v2.<a class="code" href="classcsDVector4.html#o3">z</a>, v1.<a class="code" href="classcsVector4.html#o0">w</a>+v2.<a class="code" href="classcsDVector4.html#o0">w</a>); }
-<a name="l00278"></a>00278 
-<a name="l00280"></a><a class="code" href="classcsVector4.html#n14">00280</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 <a class="code" href="cscolor_8h.html#a5">operator- </a>(<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00281"></a>00281   { <span class="keywordflow">return</span> csVector4(v1.<a class="code" href="classcsVector4.html#o1">x</a>-v2.<a class="code" href="classcsVector4.html#o1">x</a>, v1.<a class="code" href="classcsVector4.html#o2">y</a>-v2.<a class="code" href="classcsVector4.html#o2">y</a>, v1.<a class="code" href="classcsVector4.html#o3">z</a>-v2.<a class="code" href="classcsVector4.html#o3">z</a>, v1.<a class="code" href="classcsVector4.html#o0">w</a>-v2.<a class="code" href="classcsVector4.html#o0">w</a>); }
+<a name="l00252"></a><a class="code" href="classcsVector4T.html#a22">00252</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsVector4T.html#a23">Set</a> (<a class="code" href="classcsVector4T.html">csVector4T</a> <span class="keyword">const</span>&amp; v) { <a class="code" href="classcsVector4T.html#o2">x</a> = v.<a class="code" href="classcsVector4T.html#o2">x</a>; <a class="code" href="classcsVector4T.html#o3">y</a> = v.<a class="code" href="classcsVector4T.html#o3">y</a>; <a class="code" href="classcsVector4T.html#o4">z</a> = v.<a class="code" href="classcsVector4T.html#o4">z</a>; <a class="code" href="classcsVector4T.html#o1">w</a> = v.<a class="code" href="classcsVector4T.html#o1">w</a>; }
+<a name="l00253"></a>00253 
+<a name="l00255"></a><a class="code" href="classcsVector4T.html#a21">00255</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsVector4T.html#a23">Set</a> (T <span class="keyword">const</span>* v) { <a class="code" href="classcsVector4T.html#o2">x</a> = v[0]; <a class="code" href="classcsVector4T.html#o3">y</a> = v[1]; <a class="code" href="classcsVector4T.html#o4">z</a> = v[2]; <a class="code" href="classcsVector4T.html#o1">w</a> = v[3]; }
+<a name="l00256"></a>00256 
+<a name="l00258"></a><a class="code" href="classcsVector4T.html#a20">00258</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsVector4T.html#a23">Set</a> (T v) { <a class="code" href="classcsVector4T.html#o2">x</a> = <a class="code" href="classcsVector4T.html#o3">y</a> = <a class="code" href="classcsVector4T.html#o4">z</a> = <a class="code" href="classcsVector4T.html#o1">w</a> = v; }
+<a name="l00259"></a>00259 
+<a name="l00261"></a><a class="code" href="classcsVector4T.html#a7">00261</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classcsVector4T.html#a7">Get</a> (T* v) { v[0] = <a class="code" href="classcsVector4T.html#o2">x</a>; v[1] = <a class="code" href="classcsVector4T.html#o3">y</a>; v[2] = <a class="code" href="classcsVector4T.html#o4">z</a>; v[3] = <a class="code" href="classcsVector4T.html#o1">w</a>; }
+<a name="l00262"></a>00262 
+<a name="l00264"></a><a class="code" href="classcsVector4T.html#a9">00264</a>   T <a class="code" href="classcsVector4T.html#a9">Norm</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> sqrtf (<a class="code" href="classcsVector4T.html#o2">x</a> * <a class="code" href="classcsVector4T.html#o2">x</a> + <a class="code" href="classcsVector4T.html#o3">y</a> * <a class="code" href="classcsVector4T.html#o3">y</a> + <a class="code" href="classcsVector4T.html#o4">z</a> * <a class="code" href="classcsVector4T.html#o4">z</a> + <a class="code" href="classcsVector4T.html#o1">w</a> * <a class="code" href="classcsVector4T.html#o1">w</a>); }
+<a name="l00265"></a>00265 
+<a name="l00267"></a><a class="code" href="classcsVector4T.html#a24">00267</a>   T <a class="code" href="classcsVector4T.html#a24">SquaredNorm</a> ()<span class="keyword"> const</span>
+<a name="l00268"></a>00268 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsVector4T.html#o2">x</a> * <a class="code" href="classcsVector4T.html#o2">x</a> + <a class="code" href="classcsVector4T.html#o3">y</a> * <a class="code" href="classcsVector4T.html#o3">y</a> + <a class="code" href="classcsVector4T.html#o4">z</a> * <a class="code" href="classcsVector4T.html#o4">z</a> + <a class="code" href="classcsVector4T.html#o1">w</a> * <a class="code" href="classcsVector4T.html#o1">w</a>; }
+<a name="l00269"></a>00269 
+<a name="l00275"></a><a class="code" href="classcsVector4T.html#a25">00275</a>   <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#a25">Unit</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (*<span class="keyword">this</span>)/(this-&gt;<a class="code" href="classcsVector4T.html#a9">Norm</a>()); }
+<a name="l00276"></a>00276 
+<a name="l00278"></a><a class="code" href="classcsVector4T.html#e0">00278</a>   <span class="keyword">inline</span> <span class="keyword">static</span> T <a class="code" href="classcsVector4T.html#a9">Norm</a> (<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsVector4T.html#a9">Norm</a>(); }
+<a name="l00279"></a>00279 
+<a name="l00281"></a><a class="code" href="classcsVector4T.html#e1">00281</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <a class="code" href="classcsVector4T.html">csVector4T</a> <a class="code" href="classcsVector4T.html#a25">Unit</a> (<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsVector4T.html#a25">Unit</a>(); }
 <a name="l00282"></a>00282 
-<a name="l00284"></a><a class="code" href="classcsVector4.html#n13">00284</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a5">operator- </a>(<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v2)
-<a name="l00285"></a>00285   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v1.<a class="code" href="classcsVector4.html#o1">x</a>-v2.<a class="code" href="classcsDVector4.html#o1">x</a>, v1.<a class="code" href="classcsVector4.html#o2">y</a>-v2.<a class="code" href="classcsDVector4.html#o2">y</a>, v1.<a class="code" href="classcsVector4.html#o3">z</a>-v2.<a class="code" href="classcsDVector4.html#o3">z</a>, v1.<a class="code" href="classcsVector4.html#o0">w</a>-v2.<a class="code" href="classcsDVector4.html#o0">w</a>); }
-<a name="l00286"></a>00286 
-<a name="l00288"></a><a class="code" href="classcsVector4.html#n12">00288</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a5">operator- </a>(<span class="keyword">const</span> <a class="code" href="classcsDVector4.html">csDVector4</a>&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00289"></a>00289   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v1.<a class="code" href="classcsDVector4.html#o1">x</a>-v2.<a class="code" href="classcsVector4.html#o1">x</a>, v1.<a class="code" href="classcsDVector4.html#o2">y</a>-v2.<a class="code" href="classcsVector4.html#o2">y</a>, v1.<a class="code" href="classcsDVector4.html#o3">z</a>-v2.<a class="code" href="classcsVector4.html#o3">z</a>, v1.<a class="code" href="classcsDVector4.html#o0">w</a>-v2.<a class="code" href="classcsVector4.html#o0">w</a>); }
-<a name="l00290"></a>00290 
-<a name="l00291"></a>00291 
-<a name="l00293"></a><a class="code" href="classcsVector4.html#n6">00293</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">float</span> <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00294"></a>00294   { <span class="keywordflow">return</span> v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a> + v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a> + v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a> + v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>; }
-<a name="l00295"></a>00295 
-<a name="l00297"></a><a class="code" href="classcsVector4.html#n8">00297</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 operator% (<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00298"></a>00298   {
-<a name="l00299"></a>00299     <span class="keywordflow">return</span> csVector4 (
-<a name="l00300"></a>00300       (v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>-v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>-v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>-v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>),
-<a name="l00301"></a>00301       (v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>-v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>) + (v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>-v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>) + (v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>-v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>),
-<a name="l00302"></a>00302       (v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>-v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>-v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>) + (v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>-v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>),
-<a name="l00303"></a>00303       (v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>-v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>) + (v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>-v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>) + (v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>-v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>) );
-<a name="l00304"></a>00304   }
-<a name="l00305"></a>00305 
-<a name="l00307"></a><a class="code" href="classcsVector4.html#a0">00307</a>   <span class="keywordtype">void</span> Cross (<span class="keyword">const</span> csVector4 &amp; v1, <span class="keyword">const</span> csVector4 &amp; v2)
-<a name="l00308"></a>00308   {
-<a name="l00309"></a>00309     x = (v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>-v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>-v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>-v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>);
-<a name="l00310"></a>00310     y = (v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>-v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>) + (v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>-v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>) + (v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>-v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>);
-<a name="l00311"></a>00311     z = (v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>-v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>) + (v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>-v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>) + (v1.<a class="code" href="classcsVector4.html#o3">z</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>-v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o3">z</a>);
-<a name="l00312"></a>00312     w = (v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>-v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>) + (v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o1">x</a>-v1.<a class="code" href="classcsVector4.html#o1">x</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>) + (v1.<a class="code" href="classcsVector4.html#o0">w</a>*v2.<a class="code" href="classcsVector4.html#o2">y</a>-v1.<a class="code" href="classcsVector4.html#o2">y</a>*v2.<a class="code" href="classcsVector4.html#o0">w</a>);
-<a name="l00313"></a>00313   }
-<a name="l00314"></a>00314 
-<a name="l00316"></a><a class="code" href="classcsVector4.html#n5">00316</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keyword">const</span> csVector4&amp; v, <span class="keywordtype">float</span> f)
-<a name="l00317"></a>00317   { <span class="keywordflow">return</span> csVector4(v.<a class="code" href="classcsVector4.html#o1">x</a>*f, v.<a class="code" href="classcsVector4.html#o2">y</a>*f, v.<a class="code" href="classcsVector4.html#o3">z</a>*f, v.<a class="code" href="classcsVector4.html#o0">w</a>*f); }
-<a name="l00318"></a>00318 
-<a name="l00320"></a><a class="code" href="classcsVector4.html#n4">00320</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keywordtype">float</span> f, <span class="keyword">const</span> csVector4&amp; v)
-<a name="l00321"></a>00321   { <span class="keywordflow">return</span> csVector4(v.<a class="code" href="classcsVector4.html#o1">x</a>*f, v.<a class="code" href="classcsVector4.html#o2">y</a>*f, v.<a class="code" href="classcsVector4.html#o3">z</a>*f, v.<a class="code" href="classcsVector4.html#o0">w</a>*f); }
-<a name="l00322"></a>00322 
-<a name="l00324"></a><a class="code" href="classcsVector4.html#n3">00324</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keyword">const</span> csVector4&amp; v, <span class="keywordtype">double</span> f)
-<a name="l00325"></a>00325   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v) * f; }
+<a name="l00284"></a><a class="code" href="classcsVector4T.html#a10">00284</a>   <span class="keywordtype">void</span> <a class="code" href="classcsVector4T.html#a10">Normalize</a> ()
+<a name="l00285"></a>00285   {
+<a name="l00286"></a>00286     T sqlen = <a class="code" href="classcsVector4T.html#o2">x</a> * <a class="code" href="classcsVector4T.html#o2">x</a> + <a class="code" href="classcsVector4T.html#o3">y</a> * <a class="code" href="classcsVector4T.html#o3">y</a> + <a class="code" href="classcsVector4T.html#o4">z</a> * <a class="code" href="classcsVector4T.html#o4">z</a> + <a class="code" href="classcsVector4T.html#o1">w</a> * <a class="code" href="classcsVector4T.html#o1">w</a>;
+<a name="l00287"></a>00287     <span class="keywordflow">if</span> (sqlen &lt; SMALL_EPSILON) return ;
+<a name="l00288"></a>00288   
+<a name="l00289"></a>00289     T invlen = <a class="code" href="group__floating__point.html#ga6">csQisqrt</a> (sqlen);
+<a name="l00290"></a>00290     *<span class="keyword">this</span> *= invlen;
+<a name="l00291"></a>00291   }
+<a name="l00292"></a>00292 
+<a name="l00293"></a>00293 
+<a name="l00295"></a><a class="code" href="classcsVector4T.html#a8">00295</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="classcsVector4T.html#a8">IsZero</a> (T precision = SMALL_EPSILON)<span class="keyword"> const</span>
+<a name="l00296"></a>00296 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (<a class="code" href="group__geom__utils.html#ga17">ABS</a>(<a class="code" href="classcsVector4T.html#o2">x</a>) &lt; precision) &amp;&amp; (<a class="code" href="group__geom__utils.html#ga17">ABS</a>(<a class="code" href="classcsVector4T.html#o3">y</a>) &lt; precision)
+<a name="l00297"></a>00297             &amp;&amp; (<a class="code" href="group__geom__utils.html#ga17">ABS</a>(<a class="code" href="classcsVector4T.html#o4">z</a>) &lt; precision) &amp;&amp;  (<a class="code" href="group__geom__utils.html#ga17">ABS</a>(<a class="code" href="classcsVector4T.html#o1">w</a>) &lt; precision);
+<a name="l00298"></a>00298   }
+<a name="l00299"></a>00299 };
+<a name="l00300"></a>00300 
+<a name="l00304"></a><a class="code" href="classcsVector4.html">00304</a> <span class="keyword">class </span><a class="code" href="classcsVector4.html">csVector4</a> : <span class="keyword">public</span> <a class="code" href="classcsVector4T.html">csVector4T</a>&lt;float&gt;
+<a name="l00305"></a>00305 {
+<a name="l00306"></a>00306 <span class="keyword">public</span>:
+<a name="l00311"></a><a class="code" href="classcsVector4.html#a5">00311</a>   <a class="code" href="classcsVector4.html#a5">csVector4</a> () {}
+<a name="l00312"></a>00312 
+<a name="l00318"></a><a class="code" href="classcsVector4.html#a4">00318</a>   <a class="code" href="classcsVector4.html#a5">csVector4</a> (<span class="keyword">const</span> <span class="keywordtype">float</span>&amp; <a class="code" href="classcsVector4T.html#o0">m</a>) : <a class="code" href="classcsVector4T.html">csVector4T</a>&lt;float&gt; (m) {}
+<a name="l00319"></a>00319 
+<a name="l00321"></a><a class="code" href="classcsVector4.html#a3">00321</a>   <a class="code" href="classcsVector4.html#a5">csVector4</a> (<span class="keywordtype">float</span> ix, <span class="keywordtype">float</span> iy, <span class="keywordtype">float</span> iz = 0, <span class="keywordtype">float</span> iw = 1)
+<a name="l00322"></a>00322         : <a class="code" href="classcsVector4T.html">csVector4T</a>&lt;float&gt; (ix, iy, iz, iw) {}
+<a name="l00323"></a>00323 
+<a name="l00325"></a><a class="code" href="classcsVector4.html#a2">00325</a>   <a class="code" href="classcsVector4.html#a5">csVector4</a> (<span class="keyword">const</span> <a class="code" href="classcsVector4.html">csVector4</a>&amp; v) : <a class="code" href="classcsVector4T.html">csVector4T</a>&lt;float&gt; (v) {}
 <a name="l00326"></a>00326 
-<a name="l00328"></a><a class="code" href="classcsVector4.html#n2">00328</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keywordtype">double</span> f, <span class="keyword">const</span> csVector4&amp; v)
-<a name="l00329"></a>00329   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v) * f; }
-<a name="l00330"></a>00330 
-<a name="l00332"></a><a class="code" href="classcsVector4.html#n1">00332</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keyword">const</span> csVector4&amp; v, <span class="keywordtype">int</span> f)
-<a name="l00333"></a>00333   { <span class="keywordflow">return</span> v * (float)f; }
-<a name="l00334"></a>00334 
-<a name="l00336"></a><a class="code" href="classcsVector4.html#n0">00336</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 <a class="code" href="cscolor_8h.html#a1">operator* </a>(<span class="keywordtype">int</span> f, <span class="keyword">const</span> csVector4&amp; v)
-<a name="l00337"></a>00337   { <span class="keywordflow">return</span> v * (float)f; }
-<a name="l00338"></a>00338 
-<a name="l00340"></a><a class="code" href="classcsVector4.html#n17">00340</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 <a class="code" href="cscolor_8h.html#a0">operator/ </a>(<span class="keyword">const</span> csVector4&amp; v, <span class="keywordtype">float</span> f)
-<a name="l00341"></a>00341   { f = 1.0f/f; <span class="keywordflow">return</span> csVector4(v.<a class="code" href="classcsVector4.html#o1">x</a>*f, v.<a class="code" href="classcsVector4.html#o2">y</a>*f, v.<a class="code" href="classcsVector4.html#o3">z</a>*f, v.<a class="code" href="classcsVector4.html#o0">w</a>*f); }
-<a name="l00342"></a>00342 
-<a name="l00344"></a><a class="code" href="classcsVector4.html#n16">00344</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <a class="code" href="classcsDVector4.html">csDVector4</a> <a class="code" href="cscolor_8h.html#a0">operator/ </a>(<span class="keyword">const</span> csVector4&amp; v, <span class="keywordtype">double</span> f)
-<a name="l00345"></a>00345   { <span class="keywordflow">return</span> <a class="code" href="classcsDVector4.html">csDVector4</a>(v) / f; }
-<a name="l00346"></a>00346 
-<a name="l00348"></a><a class="code" href="classcsVector4.html#n15">00348</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 <a class="code" href="cscolor_8h.html#a0">operator/ </a>(<span class="keyword">const</span> csVector4&amp; v, <span class="keywordtype">int</span> f)
-<a name="l00349"></a>00349   { <span class="keywordflow">return</span> v / (float)f; }
-<a name="l00350"></a>00350 
-<a name="l00352"></a><a class="code" href="classcsVector4.html#n20">00352</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00353"></a>00353   { <span class="keywordflow">return</span> v1.<a class="code" href="classcsVector4.html#o1">x</a>==v2.<a class="code" href="classcsVector4.html#o1">x</a> &amp;&amp; v1.<a class="code" href="classcsVector4.html#o2">y</a>==v2.<a class="code" href="classcsVector4.html#o2">y</a> &amp;&amp; v1.<a class="code" href="classcsVector4.html#o3">z</a>==v2.<a class="code" href="classcsVector4.html#o3">z</a> &amp;&amp; v1.<a class="code" href="classcsVector4.html#o0">w</a>==v2.<a class="code" href="classcsVector4.html#o0">w</a>; }
-<a name="l00354"></a>00354 
-<a name="l00356"></a><a class="code" href="classcsVector4.html#n7">00356</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00357"></a>00357   { <span class="keywordflow">return</span> v1.<a class="code" href="classcsVector4.html#o1">x</a>!=v2.<a class="code" href="classcsVector4.html#o1">x</a> || v1.<a class="code" href="classcsVector4.html#o2">y</a>!=v2.<a class="code" href="classcsVector4.html#o2">y</a> || v1.<a class="code" href="classcsVector4.html#o3">z</a>!=v2.<a class="code" href="classcsVector4.html#o3">z</a> || v1.<a class="code" href="classcsVector4.html#o0">w</a>!=v2.<a class="code" href="classcsVector4.html#o0">w</a>; }
-<a name="l00358"></a>00358 
-<a name="l00360"></a><a class="code" href="classcsVector4.html#n22">00360</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 operator&gt;&gt; (<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00361"></a>00361   { <span class="keywordflow">return</span> v2*(v1*v2)/(v2*v2); }
-<a name="l00362"></a>00362 
-<a name="l00364"></a><a class="code" href="classcsVector4.html#n19">00364</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> csVector4 operator&lt;&lt; (<span class="keyword">const</span> csVector4&amp; v1, <span class="keyword">const</span> csVector4&amp; v2)
-<a name="l00365"></a>00365   { <span class="keywordflow">return</span> v1*(v1*v2)/(v1*v1); }
-<a name="l00366"></a>00366 
-<a name="l00368"></a><a class="code" href="classcsVector4.html#n18">00368</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator&lt; (<span class="keyword">const</span> csVector4&amp; v, <span class="keywordtype">float</span> f)
-<a name="l00369"></a>00369   { <span class="keywordflow">return</span> <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4.html#o1">x</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4.html#o2">y</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4.html#o3">z</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4.html#o0">w</a>)&lt;f; }
-<a name="l00370"></a>00370 
-<a name="l00372"></a><a class="code" href="classcsVector4.html#n21">00372</a>   <span class="keyword">inline</span> <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator&gt; (<span class="keywordtype">float</span> f, <span class="keyword">const</span> csVector4&amp; v)
-<a name="l00373"></a>00373   { <span class="keywordflow">return</span> <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4.html#o1">x</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4.html#o2">y</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4.html#o3">z</a>)&lt;f &amp;&amp; <a class="code" href="group__geom__utils.html#ga17">ABS</a>(v.<a class="code" href="classcsVector4.html#o0">w</a>)&lt;f; }
-<a name="l00374"></a>00374 
-<a name="l00376"></a><a class="code" href="classcsVector4.html#a19">00376</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> operator[] (<span class="keywordtype">int</span> n)<span class="keyword"> const</span>
-<a name="l00377"></a>00377 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !n?x:n&amp;1?y:n&amp;2?z:w; }
-<a name="l00378"></a>00378 
-<a name="l00380"></a><a class="code" href="classcsVector4.html#a18">00380</a>   <span class="keyword">inline</span> <span class="keywordtype">float</span> &amp; operator[] (<span class="keywordtype">int</span> n)
-<a name="l00381"></a>00381   { <span class="keywordflow">return</span> !n?x:n&amp;1?y:n&amp;2?z:w; }
-<a name="l00382"></a>00382 
-<a name="l00384"></a><a class="code" href="classcsVector4.html#a14">00384</a>   <span class="keyword">inline</span> csVector4&amp; operator+= (<span class="keyword">const</span> csVector4&amp; v)
-<a name="l00385"></a>00385   {
-<a name="l00386"></a>00386     x += v.<a class="code" href="classcsVector4.html#o1">x</a>;
-<a name="l00387"></a>00387     y += v.<a class="code" href="classcsVector4.html#o2">y</a>;
-<a name="l00388"></a>00388     z += v.<a class="code" href="classcsVector4.html#o3">z</a>;
-<a name="l00389"></a>00389     w += v.<a class="code" href="classcsVector4.html#o0">w</a>;
-<a name="l00390"></a>00390 
-<a name="l00391"></a>00391     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-<a name="l00392"></a>00392   }
-<a name="l00393"></a>00393 
-<a name="l00395"></a><a class="code" href="classcsVector4.html#a16">00395</a>   <span class="keyword">inline</span> csVector4&amp; operator-= (<span class="keyword">const</span> csVector4&amp; v)
-<a name="l00396"></a>00396   {
-<a name="l00397"></a>00397     x -= v.<a class="code" href="classcsVector4.html#o1">x</a>;
-<a name="l00398"></a>00398     y -= v.<a class="code" href="classcsVector4.html#o2">y</a>;
-<a name="l00399"></a>00399     z -= v.<a class="code" href="classcsVector4.html#o3">z</a>;
-<a name="l00400"></a>00400     w -= v.<a class="code" href="classcsVector4.html#o0">w</a>;
-<a name="l00401"></a>00401 
-<a name="l00402"></a>00402     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-<a name="l00403"></a>00403   }
-<a name="l00404"></a>00404 
-<a name="l00406"></a><a class="code" href="classcsVector4.html#a12">00406</a>   <span class="keyword">inline</span> csVector4&amp; operator*= (<span class="keywordtype">float</span> f)
-<a name="l00407"></a>00407   { x *= f; y *= f; z *= f; w *= f; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l00408"></a>00408 
-<a name="l00410"></a><a class="code" href="classcsVector4.html#a17">00410</a>   <span class="keyword">inline</span> csVector4&amp; operator/= (<span class="keywordtype">float</span> f)
-<a name="l00411"></a>00411   { f = 1.0f / f; x *= f; y *= f; z *= f; w *= f; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l00412"></a>00412 
-<a name="l00414"></a><a class="code" href="classcsVector4.html#a13">00414</a>   <span class="keyword">inline</span> csVector4 <a class="code" href="cscolor_8h.html#a4">operator+ </a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l00415"></a>00415 
-<a name="l00417"></a><a class="code" href="classcsVector4.html#a15">00417</a>   <span class="keyword">inline</span> csVector4 <a class="code" href="cscolor_8h.html#a5">operator- </a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> csVector4(-x,-y,-z, -w); }
-<a name="l00418"></a>00418 
-<a name="l00420"></a><a class="code" href="classcsVector4.html#a23">00420</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Set (<span class="keywordtype">float</span> sx, <span class="keywordtype">float</span> sy, <span class="keywordtype">float</span> sz, <span class="keywordtype">float</span> sw)
-<a name="l00421"></a>00421   { x = sx; y = sy; z = sz; w = sw; }
-<a name="l00422"></a>00422 
-<a name="l00424"></a><a class="code" href="classcsVector4.html#a22">00424</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Set (csVector4 <span class="keyword">const</span>&amp; v) { x = v.<a class="code" href="classcsVector4.html#o1">x</a>; y = v.<a class="code" href="classcsVector4.html#o2">y</a>; z = v.<a class="code" href="classcsVector4.html#o3">z</a>; w = v.<a class="code" href="classcsVector4.html#o0">w</a>; }
-<a name="l00425"></a>00425 
-<a name="l00427"></a><a class="code" href="classcsVector4.html#a21">00427</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Set (<span class="keywordtype">float</span> <span class="keyword">const</span>* v) { x = v[0]; y = v[1]; z = v[2]; w = v[3]; }
-<a name="l00428"></a>00428 
-<a name="l00430"></a><a class="code" href="classcsVector4.html#a20">00430</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Set (<span class="keywordtype">float</span> v) { x = y = z = w = v; }
-<a name="l00431"></a>00431 
-<a name="l00433"></a><a class="code" href="classcsVector4.html#a8">00433</a>   <span class="keyword">inline</span> <span class="keywordtype">void</span> Get (<span class="keywordtype">float</span>* v) { v[0] = x; v[1] = y; v[2] = z; v[3] = w; }
-<a name="l00434"></a>00434 
-<a name="l00436"></a>00436   <span class="keywordtype">float</span> Norm () <span class="keyword">const</span>;
-<a name="l00437"></a>00437 
-<a name="l00439"></a><a class="code" href="classcsVector4.html#a24">00439</a>   <span class="keywordtype">float</span> SquaredNorm ()<span class="keyword"> const</span>
-<a name="l00440"></a>00440 <span class="keyword">  </span>{ <span class="keywordflow">return</span> x * x + y * y + z * z + w * w; }
-<a name="l00441"></a>00441 
-<a name="l00447"></a><a class="code" href="classcsVector4.html#a25">00447</a>   csVector4 Unit ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (*<span class="keyword">this</span>)/(this-&gt;Norm()); }
-<a name="l00448"></a>00448 
-<a name="l00450"></a><a class="code" href="classcsVector4.html#e0">00450</a>   <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keywordtype">float</span> Norm (<span class="keyword">const</span> csVector4&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsVector4.html#a10">Norm</a>(); }
-<a name="l00451"></a>00451 
-<a name="l00453"></a><a class="code" href="classcsVector4.html#e1">00453</a>   <span class="keyword">inline</span> <span class="keyword">static</span> csVector4 Unit (<span class="keyword">const</span> csVector4&amp; v) { <span class="keywordflow">return</span> v.<a class="code" href="classcsVector4.html#a25">Unit</a>(); }
-<a name="l00454"></a>00454 
-<a name="l00456"></a>00456   <span class="keywordtype">void</span> Normalize ();
-<a name="l00457"></a>00457 
-<a name="l00459"></a><a class="code" href="classcsVector4.html#a9">00459</a>   <span class="keyword">inline</span> <span class="keywordtype">bool</span> IsZero (<span class="keywordtype">float</span> precision = SMALL_EPSILON)<span class="keyword"> const</span>
-<a name="l00460"></a>00460 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (<a class="code" href="group__geom__utils.html#ga17">ABS</a>(x) &lt; precision) &amp;&amp; (<a class="code" href="group__geom__utils.html#ga17">ABS</a>(y) &lt; precision)
-<a name="l00461"></a>00461             &amp;&amp; (<a class="code" href="group__geom__utils.html#ga17">ABS</a>(z) &lt; precision) &amp;&amp;  (<a class="code" href="group__geom__utils.html#ga17">ABS</a>(w) &lt; precision);
-<a name="l00462"></a>00462   }
-<a name="l00463"></a>00463 };
-<a name="l00464"></a>00464 
-<a name="l00467"></a>00467 <span class="preprocessor">#endif // __CS_VECTOR3_H__</span>
+<a name="l00328"></a><a class="code" href="classcsVector4.html#a1">00328</a>   <a class="code" href="classcsVector4.html#a5">csVector4</a> (<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T&lt;float&gt;</a>&amp; v) : <a class="code" href="classcsVector4T.html">csVector4T</a>&lt;float&gt; (v) {}
+<a name="l00329"></a>00329 
+<a name="l00331"></a><a class="code" href="classcsVector4.html#a0">00331</a>   <a class="code" href="classcsVector4.html#a5">csVector4</a> (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a> &amp;v) : 
+<a name="l00332"></a>00332     <a class="code" href="classcsVector4T.html">csVector4T</a>&lt;float&gt; (v.<a class="code" href="classcsVector4T.html#o2">x</a>, v.<a class="code" href="classcsVector4T.html#o3">y</a>, v.<a class="code" href="classcsVector4T.html#o4">z</a>, 1.0f) {}
+<a name="l00333"></a>00333 
+<a name="l00335"></a><a class="code" href="classcsVector4.html#a7">00335</a>   <a class="code" href="classcsVector4.html">csVector4</a>&amp; <a class="code" href="classcsVector4.html#a7">operator= </a>(<span class="keyword">const</span> <a class="code" href="classcsVector4T.html">csVector4T&lt;float&gt;</a>&amp; other)
+<a name="l00336"></a>00336   {
+<a name="l00337"></a>00337     <a class="code" href="classcsVector4T.html#a23">Set</a> (other.<a class="code" href="classcsVector4T.html#o2">x</a>, other.<a class="code" href="classcsVector4T.html#o3">y</a>, other.<a class="code" href="classcsVector4T.html#o4">z</a>, other.<a class="code" href="classcsVector4T.html#o1">w</a>);
+<a name="l00338"></a>00338     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+<a name="l00339"></a>00339   }
+<a name="l00340"></a>00340 
+<a name="l00342"></a><a class="code" href="classcsVector4.html#a6">00342</a>   <a class="code" href="classcsVector4.html">csVector4</a>&amp; <a class="code" href="classcsVector4.html#a7">operator= </a>(<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; other)
+<a name="l00343"></a>00343   {
+<a name="l00344"></a>00344     <a class="code" href="classcsVector4T.html#a23">Set</a> (other.<a class="code" href="classcsVector3.html#o1">x</a>, other.<a class="code" href="classcsVector3.html#o2">y</a>, other.<a class="code" href="classcsVector3.html#o3">z</a>, 1.0f);
+<a name="l00345"></a>00345     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+<a name="l00346"></a>00346   }
+<a name="l00347"></a>00347 };
+<a name="l00348"></a>00348 
+<a name="l00351"></a>00351 <span class="preprocessor">#endif // __CS_VECTOR3_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
