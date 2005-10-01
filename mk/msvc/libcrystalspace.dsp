@@ -286,10 +286,6 @@ SOURCE=..\..\libs\csgeom\vector3.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\vector4.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgfx\bakekeycolor.cpp
 # End Source File
 # Begin Source File
@@ -995,6 +991,10 @@ SOURCE=..\..\libs\..\include\csgeom\csrectrg.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csgeom\fastsqrt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csgeom\fixed.h
 # End Source File
 # Begin Source File
 
