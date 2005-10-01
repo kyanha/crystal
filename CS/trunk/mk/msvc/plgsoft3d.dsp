@@ -150,14 +150,6 @@ SOURCE=..\..\plugins\video\render3d\software\scan.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\scan16.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\scan32.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\software\sft3dcom.cpp
 # End Source File
 # Begin Source File
