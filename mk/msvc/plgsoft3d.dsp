@@ -190,6 +190,14 @@ SOURCE=..\..\plugins\video\render3d\software\scan.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\software\scan_pix.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\software\scan_z.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\software\scanindex.h
 # End Source File
 # Begin Source File
