@@ -1514,10 +1514,6 @@ SOURCE=..\..\libs\..\include\csutil\binder.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\csutil\bintree.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csutil\bitarray.h
 # End Source File
 # Begin Source File
