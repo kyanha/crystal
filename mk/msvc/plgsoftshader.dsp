@@ -154,6 +154,18 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\softshader_v
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_pix.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_z.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scanline.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\softshader.h
 # End Source File
 # Begin Source File
