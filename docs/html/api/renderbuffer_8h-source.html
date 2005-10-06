@@ -75,17 +75,17 @@
 <a name="l00088"></a>00088 
 <a name="l00090"></a><a class="code" href="classcsRenderBuffer.html#a3">00090</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetComponentCount ()<span class="keyword"> const</span>
 <a name="l00091"></a>00091 <span class="keyword">  </span>{
-<a name="l00092"></a>00092     <span class="keywordflow">return</span> compCount;
+<a name="l00092"></a>00092     <span class="keywordflow">return</span> props.compCount;
 <a name="l00093"></a>00093   }
 <a name="l00094"></a>00094 
 <a name="l00096"></a><a class="code" href="classcsRenderBuffer.html#a4">00096</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga11">csRenderBufferComponentType</a> GetComponentType ()<span class="keyword"> const </span>
 <a name="l00097"></a>00097 <span class="keyword">  </span>{
-<a name="l00098"></a>00098     <span class="keywordflow">return</span> comptype;
+<a name="l00098"></a>00098     <span class="keywordflow">return</span> props.comptype;
 <a name="l00099"></a>00099   }
 <a name="l00100"></a>00100 
 <a name="l00102"></a><a class="code" href="classcsRenderBuffer.html#a2">00102</a>   <span class="keyword">virtual</span> <a class="code" href="group__gfx3d.html#ga10">csRenderBufferType</a> GetBufferType()<span class="keyword"> const</span>
 <a name="l00103"></a>00103 <span class="keyword">  </span>{
-<a name="l00104"></a>00104     <span class="keywordflow">return</span> bufferType;
+<a name="l00104"></a>00104     <span class="keywordflow">return</span> props.bufferType;
 <a name="l00105"></a>00105   }
 <a name="l00106"></a>00106 
 <a name="l00108"></a><a class="code" href="classcsRenderBuffer.html#a11">00108</a>   <span class="keyword">virtual</span> size_t GetSize()<span class="keyword"> const</span>
@@ -95,17 +95,17 @@
 <a name="l00112"></a>00112 
 <a name="l00114"></a><a class="code" href="classcsRenderBuffer.html#a12">00114</a>   <span class="keyword">virtual</span> size_t GetStride()<span class="keyword"> const </span>
 <a name="l00115"></a>00115 <span class="keyword">  </span>{
-<a name="l00116"></a>00116     <span class="keywordflow">return</span> stride;
+<a name="l00116"></a>00116     <span class="keywordflow">return</span> props.stride;
 <a name="l00117"></a>00117   }
 <a name="l00118"></a>00118 
 <a name="l00119"></a><a class="code" href="classcsRenderBuffer.html#a6">00119</a>   <span class="keyword">virtual</span> size_t GetElementDistance()<span class="keyword"> const</span>
 <a name="l00120"></a>00120 <span class="keyword">  </span>{
-<a name="l00121"></a>00121     <span class="keywordflow">return</span> stride ? stride :
-<a name="l00122"></a>00122       compCount * <a class="code" href="group__gfx3d.html#ga0">csRenderBufferComponentSizes</a>[comptype];
+<a name="l00121"></a>00121     <span class="keywordflow">return</span> props.stride ? props.stride :
+<a name="l00122"></a>00122       props.compCount * <a class="code" href="group__gfx3d.html#ga0">csRenderBufferComponentSizes</a>[props.comptype];
 <a name="l00123"></a>00123   }
 <a name="l00124"></a>00124 
 <a name="l00125"></a><a class="code" href="classcsRenderBuffer.html#a8">00125</a>   <span class="keyword">virtual</span> size_t GetOffset()<span class="keyword"> const</span>
-<a name="l00126"></a>00126 <span class="keyword">  </span>{ <span class="keywordflow">return</span> offset; }
+<a name="l00126"></a>00126 <span class="keyword">  </span>{ <span class="keywordflow">return</span> props.offset; }
 <a name="l00127"></a>00127 
 <a name="l00129"></a><a class="code" href="classcsRenderBuffer.html#a13">00129</a>   <span class="keyword">virtual</span> <a class="code" href="cstypes_8h.html#a27">uint</a> GetVersion ()
 <a name="l00130"></a>00130   {
@@ -123,7 +123,7 @@
 <a name="l00142"></a>00142   }
 <a name="l00143"></a>00143 
 <a name="l00144"></a><a class="code" href="classcsRenderBuffer.html#a14">00144</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsIndexBuffer()<span class="keyword"> const</span>
-<a name="l00145"></a>00145 <span class="keyword">  </span>{ <span class="keywordflow">return</span> isIndex; }
+<a name="l00145"></a>00145 <span class="keyword">  </span>{ <span class="keywordflow">return</span> props.isIndex; }
 <a name="l00146"></a>00146 
 <a name="l00147"></a><a class="code" href="classcsRenderBuffer.html#a10">00147</a>   <span class="keyword">virtual</span> size_t GetRangeStart()<span class="keyword"> const</span>
 <a name="l00148"></a>00148 <span class="keyword">  </span>{ <span class="keywordflow">return</span> rangeStart; }
@@ -147,34 +147,48 @@
 <a name="l00224"></a>00224   <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetDescrFromBufferName (<a class="code" href="group__gfx3d.html#ga13">csRenderBufferName</a> bufferName);
 <a name="l00229"></a>00229   <span class="keyword">static</span> <a class="code" href="group__gfx3d.html#ga13">csRenderBufferName</a> GetBufferNameFromDescr (<span class="keyword">const</span> <span class="keywordtype">char</span>* name);
 <a name="l00230"></a>00230 <span class="keyword">protected</span>:
-<a name="l00232"></a><a class="code" href="classcsRenderBuffer.html#p2">00232</a>   <a class="code" href="group__gfx3d.html#ga10">csRenderBufferType</a> bufferType; 
-<a name="l00234"></a><a class="code" href="classcsRenderBuffer.html#p4">00234</a>   <a class="code" href="group__gfx3d.html#ga11">csRenderBufferComponentType</a> comptype; 
-<a name="l00235"></a>00235   
-<a name="l00237"></a><a class="code" href="classcsRenderBuffer.html#p1">00237</a>   size_t bufferSize; 
-<a name="l00239"></a><a class="code" href="classcsRenderBuffer.html#p3">00239</a>   <a class="code" href="cstypes_8h.html#a27">uint</a> compCount;
-<a name="l00241"></a><a class="code" href="classcsRenderBuffer.html#p14">00241</a>   size_t stride;
-<a name="l00243"></a><a class="code" href="classcsRenderBuffer.html#p11">00243</a>   size_t offset; 
-<a name="l00244"></a>00244 
-<a name="l00246"></a><a class="code" href="classcsRenderBuffer.html#p13">00246</a>   size_t rangeStart; 
-<a name="l00248"></a><a class="code" href="classcsRenderBuffer.html#p12">00248</a>   size_t rangeEnd; 
-<a name="l00249"></a>00249   
-<a name="l00251"></a><a class="code" href="classcsRenderBuffer.html#p15">00251</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> version; 
-<a name="l00252"></a>00252 
-<a name="l00254"></a><a class="code" href="classcsRenderBuffer.html#p5">00254</a>   <span class="keywordtype">bool</span> doCopy; 
-<a name="l00256"></a><a class="code" href="classcsRenderBuffer.html#p6">00256</a>   <span class="keywordtype">bool</span> doDelete; 
-<a name="l00258"></a><a class="code" href="classcsRenderBuffer.html#p8">00258</a>   <span class="keywordtype">bool</span> isLocked;
-<a name="l00260"></a><a class="code" href="classcsRenderBuffer.html#p7">00260</a>   <span class="keywordtype">bool</span> isIndex; 
-<a name="l00261"></a>00261 
-<a name="l00263"></a><a class="code" href="classcsRenderBuffer.html#p0">00263</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer; 
-<a name="l00265"></a><a class="code" href="classcsRenderBuffer.html#p9">00265</a>   <a class="code" href="group__gfx3d.html#ga12">csRenderBufferLockType</a> lastLock; 
-<a name="l00266"></a>00266   
-<a name="l00267"></a><a class="code" href="classcsRenderBuffer.html#p10">00267</a>   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> masterBuffer;
-<a name="l00268"></a>00268 <span class="preprocessor">#ifdef CS_DEBUG</span>
-<a name="l00269"></a>00269 <span class="preprocessor"></span>  <a class="code" href="classcsCallStack.html">csCallStack</a>* lockStack;
-<a name="l00270"></a>00270 <span class="preprocessor">#endif</span>
-<a name="l00271"></a>00271 <span class="preprocessor"></span>};
-<a name="l00272"></a>00272 
-<a name="l00275"></a>00275 <span class="preprocessor">#endif // __CS_CSGFX_RENDERBUFFER_H__</span>
+<a name="l00232"></a><a class="code" href="classcsRenderBuffer.html#p1">00232</a>   size_t bufferSize;
+<a name="l00233"></a>00233 
+<a name="l00238"></a><a class="code" href="structcsRenderBuffer_1_1Props.html">00238</a>   <span class="keyword">struct </span><a class="code" href="structcsRenderBuffer_1_1Props.html">Props</a>
+<a name="l00239"></a>00239   {
+<a name="l00241"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o0">00241</a>     <a class="code" href="group__gfx3d.html#ga10">csRenderBufferType</a> bufferType : 2;
+<a name="l00243"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o2">00243</a>     <a class="code" href="group__gfx3d.html#ga11">csRenderBufferComponentType</a> comptype : 4; 
+<a name="l00244"></a>00244   
+<a name="l00246"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o1">00246</a>     <a class="code" href="cstypes_8h.html#a27">uint</a> compCount : 8;
+<a name="l00248"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o9">00248</a>     size_t stride : 8;
+<a name="l00250"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o8">00250</a>     size_t offset : 8;
+<a name="l00251"></a>00251 
+<a name="l00253"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o3">00253</a>     <span class="keywordtype">bool</span> doCopy : 1; 
+<a name="l00255"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o4">00255</a>     <span class="keywordtype">bool</span> doDelete : 1;
+<a name="l00257"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o6">00257</a>     <span class="keywordtype">bool</span> isLocked : 1;
+<a name="l00259"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o5">00259</a>     <span class="keywordtype">bool</span> isIndex : 1;
+<a name="l00260"></a>00260 
+<a name="l00262"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#o7">00262</a>     <a class="code" href="group__gfx3d.html#ga12">csRenderBufferLockType</a> lastLock : 2;
+<a name="l00263"></a>00263 
+<a name="l00264"></a><a class="code" href="structcsRenderBuffer_1_1Props.html#a0">00264</a>     <a class="code" href="structcsRenderBuffer_1_1Props.html">Props</a> (<a class="code" href="group__gfx3d.html#ga10">csRenderBufferType</a> type, <a class="code" href="group__gfx3d.html#ga11">csRenderBufferComponentType</a> componentType,
+<a name="l00265"></a>00265       <a class="code" href="cstypes_8h.html#a27">uint</a> componentCount, <span class="keywordtype">bool</span> copy) : bufferType (type), 
+<a name="l00266"></a>00266       comptype (componentType), compCount (componentCount), stride(0), 
+<a name="l00267"></a>00267       offset (0), doCopy (copy), doDelete (false), isLocked (false), 
+<a name="l00268"></a>00268       isIndex (false) 
+<a name="l00269"></a>00269     {
+<a name="l00270"></a>00270       <a class="code" href="cssysdef_8h.html#a37">CS_ASSERT</a>(componentCount &lt;= 255); <span class="comment">// Just to be sure...</span>
+<a name="l00271"></a>00271     }
+<a name="l00272"></a>00272   } props;
+<a name="l00273"></a>00273 
+<a name="l00275"></a><a class="code" href="classcsRenderBuffer.html#p5">00275</a>   size_t rangeStart; 
+<a name="l00277"></a><a class="code" href="classcsRenderBuffer.html#p4">00277</a>   size_t rangeEnd; 
+<a name="l00278"></a>00278   
+<a name="l00280"></a><a class="code" href="classcsRenderBuffer.html#p6">00280</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> version; 
+<a name="l00281"></a>00281 
+<a name="l00283"></a><a class="code" href="classcsRenderBuffer.html#p0">00283</a>   <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *buffer; 
+<a name="l00284"></a>00284   
+<a name="l00285"></a><a class="code" href="classcsRenderBuffer.html#p2">00285</a>   <a class="code" href="classcsRef.html">csRef&lt;iRenderBuffer&gt;</a> masterBuffer;
+<a name="l00286"></a>00286 <span class="preprocessor">#ifdef CS_DEBUG</span>
+<a name="l00287"></a>00287 <span class="preprocessor"></span>  <a class="code" href="classcsCallStack.html">csCallStack</a>* lockStack;
+<a name="l00288"></a>00288 <span class="preprocessor">#endif</span>
+<a name="l00289"></a>00289 <span class="preprocessor"></span>};
+<a name="l00290"></a>00290 
+<a name="l00293"></a>00293 <span class="preprocessor">#endif // __CS_CSGFX_RENDERBUFFER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>
