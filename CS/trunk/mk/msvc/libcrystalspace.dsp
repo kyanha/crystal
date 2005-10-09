@@ -1090,6 +1090,10 @@ SOURCE=..\..\libs\..\include\csgeom\quaterni.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csgeom\quaternion.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csgeom\segment.h
 # End Source File
 # Begin Source File
