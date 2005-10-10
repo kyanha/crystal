@@ -642,10 +642,6 @@ SOURCE=..\..\libs\csutil\csuctransform.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csutil\databuf.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csutil\debug.cpp
 # End Source File
 # Begin Source File
@@ -791,10 +787,6 @@ SOURCE=..\..\libs\csutil\scfimp.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\scfstr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\scfstringarray.cpp
 # End Source File
 # Begin Source File
 
@@ -2002,7 +1994,19 @@ SOURCE=..\..\libs\..\include\csutil\zip.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csgeom\boxclip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\edgeclip.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csgeom\obb_priv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csgeom\polyclip.h
 # End Source File
 # Begin Source File
 
