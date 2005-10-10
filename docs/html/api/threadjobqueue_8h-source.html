@@ -41,52 +41,53 @@
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
 <a name="l00027"></a>00027 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="fifo_8h.html">csutil/fifo.h</a>"</span>
-<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="thread_8h.html">csutil/thread.h</a>"</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="job_8h.html">iutil/job.h</a>"</span>
-<a name="l00031"></a>00031 
-<a name="l00035"></a><a class="code" href="classcsThreadJobQueue.html">00035</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsThreadJobQueue.html">csThreadJobQueue</a> : <span class="keyword">public</span> <a class="code" href="structiJobQueue.html">iJobQueue</a>
-<a name="l00036"></a>00036 {
-<a name="l00037"></a>00037   <span class="keyword">typedef</span> <a class="code" href="classcsFIFO.html">csFIFO&lt;csRef&lt;iJob&gt;</a> &gt; <a class="code" href="classcsFIFO.html">JobFifo</a>;
-<a name="l00038"></a>00038   <span class="keyword">struct </span>QueueAndRunnableShared
-<a name="l00039"></a>00039   {
-<a name="l00040"></a>00040     <a class="code" href="classcsFIFO.html">JobFifo</a>* jobFifo;
-<a name="l00041"></a>00041     <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> fifoXS;
-<a name="l00042"></a>00042     <a class="code" href="classcsRef.html">csRef&lt;csCondition&gt;</a> queueWake;
-<a name="l00043"></a>00043     <a class="code" href="classcsRef.html">csRef&lt;iJob&gt;</a>* currentJob;
-<a name="l00044"></a>00044     <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> jobXS;
-<a name="l00045"></a>00045     <a class="code" href="classcsRef.html">csRef&lt;csCondition&gt;</a> jobFinish;
-<a name="l00046"></a>00046   };
-<a name="l00047"></a>00047   <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT QueueRunnable : <span class="keyword">public</span> <a class="code" href="classcsRunnable.html">csRunnable</a>
-<a name="l00048"></a>00048   {
-<a name="l00049"></a>00049     <span class="keywordtype">int</span> refCount;
-<a name="l00050"></a>00050     QueueAndRunnableShared sharedData;
-<a name="l00051"></a>00051   <span class="keyword">public</span>:
-<a name="l00052"></a>00052     QueueRunnable (<span class="keyword">const</span> QueueAndRunnableShared&amp; sharedData);
-<a name="l00053"></a>00053     <span class="keyword">virtual</span> ~QueueRunnable();
-<a name="l00054"></a>00054 
-<a name="l00055"></a>00055     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Run ();
-<a name="l00056"></a>00056     <span class="keyword">virtual</span> <span class="keywordtype">void</span> IncRef();
-<a name="l00057"></a>00057     <span class="keyword">virtual</span> <span class="keywordtype">void</span> DecRef();
-<a name="l00058"></a>00058     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetRefCount();
-<a name="l00059"></a>00059   };
-<a name="l00060"></a>00060   <a class="code" href="classcsRef.html">csRef&lt;csThread&gt;</a> queueThread;
-<a name="l00061"></a>00061   QueueAndRunnableShared sharedData;
-<a name="l00062"></a>00062   <a class="code" href="classcsRef.html">csRef&lt;iJob&gt;</a> currentJob;
-<a name="l00063"></a>00063   <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> jobFinishMutex;
-<a name="l00064"></a>00064   <span class="comment">// stats</span>
-<a name="l00065"></a>00065   <a class="code" href="cstypes_8h.html#a27">uint</a> jobsAdded, jobsPulled, jobsWaited, jobsUnqueued;
-<a name="l00066"></a>00066 <span class="keyword">public</span>:
-<a name="l00067"></a><a class="code" href="classcsThreadJobQueue.html#o0">00067</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069   <a class="code" href="classcsThreadJobQueue.html">csThreadJobQueue</a>();
-<a name="l00070"></a>00070   <span class="keyword">virtual</span> ~<a class="code" href="classcsThreadJobQueue.html">csThreadJobQueue</a>();
-<a name="l00071"></a>00071 
-<a name="l00072"></a>00072   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Enqueue (<a class="code" href="structiJob.html">iJob</a>* job);
-<a name="l00073"></a>00073   <span class="keyword">virtual</span> <span class="keywordtype">void</span> PullAndRun (<a class="code" href="structiJob.html">iJob</a>* job);
-<a name="l00074"></a>00074   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Unqueue (<a class="code" href="structiJob.html">iJob</a>* job, <span class="keywordtype">bool</span> waitIfCurrent = <span class="keyword">true</span>);
-<a name="l00075"></a>00075 };
-<a name="l00076"></a>00076 
-<a name="l00077"></a>00077 <span class="preprocessor">#endif // __CS_CSUTIL_THREADJOBQUEUE_H__</span>
+<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="thread_8h.html">csutil/thread.h</a>"</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="job_8h.html">iutil/job.h</a>"</span>
+<a name="l00032"></a>00032 
+<a name="l00036"></a><a class="code" href="classcsThreadJobQueue.html">00036</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsThreadJobQueue.html">csThreadJobQueue</a> : 
+<a name="l00037"></a>00037   <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;csThreadJobQueue, iJobQueue&gt;
+<a name="l00038"></a>00038 {
+<a name="l00039"></a>00039   <span class="keyword">typedef</span> <a class="code" href="classcsFIFO.html">csFIFO&lt;csRef&lt;iJob&gt;</a> &gt; <a class="code" href="classcsFIFO.html">JobFifo</a>;
+<a name="l00040"></a>00040   <span class="keyword">struct </span>QueueAndRunnableShared
+<a name="l00041"></a>00041   {
+<a name="l00042"></a>00042     <a class="code" href="classcsFIFO.html">JobFifo</a>* jobFifo;
+<a name="l00043"></a>00043     <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> fifoXS;
+<a name="l00044"></a>00044     <a class="code" href="classcsRef.html">csRef&lt;csCondition&gt;</a> queueWake;
+<a name="l00045"></a>00045     <a class="code" href="classcsRef.html">csRef&lt;iJob&gt;</a>* currentJob;
+<a name="l00046"></a>00046     <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> jobXS;
+<a name="l00047"></a>00047     <a class="code" href="classcsRef.html">csRef&lt;csCondition&gt;</a> jobFinish;
+<a name="l00048"></a>00048   };
+<a name="l00049"></a>00049   <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT QueueRunnable : <span class="keyword">public</span> <a class="code" href="classcsRunnable.html">csRunnable</a>
+<a name="l00050"></a>00050   {
+<a name="l00051"></a>00051     <span class="keywordtype">int</span> refCount;
+<a name="l00052"></a>00052     QueueAndRunnableShared sharedData;
+<a name="l00053"></a>00053   <span class="keyword">public</span>:
+<a name="l00054"></a>00054     QueueRunnable (<span class="keyword">const</span> QueueAndRunnableShared&amp; sharedData);
+<a name="l00055"></a>00055     <span class="keyword">virtual</span> ~QueueRunnable();
+<a name="l00056"></a>00056 
+<a name="l00057"></a>00057     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Run ();
+<a name="l00058"></a>00058     <span class="keyword">virtual</span> <span class="keywordtype">void</span> IncRef();
+<a name="l00059"></a>00059     <span class="keyword">virtual</span> <span class="keywordtype">void</span> DecRef();
+<a name="l00060"></a>00060     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetRefCount();
+<a name="l00061"></a>00061   };
+<a name="l00062"></a>00062   <a class="code" href="classcsRef.html">csRef&lt;csThread&gt;</a> queueThread;
+<a name="l00063"></a>00063   QueueAndRunnableShared sharedData;
+<a name="l00064"></a>00064   <a class="code" href="classcsRef.html">csRef&lt;iJob&gt;</a> currentJob;
+<a name="l00065"></a>00065   <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> jobFinishMutex;
+<a name="l00066"></a>00066   <span class="comment">// stats</span>
+<a name="l00067"></a>00067   <a class="code" href="cstypes_8h.html#a27">uint</a> jobsAdded, jobsPulled, jobsWaited, jobsUnqueued;
+<a name="l00068"></a>00068 <span class="keyword">public</span>:
+<a name="l00069"></a>00069 
+<a name="l00070"></a>00070   <a class="code" href="classcsThreadJobQueue.html">csThreadJobQueue</a>();
+<a name="l00071"></a>00071   <span class="keyword">virtual</span> ~<a class="code" href="classcsThreadJobQueue.html">csThreadJobQueue</a>();
+<a name="l00072"></a>00072 
+<a name="l00073"></a>00073   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Enqueue (<a class="code" href="structiJob.html">iJob</a>* job);
+<a name="l00074"></a>00074   <span class="keyword">virtual</span> <span class="keywordtype">void</span> PullAndRun (<a class="code" href="structiJob.html">iJob</a>* job);
+<a name="l00075"></a>00075   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Unqueue (<a class="code" href="structiJob.html">iJob</a>* job, <span class="keywordtype">bool</span> waitIfCurrent = <span class="keyword">true</span>);
+<a name="l00076"></a>00076 };
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078 <span class="preprocessor">#endif // __CS_CSUTIL_THREADJOBQUEUE_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

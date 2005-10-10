@@ -41,72 +41,72 @@
 <a name="l00026"></a>00026 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="parray_8h.html">csutil/parray.h</a>"</span>
 <a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="thread_8h.html">csutil/thread.h</a>"</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="plugin_8h.html">iutil/plugin.h</a>"</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="pluginconfig_8h.html">iutil/pluginconfig.h</a>"</span>
-<a name="l00032"></a>00032 
-<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structiComponent.html">iComponent</a>;
-<a name="l00034"></a>00034 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
-<a name="l00035"></a>00035 
-<a name="l00040"></a><a class="code" href="classcsPluginManager.html">00040</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPluginManager.html">csPluginManager</a> : <span class="keyword">public</span> <a class="code" href="structiPluginManager.html">iPluginManager</a>
-<a name="l00041"></a>00041 {
-<a name="l00042"></a>00042 <span class="keyword">private</span>:
-<a name="l00044"></a>00044   <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> mutex;
-<a name="l00045"></a>00045 
-<a name="l00049"></a>00049   <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPlugin
-<a name="l00050"></a>00050   {
-<a name="l00051"></a>00051   <span class="keyword">public</span>:
-<a name="l00053"></a>00053     <a class="code" href="structiComponent.html">iComponent</a> *Plugin;
-<a name="l00055"></a>00055     <span class="keywordtype">char</span> *ClassID;
-<a name="l00056"></a>00056 
-<a name="l00058"></a>00058     csPlugin (<a class="code" href="structiComponent.html">iComponent</a> *<a class="code" href="structiObject.html">iObject</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID);
-<a name="l00060"></a>00060     <span class="keyword">virtual</span> ~csPlugin ();
-<a name="l00061"></a>00061   };
-<a name="l00062"></a>00062 
-<a name="l00066"></a>00066   <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPluginsVector : <span class="keyword">public</span> <a class="code" href="classcsPDelArray.html">csPDelArray</a>&lt;csPlugin&gt;
-<a name="l00067"></a>00067   {
-<a name="l00068"></a>00068   <span class="keyword">public</span>:
-<a name="l00070"></a>00070     csPluginsVector (<span class="keywordtype">int</span> l, <span class="keywordtype">int</span> d) : <a class="code" href="classcsPDelArray.html">csPDelArray&lt;csPlugin&gt;</a> (l, d) {}
-<a name="l00072"></a>00072     <span class="keyword">static</span> <span class="keywordtype">int</span> CompareAddress (csPlugin* <span class="keyword">const</span>&amp; Item, <a class="code" href="structiComponent.html">iComponent</a>* <span class="keyword">const</span>&amp; Key)
-<a name="l00073"></a>00073     { <span class="keywordflow">return</span> Item-&gt;Plugin == Key ? 0 : 1; }
-<a name="l00074"></a>00074   };
-<a name="l00075"></a>00075 
-<a name="l00079"></a>00079   <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPluginOption
-<a name="l00080"></a>00080   {
-<a name="l00081"></a>00081   <span class="keyword">public</span>:
-<a name="l00082"></a>00082     <span class="keywordtype">char</span> *Name;
-<a name="l00083"></a>00083     <a class="code" href="group__util.html#ga36">csVariantType</a> Type;
-<a name="l00084"></a>00084     <span class="keywordtype">int</span> ID;
-<a name="l00085"></a>00085     <span class="keywordtype">bool</span> Value;                         <span class="comment">// If Type is CSVAR_BOOL</span>
-<a name="l00086"></a>00086     <a class="code" href="classcsRef.html">csRef&lt;iPluginConfig&gt;</a> Config;
-<a name="l00087"></a>00087 
-<a name="l00088"></a>00088     csPluginOption (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName, <a class="code" href="group__util.html#ga36">csVariantType</a> iType, <span class="keywordtype">int</span> iID,
-<a name="l00089"></a>00089       <span class="keywordtype">bool</span> iValue, <a class="code" href="structiPluginConfig.html">iPluginConfig</a>* cfg)
-<a name="l00090"></a>00090     {
-<a name="l00091"></a>00091       Name = <a class="code" href="group__util.html#ga9">csStrNew</a> (iName);
-<a name="l00092"></a>00092       Type = iType;
-<a name="l00093"></a>00093       ID = iID;
-<a name="l00094"></a>00094       Value = iValue;
-<a name="l00095"></a>00095       Config = cfg;
-<a name="l00096"></a>00096     }
-<a name="l00097"></a>00097     <span class="keyword">virtual</span> ~csPluginOption ()
-<a name="l00098"></a>00098     {
-<a name="l00099"></a>00099       <span class="keyword">delete</span> [] Name;
-<a name="l00100"></a>00100     }
-<a name="l00101"></a>00101   };
-<a name="l00102"></a>00102 
-<a name="l00104"></a>00104   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-<a name="l00105"></a>00105 
-<a name="l00107"></a>00107   csPluginsVector Plugins;
-<a name="l00108"></a>00108 
-<a name="l00109"></a>00109   <span class="comment">// List of all options for all plug-in modules.</span>
-<a name="l00110"></a>00110   <a class="code" href="classcsPDelArray.html">csPDelArray&lt;csPluginOption&gt;</a> OptionList;
-<a name="l00111"></a>00111 
-<a name="l00112"></a>00112 <span class="keyword">public</span>:
-<a name="l00114"></a>00114   <a class="code" href="classcsPluginManager.html">csPluginManager</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
-<a name="l00116"></a>00116   <span class="keyword">virtual</span> ~<a class="code" href="classcsPluginManager.html">csPluginManager</a> ();
-<a name="l00117"></a>00117 
-<a name="l00118"></a><a class="code" href="classcsPluginManager.html#o0">00118</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
+<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="thread_8h.html">csutil/thread.h</a>"</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="plugin_8h.html">iutil/plugin.h</a>"</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="pluginconfig_8h.html">iutil/pluginconfig.h</a>"</span>
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034 <span class="keyword">struct </span><a class="code" href="structiComponent.html">iComponent</a>;
+<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+<a name="l00036"></a>00036 
+<a name="l00041"></a><a class="code" href="classcsPluginManager.html">00041</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPluginManager.html">csPluginManager</a> :
+<a name="l00042"></a>00042   <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;csPluginManager, iPluginManager&gt;
+<a name="l00043"></a>00043 {
+<a name="l00044"></a>00044 <span class="keyword">private</span>:
+<a name="l00046"></a>00046   <a class="code" href="classcsRef.html">csRef&lt;csMutex&gt;</a> mutex;
+<a name="l00047"></a>00047 
+<a name="l00051"></a>00051   <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPlugin
+<a name="l00052"></a>00052   {
+<a name="l00053"></a>00053   <span class="keyword">public</span>:
+<a name="l00055"></a>00055     <a class="code" href="structiComponent.html">iComponent</a> *Plugin;
+<a name="l00057"></a>00057     <span class="keywordtype">char</span> *ClassID;
+<a name="l00058"></a>00058 
+<a name="l00060"></a>00060     csPlugin (<a class="code" href="structiComponent.html">iComponent</a> *<a class="code" href="structiObject.html">iObject</a>, <span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID);
+<a name="l00062"></a>00062     <span class="keyword">virtual</span> ~csPlugin ();
+<a name="l00063"></a>00063   };
+<a name="l00064"></a>00064 
+<a name="l00068"></a>00068   <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPluginsVector : <span class="keyword">public</span> <a class="code" href="classcsPDelArray.html">csPDelArray</a>&lt;csPlugin&gt;
+<a name="l00069"></a>00069   {
+<a name="l00070"></a>00070   <span class="keyword">public</span>:
+<a name="l00072"></a>00072     csPluginsVector (<span class="keywordtype">int</span> l, <span class="keywordtype">int</span> d) : <a class="code" href="classcsPDelArray.html">csPDelArray&lt;csPlugin&gt;</a> (l, d) {}
+<a name="l00074"></a>00074     <span class="keyword">static</span> <span class="keywordtype">int</span> CompareAddress (csPlugin* <span class="keyword">const</span>&amp; Item, <a class="code" href="structiComponent.html">iComponent</a>* <span class="keyword">const</span>&amp; Key)
+<a name="l00075"></a>00075     { <span class="keywordflow">return</span> Item-&gt;Plugin == Key ? 0 : 1; }
+<a name="l00076"></a>00076   };
+<a name="l00077"></a>00077 
+<a name="l00081"></a>00081   <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csPluginOption
+<a name="l00082"></a>00082   {
+<a name="l00083"></a>00083   <span class="keyword">public</span>:
+<a name="l00084"></a>00084     <span class="keywordtype">char</span> *Name;
+<a name="l00085"></a>00085     <a class="code" href="group__util.html#ga36">csVariantType</a> Type;
+<a name="l00086"></a>00086     <span class="keywordtype">int</span> ID;
+<a name="l00087"></a>00087     <span class="keywordtype">bool</span> Value;                         <span class="comment">// If Type is CSVAR_BOOL</span>
+<a name="l00088"></a>00088     <a class="code" href="classcsRef.html">csRef&lt;iPluginConfig&gt;</a> Config;
+<a name="l00089"></a>00089 
+<a name="l00090"></a>00090     csPluginOption (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName, <a class="code" href="group__util.html#ga36">csVariantType</a> iType, <span class="keywordtype">int</span> iID,
+<a name="l00091"></a>00091       <span class="keywordtype">bool</span> iValue, <a class="code" href="structiPluginConfig.html">iPluginConfig</a>* cfg)
+<a name="l00092"></a>00092     {
+<a name="l00093"></a>00093       Name = <a class="code" href="group__util.html#ga9">csStrNew</a> (iName);
+<a name="l00094"></a>00094       Type = iType;
+<a name="l00095"></a>00095       ID = iID;
+<a name="l00096"></a>00096       Value = iValue;
+<a name="l00097"></a>00097       Config = cfg;
+<a name="l00098"></a>00098     }
+<a name="l00099"></a>00099     <span class="keyword">virtual</span> ~csPluginOption ()
+<a name="l00100"></a>00100     {
+<a name="l00101"></a>00101       <span class="keyword">delete</span> [] Name;
+<a name="l00102"></a>00102     }
+<a name="l00103"></a>00103   };
+<a name="l00104"></a>00104 
+<a name="l00106"></a>00106   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+<a name="l00107"></a>00107 
+<a name="l00109"></a>00109   csPluginsVector Plugins;
+<a name="l00110"></a>00110 
+<a name="l00111"></a>00111   <span class="comment">// List of all options for all plug-in modules.</span>
+<a name="l00112"></a>00112   <a class="code" href="classcsPDelArray.html">csPDelArray&lt;csPluginOption&gt;</a> OptionList;
+<a name="l00113"></a>00113 
+<a name="l00114"></a>00114 <span class="keyword">public</span>:
+<a name="l00116"></a>00116   <a class="code" href="classcsPluginManager.html">csPluginManager</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
+<a name="l00118"></a>00118   <span class="keyword">virtual</span> ~<a class="code" href="classcsPluginManager.html">csPluginManager</a> ();
 <a name="l00119"></a>00119 
 <a name="l00121"></a>00121   <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a> *LoadPlugin (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID, <span class="keywordtype">bool</span> init = <span class="keyword">true</span>);
 <a name="l00122"></a>00122 
@@ -115,11 +115,11 @@
 <a name="l00129"></a>00129           <span class="keyword">const</span> <span class="keywordtype">char</span> *iInterface, <span class="keywordtype">int</span> iVersion);
 <a name="l00131"></a>00131   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> UnloadPlugin (<a class="code" href="structiComponent.html">iComponent</a> *<a class="code" href="structiObject.html">iObject</a>);
 <a name="l00133"></a>00133   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> RegisterPlugin (<span class="keyword">const</span> <span class="keywordtype">char</span> *iClassID,
-<a name="l00134"></a>00134           <a class="code" href="structiComponent.html">iComponent</a> *<a class="code" href="structiObject.html">iObject</a>);
+<a name="l00134"></a>00134           <a class="code" href="structiComponent.html">iComponent</a> *iObject);
 <a name="l00136"></a>00136   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iPluginIterator&gt;</a> GetPlugins ();
 <a name="l00138"></a>00138   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Clear ();
 <a name="l00139"></a>00139 
-<a name="l00141"></a>00141   <span class="keyword">virtual</span> <span class="keywordtype">void</span> QueryOptions (<a class="code" href="structiComponent.html">iComponent</a> *<a class="code" href="structiObject.html">iObject</a>);
+<a name="l00141"></a>00141   <span class="keyword">virtual</span> <span class="keywordtype">void</span> QueryOptions (<a class="code" href="structiComponent.html">iComponent</a> *iObject);
 <a name="l00142"></a>00142 };
 <a name="l00143"></a>00143 
 <a name="l00144"></a>00144 <span class="preprocessor">#endif // __CS_PLUGMGR_H__</span>

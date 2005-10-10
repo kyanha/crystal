@@ -43,75 +43,74 @@
 <a name="l00028"></a>00028 
 <a name="l00029"></a>00029 <span class="preprocessor">#include "csutil/leakguard.h"</span>
 <a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="refarr_8h.html">csutil/refarr.h</a>"</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
 <a name="l00032"></a>00032 
 <a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="iutil_2object_8h.html">iutil/object.h</a>"</span>
 <a name="l00034"></a>00034 
 <a name="l00035"></a><a class="code" href="csobject_8h.html#a0">00035</a> <span class="keyword">typedef</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;iObject&gt;</a> <a class="code" href="classcsRefArray.html">csObjectContainer</a>;
 <a name="l00036"></a>00036 
-<a name="l00042"></a><a class="code" href="classcsObject.html">00042</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsObject.html">csObject</a> : <span class="keyword">public</span> <a class="code" href="structiObject.html">iObject</a>
-<a name="l00043"></a>00043 {
-<a name="l00044"></a>00044 <span class="keyword">protected</span>:
-<a name="l00045"></a><a class="code" href="classcsObject.html#n0">00045</a>   <span class="keyword">friend</span> <span class="keyword">class </span>csObjectIterator;
-<a name="l00047"></a><a class="code" href="classcsObject.html#p1">00047</a>   <a class="code" href="cstypes_8h.html#a27">uint</a> csid;
-<a name="l00048"></a>00048 
-<a name="l00050"></a><a class="code" href="classcsObject.html#p0">00050</a>   <a class="code" href="classcsRefArray.html">csObjectContainer</a> *Children;
-<a name="l00051"></a>00051 
-<a name="l00053"></a><a class="code" href="classcsObject.html#p3">00053</a>   <span class="keywordtype">char</span> *Name;
-<a name="l00054"></a>00054 
-<a name="l00056"></a><a class="code" href="classcsObject.html#p4">00056</a>   <a class="code" href="structiObject.html">iObject</a> *ParentObject;
-<a name="l00057"></a>00057 
-<a name="l00059"></a><a class="code" href="classcsObject.html#p2">00059</a>   <a class="code" href="classcsRefArray.html">csRefArray&lt;iObjectNameChangeListener&gt;</a> listeners;
-<a name="l00060"></a>00060 
-<a name="l00062"></a>00062   <span class="keywordtype">void</span> InitializeObject ();
-<a name="l00063"></a>00063 
-<a name="l00065"></a>00065   <span class="keywordtype">void</span> FireNameChangeListeners (<span class="keyword">const</span> <span class="keywordtype">char</span>* oldname, <span class="keyword">const</span> <span class="keywordtype">char</span>* newname);
-<a name="l00066"></a>00066 
-<a name="l00067"></a>00067 <span class="keyword">public</span>:
-<a name="l00068"></a>00068   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsObject.html">csObject</a>);
-<a name="l00069"></a>00069 
-<a name="l00071"></a>00071   <a class="code" href="classcsObject.html">csObject</a> (<a class="code" href="structiBase.html">iBase</a>* pParent = 0);
-<a name="l00072"></a>00072 
-<a name="l00078"></a>00078   <a class="code" href="classcsObject.html">csObject</a> (<a class="code" href="classcsObject.html">csObject</a> &amp;o);
-<a name="l00079"></a>00079 
-<a name="l00081"></a>00081   <span class="keyword">virtual</span> ~<a class="code" href="classcsObject.html">csObject</a> ();
-<a name="l00082"></a>00082 
-<a name="l00084"></a>00084   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiObject.html#a14">SetName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName);
-<a name="l00085"></a>00085 
-<a name="l00087"></a>00087   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiObject.html#a5">GetName</a> () <span class="keyword">const</span>;
-<a name="l00088"></a>00088 
-<a name="l00090"></a>00090   <span class="keyword">virtual</span> <a class="code" href="cstypes_8h.html#a27">uint</a> <a class="code" href="structiObject.html#a3">GetID</a> () <span class="keyword">const</span>;
-<a name="l00091"></a>00091 
-<a name="l00093"></a>00093   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiObject.html#a15">SetObjectParent</a> (<a class="code" href="structiObject.html">iObject</a> *);
-<a name="l00094"></a>00094 
-<a name="l00096"></a>00096   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a>* <a class="code" href="structiObject.html#a6">GetObjectParent</a> () <span class="keyword">const</span>;
-<a name="l00097"></a>00097 
-<a name="l00099"></a>00099   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiObject.html#a7">ObjAdd</a> (<a class="code" href="structiObject.html">iObject</a> *obj);
-<a name="l00100"></a>00100 
-<a name="l00102"></a>00102   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiObject.html#a10">ObjRemove</a> (<a class="code" href="structiObject.html">iObject</a> *obj);
-<a name="l00103"></a>00103 
-<a name="l00105"></a>00105   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiObject.html#a11">ObjRemoveAll</a> ();
-<a name="l00106"></a>00106 
-<a name="l00108"></a>00108   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiObject.html#a8">ObjAddChildren</a> (<a class="code" href="structiObject.html">iObject</a> *Parent);
-<a name="l00109"></a>00109 
-<a name="l00119"></a>00119   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a>* <a class="code" href="structiObject.html#a2">GetChild</a> (<span class="keywordtype">int</span> iInterfaceID, <span class="keywordtype">int</span> iVersion,
-<a name="l00120"></a>00120     <span class="keyword">const</span> <span class="keywordtype">char</span> *Name = 0, <span class="keywordtype">bool</span> FirstName = <span class="keyword">false</span>) <span class="keyword">const</span>;
-<a name="l00121"></a>00121 
-<a name="l00123"></a>00123   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *<a class="code" href="structiObject.html#a2">GetChild</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Name) <span class="keyword">const</span>;
-<a name="l00124"></a>00124 
-<a name="l00129"></a>00129   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectIterator&gt;</a> <a class="code" href="structiObject.html#a4">GetIterator</a> ();
-<a name="l00130"></a>00130 
-<a name="l00131"></a>00131   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiObject.html#a0">AddNameChangeListener</a> (
-<a name="l00132"></a>00132         <a class="code" href="structiObjectNameChangeListener.html">iObjectNameChangeListener</a>* listener);
-<a name="l00133"></a>00133   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiObject.html#a12">RemoveNameChangeListener</a> (
-<a name="l00134"></a>00134         <a class="code" href="structiObjectNameChangeListener.html">iObjectNameChangeListener</a>* listener);
-<a name="l00135"></a>00135 
-<a name="l00136"></a><a class="code" href="classcsObject.html#o0">00136</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
-<a name="l00137"></a>00137 
-<a name="l00138"></a>00138   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ObjReleaseOld (<a class="code" href="structiObject.html">iObject</a> *obj);
-<a name="l00139"></a>00139 };
-<a name="l00140"></a>00140 
-<a name="l00141"></a>00141 <span class="preprocessor">#endif // __CS_CSOBJECT_H__</span>
+<a name="l00042"></a><a class="code" href="classcsObject.html">00042</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsObject.html">csObject</a> : 
+<a name="l00043"></a>00043   <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;csObject, iObject&gt;
+<a name="l00044"></a>00044 {
+<a name="l00045"></a>00045 <span class="keyword">protected</span>:
+<a name="l00046"></a><a class="code" href="classcsObject.html#n0">00046</a>   <span class="keyword">friend</span> <span class="keyword">class </span>csObjectIterator;
+<a name="l00048"></a><a class="code" href="classcsObject.html#p1">00048</a>   <a class="code" href="cstypes_8h.html#a27">uint</a> csid;
+<a name="l00049"></a>00049 
+<a name="l00051"></a><a class="code" href="classcsObject.html#p0">00051</a>   <a class="code" href="classcsRefArray.html">csObjectContainer</a> *Children;
+<a name="l00052"></a>00052 
+<a name="l00054"></a><a class="code" href="classcsObject.html#p3">00054</a>   <span class="keywordtype">char</span> *Name;
+<a name="l00055"></a>00055 
+<a name="l00057"></a><a class="code" href="classcsObject.html#p4">00057</a>   <a class="code" href="structiObject.html">iObject</a> *ParentObject;
+<a name="l00058"></a>00058 
+<a name="l00060"></a><a class="code" href="classcsObject.html#p2">00060</a>   <a class="code" href="classcsRefArray.html">csRefArray&lt;iObjectNameChangeListener&gt;</a> listeners;
+<a name="l00061"></a>00061 
+<a name="l00063"></a>00063   <span class="keywordtype">void</span> InitializeObject ();
+<a name="l00064"></a>00064 
+<a name="l00066"></a>00066   <span class="keywordtype">void</span> FireNameChangeListeners (<span class="keyword">const</span> <span class="keywordtype">char</span>* oldname, <span class="keyword">const</span> <span class="keywordtype">char</span>* newname);
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068 <span class="keyword">public</span>:
+<a name="l00069"></a>00069   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsObject.html">csObject</a>);
+<a name="l00070"></a>00070 
+<a name="l00072"></a>00072   <a class="code" href="classcsObject.html">csObject</a> (<a class="code" href="structiBase.html">iBase</a>* pParent = 0);
+<a name="l00073"></a>00073 
+<a name="l00079"></a>00079   <a class="code" href="classcsObject.html">csObject</a> (<a class="code" href="classcsObject.html">csObject</a> &amp;o);
+<a name="l00080"></a>00080 
+<a name="l00082"></a>00082   <span class="keyword">virtual</span> ~<a class="code" href="classcsObject.html">csObject</a> ();
+<a name="l00083"></a>00083 
+<a name="l00085"></a>00085   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetName (<span class="keyword">const</span> <span class="keywordtype">char</span> *iName);
+<a name="l00086"></a>00086 
+<a name="l00088"></a>00088   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *GetName () <span class="keyword">const</span>;
+<a name="l00089"></a>00089 
+<a name="l00091"></a>00091   <span class="keyword">virtual</span> <a class="code" href="cstypes_8h.html#a27">uint</a> GetID () <span class="keyword">const</span>;
+<a name="l00092"></a>00092 
+<a name="l00094"></a>00094   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetObjectParent (<a class="code" href="structiObject.html">iObject</a> *);
+<a name="l00095"></a>00095 
+<a name="l00097"></a>00097   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a>* GetObjectParent () <span class="keyword">const</span>;
+<a name="l00098"></a>00098 
+<a name="l00100"></a>00100   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ObjAdd (<a class="code" href="structiObject.html">iObject</a> *obj);
+<a name="l00101"></a>00101 
+<a name="l00103"></a>00103   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ObjRemove (<a class="code" href="structiObject.html">iObject</a> *obj);
+<a name="l00104"></a>00104 
+<a name="l00106"></a>00106   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ObjRemoveAll ();
+<a name="l00107"></a>00107 
+<a name="l00109"></a>00109   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ObjAddChildren (<a class="code" href="structiObject.html">iObject</a> *Parent);
+<a name="l00110"></a>00110 
+<a name="l00120"></a>00120   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a>* GetChild (<span class="keywordtype">int</span> iInterfaceID, <span class="keywordtype">int</span> iVersion,
+<a name="l00121"></a>00121     <span class="keyword">const</span> <span class="keywordtype">char</span> *Name = 0, <span class="keywordtype">bool</span> FirstName = <span class="keyword">false</span>) <span class="keyword">const</span>;
+<a name="l00122"></a>00122 
+<a name="l00124"></a>00124   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *GetChild (<span class="keyword">const</span> <span class="keywordtype">char</span> *Name) <span class="keyword">const</span>;
+<a name="l00125"></a>00125 
+<a name="l00130"></a>00130   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iObjectIterator&gt;</a> GetIterator ();
+<a name="l00131"></a>00131 
+<a name="l00132"></a>00132   <span class="keyword">virtual</span> <span class="keywordtype">void</span> AddNameChangeListener (
+<a name="l00133"></a>00133         <a class="code" href="structiObjectNameChangeListener.html">iObjectNameChangeListener</a>* listener);
+<a name="l00134"></a>00134   <span class="keyword">virtual</span> <span class="keywordtype">void</span> RemoveNameChangeListener (
+<a name="l00135"></a>00135         <a class="code" href="structiObjectNameChangeListener.html">iObjectNameChangeListener</a>* listener);
+<a name="l00136"></a>00136 
+<a name="l00137"></a>00137   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ObjReleaseOld (<a class="code" href="structiObject.html">iObject</a> *obj);
+<a name="l00138"></a>00138 };
+<a name="l00139"></a>00139 
+<a name="l00140"></a>00140 <span class="preprocessor">#endif // __CS_CSOBJECT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

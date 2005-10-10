@@ -39,93 +39,93 @@
 <a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_TXTMGR_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00026"></a>00026 <span class="preprocessor">#include "csextern.h"</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="parray_8h.html">csutil/parray.h</a>"</span>
-<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="ivideo_2txtmgr_8h.html">ivideo/txtmgr.h</a>"</span>
-<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="ivideo_2material_8h.html">ivideo/material.h</a>"</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="iengine_2material_8h.html">iengine/material.h</a>"</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="ivideo_2texture_8h.html">ivideo/texture.h</a>"</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="shader_8h.html">ivideo/shader/shader.h</a>"</span>
-<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="iengine_2texture_8h.html">iengine/texture.h</a>"</span>
-<a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="ivideo_2graph2d_8h.html">ivideo/graph2d.h</a>"</span>
-<a name="l00035"></a>00035 <span class="preprocessor">#include "<a class="code" href="rgbpixel_8h.html">csgfx/rgbpixel.h</a>"</span>
-<a name="l00036"></a>00036 <span class="preprocessor">#include "<a class="code" href="weakrefarr_8h.html">csutil/weakrefarr.h</a>"</span>
-<a name="l00037"></a>00037 
-<a name="l00038"></a>00038 <span class="keyword">class </span>csTexture;
-<a name="l00039"></a>00039 <span class="keyword">class </span><a class="code" href="classcsTextureManager.html">csTextureManager</a>;
-<a name="l00040"></a>00040 <span class="keyword">struct </span><a class="code" href="structiImage.html">iImage</a>;
-<a name="l00041"></a>00041 <span class="keyword">struct </span><a class="code" href="structiConfigFile.html">iConfigFile</a>;
-<a name="l00042"></a>00042 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
-<a name="l00043"></a>00043 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
-<a name="l00044"></a>00044 
-<a name="l00059"></a><a class="code" href="classcsTextureHandle.html">00059</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsTextureHandle.html">csTextureHandle</a> : <span class="keyword">public</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>
-<a name="l00060"></a>00060 {
-<a name="l00061"></a>00061 <span class="keyword">protected</span>:
-<a name="l00063"></a><a class="code" href="classcsTextureHandle.html#p3">00063</a>   <a class="code" href="classcsRef.html">csRef&lt;csTextureManager&gt;</a> texman;
-<a name="l00064"></a>00064 
-<a name="l00066"></a><a class="code" href="classcsTextureHandle.html#p1">00066</a>   <span class="keywordtype">int</span> flags;
-<a name="l00067"></a>00067 
-<a name="l00069"></a><a class="code" href="classcsTextureHandle.html#p4">00069</a>   <span class="keywordtype">bool</span> transp;
-<a name="l00071"></a><a class="code" href="classcsTextureHandle.html#p5">00071</a>   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> transp_color;
-<a name="l00072"></a>00072 
-<a name="l00073"></a><a class="code" href="classcsTextureHandle.html#p2">00073</a>   <a class="code" href="group__util.html#ga3">csStringID</a> texClass;
-<a name="l00074"></a><a class="code" href="classcsTextureHandle.html#p0">00074</a>   <a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> alphaType;
-<a name="l00075"></a>00075 <span class="keyword">public</span>:
-<a name="l00077"></a>00077   <a class="code" href="classcsTextureHandle.html">csTextureHandle</a> (<a class="code" href="classcsTextureManager.html">csTextureManager</a>* texman, <span class="keywordtype">int</span> Flags);
-<a name="l00079"></a>00079   <span class="keyword">virtual</span> ~<a class="code" href="classcsTextureHandle.html">csTextureHandle</a> ();
-<a name="l00080"></a>00080 
-<a name="l00085"></a>00085   <span class="keywordtype">void</span> AdjustSizePo2 (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">int</span> depth,
-<a name="l00086"></a>00086     <span class="keywordtype">int</span>&amp; newwidth, <span class="keywordtype">int</span>&amp; newheight, <span class="keywordtype">int</span>&amp; newdepth);
-<a name="l00087"></a>00087 
-<a name="l00089"></a><a class="code" href="classcsTextureHandle.html#o0">00089</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
-<a name="l00090"></a>00090 
-<a name="l00091"></a><a class="code" href="classcsTextureHandle.html#a4">00091</a>   <span class="keywordtype">int</span> <a class="code" href="structiTextureHandle.html#a3">GetFlags</a> ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> flags; }
-<a name="l00092"></a>00092 
-<a name="l00094"></a>00094   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a17">SetKeyColor</a> (<span class="keywordtype">bool</span> Enable);
-<a name="l00095"></a>00095 
-<a name="l00097"></a>00097   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a17">SetKeyColor</a> (<a class="code" href="cstypes_8h.html#a9">uint8</a> red, <a class="code" href="cstypes_8h.html#a9">uint8</a> green, <a class="code" href="cstypes_8h.html#a9">uint8</a> blue);
-<a name="l00098"></a>00098 
-<a name="l00103"></a>00103   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTextureHandle.html#a6">GetKeyColor</a> () <span class="keyword">const</span>;
-<a name="l00104"></a>00104 
-<a name="l00106"></a>00106   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a6">GetKeyColor</a> (<a class="code" href="cstypes_8h.html#a9">uint8</a> &amp;r, <a class="code" href="cstypes_8h.html#a9">uint8</a> &amp;g, <a class="code" href="cstypes_8h.html#a9">uint8</a> &amp;b) <span class="keyword">const</span>;
-<a name="l00107"></a>00107 
-<a name="l00109"></a><a class="code" href="classcsTextureHandle.html#a7">00109</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="structiTextureHandle.html#a9">GetPrivateObject</a> ()
-<a name="l00110"></a>00110   { <span class="keywordflow">return</span> (<a class="code" href="classcsTextureHandle.html">csTextureHandle</a> *)<span class="keyword">this</span>; }
-<a name="l00111"></a>00111 
-<a name="l00117"></a><a class="code" href="classcsTextureHandle.html#a2">00117</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiTextureHandle.html#a1">GetAlphaMap</a> () 
-<a name="l00118"></a>00118   { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
-<a name="l00119"></a>00119 
-<a name="l00126"></a>00126   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculateNextBestPo2Size (<span class="keywordtype">int</span> flags, <span class="keyword">const</span> <span class="keywordtype">int</span> orgDim, 
-<a name="l00127"></a>00127     <span class="keywordtype">int</span>&amp; newDim);
-<a name="l00128"></a>00128 
-<a name="l00129"></a><a class="code" href="classcsTextureHandle.html#a3">00129</a>   <span class="keyword">virtual</span> <a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> <a class="code" href="structiTextureHandle.html#a2">GetAlphaType</a> ()<span class="keyword"> const</span>
-<a name="l00130"></a>00130 <span class="keyword">  </span>{ <span class="keywordflow">return</span> alphaType; }
-<a name="l00131"></a><a class="code" href="classcsTextureHandle.html#a9">00131</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a15">SetAlphaType</a> (<a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> alphaType)
-<a name="l00132"></a>00132   { this-&gt;alphaType = alphaType; }
-<a name="l00133"></a>00133 
-<a name="l00134"></a>00134   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiTextureHandle.html#a18">SetTextureClass</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* className);
-<a name="l00135"></a>00135   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiTextureHandle.html#a12">GetTextureClass</a> ();
-<a name="l00136"></a>00136 };
-<a name="l00137"></a>00137 
-<a name="l00143"></a><a class="code" href="classcsTextureManager.html">00143</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTextureManager : <span class="keyword">public</span> <a class="code" href="structiTextureManager.html">iTextureManager</a>
-<a name="l00144"></a>00144 {
-<a name="l00145"></a>00145 <span class="keyword">protected</span>:
-<a name="l00146"></a>00146 
-<a name="l00147"></a>00147   <span class="comment">//typedef csArray&lt;csTextureHandle*&gt; csTexVector;</span>
-<a name="l00148"></a><a class="code" href="classcsTextureManager.html#x0">00148</a>   <span class="keyword">typedef</span> <a class="code" href="classcsWeakRefArray.html">csWeakRefArray&lt;csTextureHandle&gt;</a> <a class="code" href="classcsWeakRefArray.html">csTexVector</a>;
-<a name="l00149"></a>00149 
-<a name="l00151"></a><a class="code" href="classcsTextureManager.html#p1">00151</a>   <a class="code" href="classcsWeakRefArray.html">csTexVector</a> textures;
-<a name="l00152"></a>00152 
-<a name="l00154"></a><a class="code" href="classcsTextureManager.html#p0">00154</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg;
-<a name="l00155"></a>00155 
-<a name="l00157"></a>00157   <span class="keyword">virtual</span> <span class="keywordtype">void</span> read_config (<a class="code" href="structiConfigFile.html">iConfigFile</a> *config);
-<a name="l00158"></a>00158 <span class="keyword">public</span>:
-<a name="l00160"></a><a class="code" href="classcsTextureManager.html#o1">00160</a>   <a class="code" href="structcsPixelFormat.html">csPixelFormat</a> pfmt;
-<a name="l00161"></a>00161 
-<a name="l00162"></a><a class="code" href="classcsTextureManager.html#o0">00162</a>   <a class="code" href="group__util.html#ga3">csStringID</a> nameDiffuseTexture;
+<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="rgbpixel_8h.html">csgfx/rgbpixel.h</a>"</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="parray_8h.html">csutil/parray.h</a>"</span>
+<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="weakrefarr_8h.html">csutil/weakrefarr.h</a>"</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="iengine_2material_8h.html">iengine/material.h</a>"</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="iengine_2texture_8h.html">iengine/texture.h</a>"</span>
+<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="ivideo_2graph2d_8h.html">ivideo/graph2d.h</a>"</span>
+<a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="ivideo_2material_8h.html">ivideo/material.h</a>"</span>
+<a name="l00035"></a>00035 <span class="preprocessor">#include "<a class="code" href="shader_8h.html">ivideo/shader/shader.h</a>"</span>
+<a name="l00036"></a>00036 <span class="preprocessor">#include "<a class="code" href="ivideo_2texture_8h.html">ivideo/texture.h</a>"</span>
+<a name="l00037"></a>00037 <span class="preprocessor">#include "<a class="code" href="ivideo_2txtmgr_8h.html">ivideo/txtmgr.h</a>"</span>
+<a name="l00038"></a>00038 
+<a name="l00039"></a>00039 <span class="keyword">class </span>csTexture;
+<a name="l00040"></a>00040 <span class="keyword">class </span><a class="code" href="classcsTextureManager.html">csTextureManager</a>;
+<a name="l00041"></a>00041 <span class="keyword">struct </span><a class="code" href="structiImage.html">iImage</a>;
+<a name="l00042"></a>00042 <span class="keyword">struct </span><a class="code" href="structiConfigFile.html">iConfigFile</a>;
+<a name="l00043"></a>00043 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
+<a name="l00044"></a>00044 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+<a name="l00045"></a>00045 
+<a name="l00060"></a><a class="code" href="classcsTextureHandle.html">00060</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsTextureHandle.html">csTextureHandle</a> : 
+<a name="l00061"></a>00061   <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;csTextureHandle, iTextureHandle&gt;
+<a name="l00062"></a>00062 {
+<a name="l00063"></a>00063 <span class="keyword">protected</span>:
+<a name="l00065"></a><a class="code" href="classcsTextureHandle.html#p3">00065</a>   <a class="code" href="classcsRef.html">csRef&lt;csTextureManager&gt;</a> texman;
+<a name="l00066"></a>00066 
+<a name="l00068"></a><a class="code" href="classcsTextureHandle.html#p1">00068</a>   <span class="keywordtype">int</span> flags;
+<a name="l00069"></a>00069 
+<a name="l00071"></a><a class="code" href="classcsTextureHandle.html#p4">00071</a>   <span class="keywordtype">bool</span> transp;
+<a name="l00073"></a><a class="code" href="classcsTextureHandle.html#p5">00073</a>   <a class="code" href="structcsRGBpixel.html">csRGBpixel</a> transp_color;
+<a name="l00074"></a>00074 
+<a name="l00075"></a><a class="code" href="classcsTextureHandle.html#p2">00075</a>   <a class="code" href="group__util.html#ga3">csStringID</a> texClass;
+<a name="l00076"></a><a class="code" href="classcsTextureHandle.html#p0">00076</a>   <a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> alphaType;
+<a name="l00077"></a>00077 <span class="keyword">public</span>:
+<a name="l00079"></a>00079   <a class="code" href="classcsTextureHandle.html">csTextureHandle</a> (<a class="code" href="classcsTextureManager.html">csTextureManager</a>* texman, <span class="keywordtype">int</span> Flags);
+<a name="l00081"></a>00081   <span class="keyword">virtual</span> ~<a class="code" href="classcsTextureHandle.html">csTextureHandle</a> ();
+<a name="l00082"></a>00082 
+<a name="l00087"></a>00087   <span class="keywordtype">void</span> AdjustSizePo2 (<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, <span class="keywordtype">int</span> depth,
+<a name="l00088"></a>00088     <span class="keywordtype">int</span>&amp; newwidth, <span class="keywordtype">int</span>&amp; newheight, <span class="keywordtype">int</span>&amp; newdepth);
+<a name="l00089"></a>00089 
+<a name="l00091"></a>00091 
+<a name="l00092"></a><a class="code" href="classcsTextureHandle.html#a4">00092</a>   <span class="keywordtype">int</span> GetFlags ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> flags; }
+<a name="l00093"></a>00093 
+<a name="l00095"></a>00095   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">bool</span> Enable);
+<a name="l00096"></a>00096 
+<a name="l00098"></a>00098   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeyColor (<a class="code" href="cstypes_8h.html#a9">uint8</a> red, <a class="code" href="cstypes_8h.html#a9">uint8</a> green, <a class="code" href="cstypes_8h.html#a9">uint8</a> blue);
+<a name="l00099"></a>00099 
+<a name="l00104"></a>00104   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetKeyColor () <span class="keyword">const</span>;
+<a name="l00105"></a>00105 
+<a name="l00107"></a>00107   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetKeyColor (<a class="code" href="cstypes_8h.html#a9">uint8</a> &amp;r, <a class="code" href="cstypes_8h.html#a9">uint8</a> &amp;g, <a class="code" href="cstypes_8h.html#a9">uint8</a> &amp;b) <span class="keyword">const</span>;
+<a name="l00108"></a>00108 
+<a name="l00110"></a><a class="code" href="classcsTextureHandle.html#a7">00110</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *GetPrivateObject ()
+<a name="l00111"></a>00111   { <span class="keywordflow">return</span> (<a class="code" href="classcsTextureHandle.html">csTextureHandle</a> *)<span class="keyword">this</span>; }
+<a name="l00112"></a>00112 
+<a name="l00118"></a><a class="code" href="classcsTextureHandle.html#a2">00118</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetAlphaMap () 
+<a name="l00119"></a>00119   { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
+<a name="l00120"></a>00120 
+<a name="l00127"></a>00127   <span class="keyword">static</span> <span class="keywordtype">void</span> CalculateNextBestPo2Size (<span class="keywordtype">int</span> flags, <span class="keyword">const</span> <span class="keywordtype">int</span> orgDim, 
+<a name="l00128"></a>00128     <span class="keywordtype">int</span>&amp; newDim);
+<a name="l00129"></a>00129 
+<a name="l00130"></a><a class="code" href="classcsTextureHandle.html#a3">00130</a>   <span class="keyword">virtual</span> <a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> GetAlphaType ()<span class="keyword"> const</span>
+<a name="l00131"></a>00131 <span class="keyword">  </span>{ <span class="keywordflow">return</span> alphaType; }
+<a name="l00132"></a><a class="code" href="classcsTextureHandle.html#a9">00132</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetAlphaType (<a class="code" href="structcsAlphaMode.html#w3">csAlphaMode::AlphaType</a> alphaType)
+<a name="l00133"></a>00133   { this-&gt;alphaType = alphaType; }
+<a name="l00134"></a>00134 
+<a name="l00135"></a>00135   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureClass (<span class="keyword">const</span> <span class="keywordtype">char</span>* className);
+<a name="l00136"></a>00136   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetTextureClass ();
+<a name="l00137"></a>00137 };
+<a name="l00138"></a>00138 
+<a name="l00144"></a><a class="code" href="classcsTextureManager.html">00144</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csTextureManager : 
+<a name="l00145"></a>00145   <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;csTextureManager, iTextureManager&gt;
+<a name="l00146"></a>00146 {
+<a name="l00147"></a>00147 <span class="keyword">protected</span>:
+<a name="l00148"></a>00148 
+<a name="l00149"></a>00149   <span class="comment">//typedef csArray&lt;csTextureHandle*&gt; csTexVector;</span>
+<a name="l00150"></a><a class="code" href="classcsTextureManager.html#x0">00150</a>   <span class="keyword">typedef</span> <a class="code" href="classcsWeakRefArray.html">csWeakRefArray&lt;csTextureHandle&gt;</a> <a class="code" href="classcsWeakRefArray.html">csTexVector</a>;
+<a name="l00151"></a>00151 
+<a name="l00153"></a><a class="code" href="classcsTextureManager.html#p1">00153</a>   <a class="code" href="classcsWeakRefArray.html">csTexVector</a> textures;
+<a name="l00154"></a>00154 
+<a name="l00156"></a><a class="code" href="classcsTextureManager.html#p0">00156</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg;
+<a name="l00157"></a>00157 
+<a name="l00159"></a>00159   <span class="keyword">virtual</span> <span class="keywordtype">void</span> read_config (<a class="code" href="structiConfigFile.html">iConfigFile</a> *config);
+<a name="l00160"></a>00160 <span class="keyword">public</span>:
+<a name="l00162"></a><a class="code" href="classcsTextureManager.html#o1">00162</a>   <a class="code" href="structcsPixelFormat.html">csPixelFormat</a> pfmt;
 <a name="l00163"></a>00163 
-<a name="l00164"></a><a class="code" href="classcsTextureManager.html#o3">00164</a>   <a class="code" href="classcsStringSet.html">csStringSet</a> texClassIDs;
+<a name="l00164"></a><a class="code" href="classcsTextureManager.html#o0">00164</a>   <a class="code" href="group__util.html#ga3">csStringID</a> nameDiffuseTexture;
 <a name="l00165"></a>00165 
-<a name="l00166"></a><a class="code" href="classcsTextureManager.html#o2">00166</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
+<a name="l00166"></a><a class="code" href="classcsTextureManager.html#o2">00166</a>   <a class="code" href="classcsStringSet.html">csStringSet</a> texClassIDs;
 <a name="l00167"></a>00167 
 <a name="l00169"></a>00169   csTextureManager (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <a class="code" href="structiGraphics2D.html">iGraphics2D</a> *iG2D);
 <a name="l00171"></a>00171   <span class="keyword">virtual</span> ~csTextureManager ();
