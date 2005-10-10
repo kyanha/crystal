@@ -43,159 +43,145 @@
 <a name="l00028"></a>00028 
 <a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="csobject_8h.html">csutil/csobject.h</a>"</span>
 <a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
-<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="iproctex_8h.html">itexture/iproctex.h</a>"</span>
-<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="iengine_2texture_8h.html">iengine/texture.h</a>"</span>
-<a name="l00033"></a>00033 
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="iproctex_8h.html">itexture/iproctex.h</a>"</span>
+<a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="iengine_2texture_8h.html">iengine/texture.h</a>"</span>
 <a name="l00034"></a>00034 
-<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiEngine.html">iEngine</a>;
-<a name="l00036"></a>00036 <span class="keyword">struct </span><a class="code" href="structiEventHandler.html">iEventHandler</a>;
-<a name="l00037"></a>00037 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
-<a name="l00038"></a>00038 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
-<a name="l00039"></a>00039 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
-<a name="l00040"></a>00040 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
-<a name="l00041"></a>00041 <span class="keyword">struct </span><a class="code" href="structiTextureManager.html">iTextureManager</a>;
-<a name="l00042"></a>00042 <span class="keyword">struct </span><a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>;
-<a name="l00043"></a>00043 
-<a name="l00044"></a>00044 <span class="keyword">class </span>csProcTexEventHandler;
-<a name="l00045"></a>00045 
-<a name="l00046"></a>00046 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiProcTexCallback.html">iProcTexCallback</a>, 0, 0, 1);
-<a name="l00047"></a>00047 
-<a name="l00051"></a><a class="code" href="structiProcTexCallback.html">00051</a> <span class="keyword">struct </span><a class="code" href="structiProcTexCallback.html">iProcTexCallback</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00052"></a>00052 {
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036 <span class="keyword">struct </span><a class="code" href="structiEngine.html">iEngine</a>;
+<a name="l00037"></a>00037 <span class="keyword">struct </span><a class="code" href="structiEventHandler.html">iEventHandler</a>;
+<a name="l00038"></a>00038 <span class="keyword">struct </span><a class="code" href="structiGraphics2D.html">iGraphics2D</a>;
+<a name="l00039"></a>00039 <span class="keyword">struct </span><a class="code" href="structiGraphics3D.html">iGraphics3D</a>;
+<a name="l00040"></a>00040 <span class="keyword">struct </span><a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>;
+<a name="l00041"></a>00041 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
+<a name="l00042"></a>00042 <span class="keyword">struct </span><a class="code" href="structiTextureManager.html">iTextureManager</a>;
+<a name="l00043"></a>00043 <span class="keyword">struct </span><a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>;
+<a name="l00044"></a>00044 
+<a name="l00045"></a>00045 <span class="keyword">class </span>csProcTexEventHandler;
+<a name="l00046"></a>00046 
+<a name="l00050"></a><a class="code" href="structiProcTexCallback.html">00050</a> <span class="keyword">struct </span><a class="code" href="structiProcTexCallback.html">iProcTexCallback</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00051"></a>00051 {
+<a name="l00052"></a>00052   SCF_INTERFACE(<a class="code" href="structiProcTexCallback.html">iProcTexCallback</a>, 2,0,0);
 <a name="l00054"></a>00054   <span class="keyword">virtual</span> <a class="code" href="structiProcTexture.html">iProcTexture</a>* <a class="code" href="structiProcTexCallback.html#a0">GetProcTexture</a>() <span class="keyword">const </span>= 0;
 <a name="l00055"></a>00055 };
 <a name="l00056"></a>00056 
-<a name="l00061"></a><a class="code" href="classcsProcTexture.html">00061</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsProcTexture.html">csProcTexture</a> : <span class="keyword">public</span> <a class="code" href="classcsObject.html">csObject</a>
-<a name="l00062"></a>00062 {
-<a name="l00063"></a><a class="code" href="classcsProcTexture.html#n0">00063</a>   <span class="keyword">friend</span> <span class="keyword">struct </span>csProcTexCallback;
-<a name="l00064"></a><a class="code" href="classcsProcTexture.html#n1">00064</a>   <span class="keyword">friend</span> <span class="keyword">class </span>csProcTexEventHandler;
-<a name="l00065"></a>00065 
-<a name="l00066"></a>00066 <span class="keyword">private</span>:
-<a name="l00067"></a>00067   <span class="comment">// Setup the procedural event handler (used for updating visible</span>
-<a name="l00068"></a>00068   <span class="comment">// proc textures).</span>
-<a name="l00069"></a>00069   <span class="keyword">static</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>* SetupProcEventHandler (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
-<a name="l00070"></a>00070   <a class="code" href="classcsRef.html">csRef&lt;iEventHandler&gt;</a> proceh;
-<a name="l00071"></a>00071 
-<a name="l00072"></a>00072 <span class="keyword">protected</span>:
-<a name="l00073"></a>00073   <span class="comment">// Will be set to true as soon as pt is initialized.</span>
-<a name="l00074"></a><a class="code" href="classcsProcTexture.html#p12">00074</a>   <span class="keywordtype">bool</span> ptReady;
-<a name="l00075"></a>00075 
-<a name="l00076"></a>00076   <span class="comment">// Flags uses for the texture.</span>
-<a name="l00077"></a><a class="code" href="classcsProcTexture.html#p16">00077</a>   <span class="keywordtype">int</span> texFlags;
-<a name="l00078"></a>00078 
-<a name="l00079"></a>00079   <span class="comment">// Texture wrapper.</span>
-<a name="l00080"></a><a class="code" href="classcsProcTexture.html#p15">00080</a>   <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* tex;
-<a name="l00081"></a>00081   <span class="comment">// Dimensions of texture.</span>
-<a name="l00082"></a><a class="code" href="classcsProcTexture.html#p9">00082</a>   <span class="keywordtype">int</span> mat_w, mat_h;
-<a name="l00083"></a><a class="code" href="classcsProcTexture.html#p11">00083</a>   <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> proc_image;
-<a name="l00084"></a><a class="code" href="classcsProcTexture.html#p3">00084</a>   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
-<a name="l00085"></a><a class="code" href="classcsProcTexture.html#p2">00085</a>   <a class="code" href="classcsRef.html">csRef&lt;iGraphics2D&gt;</a> g2d;
-<a name="l00086"></a><a class="code" href="classcsProcTexture.html#p10">00086</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
-<a name="l00087"></a><a class="code" href="classcsProcTexture.html#p1">00087</a>   <span class="keywordtype">bool</span> anim_prepared;
-<a name="l00088"></a>00088 
-<a name="l00089"></a><a class="code" href="classcsProcTexture.html#p5">00089</a>   <span class="keywordtype">bool</span> key_color;
-<a name="l00090"></a><a class="code" href="classcsProcTexture.html#p7">00090</a>   <span class="keywordtype">int</span> key_red, key_green, key_blue;
-<a name="l00091"></a>00091 
-<a name="l00092"></a>00092   <span class="comment">// If true (default) then proc texture will register a callback</span>
-<a name="l00093"></a>00093   <span class="comment">// so that the texture is automatically updated (Animate is called)</span>
-<a name="l00094"></a>00094   <span class="comment">// whenever it is used.</span>
-<a name="l00095"></a><a class="code" href="classcsProcTexture.html#p17">00095</a>   <span class="keywordtype">bool</span> use_cb;
-<a name="l00096"></a>00096   <span class="comment">// always animate, even if not visible</span>
-<a name="l00097"></a><a class="code" href="classcsProcTexture.html#p0">00097</a>   <span class="keywordtype">bool</span> always_animate;
-<a name="l00098"></a>00098   <span class="comment">// Are we visible? Can be 'false' if animated w/ 'always animate'.</span>
-<a name="l00099"></a><a class="code" href="classcsProcTexture.html#p18">00099</a>   <span class="keywordtype">bool</span> visible;
-<a name="l00100"></a>00100 
-<a name="l00101"></a>00101   <span class="keywordtype">bool</span> GetAlwaysAnimate () <span class="keyword">const</span>;
-<a name="l00102"></a>00102   <span class="keywordtype">void</span> SetAlwaysAnimate (<span class="keywordtype">bool</span> enable);
-<a name="l00103"></a>00103 
-<a name="l00104"></a><a class="code" href="structcsProcTexture_1_1eiTextureWrapper.html">00104</a>   <span class="keyword">struct </span><a class="code" href="structcsProcTexture_1_1eiTextureWrapper.html">eiTextureWrapper</a> : <span class="keyword">public</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>
-<a name="l00105"></a>00105   {
-<a name="l00106"></a>00106     <a class="code" href="group__scf.html#ga33">SCF_DECLARE_EMBEDDED_IBASE</a>(<a class="code" href="classcsProcTexture.html">csProcTexture</a>);
-<a name="l00107"></a>00107     <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *QueryObject();
-<a name="l00108"></a>00108     <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a> *Clone () <span class="keyword">const</span>;
-<a name="l00109"></a>00109     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetImageFile (<a class="code" href="structiImage.html">iImage</a> *Image);
-<a name="l00110"></a>00110     <span class="keyword">virtual</span> <a class="code" href="structiImage.html">iImage</a>* GetImageFile ();
-<a name="l00111"></a>00111     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureHandle (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *tex);
-<a name="l00112"></a>00112     <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* GetTextureHandle ();
-<a name="l00113"></a>00113     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> red, <span class="keywordtype">int</span> green, <span class="keywordtype">int</span> blue);
-<a name="l00114"></a>00114     <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetKeyColor (<span class="keywordtype">int</span> &amp;red, <span class="keywordtype">int</span> &amp;green, <span class="keywordtype">int</span> &amp;blue) <span class="keyword">const</span>;
-<a name="l00115"></a>00115     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFlags (<span class="keywordtype">int</span> flags);
-<a name="l00116"></a>00116     <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetFlags () <span class="keyword">const</span>;
-<a name="l00117"></a>00117     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Register (<a class="code" href="structiTextureManager.html">iTextureManager</a> *txtmng);
-<a name="l00118"></a>00118     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetUseCallback (<a class="code" href="structiTextureCallback.html">iTextureCallback</a>* callback);
-<a name="l00119"></a>00119     <span class="keyword">virtual</span> <a class="code" href="structiTextureCallback.html">iTextureCallback</a>* GetUseCallback () <span class="keyword">const</span>;
-<a name="l00120"></a>00120     <span class="keyword">virtual</span> <span class="keywordtype">void</span> Visit ();
-<a name="l00121"></a>00121     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsVisitRequired () <span class="keyword">const</span>;
-<a name="l00122"></a>00122     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeepImage (<span class="keywordtype">bool</span> k);
-<a name="l00123"></a>00123     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> KeepImage () <span class="keyword">const</span>;
-<a name="l00124"></a>00124     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureClass (<span class="keyword">const</span> <span class="keywordtype">char</span>* className);
-<a name="l00125"></a>00125     <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetTextureClass ();
-<a name="l00126"></a>00126   } scfiTextureWrapper;
-<a name="l00127"></a><a class="code" href="classcsProcTexture.html#n3">00127</a>   <span class="keyword">friend</span> <span class="keyword">struct </span><a class="code" href="structcsProcTexture_1_1eiTextureWrapper.html">eiTextureWrapper</a>;
-<a name="l00128"></a>00128 
-<a name="l00129"></a><a class="code" href="structcsProcTexture_1_1eiProcTexture.html">00129</a>   <span class="keyword">struct </span><a class="code" href="structcsProcTexture_1_1eiProcTexture.html">eiProcTexture</a> : <span class="keyword">public</span> <a class="code" href="structiProcTexture.html">iProcTexture</a>
-<a name="l00130"></a>00130   {
-<a name="l00131"></a>00131     <a class="code" href="group__scf.html#ga33">SCF_DECLARE_EMBEDDED_IBASE</a>(<a class="code" href="classcsProcTexture.html">csProcTexture</a>);
-<a name="l00132"></a>00132 
-<a name="l00133"></a>00133     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetAlwaysAnimate () <span class="keyword">const</span>;
-<a name="l00134"></a>00134     <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetAlwaysAnimate (<span class="keywordtype">bool</span> enable);
-<a name="l00135"></a>00135     <span class="keyword">virtual</span> <a class="code" href="structiTextureFactory.html">iTextureFactory</a>* GetFactory();
-<a name="l00136"></a>00136   } scfiProcTexture;
-<a name="l00137"></a><a class="code" href="classcsProcTexture.html#n2">00137</a>   <span class="keyword">friend</span> <span class="keyword">struct </span><a class="code" href="structcsProcTexture_1_1eiProcTexture.html">eiProcTexture</a>;
-<a name="l00138"></a>00138 
-<a name="l00139"></a>00139 <span class="keyword">public</span>:
-<a name="l00140"></a>00140   <span class="comment">// The current time the previous time the callback was called.</span>
-<a name="l00141"></a>00141   <span class="comment">// This is used to detect if the callback is called multiple times</span>
-<a name="l00142"></a>00142   <span class="comment">// in one frame.</span>
-<a name="l00143"></a><a class="code" href="classcsProcTexture.html#o0">00143</a>   <a class="code" href="cstypes_8h.html#a26">csTicks</a> last_cur_time;
+<a name="l00061"></a><a class="code" href="classcsProcTexture.html">00061</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsProcTexture.html">csProcTexture</a> : 
+<a name="l00062"></a>00062   <span class="keyword">public</span> <a class="code" href="classscfImplementationExt2.html">scfImplementationExt2</a>&lt;csProcTexture, csObject, iTextureWrapper,
+<a name="l00063"></a>00063   iProcTexture&gt;
+<a name="l00064"></a>00064 {
+<a name="l00065"></a><a class="code" href="classcsProcTexture.html#n0">00065</a>   <span class="keyword">friend</span> <span class="keyword">struct </span>csProcTexCallback;
+<a name="l00066"></a><a class="code" href="classcsProcTexture.html#n1">00066</a>   <span class="keyword">friend</span> <span class="keyword">class </span>csProcTexEventHandler;
+<a name="l00067"></a>00067 
+<a name="l00068"></a>00068 <span class="keyword">private</span>:
+<a name="l00069"></a>00069   <span class="comment">// Setup the procedural event handler (used for updating visible</span>
+<a name="l00070"></a>00070   <span class="comment">// proc textures).</span>
+<a name="l00071"></a>00071   <span class="keyword">static</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>* SetupProcEventHandler (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
+<a name="l00072"></a>00072   <a class="code" href="classcsRef.html">csRef&lt;iEventHandler&gt;</a> proceh;
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074 <span class="keyword">protected</span>:
+<a name="l00075"></a>00075   <span class="comment">// Will be set to true as soon as pt is initialized.</span>
+<a name="l00076"></a><a class="code" href="classcsProcTexture.html#p12">00076</a>   <span class="keywordtype">bool</span> ptReady;
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078   <span class="comment">// Flags uses for the texture.</span>
+<a name="l00079"></a><a class="code" href="classcsProcTexture.html#p14">00079</a>   <span class="keywordtype">int</span> texFlags;
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081   <span class="comment">// Texture wrapper.</span>
+<a name="l00082"></a><a class="code" href="classcsProcTexture.html#p13">00082</a>   <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* tex;
+<a name="l00083"></a>00083   <span class="comment">// Dimensions of texture.</span>
+<a name="l00084"></a><a class="code" href="classcsProcTexture.html#p9">00084</a>   <span class="keywordtype">int</span> mat_w, mat_h;
+<a name="l00085"></a><a class="code" href="classcsProcTexture.html#p11">00085</a>   <a class="code" href="classcsRef.html">csRef&lt;iImage&gt;</a> proc_image;
+<a name="l00086"></a><a class="code" href="classcsProcTexture.html#p3">00086</a>   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
+<a name="l00087"></a><a class="code" href="classcsProcTexture.html#p2">00087</a>   <a class="code" href="classcsRef.html">csRef&lt;iGraphics2D&gt;</a> g2d;
+<a name="l00088"></a><a class="code" href="classcsProcTexture.html#p10">00088</a>   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg;
+<a name="l00089"></a><a class="code" href="classcsProcTexture.html#p1">00089</a>   <span class="keywordtype">bool</span> anim_prepared;
+<a name="l00090"></a>00090 
+<a name="l00091"></a><a class="code" href="classcsProcTexture.html#p5">00091</a>   <span class="keywordtype">bool</span> key_color;
+<a name="l00092"></a><a class="code" href="classcsProcTexture.html#p7">00092</a>   <span class="keywordtype">int</span> key_red, key_green, key_blue;
+<a name="l00093"></a>00093 
+<a name="l00094"></a>00094   <span class="comment">// If true (default) then proc texture will register a callback</span>
+<a name="l00095"></a>00095   <span class="comment">// so that the texture is automatically updated (Animate is called)</span>
+<a name="l00096"></a>00096   <span class="comment">// whenever it is used.</span>
+<a name="l00097"></a><a class="code" href="classcsProcTexture.html#p15">00097</a>   <span class="keywordtype">bool</span> use_cb;
+<a name="l00098"></a>00098   <span class="comment">// always animate, even if not visible</span>
+<a name="l00099"></a><a class="code" href="classcsProcTexture.html#p0">00099</a>   <span class="keywordtype">bool</span> always_animate;
+<a name="l00100"></a>00100   <span class="comment">// Are we visible? Can be 'false' if animated w/ 'always animate'.</span>
+<a name="l00101"></a><a class="code" href="classcsProcTexture.html#p16">00101</a>   <span class="keywordtype">bool</span> visible;
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103   <span class="keyword">virtual</span> <a class="code" href="structiObject.html">iObject</a> *QueryObject();
+<a name="l00104"></a>00104   <span class="keyword">virtual</span> <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a> *Clone () <span class="keyword">const</span>;
+<a name="l00105"></a>00105   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetImageFile (<a class="code" href="structiImage.html">iImage</a> *Image);
+<a name="l00106"></a>00106   <span class="keyword">virtual</span> <a class="code" href="structiImage.html">iImage</a>* GetImageFile ();
+<a name="l00107"></a>00107   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureHandle (<a class="code" href="structiTextureHandle.html">iTextureHandle</a> *tex);
+<a name="l00108"></a>00108   <span class="keyword">virtual</span> <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* GetTextureHandle ();
+<a name="l00109"></a>00109   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetKeyColor (<span class="keywordtype">int</span> &amp;red, <span class="keywordtype">int</span> &amp;green, <span class="keywordtype">int</span> &amp;blue) <span class="keyword">const</span>;
+<a name="l00110"></a>00110   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetFlags (<span class="keywordtype">int</span> flags);
+<a name="l00111"></a>00111   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetFlags () <span class="keyword">const</span>;
+<a name="l00112"></a>00112   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Register (<a class="code" href="structiTextureManager.html">iTextureManager</a> *txtmng);
+<a name="l00113"></a>00113   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetUseCallback (<a class="code" href="structiTextureCallback.html">iTextureCallback</a>* callback);
+<a name="l00114"></a>00114   <span class="keyword">virtual</span> <a class="code" href="structiTextureCallback.html">iTextureCallback</a>* GetUseCallback () <span class="keyword">const</span>;
+<a name="l00115"></a>00115   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Visit ();
+<a name="l00116"></a>00116   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsVisitRequired () <span class="keyword">const</span>;
+<a name="l00117"></a>00117   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetKeepImage (<span class="keywordtype">bool</span> k);
+<a name="l00118"></a>00118   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> KeepImage () <span class="keyword">const</span>;
+<a name="l00119"></a>00119   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetTextureClass (<span class="keyword">const</span> <span class="keywordtype">char</span>* className);
+<a name="l00120"></a>00120   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* GetTextureClass ();
+<a name="l00121"></a>00121 
+<a name="l00122"></a>00122   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetAlwaysAnimate () <span class="keyword">const</span>;
+<a name="l00123"></a>00123   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetAlwaysAnimate (<span class="keywordtype">bool</span> enable);
+<a name="l00124"></a>00124   <span class="keyword">virtual</span> <a class="code" href="structiTextureFactory.html">iTextureFactory</a>* GetFactory();
+<a name="l00125"></a>00125 
+<a name="l00126"></a>00126 <span class="keyword">public</span>:
+<a name="l00127"></a>00127   <span class="comment">// The current time the previous time the callback was called.</span>
+<a name="l00128"></a>00128   <span class="comment">// This is used to detect if the callback is called multiple times</span>
+<a name="l00129"></a>00129   <span class="comment">// in one frame.</span>
+<a name="l00130"></a><a class="code" href="classcsProcTexture.html#o0">00130</a>   <a class="code" href="cstypes_8h.html#a26">csTicks</a> last_cur_time;
+<a name="l00131"></a>00131 
+<a name="l00132"></a>00132 <span class="keyword">private</span>:
+<a name="l00133"></a>00133   <span class="keyword">static</span> <span class="keywordtype">void</span> ProcCallback (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* txt, <span class="keywordtype">void</span>* data);
+<a name="l00134"></a>00134 
+<a name="l00136"></a>00136   <a class="code" href="classcsRef.html">csRef&lt;iTextureFactory&gt;</a> parent;
+<a name="l00137"></a>00137 
+<a name="l00138"></a>00138 <span class="keyword">public</span>:
+<a name="l00139"></a>00139   <a class="code" href="classcsProcTexture.html">csProcTexture</a> (<a class="code" href="structiTextureFactory.html">iTextureFactory</a>* p = 0, <a class="code" href="structiImage.html">iImage</a>* image = 0);
+<a name="l00140"></a>00140   <span class="keyword">virtual</span> ~<a class="code" href="classcsProcTexture.html">csProcTexture</a> ();
+<a name="l00141"></a>00141 
+<a name="l00142"></a><a class="code" href="classcsProcTexture.html#a5">00142</a>   <a class="code" href="structiGraphics3D.html">iGraphics3D</a>* GetG3D () { <span class="keywordflow">return</span> g3d; }
+<a name="l00143"></a><a class="code" href="classcsProcTexture.html#a4">00143</a>   <a class="code" href="structiGraphics2D.html">iGraphics2D</a>* GetG2D () { <span class="keywordflow">return</span> g2d; }
 <a name="l00144"></a>00144 
-<a name="l00145"></a>00145 <span class="keyword">private</span>:
-<a name="l00146"></a>00146   <span class="keyword">static</span> <span class="keywordtype">void</span> ProcCallback (<a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* txt, <span class="keywordtype">void</span>* data);
-<a name="l00147"></a>00147 
-<a name="l00149"></a>00149   <a class="code" href="classcsRef.html">csRef&lt;iTextureFactory&gt;</a> parent;
-<a name="l00150"></a>00150 
-<a name="l00151"></a>00151 <span class="keyword">public</span>:
-<a name="l00152"></a>00152   <a class="code" href="group__scf.html#ga58">SCF_DECLARE_IBASE_EXT</a> (<a class="code" href="classcsObject.html">csObject</a>);
+<a name="l00152"></a><a class="code" href="classcsProcTexture.html#a2">00152</a>   <span class="keywordtype">void</span> DisableAutoUpdate () { use_cb = <span class="keyword">false</span>; }
 <a name="l00153"></a>00153 
-<a name="l00154"></a>00154   <a class="code" href="classcsProcTexture.html">csProcTexture</a> (<a class="code" href="structiTextureFactory.html">iTextureFactory</a>* p = 0, <a class="code" href="structiImage.html">iImage</a>* image = 0);
-<a name="l00155"></a>00155   <span class="keyword">virtual</span> ~<a class="code" href="classcsProcTexture.html">csProcTexture</a> ();
-<a name="l00156"></a>00156 
-<a name="l00157"></a><a class="code" href="classcsProcTexture.html#a5">00157</a>   <a class="code" href="structiGraphics3D.html">iGraphics3D</a>* GetG3D () { <span class="keywordflow">return</span> g3d; }
-<a name="l00158"></a><a class="code" href="classcsProcTexture.html#a4">00158</a>   <a class="code" href="structiGraphics2D.html">iGraphics2D</a>* GetG2D () { <span class="keywordflow">return</span> g2d; }
-<a name="l00159"></a>00159 
-<a name="l00167"></a><a class="code" href="classcsProcTexture.html#a2">00167</a>   <span class="keywordtype">void</span> DisableAutoUpdate () { use_cb = <span class="keyword">false</span>; }
-<a name="l00168"></a>00168 
-<a name="l00180"></a>00180   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
-<a name="l00181"></a>00181 
-<a name="l00190"></a>00190   <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <a class="code" href="structiEngine.html">iEngine</a>* engine,
-<a name="l00191"></a>00191         <a class="code" href="structiTextureManager.html">iTextureManager</a>* txtmgr, <span class="keyword">const</span> <span class="keywordtype">char</span>* name);
+<a name="l00165"></a>00165   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
+<a name="l00166"></a>00166 
+<a name="l00175"></a>00175   <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* Initialize (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg, <a class="code" href="structiEngine.html">iEngine</a>* engine,
+<a name="l00176"></a>00176         <a class="code" href="structiTextureManager.html">iTextureManager</a>* txtmgr, <span class="keyword">const</span> <span class="keywordtype">char</span>* name);
+<a name="l00177"></a>00177 
+<a name="l00181"></a>00181   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PrepareAnim ();
+<a name="l00182"></a>00182 
+<a name="l00184"></a><a class="code" href="classcsProcTexture.html#a10">00184</a>   <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> red, <span class="keywordtype">int</span> green, <span class="keywordtype">int</span> blue)
+<a name="l00185"></a>00185   {
+<a name="l00186"></a>00186     key_color = <span class="keyword">true</span>;
+<a name="l00187"></a>00187     key_red = red;
+<a name="l00188"></a>00188     key_green = green;
+<a name="l00189"></a>00189     key_blue = blue;
+<a name="l00190"></a>00190     tex-&gt;SetKeyColor (red, green, blue);
+<a name="l00191"></a>00191   }
 <a name="l00192"></a>00192 
-<a name="l00196"></a>00196   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> PrepareAnim ();
-<a name="l00197"></a>00197 
-<a name="l00199"></a><a class="code" href="classcsProcTexture.html#a11">00199</a>   <span class="keywordtype">void</span> SetKeyColor (<span class="keywordtype">int</span> red, <span class="keywordtype">int</span> green, <span class="keywordtype">int</span> blue)
-<a name="l00200"></a>00200   {
-<a name="l00201"></a>00201     key_color = <span class="keyword">true</span>;
-<a name="l00202"></a>00202     key_red = red;
-<a name="l00203"></a>00203     key_green = green;
-<a name="l00204"></a>00204     key_blue = blue;
-<a name="l00205"></a>00205   }
-<a name="l00206"></a>00206 
-<a name="l00211"></a>00211   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Animate (<a class="code" href="cstypes_8h.html#a26">csTicks</a> current_time) = 0;
-<a name="l00212"></a>00212 
-<a name="l00214"></a><a class="code" href="classcsProcTexture.html#a3">00214</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetDimension (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h)<span class="keyword"> const</span>
-<a name="l00215"></a>00215 <span class="keyword">  </span>{ w = mat_w; h = mat_h; }
-<a name="l00216"></a>00216 
-<a name="l00217"></a><a class="code" href="classcsProcTexture.html#e0">00217</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> GetRandom (<span class="keywordtype">int</span> max)
-<a name="l00218"></a>00218   {
-<a name="l00219"></a>00219     <span class="keywordflow">return</span> int ((<span class="keywordtype">float</span>(max)*rand()/(RAND_MAX+1.0)));
-<a name="l00220"></a>00220   }
-<a name="l00221"></a>00221 
-<a name="l00223"></a><a class="code" href="classcsProcTexture.html#a6">00223</a>   <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* GetTextureWrapper ()
-<a name="l00224"></a>00224   { <span class="keywordflow">return</span> &amp;scfiTextureWrapper; }
-<a name="l00225"></a>00225 
-<a name="l00226"></a>00226 };
-<a name="l00227"></a>00227 
-<a name="l00228"></a>00228 <span class="preprocessor">#endif // __CS_PROCTEX_H__</span>
+<a name="l00197"></a>00197   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Animate (<a class="code" href="cstypes_8h.html#a26">csTicks</a> current_time) = 0;
+<a name="l00198"></a>00198 
+<a name="l00200"></a><a class="code" href="classcsProcTexture.html#a3">00200</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GetDimension (<span class="keywordtype">int</span> &amp;w, <span class="keywordtype">int</span> &amp;h)<span class="keyword"> const</span>
+<a name="l00201"></a>00201 <span class="keyword">  </span>{ w = mat_w; h = mat_h; }
+<a name="l00202"></a>00202 
+<a name="l00203"></a><a class="code" href="classcsProcTexture.html#e0">00203</a>   <span class="keyword">static</span> <span class="keywordtype">int</span> GetRandom (<span class="keywordtype">int</span> max)
+<a name="l00204"></a>00204   {
+<a name="l00205"></a>00205     <span class="keywordflow">return</span> int ((<span class="keywordtype">float</span>(max)*rand()/(RAND_MAX+1.0)));
+<a name="l00206"></a>00206   }
+<a name="l00207"></a>00207 
+<a name="l00209"></a><a class="code" href="classcsProcTexture.html#a6">00209</a>   <a class="code" href="structiTextureWrapper.html">iTextureWrapper</a>* GetTextureWrapper ()
+<a name="l00210"></a>00210   { <span class="keywordflow">return</span> <span class="keyword">this</span>; }
+<a name="l00211"></a>00211 
+<a name="l00212"></a>00212 };
+<a name="l00213"></a>00213 
+<a name="l00214"></a>00214 <span class="preprocessor">#endif // __CS_PROCTEX_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

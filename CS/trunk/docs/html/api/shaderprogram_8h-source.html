@@ -41,10 +41,10 @@
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
 <a name="l00027"></a>00027 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
-<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="strhash_8h.html">csutil/strhash.h</a>"</span>
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032 <span class="preprocessor">#include "csutil/leakguard.h"</span>
+<a name="l00029"></a>00029 <span class="preprocessor">#include "csutil/leakguard.h"</span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="strhash_8h.html">csutil/strhash.h</a>"</span>
 <a name="l00033"></a>00033 <span class="preprocessor">#include "<a class="code" href="iutil_2strset_8h.html">iutil/strset.h</a>"</span>
 <a name="l00034"></a>00034 
 <a name="l00035"></a>00035 <span class="preprocessor">#include "<a class="code" href="shaderplugin_8h.html">csplugincommon/shader/shaderplugin.h</a>"</span>
@@ -54,8 +54,8 @@
 <a name="l00039"></a>00039 <span class="keyword">struct </span><a class="code" href="structiSyntaxService.html">iSyntaxService</a>;
 <a name="l00040"></a>00040 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
 <a name="l00041"></a>00041 
-<a name="l00049"></a><a class="code" href="classcsShaderProgram.html">00049</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsShaderProgram.html">csShaderProgram</a> : <span class="keyword">public</span> <a class="code" href="structiShaderProgram.html">iShaderProgram</a>,
-<a name="l00050"></a>00050                                                <span class="keyword">public</span> <a class="code" href="structiShaderTUResolver.html">iShaderTUResolver</a>
+<a name="l00049"></a><a class="code" href="classcsShaderProgram.html">00049</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsShaderProgram.html">csShaderProgram</a> : 
+<a name="l00050"></a>00050   <span class="keyword">public</span> <a class="code" href="classscfImplementation2.html">scfImplementation2</a>&lt;csShaderProgram, iShaderProgram, iShaderTUResolver&gt;
 <a name="l00051"></a>00051 {
 <a name="l00052"></a>00052 <span class="keyword">protected</span>:
 <a name="l00053"></a><a class="code" href="classcsShaderProgram.html#p0">00053</a>   <a class="code" href="classcsStringHash.html">csStringHash</a> commonTokens;
@@ -192,18 +192,16 @@
 <a name="l00212"></a>00212     <span class="keywordflow">return</span> f;
 <a name="l00213"></a>00213   }
 <a name="l00215"></a>00215 <span class="keyword">public</span>:
-<a name="l00216"></a><a class="code" href="classcsShaderProgram.html#o0">00216</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
+<a name="l00216"></a>00216   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsShaderProgram.html">csShaderProgram</a>);
 <a name="l00217"></a>00217 
-<a name="l00218"></a>00218   CS_LEAKGUARD_DECLARE (<a class="code" href="classcsShaderProgram.html">csShaderProgram</a>);
-<a name="l00219"></a>00219 
-<a name="l00220"></a>00220   <a class="code" href="classcsShaderProgram.html">csShaderProgram</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* objectReg);
-<a name="l00221"></a>00221   <span class="keyword">virtual</span> ~<a class="code" href="classcsShaderProgram.html">csShaderProgram</a> ();
-<a name="l00222"></a>00222 
-<a name="l00223"></a><a class="code" href="classcsShaderProgram.html#a2">00223</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiShaderTUResolver.html#a0">ResolveTextureBinding</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="comment">/*binding*/</span>)
-<a name="l00224"></a>00224   { <span class="keywordflow">return</span> -1; }
-<a name="l00225"></a>00225 };
-<a name="l00226"></a>00226 
-<a name="l00229"></a>00229 <span class="preprocessor">#endif // __CS_SHADERPLUGINS_COMMON_SHADERPROGRAM_H__</span>
+<a name="l00218"></a>00218   <a class="code" href="classcsShaderProgram.html">csShaderProgram</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* objectReg);
+<a name="l00219"></a>00219   <span class="keyword">virtual</span> ~<a class="code" href="classcsShaderProgram.html">csShaderProgram</a> ();
+<a name="l00220"></a>00220 
+<a name="l00221"></a><a class="code" href="classcsShaderProgram.html#a2">00221</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> ResolveTextureBinding (<span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="comment">/*binding*/</span>)
+<a name="l00222"></a>00222   { <span class="keywordflow">return</span> -1; }
+<a name="l00223"></a>00223 };
+<a name="l00224"></a>00224 
+<a name="l00227"></a>00227 <span class="preprocessor">#endif // __CS_SHADERPLUGINS_COMMON_SHADERPROGRAM_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

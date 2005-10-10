@@ -39,47 +39,48 @@
 <a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_SHDL_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00022"></a>00022 <span class="preprocessor">#include "csextern.h"</span>
-<a name="l00023"></a>00023 <span class="preprocessor">#include "isound/handle.h"</span>
-<a name="l00024"></a>00024 <span class="keyword">struct </span><a class="code" href="structiSoundData.html">iSoundData</a>;
-<a name="l00025"></a>00025 
-<a name="l00026"></a><a class="code" href="classcsSoundHandle.html">00026</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSoundHandle.html">csSoundHandle</a> : <span class="keyword">public</span> <a class="code" href="structiSoundHandle.html">iSoundHandle</a>
-<a name="l00027"></a>00027 {
-<a name="l00028"></a>00028 <span class="keyword">public</span>:
-<a name="l00029"></a><a class="code" href="classcsSoundHandle.html#o4">00029</a>   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
-<a name="l00030"></a>00030   <span class="comment">// the sound data for this handle</span>
-<a name="l00031"></a><a class="code" href="classcsSoundHandle.html#o1">00031</a>   <a class="code" href="classcsRef.html">csRef&lt;iSoundData&gt;</a> Data;
-<a name="l00032"></a>00032   <span class="comment">// is this sound registered?</span>
-<a name="l00033"></a><a class="code" href="classcsSoundHandle.html#o3">00033</a>   <span class="keywordtype">bool</span> Registered;
-<a name="l00034"></a>00034   <span class="comment">// This is a streamed sound and the stream is started</span>
-<a name="l00035"></a><a class="code" href="classcsSoundHandle.html#o0">00035</a>   <span class="keywordtype">bool</span> ActiveStream;
-<a name="l00036"></a>00036   <span class="comment">// loop the stream</span>
-<a name="l00037"></a><a class="code" href="classcsSoundHandle.html#o2">00037</a>   <span class="keywordtype">bool</span> LoopStream;
-<a name="l00038"></a>00038 
-<a name="l00039"></a>00039   <span class="comment">// constructor</span>
-<a name="l00040"></a>00040   <a class="code" href="classcsSoundHandle.html">csSoundHandle</a>(<a class="code" href="structiSoundData.html">iSoundData</a>*);
-<a name="l00041"></a>00041   <span class="comment">// destructor</span>
-<a name="l00042"></a>00042   <span class="keyword">virtual</span> ~<a class="code" href="classcsSoundHandle.html">csSoundHandle</a>();
-<a name="l00043"></a>00043   <span class="comment">// release the sound data</span>
-<a name="l00044"></a>00044   <span class="keywordtype">void</span> ReleaseSoundData();
-<a name="l00045"></a>00045   <span class="comment">// update the sound handle</span>
-<a name="l00046"></a>00046   <span class="keywordtype">void</span> Update_Time(<a class="code" href="cstypes_8h.html#a26">csTicks</a> ElapsedTime);
-<a name="l00047"></a>00047   <span class="keywordtype">void</span> UpdateCount(<span class="keywordtype">long</span> NumSamples);
-<a name="l00048"></a>00048   <span class="comment">// implementation-specific update method</span>
-<a name="l00049"></a>00049   <span class="keyword">virtual</span> <span class="keywordtype">void</span> vUpdate(<span class="keywordtype">void</span> *buf, <span class="keywordtype">long</span> NumSamples) = 0;
-<a name="l00050"></a>00050 
-<a name="l00051"></a>00051   <span class="comment">// is this a static or streamed sound?</span>
-<a name="l00052"></a>00052   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSoundHandle.html#a1">IsStatic</a>();
-<a name="l00053"></a>00053   <span class="comment">// play an instance of this sound</span>
-<a name="l00054"></a>00054   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSoundSource&gt;</a> <a class="code" href="structiSoundHandle.html#a2">Play</a>(<span class="keywordtype">bool</span> Loop);
-<a name="l00055"></a>00055   <span class="comment">// Start playing the stream (only for streamed sound)</span>
-<a name="l00056"></a>00056   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSoundHandle.html#a4">StartStream</a>(<span class="keywordtype">bool</span> Loop);
-<a name="l00057"></a>00057   <span class="comment">// Stop playing the stream</span>
-<a name="l00058"></a>00058   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSoundHandle.html#a5">StopStream</a>();
-<a name="l00059"></a>00059   <span class="comment">// Reset the stream to the beginning</span>
-<a name="l00060"></a>00060   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSoundHandle.html#a3">ResetStream</a>();
-<a name="l00061"></a>00061 };
-<a name="l00062"></a>00062 
-<a name="l00063"></a>00063 <span class="preprocessor">#endif // __CS_SHDL_H__</span>
+<a name="l00023"></a>00023 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
+<a name="l00024"></a>00024 <span class="preprocessor">#include "isound/handle.h"</span>
+<a name="l00025"></a>00025 <span class="keyword">struct </span><a class="code" href="structiSoundData.html">iSoundData</a>;
+<a name="l00026"></a>00026 
+<a name="l00027"></a><a class="code" href="classcsSoundHandle.html">00027</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsSoundHandle.html">csSoundHandle</a> : 
+<a name="l00028"></a>00028   <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;csSoundHandle, iSoundHandle&gt;
+<a name="l00029"></a>00029 {
+<a name="l00030"></a>00030 <span class="keyword">public</span>:
+<a name="l00031"></a>00031   <span class="comment">// the sound data for this handle</span>
+<a name="l00032"></a><a class="code" href="classcsSoundHandle.html#o1">00032</a>   <a class="code" href="classcsRef.html">csRef&lt;iSoundData&gt;</a> Data;
+<a name="l00033"></a>00033   <span class="comment">// is this sound registered?</span>
+<a name="l00034"></a><a class="code" href="classcsSoundHandle.html#o3">00034</a>   <span class="keywordtype">bool</span> Registered;
+<a name="l00035"></a>00035   <span class="comment">// This is a streamed sound and the stream is started</span>
+<a name="l00036"></a><a class="code" href="classcsSoundHandle.html#o0">00036</a>   <span class="keywordtype">bool</span> ActiveStream;
+<a name="l00037"></a>00037   <span class="comment">// loop the stream</span>
+<a name="l00038"></a><a class="code" href="classcsSoundHandle.html#o2">00038</a>   <span class="keywordtype">bool</span> LoopStream;
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040   <span class="comment">// constructor</span>
+<a name="l00041"></a>00041   <a class="code" href="classcsSoundHandle.html">csSoundHandle</a>(<a class="code" href="structiSoundData.html">iSoundData</a>*);
+<a name="l00042"></a>00042   <span class="comment">// destructor</span>
+<a name="l00043"></a>00043   <span class="keyword">virtual</span> ~<a class="code" href="classcsSoundHandle.html">csSoundHandle</a>();
+<a name="l00044"></a>00044   <span class="comment">// release the sound data</span>
+<a name="l00045"></a>00045   <span class="keywordtype">void</span> ReleaseSoundData();
+<a name="l00046"></a>00046   <span class="comment">// update the sound handle</span>
+<a name="l00047"></a>00047   <span class="keywordtype">void</span> Update_Time(<a class="code" href="cstypes_8h.html#a26">csTicks</a> ElapsedTime);
+<a name="l00048"></a>00048   <span class="keywordtype">void</span> UpdateCount(<span class="keywordtype">long</span> NumSamples);
+<a name="l00049"></a>00049   <span class="comment">// implementation-specific update method</span>
+<a name="l00050"></a>00050   <span class="keyword">virtual</span> <span class="keywordtype">void</span> vUpdate(<span class="keywordtype">void</span> *buf, <span class="keywordtype">long</span> NumSamples) = 0;
+<a name="l00051"></a>00051 
+<a name="l00052"></a>00052   <span class="comment">// is this a static or streamed sound?</span>
+<a name="l00053"></a>00053   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> IsStatic();
+<a name="l00054"></a>00054   <span class="comment">// play an instance of this sound</span>
+<a name="l00055"></a>00055   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iSoundSource&gt;</a> Play(<span class="keywordtype">bool</span> Loop);
+<a name="l00056"></a>00056   <span class="comment">// Start playing the stream (only for streamed sound)</span>
+<a name="l00057"></a>00057   <span class="keyword">virtual</span> <span class="keywordtype">void</span> StartStream(<span class="keywordtype">bool</span> Loop);
+<a name="l00058"></a>00058   <span class="comment">// Stop playing the stream</span>
+<a name="l00059"></a>00059   <span class="keyword">virtual</span> <span class="keywordtype">void</span> StopStream();
+<a name="l00060"></a>00060   <span class="comment">// Reset the stream to the beginning</span>
+<a name="l00061"></a>00061   <span class="keyword">virtual</span> <span class="keywordtype">void</span> ResetStream();
+<a name="l00062"></a>00062 };
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 <span class="preprocessor">#endif // __CS_SHDL_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.4 
 </small></address> </div></body> </html>

@@ -39,46 +39,46 @@
 <a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_UTIL_PROFILE_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00026"></a>00026 <span class="preprocessor">#include "csextern.h"</span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
-<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
-<a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <span class="preprocessor">#ifdef CS_DO_PROFILING</span>
-<a name="l00031"></a>00031 <span class="preprocessor"></span>
-<a name="l00032"></a>00032 <span class="preprocessor">#include &lt;sys/time.h&gt;</span>
-<a name="l00033"></a>00033 
-<a name="l00034"></a>00034 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (iProfiler, 0, 0, 1);
+<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="array_8h.html">csutil/array.h</a>"</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="csstring_8h.html">csutil/csstring.h</a>"</span>
+<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
+<a name="l00030"></a>00030 
+<a name="l00031"></a>00031 <span class="preprocessor">#ifdef CS_DO_PROFILING</span>
+<a name="l00032"></a>00032 <span class="preprocessor"></span>
+<a name="l00033"></a>00033 <span class="preprocessor">#include &lt;sys/time.h&gt;</span>
+<a name="l00034"></a>00034 
 <a name="l00035"></a>00035 
-<a name="l00036"></a>00036 <span class="keyword">struct </span>iProfiler : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00036"></a>00036 <span class="keyword">struct </span>iProfiler : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
 <a name="l00037"></a>00037 {
-<a name="l00038"></a>00038   <span class="keyword">virtual</span> <span class="keywordtype">void</span> RegisterProfilePoint (<span class="keyword">const</span> <span class="keywordtype">char</span>* token,
-<a name="l00039"></a>00039         <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line,
-<a name="l00040"></a>00040         <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_count, <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_time,
-<a name="l00041"></a>00041         <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_timemin, <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_timemax) = 0;
-<a name="l00042"></a>00042   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Dump () = 0;
-<a name="l00043"></a>00043   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Reset () = 0;
-<a name="l00044"></a>00044 };
-<a name="l00045"></a>00045 
-<a name="l00046"></a>00046 <span class="keyword">struct </span>csProfileInfo
-<a name="l00047"></a>00047 {
-<a name="l00048"></a>00048   <span class="keyword">const</span> <span class="keywordtype">char</span>* token;
-<a name="l00049"></a>00049   <span class="keyword">const</span> <span class="keywordtype">char</span>* file;
-<a name="l00050"></a>00050   <span class="keywordtype">int</span> line;
-<a name="l00051"></a>00051   <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_count;
-<a name="l00052"></a>00052   <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_time;
-<a name="l00053"></a>00053   <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_timemin;
-<a name="l00054"></a>00054   <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_timemax;
-<a name="l00055"></a>00055 };
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057 <span class="keyword">class </span>csProfiler : <span class="keyword">public</span> iProfiler
-<a name="l00058"></a>00058 {
-<a name="l00059"></a>00059 <span class="keyword">public</span>:
-<a name="l00060"></a>00060   <a class="code" href="classcsArray.html">csArray&lt;csProfileInfo&gt;</a> profile_info;
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062 <span class="keyword">public</span>:
-<a name="l00063"></a>00063   csProfiler ();
-<a name="l00064"></a>00064   <span class="keyword">virtual</span> ~csProfiler ();
-<a name="l00065"></a>00065 
-<a name="l00066"></a>00066   <a class="code" href="group__scf.html#ga32">SCF_DECLARE_IBASE</a>;
+<a name="l00038"></a>00038   <a class="code" href="group__scf.html#ga81">SCF_INTERFACE</a>(iProfiler, 2,0,0);
+<a name="l00039"></a>00039   <span class="keyword">virtual</span> <span class="keywordtype">void</span> RegisterProfilePoint (<span class="keyword">const</span> <span class="keywordtype">char</span>* token,
+<a name="l00040"></a>00040         <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line,
+<a name="l00041"></a>00041         <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_count, <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_time,
+<a name="l00042"></a>00042         <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_timemin, <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_timemax) = 0;
+<a name="l00043"></a>00043   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Dump () = 0;
+<a name="l00044"></a>00044   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Reset () = 0;
+<a name="l00045"></a>00045 };
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047 <span class="keyword">struct </span>csProfileInfo
+<a name="l00048"></a>00048 {
+<a name="l00049"></a>00049   <span class="keyword">const</span> <span class="keywordtype">char</span>* token;
+<a name="l00050"></a>00050   <span class="keyword">const</span> <span class="keywordtype">char</span>* file;
+<a name="l00051"></a>00051   <span class="keywordtype">int</span> line;
+<a name="l00052"></a>00052   <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_count;
+<a name="l00053"></a>00053   <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_time;
+<a name="l00054"></a>00054   <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_timemin;
+<a name="l00055"></a>00055   <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_timemax;
+<a name="l00056"></a>00056 };
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058 <span class="keyword">class </span>csProfiler : <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;csProfiler, iProfiler&gt;
+<a name="l00059"></a>00059 {
+<a name="l00060"></a>00060 <span class="keyword">public</span>:
+<a name="l00061"></a>00061   <a class="code" href="classcsArray.html">csArray&lt;csProfileInfo&gt;</a> profile_info;
+<a name="l00062"></a>00062 
+<a name="l00063"></a>00063 <span class="keyword">public</span>:
+<a name="l00064"></a>00064   csProfiler ();
+<a name="l00065"></a>00065   <span class="keyword">virtual</span> ~csProfiler ();
+<a name="l00066"></a>00066 
 <a name="l00067"></a>00067   <span class="keyword">virtual</span> <span class="keywordtype">void</span> RegisterProfilePoint (<span class="keyword">const</span> <span class="keywordtype">char</span>* token,
 <a name="l00068"></a>00068         <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line,
 <a name="l00069"></a>00069         <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_count, <a class="code" href="cstypes_8h.html#a13">uint32</a>* ptr_time,

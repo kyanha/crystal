@@ -38,55 +38,55 @@
 <a name="l00019"></a>00019 <span class="preprocessor">#ifndef __CS_IUTIL_CFGFILE_H__</span>
 <a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IUTIL_CFGFILE_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
-<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-<a name="l00028"></a>00028 <span class="keyword">struct </span><a class="code" href="structiConfigIterator.html">iConfigIterator</a>;
-<a name="l00029"></a>00029 <span class="keyword">struct </span><a class="code" href="structiVFS.html">iVFS</a>;
-<a name="l00030"></a>00030 
-<a name="l00031"></a>00031 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a>(<a class="code" href="structiConfigFile.html">iConfigFile</a>, 0, 0, 2);
+<a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="scf__interface_8h.html">csutil/scf_interface.h</a>"</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
+<a name="l00029"></a>00029 <span class="keyword">struct </span><a class="code" href="structiConfigIterator.html">iConfigIterator</a>;
+<a name="l00030"></a>00030 <span class="keyword">struct </span><a class="code" href="structiVFS.html">iVFS</a>;
+<a name="l00031"></a>00031 
 <a name="l00032"></a>00032 
-<a name="l00036"></a><a class="code" href="structiConfigFile.html">00036</a> <span class="keyword">struct </span><a class="code" href="structiConfigFile.html">iConfigFile</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00036"></a><a class="code" href="structiConfigFile.html">00036</a> <span class="keyword">struct </span><a class="code" href="structiConfigFile.html">iConfigFile</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
 <a name="l00037"></a>00037 {
-<a name="l00039"></a>00039   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiConfigFile.html#a6">GetFileName</a> () <span class="keyword">const </span>= 0;
-<a name="l00040"></a>00040 
-<a name="l00045"></a>00045   <span class="keyword">virtual</span> <a class="code" href="structiVFS.html">iVFS</a>* <a class="code" href="structiConfigFile.html#a10">GetVFS</a> () <span class="keyword">const </span>= 0;
-<a name="l00046"></a>00046 
-<a name="l00051"></a>00051   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a18">SetFileName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>*, <a class="code" href="structiVFS.html">iVFS</a>*) = 0;
-<a name="l00052"></a>00052 
-<a name="l00068"></a>00068   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a12">Load</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* iFileName, <a class="code" href="structiVFS.html">iVFS</a>* = 0, <span class="keywordtype">bool</span> Merge = <span class="keyword">false</span>,
-<a name="l00069"></a>00069     <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>) = 0;
-<a name="l00070"></a>00070 
-<a name="l00075"></a>00075   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a14">Save</a> () = 0;
-<a name="l00076"></a>00076 
-<a name="l00083"></a>00083   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a14">Save</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iFileName, <a class="code" href="structiVFS.html">iVFS</a>* = 0) = 0;
-<a name="l00084"></a>00084 
-<a name="l00086"></a>00086   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a0">Clear</a> () = 0;
-<a name="l00087"></a>00087 
-<a name="l00094"></a>00094   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iConfigIterator&gt;</a> <a class="code" href="structiConfigFile.html#a2">Enumerate</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Subsection = 0) = 0;
-<a name="l00095"></a>00095 
-<a name="l00097"></a>00097   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a11">KeyExists</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) <span class="keyword">const </span>= 0;
-<a name="l00099"></a>00099   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a22">SubsectionExists</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Subsection) <span class="keyword">const </span>= 0;
-<a name="l00100"></a>00100 
-<a name="l00105"></a>00105   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiConfigFile.html#a8">GetInt</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">int</span> Def = 0) <span class="keyword">const </span>= 0;
-<a name="l00110"></a>00110   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiConfigFile.html#a7">GetFloat</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">float</span> Def = 0.0) <span class="keyword">const </span>= 0;
-<a name="l00115"></a>00115   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiConfigFile.html#a9">GetStr</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Def = <span class="stringliteral">""</span>) <span class="keyword">const </span>= 0;
-<a name="l00120"></a>00120   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a3">GetBool</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">bool</span> Def = <span class="keyword">false</span>) <span class="keyword">const </span>= 0;
-<a name="l00122"></a>00122   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiConfigFile.html#a4">GetComment</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) <span class="keyword">const </span>= 0;
-<a name="l00123"></a>00123 
-<a name="l00125"></a>00125   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a21">SetStr</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Val) = 0;
-<a name="l00127"></a>00127   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a20">SetInt</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">int</span> Value) = 0;
-<a name="l00129"></a>00129   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a19">SetFloat</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">float</span> Value) = 0;
-<a name="l00131"></a>00131   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a15">SetBool</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">bool</span> Value) = 0;
-<a name="l00138"></a>00138   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a16">SetComment</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Text) = 0;
-<a name="l00140"></a>00140   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a1">DeleteKey</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) = 0;
-<a name="l00142"></a>00142   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiConfigFile.html#a5">GetEOFComment</a> () <span class="keyword">const </span>= 0;
-<a name="l00144"></a>00144   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a17">SetEOFComment</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Text) = 0;
-<a name="l00145"></a>00145 };
-<a name="l00146"></a>00146 
+<a name="l00038"></a>00038   SCF_INTERFACE(<a class="code" href="structiConfigFile.html">iConfigFile</a>, 2,0,0);
+<a name="l00040"></a>00040   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code" href="structiConfigFile.html#a6">GetFileName</a> () <span class="keyword">const </span>= 0;
+<a name="l00041"></a>00041 
+<a name="l00046"></a>00046   <span class="keyword">virtual</span> <a class="code" href="structiVFS.html">iVFS</a>* <a class="code" href="structiConfigFile.html#a10">GetVFS</a> () <span class="keyword">const </span>= 0;
+<a name="l00047"></a>00047 
+<a name="l00052"></a>00052   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a19">SetFileName</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>*, <a class="code" href="structiVFS.html">iVFS</a>*) = 0;
+<a name="l00053"></a>00053 
+<a name="l00069"></a>00069   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a12">Load</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* iFileName, <a class="code" href="structiVFS.html">iVFS</a>* = 0, <span class="keywordtype">bool</span> Merge = <span class="keyword">false</span>,
+<a name="l00070"></a>00070     <span class="keywordtype">bool</span> NewWins = <span class="keyword">true</span>) = 0;
+<a name="l00071"></a>00071 
+<a name="l00076"></a>00076   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a14">Save</a> () = 0;
+<a name="l00077"></a>00077 
+<a name="l00084"></a>00084   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a14">Save</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *iFileName, <a class="code" href="structiVFS.html">iVFS</a>* = 0) = 0;
+<a name="l00085"></a>00085 
+<a name="l00087"></a>00087   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a0">Clear</a> () = 0;
+<a name="l00088"></a>00088 
+<a name="l00095"></a>00095   <span class="keyword">virtual</span> <a class="code" href="classcsPtr.html">csPtr&lt;iConfigIterator&gt;</a> <a class="code" href="structiConfigFile.html#a2">Enumerate</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Subsection = 0) = 0;
+<a name="l00096"></a>00096 
+<a name="l00098"></a>00098   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a11">KeyExists</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) <span class="keyword">const </span>= 0;
+<a name="l00100"></a>00100   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a23">SubsectionExists</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Subsection) <span class="keyword">const </span>= 0;
+<a name="l00101"></a>00101 
+<a name="l00106"></a>00106   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiConfigFile.html#a8">GetInt</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">int</span> Def = 0) <span class="keyword">const </span>= 0;
+<a name="l00111"></a>00111   <span class="keyword">virtual</span> <span class="keywordtype">float</span> <a class="code" href="structiConfigFile.html#a7">GetFloat</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">float</span> Def = 0.0) <span class="keyword">const </span>= 0;
+<a name="l00116"></a>00116   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiConfigFile.html#a9">GetStr</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Def = <span class="stringliteral">""</span>) <span class="keyword">const </span>= 0;
+<a name="l00121"></a>00121   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a3">GetBool</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">bool</span> Def = <span class="keyword">false</span>) <span class="keyword">const </span>= 0;
+<a name="l00123"></a>00123   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiConfigFile.html#a4">GetComment</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) <span class="keyword">const </span>= 0;
+<a name="l00124"></a>00124 
+<a name="l00126"></a>00126   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a22">SetStr</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Val) = 0;
+<a name="l00128"></a>00128   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a21">SetInt</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">int</span> Value) = 0;
+<a name="l00130"></a>00130   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a20">SetFloat</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">float</span> Value) = 0;
+<a name="l00132"></a>00132   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a16">SetBool</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keywordtype">bool</span> Value) = 0;
+<a name="l00139"></a>00139   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiConfigFile.html#a17">SetComment</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key, <span class="keyword">const</span> <span class="keywordtype">char</span> *Text) = 0;
+<a name="l00141"></a>00141   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a1">DeleteKey</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Key) = 0;
+<a name="l00143"></a>00143   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiConfigFile.html#a5">GetEOFComment</a> () <span class="keyword">const </span>= 0;
+<a name="l00145"></a>00145   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiConfigFile.html#a18">SetEOFComment</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> *Text) = 0;
+<a name="l00146"></a>00146 };
 <a name="l00147"></a>00147 
-<a name="l00148"></a>00148 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a>(<a class="code" href="structiConfigIterator.html">iConfigIterator</a>, 0, 0, 1);
-<a name="l00149"></a>00149 
-<a name="l00154"></a><a class="code" href="structiConfigIterator.html">00154</a> <span class="keyword">struct </span><a class="code" href="structiConfigIterator.html">iConfigIterator</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00155"></a>00155 {
+<a name="l00148"></a>00148 
+<a name="l00153"></a><a class="code" href="structiConfigIterator.html">00153</a> <span class="keyword">struct </span><a class="code" href="structiConfigIterator.html">iConfigIterator</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00154"></a>00154 {
+<a name="l00155"></a>00155   SCF_INTERFACE(<a class="code" href="structiConfigIterator.html">iConfigIterator</a>, 2,0,0);
 <a name="l00157"></a>00157   <span class="keyword">virtual</span> <a class="code" href="structiConfigFile.html">iConfigFile</a> *<a class="code" href="structiConfigIterator.html#a2">GetConfigFile</a> () <span class="keyword">const </span>= 0;
 <a name="l00159"></a>00159   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiConfigIterator.html#a7">GetSubsection</a> () <span class="keyword">const </span>= 0;
 <a name="l00160"></a>00160 

@@ -39,21 +39,21 @@
 <a name="l00020"></a>00020 <span class="preprocessor">#ifndef __CS_IUTIL_STRING_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IUTIL_STRING_H__</span>
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
-<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
+<a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="scf__interface_8h.html">csutil/scf_interface.h</a>"</span>
 <a name="l00029"></a>00029 
-<a name="l00030"></a>00030 <a class="code" href="group__scf.html#ga83">SCF_VERSION</a> (<a class="code" href="structiString.html">iString</a>, 0, 2, 1);
-<a name="l00031"></a>00031 
-<a name="l00033"></a><a class="code" href="structiString.html">00033</a> <span class="keyword">struct </span><a class="code" href="structiString.html">iString</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00034"></a>00034 {
-<a name="l00043"></a>00043   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a35">SetCapacity</a> (size_t NewSize) = 0;
+<a name="l00030"></a>00030 
+<a name="l00032"></a><a class="code" href="structiString.html">00032</a> <span class="keyword">struct </span><a class="code" href="structiString.html">iString</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00033"></a>00033 {
+<a name="l00034"></a>00034   SCF_INTERFACE(<a class="code" href="structiString.html">iString</a>, 2,0,0);
+<a name="l00043"></a>00043   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a36">SetCapacity</a> (size_t NewSize) = 0;
 <a name="l00045"></a>00045   <span class="keyword">virtual</span> size_t <a class="code" href="structiString.html#a14">GetCapacity</a> () <span class="keyword">const </span>= 0;
 <a name="l00046"></a>00046 
-<a name="l00059"></a>00059   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a36">SetGrowsBy</a>(size_t) = 0;
+<a name="l00059"></a>00059   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a37">SetGrowsBy</a>(size_t) = 0;
 <a name="l00065"></a>00065   <span class="keyword">virtual</span> size_t <a class="code" href="structiString.html#a17">GetGrowsBy</a>() <span class="keyword">const </span>= 0;
 <a name="l00066"></a>00066 
-<a name="l00076"></a>00076   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a40">Truncate</a> (size_t Len) = 0;
+<a name="l00076"></a>00076   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a41">Truncate</a> (size_t Len) = 0;
 <a name="l00077"></a>00077 
-<a name="l00086"></a>00086   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a37">ShrinkBestFit</a> () = 0;
+<a name="l00086"></a>00086   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a38">ShrinkBestFit</a> () = 0;
 <a name="l00087"></a>00087 
 <a name="l00097"></a>00097   <a class="code" href="cssysdef_8h.html#a39">CS_DEPRECATED_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a30">Reclaim</a> () = 0;
 <a name="l00098"></a>00098 
@@ -77,7 +77,7 @@
 <a name="l00151"></a>00151 
 <a name="l00153"></a>00153   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <a class="code" href="structiString.html#a28">operator [] </a>(size_t n) <span class="keyword">const </span>= 0;
 <a name="l00154"></a>00154 
-<a name="l00161"></a>00161   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a34">SetAt</a> (size_t n, <span class="keywordtype">char</span> iChar) = 0;
+<a name="l00161"></a>00161   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a35">SetAt</a> (size_t n, <span class="keywordtype">char</span> iChar) = 0;
 <a name="l00162"></a>00162 
 <a name="l00164"></a>00164   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <a class="code" href="structiString.html#a13">GetAt</a> (size_t n) <span class="keyword">const </span>= 0;
 <a name="l00165"></a>00165 
@@ -89,9 +89,9 @@
 <a name="l00189"></a>00189 
 <a name="l00196"></a>00196   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a1">Append</a> (<span class="keyword">const</span> <a class="code" href="structiString.html">iString</a>* Str, size_t Count = (size_t)-1) = 0;
 <a name="l00197"></a>00197 
-<a name="l00204"></a>00204   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iString&gt;</a> <a class="code" href="structiString.html#a38">Slice</a> (size_t start, size_t len) <span class="keyword">const </span>= 0;
+<a name="l00204"></a>00204   <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iString&gt;</a> <a class="code" href="structiString.html#a39">Slice</a> (size_t start, size_t len) <span class="keyword">const </span>= 0;
 <a name="l00205"></a>00205 
-<a name="l00216"></a>00216   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a39">SubString</a> (<a class="code" href="structiString.html">iString</a>* sub, size_t start, size_t len) <span class="keyword">const </span>= 0;
+<a name="l00216"></a>00216   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a40">SubString</a> (<a class="code" href="structiString.html">iString</a>* sub, size_t start, size_t len) <span class="keyword">const </span>= 0;
 <a name="l00217"></a>00217 
 <a name="l00224"></a>00224   <span class="keyword">virtual</span> size_t <a class="code" href="structiString.html#a9">FindFirst</a> (<span class="keyword">const</span> <span class="keywordtype">char</span> c, size_t p = (size_t)-1) <span class="keyword">const </span>= 0;
 <a name="l00225"></a>00225 
@@ -127,7 +127,7 @@
 <a name="l00329"></a>00329 
 <a name="l00331"></a>00331   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a6">Downcase</a>() = 0;
 <a name="l00332"></a>00332 
-<a name="l00334"></a>00334   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a41">Upcase</a>() = 0;
+<a name="l00334"></a>00334   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiString.html#a42">Upcase</a>() = 0;
 <a name="l00335"></a>00335 };
 <a name="l00336"></a>00336 
 <a name="l00339"></a>00339 <span class="preprocessor">#endif // __CS_IUTIL_STRING_H__</span>
