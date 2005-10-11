@@ -178,10 +178,6 @@ SOURCE=..\..\plugins\aws2\registrar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\aws2\registry.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\aws2\widget.cpp
 # End Source File
 # Begin Source File
@@ -235,10 +231,6 @@ SOURCE=..\..\plugins\aws2\property.h
 # Begin Source File
 
 SOURCE=..\..\plugins\aws2\registrar.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\aws2\registry.h
 # End Source File
 # Begin Source File
 
