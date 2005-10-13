@@ -60,94 +60,111 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a6">CS_CLIPPER_TOPLEVEL</a>&nbsp;&nbsp;&nbsp;1</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clipper is top-level.  <a href="#a6"></a><br></td></tr>
-<tr><td colspan="2"><br><h2>Mix modes for DrawPolygonFX ()</h2></td></tr>
-<tr><td colspan="2">The constants can be ORed together if they belong to different masks. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a20">CS_FX_ADD</a>&nbsp;&nbsp;&nbsp;0x30000000</td></tr>
+<tr><td colspan="2"><br><h2>Mix modes</h2></td></tr>
+<tr><td colspan="2">The mix mode specifies how a shaded fragment (denoted as <code>SRC</code>) is mixed (or <em>blended</em>) with the framebuffer fragment (<code>DST</code>). <br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a19">CS_FX_SETALPHA</a>(alpha)&nbsp;&nbsp;&nbsp;(CS_FX_ALPHA | <a class="el" href="cstypes_8h.html#a27">uint</a> (alpha * CS_FX_MASK_ALPHA))</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">=SRC+DST  <a href="#a20"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a21">CS_FX_ALPHA</a>&nbsp;&nbsp;&nbsp;0x40000000</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Macro for setting of alpha bits into mixmode (alpha between 0 and 1).  <a href="#a19"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a20">CS_FX_SETALPHA_INT</a>(alpha)&nbsp;&nbsp;&nbsp;(CS_FX_ALPHA | <a class="el" href="cstypes_8h.html#a27">uint</a> (alpha &amp; CS_FX_MASK_ALPHA))</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">=(1-alpha)*SRC + alpha*DST  <a href="#a21"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a17">CS_FX_COPY</a>&nbsp;&nbsp;&nbsp;0x00000000</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Macro for setting of alpha bits into mixmode (alpha between 0 and 255).  <a href="#a20"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a16">CS_MIXMODE_BLEND</a>(Src, Dst)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">=SRC  <a href="#a17"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a23">CS_FX_DESTALPHAADD</a>&nbsp;&nbsp;&nbsp;0x60000000</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Helper macro to construct a blending operation mixmode.  <a href="#a16"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a18">CS_MIXMODE_BLENDOP_DST</a>(mode)&nbsp;&nbsp;&nbsp;((mode &gt;&gt; 16) &amp; CS_MIXMODE_FACT_MASK)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">=(dstalpha)*SRC + DST  <a href="#a23"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a28">CS_FX_FLAT</a>&nbsp;&nbsp;&nbsp;0x04000000</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Helper macro to extract the <code>dstFactor</code> from a blending op mixmode.  <a href="#a18"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a17">CS_MIXMODE_BLENDOP_SRC</a>(mode)&nbsp;&nbsp;&nbsp;((mode &gt;&gt; 20) &amp; CS_MIXMODE_FACT_MASK)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Flat shading.  <a href="#a28"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a27">CS_FX_KEYCOLOR</a>&nbsp;&nbsp;&nbsp;0x08000000</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Helper macro to extract the <code>srcFactor</code> from a blending op mixmode.  <a href="#a17"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="graph3d_8h.html#a129a72">CS_MIXMODE_TYPE_AUTO</a> =  0x00000000, 
+<a class="el" href="graph3d_8h.html#a129a73">CS_MIXMODE_TYPE_BLENDOP</a> =  0x40000000, 
+<a class="el" href="graph3d_8h.html#a129a74">CS_MIXMODE_TYPE_MESH</a> =  0x80000000, 
+<a class="el" href="graph3d_8h.html#a129a75">CS_MIXMODE_TYPE_MASK</a> =  0xc0000000
+ }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">color 0 is transparent  <a href="#a27"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a30">CS_FX_MASK_ALPHA</a>&nbsp;&nbsp;&nbsp;0x000000FF</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Mix mode types.  <a href="graph3d_8h.html#a129">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a130a76">CS_MIXMODE_FACT_ZERO</a> =  0x0, 
+<a class="el" href="graph3d_8h.html#a130a77">CS_MIXMODE_FACT_ONE</a> =  0x1, 
+<a class="el" href="graph3d_8h.html#a130a78">CS_MIXMODE_FACT_SRCCOLOR</a> =  0x2, 
+<a class="el" href="graph3d_8h.html#a130a79">CS_MIXMODE_FACT_SRCCOLOR_INV</a> =  0x3, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a130a80">CS_MIXMODE_FACT_DSTCOLOR</a> =  0x4, 
+<a class="el" href="graph3d_8h.html#a130a81">CS_MIXMODE_FACT_DSTCOLOR_INV</a> =  0x5, 
+<a class="el" href="graph3d_8h.html#a130a82">CS_MIXMODE_FACT_SRCALPHA</a> =  0x6, 
+<a class="el" href="graph3d_8h.html#a130a83">CS_MIXMODE_FACT_SRCALPHA_INV</a> =  0x7, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a130a84">CS_MIXMODE_FACT_DSTALPHA</a> =  0x8, 
+<a class="el" href="graph3d_8h.html#a130a85">CS_MIXMODE_FACT_DSTALPHA_INV</a> =  0x9, 
+<a class="el" href="graph3d_8h.html#a130a86">CS_MIXMODE_FACT_MASK</a> =  0xf
+<br>
+ }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">alpha = 0..FF (opaque..transparent)  <a href="#a30"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a16">CS_FX_MASK_MIXMODE</a>&nbsp;&nbsp;&nbsp;0xF0000000</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Blending op mix mode factors.  <a href="graph3d_8h.html#a130">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="graph3d_8h.html#a131a87">CS_MIXMODE_ALPHATEST_AUTO</a> =  0x00000000, 
+<a class="el" href="graph3d_8h.html#a131a88">CS_MIXMODE_ALPHATEST_ENABLE</a> =  0x10000000, 
+<a class="el" href="graph3d_8h.html#a131a89">CS_MIXMODE_ALPHATEST_DISABLE</a> =  0x20000000, 
+<a class="el" href="graph3d_8h.html#a131a90">CS_MIXMODE_ALPHATEST_MASK</a> =  0x30000000
+ }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">SRC/DST mixing mode mask.  <a href="#a16"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a26">CS_FX_MESH</a>&nbsp;&nbsp;&nbsp;0xf0000000</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Alpha test flags.  <a href="graph3d_8h.html#a131">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a132a91">CS_FX_COPY</a> =  CS_MIXMODE_TYPE_AUTO | CS_MIXMODE_ALPHATEST_AUTO, 
+<a class="el" href="graph3d_8h.html#a132a92">CS_FX_MULTIPLY</a>, 
+<a class="el" href="graph3d_8h.html#a132a93">CS_FX_MULTIPLY2</a>, 
+<a class="el" href="graph3d_8h.html#a132a94">CS_FX_ADD</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a132a95">CS_FX_ALPHA</a>, 
+<a class="el" href="graph3d_8h.html#a132a96">CS_FX_TRANSPARENT</a>, 
+<a class="el" href="graph3d_8h.html#a132a97">CS_FX_DESTALPHAADD</a>, 
+<a class="el" href="graph3d_8h.html#a132a98">CS_FX_SRCALPHAADD</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a132a99">CS_FX_PREMULTALPHA</a>, 
+<a class="el" href="graph3d_8h.html#a132a100">CS_FX_MESH</a> =  CS_MIXMODE_TYPE_MESH, 
+<a class="el" href="graph3d_8h.html#a132a101">CS_FX_FLAT</a> =  0x04000000, 
+<a class="el" href="graph3d_8h.html#a132a102">CS_FX_MASK_ALPHA</a> =  0x000000FF, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a132a103">CS_FX_MASK_MIXMODE</a> =  0xf0ff0000
+<br>
+ }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use the mix mode of the mesh zmode.  <a href="#a26"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a18">CS_FX_MULTIPLY</a>&nbsp;&nbsp;&nbsp;0x10000000</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">=SRC*DST  <a href="#a18"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a19">CS_FX_MULTIPLY2</a>&nbsp;&nbsp;&nbsp;0x20000000</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">=2*SRC*DST  <a href="#a19"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a25">CS_FX_PREMULTALPHA</a>&nbsp;&nbsp;&nbsp;0x80000000</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">=SRC + DST*(1-srcalpha)  <a href="#a25"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a31">CS_FX_SETALPHA</a>(alpha)&nbsp;&nbsp;&nbsp;(CS_FX_ALPHA | <a class="el" href="cstypes_8h.html#a27">uint</a> (alpha * CS_FX_MASK_ALPHA))</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Macro for setting of alpha bits into mixmode (alpha between 0 and 1).  <a href="#a31"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a32">CS_FX_SETALPHA_INT</a>(alpha)&nbsp;&nbsp;&nbsp;(CS_FX_ALPHA | <a class="el" href="cstypes_8h.html#a27">uint</a> (alpha &amp; CS_FX_MASK_ALPHA))</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Macro for setting of alpha bits into mixmode (alpha between 0 and 255).  <a href="#a32"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a24">CS_FX_SRCALPHAADD</a>&nbsp;&nbsp;&nbsp;0x70000000</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">=(srcalpha)*SRC + DST  <a href="#a24"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a29">CS_FX_TILING</a>&nbsp;&nbsp;&nbsp;0x02000000</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Tiling.  <a href="#a29"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a22">CS_FX_TRANSPARENT</a>&nbsp;&nbsp;&nbsp;0x50000000</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">=DST  <a href="#a22"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Default mixmodes.  <a href="graph3d_8h.html#a132">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Light parameters</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a36">CS_LIGHTPARAM_ATTENUATION</a>&nbsp;&nbsp;&nbsp;3</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a24">CS_LIGHTPARAM_ATTENUATION</a>&nbsp;&nbsp;&nbsp;3</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Attenuation of the light.  <a href="#a36"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a34">CS_LIGHTPARAM_DIFFUSE</a>&nbsp;&nbsp;&nbsp;1</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Attenuation of the light.  <a href="#a24"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a22">CS_LIGHTPARAM_DIFFUSE</a>&nbsp;&nbsp;&nbsp;1</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Diffuse color of the light.  <a href="#a34"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a33">CS_LIGHTPARAM_POSITION</a>&nbsp;&nbsp;&nbsp;0</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Diffuse color of the light.  <a href="#a22"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a21">CS_LIGHTPARAM_POSITION</a>&nbsp;&nbsp;&nbsp;0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Position of the light.  <a href="#a33"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a35">CS_LIGHTPARAM_SPECULAR</a>&nbsp;&nbsp;&nbsp;2</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Position of the light.  <a href="#a21"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a23">CS_LIGHTPARAM_SPECULAR</a>&nbsp;&nbsp;&nbsp;2</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Specular color of the light.  <a href="#a35"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Specular color of the light.  <a href="#a23"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Shadow states</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a37">CS_SHADOW_VOLUME_BEGIN</a>&nbsp;&nbsp;&nbsp;1</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a25">CS_SHADOW_VOLUME_BEGIN</a>&nbsp;&nbsp;&nbsp;1</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear stencil.  <a href="#a37"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a40">CS_SHADOW_VOLUME_FAIL1</a>&nbsp;&nbsp;&nbsp;4</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear stencil.  <a href="#a25"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a28">CS_SHADOW_VOLUME_FAIL1</a>&nbsp;&nbsp;&nbsp;4</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for carmack's reverse pass 1.  <a href="#a40"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a41">CS_SHADOW_VOLUME_FAIL2</a>&nbsp;&nbsp;&nbsp;5</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for carmack's reverse pass 1.  <a href="#a28"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a29">CS_SHADOW_VOLUME_FAIL2</a>&nbsp;&nbsp;&nbsp;5</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for carmack's reverse pass 2.  <a href="#a41"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a43">CS_SHADOW_VOLUME_FINISH</a>&nbsp;&nbsp;&nbsp;7</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for carmack's reverse pass 2.  <a href="#a29"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a31">CS_SHADOW_VOLUME_FINISH</a>&nbsp;&nbsp;&nbsp;7</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Restore states.  <a href="#a43"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a38">CS_SHADOW_VOLUME_PASS1</a>&nbsp;&nbsp;&nbsp;2</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Restore states.  <a href="#a31"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a26">CS_SHADOW_VOLUME_PASS1</a>&nbsp;&nbsp;&nbsp;2</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for pass 1.  <a href="#a38"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a39">CS_SHADOW_VOLUME_PASS2</a>&nbsp;&nbsp;&nbsp;3</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for pass 1.  <a href="#a26"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a27">CS_SHADOW_VOLUME_PASS2</a>&nbsp;&nbsp;&nbsp;3</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for pass 2.  <a href="#a39"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a42">CS_SHADOW_VOLUME_USE</a>&nbsp;&nbsp;&nbsp;6</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for pass 2.  <a href="#a27"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a30">CS_SHADOW_VOLUME_USE</a>&nbsp;&nbsp;&nbsp;6</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for shadow masking.  <a href="#a42"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for shadow masking.  <a href="#a30"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>iGraphics3D::BeginDraw() flags</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a0">CSDRAW_2DGRAPHICS</a>&nbsp;&nbsp;&nbsp;0x00000001</td></tr>
 
@@ -181,103 +198,103 @@
 #define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a11">CS_VATTRIB_SPECIFIC_LAST</a>&nbsp;&nbsp;&nbsp;15</td></tr>
 
 <tr><td colspan="2"><br><h2>Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a110">csRenderMeshType</a> { <br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a110a98">CS_MESHTYPE_TRIANGLES</a>, 
-<a class="el" href="graph3d_8h.html#a110a99">CS_MESHTYPE_QUADS</a>, 
-<a class="el" href="graph3d_8h.html#a110a100">CS_MESHTYPE_TRIANGLESTRIP</a>, 
-<a class="el" href="graph3d_8h.html#a110a101">CS_MESHTYPE_TRIANGLEFAN</a>, 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a134">csRenderMeshType</a> { <br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a134a118">CS_MESHTYPE_TRIANGLES</a>, 
+<a class="el" href="graph3d_8h.html#a134a119">CS_MESHTYPE_QUADS</a>, 
+<a class="el" href="graph3d_8h.html#a134a120">CS_MESHTYPE_TRIANGLESTRIP</a>, 
+<a class="el" href="graph3d_8h.html#a134a121">CS_MESHTYPE_TRIANGLEFAN</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a110a102">CS_MESHTYPE_POINTS</a>, 
-<a class="el" href="graph3d_8h.html#a110a103">CS_MESHTYPE_POINT_SPRITES</a>, 
-<a class="el" href="graph3d_8h.html#a110a104">CS_MESHTYPE_LINES</a>, 
-<a class="el" href="graph3d_8h.html#a110a105">CS_MESHTYPE_LINESTRIP</a>
-<br>
- }</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Primitive type of a mesh.  <a href="graph3d_8h.html#a110">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a111">csSimpleMeshFlags</a> { <a class="el" href="graph3d_8h.html#a111a106">csSimpleMeshScreenspace</a> =  0x01
- }</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Flags to influence the behaviour of DrawSimpleMesh().  <a href="graph3d_8h.html#a111">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a108">csVertexAttrib</a> { <br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a108a52">CS_VATTRIB_POSITION</a> =  CS_VATTRIB_SPECIFIC_FIRST + 0, 
-<a class="el" href="graph3d_8h.html#a108a53">CS_VATTRIB_WEIGHT</a> =  CS_VATTRIB_SPECIFIC_FIRST + 1, 
-<a class="el" href="graph3d_8h.html#a108a54">CS_VATTRIB_NORMAL</a> =  CS_VATTRIB_SPECIFIC_FIRST + 2, 
-<a class="el" href="graph3d_8h.html#a108a55">CS_VATTRIB_COLOR</a> =  CS_VATTRIB_SPECIFIC_FIRST + 3, 
-<br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a108a56">CS_VATTRIB_PRIMARY_COLOR</a> =  CS_VATTRIB_SPECIFIC_FIRST + 3, 
-<a class="el" href="graph3d_8h.html#a108a57">CS_VATTRIB_SECONDARY_COLOR</a> =  CS_VATTRIB_SPECIFIC_FIRST + 4, 
-<a class="el" href="graph3d_8h.html#a108a58">CS_VATTRIB_FOGCOORD</a> =  CS_VATTRIB_SPECIFIC_FIRST + 5, 
-<a class="el" href="graph3d_8h.html#a108a59">CS_VATTRIB_TEXCOORD</a> =  CS_VATTRIB_SPECIFIC_FIRST + 8, 
-<br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a108a60">CS_VATTRIB_TEXCOORD0</a> =  CS_VATTRIB_SPECIFIC_FIRST + 8, 
-<a class="el" href="graph3d_8h.html#a108a61">CS_VATTRIB_TEXCOORD1</a> =  CS_VATTRIB_SPECIFIC_FIRST + 9, 
-<a class="el" href="graph3d_8h.html#a108a62">CS_VATTRIB_TEXCOORD2</a> =  CS_VATTRIB_SPECIFIC_FIRST + 10, 
-<a class="el" href="graph3d_8h.html#a108a63">CS_VATTRIB_TEXCOORD3</a> =  CS_VATTRIB_SPECIFIC_FIRST + 11, 
-<br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a108a64">CS_VATTRIB_TEXCOORD4</a> =  CS_VATTRIB_SPECIFIC_FIRST + 12, 
-<a class="el" href="graph3d_8h.html#a108a65">CS_VATTRIB_TEXCOORD5</a> =  CS_VATTRIB_SPECIFIC_FIRST + 13, 
-<a class="el" href="graph3d_8h.html#a108a66">CS_VATTRIB_TEXCOORD6</a> =  CS_VATTRIB_SPECIFIC_FIRST + 14, 
-<a class="el" href="graph3d_8h.html#a108a67">CS_VATTRIB_TEXCOORD7</a> =  CS_VATTRIB_SPECIFIC_FIRST + 15, 
-<br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a108a68">CS_VATTRIB_0</a> =  CS_VATTRIB_GENERIC_FIRST + 0, 
-<a class="el" href="graph3d_8h.html#a108a69">CS_VATTRIB_1</a> =  CS_VATTRIB_GENERIC_FIRST + 1, 
-<a class="el" href="graph3d_8h.html#a108a70">CS_VATTRIB_2</a> =  CS_VATTRIB_GENERIC_FIRST + 2, 
-<a class="el" href="graph3d_8h.html#a108a71">CS_VATTRIB_3</a> =  CS_VATTRIB_GENERIC_FIRST + 3, 
-<br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a108a72">CS_VATTRIB_4</a> =  CS_VATTRIB_GENERIC_FIRST + 4, 
-<a class="el" href="graph3d_8h.html#a108a73">CS_VATTRIB_5</a> =  CS_VATTRIB_GENERIC_FIRST + 5, 
-<a class="el" href="graph3d_8h.html#a108a74">CS_VATTRIB_6</a> =  CS_VATTRIB_GENERIC_FIRST + 6, 
-<a class="el" href="graph3d_8h.html#a108a75">CS_VATTRIB_7</a> =  CS_VATTRIB_GENERIC_FIRST + 7, 
-<br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a108a76">CS_VATTRIB_8</a> =  CS_VATTRIB_GENERIC_FIRST + 8, 
-<a class="el" href="graph3d_8h.html#a108a77">CS_VATTRIB_9</a> =  CS_VATTRIB_GENERIC_FIRST + 9, 
-<a class="el" href="graph3d_8h.html#a108a78">CS_VATTRIB_10</a> =  CS_VATTRIB_GENERIC_FIRST + 10, 
-<a class="el" href="graph3d_8h.html#a108a79">CS_VATTRIB_11</a> =  CS_VATTRIB_GENERIC_FIRST + 11, 
-<br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a108a80">CS_VATTRIB_12</a> =  CS_VATTRIB_GENERIC_FIRST + 12, 
-<a class="el" href="graph3d_8h.html#a108a81">CS_VATTRIB_13</a> =  CS_VATTRIB_GENERIC_FIRST + 13, 
-<a class="el" href="graph3d_8h.html#a108a82">CS_VATTRIB_14</a> =  CS_VATTRIB_GENERIC_FIRST + 14
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a134a122">CS_MESHTYPE_POINTS</a>, 
+<a class="el" href="graph3d_8h.html#a134a123">CS_MESHTYPE_POINT_SPRITES</a>, 
+<a class="el" href="graph3d_8h.html#a134a124">CS_MESHTYPE_LINES</a>, 
+<a class="el" href="graph3d_8h.html#a134a125">CS_MESHTYPE_LINESTRIP</a>
 <br>
  }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">For NR: Vertex attributes.  <a href="graph3d_8h.html#a108">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a107">csZBufMode</a> { <br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a107a44">CS_ZBUF_NONE</a> =  0x00000000, 
-<a class="el" href="graph3d_8h.html#a107a45">CS_ZBUF_FILL</a> =  0x00000001, 
-<a class="el" href="graph3d_8h.html#a107a46">CS_ZBUF_TEST</a> =  0x00000002, 
-<a class="el" href="graph3d_8h.html#a107a47">CS_ZBUF_USE</a> =  0x00000003, 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Primitive type of a mesh.  <a href="graph3d_8h.html#a134">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a135">csSimpleMeshFlags</a> { <a class="el" href="graph3d_8h.html#a135a126">csSimpleMeshScreenspace</a> =  0x01
+ }</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Flags to influence the behaviour of DrawSimpleMesh().  <a href="graph3d_8h.html#a135">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a128">csVertexAttrib</a> { <br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a128a40">CS_VATTRIB_POSITION</a> =  CS_VATTRIB_SPECIFIC_FIRST + 0, 
+<a class="el" href="graph3d_8h.html#a128a41">CS_VATTRIB_WEIGHT</a> =  CS_VATTRIB_SPECIFIC_FIRST + 1, 
+<a class="el" href="graph3d_8h.html#a128a42">CS_VATTRIB_NORMAL</a> =  CS_VATTRIB_SPECIFIC_FIRST + 2, 
+<a class="el" href="graph3d_8h.html#a128a43">CS_VATTRIB_COLOR</a> =  CS_VATTRIB_SPECIFIC_FIRST + 3, 
 <br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a107a48">CS_ZBUF_EQUAL</a> =  0x00000004, 
-<a class="el" href="graph3d_8h.html#a107a49">CS_ZBUF_INVERT</a> =  0x00000005, 
-<a class="el" href="graph3d_8h.html#a107a50">CS_ZBUF_MESH</a> =  0x80000000, 
-<a class="el" href="graph3d_8h.html#a107a51">CS_ZBUF_MESH2</a> =  0x80000001
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a128a44">CS_VATTRIB_PRIMARY_COLOR</a> =  CS_VATTRIB_SPECIFIC_FIRST + 3, 
+<a class="el" href="graph3d_8h.html#a128a45">CS_VATTRIB_SECONDARY_COLOR</a> =  CS_VATTRIB_SPECIFIC_FIRST + 4, 
+<a class="el" href="graph3d_8h.html#a128a46">CS_VATTRIB_FOGCOORD</a> =  CS_VATTRIB_SPECIFIC_FIRST + 5, 
+<a class="el" href="graph3d_8h.html#a128a47">CS_VATTRIB_TEXCOORD</a> =  CS_VATTRIB_SPECIFIC_FIRST + 8, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a128a48">CS_VATTRIB_TEXCOORD0</a> =  CS_VATTRIB_SPECIFIC_FIRST + 8, 
+<a class="el" href="graph3d_8h.html#a128a49">CS_VATTRIB_TEXCOORD1</a> =  CS_VATTRIB_SPECIFIC_FIRST + 9, 
+<a class="el" href="graph3d_8h.html#a128a50">CS_VATTRIB_TEXCOORD2</a> =  CS_VATTRIB_SPECIFIC_FIRST + 10, 
+<a class="el" href="graph3d_8h.html#a128a51">CS_VATTRIB_TEXCOORD3</a> =  CS_VATTRIB_SPECIFIC_FIRST + 11, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a128a52">CS_VATTRIB_TEXCOORD4</a> =  CS_VATTRIB_SPECIFIC_FIRST + 12, 
+<a class="el" href="graph3d_8h.html#a128a53">CS_VATTRIB_TEXCOORD5</a> =  CS_VATTRIB_SPECIFIC_FIRST + 13, 
+<a class="el" href="graph3d_8h.html#a128a54">CS_VATTRIB_TEXCOORD6</a> =  CS_VATTRIB_SPECIFIC_FIRST + 14, 
+<a class="el" href="graph3d_8h.html#a128a55">CS_VATTRIB_TEXCOORD7</a> =  CS_VATTRIB_SPECIFIC_FIRST + 15, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a128a56">CS_VATTRIB_0</a> =  CS_VATTRIB_GENERIC_FIRST + 0, 
+<a class="el" href="graph3d_8h.html#a128a57">CS_VATTRIB_1</a> =  CS_VATTRIB_GENERIC_FIRST + 1, 
+<a class="el" href="graph3d_8h.html#a128a58">CS_VATTRIB_2</a> =  CS_VATTRIB_GENERIC_FIRST + 2, 
+<a class="el" href="graph3d_8h.html#a128a59">CS_VATTRIB_3</a> =  CS_VATTRIB_GENERIC_FIRST + 3, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a128a60">CS_VATTRIB_4</a> =  CS_VATTRIB_GENERIC_FIRST + 4, 
+<a class="el" href="graph3d_8h.html#a128a61">CS_VATTRIB_5</a> =  CS_VATTRIB_GENERIC_FIRST + 5, 
+<a class="el" href="graph3d_8h.html#a128a62">CS_VATTRIB_6</a> =  CS_VATTRIB_GENERIC_FIRST + 6, 
+<a class="el" href="graph3d_8h.html#a128a63">CS_VATTRIB_7</a> =  CS_VATTRIB_GENERIC_FIRST + 7, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a128a64">CS_VATTRIB_8</a> =  CS_VATTRIB_GENERIC_FIRST + 8, 
+<a class="el" href="graph3d_8h.html#a128a65">CS_VATTRIB_9</a> =  CS_VATTRIB_GENERIC_FIRST + 9, 
+<a class="el" href="graph3d_8h.html#a128a66">CS_VATTRIB_10</a> =  CS_VATTRIB_GENERIC_FIRST + 10, 
+<a class="el" href="graph3d_8h.html#a128a67">CS_VATTRIB_11</a> =  CS_VATTRIB_GENERIC_FIRST + 11, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a128a68">CS_VATTRIB_12</a> =  CS_VATTRIB_GENERIC_FIRST + 12, 
+<a class="el" href="graph3d_8h.html#a128a69">CS_VATTRIB_13</a> =  CS_VATTRIB_GENERIC_FIRST + 13, 
+<a class="el" href="graph3d_8h.html#a128a70">CS_VATTRIB_14</a> =  CS_VATTRIB_GENERIC_FIRST + 14
 <br>
  }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Z-buffer modes.  <a href="graph3d_8h.html#a107">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a109">G3D_RENDERSTATEOPTION</a> { <br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a109a84">G3DRENDERSTATE_ZBUFFERMODE</a>, 
-<a class="el" href="graph3d_8h.html#a109a85">G3DRENDERSTATE_DITHERENABLE</a>, 
-<a class="el" href="graph3d_8h.html#a109a86">G3DRENDERSTATE_BILINEARMAPPINGENABLE</a>, 
-<a class="el" href="graph3d_8h.html#a109a87">G3DRENDERSTATE_TRILINEARMAPPINGENABLE</a>, 
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">For NR: Vertex attributes.  <a href="graph3d_8h.html#a128">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a127">csZBufMode</a> { <br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a127a32">CS_ZBUF_NONE</a> =  0x00000000, 
+<a class="el" href="graph3d_8h.html#a127a33">CS_ZBUF_FILL</a> =  0x00000001, 
+<a class="el" href="graph3d_8h.html#a127a34">CS_ZBUF_TEST</a> =  0x00000002, 
+<a class="el" href="graph3d_8h.html#a127a35">CS_ZBUF_USE</a> =  0x00000003, 
 <br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a109a88">G3DRENDERSTATE_TRANSPARENCYENABLE</a>, 
-<a class="el" href="graph3d_8h.html#a109a89">G3DRENDERSTATE_MIPMAPENABLE</a>, 
-<a class="el" href="graph3d_8h.html#a109a90">G3DRENDERSTATE_TEXTUREMAPPINGENABLE</a>, 
-<a class="el" href="graph3d_8h.html#a109a91">G3DRENDERSTATE_LIGHTINGENABLE</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a109a92">G3DRENDERSTATE_INTERLACINGENABLE</a>, 
-<a class="el" href="graph3d_8h.html#a109a93">G3DRENDERSTATE_MMXENABLE</a>, 
-<a class="el" href="graph3d_8h.html#a109a94">G3DRENDERSTATE_INTERPOLATIONSTEP</a>, 
-<a class="el" href="graph3d_8h.html#a109a95">G3DRENDERSTATE_MAXPOLYGONSTODRAW</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a109a96">G3DRENDERSTATE_GOURAUDENABLE</a>, 
-<a class="el" href="graph3d_8h.html#a109a97">G3DRENDERSTATE_EDGES</a>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a127a36">CS_ZBUF_EQUAL</a> =  0x00000004, 
+<a class="el" href="graph3d_8h.html#a127a37">CS_ZBUF_INVERT</a> =  0x00000005, 
+<a class="el" href="graph3d_8h.html#a127a38">CS_ZBUF_MESH</a> =  0x80000000, 
+<a class="el" href="graph3d_8h.html#a127a39">CS_ZBUF_MESH2</a> =  0x80000001
 <br>
  }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Graphics3D render state options.  <a href="graph3d_8h.html#a109">More...</a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Z-buffer modes.  <a href="graph3d_8h.html#a127">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="graph3d_8h.html#a133">G3D_RENDERSTATEOPTION</a> { <br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a133a104">G3DRENDERSTATE_ZBUFFERMODE</a>, 
+<a class="el" href="graph3d_8h.html#a133a105">G3DRENDERSTATE_DITHERENABLE</a>, 
+<a class="el" href="graph3d_8h.html#a133a106">G3DRENDERSTATE_BILINEARMAPPINGENABLE</a>, 
+<a class="el" href="graph3d_8h.html#a133a107">G3DRENDERSTATE_TRILINEARMAPPINGENABLE</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a133a108">G3DRENDERSTATE_TRANSPARENCYENABLE</a>, 
+<a class="el" href="graph3d_8h.html#a133a109">G3DRENDERSTATE_MIPMAPENABLE</a>, 
+<a class="el" href="graph3d_8h.html#a133a110">G3DRENDERSTATE_TEXTUREMAPPINGENABLE</a>, 
+<a class="el" href="graph3d_8h.html#a133a111">G3DRENDERSTATE_LIGHTINGENABLE</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a133a112">G3DRENDERSTATE_INTERLACINGENABLE</a>, 
+<a class="el" href="graph3d_8h.html#a133a113">G3DRENDERSTATE_MMXENABLE</a>, 
+<a class="el" href="graph3d_8h.html#a133a114">G3DRENDERSTATE_INTERPOLATIONSTEP</a>, 
+<a class="el" href="graph3d_8h.html#a133a115">G3DRENDERSTATE_MAXPOLYGONSTODRAW</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="graph3d_8h.html#a133a116">G3DRENDERSTATE_GOURAUDENABLE</a>, 
+<a class="el" href="graph3d_8h.html#a133a117">G3DRENDERSTATE_EDGES</a>
+<br>
+ }</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Graphics3D render state options.  <a href="graph3d_8h.html#a133">More...</a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 3D graphics interface 
@@ -447,333 +464,7 @@ Clipper is top-level.
 Definition at line <a class="el" href="graph3d_8h-source.html#l00087">87</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a20"></a><!-- doxytag: member="graph3d.h::CS_FX_ADD" ref="a20" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_ADD&nbsp;&nbsp;&nbsp;0x30000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-=SRC+DST 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00223">223</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a21"></a><!-- doxytag: member="graph3d.h::CS_FX_ALPHA" ref="a21" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_ALPHA&nbsp;&nbsp;&nbsp;0x40000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-=(1-alpha)*SRC + alpha*DST 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00225">225</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a17"></a><!-- doxytag: member="graph3d.h::CS_FX_COPY" ref="a17" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_COPY&nbsp;&nbsp;&nbsp;0x00000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-=SRC 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00217">217</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.
-<p>
-Referenced by <a class="el" href="rendermesh_8h-source.html#l00048">csRenderMeshModes::csRenderMeshModes()</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a23"></a><!-- doxytag: member="graph3d.h::CS_FX_DESTALPHAADD" ref="a23" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_DESTALPHAADD&nbsp;&nbsp;&nbsp;0x60000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-=(dstalpha)*SRC + DST 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00229">229</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a28"></a><!-- doxytag: member="graph3d.h::CS_FX_FLAT" ref="a28" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_FLAT&nbsp;&nbsp;&nbsp;0x04000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Flat shading. 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00242">242</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a27"></a><!-- doxytag: member="graph3d.h::CS_FX_KEYCOLOR" ref="a27" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_KEYCOLOR&nbsp;&nbsp;&nbsp;0x08000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-color 0 is transparent 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00240">240</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a30"></a><!-- doxytag: member="graph3d.h::CS_FX_MASK_ALPHA" ref="a30" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_MASK_ALPHA&nbsp;&nbsp;&nbsp;0x000000FF          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-alpha = 0..FF (opaque..transparent) 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00246">246</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a16"></a><!-- doxytag: member="graph3d.h::CS_FX_MASK_MIXMODE" ref="a16" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_MASK_MIXMODE&nbsp;&nbsp;&nbsp;0xF0000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-SRC/DST mixing mode mask. 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00215">215</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a26"></a><!-- doxytag: member="graph3d.h::CS_FX_MESH" ref="a26" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_MESH&nbsp;&nbsp;&nbsp;0xf0000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Use the mix mode of the mesh zmode. 
-<p>
-(NOTE: NOT VALID AS MESH ZMODE - only for shader pass mixmodes)
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00238">238</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a18"></a><!-- doxytag: member="graph3d.h::CS_FX_MULTIPLY" ref="a18" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_MULTIPLY&nbsp;&nbsp;&nbsp;0x10000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-=SRC*DST 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00219">219</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a19"></a><!-- doxytag: member="graph3d.h::CS_FX_MULTIPLY2" ref="a19" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_MULTIPLY2&nbsp;&nbsp;&nbsp;0x20000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-=2*SRC*DST 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00221">221</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a25"></a><!-- doxytag: member="graph3d.h::CS_FX_PREMULTALPHA" ref="a25" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_PREMULTALPHA&nbsp;&nbsp;&nbsp;0x80000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-=SRC + DST*(1-srcalpha) 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00233">233</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a31"></a><!-- doxytag: member="graph3d.h::CS_FX_SETALPHA" ref="a31" args="(alpha)" --><p>
+<a class="anchor" name="a19"></a><!-- doxytag: member="graph3d.h::CS_FX_SETALPHA" ref="a19" args="(alpha)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -802,12 +493,12 @@ Macro for setting of alpha bits into mixmode (alpha between 0 and 1).
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00249">249</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.
+Definition at line <a class="el" href="graph3d_8h-source.html#l00403">403</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.
 <p>
 Referenced by <a class="el" href="csplugincommon_2particlesys_2particle_8h-source.html#l00267">csNewParticleSystem::SetAlpha()</a>, and <a class="el" href="partgen_8h-source.html#l00236">csParticleSystem::SetAlpha()</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a32"></a><!-- doxytag: member="graph3d.h::CS_FX_SETALPHA_INT" ref="a32" args="(alpha)" --><p>
+<a class="anchor" name="a20"></a><!-- doxytag: member="graph3d.h::CS_FX_SETALPHA_INT" ref="a20" args="(alpha)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -836,91 +527,10 @@ Macro for setting of alpha bits into mixmode (alpha between 0 and 255).
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00252">252</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00406">406</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a24"></a><!-- doxytag: member="graph3d.h::CS_FX_SRCALPHAADD" ref="a24" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_SRCALPHAADD&nbsp;&nbsp;&nbsp;0x70000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-=(srcalpha)*SRC + DST 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00231">231</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a29"></a><!-- doxytag: member="graph3d.h::CS_FX_TILING" ref="a29" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_TILING&nbsp;&nbsp;&nbsp;0x02000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Tiling. 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00244">244</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a22"></a><!-- doxytag: member="graph3d.h::CS_FX_TRANSPARENT" ref="a22" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_FX_TRANSPARENT&nbsp;&nbsp;&nbsp;0x50000000          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-=DST 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00227">227</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="a36"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_ATTENUATION" ref="a36" args="" --><p>
+<a class="anchor" name="a24"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_ATTENUATION" ref="a24" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -944,10 +554,10 @@ Attenuation of the light.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00291">291</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00445">445</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a34"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_DIFFUSE" ref="a34" args="" --><p>
+<a class="anchor" name="a22"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_DIFFUSE" ref="a22" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -971,10 +581,10 @@ Diffuse color of the light.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00287">287</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00441">441</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a33"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_POSITION" ref="a33" args="" --><p>
+<a class="anchor" name="a21"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_POSITION" ref="a21" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -998,10 +608,10 @@ Position of the light.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00285">285</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00439">439</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a35"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_SPECULAR" ref="a35" args="" --><p>
+<a class="anchor" name="a23"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_SPECULAR" ref="a23" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1025,10 +635,112 @@ Specular color of the light.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00289">289</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00443">443</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a37"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_BEGIN" ref="a37" args="" --><p>
+<a class="anchor" name="a16"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_BLEND" ref="a16" args="(Src, Dst)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_BLEND          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">Src,         <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>Dst&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment">(<a class="code" href="graph3d_8h.html#a129a73">CS_MIXMODE_TYPE_BLENDOP</a>                                                \
+  | (CS_MIXMODE_FACT_ ## Src &lt;&lt; 20) | (CS_MIXMODE_FACT_ ## Dst &lt;&lt; 16))
+</pre></div>Helper macro to construct a blending operation mixmode. 
+<p>
+<em>Src</em> and <em>Dst</em> are <a class="el" href="">blending op factors </a>, however sans the CS_MIXMODE_FACT_ prefix. E.g.: <div class="fragment"><pre class="fragment"> <a class="code" href="cstypes_8h.html#a27">uint</a> mixmode = <a class="code" href="graph3d_8h.html#a16">CS_MIXMODE_BLEND</a>(SRCALPHA, SRCALPHA_INV);
+</pre></div> will generate a blending operation for alpha blending.
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00305">305</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a18"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_BLENDOP_DST" ref="a18" args="(mode)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_BLENDOP_DST          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">mode&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;((mode &gt;&gt; 16) &amp; CS_MIXMODE_FACT_MASK)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Helper macro to extract the <code>dstFactor</code> from a blending op mixmode. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00311">311</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a17"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_BLENDOP_SRC" ref="a17" args="(mode)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_BLENDOP_SRC          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">mode&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap>&nbsp;&nbsp;&nbsp;((mode &gt;&gt; 20) &amp; CS_MIXMODE_FACT_MASK)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Helper macro to extract the <code>srcFactor</code> from a blending op mixmode. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00309">309</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a25"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_BEGIN" ref="a25" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1052,10 +764,10 @@ Clear stencil.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00297">297</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00451">451</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a40"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_FAIL1" ref="a40" args="" --><p>
+<a class="anchor" name="a28"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_FAIL1" ref="a28" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1079,10 +791,10 @@ Setup for carmack's reverse pass 1.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00303">303</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00457">457</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a41"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_FAIL2" ref="a41" args="" --><p>
+<a class="anchor" name="a29"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_FAIL2" ref="a29" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1106,10 +818,10 @@ Setup for carmack's reverse pass 2.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00305">305</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00459">459</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a43"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_FINISH" ref="a43" args="" --><p>
+<a class="anchor" name="a31"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_FINISH" ref="a31" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1133,10 +845,10 @@ Restore states.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00309">309</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00463">463</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a38"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_PASS1" ref="a38" args="" --><p>
+<a class="anchor" name="a26"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_PASS1" ref="a26" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1160,10 +872,10 @@ Setup for pass 1.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00299">299</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00453">453</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a39"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_PASS2" ref="a39" args="" --><p>
+<a class="anchor" name="a27"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_PASS2" ref="a27" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1187,10 +899,10 @@ Setup for pass 2.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00301">301</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00455">455</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a42"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_USE" ref="a42" args="" --><p>
+<a class="anchor" name="a30"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_USE" ref="a30" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1214,7 +926,7 @@ Setup for shadow masking.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00307">307</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00461">461</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a0"></a><!-- doxytag: member="graph3d.h::CSDRAW_2DGRAPHICS" ref="a0" args="" --><p>
@@ -1326,13 +1038,235 @@ Definition at line <a class="el" href="graph3d_8h-source.html#l00069">69</a> of 
   </tr>
 </table>
 <hr><h2>Enumeration Type Documentation</h2>
-<a class="anchor" name="a110"></a><!-- doxytag: member="graph3d.h::csRenderMeshType" ref="a110" args="" --><p>
+<a class="anchor" name="a129"></a><!-- doxytag: member="graph3d.h::@0" ref="a129" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a110">csRenderMeshType</a>          </td>
+          <td class="md" nowrap valign="top">anonymous enum          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Mix mode types. 
+<p>
+<dl compact><dt><b>Enumerator: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="a129a72"></a><!-- doxytag: member="CS_MIXMODE_TYPE_AUTO" ref="a129a72" args="" -->CS_MIXMODE_TYPE_AUTO</em>&nbsp;</td><td>
+Automatic blending mode. 
+<p>
+Whether the texture is alpha-blended or not is taken from csRenderMesh::alphaMode and whether the alpha part of the mixmode is non-zero.</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a129a73"></a><!-- doxytag: member="CS_MIXMODE_TYPE_BLENDOP" ref="a129a73" args="" -->CS_MIXMODE_TYPE_BLENDOP</em>&nbsp;</td><td>
+Blend with a blending operation. 
+<p>
+The fragment value written to the framebuffer is computed from the formula <code>SRC</code> * <code>srcFactor</code> + <code>DST</code> * <code>dstFactor</code>. <code>srcFactor</code> and <code>dstFactor</code> are one of <a class="el" href="">CS_MIXMODE_FACT_xxx </a>, encoded into the mixmode specifier with <a class="el" href="graph3d_8h.html#a16">CS_MIXMODE_BLEND</a>.</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a129a74"></a><!-- doxytag: member="CS_MIXMODE_TYPE_MESH" ref="a129a74" args="" -->CS_MIXMODE_TYPE_MESH</em>&nbsp;</td><td>
+Use the mix mode of the mesh mix mode. 
+<p>
+<dl compact><dt><b>Warning:</b></dt><dd>NOT VALID AS MESH MIXMODE - only for shader pass mixmodes.</dd></dl>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a129a75"></a><!-- doxytag: member="CS_MIXMODE_TYPE_MASK" ref="a129a75" args="" -->CS_MIXMODE_TYPE_MASK</em>&nbsp;</td><td>
+Bit mask to extract the type from a mixmode specifier. </td></tr>
+</table>
+</dl>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00217">217</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a130"></a><!-- doxytag: member="graph3d.h::@1" ref="a130" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">anonymous enum          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Blending op mix mode factors. 
+<p>
+<dl compact><dt><b>Enumerator: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="a130a76"></a><!-- doxytag: member="CS_MIXMODE_FACT_ZERO" ref="a130a76" args="" -->CS_MIXMODE_FACT_ZERO</em>&nbsp;</td><td>
+0 </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a77"></a><!-- doxytag: member="CS_MIXMODE_FACT_ONE" ref="a130a77" args="" -->CS_MIXMODE_FACT_ONE</em>&nbsp;</td><td>
+-(e^(i*Pi)) </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a78"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCCOLOR" ref="a130a78" args="" -->CS_MIXMODE_FACT_SRCCOLOR</em>&nbsp;</td><td>
+Source fragment (R,G,B,A) components. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a79"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCCOLOR_INV" ref="a130a79" args="" -->CS_MIXMODE_FACT_SRCCOLOR_INV</em>&nbsp;</td><td>
+Source fragment (1-R,1-G,1-B,-1A) components. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a80"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTCOLOR" ref="a130a80" args="" -->CS_MIXMODE_FACT_DSTCOLOR</em>&nbsp;</td><td>
+Destination fragment (R,G,B,A) components. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a81"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTCOLOR_INV" ref="a130a81" args="" -->CS_MIXMODE_FACT_DSTCOLOR_INV</em>&nbsp;</td><td>
+Destination fragment (1-R,1-G,1-B,-1A) components. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a82"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCALPHA" ref="a130a82" args="" -->CS_MIXMODE_FACT_SRCALPHA</em>&nbsp;</td><td>
+Source fragment alpha. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a83"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCALPHA_INV" ref="a130a83" args="" -->CS_MIXMODE_FACT_SRCALPHA_INV</em>&nbsp;</td><td>
+Source fragment 1-alpha. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a84"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTALPHA" ref="a130a84" args="" -->CS_MIXMODE_FACT_DSTALPHA</em>&nbsp;</td><td>
+Destination fragment alpha. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a85"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTALPHA_INV" ref="a130a85" args="" -->CS_MIXMODE_FACT_DSTALPHA_INV</em>&nbsp;</td><td>
+Destination fragment 1-alpha. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a130a86"></a><!-- doxytag: member="CS_MIXMODE_FACT_MASK" ref="a130a86" args="" -->CS_MIXMODE_FACT_MASK</em>&nbsp;</td><td>
+Mask to extract factors. </td></tr>
+</table>
+</dl>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00245">245</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a131"></a><!-- doxytag: member="graph3d.h::@2" ref="a131" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">anonymous enum          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Alpha test flags. 
+<p>
+Enabled alpha test (or <em>binary alpha</em>) means that a fragment is only drawn when its alpha component is above a certain threshold, and discarded otherwise.<dl compact><dt><b>Enumerator: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="a131a87"></a><!-- doxytag: member="CS_MIXMODE_ALPHATEST_AUTO" ref="a131a87" args="" -->CS_MIXMODE_ALPHATEST_AUTO</em>&nbsp;</td><td>
+Automatic alpha test. 
+<p>
+Whether the texture is alpha-blended binarily is taken from csRenderMesh::alphaMode and whether the alpha part of the mixmode is non-zero.</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a131a88"></a><!-- doxytag: member="CS_MIXMODE_ALPHATEST_ENABLE" ref="a131a88" args="" -->CS_MIXMODE_ALPHATEST_ENABLE</em>&nbsp;</td><td>
+Unconditionally enable alpha test. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a131a89"></a><!-- doxytag: member="CS_MIXMODE_ALPHATEST_DISABLE" ref="a131a89" args="" -->CS_MIXMODE_ALPHATEST_DISABLE</em>&nbsp;</td><td>
+Unconditionally disable alpha test. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a131a90"></a><!-- doxytag: member="CS_MIXMODE_ALPHATEST_MASK" ref="a131a90" args="" -->CS_MIXMODE_ALPHATEST_MASK</em>&nbsp;</td><td>
+Bit mask to extract the alpha test flag a mixmode specifier. </td></tr>
+</table>
+</dl>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00278">278</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a132"></a><!-- doxytag: member="graph3d.h::@3" ref="a132" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">anonymous enum          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Default mixmodes. 
+<p>
+A set of commonly used mix modes.<dl compact><dt><b>Enumerator: </b></dt><dd>
+<table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" name="a132a91"></a><!-- doxytag: member="CS_FX_COPY" ref="a132a91" args="" -->CS_FX_COPY</em>&nbsp;</td><td>
+This mixmode uses alpha smooth blending, binary blending (ie enabled alpha test) and no blending depending on the contents of csRenderMesh::alphaMode. 
+<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>For a "true" copy mixmode that just writes the source fragment color to the frame buffer, you can use: <div class="fragment"><pre class="fragment">   <a class="code" href="graph3d_8h.html#a16">CS_MIXMODE_BLEND</a>(ONE, ZERO) | <a class="code" href="graph3d_8h.html#a131a89">CS_MIXMODE_ALPHATEST_DISABLE</a>
+</pre></div></dd></dl>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a92"></a><!-- doxytag: member="CS_FX_MULTIPLY" ref="a132a92" args="" -->CS_FX_MULTIPLY</em>&nbsp;</td><td>
+Multiplicative blending. Formula: <code>=SRC*DST</code>. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a93"></a><!-- doxytag: member="CS_FX_MULTIPLY2" ref="a132a93" args="" -->CS_FX_MULTIPLY2</em>&nbsp;</td><td>
+Multiplicative doubling blending. Formula: <code>=2*SRC*DST</code>. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a94"></a><!-- doxytag: member="CS_FX_ADD" ref="a132a94" args="" -->CS_FX_ADD</em>&nbsp;</td><td>
+Additive blending. Formula: <code>=SRC+DST</code>. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a95"></a><!-- doxytag: member="CS_FX_ALPHA" ref="a132a95" args="" -->CS_FX_ALPHA</em>&nbsp;</td><td>
+Alpha blending. 
+<p>
+Formula: <code>=(1-srcAlpha)*SRC + srcAlpha*DST</code> <dl compact><dt><b>Remarks:</b></dt><dd>Usually used with a non-zero alpha part. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="graph3d_8h.html#a132a102">CS_FX_MASK_ALPHA</a>,<p>
+<a class="el" href="graph3d_8h.html#a19">CS_FX_SETALPHA</a></dd></dl>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a96"></a><!-- doxytag: member="CS_FX_TRANSPARENT" ref="a132a96" args="" -->CS_FX_TRANSPARENT</em>&nbsp;</td><td>
+Transparent blending (keep framebuffer unmodified). 
+<p>
+Formula: <code>=DST</code> <dl compact><dt><b>Remarks:</b></dt><dd>The Z buffer will still be modified!</dd></dl>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a97"></a><!-- doxytag: member="CS_FX_DESTALPHAADD" ref="a132a97" args="" -->CS_FX_DESTALPHAADD</em>&nbsp;</td><td>
+Multiply source color with destination alpha and add. 
+<p>
+Formula: <code>=(dstalpha)*SRC + DST</code></td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a98"></a><!-- doxytag: member="CS_FX_SRCALPHAADD" ref="a132a98" args="" -->CS_FX_SRCALPHAADD</em>&nbsp;</td><td>
+Multiply source color with source alpha and add. 
+<p>
+Formula: <code>=(srcalpha)*SRC + DST</code></td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a99"></a><!-- doxytag: member="CS_FX_PREMULTALPHA" ref="a132a99" args="" -->CS_FX_PREMULTALPHA</em>&nbsp;</td><td>
+Multiply destination color with inverse source alpha and add source color. 
+<p>
+Formula: <code>=SRC + DST*(1-srcalpha)</code> <dl compact><dt><b>Remarks:</b></dt><dd>When the <code>SRC</code> alpha component was multiplied into the source color, this acts like alpha blending; if it was not, it acts like additive blending. Hence, this mixmode can be used to use both additive and alpha blending on the same triangle even and interpolate between those two "extremes" by appropriate choice of the color and alpha values.</dd></dl>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a100"></a><!-- doxytag: member="CS_FX_MESH" ref="a132a100" args="" -->CS_FX_MESH</em>&nbsp;</td><td>
+Use the mix mode of the mesh mix mode. 
+<p>
+<dl compact><dt><b>Warning:</b></dt><dd>NOT VALID AS MESH MIXMODE - only for shader pass mixmodes.</dd></dl>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a101"></a><!-- doxytag: member="CS_FX_FLAT" ref="a132a101" args="" -->CS_FX_FLAT</em>&nbsp;</td><td>
+Flat shading flag. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a102"></a><!-- doxytag: member="CS_FX_MASK_ALPHA" ref="a132a102" args="" -->CS_FX_MASK_ALPHA</em>&nbsp;</td><td>
+Mixmode alpha part. 
+<p>
+Values range from 0(opaque) to 255 (transparent) (note that this is the reverse of the "common" alpha meaning). When this part is non-null, the renderer will scale the incoming color buffer alpha components by the (inverse of) this value. <dl compact><dt><b>Remarks:</b></dt><dd>The scaling may be relatively expensive, it is recommended to scale the vertex alpha by other means, e.g. through a vertex program.</dd></dl>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" name="a132a103"></a><!-- doxytag: member="CS_FX_MASK_MIXMODE" ref="a132a103" args="" -->CS_FX_MASK_MIXMODE</em>&nbsp;</td><td>
+Bit mask for bits relevant to mix mode comparison; contains type, alpha test flags and blending op factors. </td></tr>
+</table>
+</dl>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00317">317</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="a134"></a><!-- doxytag: member="graph3d.h::csRenderMeshType" ref="a134" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a134">csRenderMeshType</a>          </td>
         </tr>
       </table>
     </td>
@@ -1350,27 +1284,27 @@ Primitive type of a mesh.
 <p>
 <dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="a110a98"></a><!-- doxytag: member="CS_MESHTYPE_TRIANGLES" ref="a110a98" args="" -->CS_MESHTYPE_TRIANGLES</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a134a118"></a><!-- doxytag: member="CS_MESHTYPE_TRIANGLES" ref="a134a118" args="" -->CS_MESHTYPE_TRIANGLES</em>&nbsp;</td><td>
 Triangles. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a110a99"></a><!-- doxytag: member="CS_MESHTYPE_QUADS" ref="a110a99" args="" -->CS_MESHTYPE_QUADS</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a134a119"></a><!-- doxytag: member="CS_MESHTYPE_QUADS" ref="a134a119" args="" -->CS_MESHTYPE_QUADS</em>&nbsp;</td><td>
 Quads. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a110a100"></a><!-- doxytag: member="CS_MESHTYPE_TRIANGLESTRIP" ref="a110a100" args="" -->CS_MESHTYPE_TRIANGLESTRIP</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a134a120"></a><!-- doxytag: member="CS_MESHTYPE_TRIANGLESTRIP" ref="a134a120" args="" -->CS_MESHTYPE_TRIANGLESTRIP</em>&nbsp;</td><td>
 Triangle strip. 
 <p>
 The OpenGL spec describes it pretty well: "A triangle strip is a series of triangles connected along shared edges. A triangle strip is specified by giving a series of defining vertices [...]. In this case, the first three vertices define the first triangle [...]. Each subsequent vertex defines a new triangle using that point along with two vertices from the previous triangle."</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a110a101"></a><!-- doxytag: member="CS_MESHTYPE_TRIANGLEFAN" ref="a110a101" args="" -->CS_MESHTYPE_TRIANGLEFAN</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a134a121"></a><!-- doxytag: member="CS_MESHTYPE_TRIANGLEFAN" ref="a134a121" args="" -->CS_MESHTYPE_TRIANGLEFAN</em>&nbsp;</td><td>
 Triangle fan. 
 <p>
 Similar to a triangle strip, however, a triangle is always defined with the first, previously added and the recently added vertex.</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a110a102"></a><!-- doxytag: member="CS_MESHTYPE_POINTS" ref="a110a102" args="" -->CS_MESHTYPE_POINTS</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a134a122"></a><!-- doxytag: member="CS_MESHTYPE_POINTS" ref="a134a122" args="" -->CS_MESHTYPE_POINTS</em>&nbsp;</td><td>
 Points. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a110a103"></a><!-- doxytag: member="CS_MESHTYPE_POINT_SPRITES" ref="a110a103" args="" -->CS_MESHTYPE_POINT_SPRITES</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a134a123"></a><!-- doxytag: member="CS_MESHTYPE_POINT_SPRITES" ref="a134a123" args="" -->CS_MESHTYPE_POINT_SPRITES</em>&nbsp;</td><td>
 Point sprites. 
 <p>
 Note: only supported if the <em>SupportsPointSprites</em> member of the <em><a class="el" href="structcsGraphics3DCaps.html">csGraphics3DCaps</a></em> structure for this renderer is true.</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a110a104"></a><!-- doxytag: member="CS_MESHTYPE_LINES" ref="a110a104" args="" -->CS_MESHTYPE_LINES</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a134a124"></a><!-- doxytag: member="CS_MESHTYPE_LINES" ref="a134a124" args="" -->CS_MESHTYPE_LINES</em>&nbsp;</td><td>
 Lines. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a110a105"></a><!-- doxytag: member="CS_MESHTYPE_LINESTRIP" ref="a110a105" args="" -->CS_MESHTYPE_LINESTRIP</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a134a125"></a><!-- doxytag: member="CS_MESHTYPE_LINESTRIP" ref="a134a125" args="" -->CS_MESHTYPE_LINESTRIP</em>&nbsp;</td><td>
 Line strip. 
 <p>
 A line is defined from the prebviously and recently added vertex.</td></tr>
@@ -1378,16 +1312,16 @@ A line is defined from the prebviously and recently added vertex.</td></tr>
 </dl>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00372">372</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00526">526</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a111"></a><!-- doxytag: member="graph3d.h::csSimpleMeshFlags" ref="a111" args="" --><p>
+<a class="anchor" name="a135"></a><!-- doxytag: member="graph3d.h::csSimpleMeshFlags" ref="a135" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a111">csSimpleMeshFlags</a>          </td>
+          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a135">csSimpleMeshFlags</a>          </td>
         </tr>
       </table>
     </td>
@@ -1405,7 +1339,7 @@ Flags to influence the behaviour of DrawSimpleMesh().
 <p>
 <dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="a111a106"></a><!-- doxytag: member="csSimpleMeshScreenspace" ref="a111a106" args="" -->csSimpleMeshScreenspace</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a135a126"></a><!-- doxytag: member="csSimpleMeshScreenspace" ref="a135a126" args="" -->csSimpleMeshScreenspace</em>&nbsp;</td><td>
 Ignore the object2camera transform in the <a class="el" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a> struct and replace it with a transformation that effectively lets you specify the vertices in screen space. 
 <p>
 The Z components of the mesh vertices should be set to 0 when this flag is specified.</td></tr>
@@ -1413,16 +1347,16 @@ The Z components of the mesh vertices should be set to 0 when this flag is speci
 </dl>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00418">418</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00572">572</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a108"></a><!-- doxytag: member="graph3d.h::csVertexAttrib" ref="a108" args="" --><p>
+<a class="anchor" name="a128"></a><!-- doxytag: member="graph3d.h::csVertexAttrib" ref="a128" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a108">csVertexAttrib</a>          </td>
+          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a128">csVertexAttrib</a>          </td>
         </tr>
       </table>
     </td>
@@ -1440,67 +1374,67 @@ For NR: Vertex attributes.
 <p>
 <dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="a108a52"></a><!-- doxytag: member="CS_VATTRIB_POSITION" ref="a108a52" args="" -->CS_VATTRIB_POSITION</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a40"></a><!-- doxytag: member="CS_VATTRIB_POSITION" ref="a128a40" args="" -->CS_VATTRIB_POSITION</em>&nbsp;</td><td>
 Position vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a53"></a><!-- doxytag: member="CS_VATTRIB_WEIGHT" ref="a108a53" args="" -->CS_VATTRIB_WEIGHT</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a41"></a><!-- doxytag: member="CS_VATTRIB_WEIGHT" ref="a128a41" args="" -->CS_VATTRIB_WEIGHT</em>&nbsp;</td><td>
 Vertex weight attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a54"></a><!-- doxytag: member="CS_VATTRIB_NORMAL" ref="a108a54" args="" -->CS_VATTRIB_NORMAL</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a42"></a><!-- doxytag: member="CS_VATTRIB_NORMAL" ref="a128a42" args="" -->CS_VATTRIB_NORMAL</em>&nbsp;</td><td>
 Normal attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a55"></a><!-- doxytag: member="CS_VATTRIB_COLOR" ref="a108a55" args="" -->CS_VATTRIB_COLOR</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a43"></a><!-- doxytag: member="CS_VATTRIB_COLOR" ref="a128a43" args="" -->CS_VATTRIB_COLOR</em>&nbsp;</td><td>
 Primary color attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a56"></a><!-- doxytag: member="CS_VATTRIB_PRIMARY_COLOR" ref="a108a56" args="" -->CS_VATTRIB_PRIMARY_COLOR</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a44"></a><!-- doxytag: member="CS_VATTRIB_PRIMARY_COLOR" ref="a128a44" args="" -->CS_VATTRIB_PRIMARY_COLOR</em>&nbsp;</td><td>
 Primary color attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a57"></a><!-- doxytag: member="CS_VATTRIB_SECONDARY_COLOR" ref="a108a57" args="" -->CS_VATTRIB_SECONDARY_COLOR</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a45"></a><!-- doxytag: member="CS_VATTRIB_SECONDARY_COLOR" ref="a128a45" args="" -->CS_VATTRIB_SECONDARY_COLOR</em>&nbsp;</td><td>
 Secondary color attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a58"></a><!-- doxytag: member="CS_VATTRIB_FOGCOORD" ref="a108a58" args="" -->CS_VATTRIB_FOGCOORD</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a46"></a><!-- doxytag: member="CS_VATTRIB_FOGCOORD" ref="a128a46" args="" -->CS_VATTRIB_FOGCOORD</em>&nbsp;</td><td>
 Fog coordinate attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a59"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD" ref="a108a59" args="" -->CS_VATTRIB_TEXCOORD</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a47"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD" ref="a128a47" args="" -->CS_VATTRIB_TEXCOORD</em>&nbsp;</td><td>
 TU 0 texture coordinates. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a60"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD0" ref="a108a60" args="" -->CS_VATTRIB_TEXCOORD0</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a48"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD0" ref="a128a48" args="" -->CS_VATTRIB_TEXCOORD0</em>&nbsp;</td><td>
 TU 0 texture coordinates. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a61"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD1" ref="a108a61" args="" -->CS_VATTRIB_TEXCOORD1</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a49"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD1" ref="a128a49" args="" -->CS_VATTRIB_TEXCOORD1</em>&nbsp;</td><td>
 TU 1 texture coordinates. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a62"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD2" ref="a108a62" args="" -->CS_VATTRIB_TEXCOORD2</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a50"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD2" ref="a128a50" args="" -->CS_VATTRIB_TEXCOORD2</em>&nbsp;</td><td>
 TU 2 texture coordinates. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a63"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD3" ref="a108a63" args="" -->CS_VATTRIB_TEXCOORD3</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a51"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD3" ref="a128a51" args="" -->CS_VATTRIB_TEXCOORD3</em>&nbsp;</td><td>
 TU 3 texture coordinates. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a64"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD4" ref="a108a64" args="" -->CS_VATTRIB_TEXCOORD4</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a52"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD4" ref="a128a52" args="" -->CS_VATTRIB_TEXCOORD4</em>&nbsp;</td><td>
 TU 4 texture coordinates. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a65"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD5" ref="a108a65" args="" -->CS_VATTRIB_TEXCOORD5</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a53"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD5" ref="a128a53" args="" -->CS_VATTRIB_TEXCOORD5</em>&nbsp;</td><td>
 TU 5 texture coordinates. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a66"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD6" ref="a108a66" args="" -->CS_VATTRIB_TEXCOORD6</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a54"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD6" ref="a128a54" args="" -->CS_VATTRIB_TEXCOORD6</em>&nbsp;</td><td>
 TU 6 texture coordinates. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a67"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD7" ref="a108a67" args="" -->CS_VATTRIB_TEXCOORD7</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a55"></a><!-- doxytag: member="CS_VATTRIB_TEXCOORD7" ref="a128a55" args="" -->CS_VATTRIB_TEXCOORD7</em>&nbsp;</td><td>
 TU 7 texture coordinates. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a68"></a><!-- doxytag: member="CS_VATTRIB_0" ref="a108a68" args="" -->CS_VATTRIB_0</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a56"></a><!-- doxytag: member="CS_VATTRIB_0" ref="a128a56" args="" -->CS_VATTRIB_0</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a69"></a><!-- doxytag: member="CS_VATTRIB_1" ref="a108a69" args="" -->CS_VATTRIB_1</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a57"></a><!-- doxytag: member="CS_VATTRIB_1" ref="a128a57" args="" -->CS_VATTRIB_1</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a70"></a><!-- doxytag: member="CS_VATTRIB_2" ref="a108a70" args="" -->CS_VATTRIB_2</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a58"></a><!-- doxytag: member="CS_VATTRIB_2" ref="a128a58" args="" -->CS_VATTRIB_2</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a71"></a><!-- doxytag: member="CS_VATTRIB_3" ref="a108a71" args="" -->CS_VATTRIB_3</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a59"></a><!-- doxytag: member="CS_VATTRIB_3" ref="a128a59" args="" -->CS_VATTRIB_3</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a72"></a><!-- doxytag: member="CS_VATTRIB_4" ref="a108a72" args="" -->CS_VATTRIB_4</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a60"></a><!-- doxytag: member="CS_VATTRIB_4" ref="a128a60" args="" -->CS_VATTRIB_4</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a73"></a><!-- doxytag: member="CS_VATTRIB_5" ref="a108a73" args="" -->CS_VATTRIB_5</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a61"></a><!-- doxytag: member="CS_VATTRIB_5" ref="a128a61" args="" -->CS_VATTRIB_5</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a74"></a><!-- doxytag: member="CS_VATTRIB_6" ref="a108a74" args="" -->CS_VATTRIB_6</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a62"></a><!-- doxytag: member="CS_VATTRIB_6" ref="a128a62" args="" -->CS_VATTRIB_6</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a75"></a><!-- doxytag: member="CS_VATTRIB_7" ref="a108a75" args="" -->CS_VATTRIB_7</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a63"></a><!-- doxytag: member="CS_VATTRIB_7" ref="a128a63" args="" -->CS_VATTRIB_7</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a76"></a><!-- doxytag: member="CS_VATTRIB_8" ref="a108a76" args="" -->CS_VATTRIB_8</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a64"></a><!-- doxytag: member="CS_VATTRIB_8" ref="a128a64" args="" -->CS_VATTRIB_8</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a77"></a><!-- doxytag: member="CS_VATTRIB_9" ref="a108a77" args="" -->CS_VATTRIB_9</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a65"></a><!-- doxytag: member="CS_VATTRIB_9" ref="a128a65" args="" -->CS_VATTRIB_9</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a78"></a><!-- doxytag: member="CS_VATTRIB_10" ref="a108a78" args="" -->CS_VATTRIB_10</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a66"></a><!-- doxytag: member="CS_VATTRIB_10" ref="a128a66" args="" -->CS_VATTRIB_10</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a79"></a><!-- doxytag: member="CS_VATTRIB_11" ref="a108a79" args="" -->CS_VATTRIB_11</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a67"></a><!-- doxytag: member="CS_VATTRIB_11" ref="a128a67" args="" -->CS_VATTRIB_11</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a80"></a><!-- doxytag: member="CS_VATTRIB_12" ref="a108a80" args="" -->CS_VATTRIB_12</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a68"></a><!-- doxytag: member="CS_VATTRIB_12" ref="a128a68" args="" -->CS_VATTRIB_12</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a81"></a><!-- doxytag: member="CS_VATTRIB_13" ref="a108a81" args="" -->CS_VATTRIB_13</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a69"></a><!-- doxytag: member="CS_VATTRIB_13" ref="a128a69" args="" -->CS_VATTRIB_13</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a108a82"></a><!-- doxytag: member="CS_VATTRIB_14" ref="a108a82" args="" -->CS_VATTRIB_14</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a128a70"></a><!-- doxytag: member="CS_VATTRIB_14" ref="a128a70" args="" -->CS_VATTRIB_14</em>&nbsp;</td><td>
 General vertex attribute. </td></tr>
 </table>
 </dl>
@@ -1509,13 +1443,13 @@ General vertex attribute. </td></tr>
 Definition at line <a class="el" href="graph3d_8h-source.html#l00154">154</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a107"></a><!-- doxytag: member="graph3d.h::csZBufMode" ref="a107" args="" --><p>
+<a class="anchor" name="a127"></a><!-- doxytag: member="graph3d.h::csZBufMode" ref="a127" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a107">csZBufMode</a>          </td>
+          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a127">csZBufMode</a>          </td>
         </tr>
       </table>
     </td>
@@ -1533,21 +1467,21 @@ Z-buffer modes.
 <p>
 <dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="a107a44"></a><!-- doxytag: member="CS_ZBUF_NONE" ref="a107a44" args="" -->CS_ZBUF_NONE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a127a32"></a><!-- doxytag: member="CS_ZBUF_NONE" ref="a127a32" args="" -->CS_ZBUF_NONE</em>&nbsp;</td><td>
 Don't test or write. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a107a45"></a><!-- doxytag: member="CS_ZBUF_FILL" ref="a107a45" args="" -->CS_ZBUF_FILL</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a127a33"></a><!-- doxytag: member="CS_ZBUF_FILL" ref="a127a33" args="" -->CS_ZBUF_FILL</em>&nbsp;</td><td>
 Write unconditionally. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a107a46"></a><!-- doxytag: member="CS_ZBUF_TEST" ref="a107a46" args="" -->CS_ZBUF_TEST</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a127a34"></a><!-- doxytag: member="CS_ZBUF_TEST" ref="a127a34" args="" -->CS_ZBUF_TEST</em>&nbsp;</td><td>
 Test only. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a107a47"></a><!-- doxytag: member="CS_ZBUF_USE" ref="a107a47" args="" -->CS_ZBUF_USE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a127a35"></a><!-- doxytag: member="CS_ZBUF_USE" ref="a127a35" args="" -->CS_ZBUF_USE</em>&nbsp;</td><td>
 Test, write if successful. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a107a48"></a><!-- doxytag: member="CS_ZBUF_EQUAL" ref="a107a48" args="" -->CS_ZBUF_EQUAL</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a127a36"></a><!-- doxytag: member="CS_ZBUF_EQUAL" ref="a127a36" args="" -->CS_ZBUF_EQUAL</em>&nbsp;</td><td>
 Test if equal. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a107a49"></a><!-- doxytag: member="CS_ZBUF_INVERT" ref="a107a49" args="" -->CS_ZBUF_INVERT</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a127a37"></a><!-- doxytag: member="CS_ZBUF_INVERT" ref="a127a37" args="" -->CS_ZBUF_INVERT</em>&nbsp;</td><td>
 Inverted test. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a107a50"></a><!-- doxytag: member="CS_ZBUF_MESH" ref="a107a50" args="" -->CS_ZBUF_MESH</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a127a38"></a><!-- doxytag: member="CS_ZBUF_MESH" ref="a127a38" args="" -->CS_ZBUF_MESH</em>&nbsp;</td><td>
 Use the z mode of the render mesh (NOTE: NOT VALID AS MESH ZMODE). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a107a51"></a><!-- doxytag: member="CS_ZBUF_MESH2" ref="a107a51" args="" -->CS_ZBUF_MESH2</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a127a39"></a><!-- doxytag: member="CS_ZBUF_MESH2" ref="a127a39" args="" -->CS_ZBUF_MESH2</em>&nbsp;</td><td>
 Use a "pass 2" z mode depending on the render mesh zmode. 
 <p>
 The mesh zmode is used a to choose a zmode that makes sure only pixels that are changed by the mesh zmode can be touched, e.g. if the mesh has a zmode of "zuse", zmesh2 will resolve to "ztest". This is useful for multi- pass stuff. (NOTE: NOT VALID AS MESH ZMODE)</td></tr>
@@ -1558,13 +1492,13 @@ The mesh zmode is used a to choose a zmode that makes sure only pixels that are 
 Definition at line <a class="el" href="graph3d_8h-source.html#l00110">110</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="a109"></a><!-- doxytag: member="graph3d.h::G3D_RENDERSTATEOPTION" ref="a109" args="" --><p>
+<a class="anchor" name="a133"></a><!-- doxytag: member="graph3d.h::G3D_RENDERSTATEOPTION" ref="a133" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a109">G3D_RENDERSTATEOPTION</a>          </td>
+          <td class="md" nowrap valign="top">enum <a class="el" href="graph3d_8h.html#a133">G3D_RENDERSTATEOPTION</a>          </td>
         </tr>
       </table>
     </td>
@@ -1582,39 +1516,39 @@ Graphics3D render state options.
 <p>
 <dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="a109a84"></a><!-- doxytag: member="G3DRENDERSTATE_ZBUFFERMODE" ref="a109a84" args="" -->G3DRENDERSTATE_ZBUFFERMODE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a104"></a><!-- doxytag: member="G3DRENDERSTATE_ZBUFFERMODE" ref="a133a104" args="" -->G3DRENDERSTATE_ZBUFFERMODE</em>&nbsp;</td><td>
 Set Z-buffer fill/test/use mode (parameter is a csZBufMode). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a85"></a><!-- doxytag: member="G3DRENDERSTATE_DITHERENABLE" ref="a109a85" args="" -->G3DRENDERSTATE_DITHERENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a105"></a><!-- doxytag: member="G3DRENDERSTATE_DITHERENABLE" ref="a133a105" args="" -->G3DRENDERSTATE_DITHERENABLE</em>&nbsp;</td><td>
 Enable/disable dithering (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a86"></a><!-- doxytag: member="G3DRENDERSTATE_BILINEARMAPPINGENABLE" ref="a109a86" args="" -->G3DRENDERSTATE_BILINEARMAPPINGENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a106"></a><!-- doxytag: member="G3DRENDERSTATE_BILINEARMAPPINGENABLE" ref="a133a106" args="" -->G3DRENDERSTATE_BILINEARMAPPINGENABLE</em>&nbsp;</td><td>
 Enable/disable bi-linear mapping (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a87"></a><!-- doxytag: member="G3DRENDERSTATE_TRILINEARMAPPINGENABLE" ref="a109a87" args="" -->G3DRENDERSTATE_TRILINEARMAPPINGENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a107"></a><!-- doxytag: member="G3DRENDERSTATE_TRILINEARMAPPINGENABLE" ref="a133a107" args="" -->G3DRENDERSTATE_TRILINEARMAPPINGENABLE</em>&nbsp;</td><td>
 Enable/disable tri-linear mapping (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a88"></a><!-- doxytag: member="G3DRENDERSTATE_TRANSPARENCYENABLE" ref="a109a88" args="" -->G3DRENDERSTATE_TRANSPARENCYENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a108"></a><!-- doxytag: member="G3DRENDERSTATE_TRANSPARENCYENABLE" ref="a133a108" args="" -->G3DRENDERSTATE_TRANSPARENCYENABLE</em>&nbsp;</td><td>
 Enable/disable transparent textures (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a89"></a><!-- doxytag: member="G3DRENDERSTATE_MIPMAPENABLE" ref="a109a89" args="" -->G3DRENDERSTATE_MIPMAPENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a109"></a><!-- doxytag: member="G3DRENDERSTATE_MIPMAPENABLE" ref="a133a109" args="" -->G3DRENDERSTATE_MIPMAPENABLE</em>&nbsp;</td><td>
 Enable/disable mip-mapping (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a90"></a><!-- doxytag: member="G3DRENDERSTATE_TEXTUREMAPPINGENABLE" ref="a109a90" args="" -->G3DRENDERSTATE_TEXTUREMAPPINGENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a110"></a><!-- doxytag: member="G3DRENDERSTATE_TEXTUREMAPPINGENABLE" ref="a133a110" args="" -->G3DRENDERSTATE_TEXTUREMAPPINGENABLE</em>&nbsp;</td><td>
 Enable/disable textures (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a91"></a><!-- doxytag: member="G3DRENDERSTATE_LIGHTINGENABLE" ref="a109a91" args="" -->G3DRENDERSTATE_LIGHTINGENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a111"></a><!-- doxytag: member="G3DRENDERSTATE_LIGHTINGENABLE" ref="a133a111" args="" -->G3DRENDERSTATE_LIGHTINGENABLE</em>&nbsp;</td><td>
 Enable/disable lighting (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a92"></a><!-- doxytag: member="G3DRENDERSTATE_INTERLACINGENABLE" ref="a109a92" args="" -->G3DRENDERSTATE_INTERLACINGENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a112"></a><!-- doxytag: member="G3DRENDERSTATE_INTERLACINGENABLE" ref="a133a112" args="" -->G3DRENDERSTATE_INTERLACINGENABLE</em>&nbsp;</td><td>
 Enable/disable interlacing (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a93"></a><!-- doxytag: member="G3DRENDERSTATE_MMXENABLE" ref="a109a93" args="" -->G3DRENDERSTATE_MMXENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a113"></a><!-- doxytag: member="G3DRENDERSTATE_MMXENABLE" ref="a133a113" args="" -->G3DRENDERSTATE_MMXENABLE</em>&nbsp;</td><td>
 Enable/disable MMX instructions usage (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a94"></a><!-- doxytag: member="G3DRENDERSTATE_INTERPOLATIONSTEP" ref="a109a94" args="" -->G3DRENDERSTATE_INTERPOLATIONSTEP</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a114"></a><!-- doxytag: member="G3DRENDERSTATE_INTERPOLATIONSTEP" ref="a133a114" args="" -->G3DRENDERSTATE_INTERPOLATIONSTEP</em>&nbsp;</td><td>
 Set perspective-correction interpolation step (parameter is a int). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a95"></a><!-- doxytag: member="G3DRENDERSTATE_MAXPOLYGONSTODRAW" ref="a109a95" args="" -->G3DRENDERSTATE_MAXPOLYGONSTODRAW</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a115"></a><!-- doxytag: member="G3DRENDERSTATE_MAXPOLYGONSTODRAW" ref="a133a115" args="" -->G3DRENDERSTATE_MAXPOLYGONSTODRAW</em>&nbsp;</td><td>
 Set maximal number of polygons per frame to draw (parameter is a int). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a96"></a><!-- doxytag: member="G3DRENDERSTATE_GOURAUDENABLE" ref="a109a96" args="" -->G3DRENDERSTATE_GOURAUDENABLE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a116"></a><!-- doxytag: member="G3DRENDERSTATE_GOURAUDENABLE" ref="a133a116" args="" -->G3DRENDERSTATE_GOURAUDENABLE</em>&nbsp;</td><td>
 Enable/disable Gouraud shading (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="a109a97"></a><!-- doxytag: member="G3DRENDERSTATE_EDGES" ref="a109a97" args="" -->G3DRENDERSTATE_EDGES</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="a133a117"></a><!-- doxytag: member="G3DRENDERSTATE_EDGES" ref="a133a117" args="" -->G3DRENDERSTATE_EDGES</em>&nbsp;</td><td>
 Enable/disable edge drawing (debugging) (parameter is a bool). </td></tr>
 </table>
 </dl>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00313">313</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00467">467</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
 <hr size="1"><address><small>Generated for Crystal Space by 
