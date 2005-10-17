@@ -146,10 +146,6 @@ SOURCE=..\..\plugins\video\render3d\software\halo.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\scan.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\software\sft3dcom.cpp
 # End Source File
 # Begin Source File
@@ -159,10 +155,6 @@ SOURCE=..\..\plugins\video\render3d\software\soft_g3d.cpp
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\software\soft_txt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\tcache.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -186,14 +178,6 @@ SOURCE=..\..\plugins\video\render3d\software\polyrast.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\scan.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\scanindex.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\software\sft3dcom.h
 # End Source File
 # Begin Source File
@@ -203,14 +187,6 @@ SOURCE=..\..\plugins\video\render3d\software\soft_g3d.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\software\soft_txt.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\sttest.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\software\tcache.h
 # End Source File
 # Begin Source File
 
