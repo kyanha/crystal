@@ -73,9 +73,10 @@ also don't know where we can safely put our camera. In the map files
 it is possible to specify one or more starting positions. We will
 query the engine for such a starting position and initialize our
 view (camera) to that. This happens with the following code which you should
-add after <code>engine-&gt;Prepare()</code> in <code>LoadMap()</code>:
+add just after <code>engine-&gt;Prepare()</code> in the <code>Application()</code> method:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">  ...
+  engine-&gt;Prepare ();
 
   // Find the starting position in this level.
   csVector3 pos (0, 0, 0);
@@ -91,6 +92,7 @@ add after <code>engine-&gt;Prepare()</code> in <code>LoadMap()</code>:
     // We didn't find a valid starting position. So we default
     // to going to room called 'room' at position (0,0,0).
     room = engine-&gt;GetSectors ()-&gt;FindByName (&quot;room&quot;);
+    pos = csVector3 (0, 0, 0);
   }
   if (!room)
     ReportError(&quot;Can't find a valid starting position!&quot;);
@@ -98,18 +100,31 @@ add after <code>engine-&gt;Prepare()</code> in <code>LoadMap()</code>:
   view-&gt;GetCamera ()-&gt;SetSector (room);
   view-&gt;GetCamera ()-&gt;GetTransform ().SetOrigin (pos);
 
-  return true;
+  // Initialize our collider actor.
+  collider_actor.SetCollideSystem (cdsys);
+  collider_actor.SetEngine (engine);
+  csVector3 legs (.2f, .3f, .2f);
+  csVector3 body (.2f, 1.2f, .2f);
+  csVector3 shift (0, -1, 0);
+  collider_actor.InitializeColliders (view-&gt;GetCamera (),
+  	legs, body, shift);
+
+  Run ();
+  ...
 }
 </pre></td></tr></table>
 <p>First, we see how many camera positions there were defined in the
 map by using <code>iEngine::GetCameraPositionCount()</code>. If there are none,
 then the map didn't define a starting position. In that case we will
 assume there is a sector called 'room' and we will start the camera
-at (0,0,0) in that sector. But otherwise we will use the first
+at (0,0,0) in that sector. Otherwise we will use the first
 starting position defined in the map.
 </p>
-<p>This is all. After adding this code this application will now load
-the <samp>`flarge'</samp> map and display it so you can explore this map.
+<p>Once we know our position in the sector, we are also able to initialize the
+camera's collision data, as shown in the code above.
+</p>
+<p>That's it. After adding this code this application will now load
+the <samp>`flarge'</samp> map and display it so you can explore the map.
 </p>
 
 <hr size="1">

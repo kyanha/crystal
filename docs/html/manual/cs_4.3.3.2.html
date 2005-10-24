@@ -66,7 +66,7 @@ ul.toc {list-style: none}
 <p>In the second tutorial we already mentioned <small>VFS</small> (see section <a href="cs_4.7.html#4.7">Virtual File System (<small>VFS</small>)</a>). This
 is important in this case too since we are going to load the map from
 the virtual filesystem. To do this we first add the new <code>LoadMap()</code>
-routine right before the <code>Initialize()</code> function:
+routine just before the <code>OnInitialize()</code> function:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">bool Simple::LoadMap ()
 {
@@ -76,9 +76,6 @@ routine right before the <code>Initialize()</code> function:
   // Load the level file which is called 'world'.
   if (!loader-&gt;LoadMapFile (&quot;world&quot;))
     ReportError(&quot;Error couldn't load level!&quot;);
-
-  engine-&gt;Prepare ();
-
   return true;
 }
 </pre></td></tr></table>
@@ -99,26 +96,34 @@ is specified there.
 <p>If loading is successful, then you must call <code>iEngine::Prepare()</code> to
 make sure that all lightmaps are correctly loaded from the cache
 and other necessary setup work is done (i.e. textures are registered
-and so on).
-</p>
-<p>Additionally, change the last part of <code>Application()</code> to this:
+and so on). This is demonstrated in the code below, which you add to the
+<code>Application()</code> method, following the <code>SetRectangle()</code> invocation.
+We also add code to initialize collision detection for geometry in the map
+which was just loaded.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">bool Simple::Application ()
 {
   ...
-
-  view.AttachNew(new csView (engine, g3d));
-  iGraphics2D* g2d = g3d-&gt;GetDriver2D ();
   view-&gt;SetRectangle (0, 0, g2d-&gt;GetWidth (), g2d-&gt;GetHeight ());
 
+  // Here we load our world from a map file.
   if (!LoadMap ()) return false;
 
+  // Initialize collision objects for all loaded objects.
+  csColliderHelper::InitializeCollisionWrappers (cdsys, engine);
+
+  // Let the engine prepare all lightmaps for use and also free all
+  // images that were loaded for the texture manager.
+  engine-&gt;Prepare ();
+
+  Run();
   ...
 }
 </pre></td></tr></table>
-<p>So, first we create our view but haven't set the current sector.
-Instead, we will have <code>LoadMap()</code> do that based upon the loaded map,
-as shown below.
+<p>So, we now have geometry loaded into the world, but we haven't set the current
+sector or the camera's position in the world. Often, maps contain information
+specifying where the camera should be placed when the map is first loaded, so
+we will use this information if present. This is the topic of the next section.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
