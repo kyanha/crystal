@@ -79,10 +79,10 @@ private:
   csRef&lt;iGraphics3D&gt; g3d;
   csRef&lt;iKeyboardDriver&gt; kbd;
   csRef&lt;iVirtualClock&gt; vc;
+  csRef&lt;iCollideSystem&gt; cdsys;
   csRef&lt;iView&gt; view;
   iSector* room;
-  csVector3 pos;
-  float rotX, rotY;
+  csColliderActor collider_actor;
  
   bool OnKeyboard (iEvent&amp;);
   void ProcessFrame ();
@@ -90,7 +90,7 @@ private:
   bool LoadMap ();
 
 public:
-  Simple (iObjectRegistry* object_reg);
+  Simple ();
   ~Simple ();
 
   void OnExit ();
@@ -106,7 +106,7 @@ public:
 
 CS_IMPLEMENT_APPLICATION
 
-Simple::Simple (iObjectRegistry* object_reg)
+Simple::Simple ()
 {
   SetApplicationName (&quot;CrystalSpace.SimpleMap&quot;);
 }
@@ -119,11 +119,9 @@ void Simple::ProcessFrame ()
 {
   // First get elapsed time from the virtual clock.
   csTicks elapsed_time = vc-&gt;GetElapsedTicks ();
-  
-  // Now rotate the camera according to keyboard state
-  float speed = (elapsed_time / 1000.0) * (0.03 * 20);
 
-  iCamera* c = view-&gt;GetCamera();
+  csVector3 obj_move (0);
+  csVector3 obj_rotate (0);
 
   if (kbd-&gt;GetKeyState (CSKEY_SHIFT))
   {
@@ -131,42 +129,39 @@ void Simple::ProcessFrame ()
     // the camera to strafe up, down, left or right from it's
     // current position.
     if (kbd-&gt;GetKeyState (CSKEY_RIGHT))
-      c-&gt;Move (CS_VEC_RIGHT * 4 * speed);
+      obj_move = CS_VEC_RIGHT * 3.0f;
     if (kbd-&gt;GetKeyState (CSKEY_LEFT))
-      c-&gt;Move (CS_VEC_LEFT * 4 * speed);
+      obj_move = CS_VEC_LEFT * 3.0f;
     if (kbd-&gt;GetKeyState (CSKEY_UP))
-      c-&gt;Move (CS_VEC_UP * 4 * speed);
+      obj_move = CS_VEC_UP * 3.0f;
     if (kbd-&gt;GetKeyState (CSKEY_DOWN))
-      c-&gt;Move (CS_VEC_DOWN * 4 * speed);
+      obj_move = CS_VEC_DOWN * 3.0f;
   }
   else
   {
     // left and right cause the camera to rotate on the global Y
     // axis; page up and page down cause the camera to rotate on the
-    // _camera's_ X axis and up and downarrows cause the camera to
-    // go forwards and backwards.
+    // _camera's_ X axis (more on this in a second) and up and down
+    // arrows cause the camera to go forwards and backwards.
     if (kbd-&gt;GetKeyState (CSKEY_RIGHT))
-      rotY += speed;
+      obj_rotate.Set (0, 1, 0);
     if (kbd-&gt;GetKeyState (CSKEY_LEFT))
-      rotY -= speed;
+      obj_rotate.Set (0, -1, 0);
     if (kbd-&gt;GetKeyState (CSKEY_PGUP))
-      rotX += speed;
+      obj_rotate.Set (1, 0, 0);
     if (kbd-&gt;GetKeyState (CSKEY_PGDN))
-      rotX -= speed;
+      obj_rotate.Set (-1, 0, 0);
     if (kbd-&gt;GetKeyState (CSKEY_UP))
-      c-&gt;Move (CS_VEC_FORWARD * 4 * speed);
+      obj_move = CS_VEC_FORWARD * 3.0f;
     if (kbd-&gt;GetKeyState (CSKEY_DOWN))
-      c-&gt;Move (CS_VEC_BACKWARD * 4 * speed);
+      obj_move = CS_VEC_BACKWARD * 3.0f;
   }
 
-  // We now assign a new rotation transformation to the camera.
-  csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
-  csOrthoTransform ot (rot, c-&gt;GetTransform().GetOrigin ());
-  c-&gt;SetTransform (ot);
+  collider_actor.Move (float (elapsed_time) / 1000.0f, 1.0f,
+    	obj_move, obj_rotate);
 
   // Tell 3D driver we're going to display 3D things.
-  if (!g3d-&gt;BeginDraw(
-    engine-&gt;GetBeginDrawFlags() | CSDRAW_3DGRAPHICS))
+  if (!g3d-&gt;BeginDraw (engine-&gt;GetBeginDrawFlags () | CSDRAW_3DGRAPHICS))
     return;
 
   // Tell the camera to render into the frame buffer.
@@ -195,7 +190,7 @@ bool Simple::OnKeyboard(iEvent&amp; ev)
   return false;
 }
 
-bool Simple::Initialize ()
+bool Simple::OnInitialize(int argc, char* argv[])
 {
   if (!csInitializer::RequestPlugins(GetObjectRegistry(),
     CS_REQUEST_VFS,
@@ -206,6 +201,8 @@ bool Simple::Initialize ()
     CS_REQUEST_LEVELLOADER,
     CS_REQUEST_REPORTER,
     CS_REQUEST_REPORTERLISTENER,
+    CS_REQUEST_PLUGIN(&quot;crystalspace.collisiondetection.opcode&quot;,
+		iCollideSystem),
     CS_REQUEST_END))
     return ReportError(&quot;Failed to initialize plugins!&quot;);
 
@@ -213,6 +210,10 @@ bool Simple::Initialize ()
     return ReportError(&quot;Failed to set up event handler!&quot;);
 
   return true;
+}
+
+void Simple::OnExit()
+{
 }
 
 bool Simple::Application()
@@ -235,8 +236,12 @@ bool Simple::Application()
   loader = CS_QUERY_REGISTRY(GetObjectRegistry(), iLoader);
   if (!loader) return ReportError(&quot;Failed to locate Loader!&quot;);
 
-  view = csPtr&lt;iView&gt; (new csView (engine, g3d));
+  cdsys = CS_QUERY_REGISTRY (GetObjectRegistry(), iCollideSystem);
+  if (!cdsys) return ReportError (&quot;Failed to locate CD system!&quot;);
+
+  view.AttachNew(new csView (engine, g3d));
   iGraphics2D* g2d = g3d-&gt;GetDriver2D ();
+  // We use the full window to draw the world.
   view-&gt;SetRectangle (0, 0, g2d-&gt;GetWidth (), g2d-&gt;GetHeight ());
 
   Run();
@@ -252,11 +257,12 @@ int main (int argc, char* argv[])
   return csApplicationRunner&lt;Simple&gt;::Run (argc, argv);
 }
 </pre></td></tr></table>
-<p>One important note in the code above: we removed the following line:
+<p>One important note in the code above which differs from the earlier tutorials
+is that we removed the following line:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">engine-&gt;SetLightingCacheMode (0);
 </pre></td></tr></table>
-<p>That's because, when we are loading from map file, we actually want
+<p>This is because, when we are loading from map file, we actually want
 the lighting information to be read from the cache (if present).
 We do so because relighting a map can be a time-consuming process.
 </p>
