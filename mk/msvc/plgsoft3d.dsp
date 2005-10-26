@@ -178,6 +178,14 @@ SOURCE=..\..\plugins\video\render3d\software\polyrast.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\video\render3d\software\scan_blend.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\software\scan_pix.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\video\render3d\software\sft3dcom.h
 # End Source File
 # Begin Source File
