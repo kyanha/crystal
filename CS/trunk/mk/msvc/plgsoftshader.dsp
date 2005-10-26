@@ -138,26 +138,6 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_argb8888.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_argb_gen32.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_rgb555.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_rgb565.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_rgb_gen16.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\softshader.cpp
 # End Source File
 # Begin Source File
@@ -174,14 +154,6 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\softshader_v
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_blend.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_pix.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scan_z.h
 # End Source File
 # Begin Source File
@@ -191,10 +163,6 @@ SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scanline.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scanline_base.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\video\render3d\shader\shaderplugins\softshader\scanlinerenderers.h
 # End Source File
 # Begin Source File
 
