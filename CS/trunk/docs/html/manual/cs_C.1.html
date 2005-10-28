@@ -1923,6 +1923,40 @@ instead of <code>iBase</code> as the type of the parameter.
 specialization has been provided, so equivalent functionality can be achieved
 by simply using <code>csArray&lt;csRGBcolor*&gt;</code>.
 </p>
+<a name="SEC944"></a>
+<h3 class="subheading"> Changes for hierarchical objects </h3>
+
+<p>Meshes and lights can now properly be used as hierarchical objects with the
+same API. Here is how it works: meshes and lights implement the new
+<code>iSceneNode</code> interface. You can do <code>QuerySceneNode()</code> to get the
+scene object from the mesh, light, or camera without having to do
+<code>SCF_QUERY_INTERFACE</code>. To make some object a child of another you simply
+do:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">object_child-&gt;QuerySceneNode ()-&gt;SetParent (
+	    	  object_parent-&gt;QuerySceneNode ());
+</pre></td></tr></table>
+<p>To remove some object from a parent you do:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">object_child-&gt;QuerySceneNode ()-&gt;SetParent (0);
+</pre></td></tr></table>
+<p>You can get the children by calling <code>iSceneNode-&gt;GetChildren()</code>.
+</p>
+<p>The following methods have been removed:
+</p><ul>
+<li>
+<code>iMeshWrapper-&gt;GetChildren()</code>
+</li><li>
+<code>iMeshWrapper-&gt;GetParentContainer()</code>
+</li><li>
+<code>iMeshWrapper-&gt;SetParentContainer()</code>
+</li><li>
+<code>iMovable-&gt;GetParent()</code>
+</li><li>
+<code>iMovable-&gt;SetParent()</code>
+</li></ul>
+
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.html#C." title="Previous section in reading order"> &lt; </a>]</td>
