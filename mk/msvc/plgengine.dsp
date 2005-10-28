@@ -334,6 +334,10 @@ SOURCE=..\..\plugins\engine\3d\rview.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\engine\3d\scenenode.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\engine\3d\sector.h
 # End Source File
 # Begin Source File
