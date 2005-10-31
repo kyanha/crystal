@@ -73,9 +73,9 @@
 <a name="l00043"></a>00043 <span class="preprocessor"> #define CSREF_TRACK(x, cmd, refCount, obj, tag)    \</span>
 <a name="l00044"></a>00044 <span class="preprocessor">  {                                                 \</span>
 <a name="l00045"></a>00045 <span class="preprocessor">    const int rc = obj ? refCount : -1;             \</span>
-<a name="l00046"></a>00046 <span class="preprocessor">    if (obj) cmd;                                   \</span>
-<a name="l00047"></a>00047 <span class="preprocessor">    if (obj)                                        \</span>
-<a name="l00048"></a>00048 <span class="preprocessor">    {                                               \</span>
+<a name="l00046"></a>00046 <span class="preprocessor">    if (obj)                                        \</span>
+<a name="l00047"></a>00047 <span class="preprocessor">    {                                               \</span>
+<a name="l00048"></a>00048 <span class="preprocessor">      cmd;                                          \</span>
 <a name="l00049"></a>00049 <span class="preprocessor">      csRefTrackerAccess::SetDescription (obj,      \</span>
 <a name="l00050"></a>00050 <span class="preprocessor">        typeid(T).name());                          \</span>
 <a name="l00051"></a>00051 <span class="preprocessor">      csRefTrackerAccess::Match ## x (obj, rc, tag);\</span>
@@ -86,7 +86,7 @@
 <a name="l00056"></a>00056 <span class="preprocessor"></span><span class="preprocessor"> #define CSREF_TRACK_DECREF(obj,tag)    \</span>
 <a name="l00057"></a>00057 <span class="preprocessor">  CSREF_TRACK(DecRef, obj-&gt;DecRef(), obj-&gt;GetRefCount(), obj, tag);</span>
 <a name="l00058"></a>00058 <span class="preprocessor"></span><span class="preprocessor"> #define CSREF_TRACK_ASSIGN(obj,tag)    \</span>
-<a name="l00059"></a>00059 <span class="preprocessor">  CSREF_TRACK(IncRef, (0), obj-&gt;GetRefCount() - 1, obj, tag);</span>
+<a name="l00059"></a>00059 <span class="preprocessor">  CSREF_TRACK(IncRef, void(0), obj-&gt;GetRefCount() - 1, obj, tag);</span>
 <a name="l00060"></a>00060 <span class="preprocessor"></span><span class="preprocessor">#else</span>
 <a name="l00061"></a><a class="code" href="ref_8h.html#afb365ca8e84fbe0e09a8604f662ce71">00061</a> <span class="preprocessor"></span><span class="preprocessor"> #define CSREF_TRACK_INCREF(obj,tag) \</span>
 <a name="l00062"></a>00062 <span class="preprocessor">  if (obj) obj-&gt;IncRef();</span>
