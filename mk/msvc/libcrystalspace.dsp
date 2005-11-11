@@ -1306,10 +1306,6 @@ SOURCE=..\..\libs\..\include\csplugincommon\render3d\normalizationcube.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\..\include\csplugincommon\render3d\pixfmt.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\..\include\csplugincommon\render3d\txtmgr.h
 # End Source File
 # Begin Source File
