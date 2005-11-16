@@ -550,6 +550,10 @@ SOURCE=..\..\libs\cstool\userrndbuf.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\vertexcompress.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\ansiparse.cpp
 # End Source File
 # Begin Source File
@@ -1475,6 +1479,10 @@ SOURCE=..\..\libs\..\include\cstool\tokenlist.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\cstool\userrndbuf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\cstool\vertexcompress.h
 # End Source File
 # Begin Source File
 
