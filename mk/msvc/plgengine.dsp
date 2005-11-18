@@ -214,10 +214,6 @@ SOURCE=..\..\plugins\engine\3d\portalcontainer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\engine\3d\rdrprior.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\engine\3d\region.cpp
 # End Source File
 # Begin Source File
@@ -315,10 +311,6 @@ SOURCE=..\..\plugins\engine\3d\portal.h
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\3d\portalcontainer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\plugins\engine\3d\rdrprior.h
 # End Source File
 # Begin Source File
 
