@@ -1736,6 +1736,17 @@ documentations.
 Instead use <small>AWS</small>. See section <a href="cs_4.20.html#4.20">Alternate Windowing System (<small>AWS</small>)</a>.
 </p>
 <a name="SEC930"></a>
+<h3 class="subheading"> <small>AWS</small> Changes </h3>
+
+<p>The trigger system in <small>AWS</small> has changed. The trigger callback function
+now has an additional <samp>`unsigned long'</samp> parameter like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">static void TriggerFunc (unsigned long, intptr_t, iAwsSource*);
+</pre></td></tr></table>
+<p>This extra parameter is the id of the given trigger name as returned by the
+standard string set (<samp>`crystalspace.shared.stringset'</samp>).
+</p>
+<a name="SEC931"></a>
 <h3 class="subheading"> Transform Split </h3>
 
 <p>To allow more control over how geometry is transformed when using shaders the
@@ -1745,7 +1756,7 @@ is sent via a shader variable, while <samp>`world2camera'</samp> is specified vi
 <code>iGraphics3D::SetWorldToCamera()</code> (but it is also available as a shader
 variable to shader programs).
 </p>
-<a name="SEC931"></a>
+<a name="SEC932"></a>
 <h3 class="subheading"> <samp>`chunklod'</samp> Terrain Removal </h3>
 
 <p>The <samp>`chunklod'</samp> terrain plugin has been removed:
@@ -1759,7 +1770,7 @@ variable to shader programs).
 
 <p><code>crystalspace.mesh.object.terrain.bruteblock</code>
 </p>
-<a name="SEC932"></a>
+<a name="SEC933"></a>
 <h3 class="subheading"> <samp>`csHashMap'</samp> and <samp>`csHashSet'</samp> Removal </h3>
 
 <p>The long-deprecated <samp>`csHashMap'</samp>, <samp>`csHashMapReversible'</samp>, and
@@ -1768,7 +1779,7 @@ variable to shader programs).
 string-related <em>set</em> functionality, you may also want to consider using
 <samp>`csStringHash'</samp> and <samp>`csStringSet'</samp>.
 </p>
-<a name="SEC933"></a>
+<a name="SEC934"></a>
 <h3 class="subheading"> <code>csObjectPool&lt;&gt;</code> Removal </h3>
 
 <p>The <code>csObjectPool&lt;&gt;</code> utility class has been removed since it managed
@@ -1784,7 +1795,7 @@ drop-in replacement for <code>csObjectPool&lt;&gt;</code> since the <small>API</
 <small>API</small>. A global search and replace should be sufficient to account for this
 change.
 </p>
-<a name="SEC934"></a>
+<a name="SEC935"></a>
 <h3 class="subheading"> <samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> Removal </h3>
 
 <p><samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> have been replaced
@@ -1815,7 +1826,7 @@ while (iter.HasNext())
 <p>Code using <samp>`csStringHashIterator'</samp> can be fixed using the same simple
 transformation.
 </p>
-<a name="SEC935"></a>
+<a name="SEC936"></a>
 <h3 class="subheading"> Miscellaneous Removals </h3>
 
 <p>The following facilities have been removed because they were unused and/or of
@@ -1834,13 +1845,13 @@ questionable use.
 using <samp>`csFrameDataHolder&lt;csDirtyAccessArray&lt;csRenderMesh*&gt; &gt;'</samp>.
 </li></ul>
 
-<a name="SEC936"></a>
+<a name="SEC937"></a>
 <h3 class="subheading"> <code>csRenderMeshHolderSingle</code> Renamed </h3>
 
 <p><samp>`csRenderMeshHolderSingle'</samp> has been renamed to <samp>`csRenderMeshHolder'</samp>
 as a consequence of the removal of <samp>`csRenderMeshHolderMultiple'</samp>.
 </p>
-<a name="SEC937"></a>
+<a name="SEC938"></a>
 <h3 class="subheading"> C++ Standard Conformance </h3>
 
 <p>Crystal Space's public header files are now C++ Language Standard
@@ -1849,7 +1860,7 @@ strictly to the C++ Language Standard (such as those which employ <em>gcc</em>'s
 <samp>`-ansi'</samp> and <samp>`-pedantic'</samp> options) can now include Crystal Space
 headers safely.
 </p>
-<a name="SEC938"></a>
+<a name="SEC939"></a>
 <h3 class="subheading"> <tt>`imap/parser.h'</tt> Deprecated </h3>
 
 <p>All functionality in the header <tt>`imap/parser.h'</tt> was long ago moved to
@@ -1859,7 +1870,7 @@ merely included <tt>`imap/loader.h'</tt> and did nothing more. Since
 <tt>`imap/parser.h'</tt> has no useful purpose, it is now officially deprecated,
 and deprecation warnings have been added. Use <tt>`imap/loader.h'</tt> instead.
 </p>
-<a name="SEC939"></a>
+<a name="SEC940"></a>
 <h3 class="subheading"> <code>csSet&lt;&gt;</code> Relocation and Changes </h3>
 
 <p>The declaration of <code>csSet&lt;&gt;</code> was moved out from <tt>`csutil/hash.h'</tt> and
@@ -1871,7 +1882,7 @@ exposed an underlying implementation detail of <code>csSet&lt;&gt;</code>.
 for storage of pointers in a <code>csSet&lt;&gt;</code> the <code>csPtrKey&lt;&gt;</code> wrapper must
 be used.
 </p>
-<a name="SEC940"></a>
+<a name="SEC941"></a>
 <h3 class="subheading"> <code>csHash&lt;&gt;</code> Changes </h3>
 
 <p>The way <code>csHash&lt;&gt;</code> handles support for arbitrary key types has been
@@ -1897,14 +1908,14 @@ and any composite types which provide these operators. Pointers (other than
 case: to use a pointer of type <samp>`Foo*'</samp> as a hash key, employ 
 <samp>`csPtrKey&lt;Foo&gt;'</samp> as the key type in the hash declaration. 
 </p>
-<a name="SEC941"></a>
+<a name="SEC942"></a>
 <h3 class="subheading"> <code>iConfig</code> Renamed </h3>
 
 <p>The <code>iConfig</code> interface has been renamed to the more fitting 
 <code>iPluginConfig</code>, and the containing header from <tt>`iutil/config.h'</tt> to
 <code>iutil/pluginconfig.h</code>. Other changes have not been made.
 </p>
-<a name="SEC942"></a>
+<a name="SEC943"></a>
 <h3 class="subheading"> Changes for Mesh Object Writers </h3>
 
 <p><code>iMeshObject::SetLogicalParent()</code> has been renamed to
@@ -1916,14 +1927,14 @@ of the parameter.
 Same for <code>GetLogicalParent()</code>. It also uses a <code>iMeshFactoryWrapper</code>
 instead of <code>iBase</code> as the type of the parameter.
 </p>
-<a name="SEC943"></a>
+<a name="SEC944"></a>
 <h3 class="subheading"> <code>csRGBVector</code> Removed </h3>
 
 <p>The <code>csRGBVector</code> class has been removed. A <code>csComparator&lt;&gt;</code> 
 specialization has been provided, so equivalent functionality can be achieved
 by simply using <code>csArray&lt;csRGBcolor*&gt;</code>.
 </p>
-<a name="SEC944"></a>
+<a name="SEC945"></a>
 <h3 class="subheading"> Changes for hierarchical objects </h3>
 
 <p>Meshes and lights can now properly be used as hierarchical objects with the
