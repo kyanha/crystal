@@ -190,10 +190,6 @@ SOURCE=..\..\libs\csgeom\obb.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\libs\csgeom\path.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\libs\csgeom\plane3.cpp
 # End Source File
 # Begin Source File
@@ -791,10 +787,6 @@ SOURCE=..\..\libs\csutil\scfimp.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\scfstr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\libs\csutil\scfstrset.cpp
 # End Source File
 # Begin Source File
 
