@@ -61,17 +61,24 @@
 <a name="l00036"></a>00036   <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;csVirtualClock, iVirtualClock&gt;
 <a name="l00037"></a>00037 {
 <a name="l00038"></a>00038 <span class="keyword">private</span>:
-<a name="l00040"></a>00040   <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> ElapsedTime, CurrentTime;
-<a name="l00041"></a>00041 
-<a name="l00042"></a>00042 <span class="keyword">public</span>:
-<a name="l00043"></a>00043   <a class="code" href="classcsVirtualClock.html">csVirtualClock</a> ();
-<a name="l00044"></a>00044   <span class="keyword">virtual</span> ~<a class="code" href="classcsVirtualClock.html">csVirtualClock</a> ();
-<a name="l00045"></a>00045 
-<a name="l00049"></a>00049   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Advance ();
-<a name="l00053"></a><a class="code" href="classcsVirtualClock.html#70e7bf9110194f6b8de71fafc7cf47aa">00053</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Suspend () { }
-<a name="l00057"></a><a class="code" href="classcsVirtualClock.html#5871dc5855ad29621d1b73e33348d2ca">00057</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Resume () { CurrentTime = <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> (-1); }
-<a name="l00062"></a><a class="code" href="classcsVirtualClock.html#97f6036e3001136260294fb349ab9f26">00062</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> GetElapsedTicks ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> ElapsedTime; }
-<a name="l00066"></a><a class="code" href="classcsVirtualClock.html#77c9117fb741d22bd99b0b67f8c767a1">00066</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> GetCurrentTicks ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> CurrentTime; }
+<a name="l00040"></a>00040   <span class="keyword">enum</span> 
+<a name="l00041"></a>00041   { 
+<a name="l00043"></a>00043     flagSuspended = 1,
+<a name="l00049"></a>00049     flagFirstShot = 2 
+<a name="l00050"></a>00050   };
+<a name="l00052"></a>00052   <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> elapsedTime;
+<a name="l00054"></a>00054   <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> currentVirtualTime;
+<a name="l00056"></a>00056   <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> currentRealTime;
+<a name="l00057"></a>00057   <a class="code" href="group__util.html#g1277b8d5127d0eced2e9d3b99a3a7079">uint</a> flags;
+<a name="l00058"></a>00058 <span class="keyword">public</span>:
+<a name="l00059"></a>00059   <a class="code" href="classcsVirtualClock.html">csVirtualClock</a> ();
+<a name="l00060"></a>00060   <span class="keyword">virtual</span> ~<a class="code" href="classcsVirtualClock.html">csVirtualClock</a> ();
+<a name="l00061"></a>00061 
+<a name="l00062"></a>00062   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Advance ();
+<a name="l00063"></a>00063   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Suspend ();
+<a name="l00064"></a>00064   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Resume ();
+<a name="l00065"></a><a class="code" href="classcsVirtualClock.html#97f6036e3001136260294fb349ab9f26">00065</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> GetElapsedTicks ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> elapsedTime; }
+<a name="l00066"></a><a class="code" href="classcsVirtualClock.html#77c9117fb741d22bd99b0b67f8c767a1">00066</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> GetCurrentTicks ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> currentVirtualTime; }
 <a name="l00067"></a>00067 };
 <a name="l00068"></a>00068 
 <a name="l00069"></a>00069 <span class="preprocessor">#endif // __CS_VIRTCLK_H__</span>
