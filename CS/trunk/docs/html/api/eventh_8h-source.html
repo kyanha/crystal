@@ -54,16 +54,62 @@
 <a name="l00020"></a>00020 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IUTIL_EVENTH_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span>
 <a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-<a name="l00030"></a>00030 <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a>;
-<a name="l00031"></a>00031 
+<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="iutil_2eventnames_8h.html">iutil/eventnames.h</a>"</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="iutil_2eventhandlers_8h.html">iutil/eventhandlers.h</a>"</span>
 <a name="l00032"></a>00032 
-<a name="l00036"></a><a class="code" href="structiEventHandler.html">00036</a> <span class="keyword">struct </span><a class="code" href="structiEventHandler.html">iEventHandler</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00037"></a>00037 {
-<a name="l00038"></a>00038   SCF_INTERFACE(<a class="code" href="structiEventHandler.html">iEventHandler</a>, 2,0,0);
-<a name="l00051"></a>00051   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventHandler.html#e878b3184769ac454f67da245534c74c">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a>&amp;) = 0;
-<a name="l00052"></a>00052 };
-<a name="l00053"></a>00053 
-<a name="l00056"></a>00056 <span class="preprocessor">#endif // __CS_IUTIL_EVENTH_H__</span>
+<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a>;
+<a name="l00034"></a>00034 
+<a name="l00035"></a>00035 
+<a name="l00039"></a><a class="code" href="structiEventHandler.html">00039</a> <span class="keyword">struct </span><a class="code" href="structiEventHandler.html">iEventHandler</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00040"></a>00040 {
+<a name="l00041"></a>00041   SCF_INTERFACE(<a class="code" href="structiEventHandler.html">iEventHandler</a>, 2,0,0);
+<a name="l00054"></a>00054   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventHandler.html#e878b3184769ac454f67da245534c74c">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a>&amp;) = 0;
+<a name="l00055"></a>00055 
+<a name="l00080"></a>00080   <a class="code" href="cssysdef_8h.html#f4fb84f7ee0b9cf992ffae7f9c423ad0">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> * <a class="code" href="structiEventHandler.html#0b461a5b417633c4bc2cf1ba31c62320">GenericName</a>() <span class="keyword">const </span>= 0; <span class="comment">/* really is "static" */</span>
+<a name="l00081"></a>00081 
+<a name="l00092"></a>00092   <a class="code" href="cssysdef_8h.html#f4fb84f7ee0b9cf992ffae7f9c423ad0">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> <a class="code" href="structiEventHandler.html#d856eedfb62085ec4db87a50d707df0e">GenericID</a>(csRef&lt;iEventHandlerRegistry&gt; &amp;) <span class="keyword">const </span>= 0; 
+<a name="l00093"></a>00093   <span class="comment">// wish the above could be "virtual static"</span>
+<a name="l00094"></a>00094 
+<a name="l00106"></a>00106   <a class="code" href="cssysdef_8h.html#f4fb84f7ee0b9cf992ffae7f9c423ad0">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> * <a class="code" href="structiEventHandler.html#8cdac6e0da08a5b333afc1cac7ff5934">GenericPrec</a>(csRef&lt;iEventHandlerRegistry&gt; &amp;, 
+<a name="l00107"></a>00107                                                           csRef&lt;iEventNameRegistry&gt; &amp;,
+<a name="l00108"></a>00108                                                           <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a>) <span class="keyword">const </span>= 0;
+<a name="l00109"></a>00109 
+<a name="l00121"></a>00121   <a class="code" href="cssysdef_8h.html#f4fb84f7ee0b9cf992ffae7f9c423ad0">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> * <a class="code" href="structiEventHandler.html#c6b0027d5e6bb556ba5ec92c1cb9c4bc">GenericSucc</a>(csRef&lt;iEventHandlerRegistry&gt; &amp;,
+<a name="l00122"></a>00122                                                           csRef&lt;iEventNameRegistry&gt; &amp;,
+<a name="l00123"></a>00123                                                           <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a>) <span class="keyword">const </span>= 0;
+<a name="l00124"></a>00124 
+<a name="l00137"></a>00137   <a class="code" href="cssysdef_8h.html#12d5fdcda79a67a56a6bb34aa955737b">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> * <a class="code" href="structiEventHandler.html#a02ac7cec1fc99c0fa3e04087d4e0b5a">InstancePrec</a>(csRef&lt;iEventHandlerRegistry&gt; &amp;,
+<a name="l00138"></a>00138                                                           csRef&lt;iEventNameRegistry&gt; &amp;,
+<a name="l00139"></a>00139                                                           <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a>) <span class="keyword">const </span>= 0;
+<a name="l00140"></a>00140 
+<a name="l00153"></a>00153   <a class="code" href="cssysdef_8h.html#12d5fdcda79a67a56a6bb34aa955737b">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> * <a class="code" href="structiEventHandler.html#c23aa16900f041f68178d397d2d321a7">InstanceSucc</a>(csRef&lt;iEventHandlerRegistry&gt; &amp;,
+<a name="l00154"></a>00154                                                           csRef&lt;iEventNameRegistry&gt; &amp;,
+<a name="l00155"></a>00155                                                           <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a>) <span class="keyword">const </span>= 0;
+<a name="l00156"></a>00156 };
+<a name="l00157"></a>00157 
+<a name="l00163"></a><a class="code" href="group__event__handling.html#g4ca1d9fb277d4bc1fa73974403121f9e">00163</a> <span class="preprocessor">#define CS_EVENTHANDLER_NAMES(x)                                        \</span>
+<a name="l00164"></a>00164 <span class="preprocessor">  CS_CONST_METHOD const static char * StaticHandlerName()               \</span>
+<a name="l00165"></a>00165 <span class="preprocessor">  { return (x); }                                                       \</span>
+<a name="l00166"></a>00166 <span class="preprocessor">  CS_CONST_METHOD const static csHandlerID StaticID(csRef&lt;iEventHandlerRegistry&gt; &amp;reg) \</span>
+<a name="l00167"></a>00167 <span class="preprocessor">  {return reg-&gt;GetGenericID(StaticHandlerName()); }                     \</span>
+<a name="l00168"></a>00168 <span class="preprocessor">  CS_CONST_METHOD virtual const char * GenericName() const              \</span>
+<a name="l00169"></a>00169 <span class="preprocessor">  { return StaticHandlerName(); }                                       \</span>
+<a name="l00170"></a>00170 <span class="preprocessor">  CS_CONST_METHOD virtual csHandlerID GenericID(csRef&lt;iEventHandlerRegistry&gt; &amp;reg) const \</span>
+<a name="l00171"></a>00171 <span class="preprocessor">  { return StaticID(reg); }</span>
+<a name="l00172"></a>00172 <span class="preprocessor"></span>
+<a name="l00176"></a><a class="code" href="group__event__handling.html#g77e626991d70be77d93ef1065c679323">00176</a> <span class="preprocessor">#define CS_EVENTHANDLER_NIL_CONSTRAINTS                 \</span>
+<a name="l00177"></a>00177 <span class="preprocessor">        CS_EVENTHANDLER_NIL_GENERIC_CONSTRAINTS         \</span>
+<a name="l00178"></a>00178 <span class="preprocessor">        CS_EVENTHANDLER_DEFAULT_INSTANCE_CONSTRAINTS </span>
+<a name="l00179"></a>00179 <span class="preprocessor"></span>
+<a name="l00183"></a><a class="code" href="group__event__handling.html#g46384be1824a3005077f5adb70a515d2">00183</a> <span class="preprocessor">#define CS_EVENTHANDLER_NIL_GENERIC_CONSTRAINTS                         \</span>
+<a name="l00184"></a>00184 <span class="preprocessor">  CS_CONST_METHOD virtual const csHandlerID * GenericPrec(csRef&lt;iEventHandlerRegistry&gt; &amp;r1, csRef&lt;iEventNameRegistry&gt; &amp;r2, csEventID e) const { return 0; }     \</span>
+<a name="l00185"></a>00185 <span class="preprocessor">  CS_CONST_METHOD virtual const csHandlerID * GenericSucc(csRef&lt;iEventHandlerRegistry&gt; &amp;r1, csRef&lt;iEventNameRegistry&gt; &amp;r2, csEventID e) const { return 0; }</span>
+<a name="l00186"></a>00186 <span class="preprocessor"></span>
+<a name="l00190"></a><a class="code" href="group__event__handling.html#gd16864e1a0a34e6816589cd4f2842522">00190</a> <span class="preprocessor">#define CS_EVENTHANDLER_DEFAULT_INSTANCE_CONSTRAINTS                    \</span>
+<a name="l00191"></a>00191 <span class="preprocessor">  CS_CONST_METHOD virtual const csHandlerID * InstancePrec(csRef&lt;iEventHandlerRegistry&gt; &amp;r1, csRef&lt;iEventNameRegistry&gt; &amp;r2, csEventID e) const { return GenericPrec(r1, r2, e); } \</span>
+<a name="l00192"></a>00192 <span class="preprocessor">  CS_CONST_METHOD virtual const csHandlerID * InstanceSucc(csRef&lt;iEventHandlerRegistry&gt; &amp;r1, csRef&lt;iEventNameRegistry&gt; &amp;r2, csEventID e) const { return GenericSucc(r1, r2, e); }</span>
+<a name="l00193"></a>00193 <span class="preprocessor"></span>
+<a name="l00196"></a>00196 <span class="preprocessor">#endif // __CS_IUTIL_EVENTH_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.5 
 </small></address> </div></body> </html>

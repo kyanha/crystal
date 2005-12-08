@@ -55,47 +55,55 @@
 <a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_IUTIL_EVENTQ_H__</span>
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
 <a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="scf_8h.html">csutil/scf.h</a>"</span>
-<a name="l00031"></a>00031 <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a>;
-<a name="l00032"></a>00032 <span class="keyword">struct </span><a class="code" href="structiEventCord.html">iEventCord</a>;
-<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structiEventOutlet.html">iEventOutlet</a>;
-<a name="l00034"></a>00034 <span class="keyword">struct </span><a class="code" href="structiEventPlug.html">iEventPlug</a>;
-<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiEventHandler.html">iEventHandler</a>;
-<a name="l00036"></a>00036 
-<a name="l00037"></a>00037 
-<a name="l00053"></a><a class="code" href="structiEventQueue.html">00053</a> <span class="keyword">struct </span><a class="code" href="structiEventQueue.html">iEventQueue</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00054"></a>00054 {
-<a name="l00055"></a>00055   SCF_INTERFACE(<a class="code" href="structiEventQueue.html">iEventQueue</a>, 2,0,0);
-<a name="l00063"></a>00063   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#867dc7b2e8aa8c60a97e79fd9422f416">Process</a> () = 0;
-<a name="l00064"></a>00064 
-<a name="l00071"></a>00071   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#fea2ce86767ab875af47db230f90f790">Dispatch</a> (<a class="code" href="structiEvent.html">iEvent</a>&amp;) = 0;
-<a name="l00072"></a>00072 
-<a name="l00091"></a>00091   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#7c39c95f5655a78890c485fb3c8c349b">RegisterListener</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a>*, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> trigger) = 0;
-<a name="l00092"></a>00092 
-<a name="l00097"></a>00097   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#afc4378f83aaba9d09948afc4d415b90">RemoveListener</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a>*) = 0;
-<a name="l00098"></a>00098 
-<a name="l00103"></a>00103   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#075a528fb484691f81babf345137e654">ChangeListenerTrigger</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a>*, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> trigger) = 0;
-<a name="l00104"></a>00104 
-<a name="l00114"></a>00114   <span class="keyword">virtual</span> csPtr&lt;iEventOutlet&gt; <a class="code" href="structiEventQueue.html#a3e580c429c1c6e9c617500fedd3ff81">CreateEventOutlet</a> (<a class="code" href="structiEventPlug.html">iEventPlug</a>*) = 0;
-<a name="l00115"></a>00115 
-<a name="l00127"></a>00127   <span class="keyword">virtual</span> <a class="code" href="structiEventOutlet.html">iEventOutlet</a>* <a class="code" href="structiEventQueue.html#4cf0d085d3b99661d0007fd4c8b4cd71">GetEventOutlet</a> () = 0;
-<a name="l00128"></a>00128 
-<a name="l00137"></a>00137   <span class="keyword">virtual</span> <a class="code" href="structiEventCord.html">iEventCord</a>* <a class="code" href="structiEventQueue.html#cc548638ef611da64826ea853f3ccc6b">GetEventCord</a> (<span class="keywordtype">int</span> Category, <span class="keywordtype">int</span> Subcategory) = 0;
-<a name="l00138"></a>00138 
-<a name="l00143"></a>00143   <span class="keyword">virtual</span> csPtr&lt;iEvent&gt; <a class="code" href="structiEventQueue.html#b4e855a9a3d364ce825fd13c75838f90">CreateEvent</a>(<a class="code" href="group__util.html#g5f423e669d0a8f4ab7c4c3e6da27161a">uint8</a> type) = 0;
-<a name="l00144"></a>00144 
-<a name="l00154"></a>00154   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#558e14c3e9db1e80e609f2e9c7cb7bda">Post</a> (<a class="code" href="structiEvent.html">iEvent</a>*) = 0;
-<a name="l00155"></a>00155 
-<a name="l00162"></a>00162   <span class="keyword">virtual</span> csPtr&lt;iEvent&gt; <a class="code" href="structiEventQueue.html#9e800c193be9569d2223e786b46f522a">Get</a> () = 0;
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="iutil_2eventnames_8h.html">iutil/eventnames.h</a>"</span>
+<a name="l00032"></a>00032 <span class="preprocessor">#include "<a class="code" href="iutil_2eventhandlers_8h.html">iutil/eventhandlers.h</a>"</span>
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034 <span class="keyword">struct </span><a class="code" href="structiEvent.html">iEvent</a>;
+<a name="l00035"></a>00035 <span class="keyword">struct </span><a class="code" href="structiEventCord.html">iEventCord</a>;
+<a name="l00036"></a>00036 <span class="keyword">struct </span><a class="code" href="structiEventOutlet.html">iEventOutlet</a>;
+<a name="l00037"></a>00037 <span class="keyword">struct </span><a class="code" href="structiEventPlug.html">iEventPlug</a>;
+<a name="l00038"></a>00038 <span class="keyword">struct </span><a class="code" href="structiEventHandler.html">iEventHandler</a>;
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040 
+<a name="l00056"></a><a class="code" href="structiEventQueue.html">00056</a> <span class="keyword">struct </span><a class="code" href="structiEventQueue.html">iEventQueue</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00057"></a>00057 {
+<a name="l00058"></a>00058   SCF_INTERFACE(<a class="code" href="structiEventQueue.html">iEventQueue</a>, 2,0,0);
+<a name="l00066"></a>00066   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#867dc7b2e8aa8c60a97e79fd9422f416">Process</a> () = 0;
+<a name="l00067"></a>00067 
+<a name="l00074"></a>00074   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#fea2ce86767ab875af47db230f90f790">Dispatch</a> (<a class="code" href="structiEvent.html">iEvent</a>&amp;) = 0;
+<a name="l00075"></a>00075 
+<a name="l00081"></a>00081   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> <a class="code" href="structiEventQueue.html#bedddff387b3a85208a70406615a3e39">RegisterListener</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a> *) = 0;
+<a name="l00088"></a>00088   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventQueue.html#b4e9371c22ba845d158346608ecd9ce5">Subscribe</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a> *, <span class="keyword">const</span> <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> &amp;ename) = 0;
+<a name="l00093"></a>00093   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventQueue.html#b4e9371c22ba845d158346608ecd9ce5">Subscribe</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a> *, <span class="keyword">const</span> <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> ename[]) = 0;
+<a name="l00100"></a>00100   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#21d786288066fd16247ede15280671c4">Unsubscribe</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a>*, <span class="keyword">const</span> <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a>[]) = 0;
+<a name="l00108"></a>00108   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#21d786288066fd16247ede15280671c4">Unsubscribe</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a>*, <span class="keyword">const</span> <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> &amp;) = 0;
+<a name="l00112"></a>00112   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> <a class="code" href="structiEventQueue.html#bedddff387b3a85208a70406615a3e39">RegisterListener</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a> *, <span class="keyword">const</span> <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> &amp;ename) = 0;
+<a name="l00116"></a>00116   <span class="keyword">virtual</span> <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> <a class="code" href="structiEventQueue.html#bedddff387b3a85208a70406615a3e39">RegisterListener</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a> *, <span class="keyword">const</span> <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> ename[]) = 0;
+<a name="l00122"></a>00122   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#afc4378f83aaba9d09948afc4d415b90">RemoveListener</a> (<a class="code" href="structiEventHandler.html">iEventHandler</a> *) = 0;
+<a name="l00123"></a>00123 
+<a name="l00133"></a>00133   <span class="keyword">virtual</span> csPtr&lt;iEventOutlet&gt; <a class="code" href="structiEventQueue.html#a3e580c429c1c6e9c617500fedd3ff81">CreateEventOutlet</a> (<a class="code" href="structiEventPlug.html">iEventPlug</a>*) = 0;
+<a name="l00134"></a>00134 
+<a name="l00146"></a>00146   <span class="keyword">virtual</span> <a class="code" href="structiEventOutlet.html">iEventOutlet</a>* <a class="code" href="structiEventQueue.html#4cf0d085d3b99661d0007fd4c8b4cd71">GetEventOutlet</a> () = 0;
+<a name="l00147"></a>00147 
+<a name="l00156"></a>00156   <span class="keyword">virtual</span> <a class="code" href="structiEventCord.html">iEventCord</a>* <a class="code" href="structiEventQueue.html#8f8ea2da980542c33901604d2be8fa9b">GetEventCord</a> (<span class="keyword">const</span> <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> &amp;name) = 0;
+<a name="l00157"></a>00157 
+<a name="l00162"></a>00162   <span class="keyword">virtual</span> csPtr&lt;iEvent&gt; <a class="code" href="structiEventQueue.html#819cb1909869d72f8e04f1a0cc904cb0">CreateEvent</a> (<span class="keyword">const</span> <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> &amp;name) = 0;
 <a name="l00163"></a>00163 
-<a name="l00165"></a>00165   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#a208dfbd59ebdc9afcff631c8db2fe9b">Clear</a> () = 0;
-<a name="l00166"></a>00166 
-<a name="l00168"></a>00168   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventQueue.html#58a5e662e815432ee61e8cd0c6e57032">IsEmpty</a> () = 0;
+<a name="l00168"></a>00168   <span class="keyword">virtual</span> csPtr&lt;iEvent&gt; <a class="code" href="structiEventQueue.html#afa11b791e68e44ed4fc8335cacb4672">CreateBroadcastEvent</a> (<span class="keyword">const</span> <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> &amp;name) = 0;
 <a name="l00169"></a>00169 
-<a name="l00180"></a>00180   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#0341a268ebe881bed476b40b79c1cfd0">RemoveAllListeners</a> () = 0;
-<a name="l00181"></a>00181 
-<a name="l00182"></a>00182 };
-<a name="l00183"></a>00183 
-<a name="l00186"></a>00186 <span class="preprocessor">#endif // __CS_IUTIL_EVENTQ_H__</span>
+<a name="l00179"></a>00179   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#558e14c3e9db1e80e609f2e9c7cb7bda">Post</a> (<a class="code" href="structiEvent.html">iEvent</a>*) = 0;
+<a name="l00180"></a>00180 
+<a name="l00187"></a>00187   <span class="keyword">virtual</span> csPtr&lt;iEvent&gt; <a class="code" href="structiEventQueue.html#9e800c193be9569d2223e786b46f522a">Get</a> () = 0;
+<a name="l00188"></a>00188 
+<a name="l00190"></a>00190   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#a208dfbd59ebdc9afcff631c8db2fe9b">Clear</a> () = 0;
+<a name="l00191"></a>00191 
+<a name="l00193"></a>00193   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiEventQueue.html#58a5e662e815432ee61e8cd0c6e57032">IsEmpty</a> () = 0;
+<a name="l00194"></a>00194 
+<a name="l00205"></a>00205   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiEventQueue.html#0341a268ebe881bed476b40b79c1cfd0">RemoveAllListeners</a> () = 0;
+<a name="l00206"></a>00206 
+<a name="l00207"></a>00207 };
+<a name="l00208"></a>00208 
+<a name="l00211"></a>00211 <span class="preprocessor">#endif // __CS_IUTIL_EVENTQ_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.5 
 </small></address> </div></body> </html>
