@@ -66,56 +66,58 @@
 <a name="l00057"></a><a class="code" href="classcsInputBinder.html">00057</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsInputBinder.html">csInputBinder</a> : 
 <a name="l00058"></a>00058   <span class="keyword">public</span> <a class="code" href="classscfImplementation2.html">scfImplementation2</a>&lt;csInputBinder, iInputBinder, iEventHandler&gt;
 <a name="l00059"></a>00059 {
-<a name="l00060"></a>00060   <span class="keyword">struct </span>AxisCmd
-<a name="l00061"></a>00061   {
-<a name="l00062"></a>00062     <span class="keywordtype">unsigned</span> cmd;
-<a name="l00063"></a>00063     <span class="keywordtype">int</span> val, sens;
-<a name="l00064"></a>00064     <span class="keywordtype">bool</span> wrap;
-<a name="l00065"></a>00065     AxisCmd (<span class="keywordtype">unsigned</span> cmd0, <span class="keywordtype">int</span> sens0)
-<a name="l00066"></a>00066     : cmd (cmd0), val (0), sens (sens0) {}
-<a name="l00067"></a>00067   };
-<a name="l00068"></a>00068   <span class="keyword">typedef</span> csHash&lt;AxisCmd *, csInputDefinition&gt; <a class="code" href="classcsHash.html">AxisHash</a>;
-<a name="l00069"></a>00069   <a class="code" href="classcsHash.html">AxisHash</a> axisHash;
-<a name="l00070"></a>00070   csArray&lt;AxisCmd *&gt; axisArray;
-<a name="l00071"></a>00071 
-<a name="l00072"></a>00072   <span class="keyword">struct </span>BtnCmd
-<a name="l00073"></a>00073   {
-<a name="l00074"></a>00074     <span class="keywordtype">unsigned</span> cmd;
-<a name="l00075"></a>00075     <span class="keywordtype">bool</span> down, toggle;
-<a name="l00076"></a>00076     BtnCmd (<span class="keywordtype">unsigned</span> cmd0, <span class="keywordtype">bool</span> toggle0)
-<a name="l00077"></a>00077     : cmd (cmd0), down (<span class="keyword">false</span>), toggle (toggle0) {}
-<a name="l00078"></a>00078   };
-<a name="l00079"></a>00079   <span class="keyword">typedef</span> csHash&lt;BtnCmd *, csInputDefinition&gt; <a class="code" href="classcsHash.html">BtnHash</a>;
-<a name="l00080"></a>00080   <a class="code" href="classcsHash.html">BtnHash</a> btnHash;
-<a name="l00081"></a>00081   csArray&lt;BtnCmd *&gt; btnArray;
-<a name="l00082"></a>00082 
-<a name="l00083"></a>00083 <span class="keyword">protected</span>:
-<a name="l00084"></a>00084   <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a>&amp;);
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086 <span class="keyword">public</span>:
+<a name="l00060"></a>00060   <a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg;
+<a name="l00061"></a>00061   csRef&lt;iEventNameRegistry&gt; name_reg;
+<a name="l00062"></a>00062   <span class="keyword">struct </span>AxisCmd
+<a name="l00063"></a>00063   {
+<a name="l00064"></a>00064     <span class="keywordtype">unsigned</span> cmd;
+<a name="l00065"></a>00065     <span class="keywordtype">int</span> val, sens;
+<a name="l00066"></a>00066     <span class="keywordtype">bool</span> wrap;
+<a name="l00067"></a>00067     AxisCmd (<span class="keywordtype">unsigned</span> cmd0, <span class="keywordtype">int</span> sens0)
+<a name="l00068"></a>00068     : cmd (cmd0), val (0), sens (sens0) {}
+<a name="l00069"></a>00069   };
+<a name="l00070"></a>00070   <span class="keyword">typedef</span> csHash&lt;AxisCmd *, csInputDefinition&gt; <a class="code" href="classcsHash.html">AxisHash</a>;
+<a name="l00071"></a>00071   <a class="code" href="classcsHash.html">AxisHash</a> axisHash;
+<a name="l00072"></a>00072   csArray&lt;AxisCmd *&gt; axisArray;
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074   <span class="keyword">struct </span>BtnCmd
+<a name="l00075"></a>00075   {
+<a name="l00076"></a>00076     <span class="keywordtype">unsigned</span> cmd;
+<a name="l00077"></a>00077     <span class="keywordtype">bool</span> down, toggle;
+<a name="l00078"></a>00078     BtnCmd (<span class="keywordtype">unsigned</span> cmd0, <span class="keywordtype">bool</span> toggle0)
+<a name="l00079"></a>00079     : cmd (cmd0), down (<span class="keyword">false</span>), toggle (toggle0) {}
+<a name="l00080"></a>00080   };
+<a name="l00081"></a>00081   <span class="keyword">typedef</span> csHash&lt;BtnCmd *, csInputDefinition&gt; <a class="code" href="classcsHash.html">BtnHash</a>;
+<a name="l00082"></a>00082   <a class="code" href="classcsHash.html">BtnHash</a> btnHash;
+<a name="l00083"></a>00083   csArray&lt;BtnCmd *&gt; btnArray;
+<a name="l00084"></a>00084 
+<a name="l00085"></a>00085 <span class="keyword">protected</span>:
+<a name="l00086"></a>00086   <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a>&amp;);
 <a name="l00087"></a>00087 
-<a name="l00092"></a>00092   <a class="code" href="classcsInputBinder.html">csInputBinder</a> (<a class="code" href="structiBase.html">iBase</a> *parent = 0, <span class="keywordtype">int</span> btnSize = 127, <span class="keywordtype">int</span> axisSize = 13);
-<a name="l00093"></a>00093   <span class="keyword">virtual</span> ~<a class="code" href="classcsInputBinder.html">csInputBinder</a> ();
-<a name="l00094"></a>00094 
-<a name="l00095"></a><a class="code" href="classcsInputBinder.html#103190adc53aebf04fd0baade1c32e02">00095</a>   <span class="keyword">virtual</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>* QueryHandler () { <span class="keywordflow">return</span> <span class="keyword">this</span>; }
+<a name="l00088"></a>00088 <span class="keyword">public</span>:
+<a name="l00089"></a>00089 
+<a name="l00094"></a>00094   <a class="code" href="classcsInputBinder.html">csInputBinder</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *, <a class="code" href="structiBase.html">iBase</a> *parent = 0, <span class="keywordtype">int</span> btnSize = 127, <span class="keywordtype">int</span> axisSize = 13);
+<a name="l00095"></a>00095   <span class="keyword">virtual</span> ~<a class="code" href="classcsInputBinder.html">csInputBinder</a> ();
 <a name="l00096"></a>00096 
-<a name="l00097"></a>00097   <span class="keyword">virtual</span> <span class="keywordtype">int</span> Axis (<span class="keywordtype">unsigned</span> cmd);
-<a name="l00098"></a>00098   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Button (<span class="keywordtype">unsigned</span> cmd);
-<a name="l00099"></a>00099 
-<a name="l00100"></a>00100   <span class="keyword">virtual</span> <span class="keywordtype">void</span> BindButton (<a class="code" href="classcsInputDefinition.html">csInputDefinition</a> <span class="keyword">const</span>&amp; def, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cmd,
-<a name="l00101"></a>00101     <span class="keywordtype">bool</span> toggle = <span class="keyword">false</span>);
-<a name="l00102"></a>00102   <span class="keyword">virtual</span> <span class="keywordtype">void</span> BindAxis (<a class="code" href="classcsInputDefinition.html">csInputDefinition</a> <span class="keyword">const</span>&amp; def, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cmd,
-<a name="l00103"></a>00103     <span class="keywordtype">int</span> sensitivity = 1);
-<a name="l00104"></a>00104 
-<a name="l00105"></a>00105   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> UnbindAxis (<span class="keywordtype">unsigned</span> cmd);
-<a name="l00106"></a>00106   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> UnbindButton (<span class="keywordtype">unsigned</span> cmd);
-<a name="l00107"></a>00107   <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnbindAll ();
-<a name="l00108"></a>00108 
-<a name="l00109"></a>00109   <span class="keyword">virtual</span> <span class="keywordtype">void</span> LoadConfig (<a class="code" href="structiConfigFile.html">iConfigFile</a> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *subsection);
-<a name="l00110"></a>00110   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SaveConfig (<a class="code" href="structiConfigFile.html">iConfigFile</a> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *subsection);
-<a name="l00111"></a>00111 };
-<a name="l00112"></a>00112 
-<a name="l00113"></a>00113 <span class="preprocessor">#endif // __CS_UTIL_BINDER_H__</span>
+<a name="l00097"></a><a class="code" href="classcsInputBinder.html#103190adc53aebf04fd0baade1c32e02">00097</a>   <span class="keyword">virtual</span> <a class="code" href="structiEventHandler.html">iEventHandler</a>* QueryHandler () { <span class="keywordflow">return</span> <span class="keyword">this</span>; }
+<a name="l00098"></a>00098 
+<a name="l00099"></a>00099   <span class="keyword">virtual</span> <span class="keywordtype">int</span> Axis (<span class="keywordtype">unsigned</span> cmd);
+<a name="l00100"></a>00100   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> Button (<span class="keywordtype">unsigned</span> cmd);
+<a name="l00101"></a>00101 
+<a name="l00102"></a>00102   <span class="keyword">virtual</span> <span class="keywordtype">void</span> BindButton (<a class="code" href="classcsInputDefinition.html">csInputDefinition</a> <span class="keyword">const</span>&amp; def, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cmd,
+<a name="l00103"></a>00103     <span class="keywordtype">bool</span> toggle = <span class="keyword">false</span>);
+<a name="l00104"></a>00104   <span class="keyword">virtual</span> <span class="keywordtype">void</span> BindAxis (<a class="code" href="classcsInputDefinition.html">csInputDefinition</a> <span class="keyword">const</span>&amp; def, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> cmd,
+<a name="l00105"></a>00105     <span class="keywordtype">int</span> sensitivity = 1);
+<a name="l00106"></a>00106 
+<a name="l00107"></a>00107   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> UnbindAxis (<span class="keywordtype">unsigned</span> cmd);
+<a name="l00108"></a>00108   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> UnbindButton (<span class="keywordtype">unsigned</span> cmd);
+<a name="l00109"></a>00109   <span class="keyword">virtual</span> <span class="keywordtype">void</span> UnbindAll ();
+<a name="l00110"></a>00110 
+<a name="l00111"></a>00111   <span class="keyword">virtual</span> <span class="keywordtype">void</span> LoadConfig (<a class="code" href="structiConfigFile.html">iConfigFile</a> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *subsection);
+<a name="l00112"></a>00112   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SaveConfig (<a class="code" href="structiConfigFile.html">iConfigFile</a> *, <span class="keyword">const</span> <span class="keywordtype">char</span> *subsection);
+<a name="l00113"></a>00113 };
+<a name="l00114"></a>00114 
+<a name="l00115"></a>00115 <span class="preprocessor">#endif // __CS_UTIL_BINDER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.5 
 </small></address> </div></body> </html>
