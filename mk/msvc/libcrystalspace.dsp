@@ -638,6 +638,10 @@ SOURCE=..\..\libs\csutil\csstring.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\csutil\cssubscription.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\csutil\csuctransform.cpp
 # End Source File
 # Begin Source File
@@ -651,6 +655,14 @@ SOURCE=..\..\libs\csutil\documentcommon.cpp
 # Begin Source File
 
 SOURCE=..\..\libs\csutil\event.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\eventhandlers.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\csutil\eventnames.cpp
 # End Source File
 # Begin Source File
 
@@ -1610,6 +1622,10 @@ SOURCE=..\..\libs\..\include\csutil\csstring.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\csutil\cssubscription.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\csutil\csuctransform.h
 # End Source File
 # Begin Source File
@@ -1639,6 +1655,14 @@ SOURCE=..\..\libs\..\include\csutil\documenthelper.h
 # Begin Source File
 
 SOURCE=..\..\libs\..\include\csutil\event.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csutil\eventhandlers.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\csutil\eventnames.h
 # End Source File
 # Begin Source File
 
