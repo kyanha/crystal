@@ -171,7 +171,7 @@
 <a name="l00259"></a>00259       baseevent(bevent), mode(SI_LIST), qit(*t-&gt;fatRecord-&gt;SubscriberQueue,false)
 <a name="l00260"></a>00260     {
 <a name="l00261"></a>00261       <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(record-&gt;iterator == 0);
-<a name="l00262"></a>00262       <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(record-&gt;deletedList == 0);
+<a name="l00262"></a>00262       <span class="comment">//CS_ASSERT(record-&gt;deletedList == 0);</span>
 <a name="l00263"></a>00263       record-&gt;iterator = <span class="keyword">this</span>;
 <a name="l00264"></a>00264     }
 <a name="l00265"></a>00265 
@@ -179,98 +179,99 @@
 <a name="l00271"></a>00271     {
 <a name="l00272"></a>00272       <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(record-&gt;iterator == <span class="keyword">this</span>);
 <a name="l00273"></a>00273       record-&gt;iterator = 0;
-<a name="l00274"></a>00274       <span class="keywordflow">if</span> (record-&gt;deletedList) {
-<a name="l00275"></a>00275         record-&gt;StaleSubscriberQueue = <span class="keyword">true</span>;
-<a name="l00276"></a>00276         <span class="keyword">delete</span> record-&gt;deletedList;
-<a name="l00277"></a>00277         record-&gt;deletedList = 0;
-<a name="l00278"></a>00278       }
-<a name="l00279"></a>00279     }
-<a name="l00280"></a>00280 
-<a name="l00282"></a><a class="code" href="classcsEventTree_1_1SubscriberIterator.html#28318a27a677ad2b7b15a172209a2180">00282</a>     <span class="keyword">inline</span> <span class="keywordtype">bool</span> HasNext () 
-<a name="l00283"></a>00283     {
-<a name="l00284"></a>00284       <span class="keywordflow">switch</span>(mode) 
-<a name="l00285"></a>00285       {
-<a name="l00286"></a>00286       <span class="keywordflow">case</span> SI_LIST:
-<a name="l00287"></a>00287         <span class="keywordflow">return</span> qit.HasNext ();
-<a name="l00288"></a>00288         
-<a name="l00289"></a>00289       <span class="keywordflow">case</span> SI_GRAPH:
-<a name="l00290"></a>00290         <span class="keywordflow">do</span> 
-<a name="l00291"></a>00291         {
-<a name="l00292"></a>00292           <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> <span class="keywordtype">id</span> = record-&gt;SubscriberGraph-&gt;GetEnabled (<a class="code" href="group__event__handling.html#gd95d989ec73decf786853ed118c22a27">CS_HANDLER_INVALID</a>);
-<a name="l00293"></a>00293           <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == <a class="code" href="group__event__handling.html#gd95d989ec73decf786853ed118c22a27">CS_HANDLER_INVALID</a>)
-<a name="l00294"></a>00294             <span class="keywordflow">break</span>;
-<a name="l00295"></a>00295           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (handler_reg-&gt;IsInstance(<span class="keywordtype">id</span>))
-<a name="l00296"></a>00296             <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00297"></a>00297           <span class="keywordflow">else</span>
-<a name="l00298"></a>00298             record-&gt;SubscriberGraph-&gt;Mark(<span class="keywordtype">id</span>);
-<a name="l00299"></a>00299         } 
-<a name="l00300"></a>00300         <span class="keywordflow">while</span> (<span class="keyword">true</span>);
-<a name="l00301"></a>00301         <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00302"></a>00302         
-<a name="l00303"></a>00303       <span class="keywordflow">default</span>:
-<a name="l00304"></a>00304         <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>((mode == SI_LIST) ||
-<a name="l00305"></a>00305                   (mode == SI_GRAPH));
-<a name="l00306"></a>00306         <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00307"></a>00307       }
-<a name="l00308"></a>00308     }
-<a name="l00309"></a>00309 
-<a name="l00311"></a><a class="code" href="classcsEventTree_1_1SubscriberIterator.html#88219fd4d1faa1e83a2a306473ac26eb">00311</a>     <span class="keyword">inline</span> <a class="code" href="structiEventHandler.html">iEventHandler</a> *Next () 
-<a name="l00312"></a>00312     {
-<a name="l00313"></a>00313       <span class="keywordflow">switch</span>(mode) 
-<a name="l00314"></a>00314       {
-<a name="l00315"></a>00315       <span class="keywordflow">case</span> SI_LIST:
-<a name="l00316"></a>00316         <span class="comment">/* DOME : see if the current element has been deleted. */</span>
-<a name="l00317"></a>00317         <span class="keywordflow">return</span> qit.Next ();
-<a name="l00318"></a>00318         
-<a name="l00319"></a>00319       <span class="keywordflow">case</span> SI_GRAPH:
-<a name="l00320"></a>00320         <span class="comment">/* see if the current element has been flagged for deletion. */</span>
-<a name="l00321"></a>00321         <span class="keywordflow">do</span> 
-<a name="l00322"></a>00322         {
-<a name="l00323"></a>00323           <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> <span class="keywordtype">id</span> = record-&gt;SubscriberGraph-&gt;GetEnabled (<a class="code" href="group__event__handling.html#gd95d989ec73decf786853ed118c22a27">CS_HANDLER_INVALID</a>);
-<a name="l00324"></a>00324           <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == <a class="code" href="group__event__handling.html#gd95d989ec73decf786853ed118c22a27">CS_HANDLER_INVALID</a>)
-<a name="l00325"></a>00325             <span class="keywordflow">break</span>;
-<a name="l00326"></a>00326           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (handler_reg-&gt;IsInstance (<span class="keywordtype">id</span>)) 
-<a name="l00327"></a>00327           {
-<a name="l00328"></a>00328             record-&gt;SubscriberGraph-&gt;Mark (<span class="keywordtype">id</span>);
-<a name="l00329"></a>00329             <span class="keywordflow">return</span> handler_reg-&gt;GetHandler (<span class="keywordtype">id</span>);
-<a name="l00330"></a>00330           } 
-<a name="l00331"></a>00331           <span class="keywordflow">else</span>
-<a name="l00332"></a>00332             record-&gt;SubscriberGraph-&gt;Mark(<span class="keywordtype">id</span>);
-<a name="l00333"></a>00333         } 
-<a name="l00334"></a>00334         <span class="keywordflow">while</span> (<span class="keyword">true</span>);
-<a name="l00335"></a>00335         <span class="keywordflow">return</span> 0;
-<a name="l00336"></a>00336         
-<a name="l00337"></a>00337       <span class="keywordflow">default</span>:
-<a name="l00338"></a>00338         <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>((mode == SI_LIST) ||
-<a name="l00339"></a>00339                   (mode == SI_GRAPH));
-<a name="l00340"></a>00340         <span class="keywordflow">return</span> 0;
-<a name="l00341"></a>00341       }
-<a name="l00342"></a>00342     }
-<a name="l00343"></a>00343     
-<a name="l00344"></a>00344   <span class="keyword">private</span>:
-<a name="l00345"></a><a class="code" href="classcsEventTree_1_1SubscriberIterator.html#b4e4c76890e3c401309b6ca8dcf92957">00345</a>     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsEventTree.html">csEventTree</a>;
-<a name="l00346"></a>00346 
-<a name="l00347"></a>00347     csRef&lt;iEventHandlerRegistry&gt; handler_reg;
-<a name="l00348"></a>00348     FatRecordObject *record;
-<a name="l00349"></a>00349     <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> baseevent;
-<a name="l00350"></a>00350     <span class="keyword">enum</span> {
-<a name="l00351"></a>00351       SI_LIST,
-<a name="l00352"></a>00352       SI_GRAPH
-<a name="l00353"></a>00353     } mode;
-<a name="l00354"></a>00354     
-<a name="l00355"></a>00355     <span class="comment">/* SI_LIST mode data structures */</span>
-<a name="l00356"></a>00356     <a class="code" href="classcsList_1_1Iterator.html">csList&lt;iEventHandler *&gt;::Iterator</a> qit;
-<a name="l00357"></a>00357     
-<a name="l00358"></a>00358     <span class="comment">/* SI_GRAPH mode data structures and methods */</span>
-<a name="l00359"></a>00359     <span class="keywordtype">void</span> GraphMode(); <span class="comment">// change to graph (SI_GRAPH) iterator mode.</span>
-<a name="l00360"></a>00360   };
-<a name="l00361"></a><a class="code" href="classcsEventTree.html#c9d4d0ced00cc54a91470d9714b4d6e9">00361</a>   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsEventTree_1_1SubscriberIterator.html">SubscriberIterator</a>;
-<a name="l00362"></a>00362   
-<a name="l00367"></a>00367   <a class="code" href="classcsEventTree_1_1SubscriberIterator.html">SubscriberIterator</a> *<a class="code" href="classcsEventTree.html#bea567fca0b1f8882afca7c71cf82e7e">GetIterator</a>();
-<a name="l00368"></a>00368 
-<a name="l00369"></a>00369 };
-<a name="l00370"></a>00370 
-<a name="l00371"></a>00371 <span class="preprocessor">#endif // __CS_CSEVENTSUBSCRIPTION_H__</span>
+<a name="l00274"></a>00274       <span class="keywordflow">if</span> (record-&gt;deletedList) 
+<a name="l00275"></a>00275       {
+<a name="l00276"></a>00276         record-&gt;StaleSubscriberQueue = <span class="keyword">true</span>;
+<a name="l00277"></a>00277         <span class="keyword">delete</span> record-&gt;deletedList;
+<a name="l00278"></a>00278         record-&gt;deletedList = 0;
+<a name="l00279"></a>00279       }
+<a name="l00280"></a>00280     }
+<a name="l00281"></a>00281 
+<a name="l00283"></a><a class="code" href="classcsEventTree_1_1SubscriberIterator.html#28318a27a677ad2b7b15a172209a2180">00283</a>     <span class="keyword">inline</span> <span class="keywordtype">bool</span> HasNext () 
+<a name="l00284"></a>00284     {
+<a name="l00285"></a>00285       <span class="keywordflow">switch</span>(mode) 
+<a name="l00286"></a>00286       {
+<a name="l00287"></a>00287       <span class="keywordflow">case</span> SI_LIST:
+<a name="l00288"></a>00288         <span class="keywordflow">return</span> qit.HasNext ();
+<a name="l00289"></a>00289         
+<a name="l00290"></a>00290       <span class="keywordflow">case</span> SI_GRAPH:
+<a name="l00291"></a>00291         <span class="keywordflow">do</span> 
+<a name="l00292"></a>00292         {
+<a name="l00293"></a>00293           <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> <span class="keywordtype">id</span> = record-&gt;SubscriberGraph-&gt;GetEnabled (<a class="code" href="group__event__handling.html#gd95d989ec73decf786853ed118c22a27">CS_HANDLER_INVALID</a>);
+<a name="l00294"></a>00294           <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == <a class="code" href="group__event__handling.html#gd95d989ec73decf786853ed118c22a27">CS_HANDLER_INVALID</a>)
+<a name="l00295"></a>00295             <span class="keywordflow">break</span>;
+<a name="l00296"></a>00296           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (handler_reg-&gt;IsInstance(<span class="keywordtype">id</span>))
+<a name="l00297"></a>00297             <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00298"></a>00298           <span class="keywordflow">else</span>
+<a name="l00299"></a>00299             record-&gt;SubscriberGraph-&gt;Mark(<span class="keywordtype">id</span>);
+<a name="l00300"></a>00300         } 
+<a name="l00301"></a>00301         <span class="keywordflow">while</span> (<span class="keyword">true</span>);
+<a name="l00302"></a>00302         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00303"></a>00303         
+<a name="l00304"></a>00304       <span class="keywordflow">default</span>:
+<a name="l00305"></a>00305         <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>((mode == SI_LIST) ||
+<a name="l00306"></a>00306                   (mode == SI_GRAPH));
+<a name="l00307"></a>00307         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00308"></a>00308       }
+<a name="l00309"></a>00309     }
+<a name="l00310"></a>00310 
+<a name="l00312"></a><a class="code" href="classcsEventTree_1_1SubscriberIterator.html#88219fd4d1faa1e83a2a306473ac26eb">00312</a>     <span class="keyword">inline</span> <a class="code" href="structiEventHandler.html">iEventHandler</a> *Next () 
+<a name="l00313"></a>00313     {
+<a name="l00314"></a>00314       <span class="keywordflow">switch</span>(mode) 
+<a name="l00315"></a>00315       {
+<a name="l00316"></a>00316       <span class="keywordflow">case</span> SI_LIST:
+<a name="l00317"></a>00317         <span class="comment">/* DOME : see if the current element has been deleted. */</span>
+<a name="l00318"></a>00318         <span class="keywordflow">return</span> qit.Next ();
+<a name="l00319"></a>00319         
+<a name="l00320"></a>00320       <span class="keywordflow">case</span> SI_GRAPH:
+<a name="l00321"></a>00321         <span class="comment">/* see if the current element has been flagged for deletion. */</span>
+<a name="l00322"></a>00322         <span class="keywordflow">do</span> 
+<a name="l00323"></a>00323         {
+<a name="l00324"></a>00324           <a class="code" href="group__event__handling.html#ge5a6136e5947db93cececa5e0cbbcccd">csHandlerID</a> <span class="keywordtype">id</span> = record-&gt;SubscriberGraph-&gt;GetEnabled (<a class="code" href="group__event__handling.html#gd95d989ec73decf786853ed118c22a27">CS_HANDLER_INVALID</a>);
+<a name="l00325"></a>00325           <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == <a class="code" href="group__event__handling.html#gd95d989ec73decf786853ed118c22a27">CS_HANDLER_INVALID</a>)
+<a name="l00326"></a>00326             <span class="keywordflow">break</span>;
+<a name="l00327"></a>00327           <span class="keywordflow">else</span> <span class="keywordflow">if</span> (handler_reg-&gt;IsInstance (<span class="keywordtype">id</span>)) 
+<a name="l00328"></a>00328           {
+<a name="l00329"></a>00329             record-&gt;SubscriberGraph-&gt;Mark (<span class="keywordtype">id</span>);
+<a name="l00330"></a>00330             <span class="keywordflow">return</span> handler_reg-&gt;GetHandler (<span class="keywordtype">id</span>);
+<a name="l00331"></a>00331           } 
+<a name="l00332"></a>00332           <span class="keywordflow">else</span>
+<a name="l00333"></a>00333             record-&gt;SubscriberGraph-&gt;Mark(<span class="keywordtype">id</span>);
+<a name="l00334"></a>00334         } 
+<a name="l00335"></a>00335         <span class="keywordflow">while</span> (<span class="keyword">true</span>);
+<a name="l00336"></a>00336         <span class="keywordflow">return</span> 0;
+<a name="l00337"></a>00337         
+<a name="l00338"></a>00338       <span class="keywordflow">default</span>:
+<a name="l00339"></a>00339         <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>((mode == SI_LIST) ||
+<a name="l00340"></a>00340                   (mode == SI_GRAPH));
+<a name="l00341"></a>00341         <span class="keywordflow">return</span> 0;
+<a name="l00342"></a>00342       }
+<a name="l00343"></a>00343     }
+<a name="l00344"></a>00344     
+<a name="l00345"></a>00345   <span class="keyword">private</span>:
+<a name="l00346"></a><a class="code" href="classcsEventTree_1_1SubscriberIterator.html#b4e4c76890e3c401309b6ca8dcf92957">00346</a>     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsEventTree.html">csEventTree</a>;
+<a name="l00347"></a>00347 
+<a name="l00348"></a>00348     csRef&lt;iEventHandlerRegistry&gt; handler_reg;
+<a name="l00349"></a>00349     FatRecordObject *record;
+<a name="l00350"></a>00350     <a class="code" href="group__event__handling.html#g813ec95d066b77089d59c9cbb4b42a97">csEventID</a> baseevent;
+<a name="l00351"></a>00351     <span class="keyword">enum</span> {
+<a name="l00352"></a>00352       SI_LIST,
+<a name="l00353"></a>00353       SI_GRAPH
+<a name="l00354"></a>00354     } mode;
+<a name="l00355"></a>00355     
+<a name="l00356"></a>00356     <span class="comment">/* SI_LIST mode data structures */</span>
+<a name="l00357"></a>00357     <a class="code" href="classcsList_1_1Iterator.html">csList&lt;iEventHandler *&gt;::Iterator</a> qit;
+<a name="l00358"></a>00358     
+<a name="l00359"></a>00359     <span class="comment">/* SI_GRAPH mode data structures and methods */</span>
+<a name="l00360"></a>00360     <span class="keywordtype">void</span> GraphMode(); <span class="comment">// change to graph (SI_GRAPH) iterator mode.</span>
+<a name="l00361"></a>00361   };
+<a name="l00362"></a><a class="code" href="classcsEventTree.html#c9d4d0ced00cc54a91470d9714b4d6e9">00362</a>   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsEventTree_1_1SubscriberIterator.html">SubscriberIterator</a>;
+<a name="l00363"></a>00363   
+<a name="l00368"></a>00368   <a class="code" href="classcsEventTree_1_1SubscriberIterator.html">SubscriberIterator</a> *<a class="code" href="classcsEventTree.html#bea567fca0b1f8882afca7c71cf82e7e">GetIterator</a>();
+<a name="l00369"></a>00369 
+<a name="l00370"></a>00370 };
+<a name="l00371"></a>00371 
+<a name="l00372"></a>00372 <span class="preprocessor">#endif // __CS_CSEVENTSUBSCRIPTION_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.5 
 </small></address> </div></body> </html>
