@@ -287,12 +287,10 @@ unsubscribe from <samp>`crystalspace.input.joystick'</samp>.
 <a name="SEC888"></a>
 <h4 class="subsubheading"> Other porting Issues </h4>
 
-<p>Since the <samp>`csBaseEventHandler'</samp> object can now only be constructed when a 
-valid <samp>`iObjectRegistry*'</samp> is available, the idiom of deriving an 
-application class from both <samp>`csApplicationFramework'</samp> and 
-<samp>`csBaseEventHandler'</samp> will no longer work.  It is recommended that such 
-applications by rewritten to use an embedded <samp>`csBaseEventHandler'</samp>-derived 
-class (see, for example, the sample1 tutorial application).
+<p>Since the <samp>`csBaseEventHandler'</samp> object's operation is now linked with 
+having a functional event name registry, any derived class must be sure to 
+call the <samp>`Initialize(iObjectRegistry*)'</samp> method before calling any of 
+the <samp>`RegisterQueue(...)'</samp> methods.
 </p>
 
 <a name="SEC889"></a>
@@ -989,17 +987,17 @@ instance, via <samp>`new csProcFire'</samp>).  Instead, you must now use the plu
 system to create such textures. For example:
 </p> 
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iPluginManager&gt; plugin_mgr(
-  CS_QUERY_REGISTRY(object_reg, iPluginManager));
-csRef&lt;iTextureType&gt; type(CS_QUERY_PLUGIN_CLASS (plugin_mgr,
-  &quot;crystalspace.texture.type.fire&quot;, iTextureType));
+  csQueryInterface&lt;iPluginManager&gt; (object_reg));
+csRef&lt;iTextureType&gt; type (csQueryPluginClass&lt;iTextureType&gt; (plugin_mgr,
+  &quot;crystalspace.texture.type.fire&quot;));
 if (!type)
 {
-  type = CS_LOAD_PLUGIN(plugin_mgr,
-    &quot;crystalspace.texture.type.fire&quot;, iTextureType);
+  type = csLoadPlugin&lt;iTextureType&gt; (plugin_mgr,
+    &quot;crystalspace.texture.type.fire&quot;);
 }
 csRef&lt;iTextureFactory&gt; fireFact = type-&gt;NewFactory();
 csRef&lt;iTextureWrapper&gt; tex = fireFact-&gt;Generate();
-csRef&lt;iFireTexture&gt; fire = SCF_QUERY_INTERFACE(tex, iFireTexture);
+csRef&lt;iFireTexture&gt; fire = scfQueryInterface&lt;iFireTexture&gt; (tex);
 </pre></td></tr></table> 
 <p>Various procedural textures may or may not implement their own custom <small>SCF</small>
 interfaces beyond the normal interfaces implemented by all procedural
@@ -1587,6 +1585,22 @@ removed or have become private, and are no longer available to client code:
 <code>G3DTriangleMesh</code>
 </li></ul>
 
+<p>Some methods from <samp>`iSprite3DState'</samp> have been removed that basically 
+provided functionality which us also already available through 
+<samp>`iMeshObject'</samp>:
+</p>
+<ul>
+<li>
+<code>SetBaseColor()</code>. Use <code>SetColor()</code> from <samp>`iMeshObject'</samp>.
+</li><li>
+<code>GetBaseColor()</code>. Use <code>GetColor()</code> from <samp>`iMeshObject'</samp>.
+</li></ul>
+
+<p>Likewise, the <code>GetFactory()</code> method has been removed from 
+<samp>`iThingState'</samp>. Equivalent functionality can be achieved by using
+<code>GetFactory()</code> from <samp>`iMeshObject'</samp> and querying the returned object
+for the <samp>`iThingFactoryState'</samp> interface.
+</p>
 <a name="SEC923"></a>
 <h3 class="subheading"> Query Macros </h3>
 
@@ -2193,7 +2207,7 @@ by simply using <code>csArray&lt;csRGBcolor*&gt;</code>.
 same API. Here is how it works: meshes and lights implement the new
 <code>iSceneNode</code> interface. You can do <code>QuerySceneNode()</code> to get the
 scene object from the mesh, light, or camera without having to do
-<code>SCF_QUERY_INTERFACE</code>. To make some object a child of another you simply
+<code>scfQueryInterface&lt;&gt;</code>. To make some object a child of another you simply
 do:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">object_child-&gt;QuerySceneNode ()-&gt;SetParent (
