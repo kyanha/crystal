@@ -60,305 +60,281 @@
 <a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="util_8h.html">util.h</a>"</span>
 <a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="hash_8h.html">hash.h</a>"</span>
 <a name="l00032"></a>00032 
-<a name="l00045"></a>00045 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00046"></a><a class="code" href="classcsPartialOrder.html">00046</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPartialOrder.html">csPartialOrder</a>
-<a name="l00047"></a>00047 {
-<a name="l00048"></a>00048 <span class="keyword">protected</span>:
-<a name="l00049"></a><a class="code" href="classcsPartialOrder_1_1Node.html">00049</a>   <span class="keyword">class </span><a class="code" href="classcsPartialOrder_1_1Node.html">Node</a>
-<a name="l00050"></a>00050   {
-<a name="l00051"></a>00051   <span class="keyword">public</span>:
-<a name="l00052"></a><a class="code" href="classcsPartialOrder_1_1Node.html#73bce253c3d1123100f3d2436e790f10">00052</a>     <a class="code" href="classcsPartialOrder_1_1Node.html">Node</a>(<span class="keyword">const</span> <a class="code" href="classcsPartialOrder_1_1Node.html">Node</a> &amp;other) 
-<a name="l00053"></a>00053       : self(other.self), output(other.output),
-<a name="l00054"></a>00054         marked(other.marked),
-<a name="l00055"></a>00055         pre(other.pre), post(other.post)
-<a name="l00056"></a>00056     { }
-<a name="l00057"></a><a class="code" href="classcsPartialOrder_1_1Node.html#94d079fc99a491c8305c2031a2221382">00057</a>     <a class="code" href="classcsPartialOrder_1_1Node.html">Node</a>(<span class="keyword">const</span> T &amp;<span class="keywordtype">id</span>)
-<a name="l00058"></a>00058       : self(id), output(false), marked(false),
-<a name="l00059"></a>00059         pre(), post()
+<a name="l00033"></a>00033 <span class="preprocessor">#ifdef ADB_DEBUG</span>
+<a name="l00034"></a>00034 <span class="preprocessor"></span><span class="preprocessor">#include &lt;iostream&gt;</span>
+<a name="l00035"></a>00035 <span class="preprocessor">#endif </span><span class="comment">/* ADB_DEBUG */</span>
+<a name="l00036"></a>00036 
+<a name="l00049"></a>00049 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l00050"></a><a class="code" href="classcsPartialOrder.html">00050</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsPartialOrder.html">csPartialOrder</a>
+<a name="l00051"></a>00051 {
+<a name="l00052"></a>00052 <span class="keyword">protected</span>:
+<a name="l00053"></a><a class="code" href="classcsPartialOrder_1_1Node.html">00053</a>   <span class="keyword">class </span><a class="code" href="classcsPartialOrder_1_1Node.html">Node</a>
+<a name="l00054"></a>00054   {
+<a name="l00055"></a>00055   <span class="keyword">public</span>:
+<a name="l00056"></a><a class="code" href="classcsPartialOrder_1_1Node.html#73bce253c3d1123100f3d2436e790f10">00056</a>     <a class="code" href="classcsPartialOrder_1_1Node.html">Node</a>(<span class="keyword">const</span> <a class="code" href="classcsPartialOrder_1_1Node.html">Node</a> &amp;other) 
+<a name="l00057"></a>00057       : self(other.self), output(other.output),
+<a name="l00058"></a>00058         marked(other.marked),
+<a name="l00059"></a>00059         pre(other.pre), post(other.post)
 <a name="l00060"></a>00060     { }
-<a name="l00061"></a><a class="code" href="classcsPartialOrder_1_1Node.html#590f53e8699817c6fa498cc11a4cbe63">00061</a>     <span class="keyword">const</span> T <span class="keyword">self</span>;
-<a name="l00062"></a><a class="code" href="classcsPartialOrder_1_1Node.html#78e6221f6393d1356681db398f14ce6d">00062</a>     <span class="keywordtype">bool</span> output;
-<a name="l00063"></a><a class="code" href="classcsPartialOrder_1_1Node.html#5bbf2d6725b29ad8ddb7c3ab47c50930">00063</a>     <span class="keywordtype">bool</span> marked;
-<a name="l00064"></a><a class="code" href="classcsPartialOrder_1_1Node.html#6bf9e70a1f928aba143ef1eebe2720b5">00064</a>     csArray&lt;size_t&gt; pre;
-<a name="l00065"></a><a class="code" href="classcsPartialOrder_1_1Node.html#42b90196b487c54069097a68fe98ab6f">00065</a>     csArray&lt;size_t&gt; post;
-<a name="l00066"></a>00066   };
-<a name="l00067"></a><a class="code" href="classcsPartialOrder.html#187c6ad3a74cc93ac6c2229d398e383e">00067</a>   csArray&lt;Node&gt; Nodes;
-<a name="l00068"></a><a class="code" href="classcsPartialOrder.html#4cc567608b06d0cc686ac005ed880fab">00068</a>   csHash&lt;size_t,const T&gt; NodeMap;
-<a name="l00069"></a>00069         
-<a name="l00070"></a>00070 <span class="keyword">public</span>:
-<a name="l00072"></a><a class="code" href="classcsPartialOrder.html#833f6381e51a3f07d4de66203ed6a822">00072</a>   <a class="code" href="classcsPartialOrder.html">csPartialOrder</a> ()
-<a name="l00073"></a>00073     : Nodes (), NodeMap()
-<a name="l00074"></a>00074   {
-<a name="l00075"></a>00075     <span class="keywordflow">return</span>;
-<a name="l00076"></a>00076   }
-<a name="l00077"></a>00077 
-<a name="l00079"></a><a class="code" href="classcsPartialOrder.html#6e4f13def7faca40df0794f89303d3eb">00079</a>   <a class="code" href="classcsPartialOrder.html">csPartialOrder</a>(<span class="keyword">const</span> <a class="code" href="classcsPartialOrder.html">csPartialOrder</a> &amp;other)
-<a name="l00080"></a>00080     : Nodes (other.Nodes), NodeMap (other.NodeMap)
-<a name="l00081"></a>00081   {
-<a name="l00082"></a>00082     <span class="keywordflow">return</span>;
-<a name="l00083"></a>00083   }
-<a name="l00084"></a>00084 
-<a name="l00086"></a><a class="code" href="classcsPartialOrder.html#0f6e06dc782c0ba941985cdbdaf5bc81">00086</a>   <a class="code" href="classcsPartialOrder.html">csPartialOrder</a>(<span class="keyword">const</span> <a class="code" href="classcsPartialOrder.html">csPartialOrder</a> *other)
-<a name="l00087"></a>00087     : Nodes (other-&gt;Nodes), NodeMap (other-&gt;NodeMap)
-<a name="l00088"></a>00088   {
-<a name="l00089"></a>00089     <span class="keywordflow">return</span>;
-<a name="l00090"></a>00090   }
-<a name="l00091"></a>00091   
-<a name="l00093"></a><a class="code" href="classcsPartialOrder.html#5a8ac3df7fe80b04d971594234df2d49">00093</a>   <span class="keywordtype">void</span> Add (<span class="keyword">const</span> T&amp; node)
-<a name="l00094"></a>00094   {
-<a name="l00095"></a>00095     <span class="keywordflow">if</span> (NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>) == <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>) 
-<a name="l00096"></a>00096     {
-<a name="l00097"></a>00097       NodeMap.PutUnique(node, Nodes.Push(node));
-<a name="l00098"></a>00098     }
-<a name="l00099"></a>00099     Dump();
-<a name="l00100"></a>00100   }
-<a name="l00101"></a>00101 
-<a name="l00103"></a><a class="code" href="classcsPartialOrder.html#b009257462ec328cc4b7212b6e73685f">00103</a>   <span class="keywordtype">bool</span> Contains (<span class="keyword">const</span> T&amp; node)
-<a name="l00104"></a>00104   {
-<a name="l00105"></a>00105     <span class="keywordflow">return</span> (NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>) != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00106"></a>00106   }
-<a name="l00107"></a>00107   
-<a name="l00109"></a><a class="code" href="classcsPartialOrder.html#ecadb3dc36ff82a67b1dc2db48b5132e">00109</a>   <span class="keywordtype">void</span> Delete (<span class="keyword">const</span> T&amp; node)
-<a name="l00110"></a>00110   {
-<a name="l00111"></a>00111     size_t p = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00112"></a>00112     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(p!=<a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00113"></a>00113     <span class="comment">// delete all posts pointing to node</span>
-<a name="l00114"></a>00114     <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes[p].pre.Length() ; iter++) 
-<a name="l00115"></a>00115     {
-<a name="l00116"></a>00116       Nodes[Nodes[p].pre[iter]].post.DeleteFast(p);
-<a name="l00117"></a>00117     }
-<a name="l00118"></a>00118     <span class="comment">// delete node's pre's</span>
-<a name="l00119"></a>00119     Nodes[p].pre.DeleteAll();
-<a name="l00120"></a>00120     <span class="comment">// delete all pres pointing to node</span>
-<a name="l00121"></a>00121     <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes[p].post.Length() ; iter++) 
-<a name="l00122"></a>00122     {
-<a name="l00123"></a>00123       Nodes[Nodes[p].post[iter]].pre.DeleteFast(p);
-<a name="l00124"></a>00124     }
-<a name="l00125"></a>00125     <span class="comment">// delete node's post's</span>
-<a name="l00126"></a>00126     Nodes[p].post.DeleteAll();
-<a name="l00127"></a>00127     <span class="comment">// delete node</span>
-<a name="l00128"></a>00128     Nodes.DeleteIndexFast(p);
-<a name="l00129"></a>00129     NodeMap.Delete(node, p);
-<a name="l00130"></a>00130     <span class="keywordflow">if</span> (Nodes.Length() &gt; p)
-<a name="l00131"></a>00131       NodeMap.PutUnique(Nodes[p].self, p);
-<a name="l00132"></a>00132 
-<a name="l00133"></a>00133     <span class="comment">// debug...</span>
-<a name="l00134"></a>00134     <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes.Length() ; iter++) {
-<a name="l00135"></a>00135       <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(NodeMap.Get(Nodes[iter].self,<a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>)==iter);
-<a name="l00136"></a>00136     }
-<a name="l00137"></a>00137 
-<a name="l00138"></a>00138     Dump();
-<a name="l00139"></a>00139   }
-<a name="l00140"></a>00140   
-<a name="l00147"></a><a class="code" href="classcsPartialOrder.html#c104188f1cda0d44b590615c0ec22e89">00147</a>   <span class="keywordtype">bool</span> AddOrder (<span class="keyword">const</span> T&amp; node1, <span class="keyword">const</span> T&amp; node2)
-<a name="l00148"></a>00148   {
-<a name="l00149"></a>00149     size_t n1 = NodeMap.Get(node1, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00150"></a>00150     size_t n2 = NodeMap.Get(node2, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00151"></a>00151     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n1 != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00152"></a>00152     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n2 != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00153"></a>00153     
-<a name="l00154"></a>00154     <span class="comment">/* make the forward link "n1-&gt;n2" */</span>
-<a name="l00155"></a>00155     Nodes[n1].post.Push(n2);
-<a name="l00156"></a>00156     
-<a name="l00157"></a>00157     <span class="keywordflow">if</span> (InternalCycleTest(n1)) 
-<a name="l00158"></a>00158     {
-<a name="l00159"></a>00159       <span class="comment">/* undo our mischief and report failure */</span>
-<a name="l00160"></a>00160       Nodes[n1].post.Pop();
-<a name="l00161"></a>00161       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00162"></a>00162     } 
-<a name="l00163"></a>00163     <span class="keywordflow">else</span> 
-<a name="l00164"></a>00164     {
-<a name="l00165"></a>00165       <span class="comment">/* make the paired pre link "n2&lt;-n1" */</span>
-<a name="l00166"></a>00166       Nodes[n2].pre.Push(n1);
-<a name="l00167"></a>00167       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00168"></a>00168     }
-<a name="l00169"></a>00169   }
-<a name="l00170"></a>00170   
-<a name="l00172"></a><a class="code" href="classcsPartialOrder.html#59bcdeb36444855daa868d72c0e04035">00172</a>   <span class="keywordtype">void</span> DeleteOrder (<span class="keyword">const</span> T&amp; node1, <span class="keyword">const</span> T&amp; node2)
-<a name="l00173"></a>00173   {
-<a name="l00174"></a>00174     size_t n1 = NodeMap.Get(node1, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00175"></a>00175     size_t n2 = NodeMap.Get(node2, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00176"></a>00176     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n1 != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00177"></a>00177     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n2 != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00178"></a>00178     Nodes[n2].pre.DeleteFast(n1);
-<a name="l00179"></a>00179     Nodes[n1].post.DeleteFast(n2);
-<a name="l00180"></a>00180   }
-<a name="l00181"></a>00181 
-<a name="l00183"></a><a class="code" href="classcsPartialOrder.html#88fba262d891a49abeef931a4a92217a">00183</a>   size_t Size ()
-<a name="l00184"></a>00184   {
-<a name="l00185"></a>00185     <span class="keywordflow">return</span> Nodes.Length();
-<a name="l00186"></a>00186   }
-<a name="l00187"></a>00187 
-<a name="l00189"></a><a class="code" href="classcsPartialOrder.html#52126ab51e486a1542ccd261fdbbdd95">00189</a>   <span class="keyword">const</span> T GetByIndex(size_t i)
-<a name="l00190"></a>00190   {
-<a name="l00191"></a>00191     <span class="keywordflow">return</span> Nodes[i].self;
-<a name="l00192"></a>00192   }
-<a name="l00193"></a>00193   
-<a name="l00198"></a><a class="code" href="classcsPartialOrder.html#c4956e168c269494e08dcf98cff4ae55">00198</a>   <span class="keywordtype">void</span> Solve (csList&lt;const T&gt; &amp; result)
-<a name="l00199"></a>00199   {
-<a name="l00200"></a>00200     <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes.Length() ; iter++) 
-<a name="l00201"></a>00201     {
-<a name="l00202"></a>00202       Nodes[iter].output = <span class="keyword">false</span>;
-<a name="l00203"></a>00203     }
-<a name="l00204"></a>00204     result.<a class="code" href="classcsList.html#0c165cdadcf799458444a1fa6a33739d">DeleteAll</a>();
-<a name="l00205"></a>00205     <span class="keywordtype">bool</span> done;
-<a name="l00206"></a>00206     <span class="keywordflow">do</span> 
-<a name="l00207"></a>00207     {
-<a name="l00208"></a>00208       done = <span class="keyword">true</span>;
-<a name="l00209"></a>00209       <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes.Length() ; iter++) 
-<a name="l00210"></a>00210       {
-<a name="l00211"></a>00211         <span class="keywordflow">if</span> (Nodes[iter].output == <span class="keyword">false</span>) 
-<a name="l00212"></a>00212         {
-<a name="l00213"></a>00213           <span class="keywordtype">int</span> canoutput = <span class="keyword">true</span>;
-<a name="l00214"></a>00214           <span class="keywordflow">for</span> (size_t i2=0 ; i2&lt;Nodes[iter].pre.Length() ; i2++) 
-<a name="l00215"></a>00215           {
-<a name="l00216"></a>00216             <span class="keywordflow">if</span> (!Nodes[Nodes[iter].pre[i2]].output) 
-<a name="l00217"></a>00217             {
-<a name="l00218"></a>00218               canoutput = <span class="keyword">false</span>;
-<a name="l00219"></a>00219               <span class="keywordflow">break</span>;
-<a name="l00220"></a>00220             }
-<a name="l00221"></a>00221           }
-<a name="l00222"></a>00222           <span class="keywordflow">if</span> (canoutput) 
-<a name="l00223"></a>00223           {
-<a name="l00224"></a>00224             result.<a class="code" href="classcsList.html#6b5b52d319319c7cecbd62a777b300ee">PushBack</a>(Nodes[iter].<span class="keyword">self</span>);
-<a name="l00225"></a>00225             Nodes[iter].output = <span class="keyword">true</span>;
-<a name="l00226"></a>00226           } 
-<a name="l00227"></a>00227           <span class="keywordflow">else</span> 
-<a name="l00228"></a>00228           {
-<a name="l00229"></a>00229             done = <span class="keyword">false</span>;
-<a name="l00230"></a>00230           }
-<a name="l00231"></a>00231         }
-<a name="l00232"></a>00232       }
-<a name="l00233"></a>00233     } 
-<a name="l00234"></a>00234     <span class="keywordflow">while</span> (!done);
-<a name="l00235"></a>00235   }
-<a name="l00236"></a>00236   
-<a name="l00241"></a><a class="code" href="classcsPartialOrder.html#6b5a65883bdf3617d4a33c2174716d30">00241</a>   <span class="keywordtype">void</span> Mark (<span class="keyword">const</span> T&amp; node)
-<a name="l00242"></a>00242   {
-<a name="l00243"></a>00243     size_t i = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00244"></a>00244     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(i != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00245"></a>00245     Nodes[i].marked = <span class="keyword">true</span>;
-<a name="l00246"></a>00246   }
-<a name="l00247"></a>00247   
-<a name="l00251"></a><a class="code" href="classcsPartialOrder.html#f1a410fed9c7df4b2e50839a6292d4d5">00251</a>   <span class="keywordtype">bool</span> IsMarked (<span class="keyword">const</span> T&amp; node)
-<a name="l00252"></a>00252   {
-<a name="l00253"></a>00253     size_t i = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00254"></a>00254     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(i != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00255"></a>00255     <span class="keywordflow">return</span> Nodes[i].marked;
-<a name="l00256"></a>00256   }
-<a name="l00257"></a>00257   
-<a name="l00261"></a><a class="code" href="classcsPartialOrder.html#8631ce7e68ad50b1cd17bb39fa684111">00261</a>   <span class="keywordtype">void</span> ClearMark (<span class="keyword">const</span> T&amp; node)
-<a name="l00262"></a>00262   {
-<a name="l00263"></a>00263     size_t i = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00264"></a>00264     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(i != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00265"></a>00265     Nodes[i].marked = <span class="keyword">false</span>;
-<a name="l00266"></a>00266   }
-<a name="l00267"></a>00267   
-<a name="l00271"></a><a class="code" href="classcsPartialOrder.html#9ff74aed548799f3d16037eee22a1a23">00271</a>   <span class="keywordtype">void</span> ClearMark ()
-<a name="l00272"></a>00272   {
-<a name="l00273"></a>00273     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes.Length() ; i++) 
-<a name="l00274"></a>00274     {
-<a name="l00275"></a>00275       Nodes[i].marked = <span class="keyword">false</span>;
-<a name="l00276"></a>00276     }
-<a name="l00277"></a>00277   }
-<a name="l00278"></a>00278   
-<a name="l00283"></a><a class="code" href="classcsPartialOrder.html#349ead9c3903dda485ae63196985dcde">00283</a>   <span class="keywordtype">bool</span> IsEnabled(<span class="keyword">const</span> T&amp; node)
-<a name="l00284"></a>00284   {
-<a name="l00285"></a>00285     size_t i = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00286"></a>00286     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(i != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00287"></a>00287     <span class="keywordflow">return</span> InternalIsEnabled(i);
-<a name="l00288"></a>00288   }
-<a name="l00289"></a>00289   
-<a name="l00293"></a><a class="code" href="classcsPartialOrder.html#8f9d9de33efe6939d98313b9d324520c">00293</a>   <span class="keywordtype">bool</span> HasEnabled()
-<a name="l00294"></a>00294   {
-<a name="l00295"></a>00295     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes.Length() ; i++) 
-<a name="l00296"></a>00296     {
-<a name="l00297"></a>00297       <span class="keywordflow">if</span> (InternalIsEnabled(i))
-<a name="l00298"></a>00298         <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00299"></a>00299     }
-<a name="l00300"></a>00300     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00301"></a>00301   }
-<a name="l00302"></a>00302   
-<a name="l00306"></a><a class="code" href="classcsPartialOrder.html#dc5c898c62ebab7a7dadca02ecfc13e5">00306</a>   <span class="keyword">const</span> T GetEnabled(T fail)
-<a name="l00307"></a>00307   {
-<a name="l00308"></a>00308     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes.Length() ; i++) 
-<a name="l00309"></a>00309     {
-<a name="l00310"></a>00310       <span class="keywordflow">if</span> (InternalIsEnabled(i))
-<a name="l00311"></a>00311         <span class="keywordflow">return</span> Nodes[i].self;
-<a name="l00312"></a>00312     }
-<a name="l00313"></a>00313     <span class="keywordflow">return</span> fail;
-<a name="l00314"></a>00314   }
-<a name="l00315"></a>00315   
-<a name="l00316"></a>00316 <span class="keyword">private</span>:
-<a name="l00317"></a>00317   <span class="keywordtype">bool</span> CycleTest(<span class="keyword">const</span> T&amp; node)
-<a name="l00318"></a>00318   {
-<a name="l00319"></a>00319     size_t n = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00320"></a>00320     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
-<a name="l00321"></a>00321     <span class="keywordflow">return</span> InternalCycleTest(n);
-<a name="l00322"></a>00322   }
-<a name="l00323"></a>00323   
-<a name="l00324"></a>00324   <span class="keywordtype">bool</span> InternalIsEnabled(size_t i) {
-<a name="l00325"></a>00325     <span class="keywordflow">if</span> (Nodes[i].marked)
-<a name="l00326"></a>00326       <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00327"></a>00327     <span class="keywordflow">for</span> (size_t j=0 ; j&lt;Nodes[i].pre.Length() ; j++) 
-<a name="l00328"></a>00328     {
-<a name="l00329"></a>00329       <span class="keywordflow">if</span> (!Nodes[Nodes[i].pre[j]].marked)
-<a name="l00330"></a>00330         <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00331"></a>00331     }
-<a name="l00332"></a>00332     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00333"></a>00333   }
-<a name="l00334"></a>00334   
-<a name="l00335"></a>00335   <span class="keywordtype">bool</span> InternalCycleTest(size_t n1, size_t n2)
-<a name="l00336"></a>00336   {
-<a name="l00337"></a>00337     <span class="comment">// n1 is the inserted node, see if n2 hits n1 again...</span>
-<a name="l00338"></a>00338     <span class="keywordflow">if</span> (n1==n2)
-<a name="l00339"></a>00339       <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00340"></a>00340     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes[n2].post.Length() ; i++) 
-<a name="l00341"></a>00341     {
-<a name="l00342"></a>00342       <span class="keywordflow">if</span> (InternalCycleTest(n1, Nodes[n2].post[i]))
-<a name="l00343"></a>00343         <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00344"></a>00344     }
-<a name="l00345"></a>00345     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00346"></a>00346   }
-<a name="l00347"></a>00347   <span class="keywordtype">bool</span> InternalCycleTest(size_t n)
-<a name="l00348"></a>00348   {
-<a name="l00349"></a>00349     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes[n].post.Length() ; i++) 
-<a name="l00350"></a>00350     {
-<a name="l00351"></a>00351       <span class="keywordflow">if</span> (InternalCycleTest(n, Nodes[n].post[i]))
-<a name="l00352"></a>00352         <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00353"></a>00353     }
-<a name="l00354"></a>00354     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00355"></a>00355   }
-<a name="l00356"></a>00356   
-<a name="l00357"></a>00357 <span class="keyword">public</span>:
-<a name="l00358"></a><a class="code" href="classcsPartialOrder.html#9342734a1fd4a0d204eedb76aec84fb6">00358</a>   <span class="keywordtype">void</span> Dump() {
-<a name="l00359"></a>00359 <span class="preprocessor">#ifdef ADB_DEBUG</span>
-<a name="l00360"></a>00360 <span class="preprocessor"></span>    std::cerr &lt;&lt; <span class="stringliteral">"PARTIAL ORDER---------------------------------------"</span> 
-<a name="l00361"></a>00361               &lt;&lt; std::endl;
-<a name="l00362"></a>00362     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes.Length() ; i++) 
-<a name="l00363"></a>00363     {
-<a name="l00364"></a>00364       std::cerr &lt;&lt; <span class="stringliteral">" Node #"</span> &lt;&lt; i &lt;&lt; <span class="stringliteral">" ["</span> &lt;&lt; Nodes[i].<span class="keyword">self</span> 
-<a name="l00365"></a>00365                 &lt;&lt; <span class="stringliteral">"]:"</span> &lt;&lt; std::endl;
-<a name="l00366"></a>00366       std::cerr &lt;&lt; <span class="stringliteral">"   pres:"</span>;
-<a name="l00367"></a>00367       <span class="keywordflow">for</span> (size_t j=0 ; j&lt;Nodes[i].pre.Length() ; j++) 
-<a name="l00368"></a>00368       {
-<a name="l00369"></a>00369         std::cerr &lt;&lt; <span class="stringliteral">" #"</span> &lt;&lt; Nodes[i].pre[j];
-<a name="l00370"></a>00370       }
-<a name="l00371"></a>00371       std::cerr &lt;&lt; std::endl 
-<a name="l00372"></a>00372                 &lt;&lt; <span class="stringliteral">"   posts:"</span>;
-<a name="l00373"></a>00373       <span class="keywordflow">for</span> (size_t j=0 ; j&lt;Nodes[i].post.Length() ; j++) 
-<a name="l00374"></a>00374       {
-<a name="l00375"></a>00375         std::cerr &lt;&lt; <span class="stringliteral">" #"</span> &lt;&lt; Nodes[i].post[j];
-<a name="l00376"></a>00376       }
-<a name="l00377"></a>00377       std::cerr &lt;&lt; std::endl;
-<a name="l00378"></a>00378     }
-<a name="l00379"></a>00379     std::cerr &lt;&lt; <span class="stringliteral">"PARTIAL ORDER END-----------------------------------"</span> 
-<a name="l00380"></a>00380               &lt;&lt; std::endl &lt;&lt; std::endl;
-<a name="l00381"></a>00381 #endif
-<a name="l00382"></a>00382   }
-<a name="l00383"></a>00383 };
-<a name="l00384"></a>00384 
-<a name="l00385"></a>00385 #endif <span class="comment">// __CS_UTIL_PO_H__</span>
+<a name="l00061"></a><a class="code" href="classcsPartialOrder_1_1Node.html#94d079fc99a491c8305c2031a2221382">00061</a>     <a class="code" href="classcsPartialOrder_1_1Node.html">Node</a>(<span class="keyword">const</span> T &amp;<span class="keywordtype">id</span>)
+<a name="l00062"></a>00062       : self(id), output(false), marked(false),
+<a name="l00063"></a>00063         pre(), post()
+<a name="l00064"></a>00064     { }
+<a name="l00065"></a><a class="code" href="classcsPartialOrder_1_1Node.html#590f53e8699817c6fa498cc11a4cbe63">00065</a>     <span class="keyword">const</span> T <span class="keyword">self</span>;
+<a name="l00066"></a><a class="code" href="classcsPartialOrder_1_1Node.html#78e6221f6393d1356681db398f14ce6d">00066</a>     <span class="keywordtype">bool</span> output;
+<a name="l00067"></a><a class="code" href="classcsPartialOrder_1_1Node.html#5bbf2d6725b29ad8ddb7c3ab47c50930">00067</a>     <span class="keywordtype">bool</span> marked;
+<a name="l00068"></a><a class="code" href="classcsPartialOrder_1_1Node.html#6bf9e70a1f928aba143ef1eebe2720b5">00068</a>     csArray&lt;size_t&gt; pre;
+<a name="l00069"></a><a class="code" href="classcsPartialOrder_1_1Node.html#42b90196b487c54069097a68fe98ab6f">00069</a>     csArray&lt;size_t&gt; post;
+<a name="l00070"></a>00070   };
+<a name="l00071"></a><a class="code" href="classcsPartialOrder.html#187c6ad3a74cc93ac6c2229d398e383e">00071</a>   csArray&lt;Node&gt; Nodes;
+<a name="l00072"></a><a class="code" href="classcsPartialOrder.html#4cc567608b06d0cc686ac005ed880fab">00072</a>   csHash&lt;size_t,const T&gt; NodeMap;
+<a name="l00073"></a>00073         
+<a name="l00074"></a>00074 <span class="keyword">public</span>:
+<a name="l00076"></a><a class="code" href="classcsPartialOrder.html#833f6381e51a3f07d4de66203ed6a822">00076</a>   <a class="code" href="classcsPartialOrder.html">csPartialOrder</a> ()
+<a name="l00077"></a>00077     : Nodes (), NodeMap()
+<a name="l00078"></a>00078   {
+<a name="l00079"></a>00079     <span class="keywordflow">return</span>;
+<a name="l00080"></a>00080   }
+<a name="l00081"></a>00081 
+<a name="l00083"></a><a class="code" href="classcsPartialOrder.html#6e4f13def7faca40df0794f89303d3eb">00083</a>   <a class="code" href="classcsPartialOrder.html">csPartialOrder</a>(<span class="keyword">const</span> <a class="code" href="classcsPartialOrder.html">csPartialOrder</a> &amp;other)
+<a name="l00084"></a>00084     : Nodes (other.Nodes), NodeMap (other.NodeMap)
+<a name="l00085"></a>00085   {
+<a name="l00086"></a>00086     <span class="keywordflow">return</span>;
+<a name="l00087"></a>00087   }
+<a name="l00088"></a>00088 
+<a name="l00090"></a><a class="code" href="classcsPartialOrder.html#0f6e06dc782c0ba941985cdbdaf5bc81">00090</a>   <a class="code" href="classcsPartialOrder.html">csPartialOrder</a>(<span class="keyword">const</span> <a class="code" href="classcsPartialOrder.html">csPartialOrder</a> *other)
+<a name="l00091"></a>00091     : Nodes (other-&gt;Nodes), NodeMap (other-&gt;NodeMap)
+<a name="l00092"></a>00092   {
+<a name="l00093"></a>00093     <span class="keywordflow">return</span>;
+<a name="l00094"></a>00094   }
+<a name="l00095"></a>00095   
+<a name="l00097"></a><a class="code" href="classcsPartialOrder.html#5a8ac3df7fe80b04d971594234df2d49">00097</a>   <span class="keywordtype">void</span> Add (<span class="keyword">const</span> T&amp; node)
+<a name="l00098"></a>00098   {
+<a name="l00099"></a>00099     <span class="keywordflow">if</span> (NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>) == <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>) 
+<a name="l00100"></a>00100     {
+<a name="l00101"></a>00101       NodeMap.PutUnique(node, Nodes.Push(node));
+<a name="l00102"></a>00102     }
+<a name="l00103"></a>00103   }
+<a name="l00104"></a>00104 
+<a name="l00106"></a><a class="code" href="classcsPartialOrder.html#b009257462ec328cc4b7212b6e73685f">00106</a>   <span class="keywordtype">bool</span> Contains (<span class="keyword">const</span> T&amp; node)
+<a name="l00107"></a>00107   {
+<a name="l00108"></a>00108     <span class="keywordflow">return</span> (NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>) != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00109"></a>00109   }
+<a name="l00110"></a>00110   
+<a name="l00112"></a><a class="code" href="classcsPartialOrder.html#ecadb3dc36ff82a67b1dc2db48b5132e">00112</a>   <span class="keywordtype">void</span> Delete (<span class="keyword">const</span> T&amp; node)
+<a name="l00113"></a>00113   {
+<a name="l00114"></a>00114     size_t p = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00115"></a>00115     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(p!=<a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00116"></a>00116     <span class="comment">// delete all posts pointing to node</span>
+<a name="l00117"></a>00117     <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes[p].pre.Length() ; iter++) 
+<a name="l00118"></a>00118     {
+<a name="l00119"></a>00119       Nodes[Nodes[p].pre[iter]].post.DeleteFast(p);
+<a name="l00120"></a>00120     }
+<a name="l00121"></a>00121     <span class="comment">// delete node's pre's</span>
+<a name="l00122"></a>00122     Nodes[p].pre.DeleteAll();
+<a name="l00123"></a>00123     <span class="comment">// delete all pres pointing to node</span>
+<a name="l00124"></a>00124     <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes[p].post.Length() ; iter++) 
+<a name="l00125"></a>00125     {
+<a name="l00126"></a>00126       Nodes[Nodes[p].post[iter]].pre.DeleteFast(p);
+<a name="l00127"></a>00127     }
+<a name="l00128"></a>00128     <span class="comment">// delete node's post's</span>
+<a name="l00129"></a>00129     Nodes[p].post.DeleteAll();
+<a name="l00130"></a>00130     <span class="comment">// delete node</span>
+<a name="l00131"></a>00131     Nodes.DeleteIndexFast(p);
+<a name="l00132"></a>00132     NodeMap.Delete(node, p);
+<a name="l00133"></a>00133     <span class="keywordflow">if</span> (Nodes.Length() &gt; p)
+<a name="l00134"></a>00134       NodeMap.PutUnique(Nodes[p].self, p);
+<a name="l00135"></a>00135 
+<a name="l00136"></a>00136     <span class="comment">// debug...</span>
+<a name="l00137"></a>00137     <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes.Length() ; iter++)
+<a name="l00138"></a>00138     {
+<a name="l00139"></a>00139       <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(NodeMap.Get(Nodes[iter].self,<a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>)==iter);
+<a name="l00140"></a>00140     }
+<a name="l00141"></a>00141   }
+<a name="l00142"></a>00142   
+<a name="l00149"></a><a class="code" href="classcsPartialOrder.html#c104188f1cda0d44b590615c0ec22e89">00149</a>   <span class="keywordtype">bool</span> AddOrder (<span class="keyword">const</span> T&amp; node1, <span class="keyword">const</span> T&amp; node2)
+<a name="l00150"></a>00150   {
+<a name="l00151"></a>00151     size_t n1 = NodeMap.Get(node1, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00152"></a>00152     size_t n2 = NodeMap.Get(node2, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00153"></a>00153     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n1 != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00154"></a>00154     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n2 != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00155"></a>00155     
+<a name="l00156"></a>00156     <span class="comment">/* make the forward link "n1-&gt;n2" */</span>
+<a name="l00157"></a>00157     Nodes[n1].post.Push(n2);
+<a name="l00158"></a>00158     
+<a name="l00159"></a>00159     <span class="keywordflow">if</span> (InternalCycleTest(n1)) 
+<a name="l00160"></a>00160     {
+<a name="l00161"></a>00161       <span class="comment">/* undo our mischief and report failure */</span>
+<a name="l00162"></a>00162       Nodes[n1].post.Pop();
+<a name="l00163"></a>00163       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00164"></a>00164     } 
+<a name="l00165"></a>00165     <span class="keywordflow">else</span> 
+<a name="l00166"></a>00166     {
+<a name="l00167"></a>00167       <span class="comment">/* make the paired pre link "n2&lt;-n1" */</span>
+<a name="l00168"></a>00168       Nodes[n2].pre.Push(n1);
+<a name="l00169"></a>00169       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00170"></a>00170     }
+<a name="l00171"></a>00171   }
+<a name="l00172"></a>00172   
+<a name="l00174"></a><a class="code" href="classcsPartialOrder.html#59bcdeb36444855daa868d72c0e04035">00174</a>   <span class="keywordtype">void</span> DeleteOrder (<span class="keyword">const</span> T&amp; node1, <span class="keyword">const</span> T&amp; node2)
+<a name="l00175"></a>00175   {
+<a name="l00176"></a>00176     size_t n1 = NodeMap.Get(node1, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00177"></a>00177     size_t n2 = NodeMap.Get(node2, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00178"></a>00178     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n1 != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00179"></a>00179     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n2 != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00180"></a>00180     Nodes[n2].pre.DeleteFast(n1);
+<a name="l00181"></a>00181     Nodes[n1].post.DeleteFast(n2);
+<a name="l00182"></a>00182   }
+<a name="l00183"></a>00183 
+<a name="l00185"></a><a class="code" href="classcsPartialOrder.html#88fba262d891a49abeef931a4a92217a">00185</a>   size_t Size ()
+<a name="l00186"></a>00186   {
+<a name="l00187"></a>00187     <span class="keywordflow">return</span> Nodes.Length();
+<a name="l00188"></a>00188   }
+<a name="l00189"></a>00189 
+<a name="l00191"></a><a class="code" href="classcsPartialOrder.html#52126ab51e486a1542ccd261fdbbdd95">00191</a>   <span class="keyword">const</span> T GetByIndex(size_t i)
+<a name="l00192"></a>00192   {
+<a name="l00193"></a>00193     <span class="keywordflow">return</span> Nodes[i].self;
+<a name="l00194"></a>00194   }
+<a name="l00195"></a>00195   
+<a name="l00200"></a><a class="code" href="classcsPartialOrder.html#c4956e168c269494e08dcf98cff4ae55">00200</a>   <span class="keywordtype">void</span> Solve (csList&lt;const T&gt; &amp; result)
+<a name="l00201"></a>00201   {
+<a name="l00202"></a>00202     <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes.Length() ; iter++) 
+<a name="l00203"></a>00203     {
+<a name="l00204"></a>00204       Nodes[iter].output = <span class="keyword">false</span>;
+<a name="l00205"></a>00205     }
+<a name="l00206"></a>00206     result.<a class="code" href="classcsList.html#0c165cdadcf799458444a1fa6a33739d">DeleteAll</a>();
+<a name="l00207"></a>00207     <span class="keywordtype">bool</span> done;
+<a name="l00208"></a>00208     <span class="keywordflow">do</span> 
+<a name="l00209"></a>00209     {
+<a name="l00210"></a>00210       done = <span class="keyword">true</span>;
+<a name="l00211"></a>00211       <span class="keywordflow">for</span> (size_t iter=0 ; iter&lt;Nodes.Length() ; iter++) 
+<a name="l00212"></a>00212       {
+<a name="l00213"></a>00213         <span class="keywordflow">if</span> (Nodes[iter].output == <span class="keyword">false</span>) 
+<a name="l00214"></a>00214         {
+<a name="l00215"></a>00215           <span class="keywordtype">int</span> canoutput = <span class="keyword">true</span>;
+<a name="l00216"></a>00216           <span class="keywordflow">for</span> (size_t i2=0 ; i2&lt;Nodes[iter].pre.Length() ; i2++) 
+<a name="l00217"></a>00217           {
+<a name="l00218"></a>00218             <span class="keywordflow">if</span> (!Nodes[Nodes[iter].pre[i2]].output) 
+<a name="l00219"></a>00219             {
+<a name="l00220"></a>00220               canoutput = <span class="keyword">false</span>;
+<a name="l00221"></a>00221               <span class="keywordflow">break</span>;
+<a name="l00222"></a>00222             }
+<a name="l00223"></a>00223           }
+<a name="l00224"></a>00224           <span class="keywordflow">if</span> (canoutput) 
+<a name="l00225"></a>00225           {
+<a name="l00226"></a>00226             result.<a class="code" href="classcsList.html#6b5b52d319319c7cecbd62a777b300ee">PushBack</a>(Nodes[iter].<span class="keyword">self</span>);
+<a name="l00227"></a>00227             Nodes[iter].output = <span class="keyword">true</span>;
+<a name="l00228"></a>00228           } 
+<a name="l00229"></a>00229           <span class="keywordflow">else</span> 
+<a name="l00230"></a>00230           {
+<a name="l00231"></a>00231             done = <span class="keyword">false</span>;
+<a name="l00232"></a>00232           }
+<a name="l00233"></a>00233         }
+<a name="l00234"></a>00234       }
+<a name="l00235"></a>00235     } 
+<a name="l00236"></a>00236     <span class="keywordflow">while</span> (!done);
+<a name="l00237"></a>00237   }
+<a name="l00238"></a>00238   
+<a name="l00243"></a><a class="code" href="classcsPartialOrder.html#6b5a65883bdf3617d4a33c2174716d30">00243</a>   <span class="keywordtype">void</span> Mark (<span class="keyword">const</span> T&amp; node)
+<a name="l00244"></a>00244   {
+<a name="l00245"></a>00245     size_t i = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00246"></a>00246     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(i != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00247"></a>00247     Nodes[i].marked = <span class="keyword">true</span>;
+<a name="l00248"></a>00248   }
+<a name="l00249"></a>00249   
+<a name="l00253"></a><a class="code" href="classcsPartialOrder.html#f1a410fed9c7df4b2e50839a6292d4d5">00253</a>   <span class="keywordtype">bool</span> IsMarked (<span class="keyword">const</span> T&amp; node)
+<a name="l00254"></a>00254   {
+<a name="l00255"></a>00255     size_t i = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00256"></a>00256     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(i != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00257"></a>00257     <span class="keywordflow">return</span> Nodes[i].marked;
+<a name="l00258"></a>00258   }
+<a name="l00259"></a>00259   
+<a name="l00263"></a><a class="code" href="classcsPartialOrder.html#8631ce7e68ad50b1cd17bb39fa684111">00263</a>   <span class="keywordtype">void</span> ClearMark (<span class="keyword">const</span> T&amp; node)
+<a name="l00264"></a>00264   {
+<a name="l00265"></a>00265     size_t i = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00266"></a>00266     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(i != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00267"></a>00267     Nodes[i].marked = <span class="keyword">false</span>;
+<a name="l00268"></a>00268   }
+<a name="l00269"></a>00269   
+<a name="l00273"></a><a class="code" href="classcsPartialOrder.html#9ff74aed548799f3d16037eee22a1a23">00273</a>   <span class="keywordtype">void</span> ClearMark ()
+<a name="l00274"></a>00274   {
+<a name="l00275"></a>00275     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes.Length() ; i++) 
+<a name="l00276"></a>00276     {
+<a name="l00277"></a>00277       Nodes[i].marked = <span class="keyword">false</span>;
+<a name="l00278"></a>00278     }
+<a name="l00279"></a>00279   }
+<a name="l00280"></a>00280   
+<a name="l00285"></a><a class="code" href="classcsPartialOrder.html#349ead9c3903dda485ae63196985dcde">00285</a>   <span class="keywordtype">bool</span> IsEnabled(<span class="keyword">const</span> T&amp; node)
+<a name="l00286"></a>00286   {
+<a name="l00287"></a>00287     size_t i = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00288"></a>00288     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(i != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00289"></a>00289     <span class="keywordflow">return</span> InternalIsEnabled(i);
+<a name="l00290"></a>00290   }
+<a name="l00291"></a>00291   
+<a name="l00295"></a><a class="code" href="classcsPartialOrder.html#8f9d9de33efe6939d98313b9d324520c">00295</a>   <span class="keywordtype">bool</span> HasEnabled()
+<a name="l00296"></a>00296   {
+<a name="l00297"></a>00297     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes.Length() ; i++) 
+<a name="l00298"></a>00298     {
+<a name="l00299"></a>00299       <span class="keywordflow">if</span> (InternalIsEnabled(i))
+<a name="l00300"></a>00300         <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00301"></a>00301     }
+<a name="l00302"></a>00302     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00303"></a>00303   }
+<a name="l00304"></a>00304   
+<a name="l00308"></a><a class="code" href="classcsPartialOrder.html#dc5c898c62ebab7a7dadca02ecfc13e5">00308</a>   <span class="keyword">const</span> T GetEnabled(T fail)
+<a name="l00309"></a>00309   {
+<a name="l00310"></a>00310     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes.Length() ; i++) 
+<a name="l00311"></a>00311     {
+<a name="l00312"></a>00312       <span class="keywordflow">if</span> (InternalIsEnabled(i))
+<a name="l00313"></a>00313         <span class="keywordflow">return</span> Nodes[i].self;
+<a name="l00314"></a>00314     }
+<a name="l00315"></a>00315     <span class="keywordflow">return</span> fail;
+<a name="l00316"></a>00316   }
+<a name="l00317"></a>00317   
+<a name="l00318"></a>00318 <span class="keyword">private</span>:
+<a name="l00319"></a>00319   <span class="keywordtype">bool</span> CycleTest(<span class="keyword">const</span> T&amp; node)
+<a name="l00320"></a>00320   {
+<a name="l00321"></a>00321     size_t n = NodeMap.Get(node, <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00322"></a>00322     <a class="code" href="cssysdef_8h.html#d04f38f16637a9429e87f15d89a0f6af">CS_ASSERT</a>(n != <a class="code" href="group__util__containers.html#g9dbee61b033e51801dbfab2305cf192b">csArrayItemNotFound</a>);
+<a name="l00323"></a>00323     <span class="keywordflow">return</span> InternalCycleTest(n);
+<a name="l00324"></a>00324   }
+<a name="l00325"></a>00325   
+<a name="l00326"></a>00326   <span class="keywordtype">bool</span> InternalIsEnabled(size_t i)
+<a name="l00327"></a>00327   {
+<a name="l00328"></a>00328     <span class="keywordflow">if</span> (Nodes[i].marked)
+<a name="l00329"></a>00329       <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00330"></a>00330     <span class="keywordflow">for</span> (size_t j=0 ; j&lt;Nodes[i].pre.Length() ; j++) 
+<a name="l00331"></a>00331     {
+<a name="l00332"></a>00332       <span class="keywordflow">if</span> (!Nodes[Nodes[i].pre[j]].marked)
+<a name="l00333"></a>00333         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00334"></a>00334     }
+<a name="l00335"></a>00335     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00336"></a>00336   }
+<a name="l00337"></a>00337   
+<a name="l00338"></a>00338   <span class="keywordtype">bool</span> InternalCycleTest(size_t n1, size_t n2)
+<a name="l00339"></a>00339   {
+<a name="l00340"></a>00340     <span class="comment">// n1 is the inserted node, see if n2 hits n1 again...</span>
+<a name="l00341"></a>00341     <span class="keywordflow">if</span> (n1==n2)
+<a name="l00342"></a>00342       <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00343"></a>00343     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes[n2].post.Length() ; i++) 
+<a name="l00344"></a>00344     {
+<a name="l00345"></a>00345       <span class="keywordflow">if</span> (InternalCycleTest(n1, Nodes[n2].post[i]))
+<a name="l00346"></a>00346         <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00347"></a>00347     }
+<a name="l00348"></a>00348     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00349"></a>00349   }
+<a name="l00350"></a>00350   <span class="keywordtype">bool</span> InternalCycleTest(size_t n)
+<a name="l00351"></a>00351   {
+<a name="l00352"></a>00352     <span class="keywordflow">for</span> (size_t i=0 ; i&lt;Nodes[n].post.Length() ; i++) 
+<a name="l00353"></a>00353     {
+<a name="l00354"></a>00354       <span class="keywordflow">if</span> (InternalCycleTest(n, Nodes[n].post[i]))
+<a name="l00355"></a>00355         <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00356"></a>00356     }
+<a name="l00357"></a>00357     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00358"></a>00358   }
+<a name="l00359"></a>00359 };
+<a name="l00360"></a>00360 
+<a name="l00361"></a>00361 <span class="preprocessor">#endif // __CS_UTIL_PO_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.5 
 </small></address> </div></body> </html>
