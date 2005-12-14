@@ -138,11 +138,11 @@ SOURCE="$(InputPath)"
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\drawpmap.cpp
+SOURCE=..\..\plugins\video\render3d\software\halo.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\halo.cpp
+SOURCE=..\..\plugins\video\render3d\software\pixspecifica.cpp
 # End Source File
 # Begin Source File
 
@@ -171,6 +171,10 @@ SOURCE=..\..\plugins\video\render3d\software\clip_znear.h
 # Begin Source File
 
 SOURCE=..\..\plugins\video\render3d\software\clipper.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\video\render3d\software\pixspecifica.h
 # End Source File
 # Begin Source File
 
