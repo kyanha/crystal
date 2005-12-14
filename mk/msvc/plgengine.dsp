@@ -190,6 +190,10 @@ SOURCE=..\..\plugins\engine\3d\material.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\plugins\engine\3d\meshgen.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\plugins\engine\3d\meshlod.cpp
 # End Source File
 # Begin Source File
@@ -287,6 +291,10 @@ SOURCE=..\..\plugins\engine\3d\lview.h
 # Begin Source File
 
 SOURCE=..\..\plugins\engine\3d\material.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\plugins\engine\3d\meshgen.h
 # End Source File
 # Begin Source File
 
