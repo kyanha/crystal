@@ -164,15 +164,15 @@ But here we show you the full way to create meshes from code:
 </p>
 <ul class="toc">
 <li>
-Load the Mesh Object Type with <code>CS_LOAD_PLUGIN()</code> (preferably after
-checking if it is already loaded, by calling <code>CS_QUERY_PLUGIN_CLASS()</code>).
+Load the Mesh Object Type with <code>csLoadPlugin</code> (preferably after
+checking if it is already loaded, by calling <code>csQueryPluginClass</code>).
 
 </li><li>
 Create at least one Mesh Object Factory by calling <code>NewFactory()</code> on the
 Mesh Object Type instance.
 
 </li><li>
-If the factory has parameters you can call <code>SCF_QUERY_INTERFACE()</code> to get a
+If the factory has parameters you can call <code>scfQueryInterface</code> to get a
 handle to the <samp>`iSomethingFactoryState'</samp> interface (replace <em>Something</em>
 with whatever the type name of the Mesh Object is).  Then you set the
 parameters you want on that factory.
@@ -182,7 +182,7 @@ Create one or more Mesh Object instances by using one of your factories and
 calling <code>NewInstance()</code> on them.
 
 </li><li>
-If the object has parameters you use <code>SCF_QUERY_INTERFACE()</code> to get a handle
+If the object has parameters you use <code>scfQueryInterface</code> to get a handle
 to the <samp>`iSomethingState'</samp> interface (replace <em>Something</em> with whatever
 the type name of the Mesh Object is).  Then set the parameters you want on the
 Mesh Object.  Note that there are Mesh Object implementations which have
@@ -202,11 +202,11 @@ position and rotation (transformation).
 {
   ...
   // Get the ball mesh object plug-in.
-  ball_type = CS_QUERY_PLUGIN_CLASS (this,
-    &quot;crystalspace.mesh.object.ball&quot;, iMeshObjectType);
+  ball_type = csQueryPluginClass&lt;iMeshObjectType&gt; (this,
+    &quot;crystalspace.mesh.object.ball&quot;);
   if (!ball_type)
-    ball_type = CS_LOAD_PLUGIN (this,
-      &quot;crystalspace.mesh.object.ball&quot;, iMeshObjectType);
+    ball_type = csLoadPlugin&lt;iMeshObjectType&gt; (this,
+      &quot;crystalspace.mesh.object.ball&quot;);
   if (!ball_type)
     Printf (CS_MSG_WARNING, &quot;No ball type plug-in found!\n&quot;);
   ball_factory = ball_type-&gt;NewFactory ();
@@ -219,7 +219,7 @@ void SetupWorld ()
   // Make a ball using the ball plug-in.
   csRef&lt;iMeshObject&gt; ballMesh = ball_factory-&gt;NewInstance ();
   csRef&lt;iBallState&gt; ballState =
-    SCF_QUERY_INTERFACE (ballMesh, iBallState);
+    scfQueryInterface&lt;iBallState&gt; (ballMesh);
   ballState-&gt;SetRadius (.5, .5, .5);
   ballState-&gt;SetMaterialWrapper (material);
   ballState-&gt;SetRimVertices (12);

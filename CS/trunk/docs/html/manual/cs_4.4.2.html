@@ -97,7 +97,7 @@ automatically when the instance of <code>MyClass</code> is destroyed.
 pointer and then utilizing that pointer (assuming the engine plugin is loaded):
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">iObjectRegistry* object_reg = ...;
-engine = CS_QUERY_REGISTRY (object_reg, iEngine);
+engine = scfQueryInterface&lt;iEngine&gt; (object_reg);
 engine-&gt;CreateSector ();
 </pre></td></tr></table>
 <p>That is all there is to it.  For contrast, here is an example of how the same
@@ -121,7 +121,7 @@ MyClass::~MyClass ()
 }
 
 ...
-engine = CS_QUERY_REGISTRY (object_reg, iEngine);
+engine = csQueryRegistry&lt;iEngine&gt; (object_reg);
 engine-&gt;CreateSector (); ...
 ...
 </pre></td></tr></table>
@@ -133,8 +133,8 @@ a normal pointer (i.e. you can do things like <code>engine-&gt;CreateSector()</c
 <p>Here is another example illustrating smart pointers:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iMeshWrapper&gt; sprite(engine-&gt;CreateMeshWrapper(...));
-csRef&lt;iSprite3DState&gt; state (SCF_QUERY_INTERFACE (
-    sprite-&gt;GetMeshObject (), iSprite3DState));
+csRef&lt;iSprite3DState&gt; state (scfQueryInterface&lt;iSprite3DState&gt; (
+    sprite-&gt;GetMeshObject ()));
 state-&gt;SetAction (&quot;default&quot;);
 </pre></td></tr></table>
 <a name="SEC171"></a>
@@ -403,7 +403,7 @@ invoking <code>DestroyApplication()</code>.  Therefore, the following code is
     csInitializer::CreateEnvironment(argc, argv);
   ...
   csRef&lt;iPluginManager&gt; plugin_mgr =
-    (CS_QUERY_REGISTRY (object_reg, iPluginManager));
+    (csQueryRegistry&lt;iPluginManager&gt; (object_reg));
   ...
   csInitializer::DestroyApplication (object_reg);
   return 0;

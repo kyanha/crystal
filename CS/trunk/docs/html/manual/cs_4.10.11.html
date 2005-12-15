@@ -341,7 +341,7 @@ Description: Document system error for file 'test.cal3d':
 <p>Add the following to <tt>`simple1.cpp'</tt>
 just after the call to <code>CreateRoom()</code> in <code>Simple::Application()</code>:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iVFS&gt; VFS(CS_QUERY_REGISTRY(object_reg, iVFS));
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iVFS&gt; VFS(csQueryRegistry&lt;iVFS&gt; (object_reg));
 VFS-&gt;ChDir(&quot;/this/&quot;);
 csRef&lt;iMeshFactoryWrapper&gt; imeshfact(
   loader-&gt;LoadMeshObjectFactory(&quot;/this/test.cal3d&quot;));
@@ -367,10 +367,10 @@ after the code which you inserted to display the model:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">// Make it do something.
 csRef&lt;iSpriteCal3DFactoryState&gt; factstate(
-  SCF_QUERY_INTERFACE(imeshfact-&gt;GetMeshObjectFactory(),
-  iSpriteCal3DFactoryState));
-csRef&lt;iSpriteCal3DState&gt; cal3dstate(SCF_QUERY_INTERFACE(
-  sprite-&gt;GetMeshObject(), iSpriteCal3DState));
+  scfQueryInterface&lt;iSpriteCal3DFactoryState&gt; (
+  	imeshfact-&gt;GetMeshObjectFactory());
+csRef&lt;iSpriteCal3DState&gt; cal3dstate(scfQueryInterface&lt;iSpriteCal3DState&gt; (
+  sprite-&gt;GetMeshObject()));
 cal3dstate-&gt;SetAnimCycle(&quot;walk&quot;, 1.0f);
 </pre></td></tr></table>
 <p>Now, build <tt>`simple1'</tt> and run it from the <tt>`CS'</tt> directory.

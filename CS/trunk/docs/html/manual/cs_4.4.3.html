@@ -455,12 +455,12 @@ directly. Doing this invalidates the entire reason to use plugins in the first
 place.
 </p>
 <p>To load the plugin there are a few possibilities. First, you
-can load the plugin manually using <code>CS_LOAD_PLUGIN()</code> like this:
+can load the plugin manually using <code>csLoadPlugin</code> like this:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iPluginManager&gt; plugin_mgr = 
-  CS_QUERY_REGISTRY (object_reg, iPluginManager);
-csRef&lt;iMyApi&gt; myapi = CS_LOAD_PLUGIN (plugin_mgr,
-  &quot;crystalspace.mygame.myplugin&quot;, iMyApi);        
+  csQueryRegistry&lt;iPluginManager&gt; (object_reg);
+csRef&lt;iMyApi&gt; myapi = csLoadPlugin&lt;iMyApi&gt; (plugin_mgr,
+  &quot;crystalspace.mygame.myplugin&quot;);        
 if (myapi.IsValid())
 {
   ...
@@ -486,7 +486,7 @@ is called at initialization time:
 }
 ...
 
-csRef&lt;iMyApi&gt; myapi = CS_QUERY_REGISTRY (object_reg, iMyApi);
+csRef&lt;iMyApi&gt; myapi = csQueryRegistry&lt;iMyApi&gt; (object_reg);
 </pre></td></tr></table>
 <p>This way has several advantages.  First, it allows the user to override your
 plugin at the command line or in the configuration file (if your program has

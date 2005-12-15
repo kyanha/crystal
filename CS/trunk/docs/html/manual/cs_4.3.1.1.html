@@ -91,6 +91,9 @@ public:
   bool OnInitialize (int argc, char* argv[]);
 
   bool Application ();
+
+  CS_EVENTHANDLER_NAMES(&quot;application.simple1&quot;)
+  CS_EVENTHANDLER_NIL_CONSTRAINTS
 };
 
 #endif // __SIMPLE1_H__
@@ -105,6 +108,13 @@ be responsible for the full set up of Crystal Space and our application.
 <p>Note that we use smart pointers (<code>csRef&lt;&gt;</code>) for several of those
 references. That makes it easier to manage reference counting. We let
 the smart pointer take care of this for us.
+</p>
+<p>The event handler macros are used because our tutorial application also
+needs to be an event handler (it inherits from <code>csBaseEventHandler</code> for
+that). The two macros indicate the name of this event handler and also the
+desired priority mechanism. In this case we use
+<code>CS_EVENTHANDLER_NIL_CONSTRAINTS</code> which means that we don't care about
+the order in which our events arrive (relative to other modules in CS).
 </p>
 <p>In the source file <tt>`simple.cpp'</tt> we place the following:
 </p>
@@ -143,7 +153,8 @@ bool Simple::OnInitialize(int argc, char* argv[])
     CS_REQUEST_END))
     return ReportError(&quot;Failed to initialize plugins!&quot;);
 
-  if (!RegisterQueue(GetObjectRegistry()))
+  csBaseEventHandler::Initialize(GetObjectRegistry());
+  if (!RegisterQueue(GetObjectRegistry(), csevAllEvents(GetObjectRegistry())))
     return ReportError(&quot;Failed to set up event handler!&quot;);
 
   return true;

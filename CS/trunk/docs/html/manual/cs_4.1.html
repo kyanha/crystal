@@ -234,7 +234,7 @@ for the graphics driver by looking in the object registry for an object
 with the tag <samp>`iGraphics3D'</samp>.
 </p>
 <p>Now how can you actually load the plug-in? You can either load them
-manually in the code using the <code>CS_LOAD_PLUGIN()</code> macro or else
+manually in the code using the <code>csLoadPlugin</code> function or else
 you can use the plugin loader. As explained above, the plugin loader
 can load plugins specified on the commandline, a config file, or else
 explicitly requested in the code. This is done in a specific way:
@@ -252,7 +252,7 @@ This class also contains a routine (<code>RequestPlugins()</code>) which will
 use the plugin loader automatically.
 </p>
 <p>There are several advantages to using the plugin loader as opposed
-to manually loading plug-ins using <code>CS_LOAD_PLUGIN()</code>:
+to manually loading plug-ins using <code>csLoadPlugin</code>:
 </p>
 <ul class="toc">
 <li>-
@@ -265,7 +265,7 @@ that it needs is not yet present.
 The user is able to override the plug-ins loaded by the plugin loader.
 He or she can modify the config file or specify an alternative
 plug-in on the commandline. There is no way to change what plugin is
-loaded using <code>CS_LOAD_PLUGIN()</code> unless by recompilation (unless of course
+loaded using <code>csLoadPlugin</code> unless by recompilation (unless of course
 you use some other way to read the config file and find out what plugin
 to load).
 </li></ul>
@@ -276,11 +276,11 @@ How can I query the plug-in interface?
 <p>This is the last step before you can use the plug-in. It means that inside
 your program you ask the object registry for an object registered with
 the desired tag. The easiest way to do this is as follows:
-<code>CS_QUERY_REGISTRY(<var>object_reg</var>,<var>iInterface</var>)</code>.
+<code>csQueryRegistry&lt;iInterface&gt;(<var>object_reg</var>)</code>.
 This macro will search the object registry for the default object
 implementing the given interface (i.e. the object registered with the
 tag equal to the interface name). Alternatively you can also use
-<code>CS_QUERY_REGISTRY_TAG()</code> to get an object with a specific tag.
+<code>csQueryRegistryTag</code> to get an object with a specific tag.
 </p>
 </li><li>
 Conclusion
