@@ -465,7 +465,7 @@ space coordinate system is used with (0,0) in the top-left corner.
 </li><li>
 <strong>Q</strong>: Why can't I get the
 <code>iThingState</code> / <code>iSprite3DState</code> / <small class="dots">...</small> from my mesh wrapper?  I
-do <code>SCF_QUERY_INTERFACE</code> from the mesh and it returns <samp>`0'</samp>.
+do <code>scfQueryInterface</code> from the mesh and it returns <samp>`0'</samp>.
 
 <p><strong>A</strong>: A common error is to try to query the state interface for
 a mesh object from the <code>iMeshWrapper</code> instance. However it is not
@@ -483,7 +483,7 @@ not.  Can you explain this reference counting to me?
 make it easier for you to keep track of references. They will automatically
 <code>DecRef()</code> when they are ready. Here is an example of their usage:
 </p><table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iThingState&gt; st =
-  SCF_QUERY_INTERFACE(mesh-&gt;GetMeshObject(), iThingState));
+  scfQueryInterface&lt;iThingState&gt; (mesh-&gt;GetMeshObject());
 if (st)
 {
   st-&gt;blabla ...;
@@ -538,13 +538,13 @@ different.
 </p>
 </li><li>
 <strong>Q</strong>: I'm trying to use some plugin but it says that it cannot find it
-(i.e. <code>CS_QUERY_REGISTRY</code> returns null).
+(i.e. <code>csQueryRegistry</code> returns null).
 
-<p><strong>A</strong>: It is important to realize that <code>CS_QUERY_REGISTRY</code>
+<p><strong>A</strong>: It is important to realize that <code>csQueryRegistry</code>
 does NOT load a plugin. It only looks for some component in the object
 registry. There are two basic ways to load a plugin: the first is to use
 <code>csInitializer::RequestPlugins()</code> and the second is to manually
-load the plugin using <code>CS_LOAD_PLUGIN</code>. <code>RequestPlugins()</code> is
+load the plugin using <code>csLoadPlugin</code>. <code>RequestPlugins()</code> is
 best because it actually registers the plugin with the object
 registry and it also correctly manages config file, command-line and
 request plugins (so you can override a plugin on command-line/config file).

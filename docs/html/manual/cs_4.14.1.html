@@ -85,19 +85,19 @@ your call to <code>RequestPlugins</code>:
 {
   ...
 }
-csRef&lt;iCollideSystem&gt; cd_sys = CS_QUERY_REGISTRY (object_reg, iCollideSystem);
+csRef&lt;iCollideSystem&gt; cd_sys = csQueryRegistry&lt;iCollideSystem&gt; (object_reg);
 </pre></td></tr></table>
 <p>You can also load the collision detection plugin later with the following
 code:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iPluginManager&gt; plugmgr =
-  CS_QUERY_REGISTRY (object_reg, iPluginManager);
+  csQueryRegistry&lt;iPluginManager&gt; (object_reg);
 csRef&lt;iConfigManager&gt; config =
-  CS_QUERY_REGISTRY (object_reg, iConfigManager);
+  csQueryRegistry&lt;iConfigManager&gt; (object_reg);
 const char* p = config-&gt;GetStr (&quot;MyGame.Settings.CollDetPlugin&quot;,
   &quot;crystalspace.collisiondetection.opcode&quot;);
 csRef&lt;iCollideSystem&gt; cd_sys =
-  CS_LOAD_PLUGIN (plugmgr, p, iCollideSystem);
+  csLoadPlugin&lt;iCollideSystem&gt; (plugmgr, p);
 if (!cd_sys)
 {
   csReport (object_reg, CS_REPORTER_SEVERITY_ERROR,

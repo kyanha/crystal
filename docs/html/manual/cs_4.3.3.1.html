@@ -96,6 +96,9 @@ public:
   void OnExit ();
   bool OnInitialize (int argc, char* argv[]);
   bool Application ();
+
+  CS_EVENTHANDLER_NAMES(&quot;application.simpmap&quot;)
+  CS_EVENTHANDLER_NIL_CONSTRAINTS
 };
 
 #endif // __SIMPMAP_H__
@@ -183,7 +186,7 @@ bool Simple::OnKeyboard(iEvent&amp; ev)
     if (code == CSKEY_ESC)
     {
       csRef&lt;iEventQueue&gt; q = 
-        CS_QUERY_REGISTRY(GetObjectRegistry(), iEventQueue);
+        csQueryRegistry&lt;iEventQueue&gt; (GetObjectRegistry());
       if (q.IsValid()) q-&gt;GetEventOutlet()-&gt;Broadcast(cscmdQuit);
     }
   }
@@ -206,7 +209,8 @@ bool Simple::OnInitialize(int argc, char* argv[])
     CS_REQUEST_END))
     return ReportError(&quot;Failed to initialize plugins!&quot;);
 
-  if (!RegisterQueue(GetObjectRegistry()))
+  csBaseEventHandler::Initialize(GetObjectRegistry());
+  if (!RegisterQueue(GetObjectRegistry(), csevAllEvents(GetObjectRegistry())))
     return ReportError(&quot;Failed to set up event handler!&quot;);
 
   return true;
@@ -221,22 +225,22 @@ bool Simple::Application()
   if (!OpenApplication(GetObjectRegistry()))
     return ReportError(&quot;Error opening system!&quot;);
 
-  g3d = CS_QUERY_REGISTRY(GetObjectRegistry(), iGraphics3D);
+  g3d = csQueryRegistry&lt;iGraphics3D&gt; (GetObjectRegistry());
   if (!g3d) return ReportError(&quot;Failed to locate 3D renderer!&quot;);
 
-  engine = CS_QUERY_REGISTRY(GetObjectRegistry(), iEngine);
+  engine = csQueryRegistry&lt;iEngine&gt; (GetObjectRegistry());
   if (!engine) return ReportError(&quot;Failed to locate 3D engine!&quot;);
 
-  vc = CS_QUERY_REGISTRY(GetObjectRegistry(), iVirtualClock);
+  vc = csQueryRegistry&lt;iVirtualClock&gt; (GetObjectRegistry());
   if (!vc) return ReportError(&quot;Failed to locate Virtual Clock!&quot;);
 
-  kbd = CS_QUERY_REGISTRY(GetObjectRegistry(), iKeyboardDriver);
+  kbd = csQueryRegistry&lt;iKeyboardDriver&gt; (GetObjectRegistry());
   if (!kbd) return ReportError(&quot;Failed to locate Keyboard Driver!&quot;);
 
-  loader = CS_QUERY_REGISTRY(GetObjectRegistry(), iLoader);
+  loader = csQueryRegistry&lt;iLoader&gt; (GetObjectRegistry());
   if (!loader) return ReportError(&quot;Failed to locate Loader!&quot;);
 
-  cdsys = CS_QUERY_REGISTRY (GetObjectRegistry(), iCollideSystem);
+  cdsys = csQueryRegistry&lt;iCollideSystem&gt; (GetObjectRegistry());
   if (!cdsys) return ReportError (&quot;Failed to locate CD system!&quot;);
 
   view.AttachNew(new csView (engine, g3d));
