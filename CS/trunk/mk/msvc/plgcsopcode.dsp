@@ -1,25 +1,25 @@
-# Microsoft Developer Studio Project File - Name="plgopcode" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="plgcsopcode" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=plgopcode - Win32 Release
+CFG=plgcsopcode - Win32 Release
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "plgopcode.mak".
+!MESSAGE NMAKE /f "plgcsopcode.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "plgopcode.mak" CFG="plgopcode - Win32 Release"
+!MESSAGE NMAKE /f "plgcsopcode.mak" CFG="plgcsopcode - Win32 Release"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "plgopcode - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "plgopcode - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "plgopcode - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plgcsopcode - Win32 ExtensiveMemDebug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plgcsopcode - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plgcsopcode - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -30,7 +30,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "plgopcode - Win32 Release"
+!IF  "$(CFG)" == "plgcsopcode - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -39,8 +39,8 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\out\release\build\plgopcode\"
-# PROP Intermediate_Dir "..\..\out\release\build\plgopcode\"
+# PROP Output_Dir "..\..\out\release\build\plgcsopcode\"
+# PROP Intermediate_Dir "..\..\out\release\build\plgcsopcode\"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
@@ -48,7 +48,7 @@ RSC=rc.exe
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "NDEBUG" /D "_WINDOWS"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\release\build\plgopcode\plgopcode.res" /D "NDEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\release\build\plgcsopcode\plgcsopcode.res" /D "NDEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -57,12 +57,12 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /OPT:NOREF /dll /out:"..\..\opcode.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /OPT:NOREF /dll /out:"..\..\csopcode.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "plgopcode - Win32 Debug"
+!ELSEIF  "$(CFG)" == "plgcsopcode - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -71,8 +71,8 @@ SOURCE="$(InputPath)"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\out\debug\build\plgopcode\"
-# PROP Intermediate_Dir "..\..\out\debug\build\plgopcode\"
+# PROP Output_Dir "..\..\out\debug\build\plgcsopcode\"
+# PROP Intermediate_Dir "..\..\out\debug\build\plgcsopcode\"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
@@ -80,7 +80,7 @@ SOURCE="$(InputPath)"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "_WINDOWS"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\plgopcode\plgopcode.res" /D "_DEBUG" /D "CS_DEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\plgcsopcode\plgcsopcode.res" /D "_DEBUG" /D "CS_DEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -89,12 +89,12 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\opcode.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\csopcode.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
 
-!ELSEIF  "$(CFG)" == "plgopcode - Win32 ExtensiveMemDebug"
+!ELSEIF  "$(CFG)" == "plgcsopcode - Win32 ExtensiveMemDebug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -103,8 +103,8 @@ SOURCE="$(InputPath)"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\out\debug\build\plgopcode\"
-# PROP Intermediate_Dir "..\..\out\debug\build\plgopcode\"
+# PROP Output_Dir "..\..\out\debug\build\plgcsopcode\"
+# PROP Intermediate_Dir "..\..\out\debug\build\plgcsopcode\"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /vmb /vms /W3 /Gm /G5 /D "WIN32" /FD /c
@@ -112,7 +112,7 @@ SOURCE="$(InputPath)"
 # ADD BASE MTL /nologo /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /mktyplib203 /o "NUL" /win32 /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_WINDOWS"
 # ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\plgopcode\plgopcode.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
+# ADD RSC /l 0x409 /fo".\..\..\out\debug\build\plgcsopcode\plgcsopcode.res" /D "_DEBUG" /D "CS_DEBUG" /D "CS_EXTENSIVE_MEMDEBUG" /D "_WINDOWS" /D "CS_WIN32_CSCONFIG" /D "__CRYSTAL_SPACE__" /i "." /i "..\.." /i "..\..\include" /i "..\..\include\csutil\win32"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -121,7 +121,7 @@ LIB32=link.exe -lib
 # ADD LIB32 /nologo 
 LINK32=link.exe
 # ADD BASE LINK32 user32.lib gdi32.lib advapi32.lib /nologo /machine:I386
-# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\opcode.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
+# ADD LINK32 shell32.lib user32.lib gdi32.lib advapi32.lib delayimp.lib zlib.lib  /nologo /version:4.0 /machine:I386 /debug /pdbtype:sept /dll /out:"..\..\csopcode.dll" /subsystem:windows /libpath:"..\..\libs\csutil\win32\libs" 
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 # End Special Build Tool
@@ -130,9 +130,9 @@ SOURCE="$(InputPath)"
 
 # Begin Target
 
-# Name "plgopcode - Win32 Release"
-# Name "plgopcode - Win32 Debug"
-# Name "plgopcode - Win32 ExtensiveMemDebug"
+# Name "plgcsopcode - Win32 Release"
+# Name "plgcsopcode - Win32 Debug"
+# Name "plgcsopcode - Win32 ExtensiveMemDebug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""
@@ -546,11 +546,11 @@ SOURCE=..\..\plugins\collide\opcode\Stdafx.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\mk\msvc\plgopcode.rc
+SOURCE=..\..\mk\msvc\plgcsopcode.rc
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\collide\opcode\opcode.csplugin
+SOURCE=..\..\plugins\collide\opcode\csopcode.csplugin
 # End Source File
 # End Group
 # End Target
