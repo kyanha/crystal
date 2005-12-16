@@ -15,9 +15,9 @@
 
 namespace csStaticPluginInit
 {
-static char const metainfo_opcode[] =
+static char const metainfo_csopcode[] =
 "<?xml version=\"1.0\"?>"
-"<!-- opcode.csplugin -->"
+"<!-- csopcode.csplugin -->"
 "<plugin>"
 "  <scf>"
 "    <classes>"
@@ -35,16 +35,16 @@ static char const metainfo_opcode[] =
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csOPCODECollideSystem) 
   #endif
 
-class opcode
+class csopcode
 {
-SCF_REGISTER_STATIC_LIBRARY(opcode,metainfo_opcode)
+SCF_REGISTER_STATIC_LIBRARY(csopcode,metainfo_csopcode)
   #ifndef csOPCODECollideSystem_FACTORY_REGISTERED 
   #define csOPCODECollideSystem_FACTORY_REGISTERED 
     csOPCODECollideSystem_StaticInit csOPCODECollideSystem_static_init__; 
   #endif
 public:
- opcode();
+ csopcode();
 };
-opcode::opcode() {}
+csopcode::csopcode() {}
 
 }
