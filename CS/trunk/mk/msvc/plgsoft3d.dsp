@@ -174,10 +174,6 @@ SOURCE=..\..\plugins\video\render3d\software\clipper.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\plugins\video\render3d\software\pixspecifica.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\plugins\video\render3d\software\polyrast.h
 # End Source File
 # Begin Source File
