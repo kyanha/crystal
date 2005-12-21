@@ -82,7 +82,7 @@ server for a font, but also can search multiple fonts for a glyph.  This is
 especially important if you plan to internationalize your applications; it
 reduces the worry that a particular font supports the glyphs for a specific
 language.  (Crystal Space ships with the <small>GNU</small> Unifont, which is used as a
-fallback, so it already pretty good support for internationalization
+fallback, so it already has pretty good support for internationalization
 out-of-the-box.)
 </p>
 <a name="SEC423"></a>
@@ -124,24 +124,26 @@ pass the font desired.
 <a name="SEC424"></a>
 <h4 class="subsubheading"> Loadable Fonts </h4>
 
-<p>The default font server will also look for a file in 
-the virtual file system with the name specified.  The
-file must be in the &quot;csf&quot; font format.  This format is
-pretty simple binary format that supports individual characters
-with different widths and optionally an alpha component
-to provide anti-aliasing.
+<p>The font plexer will also look for a file in the virtual file system with the
+name specified.  The font can be a TrueType font or in the custom <small>CSF</small> format.
 </p>
 <p>To specify an alternate font simply use the LoadFont method
 with the file name (and optionally a size) such as:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">Font = G2D-&gt;GetFontServer()-&gt;LoadFont (&quot;/fonts/ttf/Vera.ttf&quot;, 12);
 </pre></td></tr></table>
+<p>The <small>CSF</small> format is a pretty simple binary format for non-scalable fonts 
+that supports individual characters with different widths and optionally an
+alpha component to provide anti-aliasing.
+</p>
+<p>However, using a TrueType font is usually more flexible and results in a 
+higher quality than a <small>CSF</small> font.
+</p>
 <a name="SEC425"></a>
-<h4 class="subsubheading"> Creating New Loadable Fonts </h4>
+<h4 class="subsubheading"> Creating <small>CSF</small> Fonts </h4>
 
-<p>The easiest way to create a loadable font is to
-use the <tt>`csfgen'</tt> util that comes with CS. It converts 
-a True Type font to the <small>CSF</small> format.
+<p>The easiest way to is to use the <tt>`csfgen'</tt> util that comes with CS. 
+It converts a True Type font to the <small>CSF</small> format.
 </p>
 <p>Once the <small>CSF</small> file is created it can be included
 in the application no matter what platforms are 
