@@ -82,9 +82,9 @@ Inheritance diagram for iMeshObject:<p><center><img src="structiMeshObject__inhe
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshObject.html#a91d0a23bf9f443d4baa452d0a3fa4c2">HardTransform</a> (const <a class="el" href="classcsReversibleTransform.html">csReversibleTransform</a> &amp;t)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Do a hard transform of this object.  <a href="#a91d0a23bf9f443d4baa452d0a3fa4c2"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshObject.html#f7747eabdd4ce6607dbc3e72339b3427">HitBeamObject</a> (const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end, <a class="el" href="classcsVector3.html">csVector3</a> &amp;isect, float *pr, int *polygon_idx=0)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshObject.html#4ce81e99fb4c5b08f53094d83e5094b0">HitBeamObject</a> (const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end, <a class="el" href="classcsVector3.html">csVector3</a> &amp;isect, float *pr, int *polygon_idx=0, <a class="el" href="structiMaterialWrapper.html">iMaterialWrapper</a> **material=0)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if this mesh is hit by this object space vector.  <a href="#f7747eabdd4ce6607dbc3e72339b3427"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if this mesh is hit by this object space vector.  <a href="#4ce81e99fb4c5b08f53094d83e5094b0"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiMeshObject.html#c896d4a2d9c6e587c437d1d98180e273">HitBeamOutline</a> (const <a class="el" href="classcsVector3.html">csVector3</a> &amp;start, const <a class="el" href="classcsVector3.html">csVector3</a> &amp;end, <a class="el" href="classcsVector3.html">csVector3</a> &amp;isect, float *pr)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Check if this mesh is hit by this object space vector.  <a href="#c896d4a2d9c6e587c437d1d98180e273"></a><br></td></tr>
@@ -468,7 +468,7 @@ This transformation and the original coordinates are not remembered but the obje
 Implemented in <a class="el" href="classcsMeshObject.html#f1eb598d2ff5a097c7fbc915aafd076e">csMeshObject</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="f7747eabdd4ce6607dbc3e72339b3427"></a><!-- doxytag: member="iMeshObject::HitBeamObject" ref="f7747eabdd4ce6607dbc3e72339b3427" args="(const csVector3 &amp;start, const csVector3 &amp;end, csVector3 &amp;isect, float *pr, int *polygon_idx=0)=0" --><p>
+<a class="anchor" name="4ce81e99fb4c5b08f53094d83e5094b0"></a><!-- doxytag: member="iMeshObject::HitBeamObject" ref="4ce81e99fb4c5b08f53094d83e5094b0" args="(const csVector3 &amp;start, const csVector3 &amp;end, csVector3 &amp;isect, float *pr, int *polygon_idx=0, iMaterialWrapper **material=0)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -501,7 +501,13 @@ Implemented in <a class="el" href="classcsMeshObject.html#f1eb598d2ff5a097c7fbc9
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
           <td class="md" nowrap>int *&nbsp;</td>
-          <td class="mdname" nowrap> <em>polygon_idx</em> = <code>0</code></td>
+          <td class="mdname" nowrap> <em>polygon_idx</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap><a class="el" href="structiMaterialWrapper.html">iMaterialWrapper</a> **&nbsp;</td>
+          <td class="mdname" nowrap> <em>material</em> = <code>0</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -522,9 +528,14 @@ Implemented in <a class="el" href="classcsMeshObject.html#f1eb598d2ff5a097c7fbc9
 <p>
 Check if this mesh is hit by this object space vector. 
 <p>
-Return the collision point in object space coordinates. This is the most detailed version (and also the slowest). The returned hit will be guaranteed to be the point closest to the 'start' of the beam. If the object supports this then an index of the hit polygon will be returned (or -1 if not supported or no hit). 
+Return the collision point in object space coordinates. This is the most detailed version (and also the slowest). The returned hit will be guaranteed to be the point closest to the 'start' of the beam. If the object supports this then an index of the hit polygon will be returned (or -1 if not supported or no hit). <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>material</em>&nbsp;</td><td>if not 0 then the hit material will be put here. Or 0 in case this mesh object doesn't support material selection. </td></tr>
+  </table>
+</dl>
+
 <p>
-Implemented in <a class="el" href="classcsParticleSystem.html#4d031a9be9ab69fdef2fdd37b64c4ea6">csParticleSystem</a>, and <a class="el" href="classcsMeshObject.html#80f6aab7e031d5eb35c74b1a6be7a570">csMeshObject</a>.    </td>
+Implemented in <a class="el" href="classcsParticleSystem.html#efd94000a18d553463c0390cc1062064">csParticleSystem</a>, and <a class="el" href="classcsMeshObject.html#f48066973e04cff0eeab109a857860e3">csMeshObject</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="c896d4a2d9c6e587c437d1d98180e273"></a><!-- doxytag: member="iMeshObject::HitBeamOutline" ref="c896d4a2d9c6e587c437d1d98180e273" args="(const csVector3 &amp;start, const csVector3 &amp;end, csVector3 &amp;isect, float *pr)=0" --><p>
@@ -575,7 +586,7 @@ Implemented in <a class="el" href="classcsParticleSystem.html#4d031a9be9ab69fdef
 <p>
 Check if this mesh is hit by this object space vector. 
 <p>
-This will do a test based on the outline of the object. This means that it is more accurate than HitBeamBBox(). Note that this routine will typically be faster than <a class="el" href="structiMeshObject.html#f7747eabdd4ce6607dbc3e72339b3427">HitBeamObject()</a>. The hit may be on the front or the back of the object, but will indicate that it iterrupts the beam. 
+This will do a test based on the outline of the object. This means that it is more accurate than HitBeamBBox(). Note that this routine will typically be faster than <a class="el" href="structiMeshObject.html#4ce81e99fb4c5b08f53094d83e5094b0">HitBeamObject()</a>. The hit may be on the front or the back of the object, but will indicate that it iterrupts the beam. 
 <p>
 Implemented in <a class="el" href="classcsParticleSystem.html#254c0d3e694a8f7c6b584daa8a630536">csParticleSystem</a>, and <a class="el" href="classcsMeshObject.html#7347d21ed04bec322c0a4bddd82ab290">csMeshObject</a>.    </td>
   </tr>
