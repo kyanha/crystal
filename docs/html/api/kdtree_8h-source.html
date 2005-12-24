@@ -154,136 +154,138 @@
 <a name="l00191"></a>00191   <span class="keywordtype">int</span> estimate_total_objects;
 <a name="l00192"></a>00192 
 <a name="l00193"></a>00193   <span class="comment">// Disallow Distribute().</span>
-<a name="l00194"></a>00194   <span class="comment">// If this flag is true it means that we cannot find a good split</span>
+<a name="l00194"></a>00194   <span class="comment">// If this flag &gt; 0 it means that we cannot find a good split</span>
 <a name="l00195"></a>00195   <span class="comment">// location for the current list of objects. So in that case we don't</span>
-<a name="l00196"></a>00196   <span class="comment">// split at all and set this flag to true so that we will no longer</span>
-<a name="l00197"></a>00197   <span class="comment">// attempt to distribute. Whenever objects are added or removed to this</span>
-<a name="l00198"></a>00198   <span class="comment">// node this flag will be set to false again so that a new Distribute()</span>
-<a name="l00199"></a>00199   <span class="comment">// attempt can be made. This situation should be rare though.</span>
-<a name="l00200"></a>00200   <span class="keywordtype">bool</span> disallow_distribute;
-<a name="l00201"></a>00201 
-<a name="l00202"></a>00202   <span class="comment">// Current timestamp we are using for Front2Back(). Objects that</span>
-<a name="l00203"></a>00203   <span class="comment">// have the same timestamp are already visited during Front2Back().</span>
-<a name="l00204"></a>00204   <span class="keyword">static</span> <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> global_timestamp;
-<a name="l00205"></a>00205 
-<a name="l00207"></a>00207   <span class="keywordtype">void</span> AddObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* obj);
-<a name="l00209"></a>00209   <span class="keywordtype">void</span> RemoveObject (<span class="keywordtype">int</span> idx);
-<a name="l00211"></a>00211   <span class="keywordtype">int</span> FindObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* obj);
-<a name="l00212"></a>00212 
-<a name="l00216"></a>00216   <span class="keywordtype">void</span> AddObject (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox, <a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* obj);
-<a name="l00217"></a>00217 
-<a name="l00228"></a>00228   <span class="keywordtype">float</span> FindBestSplitLocation (<span class="keywordtype">int</span> axis, <span class="keywordtype">float</span>&amp; split_loc);
-<a name="l00229"></a>00229 
-<a name="l00235"></a>00235   <span class="keywordtype">void</span> DistributeLeafObjects ();
-<a name="l00236"></a>00236 
-<a name="l00243"></a>00243   <span class="keywordtype">void</span> Front2Back (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos, <a class="code" href="group__geom__utils.html#g1d996261312c28c3e4f30965ca39da7e">csKDTreeVisitFunc</a>* func,
-<a name="l00244"></a>00244         <span class="keywordtype">void</span>* userdata, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> cur_timestamp, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> frustum_mask);
-<a name="l00245"></a>00245 
-<a name="l00252"></a>00252   <span class="keywordtype">void</span> TraverseRandom (<a class="code" href="group__geom__utils.html#g1d996261312c28c3e4f30965ca39da7e">csKDTreeVisitFunc</a>* func,
-<a name="l00253"></a>00253         <span class="keywordtype">void</span>* userdata, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> cur_timestamp, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> frustum_mask);
-<a name="l00254"></a>00254 
-<a name="l00258"></a>00258   <span class="keywordtype">void</span> ResetTimestamps ();
-<a name="l00259"></a>00259 
-<a name="l00263"></a>00263   <span class="keywordtype">void</span> FlattenTo (<a class="code" href="classcsKDTree.html">csKDTree</a>* node);
-<a name="l00264"></a>00264 
-<a name="l00265"></a>00265 <span class="keyword">public</span>:
-<a name="l00267"></a>00267   <a class="code" href="classcsKDTree.html">csKDTree</a> ();
-<a name="l00269"></a>00269   <span class="keyword">virtual</span> ~<a class="code" href="classcsKDTree.html">csKDTree</a> ();
-<a name="l00271"></a><a class="code" href="classcsKDTree.html#8d6d31e0c2b8969143249fb39292ecf9">00271</a>   <span class="keywordtype">void</span> SetParent (<a class="code" href="classcsKDTree.html">csKDTree</a>* p) { parent = p; }
-<a name="l00272"></a>00272 
-<a name="l00274"></a><a class="code" href="classcsKDTree.html#bb1c2e409f65c13e1cc3ec824601e4ac">00274</a>   <span class="keywordtype">void</span> SetObjectDescriptor (<a class="code" href="structiKDTreeObjectDescriptor.html">iKDTreeObjectDescriptor</a>* descriptor)
-<a name="l00275"></a>00275   {
-<a name="l00276"></a>00276     <a class="code" href="classcsKDTree.html#da3f6396c032b006442940855c25dfd8">csKDTree::descriptor</a> = descriptor;
-<a name="l00277"></a>00277   }
-<a name="l00278"></a>00278 
-<a name="l00280"></a>00280   <span class="keywordtype">void</span> Clear ();
-<a name="l00281"></a>00281 
-<a name="l00283"></a><a class="code" href="classcsKDTree.html#f48b266c210b7202de9dce5203d0d998">00283</a>   <span class="keyword">inline</span> <a class="code" href="structiBase.html">iBase</a>* GetUserObject ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> userobject; }
-<a name="l00284"></a>00284 
-<a name="l00290"></a>00290   <span class="keywordtype">void</span> SetUserObject (<a class="code" href="structiBase.html">iBase</a>* userobj);
-<a name="l00291"></a>00291 
-<a name="l00299"></a>00299   <a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* AddObject (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox, <span class="keywordtype">void</span>* object);
-<a name="l00300"></a>00300 
-<a name="l00305"></a>00305   <span class="keywordtype">void</span> UnlinkObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* object);
-<a name="l00306"></a>00306 
-<a name="l00311"></a>00311   <span class="keywordtype">void</span> RemoveObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* object);
-<a name="l00312"></a>00312 
-<a name="l00316"></a>00316   <span class="keywordtype">void</span> MoveObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* object, <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; new_bbox);
-<a name="l00317"></a>00317 
-<a name="l00324"></a>00324   <span class="keywordtype">void</span> Distribute ();
-<a name="l00325"></a>00325 
-<a name="l00329"></a>00329   <span class="keywordtype">void</span> FullDistribute ();
-<a name="l00330"></a>00330 
-<a name="l00336"></a>00336   <span class="keywordtype">void</span> Flatten ();
-<a name="l00337"></a>00337 
-<a name="l00343"></a>00343   <span class="keywordtype">void</span> TraverseRandom (<a class="code" href="group__geom__utils.html#g1d996261312c28c3e4f30965ca39da7e">csKDTreeVisitFunc</a>* func,
-<a name="l00344"></a>00344         <span class="keywordtype">void</span>* userdata, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> frustum_mask);
-<a name="l00345"></a>00345 
-<a name="l00352"></a>00352   <span class="keywordtype">void</span> Front2Back (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos, <a class="code" href="group__geom__utils.html#g1d996261312c28c3e4f30965ca39da7e">csKDTreeVisitFunc</a>* func,
-<a name="l00353"></a>00353         <span class="keywordtype">void</span>* userdata, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> frustum_mask);
-<a name="l00354"></a>00354 
-<a name="l00362"></a>00362   <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> NewTraversal ();
-<a name="l00363"></a>00363 
-<a name="l00367"></a><a class="code" href="classcsKDTree.html#826b48e11994b103dc99bcd1006313c7">00367</a>   <span class="keyword">inline</span> <a class="code" href="classcsKDTree.html">csKDTree</a>* GetChild1 ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> child1; }
-<a name="l00368"></a>00368 
-<a name="l00372"></a><a class="code" href="classcsKDTree.html#f5312977ab2c7837fa396a6219d30843">00372</a>   <span class="keyword">inline</span> <a class="code" href="classcsKDTree.html">csKDTree</a>* GetChild2 ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> child2; }
-<a name="l00373"></a>00373 
-<a name="l00377"></a><a class="code" href="classcsKDTree.html#e569e8c6e26a48c13477d9ad741913a1">00377</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> GetObjectCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_objects; }
-<a name="l00378"></a>00378 
-<a name="l00385"></a><a class="code" href="classcsKDTree.html#950e5152a9f34d8f7dc9c94083596a08">00385</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> GetEstimatedObjectCount () { <span class="keywordflow">return</span> estimate_total_objects; }
-<a name="l00386"></a>00386 
-<a name="l00390"></a><a class="code" href="classcsKDTree.html#9c959bea565ded5965e04e99f9d5d9cd">00390</a>   <span class="keyword">inline</span> <a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>** GetObjects ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> objects; }
-<a name="l00391"></a>00391 
-<a name="l00396"></a><a class="code" href="classcsKDTree.html#44fb7ea74091cc35698d25114757e3a0">00396</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; GetNodeBBox ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> node_bbox; }
-<a name="l00397"></a>00397 
-<a name="l00398"></a>00398   <span class="comment">// Debugging functions.</span>
-<a name="l00399"></a>00399   <span class="keywordtype">bool</span> Debug_CheckTree (<a class="code" href="classcsString.html">csString</a>&amp; str);
-<a name="l00400"></a>00400   csPtr&lt;iString&gt; Debug_UnitTest ();
-<a name="l00401"></a>00401   <span class="keywordtype">void</span> Debug_Dump (<a class="code" href="classcsString.html">csString</a>&amp; str, <span class="keywordtype">int</span> indent);
-<a name="l00402"></a>00402   <span class="keywordtype">void</span> Debug_Statistics (<span class="keywordtype">int</span>&amp; tot_objects,
-<a name="l00403"></a>00403         <span class="keywordtype">int</span>&amp; tot_nodes, <span class="keywordtype">int</span>&amp; tot_leaves, <span class="keywordtype">int</span> depth, <span class="keywordtype">int</span>&amp; max_depth,
-<a name="l00404"></a>00404         <span class="keywordtype">float</span>&amp; balance_quality);
-<a name="l00405"></a>00405   csPtr&lt;iString&gt; Debug_Statistics ();
-<a name="l00406"></a>00406   <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> Debug_Benchmark (<span class="keywordtype">int</span> num_iterations);
-<a name="l00407"></a>00407 
-<a name="l00408"></a><a class="code" href="classcsKDTree.html#740285fb2d09a015454850330920e777">00408</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetSupportedTests ()<span class="keyword"> const</span>
-<a name="l00409"></a>00409 <span class="keyword">  </span>{
-<a name="l00410"></a>00410     <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga0cdbf0003e4935d76f3ce39873c3dc6">CS_DBGHELP_UNITTEST</a> | <a class="code" href="group__util.html#g3c5c0d5eed6226de42d666a2b7d0ef11">CS_DBGHELP_STATETEST</a> |
-<a name="l00411"></a>00411       <a class="code" href="group__util.html#g71d2f9c7a254d4acd7d5d20be051bb69">CS_DBGHELP_TXTDUMP</a> | <a class="code" href="group__util.html#ge3a078c0c9d02c5806b4a6a668fdd252">CS_DBGHELP_BENCHMARK</a>;
-<a name="l00412"></a>00412   }
-<a name="l00413"></a>00413 
-<a name="l00414"></a><a class="code" href="classcsKDTree.html#090396efb1a99ad68298804e4378581b">00414</a>   <span class="keyword">virtual</span> csPtr&lt;iString&gt; UnitTest ()
-<a name="l00415"></a>00415   {
-<a name="l00416"></a>00416     <span class="keywordflow">return</span> Debug_UnitTest ();
-<a name="l00417"></a>00417   }
-<a name="l00418"></a>00418 
-<a name="l00419"></a><a class="code" href="classcsKDTree.html#bb1f6930bd9bf09f2726e44e21e56551">00419</a>   <span class="keyword">virtual</span> csPtr&lt;iString&gt; StateTest ()
-<a name="l00420"></a>00420   {
-<a name="l00421"></a>00421     <a class="code" href="classscfString.html">scfString</a>* rc = <span class="keyword">new</span> <a class="code" href="classscfString.html">scfString</a> ();
-<a name="l00422"></a>00422     <span class="keywordflow">if</span> (!Debug_CheckTree (rc-&gt;<a class="code" href="classscfString.html#6738e7f1a4caf64751a1c815627092b4">GetCsString</a> ()))
-<a name="l00423"></a>00423       <span class="keywordflow">return</span> csPtr&lt;iString&gt; (rc);
-<a name="l00424"></a>00424     <span class="keyword">delete</span> rc;
-<a name="l00425"></a>00425     <span class="keywordflow">return</span> 0;
-<a name="l00426"></a>00426   }
-<a name="l00427"></a>00427 
-<a name="l00428"></a><a class="code" href="classcsKDTree.html#a59b3ace234289588028070ebc6d8c2e">00428</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> Benchmark (<span class="keywordtype">int</span> num_iterations)
-<a name="l00429"></a>00429   {
-<a name="l00430"></a>00430     <span class="keywordflow">return</span> Debug_Benchmark (num_iterations);
-<a name="l00431"></a>00431   }
-<a name="l00432"></a>00432 
-<a name="l00433"></a><a class="code" href="classcsKDTree.html#9342734a1fd4a0d204eedb76aec84fb6">00433</a>   <span class="keyword">virtual</span> csPtr&lt;iString&gt; Dump ()
-<a name="l00434"></a>00434   {
-<a name="l00435"></a>00435     <a class="code" href="classscfString.html">scfString</a>* rc = <span class="keyword">new</span> <a class="code" href="classscfString.html">scfString</a> ();
-<a name="l00436"></a>00436     Debug_Dump (rc-&gt;<a class="code" href="classscfString.html#6738e7f1a4caf64751a1c815627092b4">GetCsString</a> (), 0);
-<a name="l00437"></a>00437     <span class="keywordflow">return</span> csPtr&lt;iString&gt; (rc);
-<a name="l00438"></a>00438   }
-<a name="l00439"></a>00439 
-<a name="l00440"></a><a class="code" href="classcsKDTree.html#48a5f83f2011d4147dd3e392554b79ca">00440</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* <span class="comment">/*g3d*/</span>) { }
-<a name="l00441"></a><a class="code" href="classcsKDTree.html#ba12422702a6419692733ca624027174">00441</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> DebugCommand (<span class="keyword">const</span> <span class="keywordtype">char</span>*) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
-<a name="l00442"></a>00442 };
-<a name="l00443"></a>00443 
-<a name="l00446"></a>00446 <span class="preprocessor">#endif // __CS_KDTREE_H__</span>
-<a name="l00447"></a>00447 <span class="preprocessor"></span>
+<a name="l00196"></a>00196   <span class="comment">// split at all and set this flag to DISALLOW_DISTRIBUTE_TIME so</span>
+<a name="l00197"></a>00197   <span class="comment">// that we will no longer attempt to distribute for a while. Whenever</span>
+<a name="l00198"></a>00198   <span class="comment">// objects are added or removed to this node this flag will be decreased</span>
+<a name="l00199"></a>00199   <span class="comment">// so that when it becomes 0 we can make a new Distribute() attempt can</span>
+<a name="l00200"></a>00200   <span class="comment">// be made. This situation should be rare though.</span>
+<a name="l00201"></a><a class="code" href="kdtree_8h.html#952208723971fd8e8d8dbb8de83d4256">00201</a> <span class="preprocessor">#define DISALLOW_DISTRIBUTE_TIME 20</span>
+<a name="l00202"></a>00202 <span class="preprocessor"></span>  <span class="keywordtype">int</span> disallow_distribute;
+<a name="l00203"></a>00203 
+<a name="l00204"></a>00204   <span class="comment">// Current timestamp we are using for Front2Back(). Objects that</span>
+<a name="l00205"></a>00205   <span class="comment">// have the same timestamp are already visited during Front2Back().</span>
+<a name="l00206"></a>00206   <span class="keyword">static</span> <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> global_timestamp;
+<a name="l00207"></a>00207 
+<a name="l00209"></a>00209   <span class="keywordtype">void</span> AddObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* obj);
+<a name="l00211"></a>00211   <span class="keywordtype">void</span> RemoveObject (<span class="keywordtype">int</span> idx);
+<a name="l00213"></a>00213   <span class="keywordtype">int</span> FindObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* obj);
+<a name="l00214"></a>00214 
+<a name="l00218"></a>00218   <span class="keywordtype">void</span> AddObject (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox, <a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* obj);
+<a name="l00219"></a>00219 
+<a name="l00230"></a>00230   <span class="keywordtype">float</span> FindBestSplitLocation (<span class="keywordtype">int</span> axis, <span class="keywordtype">float</span>&amp; split_loc);
+<a name="l00231"></a>00231 
+<a name="l00237"></a>00237   <span class="keywordtype">void</span> DistributeLeafObjects ();
+<a name="l00238"></a>00238 
+<a name="l00245"></a>00245   <span class="keywordtype">void</span> Front2Back (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos, <a class="code" href="group__geom__utils.html#g1d996261312c28c3e4f30965ca39da7e">csKDTreeVisitFunc</a>* func,
+<a name="l00246"></a>00246         <span class="keywordtype">void</span>* userdata, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> cur_timestamp, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> frustum_mask);
+<a name="l00247"></a>00247 
+<a name="l00254"></a>00254   <span class="keywordtype">void</span> TraverseRandom (<a class="code" href="group__geom__utils.html#g1d996261312c28c3e4f30965ca39da7e">csKDTreeVisitFunc</a>* func,
+<a name="l00255"></a>00255         <span class="keywordtype">void</span>* userdata, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> cur_timestamp, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> frustum_mask);
+<a name="l00256"></a>00256 
+<a name="l00260"></a>00260   <span class="keywordtype">void</span> ResetTimestamps ();
+<a name="l00261"></a>00261 
+<a name="l00265"></a>00265   <span class="keywordtype">void</span> FlattenTo (<a class="code" href="classcsKDTree.html">csKDTree</a>* node);
+<a name="l00266"></a>00266 
+<a name="l00267"></a>00267 <span class="keyword">public</span>:
+<a name="l00269"></a>00269   <a class="code" href="classcsKDTree.html">csKDTree</a> ();
+<a name="l00271"></a>00271   <span class="keyword">virtual</span> ~<a class="code" href="classcsKDTree.html">csKDTree</a> ();
+<a name="l00273"></a><a class="code" href="classcsKDTree.html#8d6d31e0c2b8969143249fb39292ecf9">00273</a>   <span class="keywordtype">void</span> SetParent (<a class="code" href="classcsKDTree.html">csKDTree</a>* p) { parent = p; }
+<a name="l00274"></a>00274 
+<a name="l00276"></a><a class="code" href="classcsKDTree.html#bb1c2e409f65c13e1cc3ec824601e4ac">00276</a>   <span class="keywordtype">void</span> SetObjectDescriptor (<a class="code" href="structiKDTreeObjectDescriptor.html">iKDTreeObjectDescriptor</a>* descriptor)
+<a name="l00277"></a>00277   {
+<a name="l00278"></a>00278     <a class="code" href="classcsKDTree.html#da3f6396c032b006442940855c25dfd8">csKDTree::descriptor</a> = descriptor;
+<a name="l00279"></a>00279   }
+<a name="l00280"></a>00280 
+<a name="l00282"></a>00282   <span class="keywordtype">void</span> Clear ();
+<a name="l00283"></a>00283 
+<a name="l00285"></a><a class="code" href="classcsKDTree.html#f48b266c210b7202de9dce5203d0d998">00285</a>   <span class="keyword">inline</span> <a class="code" href="structiBase.html">iBase</a>* GetUserObject ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> userobject; }
+<a name="l00286"></a>00286 
+<a name="l00292"></a>00292   <span class="keywordtype">void</span> SetUserObject (<a class="code" href="structiBase.html">iBase</a>* userobj);
+<a name="l00293"></a>00293 
+<a name="l00301"></a>00301   <a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* AddObject (<span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; bbox, <span class="keywordtype">void</span>* object);
+<a name="l00302"></a>00302 
+<a name="l00307"></a>00307   <span class="keywordtype">void</span> UnlinkObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* object);
+<a name="l00308"></a>00308 
+<a name="l00313"></a>00313   <span class="keywordtype">void</span> RemoveObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* object);
+<a name="l00314"></a>00314 
+<a name="l00318"></a>00318   <span class="keywordtype">void</span> MoveObject (<a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>* object, <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; new_bbox);
+<a name="l00319"></a>00319 
+<a name="l00326"></a>00326   <span class="keywordtype">void</span> Distribute ();
+<a name="l00327"></a>00327 
+<a name="l00331"></a>00331   <span class="keywordtype">void</span> FullDistribute ();
+<a name="l00332"></a>00332 
+<a name="l00338"></a>00338   <span class="keywordtype">void</span> Flatten ();
+<a name="l00339"></a>00339 
+<a name="l00345"></a>00345   <span class="keywordtype">void</span> TraverseRandom (<a class="code" href="group__geom__utils.html#g1d996261312c28c3e4f30965ca39da7e">csKDTreeVisitFunc</a>* func,
+<a name="l00346"></a>00346         <span class="keywordtype">void</span>* userdata, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> frustum_mask);
+<a name="l00347"></a>00347 
+<a name="l00354"></a>00354   <span class="keywordtype">void</span> Front2Back (<span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; pos, <a class="code" href="group__geom__utils.html#g1d996261312c28c3e4f30965ca39da7e">csKDTreeVisitFunc</a>* func,
+<a name="l00355"></a>00355         <span class="keywordtype">void</span>* userdata, <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> frustum_mask);
+<a name="l00356"></a>00356 
+<a name="l00364"></a>00364   <a class="code" href="group__util.html#g3de84ad0700f2a1571f633d399e1900e">uint32</a> NewTraversal ();
+<a name="l00365"></a>00365 
+<a name="l00369"></a><a class="code" href="classcsKDTree.html#826b48e11994b103dc99bcd1006313c7">00369</a>   <span class="keyword">inline</span> <a class="code" href="classcsKDTree.html">csKDTree</a>* GetChild1 ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> child1; }
+<a name="l00370"></a>00370 
+<a name="l00374"></a><a class="code" href="classcsKDTree.html#f5312977ab2c7837fa396a6219d30843">00374</a>   <span class="keyword">inline</span> <a class="code" href="classcsKDTree.html">csKDTree</a>* GetChild2 ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> child2; }
+<a name="l00375"></a>00375 
+<a name="l00379"></a><a class="code" href="classcsKDTree.html#e569e8c6e26a48c13477d9ad741913a1">00379</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> GetObjectCount ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> num_objects; }
+<a name="l00380"></a>00380 
+<a name="l00387"></a><a class="code" href="classcsKDTree.html#950e5152a9f34d8f7dc9c94083596a08">00387</a>   <span class="keyword">inline</span> <span class="keywordtype">int</span> GetEstimatedObjectCount () { <span class="keywordflow">return</span> estimate_total_objects; }
+<a name="l00388"></a>00388 
+<a name="l00392"></a><a class="code" href="classcsKDTree.html#9c959bea565ded5965e04e99f9d5d9cd">00392</a>   <span class="keyword">inline</span> <a class="code" href="classcsKDTreeChild.html">csKDTreeChild</a>** GetObjects ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> objects; }
+<a name="l00393"></a>00393 
+<a name="l00398"></a><a class="code" href="classcsKDTree.html#44fb7ea74091cc35698d25114757e3a0">00398</a>   <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classcsBox3.html">csBox3</a>&amp; GetNodeBBox ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> node_bbox; }
+<a name="l00399"></a>00399 
+<a name="l00400"></a>00400   <span class="comment">// Debugging functions.</span>
+<a name="l00401"></a>00401   <span class="keywordtype">bool</span> Debug_CheckTree (<a class="code" href="classcsString.html">csString</a>&amp; str);
+<a name="l00402"></a>00402   csPtr&lt;iString&gt; Debug_UnitTest ();
+<a name="l00403"></a>00403   <span class="keywordtype">void</span> Debug_Dump (<a class="code" href="classcsString.html">csString</a>&amp; str, <span class="keywordtype">int</span> indent);
+<a name="l00404"></a>00404   <span class="keywordtype">void</span> Debug_Statistics (<span class="keywordtype">int</span>&amp; tot_objects,
+<a name="l00405"></a>00405         <span class="keywordtype">int</span>&amp; tot_nodes, <span class="keywordtype">int</span>&amp; tot_leaves, <span class="keywordtype">int</span> depth, <span class="keywordtype">int</span>&amp; max_depth,
+<a name="l00406"></a>00406         <span class="keywordtype">float</span>&amp; balance_quality);
+<a name="l00407"></a>00407   csPtr&lt;iString&gt; Debug_Statistics ();
+<a name="l00408"></a>00408   <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> Debug_Benchmark (<span class="keywordtype">int</span> num_iterations);
+<a name="l00409"></a>00409 
+<a name="l00410"></a><a class="code" href="classcsKDTree.html#740285fb2d09a015454850330920e777">00410</a>   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetSupportedTests ()<span class="keyword"> const</span>
+<a name="l00411"></a>00411 <span class="keyword">  </span>{
+<a name="l00412"></a>00412     <span class="keywordflow">return</span> <a class="code" href="group__util.html#ga0cdbf0003e4935d76f3ce39873c3dc6">CS_DBGHELP_UNITTEST</a> | <a class="code" href="group__util.html#g3c5c0d5eed6226de42d666a2b7d0ef11">CS_DBGHELP_STATETEST</a> |
+<a name="l00413"></a>00413       <a class="code" href="group__util.html#g71d2f9c7a254d4acd7d5d20be051bb69">CS_DBGHELP_TXTDUMP</a> | <a class="code" href="group__util.html#ge3a078c0c9d02c5806b4a6a668fdd252">CS_DBGHELP_BENCHMARK</a>;
+<a name="l00414"></a>00414   }
+<a name="l00415"></a>00415 
+<a name="l00416"></a><a class="code" href="classcsKDTree.html#090396efb1a99ad68298804e4378581b">00416</a>   <span class="keyword">virtual</span> csPtr&lt;iString&gt; UnitTest ()
+<a name="l00417"></a>00417   {
+<a name="l00418"></a>00418     <span class="keywordflow">return</span> Debug_UnitTest ();
+<a name="l00419"></a>00419   }
+<a name="l00420"></a>00420 
+<a name="l00421"></a><a class="code" href="classcsKDTree.html#bb1f6930bd9bf09f2726e44e21e56551">00421</a>   <span class="keyword">virtual</span> csPtr&lt;iString&gt; StateTest ()
+<a name="l00422"></a>00422   {
+<a name="l00423"></a>00423     <a class="code" href="classscfString.html">scfString</a>* rc = <span class="keyword">new</span> <a class="code" href="classscfString.html">scfString</a> ();
+<a name="l00424"></a>00424     <span class="keywordflow">if</span> (!Debug_CheckTree (rc-&gt;<a class="code" href="classscfString.html#6738e7f1a4caf64751a1c815627092b4">GetCsString</a> ()))
+<a name="l00425"></a>00425       <span class="keywordflow">return</span> csPtr&lt;iString&gt; (rc);
+<a name="l00426"></a>00426     <span class="keyword">delete</span> rc;
+<a name="l00427"></a>00427     <span class="keywordflow">return</span> 0;
+<a name="l00428"></a>00428   }
+<a name="l00429"></a>00429 
+<a name="l00430"></a><a class="code" href="classcsKDTree.html#a59b3ace234289588028070ebc6d8c2e">00430</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#gbe5342ca39ff78a32f18e2b8478a064c">csTicks</a> Benchmark (<span class="keywordtype">int</span> num_iterations)
+<a name="l00431"></a>00431   {
+<a name="l00432"></a>00432     <span class="keywordflow">return</span> Debug_Benchmark (num_iterations);
+<a name="l00433"></a>00433   }
+<a name="l00434"></a>00434 
+<a name="l00435"></a><a class="code" href="classcsKDTree.html#9342734a1fd4a0d204eedb76aec84fb6">00435</a>   <span class="keyword">virtual</span> csPtr&lt;iString&gt; Dump ()
+<a name="l00436"></a>00436   {
+<a name="l00437"></a>00437     <a class="code" href="classscfString.html">scfString</a>* rc = <span class="keyword">new</span> <a class="code" href="classscfString.html">scfString</a> ();
+<a name="l00438"></a>00438     Debug_Dump (rc-&gt;<a class="code" href="classscfString.html#6738e7f1a4caf64751a1c815627092b4">GetCsString</a> (), 0);
+<a name="l00439"></a>00439     <span class="keywordflow">return</span> csPtr&lt;iString&gt; (rc);
+<a name="l00440"></a>00440   }
+<a name="l00441"></a>00441 
+<a name="l00442"></a><a class="code" href="classcsKDTree.html#48a5f83f2011d4147dd3e392554b79ca">00442</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Dump (<a class="code" href="structiGraphics3D.html">iGraphics3D</a>* <span class="comment">/*g3d*/</span>) { }
+<a name="l00443"></a><a class="code" href="classcsKDTree.html#ba12422702a6419692733ca624027174">00443</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> DebugCommand (<span class="keyword">const</span> <span class="keywordtype">char</span>*) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }
+<a name="l00444"></a>00444 };
+<a name="l00445"></a>00445 
+<a name="l00448"></a>00448 <span class="preprocessor">#endif // __CS_KDTREE_H__</span>
+<a name="l00449"></a>00449 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.5 
 </small></address> </div></body> </html>
