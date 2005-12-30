@@ -87,90 +87,99 @@
 <a name="l00063"></a>00063 <span class="comment">     1) Using a special multitexture setup that blends the FG and BG color.</span>
 <a name="l00064"></a>00064 <span class="comment">        Preferred, as we save the texture environment switch.</span>
 <a name="l00065"></a>00065 <span class="comment">        Obviously requires MT.</span>
-<a name="l00066"></a>00066 <span class="comment">     2) Using "Blend" environment which has the same effect as (1).</span>
-<a name="l00067"></a>00067 <span class="comment">        Not all HW properly supports this.</span>
-<a name="l00068"></a>00068 <span class="comment">     3) Most ugly: separate passes for FG and BG - needs two textures (one </span>
-<a name="l00069"></a>00069 <span class="comment">        with background, one with foreground transparency), and doesn't always </span>
-<a name="l00070"></a>00070 <span class="comment">        look right with AA! (We ignore that until someone complains.)</span>
-<a name="l00071"></a>00071 <span class="comment">   */</span>
-<a name="l00072"></a>00072   <span class="comment">// Whether to use method 1.</span>
-<a name="l00073"></a>00073   <span class="keywordtype">bool</span> multiTexText;
-<a name="l00074"></a>00074   <span class="comment">// Whether to use method 2.</span>
-<a name="l00075"></a>00075   <span class="keywordtype">bool</span> intensityBlendText;
-<a name="l00076"></a>00076 
-<a name="l00077"></a>00077   <span class="keyword">struct </span>CacheTexture
-<a name="l00078"></a>00078   {
-<a name="l00079"></a>00079     <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> handle;
-<a name="l00080"></a>00080     <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> mirrorHandle;
-<a name="l00081"></a>00081     <a class="code" href="classcsSubRectangles.html">csSubRectangles</a>* glyphRects;
-<a name="l00082"></a>00082 
-<a name="l00083"></a>00083     CacheTexture () 
-<a name="l00084"></a>00084     { 
-<a name="l00085"></a>00085       glyphRects = 0; 
-<a name="l00086"></a>00086     }
-<a name="l00087"></a>00087     ~CacheTexture () 
-<a name="l00088"></a>00088     { 
-<a name="l00089"></a>00089       <span class="keyword">delete</span> glyphRects; 
-<a name="l00090"></a>00090     }
-<a name="l00091"></a>00091     <span class="keywordtype">void</span> InitRects (<span class="keywordtype">int</span> size) 
-<a name="l00092"></a>00092     { 
-<a name="l00093"></a>00093       glyphRects = <span class="keyword">new</span> <a class="code" href="classcsSubRectangles.html">csSubRectangles</a> (<a class="code" href="classcsRect.html">csRect</a> (0, 0, size, size));
-<a name="l00094"></a>00094     }
-<a name="l00095"></a>00095   };
-<a name="l00096"></a>00096   csArray&lt;CacheTexture&gt; textures;
-<a name="l00097"></a>00097   csBlockAllocator&lt;GLGlyphCacheData&gt; cacheDataAlloc;
-<a name="l00098"></a>00098 
-<a name="l00099"></a>00099   <span class="keyword">struct </span>TextJob
-<a name="l00100"></a>00100   {
-<a name="l00101"></a>00101     <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> texture;
-<a name="l00102"></a>00102     <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> mirrorTexture;
-<a name="l00103"></a>00103     <span class="keywordtype">int</span> fg, bg;
-<a name="l00104"></a>00104     size_t vertOffset, vertCount, bgVertOffset, bgVertCount;
+<a name="l00066"></a>00066 <span class="comment">     2) Using ARB_fragment_program.</span>
+<a name="l00067"></a>00067 <span class="comment">        This is a workaround for a bug in some ATI drivers that seem to garble</span>
+<a name="l00068"></a>00068 <span class="comment">        text drawing under certain circumstances, which is avoided by using an</span>
+<a name="l00069"></a>00069 <span class="comment">        AFP instead of a multitexturing setup.</span>
+<a name="l00070"></a>00070 <span class="comment">     3) Using "Blend" environment which has the same effect as (1).</span>
+<a name="l00071"></a>00071 <span class="comment">        Not all HW properly supports this.</span>
+<a name="l00072"></a>00072 <span class="comment">     4) Most ugly: separate passes for FG and BG - needs two textures (one </span>
+<a name="l00073"></a>00073 <span class="comment">        with background, one with foreground transparency), and doesn't always </span>
+<a name="l00074"></a>00074 <span class="comment">        look right with AA! (We ignore that until someone complains.)</span>
+<a name="l00075"></a>00075 <span class="comment">   */</span>
+<a name="l00076"></a>00076   <span class="comment">// Whether to use method 1.</span>
+<a name="l00077"></a>00077   <span class="keywordtype">bool</span> multiTexText;
+<a name="l00078"></a>00078   <span class="comment">// Whether to use method 2.</span>
+<a name="l00079"></a>00079   <span class="keywordtype">bool</span> afpText;
+<a name="l00080"></a>00080   <span class="comment">// Whether to use method 3.</span>
+<a name="l00081"></a>00081   <span class="keywordtype">bool</span> intensityBlendText;
+<a name="l00082"></a>00082   <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> textProgram;
+<a name="l00083"></a>00083 
+<a name="l00084"></a>00084   <span class="keyword">struct </span>CacheTexture
+<a name="l00085"></a>00085   {
+<a name="l00086"></a>00086     <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> handle;
+<a name="l00087"></a>00087     <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> mirrorHandle;
+<a name="l00088"></a>00088     <a class="code" href="classcsSubRectangles.html">csSubRectangles</a>* glyphRects;
+<a name="l00089"></a>00089 
+<a name="l00090"></a>00090     CacheTexture () 
+<a name="l00091"></a>00091     { 
+<a name="l00092"></a>00092       glyphRects = 0; 
+<a name="l00093"></a>00093     }
+<a name="l00094"></a>00094     ~CacheTexture () 
+<a name="l00095"></a>00095     { 
+<a name="l00096"></a>00096       <span class="keyword">delete</span> glyphRects; 
+<a name="l00097"></a>00097     }
+<a name="l00098"></a>00098     <span class="keywordtype">void</span> InitRects (<span class="keywordtype">int</span> size) 
+<a name="l00099"></a>00099     { 
+<a name="l00100"></a>00100       glyphRects = <span class="keyword">new</span> <a class="code" href="classcsSubRectangles.html">csSubRectangles</a> (<a class="code" href="classcsRect.html">csRect</a> (0, 0, size, size));
+<a name="l00101"></a>00101     }
+<a name="l00102"></a>00102   };
+<a name="l00103"></a>00103   csArray&lt;CacheTexture&gt; textures;
+<a name="l00104"></a>00104   csBlockAllocator&lt;GLGlyphCacheData&gt; cacheDataAlloc;
 <a name="l00105"></a>00105 
-<a name="l00106"></a>00106     <span class="keywordtype">void</span> ClearRanges()
-<a name="l00107"></a>00107     {
-<a name="l00108"></a>00108       vertOffset = vertCount = bgVertOffset = bgVertCount = 0;
-<a name="l00109"></a>00109     }
-<a name="l00110"></a>00110   };
-<a name="l00111"></a>00111   csArray&lt;TextJob&gt; jobs;
-<a name="l00112"></a>00112   size_t jobCount;
-<a name="l00113"></a>00113   <span class="keywordtype">bool</span> textWriting;
-<a name="l00114"></a>00114   <span class="keywordtype">bool</span> needStates;
-<a name="l00115"></a>00115   <span class="keywordtype">int</span> envColor;
-<a name="l00116"></a>00116   size_t numFloats;
-<a name="l00117"></a>00117   size_t maxFloats;
-<a name="l00118"></a>00118   <span class="keywordtype">bool</span> tcaEnabled, vaEnabled, caEnabled;
-<a name="l00119"></a>00119   csDirtyAccessArray&lt;float&gt; verts2d;
-<a name="l00120"></a>00120   csDirtyAccessArray&lt;float&gt; texcoords;
-<a name="l00121"></a>00121 
-<a name="l00122"></a>00122   TextJob&amp; GetJob (<span class="keywordtype">int</span> fg, <span class="keywordtype">int</span> bg, <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> texture, <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> mirrorTexture, 
-<a name="l00123"></a>00123     size_t bgOffset);
-<a name="l00124"></a>00124 
-<a name="l00125"></a>00125   <span class="keyword">inline</span> <span class="keywordtype">void</span> FlushArrays ();
-<a name="l00126"></a>00126   <span class="keywordtype">void</span> BeginText ();
-<a name="l00127"></a>00127 <span class="keyword">protected</span>:
-<a name="l00128"></a>00128   <span class="keyword">virtual</span> GlyphCacheData* <a class="code" href="classcsFontCache.html#60b6ee87498fad2550ed2c4ca0e35b0b">InternalCacheGlyph</a> (KnownFont* font,
-<a name="l00129"></a>00129     <a class="code" href="group__util.html#ge74a433ff6d4182a0859d2553aff29ca">utf32_char</a> glyph, <a class="code" href="group__util.html#g1277b8d5127d0eced2e9d3b99a3a7079">uint</a> flags);
-<a name="l00130"></a>00130   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#cf26f17ffe62e79987662e4651189a9c">InternalUncacheGlyph</a> (GlyphCacheData* cacheData);
+<a name="l00106"></a>00106   <span class="keyword">struct </span>TextJob
+<a name="l00107"></a>00107   {
+<a name="l00108"></a>00108     <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> texture;
+<a name="l00109"></a>00109     <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> mirrorTexture;
+<a name="l00110"></a>00110     <span class="keywordtype">int</span> fg, bg;
+<a name="l00111"></a>00111     size_t vertOffset, vertCount, bgVertOffset, bgVertCount;
+<a name="l00112"></a>00112 
+<a name="l00113"></a>00113     <span class="keywordtype">void</span> ClearRanges()
+<a name="l00114"></a>00114     {
+<a name="l00115"></a>00115       vertOffset = vertCount = bgVertOffset = bgVertCount = 0;
+<a name="l00116"></a>00116     }
+<a name="l00117"></a>00117   };
+<a name="l00118"></a>00118   csArray&lt;TextJob&gt; jobs;
+<a name="l00119"></a>00119   size_t jobCount;
+<a name="l00120"></a>00120   <span class="keywordtype">bool</span> textWriting;
+<a name="l00121"></a>00121   <span class="keywordtype">bool</span> needStates;
+<a name="l00122"></a>00122   <span class="keywordtype">int</span> envColor;
+<a name="l00123"></a>00123   size_t numFloats;
+<a name="l00124"></a>00124   size_t maxFloats;
+<a name="l00125"></a>00125   <span class="keywordtype">bool</span> tcaEnabled, vaEnabled, caEnabled;
+<a name="l00126"></a>00126   csDirtyAccessArray&lt;float&gt; verts2d;
+<a name="l00127"></a>00127   csDirtyAccessArray&lt;float&gt; texcoords;
+<a name="l00128"></a>00128 
+<a name="l00129"></a>00129   TextJob&amp; GetJob (<span class="keywordtype">int</span> fg, <span class="keywordtype">int</span> bg, <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> texture, <a class="code" href="glextmanager_8h.html#6308aff74c75966dd6b6fae68d1c2d58">GLuint</a> mirrorTexture, 
+<a name="l00130"></a>00130     size_t bgOffset);
 <a name="l00131"></a>00131 
-<a name="l00132"></a>00132   <span class="keywordtype">void</span> CopyGlyphData (<a class="code" href="structiFont.html">iFont</a>* font, <a class="code" href="group__util.html#ge74a433ff6d4182a0859d2553aff29ca">utf32_char</a> glyph, size_t tex, 
-<a name="l00133"></a>00133     <span class="keyword">const</span> <a class="code" href="structcsBitmapMetrics.html">csBitmapMetrics</a>&amp; bmetrics, <span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; texRect, 
-<a name="l00134"></a>00134     <a class="code" href="structiDataBuffer.html">iDataBuffer</a>* bitmapDataBuf, <a class="code" href="structiDataBuffer.html">iDataBuffer</a>* alphaDataBuf);
-<a name="l00135"></a>00135 <span class="keyword">public</span>:
-<a name="l00136"></a>00136   <a class="code" href="classcsGLFontCache.html">csGLFontCache</a> (<a class="code" href="classcsGraphics2DGLCommon.html">csGraphics2DGLCommon</a>* G2D);
-<a name="l00137"></a>00137   <span class="keyword">virtual</span> ~<a class="code" href="classcsGLFontCache.html">csGLFontCache</a> ();
-<a name="l00138"></a>00138 
-<a name="l00140"></a>00140   <span class="keywordtype">void</span> Setup();
-<a name="l00141"></a>00141 
-<a name="l00145"></a>00145   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#94210cdf641658bb65b83d7f4c252938">WriteString</a> (<a class="code" href="structiFont.html">iFont</a> *font, <span class="keywordtype">int</span> pen_x, <span class="keywordtype">int</span> pen_y, 
-<a name="l00146"></a>00146     <span class="keywordtype">int</span> fg, <span class="keywordtype">int</span> bg, <span class="keyword">const</span> <a class="code" href="group__util.html#g6b9b5ab3a793031118e632045897d6f3">utf8_char</a>* text, <a class="code" href="group__util.html#g1277b8d5127d0eced2e9d3b99a3a7079">uint</a> flags);
+<a name="l00132"></a>00132   <span class="keyword">inline</span> <span class="keywordtype">void</span> FlushArrays ();
+<a name="l00133"></a>00133   <span class="keywordtype">void</span> BeginText ();
+<a name="l00134"></a>00134 <span class="keyword">protected</span>:
+<a name="l00135"></a>00135   <span class="keywordtype">void</span> Report (<span class="keywordtype">int</span> severity, <span class="keyword">const</span> <span class="keywordtype">char</span>* msg, ...);
+<a name="l00136"></a>00136 
+<a name="l00137"></a>00137   <span class="keyword">virtual</span> GlyphCacheData* <a class="code" href="classcsFontCache.html#60b6ee87498fad2550ed2c4ca0e35b0b">InternalCacheGlyph</a> (KnownFont* font,
+<a name="l00138"></a>00138     <a class="code" href="group__util.html#ge74a433ff6d4182a0859d2553aff29ca">utf32_char</a> glyph, <a class="code" href="group__util.html#g1277b8d5127d0eced2e9d3b99a3a7079">uint</a> flags);
+<a name="l00139"></a>00139   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#cf26f17ffe62e79987662e4651189a9c">InternalUncacheGlyph</a> (GlyphCacheData* cacheData);
+<a name="l00140"></a>00140 
+<a name="l00141"></a>00141   <span class="keywordtype">void</span> CopyGlyphData (<a class="code" href="structiFont.html">iFont</a>* font, <a class="code" href="group__util.html#ge74a433ff6d4182a0859d2553aff29ca">utf32_char</a> glyph, size_t tex, 
+<a name="l00142"></a>00142     <span class="keyword">const</span> <a class="code" href="structcsBitmapMetrics.html">csBitmapMetrics</a>&amp; bmetrics, <span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; texRect, 
+<a name="l00143"></a>00143     <a class="code" href="structiDataBuffer.html">iDataBuffer</a>* bitmapDataBuf, <a class="code" href="structiDataBuffer.html">iDataBuffer</a>* alphaDataBuf);
+<a name="l00144"></a>00144 <span class="keyword">public</span>:
+<a name="l00145"></a>00145   <a class="code" href="classcsGLFontCache.html">csGLFontCache</a> (<a class="code" href="classcsGraphics2DGLCommon.html">csGraphics2DGLCommon</a>* G2D);
+<a name="l00146"></a>00146   <span class="keyword">virtual</span> ~<a class="code" href="classcsGLFontCache.html">csGLFontCache</a> ();
 <a name="l00147"></a>00147 
-<a name="l00154"></a>00154   <span class="keywordtype">void</span> FlushText ();
-<a name="l00155"></a>00155 
-<a name="l00159"></a>00159   <span class="keywordtype">void</span> DumpFontCache (csRefArray&lt;iImage&gt;&amp; pages);
-<a name="l00160"></a>00160 };
-<a name="l00161"></a>00161 
-<a name="l00164"></a>00164 <span class="preprocessor">#endif // __CS_CANVAS_OPENGLCOMMON_GLFONTCACHE_H__</span>
+<a name="l00149"></a>00149   <span class="keywordtype">void</span> Setup();
+<a name="l00150"></a>00150 
+<a name="l00154"></a>00154   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsFontCache.html#94210cdf641658bb65b83d7f4c252938">WriteString</a> (<a class="code" href="structiFont.html">iFont</a> *font, <span class="keywordtype">int</span> pen_x, <span class="keywordtype">int</span> pen_y, 
+<a name="l00155"></a>00155     <span class="keywordtype">int</span> fg, <span class="keywordtype">int</span> bg, <span class="keyword">const</span> <a class="code" href="group__util.html#g6b9b5ab3a793031118e632045897d6f3">utf8_char</a>* text, <a class="code" href="group__util.html#g1277b8d5127d0eced2e9d3b99a3a7079">uint</a> flags);
+<a name="l00156"></a>00156 
+<a name="l00163"></a>00163   <span class="keywordtype">void</span> FlushText ();
+<a name="l00164"></a>00164 
+<a name="l00168"></a>00168   <span class="keywordtype">void</span> DumpFontCache (csRefArray&lt;iImage&gt;&amp; pages);
+<a name="l00169"></a>00169 };
+<a name="l00170"></a>00170 
+<a name="l00173"></a>00173 <span class="preprocessor">#endif // __CS_CANVAS_OPENGLCOMMON_GLFONTCACHE_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.5 
 </small></address> </div></body> </html>
