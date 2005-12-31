@@ -514,7 +514,15 @@ SOURCE=..\..\libs\cstool\meshobjtmpl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\cstool\normalcalc.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\cstool\pen.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\cstool\primitives.cpp
 # End Source File
 # Begin Source File
 
@@ -1446,7 +1454,15 @@ SOURCE=..\..\libs\..\include\cstool\meshobjtmpl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\libs\..\include\cstool\normalcalc.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\libs\..\include\cstool\pen.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\libs\..\include\cstool\primitives.h
 # End Source File
 # Begin Source File
 
