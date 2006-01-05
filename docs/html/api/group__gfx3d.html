@@ -36,9 +36,6 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsCoreRenderMesh.html">csCoreRenderMesh</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Data required by the renderer to draw a mesh.  <a href="structcsCoreRenderMesh.html#_details">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsGraphics3DCaps.html">csGraphics3DCaps</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Information about 3d renderer capabilities.  <a href="structcsGraphics3DCaps.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsRenderBufferHolder.html">csRenderBufferHolder</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Holder of standard renderbuffers.  <a href="classcsRenderBufferHolder.html#_details">More...</a><br></td></tr>
@@ -51,15 +48,9 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsShaderVariable.html">csShaderVariable</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Storage class for "shader vars", inheritable variables in the shader system.  <a href="classcsShaderVariable.html#_details">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A simple render mesh.  <a href="structcsSimpleRenderMesh.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiFireTexture.html">iFireTexture</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Interface to the 'fire' procedural texture.  <a href="structiFireTexture.html#_details">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiGraphics3D.html">iGraphics3D</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">This is the standard 3D graphics interface.  <a href="structiGraphics3D.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiHalo.html">iHalo</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><a class="el" href="structiHalo.html">iHalo</a>: used to render halos (aka "light globes").  <a href="structiHalo.html#_details">More...</a><br></td></tr>
@@ -125,112 +116,92 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g40e00c647036b433b16268a0cc3149c3">CS_CLIPPER_TOPLEVEL</a>&nbsp;&nbsp;&nbsp;1</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clipper is top-level.  <a href="#g40e00c647036b433b16268a0cc3149c3"></a><br></td></tr>
-<tr><td colspan="2"><br><h2>Mix modes</h2></td></tr>
-<tr><td colspan="2">The mix mode specifies how a shaded fragment (denoted as <code>SRC</code>) is mixed (or <em>blended</em>) with the framebuffer fragment (<code>DST</code>). <br><br></td></tr>
+<tr><td colspan="2"><br><h2>Mix mode: Default modes</h2></td></tr>
+<tr><td colspan="2">A set of commonly used mix modes. <br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g59466bfe3d5df98a96bd96c81c90a854">CS_FX_ADD</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(ONE, ONE) | CS_MIXMODE_ALPHATEST_DISABLE)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Additive blending. Formula: <code>=SRC+DST</code>.  <a href="#g59466bfe3d5df98a96bd96c81c90a854"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g89072101df1b847eb56c7662664fc148">CS_FX_ALPHA</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(SRCALPHA, SRCALPHA_INV) | CS_MIXMODE_ALPHATEST_DISABLE)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Alpha blending.  <a href="#g89072101df1b847eb56c7662664fc148"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g157a5b79fc02bff999d17b291dac354d">CS_FX_COPY</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_TYPE_AUTO | CS_MIXMODE_ALPHATEST_AUTO)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">This mixmode uses alpha smooth blending, binary blending (ie enabled alpha test) and no blending depending on the contents of csRenderMesh::alphaMode.  <a href="#g157a5b79fc02bff999d17b291dac354d"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g9619d4c92edc9b5873b0f53fe2e02a04">CS_FX_DESTALPHAADD</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(DSTALPHA, ONE) | CS_MIXMODE_ALPHATEST_DISABLE)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Multiply source color with destination alpha and add.  <a href="#g9619d4c92edc9b5873b0f53fe2e02a04"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gb067ef5d5d60de998bf43d15978a5d75">CS_FX_FLAT</a>&nbsp;&nbsp;&nbsp;(0x04000000)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Flat shading flag.  <a href="#gb067ef5d5d60de998bf43d15978a5d75"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gc5ac035511e3c8a35a7dc18b55cbf868">CS_FX_MASK_ALPHA</a>&nbsp;&nbsp;&nbsp;(0x000000FF)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Mixmode alpha part.  <a href="#gc5ac035511e3c8a35a7dc18b55cbf868"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#ge7f16e1fb3eff6747db082caec700c9b">CS_FX_MASK_MIXMODE</a>&nbsp;&nbsp;&nbsp;(0xf0ff0000)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Bit mask for bits relevant to mix mode comparison; contains type, alpha test flags and blending op factors.  <a href="#ge7f16e1fb3eff6747db082caec700c9b"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gdbbfe64fc8250e928827dc5c4f93d503">CS_FX_MESH</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_TYPE_MESH)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use the mix mode of the mesh mix mode.  <a href="#gdbbfe64fc8250e928827dc5c4f93d503"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gb90560b5ab7d9bcf32901e0eb5f041d2">CS_FX_MULTIPLY</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(DSTCOLOR, ZERO) | CS_MIXMODE_ALPHATEST_DISABLE)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Multiplicative blending. Formula: <code>=SRC*DST</code>.  <a href="#gb90560b5ab7d9bcf32901e0eb5f041d2"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g305a050d961b6f0cab41af02763d255b">CS_FX_MULTIPLY2</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(DSTCOLOR, SRCCOLOR) | CS_MIXMODE_ALPHATEST_DISABLE)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Multiplicative doubling blending. Formula: <code>=2*SRC*DST</code>.  <a href="#g305a050d961b6f0cab41af02763d255b"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gb116e9a5671f2b3314dfb84f3156363a">CS_FX_PREMULTALPHA</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(ONE, SRCALPHA_INV) | CS_MIXMODE_ALPHATEST_DISABLE)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Multiply destination color with inverse source alpha and add source color.  <a href="#gb116e9a5671f2b3314dfb84f3156363a"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g6c38f097325623b97008651fac2d436e">CS_FX_SRCALPHAADD</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(SRCALPHA, ONE) | CS_MIXMODE_ALPHATEST_DISABLE)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Multiply source color with source alpha and add.  <a href="#g6c38f097325623b97008651fac2d436e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gbdfcef391e5a2c8ee4974995ca4c6454">CS_FX_TRANSPARENT</a>&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(ZERO, ONE) | CS_MIXMODE_ALPHATEST_DISABLE)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Transparent blending (keep framebuffer unmodified).  <a href="#gbdfcef391e5a2c8ee4974995ca4c6454"></a><br></td></tr>
+<tr><td colspan="2"><br><h2>Mix mode: alpha helpers</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gc5a2e0c327c6b69ccab0183bd0e2a529">CS_FX_SETALPHA</a>(alpha)&nbsp;&nbsp;&nbsp;(CS_FX_ALPHA | <a class="el" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> ((alpha) * CS_FX_MASK_ALPHA))</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Macro for setting of alpha bits into mixmode (alpha between 0 and 1).  <a href="#gc5a2e0c327c6b69ccab0183bd0e2a529"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gd86331b25169e33b6fcfa9eabd6bc24c">CS_FX_SETALPHA_INT</a>(alpha)&nbsp;&nbsp;&nbsp;(CS_FX_ALPHA | <a class="el" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> ((alpha) &amp; CS_FX_MASK_ALPHA))</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Macro for setting of alpha bits into mixmode (alpha between 0 and 255).  <a href="#gd86331b25169e33b6fcfa9eabd6bc24c"></a><br></td></tr>
+<tr><td colspan="2"><br><h2>Mix mode: Alpha test flags</h2></td></tr>
+<tr><td colspan="2">Enabled alpha test (or <em>binary alpha</em>) means that a fragment is only drawn when its alpha component is above a certain threshold, and discarded otherwise. <br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g5618a7d398f0500b4ccd81a1d88245d6">CS_MIXMODE_ALPHATEST_AUTO</a>&nbsp;&nbsp;&nbsp;(0x00000000)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Automatic alpha test.  <a href="#g5618a7d398f0500b4ccd81a1d88245d6"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g2823006b1eec2520e1e39d4d75f2fcb1">CS_MIXMODE_ALPHATEST_DISABLE</a>&nbsp;&nbsp;&nbsp;(0x20000000)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Unconditionally disable alpha test.  <a href="#g2823006b1eec2520e1e39d4d75f2fcb1"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g633cd7c79aa65d6714d3d62129f895ab">CS_MIXMODE_ALPHATEST_ENABLE</a>&nbsp;&nbsp;&nbsp;(0x10000000)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Unconditionally enable alpha test.  <a href="#g633cd7c79aa65d6714d3d62129f895ab"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gcbc0e919d2b2eb10da60e2e40631602d">CS_MIXMODE_ALPHATEST_MASK</a>&nbsp;&nbsp;&nbsp;(0x30000000)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Bit mask to extract the alpha test flag from a mixmode specifier.  <a href="#gcbc0e919d2b2eb10da60e2e40631602d"></a><br></td></tr>
+<tr><td colspan="2"><br><h2>Mix mode: Blending mode helpers</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gab0163a168de01d26be545e9c3dba638">CS_MIXMODE_BLEND</a>(Src, Dst)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Helper macro to construct a blending operation mixmode.  <a href="#gab0163a168de01d26be545e9c3dba638"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Helper macro to construct a blending operation mixmode <em>Src</em> and <em>Dst</em> are <a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55bf5ce179a35fe83eb4d7bc9412fe53c42">blending op factors </a>, however sans the CS_MIXMODE_FACT_ prefix.  <a href="#gab0163a168de01d26be545e9c3dba638"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g44d0c355da9e25c99c000890e6d2c569">CS_MIXMODE_BLENDOP_DST</a>(mode)&nbsp;&nbsp;&nbsp;((mode &gt;&gt; 16) &amp; CS_MIXMODE_FACT_MASK)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Helper macro to extract the <code>dstFactor</code> from a blending op mixmode.  <a href="#g44d0c355da9e25c99c000890e6d2c569"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gfafe978b680e6b4cf43945f7646366de">CS_MIXMODE_BLENDOP_SRC</a>(mode)&nbsp;&nbsp;&nbsp;((mode &gt;&gt; 20) &amp; CS_MIXMODE_FACT_MASK)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Helper macro to extract the <code>srcFactor</code> from a blending op mixmode.  <a href="#gfafe978b680e6b4cf43945f7646366de"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b392874fc34cdde7a6bf58df1c7fdee8d">CS_MIXMODE_TYPE_AUTO</a> =  0x00000000, 
-<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b4074661486241ee614ca15b8392081ec">CS_MIXMODE_TYPE_BLENDOP</a> =  0x40000000, 
-<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55bb3c8ae8f958ea76361c36102dc81e6f5">CS_MIXMODE_TYPE_MESH</a> =  0x80000000, 
-<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b857657b3f1cf68b97b0db997adddcae4">CS_MIXMODE_TYPE_MASK</a> =  0xc0000000
- }</td></tr>
+<tr><td colspan="2"><br><h2>Mix mode: Types</h2></td></tr>
+<tr><td colspan="2">The mix mode specifies how a shaded fragment (denoted as <code>SRC</code>) is mixed (or <em>blended</em>) with the framebuffer fragment (<code>DST</code>). <br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gcca3666c7b178a88ae163dd8b1729928">CS_MIXMODE_TYPE_AUTO</a>&nbsp;&nbsp;&nbsp;(0x00000000)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Mix mode types.  <a href="group__gfx3d.html#g06fc87d81c62e9abb8790b6e5713c55b">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b7f5ce179a35fe83eb4d7bc9412fe53c42">CS_MIXMODE_FACT_ZERO</a> =  0x0, 
-<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b762585826f145edac424308dd93100b15">CS_MIXMODE_FACT_ONE</a> =  0x1, 
-<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b75f2225042583871689d329f3d551c5b5">CS_MIXMODE_FACT_SRCCOLOR</a> =  0x2, 
-<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b739df002786ee50e5a002606e76298b01">CS_MIXMODE_FACT_SRCCOLOR_INV</a> =  0x3, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b76d03e7095dabb0cefe33d15164c1d3d4">CS_MIXMODE_FACT_DSTCOLOR</a> =  0x4, 
-<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b72cbcb29d021d8dedb4ae80c2ec469e4f">CS_MIXMODE_FACT_DSTCOLOR_INV</a> =  0x5, 
-<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b7ba5a437af635a0f59c2df4a711b077e0">CS_MIXMODE_FACT_SRCALPHA</a> =  0x6, 
-<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b7402ca8198cd18db1db1c89d580340562">CS_MIXMODE_FACT_SRCALPHA_INV</a> =  0x7, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b7c77a53103daa13c42b245c309061bb8c">CS_MIXMODE_FACT_DSTALPHA</a> =  0x8, 
-<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b7c0dce88efddadc4c010208518a4637fe">CS_MIXMODE_FACT_DSTALPHA_INV</a> =  0x9, 
-<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b747f785c2424ca7659c468f85674e18f0">CS_MIXMODE_FACT_COUNT</a> =  0xa, 
-<a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b7982f2fa247ecce5a55dfa01fd64dc956">CS_MIXMODE_FACT_MASK</a> =  0xf
-<br>
- }</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Automatic blending mode.  <a href="#gcca3666c7b178a88ae163dd8b1729928"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g318fafd4e8247e9b533e0e1c8104fa61">CS_MIXMODE_TYPE_BLENDOP</a>&nbsp;&nbsp;&nbsp;(0x40000000)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Blending op mix mode factors.  <a href="group__gfx3d.html#gdf764cbdea00d65edcd07bb9953ad2b7">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <a class="el" href="group__gfx3d.html#gg99fb83031ce9923c84392b4e92f956b554729a83f0565432dc37015121eb236a">CS_MIXMODE_ALPHATEST_AUTO</a> =  0x00000000, 
-<a class="el" href="group__gfx3d.html#gg99fb83031ce9923c84392b4e92f956b500e619d9b5f7cb9080505915f594e3b8">CS_MIXMODE_ALPHATEST_ENABLE</a> =  0x10000000, 
-<a class="el" href="group__gfx3d.html#gg99fb83031ce9923c84392b4e92f956b50cf0c556f93db82d4ca43166e12583e9">CS_MIXMODE_ALPHATEST_DISABLE</a> =  0x20000000, 
-<a class="el" href="group__gfx3d.html#gg99fb83031ce9923c84392b4e92f956b5bb05ba862f5d5400d16eb0858f13f625">CS_MIXMODE_ALPHATEST_MASK</a> =  0x30000000
- }</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Blend with a blending operation.  <a href="#g318fafd4e8247e9b533e0e1c8104fa61"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g3031097131f3c1669c9cacb590b93ce9">CS_MIXMODE_TYPE_MASK</a>&nbsp;&nbsp;&nbsp;(0xc0000000)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Alpha test flags.  <a href="group__gfx3d.html#g99fb83031ce9923c84392b4e92f956b5">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b0436871b2b89eb4b5f17f07af7e2a2af26">CS_FX_COPY</a> =  CS_MIXMODE_TYPE_AUTO | CS_MIXMODE_ALPHATEST_AUTO, 
-<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b04ded88bda4d0bfcffa68a9d97848abfd5">CS_FX_MULTIPLY</a>, 
-<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b0421e3ff3fd49e651981b0baba3c2c40d9">CS_FX_MULTIPLY2</a>, 
-<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b04861f43993e1c56931568544a6fdab70c">CS_FX_ADD</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b04bd8b26897dfbb89429590ab66dc72c3b">CS_FX_ALPHA</a>, 
-<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b0420bb2b30cc3a2c515cb6f53d4886d1b3">CS_FX_TRANSPARENT</a>, 
-<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b04b4d8492e0333c61e3e298d0aa107f8b4">CS_FX_DESTALPHAADD</a>, 
-<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b04e32332c2cd5a54f94b8e099d1c0b6de1">CS_FX_SRCALPHAADD</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b047bb6ca922b796b81fe7d5cbe8b97ab11">CS_FX_PREMULTALPHA</a>, 
-<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b045cfbd7a0f42b22a2143c60dcc985bf2c">CS_FX_MESH</a> =  CS_MIXMODE_TYPE_MESH, 
-<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b0447e11099b8610c569449e259cc029ff4">CS_FX_FLAT</a> =  0x04000000, 
-<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b04845fcf6b08cc2d867f0ce82e6ad93687">CS_FX_MASK_ALPHA</a> =  0x000000FF, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b0440e7d473245e2f2c70a8edeffa47be37">CS_FX_MASK_MIXMODE</a> =  0xf0ff0000
-<br>
- }</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Bit mask to extract the type from a mixmode specifier.  <a href="#g3031097131f3c1669c9cacb590b93ce9"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g48ff680bfd4f154edd1610fd5f1dd3d3">CS_MIXMODE_TYPE_MESH</a>&nbsp;&nbsp;&nbsp;(0x80000000)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Default mixmodes.  <a href="group__gfx3d.html#gbc6126af1d45847bc59afa0aa3216b04">More...</a><br></td></tr>
-<tr><td colspan="2"><br><h2>Light parameters</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g138140e872f433308b457292170d74b8">CS_LIGHTPARAM_ATTENUATION</a>&nbsp;&nbsp;&nbsp;3</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Attenuation of the light.  <a href="#g138140e872f433308b457292170d74b8"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gd9807886217437cecd85a0f0ddee7085">CS_LIGHTPARAM_DIFFUSE</a>&nbsp;&nbsp;&nbsp;1</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Diffuse color of the light.  <a href="#gd9807886217437cecd85a0f0ddee7085"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g96604da2b5005980794869fd1d4a0fac">CS_LIGHTPARAM_POSITION</a>&nbsp;&nbsp;&nbsp;0</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Position of the light.  <a href="#g96604da2b5005980794869fd1d4a0fac"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g16c8cff479c9442ea9e0c7b9a9470bb2">CS_LIGHTPARAM_SPECULAR</a>&nbsp;&nbsp;&nbsp;2</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Specular color of the light.  <a href="#g16c8cff479c9442ea9e0c7b9a9470bb2"></a><br></td></tr>
-<tr><td colspan="2"><br><h2>Shadow states</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#ge251a7a0cd425e703b858b53024edcfb">CS_SHADOW_VOLUME_BEGIN</a>&nbsp;&nbsp;&nbsp;1</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear stencil.  <a href="#ge251a7a0cd425e703b858b53024edcfb"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gf82832b14ae98bee3f5f2032fd3679e5">CS_SHADOW_VOLUME_FAIL1</a>&nbsp;&nbsp;&nbsp;4</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for carmack's reverse pass 1.  <a href="#gf82832b14ae98bee3f5f2032fd3679e5"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g73714961951e848a16e563caba96c98d">CS_SHADOW_VOLUME_FAIL2</a>&nbsp;&nbsp;&nbsp;5</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for carmack's reverse pass 2.  <a href="#g73714961951e848a16e563caba96c98d"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gebc9e0f66eccded04d00b16624ee8b60">CS_SHADOW_VOLUME_FINISH</a>&nbsp;&nbsp;&nbsp;7</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Restore states.  <a href="#gebc9e0f66eccded04d00b16624ee8b60"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gd5f21d76142da946f71ee6f5c60f34be">CS_SHADOW_VOLUME_PASS1</a>&nbsp;&nbsp;&nbsp;2</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for pass 1.  <a href="#gd5f21d76142da946f71ee6f5c60f34be"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g817aabd70731cb5f9332dfd6e96270bf">CS_SHADOW_VOLUME_PASS2</a>&nbsp;&nbsp;&nbsp;3</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for pass 2.  <a href="#g817aabd70731cb5f9332dfd6e96270bf"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gc58e45ce876228e66ec5d82917704a07">CS_SHADOW_VOLUME_USE</a>&nbsp;&nbsp;&nbsp;6</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup for shadow masking.  <a href="#gc58e45ce876228e66ec5d82917704a07"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use the mix mode of the mesh mix mode.  <a href="#g48ff680bfd4f154edd1610fd5f1dd3d3"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Texture registration flags.</h2></td></tr>
 <tr><td colspan="2">During texture registration you should tell the manager which way you're going to use the texture: whenever you're going to use it for 2D (DrawPixmap ()), for 3D (DrawPolygon ()), whenever the texture will be dynamically modified. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g21a2c2a6e098d70e99ab94ec953c180f">CS_TEXTURE_2D</a>&nbsp;&nbsp;&nbsp;0x00000001</td></tr>
@@ -320,6 +291,25 @@
 #define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g7ce2aa06ad352f022a1f4701dca2d593">CS_VATTRIB_SPECIFIC_LAST</a>&nbsp;&nbsp;&nbsp;15</td></tr>
 
 <tr><td colspan="2"><br><h2>Enumerations</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br>
+&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55bf5ce179a35fe83eb4d7bc9412fe53c42">CS_MIXMODE_FACT_ZERO</a> =  0x0, 
+<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b62585826f145edac424308dd93100b15">CS_MIXMODE_FACT_ONE</a> =  0x1, 
+<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b5f2225042583871689d329f3d551c5b5">CS_MIXMODE_FACT_SRCCOLOR</a> =  0x2, 
+<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b39df002786ee50e5a002606e76298b01">CS_MIXMODE_FACT_SRCCOLOR_INV</a> =  0x3, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b6d03e7095dabb0cefe33d15164c1d3d4">CS_MIXMODE_FACT_DSTCOLOR</a> =  0x4, 
+<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b2cbcb29d021d8dedb4ae80c2ec469e4f">CS_MIXMODE_FACT_DSTCOLOR_INV</a> =  0x5, 
+<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55bba5a437af635a0f59c2df4a711b077e0">CS_MIXMODE_FACT_SRCALPHA</a> =  0x6, 
+<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b402ca8198cd18db1db1c89d580340562">CS_MIXMODE_FACT_SRCALPHA_INV</a> =  0x7, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55bc77a53103daa13c42b245c309061bb8c">CS_MIXMODE_FACT_DSTALPHA</a> =  0x8, 
+<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55bc0dce88efddadc4c010208518a4637fe">CS_MIXMODE_FACT_DSTALPHA_INV</a> =  0x9, 
+<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b47f785c2424ca7659c468f85674e18f0">CS_MIXMODE_FACT_COUNT</a> =  0xa, 
+<a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b982f2fa247ecce5a55dfa01fd64dc956">CS_MIXMODE_FACT_MASK</a> =  0xf
+<br>
+ }</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Mix mode: Blending op factors.  <a href="group__gfx3d.html#g06fc87d81c62e9abb8790b6e5713c55b">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g2e793d8189bb8566ed81c168875f452b">csRenderBufferComponentType</a> </td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Type of components.  <a href="group__gfx3d.html#g2e793d8189bb8566ed81c168875f452b">More...</a><br></td></tr>
@@ -386,24 +376,6 @@
  }</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Buffer usage type.  <a href="group__gfx3d.html#ge5b18d205d829115e359b43a81a963b4">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gdf2df8d75f18c8ea2351b8e2c8180420">csRenderMeshType</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#ggdf2df8d75f18c8ea2351b8e2c818042094b4df90ff18151ccf452f3d4d4f611e">CS_MESHTYPE_TRIANGLES</a>, 
-<a class="el" href="group__gfx3d.html#ggdf2df8d75f18c8ea2351b8e2c81804207af9a68303966071a8d7ef158cbd1cfc">CS_MESHTYPE_QUADS</a>, 
-<a class="el" href="group__gfx3d.html#ggdf2df8d75f18c8ea2351b8e2c81804204fad3831709890a09dc724e90443bfa6">CS_MESHTYPE_TRIANGLESTRIP</a>, 
-<a class="el" href="group__gfx3d.html#ggdf2df8d75f18c8ea2351b8e2c81804202f963fcdc2a8c89c3c95c551b0377a92">CS_MESHTYPE_TRIANGLEFAN</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#ggdf2df8d75f18c8ea2351b8e2c8180420ace39785186b57317280cd79a346aef3">CS_MESHTYPE_POINTS</a>, 
-<a class="el" href="group__gfx3d.html#ggdf2df8d75f18c8ea2351b8e2c818042084a28f3e39ea9d89d488f1309e8fe5cd">CS_MESHTYPE_POINT_SPRITES</a>, 
-<a class="el" href="group__gfx3d.html#ggdf2df8d75f18c8ea2351b8e2c818042059fe9f301c01d26d0824511d303840a6">CS_MESHTYPE_LINES</a>, 
-<a class="el" href="group__gfx3d.html#ggdf2df8d75f18c8ea2351b8e2c818042021ff882fb5102b6b047cde1787341121">CS_MESHTYPE_LINESTRIP</a>
-<br>
- }</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Primitive type of a mesh.  <a href="group__gfx3d.html#gdf2df8d75f18c8ea2351b8e2c8180420">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#gee23f4994ae356cdb3e3de782239f4fd">csSimpleMeshFlags</a> { <a class="el" href="group__gfx3d.html#ggee23f4994ae356cdb3e3de782239f4fd077b8eb55639b0b95a6dc9bad17349ca">csSimpleMeshScreenspace</a> =  0x01
- }</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Flags to influence the behaviour of DrawSimpleMesh().  <a href="group__gfx3d.html#gee23f4994ae356cdb3e3de782239f4fd">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g3daee560553f3d8fa3894b31cdde006e">csVertexAttrib</a> { <br>
 &nbsp;&nbsp;<a class="el" href="group__gfx3d.html#gg3daee560553f3d8fa3894b31cdde006eb1b455ce0b20c060873059d1887542b7">CS_VATTRIB_INVALID</a> =  -1, 
 <a class="el" href="group__gfx3d.html#gg3daee560553f3d8fa3894b31cdde006eab619a477422498b90846f39990e195f">CS_VATTRIB_POSITION</a> =  CS_VATTRIB_SPECIFIC_FIRST + 0, 
@@ -462,28 +434,6 @@
  }</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Z-buffer modes.  <a href="group__gfx3d.html#g79fdaed7abd7a72af33d0f0c5dc99055">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#ga0747e910ca225613629d9e9d2fdd9f8">G3D_RENDERSTATEOPTION</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f8bf5d3bf2ad799639b53a75d90628089f">G3DRENDERSTATE_ZBUFFERMODE</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f8301b85eecbf942cf1bc75ff008d75d67">G3DRENDERSTATE_DITHERENABLE</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f8102832aaab26cc8037c5a47f6ae32111">G3DRENDERSTATE_BILINEARMAPPINGENABLE</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f8be1fad6000b39661f231648f42b61391">G3DRENDERSTATE_TRILINEARMAPPINGENABLE</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f83e5001804025d4cd486492fed47cecfd">G3DRENDERSTATE_TRANSPARENCYENABLE</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f8adb11ad10ffa83dc8dd8736fbe838c03">G3DRENDERSTATE_MIPMAPENABLE</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f82f8539216e26b1f5460cd61d74204ad5">G3DRENDERSTATE_TEXTUREMAPPINGENABLE</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f89993fe4325760197feb3b39042e8f673">G3DRENDERSTATE_LIGHTINGENABLE</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f8189e5fe3d22b6ebd279f772c6a9d829f">G3DRENDERSTATE_INTERLACINGENABLE</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f8c276a6c68a89efffec1501e68c330d59">G3DRENDERSTATE_MMXENABLE</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f8527fe3292a32fddf82701cdd0982d146">G3DRENDERSTATE_INTERPOLATIONSTEP</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f85ea5dc921e83f83a08d3edcdcf97d1e2">G3DRENDERSTATE_MAXPOLYGONSTODRAW</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f89464ccd49110102667ad1f075f363aac">G3DRENDERSTATE_GOURAUDENABLE</a>, 
-<a class="el" href="group__gfx3d.html#gga0747e910ca225613629d9e9d2fdd9f8d2c312a32eb7289954cbe7865356aea9">G3DRENDERSTATE_EDGES</a>
-<br>
- }</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Graphics3D render state options.  <a href="group__gfx3d.html#ga0747e910ca225613629d9e9d2fdd9f8">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Variables</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">static const size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__gfx3d.html#g542a5dba96bc9616b5857070afe19ef0">csRenderBufferComponentSizes</a> [CS_BUFCOMP_TYPECOUNT]</td></tr>
 
@@ -733,6 +683,313 @@ Default material `reflection' parameter.
 Definition at line <a class="el" href="ivideo_2material_8h-source.html#l00040">40</a> of file <a class="el" href="ivideo_2material_8h-source.html">material.h</a>.    </td>
   </tr>
 </table>
+<a class="anchor" name="g59466bfe3d5df98a96bd96c81c90a854"></a><!-- doxytag: member="graph3d.h::CS_FX_ADD" ref="g59466bfe3d5df98a96bd96c81c90a854" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_ADD&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(ONE, ONE) | CS_MIXMODE_ALPHATEST_DISABLE)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Additive blending. Formula: <code>=SRC+DST</code>. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00334">334</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="g89072101df1b847eb56c7662664fc148"></a><!-- doxytag: member="graph3d.h::CS_FX_ALPHA" ref="g89072101df1b847eb56c7662664fc148" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_ALPHA&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(SRCALPHA, SRCALPHA_INV) | CS_MIXMODE_ALPHATEST_DISABLE)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Alpha blending. 
+<p>
+Formula: <code>=(1-srcAlpha)*SRC + srcAlpha*DST</code> <dl compact><dt><b>Remarks:</b></dt><dd>Usually used with a non-zero alpha part. </dd></dl>
+<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__gfx3d.html#gc5ac035511e3c8a35a7dc18b55cbf868">CS_FX_MASK_ALPHA</a>,<p>
+<a class="el" href="group__gfx3d.html#gc5a2e0c327c6b69ccab0183bd0e2a529">CS_FX_SETALPHA</a> </dd></dl>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00341">341</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="g157a5b79fc02bff999d17b291dac354d"></a><!-- doxytag: member="graph3d.h::CS_FX_COPY" ref="g157a5b79fc02bff999d17b291dac354d" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_COPY&nbsp;&nbsp;&nbsp;(CS_MIXMODE_TYPE_AUTO | CS_MIXMODE_ALPHATEST_AUTO)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+This mixmode uses alpha smooth blending, binary blending (ie enabled alpha test) and no blending depending on the contents of csRenderMesh::alphaMode. 
+<p>
+<dl compact><dt><b>Remarks:</b></dt><dd>For a "true" copy mixmode that just writes the source fragment color to the frame buffer, you can use: <div class="fragment"><pre class="fragment">   <a class="code" href="group__gfx3d.html#gab0163a168de01d26be545e9c3dba638">CS_MIXMODE_BLEND</a>(ONE, ZERO) | <a class="code" href="group__gfx3d.html#g2823006b1eec2520e1e39d4d75f2fcb1">CS_MIXMODE_ALPHATEST_DISABLE</a>
+</pre></div> </dd></dl>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00326">326</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.
+<p>
+Referenced by <a class="el" href="rendermesh_8h-source.html#l00048">csRenderMeshModes::csRenderMeshModes()</a>, and <a class="el" href="meshobjtmpl_8h-source.html#l00221">csMeshObject::GetMixMode()</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="g9619d4c92edc9b5873b0f53fe2e02a04"></a><!-- doxytag: member="graph3d.h::CS_FX_DESTALPHAADD" ref="g9619d4c92edc9b5873b0f53fe2e02a04" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_DESTALPHAADD&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(DSTALPHA, ONE) | CS_MIXMODE_ALPHATEST_DISABLE)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Multiply source color with destination alpha and add. 
+<p>
+Formula: <code>=(dstalpha)*SRC + DST</code> 
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00354">354</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="gb067ef5d5d60de998bf43d15978a5d75"></a><!-- doxytag: member="graph3d.h::CS_FX_FLAT" ref="gb067ef5d5d60de998bf43d15978a5d75" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_FLAT&nbsp;&nbsp;&nbsp;(0x04000000)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Flat shading flag. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00380">380</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="gc5ac035511e3c8a35a7dc18b55cbf868"></a><!-- doxytag: member="graph3d.h::CS_FX_MASK_ALPHA" ref="gc5ac035511e3c8a35a7dc18b55cbf868" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_MASK_ALPHA&nbsp;&nbsp;&nbsp;(0x000000FF)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Mixmode alpha part. 
+<p>
+Values range from 0(opaque) to 255 (transparent) (note that this is the reverse of the "common" alpha meaning). When this part is non-null, the renderer will scale the incoming color buffer alpha components by the (inverse of) this value. <dl compact><dt><b>Remarks:</b></dt><dd>The scaling may be relatively expensive, it is recommended to scale the vertex alpha by other means, e.g. through a vertex program. </dd></dl>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00390">390</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="ge7f16e1fb3eff6747db082caec700c9b"></a><!-- doxytag: member="graph3d.h::CS_FX_MASK_MIXMODE" ref="ge7f16e1fb3eff6747db082caec700c9b" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_MASK_MIXMODE&nbsp;&nbsp;&nbsp;(0xf0ff0000)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Bit mask for bits relevant to mix mode comparison; contains type, alpha test flags and blending op factors. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00396">396</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="gdbbfe64fc8250e928827dc5c4f93d503"></a><!-- doxytag: member="graph3d.h::CS_FX_MESH" ref="gdbbfe64fc8250e928827dc5c4f93d503" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_MESH&nbsp;&nbsp;&nbsp;(CS_MIXMODE_TYPE_MESH)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Use the mix mode of the mesh mix mode. 
+<p>
+<dl compact><dt><b>Warning:</b></dt><dd>NOT VALID AS MESH MIXMODE - only for shader pass mixmodes. </dd></dl>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00377">377</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="gb90560b5ab7d9bcf32901e0eb5f041d2"></a><!-- doxytag: member="graph3d.h::CS_FX_MULTIPLY" ref="gb90560b5ab7d9bcf32901e0eb5f041d2" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_MULTIPLY&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(DSTCOLOR, ZERO) | CS_MIXMODE_ALPHATEST_DISABLE)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Multiplicative blending. Formula: <code>=SRC*DST</code>. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00328">328</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="g305a050d961b6f0cab41af02763d255b"></a><!-- doxytag: member="graph3d.h::CS_FX_MULTIPLY2" ref="g305a050d961b6f0cab41af02763d255b" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_MULTIPLY2&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(DSTCOLOR, SRCCOLOR) | CS_MIXMODE_ALPHATEST_DISABLE)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Multiplicative doubling blending. Formula: <code>=2*SRC*DST</code>. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00331">331</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="gb116e9a5671f2b3314dfb84f3156363a"></a><!-- doxytag: member="graph3d.h::CS_FX_PREMULTALPHA" ref="gb116e9a5671f2b3314dfb84f3156363a" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_FX_PREMULTALPHA&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(ONE, SRCALPHA_INV) | CS_MIXMODE_ALPHATEST_DISABLE)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Multiply destination color with inverse source alpha and add source color. 
+<p>
+Formula: <code>=SRC + DST*(1-srcalpha)</code> <dl compact><dt><b>Remarks:</b></dt><dd>When the <code>SRC</code> alpha component was multiplied into the source color, this acts like alpha blending; if it was not, it acts like additive blending. Hence, this mixmode can be used to use both additive and alpha blending on the same triangle even and interpolate between those two "extremes" by appropriate choice of the color and alpha values. </dd></dl>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00371">371</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
 <a class="anchor" name="gc5a2e0c327c6b69ccab0183bd0e2a529"></a><!-- doxytag: member="graph3d.h::CS_FX_SETALPHA" ref="gc5a2e0c327c6b69ccab0183bd0e2a529" args="(alpha)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -762,7 +1019,7 @@ Macro for setting of alpha bits into mixmode (alpha between 0 and 1).
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00407">407</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.
+Definition at line <a class="el" href="graph3d_8h-source.html#l00402">402</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.
 <p>
 Referenced by <a class="el" href="csplugincommon_2particlesys_2particle_8h-source.html#l00267">csNewParticleSystem::SetAlpha()</a>, and <a class="el" href="partgen_8h-source.html#l00237">csParticleSystem::SetAlpha()</a>.    </td>
   </tr>
@@ -796,16 +1053,16 @@ Macro for setting of alpha bits into mixmode (alpha between 0 and 255).
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00410">410</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00405">405</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="g138140e872f433308b457292170d74b8"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_ATTENUATION" ref="g138140e872f433308b457292170d74b8" args="" --><p>
+<a class="anchor" name="g6c38f097325623b97008651fac2d436e"></a><!-- doxytag: member="graph3d.h::CS_FX_SRCALPHAADD" ref="g6c38f097325623b97008651fac2d436e" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">#define CS_LIGHTPARAM_ATTENUATION&nbsp;&nbsp;&nbsp;3          </td>
+          <td class="md" nowrap valign="top">#define CS_FX_SRCALPHAADD&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(SRCALPHA, ONE) | CS_MIXMODE_ALPHATEST_DISABLE)          </td>
         </tr>
       </table>
     </td>
@@ -819,20 +1076,20 @@ Definition at line <a class="el" href="graph3d_8h-source.html#l00410">410</a> of
     <td>
 
 <p>
-Attenuation of the light. 
+Multiply source color with source alpha and add. 
 <p>
-
+Formula: <code>=(srcalpha)*SRC + DST</code> 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00449">449</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00360">360</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="gd9807886217437cecd85a0f0ddee7085"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_DIFFUSE" ref="gd9807886217437cecd85a0f0ddee7085" args="" --><p>
+<a class="anchor" name="gbdfcef391e5a2c8ee4974995ca4c6454"></a><!-- doxytag: member="graph3d.h::CS_FX_TRANSPARENT" ref="gbdfcef391e5a2c8ee4974995ca4c6454" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">#define CS_LIGHTPARAM_DIFFUSE&nbsp;&nbsp;&nbsp;1          </td>
+          <td class="md" nowrap valign="top">#define CS_FX_TRANSPARENT&nbsp;&nbsp;&nbsp;(CS_MIXMODE_BLEND(ZERO, ONE) | CS_MIXMODE_ALPHATEST_DISABLE)          </td>
         </tr>
       </table>
     </td>
@@ -846,65 +1103,12 @@ Definition at line <a class="el" href="graph3d_8h-source.html#l00449">449</a> of
     <td>
 
 <p>
-Diffuse color of the light. 
+Transparent blending (keep framebuffer unmodified). 
 <p>
+Formula: <code>=DST</code> <dl compact><dt><b>Remarks:</b></dt><dd>The Z buffer will still be modified! </dd></dl>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00445">445</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="g96604da2b5005980794869fd1d4a0fac"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_POSITION" ref="g96604da2b5005980794869fd1d4a0fac" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_LIGHTPARAM_POSITION&nbsp;&nbsp;&nbsp;0          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Position of the light. 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00443">443</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="g16c8cff479c9442ea9e0c7b9a9470bb2"></a><!-- doxytag: member="graph3d.h::CS_LIGHTPARAM_SPECULAR" ref="g16c8cff479c9442ea9e0c7b9a9470bb2" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_LIGHTPARAM_SPECULAR&nbsp;&nbsp;&nbsp;2          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Specular color of the light. 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00447">447</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00348">348</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="gdeda0074d73bd0bcef9aed23ace12314"></a><!-- doxytag: member="material.h::CS_MATERIAL_TEXTURE_DIFFUSE" ref="gdeda0074d73bd0bcef9aed23ace12314" args="" --><p>
@@ -1042,6 +1246,114 @@ Name string for the material "reflection" shader var.
 Definition at line <a class="el" href="ivideo_2material_8h-source.html#l00047">47</a> of file <a class="el" href="ivideo_2material_8h-source.html">material.h</a>.    </td>
   </tr>
 </table>
+<a class="anchor" name="g5618a7d398f0500b4ccd81a1d88245d6"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_ALPHATEST_AUTO" ref="g5618a7d398f0500b4ccd81a1d88245d6" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_ALPHATEST_AUTO&nbsp;&nbsp;&nbsp;(0x00000000)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Automatic alpha test. 
+<p>
+Whether the texture is alpha-blended binarily is taken from csRenderMesh::alphaMode and whether the alpha part of the mixmode is non-zero. 
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00282">282</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="g2823006b1eec2520e1e39d4d75f2fcb1"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_ALPHATEST_DISABLE" ref="g2823006b1eec2520e1e39d4d75f2fcb1" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_ALPHATEST_DISABLE&nbsp;&nbsp;&nbsp;(0x20000000)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Unconditionally disable alpha test. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00286">286</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="g633cd7c79aa65d6714d3d62129f895ab"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_ALPHATEST_ENABLE" ref="g633cd7c79aa65d6714d3d62129f895ab" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_ALPHATEST_ENABLE&nbsp;&nbsp;&nbsp;(0x10000000)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Unconditionally enable alpha test. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00284">284</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="gcbc0e919d2b2eb10da60e2e40631602d"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_ALPHATEST_MASK" ref="gcbc0e919d2b2eb10da60e2e40631602d" args="" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_ALPHATEST_MASK&nbsp;&nbsp;&nbsp;(0x30000000)          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Bit mask to extract the alpha test flag from a mixmode specifier. 
+<p>
+
+<p>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00289">289</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+  </tr>
+</table>
 <a class="anchor" name="gab0163a168de01d26be545e9c3dba638"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_BLEND" ref="gab0163a168de01d26be545e9c3dba638" args="(Src, Dst)" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -1070,14 +1382,14 @@ Definition at line <a class="el" href="ivideo_2material_8h-source.html#l00047">4
     <td>
 
 <p>
-<b>Value:</b><div class="fragment"><pre class="fragment">(<a class="code" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55b4074661486241ee614ca15b8392081ec">CS_MIXMODE_TYPE_BLENDOP</a>                                                \
+<b>Value:</b><div class="fragment"><pre class="fragment">(<a class="code" href="group__gfx3d.html#g318fafd4e8247e9b533e0e1c8104fa61">CS_MIXMODE_TYPE_BLENDOP</a>                                                \
   | (CS_MIXMODE_FACT_ ## Src &lt;&lt; 20) | (CS_MIXMODE_FACT_ ## Dst &lt;&lt; 16))
-</pre></div>Helper macro to construct a blending operation mixmode. 
+</pre></div>Helper macro to construct a blending operation mixmode <em>Src</em> and <em>Dst</em> are <a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55bf5ce179a35fe83eb4d7bc9412fe53c42">blending op factors </a>, however sans the CS_MIXMODE_FACT_ prefix. 
 <p>
-<em>Src</em> and <em>Dst</em> are <a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b7f5ce179a35fe83eb4d7bc9412fe53c42">blending op factors </a>, however sans the CS_MIXMODE_FACT_ prefix. E.g.: <div class="fragment"><pre class="fragment"> <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> mixmode = <a class="code" href="group__gfx3d.html#gab0163a168de01d26be545e9c3dba638">CS_MIXMODE_BLEND</a>(SRCALPHA, SRCALPHA_INV);
+E.g.: <div class="fragment"><pre class="fragment"> <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> mixmode = <a class="code" href="group__gfx3d.html#gab0163a168de01d26be545e9c3dba638">CS_MIXMODE_BLEND</a>(SRCALPHA, SRCALPHA_INV);
 </pre></div> will generate a blending operation for alpha blending. 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00309">309</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00304">304</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="g44d0c355da9e25c99c000890e6d2c569"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_BLENDOP_DST" ref="g44d0c355da9e25c99c000890e6d2c569" args="(mode)" --><p>
@@ -1109,7 +1421,7 @@ Helper macro to extract the <code>dstFactor</code> from a blending op mixmode.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00315">315</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00310">310</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="gfafe978b680e6b4cf43945f7646366de"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_BLENDOP_SRC" ref="gfafe978b680e6b4cf43945f7646366de" args="(mode)" --><p>
@@ -1141,16 +1453,16 @@ Helper macro to extract the <code>srcFactor</code> from a blending op mixmode.
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00313">313</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00308">308</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="ge251a7a0cd425e703b858b53024edcfb"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_BEGIN" ref="ge251a7a0cd425e703b858b53024edcfb" args="" --><p>
+<a class="anchor" name="gcca3666c7b178a88ae163dd8b1729928"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_TYPE_AUTO" ref="gcca3666c7b178a88ae163dd8b1729928" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">#define CS_SHADOW_VOLUME_BEGIN&nbsp;&nbsp;&nbsp;1          </td>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_TYPE_AUTO&nbsp;&nbsp;&nbsp;(0x00000000)          </td>
         </tr>
       </table>
     </td>
@@ -1164,20 +1476,20 @@ Definition at line <a class="el" href="graph3d_8h-source.html#l00313">313</a> of
     <td>
 
 <p>
-Clear stencil. 
+Automatic blending mode. 
 <p>
-
+Whether the texture is alpha-blended or not is taken from csRenderMesh::alphaMode and whether the alpha part of the mixmode is non-zero. 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00455">455</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00221">221</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="gf82832b14ae98bee3f5f2032fd3679e5"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_FAIL1" ref="gf82832b14ae98bee3f5f2032fd3679e5" args="" --><p>
+<a class="anchor" name="g318fafd4e8247e9b533e0e1c8104fa61"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_TYPE_BLENDOP" ref="g318fafd4e8247e9b533e0e1c8104fa61" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">#define CS_SHADOW_VOLUME_FAIL1&nbsp;&nbsp;&nbsp;4          </td>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_TYPE_BLENDOP&nbsp;&nbsp;&nbsp;(0x40000000)          </td>
         </tr>
       </table>
     </td>
@@ -1191,20 +1503,20 @@ Definition at line <a class="el" href="graph3d_8h-source.html#l00455">455</a> of
     <td>
 
 <p>
-Setup for carmack's reverse pass 1. 
+Blend with a blending operation. 
 <p>
-
+The fragment value written to the framebuffer is computed from the formula <code>SRC</code> * <code>srcFactor</code> + <code>DST</code> * <code>dstFactor</code>. <code>srcFactor</code> and <code>dstFactor</code> are one of <a class="el" href="group__gfx3d.html#gg06fc87d81c62e9abb8790b6e5713c55bf5ce179a35fe83eb4d7bc9412fe53c42">CS_MIXMODE_FACT_xxx </a>, encoded into the mixmode specifier with <a class="el" href="group__gfx3d.html#gab0163a168de01d26be545e9c3dba638">CS_MIXMODE_BLEND</a>. 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00461">461</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00230">230</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="g73714961951e848a16e563caba96c98d"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_FAIL2" ref="g73714961951e848a16e563caba96c98d" args="" --><p>
+<a class="anchor" name="g3031097131f3c1669c9cacb590b93ce9"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_TYPE_MASK" ref="g3031097131f3c1669c9cacb590b93ce9" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">#define CS_SHADOW_VOLUME_FAIL2&nbsp;&nbsp;&nbsp;5          </td>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_TYPE_MASK&nbsp;&nbsp;&nbsp;(0xc0000000)          </td>
         </tr>
       </table>
     </td>
@@ -1218,20 +1530,20 @@ Definition at line <a class="el" href="graph3d_8h-source.html#l00461">461</a> of
     <td>
 
 <p>
-Setup for carmack's reverse pass 2. 
+Bit mask to extract the type from a mixmode specifier. 
 <p>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00463">463</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00238">238</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="gebc9e0f66eccded04d00b16624ee8b60"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_FINISH" ref="gebc9e0f66eccded04d00b16624ee8b60" args="" --><p>
+<a class="anchor" name="g48ff680bfd4f154edd1610fd5f1dd3d3"></a><!-- doxytag: member="graph3d.h::CS_MIXMODE_TYPE_MESH" ref="g48ff680bfd4f154edd1610fd5f1dd3d3" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">#define CS_SHADOW_VOLUME_FINISH&nbsp;&nbsp;&nbsp;7          </td>
+          <td class="md" nowrap valign="top">#define CS_MIXMODE_TYPE_MESH&nbsp;&nbsp;&nbsp;(0x80000000)          </td>
         </tr>
       </table>
     </td>
@@ -1245,92 +1557,12 @@ Definition at line <a class="el" href="graph3d_8h-source.html#l00463">463</a> of
     <td>
 
 <p>
-Restore states. 
+Use the mix mode of the mesh mix mode. 
 <p>
+<dl compact><dt><b>Warning:</b></dt><dd>NOT VALID AS MESH MIXMODE - only for shader pass mixmodes. </dd></dl>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00467">467</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="gd5f21d76142da946f71ee6f5c60f34be"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_PASS1" ref="gd5f21d76142da946f71ee6f5c60f34be" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_SHADOW_VOLUME_PASS1&nbsp;&nbsp;&nbsp;2          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Setup for pass 1. 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00457">457</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="g817aabd70731cb5f9332dfd6e96270bf"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_PASS2" ref="g817aabd70731cb5f9332dfd6e96270bf" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_SHADOW_VOLUME_PASS2&nbsp;&nbsp;&nbsp;3          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Setup for pass 2. 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00459">459</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="gc58e45ce876228e66ec5d82917704a07"></a><!-- doxytag: member="graph3d.h::CS_SHADOW_VOLUME_USE" ref="gc58e45ce876228e66ec5d82917704a07" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">#define CS_SHADOW_VOLUME_USE&nbsp;&nbsp;&nbsp;6          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Setup for shadow masking. 
-<p>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00465">465</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00235">235</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="g21a2c2a6e098d70e99ab94ec953c180f"></a><!-- doxytag: member="txtmgr.h::CS_TEXTURE_2D" ref="g21a2c2a6e098d70e99ab94ec953c180f" args="" --><p>
@@ -1711,208 +1943,39 @@ Definition at line <a class="el" href="graph3d_8h-source.html#l00069">69</a> of 
     <td>
 
 <p>
-Mix mode types. 
+Mix mode: Blending op factors. 
 <p>
 <dl compact><dt><b>Enumerator: </b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b392874fc34cdde7a6bf58df1c7fdee8d"></a><!-- doxytag: member="CS_MIXMODE_TYPE_AUTO" ref="gg06fc87d81c62e9abb8790b6e5713c55b392874fc34cdde7a6bf58df1c7fdee8d" args="" -->CS_MIXMODE_TYPE_AUTO</em>&nbsp;</td><td>
-Automatic blending mode. 
-<p>
-Whether the texture is alpha-blended or not is taken from csRenderMesh::alphaMode and whether the alpha part of the mixmode is non-zero. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b4074661486241ee614ca15b8392081ec"></a><!-- doxytag: member="CS_MIXMODE_TYPE_BLENDOP" ref="gg06fc87d81c62e9abb8790b6e5713c55b4074661486241ee614ca15b8392081ec" args="" -->CS_MIXMODE_TYPE_BLENDOP</em>&nbsp;</td><td>
-Blend with a blending operation. 
-<p>
-The fragment value written to the framebuffer is computed from the formula <code>SRC</code> * <code>srcFactor</code> + <code>DST</code> * <code>dstFactor</code>. <code>srcFactor</code> and <code>dstFactor</code> are one of <a class="el" href="group__gfx3d.html#ggdf764cbdea00d65edcd07bb9953ad2b7f5ce179a35fe83eb4d7bc9412fe53c42">CS_MIXMODE_FACT_xxx </a>, encoded into the mixmode specifier with <a class="el" href="group__gfx3d.html#gab0163a168de01d26be545e9c3dba638">CS_MIXMODE_BLEND</a>. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55bb3c8ae8f958ea76361c36102dc81e6f5"></a><!-- doxytag: member="CS_MIXMODE_TYPE_MESH" ref="gg06fc87d81c62e9abb8790b6e5713c55bb3c8ae8f958ea76361c36102dc81e6f5" args="" -->CS_MIXMODE_TYPE_MESH</em>&nbsp;</td><td>
-Use the mix mode of the mesh mix mode. 
-<p>
-<dl compact><dt><b>Warning:</b></dt><dd>NOT VALID AS MESH MIXMODE - only for shader pass mixmodes. </dd></dl>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b857657b3f1cf68b97b0db997adddcae4"></a><!-- doxytag: member="CS_MIXMODE_TYPE_MASK" ref="gg06fc87d81c62e9abb8790b6e5713c55b857657b3f1cf68b97b0db997adddcae4" args="" -->CS_MIXMODE_TYPE_MASK</em>&nbsp;</td><td>
-Bit mask to extract the type from a mixmode specifier. </td></tr>
-</table>
-</dl>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00218">218</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="gdf764cbdea00d65edcd07bb9953ad2b7"></a><!-- doxytag: member="graph3d.h::@1" ref="gdf764cbdea00d65edcd07bb9953ad2b7" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">anonymous enum          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Blending op mix mode factors. 
-<p>
-<dl compact><dt><b>Enumerator: </b></dt><dd>
-<table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b7f5ce179a35fe83eb4d7bc9412fe53c42"></a><!-- doxytag: member="CS_MIXMODE_FACT_ZERO" ref="ggdf764cbdea00d65edcd07bb9953ad2b7f5ce179a35fe83eb4d7bc9412fe53c42" args="" -->CS_MIXMODE_FACT_ZERO</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55bf5ce179a35fe83eb4d7bc9412fe53c42"></a><!-- doxytag: member="CS_MIXMODE_FACT_ZERO" ref="gg06fc87d81c62e9abb8790b6e5713c55bf5ce179a35fe83eb4d7bc9412fe53c42" args="" -->CS_MIXMODE_FACT_ZERO</em>&nbsp;</td><td>
 0 </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b762585826f145edac424308dd93100b15"></a><!-- doxytag: member="CS_MIXMODE_FACT_ONE" ref="ggdf764cbdea00d65edcd07bb9953ad2b762585826f145edac424308dd93100b15" args="" -->CS_MIXMODE_FACT_ONE</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b62585826f145edac424308dd93100b15"></a><!-- doxytag: member="CS_MIXMODE_FACT_ONE" ref="gg06fc87d81c62e9abb8790b6e5713c55b62585826f145edac424308dd93100b15" args="" -->CS_MIXMODE_FACT_ONE</em>&nbsp;</td><td>
 -(e^(i*Pi)) </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b75f2225042583871689d329f3d551c5b5"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCCOLOR" ref="ggdf764cbdea00d65edcd07bb9953ad2b75f2225042583871689d329f3d551c5b5" args="" -->CS_MIXMODE_FACT_SRCCOLOR</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b5f2225042583871689d329f3d551c5b5"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCCOLOR" ref="gg06fc87d81c62e9abb8790b6e5713c55b5f2225042583871689d329f3d551c5b5" args="" -->CS_MIXMODE_FACT_SRCCOLOR</em>&nbsp;</td><td>
 Source fragment (R,G,B,A) components. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b739df002786ee50e5a002606e76298b01"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCCOLOR_INV" ref="ggdf764cbdea00d65edcd07bb9953ad2b739df002786ee50e5a002606e76298b01" args="" -->CS_MIXMODE_FACT_SRCCOLOR_INV</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b39df002786ee50e5a002606e76298b01"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCCOLOR_INV" ref="gg06fc87d81c62e9abb8790b6e5713c55b39df002786ee50e5a002606e76298b01" args="" -->CS_MIXMODE_FACT_SRCCOLOR_INV</em>&nbsp;</td><td>
 Source fragment (1-R,1-G,1-B,-1A) components. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b76d03e7095dabb0cefe33d15164c1d3d4"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTCOLOR" ref="ggdf764cbdea00d65edcd07bb9953ad2b76d03e7095dabb0cefe33d15164c1d3d4" args="" -->CS_MIXMODE_FACT_DSTCOLOR</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b6d03e7095dabb0cefe33d15164c1d3d4"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTCOLOR" ref="gg06fc87d81c62e9abb8790b6e5713c55b6d03e7095dabb0cefe33d15164c1d3d4" args="" -->CS_MIXMODE_FACT_DSTCOLOR</em>&nbsp;</td><td>
 Destination fragment (R,G,B,A) components. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b72cbcb29d021d8dedb4ae80c2ec469e4f"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTCOLOR_INV" ref="ggdf764cbdea00d65edcd07bb9953ad2b72cbcb29d021d8dedb4ae80c2ec469e4f" args="" -->CS_MIXMODE_FACT_DSTCOLOR_INV</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b2cbcb29d021d8dedb4ae80c2ec469e4f"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTCOLOR_INV" ref="gg06fc87d81c62e9abb8790b6e5713c55b2cbcb29d021d8dedb4ae80c2ec469e4f" args="" -->CS_MIXMODE_FACT_DSTCOLOR_INV</em>&nbsp;</td><td>
 Destination fragment (1-R,1-G,1-B,-1A) components. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b7ba5a437af635a0f59c2df4a711b077e0"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCALPHA" ref="ggdf764cbdea00d65edcd07bb9953ad2b7ba5a437af635a0f59c2df4a711b077e0" args="" -->CS_MIXMODE_FACT_SRCALPHA</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55bba5a437af635a0f59c2df4a711b077e0"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCALPHA" ref="gg06fc87d81c62e9abb8790b6e5713c55bba5a437af635a0f59c2df4a711b077e0" args="" -->CS_MIXMODE_FACT_SRCALPHA</em>&nbsp;</td><td>
 Source fragment alpha. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b7402ca8198cd18db1db1c89d580340562"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCALPHA_INV" ref="ggdf764cbdea00d65edcd07bb9953ad2b7402ca8198cd18db1db1c89d580340562" args="" -->CS_MIXMODE_FACT_SRCALPHA_INV</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b402ca8198cd18db1db1c89d580340562"></a><!-- doxytag: member="CS_MIXMODE_FACT_SRCALPHA_INV" ref="gg06fc87d81c62e9abb8790b6e5713c55b402ca8198cd18db1db1c89d580340562" args="" -->CS_MIXMODE_FACT_SRCALPHA_INV</em>&nbsp;</td><td>
 Source fragment 1-alpha. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b7c77a53103daa13c42b245c309061bb8c"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTALPHA" ref="ggdf764cbdea00d65edcd07bb9953ad2b7c77a53103daa13c42b245c309061bb8c" args="" -->CS_MIXMODE_FACT_DSTALPHA</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55bc77a53103daa13c42b245c309061bb8c"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTALPHA" ref="gg06fc87d81c62e9abb8790b6e5713c55bc77a53103daa13c42b245c309061bb8c" args="" -->CS_MIXMODE_FACT_DSTALPHA</em>&nbsp;</td><td>
 Destination fragment alpha. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b7c0dce88efddadc4c010208518a4637fe"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTALPHA_INV" ref="ggdf764cbdea00d65edcd07bb9953ad2b7c0dce88efddadc4c010208518a4637fe" args="" -->CS_MIXMODE_FACT_DSTALPHA_INV</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55bc0dce88efddadc4c010208518a4637fe"></a><!-- doxytag: member="CS_MIXMODE_FACT_DSTALPHA_INV" ref="gg06fc87d81c62e9abb8790b6e5713c55bc0dce88efddadc4c010208518a4637fe" args="" -->CS_MIXMODE_FACT_DSTALPHA_INV</em>&nbsp;</td><td>
 Destination fragment 1-alpha. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b747f785c2424ca7659c468f85674e18f0"></a><!-- doxytag: member="CS_MIXMODE_FACT_COUNT" ref="ggdf764cbdea00d65edcd07bb9953ad2b747f785c2424ca7659c468f85674e18f0" args="" -->CS_MIXMODE_FACT_COUNT</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b47f785c2424ca7659c468f85674e18f0"></a><!-- doxytag: member="CS_MIXMODE_FACT_COUNT" ref="gg06fc87d81c62e9abb8790b6e5713c55b47f785c2424ca7659c468f85674e18f0" args="" -->CS_MIXMODE_FACT_COUNT</em>&nbsp;</td><td>
 Number of available mixmodes. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf764cbdea00d65edcd07bb9953ad2b7982f2fa247ecce5a55dfa01fd64dc956"></a><!-- doxytag: member="CS_MIXMODE_FACT_MASK" ref="ggdf764cbdea00d65edcd07bb9953ad2b7982f2fa247ecce5a55dfa01fd64dc956" args="" -->CS_MIXMODE_FACT_MASK</em>&nbsp;</td><td>
+<tr><td valign="top"><em><a class="anchor" name="gg06fc87d81c62e9abb8790b6e5713c55b982f2fa247ecce5a55dfa01fd64dc956"></a><!-- doxytag: member="CS_MIXMODE_FACT_MASK" ref="gg06fc87d81c62e9abb8790b6e5713c55b982f2fa247ecce5a55dfa01fd64dc956" args="" -->CS_MIXMODE_FACT_MASK</em>&nbsp;</td><td>
 Mask to extract factors. </td></tr>
 </table>
 </dl>
 
 <p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00246">246</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="g99fb83031ce9923c84392b4e92f956b5"></a><!-- doxytag: member="graph3d.h::@2" ref="g99fb83031ce9923c84392b4e92f956b5" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">anonymous enum          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Alpha test flags. 
-<p>
-Enabled alpha test (or <em>binary alpha</em>) means that a fragment is only drawn when its alpha component is above a certain threshold, and discarded otherwise. <dl compact><dt><b>Enumerator: </b></dt><dd>
-<table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="gg99fb83031ce9923c84392b4e92f956b554729a83f0565432dc37015121eb236a"></a><!-- doxytag: member="CS_MIXMODE_ALPHATEST_AUTO" ref="gg99fb83031ce9923c84392b4e92f956b554729a83f0565432dc37015121eb236a" args="" -->CS_MIXMODE_ALPHATEST_AUTO</em>&nbsp;</td><td>
-Automatic alpha test. 
-<p>
-Whether the texture is alpha-blended binarily is taken from csRenderMesh::alphaMode and whether the alpha part of the mixmode is non-zero. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gg99fb83031ce9923c84392b4e92f956b500e619d9b5f7cb9080505915f594e3b8"></a><!-- doxytag: member="CS_MIXMODE_ALPHATEST_ENABLE" ref="gg99fb83031ce9923c84392b4e92f956b500e619d9b5f7cb9080505915f594e3b8" args="" -->CS_MIXMODE_ALPHATEST_ENABLE</em>&nbsp;</td><td>
-Unconditionally enable alpha test. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gg99fb83031ce9923c84392b4e92f956b50cf0c556f93db82d4ca43166e12583e9"></a><!-- doxytag: member="CS_MIXMODE_ALPHATEST_DISABLE" ref="gg99fb83031ce9923c84392b4e92f956b50cf0c556f93db82d4ca43166e12583e9" args="" -->CS_MIXMODE_ALPHATEST_DISABLE</em>&nbsp;</td><td>
-Unconditionally disable alpha test. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gg99fb83031ce9923c84392b4e92f956b5bb05ba862f5d5400d16eb0858f13f625"></a><!-- doxytag: member="CS_MIXMODE_ALPHATEST_MASK" ref="gg99fb83031ce9923c84392b4e92f956b5bb05ba862f5d5400d16eb0858f13f625" args="" -->CS_MIXMODE_ALPHATEST_MASK</em>&nbsp;</td><td>
-Bit mask to extract the alpha test flag from a mixmode specifier. </td></tr>
-</table>
-</dl>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00282">282</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="gbc6126af1d45847bc59afa0aa3216b04"></a><!-- doxytag: member="graph3d.h::@3" ref="gbc6126af1d45847bc59afa0aa3216b04" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">anonymous enum          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Default mixmodes. 
-<p>
-A set of commonly used mix modes. <dl compact><dt><b>Enumerator: </b></dt><dd>
-<table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b0436871b2b89eb4b5f17f07af7e2a2af26"></a><!-- doxytag: member="CS_FX_COPY" ref="ggbc6126af1d45847bc59afa0aa3216b0436871b2b89eb4b5f17f07af7e2a2af26" args="" -->CS_FX_COPY</em>&nbsp;</td><td>
-This mixmode uses alpha smooth blending, binary blending (ie enabled alpha test) and no blending depending on the contents of csRenderMesh::alphaMode. 
-<p>
-<dl compact><dt><b>Remarks:</b></dt><dd>For a "true" copy mixmode that just writes the source fragment color to the frame buffer, you can use: <div class="fragment"><pre class="fragment">   <a class="code" href="group__gfx3d.html#gab0163a168de01d26be545e9c3dba638">CS_MIXMODE_BLEND</a>(ONE, ZERO) | <a class="code" href="group__gfx3d.html#gg99fb83031ce9923c84392b4e92f956b50cf0c556f93db82d4ca43166e12583e9">CS_MIXMODE_ALPHATEST_DISABLE</a>
-</pre></div> </dd></dl>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b04ded88bda4d0bfcffa68a9d97848abfd5"></a><!-- doxytag: member="CS_FX_MULTIPLY" ref="ggbc6126af1d45847bc59afa0aa3216b04ded88bda4d0bfcffa68a9d97848abfd5" args="" -->CS_FX_MULTIPLY</em>&nbsp;</td><td>
-Multiplicative blending. Formula: <code>=SRC*DST</code>. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b0421e3ff3fd49e651981b0baba3c2c40d9"></a><!-- doxytag: member="CS_FX_MULTIPLY2" ref="ggbc6126af1d45847bc59afa0aa3216b0421e3ff3fd49e651981b0baba3c2c40d9" args="" -->CS_FX_MULTIPLY2</em>&nbsp;</td><td>
-Multiplicative doubling blending. Formula: <code>=2*SRC*DST</code>. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b04861f43993e1c56931568544a6fdab70c"></a><!-- doxytag: member="CS_FX_ADD" ref="ggbc6126af1d45847bc59afa0aa3216b04861f43993e1c56931568544a6fdab70c" args="" -->CS_FX_ADD</em>&nbsp;</td><td>
-Additive blending. Formula: <code>=SRC+DST</code>. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b04bd8b26897dfbb89429590ab66dc72c3b"></a><!-- doxytag: member="CS_FX_ALPHA" ref="ggbc6126af1d45847bc59afa0aa3216b04bd8b26897dfbb89429590ab66dc72c3b" args="" -->CS_FX_ALPHA</em>&nbsp;</td><td>
-Alpha blending. 
-<p>
-Formula: <code>=(1-srcAlpha)*SRC + srcAlpha*DST</code> <dl compact><dt><b>Remarks:</b></dt><dd>Usually used with a non-zero alpha part. </dd></dl>
-<dl compact><dt><b>See also:</b></dt><dd><a class="el" href="group__gfx3d.html#ggbc6126af1d45847bc59afa0aa3216b04845fcf6b08cc2d867f0ce82e6ad93687">CS_FX_MASK_ALPHA</a>,<p>
-<a class="el" href="group__gfx3d.html#gc5a2e0c327c6b69ccab0183bd0e2a529">CS_FX_SETALPHA</a> </dd></dl>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b0420bb2b30cc3a2c515cb6f53d4886d1b3"></a><!-- doxytag: member="CS_FX_TRANSPARENT" ref="ggbc6126af1d45847bc59afa0aa3216b0420bb2b30cc3a2c515cb6f53d4886d1b3" args="" -->CS_FX_TRANSPARENT</em>&nbsp;</td><td>
-Transparent blending (keep framebuffer unmodified). 
-<p>
-Formula: <code>=DST</code> <dl compact><dt><b>Remarks:</b></dt><dd>The Z buffer will still be modified! </dd></dl>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b04b4d8492e0333c61e3e298d0aa107f8b4"></a><!-- doxytag: member="CS_FX_DESTALPHAADD" ref="ggbc6126af1d45847bc59afa0aa3216b04b4d8492e0333c61e3e298d0aa107f8b4" args="" -->CS_FX_DESTALPHAADD</em>&nbsp;</td><td>
-Multiply source color with destination alpha and add. 
-<p>
-Formula: <code>=(dstalpha)*SRC + DST</code> </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b04e32332c2cd5a54f94b8e099d1c0b6de1"></a><!-- doxytag: member="CS_FX_SRCALPHAADD" ref="ggbc6126af1d45847bc59afa0aa3216b04e32332c2cd5a54f94b8e099d1c0b6de1" args="" -->CS_FX_SRCALPHAADD</em>&nbsp;</td><td>
-Multiply source color with source alpha and add. 
-<p>
-Formula: <code>=(srcalpha)*SRC + DST</code> </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b047bb6ca922b796b81fe7d5cbe8b97ab11"></a><!-- doxytag: member="CS_FX_PREMULTALPHA" ref="ggbc6126af1d45847bc59afa0aa3216b047bb6ca922b796b81fe7d5cbe8b97ab11" args="" -->CS_FX_PREMULTALPHA</em>&nbsp;</td><td>
-Multiply destination color with inverse source alpha and add source color. 
-<p>
-Formula: <code>=SRC + DST*(1-srcalpha)</code> <dl compact><dt><b>Remarks:</b></dt><dd>When the <code>SRC</code> alpha component was multiplied into the source color, this acts like alpha blending; if it was not, it acts like additive blending. Hence, this mixmode can be used to use both additive and alpha blending on the same triangle even and interpolate between those two "extremes" by appropriate choice of the color and alpha values. </dd></dl>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b045cfbd7a0f42b22a2143c60dcc985bf2c"></a><!-- doxytag: member="CS_FX_MESH" ref="ggbc6126af1d45847bc59afa0aa3216b045cfbd7a0f42b22a2143c60dcc985bf2c" args="" -->CS_FX_MESH</em>&nbsp;</td><td>
-Use the mix mode of the mesh mix mode. 
-<p>
-<dl compact><dt><b>Warning:</b></dt><dd>NOT VALID AS MESH MIXMODE - only for shader pass mixmodes. </dd></dl>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b0447e11099b8610c569449e259cc029ff4"></a><!-- doxytag: member="CS_FX_FLAT" ref="ggbc6126af1d45847bc59afa0aa3216b0447e11099b8610c569449e259cc029ff4" args="" -->CS_FX_FLAT</em>&nbsp;</td><td>
-Flat shading flag. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b04845fcf6b08cc2d867f0ce82e6ad93687"></a><!-- doxytag: member="CS_FX_MASK_ALPHA" ref="ggbc6126af1d45847bc59afa0aa3216b04845fcf6b08cc2d867f0ce82e6ad93687" args="" -->CS_FX_MASK_ALPHA</em>&nbsp;</td><td>
-Mixmode alpha part. 
-<p>
-Values range from 0(opaque) to 255 (transparent) (note that this is the reverse of the "common" alpha meaning). When this part is non-null, the renderer will scale the incoming color buffer alpha components by the (inverse of) this value. <dl compact><dt><b>Remarks:</b></dt><dd>The scaling may be relatively expensive, it is recommended to scale the vertex alpha by other means, e.g. through a vertex program. </dd></dl>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggbc6126af1d45847bc59afa0aa3216b0440e7d473245e2f2c70a8edeffa47be37"></a><!-- doxytag: member="CS_FX_MASK_MIXMODE" ref="ggbc6126af1d45847bc59afa0aa3216b0440e7d473245e2f2c70a8edeffa47be37" args="" -->CS_FX_MASK_MIXMODE</em>&nbsp;</td><td>
-Bit mask for bits relevant to mix mode comparison; contains type, alpha test flags and blending op factors. </td></tr>
-</table>
-</dl>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00321">321</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
+Definition at line <a class="el" href="graph3d_8h-source.html#l00242">242</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="g2e793d8189bb8566ed81c168875f452b"></a><!-- doxytag: member="rndbuf.h::csRenderBufferComponentType" ref="g2e793d8189bb8566ed81c168875f452b" args="" --><p>
@@ -2147,96 +2210,6 @@ Data that changes every time it is drawn. </td></tr>
 Definition at line <a class="el" href="rndbuf_8h-source.html#l00048">48</a> of file <a class="el" href="rndbuf_8h-source.html">rndbuf.h</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="gdf2df8d75f18c8ea2351b8e2c8180420"></a><!-- doxytag: member="graph3d.h::csRenderMeshType" ref="gdf2df8d75f18c8ea2351b8e2c8180420" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">enum <a class="el" href="group__gfx3d.html#gdf2df8d75f18c8ea2351b8e2c8180420">csRenderMeshType</a>          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Primitive type of a mesh. 
-<p>
-<dl compact><dt><b>Enumerator: </b></dt><dd>
-<table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="ggdf2df8d75f18c8ea2351b8e2c818042094b4df90ff18151ccf452f3d4d4f611e"></a><!-- doxytag: member="CS_MESHTYPE_TRIANGLES" ref="ggdf2df8d75f18c8ea2351b8e2c818042094b4df90ff18151ccf452f3d4d4f611e" args="" -->CS_MESHTYPE_TRIANGLES</em>&nbsp;</td><td>
-Triangles. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf2df8d75f18c8ea2351b8e2c81804207af9a68303966071a8d7ef158cbd1cfc"></a><!-- doxytag: member="CS_MESHTYPE_QUADS" ref="ggdf2df8d75f18c8ea2351b8e2c81804207af9a68303966071a8d7ef158cbd1cfc" args="" -->CS_MESHTYPE_QUADS</em>&nbsp;</td><td>
-Quads. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf2df8d75f18c8ea2351b8e2c81804204fad3831709890a09dc724e90443bfa6"></a><!-- doxytag: member="CS_MESHTYPE_TRIANGLESTRIP" ref="ggdf2df8d75f18c8ea2351b8e2c81804204fad3831709890a09dc724e90443bfa6" args="" -->CS_MESHTYPE_TRIANGLESTRIP</em>&nbsp;</td><td>
-Triangle strip. 
-<p>
-The OpenGL spec describes it pretty well: "A triangle strip is a series of triangles connected along shared edges. A triangle strip is specified by giving a series of defining vertices [...]. In this case, the first three vertices define the first triangle [...]. Each subsequent vertex defines a new triangle using that point along with two vertices from the previous triangle." </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf2df8d75f18c8ea2351b8e2c81804202f963fcdc2a8c89c3c95c551b0377a92"></a><!-- doxytag: member="CS_MESHTYPE_TRIANGLEFAN" ref="ggdf2df8d75f18c8ea2351b8e2c81804202f963fcdc2a8c89c3c95c551b0377a92" args="" -->CS_MESHTYPE_TRIANGLEFAN</em>&nbsp;</td><td>
-Triangle fan. 
-<p>
-Similar to a triangle strip, however, a triangle is always defined with the first, previously added and the recently added vertex. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf2df8d75f18c8ea2351b8e2c8180420ace39785186b57317280cd79a346aef3"></a><!-- doxytag: member="CS_MESHTYPE_POINTS" ref="ggdf2df8d75f18c8ea2351b8e2c8180420ace39785186b57317280cd79a346aef3" args="" -->CS_MESHTYPE_POINTS</em>&nbsp;</td><td>
-Points. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf2df8d75f18c8ea2351b8e2c818042084a28f3e39ea9d89d488f1309e8fe5cd"></a><!-- doxytag: member="CS_MESHTYPE_POINT_SPRITES" ref="ggdf2df8d75f18c8ea2351b8e2c818042084a28f3e39ea9d89d488f1309e8fe5cd" args="" -->CS_MESHTYPE_POINT_SPRITES</em>&nbsp;</td><td>
-Point sprites. 
-<p>
-Note: only supported if the <em>SupportsPointSprites</em> member of the <em><a class="el" href="structcsGraphics3DCaps.html">csGraphics3DCaps</a></em> structure for this renderer is true. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf2df8d75f18c8ea2351b8e2c818042059fe9f301c01d26d0824511d303840a6"></a><!-- doxytag: member="CS_MESHTYPE_LINES" ref="ggdf2df8d75f18c8ea2351b8e2c818042059fe9f301c01d26d0824511d303840a6" args="" -->CS_MESHTYPE_LINES</em>&nbsp;</td><td>
-Lines. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="ggdf2df8d75f18c8ea2351b8e2c818042021ff882fb5102b6b047cde1787341121"></a><!-- doxytag: member="CS_MESHTYPE_LINESTRIP" ref="ggdf2df8d75f18c8ea2351b8e2c818042021ff882fb5102b6b047cde1787341121" args="" -->CS_MESHTYPE_LINESTRIP</em>&nbsp;</td><td>
-Line strip. 
-<p>
-A line is defined from the prebviously and recently added vertex. </td></tr>
-</table>
-</dl>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00530">530</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="gee23f4994ae356cdb3e3de782239f4fd"></a><!-- doxytag: member="graph3d.h::csSimpleMeshFlags" ref="gee23f4994ae356cdb3e3de782239f4fd" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">enum <a class="el" href="group__gfx3d.html#gee23f4994ae356cdb3e3de782239f4fd">csSimpleMeshFlags</a>          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Flags to influence the behaviour of DrawSimpleMesh(). 
-<p>
-<dl compact><dt><b>Enumerator: </b></dt><dd>
-<table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="ggee23f4994ae356cdb3e3de782239f4fd077b8eb55639b0b95a6dc9bad17349ca"></a><!-- doxytag: member="csSimpleMeshScreenspace" ref="ggee23f4994ae356cdb3e3de782239f4fd077b8eb55639b0b95a6dc9bad17349ca" args="" -->csSimpleMeshScreenspace</em>&nbsp;</td><td>
-Ignore the object2camera transform in the <a class="el" href="structcsSimpleRenderMesh.html">csSimpleRenderMesh</a> struct and replace it with a transformation that effectively lets you specify the vertices in screen space. 
-<p>
-The Z components of the mesh vertices should be set to 0 when this flag is specified. </td></tr>
-</table>
-</dl>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00576">576</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
 <a class="anchor" name="g3daee560553f3d8fa3894b31cdde006e"></a><!-- doxytag: member="graph3d.h::csVertexAttrib" ref="g3daee560553f3d8fa3894b31cdde006e" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -2379,65 +2352,6 @@ The mesh zmode is used a to choose a zmode that makes sure only pixels that are 
 
 <p>
 Definition at line <a class="el" href="graph3d_8h-source.html#l00110">110</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
-  </tr>
-</table>
-<a class="anchor" name="ga0747e910ca225613629d9e9d2fdd9f8"></a><!-- doxytag: member="graph3d.h::G3D_RENDERSTATEOPTION" ref="ga0747e910ca225613629d9e9d2fdd9f8" args="" --><p>
-<table class="mdTable" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top">enum <a class="el" href="group__gfx3d.html#ga0747e910ca225613629d9e9d2fdd9f8">G3D_RENDERSTATEOPTION</a>          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing="5" cellpadding="0" border="0">
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Graphics3D render state options. 
-<p>
-<dl compact><dt><b>Enumerator: </b></dt><dd>
-<table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f8bf5d3bf2ad799639b53a75d90628089f"></a><!-- doxytag: member="G3DRENDERSTATE_ZBUFFERMODE" ref="gga0747e910ca225613629d9e9d2fdd9f8bf5d3bf2ad799639b53a75d90628089f" args="" -->G3DRENDERSTATE_ZBUFFERMODE</em>&nbsp;</td><td>
-Set Z-buffer fill/test/use mode (parameter is a csZBufMode). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f8301b85eecbf942cf1bc75ff008d75d67"></a><!-- doxytag: member="G3DRENDERSTATE_DITHERENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f8301b85eecbf942cf1bc75ff008d75d67" args="" -->G3DRENDERSTATE_DITHERENABLE</em>&nbsp;</td><td>
-Enable/disable dithering (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f8102832aaab26cc8037c5a47f6ae32111"></a><!-- doxytag: member="G3DRENDERSTATE_BILINEARMAPPINGENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f8102832aaab26cc8037c5a47f6ae32111" args="" -->G3DRENDERSTATE_BILINEARMAPPINGENABLE</em>&nbsp;</td><td>
-Enable/disable bi-linear mapping (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f8be1fad6000b39661f231648f42b61391"></a><!-- doxytag: member="G3DRENDERSTATE_TRILINEARMAPPINGENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f8be1fad6000b39661f231648f42b61391" args="" -->G3DRENDERSTATE_TRILINEARMAPPINGENABLE</em>&nbsp;</td><td>
-Enable/disable tri-linear mapping (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f83e5001804025d4cd486492fed47cecfd"></a><!-- doxytag: member="G3DRENDERSTATE_TRANSPARENCYENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f83e5001804025d4cd486492fed47cecfd" args="" -->G3DRENDERSTATE_TRANSPARENCYENABLE</em>&nbsp;</td><td>
-Enable/disable transparent textures (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f8adb11ad10ffa83dc8dd8736fbe838c03"></a><!-- doxytag: member="G3DRENDERSTATE_MIPMAPENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f8adb11ad10ffa83dc8dd8736fbe838c03" args="" -->G3DRENDERSTATE_MIPMAPENABLE</em>&nbsp;</td><td>
-Enable/disable mip-mapping (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f82f8539216e26b1f5460cd61d74204ad5"></a><!-- doxytag: member="G3DRENDERSTATE_TEXTUREMAPPINGENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f82f8539216e26b1f5460cd61d74204ad5" args="" -->G3DRENDERSTATE_TEXTUREMAPPINGENABLE</em>&nbsp;</td><td>
-Enable/disable textures (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f89993fe4325760197feb3b39042e8f673"></a><!-- doxytag: member="G3DRENDERSTATE_LIGHTINGENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f89993fe4325760197feb3b39042e8f673" args="" -->G3DRENDERSTATE_LIGHTINGENABLE</em>&nbsp;</td><td>
-Enable/disable lighting (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f8189e5fe3d22b6ebd279f772c6a9d829f"></a><!-- doxytag: member="G3DRENDERSTATE_INTERLACINGENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f8189e5fe3d22b6ebd279f772c6a9d829f" args="" -->G3DRENDERSTATE_INTERLACINGENABLE</em>&nbsp;</td><td>
-Enable/disable interlacing (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f8c276a6c68a89efffec1501e68c330d59"></a><!-- doxytag: member="G3DRENDERSTATE_MMXENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f8c276a6c68a89efffec1501e68c330d59" args="" -->G3DRENDERSTATE_MMXENABLE</em>&nbsp;</td><td>
-Enable/disable MMX instructions usage (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f8527fe3292a32fddf82701cdd0982d146"></a><!-- doxytag: member="G3DRENDERSTATE_INTERPOLATIONSTEP" ref="gga0747e910ca225613629d9e9d2fdd9f8527fe3292a32fddf82701cdd0982d146" args="" -->G3DRENDERSTATE_INTERPOLATIONSTEP</em>&nbsp;</td><td>
-Set perspective-correction interpolation step (parameter is a int). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f85ea5dc921e83f83a08d3edcdcf97d1e2"></a><!-- doxytag: member="G3DRENDERSTATE_MAXPOLYGONSTODRAW" ref="gga0747e910ca225613629d9e9d2fdd9f85ea5dc921e83f83a08d3edcdcf97d1e2" args="" -->G3DRENDERSTATE_MAXPOLYGONSTODRAW</em>&nbsp;</td><td>
-Set maximal number of polygons per frame to draw (parameter is a int). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f89464ccd49110102667ad1f075f363aac"></a><!-- doxytag: member="G3DRENDERSTATE_GOURAUDENABLE" ref="gga0747e910ca225613629d9e9d2fdd9f89464ccd49110102667ad1f075f363aac" args="" -->G3DRENDERSTATE_GOURAUDENABLE</em>&nbsp;</td><td>
-Enable/disable Gouraud shading (parameter is a bool). </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="gga0747e910ca225613629d9e9d2fdd9f8d2c312a32eb7289954cbe7865356aea9"></a><!-- doxytag: member="G3DRENDERSTATE_EDGES" ref="gga0747e910ca225613629d9e9d2fdd9f8d2c312a32eb7289954cbe7865356aea9" args="" -->G3DRENDERSTATE_EDGES</em>&nbsp;</td><td>
-Enable/disable edge drawing (debugging) (parameter is a bool). </td></tr>
-</table>
-</dl>
-
-<p>
-Definition at line <a class="el" href="graph3d_8h-source.html#l00471">471</a> of file <a class="el" href="graph3d_8h-source.html">graph3d.h</a>.    </td>
   </tr>
 </table>
 <hr><h2>Variable Documentation</h2>
