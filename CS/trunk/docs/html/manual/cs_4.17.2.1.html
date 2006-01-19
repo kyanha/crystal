@@ -94,6 +94,67 @@ any other type of image that supports an alpha channel).
 procedural textures predefined in Crystal Space: <samp>`fire'</samp>, <samp>`water'</samp>,
 <samp>`dots'</samp>, and <samp>`plasma'</samp>.
 </p>
+<p>Subcommands allowed for a texture specification are:
+</p>
+<ul class="toc">
+<li> <samp>`key'</samp>
+<samp>`Key/value node'</samp>. Specifies a generic key/value.
+</li><li> <samp>`for2d'</samp>
+<samp>`Boolean'</samp>. Texture is for 2D usage.
+</li><li> <samp>`for3d'</samp>
+<samp>`Boolean'</samp>. Texture is for 3D usage (default).
+</li><li> <samp>`transparent'</samp>
+<samp>`Color'</samp>. Texture uses keycolor with the given color.
+</li><li> <samp>`file'</samp>
+<samp>`String'</samp>. <small>VFS</small> filename for the texture.
+</li><li> <samp>`mipmap'</samp>
+<samp>`Boolean'</samp>. Texture uses mipmaps (default on). For 2D textures it is
+usually better to disable this. Also skybox textures should probably disable
+this.
+</li><li> <samp>`npots'</samp>
+<samp>`Boolean'</samp>. Texture doesn't have to be power of two and it will
+not be scaled to power of two dimensions. (default off). Note that not all
+hardware supports this, and sometimes this only works if mipmaps are 
+disabled as well as clamping enabled.
+</li><li> <samp>`clamp'</samp>
+<samp>`Boolean'</samp>. If set the texture will not be tiled and color lookups
+outside the 0..1 range will be clamped to the edge of the texture. Default off.
+</li><li> <samp>`filter'</samp>
+<samp>`Boolean'</samp>. If disabled then no texture filtering will occur. This usually
+looks worse. Default is on.
+</li><li> <samp>`keepimage'</samp>
+<samp>`Boolean'</samp>. If this is set then the loaded image will be kept
+and attached to the texture for later usage. With this flag off (which is
+default) the image will be freed after the texture is given to the
+3D renderer (to conserve memory).
+</li><li> <samp>`type'</samp>
+<samp>`String'</samp>. Name of the texture plugin. Some examples of texture
+plugins are <samp>`crystalspace.texture.loader.water'</samp>,
+<samp>`crystalspace.texture.loader.plasma'</samp>,
+<samp>`crystalspace.texture.loader.checkerboard'</samp>,
+<samp>`crystalspace.texture.loader.cubemap'</samp>, <small class="dots">...</small>
+</li><li> <samp>`params'</samp>
+<samp>`Node'</samp>. Parameters for the optional texture plugin.
+</li><li> <samp>`size'</samp>
+<samp>`Attributes 'width' and 'height''</samp>. Desired size of the texture. This
+is mainly useful in case you use one of the texture plugins. If you use a
+normal file then the width and height is fetched from the image.
+</li><li> <samp>`alwaysanimate'</samp>
+<samp>`Boolean'</samp>. If this is an animated texture then this flag will
+make sure the texture keeps animating even if out of view. This is less
+performant but in some cases it is more correct. Default off.
+</li><li> <samp>`class'</samp>
+<samp>`String'</samp>. This is used to specify the class of the texture. One
+common example is <samp>`normalmap'</samp> which is used by many shaders.
+</li><li> <samp>`alpha'</samp>
+<samp>`String'</samp>. One of <samp>`none'</samp>, <samp>`binary'</samp>, <samp>`smooth'</samp>, or <samp>`auto'</samp>.
+<samp>`binary'</samp> is often used to force binary alpha for an alpha mapped texture. 
+In short, by using this flag the texture can be used on regular objects using 
+<samp>`zuse'</samp> and <samp>`object'</samp> render priority. This greatly helps performance 
+and correct visual appearance of objects. For a more detailed explanation
+@pxref{Alpha in Textures}.
+</li></ul>
+
 <a name="SEC484"></a>
 <h4 class="subsubheading"> Material Specification Section </h4>
 
@@ -134,14 +195,47 @@ uses the semi-transparent <samp>`transp'</samp> texture.
 <samp>`wood'</samp> texture. On top of that there is an additional texture layer
 that uses the <samp>`plasma'</samp> texture. The layer is scaled 10 times in both
 <em>u</em> and <em>v</em> direction and it is added to the original texture
-(i.e. the colors are added).
+(i.e. the colors are added). This &quot;special effect&quot; is achieved by attaching
+the <samp>`std_lighting_detail'</samp> shader to this material. Different shaders
+allow different effects - the additive blending of a second texture in this
+case.
 </p>
+<p>Subcommands allowed for a material specification are:
+</p>
+<ul class="toc">
+<li> <samp>`key'</samp>
+<samp>`Key/value node'</samp>. Specifies a generic key/value.
+</li><li> <samp>`texture'</samp>
+<samp>`String'</samp>. Name of the texture.
+</li><li> <samp>`color'</samp>
+<samp>`Color'</samp>. A color instead of a texture. If you use this then <samp>`texture'</samp>
+should not be used.
+</li><li> <samp>`shader'</samp>
+<samp>`String'</samp>. A shader to use for this material. The value of this should
+be the name of the shader to use. In addition you also need to specify
+the <samp>`type'</samp> (as an attribute) of this shader. This will be used in combination
+with the renderloop to control when this material will be used in the rendering
+steps.
+</li><li> <samp>`shadervar'</samp>
+<samp>`Value'</samp>. This defines a variable for the shader attached to this material.
+The meaning of a variable as well as the required type depends on the specific
+shader A shader variable has two attributes: <samp>`name'</samp> and <samp>`type'</samp>. 
+<samp>`name'</samp> is the name as used in the shader. The type can be anything like
+<samp>`texture'</samp>, <samp>`vector2'</samp>, <samp>`vector3'</samp>, <samp>`vector4'</samp>, <samp>`integer'</samp>,
+<samp>`float'</samp>,  <samp>`expr'</samp>, <samp>`expression'</samp>, or <samp>`array'</samp>.
+</li></ul>
+
 <a name="SEC485"></a>
 <h4 class="subsubheading"> Shader Section </h4>
 
 <p>With shaders you can describe more advanced texture and material
-effects. The documentation for this section is not up-to-date
-since the entire shader system is still work in progress.
+effects. Here is an example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;shaders&gt;
+  &lt;shader&gt;&lt;file&gt;/shader/reflect.xml&lt;/file&gt;&lt;/shader&gt;
+&lt;/shaders&gt;
+</pre></td></tr></table>
+<p>Most of the times you simply refer to shaders from a file.
 </p>
 <a name="SEC486"></a>
 <h4 class="subsubheading"> Sounds Section </h4>
