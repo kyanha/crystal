@@ -322,288 +322,291 @@
 <a name="l00750"></a>00750   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;
 <a name="l00751"></a><a class="code" href="classcsStringBase.html#58d4dacb4750781420975958f7148f69">00751</a>   <span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; operator = (T <span class="keyword">const</span>&amp; s) { <span class="keywordflow">return</span> Replace (s); }
 <a name="l00752"></a>00752 
-<a name="l00756"></a>00756   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;
-<a name="l00757"></a><a class="code" href="classcsStringBase.html#5922aa080bb46df04c9fc209b9be943d">00757</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;operator += (T <span class="keyword">const</span>&amp; s) { <span class="keywordflow">return</span> Append (s); }
-<a name="l00758"></a>00758 
-<a name="l00759"></a>00759   <span class="comment">// Specialization which prevents gcc from barfing on strings allocated via</span>
-<a name="l00760"></a>00760   <span class="comment">// CS_ALLOC_STACK_ARRAY().</span>
-<a name="l00761"></a><a class="code" href="classcsStringBase.html#3cedf625e5b0064baa99eea7646ba51b">00761</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;operator += (<span class="keywordtype">char</span> <span class="keyword">const</span>* s)
-<a name="l00762"></a>00762   { <span class="keywordflow">return</span> Append(s); }
-<a name="l00763"></a>00763 
-<a name="l00765"></a><a class="code" href="classcsStringBase.html#235175b40d6dea6ed6d8b13e655ba8a0">00765</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="cscolor_8h.html#4152cd06665dffa1b7bded50af1bbe34">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;iStr)<span class="keyword"> const</span>
-<a name="l00766"></a>00766 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Clone ().Append (iStr); }
+<a name="l00754"></a><a class="code" href="classcsStringBase.html#bc902c60277c3939005049886f739478">00754</a>   <span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; operator = (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
+<a name="l00755"></a>00755   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l00756"></a>00756 
+<a name="l00760"></a>00760   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;
+<a name="l00761"></a><a class="code" href="classcsStringBase.html#5922aa080bb46df04c9fc209b9be943d">00761</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;operator += (T <span class="keyword">const</span>&amp; s) { <span class="keywordflow">return</span> Append (s); }
+<a name="l00762"></a>00762 
+<a name="l00763"></a>00763   <span class="comment">// Specialization which prevents gcc from barfing on strings allocated via</span>
+<a name="l00764"></a>00764   <span class="comment">// CS_ALLOC_STACK_ARRAY().</span>
+<a name="l00765"></a><a class="code" href="classcsStringBase.html#3cedf625e5b0064baa99eea7646ba51b">00765</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;operator += (<span class="keywordtype">char</span> <span class="keyword">const</span>* s)
+<a name="l00766"></a>00766   { <span class="keywordflow">return</span> Append(s); }
 <a name="l00767"></a>00767 
-<a name="l00775"></a><a class="code" href="classcsStringBase.html#c6c45d10062bb08b028d7dd6e1998989">00775</a>   operator const char* ()<span class="keyword"> const</span>
-<a name="l00776"></a>00776 <span class="keyword">  </span>{ <span class="keywordflow">return</span> GetData(); }
-<a name="l00777"></a>00777 
-<a name="l00784"></a><a class="code" href="classcsStringBase.html#81cfd1bd211c0cabe2b63b89d0932120">00784</a>   <span class="keywordtype">bool</span> operator == (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Str)<span class="keyword"> const</span>
-<a name="l00785"></a>00785 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
-<a name="l00792"></a><a class="code" href="classcsStringBase.html#963ebe97762c4b5234acc294a9c4a00c">00792</a>   <span class="keywordtype">bool</span> operator == (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
-<a name="l00793"></a>00793 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
-<a name="l00800"></a><a class="code" href="classcsStringBase.html#8651a948b393e8ec3f5e7fd22e470f1f">00800</a>   <span class="keywordtype">bool</span> operator &lt; (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Str)<span class="keyword"> const</span>
-<a name="l00801"></a>00801 <span class="keyword">  </span>{
-<a name="l00802"></a>00802     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str.<a class="code" href="classcsStringBase.html#eb135ec8364e0f325d9b604d9e1076a3">GetDataSafe</a> ()) &lt; 0;
-<a name="l00803"></a>00803   }
-<a name="l00810"></a><a class="code" href="classcsStringBase.html#7d1c7d6e4ce243dc5503a7f1cd3e6504">00810</a>   <span class="keywordtype">bool</span> operator &lt; (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
-<a name="l00811"></a>00811 <span class="keyword">  </span>{
-<a name="l00812"></a>00812     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str) &lt; 0;
-<a name="l00813"></a>00813   }
-<a name="l00820"></a><a class="code" href="classcsStringBase.html#71ca68b148f24848fa09c44b21178ef6">00820</a>   <span class="keywordtype">bool</span> operator &gt; (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Str)<span class="keyword"> const</span>
-<a name="l00821"></a>00821 <span class="keyword">  </span>{
-<a name="l00822"></a>00822     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str.<a class="code" href="classcsStringBase.html#eb135ec8364e0f325d9b604d9e1076a3">GetDataSafe</a> ()) &gt; 0;
-<a name="l00823"></a>00823   }
-<a name="l00830"></a><a class="code" href="classcsStringBase.html#3072ec3ccc52295f077665c8d7731153">00830</a>   <span class="keywordtype">bool</span> operator &gt; (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
-<a name="l00831"></a>00831 <span class="keyword">  </span>{
-<a name="l00832"></a>00832     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str) &gt; 0;
-<a name="l00833"></a>00833   }
-<a name="l00840"></a><a class="code" href="classcsStringBase.html#31839f8dfd4436add855c8bae4e77256">00840</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Str)<span class="keyword"> const</span>
-<a name="l00841"></a>00841 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
-<a name="l00848"></a><a class="code" href="classcsStringBase.html#562de37ae976199b6d7598f6d0ac8ac1">00848</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
-<a name="l00849"></a>00849 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
-<a name="l00850"></a>00850 
-<a name="l00858"></a>00858   <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
-<a name="l00859"></a><a class="code" href="classcsStringBase.html#357eb045f9b5daf073eb4d58568f371b">00859</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;operator &lt;&lt; (T <span class="keyword">const</span>&amp; v)
-<a name="l00860"></a>00860   { <span class="keywordflow">return</span> Append (v); }
-<a name="l00861"></a>00861 
-<a name="l00862"></a>00862   <span class="comment">// Specialization which prevents gcc from barfing on strings allocated via</span>
-<a name="l00863"></a>00863   <span class="comment">// CS_ALLOC_STACK_ARRAY().</span>
-<a name="l00864"></a><a class="code" href="classcsStringBase.html#9177006494d5272367f68676b225a063">00864</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;operator &lt;&lt; (<span class="keywordtype">char</span> <span class="keyword">const</span>* v)
-<a name="l00865"></a>00865   { <span class="keywordflow">return</span> Append(v); }
-<a name="l00866"></a>00866 
-<a name="l00871"></a>00871   <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Downcase();
-<a name="l00876"></a>00876   <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Upcase();
-<a name="l00877"></a>00877 
-<a name="l00888"></a><a class="code" href="classcsStringBase.html#3fb2adf9b28acc7d2a69956187147243">00888</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* Detach ()
-<a name="l00889"></a>00889   { <span class="keywordtype">char</span>* d = Data; Data = 0; Size = 0; MaxSize = 0; <span class="keywordflow">return</span> d; }
-<a name="l00894"></a>00894   <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> GetHash() <span class="keyword">const</span>;
-<a name="l00895"></a>00895 };
-<a name="l00896"></a>00896 
-<a name="l00898"></a><a class="code" href="csstring_8h.html#27aa0a1a5ae26e95eef4c460123fb0f5">00898</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="cscolor_8h.html#4152cd06665dffa1b7bded50af1bbe34">operator + </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr1, <span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;iStr2)
-<a name="l00899"></a>00899 {
-<a name="l00900"></a>00900   <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html">csStringBase</a> (iStr1).Append (iStr2);
-<a name="l00901"></a>00901 }
-<a name="l00902"></a>00902 
-<a name="l00904"></a><a class="code" href="csstring_8h.html#77d7b0d58725a1b3c5fd0adfebc23559">00904</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="cscolor_8h.html#4152cd06665dffa1b7bded50af1bbe34">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; iStr1, <span class="keyword">const</span> <span class="keywordtype">char</span>* iStr2)
-<a name="l00905"></a>00905 {
-<a name="l00906"></a>00906   <span class="keywordflow">return</span> iStr1.<a class="code" href="classcsStringBase.html#0101903b6442cd5b096b2066b414b506">Clone</a> ().<a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (iStr2);
-<a name="l00907"></a>00907 }
-<a name="l00908"></a>00908 
-<a name="l00913"></a>00913 <span class="keyword">template</span>&lt;<span class="keywordtype">int</span> LEN = 36&gt;
-<a name="l00914"></a><a class="code" href="classcsStringFast.html">00914</a> <span class="keyword">class </span><a class="code" href="classcsStringFast.html">csStringFast</a> : <span class="keyword">public</span> <a class="code" href="classcsStringBase.html">csStringBase</a>
-<a name="l00915"></a>00915 {
-<a name="l00916"></a>00916 <span class="keyword">protected</span>:
-<a name="l00918"></a><a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">00918</a>   <span class="keywordtype">char</span> <a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>[LEN];
-<a name="l00927"></a><a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">00927</a>   size_t <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>;
-<a name="l00928"></a>00928 
-<a name="l00929"></a><a class="code" href="classcsStringFast.html#74c9c4fc52344b763af729fa9529d17e">00929</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#74c9c4fc52344b763af729fa9529d17e">SetCapacityInternal</a> (size_t NewSize, <span class="keywordtype">bool</span> soft)
-<a name="l00930"></a>00930   {
-<a name="l00931"></a>00931     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0) <span class="comment">// If dynamic buffer already allocated, just re-use it.</span>
-<a name="l00932"></a>00932       <a class="code" href="classcsStringBase.html#62840bf377294ec1d889857dadea6bf4">csStringBase::SetCapacityInternal</a>(NewSize, soft);
-<a name="l00933"></a>00933     <span class="keywordflow">else</span>
-<a name="l00934"></a>00934     {
-<a name="l00935"></a>00935       NewSize++; <span class="comment">// Plus one for implicit null byte.</span>
-<a name="l00936"></a>00936       <span class="keywordflow">if</span> (NewSize &lt;= LEN)
-<a name="l00937"></a>00937         <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = NewSize;
-<a name="l00938"></a>00938       <span class="keywordflow">else</span>
-<a name="l00939"></a>00939       {
-<a name="l00940"></a>00940         <a class="code" href="cssysdef_8h.html#c380bd47888ecfe73e7b7a40b6f827a1">CS_ASSERT</a>(<a class="code" href="classcsStringBase.html#eb2631c85b01181bf069998cc5d8e62e">MaxSize</a> == 0);
-<a name="l00941"></a>00941         <span class="keywordflow">if</span> (soft)
-<a name="l00942"></a>00942           NewSize = <a class="code" href="classcsStringBase.html#5bda81678e09cfaf998f8f6881111758">ComputeNewSize</a> (NewSize);
-<a name="l00943"></a>00943         <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> = <span class="keyword">new</span> <span class="keywordtype">char</span>[NewSize];
-<a name="l00944"></a>00944         <a class="code" href="classcsStringBase.html#eb2631c85b01181bf069998cc5d8e62e">MaxSize</a> = NewSize;
-<a name="l00945"></a>00945         <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> == 0)
-<a name="l00946"></a>00946           <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a>[0] = <span class="charliteral">'\0'</span>;
-<a name="l00947"></a>00947         <span class="keywordflow">else</span>
-<a name="l00948"></a>00948           memcpy(<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a>, <a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>, <a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> + 1);
-<a name="l00949"></a>00949       }
-<a name="l00950"></a>00950     }
-<a name="l00951"></a>00951   }
-<a name="l00952"></a>00952 
-<a name="l00953"></a><a class="code" href="classcsStringFast.html#9f09165e1d98b11ea26b755cf5037a8a">00953</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringFast.html#9f09165e1d98b11ea26b755cf5037a8a">GetDataMutable</a> ()
-<a name="l00954"></a>00954   { <span class="keywordflow">return</span> (<a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> == 0 &amp;&amp; <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> == 0 ? 0 : (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> : <a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>)); }
-<a name="l00955"></a>00955 
-<a name="l00956"></a>00956 <span class="keyword">public</span>:
-<a name="l00960"></a><a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">00960</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> () : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0) { }
-<a name="l00965"></a><a class="code" href="classcsStringFast.html#6660e56e4a281647cb879be10f78c6dc">00965</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (size_t <a class="code" href="classcsStringBase.html#4d4820df67848ac1040af1896c2dd280">Length</a>) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
-<a name="l00966"></a>00966   { <a class="code" href="classcsStringBase.html#c30b6e2a574b5b2ada978221fd61f619">SetCapacity</a> (Length); }
-<a name="l00970"></a><a class="code" href="classcsStringFast.html#5f8847107d95ed4f72848f04e47ea782">00970</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0) 
-<a name="l00971"></a>00971   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (copy); }
-<a name="l00975"></a><a class="code" href="classcsStringFast.html#344681cb7223da83662a36bb086cf6ac">00975</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
-<a name="l00976"></a>00976   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (copy); }
-<a name="l00980"></a><a class="code" href="classcsStringFast.html#d30c371c29cea0ed3ca11a9602e535b2">00980</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
-<a name="l00981"></a>00981   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (src); }
-<a name="l00985"></a><a class="code" href="classcsStringFast.html#a803194cde2163767e1fc759e8b64e19">00985</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src, size_t _length) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
-<a name="l00986"></a>00986   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (src, _length); }
-<a name="l00987"></a>00987 
-<a name="l00988"></a>00988   
-<a name="l00990"></a><a class="code" href="classcsStringFast.html#45911ea190a2c9cd34c9f0805664c732">00990</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
-<a name="l00991"></a>00991   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (c); }
-<a name="l00993"></a><a class="code" href="classcsStringFast.html#986a25783688b4f756ce3eb61bfd0eff">00993</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
-<a name="l00994"></a>00994   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> ((<span class="keywordtype">char</span>)c); }
-<a name="l00996"></a><a class="code" href="classcsStringFast.html#82bdd0d8ed724e628fef6d7c946d0beb">00996</a>   <span class="keyword">virtual</span> <a class="code" href="classcsStringFast.html#82bdd0d8ed724e628fef6d7c946d0beb">~csStringFast</a> () { }
-<a name="l00997"></a>00997 
-<a name="l00999"></a><a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">00999</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
-<a name="l01000"></a>01000   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l00769"></a><a class="code" href="classcsStringBase.html#235175b40d6dea6ed6d8b13e655ba8a0">00769</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="cscolor_8h.html#4152cd06665dffa1b7bded50af1bbe34">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;iStr)<span class="keyword"> const</span>
+<a name="l00770"></a>00770 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Clone ().Append (iStr); }
+<a name="l00771"></a>00771 
+<a name="l00779"></a><a class="code" href="classcsStringBase.html#c6c45d10062bb08b028d7dd6e1998989">00779</a>   operator const char* ()<span class="keyword"> const</span>
+<a name="l00780"></a>00780 <span class="keyword">  </span>{ <span class="keywordflow">return</span> GetData(); }
+<a name="l00781"></a>00781 
+<a name="l00788"></a><a class="code" href="classcsStringBase.html#81cfd1bd211c0cabe2b63b89d0932120">00788</a>   <span class="keywordtype">bool</span> operator == (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Str)<span class="keyword"> const</span>
+<a name="l00789"></a>00789 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
+<a name="l00796"></a><a class="code" href="classcsStringBase.html#963ebe97762c4b5234acc294a9c4a00c">00796</a>   <span class="keywordtype">bool</span> operator == (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
+<a name="l00797"></a>00797 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Compare (Str); }
+<a name="l00804"></a><a class="code" href="classcsStringBase.html#8651a948b393e8ec3f5e7fd22e470f1f">00804</a>   <span class="keywordtype">bool</span> operator &lt; (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Str)<span class="keyword"> const</span>
+<a name="l00805"></a>00805 <span class="keyword">  </span>{
+<a name="l00806"></a>00806     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str.<a class="code" href="classcsStringBase.html#eb135ec8364e0f325d9b604d9e1076a3">GetDataSafe</a> ()) &lt; 0;
+<a name="l00807"></a>00807   }
+<a name="l00814"></a><a class="code" href="classcsStringBase.html#7d1c7d6e4ce243dc5503a7f1cd3e6504">00814</a>   <span class="keywordtype">bool</span> operator &lt; (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
+<a name="l00815"></a>00815 <span class="keyword">  </span>{
+<a name="l00816"></a>00816     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str) &lt; 0;
+<a name="l00817"></a>00817   }
+<a name="l00824"></a><a class="code" href="classcsStringBase.html#71ca68b148f24848fa09c44b21178ef6">00824</a>   <span class="keywordtype">bool</span> operator &gt; (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Str)<span class="keyword"> const</span>
+<a name="l00825"></a>00825 <span class="keyword">  </span>{
+<a name="l00826"></a>00826     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str.<a class="code" href="classcsStringBase.html#eb135ec8364e0f325d9b604d9e1076a3">GetDataSafe</a> ()) &gt; 0;
+<a name="l00827"></a>00827   }
+<a name="l00834"></a><a class="code" href="classcsStringBase.html#3072ec3ccc52295f077665c8d7731153">00834</a>   <span class="keywordtype">bool</span> operator &gt; (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
+<a name="l00835"></a>00835 <span class="keyword">  </span>{
+<a name="l00836"></a>00836     <span class="keywordflow">return</span> strcmp (GetDataSafe (), Str) &gt; 0;
+<a name="l00837"></a>00837   }
+<a name="l00844"></a><a class="code" href="classcsStringBase.html#31839f8dfd4436add855c8bae4e77256">00844</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Str)<span class="keyword"> const</span>
+<a name="l00845"></a>00845 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
+<a name="l00852"></a><a class="code" href="classcsStringBase.html#562de37ae976199b6d7598f6d0ac8ac1">00852</a>   <span class="keywordtype">bool</span> operator != (<span class="keyword">const</span> <span class="keywordtype">char</span>* Str)<span class="keyword"> const</span>
+<a name="l00853"></a>00853 <span class="keyword">  </span>{ <span class="keywordflow">return</span> !Compare (Str); }
+<a name="l00854"></a>00854 
+<a name="l00862"></a>00862   <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;
+<a name="l00863"></a><a class="code" href="classcsStringBase.html#357eb045f9b5daf073eb4d58568f371b">00863</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;operator &lt;&lt; (T <span class="keyword">const</span>&amp; v)
+<a name="l00864"></a>00864   { <span class="keywordflow">return</span> Append (v); }
+<a name="l00865"></a>00865 
+<a name="l00866"></a>00866   <span class="comment">// Specialization which prevents gcc from barfing on strings allocated via</span>
+<a name="l00867"></a>00867   <span class="comment">// CS_ALLOC_STACK_ARRAY().</span>
+<a name="l00868"></a><a class="code" href="classcsStringBase.html#9177006494d5272367f68676b225a063">00868</a>   <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;operator &lt;&lt; (<span class="keywordtype">char</span> <span class="keyword">const</span>* v)
+<a name="l00869"></a>00869   { <span class="keywordflow">return</span> Append(v); }
+<a name="l00870"></a>00870 
+<a name="l00875"></a>00875   <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Downcase();
+<a name="l00880"></a>00880   <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; Upcase();
+<a name="l00881"></a>00881 
+<a name="l00892"></a><a class="code" href="classcsStringBase.html#3fb2adf9b28acc7d2a69956187147243">00892</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* Detach ()
+<a name="l00893"></a>00893   { <span class="keywordtype">char</span>* d = Data; Data = 0; Size = 0; MaxSize = 0; <span class="keywordflow">return</span> d; }
+<a name="l00898"></a>00898   <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> GetHash() <span class="keyword">const</span>;
+<a name="l00899"></a>00899 };
+<a name="l00900"></a>00900 
+<a name="l00902"></a><a class="code" href="csstring_8h.html#27aa0a1a5ae26e95eef4c460123fb0f5">00902</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="cscolor_8h.html#4152cd06665dffa1b7bded50af1bbe34">operator + </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* iStr1, <span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a> &amp;iStr2)
+<a name="l00903"></a>00903 {
+<a name="l00904"></a>00904   <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html">csStringBase</a> (iStr1).Append (iStr2);
+<a name="l00905"></a>00905 }
+<a name="l00906"></a>00906 
+<a name="l00908"></a><a class="code" href="csstring_8h.html#77d7b0d58725a1b3c5fd0adfebc23559">00908</a> <span class="keyword">inline</span> <a class="code" href="classcsStringBase.html">csStringBase</a> <a class="code" href="cscolor_8h.html#4152cd06665dffa1b7bded50af1bbe34">operator + </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; iStr1, <span class="keyword">const</span> <span class="keywordtype">char</span>* iStr2)
+<a name="l00909"></a>00909 {
+<a name="l00910"></a>00910   <span class="keywordflow">return</span> iStr1.<a class="code" href="classcsStringBase.html#0101903b6442cd5b096b2066b414b506">Clone</a> ().<a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (iStr2);
+<a name="l00911"></a>00911 }
+<a name="l00912"></a>00912 
+<a name="l00917"></a>00917 <span class="keyword">template</span>&lt;<span class="keywordtype">int</span> LEN = 36&gt;
+<a name="l00918"></a><a class="code" href="classcsStringFast.html">00918</a> <span class="keyword">class </span><a class="code" href="classcsStringFast.html">csStringFast</a> : <span class="keyword">public</span> <a class="code" href="classcsStringBase.html">csStringBase</a>
+<a name="l00919"></a>00919 {
+<a name="l00920"></a>00920 <span class="keyword">protected</span>:
+<a name="l00922"></a><a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">00922</a>   <span class="keywordtype">char</span> <a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>[LEN];
+<a name="l00931"></a><a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">00931</a>   size_t <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>;
+<a name="l00932"></a>00932 
+<a name="l00933"></a><a class="code" href="classcsStringFast.html#74c9c4fc52344b763af729fa9529d17e">00933</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#74c9c4fc52344b763af729fa9529d17e">SetCapacityInternal</a> (size_t NewSize, <span class="keywordtype">bool</span> soft)
+<a name="l00934"></a>00934   {
+<a name="l00935"></a>00935     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0) <span class="comment">// If dynamic buffer already allocated, just re-use it.</span>
+<a name="l00936"></a>00936       <a class="code" href="classcsStringBase.html#62840bf377294ec1d889857dadea6bf4">csStringBase::SetCapacityInternal</a>(NewSize, soft);
+<a name="l00937"></a>00937     <span class="keywordflow">else</span>
+<a name="l00938"></a>00938     {
+<a name="l00939"></a>00939       NewSize++; <span class="comment">// Plus one for implicit null byte.</span>
+<a name="l00940"></a>00940       <span class="keywordflow">if</span> (NewSize &lt;= LEN)
+<a name="l00941"></a>00941         <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = NewSize;
+<a name="l00942"></a>00942       <span class="keywordflow">else</span>
+<a name="l00943"></a>00943       {
+<a name="l00944"></a>00944         <a class="code" href="cssysdef_8h.html#c380bd47888ecfe73e7b7a40b6f827a1">CS_ASSERT</a>(<a class="code" href="classcsStringBase.html#eb2631c85b01181bf069998cc5d8e62e">MaxSize</a> == 0);
+<a name="l00945"></a>00945         <span class="keywordflow">if</span> (soft)
+<a name="l00946"></a>00946           NewSize = <a class="code" href="classcsStringBase.html#5bda81678e09cfaf998f8f6881111758">ComputeNewSize</a> (NewSize);
+<a name="l00947"></a>00947         <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> = <span class="keyword">new</span> <span class="keywordtype">char</span>[NewSize];
+<a name="l00948"></a>00948         <a class="code" href="classcsStringBase.html#eb2631c85b01181bf069998cc5d8e62e">MaxSize</a> = NewSize;
+<a name="l00949"></a>00949         <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> == 0)
+<a name="l00950"></a>00950           <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a>[0] = <span class="charliteral">'\0'</span>;
+<a name="l00951"></a>00951         <span class="keywordflow">else</span>
+<a name="l00952"></a>00952           memcpy(<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a>, <a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>, <a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> + 1);
+<a name="l00953"></a>00953       }
+<a name="l00954"></a>00954     }
+<a name="l00955"></a>00955   }
+<a name="l00956"></a>00956 
+<a name="l00957"></a><a class="code" href="classcsStringFast.html#9f09165e1d98b11ea26b755cf5037a8a">00957</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringFast.html#9f09165e1d98b11ea26b755cf5037a8a">GetDataMutable</a> ()
+<a name="l00958"></a>00958   { <span class="keywordflow">return</span> (<a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> == 0 &amp;&amp; <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> == 0 ? 0 : (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> : <a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>)); }
+<a name="l00959"></a>00959 
+<a name="l00960"></a>00960 <span class="keyword">public</span>:
+<a name="l00964"></a><a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">00964</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> () : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0) { }
+<a name="l00969"></a><a class="code" href="classcsStringFast.html#6660e56e4a281647cb879be10f78c6dc">00969</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (size_t <a class="code" href="classcsStringBase.html#4d4820df67848ac1040af1896c2dd280">Length</a>) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
+<a name="l00970"></a>00970   { <a class="code" href="classcsStringBase.html#c30b6e2a574b5b2ada978221fd61f619">SetCapacity</a> (Length); }
+<a name="l00974"></a><a class="code" href="classcsStringFast.html#5f8847107d95ed4f72848f04e47ea782">00974</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0) 
+<a name="l00975"></a>00975   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (copy); }
+<a name="l00979"></a><a class="code" href="classcsStringFast.html#344681cb7223da83662a36bb086cf6ac">00979</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
+<a name="l00980"></a>00980   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (copy); }
+<a name="l00984"></a><a class="code" href="classcsStringFast.html#d30c371c29cea0ed3ca11a9602e535b2">00984</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
+<a name="l00985"></a>00985   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (src); }
+<a name="l00989"></a><a class="code" href="classcsStringFast.html#a803194cde2163767e1fc759e8b64e19">00989</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src, size_t _length) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
+<a name="l00990"></a>00990   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (src, _length); }
+<a name="l00991"></a>00991 
+<a name="l00992"></a>00992   
+<a name="l00994"></a><a class="code" href="classcsStringFast.html#45911ea190a2c9cd34c9f0805664c732">00994</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
+<a name="l00995"></a>00995   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> (c); }
+<a name="l00997"></a><a class="code" href="classcsStringFast.html#986a25783688b4f756ce3eb61bfd0eff">00997</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(), <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a>(0)
+<a name="l00998"></a>00998   { <a class="code" href="classcsStringBase.html#9b78c60659ea1e5bea610d4d2eb29016">Append</a> ((<span class="keywordtype">char</span>)c); }
+<a name="l01000"></a><a class="code" href="classcsStringFast.html#82bdd0d8ed724e628fef6d7c946d0beb">01000</a>   <span class="keyword">virtual</span> <a class="code" href="classcsStringFast.html#82bdd0d8ed724e628fef6d7c946d0beb">~csStringFast</a> () { }
 <a name="l01001"></a>01001 
-<a name="l01003"></a>01003   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;
-<a name="l01004"></a><a class="code" href="classcsStringFast.html#afa91b8e35516324c49ff2f748bd26ec">01004</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(T <span class="keyword">const</span>&amp; s) { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a> (s); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01003"></a><a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">01003</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
+<a name="l01004"></a>01004   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
 <a name="l01005"></a>01005 
-<a name="l01006"></a><a class="code" href="classcsStringFast.html#ae377ba228b98ff910c5508f320c0d75">01006</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classcsStringFast.html#ae377ba228b98ff910c5508f320c0d75">GetData</a> ()<span class="keyword"> const</span>
-<a name="l01007"></a>01007 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (<a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> == 0 &amp;&amp; <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> == 0 ? 0 : (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> : <a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>)); }
-<a name="l01008"></a>01008 
-<a name="l01009"></a><a class="code" href="classcsStringFast.html#9b5ce3297ba258454ad684e55e2dab85">01009</a>   <span class="keyword">virtual</span> size_t <a class="code" href="classcsStringFast.html#9b5ce3297ba258454ad684e55e2dab85">GetCapacity</a>()<span class="keyword"> const</span>
-<a name="l01010"></a>01010 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#468fdc4e909ff172cd0f8fd5fb2c5cbc">csStringBase::GetCapacity</a>() : <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> - 1; }
-<a name="l01011"></a>01011 
-<a name="l01012"></a><a class="code" href="classcsStringFast.html#ec6b8c96e0f739e6ce084669850ba71e">01012</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#ec6b8c96e0f739e6ce084669850ba71e">ShrinkBestFit</a> ()
-<a name="l01013"></a>01013   {
-<a name="l01014"></a>01014     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> == 0)
-<a name="l01015"></a>01015     {
-<a name="l01016"></a>01016       <a class="code" href="classcsStringBase.html#516a2096e7ebf2a5c4d9b8a35bda2527">csStringBase::ShrinkBestFit</a>();
-<a name="l01017"></a>01017       <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = 0;
-<a name="l01018"></a>01018     }
-<a name="l01019"></a>01019     <span class="keywordflow">else</span>
-<a name="l01020"></a>01020     {
-<a name="l01021"></a>01021       size_t needed = <a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> + 1;
-<a name="l01022"></a>01022       <span class="keywordflow">if</span> (needed &gt; LEN)
-<a name="l01023"></a>01023         <a class="code" href="classcsStringBase.html#516a2096e7ebf2a5c4d9b8a35bda2527">csStringBase::ShrinkBestFit</a>();
-<a name="l01024"></a>01024       <span class="keywordflow">else</span>
-<a name="l01025"></a>01025       {
-<a name="l01026"></a>01026         <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = needed;
-<a name="l01027"></a>01027         <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0)
-<a name="l01028"></a>01028         {
-<a name="l01029"></a>01029           memcpy(<a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>, <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a>, needed); <span class="comment">// Includes implicit null byte.</span>
-<a name="l01030"></a>01030           <a class="code" href="classcsStringBase.html#fa5e7cc27c97e4c970c19f1172117f6a">csStringBase::Free</a>();
-<a name="l01031"></a>01031         }
-<a name="l01032"></a>01032       }
-<a name="l01033"></a>01033     }
-<a name="l01034"></a>01034   }
-<a name="l01035"></a>01035 
-<a name="l01036"></a><a class="code" href="classcsStringFast.html#49a4f3f62534048aa947da39a8fee1d8">01036</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#49a4f3f62534048aa947da39a8fee1d8">Free</a> () { <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = 0; <a class="code" href="classcsStringBase.html#fa5e7cc27c97e4c970c19f1172117f6a">csStringBase::Free</a>(); }
-<a name="l01037"></a>01037 
-<a name="l01038"></a><a class="code" href="classcsStringFast.html#1f79797cac8cafd7a82467708cdf320b">01038</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringFast.html#1f79797cac8cafd7a82467708cdf320b">Detach</a> ()
-<a name="l01039"></a>01039   { 
-<a name="l01040"></a>01040     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0)
-<a name="l01041"></a>01041       <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html#3fb2adf9b28acc7d2a69956187147243">csStringBase::Detach</a>();
-<a name="l01042"></a>01042     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> == 0)
-<a name="l01043"></a>01043       <span class="keywordflow">return</span> 0; <span class="comment">// Emulate NULL return of csStringBase in this case.</span>
-<a name="l01044"></a>01044     <span class="keywordflow">else</span>
-<a name="l01045"></a>01045     {
-<a name="l01046"></a>01046       <a class="code" href="cssysdef_8h.html#c380bd47888ecfe73e7b7a40b6f827a1">CS_ASSERT</a>(<a class="code" href="classcsStringBase.html#eb2631c85b01181bf069998cc5d8e62e">MaxSize</a> == 0);
-<a name="l01047"></a>01047       <span class="keywordtype">char</span>* d = <a class="code" href="group__util.html#gc3a6e34ea28a22fdeda8802c872ce2d0">csStrNew</a> (<a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>);
-<a name="l01048"></a>01048       <a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> = 0; <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = 0;
-<a name="l01049"></a>01049       <span class="keywordflow">return</span> d;
-<a name="l01050"></a>01050     }
-<a name="l01051"></a>01051   }
-<a name="l01052"></a>01052 };
-<a name="l01053"></a>01053 
-<a name="l01054"></a>01054 CS_SPECIALIZE_TEMPLATE
-<a name="l01055"></a><a class="code" href="classcsStringFast_3_010_01_4.html">01055</a> <span class="keyword">class </span><a class="code" href="classcsStringFast.html">csStringFast</a>&lt;0&gt; : <span class="keyword">public</span> <a class="code" href="classcsStringBase.html">csStringBase</a>
-<a name="l01056"></a>01056 {
-<a name="l01057"></a>01057 <span class="keyword">public</span>:
-<a name="l01058"></a><a class="code" href="classcsStringFast_3_010_01_4.html#10e602e475c49856cb7ab2798ab7d9a0">01058</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> () : <a class="code" href="classcsStringBase.html">csStringBase</a>() { }
-<a name="l01059"></a><a class="code" href="classcsStringFast_3_010_01_4.html#cae494318af69bb4156ca5abe59b1fa4">01059</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (size_t <a class="code" href="classcsStringBase.html#4d4820df67848ac1040af1896c2dd280">Length</a>) : <a class="code" href="classcsStringBase.html">csStringBase</a>(Length) { }
-<a name="l01060"></a><a class="code" href="classcsStringFast_3_010_01_4.html#888949300fb47849b454cd035f88d5d6">01060</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (copy) { }
-<a name="l01061"></a><a class="code" href="classcsStringFast_3_010_01_4.html#f72679070980cd0cddea881e4f2648ba">01061</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringBase.html">csStringBase</a>(src) { }
-<a name="l01062"></a><a class="code" href="classcsStringFast_3_010_01_4.html#ad2fd7d8a806951a6cb5a9691e29b253">01062</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src, size_t _length) : <a class="code" href="classcsStringBase.html">csStringBase</a>(src, _length)
-<a name="l01063"></a>01063   { }
-<a name="l01064"></a><a class="code" href="classcsStringFast_3_010_01_4.html#e85afedc256118982cab7ea4e2f6ddaf">01064</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(c) { }
-<a name="l01065"></a><a class="code" href="classcsStringFast_3_010_01_4.html#0fb3636f6070d6f6bbcc8ca264ef2fe7">01065</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(c) { }
-<a name="l01066"></a><a class="code" href="classcsStringFast_3_010_01_4.html#952c3bab703da5e44606a0af19e0f65a">01066</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
-<a name="l01067"></a>01067   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01068"></a><a class="code" href="classcsStringFast_3_010_01_4.html#b7366a55fab355037662a130f51148c2">01068</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* copy)
-<a name="l01069"></a>01069   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01070"></a><a class="code" href="classcsStringFast_3_010_01_4.html#3794644e352ff500734a3fc2726e5f44">01070</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">char</span> x)
-<a name="l01071"></a>01071   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01072"></a><a class="code" href="classcsStringFast_3_010_01_4.html#eee7f704b940f95e6651fc196d4b90c1">01072</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> x)
-<a name="l01073"></a>01073   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01074"></a><a class="code" href="classcsStringFast_3_010_01_4.html#f128206b63e8aaf56366fc6c8ccabbe3">01074</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">bool</span> x)
+<a name="l01007"></a>01007   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;
+<a name="l01008"></a><a class="code" href="classcsStringFast.html#afa91b8e35516324c49ff2f748bd26ec">01008</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(T <span class="keyword">const</span>&amp; s) { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a> (s); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01009"></a>01009 
+<a name="l01010"></a><a class="code" href="classcsStringFast.html#ae377ba228b98ff910c5508f320c0d75">01010</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span> <span class="keyword">const</span>* <a class="code" href="classcsStringFast.html#ae377ba228b98ff910c5508f320c0d75">GetData</a> ()<span class="keyword"> const</span>
+<a name="l01011"></a>01011 <span class="keyword">  </span>{ <span class="keywordflow">return</span> (<a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> == 0 &amp;&amp; <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> == 0 ? 0 : (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> : <a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>)); }
+<a name="l01012"></a>01012 
+<a name="l01013"></a><a class="code" href="classcsStringFast.html#9b5ce3297ba258454ad684e55e2dab85">01013</a>   <span class="keyword">virtual</span> size_t <a class="code" href="classcsStringFast.html#9b5ce3297ba258454ad684e55e2dab85">GetCapacity</a>()<span class="keyword"> const</span>
+<a name="l01014"></a>01014 <span class="keyword">  </span>{ <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0 ? <a class="code" href="classcsStringBase.html#468fdc4e909ff172cd0f8fd5fb2c5cbc">csStringBase::GetCapacity</a>() : <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> - 1; }
+<a name="l01015"></a>01015 
+<a name="l01016"></a><a class="code" href="classcsStringFast.html#ec6b8c96e0f739e6ce084669850ba71e">01016</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#ec6b8c96e0f739e6ce084669850ba71e">ShrinkBestFit</a> ()
+<a name="l01017"></a>01017   {
+<a name="l01018"></a>01018     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> == 0)
+<a name="l01019"></a>01019     {
+<a name="l01020"></a>01020       <a class="code" href="classcsStringBase.html#516a2096e7ebf2a5c4d9b8a35bda2527">csStringBase::ShrinkBestFit</a>();
+<a name="l01021"></a>01021       <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = 0;
+<a name="l01022"></a>01022     }
+<a name="l01023"></a>01023     <span class="keywordflow">else</span>
+<a name="l01024"></a>01024     {
+<a name="l01025"></a>01025       size_t needed = <a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> + 1;
+<a name="l01026"></a>01026       <span class="keywordflow">if</span> (needed &gt; LEN)
+<a name="l01027"></a>01027         <a class="code" href="classcsStringBase.html#516a2096e7ebf2a5c4d9b8a35bda2527">csStringBase::ShrinkBestFit</a>();
+<a name="l01028"></a>01028       <span class="keywordflow">else</span>
+<a name="l01029"></a>01029       {
+<a name="l01030"></a>01030         <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = needed;
+<a name="l01031"></a>01031         <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0)
+<a name="l01032"></a>01032         {
+<a name="l01033"></a>01033           memcpy(<a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>, <a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a>, needed); <span class="comment">// Includes implicit null byte.</span>
+<a name="l01034"></a>01034           <a class="code" href="classcsStringBase.html#fa5e7cc27c97e4c970c19f1172117f6a">csStringBase::Free</a>();
+<a name="l01035"></a>01035         }
+<a name="l01036"></a>01036       }
+<a name="l01037"></a>01037     }
+<a name="l01038"></a>01038   }
+<a name="l01039"></a>01039 
+<a name="l01040"></a><a class="code" href="classcsStringFast.html#49a4f3f62534048aa947da39a8fee1d8">01040</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcsStringFast.html#49a4f3f62534048aa947da39a8fee1d8">Free</a> () { <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = 0; <a class="code" href="classcsStringBase.html#fa5e7cc27c97e4c970c19f1172117f6a">csStringBase::Free</a>(); }
+<a name="l01041"></a>01041 
+<a name="l01042"></a><a class="code" href="classcsStringFast.html#1f79797cac8cafd7a82467708cdf320b">01042</a>   <span class="keyword">virtual</span> <span class="keywordtype">char</span>* <a class="code" href="classcsStringFast.html#1f79797cac8cafd7a82467708cdf320b">Detach</a> ()
+<a name="l01043"></a>01043   { 
+<a name="l01044"></a>01044     <span class="keywordflow">if</span> (<a class="code" href="classcsStringBase.html#398de8de57fe8e648bb7207d00c31de3">Data</a> != 0)
+<a name="l01045"></a>01045       <span class="keywordflow">return</span> <a class="code" href="classcsStringBase.html#3fb2adf9b28acc7d2a69956187147243">csStringBase::Detach</a>();
+<a name="l01046"></a>01046     <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> == 0)
+<a name="l01047"></a>01047       <span class="keywordflow">return</span> 0; <span class="comment">// Emulate NULL return of csStringBase in this case.</span>
+<a name="l01048"></a>01048     <span class="keywordflow">else</span>
+<a name="l01049"></a>01049     {
+<a name="l01050"></a>01050       <a class="code" href="cssysdef_8h.html#c380bd47888ecfe73e7b7a40b6f827a1">CS_ASSERT</a>(<a class="code" href="classcsStringBase.html#eb2631c85b01181bf069998cc5d8e62e">MaxSize</a> == 0);
+<a name="l01051"></a>01051       <span class="keywordtype">char</span>* d = <a class="code" href="group__util.html#gc3a6e34ea28a22fdeda8802c872ce2d0">csStrNew</a> (<a class="code" href="classcsStringFast.html#d0b09dc3848920bee618d78956125072">minibuff</a>);
+<a name="l01052"></a>01052       <a class="code" href="classcsStringBase.html#56a011d57a287c82fc0e6dc0843ecc8a">Size</a> = 0; <a class="code" href="classcsStringFast.html#4e781ace33d0f30409fbc4daf8475a51">miniused</a> = 0;
+<a name="l01053"></a>01053       <span class="keywordflow">return</span> d;
+<a name="l01054"></a>01054     }
+<a name="l01055"></a>01055   }
+<a name="l01056"></a>01056 };
+<a name="l01057"></a>01057 
+<a name="l01058"></a>01058 CS_SPECIALIZE_TEMPLATE
+<a name="l01059"></a><a class="code" href="classcsStringFast_3_010_01_4.html">01059</a> <span class="keyword">class </span><a class="code" href="classcsStringFast.html">csStringFast</a>&lt;0&gt; : <span class="keyword">public</span> <a class="code" href="classcsStringBase.html">csStringBase</a>
+<a name="l01060"></a>01060 {
+<a name="l01061"></a>01061 <span class="keyword">public</span>:
+<a name="l01062"></a><a class="code" href="classcsStringFast_3_010_01_4.html#10e602e475c49856cb7ab2798ab7d9a0">01062</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> () : <a class="code" href="classcsStringBase.html">csStringBase</a>() { }
+<a name="l01063"></a><a class="code" href="classcsStringFast_3_010_01_4.html#cae494318af69bb4156ca5abe59b1fa4">01063</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (size_t <a class="code" href="classcsStringBase.html#4d4820df67848ac1040af1896c2dd280">Length</a>) : <a class="code" href="classcsStringBase.html">csStringBase</a>(Length) { }
+<a name="l01064"></a><a class="code" href="classcsStringFast_3_010_01_4.html#888949300fb47849b454cd035f88d5d6">01064</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringBase.html">csStringBase</a> (copy) { }
+<a name="l01065"></a><a class="code" href="classcsStringFast_3_010_01_4.html#f72679070980cd0cddea881e4f2648ba">01065</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringBase.html">csStringBase</a>(src) { }
+<a name="l01066"></a><a class="code" href="classcsStringFast_3_010_01_4.html#ad2fd7d8a806951a6cb5a9691e29b253">01066</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src, size_t _length) : <a class="code" href="classcsStringBase.html">csStringBase</a>(src, _length)
+<a name="l01067"></a>01067   { }
+<a name="l01068"></a><a class="code" href="classcsStringFast_3_010_01_4.html#e85afedc256118982cab7ea4e2f6ddaf">01068</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(c) { }
+<a name="l01069"></a><a class="code" href="classcsStringFast_3_010_01_4.html#0fb3636f6070d6f6bbcc8ca264ef2fe7">01069</a>   <a class="code" href="classcsStringFast.html#0efac2e772032371959b71919471b1bf">csStringFast</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringBase.html">csStringBase</a>(c) { }
+<a name="l01070"></a><a class="code" href="classcsStringFast_3_010_01_4.html#952c3bab703da5e44606a0af19e0f65a">01070</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
+<a name="l01071"></a>01071   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01072"></a><a class="code" href="classcsStringFast_3_010_01_4.html#b7366a55fab355037662a130f51148c2">01072</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* copy)
+<a name="l01073"></a>01073   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01074"></a><a class="code" href="classcsStringFast_3_010_01_4.html#3794644e352ff500734a3fc2726e5f44">01074</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">char</span> x)
 <a name="l01075"></a>01075   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01076"></a><a class="code" href="classcsStringFast_3_010_01_4.html#2bdad66de7001e5ae97dbd86bd4e64fa">01076</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">short</span> x)
+<a name="l01076"></a><a class="code" href="classcsStringFast_3_010_01_4.html#eee7f704b940f95e6651fc196d4b90c1">01076</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> x)
 <a name="l01077"></a>01077   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01078"></a><a class="code" href="classcsStringFast_3_010_01_4.html#f6c1ca2d86c1db9c2a3f439968a9b1c7">01078</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> x)
+<a name="l01078"></a><a class="code" href="classcsStringFast_3_010_01_4.html#f128206b63e8aaf56366fc6c8ccabbe3">01078</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">bool</span> x)
 <a name="l01079"></a>01079   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01080"></a><a class="code" href="classcsStringFast_3_010_01_4.html#976fe5acefe91eeacbe257a9c7c96f03">01080</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">int</span> x)
+<a name="l01080"></a><a class="code" href="classcsStringFast_3_010_01_4.html#2bdad66de7001e5ae97dbd86bd4e64fa">01080</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">short</span> x)
 <a name="l01081"></a>01081   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01082"></a><a class="code" href="classcsStringFast_3_010_01_4.html#67ce8310c6048e7a3028ac9756c91f64">01082</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x)
+<a name="l01082"></a><a class="code" href="classcsStringFast_3_010_01_4.html#f6c1ca2d86c1db9c2a3f439968a9b1c7">01082</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> x)
 <a name="l01083"></a>01083   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01084"></a><a class="code" href="classcsStringFast_3_010_01_4.html#38eb5d32a71c0faea578c5043aaef916">01084</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">long</span> x)
+<a name="l01084"></a><a class="code" href="classcsStringFast_3_010_01_4.html#976fe5acefe91eeacbe257a9c7c96f03">01084</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">int</span> x)
 <a name="l01085"></a>01085   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01086"></a><a class="code" href="classcsStringFast_3_010_01_4.html#3121503d2168e38ca8bf8142b9bc5d97">01086</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> x)
+<a name="l01086"></a><a class="code" href="classcsStringFast_3_010_01_4.html#67ce8310c6048e7a3028ac9756c91f64">01086</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x)
 <a name="l01087"></a>01087   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01088"></a><a class="code" href="classcsStringFast_3_010_01_4.html#550481a74205b423057fb253b763a42b">01088</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">float</span> x)
+<a name="l01088"></a><a class="code" href="classcsStringFast_3_010_01_4.html#38eb5d32a71c0faea578c5043aaef916">01088</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">long</span> x)
 <a name="l01089"></a>01089   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01090"></a><a class="code" href="classcsStringFast_3_010_01_4.html#ea0ecd25cffead055822904ee49abbc1">01090</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">double</span> x)
+<a name="l01090"></a><a class="code" href="classcsStringFast_3_010_01_4.html#3121503d2168e38ca8bf8142b9bc5d97">01090</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> x)
 <a name="l01091"></a>01091   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01092"></a>01092 <span class="preprocessor">#ifndef __STRICT_ANSI__</span>
-<a name="l01093"></a><a class="code" href="classcsStringFast_3_010_01_4.html#01e8561f7342733fcd6bfb431a425231">01093</a> <span class="preprocessor"></span>  <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<a class="code" href="group__util.html#g574e57efdc7bcebd6e3b5e043fdeb28c">longlong</a> x)
-<a name="l01094"></a>01094   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01095"></a><a class="code" href="classcsStringFast_3_010_01_4.html#341036188377b7e3cde0d35cf0ed4676">01095</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<a class="code" href="group__util.html#g8c42bcc74c4498c45586ad15fab3b829">ulonglong</a> x)
-<a name="l01096"></a>01096   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01097"></a>01097 <span class="preprocessor">#endif</span>
-<a name="l01098"></a>01098 <span class="preprocessor"></span>};
-<a name="l01099"></a>01099 
-<a name="l01100"></a>01100 <span class="preprocessor">#ifndef SWIG</span>
-<a name="l01101"></a>01101 <span class="preprocessor"></span>
-<a name="l01106"></a><a class="code" href="csstring_8h.html#f6715753272ba078edc12216596ce980">01106</a> <span class="keyword">typedef</span> <a class="code" href="classcsStringFast.html">csStringFast&lt;&gt;</a> <a class="code" href="classcsStringFast.html">csStringFastDefault</a>;
-<a name="l01107"></a>01107 <span class="preprocessor">#else</span>
-<a name="l01108"></a>01108 <span class="preprocessor"></span><span class="preprocessor">#define csStringFastDefault csStringFast&lt;36&gt;</span>
-<a name="l01109"></a>01109 <span class="preprocessor"></span>%<span class="keyword">template</span>(csStringParent) <a class="code" href="classcsStringFast.html">csStringFast&lt;36&gt;</a>;
-<a name="l01110"></a>01110 <span class="preprocessor">#endif</span>
-<a name="l01111"></a>01111 <span class="preprocessor"></span>
-<a name="l01115"></a><a class="code" href="classcsString.html">01115</a> <span class="keyword">class </span><a class="code" href="classcsString.html">csString</a> : <span class="keyword">public</span> csStringFastDefault
-<a name="l01116"></a>01116 {
-<a name="l01117"></a>01117 <span class="keyword">public</span>:
-<a name="l01119"></a><a class="code" href="classcsString.html#edaf372782d9a8799e024f2ac4c2c564">01119</a>   <a class="code" href="classcsString.html">csString</a> () : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; () { }
-<a name="l01124"></a><a class="code" href="classcsString.html#84579973ccfd0eb9cba69462f97e6b7e">01124</a>   <a class="code" href="classcsString.html">csString</a> (size_t Length) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (Length) { }
-<a name="l01126"></a>01126 
-<a name="l01127"></a><a class="code" href="classcsString.html#f7702500f67111de535b0d48f3e4ee4d">01127</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy) :
-<a name="l01128"></a>01128     <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; ((const <a class="code" href="classcsStringBase.html">csStringBase</a>&amp;)copy) { }
-<a name="l01129"></a><a class="code" href="classcsString.html#989fbef0bd275b1c116ec252086518d5">01129</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (copy) { }
-<a name="l01131"></a>01131 
-<a name="l01132"></a><a class="code" href="classcsString.html#d330b9390dbe0fb64c433289c98f8746">01132</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (src) { }
-<a name="l01134"></a><a class="code" href="classcsString.html#302e652ded98052ce79cb74539a5815f">01134</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src, size_t _length) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (src, _length) { }
-<a name="l01136"></a><a class="code" href="classcsString.html#612a5248c5600ee111bba3e9c0f1d329">01136</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (c) { }
-<a name="l01138"></a><a class="code" href="classcsString.html#2063954e77d18fd0c2ca95d0fa87b6d1">01138</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (c) { }
-<a name="l01139"></a>01139 
-<a name="l01141"></a>01141 
-<a name="l01142"></a><a class="code" href="classcsString.html#2a686d11fae9542186ebcc42129e8832">01142</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy)
-<a name="l01143"></a>01143   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01144"></a><a class="code" href="classcsString.html#a39053d32060564e963c094c9daa2f05">01144</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
-<a name="l01145"></a>01145   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01146"></a><a class="code" href="classcsString.html#9655afb5282bffa56b1e85b8daeff6f1">01146</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <span class="keywordtype">char</span>* copy)
+<a name="l01092"></a><a class="code" href="classcsStringFast_3_010_01_4.html#550481a74205b423057fb253b763a42b">01092</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">float</span> x)
+<a name="l01093"></a>01093   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01094"></a><a class="code" href="classcsStringFast_3_010_01_4.html#ea0ecd25cffead055822904ee49abbc1">01094</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<span class="keywordtype">double</span> x)
+<a name="l01095"></a>01095   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01096"></a>01096 <span class="preprocessor">#ifndef __STRICT_ANSI__</span>
+<a name="l01097"></a><a class="code" href="classcsStringFast_3_010_01_4.html#01e8561f7342733fcd6bfb431a425231">01097</a> <span class="preprocessor"></span>  <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<a class="code" href="group__util.html#g574e57efdc7bcebd6e3b5e043fdeb28c">longlong</a> x)
+<a name="l01098"></a>01098   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01099"></a><a class="code" href="classcsStringFast_3_010_01_4.html#341036188377b7e3cde0d35cf0ed4676">01099</a>   <span class="keyword">const</span> <a class="code" href="classcsStringFast.html">csStringFast</a>&amp; <a class="code" href="classcsStringFast.html#7fd076b23661571a4fbccb29cb61dde3">operator = </a>(<a class="code" href="group__util.html#g8c42bcc74c4498c45586ad15fab3b829">ulonglong</a> x)
+<a name="l01100"></a>01100   { <a class="code" href="classcsStringBase.html#6bb4fbecd065935ea4c6e0d9420a4b3f">Replace</a>(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01101"></a>01101 <span class="preprocessor">#endif</span>
+<a name="l01102"></a>01102 <span class="preprocessor"></span>};
+<a name="l01103"></a>01103 
+<a name="l01104"></a>01104 <span class="preprocessor">#ifndef SWIG</span>
+<a name="l01105"></a>01105 <span class="preprocessor"></span>
+<a name="l01110"></a><a class="code" href="csstring_8h.html#f6715753272ba078edc12216596ce980">01110</a> <span class="keyword">typedef</span> <a class="code" href="classcsStringFast.html">csStringFast&lt;&gt;</a> <a class="code" href="classcsStringFast.html">csStringFastDefault</a>;
+<a name="l01111"></a>01111 <span class="preprocessor">#else</span>
+<a name="l01112"></a>01112 <span class="preprocessor"></span><span class="preprocessor">#define csStringFastDefault csStringFast&lt;36&gt;</span>
+<a name="l01113"></a>01113 <span class="preprocessor"></span>%<span class="keyword">template</span>(csStringParent) <a class="code" href="classcsStringFast.html">csStringFast&lt;36&gt;</a>;
+<a name="l01114"></a>01114 <span class="preprocessor">#endif</span>
+<a name="l01115"></a>01115 <span class="preprocessor"></span>
+<a name="l01119"></a><a class="code" href="classcsString.html">01119</a> <span class="keyword">class </span><a class="code" href="classcsString.html">csString</a> : <span class="keyword">public</span> csStringFastDefault
+<a name="l01120"></a>01120 {
+<a name="l01121"></a>01121 <span class="keyword">public</span>:
+<a name="l01123"></a><a class="code" href="classcsString.html#edaf372782d9a8799e024f2ac4c2c564">01123</a>   <a class="code" href="classcsString.html">csString</a> () : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; () { }
+<a name="l01128"></a><a class="code" href="classcsString.html#84579973ccfd0eb9cba69462f97e6b7e">01128</a>   <a class="code" href="classcsString.html">csString</a> (size_t Length) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (Length) { }
+<a name="l01130"></a>01130 
+<a name="l01131"></a><a class="code" href="classcsString.html#f7702500f67111de535b0d48f3e4ee4d">01131</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy) :
+<a name="l01132"></a>01132     <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; ((const <a class="code" href="classcsStringBase.html">csStringBase</a>&amp;)copy) { }
+<a name="l01133"></a><a class="code" href="classcsString.html#989fbef0bd275b1c116ec252086518d5">01133</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (copy) { }
+<a name="l01135"></a>01135 
+<a name="l01136"></a><a class="code" href="classcsString.html#d330b9390dbe0fb64c433289c98f8746">01136</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (src) { }
+<a name="l01138"></a><a class="code" href="classcsString.html#302e652ded98052ce79cb74539a5815f">01138</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keyword">const</span> <span class="keywordtype">char</span>* src, size_t _length) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (src, _length) { }
+<a name="l01140"></a><a class="code" href="classcsString.html#612a5248c5600ee111bba3e9c0f1d329">01140</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">char</span> c) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (c) { }
+<a name="l01142"></a><a class="code" href="classcsString.html#2063954e77d18fd0c2ca95d0fa87b6d1">01142</a>   <a class="code" href="classcsString.html">csString</a> (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> c) : <a class="code" href="classcsStringFast.html">csStringFast</a>&lt;&gt; (c) { }
+<a name="l01143"></a>01143 
+<a name="l01145"></a>01145 
+<a name="l01146"></a><a class="code" href="classcsString.html#2a686d11fae9542186ebcc42129e8832">01146</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; copy)
 <a name="l01147"></a>01147   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01148"></a><a class="code" href="classcsString.html#1bb401141f7d4911da777bf33730f7b9">01148</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">char</span> x)
-<a name="l01149"></a>01149   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01150"></a><a class="code" href="classcsString.html#4542d561e92c4bc8665b2e6b8d2b5292">01150</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> x)
-<a name="l01151"></a>01151   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01152"></a><a class="code" href="classcsString.html#6917232dae4e2766d4f05dc07ec8ba73">01152</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">bool</span> x)
+<a name="l01148"></a><a class="code" href="classcsString.html#a39053d32060564e963c094c9daa2f05">01148</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <a class="code" href="classcsStringBase.html">csStringBase</a>&amp; copy)
+<a name="l01149"></a>01149   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01150"></a><a class="code" href="classcsString.html#9655afb5282bffa56b1e85b8daeff6f1">01150</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keyword">const</span> <span class="keywordtype">char</span>* copy)
+<a name="l01151"></a>01151   { Replace(copy); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01152"></a><a class="code" href="classcsString.html#1bb401141f7d4911da777bf33730f7b9">01152</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">char</span> x)
 <a name="l01153"></a>01153   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01154"></a><a class="code" href="classcsString.html#a6dbfff40cc5ec4ec2a9f29edc3cac3e">01154</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">short</span> x)
+<a name="l01154"></a><a class="code" href="classcsString.html#4542d561e92c4bc8665b2e6b8d2b5292">01154</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> x)
 <a name="l01155"></a>01155   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01156"></a><a class="code" href="classcsString.html#77141878a1a421a53b15dd9b74bd9d87">01156</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> x)
+<a name="l01156"></a><a class="code" href="classcsString.html#6917232dae4e2766d4f05dc07ec8ba73">01156</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">bool</span> x)
 <a name="l01157"></a>01157   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01158"></a><a class="code" href="classcsString.html#21cff66e111956686427ccd4bb7dad24">01158</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">int</span> x)
+<a name="l01158"></a><a class="code" href="classcsString.html#a6dbfff40cc5ec4ec2a9f29edc3cac3e">01158</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">short</span> x)
 <a name="l01159"></a>01159   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01160"></a><a class="code" href="classcsString.html#c27f2601c65c004c8e34f52a7daef8ff">01160</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x)
+<a name="l01160"></a><a class="code" href="classcsString.html#77141878a1a421a53b15dd9b74bd9d87">01160</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> x)
 <a name="l01161"></a>01161   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01162"></a><a class="code" href="classcsString.html#1ab8e3eb61c7399f26c6cdb7049b154d">01162</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">long</span> x)
+<a name="l01162"></a><a class="code" href="classcsString.html#21cff66e111956686427ccd4bb7dad24">01162</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">int</span> x)
 <a name="l01163"></a>01163   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01164"></a><a class="code" href="classcsString.html#c45c40af3ab73f4ea624682458ebc4fe">01164</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> x)
+<a name="l01164"></a><a class="code" href="classcsString.html#c27f2601c65c004c8e34f52a7daef8ff">01164</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x)
 <a name="l01165"></a>01165   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01166"></a><a class="code" href="classcsString.html#7f4b259ff070a565547d3cf65924f823">01166</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">float</span> x)
+<a name="l01166"></a><a class="code" href="classcsString.html#1ab8e3eb61c7399f26c6cdb7049b154d">01166</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">long</span> x)
 <a name="l01167"></a>01167   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01168"></a><a class="code" href="classcsString.html#ddbecc5306d9bd847c8efea85bc2d3ca">01168</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">double</span> x)
+<a name="l01168"></a><a class="code" href="classcsString.html#c45c40af3ab73f4ea624682458ebc4fe">01168</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> x)
 <a name="l01169"></a>01169   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01170"></a>01170 <span class="preprocessor">#ifndef __STRICT_ANSI__</span>
-<a name="l01171"></a><a class="code" href="classcsString.html#78c05f2a2b99bf3e02907022ac60b93f">01171</a> <span class="preprocessor"></span>  <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<a class="code" href="group__util.html#g574e57efdc7bcebd6e3b5e043fdeb28c">longlong</a> x)
-<a name="l01172"></a>01172   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01173"></a><a class="code" href="classcsString.html#7fd3632f90f30bbebf0d8f244cc869f1">01173</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<a class="code" href="group__util.html#g8c42bcc74c4498c45586ad15fab3b829">ulonglong</a> x)
-<a name="l01174"></a>01174   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01175"></a>01175 <span class="preprocessor">#endif</span>
-<a name="l01176"></a>01176 <span class="preprocessor"></span>
-<a name="l01177"></a>01177 };
-<a name="l01178"></a>01178 
-<a name="l01179"></a>01179 <span class="preprocessor">#endif // __CS_CSSTRING_H__</span>
+<a name="l01170"></a><a class="code" href="classcsString.html#7f4b259ff070a565547d3cf65924f823">01170</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">float</span> x)
+<a name="l01171"></a>01171   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01172"></a><a class="code" href="classcsString.html#ddbecc5306d9bd847c8efea85bc2d3ca">01172</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<span class="keywordtype">double</span> x)
+<a name="l01173"></a>01173   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01174"></a>01174 <span class="preprocessor">#ifndef __STRICT_ANSI__</span>
+<a name="l01175"></a><a class="code" href="classcsString.html#78c05f2a2b99bf3e02907022ac60b93f">01175</a> <span class="preprocessor"></span>  <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<a class="code" href="group__util.html#g574e57efdc7bcebd6e3b5e043fdeb28c">longlong</a> x)
+<a name="l01176"></a>01176   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01177"></a><a class="code" href="classcsString.html#7fd3632f90f30bbebf0d8f244cc869f1">01177</a>   <span class="keyword">const</span> <a class="code" href="classcsString.html">csString</a>&amp; operator = (<a class="code" href="group__util.html#g8c42bcc74c4498c45586ad15fab3b829">ulonglong</a> x)
+<a name="l01178"></a>01178   { Replace(x); <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01179"></a>01179 <span class="preprocessor">#endif</span>
+<a name="l01180"></a>01180 <span class="preprocessor"></span>
+<a name="l01181"></a>01181 };
+<a name="l01182"></a>01182 
+<a name="l01183"></a>01183 <span class="preprocessor">#endif // __CS_CSSTRING_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
