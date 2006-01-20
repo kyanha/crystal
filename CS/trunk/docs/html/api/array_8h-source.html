@@ -809,27 +809,35 @@
 <a name="l01063"></a>01063 
 <a name="l01065"></a><a class="code" href="classcsArray.html#546ff91af9eea7941db980b6809b8f54">01065</a>   Iterator <a class="code" href="classcsArray.html#546ff91af9eea7941db980b6809b8f54">GetIterator</a>()<span class="keyword"> const</span>
 <a name="l01066"></a>01066 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Iterator(*<span class="keyword">this</span>); }
-<a name="l01067"></a>01067 };
-<a name="l01068"></a>01068 
-<a name="l01074"></a>01074 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l01075"></a><a class="code" href="classcsSafeCopyArray.html">01075</a> <span class="keyword">class </span><a class="code" href="classcsSafeCopyArray.html">csSafeCopyArray</a>
-<a name="l01076"></a>01076         : <span class="keyword">public</span> <a class="code" href="classcsArray.html">csArray</a>&lt;T,
-<a name="l01077"></a>01077                 csArrayElementHandler&lt;T&gt;,
-<a name="l01078"></a>01078                 csSafeCopyArrayMemoryAllocator&lt;T&gt; &gt;
-<a name="l01079"></a>01079 {
-<a name="l01080"></a>01080 <span class="keyword">public</span>:
-<a name="l01085"></a><a class="code" href="classcsSafeCopyArray.html#4d0342f7404e2985c4b0d114991e9ddb">01085</a>   <a class="code" href="classcsSafeCopyArray.html#4d0342f7404e2985c4b0d114991e9ddb">csSafeCopyArray</a> (size_t limit = 0, size_t threshold = 0)
-<a name="l01086"></a>01086         : <a class="code" href="classcsArray.html">csArray</a>&lt;T, <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler</a>&lt;T&gt;,
-<a name="l01087"></a>01087                      <a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">csSafeCopyArrayMemoryAllocator</a>&lt;T&gt; &gt; (limit, threshold)
-<a name="l01088"></a>01088   {
-<a name="l01089"></a>01089   }
-<a name="l01090"></a>01090 };
-<a name="l01091"></a>01091 
-<a name="l01092"></a>01092 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
-<a name="l01093"></a>01093 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
-<a name="l01094"></a>01094 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l01095"></a>01095 <span class="preprocessor"></span>
-<a name="l01098"></a>01098 <span class="preprocessor">#endif</span>
+<a name="l01067"></a>01067   
+<a name="l01069"></a><a class="code" href="classcsArray.html#3d95e8e194e29ee788611a5578541f35">01069</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsArray.html#3d95e8e194e29ee788611a5578541f35">operator== </a>(<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&amp; other)<span class="keyword"> const</span>
+<a name="l01070"></a>01070 <span class="keyword">  </span>{
+<a name="l01071"></a>01071     <span class="keywordflow">if</span> (other.<a class="code" href="classcsArray.html#287e65f82e57b69cc99630b57dd45e67">GetSize</a>() != <a class="code" href="classcsArray.html#287e65f82e57b69cc99630b57dd45e67">GetSize</a>()) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l01072"></a>01072     <span class="keywordflow">for</span> (size_t i = 0; i &lt; <a class="code" href="classcsArray.html#287e65f82e57b69cc99630b57dd45e67">GetSize</a>(); i++)
+<a name="l01073"></a>01073       <span class="keywordflow">if</span> (<a class="code" href="classcsArray.html#ff31f97d7a35ad1232c022e0bb728a27">Get</a> (i) != other[i]) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l01074"></a>01074     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l01075"></a>01075   }
+<a name="l01076"></a>01076 };
+<a name="l01077"></a>01077 
+<a name="l01083"></a>01083 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l01084"></a><a class="code" href="classcsSafeCopyArray.html">01084</a> <span class="keyword">class </span><a class="code" href="classcsSafeCopyArray.html">csSafeCopyArray</a>
+<a name="l01085"></a>01085         : <span class="keyword">public</span> <a class="code" href="classcsArray.html">csArray</a>&lt;T,
+<a name="l01086"></a>01086                 csArrayElementHandler&lt;T&gt;,
+<a name="l01087"></a>01087                 csSafeCopyArrayMemoryAllocator&lt;T&gt; &gt;
+<a name="l01088"></a>01088 {
+<a name="l01089"></a>01089 <span class="keyword">public</span>:
+<a name="l01094"></a><a class="code" href="classcsSafeCopyArray.html#4d0342f7404e2985c4b0d114991e9ddb">01094</a>   <a class="code" href="classcsSafeCopyArray.html#4d0342f7404e2985c4b0d114991e9ddb">csSafeCopyArray</a> (size_t limit = 0, size_t threshold = 0)
+<a name="l01095"></a>01095         : <a class="code" href="classcsArray.html">csArray</a>&lt;T, <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler</a>&lt;T&gt;,
+<a name="l01096"></a>01096                      <a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">csSafeCopyArrayMemoryAllocator</a>&lt;T&gt; &gt; (limit, threshold)
+<a name="l01097"></a>01097   {
+<a name="l01098"></a>01098   }
+<a name="l01099"></a>01099 };
+<a name="l01100"></a>01100 
+<a name="l01101"></a>01101 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
+<a name="l01102"></a>01102 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
+<a name="l01103"></a>01103 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l01104"></a>01104 <span class="preprocessor"></span>
+<a name="l01107"></a>01107 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
