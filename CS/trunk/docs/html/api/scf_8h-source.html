@@ -348,13 +348,13 @@
 <a name="l00525"></a>00525 <span class="preprocessor">  SCF_IMPLEMENT_IBASE_EXT_QUERY_END</span>
 <a name="l00526"></a>00526 <span class="preprocessor"></span>
 <a name="l00542"></a>00542 <span class="preprocessor">#ifdef CS_MEMORY_TRACKER</span>
-<a name="l00543"></a>00543 <span class="preprocessor"></span><span class="comment">// This special version of SCF_IMPLEMENT_FACTORY_INIT will make sure that</span>
-<a name="l00544"></a>00544 <span class="comment">// the memory tracker for this plugin is implemented.</span>
-<a name="l00545"></a>00545 <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_INIT(Class)                               \</span>
-<a name="l00546"></a>00546 <span class="preprocessor">static inline void Class ## _scfUnitInitialize(iSCF* SCF)               \</span>
-<a name="l00547"></a>00547 <span class="preprocessor">{                                                                       \</span>
-<a name="l00548"></a>00548 <span class="preprocessor">  iSCF::SCF = SCF;                                                      \</span>
-<a name="l00549"></a>00549 <span class="preprocessor">  extern void mtiRegisterModule (char*);                                \</span>
+<a name="l00543"></a>00543 <span class="preprocessor"></span><span class="preprocessor">#include "memdebug.h"</span> <span class="comment">// needed for mtiRegisterModule</span>
+<a name="l00544"></a>00544 <span class="comment">// This special version of SCF_IMPLEMENT_FACTORY_INIT will make sure that</span>
+<a name="l00545"></a>00545 <span class="comment">// the memory tracker for this plugin is implemented.</span>
+<a name="l00546"></a>00546 <span class="preprocessor">#define SCF_IMPLEMENT_FACTORY_INIT(Class)                               \</span>
+<a name="l00547"></a>00547 <span class="preprocessor">static inline void Class ## _scfUnitInitialize(iSCF* SCF)               \</span>
+<a name="l00548"></a>00548 <span class="preprocessor">{                                                                       \</span>
+<a name="l00549"></a>00549 <span class="preprocessor">  iSCF::SCF = SCF;                                                      \</span>
 <a name="l00550"></a>00550 <span class="preprocessor">  mtiRegisterModule (#Class);                                           \</span>
 <a name="l00551"></a>00551 <span class="preprocessor">}                                                                       \</span>
 <a name="l00552"></a>00552 <span class="preprocessor">CS_EXPORTED_FUNCTION                                                    \</span>

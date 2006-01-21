@@ -50,6 +50,9 @@ Inheritance diagram for iEngine:<p><center><img src="structiEngine__inherit__gra
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the <a class="el" href="structiObject.html">iObject</a> for the engine.  <a href="#7fb2d06edb8be40dd2c0d2c663b1fa7c"></a><br></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Sector handling</div></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEngine.html#552b31f7b3bdf4ac82b655b4f49a66c6">AddEngineFrameCallback</a> (<a class="el" href="structiEngineFrameCallback.html">iEngineFrameCallback</a> *cb)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Add a frame callback.  <a href="#552b31f7b3bdf4ac82b655b4f49a66c6"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEngine.html#916e54a6c4b67d83a6c8291dab82c54e">AddEngineSectorCallback</a> (<a class="el" href="structiEngineSectorCallback.html">iEngineSectorCallback</a> *cb)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Add a sector callback.  <a href="#916e54a6c4b67d83a6c8291dab82c54e"></a><br></td></tr>
@@ -65,6 +68,9 @@ Inheritance diagram for iEngine:<p><center><img src="structiEngine__inherit__gra
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiSectorList.html">iSectorList</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEngine.html#6154fdb7e98d5b4519e02149ceb4a00e">GetSectors</a> ()=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the list of sectors.  <a href="#6154fdb7e98d5b4519e02149ceb4a00e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEngine.html#0a49b6801ed741a04ac291d0db8bffd4">RemoveEngineFrameCallback</a> (<a class="el" href="structiEngineFrameCallback.html">iEngineFrameCallback</a> *cb)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove a frame callback.  <a href="#0a49b6801ed741a04ac291d0db8bffd4"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiEngine.html#afd8134db68980b21b38fc819eb16b5b">RemoveEngineSectorCallback</a> (<a class="el" href="structiEngineSectorCallback.html">iEngineSectorCallback</a> *cb)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove a sector callback.  <a href="#afd8134db68980b21b38fc819eb16b5b"></a><br></td></tr>
@@ -413,7 +419,37 @@ Main users of this interface:<ul>
 <p>
 
 <p>
-Definition at line <a class="el" href="engine_8h-source.html#l00157">157</a> of file <a class="el" href="engine_8h-source.html">engine.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="engine_8h-source.html#l00170">170</a> of file <a class="el" href="engine_8h-source.html">engine.h</a>.<hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="552b31f7b3bdf4ac82b655b4f49a66c6"></a><!-- doxytag: member="iEngine::AddEngineFrameCallback" ref="552b31f7b3bdf4ac82b655b4f49a66c6" args="(iEngineFrameCallback *cb)=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual void iEngine::AddEngineFrameCallback           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiEngineFrameCallback.html">iEngineFrameCallback</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>cb</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Add a frame callback. 
+<p>
+This will call <a class="el" href="structiBase.html#426a2763702fbbc33a213f849042284a">IncRef()</a> on the callback So make sure you call <a class="el" href="structiBase.html#3a44d46ca155e6ab0c0179db01011bb0">DecRef()</a> to release your own reference.     </td>
+  </tr>
+</table>
 <a class="anchor" name="916e54a6c4b67d83a6c8291dab82c54e"></a><!-- doxytag: member="iEngine::AddEngineSectorCallback" ref="916e54a6c4b67d83a6c8291dab82c54e" args="(iEngineSectorCallback *cb)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -4138,6 +4174,36 @@ Render priorities are assigned to objects and controls the order in which object
   </table>
 </dl>
 <dl compact><dt><b>Note:</b></dt><dd>The default render priorities are 'sky', 'portal', 'wall', 'object' and 'alpha' (in that priority order, where sky is rendered first and alpha is rendered last). Should you wish to add your own render priority, you must call <a class="el" href="structiEngine.html#b7170c64726aa3e2bd0401fbc4a9b678">ClearRenderPriorities()</a> and re-add the default render priorities along with your own new priorities. </dd></dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="0a49b6801ed741a04ac291d0db8bffd4"></a><!-- doxytag: member="iEngine::RemoveEngineFrameCallback" ref="0a49b6801ed741a04ac291d0db8bffd4" args="(iEngineFrameCallback *cb)=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual void iEngine::RemoveEngineFrameCallback           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiEngineFrameCallback.html">iEngineFrameCallback</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>cb</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Remove a frame callback. 
+<p>
     </td>
   </tr>
 </table>
