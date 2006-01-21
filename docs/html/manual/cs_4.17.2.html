@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.17.2 Format of Map File (XML)</title>
+<title>Crystal Space: 4.17.2 Playing a Sound</title>
 
-<meta name="description" content="Crystal Space: 4.17.2 Format of Map File (XML)">
-<meta name="keywords" content="Crystal Space: 4.17.2 Format of Map File (XML)">
+<meta name="description" content="Crystal Space: 4.17.2 Playing a Sound">
+<meta name="keywords" content="Crystal Space: 4.17.2 Playing a Sound">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="XML-File-Format"></a>
+<a name="Playing-Sound"></a>
 <a name="4.17.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.17.1.html#4.17.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.17.2.1.html#4.17.2.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.18.html#4.18" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.17.html#4.17" title="Up section"> Up </a>]</td>
@@ -58,92 +58,79 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.17.2 Format of Map File (<small>XML</small>) </h3>
+<h3 class="subsection"> 4.17.2 Playing a Sound </h3>
 
-<p>This section describes the the Crystal Space map, which uses <small>XML</small>, and is a
-companion to the <small>XML</small> schema file residing at:
-</p>
+<a name="SEC537"></a>
+<h4 class="subsubheading"> Playing a Sound Once </h4>
 
-<p><tt>`CS/scripts/xml/cs_world.xsd'</tt>
+<p>You can create more than one source to have the same sound played multiple times at the same time. For instance if you have a shooting sound and you want your players to shoot at the same time and have the correct number of shooting sounds.
 </p>
-<p>This document is not yet complete but it should give you sufficient information
-to get started.  For the format of the mesh object loaders you should look at
-the appropriate mesh object documentation (see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).  There is also
-a <small>HOWTO</small> on loading a map file (see section <a href="cs_4.17.1.html#4.17.1">Loading a Level</a>) and a
-<small>HOWTO</small> with a simple map example (see section <a href="cs_5.2.html#5.2">Simple Map Example</a>).
-</p>
-<p>The Crystal Space engine, itself, does not care about the external format of
-world data, nor does it care about how that information was obtained.  It is
-possible to create additional map loaders as plug-in modules which understand
-world data stored in other formats, such as binary.  A map loading plug-in
-module could even load maps over the network from a map file server, or
-generate worlds randomly based upon some set of input properties.  There are
-many possibilities.
-</p>
-<p>The map file syntax described in this section, however, is that which is
-understood by the standard map file loader which accompanies Crystal Space.
-It deals strictly with plain-text <small>XML</small>-format files.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_4.17.2.1.html#4.17.2.1">4.17.2.1 Initalization Section</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.17.2.2.html#4.17.2.2">4.17.2.2 World Element Section</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.17.2.3.html#4.17.2.3">4.17.2.3 World Definition Section</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_4.17.2.4.html#4.17.2.4">4.17.2.4 Action Section</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;isound/handle.h&quot;
+#include &quot;isound/source.h&quot;
+#include &quot;isound/loader.h&quot;
+#include &quot;isound/source.h&quot;
+#include &quot;isound/renderer.h&quot;
+#include &quot;isound/wrapper.h&quot;
 
-<a name="SEC480"></a>
-<h4 class="subsubheading"> Basic Structure </h4>
+...
 
-<p>The basic structure of a map file for Crystal Space is as follows:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;world&gt;
-  initialization part:
-    one texture specification section.
-    one material specification section.
-    one shader section.
-    one sounds section.
-    one variable section.
-    one plugin section.
-    one settings section.
-    zero or more start locations.
-    zero or more library specifications.
-    zero or more keys.
-  world elements:
-    zero or more add-ons.
-    zero or more mesh factories.
-  world definition:
-    zero or more sectors.
-    zero or more collections.
-  action section:
-    one sequence section.
-    one trigger section.
-&lt;/world&gt;
+if (!csInitializer::RequestPlugins(object_reg,
+...
+CS_REQUEST_PLUGIN(&quot;crystalspace.sound.render.software&quot;, iSoundRender),
+CS_REQUEST_PLUGIN(&quot;crystalspace.sound.loader.multiplexer&quot;, iSoundLoader),
+CS_REQUEST_END))
+...
+
+iSoundRender *sndrdr = csQueryRegistry&lt;iSoundRender&gt; (object_reg);
+if (sndrdr)
+{
+  printf(&quot;iSoundRender loaded\n&quot;);
+  csRef&lt;iSoundWrapper&gt; w_boom = loader-&gt;LoadSound(&lt;sound name&gt;,&lt;sound url&gt;);
+  if (w_boom)
+  {
+    csRef&lt;iSoundSource&gt; sndsrc = w_boom-&gt;GetSound()-&gt;CreateSource(
+    	SOUND3D_ABSOLUTE);
+    sndsrc-&gt;Play();
+  }
+  else
+  {
+    printf(&quot;ERROR: SoundWrapper empty. \n&quot;);
+  }
+}
+else
+{
+  printf(&quot;Error: no iSoundRender plugin\n&quot;);
+}
 </pre></td></tr></table>
-<p>The structure above divides the world into roughly four sections.  This is only
-a logical division for explanatory purposes; in reality there are no such
-divisions.
+<a name="SEC538"></a>
+<h4 class="subsubheading"> Looping Background Music </h4>
+
+<p>Here is how you can play a looping sound:
 </p>
-<p>The initialization part contains everything that is related to
-setting up the map except for geometry-related data. The textures,
-materials, and other required parts are defined there.
-</p>
-<p>The world elements section defines objects (mesh factories) and optional
-additional features (add-on's) which will be used throughout the
-actual world definition. Thus, geometry-templates are defined here, though
-instantiated later.
-</p>
-<p>In the world definition section the actual geometry is defined. At the
-highest level you have sectors. In every sector the actual objects reside
-(see later for more information about this).
-</p>
-<p>Finally there is the action section. In this section sequences and
-triggers are used to define interactions and other special actions on
-objects and other objects in the world.
-</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">//Sound renderer
+csRef snd = csQueryRegistry&lt;iSoundRender&gt; (object_reg);
+if (snd)
+{
+  // &quot;song&quot; is the handle, songname is a const char* to the filename.
+  csRef&lt;iSoundWrapper&gt; w = loader-&gt;LoadSound(&quot;song&quot;,songname);
+  if (w)
+  {
+    // Declare 'music' as a csRef&lt;iSoundSource&gt; somewhere.
+    music = w-&gt;GetSound ()-&gt;Play (true);
+  }
+  else
+  {
+    printf(&quot;ERROR: Wrapper empty. \n&quot;);
+  }
+}
+</pre></td></tr></table>
+
+
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.17.1.html#4.17.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.17.2.1.html#4.17.2.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.18.html#4.18" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.17.html#4.17" title="Up section"> Up </a>]</td>
