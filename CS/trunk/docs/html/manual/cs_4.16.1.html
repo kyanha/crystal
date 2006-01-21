@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.16.1 Common Model Data Structure (iModelData)</title>
+<title>Crystal Space: 4.16.1 Loading a Level</title>
 
-<meta name="description" content="Crystal Space: 4.16.1 Common Model Data Structure (iModelData)">
-<meta name="keywords" content="Crystal Space: 4.16.1 Common Model Data Structure (iModelData)">
+<meta name="description" content="Crystal Space: 4.16.1 Loading a Level">
+<meta name="keywords" content="Crystal Space: 4.16.1 Loading a Level">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Model-Data-Structure"></a>
+<a name="HOWTO-Level-Loading"></a>
 <a name="4.16.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.16.html#4.16" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.17.html#4.17" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.16.2.html#4.16.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.16.html#4.16" title="Up section"> Up </a>]</td>
@@ -58,91 +58,65 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.16.1 Common Model Data Structure (<code>iModelData</code>) </h3>
+<h3 class="subsection"> 4.16.1 Loading a Level </h3>
 
-<p>The <small>IDS</small> is built by a simple concept. All components implement
-<code>iObject</code>. Except a few cases, the structure is built using the
-<code>iObject</code> hierarchy. The following components are currently used:
+<p>This section describes how you can load a level in your game.
 </p>
-<dl compact="compact">
-<dt> <em>Scene</em></dt>
-<dd><p>This is the main object. It contains any number of <em>objects</em>,
-<em>light sources</em>, <em>cameras</em>, <em>materials</em> and <em>textures</em>.
-</p>
-</dd>
-<dt> <em>Texture</em></dt>
-<dd><p>An image, which can be stored as an <code>iImage</code>, an <code>iTextureWrapper</code>,
-or a filename.
-</p>
-</dd>
-<dt> <em>Material</em></dt>
-<dd><p>A material, which can be stored as an <code>iMaterial</code> or an
-<code>iMaterialWrapper</code>.
-</p>
-</dd>
-<dt> <em>Camera</em></dt>
-<dd><p>A camera that looks into the scene. It currently contains a position and
-up, front and right vectors.
-</p>
-</dd>
-<dt> <em>Light Source</em></dt>
-<dd><p>A light source, consisting of position, brightness and color.
-</p>
-</dd>
-<dt> <em>Vertex Frame</em></dt>
-<dd><p>This is a collection of any number of vertex positions, any number of normal
-vectors, of color values and of texture coordinates (also called
-<em>texels</em>).
-</p>
-</dd>
-<dt> <em>Polygon</em></dt>
-<dd><p>A list of quadruples of index values. Every entry in the list contains an
-index for a vertex table, an index for a normal table, one for a color table
-and one for a texel table. To produce meaningful output, a polygon has to be
-used together with a vertex frame object.
-</p>
-</dd>
-<dt> <em>Object</em></dt>
-<dd><p>This is what model importing is usually about. An object can be as much as
-a complete level or as few as one polygon. It is simply something that you
-can build a mesh object from. This means that it doesn't even have to use
-polygons (it could use curves instead). This object itself is hardly more
-than a node in the <code>iObject</code> hierarchy.
-</p>
-<p>Sub-objects are currently organized in a way that is closely related to the
-<em>thing</em> and <em>sprite</em> meshes used in CS: Every object contains a
-<em>Default Vertex Frame</em>, which is (of course) a vertex frame object. Also,
-an object contains any number of <em>polygon</em> objects. Take these together
-and you have the static shape of an object (and also the shape that is used
-when you build a thing mesh from it).
-</p>
-</dd>
-<dt> <em>Action</em></dt>
-<dd><p>For sprites, it is more difficult as you also want animation. An <small>IDS</small>
-object can also contain any number of <em>action</em> objects. An action is
-a list of frames and time values. Frames are also handled as generic <small>IDS</small>
-objects. However, they are special in the way that they are not contained in
-the action as <code>iObject</code> children but rather directly though the
-<code>iModelDataAction</code> interface. Currently the only types of frames that are
-allowed are vertex frames.
-</p>
-<p>Finally, the time value system has to be explained. Time values are stored in
-a rather unusual way: The time that is stored with each frame is the point
-in time when the frame ends. For example, if the first frame lasts 50 msec,
-then the time value stored with it is 50 msec. If the second frame lasts 30
-msec, its time value is 80 (50+30). The last time value is also the total
-length of one animation cycle. Note that for interpolated animation this
-produces another effect: At the point <em>zero</em> in time, the frame to show
-is equal to the last stored frame. The animation then moves on to the first
-time value, shifting the frame to show over to the first stored frame.
-</p></dd>
-</dl>
+<a name="SEC460"></a>
+<h4 class="subsubheading"> Getting the Level Loader Plugin </h4>
 
+<p>To load a level you need the level loader plugin. There are two
+ways to make sure you have this plugin in your application. You can put
+a line in your config file like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">System.Plugins.iLoader = crystalspace.level.loader
+</pre></td></tr></table>
+<p>Or you can add the following line to the call to
+<code>csInitializer::RequestPlugins()</code> in your <code>main()</code> function:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">CS_REQUEST_LEVELLOADER,
+</pre></td></tr></table>
+<p>To finally be able to use the level loader in your application you
+need to do:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iLoader&gt; level_loader = csQueryRegistry&lt;iLoader&gt; (object_reg);
+</pre></td></tr></table>
+<p>When you don't need it anymore you must call <code>level_loader-&gt;DecRef ()</code>.
+</p>
+<a name="SEC461"></a>
+<h4 class="subsubheading"> Loading a Map </h4>
 
+<p>Loading a map is simple. You just do:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">VFS-&gt;ChDir (&quot;/lev/mymap&quot;);
+level_loader-&gt;LoadMapFile (&quot;world&quot;);
+engine-&gt;Prepare ();
+</pre></td></tr></table>
+<p>This will first set the current directory to the right <small>VFS</small> dir
+(see section <a href="cs_4.7.html#4.7">Virtual File System (<small>VFS</small>)</a>) and then it will load the map file which is called 'world' (this
+is not a requirement).
+</p>
+<p>Note that this will clear all other geometry that might have been
+loaded in the engine before. If you don't want that then you need to
+set the second parameter of <code>LoadMapFile</code> to <code>false</code>.
+</p>
+<p>The line <code>engine-&gt;Prepare()</code> will make sure that everything that
+is loaded is correctly set up (i.e. materials and texture will be registered,
+lightmaps will be loaded from the cache, ...).
+</p>
+<a name="SEC462"></a>
+<h4 class="subsubheading"> Include Files </h4>
+
+<p>The include files useful for this section are:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;isys/vfs.h&gt;
+#include &lt;imap/loader.h&gt;
+#include &lt;iengine/engine.h&gt;
+</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.16.html#4.16" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.17.html#4.17" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.16.2.html#4.16.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.16.html#4.16" title="Up section"> Up </a>]</td>

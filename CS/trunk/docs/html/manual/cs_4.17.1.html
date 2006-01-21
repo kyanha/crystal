@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.17.1 Loading a Level</title>
+<title>Crystal Space: 4.17.1 Sound Plugins</title>
 
-<meta name="description" content="Crystal Space: 4.17.1 Loading a Level">
-<meta name="keywords" content="Crystal Space: 4.17.1 Loading a Level">
+<meta name="description" content="Crystal Space: 4.17.1 Sound Plugins">
+<meta name="keywords" content="Crystal Space: 4.17.1 Sound Plugins">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="HOWTO-Level-Loading"></a>
+<a name="Sound-Drivers"></a>
 <a name="4.17.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.17.html#4.17" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,61 +58,180 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.17.1 Loading a Level </h3>
+<h3 class="subsection"> 4.17.1 Sound Plugins </h3>
 
-<p>This section describes how you can load a level in your game.
+<p>The sound system consists of three components.
 </p>
-<a name="SEC476"></a>
-<h4 class="subsubheading"> Getting the Level Loader Plugin </h4>
+<dl compact="compact">
+<dt> <em>Sound Driver</em></dt>
+<dd><p>System dependent sound drivers.  This driver is used to pass one audio stream
+to the sound hardware (it does not mix several streams), and is only used by
+the software sound renderer.  The other renderers do not need this driver.
+There are currently drivers for MacOS/9, <small>OSS</small> (<small>GNU</small>/Linux) and WaveOut
+(Windows).
+</p>
+<p><em>Note</em>: You need not load the sound driver yourself.  It is loaded
+automatically by the software sound renderer. In fact, you normally don't
+have to deal with the sound driver in any way.
+</p>
+</dd>
+<dt> <em>Sound Renderer</em></dt>
+<dd><p>System dependent sound renderers.  This driver can be used to play sound.
+There are currently renderers for DirectSound3D and software.
+</p>
+</dd>
+<dt> <em>Sound Loader</em></dt>
+<dd><p>This module is used to load sound files.  There is only one implementation for
+this module.  It supports the following sound formats:
+</p>
+<ul>
+<li>
+Sun standard <tt>`.au'</tt> (or <tt>`.snd'</tt>), 8- and 16-bit <small>PCM</small> and 8-bit
+G.711 u-Law (no-compression).
+</li><li>
+Microsoft <tt>`.wav'</tt>, 8- and 16-bit <small>PCM</small>.
+</li><li>
+Amiga <tt>`.8svx'</tt> and <tt>`.iff'</tt>, 8-bit <small>PCM</small>.
+</li><li>
+MacOS/9 <tt>`.aiff'</tt>, 8- and 16-bit <small>PCM</small>.
+</li></ul>
+</dd>
+</dl>
 
-<p>To load a level you need the level loader plugin. There are two
-ways to make sure you have this plugin in your application. You can put
-a line in your config file like this:
+<p>The options for all sound modules must be set in the (virtual) file
+<tt>`/config/sound.cfg'</tt>.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">System.Plugins.iLoader = crystalspace.level.loader
-</pre></td></tr></table>
-<p>Or you can add the following line to the call to
-<code>csInitializer::RequestPlugins()</code> in your <code>main()</code> function:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">CS_REQUEST_LEVELLOADER,
-</pre></td></tr></table>
-<p>To finally be able to use the level loader in your application you
-need to do:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iLoader&gt; level_loader = csQueryRegistry&lt;iLoader&gt; (object_reg);
-</pre></td></tr></table>
-<p>When you don't need it anymore you must call <code>level_loader-&gt;DecRef ()</code>.
-</p>
-<a name="SEC477"></a>
-<h4 class="subsubheading"> Loading a Map </h4>
+<a name="SEC529"></a>
+<h4 class="subsubheading"> Sound Loader </h4>
 
-<p>Loading a map is simple. You just do:
+<p>The sound loader plug-in is used to load sound files and create sound data
+objects (<code>iSoundData</code>) from it. A sound data object represents the sound
+in its raw form. It is the same as the <code>iImage</code> is for graphics.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">VFS-&gt;ChDir (&quot;/lev/mymap&quot;);
-level_loader-&gt;LoadMapFile (&quot;world&quot;);
-engine-&gt;Prepare ();
-</pre></td></tr></table>
-<p>This will first set the current directory to the right <small>VFS</small> dir
-(see section <a href="cs_4.7.html#4.7">Virtual File System (<small>VFS</small>)</a>) and then it will load the map file which is called 'world' (this
-is not a requirement).
+<p>Looking at the sound loader's methods, you have probably noticed that it
+takes an object of <samp>`csSoundFormat'</samp> type. This object tells the sound
+loader in what format (frequency, 8- or 16-bits, stereo or mono) the samples
+should be supplied. You can get this from the sound renderer.
 </p>
-<p>Note that this will clear all other geometry that might have been
-loaded in the engine before. If you don't want that then you need to
-set the second parameter of <code>LoadMapFile</code> to <code>false</code>.
-</p>
-<p>The line <code>engine-&gt;Prepare()</code> will make sure that everything that
-is loaded is correctly set up (i.e. materials and texture will be registered,
-lightmaps will be loaded from the cache, ...).
-</p>
-<a name="SEC478"></a>
-<h4 class="subsubheading"> Include Files </h4>
+<a name="SEC530"></a>
+<h4 class="subsubheading"> Sound Data </h4>
 
-<p>The include files useful for this section are:
+<p>A sound data object can be either <em>static</em> or <em>streamed</em>. These are
+fundamentally different. The only reason why they use the same interface is
+that this makes it easier for the user. A static sound is mainly a buffer of
+samples. A streamed sound is mainly a callback function to read samples. At
+this point we can already say that one main difference is that you can play
+many instances of a static sound at the same time (each with its own position
+counter), but only one instance of a streamed sound. However, this does not
+mean that you can't create more than one sound source from a streamed sound.
+Read on!
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;isys/vfs.h&gt;
-#include &lt;imap/loader.h&gt;
-#include &lt;iengine/engine.h&gt;
-</pre></td></tr></table>
+<a name="SEC531"></a>
+<h4 class="subsubheading"> Sound Handle </h4>
+
+<p>The next step towards playing the sound is to hand over the sound data to the
+sound renderer. After doing this you may not use the sound data itself
+anymore. The renderer will now possibly convert the sound data to an internal
+format, load it into the soundcard memory, etc. In return you get a
+<em>sound handle</em>, which you should use from now.
+</p>
+<p>For static sounds, the sound handle is just that: A wrapper around the sound
+data. But for streamed sounds it is more: We said before that there can be
+only one instance of a streamed sound. This is not really correct. There may
+be several instances, as long as they play the same sequence of samples all
+the time (like several speakers that are connected to the same recorder).
+</p>
+<p>So here's a big difference between static and streamed sound. For static
+sounds, every instance has its own idea of which part of the sound to play,
+and you can control this on a per-instance basis. For streamed sounds, all
+instances of the same sound handle play the same stuff, and this is
+controlled on a per-handle basis. So the sound handle interface also contains
+methods to control playback, but only for streamed sounds.
+</p>
+<p>In short, the sound handle can do the following:
+</p>
+<ul>
+<li>
+Create and play an instance of the sound. This is a convenience function. It
+does not allow 3d effects or stopping the sound later (you must wait until
+it is finished). IT can be used for example for <small>GUI</small> sounds.
+
+</li><li>
+Create a sound source. A <em>sound source</em> is an instance of the sound.
+
+</li><li>
+Control playback for streamed sounds.
+</li></ul>
+
+<a name="SEC532"></a>
+<h4 class="subsubheading"> Sound Source </h4>
+
+<p>The sound source is one instance of a sound. It controls position and velocity
+for 3d sounds. For static sounds it also controls playback position and
+activeness, while for streamed sounds it controls only activeness.
+</p>
+<a name="SEC533"></a>
+<h4 class="subsubheading"> The Sound Listener </h4>
+
+<p>The sound renderer uses one global listener object. It controls how you hear
+sounds. This includes your own position and velocity (only for 3D sounds),
+and environmental effects.  @@@FIXME do env effects affect non-3D sounds?
+</p>
+<a name="SEC534"></a>
+<h4 class="subsubheading"> Sound System Example </h4>
+
+<p>Here's an example on how to set up the sound system:
+</p>
+<p>Assume you have five players running around in a FPS game. Three of them
+have a pistol, two have a shotgun. You want to play sounds when they fire
+their weapons, and you also have a sound file for footsteps. Finally, you
+want to play some music from thee big speakers that are placed in the level.
+</p>
+<p>First you load the sounds and register them. After that, you have three static
+sound handles for pistol, shotgun and footsteps, and one streamed sound handle
+for the music (note that there is currently no loader that creates streamed
+sound data, but let's assume there is).
+</p>
+<p>Now you create the sound sources. As said before, a sound source is one
+instance of a sound. Thus, if you want to hear the same sound from two
+directions, it must come from two sources. We actually have some freedom on
+how we create the sound sources. One thing is sure: We need one source for
+each of the three speakers for the music. We create the sources, set them to
+active, set the position to the position of the speakers and start stream
+playback at the sound handle for the music.
+</p>
+<p>For the footsteps we have several options. As one player cannot produce two
+footstep sounds at the same time, we can create one sound source for every
+player, then start playing on every step without looping. Or we could start
+looped playing when the player starts walking and stop playing when the player
+stops walking.
+</p>
+<p>Instead of starting and stopping playback all the time, we could also create
+a new sound source on every step, and destroy at afterwards. Currently this
+should be considered slow, but this may change. On the other hand, every
+sound source takes its part of memory, possibly soundcard memory. This may
+also change.
+</p>
+<p>What about the guns? It's similar to the footsteps. A player can only fire
+one shot at a time, so you can create one source per player for the shooting
+sound.
+</p>
+<a name="SEC535"></a>
+<h4 class="subsubheading"> Advanced Sound Effects </h4>
+
+<p>The environmental effects of the listener are not enough for you? You want to
+dynamically generate the sound? This is possible. You have to create your own
+implementation of <code>iSoundData</code>, usually as a streamed sound.
+</p>
+<p>To create special effects, you may for example load a sound as a streamed
+sound. Instead of passing it to the sound renderer, you create an object of
+your special effects class that takes the original stream and is itself a
+sound stream. You then pass this object to the sound renderer. When it is
+asked for sample data by the sound renderer, it could for example read data
+from the original stream, apply an echoing effect and return the modified
+data to the sound renderer. Note that it has to copy the data before modifying
+it! Otherwise you may seriously damage the original stream.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.17.html#4.17" title="Previous section in reading order"> &lt; </a>]</td>

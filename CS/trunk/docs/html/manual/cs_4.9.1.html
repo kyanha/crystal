@@ -65,7 +65,7 @@ have to be rendered. In this section the basic
 rendering algorithm is explained. This is a more theoretical explanation.
 Later some examples are given of some commonly used configurations.
 </p>
-<a name="SEC231"></a>
+<a name="SEC217"></a>
 <h4 class="subsubheading"> Meshes and Sectors </h4>
 
 <p>One of the most fundamental concepts in Crystal Space is a sector (interface
@@ -79,7 +79,7 @@ sector to another.  The list of sectors that a mesh object is in and also the
 position (i.e. transform) is kept by an instance of <code>iMovable</code>
 (see section <a href="cs_4.10.7.html#4.10.7">Mesh Movement</a>).
 </p>
-<a name="SEC232"></a>
+<a name="SEC218"></a>
 <h4 class="subsubheading"> Render Priorities </h4>
 
 <p>The engine supports the notion of render priorities. There is usually
@@ -118,10 +118,15 @@ you can choose in which order to render objects.
 </p>
 <p>The <samp>`alpha'</samp> render priority is a bit special. Objects in that
 render priority will be rendered from back to front. This is needed for
-objects that use alpha transparency. If you use other kinds of transparency
-like add or mult then you can use the <samp>`transp'</samp> render priority. That
-one is not sorted from back to front so it is only usable for transparencies
-that are correct even if rendered in other order.
+objects that use alpha transparency and also if you need a mix of different
+kinds of transparencies. If you use a single other kind of transparency
+like add or mult (but not both) then you can use the <samp>`transp'</samp> render
+priority. That one is not sorted from back to front so it is only usable for
+transparencies that are correct even if rendered in other order.
+</p>
+<p>For keycolor objects (see section <a href="cs_4.12.1.html#4.12.1">Alpha and Keycolor in Textures</a>) you can use the normal
+<samp>`object'</samp> render priority with <samp>`ZUSE'</samp> z-buffer mode. This is also
+true for objects that have textures using binary alpha.
 </p>
 <p>To set up render priorities from within your application you can use
 the <code>engine-&gt;RegisterRenderPriority()</code> function.
@@ -144,7 +149,7 @@ mesh-&gt;SetRenderPriority (engine-&gt;GetRenderPriority (&quot;object&quot;));
 </pre></td></tr></table>
 <p>By default objects will be put in the <samp>`object'</samp> render queue.
 </p>
-<a name="SEC233"></a>
+<a name="SEC219"></a>
 <h4 class="subsubheading"> Z-Buffer Render Mode </h4>
 
 <p>In addition to render priorities you can also choose how the object
@@ -203,7 +208,8 @@ is cleared every frame.
 using <samp>`ZFILL'</samp>.
 </li><li>
 <samp>`object'</samp>: After sector walls the normal objects are rendered. Usually
-these have <samp>`ZUSE'</samp> Z-buffer mode.
+these have <samp>`ZUSE'</samp> Z-buffer mode. You can also use this render priority
+for objects using keycolor transparency.
 </li><li>
 <samp>`transp'</samp>: Non-alpha transparent objects need to be rendered after all other
 objects. The best Z-buffer mode for these kinds of objects is <samp>`ZTEST'</samp>.
@@ -219,7 +225,7 @@ best Z-buffer mode for these kinds of objects is <samp>`ZTEST'</samp>.
 camera will always be in the center of that object. So you can move forever
 in some direction without ever reaching the bounds of the sky.
 </p>
-<a name="SEC234"></a>
+<a name="SEC220"></a>
 <h4 class="subsubheading"> Include Files </h4>
 
 <p>The include files useful for this section are:
