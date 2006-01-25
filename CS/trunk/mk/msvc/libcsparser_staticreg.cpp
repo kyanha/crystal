@@ -35,8 +35,6 @@ static char const metainfo_csparser[] =
 "          <class>crystalspace.graphics3d.</class>"
 "          <class>crystalspace.sound.render.</class>"
 "          <class>crystalspace.sndsys.renderer.</class>"
-"          <class>crystalspace.mesh.crossbuilder</class>"
-"          <class>crystalspace.modelconverter.</class>"
 "          <class>crystalspace.documentsystem.</class>"
 "        </requires>"
 "      </class>"
