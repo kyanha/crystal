@@ -33,7 +33,7 @@
   </ul></div>
 <h1>iGeneralFactoryState Struct Reference<br>
 <small>
-[<a class="el" href="group__meshplugins.html">Mesh plugins</a>]</small>
+[<a class="el" href="group__meshplugins.html">Mesh plugins</a>,&nbsp;<a class="el" href="group__meshplugins.html">Mesh plugins</a>]</small>
 </h1><!-- doxytag: class="iGeneralFactoryState" --><!-- doxytag: inherits="iGeneralMeshCommonState" -->This interface describes the API for the general mesh factory.  
 <a href="#_details">More...</a>
 <p>
@@ -62,9 +62,9 @@ Inheritance diagram for iGeneralFactoryState:<p><center><img src="structiGeneral
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiGeneralFactoryState.html#dc7dabe077ed2b6f9ca5940cd297f564">GenerateBox</a> (const <a class="el" href="classcsBox3.html">csBox3</a> &amp;box)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Automatically generate a box.  <a href="#dc7dabe077ed2b6f9ca5940cd297f564"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiGeneralFactoryState.html#abb39605f5cd6e728ada9338bd1c7ef6">GenerateSphere</a> (const <a class="el" href="classcsSphere.html">csSphere</a> &amp;sphere, int rim_vertices)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiGeneralFactoryState.html#c00aae05ef047142e9adc9fb3a76ed1a">GenerateSphere</a> (const <a class="el" href="classcsEllipsoid.html">csEllipsoid</a> &amp;ellips, int rim_vertices, bool cyl_mapping=false, bool toponly=false, bool reversed=false)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Automatically generate a sphere.  <a href="#abb39605f5cd6e728ada9338bd1c7ef6"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Automatically generate a sphere.  <a href="#c00aae05ef047142e9adc9fb3a76ed1a"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual <a class="el" href="structiGenMeshAnimationControlFactory.html">iGenMeshAnimationControlFactory</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiGeneralFactoryState.html#6fee83501d8f80e1bf01367a0ff8afb1">GetAnimationControlFactory</a> () const =0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the current animation control factory for this factory.  <a href="#6fee83501d8f80e1bf01367a0ff8afb1"></a><br></td></tr>
@@ -295,10 +295,10 @@ This should be called after setting up the geometry.     </td>
 <p>
 Automatically generate a box. 
 <p>
-This will set the number of vertices to eight and generate vertices, texels, and triangles. The colors and normals are not initialized here.     </td>
+This will set the number of vertices to eight and generate vertices, texels, normals, and triangles. The vertex colors are set to black.     </td>
   </tr>
 </table>
-<a class="anchor" name="abb39605f5cd6e728ada9338bd1c7ef6"></a><!-- doxytag: member="iGeneralFactoryState::GenerateSphere" ref="abb39605f5cd6e728ada9338bd1c7ef6" args="(const csSphere &amp;sphere, int rim_vertices)=0" --><p>
+<a class="anchor" name="c00aae05ef047142e9adc9fb3a76ed1a"></a><!-- doxytag: member="iGeneralFactoryState::GenerateSphere" ref="c00aae05ef047142e9adc9fb3a76ed1a" args="(const csEllipsoid &amp;ellips, int rim_vertices, bool cyl_mapping=false, bool toponly=false, bool reversed=false)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -306,14 +306,32 @@ This will set the number of vertices to eight and generate vertices, texels, and
         <tr>
           <td class="md" nowrap valign="top">virtual void iGeneralFactoryState::GenerateSphere           </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top">const <a class="el" href="classcsSphere.html">csSphere</a> &amp;&nbsp;</td>
-          <td class="mdname" nowrap> <em>sphere</em>, </td>
+          <td class="md" nowrap valign="top">const <a class="el" href="classcsEllipsoid.html">csEllipsoid</a> &amp;&nbsp;</td>
+          <td class="mdname" nowrap> <em>ellips</em>, </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>rim_vertices</em></td>
+          <td class="mdname" nowrap> <em>rim_vertices</em>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap> <em>cyl_mapping</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap> <em>toponly</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>bool&nbsp;</td>
+          <td class="mdname" nowrap> <em>reversed</em> = <code>false</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -334,7 +352,14 @@ This will set the number of vertices to eight and generate vertices, texels, and
 <p>
 Automatically generate a sphere. 
 <p>
-This will set the apropriate number of vertices and generate vertices, texels, normals, and triangles. The colors are not initialized here.     </td>
+This will set the apropriate number of vertices and generate vertices, texels, normals, and triangles. The vertex colors are set to black. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>cyl_mapping</em>&nbsp;</td><td>if true then use cylindrical texture mapping. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>toponly</em>&nbsp;</td><td>if true then only generate the top half of the sphere. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>reversed</em>&nbsp;</td><td>if true then generate the sphere so it is visible from the inside. </td></tr>
+  </table>
+</dl>
+    </td>
   </tr>
 </table>
 <a class="anchor" name="6fee83501d8f80e1bf01367a0ff8afb1"></a><!-- doxytag: member="iGeneralFactoryState::GetAnimationControlFactory" ref="6fee83501d8f80e1bf01367a0ff8afb1" args="() const =0" --><p>
