@@ -122,6 +122,27 @@ void LoadModel ()
   }
 }
 </pre></td></tr></table>
+<p>Or you can use the <code>iLoader-&gt;Load()</code> method which will automatically
+recognize the model and can also load Crystal Space <small>XML</small> files:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;imap/loader.h&quot;
+
+void LoadModel ()
+{
+  csRef&lt;iLoader&gt; loader = csQueryRegistry&lt;iLoader&gt; (object_reg);
+  iBase* result;
+  if (!loader-&gt;Load (&quot;/lib/model.3ds&quot;, result))
+  {
+    // Error!
+    ...
+  }
+  csRef&lt;iMeshFactoryWrapper&gt; ff = scfQueryInterface&lt;iMeshFactoryWrapper&gt; (result);
+  if (ff)
+  {
+    ...
+  }
+}
+</pre></td></tr></table>
 
 
 <hr size="1">
