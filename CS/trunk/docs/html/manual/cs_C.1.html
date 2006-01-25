@@ -1592,6 +1592,20 @@ methods have been removed:
 <code>DrawTest()</code>
 </li></ul>
 
+<p>From <samp>`iParticleState'</samp>, the following methods have been removed.
+Use the methods with the same name from <samp>`iMeshObject'</samp> instead.
+</p>
+<ul>
+<li>
+<code>SetColor()</code>
+</li><li>
+<code>GetColor()</code>
+</li><li>
+<code>SetMaterialWrapper()</code>
+</li><li>
+<code>GetMaterialWrapper()</code>
+</li></ul>
+
 <p>Apart from these methods, the following classes and structures have been
 removed or have become private, and are no longer available to client code:
 </p>
@@ -2328,6 +2342,65 @@ objects and <small>MD2</small> models as 3D sprites. See section <a href="cs_4.1
 <p>It is no longer possible to define render priorities in a map file. You can
 now only redefine render priorities from the engine <small>API</small>.
 See section <a href="cs_4.9.1.html#4.9.1">Render Priorities and Objects in Sectors</a>.
+</p>
+<a name="SEC935"></a>
+<h3 class="subheading"> Ball Mesh Removed </h3>
+
+<p>The ball mesh has been removed. The genmesh mesh can now be used to generate
+spheres instead. Here is an example how you would have to change the map file. First
+here is the old way:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;ballFact&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.factory.ball&lt;/plugin&gt;
+  &lt;params /&gt;
+&lt;/meshfact&gt;
+...
+&lt;sector name=&quot;room&quot;&gt;
+  &lt;meshobj name=&quot;ball&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.ball&lt;/plugin&gt;
+    &lt;params&gt;
+      &lt;factory&gt;ballFact&lt;/factory&gt;
+      &lt;material&gt;plasma&lt;/material&gt;
+      &lt;numrim&gt;16&lt;/numrim&gt;
+      &lt;radius x=&quot;2&quot; y=&quot;1&quot; z=&quot;.5&quot; /&gt;
+      &lt;shift x=&quot;0&quot; y=&quot;.5&quot; z=&quot;0&quot; /&gt;
+      &lt;reversed /&gt;
+      &lt;toponly /&gt;
+      &lt;cylindrical /&gt;
+    &lt;/params&gt;
+    &lt;move&gt; &lt;v x=&quot;15&quot; y=&quot;4&quot; z=&quot;14&quot; /&gt; &lt;/move&gt;
+  &lt;/meshobj&gt;
+&lt;/sector&gt;
+</pre></td></tr></table>
+<p>And here is the new way:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;ballFact&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.factory.genmesh&lt;/plugin&gt;
+  &lt;params&gt;
+    &lt;sphere rimvertices=&quot;16&quot; reversed=&quot;true&quot; toponly=&quot;true&quot; cylindrical=&quot;true&quot; &gt;
+      &lt;radius x=&quot;2&quot; y=&quot;1&quot; z=&quot;.5&quot; /&gt;
+      &lt;center x=&quot;0&quot; y=&quot;.5&quot; z=&quot;0&quot; /&gt;
+    &lt;/sphere&gt;
+  &lt;/params&gt;
+&lt;/meshfact&gt;
+...
+&lt;sector name=&quot;room&quot;&gt;
+  &lt;meshobj name=&quot;transpBall&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.genmesh&lt;/plugin&gt;
+    &lt;params&gt;
+      &lt;factory&gt;ballFact&lt;/factory&gt;
+      &lt;material&gt;plasma&lt;/material&gt;
+    &lt;/params&gt;
+    &lt;move&gt; &lt;v x=&quot;15&quot; y=&quot;4&quot; z=&quot;14&quot; /&gt; &lt;/move&gt;
+  &lt;/meshobj&gt;
+&lt;/sector&gt;
+</pre></td></tr></table>
+<p>It is important to note that the geometry defining the sphere is now in the
+factory (as with all genmeshes).
+</p>
+<p>If you want to create them from code then you have to get rid of using the
+<code>iBallState</code> and instead use <code>iGeneralFactoryState-&gt;GenerateSphere()</code>
+to generate the desired sphere in a genmesh factory.
 </p>
 
 <hr size="1">
