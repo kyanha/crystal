@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.10.12 Genmesh Mesh Object</title>
+<title>Crystal Space: 4.10.12 Sprite2D Mesh Object</title>
 
-<meta name="description" content="Crystal Space: 4.10.12 Genmesh Mesh Object">
-<meta name="keywords" content="Crystal Space: 4.10.12 Genmesh Mesh Object">
+<meta name="description" content="Crystal Space: 4.10.12 Sprite2D Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.10.12 Sprite2D Mesh Object">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MeshObject-Genmesh"></a>
+<a name="MeshObject-Spr2D"></a>
 <a name="4.10.12"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.11.html#4.10.11" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,34 +58,31 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.10.12 Genmesh Mesh Object </h3>
+<h3 class="subsection"> 4.10.12 Sprite2D Mesh Object </h3>
 
 <p><em>Written by Jorrit Tyberghein,
-<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
+(<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>).</em>
 </p>
-<p>A Genmesh is a complex set of 3D triangles (just like a 3D sprite)
-that doesn't support any automatic animation (unlike a 3D sprite). In general
-genmeshes are ideal for high detailed objects.
+<p>A 2D Sprite is basically a polygon that always faces the camera.  There are
+some special effects that you can do with this but it is really very simple
+otherwise.
 </p>
-<p>There is also a <small>HOWTO</small> discussing the creation of genmeshes.
-See section <a href="cs_4.10.5.html#4.10.5">Creating a Genmesh Mesh</a>.
-</p>
-<a name="SEC312"></a>
+<a name="SEC329"></a>
 <h4 class="subsubheading"> Basic Structure </h4>
 
 <p>The following <small>SCF</small> class names are used (for <code>csLoadPlugin</code>):
 </p>
 <ul>
 <li>
-Type plugin: <code>crystalspace.mesh.object.genmesh</code>
+Type plugin: <samp>`crystalspace.mesh.object.sprite.2d'</samp>
 </li><li>
-Loader plugin: <code>crystalspace.mesh.loader.genmesh</code>
+Loader plugin: <samp>`crystalspace.mesh.loader.sprite.2d'</samp>
 </li><li>
-Factory loader plugin: <code>crystalspace.mesh.loader.factory.genmesh</code>
+Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.sprite.2d'</samp>
 </li></ul>
 
-<p>Objects in this plugin implement the following <small>SCF</small> interfaces, which you
-can retrieve with <code>scfQueryInterface</code>:
+<p>Objects in this plugin implement the following <small>SCF</small> interfaces (get with
+<code>scfQueryInterface</code>):
 </p>
 <ul>
 <li>
@@ -94,7 +91,9 @@ can retrieve with <code>scfQueryInterface</code>:
 <li>
 Implements <samp>`iMeshObject'</samp>
 </li><li>
-Implements <samp>`iGeneralMeshState'</samp>
+Implements <samp>`iSprite2DState'</samp>
+</li><li>
+Implements <samp>`iParticle'</samp>
 </li></ul>
 </li><li>
 <em>MeshObjectFactory</em>
@@ -102,44 +101,200 @@ Implements <samp>`iGeneralMeshState'</samp>
 <li>
 Implements <samp>`iMeshObjectFactory'</samp>
 </li><li>
-Implements <samp>`iGeneralFactoryState'</samp>
+Implements <samp>`iSprite2DFactoryState'</samp>
 </li></ul>
 </li><li>
-<em>MeshObjectType</em>
+<em>MeshObjectFactory</em>
 <ul>
 <li>
 Implements <samp>`iMeshObjectType'</samp>
 </li></ul>
 </li></ul>
 
-<a name="SEC313"></a>
+<a name="SEC330"></a>
 <h4 class="subsubheading"> Factory State Interface </h4>
 
-<p>Use the <samp>`iGeneralFactoryState'</samp> <small>SCF</small> interface to access settings for
-a genmesh factory.  The definition of this interface can be found in
-<tt>`CS/include/imesh/genmesh.h'</tt> and that is also the include file you need
+<p>Use the <small>SCF</small> interface <samp>`iSprite2DFactoryState'</samp> to access settings for
+a 2D sprite factory.  The definition of this interface can be found in
+<tt>`CS/include/imesh/sprite2d.h'</tt> and that is also the include file you need
 to include in your applications to use this plugin.  Using this interface you
-can access the material, triangles, vertices, texture coordinates, normals,
-and various other configuration parameters for a genmesh factory.
+can access the material, blending mode (mixmode), and lighting settings.
 </p>
-<a name="SEC314"></a>
+<a name="SEC331"></a>
 <h4 class="subsubheading"> Factory Loader </h4>
 
-<p>@@@TODO
-</p>
-<a name="SEC315"></a>
+<dl compact="compact">
+<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
+<dd><p>Enable/disable lighting.
+</p></dd>
+<dt> <code>&lt;material&gt;materialname&lt;/material&gt;</code></dt>
+<dd><p>Material to use for the polygon.
+</p></dd>
+<dt> <code>&lt;mixmode&gt;&lt;mode /&gt;&lt;/mixmode&gt;</code></dt>
+<dd><p>Blending mode; one of <samp>`add'</samp>, <samp>`alpha'</samp>, <samp>`copy'</samp>, <samp>`keycolor'</samp>,
+<samp>`multiply2'</samp>, <samp>`multiply'</samp>, or <samp>`transparent'</samp>.
+</p></dd>
+<dt> <code>&lt;uvanimation name=uvanimationname&gt;&lt;frame <small class="dots">...</small>&gt; <small class="dots">...</small></code></dt>
+<dd><p>Define an uv animation, that is a sequence of frames which textures are all in
+one big texture.  Thus the animation is achieved by altering the (u,v)
+coordinates of the polygon defined by this sprite.
+</p></dd>
+<dt> <code>&lt;frame&gt;&lt;duration&gt;&lt;vertices <small class="dots">...</small>&gt; <small class="dots">...</small></code></dt>
+<dd><p>Defines a single frame within an uv animation by specifying its duration in
+milliseconds and the u,v coordinates to use.
+</p><ul>
+<li><table><tr><td>&nbsp;</td><td><pre class="example">&lt;frame name=&quot;framename&quot;&gt;
+  &lt;duration&gt;milliseconds&lt;/duration&gt;
+  &lt;v u=&quot;&quot; v=&quot;&quot; /&gt;
+  ... u,v coo list
+&lt;/frame&gt;
+</pre></td></tr></table></li></ul>
+</dd>
+</dl>
+
+<a name="SEC332"></a>
 <h4 class="subsubheading"> Object State Interface </h4>
 
-<p><samp>`iGeneralMeshState'</samp> (residing in <tt>`CS/include/imesh/genmesh.h'</tt>) is the
-<small>SCF</small> interface that you can use to manipulate settings for a genmesh
-object.  By using this interface you can access the material, blending mode
-(mixmode), and various other configuration parameters for a genmesh object.
+<p><samp>`iSprite2DState'</samp> is the <small>SCF</small> interface that you can use to set/get
+settings for a 2D sprite object.  The definition of this interface can be found
+in <tt>`CS/include/imesh/sprite2d.h'</tt> and that is also the include file you
+need to include in your applications to use this plugin.  Using this
+interface you can access the material, blending mode (mixmode), lighting
+settings, and also the vertices of the 2D polygon controlled by this plugin.
 </p>
-<a name="SEC316"></a>
+<a name="SEC333"></a>
 <h4 class="subsubheading"> Object Loader </h4>
 
-<p>@@@TODO
+<dl compact="compact">
+<dt> <code>&lt;factory&gt;factoryname&lt;/factory&gt;</code></dt>
+<dd><p>Name of the factory to use for creation of this instance.
+</p></dd>
+<dt> <code>&lt;mixmode&gt;&lt;mode /&gt;&lt;/mixmode&gt;</code></dt>
+<dd><p>Blending mode, one of <samp>`add'</samp>, <samp>`alpha'</samp>, <samp>`copy'</samp>, <samp>`keycolor'</samp>,
+<samp>`multiply2'</samp>, <samp>`multiply'</samp>, or <samp>`transparent'</samp>.
+</p></dd>
+<dt> <code>&lt;material&gt;materialname&lt;/material&gt;</code></dt>
+<dd><p>Material to use for the polygon.
+</p></dd>
+<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
+<dd><p>Enable/disable lighting.
+</p></dd>
+<dt> <code>vertices &lt;v x=&quot;&quot; y=&quot;&quot; /&gt; <small class="dots">...</small></code></dt>
+<dd><p>List of 2D vertices defining the polygon.
+</p></dd>
+<dt> <code>&lt;uv u=&quot;&quot; v=&quot;&quot; /&gt;</code></dt>
+<dd><p>List of texture mapping UV coordinates for the polygon.
+</p></dd>
+<dt> <code>&lt;color red=&quot;&quot; green=&quot;&quot; blue=&quot;&quot; /&gt;</code></dt>
+<dd><p>List of rgb colors for the polygon.
+</p></dd>
+<dt> <code>&lt;animate&gt; <small class="dots">...</small></code></dt>
+<dd><p>Select an uv animation from the list of animations declared in the template
+</p><ul>
+<li><table><tr><td>&nbsp;</td><td><pre class="example">&lt;animate name=&quot;animationname&quot;&gt;
+  &lt;timing&gt;milliseconds&lt;/timing&gt;
+  &lt;loop&gt;yes/no&lt;/loop&gt;
+&lt;/animate&gt;
+</pre></td></tr></table><ul>
+<li>
+timing &gt; 0 : every &lt;timing&gt; milliseconds the next frame will be shown
+</li><li>
+timing &lt; 0 : every &lt;-timing&gt; gameloop the next frame will be shown
+</li><li>
+timing = 0 : timing attached to the frame will be used
+</li><li>
+loop : loop the animation or stop after last frame (and show the last frame)
+</li></ul>
+</li></ul>
+</dd>
+</dl>
+
+<a name="SEC334"></a>
+<h4 class="subsubheading"> Example 1 </h4>
+
+<p>This is how our world file looks:
 </p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;world&gt;
+  &lt;textures&gt;
+    &lt;texture name=&quot;blow&quot;&gt;
+      &lt;file&gt;blow.png&lt;/file&gt;
+    &lt;/texture&gt;
+  &lt;/textures&gt;
+  &lt;materials&gt;
+    &lt;material name=&quot;explosion&quot;&gt;
+      &lt;texture&gt;blow&lt;/texture&gt;
+    &lt;/material&gt;
+  &lt;/materials&gt;
+  &lt;meshobj name=&quot;Explosion&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.factory.sprite.2d&lt;/plugin&gt;
+    &lt;params&gt;
+      &lt;material&gt;explosion&lt;/material&gt;
+      &lt;uvanimation name=&quot;boom&quot;&gt;
+        &lt;frame name=&quot;first&quot;&gt;
+          &lt;duration&gt;100&lt;/duration&gt;
+          &lt;v u=&quot;0&quot; v=&quot;0&quot; /&gt;
+          &lt;v u=&quot;0.5&quot; v=&quot;0&quot; /&gt;
+          &lt;v u=&quot;0.5&quot; v=&quot;0.5&quot; /&gt;
+          &lt;v u=&quot;0&quot; v=&quot;0.5&quot; /&gt;
+        &lt;/frame&gt;
+        &lt;frame name=&quot;second&quot;&gt;
+          &lt;duration&gt;100&lt;/duration&gt;
+          &lt;v u=&quot;0.5&quot; v=&quot;0&quot; /&gt;
+          &lt;v u=&quot;1&quot; v=&quot;0&quot; /&gt;
+          &lt;v u=&quot;1&quot; v=&quot;0.5&quot; /&gt;
+          &lt;v u=&quot;0.5&quot; v=&quot;0.5&quot; /&gt;
+        &lt;/frame&gt;
+        &lt;frame name=&quot;third&quot;&gt;
+          &lt;duration&gt;100&lt;/duration&gt;
+          &lt;v u=&quot;0&quot; v=&quot;0.5&quot; /&gt;
+          &lt;v u=&quot;0.5&quot; v=&quot;0.5&quot; /&gt;
+          &lt;v u=&quot;0.5&quot; v=&quot;1&quot; /&gt;
+          &lt;v u=&quot;0&quot; v=&quot;1&quot; /&gt;
+        &lt;/frame&gt;
+        &lt;frame name=&quot;fourth&quot;&gt;
+          &lt;duration&gt;100&lt;/duration&gt;
+          &lt;v u=&quot;0.5&quot; v=&quot;0.5&quot; /&gt;
+          &lt;v u=&quot;1&quot; v=&quot;0.5&quot; /&gt;
+          &lt;v u=&quot;1&quot; v=&quot;1&quot; /&gt;
+          &lt;v u=&quot;0.5&quot; v=&quot;1&quot; /&gt;
+        &lt;/frame&gt;
+      &lt;/uvanimation&gt;
+    &lt;/params&gt;
+  &lt;/meshobj&gt;
+  &lt;sector name=&quot;space&quot;&gt;
+  &lt;!-- define all the stuff in space ...
+       and now one of the enemies right after we met him --&gt;
+    &lt;meshobj name=&quot;Kaboom&quot;&gt;
+      &lt;plugin&gt;crystalspace.mesh.loader.sprite.2d&lt;/plugin&gt;
+      &lt;params&gt;
+        &lt;v x=&quot;-1&quot; y=&quot;1&quot; /&gt;
+        &lt;v x=&quot;1&quot; y=&quot;1&quot; /&gt;
+        &lt;v x=&quot;1&quot; y=&quot;-1&quot; /&gt;
+        &lt;v x=&quot;-1&quot; y=&quot;-1&quot; /&gt;
+        &lt;uv u=&quot;0&quot; v=&quot;0&quot; /&gt;
+        &lt;uv u=&quot;1&quot; v=&quot;0&quot; /&gt;
+        &lt;uv u=&quot;1&quot; v=&quot;1&quot; /&gt;
+        &lt;uv u=&quot;0&quot; v=&quot;1&quot; /&gt;
+        &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
+        &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
+        &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
+        &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
+        &lt;lighting&gt;no&lt;/lighting&gt;
+        &lt;!-- show the animation, use the timings attached to
+             the frames, loop --&gt;
+        &lt;animate name=&quot;boom&quot;&gt;
+          &lt;timing&gt;0&lt;/timing&gt;
+          &lt;loop&gt;yes&lt;/loop&gt;
+        &lt;/animate&gt;
+      &lt;/params&gt;
+      &lt;move&gt;
+        &lt;v x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot;&gt;
+      &lt;/move&gt;
+    &lt;/meshobj&gt;
+  &lt;/sector&gt;
+&lt;/world&gt;
+
+</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.11.html#4.10.11" title="Previous section in reading order"> &lt; </a>]</td>

@@ -60,67 +60,58 @@ ul.toc {list-style: none}
 </tr></table>
 <h3 class="subsection"> 4.17.2 Playing a Sound </h3>
 
-<a name="SEC537"></a>
+<a name="SEC555"></a>
 <h4 class="subsubheading"> Playing a Sound Once </h4>
 
-<p>You can create more than one source to have the same sound played multiple times at the same time. For instance if you have a shooting sound and you want your players to shoot at the same time and have the correct number of shooting sounds.
+<p>You can create more than one source to have the same sound played
+multiple times at the same time. For instance if you have a shooting
+sound and you want your players to shoot at the same time and have the
+correct number of shooting sounds.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;isound/handle.h&quot;
-#include &quot;isound/source.h&quot;
-#include &quot;isound/loader.h&quot;
-#include &quot;isound/source.h&quot;
-#include &quot;isound/renderer.h&quot;
-#include &quot;isound/wrapper.h&quot;
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;isndsys/ss_source.h&quot;
+#include &quot;isndsys/ss_loader.h&quot;
+#include &quot;isndsys/ss_renderer.h&quot;
+#include &quot;isndsys/ss_manager.h&quot;
+#include &quot;imap/loader.h&quot;
 
 ...
 
 if (!csInitializer::RequestPlugins(object_reg,
 ...
-CS_REQUEST_PLUGIN(&quot;crystalspace.sound.render.software&quot;, iSoundRender),
-CS_REQUEST_PLUGIN(&quot;crystalspace.sound.loader.multiplexer&quot;, iSoundLoader),
+CS_REQUEST_PLUGIN(&quot;crystalspace.sndsys.renderer.software&quot;, iSndSysRenderer),
+CS_REQUEST_PLUGIN(&quot;crystalspace.sndsys.element.loader&quot;, iSndSysLoader),
 CS_REQUEST_END))
 ...
 
-iSoundRender *sndrdr = csQueryRegistry&lt;iSoundRender&gt; (object_reg);
+csRef&lt;iLoader&gt; loader = csQueryRegistry&lt;iLoader&gt; (object_reg);
+csRef&lt;iSndSysRenderer&gt; sndrdr = csQueryRegistry&lt;iSndSysRenderer&gt; (object_reg);
 if (sndrdr)
 {
-  printf(&quot;iSoundRender loaded\n&quot;);
-  csRef&lt;iSoundWrapper&gt; w_boom = loader-&gt;LoadSound(&lt;sound name&gt;,&lt;sound url&gt;);
+  iSndSysWrapper* w_boom = loader-&gt;LoadSoundWrapper (&lt;sound name&gt;,
+  	&lt;sound file&gt;, CS_SND3D_DISABLE);
   if (w_boom)
   {
     csRef&lt;iSoundSource&gt; sndsrc = w_boom-&gt;GetSound()-&gt;CreateSource(
-    	SOUND3D_ABSOLUTE);
-    sndsrc-&gt;Play();
+    	SOUND3D_DISABLE);
+    w_boom-&gt;GetStream ()-&gt;SetLoopState (CS_SNDSYS_STREAM_DONTLOOP);
+    w_boom-&gt;GetStream ()-&gt;Unpause();
   }
-  else
-  {
-    printf(&quot;ERROR: SoundWrapper empty. \n&quot;);
-  }
-}
-else
-{
-  printf(&quot;Error: no iSoundRender plugin\n&quot;);
 }
 </pre></td></tr></table>
-<a name="SEC538"></a>
+<a name="SEC556"></a>
 <h4 class="subsubheading"> Looping Background Music </h4>
 
 <p>Here is how you can play a looping sound:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">//Sound renderer
-csRef snd = csQueryRegistry&lt;iSoundRender&gt; (object_reg);
-if (snd)
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iSndSysRenderer&gt; sndrdr = csQueryRegistry&lt;iSndSysRenderer&gt; (object_reg);
+if (sndrdr)
 {
-  // &quot;song&quot; is the handle, songname is a const char* to the filename.
-  csRef&lt;iSoundWrapper&gt; w = loader-&gt;LoadSound(&quot;song&quot;,songname);
-  if (w)
+  iSndSysWrapper* w_music = loader-&gt;LoadSoundWrapper (&lt;sound name&gt;,
+  	&lt;sound file&gt;, CS_SND3D_DISABLE);
+  if (w_music)
   {
-    // Declare 'music' as a csRef&lt;iSoundSource&gt; somewhere.
-    music = w-&gt;GetSound ()-&gt;Play (true);
-  }
-  else
-  {
-    printf(&quot;ERROR: Wrapper empty. \n&quot;);
+    w_boom-&gt;GetStream ()-&gt;SetLoopState (CS_SNDSYS_STREAM_LOOP);
+    w_boom-&gt;GetStream ()-&gt;Unpause();
   }
 }
 </pre></td></tr></table>

@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.10.20 Explosion Mesh Object</title>
+<title>Crystal Space: 4.10.20 Rain Mesh Object</title>
 
-<meta name="description" content="Crystal Space: 4.10.20 Explosion Mesh Object">
-<meta name="keywords" content="Crystal Space: 4.10.20 Explosion Mesh Object">
+<meta name="description" content="Crystal Space: 4.10.20 Rain Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.10.20 Rain Mesh Object">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MeshObject-Explo"></a>
+<a name="MeshObject-Rain"></a>
 <a name="4.10.20"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.19.html#4.10.19" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,27 +58,27 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.10.20 Explosion Mesh Object </h3>
+<h3 class="subsection"> 4.10.20 Rain Mesh Object </h3>
 
 <p><em>Written by Jorrit Tyberghein,
 <a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
 </p>
-<p>Explosion is a particle system that emulates an explosion.  Also see the
-general particle system documentation which is valid for all particle systems.
-See section <a href="cs_4.10.15.html#4.10.15">Particle Systems in General</a>.
+<p>Rain is a particle system that emulates rain.  Also see the general particle
+system documentation which is valid for all particle systems.
+See section <a href="cs_4.10.16.html#4.10.16">Particle Systems in General</a>.
 </p>
-<a name="SEC357"></a>
+<a name="SEC378"></a>
 <h4 class="subsubheading"> Basic Structure </h4>
 
 <p>The following <small>SCF</small> class names are used (for <code>csLoadPlugin</code>):
 </p>
 <ul>
 <li>
-Type plugin: <samp>`crystalspace.mesh.object.explosion'</samp>
+Type plugin: <samp>`crystalspace.mesh.object.rain'</samp>
 </li><li>
-Loader plugin: <samp>`crystalspace.mesh.loader.explosion'</samp>
+Loader plugin: <samp>`crystalspace.mesh.loader.rain'</samp>
 </li><li>
-Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.explosion'</samp>
+Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.rain'</samp>
 </li></ul>
 
 <p>Objects in this plugin implement the following <small>SCF</small> interfaces (get
@@ -93,7 +93,7 @@ Implements <samp>`iMeshObject'</samp>
 </li><li>
 Implements <samp>`iParticleState'</samp>
 </li><li>
-Implements <samp>`iExplosionState'</samp>
+Implements <samp>`iRainState'</samp>
 </li></ul>
 </li><li>
 <em>MeshObjectFactory</em>
@@ -109,70 +109,55 @@ Implements <samp>`iMeshObjectType'</samp>
 </li></ul>
 </li></ul>
 
-<a name="SEC358"></a>
+<a name="SEC379"></a>
 <h4 class="subsubheading"> Factory State Interface </h4>
 
 <p>This plugin has no factory state interface.
 </p>
-<a name="SEC359"></a>
+<a name="SEC380"></a>
 <h4 class="subsubheading"> Factory Loader </h4>
 
 <p>The fountain mesh factory loader has no parameters.
 </p>
-<a name="SEC360"></a>
+<a name="SEC381"></a>
 <h4 class="subsubheading"> Object State Interface </h4>
 
-<p><samp>`iExplosionState'</samp> is the <small>SCF</small> interface that you can
-use to set/get settings for an explosion object. The definition of this
-interface can be found in <tt>`CS/include/imesh/explode.h'</tt> and that's also the
+<p><samp>`iRainState'</samp> is the <small>SCF</small> interface that you can
+use to set/get settings for a rain object. The definition of this
+interface can be found in <tt>`CS/include/imesh/rain.h'</tt> and that's also the
 include file you need to include in your applications to use this plugin.
 Using this interface you can access the number of particles, the size
-of the particles, and various other explosion parameters.
+of the particles, and various other rain parameters.
 </p>
 <p>In addition you can use <samp>`iParticleState'</samp>.
 </p>
-<a name="SEC361"></a>
+<a name="SEC382"></a>
 <h4 class="subsubheading"> Object Loader </h4>
 
 <p>Also see the general documentation for particle systems for other recognized
-keywords.  See section <a href="cs_4.10.15.html#4.10.15">Particle Systems in General</a>.
+keywords.  See section <a href="cs_4.10.16.html#4.10.16">Particle Systems in General</a>.
 </p>
 <dl compact="compact">
 <dt> <code>&lt;dropsize w=&quot;&quot; h=&quot;&quot; /&gt;</code></dt>
-<dd><p>Size of the droplets for the snow (width and height).
+<dd><p>Size of the droplets for the rain (width and height).
 </p></dd>
-<dt> <code>&lt;center x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Center of the explosion.  In most cases you should use the origin here (0,0,0)
-and let the engine control the position of the explosion.
+<dt> <code>&lt;box&gt;</code></dt>
+<dd><table><tr><td>&nbsp;</td><td><pre class="example">	&lt;min x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
+	&lt;max x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
+&lt;/box&gt;
+</pre></td></tr></table><p>Box that will contain the rain particles.
 </p></dd>
-<dt> <code>&lt;push x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Initial push.
-</p></dd>
-<dt> <code>&lt;fade&gt;number&lt;/fade&gt;</code></dt>
-<dd><p>Fade.
-</p></dd>
-<dt> <code>&lt;partradius&gt;radius&lt;/partradius&gt;</code></dt>
-<dd><p>Radius of every part.
-</p></dd>
-<dt> <code>&lt;nrsides&gt;nrSides&lt;/nrsides&gt;</code></dt>
-<dd><p>Number of sides to use for the explosion particles.
-</p></dd>
-<dt> <code>&lt;spreadpos&gt;spreadPos&lt;/spreadpos&gt;</code></dt>
-<dd><p>SpreadPos.
-</p></dd>
-<dt> <code>&lt;spreadspeed&gt;spreadSpeed&lt;/spreadspeed&gt;</code></dt>
-<dd><p>SpreadSpeed.
-</p></dd>
-<dt> <code>&lt;spreadaccel&gt;spreadAccelaration&lt;/spreadaccel&gt;</code></dt>
-<dd><p>SpreadAccel.
+<dt> <code>&lt;fallspeed x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Speed of the rain.
 </p></dd>
 <dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
-<dd><p>Disable or enable lighting for the explosion particles.
+<dd><p>Disable or enable lighting for the rain particles.
 </p></dd>
-<dt> <code>&lt;number&gt;numberparticles&lt;/number&gt;</code></dt>
+<dt> <code>&lt;number&gt;nrParticles&lt;/number&gt;</code></dt>
 <dd><p>Number of particles to use.
 </p></dd>
 </dl>
+
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

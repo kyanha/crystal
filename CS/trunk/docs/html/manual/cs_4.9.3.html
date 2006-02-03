@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.9.3 Portal Engine</title>
+<title>Crystal Space: 4.9.3 Render Priorities and Objects in Sectors</title>
 
-<meta name="description" content="Crystal Space: 4.9.3 Portal Engine">
-<meta name="keywords" content="Crystal Space: 4.9.3 Portal Engine">
+<meta name="description" content="Crystal Space: 4.9.3 Render Priorities and Objects in Sectors">
+<meta name="keywords" content="Crystal Space: 4.9.3 Render Priorities and Objects in Sectors">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Portal-Engine"></a>
+<a name="HOWTO-Render-Priorities"></a>
 <a name="4.9.3"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.2.html#4.9.2" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,202 +58,183 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.9.3 Portal Engine </h3>
+<h3 class="subsection"> 4.9.3 Render Priorities and Objects in Sectors </h3>
 
+<p>Renderpriorities give the map creator some extra control over when objects
+have to be rendered. In this section the basic
+rendering algorithm is explained. This is a more theoretical explanation.
+Later some examples are given of some commonly used configurations.
+</p>
+<a name="SEC236"></a>
+<h4 class="subsubheading"> Meshes and Sectors </h4>
 
-<p><em>Written by Jorrit Tyberghein,
-<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
+<p>One of the most fundamental concepts in Crystal Space is a sector (interface
+<code>iSector</code>). A sector is basically empty
+space which needs to be filled with geometry.
 </p>
-<p>The world in Crystal Space is defined with <em>Sectors</em>. A sector is
-an infinite area of space that itself does not represent geometry but can
-contain objects that represent geometry. There are various types of
-objects that you can put in a sector (see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).
+<p>To put geometry in a sector you use one or more mesh objects
+(see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).  Note that a mesh object can also be in several sectors
+at once.  This happens when some object is busy traversing some portal from one
+sector to another.  The list of sectors that a mesh object is in and also the
+position (i.e. transform) is kept by an instance of <code>iMovable</code>
+(see section <a href="cs_4.10.7.html#4.10.7">Mesh Movement</a>).
 </p>
-<p>A sector is in principle an infinite area of space. But usually the
-sector has logical bounds which are made from some mesh object. In this
-discussion we will use the thing mesh object to make sector boundaries.
-</p>
-<p>You can define multiple sectors and connect them together by using
-portals in a portal container (see section <a href="cs_4.10.8.html#4.10.8">Portal Container Mesh Object</a>).
-</p>
-<p>Assume that you want to define a large room with a pillar in the middle of the
-room.  You can do this two ways; either with four sectors, or with one sector.
-First let us define it with four sectors.
-</p>
+<a name="SEC237"></a>
+<h4 class="subsubheading"> Render Priorities </h4>
 
-<p>As seen from above, the sectors would look something like this:
+<p>The engine supports the notion of render priorities. There is usually
+a limited set of render priority slots available. By default these are:
 </p>
-<p><img src="usingcs/engine/portal1.png" alt="usingcs/engine/portal1">
-</p>
-
-<p>Sector S1 is composed of eight polygons (including the top and bottom polygon
-for its roof and floor, as well as the three polygons at the east side).  The
-two polygons adjacent to sectors S2 and S4 are portals to the respective
-sectors.  All the other polygons are texture mapped as normal.
-</p>
-
-<p>Sectors S2 and S4 have six polygons each.  Their west polygons are again
-portals to sector S1.  Their east polygons are portals to sector S3.
-</p>
-
-<p>Sector S3 is defined as is sector S1.
-</p>
-<p>Another way to define this room using just the same four sectors could be done
-as follows:
-</p>
-<p><img src="usingcs/engine/portal2.png" alt="usingcs/engine/portal2">
-</p>
-
-<p>To the person standing in this room this makes no difference at all.
-</p>
-<p>There are many other ways to define this room using the four sectors.  One
-important thing to note is that four is the minimum number of Sectors that you
-need to define this room if you want to render the polygons using Z-fill
-mode (this means that the Z-buffer is updated but not tested). If you want
-to be able to render using Z-fill mode a sector has to be <em>convex</em>.
-</p>
-<p>An easier way to define this room is by using only one Sector and one Thing
-to define the pillar, as shown below.
-</p>
-<p><img src="usingcs/engine/thing.png" alt="usingcs/engine/thing">
-</p>
-<p>Again this makes no difference for the person standing in this room. For a
-simple situation like this you should avoid the overhead of portals as 3D
-hardware is fast enough to just render everything anyway. Portals are mainly
-useful when you are creating complicated and large worlds. For example, if you
-have a large outside world with buildings then you could model the outside
-as one sector and the inside of every building as another sector.
-</p>
-<p>Using Things like this make it easier to define worlds. If they are small
-enough they will also enhance performance.
-</p>
-<p>With Sectors, Portals, and Things you can describe virtually any world that
-you want.
-</p>
-<a name="SEC224"></a>
-<h4 class="subsubheading"> Sectors </h4>
-
-<p>In this section I will describe Sectors a bit more thoroughly.  As stated
-before sectors represent infinite space. You can fill a sector with geometry
-by using mesh objects (see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).
-</p>
-<p>With a sector there is always an associated visibility culler. Currently
-Crystal Space supports two cullers:
-</p><ul class="toc">
+<ol>
 <li>
-<samp>`frustvis'</samp>: This is the default visibility culler that is used if no
-other is specified. It only does frustum culling. It is the best culler to
-use for simple sectors that don't have a lot of objects or else for sectors
-that are big but where all objects are small. For such sectors it doesn't
-make much sense to try to do more complicated visibility culling so
-frustum cullling (testing if an object is visible in the current view)
-is more than enough.
+<samp>`init'</samp>
 </li><li>
-<samp>`dynavis'</samp>: This is a more advanced visibility culler that does
-frustum culling in addition to trying to avoid rendering objects that
-are obscured by other objects (see section <a href="cs_4.9.7.html#4.9.7">Visibility Culling In Detail</a>). This culler
-is mainly useful when you have big complex sectors with lots of objects
-and when objects have a good chance of occluding (hiding) other objects.
+<samp>`sky'</samp>
+</li><li>
+<samp>`sky2'</samp>
+</li><li>
+<samp>`portal'</samp>
+</li><li>
+<samp>`wall'</samp>
+</li><li>
+<samp>`wall2'</samp>
+</li><li>
+<samp>`object'</samp>
+</li><li>
+<samp>`object2'</samp>
+</li><li>
+<samp>`transp'</samp>
+</li><li>
+<samp>`alpha'</samp>
+</li><li>
+<samp>`final'</samp>
+</li></ol>
+
+<p>But you can setup your own render priorities by calling the engine
+<small>API</small>. Objects which are in a lower
+render priority (i.e. <samp>`sky'</samp> is lower than <samp>`wall'</samp>) will be rendered
+before objects with a higher priority. So using the render priority system
+you can choose in which order to render objects.
+</p>
+<p>The <samp>`alpha'</samp> render priority is a bit special. Objects in that
+render priority will be rendered from back to front. This is needed for
+objects that use alpha transparency and also if you need a mix of different
+kinds of transparencies. If you use a single other kind of transparency
+like add or mult (but not both) then you can use the <samp>`transp'</samp> render
+priority. That one is not sorted from back to front so it is only usable for
+transparencies that are correct even if rendered in other order.
+</p>
+<p>For keycolor objects (see section <a href="cs_4.12.2.html#4.12.2">Alpha and Keycolor in Textures</a>) you can use the normal
+<samp>`object'</samp> render priority with <samp>`ZUSE'</samp> z-buffer mode. This is also
+true for objects that have textures using binary alpha.
+</p>
+<p>To set up render priorities from within your application you can use
+the <code>engine-&gt;RegisterRenderPriority()</code> function.
+</p>
+<p>To set the render priority for an object you can use the following
+in a map file:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;myObject&quot;&gt;
+  &lt;plugin&gt;...&lt;/plugin&gt;
+  &lt;params&gt;
+    ...
+  &lt;/params&gt;
+  &lt;priority&gt;object&lt;/priority&gt;
+&lt;/meshobj&gt;
+</pre></td></tr></table>
+<p>To set the render priority from within the code you can do:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iMeshWrapper* mesh;
+mesh-&gt;SetRenderPriority (engine-&gt;GetRenderPriority (&quot;object&quot;));
+</pre></td></tr></table>
+<p>By default objects will be put in the <samp>`object'</samp> render queue.
+</p>
+<a name="SEC238"></a>
+<h4 class="subsubheading"> Z-Buffer Render Mode </h4>
+
+<p>In addition to render priorities you can also choose how the object
+will be rendered with regards to the Z-buffer. There are four possibilities:
+</p>
+<ul class="toc">
+<li>
+<samp>`ZUSE'</samp>: use the Z-buffer to see where the object has to be rendered and
+also update the Z-buffer wherever the object is actually rendered.
+</li><li>
+<samp>`ZFILL'</samp>: only update the Z-buffer where the object is rendered but don't
+check against the existing Z-buffer contents.
+</li><li>
+<samp>`ZTEST'</samp>: use the Z-buffer to see where the object has to be rendered
+but don't update the Z-buffer.
+</li><li>
+<samp>`ZNONE'</samp>: don't update or read the Z-buffer when rendering this object.
 </li></ul>
 
-<a name="SEC225"></a>
-<h4 class="subsubheading"> Things </h4>
-
-<p>A Thing is one of the basic building blocks to create geometry in
-Crystal Space. A Thing is made from convex polygons.
+<p>To set the Z-buffer mode from a map file you can do the following:
 </p>
-<p>Things (and other mesh objects for that matter) can be rendered using
-Z-fill or Z-use mode. With Z-fill the previous contents of the Z-buffer
-(where that Thing is rendered) is just overwritten. With Z-use the
-previous contents is checked in order to see if the Thing is in front
-or behind the polygons that are already on screen. If you have a convex
-object (like the outer polygons of a room) then you can use Z-fill because
-the polygons will not overlap. Things which are then inside those walls
-will need to use Z-use in order not to overwrite each other.
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;myObject&quot;&gt;
+  &lt;plugin&gt;...&lt;/plugin&gt;
+  &lt;params&gt;
+    ...
+  &lt;/params&gt;
+  &lt;priority&gt;object&lt;/priority&gt;
+  &lt;zuse /&gt;
+&lt;/meshobj&gt;
+</pre></td></tr></table>
+<p>To set the Z-buffer mode from the code you can use the following example:
 </p>
-<p>Note that polygons have a visible side and an invisible side (backface
-culling).
+<table><tr><td>&nbsp;</td><td><pre class="example">  iMeshWrapper* mesh;
+  mesh-&gt;SetZBufMode (CS_ZBUF_USE);
+</pre></td></tr></table>
+<p><samp>`ZUSE'</samp> is the default Z-buffer mode for objects created from within
+an application.
 </p>
-<a name="SEC226"></a>
-<h4 class="subsubheading"> Polygons </h4>
-
-<p>Things are made of 3D polygons.  As mentioned before polygons must
-be convex.  The vertices of polygons are oriented clockwise.  This fact is
-used for backface culling; a polygon has only one visible side.
+<p>By using the z-buffer mode in combination with the render priorities we
+now have a very powerful system to control object rendering in a sector.
+In the following sections we will show some popular examples. But first
+we show in a table what the common usage is of the render priorities in
+combination with the Z-buffer modes:
 </p>
-<p>Polygons are drawn with a texture.  How the texture is mapped on the polygon
-depends on a transformation matrix.  This is general enough so that you can
-translate, rotate, scale, and mirror the texture in every possible direction.
-The texture is tiled across the polygon surface.
-</p>
-<p>In a pre-computing stage three light-maps are created for every polygon (this
-is explained in more detail later).  Lighting is sampled in a grid which is 16
-by 16 texture pixels (or <em>texels</em>) in size, by default.  Bilinear
-interpolation is used by the texture caching machinery to make this lighting
-appear smooth.  The end result of this is a non-tiled lighted texture that is
-mapped across the polygon surface.
-</p>
-<a name="SEC227"></a>
-<h4 class="subsubheading"> Portal Containers </h4>
-
-<p>A special kind of object is the portal container. It also has polygons
-but every polygon is a portal to another sector (or the same sector in case of
-a mirror or other space warping transformation).
-</p>
-<a name="SEC228"></a>
-<h4 class="subsubheading"> Portals </h4>
-
-<p>A Portal is a special kind of polygon.
-</p>
-<p>Instead of texture mapping a portal polygon, the engine will recursively
-draw the sector that this portal points to.  After this, if the texture is
-semi-transparent, the texture will be mapped over the already rendered
-sector.
-</p>
-<p>Portals can also transform space.  This feature can be used to implement
-mirrors or reflecting surfaces.
-</p>
-<p>Note that when there is a portal from sector A to sector B you should probably
-also define a portal from sector B to sector A.  Adjacent polygons of
-different sectors are not shared so you need to set a portal on each of them.
-Otherwise you will have the effect that you can see from sector A to sector B
-but not the other way around.
-</p>
-<p>A special feature of portals is that you could (in theory) have a portal from
-sector A to sector B, but instead of going back to sector A from sector B you
-could set the portal to point at sector C which (in this example) would be a
-sector which has the same world space coordinates as sector A.  This is
-perfectly possible (although maybe not desirable) with Crystal Space.  An
-important result of this is that a given world space coordinate can belong to
-more than one sector!  A corollary of this is that you always need a current
-sector reference together with a world space coordinate to really know where
-you are.
-</p>
-<p>Portals in Crystal Space can solve the problem of polygon sorting if you
-structure your world strictly with convex sectors (not really recommonded for
-practical worlds).  All polygons
-in the current sector are certainly visible (unless they are behind the view
-plane) and do not overlap, so they can just be drawn in any order without
-overdraw and without conflicts.  If a portal polygon is reached, all polygons
-in that other sector are behind all the polygons in the current sector.  In
-fact portals are an explicit form of <small>BSP</small> tree.  The advantages of this
-approach are summarized below.
-</p>
-<ul>
+<ul class="toc">
 <li>
-Space warping can be used as described above.
-
+<samp>`sky'</samp>: This render priority is used for rendering the object that
+represents the sky. This can be a skybox, or a skydome, or something else.
+Usually these objects have <samp>`ZNONE'</samp> or <samp>`ZFILL'</samp> render mode. If
+you want to use <samp>`ZNONE'</samp> you have to make sure that the Z-buffer
+is cleared every frame.
 </li><li>
-In theory it would be rather easy to make dynamic worlds.  Because the portals
-are explicit it is easy to define them so that certain sectors can move and
-transform in certain ways.
-Note that static lighting makes this a bit difficult in some cases.
+<samp>`portal'</samp>: Sometimes portals need to be put here.
+</li><li>
+<samp>`wall'</samp>: Sector walls are put in this queue. They are usually rendered
+using <samp>`ZFILL'</samp>.
+</li><li>
+<samp>`object'</samp>: After sector walls the normal objects are rendered. Usually
+these have <samp>`ZUSE'</samp> Z-buffer mode. You can also use this render priority
+for objects using keycolor transparency.
+</li><li>
+<samp>`transp'</samp>: Non-alpha transparent objects need to be rendered after all other
+objects. The best Z-buffer mode for these kinds of objects is <samp>`ZTEST'</samp>.
+</li><li>
+<samp>`alpha'</samp>: Alpha transparent objects need to be rendered after all other
+objects (and in back to front render mode as seen from the camera). The
+best Z-buffer mode for these kinds of objects is <samp>`ZTEST'</samp>.
 </li></ul>
 
-<p>One disadvantage a portal engine is that it can be more difficult to define
-worlds. If you want to be able to use <small>ZFILL</small> mode you must make all
-sectors convex. If you don't care about that then you can use <small>ZUSE</small> too.
+<p>Note that sky objects are usually created with the <samp>`CAMERA'</samp> keyword
+(in map file) or the <code>CS_ENTITY_CAMERA</code> flag (in
+<code>iMeshWrapper::GetFlags()</code>). The camera keyword makes sure that the
+camera will always be in the center of that object. So you can move forever
+in some direction without ever reaching the bounds of the sky.
 </p>
+<a name="SEC239"></a>
+<h4 class="subsubheading"> Include Files </h4>
+
+<p>The include files useful for this section are:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iengine/mesh.h&gt;
+#include &lt;iengine/sector.h&gt;
+#include &lt;iengine/engine.h&gt;
+#include &lt;ivideo/graph3d.h&gt;
+</pre></td></tr></table>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
