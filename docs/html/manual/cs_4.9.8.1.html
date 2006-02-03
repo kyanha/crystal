@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.1.3 Compiling the Application</title>
+<title>Crystal Space: 4.9.8.1 Sectors and Portals</title>
 
-<meta name="description" content="Crystal Space: 4.1.3 Compiling the Application">
-<meta name="keywords" content="Crystal Space: 4.1.3 Compiling the Application">
+<meta name="description" content="Crystal Space: 4.9.8.1 Sectors and Portals">
+<meta name="keywords" content="Crystal Space: 4.9.8.1 Sectors and Portals">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,14 +40,14 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="TutIntro-Compilation"></a>
-<a name="4.1.3"></a>
+<a name="VIS-sectors-and-portals"></a>
+<a name="4.9.8.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_4.1.2.html#4.1.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.2.html#4.2" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_4.9.8.html#4.9.8" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.8.2.html#4.9.8.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.1.html#4.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.8.html#4.9.8" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -58,25 +58,37 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.1.3 Compiling the Application </h3>
+<h4 class="subsubsection"> 4.9.8.1 Sectors and Portals </h4>
 
-<p>In order to compile a Crystal Space application I recommend you look at the
-howto on compiling an external application. For <small>MSVC</small> 7 and later this 
-tutorial can be found at See section <a href="cs_4.21.2.html#4.21.2">Creating an External <small>MSVC</small> 7, 7.1 or 8 Application</a>, 
-for other environments based on <small>GNU</small> make you can look at
-See section <a href="cs_4.21.1.html#4.21.1">Creating an External Crystal Space Application</a>.
+<p>A sector is the basic building block in Crystal Space. A world will be made out
+of several sectors connected with portals (see section <a href="cs_4.9.4.html#4.9.4">Portal Engine</a>).
+Normally adjacent sectors can be connected with a straight portal but
+portals can also warp space so that you can connect any point in space to
+any other point in space. This effect can be used to create mirrors for
+example.
 </p>
-<p>Additionally note that the source for some of these tutorials can be
-found in the <tt>`CS/apps/tutorials'</tt> directory. There are also a few
-additional tutorials there that are not (yet) covered in the documentation.
+<p>This effect of portals makes them very powerful. It also means that
+you can have overlapping sectors and in general other weird portal
+constructs.
+</p>
+<p>Portals starting in arbitrary space (i.e. in the middle of
+a sector) are called floating portals. Some special care needs to be taken
+for those because we can't rely on the Z-buffer to be useful here. So this
+is a case where clipping to the 2D boundary of the portal must happen.
+</p>
+<p>Important for this discussion is the fact that we have two important
+areas where culling happens. We have in-sector visibility culling which
+is all visibility testing that ignores portal boundaries and we have
+portal/sector visibility which controls what you can see through a
+portal. Discussing both will be the main focus of this document later.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_4.1.2.html#4.1.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.2.html#4.2" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_4.9.8.html#4.9.8" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.8.2.html#4.9.8.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.1.html#4.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.8.html#4.9.8" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
 </tr></table>
 <p>

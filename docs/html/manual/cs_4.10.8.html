@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.10.8 Portal Container Mesh Object</title>
+<title>Crystal Space: 4.10.8 Genmesh Mesh Object</title>
 
-<meta name="description" content="Crystal Space: 4.10.8 Portal Container Mesh Object">
-<meta name="keywords" content="Crystal Space: 4.10.8 Portal Container Mesh Object">
+<meta name="description" content="Crystal Space: 4.10.8 Genmesh Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.10.8 Genmesh Mesh Object">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MeshObject-Portal-Container"></a>
+<a name="MeshObject-Genmesh"></a>
 <a name="4.10.8"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.7.html#4.10.7" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,17 +58,90 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.10.8 Portal Container Mesh Object </h3>
+<h3 class="subsection"> 4.10.8 Genmesh Mesh Object </h3>
 
 <p><em>Written by Jorrit Tyberghein,
-(<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>).</em>
+<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
 </p>
-<p>This is a special type of mesh object which basically represents a collection
-of portals.
+<p>A Genmesh is a complex set of 3D triangles (just like a 3D sprite)
+that normally doesn't support any automatic animation (unlike a 3D sprite)
+unless you use a genmesh animation plugin (see section <a href="cs_4.15.4.html#4.15.4">GenMesh Animation</a>).
+In general genmeshes are ideal for high detailed objects. Genmeshes also
+support multiple materials using submeshes.
 </p>
-<p>TODO
+<p>There is also a <small>HOWTO</small> discussing the creation of genmeshes.
+See section <a href="cs_4.10.5.html#4.10.5">Creating a Genmesh Mesh</a>.
 </p>
+<a name="SEC307"></a>
+<h4 class="subsubheading"> Basic Structure </h4>
 
+<p>The following <small>SCF</small> class names are used (for <code>csLoadPlugin</code>):
+</p>
+<ul>
+<li>
+Type plugin: <code>crystalspace.mesh.object.genmesh</code>
+</li><li>
+Loader plugin: <code>crystalspace.mesh.loader.genmesh</code>
+</li><li>
+Factory loader plugin: <code>crystalspace.mesh.loader.factory.genmesh</code>
+</li></ul>
+
+<p>Objects in this plugin implement the following <small>SCF</small> interfaces, which you
+can retrieve with <code>scfQueryInterface</code>:
+</p>
+<ul>
+<li>
+<em>MeshObject</em>
+<ul>
+<li>
+Implements <samp>`iMeshObject'</samp>
+</li><li>
+Implements <samp>`iGeneralMeshState'</samp>
+</li></ul>
+</li><li>
+<em>MeshObjectFactory</em>
+<ul>
+<li>
+Implements <samp>`iMeshObjectFactory'</samp>
+</li><li>
+Implements <samp>`iGeneralFactoryState'</samp>
+</li></ul>
+</li><li>
+<em>MeshObjectType</em>
+<ul>
+<li>
+Implements <samp>`iMeshObjectType'</samp>
+</li></ul>
+</li></ul>
+
+<a name="SEC308"></a>
+<h4 class="subsubheading"> Factory State Interface </h4>
+
+<p>Use the <samp>`iGeneralFactoryState'</samp> <small>SCF</small> interface to access settings for
+a genmesh factory.  The definition of this interface can be found in
+<tt>`CS/include/imesh/genmesh.h'</tt> and that is also the include file you need
+to include in your applications to use this plugin.  Using this interface you
+can access the material, triangles, vertices, texture coordinates, normals,
+and various other configuration parameters for a genmesh factory.
+</p>
+<a name="SEC309"></a>
+<h4 class="subsubheading"> Factory Loader </h4>
+
+<p>@@@TODO
+</p>
+<a name="SEC310"></a>
+<h4 class="subsubheading"> Object State Interface </h4>
+
+<p><samp>`iGeneralMeshState'</samp> (residing in <tt>`CS/include/imesh/genmesh.h'</tt>) is the
+<small>SCF</small> interface that you can use to manipulate settings for a genmesh
+object.  By using this interface you can access the material, blending mode
+(mixmode), and various other configuration parameters for a genmesh object.
+</p>
+<a name="SEC311"></a>
+<h4 class="subsubheading"> Object Loader </h4>
+
+<p>@@@TODO
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.7.html#4.10.7" title="Previous section in reading order"> &lt; </a>]</td>

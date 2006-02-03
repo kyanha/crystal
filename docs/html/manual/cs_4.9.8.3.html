@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.12.2.3 Perspective Correction</title>
+<title>Crystal Space: 4.9.8.3 Entities</title>
 
-<meta name="description" content="Crystal Space: 4.12.2.3 Perspective Correction">
-<meta name="keywords" content="Crystal Space: 4.12.2.3 Perspective Correction">
+<meta name="description" content="Crystal Space: 4.9.8.3 Entities">
+<meta name="keywords" content="Crystal Space: 4.9.8.3 Entities">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,14 +40,14 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Texture-Mapping-Perspective-Correction"></a>
-<a name="4.12.2.3"></a>
+<a name="VIS-entities"></a>
+<a name="4.9.8.3"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_4.12.2.2.html#4.12.2.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.12.2.4.html#4.12.2.4" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_4.9.8.2.html#4.9.8.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.8.4.html#4.9.8.4" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.12.2.html#4.12.2" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.8.html#4.9.8" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -58,31 +58,53 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.12.2.3 Perspective Correction </h4>
+<h4 class="subsubsection"> 4.9.8.3 Entities </h4>
 
-<p>Objects in camera space are still 3D and thus not suited for immediate display
-on a 2-dimensional screen.  Therefore you still need to do perspective
-correction as follows:
+<p>But first lets discuss the type of entities that Crystal Space supports.
+We already saw sectors above. These are the main containers for all
+the entities below.
 </p>
-<blockquote><p><em>x = (F * Vc.x) / Vc.z</em><br>
-<em>y = (F * Vc.y) / Vc.z</em>
-</p></blockquote>
+<a name="SEC257"></a>
+<h4 class="subsubheading"> Sprites or Models </h4>
 
-
-<p><em>x</em> and <em>y</em> are then the 2-dimensional coordinates corresponding to
-the 3D vertex.  We will call this 2D vector <em>Vs</em>.
+<p>Crystal Space supports (among others) both 3D and 2D sprites. A 3D sprite
+is basically a set of triangles or a triangle mesh. I will not go into much
+more detail here because this document is related to visibility. A 2D sprite
+is a general polygon which always faces the camera. Both are considered
+detail objects (more on that later).
 </p>
-<p><em>F</em> is some factor needed to get a correct <em>Field of Vision</em>
-(<small>FOV</small>).  Crystal Space currently uses the height of the display (in
-pixels) for this.
+<a name="SEC258"></a>
+<h4 class="subsubheading"> Things </h4>
+
+<p>Things are general objects used to define the basic geometry in a level.
+They can move and rotate but in general their most important use is to define
+level geometry (i.e. walls, floor, ceiling, a painting on the wall, a staircase,
+a chair, etc.). Small and detailed things will be tagged as detail
+objects.
+</p>
+<a name="SEC259"></a>
+<h4 class="subsubheading"> Curved Surfaces </h4>
+
+<p>Curved surfaces are implemented in a separate mesh object. They are usually
+considered as detail objects.
+</p>
+<a name="SEC260"></a>
+<h4 class="subsubheading"> Terrain Surfaces </h4>
+
+<p>A terrain surface is a large entity that can be in a sector.
+It is not a detail object (obviously). Handling of terrain and visibility
+is not ready yet. We need to do more work on this part. At this moment
+the terrain engine already has a visibility algorithm inside which is
+used for visibility culling of its own triangles but this algorithm should
+also be used to cull objects that are on the terrain.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_4.12.2.2.html#4.12.2.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.12.2.4.html#4.12.2.4" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_4.9.8.2.html#4.9.8.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.8.4.html#4.9.8.4" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.12.2.html#4.12.2" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.9.8.html#4.9.8" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
 </tr></table>
 <p>

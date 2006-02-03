@@ -66,7 +66,7 @@ ul.toc {list-style: none}
 <p>This section explains how to use Mesh Objects in general.  It doesn't go into
 detail about the specific Mesh Object Types that Crystal Space supports.
 </p>
-<a name="SEC262"></a>
+<a name="SEC279"></a>
 <h4 class="subsubheading"> General </h4>
 
 <p>When the engine works with instances of Mesh Objects it does so through the
@@ -77,7 +77,7 @@ when to light it.  <samp>`iMeshWrapper'</samp> also manages the position of the 
 in the world and manages possible hierarchical transformations (i.e.
 <samp>`iMeshWrapper'</samp> has an array of <samp>`iMeshWrapper'</samp> children).
 </p>
-<a name="SEC263"></a>
+<a name="SEC280"></a>
 <h4 class="subsubheading"> Loading From Map File </h4>
 
 <p>The easiest way to use Mesh Objects is to simply specify them in the map file
@@ -154,7 +154,7 @@ relative to the parent.
 illustrated above, then you can query the parameters from your application by
 using the standard <small>API</small> in the <samp>`iEngine'</samp> interface.
 </p>
-<a name="SEC264"></a>
+<a name="SEC281"></a>
 <h4 class="subsubheading"> Using Directly From Code </h4>
 
 <p>You can also create Mesh Objects directly from your application. The engine
@@ -162,7 +162,7 @@ has a few conveniance functions you can use for that
 (<code>iEngine::CreateMeshwrapper()</code> and <code>iEngine::CreateMeshFactory()</code>).
 But here we show you the full way to create meshes from code:
 </p>
-<ul class="toc">
+<ul>
 <li>
 Load the Mesh Object Type with <code>csLoadPlugin</code> (preferably after
 checking if it is already loaded, by calling <code>csQueryPluginClass</code>).
@@ -196,50 +196,66 @@ For every instance of <samp>`iMeshObject'</samp> you need to create a
 position and rotation (transformation).
 </li></ul>
 
-<p>Here is a code example for creating an instance of the ball plug-in.
+<p>Here is a code example for creating an instance of the genmesh plug-in.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">void Initialize ()
 {
   ...
-  // Get the ball mesh object plug-in.
-  ball_type = csQueryPluginClass&lt;iMeshObjectType&gt; (this,
-    &quot;crystalspace.mesh.object.ball&quot;);
-  if (!ball_type)
-    ball_type = csLoadPlugin&lt;iMeshObjectType&gt; (this,
-      &quot;crystalspace.mesh.object.ball&quot;);
-  if (!ball_type)
-    Printf (CS_MSG_WARNING, &quot;No ball type plug-in found!\n&quot;);
-  ball_factory = ball_type-&gt;NewFactory ();
+  // First create the factory:
+  csRef&lt;iMeshFactoryWrapper&gt; fact = engine-&gt;CreateMeshFactory (
+    &quot;crystalspace.mesh.object.genmesh&quot;, &quot;cubeFact&quot;);
+  csRef&lt;iGeneralFactoryState&gt; factstate = scfQueryInterface&lt;iGeneralFactoryState&gt; (
+    fact-&gt;GetMeshObjectFactory ());
+
+  csEllipsoid ellips (csVector3 (0, 0, 0), csVector3 (1, 1, 1));
+  factstate-&gt;GenerateSphere (ellips, 8);
+  factstate-&gt;CalculateNormals ();
   ...
 }
 ...
 void SetupWorld ()
 {
   ...
-  // Make a ball using the ball plug-in.
-  csRef&lt;iMeshObject&gt; ballMesh = ball_factory-&gt;NewInstance ();
-  csRef&lt;iBallState&gt; ballState =
-    scfQueryInterface&lt;iBallState&gt; (ballMesh);
-  ballState-&gt;SetRadius (.5, .5, .5);
-  ballState-&gt;SetMaterialWrapper (material);
-  ballState-&gt;SetRimVertices (12);
-
+  // Make a ball using the genmesh plug-in.
   csRef&lt;iMeshWrapper&gt; ball =
-    engine-&gt;CreateMeshWrapper (ballMesh, &quot;MyBall&quot;, room);
-  m.Identity ();
-  ball-&gt;GetMovable ().SetTransform (m);
-  ball-&gt;GetMovable ().SetPosition (csVector3 (-3, 5, -3));
-  ball-&gt;GetMovable ().UpdateMove ();
+    engine-&gt;CreateMeshWrapper (fact, &quot;ball&quot;, room, csVector3 (-3, 5, -3));
+  csRef&lt;iGeneralMeshState&gt; ballstate = scfQueryInterface&lt;iGeneralMeshState&gt; (
+    ball-&gt;GetMeshObject ());
+  ballstate-&gt;SetMaterialWrapper (myMaterial);
   ...
 }
 </pre></td></tr></table>
 <p>This example will load a ball using the plug-in and place it at (-3,5,-3) in
-<samp>`room'</samp>.  It will also make sure that it will be lit by the 10 closest
-lights.
+<samp>`room'</samp>.
 </p>
-<p><samp>`iBallState'</samp> is the state interface for setting the characteristics of
-ball Mesh Objects.
+<p><code>iGeneralFactoryState</code> and <code>iGeneralMeshState</code> are the state
+interfaces for setting the characteristics of genmesh Mesh Objects.
 </p>
+<p><a name="Generic-Mesh-Creation-Code"></a>
+</p><a name="SEC282"></a>
+<h4 class="subsubheading"> Generic Mesh Creation Code </h4>
+
+<p>In general you should use the following code to create any kind of mesh:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">  // First create the factory:
+  csRef&lt;iMeshFactoryWrapper&gt; fact = engine-&gt;CreateMeshFactory (
+	&quot;crystalspace.mesh.object.meshtype&quot;, &quot;factoryName&quot;);
+  csRef&lt;iMeshtypeFactoryState&gt; factstate = scfQueryInterface&lt;
+  	iMeshtypeFactoryState&gt; (fact-&gt;GetMeshObjectFactory ());
+  ...
+  // Then make one or more meshes:
+  csRef&lt;iMeshWrapper&gt; mesh = engine-&gt;CreateMeshWrapper (
+  	fact, &quot;meshName&quot;, sector, csVector3 (-3, 5, -3));
+  csRef&lt;iMeshtypeObjectState&gt; meshstate = scfQueryInterface&lt;
+  	iMeshtypeObjectState&gt; (mesh-&gt;GetMeshObject ());
+  ...
+</pre></td></tr></table>
+<p>Replace <samp>`meshtype'</samp> with the correct mesh type (like <samp>`genmesh'</samp>,
+<samp>`thing'</samp>, <small class="dots">...</small>). Replace <code>iMeshtypeFactoryState</code> with the
+correct factory state and <code>iMeshtypeObjectState</code> with the correct
+object state.
+</p>
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.1.html#4.10.1" title="Previous section in reading order"> &lt; </a>]</td>

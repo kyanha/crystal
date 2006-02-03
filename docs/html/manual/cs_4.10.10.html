@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.10.10 Sprite3D Mesh Object</title>
+<title>Crystal Space: 4.10.10 Terrain Mesh Object</title>
 
-<meta name="description" content="Crystal Space: 4.10.10 Sprite3D Mesh Object">
-<meta name="keywords" content="Crystal Space: 4.10.10 Sprite3D Mesh Object">
+<meta name="description" content="Crystal Space: 4.10.10 Terrain Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.10.10 Terrain Mesh Object">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MeshObject-Spr3D"></a>
+<a name="MeshObject-TerrFunc"></a>
 <a name="4.10.10"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.9.html#4.10.9" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,30 +58,45 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.10.10 Sprite3D Mesh Object </h3>
+<h3 class="subsection"> 4.10.10 Terrain Mesh Object </h3>
 
 <p><em>Written by Jorrit Tyberghein,
-<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
+(<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>).</em>
 </p>
-<p>A 3D Sprite is a complex set of 3D triangles that supports animation through
-frames.
+<p>This mesh object represents a landscape engine. The basic idea is that
+the entire landscape is represented by a two dimensional heightmap.
+This heighmap typically comes from a heightmap image file but it can also
+come from other sources.
 </p>
-<a name="SEC297"></a>
+<p>It features:
+</p><ul>
+<li>
+Automatic lod.
+</li><li>
+Splatting: having multiple detail materials selected with a material palette
+and smooth transitions between the different materials.
+</li><li>
+Static precalculated lighting with shadows.
+</li><li>
+Dynamic lighting using bumpmapping and similar techniques.
+</li></ul>
+
+<a name="SEC317"></a>
 <h4 class="subsubheading"> Basic Structure </h4>
 
 <p>The following <small>SCF</small> class names are used (for <code>csLoadPlugin</code>):
 </p>
 <ul>
 <li>
-Type plugin: <samp>`crystalspace.mesh.object.sprite.3d'</samp>
+Type plugin: <code>crystalspace.mesh.object.terrain.bruteblock</code>
 </li><li>
-Loader plugin: <samp>`crystalspace.mesh.loader.sprite.3d'</samp>
+Loader plugin: <code>crystalspace.mesh.loader.terrain</code>
 </li><li>
-Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.sprite.3d'</samp>
+Factory loader plugin: <code>crystalspace.mesh.loader.factory.terrain</code>
 </li></ul>
 
-<p>Objects in this plugin implement the following <small>SCF</small> interfaces (get
-with <code>scfQueryInterface</code>):
+<p>Objects in this plugin implement the following <small>SCF</small> interfaces, which you
+can retrieve with <code>scfQueryInterface</code>:
 </p>
 <ul>
 <li>
@@ -90,7 +105,7 @@ with <code>scfQueryInterface</code>):
 <li>
 Implements <samp>`iMeshObject'</samp>
 </li><li>
-Implements <samp>`iSprite3DState'</samp>
+Implements <samp>`iTerrainObjectState'</samp>
 </li></ul>
 </li><li>
 <em>MeshObjectFactory</em>
@@ -98,116 +113,255 @@ Implements <samp>`iSprite3DState'</samp>
 <li>
 Implements <samp>`iMeshObjectFactory'</samp>
 </li><li>
-Implements <samp>`iSprite3DFactoryState'</samp>
+Implements <samp>`iTerrainFactoryState'</samp>
 </li></ul>
 </li><li>
 <em>MeshObjectType</em>
 <ul>
 <li>
 Implements <samp>`iMeshObjectType'</samp>
-</li><li>
-Implements <samp>`iConfig'</samp>
 </li></ul>
 </li></ul>
 
-<a name="SEC298"></a>
+<a name="SEC318"></a>
 <h4 class="subsubheading"> Factory State Interface </h4>
 
-<p>Use the <samp>`iSprite3DFactoryState'</samp> <small>SCF</small> interface to access settings for
-a 3D sprite factory.  The definition of this interface can be found in
-<tt>`CS/include/imesh/sprite3d.h'</tt> and that is also the include file you need
+<p>Use the <samp>`iTerrainFactoryState'</samp> <small>SCF</small> interface to access settings for
+a terrain factory.  The definition of this interface can be found in
+<tt>`CS/include/imesh/terrain.h'</tt> and that is also the include file you need
 to include in your applications to use this plugin.  Using this interface you
-can access the material, triangles, vertices, texture coordinates, normals,
-frames, actions, and various other configuration parameters for a 3D
-sprite factory.
+can access the terraformer and sample area for a terrain factory.
 </p>
-<p>For frame based animation you need to access the <samp>`iSpriteFrame'</samp> and
-<samp>`iSpriteAction'</samp> interfaces (defined in <tt>`CS/include/imesh/sprite3d.h'</tt>).
-</p>
-<a name="SEC299"></a>
-<h4 class="subsubheading"> Factory Loader </h4>
-
-<dl compact="compact">
-<dt> <code>&lt;material&gt;materialname&lt;/material&gt;</code></dt>
-<dd><p>Material to use for the sprite.
-</p></dd>
-<dt> <code>&lt;frame name=&quot;framename&quot;&gt;&lt;v x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; u=&quot;&quot; v=&quot;&quot; /&gt; <small class="dots">...</small></code></dt>
-<dd><p>Define one frame.  A frame is a list of vertices which are specified using the
-<samp>`v'</samp> tag.  Every vertex has a 3D position in object space and (u,v)
-coordinates in the given texture (from 0 to 1).  Note that every frame needs to
-have the same number of vertices.
-</p></dd>
-<dt> <code>&lt;action name=&quot;actionname&quot;&gt;&lt;f name=&quot;framename&quot;&gt;&lt;delay&gt;</code></dt>
-<dd><p>Define one action.  An action is a list of frames.  Every frame is annotated
-with the <samp>`f'</samp> tag which contains the name of the frame to use and a
-delay.
-</p></dd>
-<dt> <code>&lt;t v1=&quot;&quot; v2=&quot;&quot; v3=&quot;&quot; /&gt;</code></dt>
-<dd><p>Define one triangle.  The three parameters are the indices for the three
-triangle vertices.
-</p></dd>
-<dt> <code>&lt;smooth&gt;base/frame&lt;/smooth&gt;</code></dt>
-<dd><p>Defines how to apply normal smoothing on the sprite.
-</p></dd>
-<dt> <code>&lt;tween&gt;yes/no&lt;/tween&gt;</code></dt>
-<dd><p>Set to yes if you want to enable frame tweening.  Default is false.
-</p></dd>
-</dl>
-
-<a name="SEC300"></a>
+<a name="SEC319"></a>
 <h4 class="subsubheading"> Object State Interface </h4>
 
-<p><samp>`iSprite3DState'</samp> is the <small>SCF</small> interface that you can
-use to set/get settings for a 3D Sprite object. The definition of this
-interface can be found in <tt>`CS/include/imesh/sprite3d.h'</tt> and that's also the
-include file you need to include in your applications to use this plugin.
-Using this interface you can access the material, blending mode (mixmode),
-current frame and action, and various other configuration parameters for an
-3D sprite object.
+<p><samp>`iTerrainObjectState'</samp> (residing in <tt>`CS/include/imesh/terrain.h'</tt>)
+is the <small>SCF</small> interface that you can use to manipulate settings for a terrain
+object.  By using this interface you can access the base material, material
+palette, and various other settings for the terrain object.
 </p>
-<a name="SEC301"></a>
-<h4 class="subsubheading"> Object Loader </h4>
+<a name="SEC320"></a>
+<h4 class="subsubheading"> How Does it Work </h4>
 
-<dl compact="compact">
-<dt> <code>&lt;factory&gt;factoryname&lt;/factory&gt;</code></dt>
-<dd><p>Name of the factory to use for creation of this instance.
-</p></dd>
-<dt> <code>&lt;mixmode&gt;&lt;mode \&gt;&lt;/mixmode&gt;</code></dt>
-<dd><p>Blending mode, one of <samp>`add'</samp>, <samp>`alpha'</samp>, <samp>`copy'</samp>, <samp>`keycolor'</samp>,
-<samp>`multiply2'</samp>, <samp>`multiply'</samp>, or <samp>`transparent'</samp>.
-</p></dd>
-<dt> <code>&lt;material&gt;materialname&lt;/material&gt;</code></dt>
-<dd><p>Material to use for the sprite.
-</p></dd>
-<dt> <code>&lt;tween&gt;yes/no&lt;/tween&gt;</code></dt>
-<dd><p>Set to yes if you want to enable frame tweening.  Default is false.
-</p></dd>
-<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
-<dd><p>Set to yes if you want to enable lighting.  Default is true.
-</p></dd>
-<dt> <code>&lt;basecolor red=&quot;&quot; green=&quot;&quot; blue=&quot;&quot; /&gt;</code></dt>
-<dd><p>Base color that will be added to all vertex colors. Default 0,0,0.
-</p></dd>
-<dt> <code>&lt;action name=&quot;actionname&quot;&gt;</code></dt>
-<dd><p>The default action to use for this sprite instance.
-</p></dd>
-</dl>
-
-<a name="SEC302"></a>
-<h4 class="subsubheading"> Configuration Parameters </h4>
-
-<p>The <tt>`sprite3d'</tt> plugin supports the following configuration parameters
-via the <samp>`iConfig'</samp> interface in the mesh object type plugin:
+<p>The easiest way to explain how the landscape engine works is to show
+an example world file:
 </p>
-<dl compact="compact">
-<dt> <code>sprlod</code></dt>
-<dd><p>Set the sprite level-of-detail (<small>LOD</small>) level.
-</p></dd>
-<dt> <code>sprlq</code></dt>
-<dd><p>Set the sprite lighting quality.
-</p></dd>
-</dl>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;world&gt;
+  &lt;textures&gt;
+    &lt;texture name=&quot;andrew_marble4.jpg&quot;&gt;
+      &lt;file&gt;/lib/stdtex/andrew_marble4.jpg&lt;/file&gt;
+    &lt;/texture&gt;
+    &lt;texture name=&quot;stone4.gif&quot;&gt;
+      &lt;file&gt;/lib/std/stone4.gif&lt;/file&gt;
+    &lt;/texture&gt;
+    &lt;texture name=&quot;grass.png&quot;&gt;
+      &lt;file&gt;/lev/terrain/grass.png&lt;/file&gt;
+    &lt;/texture&gt;
+    &lt;texture name=&quot;materialmap_base.png&quot;&gt;
+      &lt;file&gt;/lev/terrain/materialmap_base.png&lt;/file&gt;
+    &lt;/texture&gt;
+  &lt;/textures&gt;
 
+  &lt;shaders&gt;
+    &lt;shader&gt;&lt;file&gt;/shader/terrain_fixed_base.xml&lt;/file&gt;&lt;/shader&gt;
+    &lt;shader&gt;&lt;file&gt;/shader/terrain_fixed_splatting.xml&lt;/file&gt;&lt;/shader&gt;
+  &lt;/shaders&gt;
+
+  &lt;materials&gt;
+    &lt;material name=&quot;Base&quot;&gt;
+      &lt;texture&gt;materialmap_base.png&lt;/texture&gt;
+      &lt;shader type=&quot;ambient&quot;&gt;terrain_fixed_base&lt;/shader&gt;
+    &lt;/material&gt;
+    &lt;material name=&quot;Marble&quot;&gt;
+      &lt;texture&gt;andrew_marble4.jpg&lt;/texture&gt;
+      &lt;shadervar name=&quot;texture scale&quot; type=&quot;vector2&quot;&gt;16,16&lt;/shadervar&gt;
+      &lt;shader type=&quot;terrain splat&quot;&gt;terrain_fixed_splatting&lt;/shader&gt;
+    &lt;/material&gt;
+    &lt;material name=&quot;Stone&quot;&gt;
+      &lt;texture&gt;stone4.gif&lt;/texture&gt;
+      &lt;shadervar name=&quot;texture scale&quot; type=&quot;vector2&quot;&gt;16,16&lt;/shadervar&gt;
+      &lt;shader type=&quot;terrain splat&quot;&gt;terrain_fixed_splatting&lt;/shader&gt;
+    &lt;/material&gt;
+    &lt;material name=&quot;Grass&quot;&gt;
+      &lt;texture&gt;grass.png&lt;/texture&gt;
+      &lt;shadervar name=&quot;texture scale&quot; type=&quot;vector2&quot;&gt;16,16&lt;/shadervar&gt;
+      &lt;shader type=&quot;terrain splat&quot;&gt;terrain_fixed_splatting&lt;/shader&gt;
+    &lt;/material&gt;
+  &lt;/materials&gt;
+
+  &lt;addon&gt;
+    &lt;plugin&gt;crystalspace.renderloop.loop.loader&lt;/plugin&gt;
+    &lt;paramsfile&gt;/shader/std_rloop_terrainfixed.xml&lt;/paramsfile&gt;
+  &lt;/addon&gt;
+    
+  &lt;settings&gt;
+    &lt;clearzbuf&gt;yes&lt;/clearzbuf&gt;
+    &lt;renderloop&gt;std_rloop_terrainfixed&lt;/renderloop&gt;
+  &lt;/settings&gt;
+
+  &lt;start&gt;
+    &lt;sector&gt;room&lt;/sector&gt;
+    &lt;position x=&quot;0&quot; y=&quot;30&quot; z=&quot;0&quot; /&gt;
+  &lt;/start&gt;
+
+  &lt;addon plugin=&quot;crystalspace.terraformer.simple.loader&quot;&gt;
+    &lt;name&gt;simple&lt;/name&gt;
+    &lt;heightmap&gt;/lev/terrain/heightmap_257x257.png&lt;/heightmap&gt;
+    &lt;scale x=&quot;256&quot; y=&quot;32&quot; z=&quot;256&quot; /&gt;
+  &lt;/addon&gt;
+
+  &lt;meshfact name=&quot;TerrainFact&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.factory.terrain&lt;/plugin&gt;
+    &lt;params&gt;
+      &lt;plugin&gt;crystalspace.mesh.object.terrain.bruteblock&lt;/plugin&gt;
+      &lt;terraformer&gt;simple&lt;/terraformer&gt;
+      &lt;sampleregion&gt;
+        &lt;min x=&quot;-256&quot; y=&quot;-256&quot; /&gt;
+        &lt;max x=&quot;256&quot; y=&quot;256&quot; /&gt;
+      &lt;/sampleregion&gt;
+    &lt;/params&gt;
+  &lt;/meshfact&gt;
+
+  &lt;sector name=&quot;room&quot;&gt;
+     &lt;light name=&quot;sun&quot;&gt;
+       &lt;center x=&quot;-50000&quot; y=&quot;86030&quot; z=&quot;0&quot; /&gt;
+       &lt;color red=&quot;0.85903&quot; green=&quot;0.80995&quot; blue=&quot;0.70420&quot; /&gt;
+       &lt;radius&gt;1000000&lt;/radius&gt;
+     &lt;/light&gt;
+
+    &lt;meshobj name=&quot;Terrain&quot;&gt;
+      &lt;plugin&gt;crystalspace.mesh.loader.terrain&lt;/plugin&gt;
+      &lt;params&gt;
+        &lt;factory&gt;TerrainFact&lt;/factory&gt;
+        &lt;material&gt;Base&lt;/material&gt;
+	&lt;materialpalette&gt;
+	  &lt;material&gt;Grass&lt;/material&gt;
+	  &lt;material&gt;Marble&lt;/material&gt;
+	  &lt;material&gt;Stone&lt;/material&gt;
+	&lt;/materialpalette&gt;
+	&lt;lodvalue name=&quot;splatting distance&quot;&gt;200&lt;/lodvalue&gt;
+  	&lt;lodvalue name=&quot;block resolution&quot;&gt;16&lt;/lodvalue&gt;
+  	&lt;lodvalue name=&quot;block split distance&quot;&gt;8&lt;/lodvalue&gt;
+  	&lt;lodvalue name=&quot;minimum block size&quot;&gt;32&lt;/lodvalue&gt;
+  	&lt;lodvalue name=&quot;cd resolution&quot;&gt;256&lt;/lodvalue&gt;
+	&lt;materialmap image=&quot;/lev/terrain/materialmap.png&quot; /&gt;
+	&lt;staticlighting&gt;yes&lt;/staticlighting&gt;
+	&lt;castshadows&gt;yes&lt;/castshadows&gt;
+      &lt;/params&gt;
+    &lt;/meshobj&gt;
+  &lt;/sector&gt;
+&lt;/world&gt;
+</pre></td></tr></table>
+<a name="SEC321"></a>
+<h4 class="subsubheading"> Textures and Materials </h4>
+
+<p>In the first part of this world file we define the textures as used
+by the landscape mesh. In this particular example we use
+<tt>`materialmap_base.png'</tt> as the base material. This is the material that
+is going to be used for the landscape in the distance. The three other
+textures are individual textures that are going to be used by the splatting
+algorithm (more on that later).
+</p>
+<p>In this particular example we use the <tt>`terrain_fixed_base.xml'</tt> and
+<tt>`terrain_fixed_splatting.xml'</tt> shaders. This means that we use simple
+static lighting (needs a <samp>`-relight'</samp>). Other options here are the
+<tt>`splatting_base.xml'</tt> and related shaders which allow for fully dynamic
+lighting and bumpmapping.
+</p>
+<p>We need to define four materials. One material for the base material so
+that one uses the <samp>`terrain_fixed_base'</samp> shader. The three others will
+be used by the splatting algorithm so they need the
+<samp>`terrain_fixed_splatting'</samp> shader. Using the <samp>`texture scale'</samp>
+shader variable you can control the scale of these textures as used on the
+terrain.
+</p>
+<a name="SEC322"></a>
+<h4 class="subsubheading"> Level Setup </h4>
+
+<p>Because we need the <samp>`terrain_fixed_base'</samp> shaders we also need the
+<tt>`std_rloop_terrainfixed.xml'</tt> renderloop. This renderloop works together
+with the fixed terrain shaders. It also supports rendering of normal
+software vertex lighted meshes and meshes using lightmaps so you can easily
+put other objects on the landscape.
+</p>
+<a name="SEC323"></a>
+<h4 class="subsubheading"> Heightmap Data </h4>
+
+<p>The landscape engine uses a terraformer plugin to get the heightmap
+data from. Currently there is only one terraformer which loads heightmap
+data from a normal image. Using the
+<samp>`crystalspace.terraformer.simple.loader'</samp> terraformer plugin loader
+we can load the heightmap data (<tt>`heightmap_257x257.png'</tt>) and
+give it the name <samp>`simple'</samp>. Using the <samp>`scale'</samp> keyword we can
+scale it to the right dimensions as needed for the landscape engine.
+</p>
+<a name="SEC324"></a>
+<h4 class="subsubheading"> Mesh Factory </h4>
+
+<p>In the mesh factory of the landscape engine we say which terraformer we
+are going to use (i.e. <samp>`simple'</samp> in this case) and also where we will
+sample the terraformer. In the terraformer itself we scaled the heightmap
+data to the right dimensions. But in the factory we decide which region
+we will actually use for geometry.
+</p>
+<a name="SEC325"></a>
+<h4 class="subsubheading"> Mesh Object </h4>
+
+<p>Finally we need the actual mesh object representing the landscape.
+Here we say what the base material is that we will use and we also setup
+the material palette. In our case we use a palette as follows:
+</p>
+<ul>
+<li>
+<samp>`Grass'</samp>: index 0
+</li><li>
+<samp>`Marble'</samp>: index 1
+</li><li>
+<samp>`Stone'</samp>; index 2
+</li></ul>
+
+<p>This palette is used in combination with a materialmap (<tt>`materialmap.png'</tt>).
+The materialmap is an indexed image which tells the landscape engine which
+material should be used on every triangle of the terrain. In addition the
+following flags are set here:
+</p>
+<ul>
+<li>
+<samp>`splatting distance'</samp>: this is the distance at which it stops using
+splatting and switches to the base material. Making this lower will cause
+the landscape to be less detailed (less detailed material) but it will run
+faster.
+</li><li>
+<samp>`block resolution'</samp>: this controls the internal resolution of the blocks.
+</li><li>
+<samp>`block split distance'</samp>: unknown?
+</li><li>
+<samp>`minimum block size'</samp>: unknown?
+</li><li>
+<samp>`cd resolution'</samp>: this is a current hack to control the resolution
+of the triangle mesh used for collision detection. The default is 256 which
+means that a mesh of 256x256x2 triangles will be used. Larger values will
+result in more accurate collision detection (no sinking through floor) but
+slower and more memory usage.
+</li><li>
+<samp>`staticlighting'</samp>: enable this if you want to use static lighting (using
+<samp>`-relight'</samp>).
+</li><li>
+<samp>`castshadows'</samp>: enable this if you want to enable shadow casting for
+other objects on this terrain. This is only used in combination with
+static lighting.
+</li></ul>
+
+<a name="SEC326"></a>
+<h4 class="subsubheading"> Using From Code </h4>
+
+<p>It is also possible to use the landscape mesh from code. Use the state
+interfaces <code>iTerrainFactoryState</code> and <code>iTerrainObjectState</code>
+with the <samp>`terrain'</samp> mesh type using the generic mesh generation code
+(see <a href="cs_4.10.2.html#Generic-Mesh-Creation-Code">Generic Mesh Creation Code</a>).
+</p>
+<p>TODO: add more information here.
+</p>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

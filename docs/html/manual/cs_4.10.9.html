@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.10.9 Sprite2D Mesh Object</title>
+<title>Crystal Space: 4.10.9 Thing Mesh Object</title>
 
-<meta name="description" content="Crystal Space: 4.10.9 Sprite2D Mesh Object">
-<meta name="keywords" content="Crystal Space: 4.10.9 Sprite2D Mesh Object">
+<meta name="description" content="Crystal Space: 4.10.9 Thing Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.10.9 Thing Mesh Object">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MeshObject-Spr2D"></a>
+<a name="MeshObject-Thing"></a>
 <a name="4.10.9"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.8.html#4.10.8" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,243 +58,288 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.10.9 Sprite2D Mesh Object </h3>
+<h3 class="subsection"> 4.10.9 Thing Mesh Object </h3>
 
 <p><em>Written by Jorrit Tyberghein,
 (<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>).</em>
 </p>
-<p>A 2D Sprite is basically a polygon that always faces the camera.  There are
-some special effects that you can do with this but it is really very simple
-otherwise.
+<p>This mesh object represents a 'thing' which is a very often used
+geometry object in Crystal Space. Things are often used to mark the bounding
+geometry of a sector so that it represents a closed space. Things are not
+very dynamic in nature (although you can have things that move) so they
+are most often used for static geometry.
 </p>
-<a name="SEC290"></a>
+<p>Things support general polygons (as opposed to only supporting triangles).
+</p>
+<p>There is also a howto on creating things (see section <a href="cs_4.10.4.html#4.10.4">Creating a Thing Mesh</a>).
+</p>
+<a name="SEC313"></a>
 <h4 class="subsubheading"> Basic Structure </h4>
 
 <p>The following <small>SCF</small> class names are used (for <code>csLoadPlugin</code>):
 </p>
 <ul>
 <li>
-Type plugin: <samp>`crystalspace.mesh.object.sprite.2d'</samp>
+Type plugin: <samp>`crystalspace.mesh.object.thing'</samp>
 </li><li>
-Loader plugin: <samp>`crystalspace.mesh.loader.sprite.2d'</samp>
+Loader plugin: <samp>`crystalspace.mesh.loader.thing'</samp>
 </li><li>
-Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.sprite.2d'</samp>
+Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.thing'</samp>
 </li></ul>
 
-<p>Objects in this plugin implement the following <small>SCF</small> interfaces (get with
-<code>scfQueryInterface</code>):
+<p>Objects in this plugin implement the following <small>SCF</small> interfaces (get
+with <code>scfQueryInterface</code>):
 </p>
 <ul>
 <li>
-<em>MeshObject</em>
-<ul>
-<li>
-Implements <samp>`iMeshObject'</samp>
-</li><li>
-Implements <samp>`iSprite2DState'</samp>
-</li><li>
-Implements <samp>`iParticle'</samp>
-</li></ul>
-</li><li>
 <em>MeshObjectFactory</em>
 <ul>
 <li>
 Implements <samp>`iMeshObjectFactory'</samp>
 </li><li>
-Implements <samp>`iSprite2DFactoryState'</samp>
+Implements <samp>`iThingFactoryState'</samp>
 </li></ul>
 </li><li>
-<em>MeshObjectFactory</em>
+<em>MeshObject</em>
+<ul>
+<li>
+Implements <samp>`iMeshObject'</samp>
+</li><li>
+Implements <samp>`iThingState'</samp>
+</li><li>
+Implements <samp>`iVisibilityCuller'</samp>
+</li><li>
+Implements <samp>`iLightingInfo'</samp>
+</li></ul>
+</li><li>
+<em>MeshObjectType</em>
 <ul>
 <li>
 Implements <samp>`iMeshObjectType'</samp>
+</li><li>
+Implements <samp>`iThingEnvironment'</samp>
 </li></ul>
 </li></ul>
 
-<a name="SEC291"></a>
-<h4 class="subsubheading"> Factory State Interface </h4>
+<a name="SEC314"></a>
+<h4 class="subsubheading"> State Interfaces </h4>
 
-<p>Use the <small>SCF</small> interface <samp>`iSprite2DFactoryState'</samp> to access settings for
-a 2D sprite factory.  The definition of this interface can be found in
-<tt>`CS/include/imesh/sprite2d.h'</tt> and that is also the include file you need
-to include in your applications to use this plugin.  Using this interface you
-can access the material, blending mode (mixmode), and lighting settings.
+<p><samp>`iThingFactoryState'</samp> is the <small>SCF</small> interface that you can use to
+set/get settings for a thing. The definition of this interface
+can be found in <tt>`CS/include/imesh/thing.h'</tt> and that is also the
+include file you need to include in your applications to use this plugin.
+Using this interface you can access the vertices, polygons, materials,
+and various other configuration parameters for a thing.
 </p>
-<a name="SEC292"></a>
-<h4 class="subsubheading"> Factory Loader </h4>
-
-<dl compact="compact">
-<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
-<dd><p>Enable/disable lighting.
-</p></dd>
-<dt> <code>&lt;material&gt;materialname&lt;/material&gt;</code></dt>
-<dd><p>Material to use for the polygon.
-</p></dd>
-<dt> <code>&lt;mixmode&gt;&lt;mode /&gt;&lt;/mixmode&gt;</code></dt>
-<dd><p>Blending mode; one of <samp>`add'</samp>, <samp>`alpha'</samp>, <samp>`copy'</samp>, <samp>`keycolor'</samp>,
-<samp>`multiply2'</samp>, <samp>`multiply'</samp>, or <samp>`transparent'</samp>.
-</p></dd>
-<dt> <code>&lt;uvanimation name=uvanimationname&gt;&lt;frame <small class="dots">...</small>&gt; <small class="dots">...</small></code></dt>
-<dd><p>Define an uv animation, that is a sequence of frames which textures are all in
-one big texture.  Thus the animation is achieved by altering the (u,v)
-coordinates of the polygon defined by this sprite.
-</p></dd>
-<dt> <code>&lt;frame&gt;&lt;duration&gt;&lt;vertices <small class="dots">...</small>&gt; <small class="dots">...</small></code></dt>
-<dd><p>Defines a single frame within an uv animation by specifying its duration in
-milliseconds and the u,v coordinates to use.
-</p><ul>
-<li><table><tr><td>&nbsp;</td><td><pre class="example">&lt;frame name=&quot;framename&quot;&gt;
-  &lt;duration&gt;milliseconds&lt;/duration&gt;
-  &lt;v u=&quot;&quot; v=&quot;&quot; /&gt;
-  ... u,v coo list
-&lt;/frame&gt;
-</pre></td></tr></table></li></ul>
-</dd>
-</dl>
-
-<a name="SEC293"></a>
-<h4 class="subsubheading"> Object State Interface </h4>
-
-<p><samp>`iSprite2DState'</samp> is the <small>SCF</small> interface that you can use to set/get
-settings for a 2D sprite object.  The definition of this interface can be found
-in <tt>`CS/include/imesh/sprite2d.h'</tt> and that is also the include file you
-need to include in your applications to use this plugin.  Using this
-interface you can access the material, blending mode (mixmode), lighting
-settings, and also the vertices of the 2D polygon controlled by this plugin.
+<p><samp>`iThingState'</samp> is for thing instances.
 </p>
-<a name="SEC294"></a>
-<h4 class="subsubheading"> Object Loader </h4>
+<a name="SEC315"></a>
+<h4 class="subsubheading"> Factory and Object Loader </h4>
 
-<dl compact="compact">
-<dt> <code>&lt;factory&gt;factoryname&lt;/factory&gt;</code></dt>
-<dd><p>Name of the factory to use for creation of this instance.
-</p></dd>
-<dt> <code>&lt;mixmode&gt;&lt;mode /&gt;&lt;/mixmode&gt;</code></dt>
-<dd><p>Blending mode, one of <samp>`add'</samp>, <samp>`alpha'</samp>, <samp>`copy'</samp>, <samp>`keycolor'</samp>,
-<samp>`multiply2'</samp>, <samp>`multiply'</samp>, or <samp>`transparent'</samp>.
-</p></dd>
-<dt> <code>&lt;material&gt;materialname&lt;/material&gt;</code></dt>
-<dd><p>Material to use for the polygon.
-</p></dd>
-<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
-<dd><p>Enable/disable lighting.
-</p></dd>
-<dt> <code>vertices &lt;v x=&quot;&quot; y=&quot;&quot; /&gt; <small class="dots">...</small></code></dt>
-<dd><p>List of 2D vertices defining the polygon.
-</p></dd>
-<dt> <code>&lt;uv u=&quot;&quot; v=&quot;&quot; /&gt;</code></dt>
-<dd><p>List of texture mapping UV coordinates for the polygon.
-</p></dd>
-<dt> <code>&lt;color red=&quot;&quot; green=&quot;&quot; blue=&quot;&quot; /&gt;</code></dt>
-<dd><p>List of rgb colors for the polygon.
-</p></dd>
-<dt> <code>&lt;animate&gt; <small class="dots">...</small></code></dt>
-<dd><p>Select an uv animation from the list of animations declared in the template
-</p><ul>
-<li><table><tr><td>&nbsp;</td><td><pre class="example">&lt;animate name=&quot;animationname&quot;&gt;
-  &lt;timing&gt;milliseconds&lt;/timing&gt;
-  &lt;loop&gt;yes/no&lt;/loop&gt;
-&lt;/animate&gt;
-</pre></td></tr></table><ul>
+<p>At load time a thing can be constructed from several <em>thing parts</em>.
+At run time these parts will all be combined into one big thing but
+at load time it is sometimes easy to be able to split the thing in parts
+so that you can have a more logical grouping of thing data. The important
+feature of parts is that the vertex table starts from zero again. This means
+that you can define vertices in a part and then use them in polygons in that
+part as if the vertex table starts at 0 again. This is useful because then
+you can more easily add new parts and even move around parts without having
+to change all vertex indices. Note that it is no problem to have duplicate
+vertices between different parts as they will be combined in a post-processing
+pass anyway. The table below describes everything which you can use in a
+single <em>part</em> which is also what you can use in the top level thing
+definition.
+</p>
+<ul>
 <li>
-timing &gt; 0 : every &lt;timing&gt; milliseconds the next frame will be shown
-</li><li>
-timing &lt; 0 : every &lt;-timing&gt; gameloop the next frame will be shown
-</li><li>
-timing = 0 : timing attached to the frame will be used
-</li><li>
-loop : loop the animation or stop after last frame (and show the last frame)
-</li></ul>
-</li></ul>
-</dd>
+Vertex and polygon definition commands. Note that in a given part the vertex
+table always starts at index 0. Every vertex you add will use a new index.
+<dl compact="compact">
+<dt> <code>vertex &lt;v x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Define a single vertex given three coordinates. The coordinates are given
+in local object space for this thing.
+</p></dd>
+<dt> <code>polygon &lt;p name=&quot;&quot;&gt; <small class="dots">...</small></code></dt>
+<dd><p>This defines a single polygon using the vertices described above. The
+definition of a polygon is given below.
+</p></dd>
 </dl>
 
-<a name="SEC295"></a>
-<h4 class="subsubheading"> Example 1 </h4>
+</li><li>
+Material related commands.
+<dl compact="compact">
+<dt> <code>&lt;material&gt;materialName&lt;/material&gt;</code></dt>
+<dd><p>The default material to use for all following polygons. A polygon can
+still override this.
+</p></dd>
+<dt> <code>&lt;matsetselect&gt;materialSetName&lt;/matsetselect&gt;</code></dt>
+<dd><p>Use a set of textures that was defined previously.
+</p></dd>
+<dt> <code>&lt;texlen&gt;scaleValue&lt;/texlen&gt;</code></dt>
+<dd><p>This is a very general and easy command to control texture mapping on
+a polygon. It basically defines the scale of a texture. If you want more
+control over polygon texture mapping you should look at the texture mapping
+parameters in a polygon. But if you want Quick-And-Dirty texture mapping
+then this command can help you. <samp>`texlen'</samp> expects a single parameter
+which is a scale. A scale of 1 means that the given texture will be scaled
+once in both directions for 1 unit in world space. A scale of 2 means that
+the given texture will be scaled once in 2 units of world space.
+</p></dd>
+</dl>
 
-<p>This is how our world file looks:
+</li><li>
+Various other commands.
+<dl compact="compact">
+<dt> <code>&lt;fastmesh&gt;yes/no&lt;/fastmesh&gt;</code></dt>
+<dd><p>This command only works for the top-level thing. It indicates that this
+mesh will be rendered using a faster technique. At this moment this is
+default if the number of polygons exceeds some threshold.
+</p></dd>
+<dt> <code>&lt;factory&gt;factoryName&lt;/factory&gt;</code></dt>
+<dd><p>This thing will be made from the given thing factory.
+</p></dd>
+<dt> <code>&lt;clone&gt;thingName&lt;/clone&gt;</code></dt>
+<dd><p>This is similar to <samp>`factory'</samp> but the thing will be made from the
+given thing instead. i.e. it is a clone.
+</p></dd>
+<dt> <code>&lt;cosfact&gt;factorValue&lt;/cosfact&gt;</code></dt>
+<dd><p>The cosinus factor to use for lighting. The default is 0 which means
+that the strength of the light falling on this polygon will depend
+completely on the angle of the light and a polygon. This is the most
+realistic setting but in some cases it doesn't look right. To completely
+disable dependence on angle you can use 1. In between values are also
+possible.
+</p></dd>
+</dl>
+</li></ul>
+
+<p>A given polygon (inside the <samp>`polygon'</samp> keyword) is defined as
+follows:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;world&gt;
-  &lt;textures&gt;
-    &lt;texture name=&quot;blow&quot;&gt;
-      &lt;file&gt;blow.png&lt;/file&gt;
-    &lt;/texture&gt;
-  &lt;/textures&gt;
-  &lt;materials&gt;
-    &lt;material name=&quot;explosion&quot;&gt;
-      &lt;texture&gt;blow&lt;/texture&gt;
-    &lt;/material&gt;
-  &lt;/materials&gt;
-  &lt;meshobj name=&quot;Explosion&quot;&gt;
-    &lt;plugin&gt;crystalspace.mesh.loader.factory.sprite.2d&lt;/plugin&gt;
-    &lt;params&gt;
-      &lt;material&gt;explosion&lt;/material&gt;
-      &lt;uvanimation name=&quot;boom&quot;&gt;
-        &lt;frame name=&quot;first&quot;&gt;
-          &lt;duration&gt;100&lt;/duration&gt;
-          &lt;v u=&quot;0&quot; v=&quot;0&quot; /&gt;
-          &lt;v u=&quot;0.5&quot; v=&quot;0&quot; /&gt;
-          &lt;v u=&quot;0.5&quot; v=&quot;0.5&quot; /&gt;
-          &lt;v u=&quot;0&quot; v=&quot;0.5&quot; /&gt;
-        &lt;/frame&gt;
-        &lt;frame name=&quot;second&quot;&gt;
-          &lt;duration&gt;100&lt;/duration&gt;
-          &lt;v u=&quot;0.5&quot; v=&quot;0&quot; /&gt;
-          &lt;v u=&quot;1&quot; v=&quot;0&quot; /&gt;
-          &lt;v u=&quot;1&quot; v=&quot;0.5&quot; /&gt;
-          &lt;v u=&quot;0.5&quot; v=&quot;0.5&quot; /&gt;
-        &lt;/frame&gt;
-        &lt;frame name=&quot;third&quot;&gt;
-          &lt;duration&gt;100&lt;/duration&gt;
-          &lt;v u=&quot;0&quot; v=&quot;0.5&quot; /&gt;
-          &lt;v u=&quot;0.5&quot; v=&quot;0.5&quot; /&gt;
-          &lt;v u=&quot;0.5&quot; v=&quot;1&quot; /&gt;
-          &lt;v u=&quot;0&quot; v=&quot;1&quot; /&gt;
-        &lt;/frame&gt;
-        &lt;frame name=&quot;fourth&quot;&gt;
-          &lt;duration&gt;100&lt;/duration&gt;
-          &lt;v u=&quot;0.5&quot; v=&quot;0.5&quot; /&gt;
-          &lt;v u=&quot;1&quot; v=&quot;0.5&quot; /&gt;
-          &lt;v u=&quot;1&quot; v=&quot;1&quot; /&gt;
-          &lt;v u=&quot;0.5&quot; v=&quot;1&quot; /&gt;
-        &lt;/frame&gt;
-      &lt;/uvanimation&gt;
-    &lt;/params&gt;
-  &lt;/meshobj&gt;
-  &lt;sector name=&quot;space&quot;&gt;
-  &lt;!-- define all the stuff in space ...
-       and now one of the enemies right after we met him --&gt;
-    &lt;meshobj name=&quot;Kaboom&quot;&gt;
-      &lt;plugin&gt;crystalspace.mesh.loader.sprite.2d&lt;/plugin&gt;
-      &lt;params&gt;
-        &lt;v x=&quot;-1&quot; y=&quot;1&quot; /&gt;
-        &lt;v x=&quot;1&quot; y=&quot;1&quot; /&gt;
-        &lt;v x=&quot;1&quot; y=&quot;-1&quot; /&gt;
-        &lt;v x=&quot;-1&quot; y=&quot;-1&quot; /&gt;
-        &lt;uv u=&quot;0&quot; v=&quot;0&quot; /&gt;
-        &lt;uv u=&quot;1&quot; v=&quot;0&quot; /&gt;
-        &lt;uv u=&quot;1&quot; v=&quot;1&quot; /&gt;
-        &lt;uv u=&quot;0&quot; v=&quot;1&quot; /&gt;
-        &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
-        &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
-        &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
-        &lt;color red=&quot;1&quot; green=&quot;1&quot; blue=&quot;1&quot; /&gt;
-        &lt;lighting&gt;no&lt;/lighting&gt;
-        &lt;!-- show the animation, use the timings attached to
-             the frames, loop --&gt;
-        &lt;animate name=&quot;boom&quot;&gt;
-          &lt;timing&gt;0&lt;/timing&gt;
-          &lt;loop&gt;yes&lt;/loop&gt;
-        &lt;/animate&gt;
-      &lt;/params&gt;
-      &lt;move&gt;
-        &lt;v x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot;&gt;
-      &lt;/move&gt;
-    &lt;/meshobj&gt;
-  &lt;/sector&gt;
-&lt;/world&gt;
+<dl compact="compact">
+<dt> <code>&lt;material&gt;materialName&lt;/material&gt;</code></dt>
+<dd><p>The material to use for this polygon. If not given then the default material
+will be used.
+</p></dd>
+<dt> <code>&lt;texmap&gt; <small class="dots">...</small></code></dt>
+<dd><p>This keyword can be used to define additional texture mapping parameters.
+</p></dd>
+<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
+<dd><p>Should this polygon use lighting or not. By default this is enabled. If
+disabled the texture on this polygon will be rendered using original colors
+(i.e. full-bright texture).
+</p></dd>
+<dt> <code>shading(shadingParm) FIXME: still existing ?</code></dt>
+<dd><p>This describes the kind of shading to use for this polygon. Possible values
+are: <samp>`none'</samp>, <samp>`flat'</samp>, <samp>`gouraud'</samp>, or <samp>`lightmap'</samp>. Default
+is <samp>`lightmap'</samp>.
+</p></dd>
+<dt> <code>vertices &lt;v v1=&quot;&quot; <small class="dots">...</small> /&gt;</code></dt>
+<dd><p>The vertices of the polygon. This is a list of vertex indices local to the
+part this polygon is in. In combination with the <samp>`vblock'</samp> or <samp>`vroom'</samp>
+commands this command can also contain something with the name: <samp>`w'</samp>,
+<samp>`e'</samp>, <samp>`n'</samp>, <samp>`s'</samp>, <samp>`u'</samp>, or <samp>`d'</samp> (for west, east, north,
+south, up, or down). This will then create vertices according to the last
+<samp>`vblock'</samp> or <samp>`vroom'</samp>. Note that there should be no other vertex
+generating command between the <samp>`vblock'</samp> or <samp>`vroom'</samp> and this
+polygon command! You can also give the first index of the <samp>`vblock'</samp>
+or <samp>`vroom'</samp> generated vertices with a notation like this:
+<samp>`vertices (w,8)'</samp>.
+</p></dd>
+<dt> <code>&lt;uv u1=&quot;&quot; v1=&quot;&quot; <small class="dots">...</small> /&gt;</code></dt>
+<dd><p>If you use this keyword the polygon will be gouraud shaded and not
+lightmapped. This keyword allows you to describe the uv coordinates
+for the polygon with gouraud shading. Currently a gouraud shaded polygon
+is limited to three vertices. This limitation will be removed in the
+future. But for now it means that uv will be followed by six parameters (three
+u,v coordinate sets).
+</p></dd>
+<dt> <code>&lt;uva u1=&quot;&quot; v1=&quot;&quot; a1=&quot;&quot; <small class="dots">...</small> /&gt;</code></dt>
+<dd><p>Similar to <samp>`uv'</samp> but uses another technique to describe the coordinates
+using angle.
+</p></dd>
+<dt> <code>&lt;color red=&quot;&quot; green=&quot;&quot; blue=&quot;&quot; <small class="dots">...</small> /&gt;</code></dt>
+<dd><p>When using <samp>`uv'</samp> you can use this command to give colors (r,g,b) for
+every vertex.
+</p></dd>
+<dt> <code>colldet(boolean)</code></dt>
+<dd><p>Enable/disable collision detection for this polygon. By default a normal
+polygon will have collision detection enabled.
+</p></dd>
+<dt> <code>viscull(boolean)</code></dt>
+<dd><p>Enable/disable visibility culling for this polygon. By default a normal
+polygon will have visibility culling enabled. If the polygon has alpha
+then it will be disabled. However if the polygon uses a transparent texture
+then CS cannot easily detect that so in that case you have to disable it
+manually. This flag tells the visibility culler that this polygon should NOT
+be used to cull other objects (i.e. to block visibility).
+</p></dd>
+<dt> <code>&lt;alpha&gt;alphaValue&lt;/alpha&gt;</code></dt>
+<dd><p>Using this you can set the alpha transparency factor of this polygon.
+This is a value between 0 and 100.
+</p></dd>
+<dt> <code>&lt;mixmode&gt;&lt;mode /&gt;&lt;/mixmode&gt;</code></dt>
+<dd><p>With this you can control more blending options for the polygon.
+One of <samp>`add'</samp>, <samp>`alpha'</samp>, <samp>`copy'</samp>, <samp>`keycolor'</samp>,
+<samp>`multiply2'</samp>, <samp>`multiply'</samp>, or <samp>`transparent'</samp>.
+</p></dd>
+<dt> <code>len(scale) FIXME: obsolete ?</code></dt>
+<dd><p>This is similar to the <samp>`texlen'</samp> command in the part and also to the
+<samp>`len'</samp> command in the texture definition but it is repeated here
+as a short-hand for <samp>`texture (len (...))'</samp>.
+</p></dd>
+<dt> <code>plane(planeName) FIXME: no shortcut anymore ?</code></dt>
+<dd><p>This is a shorthand for <samp>`texture (plane (...))'</samp>.
+</p></dd>
+</dl>
 
-</pre></td></tr></table>
+<p>A texture mapping specification (the <samp>`texture'</samp> keyword in a polygon)
+has the following parameters:
+</p>
+<dl compact="compact">
+<dt> <code>&lt;orig x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>The origin for texture mapping (3D coord).
+</p></dd>
+<dt> <code>&lt;first x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>The u-axis coordinate for texture mapping (3D coord).
+</p></dd>
+<dt> <code>&lt;second x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>The v-axis coordinate for texture mapping (3D coord).
+</p></dd>
+<dt> <code>&lt;firstlen&gt;scale&lt;/firstlen&gt;</code></dt>
+<dd><p>Scale along the u-axis.
+</p></dd>
+<dt> <code>&lt;secondlen&gt;scale&lt;/secondlen&gt;</code></dt>
+<dd><p>Scale along the v-axis.
+</p></dd>
+<dt> <code>&lt;uvec x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Similar to <samp>`first'</samp> with <samp>`firstlen'</samp> set to length
+of vector (<samp>`first'</samp>-<samp>`orig'</samp>).
+</p></dd>
+<dt> <code>&lt;vvec x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Similar to <samp>`second'</samp> with <samp>`secondlen'</samp> set to length
+of vector (<samp>`second'</samp>-<samp>`orig'</samp>).
+</p></dd>
+<dt> <code>&lt;matrix&gt; <small class="dots">...</small></code></dt>
+<dd><p>Most general way to describe texture mapping using the transformation matrix.
+</p></dd>
+<dt> <code>&lt;v x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Most general way to describe texture mapping using the transformation vector.
+</p></dd>
+<dt> <code>len(scale) FIXME: obsolete ?</code></dt>
+<dd><p>Use this as an easier way to describe texture scale (i.e. instead
+of all the above).
+</p></dd>
+<dt> <code>&lt;uv idx1=&quot;&quot; u1=&quot;&quot; v1=&quot;&quot; idx2=&quot;&quot; u2=&quot;&quot; v2=&quot;&quot; idx3=&quot;&quot; u3=&quot;&quot; v3=&quot;&quot; /&gt;</code></dt>
+<dd><p>Directly specify u,v mapping coordinates for three given vertices.
+</p></dd>
+<dt> <code>uv_shift(ushift,vshift) FIXME: where is this now ?</code></dt>
+<dd><p>Given the mapping described above, further shift with the given
+u,v shift value.
+</p></dd>
+</dl>
+
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.8.html#4.10.8" title="Previous section in reading order"> &lt; </a>]</td>

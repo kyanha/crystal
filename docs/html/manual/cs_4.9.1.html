@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.9.1 Render Priorities and Objects in Sectors</title>
+<title>Crystal Space: 4.9.1 Components of a World</title>
 
-<meta name="description" content="Crystal Space: 4.9.1 Render Priorities and Objects in Sectors">
-<meta name="keywords" content="Crystal Space: 4.9.1 Render Priorities and Objects in Sectors">
+<meta name="description" content="Crystal Space: 4.9.1 Components of a World">
+<meta name="keywords" content="Crystal Space: 4.9.1 Components of a World">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="HOWTO-Render-Priorities"></a>
+<a name="World-Components"></a>
 <a name="4.9.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.html#4.9" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,183 +58,197 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.9.1 Render Priorities and Objects in Sectors </h3>
+<h3 class="subsection"> 4.9.1 Components of a World </h3>
 
-<p>Renderpriorities give the map creator some extra control over when objects
-have to be rendered. In this section the basic
-rendering algorithm is explained. This is a more theoretical explanation.
-Later some examples are given of some commonly used configurations.
+<p>This section describes the objects used to build a world.  This is useful to
+understand the format of the Crystal Space map file
+(see section <a href="cs_4.16.2.html#4.16.2">Format of Map File (<small>XML</small>)</a>).  To understand this you should know the basics of
+the <a href="cs_4.9.4.html#4.9.4">Portal Engine</a>.  This section describes the components of the world
+independent from the file format, so it is also useful if you want to build a
+world from within your program.
 </p>
-<a name="SEC217"></a>
-<h4 class="subsubheading"> Meshes and Sectors </h4>
-
-<p>One of the most fundamental concepts in Crystal Space is a sector (interface
-<code>iSector</code>). A sector is basically empty
-space which needs to be filled with geometry.
-</p>
-<p>To put geometry in a sector you use one or more mesh objects
-(see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).  Note that a mesh object can also be in several sectors
-at once.  This happens when some object is busy traversing some portal from one
-sector to another.  The list of sectors that a mesh object is in and also the
-position (i.e. transform) is kept by an instance of <code>iMovable</code>
-(see section <a href="cs_4.10.7.html#4.10.7">Mesh Movement</a>).
-</p>
-<a name="SEC218"></a>
-<h4 class="subsubheading"> Render Priorities </h4>
-
-<p>The engine supports the notion of render priorities. There is usually
-a limited set of render priority slots available. By default these are:
-</p>
-<ol>
-<li>
-<samp>`init'</samp>
-</li><li>
-<samp>`sky'</samp>
-</li><li>
-<samp>`sky2'</samp>
-</li><li>
-<samp>`portal'</samp>
-</li><li>
-<samp>`wall'</samp>
-</li><li>
-<samp>`wall2'</samp>
-</li><li>
-<samp>`object'</samp>
-</li><li>
-<samp>`object2'</samp>
-</li><li>
-<samp>`transp'</samp>
-</li><li>
-<samp>`alpha'</samp>
-</li><li>
-<samp>`final'</samp>
-</li></ol>
-
-<p>But you can setup your own render priorities by calling the engine
-<small>API</small>. Objects which are in a lower
-render priority (i.e. <samp>`sky'</samp> is lower than <samp>`wall'</samp>) will be rendered
-before objects with a higher priority. So using the render priority system
-you can choose in which order to render objects.
-</p>
-<p>The <samp>`alpha'</samp> render priority is a bit special. Objects in that
-render priority will be rendered from back to front. This is needed for
-objects that use alpha transparency and also if you need a mix of different
-kinds of transparencies. If you use a single other kind of transparency
-like add or mult (but not both) then you can use the <samp>`transp'</samp> render
-priority. That one is not sorted from back to front so it is only usable for
-transparencies that are correct even if rendered in other order.
-</p>
-<p>For keycolor objects (see section <a href="cs_4.12.1.html#4.12.1">Alpha and Keycolor in Textures</a>) you can use the normal
-<samp>`object'</samp> render priority with <samp>`ZUSE'</samp> z-buffer mode. This is also
-true for objects that have textures using binary alpha.
-</p>
-<p>To set up render priorities from within your application you can use
-the <code>engine-&gt;RegisterRenderPriority()</code> function.
-</p>
-<p>To set the render priority for an object you can use the following
-in a map file:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;myObject&quot;&gt;
-  &lt;plugin&gt;...&lt;/plugin&gt;
-  &lt;params&gt;
-    ...
-  &lt;/params&gt;
-  &lt;priority&gt;object&lt;/priority&gt;
-&lt;/meshobj&gt;
-</pre></td></tr></table>
-<p>To set the render priority from within the code you can do:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iMeshWrapper* mesh;
-mesh-&gt;SetRenderPriority (engine-&gt;GetRenderPriority (&quot;object&quot;));
-</pre></td></tr></table>
-<p>By default objects will be put in the <samp>`object'</samp> render queue.
+<p>The world is built up from the following objects:
 </p>
 <a name="SEC219"></a>
-<h4 class="subsubheading"> Z-Buffer Render Mode </h4>
+<h4 class="subsubheading"> Sectors </h4>
 
-<p>In addition to render priorities you can also choose how the object
-will be rendered with regards to the Z-buffer. There are four possibilities:
-</p>
-<ul class="toc">
-<li>
-<samp>`ZUSE'</samp>: use the Z-buffer to see where the object has to be rendered and
-also update the Z-buffer wherever the object is actually rendered.
-</li><li>
-<samp>`ZFILL'</samp>: only update the Z-buffer where the object is rendered but don't
-check against the existing Z-buffer contents.
-</li><li>
-<samp>`ZTEST'</samp>: use the Z-buffer to see where the object has to be rendered
-but don't update the Z-buffer.
-</li><li>
-<samp>`ZNONE'</samp>: don't update or read the Z-buffer when rendering this object.
-</li></ul>
-
-<p>To set the Z-buffer mode from a map file you can do the following:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;myObject&quot;&gt;
-  &lt;plugin&gt;...&lt;/plugin&gt;
-  &lt;params&gt;
-    ...
-  &lt;/params&gt;
-  &lt;priority&gt;object&lt;/priority&gt;
-  &lt;zuse /&gt;
-&lt;/meshobj&gt;
-</pre></td></tr></table>
-<p>To set the Z-buffer mode from the code you can use the following example:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">  iMeshWrapper* mesh;
-  mesh-&gt;SetZBufMode (CS_ZBUF_USE);
-</pre></td></tr></table>
-<p><samp>`ZUSE'</samp> is the default Z-buffer mode for objects created from within
-an application.
-</p>
-<p>By using the z-buffer mode in combination with the render priorities we
-now have a very powerful system to control object rendering in a sector.
-In the following sections we will show some popular examples. But first
-we show in a table what the common usage is of the render priorities in
-combination with the Z-buffer modes:
-</p>
-<ul class="toc">
-<li>
-<samp>`sky'</samp>: This render priority is used for rendering the object that
-represents the sky. This can be a skybox, or a skydome, or something else.
-Usually these objects have <samp>`ZNONE'</samp> or <samp>`ZFILL'</samp> render mode. If
-you want to use <samp>`ZNONE'</samp> you have to make sure that the Z-buffer
-is cleared every frame.
-</li><li>
-<samp>`portal'</samp>: Sometimes portals need to be put here.
-</li><li>
-<samp>`wall'</samp>: Sector walls are put in this queue. They are usually rendered
-using <samp>`ZFILL'</samp>.
-</li><li>
-<samp>`object'</samp>: After sector walls the normal objects are rendered. Usually
-these have <samp>`ZUSE'</samp> Z-buffer mode. You can also use this render priority
-for objects using keycolor transparency.
-</li><li>
-<samp>`transp'</samp>: Non-alpha transparent objects need to be rendered after all other
-objects. The best Z-buffer mode for these kinds of objects is <samp>`ZTEST'</samp>.
-</li><li>
-<samp>`alpha'</samp>: Alpha transparent objects need to be rendered after all other
-objects (and in back to front render mode as seen from the camera). The
-best Z-buffer mode for these kinds of objects is <samp>`ZTEST'</samp>.
-</li></ul>
-
-<p>Note that sky objects are usually created with the <samp>`CAMERA'</samp> keyword
-(in map file) or the <code>CS_ENTITY_CAMERA</code> flag (in
-<code>iMeshWrapper::GetFlags()</code>). The camera keyword makes sure that the
-camera will always be in the center of that object. So you can move forever
-in some direction without ever reaching the bounds of the sky.
+<p>(<code>iSector</code>). For technical details, see the portal engine discussion
+(see section <a href="cs_4.9.4.html#4.9.4">Portal Engine</a>). Basically sectors define an area
+that can contain several geometrical objects. As opposed to earlier
+versions of Crystal Space, a sector does not itself represent geometry.
+Instead all geometry in a sector is made from <em>Mesh Objects</em>.
+Theoretically a sector is infinite although in practice it is usually
+logically bounded by sector walls or a sky object. You can create sectors
+using the engine (<code>iEngine</code>) or they can be created in a map file.
 </p>
 <a name="SEC220"></a>
-<h4 class="subsubheading"> Include Files </h4>
+<h4 class="subsubheading"> Mesh Factories </h4>
 
-<p>The include files useful for this section are:
+<p>(<code>iMeshFactoryWrapper</code>, <code>iMeshObjectFactory</code>). See the mesh object
+section for more specific information about mesh factories (see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).
+Mesh object factories are objects that can be used to create mesh objects
+that inherit characteristics from their mesh factory. Basically a mesh
+object factory is like a blue-print for creating a mesh object. Mesh
+factories can also be hierarchical like mesh objects. In most cases
+(i.e. like genmesh (see section <a href="cs_4.10.8.html#4.10.8">Genmesh Mesh Object</a> and thing
+(see section <a href="cs_4.10.9.html#4.10.9">Thing Mesh Object</a>)) the factory defines the actual geometry of
+an object. You can then create multiple mesh objects from those factories.
+They will all share the same geometry.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iengine/mesh.h&gt;
-#include &lt;iengine/sector.h&gt;
-#include &lt;iengine/engine.h&gt;
-#include &lt;ivideo/graph3d.h&gt;
-</pre></td></tr></table>
+<a name="SEC221"></a>
+<h4 class="subsubheading"> Mesh Objects </h4>
+
+<p>(<code>iMeshWrapper</code>, <code>iMeshObject</code>). See the mesh object section for
+more specific information about mesh objects (see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).
+Mesh objects represent geometry in some
+sector. Everything you can see (walls, actors, particle systems, <small class="dots">...</small>) is
+represented by some kind of mesh object. This is a very important concept
+in the Crystal Space engine. Mesh objects can also be hierarchical.
+A mesh object can have several children which in turn can also have children
+and so on. The children of a mesh object are positioned relative to the
+parent. So when you move the parent the children will automatically move
+with the parent. Children of a mesh can be meshes or lights.
+</p>
+<a name="SEC222"></a>
+<h4 class="subsubheading"> Textures </h4>
+
+<p>(<code>iTextureWrapper</code>). See the material section for more information
+about textures.  (see section <a href="cs_4.12.html#4.12">Materials and Textures</a>).
+Basically a texture represents an actual image that can
+be used in materials. Textures are used to give your mesh objects a real
+appearance. Textures are never used alone but always in a material.
+</p>
+<a name="SEC223"></a>
+<h4 class="subsubheading"> Materials </h4>
+
+<p>(<code>iMaterialWrapper</code>). See the material section for more information
+about materials.  (see section <a href="cs_4.12.html#4.12">Materials and Textures</a>).
+Basically a material represents a surface appearance
+for a polygon or triangle. A material is most typically made out of a single
+texture but it is also possible to make materials out of a combination of
+textures (using a shader) or even without any textures at all (for example
+a solid color).
+</p>
+<a name="SEC224"></a>
+<h4 class="subsubheading"> Shaders </h4>
+
+<p>(<code>iShader</code>). See the shader section for more information about shaders
+(see section <a href="cs_4.12.1.html#4.12.1">Shaders</a>). A shader is a piece of code that is typically run on
+the 3D card. It is this code that is responsible for actually rendering
+the surface attributes using the material data. A material and a shader
+work closely together.
+</p>
+<a name="SEC225"></a>
+<h4 class="subsubheading"> Renderloops </h4>
+
+<p>(<code>iRenderLoop</code>). See the renderloop section for more information about
+renderloops (see section <a href="cs_4.9.2.html#4.9.2">Renderloops</a>). A renderloop is an engine structure that
+tells the engine how to render the objects in a given sector. Basically it tells
+the engine the steps required to do the rendering of the mesh objects and
+also the steps required to do the lighting. You can make your own renderloops
+but typically you would use one of the standard provided renderloops
+from the <tt>`data/shader'</tt> directory.
+</p>
+<a name="SEC226"></a>
+<h4 class="subsubheading"> Portals </h4>
+
+<p>(<code>iPortal</code>, <code>iPortalContainer</code>). See the portal discussion
+(see section <a href="cs_4.9.4.html#4.9.4">Portal Engine</a>).
+The idea is that sectors are normally totally independent areas
+unless you connect them through portals. A portal is basically a 3D polygon
+that has no material but instead represents a view of the destination sector.
+</p>
+<a name="SEC227"></a>
+<h4 class="subsubheading"> Lights </h4>
+
+<p>(<code>iLight</code>). A light is needed to illuminate your level.
+Lights can also be part of a hierarchical object (like mesh objects).
+There are different ways how lighting is applied to objects. See section <a href="cs_4.11.1.html#4.11.1">Lighting</a>.
+</p>
+<a name="SEC228"></a>
+<h4 class="subsubheading"> Scene Nodes </h4>
+
+<p>(<code>iSceneNode</code>). A scene node is a generic representation of an
+object in a hierarchy. Currently mesh objects and lights are scene nodes.
+</p>
+<a name="SEC229"></a>
+<h4 class="subsubheading"> Collection Objects </h4>
+
+<p>(<code>iCollection</code>). These are simply groups of other objects.
+Do not confuse them with hierarchical objects or with regions. Crystal Space
+itself does not use them but you can use
+them for your own purposes in your application.
+</p>
+<a name="SEC230"></a>
+<h4 class="subsubheading"> Regions </h4>
+
+<p>(<code>iRegion</code>). A region is also a collection of objects but the purpose
+is different (as opposed to collections). A region can contain
+textures, materials, mesh objects, mesh factories, lights, collections, sectors,
+sequences, triggers, shared variables, <small class="dots">...</small>. Regions are useful when you
+want to load/unload big parts of a world dynamically. This can be used in
+cases where the world is too big to fit in memory and you want to use dynamic
+loading. It is important to realize that the concept of a region is not
+geometrical. A region is typically a collection of objects that are located
+close to each other in 3D but it doesn't have to be that way. Regions can
+be organized in any way you want. Some examples:
+</p>
+<ul>
+<li>
+One region represents a geometrical part of the world, including sectors,
+meshes, lights, materials, <small class="dots">...</small>) used in that region. This is probably
+the most common usage.
+</li><li>
+One region represents objects of a given type. For example, all materials
+are in one region. Meshes in another.
+</li><li>
+One region represents the static objects of your world. The other region
+represents the dynamic objects (moving objects).
+</li></ul>
+
+<a name="SEC231"></a>
+<h4 class="subsubheading"> Key/Value pairs </h4>
+
+<p>(<code>iKeyValuePair</code>). A key/value pair is a {<var>key</var>,<var>value</var>}
+tuple describing some game specific concept. Key/value tuples are represented
+by a pair of strings (or one name and several named value strings). If you
+have built levels for Quake before, you are probably familiar with this concept
+from Quake's <em>Entities</em>. Almost all objects in the Crystal Space
+engine support these key/value pairs (this is done through the <code>iObject</code>
+system) so you can attach this kind of
+information to anything. Crystal Space itself will not use this information
+but your game can query it and perform the appropriate actions.
+In theory it is up to your program as to how these key-value tuples
+are interpreted.  However, Crystal Space has set some standards to make life
+easier for level designers and also to make levels as portable as possible
+between different Crystal Space games. Note that key value pairs actually
+allow multiple named values for a single key. See <a href="#Keylist-Standards">Keylist Standards</a>.
+See the section about game data for more information on this subject.
+(see section <a href="cs_4.8.html#4.8">Managing Game Specific Data</a>).
+</p>
+<a name="SEC232"></a>
+<h4 class="subsubheading"> Nodes </h4>
+
+<p>(<code>iMapNode</code>). A node represents a point in space. The engine
+itself will not use nodes but a game can use them to represent game specific
+data. See the section about game data for more information on this subject.
+(see section <a href="cs_4.8.html#4.8">Managing Game Specific Data</a>).
+</p>
+<p><a name="Keylist-Standards"></a>
+</p><a name="SEC233"></a>
+<h4 class="subsubheading"> Keylist Standards </h4>
+
+<p>This section describes some guidelines for key/value tuples.
+</p>
+<p>The most important key is the <samp>`classname'</samp> key.  It tells the program the
+type of an object.  All the following guidelines are set for special object
+classes.  If you don't agree with them, you should use different classnames.
+</p>
+<p>The following classnames are standardized:
+</p>
+
+<p>@@@FIXME: <em>Write this.</em>
+</p>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
