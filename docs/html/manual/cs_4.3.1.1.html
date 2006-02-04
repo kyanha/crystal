@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.3.1.1 Simple Header File</title>
+<title>Crystal Space: 4.3.1.1 How it Works</title>
 
-<meta name="description" content="Crystal Space: 4.3.1.1 Simple Header File">
-<meta name="keywords" content="Crystal Space: 4.3.1.1 Simple Header File">
+<meta name="description" content="Crystal Space: 4.3.1.1 How it Works">
+<meta name="keywords" content="Crystal Space: 4.3.1.1 How it Works">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Simple-Header-File"></a>
+<a name="SCF-Explained"></a>
 <a name="4.3.1.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.html#4.3.1" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,203 +58,128 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.3.1.1 Simple Header File </h4>
+<h4 class="subsubsection"> 4.3.1.1 How it Works </h4>
 
-<p>It is good practice to always put definitions and declarations in header
-files as opposed to source files. In some cases it is even required. Here
-we will show the header file for a simple Crystal Space application.
-Although this is not strictly required, we use a class to encapsulate
-the application logic. Our <tt>`simple.h'</tt> header looks as follows:
+<p>This section contains technical details about <small>SCF</small>. If you're not
+interested in details, you can skip directly to the next section which
+explains how <small>SCF</small> should be used from the end-user's point of view.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#ifndef __SIMPLE_H__
-#define __SIMPLE_H__
+<p><small>SCF</small> is somewhat similar to <small>COM</small>. This is because historically
+Crystal Space initially used <small>COM</small> for inter-module communication. Thanks
+to Dan Ogles for the initial implementation of a cross-platform <small>COM</small>
+library; his implementation was a good test-bed for this <small>SCF</small>
+implementation.
+</p>
+<p>The differences between <small>COM</small> and <small>SCF</small> are due to the increased need for
+an easier-to-use and more lightweight mechanism than <small>COM</small>.  The <small>COM</small>
+implementation caused some problems (because of historic bugs in <small>EGCS</small>
+1.1.x and incompatibilities with platforms to which Crystal Space has ported).
+Also it has some problems due to the native Windows types used in <small>COM</small>;
+this experience was taken into account while developing <small>SCF</small>.
+</p>
+<p>The main paradigm of <small>SCF</small>, as in <small>COM</small>/<small>CORBA</small>/Java/etc. is the
+<em>interface</em>.  You define an <em>interface</em>, that is, a set of abstract
+methods that you want to access within some object.  <small>SCF</small> interfaces are
+plain C++ structs (or classes, it doesn't matter much except that if you're
+using classes to which you will have to add the <samp>`public:'</samp> keyword).
+Theoretically, interfaces can contain member variables and inline methods
+(though not non-virtual methods or constructors), <em>but</em> this practice is
+not encouraged because later someone may want to add a <small>COM</small>, <small>CORBA</small>,
+etc.  layer between the client and the actual object, and this will not be
+possible if the interfaces contains variables, inline methods, or non-virtual
+methods.  If you don't plan to use <small>COM</small> or <small>CORBA</small> later, then you can
+use variables and inline functions as much as you like in your own code, but
+their use in Crystal Space code is highly discouraged.
+</p>
+<p>Here is an example of an interface in a file named <tt>`idog.h'</tt>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">struct iDog
+{
+  virtual bool IsAlive() = 0;
+  virtual char const* GetName() = 0;
+  virtual void SetName (char const*) = 0;
+  virtual void Shout(int Volume) = 0;
+  virtual void Run(int Speed, float Direction) = 0;
+  virtual bool GetChildren(iObjVector* oBrood) = 0;
+};
+</pre></td></tr></table>
+<p>Note the last method that gets a pointer of <samp>`iObjVector'</samp> type.
+<samp>`iObjVector'</samp> is yet another interface.  We could pass a pointer to a
+<samp>`csObjVector'</samp> (the implementation of that interface) as well, but this
+will mean both modules (caller and callee) should have same idea about what a
+<samp>`csObjVector'</samp> is, and if it happened that you compiled the shared library
+with a slightly different version of <samp>`csObjVector'</samp> (that, say, had one
+member variable fewer) you will end up with a <small>SIGSEGV</small> crash.  By instead
+specifying the abstract <samp>`iObjVector'</samp>, there is no need to link the
+<samp>`csObjVector'</samp> class into both the caller and the callee.
+</p>
+<p>Now let's write a particular <em>implementation</em> of the above interface.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;idog.h&quot;
 
-#include &lt;crystalspace.h&gt;
-
-class Simple : public csApplicationFramework, public csBaseEventHandler
+class MyDog : public iDog
 {
 private:
-  csRef&lt;iEngine&gt; engine;
-  csRef&lt;iLoader&gt; loader;
-  csRef&lt;iGraphics3D&gt; g3d;
-  csRef&lt;iKeyboardDriver&gt; kbd;
-  csRef&lt;iVirtualClock&gt; vc;
-
-  void ProcessFrame ();
-  void FinishFrame ();
-
+  // private member functions &amp; variables ...
+  char* Name;
 public:
-  Simple ();
-  ~Simple ();
-
-  void OnExit ();
-  bool OnInitialize (int argc, char* argv[]);
-
-  bool Application ();
-
-  CS_EVENTHANDLER_NAMES(&quot;application.simple1&quot;)
-  CS_EVENTHANDLER_NIL_CONSTRAINTS
+  virtual bool IsAlive();
+  virtual char const* GetName();
+  virtual void SetName(char const*);
+  virtual void Shout(int Volume);
+  virtual void Run(int Speed, float Direction);
+  virtual bool GetChildren(iObjVector* oBrood);
+  ... public member functions &amp; variables ...
 };
 
-#endif // __SIMPLE1_H__
+bool MyDog::IsAlive()
+{
+  return true;
+};
+
+char const* MyDog::GetName()
+{
+  return Name;
+}
+
+void MyDog::SetName(char const* NewName)
+{
+  if (Name != 0)
+    free (Name);
+  Name = strcpy (NewName);
+}
+
+// And so on ...
 </pre></td></tr></table>
-<p>In the <samp>`Simple'</samp> class we keep a number of references to important
-objects that we are going to need a lot. That way we don't have to get
-them every time when we need them. Other than that we have a constructor
-which will do the initialization of these variables, a destructor which
-will clean up the application, an initialization function which will
-be responsible for the full set up of Crystal Space and our application.
+<p>Now, we put the actual implementation into a separate module (i.e. into a
+shared library), and include within the client just the interface file
+<tt>`idog.h'</tt>. Since the client does not have any idea how we should build
+an object of the <samp>`MyDog'</samp> class, we also provide a function that will
+return a newly-allocated object of that class. This is called the
+<em>class factory</em> (in fact, a class factory is a bit more than just this,
+but more about this later). Here is how to do it:
 </p>
-<p>Note that we use smart pointers (<code>csRef&lt;&gt;</code>) for several of those
-references. That makes it easier to manage reference counting. We let
-the smart pointer take care of this for us.
-</p>
-<p>The event handler macros are used because our tutorial application also
-needs to be an event handler (it inherits from <code>csBaseEventHandler</code> for
-that). The two macros indicate the name of this event handler and also the
-desired priority mechanism. In this case we use
-<code>CS_EVENTHANDLER_NIL_CONSTRAINTS</code> which means that we don't care about
-the order in which our events arrive (relative to other modules in CS).
-</p>
-<p>In the source file <tt>`simple.cpp'</tt> we place the following:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;simple.h&quot;
-
-CS_IMPLEMENT_APPLICATION
-
-Simple::Simple ()
+<table><tr><td>&nbsp;</td><td><pre class="example">static iDog* MyDog_Create()
 {
-  SetApplicationName (&quot;CrystalSpace.Simple1&quot;);
-}
-
-Simple::~Simple ()
-{
-}
-
-void Simple::ProcessFrame ()
-{
-}
-
-void Simple::FinishFrame ()
-{
-}
-
-bool Simple::OnInitialize(int argc, char* argv[])
-{
-  if (!csInitializer::RequestPlugins(GetObjectRegistry(),
-    CS_REQUEST_VFS,
-    CS_REQUEST_OPENGL3D,
-    CS_REQUEST_ENGINE,
-    CS_REQUEST_FONTSERVER,
-    CS_REQUEST_IMAGELOADER,
-    CS_REQUEST_LEVELLOADER,
-    CS_REQUEST_REPORTER,
-    CS_REQUEST_REPORTERLISTENER,
-    CS_REQUEST_END))
-    return ReportError(&quot;Failed to initialize plugins!&quot;);
-
-  csBaseEventHandler::Initialize(GetObjectRegistry());
-  if (!RegisterQueue(GetObjectRegistry(), csevAllEvents(GetObjectRegistry())))
-    return ReportError(&quot;Failed to set up event handler!&quot;);
-
-  return true;
-}
-
-void Simple::OnExit()
-{
-}
-
-bool Simple::Application()
-{
-  if (!OpenApplication(GetObjectRegistry()))
-    return ReportError(&quot;Error opening system!&quot;);
-
-  g3d = csQueryRegistry&lt;iGraphics3D&gt; (GetObjectRegistry());
-  if (!g3d) return ReportError(&quot;Failed to locate 3D renderer!&quot;);
-
-  engine = csQueryRegistry&lt;iEngine&gt; (GetObjectRegistry());
-  if (!engine) return ReportError(&quot;Failed to locate 3D engine!&quot;);
-
-  vc = csQueryRegistry&lt;iVirtualClock&gt; (GetObjectRegistry());
-  if (!vc) return ReportError(&quot;Failed to locate Virtual Clock!&quot;);
-
-  kbd = csQueryRegistry&lt;iKeyboardDriver&gt; (GetObjectRegistry());
-  if (!kbd) return ReportError(&quot;Failed to locate Keyboard Driver!&quot;);
-
-  loader = csQueryRegistry&lt;iLoader&gt; (GetObjectRegistry());
-  if (!loader) return ReportError(&quot;Failed to locate Loader!&quot;);
-
-  Run();
-
-  return true;
-}
-
-/*---------------*
- * Main function
- *---------------*/
-int main (int argc, char* argv[])
-{
-  return csApplicationRunner&lt;Simple&gt;::Run (argc, argv);
+  return new MyDog();
 }
 </pre></td></tr></table>
-<p>This is almost the simplest possible application and it is absolutely useless.
-Also don't run it on an operating system where you can't kill a running
-application because there is no way to stop the application once it has
-started running.
+<p>Okay, we did it. Now back to the client. To work with an object that
+implements the <samp>`iDog'</samp> interface we need to load the shared library, get
+a pointer to the <code>MyDog_Create()</code> function, call it and get a new
+<samp>`MyDog'</samp> object. Further we work with this pointer as if it were pointing
+to an <samp>`iDog'</samp> object:
 </p>
-<p>Even though this application is useless it already has a lot of features
-that are going to be very useful later. Here is a short summary of all
-the things and features it already has:
-</p>
-<ul>
-<li>
-It will open a window.
-
-</li><li>
-You can control the size of the window and the video driver used
-for that window with command-line options (<samp>`-video'</samp> and <samp>`-mode'</samp>
-command-line options).
-
-</li><li>
-It will give command-line help when you use the <samp>`-help'</samp> command-line
-option.
-
-</li><li>
-It has the following plugins initialized and ready to use: engine, 3D
-renderer, canvas, reporter, reporter listener, font server, image loader,
-map loader, and <small>VFS</small>.
-</li></ul>
-
-<p>Before we start making this application more useful lets have a look at what
-actually happens here.
-</p>
-<p>Before doing anything at all, after including the necessary header files, we
-first need to use a few macros.  The CS_IMPLEMENT_APPLICATION macro is
-essential for every application using Crystal Space.  It makes sure that the
-<code>main()</code> routine is correctly linked and called on every platform.
-</p>
-<p><code>csInitializer::RequestPlugins()</code> will use the configuration file
-(which we are not using in this tutorial), the command-line and the
-requested plugins to find out which plugins to load. The command-line
-has highest priority, followed by the configuration file and lastly the
-requested plugins.
-</p>
-<p>This concludes the initialization pass.
-</p>
-<p>In <code>Simple::Application()</code> we open the window with a call
-to the function <code>csInitializer::OpenApplication()</code>. This sends
-the <samp>`cscmdSystemOpen'</samp> broadcast message to all components that are
-listening to the event queue.  One of the plugins that listens for this is
-the 3D renderer which will then open its window (or enable graphics
-on a non-windowing operating system).
-</p>
-<p>After that, we query the object registry to locate all the
-common objects that we will need later, and store references to them
-in our main class. Because we use <code>csRef&lt;&gt;</code> or smart pointers,
-we don't have to worry about invoking <code>IncRef()</code> and <code>DecRef()</code>
-manually.
-</p>
-<p>Finally we start the default main loop by calling <code>Run()</code>.
+<table><tr><td>&nbsp;</td><td><pre class="example">csLibraryHandle handle = csLoadLibrary(&quot;./libdog.so&quot;);
+iDog (*iDog_Create)() = csGetLibrarySymbol(handle, &quot;MyDog_Create&quot;);
+iDog* dog = iDog_Create();
+printf(&quot;Doggy's name is %s\n&quot;, dog-&gt;GetName());
+dog-&gt;Shout(100);
+...
+</pre></td></tr></table>
+<p>Of course, you don't have to do all this stuff manually with the <small>SCF</small>
+implementation. The <small>SCF</small> library provides a number of useful macros and
+functions which hide these ugly implementation details from end-user.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

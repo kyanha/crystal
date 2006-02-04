@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.2.1 Basic Crystal Space Concepts</title>
+<title>Crystal Space: 4.2.1 Simple Tutorial 1: Basic Setup, World Creation</title>
 
-<meta name="description" content="Crystal Space: 4.2.1 Basic Crystal Space Concepts">
-<meta name="keywords" content="Crystal Space: 4.2.1 Basic Crystal Space Concepts">
+<meta name="description" content="Crystal Space: 4.2.1 Simple Tutorial 1: Basic Setup, World Creation">
+<meta name="keywords" content="Crystal Space: 4.2.1 Simple Tutorial 1: Basic Setup, World Creation">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="TutIntro-Basic-Concepts"></a>
+<a name="Tutorial-Simple"></a>
 <a name="4.2.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.2.html#4.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.2.2.html#4.2.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.2.1.1.html#4.2.1.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.2.html#4.2" title="Up section"> Up </a>]</td>
@@ -58,153 +58,84 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.2.1 Basic Crystal Space Concepts </h3>
+<h3 class="subsection"> 4.2.1 Simple Tutorial 1: Basic Setup, World Creation </h3>
 
-<p>In order to write a Crystal Space application there are several concepts
-that you need to know about. Here we will give a quick overview of all
-important things you need to know about when writing Crystal Space
-applications. This section explains the concepts from the perspective
-of using Crystal Space as a framework. Read the next section to learn
-about engine concepts.
+<p>This tutorial provides a step-by-step explanation on how you can use Crystal
+Space from within your application.  This tutorial is mainly based on the
+<tt>`simple1'</tt> application which you can compile and run to see what it does.
+To build <tt>`simple1'</tt> which ships with Crystal Space, type <samp>`make
+simple1'</samp> or <samp>`jam simple1'</samp>, or build the <tt>`appsimple1'</tt> project if you
+use <small>MSVC</small>.
 </p>
-<a name="SEC113"></a>
-<h4 class="subsubheading"> The <small>SCF</small> Facility </h4>
+<p>When you downloaded the Crystal Space package it contains a <tt>`CS/include'</tt>
+directory. This directory contains all header files you need when using the
+Crystal Space components and libraries in your own applications. On one hand,
+the include directory contains <small>SCF</small> interface definitions.  These pure
+interface file are stored in directories with names starting with the letter
+<samp>`i'</samp> (as in <tt>`iengine/engine.h'</tt>).  On the other hand we also have plain
+C++ include files for interfacing with the libraries of Crystal Space.  When
+you install Crystal Space on your development system (for instance, by invoking
+<samp>`make install'</samp> or <samp>`jam install'</samp>), these headers are placed in a
+location where they can be easily accessed when writing new programs based on
+Crystal Space.  On Unix systems, for instance, these files usually end up in
+<tt>`/usr/local/include/crystalspace'</tt>. Since it can be difficult to remember
+which header files contain which classes and interfaces, you can instead
+include the convenient catch-all header file <tt>`crystalspace.h'</tt>.
+</p>
+<p>Crystal Space also has a reference manual and <small>API</small> documentation.  The
+manual is included in <small>HTML</small> form Crystal Space itself in the
+<tt>`CS/docs/html'</tt> directory. After you install Crystal Space, the
+documentation resides at <tt>`/usr/local/share/docs/crystalspace-*'</tt>.
+Documentation is also available online.  The <small>API</small> documentation can be
+generated locally or viewed online.  See section <a href="cs_1.6.html#1.6">Where to Get Crystal Space</a>.
+</p>
+<p>Additionally, note that the source code for some of these tutorials can be
+found in the <tt>`CS/apps/tutorials'</tt> directory. There are also a few
+additional tutorials at that location which are not (yet) covered in the
+documentation.
+</p>
+<p>Before reading this tutorial you should first read the basics
+(see section <a href="cs_4.1.html#4.1">Basics and Overview</a>).
+</p>
+<p>This tutorial features:
+</p><ul>
+<li>
+Basic setup of a Crystal Space application using <code>csApplicationFramework</code>.
+</li><li>
+Setting up the application event handler using <code>csBaseEventHandler</code>.
+</li><li>
+Using events to draw 3D frame and listen to keyboard so we can quit
+the application.
+</li><li>
+Loading of the basic plugins needed to get the engine going using
+<code>csInitializer::RequestPlugins()</code>.
+</li><li>
+Creating of the 3D window.
+</li><li>
+Loading of a texture and material using <code>iLoader::LoadTexture()</code>.
+</li><li>
+Creation of a simple room using <code>iEngine::CreateSector()</code> and
+<code>iEngine::CreateSectorWallsMesh()</code>. Also adding a few lights so
+that everything is visible.
+</li><li>
+Creation of a view (<code>csView</code> class) and a camera.
+</li><li>
+Basic movement using the keyboard.
+</li></ul>
 
-<p>The <small>SCF</small> (see section <a href="cs_4.4.1.html#4.4.1">Shared Class Facility (<small>SCF</small>)</a>) system is the core low-level memory framework
-for Crystal Space. You must initialize this before doing anything else
-(one way is to use <code>csInitializer::InitializeSCF()</code>).
-</p>
-<a name="SEC114"></a>
-<h4 class="subsubheading"> Reference Counting </h4>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="cs_4.2.1.1.html#4.2.1.1">4.2.1.1 Simple Header File</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.2.1.2.html#4.2.1.2">4.2.1.2 Event Handling</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.2.1.3.html#4.2.1.3">4.2.1.3 Creating a &quot;World&quot;</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.2.1.4.html#4.2.1.4">4.2.1.4 The Camera</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.2.1.5.html#4.2.1.5">4.2.1.5 Locomotion (Moving Around)</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
 
-<p>Reference counting is a very important part of the Crystal Space
-framework. Read the <small>SCF</small> (see section <a href="cs_4.4.1.html#4.4.1">Shared Class Facility (<small>SCF</small>)</a>) documentation for more information
-about this but keep in mind that it is very important and try to make
-sure you manage references correctly in your own code. Missing a
-<code>DecRef()</code> can cause big memory leaks.
-</p>
-<a name="SEC115"></a>
-<h4 class="subsubheading"> The Object Registry </h4>
-
-<p>The object registry is the central repository for all objects in
-Crystal Space. Everything in Crystal Space will use the object registry
-to get the pointer to the objects it is interested in. One of the first
-tasks a Crystal Space application has to do is to create the object
-registry. You can create an object registry using
-<code>csInitializer::CreateObjectRegistry()</code> or
-<code>csInitializer::CreateEnvironment()</code>.
-</p>
-<a name="SEC116"></a>
-<h4 class="subsubheading"> The Plugin Manager </h4>
-
-<p>The plugin manager is responsible for loading and unloading plugins. A
-plugin is a shared library of functions that can be loaded dynamically
-into a running Crystal Space application. On Unix a plugin has the <tt>`.so'</tt>
-extension and on Windows the <tt>`.dll'</tt> extension is used. Almost everything
-in the Crystal Space framework is itself a plugin. So the plugin manager
-is an important object. You can create the plugin manager with
-<code>csInitializer::CreatePluginManager()</code> or
-<code>csInitializer::CreateEnvironment()</code>.
-</p>
-<a name="SEC117"></a>
-<h4 class="subsubheading"> The Event Queue </h4>
-
-<p>Crystal Space is an event-driven framework. So a Crystal Space application
-will also be event driven. The event queue manages the event system and
-sends events to listeners. Every module or plugin that implements
-<samp>`iEventHandler'</samp> can register itself with the event queue so it gets
-notified when certain events happen. You can create the event queue
-with <code>csInitializer::CreateEventQueue()</code> or
-<code>csInitializer::CreateEnvironment()</code>.
-</p>
-<p>A Crystal Space application will also have to create an event handler
-on its own in order to actually be able to do something. This event handler
-will be responsible for actually rendering to the screen (this has to be
-done in response to the <code>cscmdProcess</code> event) and also catching
-keyboard/mouse input. But there is much more. To setup an event handler
-for the application you can use <code>csInitializer::SetupEventHandler()</code>.
-</p>
-<a name="SEC118"></a>
-<h4 class="subsubheading"> The Virtual Clock </h4>
-
-<p>Most Crystal Space applications will be time-based. The virtual clock
-supports the notion of <small>CURRENT TIME</small> and <small>ELAPSED TIME</small>. It is
-called a virtual clock because it doesn't necessarily have to correspond
-with real time. For example, a game can be paused. Note that a well-behaved
-game should always take elapsed time (between two frames) into consideration
-for calculating what could have happened in that time. This is important
-especially for physics calculations and also for speed of moving objects.
-You want an object moving at some speed to move with the same speed on a
-system with low framerates compared to a system with high framerates.
-The virtual clock can be created with
-<code>csInitializer::CreateVirtualClock()</code> or
-<code>csInitializer::CreateEnvironment()</code>.
-</p>
-<a name="SEC119"></a>
-<h4 class="subsubheading"> The Commandline Parser </h4>
-
-<p>The commandline parser is responsible for parsing options from
-the commandline. If you properly initialize it with <samp>`argc'</samp> and
-<samp>`argv'</samp> then you can use it to query options that have been given
-to the commandline. Several Crystal Space plugins and modules will also
-query the commandline so it is important to have this object correctly
-initialized. The commandline parser can be created with
-<code>csInitializer::CreateCommandLineParser()</code> or
-<code>csInitializer::CreateEnvironment()</code>.
-</p>
-<a name="SEC120"></a>
-<h4 class="subsubheading"> The Configuration Manager </h4>
-
-<p>The configuration manager is responsible for reading options from configuration
-files.  All configuration files are put in a global pool which is managed by
-the configuration manager.  Several Crystal Space plugins and modules will
-query options from the configuration manager and Crystal Space applications can
-also do that if they want.
-</p>
-<p>You can create the configuration manager with:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csInitializer::CreateConfigManager()
-</pre></td></tr></table>
-
-<p>or
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csInitializer::CreateEnvironment()
-</pre></td></tr></table>
-<p>You can setup the configuration manager with:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csInitializer::SetupConfigManager()
-</pre></td></tr></table>
-<a name="SEC121"></a>
-<h4 class="subsubheading"> The Input Drivers </h4>
-
-<p>There are three standard input drivers included with Crystal Space:
-keyboard, mouse, and joystick. Calling:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csInitializer::CreateInputDrivers()
-</pre></td></tr></table>
-
-<p>or
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csInitializer::CreateEnvironment()
-</pre></td></tr></table>
-
-<p>will create the drivers and publish them via the object registry.  These
-drivers will post events to the global event queue.
-</p>
-<a name="SEC122"></a>
-<h4 class="subsubheading"> The <code>csInitializer</code> class </h4>
-
-<p>We already mentioned several of the functions above. This class (for which
-the definition can be found in <tt>`include/cstool/initapp.h'</tt>) is a
-convenience class that can be used to help you setup everything needed to
-get the application running. In the tutorial below we will use several of the
-functions from <samp>`csInitializer'</samp>. This class contains only static member
-functions.
-</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.2.html#4.2" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.2.2.html#4.2.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.2.1.1.html#4.2.1.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.2.html#4.2" title="Up section"> Up </a>]</td>

@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.6.2 Utility Library (csUtil)</title>
+<title>Crystal Space: 4.6.2 Configuration File (vfs.cfg)</title>
 
-<meta name="description" content="Crystal Space: 4.6.2 Utility Library (csUtil)">
-<meta name="keywords" content="Crystal Space: 4.6.2 Utility Library (csUtil)">
+<meta name="description" content="Crystal Space: 4.6.2 Configuration File (vfs.cfg)">
+<meta name="keywords" content="Crystal Space: 4.6.2 Configuration File (vfs.cfg)">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="csUtil"></a>
+<a name="VFS-Configuration-File"></a>
 <a name="4.6.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.6.1.html#4.6.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.6.2.1.html#4.6.2.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.7.html#4.7" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.6.html#4.6" title="Up section"> Up </a>]</td>
@@ -58,51 +58,186 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.6.2 Utility Library (<code>csUtil</code>) </h3>
+<h3 class="subsection"> 4.6.2 Configuration File (<tt>`vfs.cfg'</tt>) </h3>
 
-<p>This utility library consists of many handy tools and classes which depend upon
-no other library within Crystal Space. All other plugins and libraries utilize
-the features provided by this library.  An important facility within this
-library is <small>SCF</small>, the Shared Class Facility, upon which all Crystal Space
-plugins are predicated.  See section <a href="cs_4.4.1.html#4.4.1">Shared Class Facility (<small>SCF</small>)</a>.
-</p>
-<p>In addition to the many other useful classes, there are a number of handy
-array templates in this library.
+<p>When the <small>VFS</small> plugin is loaded, it searches for a configuration file named
+<tt>`vfs.cfg'</tt> in the following locations in the order shown:
 </p>
 <ul>
 <li>
-<code>csArray&lt;T&gt;</code>,
+Application resource directory; typically, the directory in which the
+application executable resides but, on MacOS/X, it is the <tt>`Resources'</tt>
+directory within the Cocoa application wrapper for <small>GUI</small> programs. (Returned
+by <code>csGetResourceDir()</code>.)
+
 </li><li>
-<code>csDirtyAccessArray&lt;T&gt;</code>
+Directory where application executable resides, or the directory where Cocoa
+application wrapper resides on MacOS/X. (Returned by <code>csGetAppDir()</code>.)
+
 </li><li>
-<code>csRefArray&lt;T&gt;</code>
-</li><li>
-<code>csRefArrayObject&lt;T&gt;</code>
-</li><li>
-<code>csPDelArray&lt;T&gt;</code>
+Crystal Space installation directory. (Returned by <code>csGetConfigPath()</code>.)
 </li></ul>
 
-<p>Also in <tt>`csutil'</tt> are the <tt>`.cfg'</tt> file reader and the random
-number generator.
-</p>
-<p>The other classes might or might not be useful, so if you need some very
-common functionality in your application, you should look in the <small>API</small>
-reference to see if it is already implemented. The usage of these classes
-will not be explained further, as most functions are self-explanatory. The
-comments in the <small>API</small> reference and the header files should also help.
-</p>
-<p>Exceptions should be made here for the <samp>`csObject'</samp> class and for typed
-vectors. They will be explained in the next sections.
-</p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_4.6.2.1.html#4.6.2.1">4.6.2.1 Typed Arrays</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
-</td></tr>
-</table>
 
+<p>The full set of directories mounted by <small>VFS</small> after it scans for
+configuration files is the union of the entries in all of the discovered
+<tt>`vfs.cfg'</tt> files. If there are conflicting entries, then mounts and
+variable assignments specified in configuration files discovered earlier in the
+scan take precedence over those discovered later.
+</p>
+<p>Keys in the <tt>`vfs.cfg'</tt> configuration file with names starting with
+<samp>`VFS.Mount.'</samp> describe the layout of the <em>virtual</em> file system.
+Imagine a clean disk drive onto which you start to create directories by making
+links to existing <em>real</em> directories and archive (<tt>`.zip'</tt>) files.  An
+archive is treated exactly like a subdirectory; you even can link one &quot;virtual
+directory&quot; to several &quot;real&quot; paths and archives; however if you write files
+they will be written to the first directory or archive in list.
+</p>
+<p>These keys present a list of virtual-to-real path mappings.  The local name of
+a key with the <samp>`VFS.Mount.'</samp> prefix define the virtual directory, and the
+values define the real paths, which can represent a list of <em>physical</em>
+directories and <small>ZIP</small> archives.  The physical directory path lists should be
+separated by commas (,), therefore commas cannot be used in directory names.
+This should not be much of a restriction, but if it is a problem for a
+particular platform, you may want to take the drastic action of changing
+<samp>`VFS_PATH_DIVIDER'</samp> macro in <tt>`vfs.cpp'</tt>.
+</p>
+<p>The <samp>`VFS.Mount.'</samp> values typically makes heavy use of variables since
+most operating systems have different pathname semantics and syntax.  The
+&quot;common denominator&quot; that <small>VFS</small> emulates is a Unix-like filesystem.  To
+include the value of a variable in a <small>VFS</small> path use the
+<samp>`$(<var>variable-name</var>)'</samp> construct.  In the case where
+<samp>`<var>variable-name</var>'</samp> consists of a single letter, you can omit the
+parentheses, as in <code>$<var>variable-name</var></code> (for example <samp>`$A'</samp>).
+</p>
+<p>Variables that are defined in the environment override those defined in this
+file.  For example, the <samp>`$HOME'</samp> environment variable is set in all
+Unixes, but is undefined in many other operating systems.  They can define
+their own values for these variables in system-dependent sections, but if the
+user defines the <samp>`$HOME'</samp> environment variable it will always override
+the one from this file. You also can refer the variables in the following
+way: <samp>`$(<var>var</var>:<var>expr</var>)'</samp> which means &quot;use the contents of
+<samp>`<var>var</var>'</samp> if <samp>`<var>var</var>'</samp> is set (usually in environment), or use
+<samp>`<var>expr</var>'</samp> if not&quot;.  This can be used for more complex expressions,
+for example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">$(HOME:$(HOMEDIR:$(HOMEPATH:/home)))
+</pre></td></tr></table>
+<p>This expression means &quot;take the value of the <samp>`$HOME'</samp> variable; if it is
+not set, use the contents of <samp>`$HOMEDIR'</samp>; if it is also not set, use
+<samp>`$HOMEPATH'</samp>; and if none are set, use the literal string <samp>`/home'</samp> as
+the resulting value.
+</p>
+<p><small>VFS</small> defines a pseudo-variable named <samp>`/'</samp> that contains the path
+delimiter for the current operating system (i.e.  <tt>`/'</tt> for Unix and
+MacOS/X, and <tt>`\'</tt> for Windows/<small>DOS</small>).  You reference this variable by
+writing <samp>`$/'</samp> rather than using the &quot;real-world&quot; delimiters <samp>`/'</samp>,
+or <samp>`\'</samp>.
+</p>
+<p>Here is the complete list of pseudo-variables understood by <small>VFS</small>:
+</p>
+<dl compact="compact">
+<dt> <code>$/</code></dt>
+<dd><p>Platform-specific path delimiter; <tt>`/'</tt> on Unix and MacOS/X; <tt>`\'</tt> on
+Windows.
+</p>
+</dd>
+<dt> <code>$@</code></dt>
+<dd><p>Crystal Space installation directory.
+</p>
+</dd>
+<dt> <code>$*</code></dt>
+<dd><p>Application resource directory; typically, the directory in which the
+application executable resides but, on MacOS/X, it is the <tt>`Resources'</tt>
+directory within the Cocoa application wrapper for <small>GUI</small> programs.
+</p>
+</dd>
+<dt> <code>$^</code></dt>
+<dd><p>Directory where application executable resides, or the directory where Cocoa
+application wrapper resides on MacOS/X.
+</p></dd>
+</dl>
+
+<p>The following is an example <small>VFS</small> configuration file.
+</p>
+<p>Assume we wrote a game with three levels; the game is located on <small>CD-ROM</small>
+and we want to be able to release patches in the future which will replace
+several files from level archives (each level is presumed to be placed in a
+separate <small>ZIP</small> archive on either <small>CD-ROM</small> or cached on the hard drive).
+Additionally, we will add a link to user's home directory (something somewhat
+vaguely defined on non-Unix platforms) so that game can store the user's
+settings into the file <tt>`~/game.profile'</tt>.
+</p>
+<p>Note that in this example many of the options in the real <tt>`vfs.cfg'</tt> are
+omitted. So you should not take this example for your game, because one of the
+libraries or plug-in modules you use may require a mapping that is not listed
+here. This example is only intended to understand the concept:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">;;; Virtual File System mount table
+;;;
+;;; $/ -- path delimiter (i.e. &quot;/&quot; on Unix; &quot;\&quot; on Windows)
+;;; $@ -- installation directory of Crystal Space
+;;; $* -- application resource directory
+;;; $^ -- directory in which application resides
+;;; The expansions of $@, $*, and $^ always have a trailing
+;;; path delimiter.
+;
+; The following variables should be defined either in
+; the environment or in system-dependent sections:
+;
+; $CD - The path to CD-ROM.
+; $HOME - user's home directory
+;
+; A common error is to omit the last $/ from directories.
+; This is an error since VFS will treat any path not ending
+; in $/ as an archive file name and not as a physical
+; directory.
+
+; Mount points. (These are split over multiple lines in order to
+; fit correctly on a printed page in the documentation.  In real
+; life, the values would appear immediately after the `=' signs!)
+VFS.Mount.~ = $(HOME)$/
+VFS.Mount.map1 =
+  $*$/patch$/map1$/, $*$/cache$/map1.zip, $(CD)$/data$/map1.zip
+VFS.Mount.map2 =
+  $*$/patch$/map2$/, $*$/cache$/map2.zip, $(CD)$/data$/map2.zip
+VFS.Mount.map3 =
+  $*$/patch$/map3$/, $*$/cache$/map3.zip, $(CD)$/data$/map3.zip
+
+; Platform aliases.  Aliases are always read first; VFS
+; entries specific to each platform override those defined
+; in the platform alias section.  For example, if your
+; current platform is MacOS/X, VFS will look for the value
+; of a variable first in the environment, then in
+; VFS.MacOS/X., and finally in VFS.Unix. (as specified in
+; section below).
+
+; Unix-style filesystems
+VFS.Alias.Unix    = VFS.Unix
+VFS.Alias.MacOS/X = VFS.Unix
+
+; CP/M-style filesystems
+VFS.Alias.Win32   = VFS.CP/M
+VFS.Alias.DOS     = VFS.CP/M
+
+; Strange key names follow:
+; VFS.Unix.. means key '.' in section VFS.Unix.*
+; VFS.Unix... means key '..' in section VFS.Unix.*
+VFS.Unix.. = .
+VFS.Unix... = ..
+VFS.Unix.CDROM = /mnt/cdrom
+VFS.Unix.TMP = /tmp
+
+VFS.CP/M.. = .
+VFS.CP/M... = ..
+VFS.CP/M.HOME = $(HOMEDIR:$(HOMEPATH:.))
+VFS.CP/M.CDROM = x:
+VFS.CP/M.TMP = $(TEMP:$(TMP:$(SYSTEMROOT)$/temp))
+</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.6.1.html#4.6.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.6.2.1.html#4.6.2.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.7.html#4.7" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.6.html#4.6" title="Up section"> Up </a>]</td>

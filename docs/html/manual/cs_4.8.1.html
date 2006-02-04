@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.8.1 csObject and iObject</title>
+<title>Crystal Space: 4.8.1 Components of a World</title>
 
-<meta name="description" content="Crystal Space: 4.8.1 csObject and iObject">
-<meta name="keywords" content="Crystal Space: 4.8.1 csObject and iObject">
+<meta name="description" content="Crystal Space: 4.8.1 Components of a World">
+<meta name="keywords" content="Crystal Space: 4.8.1 Components of a World">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="csObject"></a>
+<a name="World-Components"></a>
 <a name="4.8.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.8.html#4.8" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,50 +58,196 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.8.1 csObject and iObject </h3>
+<h3 class="subsection"> 4.8.1 Components of a World </h3>
 
-<p>The <samp>`csObject'</samp> class can be used to build object hierarchies. It supports
-building a simple tree structure. To use this functionality, you should derive
-your classes from <samp>`csObject'</samp>. <samp>`csObject'</samp> implements the
-<samp>`iObject'</samp> interface and can store any number of <samp>`iObject'</samp> children.
-Furthermore, every <samp>`csObject'</samp> may have a name.
+<p>This section describes the objects used to build a world.  This is useful to
+understand the format of the Crystal Space map file
+(see section <a href="cs_4.15.2.html#4.15.2">Format of Map File (<small>XML</small>)</a>).  To understand this you should know the basics of
+the <a href="cs_4.8.4.html#4.8.4">Portal Engine</a>.  This section describes the components of the world
+independent from the file format, so it is also useful if you want to build a
+world from within your program.
 </p>
-<p>All child objects are <code>IncRef()</code>'ed when added and <code>DecRef()</code>'ed when
-removed. An object also stores a pointer to its parent (which is not
-reference-counted to avoid circular references). Note that this pointer will
-always point to the last parent if the object is added to more than one
-parent. When the object is removed from a parent, the pointer is set to
-null, even if the object is still a child of another parent!
+<p>The world is built up from the following objects:
 </p>
-<p>Although the children of an object are only available as <samp>`iObject'</samp>
-instances, you can use <code>scfQueryInterface</code> to query other interfaces
-from them.  Some convenience macros are also available:
-</p>
-<dl compact="compact">
-<dt> <code>CS_GET_CHILD_OBJECT(object,Interface)</code></dt>
-<dd><p>Get the first child object that implements the given interface.
-</p>
-</dd>
-<dt> <code>CS_GET_NAMED_CHILD_OBJECT(object,Interface,name)</code></dt>
-<dd><p>Get the first child object with the given name that implements the given
-interface. This will continue to search through the objects if an object
-with the right name but not the right interface was found, i.e. it handles
-multiple objects with the same name correctly.
-</p>
-</dd>
-<dt> <code>CS_GET_FIRST_NAMED_CHILD_OBJECT(object,Interface,name)</code></dt>
-<dd><p>Same as the above but stops at the first object with the given name, even if
-it does not implement the requested interface (in that case, <code>0</code> is
-returned). This is slightly faster.
-</p></dd>
-</dl>
+<a name="SEC229"></a>
+<h4 class="subsubheading"> Sectors </h4>
 
-<p>Note that all these macros increase the reference count of the returned
-object by 1.
+<p>(<code>iSector</code>). For technical details, see the portal engine discussion
+(see section <a href="cs_4.8.4.html#4.8.4">Portal Engine</a>). Basically sectors define an area
+that can contain several geometrical objects. As opposed to earlier
+versions of Crystal Space, a sector does not itself represent geometry.
+Instead all geometry in a sector is made from <em>Mesh Objects</em>.
+Theoretically a sector is infinite although in practice it is usually
+logically bounded by sector walls or a sky object. You can create sectors
+using the engine (<code>iEngine</code>) or they can be created in a map file.
 </p>
-<p>Note that there are a few HOWTO's describing possible uses for the
-<samp>`csObject'</samp> system (see section <a href="cs_4.8.2.html#4.8.2">Attaching User Objects to CS Objects</a> and
-see section <a href="cs_4.8.3.html#4.8.3">Attaching User Objects to CS Objects in a map file</a>).
+<a name="SEC230"></a>
+<h4 class="subsubheading"> Mesh Factories </h4>
+
+<p>(<code>iMeshFactoryWrapper</code>, <code>iMeshObjectFactory</code>). See the mesh object
+section for more specific information about mesh factories (see section <a href="cs_4.9.html#4.9">Mesh Object Plug-In System</a>).
+Mesh object factories are objects that can be used to create mesh objects
+that inherit characteristics from their mesh factory. Basically a mesh
+object factory is like a blue-print for creating a mesh object. Mesh
+factories can also be hierarchical like mesh objects. In most cases
+(i.e. like genmesh (see section <a href="cs_4.9.8.html#4.9.8">Genmesh Mesh Object</a> and thing
+(see section <a href="cs_4.9.9.html#4.9.9">Thing Mesh Object</a>)) the factory defines the actual geometry of
+an object. You can then create multiple mesh objects from those factories.
+They will all share the same geometry.
+</p>
+<a name="SEC231"></a>
+<h4 class="subsubheading"> Mesh Objects </h4>
+
+<p>(<code>iMeshWrapper</code>, <code>iMeshObject</code>). See the mesh object section for
+more specific information about mesh objects (see section <a href="cs_4.9.html#4.9">Mesh Object Plug-In System</a>).
+Mesh objects represent geometry in some
+sector. Everything you can see (walls, actors, particle systems, <small class="dots">...</small>) is
+represented by some kind of mesh object. This is a very important concept
+in the Crystal Space engine. Mesh objects can also be hierarchical.
+A mesh object can have several children which in turn can also have children
+and so on. The children of a mesh object are positioned relative to the
+parent. So when you move the parent the children will automatically move
+with the parent. Children of a mesh can be meshes or lights.
+</p>
+<a name="SEC232"></a>
+<h4 class="subsubheading"> Textures </h4>
+
+<p>(<code>iTextureWrapper</code>). See the material section for more information
+about textures.  (see section <a href="cs_4.11.html#4.11">Materials and Textures</a>).
+Basically a texture represents an actual image that can
+be used in materials. Textures are used to give your mesh objects a real
+appearance. Textures are never used alone but always in a material.
+</p>
+<a name="SEC233"></a>
+<h4 class="subsubheading"> Materials </h4>
+
+<p>(<code>iMaterialWrapper</code>). See the material section for more information
+about materials.  (see section <a href="cs_4.11.html#4.11">Materials and Textures</a>).
+Basically a material represents a surface appearance
+for a polygon or triangle. A material is most typically made out of a single
+texture but it is also possible to make materials out of a combination of
+textures (using a shader) or even without any textures at all (for example
+a solid color).
+</p>
+<a name="SEC234"></a>
+<h4 class="subsubheading"> Shaders </h4>
+
+<p>(<code>iShader</code>). See the shader section for more information about shaders
+(see section <a href="cs_4.11.1.html#4.11.1">Shaders</a>). A shader is a piece of code that is typically run on
+the 3D card. It is this code that is responsible for actually rendering
+the surface attributes using the material data. A material and a shader
+work closely together.
+</p>
+<a name="SEC235"></a>
+<h4 class="subsubheading"> Renderloops </h4>
+
+<p>(<code>iRenderLoop</code>). See the renderloop section for more information about
+renderloops (see section <a href="cs_4.8.2.html#4.8.2">Renderloops</a>). A renderloop is an engine structure that
+tells the engine how to render the objects in a given sector. Basically it tells
+the engine the steps required to do the rendering of the mesh objects and
+also the steps required to do the lighting. You can make your own renderloops
+but typically you would use one of the standard provided renderloops
+from the <tt>`data/shader'</tt> directory.
+</p>
+<a name="SEC236"></a>
+<h4 class="subsubheading"> Portals </h4>
+
+<p>(<code>iPortal</code>, <code>iPortalContainer</code>). See the portal discussion
+(see section <a href="cs_4.8.4.html#4.8.4">Portal Engine</a>).
+The idea is that sectors are normally totally independent areas
+unless you connect them through portals. A portal is basically a 3D polygon
+that has no material but instead represents a view of the destination sector.
+</p>
+<a name="SEC237"></a>
+<h4 class="subsubheading"> Lights </h4>
+
+<p>(<code>iLight</code>). A light is needed to illuminate your level.
+Lights can also be part of a hierarchical object (like mesh objects).
+There are different ways how lighting is applied to objects. See section <a href="cs_4.10.1.html#4.10.1">Lighting</a>.
+</p>
+<a name="SEC238"></a>
+<h4 class="subsubheading"> Scene Nodes </h4>
+
+<p>(<code>iSceneNode</code>). A scene node is a generic representation of an
+object in a hierarchy. Currently mesh objects and lights are scene nodes.
+</p>
+<a name="SEC239"></a>
+<h4 class="subsubheading"> Collection Objects </h4>
+
+<p>(<code>iCollection</code>). These are simply groups of other objects.
+Do not confuse them with hierarchical objects or with regions. Crystal Space
+itself does not use them but you can use
+them for your own purposes in your application.
+</p>
+<a name="SEC240"></a>
+<h4 class="subsubheading"> Regions </h4>
+
+<p>(<code>iRegion</code>). A region is also a collection of objects but the purpose
+is different (as opposed to collections). A region can contain
+textures, materials, mesh objects, mesh factories, lights, collections, sectors,
+sequences, triggers, shared variables, <small class="dots">...</small>. Regions are useful when you
+want to load/unload big parts of a world dynamically. This can be used in
+cases where the world is too big to fit in memory and you want to use dynamic
+loading. It is important to realize that the concept of a region is not
+geometrical. A region is typically a collection of objects that are located
+close to each other in 3D but it doesn't have to be that way. Regions can
+be organized in any way you want. Some examples:
+</p>
+<ul>
+<li>
+One region represents a geometrical part of the world, including sectors,
+meshes, lights, materials, <small class="dots">...</small>) used in that region. This is probably
+the most common usage.
+</li><li>
+One region represents objects of a given type. For example, all materials
+are in one region. Meshes in another.
+</li><li>
+One region represents the static objects of your world. The other region
+represents the dynamic objects (moving objects).
+</li></ul>
+
+<a name="SEC241"></a>
+<h4 class="subsubheading"> Key/Value pairs </h4>
+
+<p>(<code>iKeyValuePair</code>). A key/value pair is a {<var>key</var>,<var>value</var>}
+tuple describing some game specific concept. Key/value tuples are represented
+by a pair of strings (or one name and several named value strings). If you
+have built levels for Quake before, you are probably familiar with this concept
+from Quake's <em>Entities</em>. Almost all objects in the Crystal Space
+engine support these key/value pairs (this is done through the <code>iObject</code>
+system) so you can attach this kind of
+information to anything. Crystal Space itself will not use this information
+but your game can query it and perform the appropriate actions.
+In theory it is up to your program as to how these key-value tuples
+are interpreted.  However, Crystal Space has set some standards to make life
+easier for level designers and also to make levels as portable as possible
+between different Crystal Space games. Note that key value pairs actually
+allow multiple named values for a single key. See <a href="#Keylist-Standards">Keylist Standards</a>.
+See the section about game data for more information on this subject.
+(see section <a href="cs_4.7.html#4.7">Managing Game Specific Data</a>).
+</p>
+<a name="SEC242"></a>
+<h4 class="subsubheading"> Nodes </h4>
+
+<p>(<code>iMapNode</code>). A node represents a point in space. The engine
+itself will not use nodes but a game can use them to represent game specific
+data. See the section about game data for more information on this subject.
+(see section <a href="cs_4.7.html#4.7">Managing Game Specific Data</a>).
+</p>
+<p><a name="Keylist-Standards"></a>
+</p><a name="SEC243"></a>
+<h4 class="subsubheading"> Keylist Standards </h4>
+
+<p>This section describes some guidelines for key/value tuples.
+</p>
+<p>The most important key is the <samp>`classname'</samp> key.  It tells the program the
+type of an object.  All the following guidelines are set for special object
+classes.  If you don't agree with them, you should use different classnames.
+</p>
+<p>The following classnames are standardized:
+</p>
+
+<p>@@@FIXME: <em>Write this.</em>
 </p>
 
 <hr size="1">

@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.7.2 Configuration File (vfs.cfg)</title>
+<title>Crystal Space: 4.7.2 Attaching User Objects to CS Objects</title>
 
-<meta name="description" content="Crystal Space: 4.7.2 Configuration File (vfs.cfg)">
-<meta name="keywords" content="Crystal Space: 4.7.2 Configuration File (vfs.cfg)">
+<meta name="description" content="Crystal Space: 4.7.2 Attaching User Objects to CS Objects">
+<meta name="keywords" content="Crystal Space: 4.7.2 Attaching User Objects to CS Objects">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="VFS-Configuration-File"></a>
+<a name="User-Objects"></a>
 <a name="4.7.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.7.1.html#4.7.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.8.html#4.8" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.7.3.html#4.7.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.7.html#4.7" title="Up section"> Up </a>]</td>
@@ -58,186 +58,125 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.7.2 Configuration File (<tt>`vfs.cfg'</tt>) </h3>
+<h3 class="subsection"> 4.7.2 Attaching User Objects to CS Objects </h3>
 
-<p>When the <small>VFS</small> plugin is loaded, it searches for a configuration file named
-<tt>`vfs.cfg'</tt> in the following locations in the order shown:
+<p>This section explains how you can assign your own game specific data
+to Crystal Space objects (i.e. like meshes and sectors). In this section
+we explain how to do it from within code. In the next howto
+(see section <a href="cs_4.7.3.html#4.7.3">Attaching User Objects to CS Objects in a map file</a>) we explain how you can do this from
+a map file.
 </p>
-<ul>
-<li>
-Application resource directory; typically, the directory in which the
-application executable resides but, on MacOS/X, it is the <tt>`Resources'</tt>
-directory within the Cocoa application wrapper for <small>GUI</small> programs. (Returned
-by <code>csGetResourceDir()</code>.)
+<a name="SEC218"></a>
+<h4 class="subsubheading"> The Crystal Space Object System </h4>
 
-</li><li>
-Directory where application executable resides, or the directory where Cocoa
-application wrapper resides on MacOS/X. (Returned by <code>csGetAppDir()</code>.)
+<p>Almost all objects in the Crystal Space engine implement the
+<code>iObject</code> interface. Because of this you can attach your own
+objects to them. This can be very useful to attach game specific
+data to Crystal Space objects. For example, you may want to attach
+the state of an actor to the mesh object representing that actor (like
+current amount of ammunition, health, <small class="dots">...</small>).
+</p>
+<a name="SEC219"></a>
+<h4 class="subsubheading"> Defining Game Data </h4>
 
-</li><li>
-Crystal Space installation directory. (Returned by <code>csGetConfigPath()</code>.)
-</li></ul>
+<p>To define data that you can attach to any other Crystal Space
+object (or any object implementing <code>iObject</code>) you also have to
+create an object that implements <code>iObject</code>. The easiest way to do
+that is to inherit from <code>csObject</code> which implements <code>iObject</code>
+for you. Here is an example on how you can do this easily:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">class MyOwnData : public scfImplementationExt1&lt;MyOwnData, csObject
+	scfFakeInterface&lt;MyOwnData&gt; &gt;
+{
+private:
+  int my_data_int;
 
-
-<p>The full set of directories mounted by <small>VFS</small> after it scans for
-configuration files is the union of the entries in all of the discovered
-<tt>`vfs.cfg'</tt> files. If there are conflicting entries, then mounts and
-variable assignments specified in configuration files discovered earlier in the
-scan take precedence over those discovered later.
-</p>
-<p>Keys in the <tt>`vfs.cfg'</tt> configuration file with names starting with
-<samp>`VFS.Mount.'</samp> describe the layout of the <em>virtual</em> file system.
-Imagine a clean disk drive onto which you start to create directories by making
-links to existing <em>real</em> directories and archive (<tt>`.zip'</tt>) files.  An
-archive is treated exactly like a subdirectory; you even can link one &quot;virtual
-directory&quot; to several &quot;real&quot; paths and archives; however if you write files
-they will be written to the first directory or archive in list.
-</p>
-<p>These keys present a list of virtual-to-real path mappings.  The local name of
-a key with the <samp>`VFS.Mount.'</samp> prefix define the virtual directory, and the
-values define the real paths, which can represent a list of <em>physical</em>
-directories and <small>ZIP</small> archives.  The physical directory path lists should be
-separated by commas (,), therefore commas cannot be used in directory names.
-This should not be much of a restriction, but if it is a problem for a
-particular platform, you may want to take the drastic action of changing
-<samp>`VFS_PATH_DIVIDER'</samp> macro in <tt>`vfs.cpp'</tt>.
-</p>
-<p>The <samp>`VFS.Mount.'</samp> values typically makes heavy use of variables since
-most operating systems have different pathname semantics and syntax.  The
-&quot;common denominator&quot; that <small>VFS</small> emulates is a Unix-like filesystem.  To
-include the value of a variable in a <small>VFS</small> path use the
-<samp>`$(<var>variable-name</var>)'</samp> construct.  In the case where
-<samp>`<var>variable-name</var>'</samp> consists of a single letter, you can omit the
-parentheses, as in <code>$<var>variable-name</var></code> (for example <samp>`$A'</samp>).
-</p>
-<p>Variables that are defined in the environment override those defined in this
-file.  For example, the <samp>`$HOME'</samp> environment variable is set in all
-Unixes, but is undefined in many other operating systems.  They can define
-their own values for these variables in system-dependent sections, but if the
-user defines the <samp>`$HOME'</samp> environment variable it will always override
-the one from this file. You also can refer the variables in the following
-way: <samp>`$(<var>var</var>:<var>expr</var>)'</samp> which means &quot;use the contents of
-<samp>`<var>var</var>'</samp> if <samp>`<var>var</var>'</samp> is set (usually in environment), or use
-<samp>`<var>expr</var>'</samp> if not&quot;.  This can be used for more complex expressions,
-for example:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">$(HOME:$(HOMEDIR:$(HOMEPATH:/home)))
+public:
+  SCF_INTERFACE (MyOwnData, 1, 0, 0);
+  ...
+  MyOwnData () : scfImplementationType (this)
+  {
+    ...
+  }
+  virtual ~MyOwnData ()
+  {
+    ...
+  }
+};
 </pre></td></tr></table>
-<p>This expression means &quot;take the value of the <samp>`$HOME'</samp> variable; if it is
-not set, use the contents of <samp>`$HOMEDIR'</samp>; if it is also not set, use
-<samp>`$HOMEPATH'</samp>; and if none are set, use the literal string <samp>`/home'</samp> as
-the resulting value.
+<p>In this example you must use some <small>SCF</small> templates so that your
+own class becomes a valid <small>SCF</small> object that inherits from <code>csObject</code>
+properly.
 </p>
-<p><small>VFS</small> defines a pseudo-variable named <samp>`/'</samp> that contains the path
-delimiter for the current operating system (i.e.  <tt>`/'</tt> for Unix and
-MacOS/X, and <tt>`\'</tt> for Windows/<small>DOS</small>).  You reference this variable by
-writing <samp>`$/'</samp> rather than using the &quot;real-world&quot; delimiters <samp>`/'</samp>,
-or <samp>`\'</samp>.
+<p>Basically you create a class called <samp>`MyOwnData'</samp> which inherits
+from <code>csObject</code>. In that class you can do whatever you want
+with respect to your own game data. In the example above we only
+have a variable <samp>`my_data_int'</samp> but of course you can do whatever
+you want. The <small>SCF</small> templates make sure that you can later query for
+that object (using <code>scfQueryInterface</code> for example).
 </p>
-<p>Here is the complete list of pseudo-variables understood by <small>VFS</small>:
-</p>
-<dl compact="compact">
-<dt> <code>$/</code></dt>
-<dd><p>Platform-specific path delimiter; <tt>`/'</tt> on Unix and MacOS/X; <tt>`\'</tt> on
-Windows.
-</p>
-</dd>
-<dt> <code>$@</code></dt>
-<dd><p>Crystal Space installation directory.
-</p>
-</dd>
-<dt> <code>$*</code></dt>
-<dd><p>Application resource directory; typically, the directory in which the
-application executable resides but, on MacOS/X, it is the <tt>`Resources'</tt>
-directory within the Cocoa application wrapper for <small>GUI</small> programs.
-</p>
-</dd>
-<dt> <code>$^</code></dt>
-<dd><p>Directory where application executable resides, or the directory where Cocoa
-application wrapper resides on MacOS/X.
-</p></dd>
-</dl>
+<a name="SEC220"></a>
+<h4 class="subsubheading"> Attaching Game Data </h4>
 
-<p>The following is an example <small>VFS</small> configuration file.
+<p>To attach your own data to some Crystal Space object you can use
+<code>iObject::ObjAdd()</code>. The example below shows how you can attach
+an instance of <code>MyOwnData</code> to a mesh:
 </p>
-<p>Assume we wrote a game with three levels; the game is located on <small>CD-ROM</small>
-and we want to be able to release patches in the future which will replace
-several files from level archives (each level is presumed to be placed in a
-separate <small>ZIP</small> archive on either <small>CD-ROM</small> or cached on the hard drive).
-Additionally, we will add a link to user's home directory (something somewhat
-vaguely defined on non-Unix platforms) so that game can store the user's
-settings into the file <tt>`~/game.profile'</tt>.
-</p>
-<p>Note that in this example many of the options in the real <tt>`vfs.cfg'</tt> are
-omitted. So you should not take this example for your game, because one of the
-libraries or plug-in modules you use may require a mapping that is not listed
-here. This example is only intended to understand the concept:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">;;; Virtual File System mount table
-;;;
-;;; $/ -- path delimiter (i.e. &quot;/&quot; on Unix; &quot;\&quot; on Windows)
-;;; $@ -- installation directory of Crystal Space
-;;; $* -- application resource directory
-;;; $^ -- directory in which application resides
-;;; The expansions of $@, $*, and $^ always have a trailing
-;;; path delimiter.
-;
-; The following variables should be defined either in
-; the environment or in system-dependent sections:
-;
-; $CD - The path to CD-ROM.
-; $HOME - user's home directory
-;
-; A common error is to omit the last $/ from directories.
-; This is an error since VFS will treat any path not ending
-; in $/ as an archive file name and not as a physical
-; directory.
-
-; Mount points. (These are split over multiple lines in order to
-; fit correctly on a printed page in the documentation.  In real
-; life, the values would appear immediately after the `=' signs!)
-VFS.Mount.~ = $(HOME)$/
-VFS.Mount.map1 =
-  $*$/patch$/map1$/, $*$/cache$/map1.zip, $(CD)$/data$/map1.zip
-VFS.Mount.map2 =
-  $*$/patch$/map2$/, $*$/cache$/map2.zip, $(CD)$/data$/map2.zip
-VFS.Mount.map3 =
-  $*$/patch$/map3$/, $*$/cache$/map3.zip, $(CD)$/data$/map3.zip
-
-; Platform aliases.  Aliases are always read first; VFS
-; entries specific to each platform override those defined
-; in the platform alias section.  For example, if your
-; current platform is MacOS/X, VFS will look for the value
-; of a variable first in the environment, then in
-; VFS.MacOS/X., and finally in VFS.Unix. (as specified in
-; section below).
-
-; Unix-style filesystems
-VFS.Alias.Unix    = VFS.Unix
-VFS.Alias.MacOS/X = VFS.Unix
-
-; CP/M-style filesystems
-VFS.Alias.Win32   = VFS.CP/M
-VFS.Alias.DOS     = VFS.CP/M
-
-; Strange key names follow:
-; VFS.Unix.. means key '.' in section VFS.Unix.*
-; VFS.Unix... means key '..' in section VFS.Unix.*
-VFS.Unix.. = .
-VFS.Unix... = ..
-VFS.Unix.CDROM = /mnt/cdrom
-VFS.Unix.TMP = /tmp
-
-VFS.CP/M.. = .
-VFS.CP/M... = ..
-VFS.CP/M.HOME = $(HOMEDIR:$(HOMEPATH:.))
-VFS.CP/M.CDROM = x:
-VFS.CP/M.TMP = $(TEMP:$(TMP:$(SYSTEMROOT)$/temp))
+<table><tr><td>&nbsp;</td><td><pre class="example">MyOwnData* mydata = new MyOwnData ();
+mydata-&gt;my_data_int = ...;
+iMeshWrapper* mesh = ...;
+mesh-&gt;QueryObject ()-&gt;ObjAdd (mydata);
+mydata-&gt;DecRef ();
 </pre></td></tr></table>
+<p><code>mesh-&gt;QueryObject()</code> is interesting. Many Crystal Space objects
+that implement <code>iObject</code> have a convenience function called
+<code>QueryObject()</code> which will return a reference to the <code>iObject</code>
+implementation. This code is equivalent to:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iObject&gt; obj = scfQueryInterface&lt;iObject&gt; (mesh);
+</pre></td></tr></table>
+<p>with the important difference that <code>QueryObject()</code> does not increment
+the reference count. If an object doesn't have this convenience function you
+must use <code>scfQueryInterface</code> instead.
+</p>
+<a name="SEC221"></a>
+<h4 class="subsubheading"> Finding Game Data </h4>
+
+<p>To find if some object has your data attached to it you can use the
+following code:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;MyOwnData&gt; mydata =
+  CS_GET_CHILD_OBJECT(mesh-&gt;QueryObject(), MyOwnData);
+if (mydata)
+{
+  ... (use mydata)
+}
+</pre></td></tr></table>
+<a name="SEC222"></a>
+<h4 class="subsubheading"> Removing Game Data </h4>
+
+<p>To remove your data you can use:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;MyOwnData&gt; mydata =
+  CS_GET_CHILD_OBJECT(mesh-&gt;QueryObject(), MyOwnData);
+if (mydata)
+{
+  mesh-&gt;QueryObject ()-&gt;ObjRemove (mydata);
+}
+</pre></td></tr></table>
+<a name="SEC223"></a>
+<h4 class="subsubheading"> Include Files </h4>
+
+<p>The include files useful for this section are:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iutil/object.h&gt;
+#include &lt;csutil/csobject.h&gt;
+</pre></td></tr></table>
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.7.1.html#4.7.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.8.html#4.8" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.7.3.html#4.7.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.7.html#4.7" title="Up section"> Up </a>]</td>

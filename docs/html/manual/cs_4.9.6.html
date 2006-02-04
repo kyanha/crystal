@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.9.6 Camera Movement</title>
+<title>Crystal Space: 4.9.6 Mesh Lighting and Animation</title>
 
-<meta name="description" content="Crystal Space: 4.9.6 Camera Movement">
-<meta name="keywords" content="Crystal Space: 4.9.6 Camera Movement">
+<meta name="description" content="Crystal Space: 4.9.6 Mesh Lighting and Animation">
+<meta name="keywords" content="Crystal Space: 4.9.6 Mesh Lighting and Animation">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="HOWTO-Camera-Movement"></a>
+<a name="HOWTO-Mesh-LightAnim"></a>
 <a name="4.9.6"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.5.html#4.9.5" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,68 +58,52 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.9.6 Camera Movement </h3>
+<h3 class="subsection"> 4.9.6 Mesh Lighting and Animation </h3>
 
-<p>This section describes how to move the camera.
+<p>This section describes how to do animation for meshes and how they can
+get lit by surrounding lights.
 </p>
-<a name="SEC250"></a>
-<h4 class="subsubheading"> The Camera is a Transform </h4>
+<a name="SEC305"></a>
+<h4 class="subsubheading"> Animating Meshes </h4>
 
-<p>Internally in the engine the <samp>`csCamera'</samp> class inherits
-directly from <samp>`csOrthoTransform'</samp> which inherits from
-<samp>`csReversibleTransform'</samp>. If you work with <samp>`iCamera'</samp> then you
-can get the reference to this transform with <code>camera-&gt;GetTransform()</code>.
-In addition to the transformation a camera also holds a pointer to the
-current sector.
+<p>Not all meshes support animation. All particle systems and 3D sprites
+have animation.
 </p>
-<p>This means that all operations you have in <samp>`csOrthoTransform'</samp> can
-be used on the camera. One of the most useful functions there is
-<code>LookAt()</code> with which you can make the camera point to some spot.
-Using <code>LookAt()</code> it is very easy to make a 3rd person view.
+<p>The engine is smart enough to only animate mesh objects that are actually
+visible on screen.
 </p>
-<p>In addition to the standard functions from <samp>`csOrthoTransform'</samp> there
-are a number of other functions that you can use. The most interesting
-are <code>MoveWorld()</code> and <code>Move()</code>. These functions will move
-the camera and make sure that it cannot walk through a wall and also make
-sure that walking through portals will work. Both functions move the
-camera a relative amount. The difference between <code>MoveWorld()</code> and
-<code>Move()</code> is that the latter will move the camera in camera space.
-For example, take the following code:
+<a name="SEC306"></a>
+<h4 class="subsubheading"> Lighting Meshes </h4>
+
+<p>Almost all meshes support lighting. Mesh things are treated
+specially as they have support for lightmaps and dynamic lighting using
+dynamic lightmaps. So this discussion is not for them. But for all other
+meshes the system below applies. Note that for many meshes lighting can
+be disabled (usually by calling <code>SetLighting(false)</code> on the
+state of the mesh object).
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iCamera* camera;
-camera-&gt;GetTransform ().Move (csVector3 (0, 0, 1));
-</pre></td></tr></table>
-<p>This will move the camera forward in camera space. This means that the
-camera will walk 'forward' :-) On the other hand:
+<p>Note that objects that don't use lightmaps are normally updated automatically
+whenever needed. The engine will track when lights are added, removed, or
+changed (i.e. moving or color change), and the engine will track when the
+object itself moves. There is one case where this can fail and that's when
+a light affects an object indirectly through some portal and the object
+containing the portal changes (i.e. moves or otherwise). In this case the
+engine will not notice the lighting change on the mesh. If you suffer from
+this rare case then you can force the set of lights to be recalculated
+all the time (when the object is visible) by using
+<code>iMeshWrapper::SetLightingUpdate()</code> and setting the
+<code>CS_LIGHTINGUPDATE_ALWAYSUPDATE</code> flag. Note that using the same function
+you can also control the maximum number of lights that can affect your
+mesh (default is 8).
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iCamera* camera;
-camera-&gt;GetTransform ().MoveWorld (csVector3 (0, 0, 1));
-</pre></td></tr></table>
-<p>This will move the camera in the world so that it goes one unit in
-the positive Z direction. This will happen independently of the orientation
-of the camera.
-</p>
-<p>Here is another example which demonstrates how to use the <code>LookAt()</code>
-function. The following example will set a camera at location <samp>`3,5,1'</samp>
-and let it look at <samp>`3,5,10'</samp>. The up vector of the camera will be
-<samp>`0,1,0'</samp> (which is default):
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csVector3 camera_pos (3, 5, 1);
-csVector3 look_at_pos (3, 5, 10);
-csVector3 up (0, 1, 0);
-camera-&gt;GetTransform ().Move (camera_pos);
-camera-&gt;GetTransform ().LookAt (camera_pos - look_at_pos, up);
-</pre></td></tr></table>
-<a name="SEC251"></a>
-<h4 class="subsubheading"> Include Files </h4>
+<a name="SEC307"></a>
+<h4 class="subsubheading"> Mesh Include Files </h4>
 
 <p>The include files useful for this section are:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iengine/camera.h&gt;
-#include &lt;csgeom/transfrm.h&gt;
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iengine/mesh.h&gt;
+#include &lt;iengine/engine.h&gt;
 </pre></td></tr></table>
-
-
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.5.html#4.9.5" title="Previous section in reading order"> &lt; </a>]</td>

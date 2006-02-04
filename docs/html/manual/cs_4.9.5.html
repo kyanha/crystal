@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.9.5 Cameras and Matrices</title>
+<title>Crystal Space: 4.9.5 Creating a Genmesh Mesh</title>
 
-<meta name="description" content="Crystal Space: 4.9.5 Cameras and Matrices">
-<meta name="keywords" content="Crystal Space: 4.9.5 Cameras and Matrices">
+<meta name="description" content="Crystal Space: 4.9.5 Creating a Genmesh Mesh">
+<meta name="keywords" content="Crystal Space: 4.9.5 Creating a Genmesh Mesh">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Cameras-and-Matrices"></a>
+<a name="HOWTO-Create-Genmesh"></a>
 <a name="4.9.5"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.4.html#4.9.4" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,234 +58,136 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.9.5 Cameras and Matrices </h3>
+<h3 class="subsection"> 4.9.5 Creating a Genmesh Mesh </h3>
 
-<p><em>Written by Jorrit Tyberghein,
-<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.  Mathematical typesetting for
-TeX performed by Eric Sunshine, <a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a>.</em>
+<p>This section describes how to create a Genmesh mesh.
 </p>
-<p>This section describes how a camera in a 3D engine can be represented by a 3x3
-matrix and a 3-element vector.  This is the method that is used in the Crystal
-Space engine but it is general enough that it can be used in other engines as
-well. In Crystal Space a transform is represented by a
-<code>csReversibleTransform</code>.
-</p>
-<a name="SEC247"></a>
-<h4 class="subsubheading"> Theory </h4>
+<a name="SEC300"></a>
+<h4 class="subsubheading"> What is Genmesh? </h4>
 
-<p>A way to look at the matrix and vector representation of a camera is by seeing
-the matrix as a 3 dimensional arrow pointing in some direction (the direction
-the camera is looking at) and the vector as the starting point (origin) of
-that arrow.
+<p>A <samp>`Genmesh'</samp> mesh object (see section <a href="cs_4.9.8.html#4.9.8">Genmesh Mesh Object</a>) is a generic
+triangle mesh object. Genmeshes also support animation
+(see section <a href="cs_4.14.4.html#4.14.4">GenMesh Animation</a>).
 </p>
-<p>What does this matrix do? It performs a linear transformation from 3D to 3D.
-With a 3x3 matrix you can represent every linear transformation from one 3D
-space to another 3D space.  The matrix that we use for a camera is just a
-linear transformation matrix that transforms coordinates represented in one
-coordinate system to another.  Let's assume that everything in the world is
-defined by using 3D vertices with an <em>x</em>, <em>y</em>, and <em>z</em>
-component.  So a vertex is defined by three numbers: <em>x</em>, <em>y</em>, and
-<em>z</em>.  These three numbers only have meaning when used relative to some
-origin.  A origin is defined by three axes (if it is a 3D origin that is).
+<p>Genmeshes are very useful for static or semi-static geometry (chests,
+doors, candles, swords, etc.) which can sometimes require a lot of detail.
 </p>
-<p>So our camera matrix transforms 3D vertices from world space to camera space.
-This means that a vertex with position (<em>x,y,z</em>) in the world (in world
-space) will get new coordinates (<em>x',y',z'</em>) in camera space.  The only
-reason that we want to apply this transformation is to make things easier for
-the rest of the 3D engine.  Because after this transformation we can program
-the rest of the engine as if every vertex is represented in camera space.  In
-other words; a vertex with coordinates (<em>0,0,5</em>) will be a vertex that
-lies just in front of the camera at distance 5.  A vertex with coordinates
-(<em>1,3,-5</em>) is behind the plane of the camera and can thus be easily
-discarded.  The test <em>Z &lt; 0</em> is thus an easy test to see if a vertex will
-be visible or not.
+<p>Genmeshes use vertex lighting (or stencil if you use a stencil lighting
+shader).
 </p>
-<p>How does this transformation work? In fact it is just matrix algebra.  For
-example, if the camera matrix is represented by <em>M</em> and the camera
-position is represented by <em>P</em> then we can write the equation to
-transform from world space to camera space by using:
+<p>Genmesh objects always have to be created through a factory. So, first
+you create the actual geometry in a genmesh factory and then you create one
+or more instances from that factory. This is a great way to save memory.
+This does mean that it is not possible to HardTransform genmeshes. It is
+only possible to HardTransform Genmesh factories.
 </p>
-<blockquote><p><em>C = M * (W - P)</em>
-</p></blockquote>
+<a name="SEC301"></a>
+<h4 class="subsubheading"> Creating a Genmesh in a Map </h4>
 
-
-<p><em>W</em> is a 3D vector describing the position of a vertex in world space
-coordinates.  <em>C</em> is a 3D vector describing the position of a vertex in
-camera space coordinates.
+<p>Here is an example of how to create a cube genmesh in a map file:
 </p>
-<p>This formula does the following.  First it translates the world space position
-so that the camera position is at (<em>0,0,0</em>).  This is done by <em>W -
-P</em>.  As you can see a vertex that would be on the same world space coordinates
-as the camera would be translated to (<em>0,0,0</em>).  The result of this
-calculation is another 3D vector.
-</p>
-<p>This vector is then multiplied by the camera matrix <em>M</em> to transform it
-to camera space.  You can visualize this by treating <em>M</em> as an arrow
-pointing in some direction and the vertex lying somewhere relative to that
-arrow.  By transforming with <em>M</em> (multiplying) we move the arrow until it
-points just the way we want it (with the Z-axis in front and so on).
-</p>
-<p>A matrix by vector multiplication is defined as follows:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">/ a b c \     / x \     / a * x + b * y + c * z \
-| d e f |  *  | y |  =  | d * x + e * y + f * z |
-\ g h i /     \ z /     \ g * x + h * y + i * z /
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;cubeFact&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.factory.genmesh&lt;/plugin&gt;
+  &lt;params&gt;
+    &lt;numvt&gt;8&lt;/numvt&gt;
+    &lt;numtri&gt;12&lt;/numtri&gt;
+    &lt;v x=&quot;-0.1&quot; y=&quot;0.1&quot; z=&quot;0.1&quot; u=&quot;0&quot; v=&quot;0&quot; /&gt;
+    &lt;v x=&quot;-0.1&quot; y=&quot;0.1&quot; z=&quot;-0.1&quot; u=&quot;1&quot; v=&quot;0&quot; /&gt;
+    &lt;v x=&quot;0.1&quot; y=&quot;0.1&quot; z=&quot;-0.1&quot; u=&quot;0&quot; v=&quot;1&quot; /&gt;
+    &lt;v x=&quot;0.1&quot; y=&quot;0.1&quot; z=&quot;0.1&quot; u=&quot;1&quot; v=&quot;1&quot; /&gt;
+    &lt;v x=&quot;-0.1&quot; y=&quot;-0.1&quot; z=&quot;0.1&quot; u=&quot;1&quot; v=&quot;0&quot; /&gt;
+    &lt;v x=&quot;-0.1&quot; y=&quot;-0.1&quot; z=&quot;-0.1&quot; u=&quot;0&quot; v=&quot;1&quot; /&gt;
+    &lt;v x=&quot;0.1&quot; y=&quot;-0.1&quot; z=&quot;-0.1&quot; u=&quot;1&quot; v=&quot;1&quot; /&gt;
+    &lt;v x=&quot;0.1&quot; y=&quot;-0.1&quot; z=&quot;0.1&quot; u=&quot;0&quot; v=&quot;0&quot; /&gt;
+    &lt;t v1=&quot;0&quot; v2=&quot;3&quot; v3=&quot;1&quot; /&gt;
+    &lt;t v1=&quot;3&quot; v2=&quot;2&quot; v3=&quot;1&quot; /&gt;
+    &lt;t v1=&quot;4&quot; v2=&quot;5&quot; v3=&quot;7&quot; /&gt;
+    &lt;t v1=&quot;5&quot; v2=&quot;6&quot; v3=&quot;7&quot; /&gt;
+    &lt;t v1=&quot;0&quot; v2=&quot;4&quot; v3=&quot;3&quot; /&gt;
+    &lt;t v1=&quot;4&quot; v2=&quot;7&quot; v3=&quot;3&quot; /&gt;
+    &lt;t v1=&quot;1&quot; v2=&quot;6&quot; v3=&quot;5&quot; /&gt;
+    &lt;t v1=&quot;1&quot; v2=&quot;2&quot; v3=&quot;6&quot; /&gt;
+    &lt;t v1=&quot;0&quot; v2=&quot;1&quot; v3=&quot;5&quot; /&gt;
+    &lt;t v1=&quot;0&quot; v2=&quot;5&quot; v3=&quot;4&quot; /&gt;
+    &lt;t v1=&quot;2&quot; v2=&quot;3&quot; v3=&quot;7&quot; /&gt;
+    &lt;t v1=&quot;2&quot; v2=&quot;7&quot; v3=&quot;6&quot; /&gt;
+    &lt;autonormals /&gt;
+  &lt;/params&gt;
+&lt;/meshfact&gt;
+&lt;sector name=&quot;bla&quot;&gt;
+  &lt;meshobj name=&quot;cube&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.genmesh&lt;/plugin&gt;
+    &lt;params&gt;
+      &lt;factory&gt;cubeFact&lt;/factory&gt;
+      &lt;material&gt;mosaic&lt;/material&gt;
+    &lt;/params&gt;
+    &lt;move&gt;
+      &lt;v x=&quot;1&quot; y=&quot;0&quot; z=&quot;3&quot; /&gt;
+    &lt;/move&gt;
+  &lt;/meshobj&gt;
+&lt;/sector&gt;
 </pre></td></tr></table>
-<p>So for example, let's apply this formula in the initial configuration, with
-the camera pointing forwards in world space.  The camera matrix is then equal
-to:
+<p>In this example we define a box by specifying the eight corner vertices
+and the twelve triangles. The <code>&lt;autonormals&gt;</code> tag specifies that normals
+will be created automatically (to give the box a smooth appearance). The
+normals are used for lighthing. It is also possible to specify normals
+manually. Note that with every vertex we also specify a texture coordinate
+(uv coordinate).
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">/ 1 0 0 \
-| 0 1 0 |
-\ 0 0 1 /
+<p>To create a genmesh box you can actually use a short-hand notation:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;cubeFact&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.factory.genmesh&lt;/plugin&gt;
+  &lt;params&gt;
+    &lt;box&gt;
+      &lt;min x=&quot;-0.1&quot; y=&quot;-0.1&quot; z=&quot;-0.1&quot; /&gt;
+      &lt;max x=&quot;0.1&quot; y=&quot;0.1&quot; z=&quot;0.1&quot; /&gt;
+    &lt;/box&gt;
+    &lt;autonormals /&gt;
+  &lt;/params&gt;
+&lt;/meshfact&gt;
 </pre></td></tr></table>
-
-<p>And the vector is equal to:
+<p>This is a quick way to make boxes in a map file.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">/ 0 \
-| 0 |
-\ 0 /
+<a name="SEC302"></a>
+<h4 class="subsubheading"> Creating a Genmesh Programmatically </h4>
+
+<p>Here we create the same genmesh programmatically:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">// First create the factory:
+csRef&lt;iMeshFactoryWrapper&gt; fact = engine-&gt;CreateMeshFactory (
+  &quot;crystalspace.mesh.object.genmesh&quot;, &quot;cubeFact&quot;);
+csRef&lt;iGeneralFactoryState&gt; factstate = scfQueryInterface&lt;iGeneralFactoryState&gt; (
+  fact-&gt;GetMeshObjectFactory ());
+factstate-&gt;SetVertexCount (8);
+factstate-&gt;GetVertices ()[0].Set (-0.1, 0.1, 0.1);
+factstate-&gt;GetTexels ()[0].Set (0, 0);
+factstate-&gt;GetVertices ()[1].Set (-0.1, 0.1, -0.1);
+factstate-&gt;GetTexels ()[1].Set (1, 0);
+...
+factstate-&gt;SetTriangleCount (12);
+factstate-&gt;GetTriangles ()[0].Set (0, 3, 1);
+factstate-&gt;GetTriangles ()[1].Set (3, 2, 1);
+...
+factstate-&gt;CalculateNormals ();
+
+// Now create an instance:
+csRef&lt;iMeshWrapper&gt; mesh =
+  engine-&gt;CreateMeshWrapper (fact, &quot;cube&quot;);
+csRef&lt;iGeneralMeshState&gt; meshstate = scfQueryInterface&lt;iGeneralMeshState&gt; (
+  mesh-&gt;GetMeshObject ());
+meshstate-&gt;SetMaterialWrapper (myMaterial);
+...
 </pre></td></tr></table>
-<p>Translation of a vertex in world space coordinates to camera space coordinates
-makes no changes since the camera is at the origin of the world.
-Transformation results in the previous formula being applied:
+<p>This will basically create the same cube as in the map file example.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">/ 1 0 0 \     / x \     / 1 * x + 0 * y + 0 * z \
-| 0 1 0 |  *  | y |  =  | 0 * x + 1 * y + 0 * z |
-\ 0 0 1 /     \ z /     \ 0 * x + 0 * y + 1 * z /
+<a name="SEC303"></a>
+<h4 class="subsubheading"> Include Files </h4>
+
+<p>The include files useful for this section are:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;imesh/genmesh.h&gt;
 </pre></td></tr></table>
-
-<p>So as you can see, this does not change the vertex at all.
-</p>
-<a name="SEC248"></a>
-<h4 class="subsubheading"> Practice </h4>
-
-<p>Now that the theory behind camera mathematics has been described, it is time
-to see everything put into practice in order to actually move the camera.  All
-of the different kind of movements that the camera can do are also performed
-as transformations.
-</p>
-<p>For example, let's say that you want to move the camera forward a bit.  If you
-would represent this movement in camera space than you would say that the
-camera moves from (<em>0,0,0</em>)--since the camera is at the origin in camera
-space-to (<em>0,0,d</em>) with <em>d</em> the distance that you want it to move.
-This is because we defined camera space so that <em>Z</em> is in front of you.
-</p>
-<p>But we want to know the position of the camera in world space.  In fact, what
-we want to do is to transform the camera space position (<em>0,0,d</em>) to
-world space.  This would then be the new position for the camera.
-</p>
-<p>So we need the inverse transformation.  To calculate the inverse
-transformation you need to calculate the inverse of the matrix <em>M</em>.
-Let's call this inverse <em>M'</em>.  From Matrix Algebra, we know that
-<em>M * M' = I</em>
-(where <em>I</em> is the identity matrix).
-</p>
-<p>Calculation of the inverse of a matrix is a bit complicated.  For exact
-details, consult a Matrix Algebra textbook.  In practical terms, it is done by
-starting with the following formula which is our transformation from world to
-camera space equation:
-</p>
-<blockquote><p><em>C = M * (W - P)</em>
-</p></blockquote>
-
-
-<p>We would now like to calculate the new equation for the inverse
-transformation.  We already have <em>M'</em> (the inverse matrix).  Ok, let us
-multiply both sides of the equation by <em>M'</em>.  This gives:
-</p>
-<blockquote><p><em>M' * C = M' * M * (W - P)</em>
-</p></blockquote>
-
-
-<p>Since
-<em>M' * M = I</em>,
-this results in:
-</p>
-<blockquote><p><em>M' * C = W - P</em>
-</p></blockquote>
-
-<p>So the equation we are looking for is:
-</p>
-<blockquote><p><em>W = M' * C + P</em>
-</p></blockquote>
-
-<p>So this is the equation that transforms camera space to world space.  Now we
-can use this to transform (<em>0,0,d</em>) to the new camera space coordinates.
-Other movements (like moving to the right (<em>d,0,0</em>), up (<em>0,d,0</em>),
-down (<em>0,-d,0</em>), and so on) are all performed in an equivalent manner.
-</p>
-<p>If you want to turn right then your position will not change but you will have
-to change the transformation matrix.  This works differently.  For example, to
-turn right you would want to rotate a certain angle around the Y-axis (since
-the Y-axis points upwards).  This rotation can be represented by the following
-matrix (known as a <em>rotation matrix</em>) which rotates about the Y-axis:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">/ cos(a)   0    -sin(a) \
-| 0        1    0       |
-\ sin(a)   0    cos(a)  /
-</pre></td></tr></table>
-
-<p>To see why this works, just try multiplying it by some vectors in 3D and see
-where they will transform too.
-</p>
-<p>How can we then use this matrix to turn our camera to the right? An important
-thing to realize is that transformations can be combined by multiplying the
-transformation matrices together.  For example, if we have our matrix <em>M</em>
-transforming from world to camera space and we would like to apply the Y-axis
-rotation on the camera then you can see this as a combination of first the
-transformation from world to camera space followed by the rotation along the
-Y-axis.  So instead of:
-</p>
-<blockquote><p><em>C = M * (W - P)</em>
-</p></blockquote>
-
-
-<p>We would want to use:
-</p>
-<blockquote><p><em>C = R * M * (W - P)</em>
-</p></blockquote>
-
-
-<p>Where <em>R</em> is the rotation matrix.
-</p>
-<p><em>R * M * (W - P)</em>
-means to first apply transformation <em>M</em> on (<em>W - P</em>) and after that
-apply transformation <em>R</em> on the result.  Note that multiplication of
-matrices is not commutative.
-<em>R * M</em>
-is not guaranteed to be the same as
-<em>M * R</em>.
-</p>
-<p>So, we can conclude from this that we just have to multiply the camera matrix
-by <em>R</em> to get the new camera matrix:
-</p>
-<blockquote><p><em>M' = R * M</em>
-</p></blockquote>
-
-<p>Matrix multiplication works as follows:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">/ a b c \   / A B C \   / a*A+b*D+c*G a*B+b*E+c*H a*C+b*F+c*I \
-| d e f | * | D E F | = | d*A+e*D+f*G d*B+e*E+f*H d*C+e*F+f*I |
-\ g h i /   \ G H I /   \ g*A+h*D+i*G g*B+h*E+i*H g*C+h*F+i*I /
-</pre></td></tr></table>
-<p>Rotation along the other axes works in a similar fashion.  Rotation along the
-X-axis is represented by:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">/ 1   0        0       \
-| 0   cos(a)   -sin(a) |
-\ 0   sin(a)   cos(a)  /
-</pre></td></tr></table>
-
-<p>Rotation along the Z-axis is represented by:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">/ cos(a)   -sin(a) 0  \
-| sin(a)   cos(a)  0  |
-\ 0        0       1  /
-</pre></td></tr></table>
-<p>With these formulas you should be able to do any movement of the camera that
-you want, including rotating the camera around the direction it is looking.
-</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.4.html#4.9.4" title="Previous section in reading order"> &lt; </a>]</td>

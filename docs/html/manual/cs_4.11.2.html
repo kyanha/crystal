@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.11.2 Pseudo-dynamic Lights</title>
+<title>Crystal Space: 4.11.2 Alpha and Keycolor in Textures</title>
 
-<meta name="description" content="Crystal Space: 4.11.2 Pseudo-dynamic Lights">
-<meta name="keywords" content="Crystal Space: 4.11.2 Pseudo-dynamic Lights">
+<meta name="description" content="Crystal Space: 4.11.2 Alpha and Keycolor in Textures">
+<meta name="keywords" content="Crystal Space: 4.11.2 Alpha and Keycolor in Textures">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="HOWTO-Pseudo-DynLight"></a>
+<a name="Alpha-Textures"></a>
 <a name="4.11.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.11.1.html#4.11.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.12.html#4.12" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.3.html#4.11.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.11.html#4.11" title="Up section"> Up </a>]</td>
@@ -58,71 +58,63 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.11.2 Pseudo-dynamic Lights </h3>
+<h3 class="subsection"> 4.11.2 Alpha and Keycolor in Textures </h3>
 
-<p>One little known feature in CS is the ability to have pseudo-dynamic
-lights. Pseudo-dynamic lights are somewhere between static lights and
-dynamic lights. Static lights cannot move but they generate high quality
-lightmaps. Dynamic lights can move but the quality of lighting is much
-less. Pseudo-dynamic lights are a variant of static lights. They cannot
-move either but they can change intensity and color dynamically. Since
-they also use lightmaps the quality is very good and they have correct
-shadows. Pseudo-dynamic lights are ideal for lights that can be switched
-on/off or possibly even for outside light that you want to turn off (at
-night). Note that the usage of pseudo-dynamic lights adds an additional
-shadow map to every polygon that is touched by that light. So memory
-usage can go up quickly.
+<p>Crystal Space supports the alpha channel that can be present in some image
+files (like <small>PNG</small> and <small>TGA</small>).
 </p>
-<a name="SEC403"></a>
-<h4 class="subsubheading"> Creating a Pseudo-Dynamic Light </h4>
-
-<p>To specify a pseudo-dynamic light in a map file you use the following
-syntax:
+<p>It is important to realize that when you use alpha on an object you must
+sort the object back to front. That basically means you'll most likely have
+to use the <samp>`alpha'</samp> render priority (see section <a href="cs_4.8.3.html#4.8.3">Render Priorities and Objects in Sectors</a>) and
+also <samp>`ztest'</samp> for the Z-buffer usage. Also in some cases you may need
+to set the <samp>`back2front'</samp> flag if the object is a genmesh
+(see section <a href="cs_4.9.8.html#4.9.8">Genmesh Mesh Object</a>).
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;light name=&quot;DynLight&quot;&gt;
-  &lt;center x=&quot;23&quot; y=&quot;1&quot; z=&quot;5&quot;/&gt;
-  &lt;radius&gt;10&lt;/radius&gt;
-  &lt;color red=&quot;1&quot; green=&quot;0&quot; blue=&quot;0&quot;/&gt;
-  &lt;dynamic /&gt;
-&lt;light&gt;
+<p>It is often hard to get things correct with such a setup so in many cases
+it is preferable to use a method named <em>binary alpha</em>. This means that
+a pixel is either treated as <em>fully opaque</em> or <em>fully transparent</em> -
+the former for alpha values greater than 50%, the latter for alpha values
+lower than 50%. In practice, it is probably desireable to only use 0% and 
+100% transparency values in the alpha channel. Also, the transparent area(s)
+should be filled with a color that is similar to its adjacent opaque pixels, 
+as, due texture filtering, this color will slightly bleed into the neighboring
+opaque pixels. Choosing an approriate color makes this bleeding non-obvious.
+</p>
+<p>The easiest way to activate binary alpha is to mark the texture as follows in 
+your world file:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;texture name=&quot;transparent&quot;&gt;
+    &lt;file&gt;mytexture.png&lt;/file&gt;
+    &lt;alpha&gt;&lt;binary/&gt;&lt;/alpha&gt;
+&lt;/texture&gt;
 </pre></td></tr></table>
-<p>In other words, the syntax is the same as for a normal light except for
-the <samp>`dynamic'</samp> keyword. Note that lights usually don't have a name
-but for a pseudo-dynamic light it is convenient to have one since you can
-use that name to find the light later (which is essential if you want to
-change the color/intensity).
+<p>If you do this then this texture can be used on objects as any other texture.
+So the object can simply use <samp>`object'</samp> render priority and <samp>`zuse'</samp>
+Z-buffer mode.
 </p>
-<p>To create a pseudo-dynamic light from within an application you can
-use the following code:
+<p>An alternative way to enable binary alpha is by using a <em>keycolor</em> for the
+texture; that is, all pixels of the specified color (in the example magenta)
+will be rendered transparent.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iLight&gt; light = engine-&gt;CreateLight (&quot;DynLight&quot;,
-  csVector3 (23, 1, 5), 10, csColor (1, 0, 0), true);
-sector-&gt;GetLights ()-&gt;AddLight (light);
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;texture name=&quot;transparent&quot;&gt;
+    &lt;file&gt;mytexture.png&lt;/file&gt;
+    &lt;transparent r=&quot;1&quot; g=&quot;0&quot; b=&quot;1&quot; /&gt;
+&lt;/texture&gt;
 </pre></td></tr></table>
-<p>This will create exactly the same light as the one specified above.
+<p>However, using this technique is discouraged as it is less performant than the 
+using binary alpha as described above; specifically, when loading a texture
+with a keycolor, CrystalSpace will scan the image for pixels of that color and
+set their alpha value to 0. Internally, binary alpha and keycolor work in the 
+same way (transparency of a pixel is based on whether the alpha value is 
+above or below 50%), however, keycolored textures come with a load-time 
+performance penalty due to the required processing step.
 </p>
-<p>At some point you may want to change the color of the light. You can
-do this with the following code:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">light-&gt;SetColor (csColor (0, 0, 1));
-</pre></td></tr></table>
-<p>This will change the color of the light from red to blue.
-</p>
-<a name="SEC404"></a>
-<h4 class="subsubheading"> Include Files </h4>
-
-<p>The include files useful for this section are:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iengine/light.h&gt;
-#include &lt;iengine/sector.h&gt;
-#include &lt;iengine/engine.h&gt;
-</pre></td></tr></table>
 
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.11.1.html#4.11.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.12.html#4.12" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.3.html#4.11.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.11.html#4.11" title="Up section"> Up </a>]</td>

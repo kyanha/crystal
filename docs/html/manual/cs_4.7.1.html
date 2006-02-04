@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.7.1 Details</title>
+<title>Crystal Space: 4.7.1 csObject and iObject</title>
 
-<meta name="description" content="Crystal Space: 4.7.1 Details">
-<meta name="keywords" content="Crystal Space: 4.7.1 Details">
+<meta name="description" content="Crystal Space: 4.7.1 csObject and iObject">
+<meta name="keywords" content="Crystal Space: 4.7.1 csObject and iObject">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="VFS-Details"></a>
+<a name="csObject"></a>
 <a name="4.7.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.7.html#4.7" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,52 +58,51 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.7.1 Details </h3>
+<h3 class="subsection"> 4.7.1 csObject and iObject </h3>
 
-<p>To make difference between <small>ZIP</small> archives and physical disk directories
-<small>VFS</small> uses a simple convention: directories end with a path separator
-character (<samp>`$/'</samp>) while archives do not. <samp>`$/'</samp> is a special
-configuration file variable which represents the path separator on any
-particular platform (see section <a href="cs_4.7.2.html#4.7.2">Configuration File (<tt>`vfs.cfg'</tt>)</a>). For example
-<samp>`$/data'</samp> refers to an archive, while <samp>`$/data$/'</samp> refers to an actual
-directory named <tt>`data'</tt>.  Failure to understand this distinction is often
-the major cause of errors; so if you're getting unexpected results check in
-the first place if directories have trailing path separators.
+<p>The <samp>`csObject'</samp> class can be used to build object hierarchies. It supports
+building a simple tree structure. To use this functionality, you should derive
+your classes from <samp>`csObject'</samp>. <samp>`csObject'</samp> implements the
+<samp>`iObject'</samp> interface and can store any number of <samp>`iObject'</samp> children.
+Furthermore, every <samp>`csObject'</samp> may have a name.
 </p>
-<p>There are several differences between filesystems between operating systems
-that you should always keep in mind because <small>VFS</small> doesn't hide these
-details from you. To avoid inconsistencies between different file systems you
-should follow this list of guidelines:
+<p>All child objects are <code>IncRef()</code>'ed when added and <code>DecRef()</code>'ed when
+removed. An object also stores a pointer to its parent (which is not
+reference-counted to avoid circular references). Note that this pointer will
+always point to the last parent if the object is added to more than one
+parent. When the object is removed from a parent, the pointer is set to
+null, even if the object is still a child of another parent!
 </p>
-<ul>
-<li>
-Choose filenames that are well suited for all operating systems you are
-targeting.  As of today <small>DOS</small> has the most restricted rules for naming
-files (<small>ASCII7</small> characters except <samp>`?'</samp>, <samp>`*'</samp>, <samp>`+'</samp>, and space,
-and with only one dot per filename).
-The part of <small>VFS</small> that is located in archives support virtually any
-filenames, so if you are sure that you will never have to place some file on a
-&quot;real&quot; filesystem, you can give it any name you desire.
+<p>Although the children of an object are only available as <samp>`iObject'</samp>
+instances, you can use <code>scfQueryInterface</code> to query other interfaces
+from them.  Some convenience macros are also available:
+</p>
+<dl compact="compact">
+<dt> <code>CS_GET_CHILD_OBJECT(object,Interface)</code></dt>
+<dd><p>Get the first child object that implements the given interface.
+</p>
+</dd>
+<dt> <code>CS_GET_NAMED_CHILD_OBJECT(object,Interface,name)</code></dt>
+<dd><p>Get the first child object with the given name that implements the given
+interface. This will continue to search through the objects if an object
+with the right name but not the right interface was found, i.e. it handles
+multiple objects with the same name correctly.
+</p>
+</dd>
+<dt> <code>CS_GET_FIRST_NAMED_CHILD_OBJECT(object,Interface,name)</code></dt>
+<dd><p>Same as the above but stops at the first object with the given name, even if
+it does not implement the requested interface (in that case, <code>0</code> is
+returned). This is slightly faster.
+</p></dd>
+</dl>
 
-</li><li>
-Different platforms use different filename comparison criteria.  On Unix and
-MacOS/X <small>UFS</small> filesystems, filenames are case-sensitive, while on Windows,
-<small>DOS</small>, and Macintosh <small>HFS</small> filesystems, they are case-insensitive.  To
-avoid problems always refer to files by their exact names.  For example, if you
-have a file on <small>VFS</small> called <tt>`GaMe.DaT'</tt> you should open it exactly as
-<tt>`GaMe.DaT'</tt> and not as <tt>`game.dat'</tt> or <tt>`GAME.DAT'</tt>.  On <small>DOS</small>,
-the file will appear to be entirely upper-case <tt>`GAME.DAT'</tt>, but you should
-still use the correct name, <tt>`GaMe.DaT'</tt>, when opening it.
-
-</li><li>
-Keep in mind that Unix <em>can</em> delete files which are actively open, whereas
-Windows, <small>DOS</small>, and possibly other platforms can not.  Therefore, you should
-avoid deleting open files.  (<em>Technical Note</em>: Actually, this should work
-for files which are located in archives but is not advisable to do so, because
-in general, program code will not know if a file resides within an archive or
-within the physical filesystem.  Furthermore, deleting open files from an
-archive not been tested.
-</li></ul>
+<p>Note that all these macros increase the reference count of the returned
+object by 1.
+</p>
+<p>Note that there are a few HOWTO's describing possible uses for the
+<samp>`csObject'</samp> system (see section <a href="cs_4.7.2.html#4.7.2">Attaching User Objects to CS Objects</a> and
+see section <a href="cs_4.7.3.html#4.7.3">Attaching User Objects to CS Objects in a map file</a>).
+</p>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

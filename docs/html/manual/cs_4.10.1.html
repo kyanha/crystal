@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.10.1 MeshObject Concepts</title>
+<title>Crystal Space: 4.10.1 Lighting</title>
 
-<meta name="description" content="Crystal Space: 4.10.1 MeshObject Concepts">
-<meta name="keywords" content="Crystal Space: 4.10.1 MeshObject Concepts">
+<meta name="description" content="Crystal Space: 4.10.1 Lighting">
+<meta name="keywords" content="Crystal Space: 4.10.1 Lighting">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MeshObject-Concepts"></a>
+<a name="Lighting"></a>
 <a name="4.10.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,118 +58,190 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.10.1 MeshObject Concepts </h3>
+<h3 class="subsection"> 4.10.1 Lighting </h3>
+
 
 <p><em>Written by Jorrit Tyberghein,
 <a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
 </p>
-<p>In this section a general overview is given of the mesh object plug-in
-system and several of the concepts are explained.
+<p>Crystal Space supports three types of lighting: <em>static</em>,
+<em>pseudo-dynamic</em> and <em>dynamic</em>.  They are different in the ways you
+can change their attributes while the engine is running.  Static lights cannot
+be changed at all, but produce best performance and least memory consumption.
+Pseudo-dynamic lights can change their color and brightness, but not their
+position.  Dynamic lights can also change their position.
 </p>
-<a name="SEC273"></a>
-<h4 class="subsubheading"> Mesh Object </h4>
+<p>In the interest of accuracy, it is actually possible to change the so-called
+&quot;unchangeable&quot; attributes of static and pseudo-dynamic lights, but after
+doing so, it is necessary to perform time-consuming recalculation of lightmaps
+in order for the changes to be reflected in the rendered world.
+</p>
+<p>Every light has a position in world space coordinates and a current
+<em>sector</em>.  Every light also has a radius (expressed in squared distance).
+This radius indicates where the light levels of the three light tables will
+reach zero.
+</p>
+<a name="SEC408"></a>
+<h4 class="subsubheading"> Static Lights </h4>
 
-<p>A <em>Mesh Object</em> is what this plug-in system is all about.  It is basically
-a 3D object that the engine can render.  Every mesh object knows how to render
-and light itself.  Mesh Objects don't control their own position in the engine
-though.  The engine is responsible for doing that.  Mesh Object implementations
-must implement the <small>SCF</small> interface <samp>`iMeshObject'</samp>.  Every visible mesh
-object in the world will implement this interface. Note that from the
-perspective of the engine you will always communicate with <samp>`iMeshWrapper'</samp>
-instead of <samp>`iMeshObject'</samp>.
+<p>This section gives a very brief explanation of the static lighting system used
+in Crystal Space.  <strong>Warning</strong>: <em>Although the basic principle
+described here is still valid, much more is going on now.  This document needs
+to be updated to reflect the current state of the engine.</em>
 </p>
-<p>Mesh Objects often also implement one or more additional type specific
-interfaces to access the characteristics of that Mesh Object.  The engine
-itself does not know about these interfaces.  It is the responsibility of the
-application writer to correctly set up the characteristics of all Mesh Objects
-that it uses.  These type specific interfaces are usually called
-<samp>`iSomethingState'</samp> (replace <em>Something</em> with the appropriate name).
+<p>Static lighting is based on <em>lightmaps</em>.  These are like textures except
+that every pixel defines the combined brightness of all lights at its
+position.  Before the rendering loop starts, these lightmaps are precalculated
+so there is little performance loss at runtime, where we only need to blend
+texture and lightmap of a polygon.
 </p>
-<a name="SEC274"></a>
-<h4 class="subsubheading"> Mesh Object Factory </h4>
-
-<p>A <em>Mesh Object Factory</em> is an object from which you can generate Mesh
-Object instances.  The Mesh Objects generated from a Mesh Object Factory will
-inherit some of the characteristics from this factory.  Exactly which
-characteristics depend upon the Mesh Object Type (see below).  Roughly
-speaking, there are three possibilities:
+<p>Lightmaps are calculated as follows:
 </p>
 <ol>
 <li>
-For some types the factory is really empty and only serves as a stub to create
-Mesh Object instances.  In that case you would only have to use one factory to
-generate all your Mesh Objects of that type.
+First initialize all lightmaps to black (or the ambient color).
 
 </li><li>
-In other cases the factory contains default values for some characteristics
-that are copied to all Mesh Objects created from that factory.  In that case
-you can decide to use one factory and change the settings before creating new
-instances.  Or (for convenience) you can create several factories with default
-values that you use often and create Mesh Objects from the factory of choice.
+For every light in the world generate a view frustum as seen from the position
+of that light.  The frustum is defined as a set of 3D polygon or light
+patches.  Every light patch is clipped against the relevant portals until
+nothing remains (light patch becomes empty).  Every light patch in this
+frustum is in fact a projection of the light on the normal polygons.  It is in
+that area that we need to update the lightmap for every polygon.
 
 </li><li>
-In still other cases the factory actually contains the characteristics used by
-all Mesh Objects created from it.  Changing the factory characteristics will
-actually modify the characteristics for all Mesh Objects instantly.  In this
-case you will have to use a separate factory for all Mesh Objects sharing the
-same characteristics.
+For every polygon that was hit, cast beams from the light to every lightmap
+point on the polygon (lightmap points are often defined every 16 by 16 texels
+although you can change this value if desired).  We know that in principle the
+beam of light should reach the polygon since the light patch gives the
+boundary of where the light can reach the polygon.  But the frustum was
+generated ignoring Things.  So it is possible that there is a Thing blocking a
+specific beam of light.  We need to test for that.
+
+</li><li>
+If there is a successful hit then calculate the distance between the light and
+the point on the polygon and update the intensity there.
 </li></ol>
 
-<p>Which of the possibilities is selected by some Mesh Object type depends on the
-type.  You'll have to look it up in the respective documentation for that type.
-Mesh Object Factories implement the <small>SCF</small> interface
-<samp>`iMeshObjectFactory'</samp>. Note that from the
-perspective of the engine you will always communicate with
-<samp>`iMeshFactoryWrapper'</samp> instead of <samp>`iMeshObjectFactory'</samp>.
+<p>To create the three lightmaps for every polygon a 2D bounding box in texture
+space is calculated.  This defines a rectangle that overlaps with the texture
+on the polygon and is correctly aligned with it (so that every 16 by 16 texel
+grid has one lightmap position).  A consequence of this is that rotated
+textures can waste a lot of lightmap space.  For example, see the following
+polygon:
 </p>
-<p>Mesh Object Factories often implement one or more additional type specific
-interfaces to access the characteristics of that Mesh Object Factory.  The
-engine itself does not know about these interfaces.  It is the responsibility
-of the application writer to correctly set up the characteristics of all Mesh
-Objects Factories that it uses.  These type specific interfaces are usually
-called <samp>`iSomethingFactoryState'</samp> (replace <em>Something</em> with the
-appropriate name).
-</p>
-<a name="SEC275"></a>
-<h4 class="subsubheading"> Mesh Object Type </h4>
-
-<p>The <em>Mesh Object Type</em> describes a specific kind of Mesh Object plug-in.
-For example, Crystal Space supports several types of Mesh Objects: snow
-particle system, fountain particle system, cube, ball, etc.  The Mesh Object
-Type corresponds directly to the plug-in itself.  It is the class' responsible
-for creating all Mesh Object Factories.  Mesh Object Types implement the
-<small>SCF</small> interface <samp>`iMeshObjectType'</samp>.
-</p>
-<p>Some Mesh Object Types implement the <small>SCF</small> interface <samp>`iConfig'</samp>.  In
-this case, you can use this interface to query all run-time options that are
-valid for that type.
-</p>
-<a name="SEC276"></a>
-<h4 class="subsubheading"> Loaders </h4>
-
-<p>In addition to the functionality for the Mesh Objects themselves, many Mesh
-Object Types support two implementations of the <small>SCF</small> interface
-<samp>`iLoaderPlugin'</samp>.  By implementing this, these plug-ins can be used
-directly by the standard Crystal Space map file loader.  There is a loader for
-the Mesh Object Factory and a loader for the Mesh Object itself.  The Mesh
-Object plug-in itself doesn't know about these loader plug-ins.  In fact, you
-can even write different loader plug-ins for the same Mesh Object Type if you
-so desire.
-</p>
-<a name="SEC277"></a>
-<h4 class="subsubheading"> Responsibilities </h4>
-
-<p>As mentioned above Mesh Objects only know how to render themselves and how to
-update lighting information.  The engine is responsible for deciding when to
-draw and when to update.  So basically, the Mesh Objects control the <em>how</em>
-while the engine controls the <em>when</em>.  This is not completely true,
-though.  The Mesh Object implementation itself must do some parts of the
-visibility testing on its own.  For example, far plane clipping, and testing if
-the bounding box of the object is visible on screen are all the responsibility
-of the Mesh Object (but it can use the engine for help on calculating these
-things).
+<p><img src="usingcs/lighting/light1.png" alt="usingcs/lighting/light1">
 </p>
 
+<p>And assume that the texture is aligned horizontally.  Then we would need a
+lightmap of the following size:
+</p>
+<p><img src="usingcs/lighting/light2.png" alt="usingcs/lighting/light2">
+</p>
+
+<p>Note also, that the texture in the texture cache will have that size.
+</p>
+<a name="SEC409"></a>
+<h4 class="subsubheading"> Pseudo-Dynamic Lights </h4>
+
+<p>The pseudo-dynamic lighting system is an extension to the static lighting
+system described above.  Pseudo-dynamic lights can not move but you can change
+the intensity or color.  When some light is made pseudo-dynamic (a simple
+flag) the processing is a bit different.  The shadow-computation remains the
+same but every polygon that is hit by the pseudo-dynamic light needs to have
+separate lightmaps for every pseudo-dynamic light that hits the polygon.  So
+in the end all the polygons that are only hit by static lights have just one
+lightmap (for the three tables) for all static lighting information.  Every
+polygon that is hit by one or more pseudo-dynamic lights will have one or more
+extra lightmap tables for every pseudo-dynamic light and one extra for all
+static lights.  This information is then added together to result in the final
+lightmap table that can then be used by the texture cache routine (as
+explained earlier).
+</p>
+<p>The lightmaps for the pseudo-dynamic lights are stored without the strength of
+the light.  So where the light shines brightest the value in the lightmap will
+be 255, and where it shines least bright the value will be 0.  When combining
+all pseudo-dynamic lightmaps and the static lightmap the strength of every
+light will be multiplied with the distance value to result in the real
+lightmap value.  This also implies that there is only one extra lightmap for
+every polygon/pseudo-dynamic light because the shadow information (which is
+basically what is represented in pseudo-dynamic lightmaps) is the same for all
+three light-tables.
+</p>
+<p>Here are some performance considerations for pseudo-dynamic lighting.  There
+is a memory penalty for every polygon that is hit by some pseudo-dynamic
+lighting because extra lightmaps need to be created.  So if you use no
+pseudo-dynamic lighting you will suffer no penalty but if you use a very large
+pseudo-dynamic light (with a large radius) it will probably hit a large number
+of polygons and you will have a considerable increase in memory requirements.
+</p>
+<p>There is also a performance penalty whenever the intensity of a pseudo-dynamic
+light changes.  This is because all the textures for the polygons that are hit
+by the pseudo-dynamic light need to be recalculated (they are removed from the
+texture cache).
+</p>
+<p>If the intensity of a pseudo-dynamic light does not change there is no
+performance hit at all.
+</p>
+<a name="SEC410"></a>
+<h4 class="subsubheading"> Dynamic Lights </h4>
+
+<p>Crystal Space also supports true dynamic lights.  These are rendered atop the
+normal lightmaps as explained above and support colors and limited shadows.
+</p>
+<a name="SEC411"></a>
+<h4 class="subsubheading"> Shadow Calculation </h4>
+
+<p>The algorithm to see if a given beam reaches a specific point on some polygon
+works as follows.  The beam is described as two vertices (<em>start</em> and
+<em>end</em>):
+</p>
+<ol>
+<li>
+Start at the &quot;sector&quot; of the light.
+
+</li><li>
+If the current sector is equal to the sector of the polygon then there is a
+hit, since all polygons of a sector are completely visible from anywhere in a
+sector.
+
+</li><li>
+Otherwise, if the light is not in this sector, the beam could reach this
+sector through a portal.  Since the beam certainly ends at the polygon (this
+is given, the start and end vertices define a beam that will--if not
+blocked--reach the polygon) and the beam passed through portals to reach here
+then the beam hits the polygon.  So perform the following steps:
+
+<ol>
+<li>
+Determine which polygon of the current sector intersects with the beam.
+
+</li><li>
+If the polygon is on the same plane as the destination polygon then there is a
+hit.  The reason this is true has to do with the fact that the lightmaps are
+slightly bigger than what is really needed.  Bilinear interpolation is used to
+finally light the polygon and it has to be able to correctly interpolate at
+the boundaries of the polygon as well.
+
+</li><li>
+If the polygon that is hit is a portal then recursively continue with the
+following sector.  If the recursive calls returns a hit then we have a hit.
+
+</li><li>
+If the polygon is not a portal there is no hit so return from the algorithm
+(the beam of light does not reach the polygon).
+</li></ol>
+
+</li><li>
+In all cases where a hit occurred according to the previous steps, arrive at
+this step to check if there are no Things blocking the beam.  For every Thing
+in the current sector check if the beam intersects with one of the polygons of
+the Thing.  If so then there is no hit.  Otherwise there is a hit.
+</li></ol>
+
+
+<p>A similar algorithm is used for Things.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Previous section in reading order"> &lt; </a>]</td>

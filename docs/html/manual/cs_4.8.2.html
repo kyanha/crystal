@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.8.2 Attaching User Objects to CS Objects</title>
+<title>Crystal Space: 4.8.2 Renderloops</title>
 
-<meta name="description" content="Crystal Space: 4.8.2 Attaching User Objects to CS Objects">
-<meta name="keywords" content="Crystal Space: 4.8.2 Attaching User Objects to CS Objects">
+<meta name="description" content="Crystal Space: 4.8.2 Renderloops">
+<meta name="keywords" content="Crystal Space: 4.8.2 Renderloops">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="User-Objects"></a>
+<a name="Renderloops"></a>
 <a name="4.8.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.8.1.html#4.8.1" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,112 +58,17 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.8.2 Attaching User Objects to CS Objects </h3>
+<h3 class="subsection"> 4.8.2 Renderloops </h3>
 
-<p>This section explains how you can assign your own game specific data
-to Crystal Space objects (i.e. like meshes and sectors). In this section
-we explain how to do it from within code. In the next howto
-(see section <a href="cs_4.8.3.html#4.8.3">Attaching User Objects to CS Objects in a map file</a>) we explain how you can do this from
-a map file.
+<p>A renderloop is an engine structure that
+tells the engine how to render the objects in a given sector. Basically it tells
+the engine the steps required to do the rendering of the mesh objects and
+also the steps required to do the lighting. You can make your own renderloops
+but typically you would use one of the standard provided renderloops
+from the <tt>`data/shader'</tt> directory.
 </p>
-<a name="SEC208"></a>
-<h4 class="subsubheading"> The Crystal Space Object System </h4>
-
-<p>Almost all objects in the Crystal Space engine implement the
-<code>iObject</code> interface. Because of this you can attach your own
-objects to them. This can be very useful to attach game specific
-data to Crystal Space objects. For example, you may want to attach
-the state of an actor to the mesh object representing that actor (like
-current amount of ammunition, health, <small class="dots">...</small>).
+<p>TODO
 </p>
-<a name="SEC209"></a>
-<h4 class="subsubheading"> Defining Game Data </h4>
-
-<p>To define data that you can attach to any other Crystal Space
-object (or any object implementing <code>iObject</code>) you also have to
-create an object that implements <code>iObject</code>. The easiest way to do
-that is to inherit from <code>csObject</code> which implements <code>iObject</code>
-for you. Here is an example on how you can do this easily:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">SCF_VERSION (MyOwnData, 0, 0, 1);
-class MyOwnData : public csObject
-{
-public:
-  int my_data_int;
-  ...
-
-  SCF_DECLARE_IBASE_EXT (csObject);
-};
-
-SCF_IMPLEMENT_IBASE_EXT (MyOwnData)
-  SCF_IMPLEMENTS_INTERFACE (MyOwnData)
-SCF_IMPLEMENT_IBASE_EXT_END
-</pre></td></tr></table>
-<p>Basically you create a class called <samp>`MyOwnData'</samp> which inherits
-from <code>csObject</code>. In that class you can do whatever you want
-with respect to your own game data. In the example above we only
-have a variable <samp>`my_data_int'</samp> but of course you can do whatever
-you want. The <small>SCF</small> macros make sure that you can later query for
-that object (using <code>scfQueryInterface</code> for example).
-</p>
-<a name="SEC210"></a>
-<h4 class="subsubheading"> Attaching Game Data </h4>
-
-<p>To attach your own data to some Crystal Space object you can use
-<code>iObject::ObjAdd()</code>. The example below shows how you can attach
-an instance of <code>MyOwnData</code> to a mesh:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">MyOwnData* mydata = new MyOwnData ();
-mydata-&gt;my_data_int = ...;
-iMeshWrapper* mesh = ...;
-mesh-&gt;QueryObject ()-&gt;ObjAdd (mydata);
-mydata-&gt;DecRef ();
-</pre></td></tr></table>
-<p><code>mesh-&gt;QueryObject()</code> is interesting. Many Crystal Space objects
-that implement <code>iObject</code> have a convenience function called
-<code>QueryObject()</code> which will return a reference to the <code>iObject</code>
-implementation. This code is equivalent to:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iObject&gt; obj = scfQueryInterface&lt;iObject&gt; (mesh);
-</pre></td></tr></table>
-<p>with the important difference that <code>QueryObject()</code> does not increment
-the reference count. If an object doesn't have this convenience function you
-must use <code>scfQueryInterface</code> instead.
-</p>
-<a name="SEC211"></a>
-<h4 class="subsubheading"> Finding Game Data </h4>
-
-<p>To find if some object has your data attached to it you can use the
-following code:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;MyOwnData&gt; mydata =
-  CS_GET_CHILD_OBJECT(mesh-&gt;QueryObject(), MyOwnData);
-if (mydata)
-{
-  ... (use mydata)
-}
-</pre></td></tr></table>
-<a name="SEC212"></a>
-<h4 class="subsubheading"> Removing Game Data </h4>
-
-<p>To remove your data you can use:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;MyOwnData&gt; mydata =
-  CS_GET_CHILD_OBJECT(mesh-&gt;QueryObject(), MyOwnData);
-if (mydata)
-{
-  mesh-&gt;QueryObject ()-&gt;ObjRemove (mydata);
-}
-</pre></td></tr></table>
-<a name="SEC213"></a>
-<h4 class="subsubheading"> Include Files </h4>
-
-<p>The include files useful for this section are:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iutil/object.h&gt;
-#include &lt;csutil/csobject.h&gt;
-</pre></td></tr></table>
-
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.8.1.html#4.8.1" title="Previous section in reading order"> &lt; </a>]</td>

@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.9.3 Render Priorities and Objects in Sectors</title>
+<title>Crystal Space: 4.9.3 Writing Mesh Objects</title>
 
-<meta name="description" content="Crystal Space: 4.9.3 Render Priorities and Objects in Sectors">
-<meta name="keywords" content="Crystal Space: 4.9.3 Render Priorities and Objects in Sectors">
+<meta name="description" content="Crystal Space: 4.9.3 Writing Mesh Objects">
+<meta name="keywords" content="Crystal Space: 4.9.3 Writing Mesh Objects">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="HOWTO-Render-Priorities"></a>
+<a name="Writing-MeshObjects"></a>
 <a name="4.9.3"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.2.html#4.9.2" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,184 +58,15 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.9.3 Render Priorities and Objects in Sectors </h3>
+<h3 class="subsection"> 4.9.3 Writing Mesh Objects </h3>
 
-<p>Renderpriorities give the map creator some extra control over when objects
-have to be rendered. In this section the basic
-rendering algorithm is explained. This is a more theoretical explanation.
-Later some examples are given of some commonly used configurations.
+<p><em>Written by Jorrit Tyberghein,
+<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
 </p>
-<a name="SEC236"></a>
-<h4 class="subsubheading"> Meshes and Sectors </h4>
-
-<p>One of the most fundamental concepts in Crystal Space is a sector (interface
-<code>iSector</code>). A sector is basically empty
-space which needs to be filled with geometry.
+<p>This section explains how you can write your own Mesh Object plug-in modules.
 </p>
-<p>To put geometry in a sector you use one or more mesh objects
-(see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).  Note that a mesh object can also be in several sectors
-at once.  This happens when some object is busy traversing some portal from one
-sector to another.  The list of sectors that a mesh object is in and also the
-position (i.e. transform) is kept by an instance of <code>iMovable</code>
-(see section <a href="cs_4.10.7.html#4.10.7">Mesh Movement</a>).
+<p><small>NOT YET WRITTEN.</small>
 </p>
-<a name="SEC237"></a>
-<h4 class="subsubheading"> Render Priorities </h4>
-
-<p>The engine supports the notion of render priorities. There is usually
-a limited set of render priority slots available. By default these are:
-</p>
-<ol>
-<li>
-<samp>`init'</samp>
-</li><li>
-<samp>`sky'</samp>
-</li><li>
-<samp>`sky2'</samp>
-</li><li>
-<samp>`portal'</samp>
-</li><li>
-<samp>`wall'</samp>
-</li><li>
-<samp>`wall2'</samp>
-</li><li>
-<samp>`object'</samp>
-</li><li>
-<samp>`object2'</samp>
-</li><li>
-<samp>`transp'</samp>
-</li><li>
-<samp>`alpha'</samp>
-</li><li>
-<samp>`final'</samp>
-</li></ol>
-
-<p>But you can setup your own render priorities by calling the engine
-<small>API</small>. Objects which are in a lower
-render priority (i.e. <samp>`sky'</samp> is lower than <samp>`wall'</samp>) will be rendered
-before objects with a higher priority. So using the render priority system
-you can choose in which order to render objects.
-</p>
-<p>The <samp>`alpha'</samp> render priority is a bit special. Objects in that
-render priority will be rendered from back to front. This is needed for
-objects that use alpha transparency and also if you need a mix of different
-kinds of transparencies. If you use a single other kind of transparency
-like add or mult (but not both) then you can use the <samp>`transp'</samp> render
-priority. That one is not sorted from back to front so it is only usable for
-transparencies that are correct even if rendered in other order.
-</p>
-<p>For keycolor objects (see section <a href="cs_4.12.2.html#4.12.2">Alpha and Keycolor in Textures</a>) you can use the normal
-<samp>`object'</samp> render priority with <samp>`ZUSE'</samp> z-buffer mode. This is also
-true for objects that have textures using binary alpha.
-</p>
-<p>To set up render priorities from within your application you can use
-the <code>engine-&gt;RegisterRenderPriority()</code> function.
-</p>
-<p>To set the render priority for an object you can use the following
-in a map file:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;myObject&quot;&gt;
-  &lt;plugin&gt;...&lt;/plugin&gt;
-  &lt;params&gt;
-    ...
-  &lt;/params&gt;
-  &lt;priority&gt;object&lt;/priority&gt;
-&lt;/meshobj&gt;
-</pre></td></tr></table>
-<p>To set the render priority from within the code you can do:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iMeshWrapper* mesh;
-mesh-&gt;SetRenderPriority (engine-&gt;GetRenderPriority (&quot;object&quot;));
-</pre></td></tr></table>
-<p>By default objects will be put in the <samp>`object'</samp> render queue.
-</p>
-<a name="SEC238"></a>
-<h4 class="subsubheading"> Z-Buffer Render Mode </h4>
-
-<p>In addition to render priorities you can also choose how the object
-will be rendered with regards to the Z-buffer. There are four possibilities:
-</p>
-<ul class="toc">
-<li>
-<samp>`ZUSE'</samp>: use the Z-buffer to see where the object has to be rendered and
-also update the Z-buffer wherever the object is actually rendered.
-</li><li>
-<samp>`ZFILL'</samp>: only update the Z-buffer where the object is rendered but don't
-check against the existing Z-buffer contents.
-</li><li>
-<samp>`ZTEST'</samp>: use the Z-buffer to see where the object has to be rendered
-but don't update the Z-buffer.
-</li><li>
-<samp>`ZNONE'</samp>: don't update or read the Z-buffer when rendering this object.
-</li></ul>
-
-<p>To set the Z-buffer mode from a map file you can do the following:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;myObject&quot;&gt;
-  &lt;plugin&gt;...&lt;/plugin&gt;
-  &lt;params&gt;
-    ...
-  &lt;/params&gt;
-  &lt;priority&gt;object&lt;/priority&gt;
-  &lt;zuse /&gt;
-&lt;/meshobj&gt;
-</pre></td></tr></table>
-<p>To set the Z-buffer mode from the code you can use the following example:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">  iMeshWrapper* mesh;
-  mesh-&gt;SetZBufMode (CS_ZBUF_USE);
-</pre></td></tr></table>
-<p><samp>`ZUSE'</samp> is the default Z-buffer mode for objects created from within
-an application.
-</p>
-<p>By using the z-buffer mode in combination with the render priorities we
-now have a very powerful system to control object rendering in a sector.
-In the following sections we will show some popular examples. But first
-we show in a table what the common usage is of the render priorities in
-combination with the Z-buffer modes:
-</p>
-<ul class="toc">
-<li>
-<samp>`sky'</samp>: This render priority is used for rendering the object that
-represents the sky. This can be a skybox, or a skydome, or something else.
-Usually these objects have <samp>`ZNONE'</samp> or <samp>`ZFILL'</samp> render mode. If
-you want to use <samp>`ZNONE'</samp> you have to make sure that the Z-buffer
-is cleared every frame.
-</li><li>
-<samp>`portal'</samp>: Sometimes portals need to be put here.
-</li><li>
-<samp>`wall'</samp>: Sector walls are put in this queue. They are usually rendered
-using <samp>`ZFILL'</samp>.
-</li><li>
-<samp>`object'</samp>: After sector walls the normal objects are rendered. Usually
-these have <samp>`ZUSE'</samp> Z-buffer mode. You can also use this render priority
-for objects using keycolor transparency.
-</li><li>
-<samp>`transp'</samp>: Non-alpha transparent objects need to be rendered after all other
-objects. The best Z-buffer mode for these kinds of objects is <samp>`ZTEST'</samp>.
-</li><li>
-<samp>`alpha'</samp>: Alpha transparent objects need to be rendered after all other
-objects (and in back to front render mode as seen from the camera). The
-best Z-buffer mode for these kinds of objects is <samp>`ZTEST'</samp>.
-</li></ul>
-
-<p>Note that sky objects are usually created with the <samp>`CAMERA'</samp> keyword
-(in map file) or the <code>CS_ENTITY_CAMERA</code> flag (in
-<code>iMeshWrapper::GetFlags()</code>). The camera keyword makes sure that the
-camera will always be in the center of that object. So you can move forever
-in some direction without ever reaching the bounds of the sky.
-</p>
-<a name="SEC239"></a>
-<h4 class="subsubheading"> Include Files </h4>
-
-<p>The include files useful for this section are:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iengine/mesh.h&gt;
-#include &lt;iengine/sector.h&gt;
-#include &lt;iengine/engine.h&gt;
-#include &lt;ivideo/graph3d.h&gt;
-</pre></td></tr></table>
-
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.2.html#4.9.2" title="Previous section in reading order"> &lt; </a>]</td>
