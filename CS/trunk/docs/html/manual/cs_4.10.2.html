@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.10.2 Using Mesh Objects</title>
+<title>Crystal Space: 4.10.2 Pseudo-dynamic Lights</title>
 
-<meta name="description" content="Crystal Space: 4.10.2 Using Mesh Objects">
-<meta name="keywords" content="Crystal Space: 4.10.2 Using Mesh Objects">
+<meta name="description" content="Crystal Space: 4.10.2 Pseudo-dynamic Lights">
+<meta name="keywords" content="Crystal Space: 4.10.2 Pseudo-dynamic Lights">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Using-MeshObject"></a>
+<a name="HOWTO-Pseudo-DynLight"></a>
 <a name="4.10.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.1.html#4.10.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.10.3.html#4.10.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.html#4.11" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>
@@ -58,208 +58,71 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.10.2 Using Mesh Objects </h3>
+<h3 class="subsection"> 4.10.2 Pseudo-dynamic Lights </h3>
 
-<p><em>Written by Jorrit Tyberghein,
-<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
+<p>One little known feature in CS is the ability to have pseudo-dynamic
+lights. Pseudo-dynamic lights are somewhere between static lights and
+dynamic lights. Static lights cannot move but they generate high quality
+lightmaps. Dynamic lights can move but the quality of lighting is much
+less. Pseudo-dynamic lights are a variant of static lights. They cannot
+move either but they can change intensity and color dynamically. Since
+they also use lightmaps the quality is very good and they have correct
+shadows. Pseudo-dynamic lights are ideal for lights that can be switched
+on/off or possibly even for outside light that you want to turn off (at
+night). Note that the usage of pseudo-dynamic lights adds an additional
+shadow map to every polygon that is touched by that light. So memory
+usage can go up quickly.
 </p>
-<p>This section explains how to use Mesh Objects in general.  It doesn't go into
-detail about the specific Mesh Object Types that Crystal Space supports.
-</p>
-<a name="SEC279"></a>
-<h4 class="subsubheading"> General </h4>
+<a name="SEC413"></a>
+<h4 class="subsubheading"> Creating a Pseudo-Dynamic Light </h4>
 
-<p>When the engine works with instances of Mesh Objects it does so through the
-<samp>`iMeshWrapper'</samp> interface.  <samp>`iMeshWrapper'</samp> holds the reference to the
-<samp>`iMeshObject'</samp> instances implementing the particular type of Mesh Object.
-<samp>`iMeshWrapper'</samp> is responsible for deciding when to draw a Mesh Object and
-when to light it.  <samp>`iMeshWrapper'</samp> also manages the position of the object
-in the world and manages possible hierarchical transformations (i.e.
-<samp>`iMeshWrapper'</samp> has an array of <samp>`iMeshWrapper'</samp> children).
+<p>To specify a pseudo-dynamic light in a map file you use the following
+syntax:
 </p>
-<a name="SEC280"></a>
-<h4 class="subsubheading"> Loading From Map File </h4>
-
-<p>The easiest way to use Mesh Objects is to simply specify them in the map file
-for your level.  There are two things that you need to do for that.  First you
-have to specify an entry at top-level (directly inside the <samp>`world'</samp>
-statement) like this (this example uses the <em>fountain</em> plug-in to make a
-fountain):
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;fountainFactory&quot;&gt;
-  &lt;plugin&gt;crystalspace.mesh.loader.factory.fountain&lt;/plugin&gt;
-  &lt;params /&gt;
-&lt;/meshfact&gt;
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;light name=&quot;DynLight&quot;&gt;
+  &lt;center x=&quot;23&quot; y=&quot;1&quot; z=&quot;5&quot;/&gt;
+  &lt;radius&gt;10&lt;/radius&gt;
+  &lt;color red=&quot;1&quot; green=&quot;0&quot; blue=&quot;0&quot;/&gt;
+  &lt;dynamic /&gt;
+&lt;light&gt;
 </pre></td></tr></table>
-<p>This will use the <em>mesh object loader</em> plug-in which is identified by the
-<small>SCF</small> name mentioned by the <samp>`plugin'</samp> statement to load a factory
-(type <samp>`iMeshObjectFactory'</samp>) and register it with the engine.  There are no
-parameters for the fountain's Mesh Object Factory so that's why the
-<samp>`params'</samp> block is empty.  But you still have to specify it.  Other mesh
-object factories may accept parameters.
+<p>In other words, the syntax is the same as for a normal light except for
+the <samp>`dynamic'</samp> keyword. Note that lights usually don't have a name
+but for a pseudo-dynamic light it is convenient to have one since you can
+use that name to find the light later (which is essential if you want to
+change the color/intensity).
 </p>
-<p>Because the fountain defines no parameters for the Mesh Object Factory
-you only have to create one factory in order to make all fountains you need.
-But in some cases you may have to create multiple factories depending
-on the object characteristics you want.
+<p>To create a pseudo-dynamic light from within an application you can
+use the following code:
 </p>
-<p>To place a fountain in some room (sector) you use a <samp>`meshobj'</samp>
-statement, within the definition of a room or sector, like this:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;fountain&quot;&gt;
-  &lt;plugin&gt;crystalspace.mesh.loader.fountain&lt;/plugin&gt;
-  &lt;params&gt;
-    &lt;factory&gt;fountainFactory&lt;/factory&gt;
-    &lt;number&gt;300&lt;/number&gt;
-    &lt;material&gt;spark&lt;/material&gt;
-    &lt;origin x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot;/&gt;
-    &lt;dropsize w=&quot;.05&quot; h=&quot;.05&quot;/&gt;
-    &lt;color red=&quot;0.7&quot; green=&quot;0.9&quot; blue=&quot;1.0&quot;/&gt;
-    &lt;accel x=&quot;0&quot; y=&quot;-.1&quot; z=&quot;0&quot;/&gt;
-    &lt;falltime&gt;3&lt;/falltime&gt;
-    &lt;speed&gt;1&lt;/speed&gt;
-    &lt;elevation&gt;1.5&lt;/elevation&gt;
-    &lt;azimuth&gt;0&lt;/azimuth&gt;
-    &lt;opening&gt;.2&lt;/opening&gt;
-    &lt;mixmode&gt;
-      &lt;add /&gt;
-    &lt;/mixmode&gt;
-  &lt;/params&gt;
-  &lt;move&gt;
-    &lt;v x=&quot;-10&quot; y=&quot;-1&quot; z=&quot;14&quot;/&gt;
-    &lt;matrix&gt;
-      &lt;rot x=&quot;1.5&quot;/&gt;
-    &lt;/matrix&gt;
-  &lt;/move&gt;
-&lt;/meshobj&gt;
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iLight&gt; light = engine-&gt;CreateLight (&quot;DynLight&quot;,
+  csVector3 (23, 1, 5), 10, csColor (1, 0, 0), true);
+sector-&gt;GetLights ()-&gt;AddLight (light);
 </pre></td></tr></table>
-<p>This code fragment uses the <samp>`crystalspace.mesh.loader.fountain'</samp> loader
-plug-in named to load a Mesh Object (type
-<samp>`iMeshObject'</samp>) and register it with the engine (while placing it in the
-current sector).  In this case there are many parameters.  The first parameter
-should always be the name of the factory.  This is true for all Mesh Objects
-regardless of their type.  For a complete list of parameters available, you
-should refer to the fountain documentation.
+<p>This will create exactly the same light as the one specified above.
 </p>
-<p>The <samp>`move'</samp> statement is outside of the <samp>`params'</samp> block.  The reason
-for this is that the position of Mesh Objects is controlled by the engine and
-not by the Mesh Object itself.
+<p>At some point you may want to change the color of the light. You can
+do this with the following code:
 </p>
-<p>In addition to the above statements you can also nest other <samp>`meshobj'</samp>
-statements to create a hierarchy of Mesh Objects (not shown in the example
-above).  If you do that, then the <samp>`move'</samp> statement must be interpreted
-relative to the parent.
-</p>
-<p>When you have Mesh Objects loaded into Crystal Space using the map file syntax
-illustrated above, then you can query the parameters from your application by
-using the standard <small>API</small> in the <samp>`iEngine'</samp> interface.
-</p>
-<a name="SEC281"></a>
-<h4 class="subsubheading"> Using Directly From Code </h4>
-
-<p>You can also create Mesh Objects directly from your application. The engine
-has a few conveniance functions you can use for that
-(<code>iEngine::CreateMeshwrapper()</code> and <code>iEngine::CreateMeshFactory()</code>).
-But here we show you the full way to create meshes from code:
-</p>
-<ul>
-<li>
-Load the Mesh Object Type with <code>csLoadPlugin</code> (preferably after
-checking if it is already loaded, by calling <code>csQueryPluginClass</code>).
-
-</li><li>
-Create at least one Mesh Object Factory by calling <code>NewFactory()</code> on the
-Mesh Object Type instance.
-
-</li><li>
-If the factory has parameters you can call <code>scfQueryInterface</code> to get a
-handle to the <samp>`iSomethingFactoryState'</samp> interface (replace <em>Something</em>
-with whatever the type name of the Mesh Object is).  Then you set the
-parameters you want on that factory.
-
-</li><li>
-Create one or more Mesh Object instances by using one of your factories and
-calling <code>NewInstance()</code> on them.
-
-</li><li>
-If the object has parameters you use <code>scfQueryInterface</code> to get a handle
-to the <samp>`iSomethingState'</samp> interface (replace <em>Something</em> with whatever
-the type name of the Mesh Object is).  Then set the parameters you want on the
-Mesh Object.  Note that there are Mesh Object implementations which have
-multiple interfaces like this (for example, the particle systems implement both
-<samp>`iParticleState'</samp> plus another particle system-dependent interface).
-
-</li><li>
-For every instance of <samp>`iMeshObject'</samp> you need to create a
-<samp>`iMeshWrapper'</samp> instance for the engine.  Then you set up the
-<samp>`iMeshWrapper'</samp> by placing it in the sector that you want it and setup its
-position and rotation (transformation).
-</li></ul>
-
-<p>Here is a code example for creating an instance of the genmesh plug-in.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Initialize ()
-{
-  ...
-  // First create the factory:
-  csRef&lt;iMeshFactoryWrapper&gt; fact = engine-&gt;CreateMeshFactory (
-    &quot;crystalspace.mesh.object.genmesh&quot;, &quot;cubeFact&quot;);
-  csRef&lt;iGeneralFactoryState&gt; factstate = scfQueryInterface&lt;iGeneralFactoryState&gt; (
-    fact-&gt;GetMeshObjectFactory ());
-
-  csEllipsoid ellips (csVector3 (0, 0, 0), csVector3 (1, 1, 1));
-  factstate-&gt;GenerateSphere (ellips, 8);
-  factstate-&gt;CalculateNormals ();
-  ...
-}
-...
-void SetupWorld ()
-{
-  ...
-  // Make a ball using the genmesh plug-in.
-  csRef&lt;iMeshWrapper&gt; ball =
-    engine-&gt;CreateMeshWrapper (fact, &quot;ball&quot;, room, csVector3 (-3, 5, -3));
-  csRef&lt;iGeneralMeshState&gt; ballstate = scfQueryInterface&lt;iGeneralMeshState&gt; (
-    ball-&gt;GetMeshObject ());
-  ballstate-&gt;SetMaterialWrapper (myMaterial);
-  ...
-}
+<table><tr><td>&nbsp;</td><td><pre class="example">light-&gt;SetColor (csColor (0, 0, 1));
 </pre></td></tr></table>
-<p>This example will load a ball using the plug-in and place it at (-3,5,-3) in
-<samp>`room'</samp>.
+<p>This will change the color of the light from red to blue.
 </p>
-<p><code>iGeneralFactoryState</code> and <code>iGeneralMeshState</code> are the state
-interfaces for setting the characteristics of genmesh Mesh Objects.
-</p>
-<p><a name="Generic-Mesh-Creation-Code"></a>
-</p><a name="SEC282"></a>
-<h4 class="subsubheading"> Generic Mesh Creation Code </h4>
+<a name="SEC414"></a>
+<h4 class="subsubheading"> Include Files </h4>
 
-<p>In general you should use the following code to create any kind of mesh:
+<p>The include files useful for this section are:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">  // First create the factory:
-  csRef&lt;iMeshFactoryWrapper&gt; fact = engine-&gt;CreateMeshFactory (
-	&quot;crystalspace.mesh.object.meshtype&quot;, &quot;factoryName&quot;);
-  csRef&lt;iMeshtypeFactoryState&gt; factstate = scfQueryInterface&lt;
-  	iMeshtypeFactoryState&gt; (fact-&gt;GetMeshObjectFactory ());
-  ...
-  // Then make one or more meshes:
-  csRef&lt;iMeshWrapper&gt; mesh = engine-&gt;CreateMeshWrapper (
-  	fact, &quot;meshName&quot;, sector, csVector3 (-3, 5, -3));
-  csRef&lt;iMeshtypeObjectState&gt; meshstate = scfQueryInterface&lt;
-  	iMeshtypeObjectState&gt; (mesh-&gt;GetMeshObject ());
-  ...
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iengine/light.h&gt;
+#include &lt;iengine/sector.h&gt;
+#include &lt;iengine/engine.h&gt;
 </pre></td></tr></table>
-<p>Replace <samp>`meshtype'</samp> with the correct mesh type (like <samp>`genmesh'</samp>,
-<samp>`thing'</samp>, <small class="dots">...</small>). Replace <code>iMeshtypeFactoryState</code> with the
-correct factory state and <code>iMeshtypeObjectState</code> with the correct
-object state.
-</p>
+
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.10.1.html#4.10.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.10.3.html#4.10.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.html#4.11" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Up section"> Up </a>]</td>

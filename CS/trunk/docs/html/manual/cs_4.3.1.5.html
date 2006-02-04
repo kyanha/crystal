@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.3.1.5 Locomotion (Moving Around)</title>
+<title>Crystal Space: 4.3.1.5 Client Side</title>
 
-<meta name="description" content="Crystal Space: 4.3.1.5 Locomotion (Moving Around)">
-<meta name="keywords" content="Crystal Space: 4.3.1.5 Locomotion (Moving Around)">
+<meta name="description" content="Crystal Space: 4.3.1.5 Client Side">
+<meta name="keywords" content="Crystal Space: 4.3.1.5 Client Side">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Simple-Locomotion"></a>
+<a name="SCF-Client"></a>
 <a name="4.3.1.5"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.4.html#4.3.1.4" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.3.2.html#4.3.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.3.1.6.html#4.3.1.6" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.3.1.html#4.3.1" title="Up section"> Up </a>]</td>
@@ -58,87 +58,56 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.3.1.5 Locomotion (Moving Around) </h4>
+<h4 class="subsubsection"> 4.3.1.5 Client Side </h4>
 
-<p>Staring at that solid wall gets a bit boring after some time.  The problem is
-that we can't move the camera to change our view point.  Let's add some code
-to do exactly this.  Edit <tt>`simple.cpp'</tt> again and change
-<tt>`ProcessFrame()'</tt> as follows:
+<p>Now let's explain how to use all this mess from client side.  First, we should
+be able to create objects that implement the interfaces we want.  For this, you
+should use the <code>SCF_CREATE_INSTANCE()</code> macro.  It receives two arguments:
+the name of external class, and the name of the interface it implements.  So,
+if we know class <samp>`MyGraphics3D'</samp> implements the <samp>`iGraphics3D'</samp>
+interface, we can write:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Simple::ProcessFrame ()
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iGraphics3D&gt; G3D =
+  SCF_CREATE_INSTANCE(&quot;MyGraphics3D&quot;, iGraphics3D);
+if (!G3D)
 {
-  // First get elapsed time from the virtual clock.
-  csTicks elapsed_time = vc-&gt;GetElapsedTicks ();
-
-  // Now rotate the camera according to keyboard state
-  float speed = (elapsed_time / 1000.0) * (0.03 * 20);
-
-  iCamera* c = view-&gt;GetCamera();
-  if (kbd-&gt;GetKeyState (CSKEY_SHIFT))
-  {
-    // If the user is holding down shift, the arrow keys will cause
-    // the camera to strafe up, down, left or right from it's
-    // current position.
-    if (kbd-&gt;GetKeyState (CSKEY_RIGHT))
-      c-&gt;Move (CS_VEC_RIGHT * 4 * speed);
-    if (kbd-&gt;GetKeyState (CSKEY_LEFT))
-      c-&gt;Move (CS_VEC_LEFT * 4 * speed);
-    if (kbd-&gt;GetKeyState (CSKEY_UP))
-      c-&gt;Move (CS_VEC_UP * 4 * speed);
-    if (kbd-&gt;GetKeyState (CSKEY_DOWN))
-      c-&gt;Move (CS_VEC_DOWN * 4 * speed);
-  }
-  else
-  {
-    // left and right cause the camera to rotate on the global Y
-    // axis; page up and page down cause the camera to rotate on the
-    // _camera's_ X axis (more on this in a second) and up and down
-    // arrows cause the camera to go forwards and backwards.
-    if (kbd-&gt;GetKeyState (CSKEY_RIGHT))
-      rotY += speed;
-    if (kbd-&gt;GetKeyState (CSKEY_LEFT))
-      rotY -= speed;
-    if (kbd-&gt;GetKeyState (CSKEY_PGUP))
-      rotX += speed;
-    if (kbd-&gt;GetKeyState (CSKEY_PGDN))
-      rotX -= speed;
-    if (kbd-&gt;GetKeyState (CSKEY_UP))
-      c-&gt;Move (CS_VEC_FORWARD * 4 * speed);
-    if (kbd-&gt;GetKeyState (CSKEY_DOWN))
-      c-&gt;Move (CS_VEC_BACKWARD * 4 * speed);
-  }
-
-  // We now assign a new rotation transformation to the camera.  You
-  // can think of the rotation this way: starting from the zero
-  // position, you first rotate &quot;rotY&quot; radians on your Y axis to get
-  // the first rotation.  From there you rotate &quot;rotX&quot; radians on the
-  // your X axis to get the final rotation.  We multiply the
-  // individual rotations on each axis together to get a single
-  // rotation matrix.  The rotations are applied in right to left
-  // order .
-  csMatrix3 rot = csXRotMatrix3 (rotX) * csYRotMatrix3 (rotY);
-  csOrthoTransform ot (rot, c-&gt;GetTransform().GetOrigin ());
-  c-&gt;SetTransform (ot);
-
-  ...
+  fprintf(stderr,
+    &quot;Failed to create an instance of iGraphics3D!\n&quot;);
+  abort();
 }
 </pre></td></tr></table>
-<p>With this change, you can rotate the camera with the left
-and right arrow keys and move forward and backward with the up and down arrow
-keys.  Try it out to see the effect.  To rotate the camera we use
-<code>SetTransform()</code> which expects a transformation matrix.
+<p>Now you can use the object any way you like, just like standard C++:
 </p>
-<p>That's it for now.  In this tutorial you learned how to set up the Crystal
-Space system for use, how to create a simple room with some lights, how to
-respond to events, and how to handle some basic camera operations.
+<table><tr><td>&nbsp;</td><td><pre class="example">G3D-&gt;BeginDraw();
+G3D-&gt;DrawLine(...);
+G3D-&gt;DrawPolygon(...);
+G3D-&gt;EndDraw();
+</pre></td></tr></table>
+<p>When you are done using the <samp>`G3D'</samp> pointer (say, when program exits), the
+reference you own for the object should be released.  This happens
+automatically when the <code>csRef&lt;&gt;</code> goes out of scope.  If you are not using
+<code>csRef&lt;&gt;</code>, but are instead using a plain pointer, <samp>`iGraphics3D*'</samp>,
+then you must manually release the reference when you are done with it by
+calling <code>G3D-&gt;DecRef()</code>.  After this you can not use <samp>`G3D'</samp> anymore;
+you should create another instance of <samp>`iGraphics3D'</samp> if needed.
 </p>
-<p>You can now go on to the next tutorial (see section <a href="cs_4.3.2.html#4.3.2">Simple Tutorial 2: Sprites</a>)) to learn
-how to add a 3D sprite to this application.
+<p>To query an object to see if it implements an interface, you should use the
+<code>scfQueryInterface</code> macro. It also receives two arguments, first being
+the object you are querying for the embedded interface, and second being the
+name of the interface you desire. Example:
 </p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iHalo&gt; halo = scfQueryInterface&lt;iHalo&gt; (G3D);
+if (!halo)
+{
+  fprintf(stderr,
+    &quot;3D graphic driver doesn't support halos!\n&quot;);
+  return;
+}
+</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.4.html#4.3.1.4" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.3.2.html#4.3.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.3.1.6.html#4.3.1.6" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.3.1.html#4.3.1" title="Up section"> Up </a>]</td>

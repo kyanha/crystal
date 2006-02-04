@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.13.2 Drawing Text</title>
+<title>Crystal Space: 4.13.2 Physics using ODE</title>
 
-<meta name="description" content="Crystal Space: 4.13.2 Drawing Text">
-<meta name="keywords" content="Crystal Space: 4.13.2 Drawing Text">
+<meta name="description" content="Crystal Space: 4.13.2 Physics using ODE">
+<meta name="keywords" content="Crystal Space: 4.13.2 Physics using ODE">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="HOWTO-Draw-Text"></a>
+<a name="Physics-ODE"></a>
 <a name="4.13.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.13.1.html#4.13.1" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,35 +58,57 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.13.2 Drawing Text </h3>
+<h3 class="subsection"> 4.13.2 Physics using ODE </h3>
 
-<p>This section describes how to draw text.
+<p>The <samp>`odedynam'</samp> plugin implements physics for Crystal Space using
+the <small>ODE</small> library.
 </p>
-<a name="SEC431"></a>
-<h4 class="subsubheading"> Loading a Font </h4>
+<a name="SEC457"></a>
+<h4 class="subsubheading"> Doing the Timed Physics Simulation </h4>
 
-<p>Before you can use text you need a font first. Typically you load a font
-in an initialization routine. Here is an example:
+<p>To make sure the physics simulation proceeds correctly in time you must
+tell <small>ODE</small> how much time has elapsed since previous frame so that
+it can calculate the collisions and physical interactions that happened
+during that time. The <code>iDynamics-&gt;Step()</code> function is responsable for
+that. As a parameter it has a delta which is a floating point number that
+represents the number of seconds to calculate. You should not make this
+number too big because that will make the calculations less accurate. A
+good number for accurate calculation is around <samp>`0.01'</samp>. <samp>`0.02'</samp>
+is also good and makes calculations a bit faster. However, what should you
+do if the elapsed number of seconds is bigger then that number? In that
+case you should divide the elapsed time with the delta and perform that
+number of steps one by one. It is also very important to make sure that
+the delta you pass to the <code>Step()</code> function is constant. If this
+number is variable then <small>ODE</small> will not behave well and you get stability
+errors. Here below I present a possible code snipped that will ensure
+that the delta is constant and also makes sure that no time is lost so
+that the speed of physics simulation is constant even with variable
+framerate:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iGraphics2D* g2d = ...;
-iFontServer* fontserver = g2d-&gt;GetFontServer ();
-iFont* font = fontserver-&gt;LoadFont (CSFONT_COURIER);
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iVirtualClock&gt; vc = ...;
+csRef&lt;iDynamics&gt; dynamics = ...;
+float delta = 0.01f;
+float remaining_seconds = 0.0f;
+...
+void ProcessPhysicsEveryFrame ()
+{
+  csTicks elapsed_time = vc-&gt;GetElapsedTicks ();
+  float seconds = float (elapsed_time) / 1000.0f;
+  seconds += remaining_seconds;
+  while (seconds &gt;= delta)
+  {
+    ProcessForces (delta);
+    dynamics-&gt;Step (delta);
+    seconds -= delta;
+  }
+  remaining_seconds = seconds;
+}
 </pre></td></tr></table>
-<p>A number of fonts are available for use. See section <a href="cs_4.13.1.html#4.13.1">Using a Custom Font</a>.
+<p>This snippet of code will make sure that <code>Step</code> is only called with
+a constant delta. If there is a small time left after the loop (less then
+delta) then that will be remembered (in <samp>`remaining_seconds'</samp>) for the next
+frame.
 </p>
-<a name="SEC432"></a>
-<h4 class="subsubheading"> Actually Drawing the Text </h4>
-
-<p>To draw the text you must first make sure you are in 2D mode. Here is
-how it would work (this code could be put after the call to let the engine
-draw (<code>view-&gt;Draw()</code>):
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">g3d-&gt;BeginDraw (CSDRAW_2DGRAPHICS);
-int fg = g2d-&gt;FindRGB (255, 0, 0);  // Red.
-int bg = -1;   // Transparent.
-g2d-&gt;Write (font, x, y, fg, bg, &quot;This is text&quot;);
-</pre></td></tr></table>
-
 
 
 

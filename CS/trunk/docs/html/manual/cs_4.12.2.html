@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.12.2 Alpha and Keycolor in Textures</title>
+<title>Crystal Space: 4.12.2 Drawing Text</title>
 
-<meta name="description" content="Crystal Space: 4.12.2 Alpha and Keycolor in Textures">
-<meta name="keywords" content="Crystal Space: 4.12.2 Alpha and Keycolor in Textures">
+<meta name="description" content="Crystal Space: 4.12.2 Drawing Text">
+<meta name="keywords" content="Crystal Space: 4.12.2 Drawing Text">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Alpha-Textures"></a>
+<a name="HOWTO-Draw-Text"></a>
 <a name="4.12.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.12.1.html#4.12.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.12.3.html#4.12.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.13.html#4.13" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.12.html#4.12" title="Up section"> Up </a>]</td>
@@ -58,63 +58,42 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.12.2 Alpha and Keycolor in Textures </h3>
+<h3 class="subsection"> 4.12.2 Drawing Text </h3>
 
-<p>Crystal Space supports the alpha channel that can be present in some image
-files (like <small>PNG</small> and <small>TGA</small>).
+<p>This section describes how to draw text.
 </p>
-<p>It is important to realize that when you use alpha on an object you must
-sort the object back to front. That basically means you'll most likely have
-to use the <samp>`alpha'</samp> render priority (see section <a href="cs_4.9.3.html#4.9.3">Render Priorities and Objects in Sectors</a>) and
-also <samp>`ztest'</samp> for the Z-buffer usage. Also in some cases you may need
-to set the <samp>`back2front'</samp> flag if the object is a genmesh
-(see section <a href="cs_4.10.8.html#4.10.8">Genmesh Mesh Object</a>).
+<a name="SEC441"></a>
+<h4 class="subsubheading"> Loading a Font </h4>
+
+<p>Before you can use text you need a font first. Typically you load a font
+in an initialization routine. Here is an example:
 </p>
-<p>It is often hard to get things correct with such a setup so in many cases
-it is preferable to use a method named <em>binary alpha</em>. This means that
-a pixel is either treated as <em>fully opaque</em> or <em>fully transparent</em> -
-the former for alpha values greater than 50%, the latter for alpha values
-lower than 50%. In practice, it is probably desireable to only use 0% and 
-100% transparency values in the alpha channel. Also, the transparent area(s)
-should be filled with a color that is similar to its adjacent opaque pixels, 
-as, due texture filtering, this color will slightly bleed into the neighboring
-opaque pixels. Choosing an approriate color makes this bleeding non-obvious.
-</p>
-<p>The easiest way to activate binary alpha is to mark the texture as follows in 
-your world file:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;texture name=&quot;transparent&quot;&gt;
-    &lt;file&gt;mytexture.png&lt;/file&gt;
-    &lt;alpha&gt;&lt;binary/&gt;&lt;/alpha&gt;
-&lt;/texture&gt;
+<table><tr><td>&nbsp;</td><td><pre class="example">iGraphics2D* g2d = ...;
+iFontServer* fontserver = g2d-&gt;GetFontServer ();
+iFont* font = fontserver-&gt;LoadFont (CSFONT_COURIER);
 </pre></td></tr></table>
-<p>If you do this then this texture can be used on objects as any other texture.
-So the object can simply use <samp>`object'</samp> render priority and <samp>`zuse'</samp>
-Z-buffer mode.
+<p>A number of fonts are available for use. See section <a href="cs_4.12.1.html#4.12.1">Using a Custom Font</a>.
 </p>
-<p>An alternative way to enable binary alpha is by using a <em>keycolor</em> for the
-texture; that is, all pixels of the specified color (in the example magenta)
-will be rendered transparent.
+<a name="SEC442"></a>
+<h4 class="subsubheading"> Actually Drawing the Text </h4>
+
+<p>To draw the text you must first make sure you are in 2D mode. Here is
+how it would work (this code could be put after the call to let the engine
+draw (<code>view-&gt;Draw()</code>):
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;texture name=&quot;transparent&quot;&gt;
-    &lt;file&gt;mytexture.png&lt;/file&gt;
-    &lt;transparent r=&quot;1&quot; g=&quot;0&quot; b=&quot;1&quot; /&gt;
-&lt;/texture&gt;
+<table><tr><td>&nbsp;</td><td><pre class="example">g3d-&gt;BeginDraw (CSDRAW_2DGRAPHICS);
+int fg = g2d-&gt;FindRGB (255, 0, 0);  // Red.
+int bg = -1;   // Transparent.
+g2d-&gt;Write (font, x, y, fg, bg, &quot;This is text&quot;);
 </pre></td></tr></table>
-<p>However, using this technique is discouraged as it is less performant than the 
-using binary alpha as described above; specifically, when loading a texture
-with a keycolor, CrystalSpace will scan the image for pixels of that color and
-set their alpha value to 0. Internally, binary alpha and keycolor work in the 
-same way (transparency of a pixel is based on whether the alpha value is 
-above or below 50%), however, keycolored textures come with a load-time 
-performance penalty due to the required processing step.
-</p>
+
+
 
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.12.1.html#4.12.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.12.3.html#4.12.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.13.html#4.13" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.12.html#4.12" title="Up section"> Up </a>]</td>

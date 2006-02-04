@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.9.4 Portal Engine</title>
+<title>Crystal Space: 4.9.4 Creating a Thing Mesh</title>
 
-<meta name="description" content="Crystal Space: 4.9.4 Portal Engine">
-<meta name="keywords" content="Crystal Space: 4.9.4 Portal Engine">
+<meta name="description" content="Crystal Space: 4.9.4 Creating a Thing Mesh">
+<meta name="keywords" content="Crystal Space: 4.9.4 Creating a Thing Mesh">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Portal-Engine"></a>
+<a name="HOWTO-Create-Thing"></a>
 <a name="4.9.4"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.3.html#4.9.3" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,203 +58,125 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.9.4 Portal Engine </h3>
+<h3 class="subsection"> 4.9.4 Creating a Thing Mesh </h3>
 
+<p>This section describes how to create a thing mesh.
+</p>
+<a name="SEC295"></a>
+<h4 class="subsubheading"> What are Things? </h4>
 
-<p><em>Written by Jorrit Tyberghein,
-<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
+<p>A <samp>`thing'</samp> mesh object (see section <a href="cs_4.9.9.html#4.9.9">Thing Mesh Object</a>) is an object made
+out of polygons. Every polygon can have another material and the polygons
+can have three or more vertices. A thing uses lightmapping
+for lighting (roughly this means that every polygon gets another texture
+which contains light and shadow information for that polygon).
 </p>
-<p>The world in Crystal Space is defined with <em>Sectors</em>. A sector is
-an infinite area of space that itself does not represent geometry but can
-contain objects that represent geometry. There are various types of
-objects that you can put in a sector (see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).
+<p>Things are useful for static geometry objects or objects that don't animate.
+You can use it for walls, floor, staircases, and even doors that open. As
+long as the object itself doesn't have to animate (but just moves) a thing
+is perfectly fine. For very high detail objects it is probably better to
+use the <samp>`genmesh'</samp> mesh object (see section <a href="cs_4.9.8.html#4.9.8">Genmesh Mesh Object</a> instead. Also
+if you want to use internal animation (like an actor or a creature in your
+game) you should use the <samp>`sprite3d'</samp> mesh object (see section <a href="cs_4.9.13.html#4.9.13">Sprite3D Mesh Object</a>).
 </p>
-<p>A sector is in principle an infinite area of space. But usually the
-sector has logical bounds which are made from some mesh object. In this
-discussion we will use the thing mesh object to make sector boundaries.
+<p>Things can share geometry if they are made from the same factory. Note that
+information like lightmaps is not shared because a lightmap is position
+dependent (i.e. the amount of light a polygon receives depends on where the
+object instance actually is).
 </p>
-<p>You can define multiple sectors and connect them together by using
-portals in a portal container (see section <a href="cs_4.10.11.html#4.10.11">Portal Container Mesh Object</a>).
+<p>Note that you can hardtransform things (hardmove in maps). If you do this
+on a mesh object instance then the factory will be cloned if it is used
+by multiple mesh objects. That's because hardtransform essentially modifies
+the original geometry and the geometry of a thing is always in the factory.
+So beware of this because it may mean a lot of extra memory usage if you
+hardtransform every instance created from a factory.
 </p>
-<p>Assume that you want to define a large room with a pillar in the middle of the
-room.  You can do this two ways; either with four sectors, or with one sector.
-First let us define it with four sectors.
+<p>Note that individual polygons can have names. This can be useful for debugging
+and also for attaching specific game features to some polygons (like indicating
+if some polygon is a light switch button or something) but be aware that these
+names add some memory overhead.
 </p>
+<a name="SEC296"></a>
+<h4 class="subsubheading"> Creating a Thing in a Map </h4>
 
-<p>As seen from above, the sectors would look something like this:
+<p>Here is an example of how to create a cube thing in a map file. Note that
+in this example we avoid the use of a factory. We load a mesh object directly.
+A factory will be created invisibly to support the thing geometry:
 </p>
-<p><img src="usingcs/engine/portal1.png" alt="usingcs/engine/portal1">
-</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;cube&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.thing&lt;/plugin&gt;
+  &lt;params&gt;
+    &lt;v x=&quot;-0.5&quot; y=&quot;-0.5&quot; z=&quot;-0.5&quot; /&gt;
+    &lt;v x=&quot;-0.5&quot; y=&quot;-0.5&quot; z=&quot;0.5&quot; /&gt;
+    &lt;v x=&quot;-0.5&quot; y=&quot;0.5&quot; z=&quot;-0.5&quot; /&gt;
+    &lt;v x=&quot;-0.5&quot; y=&quot;0.5&quot; z=&quot;0.5&quot; /&gt;
+    &lt;v x=&quot;0.5&quot; y=&quot;-0.5&quot; z=&quot;-0.5&quot; /&gt;
+    &lt;v x=&quot;0.5&quot; y=&quot;-0.5&quot; z=&quot;0.5&quot; /&gt;
+    &lt;v x=&quot;0.5&quot; y=&quot;0.5&quot; z=&quot;-0.5&quot; /&gt;
+    &lt;v x=&quot;0.5&quot; y=&quot;0.5&quot; z=&quot;0.5&quot; /&gt;
 
-<p>Sector S1 is composed of eight polygons (including the top and bottom polygon
-for its roof and floor, as well as the three polygons at the east side).  The
-two polygons adjacent to sectors S2 and S4 are portals to the respective
-sectors.  All the other polygons are texture mapped as normal.
+    &lt;material&gt;upMaterial&lt;/material&gt;
+    &lt;p name=&quot;up&quot;&gt;
+      &lt;v&gt;3&lt;/v&gt; &lt;v&gt;7&lt;/v&gt; &lt;v&gt;6&lt;/v&gt; &lt;v&gt;2&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;material&gt;otherMaterial&lt;/material&gt;
+    &lt;p name=&quot;north&quot;&gt;
+      &lt;v&gt;1&lt;/v&gt; &lt;v&gt;5&lt;/v&gt; &lt;v&gt;7&lt;/v&gt; &lt;v&gt;3&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;p name=&quot;east&quot;&gt;
+      &lt;v&gt;5&lt;/v&gt; &lt;v&gt;4&lt;/v&gt; &lt;v&gt;6&lt;/v&gt; &lt;v&gt;7&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;p name=&quot;south&quot;&gt;
+      &lt;v&gt;4&lt;/v&gt; &lt;v&gt;0&lt;/v&gt; &lt;v&gt;2&lt;/v&gt; &lt;v&gt;6&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;p name=&quot;west&quot;&gt;
+      &lt;v&gt;0&lt;/v&gt; &lt;v&gt;1&lt;/v&gt; &lt;v&gt;3&lt;/v&gt; &lt;v&gt;2&lt;/v&gt;
+    &lt;/p&gt;
+    &lt;p name=&quot;down&quot;&gt;
+      &lt;v&gt;0&lt;/v&gt; &lt;v&gt;4&lt;/v&gt; &lt;v&gt;5&lt;/v&gt; &lt;v&gt;1&lt;/v&gt;
+    &lt;/p&gt;
+  &lt;/params&gt;
+  &lt;move&gt;
+    &lt;v x=&quot;1&quot; y=&quot;0&quot; z=&quot;3&quot; /&gt;
+  &lt;/move&gt;
+&lt;/meshobj&gt;
+</pre></td></tr></table>
+<p>There is a lot more you can do in a thing. For example you can specify
+exactly how you want to map the texture on the polygons.
+In this particular example we create a cube that
+has another material for the upper polygon.
 </p>
+<a name="SEC297"></a>
+<h4 class="subsubheading"> Creating a Thing from Code </h4>
 
-<p>Sectors S2 and S4 have six polygons each.  Their west polygons are again
-portals to sector S1.  Their east polygons are portals to sector S3.
+<p>Here we create the same thing from code. We use a convenience function in
+the engine to create a thing (<code>CreateThingMesh</code>).
 </p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iMaterialWrapper* upMaterial = ...
+iMaterialWrapper* otherMaterial = ...
+csRef&lt;iMeshWrapper&gt; walls = engine-&gt;CreateThingMesh (room, &quot;cube&quot;));
+csRef&lt;iThingState&gt; ws =
+  scfQueryInterface&lt;iThingState&gt; (walls-&gt;GetMeshObject ());
+csRef&lt;iThingFactoryState&gt; walls_state = ws-&gt;GetFactory ();
+walls_state-&gt;AddQuad (
+  csVector3 (-.5, .5, -.5),
+  csVector3 (.5, .5, -.5),
+  csVector3 (.5, .5, .5),
+  csVector3 (-.5, .5, .5));
+walls_state-&gt;SetPolygonMaterial (CS_POLYRANGE_LAST, upMaterial);
+walls_state-&gt;SetPolygonTextureMapping (CS_POLYRANGE_LAST, 3);
+...
+</pre></td></tr></table>
+<p>This is only an extract of the example but you can easily see how to create
+additional polygons here.
+</p>
+<a name="SEC298"></a>
+<h4 class="subsubheading"> Include Files </h4>
 
-<p>Sector S3 is defined as is sector S1.
+<p>The include files useful for this section are:
 </p>
-<p>Another way to define this room using just the same four sectors could be done
-as follows:
-</p>
-<p><img src="usingcs/engine/portal2.png" alt="usingcs/engine/portal2">
-</p>
-
-<p>To the person standing in this room this makes no difference at all.
-</p>
-<p>There are many other ways to define this room using the four sectors.  One
-important thing to note is that four is the minimum number of Sectors that you
-need to define this room if you want to render the polygons using Z-fill
-mode (this means that the Z-buffer is updated but not tested). If you want
-to be able to render using Z-fill mode a sector has to be <em>convex</em>.
-</p>
-<p>An easier way to define this room is by using only one Sector and one Thing
-to define the pillar, as shown below.
-</p>
-<p><img src="usingcs/engine/thing.png" alt="usingcs/engine/thing">
-</p>
-<p>Again this makes no difference for the person standing in this room. For a
-simple situation like this you should avoid the overhead of portals as 3D
-hardware is fast enough to just render everything anyway. Portals are mainly
-useful when you are creating complicated and large worlds. For example, if you
-have a large outside world with buildings then you could model the outside
-as one sector and the inside of every building as another sector.
-</p>
-<p>Using Things like this make it easier to define worlds. If they are small
-enough they will also enhance performance.
-</p>
-<p>With Sectors, Portals, and Things you can describe virtually any world that
-you want.
-</p>
-<a name="SEC241"></a>
-<h4 class="subsubheading"> Sectors </h4>
-
-<p>In this section I will describe Sectors a bit more thoroughly.  As stated
-before sectors represent infinite space. You can fill a sector with geometry
-by using mesh objects (see section <a href="cs_4.10.html#4.10">Mesh Object Plug-In System</a>).
-</p>
-<p>With a sector there is always an associated visibility culler. Currently
-Crystal Space supports two cullers:
-</p><ul class="toc">
-<li>
-<samp>`frustvis'</samp>: This is the default visibility culler that is used if no
-other is specified. It only does frustum culling. It is the best culler to
-use for simple sectors that don't have a lot of objects or else for sectors
-that are big but where all objects are small. For such sectors it doesn't
-make much sense to try to do more complicated visibility culling so
-frustum cullling (testing if an object is visible in the current view)
-is more than enough.
-</li><li>
-<samp>`dynavis'</samp>: This is a more advanced visibility culler that does
-frustum culling in addition to trying to avoid rendering objects that
-are obscured by other objects (see section <a href="cs_4.9.8.html#4.9.8">Visibility Culling In Detail</a>). This culler
-is mainly useful when you have big complex sectors with lots of objects
-and when objects have a good chance of occluding (hiding) other objects.
-</li></ul>
-
-<a name="SEC242"></a>
-<h4 class="subsubheading"> Things </h4>
-
-<p>A Thing is one of the basic building blocks to create geometry in
-Crystal Space. A Thing is made from convex polygons.
-</p>
-<p>Things (and other mesh objects for that matter) can be rendered using
-Z-fill or Z-use mode. With Z-fill the previous contents of the Z-buffer
-(where that Thing is rendered) is just overwritten. With Z-use the
-previous contents is checked in order to see if the Thing is in front
-or behind the polygons that are already on screen. If you have a convex
-object (like the outer polygons of a room) then you can use Z-fill because
-the polygons will not overlap. Things which are then inside those walls
-will need to use Z-use in order not to overwrite each other.
-</p>
-<p>Note that polygons have a visible side and an invisible side (backface
-culling).
-</p>
-<a name="SEC243"></a>
-<h4 class="subsubheading"> Polygons </h4>
-
-<p>Things are made of 3D polygons.  As mentioned before polygons must
-be convex.  The vertices of polygons are oriented clockwise.  This fact is
-used for backface culling; a polygon has only one visible side.
-</p>
-<p>Polygons are drawn with a texture.  How the texture is mapped on the polygon
-depends on a transformation matrix.  This is general enough so that you can
-translate, rotate, scale, and mirror the texture in every possible direction.
-The texture is tiled across the polygon surface.
-</p>
-<p>In a pre-computing stage three light-maps are created for every polygon (this
-is explained in more detail later).  Lighting is sampled in a grid which is 16
-by 16 texture pixels (or <em>texels</em>) in size, by default.  Bilinear
-interpolation is used by the texture caching machinery to make this lighting
-appear smooth.  The end result of this is a non-tiled lighted texture that is
-mapped across the polygon surface.
-</p>
-<a name="SEC244"></a>
-<h4 class="subsubheading"> Portal Containers </h4>
-
-<p>A special kind of object is the portal container. It also has polygons
-but every polygon is a portal to another sector (or the same sector in case of
-a mirror or other space warping transformation).
-</p>
-<a name="SEC245"></a>
-<h4 class="subsubheading"> Portals </h4>
-
-<p>A Portal is a special kind of polygon.
-</p>
-<p>Instead of texture mapping a portal polygon, the engine will recursively
-draw the sector that this portal points to.  After this, if the texture is
-semi-transparent, the texture will be mapped over the already rendered
-sector.
-</p>
-<p>Portals can also transform space.  This feature can be used to implement
-mirrors or reflecting surfaces.
-</p>
-<p>Note that when there is a portal from sector A to sector B you should probably
-also define a portal from sector B to sector A.  Adjacent polygons of
-different sectors are not shared so you need to set a portal on each of them.
-Otherwise you will have the effect that you can see from sector A to sector B
-but not the other way around.
-</p>
-<p>A special feature of portals is that you could (in theory) have a portal from
-sector A to sector B, but instead of going back to sector A from sector B you
-could set the portal to point at sector C which (in this example) would be a
-sector which has the same world space coordinates as sector A.  This is
-perfectly possible (although maybe not desirable) with Crystal Space.  An
-important result of this is that a given world space coordinate can belong to
-more than one sector!  A corollary of this is that you always need a current
-sector reference together with a world space coordinate to really know where
-you are.
-</p>
-<p>Portals in Crystal Space can solve the problem of polygon sorting if you
-structure your world strictly with convex sectors (not really recommonded for
-practical worlds).  All polygons
-in the current sector are certainly visible (unless they are behind the view
-plane) and do not overlap, so they can just be drawn in any order without
-overdraw and without conflicts.  If a portal polygon is reached, all polygons
-in that other sector are behind all the polygons in the current sector.  In
-fact portals are an explicit form of <small>BSP</small> tree.  The advantages of this
-approach are summarized below.
-</p>
-<ul>
-<li>
-Space warping can be used as described above.
-
-</li><li>
-In theory it would be rather easy to make dynamic worlds.  Because the portals
-are explicit it is easy to define them so that certain sectors can move and
-transform in certain ways.
-Note that static lighting makes this a bit difficult in some cases.
-</li></ul>
-
-<p>One disadvantage a portal engine is that it can be more difficult to define
-worlds. If you want to be able to use <small>ZFILL</small> mode you must make all
-sectors convex. If you don't care about that then you can use <small>ZUSE</small> too.
-</p>
-
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;imesh/thing.h&gt;
+</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.3.html#4.9.3" title="Previous section in reading order"> &lt; </a>]</td>

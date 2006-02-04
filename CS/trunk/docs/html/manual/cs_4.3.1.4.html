@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.3.1.4 The Camera</title>
+<title>Crystal Space: 4.3.1.4 Interface Versions</title>
 
-<meta name="description" content="Crystal Space: 4.3.1.4 The Camera">
-<meta name="keywords" content="Crystal Space: 4.3.1.4 The Camera">
+<meta name="description" content="Crystal Space: 4.3.1.4 Interface Versions">
+<meta name="keywords" content="Crystal Space: 4.3.1.4 Interface Versions">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Simple-Camera"></a>
+<a name="SCF-Versions"></a>
 <a name="4.3.1.4"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.3.html#4.3.1.3" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,117 +58,74 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.3.1.4 The Camera </h4>
+<h4 class="subsubsection"> 4.3.1.4 Interface Versions </h4>
 
-<p>In Crystal Space there is an interface called <samp>`iView'</samp> which
-encapsulates both <samp>`iCamera'</samp> and <samp>`iClipper2D'</samp> instances.
-In principle you can use those classes directly but using <samp>`iView'</samp> is
-easier.  Now, edit <tt>`simple.h'</tt> to make use of <samp>`iView'</samp>:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">...
-class Simple
-{
-private:
-  ...
-  csRef&lt;iView&gt; view;
-  ...
-  void ProcessFrame ();
-  void FinishFrame ();
-  ...
-</pre></td></tr></table>
-<p>Then, edit <tt>`simple.cpp'</tt> and make the following changes at the end of
-our <code>Application()</code> function:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">bool Simple::Application ()
-{
-  ...
-  view.AttachNew(new csView (engine, g3d));
-  iGraphics2D* g2d = g3d-&gt;GetDriver2D ();
-  view-&gt;SetRectangle (0, 0, g2d-&gt;GetWidth (), g2d-&gt;GetHeight ());
-  ...
-  view-&gt;GetCamera ()-&gt;SetSector (room);
-  view-&gt;GetCamera ()-&gt;GetTransform ().SetOrigin (csVector3 (0, 5, -3));
-
-  return true;
-}
-</pre></td></tr></table>
-<p>So, first we create a view for our world and a particular 3D renderer.
-The view has a current sector which is passed to the camera and is set by
-<code>SetSector()</code>.  The camera also has a position in that sector which you
-can set by first getting the camera with <code>GetCamera()</code> and then setting
-the position (which is a <samp>`csVector3'</samp>) with <code>SetPosition()</code>.  The
-view also holds a clipping region which corresponds to the area on the window
-that is going to be used for drawing the world.  Crystal Space supports convex
-polygons as viewing areas, but in this case we use a simple rectangle
-the same size as the window.  We set this viewing rectangle with
-<code>SetRectangle()</code>.
-</p>
-<p>The call to create a new view is a bit special. See the discussion
-on smart pointers for a detailed discussion (see section <a href="cs_4.4.2.html#4.4.2">Correctly Using Smart Pointers</a>).
-</p>
-<p>Now, this still isn't enough.  We have a camera but the camera is not used.
-We have to write code that actually draws the screen. We will do this
-in the functions <code>ProcessFrame()</code> and <code>FinishFrame()</code>. Note that
-Crystal Space is event driven so the actual drawing needs to be triggered
-by the event handler. Add the following code somewhere in the source file:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Simple::ProcessFrame ()
-{
-  // Tell 3D driver we're going to display 3D things.
-  if (!g3d-&gt;BeginDraw(
-    engine-&gt;GetBeginDrawFlags() | CSDRAW_3DGRAPHICS))
-    return;
-
-  // Tell the camera to render into the frame buffer.
-  view-&gt;Draw ();
-}
-
-void Simple::FinishFrame ()
-{
-  g3d-&gt;FinishDraw ();
-  g3d-&gt;Print (0);
-}
-</pre></td></tr></table>
-<p>Drawing the screen is done in two steps. First there is the part that
-is done in <code>ProcessFrame()</code>. Here, we will actually fill the display.
-In this case we let the engine do most of that work by calling
-<code>view-&gt;Draw()</code>. But, in principle, you can do any kind of drawing here.
-</p>
-<p>In <code>ProcessFrame()</code> we first have to indicate to the 3D rasterizer that
-we want to start drawing 3D graphics.  This call makes sure that the
-needed buffers are set up and
-performs all necessary initialization. The engine often needs extra settings
-for this as well so you <em>must</em> call <code>engine-&gt;GetBeginDrawFlags()</code> to
-get these flags and bitwise-or them with the ones that you want.
-</p>
-<p>The second part is in <code>FinishFrame()</code> where we actually dump the
-frame to the screen. The reason this is split is that other components
-(plugins) in Crystal Space may choose to listen to events and draw additional
-things on top of the 3D view rendered in <code>ProcessFrame()</code>. When a frame
-needs to be rendered, the Crystal Space framework will send four messages:
+<p>Unlike <small>COM</small>, <small>SCF</small> supports interface versions.  That is, a shared class
+could implement version 0.3.6 of given interface, and if client requests that
+interface of a version lower or equal than 0.3.6, a correct interface pointer
+is returned.  For this to work you need to define inside each interface header
+file a specialization of the <code>scfInterface&lt;&gt;</code> template class for each
+interface.  This specialization must provide the interface's version number as
+the result of its <code>GetVersion()</code> method.  To correctly support different
+versions of interfaces you should follow these guidelines:
 </p>
 <ul>
 <li>
-<samp>`csevPreProcess'</samp> is sent first. This allows plugins to preprocess
-things before drawing can happen.
+Do not insert new methods into existing interfaces.  Instead, you should
+append them after last defined method.
 
 </li><li>
-<samp>`csevProcess'</samp> follows. In this pass the application will render.
+If your change made the interface invalid for clients that expect older
+versions of interfaces (for example, you broke the previous rule), increase
+the major version number, and set minor and micro versions to zero.
 
 </li><li>
-<samp>`csevPostProcess'</samp> is after that. This is the pass that can be used
-by external components to render on top of the view rendered by the
-application.
+If your changes are relatively minor, but you do a major release, increase the
+minor version number and drop the micro version to zero.
 
 </li><li>
-<samp>`csevFinalProcess'</samp> is last. In this pass the application will display
-the frame on screen.
+If you are in the development process, and did a minor change to the
+interface, increase the micro version.
 </li></ul>
 
-<p>Compile and run this example.  For the first time you should see something: A
-solid wall.  Congratulations, you have created your first almost useful
-Crystal Space application.
+<p>The possible range for major and minor version numbers is 0..255, and the
+range for micro version number is 0..65535.
 </p>
+<p>When you query an interface, you should always tell it what interface version
+are you looking for.  If a module cannot provide an interface compatible with
+the requested version, then <code>QueryInterface()</code> will return <samp>`NULL'</samp>
+(same as if interface wasn't available at all).  You can use
+<code>scfCompatibleVersion()</code> to check whether the requested version is
+compatible with interface version.  In fact, the
+<code>SCF_IMPLEMENTS_INTERFACE()</code> and
+<code>SCF_IMPLEMENTS_EMBEDDED_INTERFACE()</code> macros employ this function
+automatically.
+</p>
+<p>Since specializing the <code>scfInterface&lt;&gt;</code> template for each interface is an
+onerous task, you can instead automate the task via use of the
+<code>SCF_VERSION()</code> macro.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">SCF_VERSION(iMyGraphics3D, 0, 0, 1);
+
+struct iMyGraphics3D : public iBase
+{
+  ...
+};
+</pre></td></tr></table>
+<p>If you are placing your interfaces in your project's own namespace, then you
+must invoke the <code>SCF_VERSION()</code> macro outside your namespace.  For
+instance:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">namespace MyProject
+{
+  struct iMyGraphics3D : public iBase
+  {
+    ...
+  };
+}
+
+SCF_VERSION(MyProject::iMyGraphics3D, 0, 0, 1);
+</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.3.html#4.3.1.3" title="Previous section in reading order"> &lt; </a>]</td>
