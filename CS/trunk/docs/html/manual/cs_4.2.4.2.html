@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.2.4.2 Constants</title>
+<title>Crystal Space: 4.2.4.2 Class Distribution</title>
 
-<meta name="description" content="Crystal Space: 4.2.4.2 Constants">
-<meta name="keywords" content="Crystal Space: 4.2.4.2 Constants">
+<meta name="description" content="Crystal Space: 4.2.4.2 Class Distribution">
+<meta name="keywords" content="Crystal Space: 4.2.4.2 Class Distribution">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Mazing-Constants"></a>
+<a name="Mazing-Classes"></a>
 <a name="4.2.4.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.2.4.1.html#4.2.4.1" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,50 +58,40 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.2.4.2 Constants </h4>
+<h4 class="subsubsection"> 4.2.4.2 Class Distribution </h4>
 
-<p>There are several constants that we use in this game. By using constants it
-is easier to change the behaviour. Even better would be to read these fields
-from a configuration file but that is beyond the scope of this tutorial:
+<p>In this tutorial we will divide the logic into several classes:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">// World defines.
-#define ROOM_DIMENSION 10.0
-#define MAZE_DIMENSION 3
+<ul>
+<li>
+<code>AppMazing</code>: this is the main application class. It handles the Crystal Space
+event stuff and basic Crystal Space setup.
+</li><li>
+<code>Game</code>: this is the main class controlling the game logic. It ties everything
+together.
+</li><li>
+<code>RoomCoordinate</code>: this is a small class that is used to represent a coordinate
+in our maze. A coordinate is a three dimensional integer coordinate that represents
+a node in our three dimensional maze.
+</li><li>
+<code>Maze</code>: this class is the representation of the maze. i.e. the world
+where the game happens. In this game we will make a three dimensional maze where
+every node of the maze is a sector. This class keeps track of those sectors.
+</li><li>
+<code>Player</code>: the player with the collider (collision detection) is managed
+by this class. This class also takes care of player movement.
+</li><li>
+<code>Adversary</code>: this is the enemy! Every enemy in the game will have an instance
+of this class. This class also manages the <em>very</em> primitive artificial
+intelligence.
+</li><li>
+<code>Explosion</code>: whenever an adversary explodes there will be an explosion. For
+every explosion we have an instance of this class.
+</li><li>
+<code>Laser</code>: the player can fire with a laserbeam. There is one instance of this
+class which manages visibility and collision detection of the beam.
+</li></ul>
 
-// Adversary defines.
-#define ADVERSARY_DIMENSION 1
-#define ADVERSARY_MOVETIME 1.0
-
-// Explosion defines.
-#define EXPLOSION_EMITTIME 2000
-#define EXPLOSION_PARTTIME 500
-#define EXPLOSION_PARTVARTIME 100
-#define EXPLOSION_TIME (EXPLOSION_PARTTIME+EXPLOSION_EMITTIME+EXPLOSION_PARTVARTIME)
-
-// Laserbeam defines.
-#define LASER_WIDTH 0.05
-#define LASER_LENGTH 100.0
-#define LASER_LIFETIME 300	// Milliseconds the laser will be visible.
-#define LASER_FLICKTIME 20
-#define LASER_OFFSET csVector3(0,-.5,0)
-
-// Movement defines.
-#define MOVE_DISTANCE 5.0	// In one keypress we will move this far.
-#define STEP_DISTANCE 1.0	// Step size for collision detection along path.
-#define MOVECAMERA_SPEED 5.0	// Speed with which we move the camera.
-#define ROTATE_ANGLE 0.5	// How much we want to rotate in one keypress.
-#define ROTATECAMERA_SPEED 3.0	// Speed to rotate with.
-#define PLAYER_SIZE 2.0
-
-// These numbers define the position of the specific portal
-// for the CreateRoom() function.
-#define PORTAL_UP 0
-#define PORTAL_DOWN 1
-#define PORTAL_LEFT 2
-#define PORTAL_RIGHT 3
-#define PORTAL_FRONT 4
-#define PORTAL_BACK 5
-</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.2.4.1.html#4.2.4.1" title="Previous section in reading order"> &lt; </a>]</td>

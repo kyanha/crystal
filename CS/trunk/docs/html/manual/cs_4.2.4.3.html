@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.2.4.3 RoomCoordinate Class</title>
+<title>Crystal Space: 4.2.4.3 Constants</title>
 
-<meta name="description" content="Crystal Space: 4.2.4.3 RoomCoordinate Class">
-<meta name="keywords" content="Crystal Space: 4.2.4.3 RoomCoordinate Class">
+<meta name="description" content="Crystal Space: 4.2.4.3 Constants">
+<meta name="keywords" content="Crystal Space: 4.2.4.3 Constants">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Mazing-RoomCoordinate-Class"></a>
+<a name="Mazing-Constants"></a>
 <a name="4.2.4.3"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.2.4.2.html#4.2.4.2" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,36 +58,50 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.2.4.3 RoomCoordinate Class </h4>
+<h4 class="subsubsection"> 4.2.4.3 Constants </h4>
 
-<p>This is a very simple class that keeps track of a coordinate in the maze:
+<p>There are several constants that we use in this game. By using constants it
+is easier to change the behaviour. Even better would be to read these fields
+from a configuration file but that is beyond the scope of this tutorial:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">class RoomCoordinate
-{
-public:
-  int x, y, z;
-  RoomCoordinate () : x (0), y (0), z (0) { }
-  RoomCoordinate (int x, int y, int z) : x (x), y (y), z (z) { }
-  RoomCoordinate (const RoomCoordinate&amp; rc) : x (rc.x), y (rc.y), z (rc.z) { }
-# ifdef CS_DEBUG
-  static bool IsValid (int x, int y, int z)
-  {
-    return (x &gt;= 0 &amp;&amp; x &lt; MAZE_DIMENSION &amp;&amp;
-	    y &gt;= 0 &amp;&amp; y &lt; MAZE_DIMENSION &amp;&amp;
-	    z &gt;= 0 &amp;&amp; z &lt; MAZE_DIMENSION);
-  }
-  bool IsValid () const
-  {
-    return IsValid (x, y, z);
-  }
-# endif
-};
+<table><tr><td>&nbsp;</td><td><pre class="example">// World defines.
+#define ROOM_DIMENSION 10.0
+#define MAZE_DIMENSION 3
+
+// Adversary defines.
+#define ADVERSARY_DIMENSION 1
+#define ADVERSARY_MOVETIME 1.0
+
+// Explosion defines.
+#define EXPLOSION_EMITTIME 2000
+#define EXPLOSION_PARTTIME 500
+#define EXPLOSION_PARTVARTIME 100
+#define EXPLOSION_TIME (EXPLOSION_PARTTIME+EXPLOSION_EMITTIME+EXPLOSION_PARTVARTIME)
+
+// Laserbeam defines.
+#define LASER_WIDTH 0.05
+#define LASER_LENGTH 100.0
+#define LASER_LIFETIME 300	// Milliseconds the laser will be visible.
+#define LASER_FLICKTIME 20
+#define LASER_OFFSET csVector3(0,-.5,0)
+
+// Movement defines.
+#define MOVE_DISTANCE 5.0	// In one keypress we will move this far.
+#define STEP_DISTANCE 1.0	// Step size for collision detection along path.
+#define MOVECAMERA_SPEED 5.0	// Speed with which we move the camera.
+#define ROTATE_ANGLE 0.5	// How much we want to rotate in one keypress.
+#define ROTATECAMERA_SPEED 3.0	// Speed to rotate with.
+#define PLAYER_SIZE 2.0
+
+// These numbers define the position of the specific portal
+// for the CreateRoom() function.
+#define PORTAL_UP 0
+#define PORTAL_DOWN 1
+#define PORTAL_LEFT 2
+#define PORTAL_RIGHT 3
+#define PORTAL_FRONT 4
+#define PORTAL_BACK 5
 </pre></td></tr></table>
-<p>One special thing in this class is the usage of the <samp>`CS_DEBUG'</samp> define.
-When your application is compiled in debug mode this define will be set. This
-means that you can do additional checks in debug mode that will disappear
-in optimize/release mode. This is very useful during development.
-</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.2.4.2.html#4.2.4.2" title="Previous section in reading order"> &lt; </a>]</td>
