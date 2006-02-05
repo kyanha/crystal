@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.2.4.8 Laser Class</title>
+<title>Crystal Space: 4.2.4.8 Explosion Class</title>
 
-<meta name="description" content="Crystal Space: 4.2.4.8 Laser Class">
-<meta name="keywords" content="Crystal Space: 4.2.4.8 Laser Class">
+<meta name="description" content="Crystal Space: 4.2.4.8 Explosion Class">
+<meta name="keywords" content="Crystal Space: 4.2.4.8 Explosion Class">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Mazing-Laser-Class"></a>
+<a name="Mazing-Explosion-Class"></a>
 <a name="4.2.4.8"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.2.4.7.html#4.2.4.7" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,137 +58,50 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.2.4.8 Laser Class </h4>
+<h4 class="subsubsection"> 4.2.4.8 Explosion Class </h4>
 
-<p>The <code>Laser</code> class is responsible for managing the laserbeam that the
-player can shoot. There is only one instance of this class.
+<p>This is a very simple class that keeps track of an explosion. Once the
+explosion particle system has died out the instance of this class will be
+removed as well.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">class Laser
+<table><tr><td>&nbsp;</td><td><pre class="example">class Explosion
 {
 private:
-  AppMazing* app;
-
-  /// Our laserbeam mesh.
-  csRef&lt;iMeshWrapper&gt; laserbeam;
-  // Lifetime of the laserbeam.
-  int lasertime;
-  // The current laserbeam coordinates.
-  csVector3 laserstart, laserend;
-  iSector* lasersector;
+  csRef&lt;iMeshWrapper&gt; mesh;
+  int timeleft;
 
 public:
-  Laser (AppMazing* app);
+  Explosion (iMeshWrapper* mesh, int timeleft);
 
-  void SetMeshWrapper (iMeshWrapper* laser)
-  {
-    laserbeam = laser;
-  }
+  bool Handle (csTicks elapsed_ticks);
 
-  /// Start the laser.
-  void Start ();
-  /// Handle life time of the laser.
-  void Handle (csTicks ticks);
-  /// Check if the laser hits anything.
-  void Check ();
+  iMeshWrapper* GetMesh () const { return mesh; }
 };
 </pre></td></tr></table>
-<p>The three important functions in this class are: <code>Start()</code> which starts
-the laser (unless it is already in progress), <code>Handle()</code> which takes
-care of the lifetime of the laser, and <code>Check()</code> which will check if
-the laser hits anything.
+<p>The main function here is the <code>Handle()</code> function. This one takes
+the elapsed ticks (i.e. milliseconds) since last frame which it will use
+to decide when to delete the explosion mesh.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">Laser::Laser (AppMazing* app)
+<table><tr><td>&nbsp;</td><td><pre class="example">Explosion::Explosion (iMeshWrapper* mesh, int timeleft)
 {
-  Laser::app = app;
-  lasertime = 0;
+  Explosion::mesh = mesh;
+  Explosion::timeleft = timeleft;
 }
 
-void Laser::Start ()
+bool Explosion::Handle (csTicks elapsed_ticks)
 {
-  if (lasertime &gt; 0) return;	// Laser already in progress.
-  lasertime = LASER_LIFETIME;
-  const csOrthoTransform&amp; tr = app-&gt;GetCamera ()-&gt;GetTransform ();
-  laserstart = tr.This2Other (LASER_OFFSET);
-  laserend = tr.This2Other (csVector3 (0, 0, 20.0));
-  lasersector = app-&gt;GetCamera ()-&gt;GetSector ();
-
-  // Fire up our beam.
-  laserbeam-&gt;GetMovable ()-&gt;SetPosition (lasersector, laserstart);
-  laserbeam-&gt;GetMovable ()-&gt;GetTransform ().LookAt (
-  	laserend-tr.GetOrigin (), csVector3 (0, 1, 0));
-  laserbeam-&gt;GetMovable ()-&gt;UpdateMove ();
+  timeleft -= elapsed_ticks;
+  if (timeleft &lt;= 0)
+  {
+    return false;
+  }
+  return true;
 }
 </pre></td></tr></table>
-<p>This function starts the laserbeam (unless it is already in progress).
-Starting the laser means that we basically put it at the same position
-of the camera but lowered a bit with the <samp>`LASER_OFFSET'</samp> offset.
-This offset is calculated in camera space that means that it will always
-be below the camera as seen from the perspective of the camera. The
-<code>This2Other()</code> functions transforms the offset (as seen in camera
-space) to world space by using the camera transformation
-(<code>iCamera-&gt;GetTransform()</code>).
-</p>
-<p>We also transform a point in front of the camera (20 units in front) to
-world space. So these two world space coordinates give us a starting and a
-direction for our laserbeam. We place the laserbeam mesh at the starting
-position and then we use <code>LookAt()</code> to change the transform of that
-mesh to look at the destination position. Then we place the mesh in the
-sector of the camera and finally we call <code>UpdateMove()</code> which is required
-after moving a mesh.
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Laser::Handle (csTicks ticks)
-{
-  if (lasertime &lt;= 0) return;
-  lasertime -= ticks;
-  if (lasertime &lt;= 0)
-  {
-    // Time to stop the laser.
-    lasertime = 0;
-    laserbeam-&gt;GetMovable ()-&gt;ClearSectors ();
-    laserbeam-&gt;GetMovable ()-&gt;UpdateMove ();
-  }
-  else
-  {
-    int flick = (lasertime / LASER_FLICKTIME) &amp; 1;
-    Check ();
-    csRef&lt;iGeneralMeshState&gt; state = scfQueryInterface&lt;iGeneralMeshState&gt; (
-    	laserbeam-&gt;GetMeshObject ());
-    state-&gt;SetColor (flick ? csColor (2.0, 2.0, 2.0) : csColor (.5, .5, .5));
-  }
-}
-</pre></td></tr></table>
-<p>This function handles the lifetime of the laser. Again depending on the
-elapsed ticks since previous frame. This function also makes the beam
-flicker by changing the color. Additionally, every time the laserbeam
-changes color it will check if there is an adversary hit by the laser. This
-happens with the <code>Check()</code> function below:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void Laser::Check ()
-{
-  // Do a beam to check if we hit an adversary.
-  csVector3 isect;
-  iMeshWrapper* mesh = lasersector-&gt;HitBeamPortals (laserstart,
-  	laserend, isect, 0);
-  if (mesh)
-  {
-    csRef&lt;Adversary&gt; adv = CS_GET_CHILD_OBJECT (
-    	mesh-&gt;QueryObject (), Adversary);
-    if (adv)
-    {
-      // Hit!
-      app-&gt;ExplodeAdversary (adv);
-    }
-  }
-}
-</pre></td></tr></table>
-<p>Using <code>iSector::HitBeamPortals()</code> we try to find if there is an object
-in the beam of the laser. We use the start and end position as calculated
-in the <code>Start()</code> function. If we hit a mesh then we will use
-<code>CS_GET_CHILD_OBJECT()</code> to get the <code>Adversary</code> instance that is
-attached to the mesh. This makes use of the fact that we added the
-adversary to the mesh using the <code>iObject</code> system.
-</p>
-<p>If we hit an adversary then we explode it by calling <code>ExplodeAdversary()</code>.
+<p>The implementation is very simple. The <code>Explosion</code> class is instantiated
+with a certain lifetime (see later). Every frame <code>Handle()</code> will be called
+which will subtract the elapsed ticks from the lifetime. When the lifetime
+becomes smaller or equal then 0 then the explosion should be removed.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
