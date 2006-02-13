@@ -30,8 +30,8 @@
     <li><a href="globals.html"><span>File&nbsp;Members</span></a></li>
   </ul></div>
 <h1>csutil/radixsort.h</h1><a href="radixsort_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="comment">/*</span>
-<a name="l00002"></a>00002 <span class="comment">  Crystal Space In-Place Radix Sort</span>
-<a name="l00003"></a>00003 <span class="comment">  Copyright (C) 2003 by Jorrit Tyberghein</span>
+<a name="l00002"></a>00002 <span class="comment">  Crystal Space Radix Sort</span>
+<a name="l00003"></a>00003 <span class="comment">  Copyright (C) 2006 by Marten Svanfeldt</span>
 <a name="l00004"></a>00004 <span class="comment"></span>
 <a name="l00005"></a>00005 <span class="comment">  This library is free software; you can redistribute it and/or</span>
 <a name="l00006"></a>00006 <span class="comment">  modify it under the terms of the GNU Library General Public</span>
@@ -53,25 +53,96 @@
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
 <a name="l00027"></a>00027 <span class="preprocessor">#include "csextern.h"</span>
 <a name="l00028"></a>00028 
-<a name="l00032"></a><a class="code" href="classcsRadixSorter.html">00032</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsRadixSorter.html">csRadixSorter</a>
-<a name="l00033"></a>00033 {
-<a name="l00034"></a>00034 <span class="keyword">private</span>:
-<a name="l00035"></a>00035   <span class="comment">// Element counter table. This is used to count the</span>
-<a name="l00036"></a>00036   <span class="comment">// distribution of all elements in the input table (for the</span>
-<a name="l00037"></a>00037   <span class="comment">// given part of the elements we are sorting).</span>
-<a name="l00038"></a>00038   <span class="keywordtype">int</span> counter_table[256];
-<a name="l00039"></a>00039   <span class="comment">// Offset table where every element starts in the sorted result.</span>
-<a name="l00040"></a>00040   <span class="keywordtype">int</span> offset_table[256];
-<a name="l00041"></a>00041 
-<a name="l00042"></a>00042   <span class="comment">// Sort from one table to the other on the given bit-mask.</span>
-<a name="l00043"></a>00043   <span class="keywordtype">void</span> Sort (<a class="code" href="group__util.html#g1134b580f8da4de94ca6b1de4d37975e">uint32</a>* table_source, <a class="code" href="group__util.html#g1134b580f8da4de94ca6b1de4d37975e">uint32</a>* table_dest, <span class="keywordtype">int</span> size,
-<a name="l00044"></a>00044         <a class="code" href="group__util.html#g1134b580f8da4de94ca6b1de4d37975e">uint32</a> bit_mask, <span class="keywordtype">int</span> shift);
-<a name="l00045"></a>00045 
-<a name="l00046"></a>00046 <span class="keyword">public</span>:
-<a name="l00052"></a>00052   <span class="keywordtype">void</span> Sort (<a class="code" href="group__util.html#g1134b580f8da4de94ca6b1de4d37975e">uint32</a>* table, <span class="keywordtype">int</span> size, <span class="keywordtype">int</span> max_value);
-<a name="l00053"></a>00053 };
-<a name="l00054"></a>00054 
-<a name="l00055"></a>00055 <span class="preprocessor">#endif</span>
+<a name="l00034"></a><a class="code" href="classcsRadixSorter.html">00034</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsRadixSorter.html">csRadixSorter</a>
+<a name="l00035"></a>00035 {
+<a name="l00036"></a>00036 <span class="keyword">public</span>:
+<a name="l00037"></a>00037   <a class="code" href="classcsRadixSorter.html">csRadixSorter</a>();
+<a name="l00038"></a>00038   ~<a class="code" href="classcsRadixSorter.html">csRadixSorter</a>();
+<a name="l00039"></a>00039 
+<a name="l00045"></a>00045   <span class="keywordtype">void</span> Sort(<a class="code" href="group__util.html#g1134b580f8da4de94ca6b1de4d37975e">uint32</a>* array, size_t size);
+<a name="l00046"></a>00046 
+<a name="l00052"></a>00052   <span class="keywordtype">void</span> Sort(<a class="code" href="group__util.html#g56f1a81c92849566ae864511088eb7e8">int32</a>* array, size_t size);
+<a name="l00053"></a>00053 
+<a name="l00059"></a>00059   <span class="keywordtype">void</span> Sort(<span class="keywordtype">float</span>* array, size_t size);
+<a name="l00060"></a>00060 
+<a name="l00064"></a><a class="code" href="classcsRadixSorter.html#0572d1f4de8c085d114eeabd228e86f6">00064</a>   <span class="keyword">inline</span> size_t* GetRanks()<span class="keyword"> const</span>
+<a name="l00065"></a>00065 <span class="keyword">  </span>{
+<a name="l00066"></a>00066     <span class="keywordflow">return</span> ranks1;
+<a name="l00067"></a>00067   }
+<a name="l00068"></a>00068 
+<a name="l00072"></a>00072   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+<a name="l00073"></a><a class="code" href="classcsRadixSorter.html#5e50b8e5270a603bc2820cc3bde0741c">00073</a>   <span class="keywordtype">void</span> ReorderInplace(T* source, size_t size)
+<a name="l00074"></a>00074   {
+<a name="l00075"></a>00075     <span class="keywordflow">if</span>(size*<span class="keyword">sizeof</span>(T) &lt; 0x4000) <span class="comment">//Max out to 16kb</span>
+<a name="l00076"></a>00076     {
+<a name="l00077"></a>00077       <span class="comment">//Stack-allocated temp-array</span>
+<a name="l00078"></a>00078       <a class="code" href="cssysdef_8h.html#8185c7b21a22716685e7608a1f31a27f">CS_ALLOC_STACK_ARRAY</a>(<a class="code" href="group__util.html#gdde6aaee8457bee49c2a92621fe22b79">uint8</a>, tmpStorage, size*<span class="keyword">sizeof</span>(T));
+<a name="l00079"></a>00079       T* dest = (T*)tmpStorage;
+<a name="l00080"></a>00080       <span class="keywordflow">for</span>(size_t i = 0; i &lt; size; i++)
+<a name="l00081"></a>00081       {
+<a name="l00082"></a>00082         <span class="keyword">new</span> (&amp;dest[i]) T(source[ranks1[i]]); <span class="comment">//to make sure it is initialized</span>
+<a name="l00083"></a>00083       }
+<a name="l00084"></a>00084       <span class="keywordflow">for</span>(size_t i = 0; i &lt; size; i++)
+<a name="l00085"></a>00085       {
+<a name="l00086"></a>00086         source[i] = dest[i];
+<a name="l00087"></a>00087         dest[i].~T();
+<a name="l00088"></a>00088       }
+<a name="l00089"></a>00089     }
+<a name="l00090"></a>00090     <span class="keywordflow">else</span>
+<a name="l00091"></a>00091     {
+<a name="l00092"></a>00092       <span class="comment">//Heap-allocated</span>
+<a name="l00093"></a>00093       <a class="code" href="group__util.html#gdde6aaee8457bee49c2a92621fe22b79">uint8</a>* tmpStorage = (<a class="code" href="group__util.html#gdde6aaee8457bee49c2a92621fe22b79">uint8</a>*)malloc(size*<span class="keyword">sizeof</span>(T));
+<a name="l00094"></a>00094       T* dest = (T*)tmpStorage;
+<a name="l00095"></a>00095       <span class="keywordflow">for</span>(size_t i = 0; i &lt; size; i++)
+<a name="l00096"></a>00096       {
+<a name="l00097"></a>00097         <span class="keyword">new</span> (&amp;dest[i]) T(source[ranks1[i]]); <span class="comment">//to make sure it is initialized</span>
+<a name="l00098"></a>00098       }
+<a name="l00099"></a>00099       <span class="keywordflow">for</span>(size_t i = 0; i &lt; size; i++)
+<a name="l00100"></a>00100       {
+<a name="l00101"></a>00101         source[i] = dest[i];
+<a name="l00102"></a>00102         dest[i].~T();
+<a name="l00103"></a>00103       }
+<a name="l00104"></a>00104       free(tmpStorage);
+<a name="l00105"></a>00105     }
+<a name="l00106"></a>00106   }
+<a name="l00107"></a>00107 
+<a name="l00112"></a>00112   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+<a name="l00113"></a><a class="code" href="classcsRadixSorter.html#7b19c79eae0e9e69a214ea262d8e9628">00113</a>   <span class="keywordtype">bool</span> Reorder(<span class="keyword">const</span> T* source, T* dest, size_t size)
+<a name="l00114"></a>00114   {
+<a name="l00115"></a>00115     <span class="comment">//make sure ranges don't overlap</span>
+<a name="l00116"></a>00116 <span class="preprocessor">#ifdef _DEBUG</span>
+<a name="l00117"></a>00117 <span class="preprocessor"></span>    <span class="keywordflow">if</span>((source + size - dest &gt; 0 &amp;&amp; dest - source &lt; size) ||
+<a name="l00118"></a>00118        (dest + size - source &gt; 0 &amp;&amp; source - dest &lt; size))
+<a name="l00119"></a>00119        <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00120"></a>00120 <span class="preprocessor">#endif</span>
+<a name="l00121"></a>00121 <span class="preprocessor"></span>
+<a name="l00122"></a>00122     <span class="keywordflow">for</span>(size_t i = 0; i &lt; size; i++)
+<a name="l00123"></a>00123     {
+<a name="l00124"></a>00124       dest[i] = source[ranks1[i]];
+<a name="l00125"></a>00125     }
+<a name="l00126"></a>00126     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00127"></a>00127   }
+<a name="l00128"></a>00128 
+<a name="l00129"></a>00129 <span class="keyword">private</span>:
+<a name="l00130"></a>00130   <span class="comment">// Resize the rank arrays</span>
+<a name="l00131"></a>00131   <span class="keywordtype">void</span> Resize(size_t size);
+<a name="l00132"></a>00132 
+<a name="l00133"></a>00133   <span class="comment">//Helper-function to create histograms. Returns true if values are already sorted</span>
+<a name="l00134"></a>00134   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+<a name="l00135"></a>00135   <span class="keywordtype">bool</span> CreateHistogram(T* data, size_t size, <a class="code" href="group__util.html#g1134b580f8da4de94ca6b1de4d37975e">uint32</a>* histogram);
+<a name="l00136"></a>00136 
+<a name="l00137"></a>00137   <span class="comment">// Check if pass should be performed</span>
+<a name="l00138"></a>00138   <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
+<a name="l00139"></a>00139   <span class="keywordtype">bool</span> DoPass(size_t pass, T* data, size_t size, <a class="code" href="group__util.html#g1134b580f8da4de94ca6b1de4d37975e">uint32</a>* histogram);
+<a name="l00140"></a>00140 
+<a name="l00141"></a>00141   size_t currentSize;
+<a name="l00142"></a>00142   size_t* ranks1;
+<a name="l00143"></a>00143   size_t* ranks2;
+<a name="l00144"></a>00144 
+<a name="l00145"></a>00145   <span class="keywordtype">bool</span> ranksValid;
+<a name="l00146"></a>00146 };
+<a name="l00147"></a>00147 
+<a name="l00148"></a>00148 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
