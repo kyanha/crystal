@@ -152,12 +152,18 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">unsigned int&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util__containers.html#gb805c6e597fbb1d73233fecf4c050a6e">csHashCompute</a> (char const *)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute a hash key for a null-terminated string.  <a href="#gb805c6e597fbb1d73233fecf4c050a6e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="gc3fc6b4bf9435dc4c11fdedfa57dc7a8"></a><!-- doxytag: member="util_containers::operator delete" ref="gc3fc6b4bf9435dc4c11fdedfa57dc7a8" args="(void *, csMemoryPool *)" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util__containers.html#gc3fc6b4bf9435dc4c11fdedfa57dc7a8">operator delete</a> (void *, <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> *)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="gf2e4d137c0e7a5801e32f584af502ad1"></a><!-- doxytag: member="util_containers::operator delete" ref="gf2e4d137c0e7a5801e32f584af502ad1" args="(void *, csMemoryPool &amp;)" -->
+void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util__containers.html#gf2e4d137c0e7a5801e32f584af502ad1">operator delete</a> (void *, <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> &amp;)</td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="gf396c9305522b353fd6712180d2ae30d"></a><!-- doxytag: member="util_containers::operator new" ref="gf396c9305522b353fd6712180d2ae30d" args="(size_t n, csMemoryPool *p)" -->
 void *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util__containers.html#gf396c9305522b353fd6712180d2ae30d">operator new</a> (size_t n, <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> *p)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util__containers.html#gbc7922c9bd871e9c87c6ece97aaca88d">operator new</a> (size_t n, <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> &amp;p)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Convenience <code>new</code> operator which makes the allocation from a <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> rather than from the system heap.  <a href="#gbc7922c9bd871e9c87c6ece97aaca88d"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Convenience <code>new</code> and delete operators which for allocations from a <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> rather than from the system heap.  <a href="#gbc7922c9bd871e9c87c6ece97aaca88d"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Variables</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">const size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a> = (size_t)-1</td></tr>
 
@@ -269,14 +275,16 @@ Referenced by <a class="el" href="hash_8h-source.html#l00203">csHashComputerStru
     <td>
 
 <p>
-Convenience <code>new</code> operator which makes the allocation from a <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> rather than from the system heap. 
+Convenience <code>new</code> and delete operators which for allocations from a <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> rather than from the system heap. 
 <p>
 For instance, if <code>pool</code> is a pointer or reference to a <a class="el" href="classcsMemoryPool.html">csMemoryPool</a>, and you want to allocate an object of type FooBar from the <a class="el" href="classcsMemoryPool.html">csMemoryPool</a>, then you can do this: <div class="fragment"><pre class="fragment"> FooBar* foobar = <span class="keyword">new</span> (pool) FooBar;
-</pre></div> It is your responsibility to invoke the destructor of the objects you allocate from the <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> before the <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> itself is destroyed (since it knows nothing about the objects which you placed into it). For instance, continuing the above example, before destroying <code>pool</code>, you should invoke <code>foobar's</code> destructor as follows: <div class="fragment"><pre class="fragment"> foobar-&gt;~FooBar();
+</pre></div><p>
+It is your responsibility to delete the objects you allocate from the <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> before the <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> itself is destroyed(since it knows nothing about the objects which you placed into it). For instance, continuing the above example, before destroying <code>pool</code>, you should delete <code>foobar's</code> destructor as follows: <div class="fragment"><pre class="fragment"> <span class="keyword">delete</span> (pool) foobar;
  <span class="comment">// ... it is now safe to destroy `pool' ...</span>
-</pre></div> 
+</pre></div> <dl compact><dt><b>Remarks:</b></dt><dd>Actually, since you cannot reclaim memory from a <a class="el" href="classcsMemoryPool.html">csMemoryPool</a>, the delete operator is a no-op. However, even with a no-op delete, the object's destructor will be called; hence, even objects allocated from a <a class="el" href="classcsMemoryPool.html">csMemoryPool</a> should be deleted to ensure a proper cleanup. </dd></dl>
+
 <p>
-Definition at line <a class="el" href="mempool_8h-source.html#l00136">136</a> of file <a class="el" href="mempool_8h-source.html">mempool.h</a>.
+Definition at line <a class="el" href="mempool_8h-source.html#l00141">141</a> of file <a class="el" href="mempool_8h-source.html">mempool.h</a>.
 <p>
 References <a class="el" href="classcsMemoryPool.html#d8fbdf893c4bff02c794d21948061911">csMemoryPool::Alloc()</a>.    </td>
   </tr>
