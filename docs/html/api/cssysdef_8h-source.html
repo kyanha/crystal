@@ -601,91 +601,98 @@
 <a name="l00783"></a>00783 <span class="preprocessor">     __attribute__((format (__printf__, format_idx, arg_idx)))</span>
 <a name="l00784"></a>00784 <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_SCANF(format_idx, arg_idx) \</span>
 <a name="l00785"></a>00785 <span class="preprocessor">     __attribute__((format (__scanf__, format_idx, arg_idx)))</span>
-<a name="l00786"></a>00786 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00787"></a><a class="code" href="cssysdef_8h.html#8e48e51430e3babbaf943b676c17ec31">00787</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_PRINTF(format_idx, arg_idx)</span>
-<a name="l00788"></a><a class="code" href="cssysdef_8h.html#f9f528fcf2834ab286bab988d5c90e8f">00788</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_SCANF(format_idx, arg_idx)</span>
-<a name="l00789"></a>00789 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00790"></a>00790 <span class="preprocessor"></span>
-<a name="l00791"></a>00791 <span class="comment">// Remove __attribute__ on non GNUC compilers.</span>
-<a name="l00792"></a>00792 <span class="preprocessor">#ifndef __GNUC__</span>
-<a name="l00793"></a><a class="code" href="cssysdef_8h.html#9d373a9b65ff25b2db84c07394e1c212">00793</a> <span class="preprocessor"></span><span class="preprocessor">#define __attribute__(x)</span>
-<a name="l00794"></a>00794 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00795"></a>00795 <span class="preprocessor"></span>
-<a name="l00796"></a>00796 <span class="comment">// Support for alignment and packing of structures.</span>
-<a name="l00797"></a>00797 <span class="preprocessor">#if !defined(CS_STRUCT_ALIGN_4BYTE_BEGIN)</span>
-<a name="l00798"></a>00798 <span class="preprocessor"></span><span class="preprocessor">#  if defined(__GNUC__) &amp;&amp; defined(CS_STRICT_ALIGNMENT)</span>
-<a name="l00799"></a>00799 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_BEGIN</span>
-<a name="l00800"></a>00800 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_END __attribute__ ((aligned(4)))</span>
-<a name="l00801"></a>00801 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
-<a name="l00802"></a>00802 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_BEGIN</span>
-<a name="l00803"></a>00803 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_END</span>
-<a name="l00804"></a>00804 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-<a name="l00805"></a>00805 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00806"></a>00806 <span class="preprocessor"></span>
-<a name="l00807"></a>00807 <span class="preprocessor">#if defined(CS_COMPILER_MSVC)</span>
-<a name="l00808"></a>00808 <span class="preprocessor"></span><span class="preprocessor">  #define CS_ALIGNED_MEMBER(Member, Align)                              \</span>
-<a name="l00809"></a>00809 <span class="preprocessor">    __declspec(align(Align)) Member</span>
-<a name="l00810"></a>00810 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_COMPILER_GCC)</span>
-<a name="l00811"></a>00811 <span class="preprocessor"></span>
-<a name="l00823"></a><a class="code" href="cssysdef_8h.html#5d8d64bebccf32da81cda892904bbc28">00823</a> <span class="preprocessor">  #define CS_ALIGNED_MEMBER(Member, Align)                              \</span>
-<a name="l00824"></a>00824 <span class="preprocessor">    Member __attribute((aligned(Align)))</span>
-<a name="l00825"></a>00825 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00826"></a>00826 <span class="preprocessor"></span><span class="preprocessor">  #define CS_ALIGNED_MEMBER(Member, Align)      Member</span>
-<a name="l00827"></a>00827 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00828"></a>00828 <span class="preprocessor"></span>
-<a name="l00829"></a>00829 <span class="comment">// Macro used to define static implicit pointer conversion function.</span>
-<a name="l00830"></a>00830 <span class="comment">// Only use within a class declaration.</span>
-<a name="l00831"></a>00831 <span class="preprocessor">#ifndef _CS_IMPLICITPTRCAST_NAME</span>
-<a name="l00832"></a><a class="code" href="cssysdef_8h.html#eadac43e70d3dae7b999d8a7b26690f1">00832</a> <span class="preprocessor"></span><span class="preprocessor">#  define _CS_IMPLICITPTRCAST_NAME __ImplicitPtrCast</span>
-<a name="l00833"></a>00833 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00834"></a>00834 <span class="preprocessor"></span>
-<a name="l00856"></a><a class="code" href="cssysdef_8h.html#b8b4e5655675ca59b0c4d8419ae243ec">00856</a> <span class="preprocessor">#define CS_IMPLEMENT_IMPLICIT_PTR_CAST(classname) \</span>
-<a name="l00857"></a>00857 <span class="preprocessor">  inline static classname* _CS_IMPLICITPTRCAST_NAME (classname* ptr) \</span>
-<a name="l00858"></a>00858 <span class="preprocessor">  { \</span>
-<a name="l00859"></a>00859 <span class="preprocessor">    return ptr;\</span>
-<a name="l00860"></a>00860 <span class="preprocessor">  }</span>
-<a name="l00861"></a>00861 <span class="preprocessor"></span>
-<a name="l00870"></a><a class="code" href="cssysdef_8h.html#15431b2aca13c8d4653f4387bf5b1141">00870</a> <span class="preprocessor">#define CS_IMPLICIT_PTR_CAST(classname, ptr) \</span>
-<a name="l00871"></a>00871 <span class="preprocessor">  (classname::_CS_IMPLICITPTRCAST_NAME(ptr))</span>
-<a name="l00872"></a>00872 <span class="preprocessor"></span>
-<a name="l00876"></a>00876 <span class="preprocessor">#ifdef CS_HAVE_VA_COPY</span>
-<a name="l00877"></a>00877 <span class="preprocessor"></span><span class="preprocessor">#  define CS_VA_COPY(dest, src)         va_copy(dest, src)</span>
-<a name="l00878"></a>00878 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00879"></a>00879 <span class="preprocessor"></span><span class="preprocessor">#  ifdef CS_HAVE___VA_COPY</span>
-<a name="l00880"></a>00880 <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       __va_copy(dest, src)</span>
-<a name="l00881"></a>00881 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
-<a name="l00882"></a><a class="code" href="cssysdef_8h.html#d1a95e13bd870b3531da80fc8d2a0e50">00882</a> <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       dest = src;</span>
-<a name="l00883"></a>00883 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
-<a name="l00884"></a>00884 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00885"></a>00885 <span class="preprocessor"></span>
-<a name="l00890"></a>00890 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
-<a name="l00891"></a><a class="code" href="cssysdef_8h.html#92bb2a51bb45506ed1214feb410034b8">00891</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __PRETTY_FUNCTION__</span>
-<a name="l00892"></a>00892 <span class="preprocessor"></span><span class="preprocessor">#elif defined(__FUNCTION__)</span>
-<a name="l00893"></a>00893 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __FUNCTION__</span>
-<a name="l00894"></a>00894 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00895"></a>00895 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              "&lt;?\?\?&gt;"</span>
-<a name="l00896"></a>00896 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00897"></a>00897 <span class="preprocessor"></span>
-<a name="l00898"></a><a class="code" href="cssysdef_8h.html#f4bcf7e8c715e37b5bc751715c351d93">00898</a> <span class="preprocessor">#define CS_STRING_TO_WIDE_(x)   L ## x</span>
-<a name="l00899"></a>00899 <span class="preprocessor"></span>
-<a name="l00906"></a><a class="code" href="cssysdef_8h.html#dceb8db1fe1c12cad8cfc6477b42ea1c">00906</a> <span class="preprocessor">#define CS_STRING_TO_WIDE(x)    CS_STRING_TO_WIDE_(x)</span>
-<a name="l00907"></a>00907 <span class="preprocessor"></span>
-<a name="l00908"></a>00908 <span class="preprocessor">#ifdef PACKAGE_NAME</span>
-<a name="l00909"></a>00909 <span class="preprocessor"></span><span class="preprocessor"># define CS_NAMESPACE_PACKAGE_NAME       PACKAGE_NAME</span>
-<a name="l00910"></a>00910 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00911"></a><a class="code" href="cssysdef_8h.html#f0a9fe2459ed9f7eb5a86e07952c4a04">00911</a> <span class="preprocessor"></span><span class="preprocessor"># define CS_NAMESPACE_PACKAGE_NAME       CS</span>
-<a name="l00912"></a>00912 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00913"></a>00913 <span class="preprocessor"></span>
-<a name="l00915"></a>00915 
-<a name="l00939"></a><a class="code" href="cssysdef_8h.html#b792f98a2a2db53412f0d9269022a1a0">00939</a> <span class="preprocessor">#define CS_PLUGIN_NAMESPACE_BEGIN(name)                                     \</span>
-<a name="l00940"></a>00940 <span class="preprocessor">  namespace CS_NAMESPACE_PACKAGE_NAME { namespace Plugin { namespace name</span>
-<a name="l00941"></a><a class="code" href="cssysdef_8h.html#35ca9298918766ab003f1b784b3b6e71">00941</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_PLUGIN_NAMESPACE_END(name)                                       \</span>
-<a name="l00942"></a>00942 <span class="preprocessor">  } }</span>
-<a name="l00943"></a><a class="code" href="cssysdef_8h.html#7d9ba8bcac3618355f56ed893d6df8b1">00943</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_PLUGIN_NAMESPACE_NAME(name)                                      \</span>
-<a name="l00944"></a>00944 <span class="preprocessor">  CS_NAMESPACE_PACKAGE_NAME::Plugin::name</span>
-<a name="l00945"></a>00945 <span class="preprocessor"></span>
-<a name="l00946"></a>00946 
-<a name="l00947"></a>00947 <span class="preprocessor">#endif // __CS_CSSYSDEF_H__</span>
+<a name="l00786"></a>00786 <span class="preprocessor"></span><span class="comment">// Unfortunately, gcc doesn't support format argument checking for wide strings</span>
+<a name="l00787"></a>00787 <span class="preprocessor">#  define CS_GNUC_WPRINTF(format_idx, arg_idx) \</span>
+<a name="l00788"></a>00788 <span class="preprocessor">     </span><span class="comment">/*__attribute__((format (__wprintf__, format_idx, arg_idx)))*/</span>
+<a name="l00789"></a>00789 <span class="preprocessor">#  define CS_GNUC_WSCANF(format_idx, arg_idx) \</span>
+<a name="l00790"></a>00790 <span class="preprocessor">     </span><span class="comment">/*__attribute__((format (__wscanf__, format_idx, arg_idx)))*/</span>
+<a name="l00791"></a>00791 <span class="preprocessor">#else</span>
+<a name="l00792"></a><a class="code" href="cssysdef_8h.html#8e48e51430e3babbaf943b676c17ec31">00792</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_PRINTF(format_idx, arg_idx)</span>
+<a name="l00793"></a><a class="code" href="cssysdef_8h.html#f9f528fcf2834ab286bab988d5c90e8f">00793</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_SCANF(format_idx, arg_idx)</span>
+<a name="l00794"></a><a class="code" href="cssysdef_8h.html#1d9accf337fabb00d46c9635b4286857">00794</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_WPRINTF(format_idx, arg_idx)</span>
+<a name="l00795"></a><a class="code" href="cssysdef_8h.html#35f3e34a44c9c900d34e3043fad2dfcc">00795</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_GNUC_WSCANF(format_idx, arg_idx)</span>
+<a name="l00796"></a>00796 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00797"></a>00797 <span class="preprocessor"></span>
+<a name="l00798"></a>00798 <span class="comment">// Remove __attribute__ on non GNUC compilers.</span>
+<a name="l00799"></a>00799 <span class="preprocessor">#ifndef __GNUC__</span>
+<a name="l00800"></a><a class="code" href="cssysdef_8h.html#9d373a9b65ff25b2db84c07394e1c212">00800</a> <span class="preprocessor"></span><span class="preprocessor">#define __attribute__(x)</span>
+<a name="l00801"></a>00801 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00802"></a>00802 <span class="preprocessor"></span>
+<a name="l00803"></a>00803 <span class="comment">// Support for alignment and packing of structures.</span>
+<a name="l00804"></a>00804 <span class="preprocessor">#if !defined(CS_STRUCT_ALIGN_4BYTE_BEGIN)</span>
+<a name="l00805"></a>00805 <span class="preprocessor"></span><span class="preprocessor">#  if defined(__GNUC__) &amp;&amp; defined(CS_STRICT_ALIGNMENT)</span>
+<a name="l00806"></a>00806 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_BEGIN</span>
+<a name="l00807"></a>00807 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_END __attribute__ ((aligned(4)))</span>
+<a name="l00808"></a>00808 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
+<a name="l00809"></a>00809 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_BEGIN</span>
+<a name="l00810"></a>00810 <span class="preprocessor"></span><span class="preprocessor">#    define CS_STRUCT_ALIGN_4BYTE_END</span>
+<a name="l00811"></a>00811 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+<a name="l00812"></a>00812 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00813"></a>00813 <span class="preprocessor"></span>
+<a name="l00814"></a>00814 <span class="preprocessor">#if defined(CS_COMPILER_MSVC)</span>
+<a name="l00815"></a>00815 <span class="preprocessor"></span><span class="preprocessor">  #define CS_ALIGNED_MEMBER(Member, Align)                              \</span>
+<a name="l00816"></a>00816 <span class="preprocessor">    __declspec(align(Align)) Member</span>
+<a name="l00817"></a>00817 <span class="preprocessor"></span><span class="preprocessor">#elif defined(CS_COMPILER_GCC)</span>
+<a name="l00818"></a>00818 <span class="preprocessor"></span>
+<a name="l00830"></a><a class="code" href="cssysdef_8h.html#5d8d64bebccf32da81cda892904bbc28">00830</a> <span class="preprocessor">  #define CS_ALIGNED_MEMBER(Member, Align)                              \</span>
+<a name="l00831"></a>00831 <span class="preprocessor">    Member __attribute((aligned(Align)))</span>
+<a name="l00832"></a>00832 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00833"></a>00833 <span class="preprocessor"></span><span class="preprocessor">  #define CS_ALIGNED_MEMBER(Member, Align)      Member</span>
+<a name="l00834"></a>00834 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00835"></a>00835 <span class="preprocessor"></span>
+<a name="l00836"></a>00836 <span class="comment">// Macro used to define static implicit pointer conversion function.</span>
+<a name="l00837"></a>00837 <span class="comment">// Only use within a class declaration.</span>
+<a name="l00838"></a>00838 <span class="preprocessor">#ifndef _CS_IMPLICITPTRCAST_NAME</span>
+<a name="l00839"></a><a class="code" href="cssysdef_8h.html#eadac43e70d3dae7b999d8a7b26690f1">00839</a> <span class="preprocessor"></span><span class="preprocessor">#  define _CS_IMPLICITPTRCAST_NAME __ImplicitPtrCast</span>
+<a name="l00840"></a>00840 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00841"></a>00841 <span class="preprocessor"></span>
+<a name="l00863"></a><a class="code" href="cssysdef_8h.html#b8b4e5655675ca59b0c4d8419ae243ec">00863</a> <span class="preprocessor">#define CS_IMPLEMENT_IMPLICIT_PTR_CAST(classname) \</span>
+<a name="l00864"></a>00864 <span class="preprocessor">  inline static classname* _CS_IMPLICITPTRCAST_NAME (classname* ptr) \</span>
+<a name="l00865"></a>00865 <span class="preprocessor">  { \</span>
+<a name="l00866"></a>00866 <span class="preprocessor">    return ptr;\</span>
+<a name="l00867"></a>00867 <span class="preprocessor">  }</span>
+<a name="l00868"></a>00868 <span class="preprocessor"></span>
+<a name="l00877"></a><a class="code" href="cssysdef_8h.html#15431b2aca13c8d4653f4387bf5b1141">00877</a> <span class="preprocessor">#define CS_IMPLICIT_PTR_CAST(classname, ptr) \</span>
+<a name="l00878"></a>00878 <span class="preprocessor">  (classname::_CS_IMPLICITPTRCAST_NAME(ptr))</span>
+<a name="l00879"></a>00879 <span class="preprocessor"></span>
+<a name="l00883"></a>00883 <span class="preprocessor">#ifdef CS_HAVE_VA_COPY</span>
+<a name="l00884"></a>00884 <span class="preprocessor"></span><span class="preprocessor">#  define CS_VA_COPY(dest, src)         va_copy(dest, src)</span>
+<a name="l00885"></a>00885 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00886"></a>00886 <span class="preprocessor"></span><span class="preprocessor">#  ifdef CS_HAVE___VA_COPY</span>
+<a name="l00887"></a>00887 <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       __va_copy(dest, src)</span>
+<a name="l00888"></a>00888 <span class="preprocessor"></span><span class="preprocessor">#  else</span>
+<a name="l00889"></a><a class="code" href="cssysdef_8h.html#d1a95e13bd870b3531da80fc8d2a0e50">00889</a> <span class="preprocessor"></span><span class="preprocessor">#    define CS_VA_COPY(dest, src)       dest = src;</span>
+<a name="l00890"></a>00890 <span class="preprocessor"></span><span class="preprocessor">#  endif</span>
+<a name="l00891"></a>00891 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00892"></a>00892 <span class="preprocessor"></span>
+<a name="l00897"></a>00897 <span class="preprocessor">#if defined(CS_COMPILER_GCC)</span>
+<a name="l00898"></a><a class="code" href="cssysdef_8h.html#92bb2a51bb45506ed1214feb410034b8">00898</a> <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __PRETTY_FUNCTION__</span>
+<a name="l00899"></a>00899 <span class="preprocessor"></span><span class="preprocessor">#elif defined(__FUNCTION__)</span>
+<a name="l00900"></a>00900 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              __FUNCTION__</span>
+<a name="l00901"></a>00901 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00902"></a>00902 <span class="preprocessor"></span><span class="preprocessor">#  define CS_FUNCTION_NAME              "&lt;?\?\?&gt;"</span>
+<a name="l00903"></a>00903 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00904"></a>00904 <span class="preprocessor"></span>
+<a name="l00905"></a><a class="code" href="cssysdef_8h.html#f4bcf7e8c715e37b5bc751715c351d93">00905</a> <span class="preprocessor">#define CS_STRING_TO_WIDE_(x)   L ## x</span>
+<a name="l00906"></a>00906 <span class="preprocessor"></span>
+<a name="l00913"></a><a class="code" href="cssysdef_8h.html#dceb8db1fe1c12cad8cfc6477b42ea1c">00913</a> <span class="preprocessor">#define CS_STRING_TO_WIDE(x)    CS_STRING_TO_WIDE_(x)</span>
+<a name="l00914"></a>00914 <span class="preprocessor"></span>
+<a name="l00915"></a>00915 <span class="preprocessor">#ifdef PACKAGE_NAME</span>
+<a name="l00916"></a>00916 <span class="preprocessor"></span><span class="preprocessor"># define CS_NAMESPACE_PACKAGE_NAME       PACKAGE_NAME</span>
+<a name="l00917"></a>00917 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00918"></a><a class="code" href="cssysdef_8h.html#f0a9fe2459ed9f7eb5a86e07952c4a04">00918</a> <span class="preprocessor"></span><span class="preprocessor"># define CS_NAMESPACE_PACKAGE_NAME       CS</span>
+<a name="l00919"></a>00919 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00920"></a>00920 <span class="preprocessor"></span>
+<a name="l00922"></a>00922 
+<a name="l00946"></a><a class="code" href="cssysdef_8h.html#b792f98a2a2db53412f0d9269022a1a0">00946</a> <span class="preprocessor">#define CS_PLUGIN_NAMESPACE_BEGIN(name)                                     \</span>
+<a name="l00947"></a>00947 <span class="preprocessor">  namespace CS_NAMESPACE_PACKAGE_NAME { namespace Plugin { namespace name</span>
+<a name="l00948"></a><a class="code" href="cssysdef_8h.html#35ca9298918766ab003f1b784b3b6e71">00948</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_PLUGIN_NAMESPACE_END(name)                                       \</span>
+<a name="l00949"></a>00949 <span class="preprocessor">  } }</span>
+<a name="l00950"></a><a class="code" href="cssysdef_8h.html#7d9ba8bcac3618355f56ed893d6df8b1">00950</a> <span class="preprocessor"></span><span class="preprocessor">#define CS_PLUGIN_NAMESPACE_NAME(name)                                      \</span>
+<a name="l00951"></a>00951 <span class="preprocessor">  CS_NAMESPACE_PACKAGE_NAME::Plugin::name</span>
+<a name="l00952"></a>00952 <span class="preprocessor"></span>
+<a name="l00953"></a>00953 
+<a name="l00954"></a>00954 <span class="preprocessor">#endif // __CS_CSSYSDEF_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
