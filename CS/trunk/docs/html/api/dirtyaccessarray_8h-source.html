@@ -59,59 +59,65 @@
 <a name="l00033"></a>00033 
 <a name="l00034"></a>00034 <span class="preprocessor">#include "<a class="code" href="array_8h.html">array.h</a>"</span>
 <a name="l00035"></a>00035 
-<a name="l00045"></a>00045 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l00046"></a><a class="code" href="classcsDirtyAccessArray.html">00046</a> <span class="keyword">class </span><a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray</a> : <span class="keyword">public</span> <a class="code" href="classcsArray.html">csArray</a>&lt;T&gt;
+<a name="l00045"></a>00045 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T, <span class="keyword">class</span> ElementHandler = csArrayElementHandler&lt;T&gt; &gt;
+<a name="l00046"></a><a class="code" href="classcsDirtyAccessArray.html">00046</a> <span class="keyword">class </span><a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray</a> : <span class="keyword">public</span> <a class="code" href="classcsArray.html">csArray</a>&lt;T, ElementHandler&gt;
 <a name="l00047"></a>00047 {
-<a name="l00048"></a>00048 <span class="keyword">private</span>:
-<a name="l00049"></a>00049   <span class="keywordtype">int</span> RefCount;
-<a name="l00050"></a>00050 
-<a name="l00051"></a>00051 <span class="keyword">public</span>:
-<a name="l00056"></a><a class="code" href="classcsDirtyAccessArray.html#69b96fc2342946c08ff0d1905f525cb0">00056</a>   <a class="code" href="classcsDirtyAccessArray.html#69b96fc2342946c08ff0d1905f525cb0">csDirtyAccessArray</a> (<span class="keywordtype">int</span> ilimit = 0, <span class="keywordtype">int</span> ithreshold = 0)
-<a name="l00057"></a>00057         : <a class="code" href="classcsArray.html">csArray</a>&lt;T&gt; (ilimit, ithreshold)
+<a name="l00048"></a>00048 <span class="keyword">public</span>:
+<a name="l00053"></a><a class="code" href="classcsDirtyAccessArray.html#8f5ed6eef3704ebf57767627e3cb562d">00053</a>   <a class="code" href="classcsDirtyAccessArray.html#8f5ed6eef3704ebf57767627e3cb562d">csDirtyAccessArray</a> (<span class="keywordtype">int</span> ilimit = 0, <span class="keywordtype">int</span> ithreshold = 0)
+<a name="l00054"></a>00054         : <a class="code" href="classcsArray.html">csArray</a>&lt;T, ElementHandler&gt; (ilimit, ithreshold) {}
+<a name="l00055"></a>00055 
+<a name="l00057"></a><a class="code" href="classcsDirtyAccessArray.html#33476cdd009b0d9cc5646743decf61c8">00057</a>   T* <a class="code" href="classcsDirtyAccessArray.html#33476cdd009b0d9cc5646743decf61c8">GetArray</a> ()
 <a name="l00058"></a>00058   {
-<a name="l00059"></a>00059     RefCount = 0;
-<a name="l00060"></a>00060   }
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062   <span class="comment">// Reference counting.</span>
-<a name="l00063"></a><a class="code" href="classcsDirtyAccessArray.html#48e5114f8fe01692fd5a875a820317cd">00063</a>   <span class="keywordtype">void</span> <a class="code" href="classcsDirtyAccessArray.html#48e5114f8fe01692fd5a875a820317cd">IncRef</a> () { RefCount++; }
+<a name="l00059"></a>00059     <span class="keywordflow">if</span> (this-&gt;Length () &gt; 0) <span class="comment">// see *1*</span>
+<a name="l00060"></a>00060       <span class="keywordflow">return</span> &amp;this-&gt;Get (0);
+<a name="l00061"></a>00061     <span class="keywordflow">else</span>
+<a name="l00062"></a>00062       <span class="keywordflow">return</span> 0;
+<a name="l00063"></a>00063   }
 <a name="l00064"></a>00064 
-<a name="l00065"></a>00065   <span class="comment">// Reference counting. Delete array when reference reaches 0.</span>
-<a name="l00066"></a><a class="code" href="classcsDirtyAccessArray.html#fe87c37626ae49ca0e51e9a295c67026">00066</a>   <span class="keywordtype">void</span> <a class="code" href="classcsDirtyAccessArray.html#fe87c37626ae49ca0e51e9a295c67026">DecRef</a> ()
-<a name="l00067"></a>00067   {
-<a name="l00068"></a>00068     <span class="keywordflow">if</span> (RefCount == 1) { this-&gt;<a class="code" href="classcsArray.html#e0828a94ef01e3311efe3b01ac268ecf">DeleteAll</a> (); } <span class="comment">// see *1*</span>
-<a name="l00069"></a>00069     RefCount--;
-<a name="l00070"></a>00070   }
-<a name="l00071"></a>00071 
-<a name="l00073"></a><a class="code" href="classcsDirtyAccessArray.html#09bd8717983ee74bc27d0a36aca38326">00073</a>   T* <a class="code" href="classcsDirtyAccessArray.html#09bd8717983ee74bc27d0a36aca38326">GetArray</a> ()
-<a name="l00074"></a>00074   {
-<a name="l00075"></a>00075     <span class="keywordflow">if</span> (this-&gt;Length () &gt; 0) <span class="comment">// see *1*</span>
-<a name="l00076"></a>00076       <span class="keywordflow">return</span> &amp;this-&gt;Get (0);
-<a name="l00077"></a>00077     <span class="keywordflow">else</span>
-<a name="l00078"></a>00078       <span class="keywordflow">return</span> 0;
-<a name="l00079"></a>00079   }
-<a name="l00080"></a>00080 
-<a name="l00082"></a><a class="code" href="classcsDirtyAccessArray.html#93f71facba05a0ac1c867a514d967125">00082</a>   <span class="keyword">const</span> T* <a class="code" href="classcsDirtyAccessArray.html#09bd8717983ee74bc27d0a36aca38326">GetArray</a> ()<span class="keyword"> const</span>
-<a name="l00083"></a>00083 <span class="keyword">  </span>{
-<a name="l00084"></a>00084     <span class="keywordflow">if</span> (this-&gt;Length () &gt; 0) <span class="comment">// see *1*</span>
-<a name="l00085"></a>00085       <span class="keywordflow">return</span> &amp;this-&gt;Get (0);
-<a name="l00086"></a>00086     <span class="keywordflow">else</span>
-<a name="l00087"></a>00087       <span class="keywordflow">return</span> 0;
-<a name="l00088"></a>00088   }
-<a name="l00089"></a>00089 
-<a name="l00095"></a><a class="code" href="classcsDirtyAccessArray.html#403fd24bd6a5235a8a4cc80f6da6b1fe">00095</a>   T* <a class="code" href="classcsDirtyAccessArray.html#403fd24bd6a5235a8a4cc80f6da6b1fe">GetArrayCopy</a> ()
-<a name="l00096"></a>00096   {
-<a name="l00097"></a>00097     <span class="keywordflow">if</span> (this-&gt;Length () &gt; 0) <span class="comment">// see *1*</span>
-<a name="l00098"></a>00098     {
-<a name="l00099"></a>00099       T* copy = <span class="keyword">new</span> T [this-&gt;Length ()];
-<a name="l00100"></a>00100       memcpy (copy, &amp;this-&gt;Get (0), <span class="keyword">sizeof</span> (T) * this-&gt;Length ());
-<a name="l00101"></a>00101       <span class="keywordflow">return</span> copy;
-<a name="l00102"></a>00102     }
-<a name="l00103"></a>00103     <span class="keywordflow">else</span>
-<a name="l00104"></a>00104       <span class="keywordflow">return</span> 0;
-<a name="l00105"></a>00105   }
-<a name="l00106"></a>00106 };
+<a name="l00066"></a><a class="code" href="classcsDirtyAccessArray.html#342125da74e8b93a8e9ff8a38682f5aa">00066</a>   <span class="keyword">const</span> T* <a class="code" href="classcsDirtyAccessArray.html#33476cdd009b0d9cc5646743decf61c8">GetArray</a> ()<span class="keyword"> const</span>
+<a name="l00067"></a>00067 <span class="keyword">  </span>{
+<a name="l00068"></a>00068     <span class="keywordflow">if</span> (this-&gt;Length () &gt; 0) <span class="comment">// see *1*</span>
+<a name="l00069"></a>00069       <span class="keywordflow">return</span> &amp;this-&gt;Get (0);
+<a name="l00070"></a>00070     <span class="keywordflow">else</span>
+<a name="l00071"></a>00071       <span class="keywordflow">return</span> 0;
+<a name="l00072"></a>00072   }
+<a name="l00073"></a>00073 
+<a name="l00079"></a><a class="code" href="classcsDirtyAccessArray.html#e38aa8a9d2e9cdbc0fa67b460b4c22c4">00079</a>   T* <a class="code" href="classcsDirtyAccessArray.html#e38aa8a9d2e9cdbc0fa67b460b4c22c4">GetArrayCopy</a> ()
+<a name="l00080"></a>00080   {
+<a name="l00081"></a>00081     <span class="keywordflow">if</span> (this-&gt;Length () &gt; 0) <span class="comment">// see *1*</span>
+<a name="l00082"></a>00082     {
+<a name="l00083"></a>00083       T* copy = <span class="keyword">new</span> T [this-&gt;Length ()];
+<a name="l00084"></a>00084       memcpy (copy, &amp;this-&gt;Get (0), <span class="keyword">sizeof</span> (T) * this-&gt;Length ());
+<a name="l00085"></a>00085       <span class="keywordflow">return</span> copy;
+<a name="l00086"></a>00086     }
+<a name="l00087"></a>00087     <span class="keywordflow">else</span>
+<a name="l00088"></a>00088       <span class="keywordflow">return</span> 0;
+<a name="l00089"></a>00089   }
+<a name="l00090"></a>00090 };
+<a name="l00091"></a>00091 
+<a name="l00097"></a>00097 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T, <span class="keyword">class</span> ElementHandler = csArrayElementHandler&lt;T&gt; &gt;
+<a name="l00098"></a><a class="code" href="classcsDirtyAccessArrayRefCounted.html">00098</a> <span class="keyword">class </span><a class="code" href="classcsDirtyAccessArrayRefCounted.html">csDirtyAccessArrayRefCounted</a> : 
+<a name="l00099"></a>00099   <span class="keyword">public</span> <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray</a>&lt;T, ElementHandler&gt;
+<a name="l00100"></a>00100 {
+<a name="l00101"></a>00101 <span class="keyword">private</span>:
+<a name="l00102"></a>00102   <span class="keywordtype">int</span> RefCount;
+<a name="l00103"></a>00103 <span class="keyword">public</span>:
+<a name="l00104"></a><a class="code" href="classcsDirtyAccessArrayRefCounted.html#855d77c502b7729d5d9a668529c73bec">00104</a>   <a class="code" href="classcsDirtyAccessArrayRefCounted.html#855d77c502b7729d5d9a668529c73bec">csDirtyAccessArrayRefCounted</a> (<span class="keywordtype">int</span> ilimit = 0, <span class="keywordtype">int</span> ithreshold = 0) : 
+<a name="l00105"></a>00105     <a class="code" href="classcsDirtyAccessArray.html">csDirtyAccessArray</a>&lt;T, ElementHandler&gt; (ilimit, ithreshold), RefCount (0)
+<a name="l00106"></a>00106   { }
 <a name="l00107"></a>00107 
-<a name="l00108"></a>00108 <span class="preprocessor">#endif // __CS_DIRTYACCESSARRAY_H__</span>
+<a name="l00109"></a><a class="code" href="classcsDirtyAccessArrayRefCounted.html#a8ff973e5df2434de24415fddf173de4">00109</a>   <span class="keywordtype">void</span> <a class="code" href="classcsDirtyAccessArrayRefCounted.html#a8ff973e5df2434de24415fddf173de4">IncRef</a> () { RefCount++; }
+<a name="l00110"></a>00110 
+<a name="l00112"></a><a class="code" href="classcsDirtyAccessArrayRefCounted.html#3992fe8b9ab316673ccbaf0e4bac43f7">00112</a>   <span class="keywordtype">void</span> <a class="code" href="classcsDirtyAccessArrayRefCounted.html#3992fe8b9ab316673ccbaf0e4bac43f7">DecRef</a> ()
+<a name="l00113"></a>00113   {
+<a name="l00114"></a>00114     <span class="keywordflow">if</span> (RefCount == 1) { this-&gt;<a class="code" href="classcsArray.html#e0828a94ef01e3311efe3b01ac268ecf">DeleteAll</a> (); } <span class="comment">// see *1*</span>
+<a name="l00115"></a>00115     RefCount--;
+<a name="l00116"></a>00116   }
+<a name="l00117"></a>00117 
+<a name="l00118"></a>00118 };
+<a name="l00119"></a>00119 
+<a name="l00120"></a>00120 
+<a name="l00121"></a>00121 <span class="preprocessor">#endif // __CS_DIRTYACCESSARRAY_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
