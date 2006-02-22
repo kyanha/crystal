@@ -299,43 +299,44 @@
 <a name="l00354"></a>00354     <span class="keywordflow">return</span> <span class="keyword">true</span>;
 <a name="l00355"></a>00355   }
 <a name="l00356"></a><a class="code" href="classcsParticleSystem.html#2b338104d8a482aaa34f4077f81f6460">00356</a>   <span class="keyword">virtual</span> <a class="code" href="structiMaterialWrapper.html">iMaterialWrapper</a>* GetMaterialWrapper ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mat; }
-<a name="l00357"></a>00357   <span class="comment">//------------------------- iParticleState implementation ----------------</span>
-<a name="l00358"></a><a class="code" href="classcsParticleSystem.html#ca1e9b3e7c4eb998ce9bb7ec1cadc14e">00358</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetMixMode (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> mode)
-<a name="l00359"></a>00359   {
-<a name="l00360"></a>00360     MixMode = mode;
-<a name="l00361"></a>00361     SetupMixMode ();
-<a name="l00362"></a>00362   }
-<a name="l00363"></a><a class="code" href="classcsParticleSystem.html#f258236fe17d9af5e14a2b9d848bdbb4">00363</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> GetMixMode ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> MixMode; }
-<a name="l00364"></a><a class="code" href="classcsParticleSystem.html#144928e3054bc79d68a7926322a700e6">00364</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> InvalidateMaterialHandles () { }
-<a name="l00369"></a><a class="code" href="classcsParticleSystem.html#35dd8229a1af65102243722d4d48de8d">00369</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> PositionChild (<a class="code" href="structiMeshObject.html">iMeshObject</a>* <span class="comment">/*child*/</span>,<a class="code" href="group__util.html#g28e82998c4c2d1197a1d412bba7da793">csTicks</a> <span class="comment">/*current_time*/</span>) { }
-<a name="l00370"></a>00370 };
-<a name="l00371"></a>00371 
-<a name="l00376"></a><a class="code" href="classcsNewtonianParticleSystem.html">00376</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csNewtonianParticleSystem :
-<a name="l00377"></a>00377   <span class="keyword">public</span> <a class="code" href="classscfImplementationExt0.html">scfImplementationExt0</a>&lt;csNewtonianParticleSystem, csParticleSystem&gt;
-<a name="l00378"></a>00378 {
-<a name="l00379"></a>00379 <span class="keyword">protected</span>:
-<a name="l00381"></a><a class="code" href="classcsNewtonianParticleSystem.html#2e820855219c2606361a879288eb5387">00381</a>   <a class="code" href="classcsVector3.html">csVector3</a> *part_speed;
-<a name="l00383"></a><a class="code" href="classcsNewtonianParticleSystem.html#cfa134f0336f037e125a20bc3edbcb76">00383</a>   <a class="code" href="classcsVector3.html">csVector3</a> *part_accel;
-<a name="l00384"></a>00384 
-<a name="l00385"></a>00385 <span class="keyword">public</span>:
-<a name="l00387"></a>00387   csNewtonianParticleSystem (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg,
-<a name="l00388"></a>00388         <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* factory);
-<a name="l00389"></a>00389   <span class="keyword">virtual</span> ~csNewtonianParticleSystem ();
-<a name="l00390"></a>00390 
-<a name="l00391"></a>00391   <span class="keywordtype">void</span> SetCount (<span class="keywordtype">int</span> max);
-<a name="l00392"></a>00392 
-<a name="l00394"></a>00394   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Update (<a class="code" href="group__util.html#g28e82998c4c2d1197a1d412bba7da793">csTicks</a> elapsed_time);
-<a name="l00395"></a>00395 
-<a name="l00397"></a><a class="code" href="classcsNewtonianParticleSystem.html#51766b35969a9d48589329ae14079426">00397</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetSpeed (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> part_speed[idx]; }
-<a name="l00399"></a><a class="code" href="classcsNewtonianParticleSystem.html#39839a17e51760fe0d7a98bb2a55190a">00399</a>   <span class="keywordtype">void</span> SetSpeed (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; spd)
-<a name="l00400"></a>00400   { part_speed[idx] = spd; }
-<a name="l00401"></a>00401 
-<a name="l00403"></a><a class="code" href="classcsNewtonianParticleSystem.html#48a91f43c15931f641b83f52135e6881">00403</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetAccel (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> part_accel[idx]; }
-<a name="l00405"></a><a class="code" href="classcsNewtonianParticleSystem.html#28dd962ac45663237985eec9ef60ccbd">00405</a>   <span class="keywordtype">void</span> SetAccel (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; acl)
-<a name="l00406"></a>00406   { part_accel[idx] = acl; }
-<a name="l00407"></a>00407 };
-<a name="l00408"></a>00408 
-<a name="l00411"></a>00411 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_PARTICLESYS_PARTGEN_H__</span>
+<a name="l00357"></a><a class="code" href="classcsParticleSystem.html#68d77c097d1ec09be6de89d9a7073c17">00357</a>   <span class="keyword">virtual</span> <a class="code" href="structiTerraFormer.html">iTerraFormer</a>* GetTerraFormerColldet () { <span class="keywordflow">return</span> 0; }
+<a name="l00358"></a>00358   <span class="comment">//------------------------- iParticleState implementation ----------------</span>
+<a name="l00359"></a><a class="code" href="classcsParticleSystem.html#ca1e9b3e7c4eb998ce9bb7ec1cadc14e">00359</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> SetMixMode (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> mode)
+<a name="l00360"></a>00360   {
+<a name="l00361"></a>00361     MixMode = mode;
+<a name="l00362"></a>00362     SetupMixMode ();
+<a name="l00363"></a>00363   }
+<a name="l00364"></a><a class="code" href="classcsParticleSystem.html#f258236fe17d9af5e14a2b9d848bdbb4">00364</a>   <span class="keyword">virtual</span> <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> GetMixMode ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> MixMode; }
+<a name="l00365"></a><a class="code" href="classcsParticleSystem.html#144928e3054bc79d68a7926322a700e6">00365</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> InvalidateMaterialHandles () { }
+<a name="l00370"></a><a class="code" href="classcsParticleSystem.html#35dd8229a1af65102243722d4d48de8d">00370</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> PositionChild (<a class="code" href="structiMeshObject.html">iMeshObject</a>* <span class="comment">/*child*/</span>,<a class="code" href="group__util.html#g28e82998c4c2d1197a1d412bba7da793">csTicks</a> <span class="comment">/*current_time*/</span>) { }
+<a name="l00371"></a>00371 };
+<a name="l00372"></a>00372 
+<a name="l00377"></a><a class="code" href="classcsNewtonianParticleSystem.html">00377</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csNewtonianParticleSystem :
+<a name="l00378"></a>00378   <span class="keyword">public</span> <a class="code" href="classscfImplementationExt0.html">scfImplementationExt0</a>&lt;csNewtonianParticleSystem, csParticleSystem&gt;
+<a name="l00379"></a>00379 {
+<a name="l00380"></a>00380 <span class="keyword">protected</span>:
+<a name="l00382"></a><a class="code" href="classcsNewtonianParticleSystem.html#2e820855219c2606361a879288eb5387">00382</a>   <a class="code" href="classcsVector3.html">csVector3</a> *part_speed;
+<a name="l00384"></a><a class="code" href="classcsNewtonianParticleSystem.html#cfa134f0336f037e125a20bc3edbcb76">00384</a>   <a class="code" href="classcsVector3.html">csVector3</a> *part_accel;
+<a name="l00385"></a>00385 
+<a name="l00386"></a>00386 <span class="keyword">public</span>:
+<a name="l00388"></a>00388   csNewtonianParticleSystem (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg,
+<a name="l00389"></a>00389         <a class="code" href="structiMeshObjectFactory.html">iMeshObjectFactory</a>* factory);
+<a name="l00390"></a>00390   <span class="keyword">virtual</span> ~csNewtonianParticleSystem ();
+<a name="l00391"></a>00391 
+<a name="l00392"></a>00392   <span class="keywordtype">void</span> SetCount (<span class="keywordtype">int</span> max);
+<a name="l00393"></a>00393 
+<a name="l00395"></a>00395   <span class="keyword">virtual</span> <span class="keywordtype">void</span> Update (<a class="code" href="group__util.html#g28e82998c4c2d1197a1d412bba7da793">csTicks</a> elapsed_time);
+<a name="l00396"></a>00396 
+<a name="l00398"></a><a class="code" href="classcsNewtonianParticleSystem.html#51766b35969a9d48589329ae14079426">00398</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetSpeed (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> part_speed[idx]; }
+<a name="l00400"></a><a class="code" href="classcsNewtonianParticleSystem.html#39839a17e51760fe0d7a98bb2a55190a">00400</a>   <span class="keywordtype">void</span> SetSpeed (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; spd)
+<a name="l00401"></a>00401   { part_speed[idx] = spd; }
+<a name="l00402"></a>00402 
+<a name="l00404"></a><a class="code" href="classcsNewtonianParticleSystem.html#48a91f43c15931f641b83f52135e6881">00404</a>   <a class="code" href="classcsVector3.html">csVector3</a>&amp; GetAccel (<span class="keywordtype">int</span> idx)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> part_accel[idx]; }
+<a name="l00406"></a><a class="code" href="classcsNewtonianParticleSystem.html#28dd962ac45663237985eec9ef60ccbd">00406</a>   <span class="keywordtype">void</span> SetAccel (<span class="keywordtype">int</span> idx, <span class="keyword">const</span> <a class="code" href="classcsVector3.html">csVector3</a>&amp; acl)
+<a name="l00407"></a>00407   { part_accel[idx] = acl; }
+<a name="l00408"></a>00408 };
+<a name="l00409"></a>00409 
+<a name="l00412"></a>00412 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_PARTICLESYS_PARTGEN_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
