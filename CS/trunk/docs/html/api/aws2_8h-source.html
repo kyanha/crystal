@@ -67,67 +67,46 @@
 <a name="l00040"></a>00040 
 <a name="l00041"></a>00041 <span class="keyword">struct </span><a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>;
 <a name="l00042"></a>00042 
-<a name="l00043"></a><a class="code" href="namespaceaws.html">00043</a> <span class="keyword">namespace </span>aws
-<a name="l00044"></a>00044 {
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044 <span class="keyword">struct </span><a class="code" href="structiAwsScriptObject.html">iAwsScriptObject</a>;
 <a name="l00045"></a>00045 
-<a name="l00046"></a><a class="code" href="namespaceaws_1_1autom.html">00046</a> <span class="keyword">namespace </span>autom
-<a name="l00047"></a>00047 {
-<a name="l00048"></a>00048   <span class="keyword">class </span>string;
-<a name="l00049"></a>00049   <span class="keyword">class </span>integer;
-<a name="l00050"></a>00050   <span class="keyword">class </span>floating;
-<a name="l00051"></a>00051   
-<a name="l00053"></a><a class="code" href="structaws_1_1autom_1_1iObject.html">00053</a>   <span class="keyword">struct </span><a class="code" href="structaws_1_1autom_1_1iObject.html">iObject</a> 
-<a name="l00054"></a>00054   {    
-<a name="l00055"></a>00055     SCF_INTERFACE(<a class="code" href="structaws_1_1autom_1_1iObject.html">autom::iObject</a>,0,0,1);
-<a name="l00056"></a><a class="code" href="structaws_1_1autom_1_1iObject.html#717a568662ba6037342bad66ace0b1b6">00056</a>     <span class="keyword">enum</span> <a class="code" href="structaws_1_1autom_1_1iObject.html#717a568662ba6037342bad66ace0b1b6">TYPE</a> { T_STRING, T_INT, T_FLOAT, T_LIST, T_MAP, T_FUNCTION,
-<a name="l00057"></a>00057         T_REFERENCE, T_BLOB, T_VAR, T_NIL };
+<a name="l00046"></a><a class="code" href="aws2_8h.html#46a44cc9bed3629a3370356f82febb65">00046</a> <span class="keyword">typedef</span> <span class="keywordtype">void</span> <a class="code" href="aws2_8h.html#46a44cc9bed3629a3370356f82febb65">AwsScriptObjectFunc</a>(<a class="code" href="structiAwsScriptObject.html">iAwsScriptObject</a> *);
+<a name="l00047"></a>00047         
+<a name="l00048"></a>00048 <a class="code" href="group__scf.html#g654bebfc58b1e4e2c9ef9c6334139c73">SCF_VERSION</a>(<a class="code" href="structiAwsScriptObject.html">iAwsScriptObject</a>, 1, 0, 1);
+<a name="l00049"></a><a class="code" href="structiAwsScriptObject.html">00049</a> <span class="keyword">struct </span><a class="code" href="structiAwsScriptObject.html">iAwsScriptObject</a>
+<a name="l00050"></a>00050 {                       
+<a name="l00052"></a>00052         <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAwsScriptObject.html#dce5168792eaad2d2cd91e08b05c0974">SetNotification</a>(<a class="code" href="aws2_8h.html#46a44cc9bed3629a3370356f82febb65">AwsScriptObjectFunc</a> *_func)=0;
+<a name="l00053"></a>00053         
+<a name="l00055"></a>00055         <span class="keyword">virtual</span> <a class="code" href="group__util.html#g1134b580f8da4de94ca6b1de4d37975e">uint32</a> <a class="code" href="structiAwsScriptObject.html#063dbad99769c2696060294b1d4b07a4">NumArgs</a>()=0;             
+<a name="l00056"></a>00056 };
+<a name="l00057"></a>00057         
 <a name="l00058"></a>00058 
-<a name="l00063"></a>00063     <span class="keyword">virtual</span> <a class="code" href="structaws_1_1autom_1_1iObject.html#717a568662ba6037342bad66ace0b1b6">TYPE</a> <a class="code" href="structaws_1_1autom_1_1iObject.html#42d0c15f459d1005a58a1cba54d8b7b7">ObjectType</a>() = 0;
-<a name="l00064"></a>00064       
-<a name="l00066"></a>00066     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structaws_1_1autom_1_1iObject.html#73076f01714a359fbbeb3eb1507fc57b">SetName</a>(<a class="code" href="structiString.html">iString</a>* _name) = 0;
-<a name="l00067"></a>00067       
-<a name="l00069"></a>00069     <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iString&gt;</a> <a class="code" href="structaws_1_1autom_1_1iObject.html#ccee04d253dd9da385fdd8710461534a">GetName</a>() = 0;
-<a name="l00070"></a>00070       
-<a name="l00072"></a>00072     <span class="keyword">virtual</span> string <a class="code" href="structaws_1_1autom_1_1iObject.html#aeac976a5985fb9375b4e3e1f50c39e5">ToString</a>() = 0;
-<a name="l00073"></a>00073       
-<a name="l00075"></a>00075     <span class="keyword">virtual</span> integer <a class="code" href="structaws_1_1autom_1_1iObject.html#e10bd256e89be373ba35f729f9e1cc7e">ToInt</a>() = 0;
-<a name="l00076"></a>00076       
-<a name="l00078"></a>00078     <span class="keyword">virtual</span> floating <a class="code" href="structaws_1_1autom_1_1iObject.html#398d95201207807da69331ff50212d4f">ToFloat</a>() = 0;     
-<a name="l00079"></a>00079       
-<a name="l00084"></a>00084     <span class="keyword">virtual</span> <a class="code" href="classcsRef.html">csRef&lt;iString&gt;</a> <a class="code" href="structaws_1_1autom_1_1iObject.html#4e35fddcb01c6d984c2f3036d4eb4dc9">ReprObject</a>() = 0;      
-<a name="l00085"></a>00085   };
-<a name="l00086"></a>00086 
-<a name="l00087"></a>00087 } <span class="comment">// namespace autom</span>
+<a name="l00059"></a>00059 <a class="code" href="group__scf.html#g654bebfc58b1e4e2c9ef9c6334139c73">SCF_VERSION</a>(<a class="code" href="structiAwsWindow.html">iAwsWindow</a>, 1, 0, 1);
+<a name="l00060"></a><a class="code" href="structiAwsWindow.html">00060</a> <span class="keyword">struct </span><a class="code" href="structiAwsWindow.html">iAwsWindow</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00061"></a>00061 {
+<a name="l00062"></a><a class="code" href="structiAwsWindow.html#a5d648f46f07bc09688169dbad550b99">00062</a>   <span class="keywordtype">int</span> <a class="code" href="structiAwsWindow.html#a5d648f46f07bc09688169dbad550b99">empty</a>;
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 };
+<a name="l00065"></a>00065 
+<a name="l00066"></a>00066 
+<a name="l00067"></a>00067 <a class="code" href="group__scf.html#g654bebfc58b1e4e2c9ef9c6334139c73">SCF_VERSION</a>(<a class="code" href="structiAws.html">iAws</a>, 1, 0, 1);
+<a name="l00068"></a>00068 <span class="keyword">struct </span><a class="code" href="structiAws.html">iAws</a>  : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00069"></a>00069 {
+<a name="l00071"></a>00071   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#9ae40a83783ec56c3dc8deba3e09ff5d">Initialize</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *_object_reg)=0;
+<a name="l00072"></a>00072 
+<a name="l00074"></a>00074   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAws.html#c5484d896df0d1bf04aefed8010e1433">SetDrawTarget</a>(<a class="code" href="structiGraphics2D.html">iGraphics2D</a> *_g2d, <a class="code" href="structiGraphics3D.html">iGraphics3D</a> *_g3d)=0;
+<a name="l00075"></a>00075 
+<a name="l00077"></a>00077   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#7490cd793f3e764808e001892ae3d59c">Load</a>(<span class="keyword">const</span> <a class="code" href="classscfString.html">scfString</a> &amp;_filename)=0;
+<a name="l00078"></a>00078 
+<a name="l00080"></a>00080   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#cd0af10290ecbac7f8f4daa4eccfe43e">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a> &amp;)=0;  
+<a name="l00081"></a>00081 
+<a name="l00083"></a>00083   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAws.html#892874caf5be95d3bcda7464714954c0">Redraw</a>()=0;
+<a name="l00084"></a>00084   
+<a name="l00086"></a>00086   <span class="keyword">virtual</span> <a class="code" href="structiAwsScriptObject.html">iAwsScriptObject</a> *<a class="code" href="structiAws.html#bbf00b9fa8419034edf263a02e1844a3">CreateScriptObject</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *name)=0;
+<a name="l00087"></a>00087 };
 <a name="l00088"></a>00088 
-<a name="l00089"></a>00089 } <span class="comment">// namespace aws</span>
-<a name="l00090"></a>00090 
-<a name="l00091"></a>00091 <span class="comment">/*SCF_VERSION(aws::autom::iObject, 1, 0, 1);*/</span>
-<a name="l00092"></a>00092 
-<a name="l00093"></a>00093 
-<a name="l00094"></a>00094 <a class="code" href="group__scf.html#g654bebfc58b1e4e2c9ef9c6334139c73">SCF_VERSION</a>(<a class="code" href="structiAwsWindow.html">iAwsWindow</a>, 1, 0, 1);
-<a name="l00095"></a><a class="code" href="structiAwsWindow.html">00095</a> <span class="keyword">struct </span><a class="code" href="structiAwsWindow.html">iAwsWindow</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00096"></a>00096 {
-<a name="l00097"></a><a class="code" href="structiAwsWindow.html#a5d648f46f07bc09688169dbad550b99">00097</a>   <span class="keywordtype">int</span> <a class="code" href="structiAwsWindow.html#a5d648f46f07bc09688169dbad550b99">empty</a>;
-<a name="l00098"></a>00098 
-<a name="l00099"></a>00099 };
-<a name="l00100"></a>00100 
-<a name="l00101"></a>00101 
-<a name="l00102"></a>00102 <a class="code" href="group__scf.html#g654bebfc58b1e4e2c9ef9c6334139c73">SCF_VERSION</a>(<a class="code" href="structiAws.html">iAws</a>, 1, 0, 1);
-<a name="l00103"></a>00103 <span class="keyword">struct </span><a class="code" href="structiAws.html">iAws</a>  : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00104"></a>00104 {
-<a name="l00106"></a>00106   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#9ae40a83783ec56c3dc8deba3e09ff5d">Initialize</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a> *_object_reg)=0;
-<a name="l00107"></a>00107 
-<a name="l00109"></a>00109   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAws.html#c5484d896df0d1bf04aefed8010e1433">SetDrawTarget</a>(<a class="code" href="structiGraphics2D.html">iGraphics2D</a> *_g2d, <a class="code" href="structiGraphics3D.html">iGraphics3D</a> *_g3d)=0;
-<a name="l00110"></a>00110 
-<a name="l00112"></a>00112   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#7490cd793f3e764808e001892ae3d59c">Load</a>(<span class="keyword">const</span> <a class="code" href="classscfString.html">scfString</a> &amp;_filename)=0;
-<a name="l00113"></a>00113 
-<a name="l00115"></a>00115   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiAws.html#cd0af10290ecbac7f8f4daa4eccfe43e">HandleEvent</a> (<a class="code" href="structiEvent.html">iEvent</a> &amp;)=0;  
-<a name="l00116"></a>00116 
-<a name="l00118"></a>00118   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiAws.html#892874caf5be95d3bcda7464714954c0">Redraw</a>()=0;
-<a name="l00119"></a>00119 };
-<a name="l00120"></a>00120 
-<a name="l00121"></a>00121 
-<a name="l00122"></a>00122 <span class="preprocessor">#endif</span>
+<a name="l00089"></a>00089 
+<a name="l00090"></a>00090 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
