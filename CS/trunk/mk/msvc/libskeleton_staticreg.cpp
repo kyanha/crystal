@@ -16,32 +16,19 @@
 namespace csStaticPluginInit
 {
 static char const metainfo_skeleton[] =
-"<?xml version=\"1.0\"?>
-"
-"<!-- skeleton.csplugin -->
-"
-"<plugin>
-"
-"  <scf>
-"
-"    <classes>
-"
-"      <class>
-"
-"        <name>crystalspace.graveyard</name>
-"
-"        <implementation>csSkeletonGraveyard</implementation>
-"
-"        <description>Crystal Space Graveyard class</description>
-"
-"      </class>
-"
-"    </classes>
-"
-"  </scf>
-"
-"</plugin>
-"
+"<?xml version=\"1.0\"?>"
+"<!-- skeleton.csplugin -->"
+"<plugin>"
+"  <scf>"
+"    <classes>"
+"      <class>"
+"        <name>crystalspace.graveyard</name>"
+"        <implementation>csSkeletonGraveyard</implementation>"
+"        <description>Crystal Space Graveyard class</description>"
+"      </class>"
+"    </classes>"
+"  </scf>"
+"</plugin>"
 ;
   #ifndef csSkeletonGraveyard_FACTORY_REGISTER_DEFINED 
   #define csSkeletonGraveyard_FACTORY_REGISTER_DEFINED 

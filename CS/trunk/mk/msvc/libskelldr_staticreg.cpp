@@ -16,32 +16,19 @@
 namespace csStaticPluginInit
 {
 static char const metainfo_skelldr[] =
-"<?xml version=\"1.0\"?>
-"
-"<!-- skelldr.csplugin -->
-"
-"<plugin>
-"
-"  <scf>
-"
-"    <classes>
-"
-"      <class>
-"
-"        <name>crystalspace.graveyard.loader</name>
-"
-"        <implementation>csSkeletonFactoryLoader</implementation>
-"
-"        <description>Crystal Space General Skeleton Factory Loader</description>
-"
-"      </class>
-"
-"    </classes>
-"
-"  </scf>
-"
-"</plugin>
-"
+"<?xml version=\"1.0\"?>"
+"<!-- skelldr.csplugin -->"
+"<plugin>"
+"  <scf>"
+"    <classes>"
+"      <class>"
+"        <name>crystalspace.graveyard.loader</name>"
+"        <implementation>csSkeletonFactoryLoader</implementation>"
+"        <description>Crystal Space General Skeleton Factory Loader</description>"
+"      </class>"
+"    </classes>"
+"  </scf>"
+"</plugin>"
 ;
   #ifndef csSkeletonFactoryLoader_FACTORY_REGISTER_DEFINED 
   #define csSkeletonFactoryLoader_FACTORY_REGISTER_DEFINED 
