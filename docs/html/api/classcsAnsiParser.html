@@ -49,14 +49,24 @@
 <a class="el" href="classcsAnsiParser.html#5e0169d838a8621d116dc08b6b36c7a0f8f58bae0d55db7e7bd21bdcd1543cc8">cmdFormatAttrDisable</a>, 
 <br>
 &nbsp;&nbsp;<a class="el" href="classcsAnsiParser.html#5e0169d838a8621d116dc08b6b36c7a042c3f53281d8e4c554da647e9ad657cb">cmdFormatAttrForeground</a>, 
-<a class="el" href="classcsAnsiParser.html#5e0169d838a8621d116dc08b6b36c7a0890f0ee802952d5b59999a04dea2a089">cmdFormatAttrBackground</a>
+<a class="el" href="classcsAnsiParser.html#5e0169d838a8621d116dc08b6b36c7a0890f0ee802952d5b59999a04dea2a089">cmdFormatAttrBackground</a>, 
+<a class="el" href="classcsAnsiParser.html#5e0169d838a8621d116dc08b6b36c7a02b5a1ea6e5384ad65a6ea750dc293b87">cmdClearScreen</a>, 
+<a class="el" href="classcsAnsiParser.html#5e0169d838a8621d116dc08b6b36c7a0073550261fe0f54efcbefeb9fd09cb9e">cmdClearLine</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="classcsAnsiParser.html#5e0169d838a8621d116dc08b6b36c7a0fa7fd47c7b37898827427ba8ecda4385">cmdCursorSetPosition</a>, 
+<a class="el" href="classcsAnsiParser.html#5e0169d838a8621d116dc08b6b36c7a02d61b66cc824db535c6fc7c58203243a">cmdCursorMoveRelative</a>
 <br>
  }</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Identifier for the ANSI command.  <a href="classcsAnsiParser.html#5e0169d838a8621d116dc08b6b36c7a0">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14c">CommandClass</a> { <a class="el" href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14c3d56c807b4e666efc34e8cb47229a2a2">classNone</a>, 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14c">CommandClass</a> { <br>
+&nbsp;&nbsp;<a class="el" href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14c3d56c807b4e666efc34e8cb47229a2a2">classNone</a>, 
 <a class="el" href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14c57cc8e863fc0798209a80432038e0d46">classUnknown</a>, 
-<a class="el" href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14c51d444625a2df9be1562e867f130343b">classFormat</a>
+<a class="el" href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14c51d444625a2df9be1562e867f130343b">classFormat</a>, 
+<a class="el" href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14cdf1e57426fb0b53f2f256c65cf6e29d1">classClear</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14cadfa89111be5826638252624059dfe17">classCursor</a>
+<br>
  }</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Classification of the command sequence.  <a href="classcsAnsiParser.html#aad88e11bf47c66db29e97380a2ce14c">More...</a><br></td></tr>
@@ -101,13 +111,15 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsAnsiParser_1_1CommandParams.html">CommandParams</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parameters to ANSI command.  <a href="structcsAnsiParser_1_1CommandParams.html#_details">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsAnsiParser_1_1CursorParams.html">CursorParams</a></td></tr>
+
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Helper to parse a string for ANSI codes. 
 <p>
 
 <p>
-Definition at line <a class="el" href="ansiparse_8h-source.html#l00031">31</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.<hr><h2>Member Enumeration Documentation</h2>
+Definition at line <a class="el" href="ansiparse_8h-source.html#l00033">33</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.<hr><h2>Member Enumeration Documentation</h2>
 <a class="anchor" name="5e0169d838a8621d116dc08b6b36c7a0"></a><!-- doxytag: member="csAnsiParser::Command" ref="5e0169d838a8621d116dc08b6b36c7a0" args="" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -144,11 +156,19 @@ Reset all attributes. </td></tr>
 'Set foreground color' </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="5e0169d838a8621d116dc08b6b36c7a0890f0ee802952d5b59999a04dea2a089"></a><!-- doxytag: member="cmdFormatAttrBackground" ref="5e0169d838a8621d116dc08b6b36c7a0890f0ee802952d5b59999a04dea2a089" args="" -->cmdFormatAttrBackground</em>&nbsp;</td><td>
 'Set background color' </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="5e0169d838a8621d116dc08b6b36c7a02b5a1ea6e5384ad65a6ea750dc293b87"></a><!-- doxytag: member="cmdClearScreen" ref="5e0169d838a8621d116dc08b6b36c7a02b5a1ea6e5384ad65a6ea750dc293b87" args="" -->cmdClearScreen</em>&nbsp;</td><td>
+'Clear screen' </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="5e0169d838a8621d116dc08b6b36c7a0073550261fe0f54efcbefeb9fd09cb9e"></a><!-- doxytag: member="cmdClearLine" ref="5e0169d838a8621d116dc08b6b36c7a0073550261fe0f54efcbefeb9fd09cb9e" args="" -->cmdClearLine</em>&nbsp;</td><td>
+'Clear end of line' </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="5e0169d838a8621d116dc08b6b36c7a0fa7fd47c7b37898827427ba8ecda4385"></a><!-- doxytag: member="cmdCursorSetPosition" ref="5e0169d838a8621d116dc08b6b36c7a0fa7fd47c7b37898827427ba8ecda4385" args="" -->cmdCursorSetPosition</em>&nbsp;</td><td>
+'Set cursor position' </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="5e0169d838a8621d116dc08b6b36c7a02d61b66cc824db535c6fc7c58203243a"></a><!-- doxytag: member="cmdCursorMoveRelative" ref="5e0169d838a8621d116dc08b6b36c7a02d61b66cc824db535c6fc7c58203243a" args="" -->cmdCursorMoveRelative</em>&nbsp;</td><td>
+Move cursor specified number of lines and columns relative to current position. </td></tr>
 </table>
 </dl>
 
 <p>
-Definition at line <a class="el" href="ansiparse_8h-source.html#l00035">35</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
+Definition at line <a class="el" href="ansiparse_8h-source.html#l00037">37</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="aad88e11bf47c66db29e97380a2ce14c"></a><!-- doxytag: member="csAnsiParser::CommandClass" ref="aad88e11bf47c66db29e97380a2ce14c" args="" --><p>
@@ -181,11 +201,15 @@ No ANSI sequence was found. </td></tr>
 An ANSI sequence was found, but not recognized. </td></tr>
 <tr><td valign="top"><em><a class="anchor" name="aad88e11bf47c66db29e97380a2ce14c51d444625a2df9be1562e867f130343b"></a><!-- doxytag: member="classFormat" ref="aad88e11bf47c66db29e97380a2ce14c51d444625a2df9be1562e867f130343b" args="" -->classFormat</em>&nbsp;</td><td>
 A formatting sequence was found. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aad88e11bf47c66db29e97380a2ce14cdf1e57426fb0b53f2f256c65cf6e29d1"></a><!-- doxytag: member="classClear" ref="aad88e11bf47c66db29e97380a2ce14cdf1e57426fb0b53f2f256c65cf6e29d1" args="" -->classClear</em>&nbsp;</td><td>
+A screen clear sequence was found. </td></tr>
+<tr><td valign="top"><em><a class="anchor" name="aad88e11bf47c66db29e97380a2ce14cadfa89111be5826638252624059dfe17"></a><!-- doxytag: member="classCursor" ref="aad88e11bf47c66db29e97380a2ce14cadfa89111be5826638252624059dfe17" args="" -->classCursor</em>&nbsp;</td><td>
+A cursor movement sequence was found. </td></tr>
 </table>
 </dl>
 
 <p>
-Definition at line <a class="el" href="ansiparse_8h-source.html#l00051">51</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
+Definition at line <a class="el" href="ansiparse_8h-source.html#l00061">61</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="17df6b7c32f650c1fcdd8839a2401c4f"></a><!-- doxytag: member="csAnsiParser::FormatAttr" ref="17df6b7c32f650c1fcdd8839a2401c4f" args="" --><p>
@@ -232,7 +256,7 @@ Types of attributes in the cmdFormatAttrEnable/cmdFormatAttrBackground command.
 </dl>
 
 <p>
-Definition at line <a class="el" href="ansiparse_8h-source.html#l00064">64</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
+Definition at line <a class="el" href="ansiparse_8h-source.html#l00078">78</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="a8fc920cc044ff4caadcb72f0b0003ef"></a><!-- doxytag: member="csAnsiParser::FormatColor" ref="a8fc920cc044ff4caadcb72f0b0003ef" args="" --><p>
@@ -281,7 +305,7 @@ White. </td></tr>
 </dl>
 
 <p>
-Definition at line <a class="el" href="ansiparse_8h-source.html#l00084">84</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
+Definition at line <a class="el" href="ansiparse_8h-source.html#l00098">98</a> of file <a class="el" href="ansiparse_8h-source.html">ansiparse.h</a>.    </td>
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
