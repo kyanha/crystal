@@ -36,6 +36,7 @@
 <code>#include &quot;<a class="el" href="iutil_2eventnames_8h-source.html">iutil/eventnames.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="iutil_2eventhandlers_8h-source.html">iutil/eventhandlers.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="iutil_2objreg_8h-source.html">iutil/objreg.h</a>&quot;</code><br>
+<code>#include &quot;<a class="el" href="eventh_8h-source.html">iutil/eventh.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="scf__implementation_8h-source.html">csutil/scf_implementation.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="hash_8h-source.html">csutil/hash.h</a>&quot;</code><br>
 <code>#include &quot;<a class="el" href="csutil_2strset_8h-source.html">csutil/strset.h</a>&quot;</code><br>
@@ -48,12 +49,358 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsEventHandlerRegistry.html">csEventHandlerRegistry</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The <a class="el" href="classcsEventHandlerRegistry.html">csEventHandlerRegistry</a> maintains a global one-to-one mapping from strings to csHandlerIDs, and a one-to-(zero or one) mapping from csHandlerIDs to <a class="el" href="structiEventHandler.html">iEventHandler</a> pointers.  <a href="classcsEventHandlerRegistry.html#_details">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameSignpost__2DConsole.html">FrameSignpost_2DConsole</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameSignpost__3D2D.html">FrameSignpost_3D2D</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameSignpost__ConsoleDebug.html">FrameSignpost_ConsoleDebug</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameSignpost__DebugFrame.html">FrameSignpost_DebugFrame</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFrameSignpost__Logic3D.html">FrameSignpost_Logic3D</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiFrameEventSignpost.html">iFrameEventSignpost</a></td></tr>
+
+<tr><td colspan="2"><br><h2>Defines</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="csutil_2eventhandlers_8h.html#754fd78231a571e0e56e2630b0a4736f">CS_EVENTHANDLER_PHASE_2D</a>(x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use this macro to declare your event handler as wanting to handle the csevFrame event in the "2D" phase (i.e., after any handlers in the "3D" phase and before any handlers in the "console" phase).  <a href="#754fd78231a571e0e56e2630b0a4736f"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="csutil_2eventhandlers_8h.html#fe3929bf12ab372791dfa4f926761d08">CS_EVENTHANDLER_PHASE_3D</a>(x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use this macro to declare your event handler as wanting to handle the csevFrame event in the "3D" phase (i.e., after any handlers in the "logic" phase and before any handlers in the "2D" phase).  <a href="#fe3929bf12ab372791dfa4f926761d08"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="csutil_2eventhandlers_8h.html#4c23b693961ab200f5decd08f6faa852">CS_EVENTHANDLER_PHASE_CONSOLE</a>(x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use this macro to declare your event handler as wanting to handle the csevFrame event in the "Console" phase (i.e., after any handlers in the "2D" phase and before any handlers in the "debug" phase).  <a href="#4c23b693961ab200f5decd08f6faa852"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="csutil_2eventhandlers_8h.html#e816522aa09b4fa75dc09de21329b9e6">CS_EVENTHANDLER_PHASE_DEBUG</a>(x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use this macro to declare your event handler as wanting to handle the csevFrame event in the "Debug" phase (i.e., after any handlers in the "Console" phase and before any handlers in the "Frame" phase).  <a href="#e816522aa09b4fa75dc09de21329b9e6"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="csutil_2eventhandlers_8h.html#412901a6fddc603080b4ae1259e47401">CS_EVENTHANDLER_PHASE_FRAME</a>(x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use this macro to declare your event handler as wanting to handle the csevFrame event in the "Debug" phase (i.e., after any handlers in the "Console" phase and before any handlers in the "Frame" phase).  <a href="#412901a6fddc603080b4ae1259e47401"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="csutil_2eventhandlers_8h.html#4ada3b18ed11fdfb128f8a272177fe5d">CS_EVENTHANDLER_PHASE_LOGIC</a>(x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use this macro to declare your event handler as wanting to handle the csevFrame event in the "logic" phase (i.e., before any handlers in the "3D" phase).  <a href="#4ada3b18ed11fdfb128f8a272177fe5d"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Event handler naming, name management, indexing, and instantiation. 
 <p>
 
 <p>
-Definition in file <a class="el" href="csutil_2eventhandlers_8h-source.html">eventhandlers.h</a>.<hr size="1"><address><small>Generated for Crystal Space by 
+Definition in file <a class="el" href="csutil_2eventhandlers_8h-source.html">eventhandlers.h</a>.<hr><h2>Define Documentation</h2>
+<a class="anchor" name="754fd78231a571e0e56e2630b0a4736f"></a><!-- doxytag: member="eventhandlers.h::CS_EVENTHANDLER_PHASE_2D" ref="754fd78231a571e0e56e2630b0a4736f" args="(x)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_EVENTHANDLER_PHASE_2D          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">x&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment"><a class="code" href="group__event__handling.html#g4f7b2a21cfb5997a2bb258920fafc61f">CS_EVENTHANDLER_NAMES</a>(x)                                                \
+<a class="code" href="group__event__handling.html#g3b8588d425823594019243398b3d4447">CS_EVENTHANDLER_DEFAULT_INSTANCE_CONSTRAINTS</a>                            \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericPrec                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> precConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  precConstraint[0] = FrameSignpost_3D2D::StaticID(r1);                 \
+  precConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> precConstraint;                                                \
+}                                                                       \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericSucc                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> succConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  succConstraint[0] = FrameSignpost_2DConsole::StaticID(r1);            \
+  succConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> succConstraint;                                                \
+}
+</pre></div>Use this macro to declare your event handler as wanting to handle the csevFrame event in the "2D" phase (i.e., after any handlers in the "3D" phase and before any handlers in the "console" phase). 
+<p>
+
+<p>
+Definition at line <a class="el" href="csutil_2eventhandlers_8h-source.html#l00350">350</a> of file <a class="el" href="csutil_2eventhandlers_8h-source.html">eventhandlers.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="fe3929bf12ab372791dfa4f926761d08"></a><!-- doxytag: member="eventhandlers.h::CS_EVENTHANDLER_PHASE_3D" ref="fe3929bf12ab372791dfa4f926761d08" args="(x)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_EVENTHANDLER_PHASE_3D          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">x&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment"><a class="code" href="group__event__handling.html#g4f7b2a21cfb5997a2bb258920fafc61f">CS_EVENTHANDLER_NAMES</a>(x)                                                \
+<a class="code" href="group__event__handling.html#g3b8588d425823594019243398b3d4447">CS_EVENTHANDLER_DEFAULT_INSTANCE_CONSTRAINTS</a>                            \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericPrec                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> precConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  precConstraint[0] = FrameSignpost_Logic3D::StaticID(r1);              \
+  precConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> precConstraint;                                                \
+}                                                                       \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericSucc                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> succConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  succConstraint[0] = FrameSignpost_3D2D::StaticID(r1);                 \
+  succConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> succConstraint;                                                \
+}
+</pre></div>Use this macro to declare your event handler as wanting to handle the csevFrame event in the "3D" phase (i.e., after any handlers in the "logic" phase and before any handlers in the "2D" phase). 
+<p>
+
+<p>
+Definition at line <a class="el" href="csutil_2eventhandlers_8h-source.html#l00320">320</a> of file <a class="el" href="csutil_2eventhandlers_8h-source.html">eventhandlers.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="4c23b693961ab200f5decd08f6faa852"></a><!-- doxytag: member="eventhandlers.h::CS_EVENTHANDLER_PHASE_CONSOLE" ref="4c23b693961ab200f5decd08f6faa852" args="(x)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_EVENTHANDLER_PHASE_CONSOLE          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">x&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment"><a class="code" href="group__event__handling.html#g4f7b2a21cfb5997a2bb258920fafc61f">CS_EVENTHANDLER_NAMES</a>(x)                                                \
+<a class="code" href="group__event__handling.html#g3b8588d425823594019243398b3d4447">CS_EVENTHANDLER_DEFAULT_INSTANCE_CONSTRAINTS</a>                            \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericPrec                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> precConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  precConstraint[0] = FrameSignpost_2DConsole::StaticID(r1);            \
+  precConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> precConstraint;                                                \
+}                                                                       \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericSucc                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> succConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  succConstraint[0] = FrameSignpost_ConsoleDebug::StaticID(r1);         \
+  succConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> succConstraint;                                                \
+}
+</pre></div>Use this macro to declare your event handler as wanting to handle the csevFrame event in the "Console" phase (i.e., after any handlers in the "2D" phase and before any handlers in the "debug" phase). 
+<p>
+
+<p>
+Definition at line <a class="el" href="csutil_2eventhandlers_8h-source.html#l00380">380</a> of file <a class="el" href="csutil_2eventhandlers_8h-source.html">eventhandlers.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="e816522aa09b4fa75dc09de21329b9e6"></a><!-- doxytag: member="eventhandlers.h::CS_EVENTHANDLER_PHASE_DEBUG" ref="e816522aa09b4fa75dc09de21329b9e6" args="(x)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_EVENTHANDLER_PHASE_DEBUG          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">x&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment"><a class="code" href="group__event__handling.html#g4f7b2a21cfb5997a2bb258920fafc61f">CS_EVENTHANDLER_NAMES</a>(x)                                                \
+<a class="code" href="group__event__handling.html#g3b8588d425823594019243398b3d4447">CS_EVENTHANDLER_DEFAULT_INSTANCE_CONSTRAINTS</a>                            \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericPrec                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> precConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  precConstraint[0] = FrameSignpost_ConsoleDebug::StaticID(r1);         \
+  precConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> precConstraint;                                                \
+}                                                                       \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericSucc                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> succConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  succConstraint[0] = FrameSignpost_DebugFrame::StaticID(r1);           \
+  succConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> succConstraint;                                                \
+}
+</pre></div>Use this macro to declare your event handler as wanting to handle the csevFrame event in the "Debug" phase (i.e., after any handlers in the "Console" phase and before any handlers in the "Frame" phase). 
+<p>
+
+<p>
+Definition at line <a class="el" href="csutil_2eventhandlers_8h-source.html#l00410">410</a> of file <a class="el" href="csutil_2eventhandlers_8h-source.html">eventhandlers.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="412901a6fddc603080b4ae1259e47401"></a><!-- doxytag: member="eventhandlers.h::CS_EVENTHANDLER_PHASE_FRAME" ref="412901a6fddc603080b4ae1259e47401" args="(x)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_EVENTHANDLER_PHASE_FRAME          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">x&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment"><a class="code" href="group__event__handling.html#g4f7b2a21cfb5997a2bb258920fafc61f">CS_EVENTHANDLER_NAMES</a>(x)                                                \
+<a class="code" href="group__event__handling.html#g3b8588d425823594019243398b3d4447">CS_EVENTHANDLER_DEFAULT_INSTANCE_CONSTRAINTS</a>                            \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericPrec                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> precConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  precConstraint[0] = FrameSignpost_DebugFrame::StaticID(r1);           \
+  precConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> precConstraint;                                                \
+}                                                                       \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericSucc                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keywordflow">return</span> 0;                                                             \
+}
+</pre></div>Use this macro to declare your event handler as wanting to handle the csevFrame event in the "Debug" phase (i.e., after any handlers in the "Console" phase and before any handlers in the "Frame" phase). 
+<p>
+
+<p>
+Definition at line <a class="el" href="csutil_2eventhandlers_8h-source.html#l00440">440</a> of file <a class="el" href="csutil_2eventhandlers_8h-source.html">eventhandlers.h</a>.    </td>
+  </tr>
+</table>
+<a class="anchor" name="4ada3b18ed11fdfb128f8a272177fe5d"></a><!-- doxytag: member="eventhandlers.h::CS_EVENTHANDLER_PHASE_LOGIC" ref="4ada3b18ed11fdfb128f8a272177fe5d" args="(x)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">#define CS_EVENTHANDLER_PHASE_LOGIC          </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">x&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+<b>Value:</b><div class="fragment"><pre class="fragment"><a class="code" href="group__event__handling.html#g4f7b2a21cfb5997a2bb258920fafc61f">CS_EVENTHANDLER_NAMES</a>(x)                                                \
+<a class="code" href="group__event__handling.html#g3b8588d425823594019243398b3d4447">CS_EVENTHANDLER_DEFAULT_INSTANCE_CONSTRAINTS</a>                            \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericPrec                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a>) <span class="keyword">const</span> {                                                     \
+  <span class="keywordflow">return</span> 0;                                                             \
+}                                                                       \
+<a class="code" href="cssysdef_8h.html#66bba4b4bdb4b6dadd37563abc499d48">CS_CONST_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> * GenericSucc                 \
+(<a class="code" href="classcsRef.html">csRef&lt;iEventHandlerRegistry&gt;</a> &amp;r1, <a class="code" href="classcsRef.html">csRef&lt;iEventNameRegistry&gt;</a> &amp;r2,       \
+ <a class="code" href="group__event__handling.html#g51e1762faeeefdadf693499fc93db757">csEventID</a> event) <span class="keyword">const</span> {                                               \
+  <span class="keyword">static</span> <a class="code" href="group__event__handling.html#gd62f963e20f1180634a9557b392d987d">csHandlerID</a> succConstraint[2];                                 \
+  <span class="keywordflow">if</span> (event != <a class="code" href="group__event__handling.html#gb6d197b308f4c78c8690de6a1c252d04">csevFrame</a>(r2))                                           \
+    <span class="keywordflow">return</span> 0;                                                           \
+  succConstraint[0] = FrameSignpost_Logic3D::StaticID(r1);              \
+  succConstraint[1] = <a class="code" href="group__event__handling.html#g9aa0e2476106e51c7a44ced844b6f20b">CS_HANDLERLIST_END</a>;                               \
+  <span class="keywordflow">return</span> succConstraint;                                                \
+}
+</pre></div>Use this macro to declare your event handler as wanting to handle the csevFrame event in the "logic" phase (i.e., before any handlers in the "3D" phase). 
+<p>
+
+<p>
+Definition at line <a class="el" href="csutil_2eventhandlers_8h-source.html#l00295">295</a> of file <a class="el" href="csutil_2eventhandlers_8h-source.html">eventhandlers.h</a>.    </td>
+  </tr>
+</table>
+<hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
