@@ -103,8 +103,9 @@ than describing particular command events with a combination of the
 property, each of the old command codes now has its own event name.  
 For example, <samp>`cscmdQuit'</samp> is now <samp>`crystalspace.application.quit'</samp>, and 
 the <samp>`cscmdPreProcess'</samp>/<samp>`cscmdProcess'</samp>/<samp>`cscmdPostProcess'</samp>/
-<samp>`cscmdFinalProcess'</samp> series will be replaced with a single 
-<samp>`csevFrame'</samp> event (see below).
+<samp>`cscmdFinalProcess'</samp> events have been deprecated in favor of the new 
+single <samp>`csevFrame'</samp> event and six frame &quot;phases&quot; within which it can
+be received (see below).
 </p>
 <p>Event names are translated into an efficient internal representation, the 
 <samp>`csEventID'</samp>, using a singleton event name registry object 
@@ -117,7 +118,7 @@ These <samp>`csEventID'</samp>s are then used in calls to subscribe to event que
 and in comparisons to determine the type of an event.  Many common event 
 types' <samp>`csEventID'</samp>s can be accessed using macros defined in 
 <tt>`include/csutil/eventnames.h'</tt>, e.g., <samp>`crystalspace.application.quit'</samp> 
-is <samp>`csevQuit()'</samp>, which must be called upon either an 
+is <samp>`csevQuit()'</samp>, which must be called with an argument of either an 
 <samp>`iObjectRegistry'</samp> pointer or a <samp>`iEventNameRegistry'</samp> reference.  
 Since referencing an event ID via one of these macros will consume several 
 cycles, performance-sensitive code should cache the results; see, for example, 
@@ -171,7 +172,7 @@ test:
 <a name="SEC894"></a>
 <h4 class="subsubheading"> Event Scheduling </h4>
 
-<p>The more interesting change to the event system is the introduction of a 
+<p>An even more interesting change to the event system is the introduction of a 
 schedulable event subscription system.  In the old system, event handlers 
 subscribed to event types on a first-come, first-served basis.  This begot an 
 increasing number of event types to represent different points in the frame 
@@ -229,12 +230,13 @@ identified by the argument, should always handle event with that name
 <p>In many simple cases, you will want to use default implementations of these 
 functions provided by the <code>CS_EVENTHANDLER_NAMES()</code> and 
 <code>CS_EVENTHANDLER_NIL_CONSTRAINTS</code> macros, like so:
-</p><table><tr><td>&nbsp;</td><td><pre class="example"> struct eiEventHandler : public iEventHandler
+</p><table><tr><td>&nbsp;</td><td><pre class="example"> struct myEventHandler : public iEventHandler
  {
-   SCF_DECLARE_EMBEDDED_IBASE (csWrapperClass);
    virtual bool HandleEvent (iEvent &amp;Event)
    {
-     return scfParent-&gt;HandleEvent (Event);
+     foo();
+     bar();
+     return baz();
    }
    CS_EVENTHANDLER_NAMES(&quot;crystalspace.module.name&quot;)
    CS_EVENTHANDLER_NIL_CONSTRAINTS
@@ -248,7 +250,7 @@ into a <samp>`csHandlerID'</samp> by calling
 The <samp>`csHandlerID'</samp> of an instance of an event handler class can be 
 retrieved by passing a pointer to that class to 
 <code>csHandlerRegistry::GetID()</code>, e.g., 
-<code>csHandlerRegistry::GetID(new myHandlerClass)</code>.
+<code>csHandlerRegistry::GetID(new myHandlerClass())</code>.
 </p>
 
 <a name="SEC895"></a>
@@ -258,7 +260,7 @@ retrieved by passing a pointer to that class to
 <code>csEventQueue::RegisterListener()</code> or <code>csEventQueue::Subscribe()</code> 
 methods (or, if you are inheriting from <code>csBaseEventHandler</code>, 
 <code>csBaseEventHandler::RegisterQueue</code>).  For each of these, the arguments 
-of interest to use are the <code>csEventID</code> and <code>csEventID[]</code> parameters.  
+of interest are the <code>csEventID</code> and <code>csEventID[]</code> parameters.  
 (Note that the <samp>`RegisterListener'</samp> form with no <samp>`csEventID'</samp> argument 
 does not subscribe the listener to anything, and must be followed by a call to 
 <code>Subscribe()</code> if you ever want the handler to receive any events.)  
@@ -273,15 +275,15 @@ and <samp>`crystalspace.input.mouse'</samp> but a different set for
 <samp>`crystalspace.input'</samp> and have the Prec/Succ functions return different 
 values for each of <samp>`.keyboard'</samp>, <samp>`.mouse'</samp>, and <samp>`.joystick'</samp>; 
 rather, you should subscribe to each of those three event names individually.  
-This restriction helps us avoid the introduction of subtly contradictory or 
+This restriction helps us avoid the introduction of hard-to-detect 
 circular ordering rules.
 </p>
 <p>Also note that you should use the <code>Subscribe()</code> and <code>Unsubscribe()</code> 
 methods to add and remove events from the set an event handler wishes to 
-receive.  Note that you should only <code>Unsubscribe()</code> from the particular 
-events to which you have <code>Subscribe()</code>d; the behavior is undefined if 
-you (e.g.) subscribe to <samp>`crystalspace.input'</samp> and subsequently 
-unsubscribe from <samp>`crystalspace.input.joystick'</samp>.
+receive.  You should only <code>Unsubscribe()</code> from the particular 
+events to which you have <code>Subscribe()</code>d; the behavior is undefined 
+otherwise (e.g., if you subscribe to <samp>`crystalspace.input'</samp> and 
+subsequently unsubscribe from <samp>`crystalspace.input.joystick'</samp>).
 </p>
 
 <a name="SEC896"></a>
@@ -296,18 +298,52 @@ the <samp>`RegisterQueue(...)'</samp> methods.
 <a name="SEC897"></a>
 <h4 class="subsubheading"> The <code>csevFrame</code> Transition </h4>
 
-<p>At present, a lot of code depends upon subscription to the PreProcess, Process, 
-PostProcess, and FinalProcess events.  We intend to remove these events 
-shortly; in their place, all event handlers interested in being called 
-per-frame should subscribe to the <samp>`csevFrame'</samp> event and specify 
-appropriate ordering constraints.  (If a handler needs to be called several 
-times per frame, then it should create several embedded event handlers each 
-with its own ordering constraints.)  Unfortunately, there aren't any really 
-good ways to make this change-over gracefully, so expect for a zero day to be 
-announced in the near future when Pre/Process/Post/Final will all go away.  
-In the meantime, the <samp>`csevPreProcess'</samp>, <samp>`csevProcess'</samp>, 
-<samp>`csevPostProcess'</samp>, and <samp>`csevFinalProcess'</samp> events are each dispatched 
-by a handler of the <samp>`csevFrame'</samp> event.
+<p>Under the old static event model, CrystalSpace would render each frame by
+dispatching four events in sequence: PreProcess, Process, PostProcess, and
+FinalProcess.  The new event handler scheduling mechanisms enable a more
+flexible and extensible paradigm in which there is only a single event, 
+<samp>`csevFrame'</samp>, and each handler orders its handling of that event with 
+respect to other handler types and handlers.
+</p>
+<p>However, since it is difficult to plan for (or even imagine) the set of all
+handler types that may appear in a CrystalSpace application, handlers of
+<samp>`csevFrame'</samp> can use simple helper macros to classify themselves as 
+belonging to any of six &quot;phases&quot; of frame creation.
+</p><ul>
+<li> 
+<em>Logic</em> - game logic to be performed before any rendering is done.
+Use the <samp>`CS_EVENTHANDLER_PHASE_LOGIC(x)'</samp> macro.
+</li><li> 
+<em>3D</em> - rendering of the 3D view.
+Use the <samp>`CS_EVENTHANDLER_PHASE_3D(x)'</samp> macro.
+</li><li> 
+<em>2D</em> - rendering of 2D overlays.
+See the <samp>`CS_EVENTHANDLER_PHASE_LOGIC(x)'</samp> macro.
+</li><li> 
+<em>Console</em> - used by CEL.
+See the <samp>`CS_EVENTHANDLER_PHASE_LOGIC(x)'</samp> macro.
+</li><li> 
+<em>Debug</em> - used by bugplug.
+See the <samp>`CS_EVENTHANDLER_PHASE_LOGIC(x)'</samp> macro.
+</li><li> 
+<em>Frame</em> - final rendering to the screen.
+See the <samp>`CS_EVENTHANDLER_PHASE_LOGIC(x)'</samp> macro.
+</li></ul>
+
+<p>These macros, included in the declaration of an event handler class, 
+provide all of the naming and constraint methods to make instances of
+that handler class schedule their subscriptions to <samp>`csevFrame'</samp>
+within the appropriate phase.  (You will not be able to use these macros
+if you need to subscribe the handler to events besides <samp>`csevFrame'</samp>
+and apply ordering constraints for those events.)
+</p>
+<p>The old PreProcess event corresponded with the Logic phase, 
+Process with the 3D phase, PostProcess with the 2D, Console, and
+Debug phases, and FinalProcess with the Frame phase.  You should 
+update your event handlers which used to subscribe to the old
+Process events to instead subscribe to the <samp>`csevFrame'</samp> event
+either using the event phase macros listed above or explicitly
+calling out your own subscription ordering constraints.
 </p>
 
 <a name="SEC898"></a>
