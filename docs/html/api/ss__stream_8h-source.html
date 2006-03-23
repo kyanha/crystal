@@ -71,56 +71,61 @@
 <a name="l00051"></a>00051   <a class="code" href="group__sndsys.html#gg06fc87d81c62e9abb8790b6e5713c55bb9f7a0ab979ba1e2456205bb8087f65e">CS_SND3D_ABSOLUTE</a>
 <a name="l00052"></a>00052 };
 <a name="l00053"></a>00053 
-<a name="l00054"></a>00054 <a class="code" href="group__scf.html#g654bebfc58b1e4e2c9ef9c6334139c73">SCF_VERSION</a> (<a class="code" href="structiSndSysStream.html">iSndSysStream</a>, 0, 1, 0);
-<a name="l00055"></a>00055 
-<a name="l00059"></a><a class="code" href="structiSndSysStream.html">00059</a> <span class="keyword">struct </span><a class="code" href="structiSndSysStream.html">iSndSysStream</a> : <span class="keyword">public</span> <a class="code" href="structiBase.html">iBase</a>
-<a name="l00060"></a>00060 {
-<a name="l00065"></a>00065   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsSndSysSoundFormat.html">csSndSysSoundFormat</a> *<a class="code" href="structiSndSysStream.html#d66feda8245c8d13d6ea5803ed9883ef">GetRenderedFormat</a>() = 0;
-<a name="l00066"></a>00066 
-<a name="l00068"></a>00068   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSndSysStream.html#40af86fd33958cf14e0ff1e494966ec5">Get3dMode</a>() = 0;
+<a name="l00055"></a>00055 <span class="comment">//</span>
+<a name="l00056"></a>00056 <span class="comment">//  All audio is presented to the sound system in the form of a stream.</span>
+<a name="l00057"></a>00057 <span class="comment">//  This interface is the minimal interface that all audio providing </span>
+<a name="l00058"></a>00058 <span class="comment">//  objects must implement in order to produce sound.</span>
+<a name="l00059"></a>00059 <span class="comment">//</span>
+<a name="l00060"></a><a class="code" href="structiSndSysStream.html">00060</a> <span class="keyword">struct </span><a class="code" href="structiSndSysStream.html">iSndSysStream</a> : <span class="keyword">public</span> <span class="keyword">virtual</span> <a class="code" href="structiBase.html">iBase</a>
+<a name="l00061"></a>00061 {
+<a name="l00063"></a>00063   <a class="code" href="structiSndSysStream.html#5c25e14d13fa5fddd385de92a8993dad">SCF_INTERFACE</a>(<a class="code" href="structiSndSysStream.html">iSndSysStream</a>,0,2,0);
+<a name="l00064"></a>00064 
+<a name="l00066"></a>00066   <span class="comment">//  This is not guaranteed to be useful for any particular purpose, different,</span>
+<a name="l00067"></a>00067   <span class="comment">//  or even accurate.  This is mainly for diagnostic purposes.</span>
+<a name="l00068"></a>00068   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="structiSndSysStream.html#f5a3d327ccf46f56aa014e977dfac1ed">GetDescription</a>() = 0;
 <a name="l00069"></a>00069 
-<a name="l00076"></a>00076   <span class="keyword">virtual</span> size_t <a class="code" href="structiSndSysStream.html#7cbb145f1d94c22a9547b44cbe8c53fe">GetSampleCount</a>() = 0;
-<a name="l00077"></a>00077 
-<a name="l00088"></a>00088   <span class="keyword">virtual</span> size_t <a class="code" href="structiSndSysStream.html#c86197b837a2e53ccfd46a26948c2207">GetPosition</a>() = 0;
-<a name="l00089"></a>00089 
-<a name="l00095"></a>00095   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#61bf6816d14a6648ad071031fba4e24b">ResetPosition</a>() = 0;
-<a name="l00096"></a>00096 
-<a name="l00102"></a>00102   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#f783e03ac79634de917d8c19ef4e5aa3">SetPosition</a> (size_t newposition) = 0;
-<a name="l00103"></a>00103 
-<a name="l00116"></a>00116   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#3e92be14cdad9c61397d401abb0c5d56">Pause</a>() = 0;
-<a name="l00117"></a>00117 
-<a name="l00122"></a>00122   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#9ef483cfe6b45d306ab87549ae19b99e">Unpause</a>() = 0;
-<a name="l00123"></a>00123 
-<a name="l00130"></a>00130   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSndSysStream.html#5a1468bfd07840c8dfa341821cd69ec4">GetPauseState</a>() = 0;
-<a name="l00131"></a>00131 
-<a name="l00137"></a>00137   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#d4b7bd25093db790232d998ea531a00b">SetLoopState</a>(<span class="keywordtype">int</span> loopstate) = 0;
-<a name="l00138"></a>00138 
-<a name="l00143"></a>00143   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSndSysStream.html#c472f9baf3a13a3a5a3d3e17df247b6e">GetLoopState</a>() = 0;
-<a name="l00144"></a>00144 
-<a name="l00149"></a>00149   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#e3f0248eac62c91ab72f981bffd1a819">SetPlayRatePercent</a>(<span class="keywordtype">int</span> percent) = 0;
-<a name="l00150"></a>00150 
-<a name="l00155"></a>00155   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSndSysStream.html#bf70b7f3a8229af62d20d9538fb6842b">GetPlayRatePercent</a>() = 0;
-<a name="l00156"></a>00156 
-<a name="l00161"></a>00161   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#b2202b3acd98660da78b398e7737cb54">SetAutoUnregister</a>(<span class="keywordtype">bool</span> autounreg) = 0;
-<a name="l00162"></a>00162 
-<a name="l00167"></a>00167   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#ba67efcf175ff16e94af86be47afc472">GetAutoUnregister</a>() = 0;
-<a name="l00168"></a>00168 
-<a name="l00173"></a>00173   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#68af5f2a1f7e4bbbad3c260f8bf3ac78">GetAutoUnregisterRequested</a>() = 0;
-<a name="l00174"></a>00174 
-<a name="l00175"></a>00175 
-<a name="l00189"></a>00189   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#0df90161aa4b44375a41825f3f0949a6">AdvancePosition</a>(<a class="code" href="group__util.html#g28e82998c4c2d1197a1d412bba7da793">csTicks</a> current_time) = 0;
-<a name="l00190"></a>00190 
-<a name="l00225"></a>00225   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#af74da155cd830be985b45d67743d3a4">GetDataPointers</a>(size_t* position_marker,
-<a name="l00226"></a>00226         size_t max_requested_length,
-<a name="l00227"></a>00227         <span class="keywordtype">void</span> **buffer1, size_t *buffer1_length,
-<a name="l00228"></a>00228         <span class="keywordtype">void</span> **buffer2, size_t *buffer2_length) = 0;
-<a name="l00229"></a>00229 
-<a name="l00236"></a>00236   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#c46bf5f08884d66a679bc313300b75f5">InitializeSourcePositionMarker</a> (size_t* position_marker) = 0;
-<a name="l00237"></a>00237 
-<a name="l00239"></a>00239   <span class="keyword">virtual</span> <a class="code" href="structiSndSysStream.html">iSndSysStream</a> *<a class="code" href="structiSndSysStream.html#5d6c4b8578ca72396540c4262e45a5e4">GetPtr</a>() = 0;
-<a name="l00240"></a>00240 };
-<a name="l00241"></a>00241 
-<a name="l00244"></a>00244 <span class="preprocessor">#endif // __CS_SNDSYS_STREAM_H__</span>
+<a name="l00074"></a>00074   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsSndSysSoundFormat.html">csSndSysSoundFormat</a> *<a class="code" href="structiSndSysStream.html#d66feda8245c8d13d6ea5803ed9883ef">GetRenderedFormat</a>() = 0;
+<a name="l00075"></a>00075 
+<a name="l00077"></a>00077   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSndSysStream.html#40af86fd33958cf14e0ff1e494966ec5">Get3dMode</a>() = 0;
+<a name="l00078"></a>00078 
+<a name="l00085"></a>00085   <span class="keyword">virtual</span> size_t <a class="code" href="structiSndSysStream.html#44e60d6dbbfb761a33527e1c786d9294">GetFrameCount</a>() = 0;
+<a name="l00086"></a>00086 
+<a name="l00097"></a>00097   <span class="keyword">virtual</span> size_t <a class="code" href="structiSndSysStream.html#c86197b837a2e53ccfd46a26948c2207">GetPosition</a>() = 0;
+<a name="l00098"></a>00098 
+<a name="l00104"></a>00104   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#61bf6816d14a6648ad071031fba4e24b">ResetPosition</a>() = 0;
+<a name="l00105"></a>00105 
+<a name="l00111"></a>00111   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#f783e03ac79634de917d8c19ef4e5aa3">SetPosition</a> (size_t newposition) = 0;
+<a name="l00112"></a>00112 
+<a name="l00125"></a>00125   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#3e92be14cdad9c61397d401abb0c5d56">Pause</a>() = 0;
+<a name="l00126"></a>00126 
+<a name="l00131"></a>00131   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#9ef483cfe6b45d306ab87549ae19b99e">Unpause</a>() = 0;
+<a name="l00132"></a>00132 
+<a name="l00139"></a>00139   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSndSysStream.html#5a1468bfd07840c8dfa341821cd69ec4">GetPauseState</a>() = 0;
+<a name="l00140"></a>00140 
+<a name="l00146"></a>00146   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#d4b7bd25093db790232d998ea531a00b">SetLoopState</a>(<span class="keywordtype">int</span> loopstate) = 0;
+<a name="l00147"></a>00147 
+<a name="l00152"></a>00152   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSndSysStream.html#c472f9baf3a13a3a5a3d3e17df247b6e">GetLoopState</a>() = 0;
+<a name="l00153"></a>00153 
+<a name="l00158"></a>00158   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#e3f0248eac62c91ab72f981bffd1a819">SetPlayRatePercent</a>(<span class="keywordtype">int</span> percent) = 0;
+<a name="l00159"></a>00159 
+<a name="l00164"></a>00164   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="structiSndSysStream.html#bf70b7f3a8229af62d20d9538fb6842b">GetPlayRatePercent</a>() = 0;
+<a name="l00165"></a>00165 
+<a name="l00170"></a>00170   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#b2202b3acd98660da78b398e7737cb54">SetAutoUnregister</a>(<span class="keywordtype">bool</span> autounreg) = 0;
+<a name="l00171"></a>00171 
+<a name="l00176"></a>00176   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#ba67efcf175ff16e94af86be47afc472">GetAutoUnregister</a>() = 0;
+<a name="l00177"></a>00177 
+<a name="l00182"></a>00182   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="structiSndSysStream.html#68af5f2a1f7e4bbbad3c260f8bf3ac78">GetAutoUnregisterRequested</a>() = 0;
+<a name="l00183"></a>00183 
+<a name="l00184"></a>00184 
+<a name="l00199"></a>00199   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#f1e3e9214dbf32b2a3c973173a88d68e">AdvancePosition</a>(size_t frame_delta) = 0;
+<a name="l00200"></a>00200 
+<a name="l00237"></a>00237   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#19bec601b069a74920a2df68df96a808">GetDataPointers</a>(size_t* position_marker, size_t max_requested_frames,
+<a name="l00238"></a>00238         <span class="keywordtype">void</span> **buffer1, size_t *buffer1_frames, <span class="keywordtype">void</span> **buffer2, size_t *buffer2_frames) = 0;
+<a name="l00239"></a>00239 
+<a name="l00246"></a>00246   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiSndSysStream.html#c46bf5f08884d66a679bc313300b75f5">InitializeSourcePositionMarker</a> (size_t* position_marker) = 0;
+<a name="l00247"></a>00247 };
+<a name="l00248"></a>00248 
+<a name="l00251"></a>00251 <span class="preprocessor">#endif // __CS_SNDSYS_STREAM_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
