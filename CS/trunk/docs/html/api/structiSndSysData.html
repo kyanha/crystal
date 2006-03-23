@@ -52,22 +52,31 @@ Inheritance diagram for iSndSysData:<p><center><img src="structiSndSysData__inhe
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysData.html#b4f0ff7f6a615d719dd9805e6e9d604a">GetDataSize</a> ()=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the size of the data stored in bytes.  <a href="#b4f0ff7f6a615d719dd9805e6e9d604a"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual const char *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysData.html#269a088f7de2a45ef0f642264361c305">GetDescription</a> ()=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Retrieve the description associated with this sound data.  <a href="#269a088f7de2a45ef0f642264361c305"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual const <a class="el" href="structcsSndSysSoundFormat.html">csSndSysSoundFormat</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysData.html#08ea16b2b0fb87dc2b567c3ed83923bc">GetFormat</a> ()=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the format of the sound data.  <a href="#08ea16b2b0fb87dc2b567c3ed83923bc"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysData.html#ea8c6706cfc68a02bbf84c44bd59646a">GetSampleCount</a> ()=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysData.html#1009e0db2f54977f926e7ca89e43c348">GetFrameCount</a> ()=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get size of this sound in samples.  <a href="#ea8c6706cfc68a02bbf84c44bd59646a"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get size of this sound in frames.  <a href="#1009e0db2f54977f926e7ca89e43c348"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysData.html#486e64102a45bfa7af5f4ca65976506e">SCF_INTERFACE</a> (<a class="el" href="structiSndSysData.html">iSndSysData</a>, 0, 2, 0)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">SCF2006 - See <a href="http://www.crystalspace3d.org/cseps/csep-0010.html.">http://www.crystalspace3d.org/cseps/csep-0010.html.</a>  <a href="#486e64102a45bfa7af5f4ca65976506e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysData.html#5b16ed0f929ce3e7045ceb24443fa397">SetDescription</a> (const char *pDescription)=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set an optional description to be associated with this sound data.  <a href="#5b16ed0f929ce3e7045ceb24443fa397"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 The sound data is an interface to the container object controlling raw sound data. 
 <p>
-After obtaining an iSound2Data interface (most likely by loading a sound file) at least one iSound2Stream must be obtained.<p>
+After obtaining an <a class="el" href="structiSndSysData.html">iSndSysData</a> interface (most likely by loading a sound file) at least one <a class="el" href="structiSndSysStream.html">iSndSysStream</a> must be obtained.<p>
 This interface is implemented at least once per Sound Element. 
 <p>
 
 <p>
-Definition at line <a class="el" href="ss__data_8h-source.html#l00046">46</a> of file <a class="el" href="ss__data_8h-source.html">ss_data.h</a>.<hr><h2>Member Function Documentation</h2>
+Definition at line <a class="el" href="ss__data_8h-source.html#l00044">44</a> of file <a class="el" href="ss__data_8h-source.html">ss_data.h</a>.<hr><h2>Member Function Documentation</h2>
 <a class="anchor" name="9649a962f97c89be7b258132221aedb9"></a><!-- doxytag: member="iSndSysData::CreateStream" ref="9649a962f97c89be7b258132221aedb9" args="(csSndSysSoundFormat *renderformat, int mode3d)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
@@ -135,7 +144,36 @@ Creates a stream associated with this sound data positioned at the beginning of 
 <p>
 Return the size of the data stored in bytes. 
 <p>
-This is informational only and is not guaranteed to be a number usable for sound calculations. For example, an audio file compressed with variable rate compression may result in a situation where FILE_SIZE is not equal to SAMPLE_COUNT * SAMPLE_SIZE since SAMPLE_SIZE may vary throughout the audio data.     </td>
+This is informational only and is not guaranteed to be a number usable for sound calculations. For example, an audio file compressed with variable rate compression may result in a situation where FILE_SIZE is not equal to FRAME_COUNT * FRAME_SIZE since FRAME_SIZE may vary throughout the audio data.     </td>
+  </tr>
+</table>
+<a class="anchor" name="269a088f7de2a45ef0f642264361c305"></a><!-- doxytag: member="iSndSysData::GetDescription" ref="269a088f7de2a45ef0f642264361c305" args="()=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual const char* iSndSysData::GetDescription           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Retrieve the description associated with this sound data. 
+<p>
+    </td>
   </tr>
 </table>
 <a class="anchor" name="08ea16b2b0fb87dc2b567c3ed83923bc"></a><!-- doxytag: member="iSndSysData::GetFormat" ref="08ea16b2b0fb87dc2b567c3ed83923bc" args="()=0" --><p>
@@ -167,13 +205,13 @@ Get the format of the sound data.
     </td>
   </tr>
 </table>
-<a class="anchor" name="ea8c6706cfc68a02bbf84c44bd59646a"></a><!-- doxytag: member="iSndSysData::GetSampleCount" ref="ea8c6706cfc68a02bbf84c44bd59646a" args="()=0" --><p>
+<a class="anchor" name="1009e0db2f54977f926e7ca89e43c348"></a><!-- doxytag: member="iSndSysData::GetFrameCount" ref="1009e0db2f54977f926e7ca89e43c348" args="()=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top">virtual size_t iSndSysData::GetSampleCount           </td>
+          <td class="md" nowrap valign="top">virtual size_t iSndSysData::GetFrameCount           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
@@ -191,7 +229,88 @@ Get the format of the sound data.
     <td>
 
 <p>
-Get size of this sound in samples. 
+Get size of this sound in frames. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="486e64102a45bfa7af5f4ca65976506e"></a><!-- doxytag: member="iSndSysData::SCF_INTERFACE" ref="486e64102a45bfa7af5f4ca65976506e" args="(iSndSysData, 0, 2, 0)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">iSndSysData::SCF_INTERFACE           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiSndSysData.html">iSndSysData</a>&nbsp;</td>
+          <td class="mdname" nowrap>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>0&nbsp;</td>
+          <td class="mdname" nowrap>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>2&nbsp;</td>
+          <td class="mdname" nowrap>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>0&nbsp;</td>
+          <td class="mdname" nowrap></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+SCF2006 - See <a href="http://www.crystalspace3d.org/cseps/csep-0010.html.">http://www.crystalspace3d.org/cseps/csep-0010.html.</a> 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="5b16ed0f929ce3e7045ceb24443fa397"></a><!-- doxytag: member="iSndSysData::SetDescription" ref="5b16ed0f929ce3e7045ceb24443fa397" args="(const char *pDescription)=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual void iSndSysData::SetDescription           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">const char *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>pDescription</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Set an optional description to be associated with this sound data. 
 <p>
     </td>
   </tr>

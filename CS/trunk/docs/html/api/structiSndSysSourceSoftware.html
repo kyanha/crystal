@@ -48,17 +48,23 @@ Inheritance diagram for iSndSysSourceSoftware:<p><center><img src="structiSndSys
 <center><font size="2">[<a href="graph_legend.html">legend</a>]</font></center><a href="structiSndSysSourceSoftware-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysSourceSoftware.html#bfd0a327bb1f0e8fc194b85172217c5c">MergeIntoBuffer</a> (<a class="el" href="group__sndsys.html#gc8eb30abac5547e09b41e96e87100ff7">csSoundSample</a> *channel_buffer, size_t buffer_samples)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysSourceSoftware.html#036cec3e3c94cbb0d5b6d47fc8e78186">MergeIntoBuffer</a> (<a class="el" href="group__sndsys.html#gc8eb30abac5547e09b41e96e87100ff7">csSoundSample</a> *frame_buffer, size_t frame_count)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Renderer convenience interface - requests the source to fill the supplied buffers.  <a href="#bfd0a327bb1f0e8fc194b85172217c5c"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Renderer convenience interface - requests the source to fill the supplied buffers.  <a href="#036cec3e3c94cbb0d5b6d47fc8e78186"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysSourceSoftware.html#6829bcef9b7d76b43dae2569341ab0e4">ProcessOutputFilters</a> ()=0</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Renderer convenience interface - Called to provide processing of output filters.  <a href="#6829bcef9b7d76b43dae2569341ab0e4"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiSndSysSourceSoftware.html#55bb8c116e90079312d67441a892b42b">SCF_INTERFACE</a> (<a class="el" href="structiSndSysSourceSoftware.html">iSndSysSourceSoftware</a>, 0, 1, 0)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">SCF2006 - See <a href="http://www.crystalspace3d.org/cseps/csep-0010.html.">http://www.crystalspace3d.org/cseps/csep-0010.html.</a>  <a href="#55bb8c116e90079312d67441a892b42b"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 @@ Document me. 
 <p>
 
 <p>
-Definition at line <a class="el" href="ss__source_8h-source.html#l00065">65</a> of file <a class="el" href="ss__source_8h-source.html">ss_source.h</a>.<hr><h2>Member Function Documentation</h2>
-<a class="anchor" name="bfd0a327bb1f0e8fc194b85172217c5c"></a><!-- doxytag: member="iSndSysSourceSoftware::MergeIntoBuffer" ref="bfd0a327bb1f0e8fc194b85172217c5c" args="(csSoundSample *channel_buffer, size_t buffer_samples)=0" --><p>
+Definition at line <a class="el" href="ss__source_8h-source.html#l00082">82</a> of file <a class="el" href="ss__source_8h-source.html">ss_source.h</a>.<hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="036cec3e3c94cbb0d5b6d47fc8e78186"></a><!-- doxytag: member="iSndSysSourceSoftware::MergeIntoBuffer" ref="036cec3e3c94cbb0d5b6d47fc8e78186" args="(csSoundSample *frame_buffer, size_t frame_count)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -67,13 +73,13 @@ Definition at line <a class="el" href="ss__source_8h-source.html#l00065">65</a> 
           <td class="md" nowrap valign="top">virtual size_t iSndSysSourceSoftware::MergeIntoBuffer           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="group__sndsys.html#gc8eb30abac5547e09b41e96e87100ff7">csSoundSample</a> *&nbsp;</td>
-          <td class="mdname" nowrap> <em>channel_buffer</em>, </td>
+          <td class="mdname" nowrap> <em>frame_buffer</em>, </td>
         </tr>
         <tr>
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
           <td class="md" nowrap>size_t&nbsp;</td>
-          <td class="mdname" nowrap> <em>buffer_samples</em></td>
+          <td class="mdname" nowrap> <em>frame_count</em></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -93,6 +99,93 @@ Definition at line <a class="el" href="ss__source_8h-source.html#l00065">65</a> 
 
 <p>
 Renderer convenience interface - requests the source to fill the supplied buffers. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>frame_buffer</em>&nbsp;</td><td>- A pointer to an array of csSoundSample sample buffers to be filled with sound sample data </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>frame_count</em>&nbsp;</td><td>- The size of the buffer pointed to by frame_buffer in frames. </td></tr>
+  </table>
+</dl>
+<dl compact><dt><b>Returns:</b></dt><dd>- The number of frames that were actually filled. </dd></dl>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="6829bcef9b7d76b43dae2569341ab0e4"></a><!-- doxytag: member="iSndSysSourceSoftware::ProcessOutputFilters" ref="6829bcef9b7d76b43dae2569341ab0e4" args="()=0" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">virtual void iSndSysSourceSoftware::ProcessOutputFilters           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap><code> [pure virtual]</code></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Renderer convenience interface - Called to provide processing of output filters. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="55bb8c116e90079312d67441a892b42b"></a><!-- doxytag: member="iSndSysSourceSoftware::SCF_INTERFACE" ref="55bb8c116e90079312d67441a892b42b" args="(iSndSysSourceSoftware, 0, 1, 0)" --><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">iSndSysSourceSoftware::SCF_INTERFACE           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structiSndSysSourceSoftware.html">iSndSysSourceSoftware</a>&nbsp;</td>
+          <td class="mdname" nowrap>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>0&nbsp;</td>
+          <td class="mdname" nowrap>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>1&nbsp;</td>
+          <td class="mdname" nowrap>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>0&nbsp;</td>
+          <td class="mdname" nowrap></td>
+        </tr>
+        <tr>
+          <td class="md"></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+SCF2006 - See <a href="http://www.crystalspace3d.org/cseps/csep-0010.html.">http://www.crystalspace3d.org/cseps/csep-0010.html.</a> 
 <p>
     </td>
   </tr>
