@@ -57,170 +57,179 @@
 <a name="l00026"></a>00026 <span class="preprocessor">#include "<a class="code" href="ss__stream_8h.html">isndsys/ss_stream.h</a>"</span>
 <a name="l00027"></a>00027 <span class="preprocessor">#include "<a class="code" href="convert_8h.html">csplugincommon/sndsys/convert.h</a>"</span>
 <a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="cyclicbuf_8h.html">csplugincommon/sndsys/cyclicbuf.h</a>"</span>
-<a name="l00029"></a>00029 <span class="preprocessor">#include "csplugincommon/sndsys/queue.h"</span>
+<a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="queue_8h.html">csplugincommon/sndsys/queue.h</a>"</span>
 <a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="refarr_8h.html">csutil/refarr.h</a>"</span>
 <a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
 <a name="l00032"></a>00032 
 <a name="l00033"></a>00033 
-<a name="l00034"></a><a class="code" href="classSndSysBasicStream.html">00034</a> <span class="keyword">class </span><a class="code" href="classSndSysBasicStream.html">SndSysBasicStream</a> :
-<a name="l00035"></a>00035   <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;SndSysBasicStream, iSndSysStream&gt;
-<a name="l00036"></a>00036 {
-<a name="l00037"></a>00037 <span class="keyword">public</span>:
-<a name="l00038"></a>00038   <a class="code" href="classSndSysBasicStream.html">SndSysBasicStream</a>(<a class="code" href="structcsSndSysSoundFormat.html">csSndSysSoundFormat</a> *pRenderFormat, <span class="keywordtype">int</span> Mode3D);
-<a name="l00039"></a>00039   <span class="keyword">virtual</span> ~<a class="code" href="classSndSysBasicStream.html">SndSysBasicStream</a>();
-<a name="l00040"></a>00040 
-<a name="l00042"></a><a class="code" href="classSndSysBasicStream.html#bde31164f417de4b408b8d950fcce564">00042</a>   <span class="keyword">static</span> <span class="keyword">const</span> size_t <a class="code" href="classSndSysBasicStream.html#bde31164f417de4b408b8d950fcce564">InvalidPosition</a> = (size_t)~0;
-<a name="l00043"></a>00043 
-<a name="l00045"></a>00045   <span class="comment">// Structure/enum definitions</span>
-<a name="l00047"></a>00047 <span class="comment"></span>
-<a name="l00049"></a><a class="code" href="classSndSysBasicStream.html#7998b916b7337e08bc7bf32d0659ea1e">00049</a>   <span class="keyword">typedef</span> <span class="keyword">enum</span>
-<a name="l00050"></a>00050   {
-<a name="l00051"></a>00051     STREAM_NOTIFY_PAUSED=0,
-<a name="l00052"></a>00052     STREAM_NOTIFY_UNPAUSED,
-<a name="l00053"></a>00053     STREAM_NOTIFY_LOOP,
-<a name="l00054"></a>00054     STREAM_NOTIFY_FRAME
-<a name="l00055"></a>00055   } <a class="code" href="classSndSysBasicStream.html#7998b916b7337e08bc7bf32d0659ea1e">StreamNotificationType</a>;
-<a name="l00056"></a>00056 
-<a name="l00058"></a><a class="code" href="structSndSysBasicStream_1_1StreamNotificationEvent.html">00058</a>   <span class="keyword">struct </span><a class="code" href="structSndSysBasicStream_1_1StreamNotificationEvent.html">StreamNotificationEvent</a>
-<a name="l00059"></a>00059   {
-<a name="l00061"></a><a class="code" href="structSndSysBasicStream_1_1StreamNotificationEvent.html#a7daa7b331857bd95be151b66e1d66e5">00061</a>     <a class="code" href="classSndSysBasicStream.html#7998b916b7337e08bc7bf32d0659ea1e">StreamNotificationType</a> <a class="code" href="structSndSysBasicStream_1_1StreamNotificationEvent.html#a7daa7b331857bd95be151b66e1d66e5">m_Type</a>;
-<a name="l00063"></a>00063     <span class="comment">//    This is currently only valid for </span>
-<a name="l00064"></a>00064     <span class="comment">//    STREAM_NOTIFY_FRAME event types</span>
-<a name="l00065"></a><a class="code" href="structSndSysBasicStream_1_1StreamNotificationEvent.html#ca000545266f55757c0fb8e003c64953">00065</a>     size_t <a class="code" href="structSndSysBasicStream_1_1StreamNotificationEvent.html#ca000545266f55757c0fb8e003c64953">m_Frame</a>;
-<a name="l00066"></a>00066   };
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068 
-<a name="l00070"></a>00070   <span class="comment">// Interface implementation</span>
-<a name="l00072"></a>00072 <span class="comment"></span>
-<a name="l00073"></a>00073   <span class="comment">//------------------------</span>
-<a name="l00074"></a>00074   <span class="comment">// iSndSysStream</span>
-<a name="l00075"></a>00075   <span class="comment">//------------------------</span>
-<a name="l00076"></a>00076 <span class="keyword">public</span>:
-<a name="l00077"></a>00077 
-<a name="l00079"></a>00079   <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classSndSysBasicStream.html#1d9012e437de8ffe22314b7d455bce54">GetDescription</a>() = 0;
-<a name="l00080"></a>00080 
-<a name="l00085"></a>00085   <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsSndSysSoundFormat.html">csSndSysSoundFormat</a> *<a class="code" href="classSndSysBasicStream.html#350fe848028166b4c109f30beb464ea9">GetRenderedFormat</a>();
-<a name="l00086"></a>00086 
-<a name="l00088"></a>00088   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#034dfc258ef7da4716e4d8b645241458">Get3dMode</a>();
-<a name="l00089"></a>00089 
-<a name="l00096"></a>00096   <span class="keyword">virtual</span> size_t <a class="code" href="classSndSysBasicStream.html#e45d7902200641ade61b359a919cac90">GetFrameCount</a>() = 0;
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098 
-<a name="l00109"></a>00109   <span class="keyword">virtual</span> size_t <a class="code" href="classSndSysBasicStream.html#f7eaf0e2d38afd56e4955e3214f751bc">GetPosition</a>();
-<a name="l00110"></a>00110 
-<a name="l00116"></a>00116   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#e5e7b0db705a2dde4834bdf30c039c00">ResetPosition</a>();
-<a name="l00117"></a>00117 
-<a name="l00123"></a>00123   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#feb2a988df39a3901d21f514c67eae70">SetPosition</a> (size_t newposition);
-<a name="l00124"></a>00124 
-<a name="l00137"></a>00137   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#3c69870c60a5a45e9550dfa6f3006f9c">Pause</a>();
-<a name="l00138"></a>00138 
-<a name="l00143"></a>00143   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#6288536ac3abd37740ad5acd1d0e8854">Unpause</a>();
-<a name="l00144"></a>00144 
-<a name="l00151"></a>00151   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#be4e7be1e9857d9a206eeb0961067c8a">GetPauseState</a>();
-<a name="l00152"></a>00152 
-<a name="l00158"></a>00158   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#3696e7f10ec44210b233cb978274279c">SetLoopState</a>(<span class="keywordtype">int</span> loopstate);
-<a name="l00159"></a>00159 
-<a name="l00164"></a>00164   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#a53f93842bf8a344e74053e14fbd99e1">GetLoopState</a>();
-<a name="l00165"></a>00165 
-<a name="l00170"></a>00170   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSndSysBasicStream.html#6ce28e7572545fd08cb6bdc6cf27890d">SetPlayRatePercent</a>(<span class="keywordtype">int</span> percent);
-<a name="l00171"></a>00171 
-<a name="l00176"></a>00176   <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#0dc3fd23a174651e23f77aa916f1e699">GetPlayRatePercent</a>();
-<a name="l00177"></a>00177 
-<a name="l00182"></a>00182   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSndSysBasicStream.html#0f4f47dc9f7f0ce82a540c74a90dbd4c">SetAutoUnregister</a>(<span class="keywordtype">bool</span> autounreg);
-<a name="l00183"></a>00183 
-<a name="l00188"></a>00188   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#17cf74884bd9013469fdb07e4a4ceb0b">GetAutoUnregister</a>();
-<a name="l00189"></a>00189 
-<a name="l00194"></a>00194   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#4023bf792a5eb112850416154229a7b3">GetAutoUnregisterRequested</a>();
-<a name="l00195"></a>00195 
-<a name="l00210"></a>00210   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSndSysBasicStream.html#d9deb10b5ad60c40742939ad8d9f0c78">AdvancePosition</a>(size_t frame_delta) = 0;
-<a name="l00211"></a>00211 
-<a name="l00248"></a>00248   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSndSysBasicStream.html#f010e502d7619f4bec0801e71e335c37">GetDataPointers</a> (size_t *position_marker, size_t max_requested_length,
-<a name="l00249"></a>00249     <span class="keywordtype">void</span> **buffer1, size_t *buffer1_bytes, <span class="keywordtype">void</span> **buffer2, size_t *buffer2_bytes);
-<a name="l00250"></a>00250 
-<a name="l00257"></a>00257   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSndSysBasicStream.html#3309eaf9ef5985730e9b563cbebf3132">InitializeSourcePositionMarker</a> (size_t* position_marker);
-<a name="l00258"></a>00258 
-<a name="l00264"></a>00264   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classSndSysBasicStream.html#33de8a3a7793e4c0c2d3b7a1b6e4f03f">ProcessNotifications</a>();
-<a name="l00265"></a>00265 
-<a name="l00266"></a>00266 
-<a name="l00268"></a>00268   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#9daa821968ab7af59a551b375f1f9a81">RegisterCallback</a>(<a class="code" href="structiSndSysStreamCallback.html">iSndSysStreamCallback</a> *pCallback);
-<a name="l00269"></a>00269 
-<a name="l00271"></a>00271   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#a2c027b0d1bb5bbc8c63ab60e6c1aca2">UnregisterCallback</a>(<a class="code" href="structiSndSysStreamCallback.html">iSndSysStreamCallback</a> *pCallback);
-<a name="l00272"></a>00272 
-<a name="l00274"></a>00274   <span class="comment">//   it's crossed.</span>
-<a name="l00275"></a>00275   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#44ffb3bac1263c857e6e2dead0a8aa6b">RegisterFrameNotification</a>(size_t frame_number);
-<a name="l00276"></a>00276 
-<a name="l00278"></a>00278   <span class="comment">// Internal functions</span>
-<a name="l00280"></a>00280 <span class="comment"></span><span class="keyword">protected</span>:
-<a name="l00282"></a>00282   <span class="comment">//</span>
-<a name="l00283"></a>00283   size_t <a class="code" href="classSndSysBasicStream.html#1a177d9cce01a63eaf672e9de396d69c">CopyBufferBytes</a> (size_t max_dest_bytes);
-<a name="l00284"></a>00284 
-<a name="l00286"></a>00286   <span class="keywordtype">void</span> <a class="code" href="classSndSysBasicStream.html#89b66545be53854bdd02e5136ab109cd">QueueNotificationEvent</a>(<a class="code" href="classSndSysBasicStream.html#7998b916b7337e08bc7bf32d0659ea1e">StreamNotificationType</a> NotifyType, size_t FrameNum);
-<a name="l00287"></a>00287 
-<a name="l00288"></a>00288 
-<a name="l00290"></a>00290   <span class="comment">//  Member variables</span>
-<a name="l00292"></a>00292 <span class="comment"></span><span class="keyword">protected</span>:
-<a name="l00294"></a><a class="code" href="classSndSysBasicStream.html#b103f75514c346b9e3f9bcc9830ba0f9">00294</a>   <a class="code" href="structcsSndSysSoundFormat.html">csSndSysSoundFormat</a> <a class="code" href="classSndSysBasicStream.html#b103f75514c346b9e3f9bcc9830ba0f9">m_RenderFormat</a>;
-<a name="l00295"></a>00295 
-<a name="l00297"></a>00297   <span class="comment">//</span>
-<a name="l00298"></a>00298   <span class="comment">//  The cyclic buffer is used to hold recently decoded sound.  It </span>
-<a name="l00299"></a>00299   <span class="comment">//   provides functionality which allows us to add new data at any point</span>
-<a name="l00300"></a>00300   <span class="comment">//   without a lot of excess copying.</span>
-<a name="l00301"></a><a class="code" href="classSndSysBasicStream.html#87d274411827edf13cd89ff3aeb87d08">00301</a>   <a class="code" href="classCS_1_1Sound_1_1SoundCyclicBuffer.html">CS::Sound::SoundCyclicBuffer</a> *<a class="code" href="classSndSysBasicStream.html#87d274411827edf13cd89ff3aeb87d08">m_pCyclicBuffer</a>;
-<a name="l00302"></a>00302 
-<a name="l00304"></a><a class="code" href="classSndSysBasicStream.html#db357619c6fdff4256665b50e1ed1352">00304</a>   <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#db357619c6fdff4256665b50e1ed1352">m_bPaused</a>;
-<a name="l00305"></a>00305 
-<a name="l00307"></a>00307   <span class="comment">//   of the data?</span>
-<a name="l00308"></a><a class="code" href="classSndSysBasicStream.html#5ecb41187b4e1ba6e1ee6484763f23c1">00308</a>   <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#5ecb41187b4e1ba6e1ee6484763f23c1">m_bLooping</a>;
-<a name="l00309"></a>00309 
-<a name="l00311"></a>00311   <span class="comment">//</span>
-<a name="l00312"></a>00312   <span class="comment">//  This is set to true once we have completed reading the underlying data</span>
-<a name="l00313"></a>00313   <span class="comment">//   only if we are not looping. If we are looping, then we'll just start</span>
-<a name="l00314"></a>00314   <span class="comment">//   back at the beginning of the data and we will never be finished reading.</span>
-<a name="l00315"></a><a class="code" href="classSndSysBasicStream.html#09b16d0f71a0b66a2ae6dc5ad9f88759">00315</a>   <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#09b16d0f71a0b66a2ae6dc5ad9f88759">m_bPlaybackReadComplete</a>;
-<a name="l00316"></a>00316 
-<a name="l00318"></a>00318   <span class="comment">//   furthest ahead in reading.</span>
-<a name="l00319"></a><a class="code" href="classSndSysBasicStream.html#237f210dd4d265a68e8218c0a10d70a7">00319</a>   size_t <a class="code" href="classSndSysBasicStream.html#237f210dd4d265a68e8218c0a10d70a7">m_MostAdvancedReadPointer</a>;
-<a name="l00320"></a>00320 
-<a name="l00325"></a><a class="code" href="classSndSysBasicStream.html#b1eb4a315857cb45b966ef04a3444c68">00325</a>   size_t <a class="code" href="classSndSysBasicStream.html#b1eb4a315857cb45b966ef04a3444c68">m_NewPosition</a>;
-<a name="l00326"></a>00326 
-<a name="l00331"></a><a class="code" href="classSndSysBasicStream.html#ac839af7fd32adff28e14dc07fd734c2">00331</a>   <a class="code" href="classCS_1_1Sound_1_1PCMSampleConverter.html">CS::Sound::PCMSampleConverter</a> *<a class="code" href="classSndSysBasicStream.html#ac839af7fd32adff28e14dc07fd734c2">m_pPCMConverter</a>;
-<a name="l00332"></a>00332 
-<a name="l00334"></a>00334   <span class="comment">//   for addition to the cyclic buffer.</span>
-<a name="l00335"></a><a class="code" href="classSndSysBasicStream.html#17ff943a6937f5673a1e6ec92c533b8c">00335</a>   <span class="keywordtype">char</span> *<a class="code" href="classSndSysBasicStream.html#17ff943a6937f5673a1e6ec92c533b8c">m_pPreparedDataBuffer</a>;
-<a name="l00336"></a>00336 
-<a name="l00338"></a><a class="code" href="classSndSysBasicStream.html#4a73879b5b33e9feed60c3d0e8027a39">00338</a>   <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#4a73879b5b33e9feed60c3d0e8027a39">m_PreparedDataBufferSize</a>;
-<a name="l00339"></a>00339 
-<a name="l00341"></a><a class="code" href="classSndSysBasicStream.html#f02a6b101508a704f89d23753bd1c425">00341</a>   size_t <a class="code" href="classSndSysBasicStream.html#f02a6b101508a704f89d23753bd1c425">m_PreparedDataBufferUsage</a>;
-<a name="l00342"></a>00342 
-<a name="l00344"></a>00344   <span class="comment">//   data buffer</span>
-<a name="l00345"></a><a class="code" href="classSndSysBasicStream.html#b207f29cf4fb74067961ad343d9c15d1">00345</a>   size_t <a class="code" href="classSndSysBasicStream.html#b207f29cf4fb74067961ad343d9c15d1">m_PreparedDataBufferStart</a>;
-<a name="l00346"></a>00346 
-<a name="l00348"></a><a class="code" href="classSndSysBasicStream.html#b0e881215ffc71804a71891d691bc85f">00348</a>   <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#b0e881215ffc71804a71891d691bc85f">m_RenderFrameSize</a>;
-<a name="l00349"></a>00349 
-<a name="l00351"></a><a class="code" href="classSndSysBasicStream.html#d55f650df879b8f347921a3cbe698582">00351</a>   <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#d55f650df879b8f347921a3cbe698582">m_PlaybackPercent</a>;
-<a name="l00352"></a>00352 
-<a name="l00357"></a><a class="code" href="classSndSysBasicStream.html#dcd91a3838ac2d39ca5b0cd45adb6beb">00357</a>   <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#dcd91a3838ac2d39ca5b0cd45adb6beb">m_OutputFrequency</a>;
-<a name="l00358"></a>00358 
-<a name="l00363"></a><a class="code" href="classSndSysBasicStream.html#b94f876441324d5efa975a5882ae4d84">00363</a>   <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#b94f876441324d5efa975a5882ae4d84">m_NewOutputFrequency</a>;
-<a name="l00364"></a>00364 
-<a name="l00369"></a><a class="code" href="classSndSysBasicStream.html#ebc0134a4192b26288fe3afd85819662">00369</a>   <span class="keywordtype">int</span> <a class="code" href="classSndSysBasicStream.html#ebc0134a4192b26288fe3afd85819662">m_3DMode</a>;
-<a name="l00370"></a>00370 
-<a name="l00375"></a><a class="code" href="classSndSysBasicStream.html#e0935f3048c4f711f79c090f25683b6b">00375</a>   <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#e0935f3048c4f711f79c090f25683b6b">m_bAutoUnregisterRequested</a>;
-<a name="l00376"></a>00376 
-<a name="l00378"></a><a class="code" href="classSndSysBasicStream.html#5b7cc3d34d6ee4f115b2de4bbfee22f5">00378</a>   <span class="keywordtype">bool</span> <a class="code" href="classSndSysBasicStream.html#5b7cc3d34d6ee4f115b2de4bbfee22f5">m_bAutoUnregisterReady</a>;
-<a name="l00379"></a>00379 
-<a name="l00381"></a><a class="code" href="classSndSysBasicStream.html#0e93ad1a68f1a817135e25c410ebd298">00381</a>   <a class="code" href="classcsRefArray.html">csRefArray&lt;iSndSysStreamCallback&gt;</a> <a class="code" href="classSndSysBasicStream.html#0e93ad1a68f1a817135e25c410ebd298">m_CallbackList</a>;
-<a name="l00382"></a>00382 
-<a name="l00384"></a><a class="code" href="classSndSysBasicStream.html#bdfe12f69c9f90fe7822e2e02a112d3a">00384</a>   <a class="code" href="classQueue.html">Queue&lt;StreamNotificationEvent&gt;</a> <a class="code" href="classSndSysBasicStream.html#bdfe12f69c9f90fe7822e2e02a112d3a">m_NotificationQueue</a>;
-<a name="l00385"></a>00385 };
-<a name="l00386"></a>00386 
+<a name="l00034"></a>00034 <span class="keyword">namespace </span>CS
+<a name="l00035"></a>00035 {
+<a name="l00036"></a>00036   <span class="keyword">namespace </span>SndSys
+<a name="l00037"></a>00037   {
+<a name="l00038"></a>00038 
+<a name="l00039"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html">00039</a>   <span class="keyword">class </span><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html">SndSysBasicStream</a> :
+<a name="l00040"></a>00040     <span class="keyword">public</span> <a class="code" href="classscfImplementation1.html">scfImplementation1</a>&lt;SndSysBasicStream, iSndSysStream&gt;
+<a name="l00041"></a>00041   {
+<a name="l00042"></a>00042   <span class="keyword">public</span>:
+<a name="l00043"></a>00043     <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html">SndSysBasicStream</a>(<a class="code" href="structcsSndSysSoundFormat.html">csSndSysSoundFormat</a> *pRenderFormat, <span class="keywordtype">int</span> Mode3D);
+<a name="l00044"></a>00044     <span class="keyword">virtual</span> ~<a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html">SndSysBasicStream</a>();
+<a name="l00045"></a>00045 
+<a name="l00047"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#86804c52aca343c2525bf73a5dd69fdc">00047</a>     <span class="keyword">static</span> <span class="keyword">const</span> size_t <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#86804c52aca343c2525bf73a5dd69fdc">InvalidPosition</a> = (size_t)~0;
+<a name="l00048"></a>00048 
+<a name="l00050"></a>00050     <span class="comment">// Structure/enum definitions</span>
+<a name="l00052"></a>00052 <span class="comment"></span>
+<a name="l00054"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#76e4566d647662f1098b92bf661c3250">00054</a>     <span class="keyword">typedef</span> <span class="keyword">enum</span>
+<a name="l00055"></a>00055     {
+<a name="l00056"></a>00056       STREAM_NOTIFY_PAUSED=0,
+<a name="l00057"></a>00057       STREAM_NOTIFY_UNPAUSED,
+<a name="l00058"></a>00058       STREAM_NOTIFY_LOOP,
+<a name="l00059"></a>00059       STREAM_NOTIFY_FRAME
+<a name="l00060"></a>00060     } <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#76e4566d647662f1098b92bf661c3250">StreamNotificationType</a>;
+<a name="l00061"></a>00061 
+<a name="l00063"></a><a class="code" href="structCS_1_1SndSys_1_1SndSysBasicStream_1_1StreamNotificationEvent.html">00063</a>     <span class="keyword">struct </span><a class="code" href="structCS_1_1SndSys_1_1SndSysBasicStream_1_1StreamNotificationEvent.html">StreamNotificationEvent</a>
+<a name="l00064"></a>00064     {
+<a name="l00066"></a><a class="code" href="structCS_1_1SndSys_1_1SndSysBasicStream_1_1StreamNotificationEvent.html#1734ec15f87ae5485d786734c3667d5c">00066</a>       <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#76e4566d647662f1098b92bf661c3250">StreamNotificationType</a> <a class="code" href="structCS_1_1SndSys_1_1SndSysBasicStream_1_1StreamNotificationEvent.html#1734ec15f87ae5485d786734c3667d5c">m_Type</a>;
+<a name="l00068"></a>00068       <span class="comment">//    This is currently only valid for </span>
+<a name="l00069"></a>00069       <span class="comment">//    STREAM_NOTIFY_FRAME event types</span>
+<a name="l00070"></a><a class="code" href="structCS_1_1SndSys_1_1SndSysBasicStream_1_1StreamNotificationEvent.html#9ae0b7f1631e5006d5dc7298d45e5d6c">00070</a>       size_t <a class="code" href="structCS_1_1SndSys_1_1SndSysBasicStream_1_1StreamNotificationEvent.html#9ae0b7f1631e5006d5dc7298d45e5d6c">m_Frame</a>;
+<a name="l00071"></a>00071     };
+<a name="l00072"></a>00072 
+<a name="l00073"></a>00073 
+<a name="l00075"></a>00075     <span class="comment">// Interface implementation</span>
+<a name="l00077"></a>00077 <span class="comment"></span>
+<a name="l00078"></a>00078     <span class="comment">//------------------------</span>
+<a name="l00079"></a>00079     <span class="comment">// iSndSysStream</span>
+<a name="l00080"></a>00080     <span class="comment">//------------------------</span>
+<a name="l00081"></a>00081   <span class="keyword">public</span>:
+<a name="l00082"></a>00082 
+<a name="l00084"></a>00084     <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#1dd55274234d28c78973057ac9a87283">GetDescription</a>() = 0;
+<a name="l00085"></a>00085 
+<a name="l00090"></a>00090     <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="structcsSndSysSoundFormat.html">csSndSysSoundFormat</a> *<a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#d29e3867d8a22a825d89b56238faa39c">GetRenderedFormat</a>();
+<a name="l00091"></a>00091 
+<a name="l00093"></a>00093     <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#373d8eff94729fc78bb62e4400426e74">Get3dMode</a>();
+<a name="l00094"></a>00094 
+<a name="l00101"></a>00101     <span class="keyword">virtual</span> size_t <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#ee89c6117b6dd0d612a4606820710800">GetFrameCount</a>() = 0;
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103 
+<a name="l00114"></a>00114     <span class="keyword">virtual</span> size_t <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#ce0344fe88b3f27cf9fb8ed638c60a07">GetPosition</a>();
+<a name="l00115"></a>00115 
+<a name="l00121"></a>00121     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#be35f5e5fcd3a4f24584ad571c660b36">ResetPosition</a>();
+<a name="l00122"></a>00122 
+<a name="l00128"></a>00128     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#68c8a1d7d997c96b7b68c84abae56a4d">SetPosition</a> (size_t newposition);
+<a name="l00129"></a>00129 
+<a name="l00142"></a>00142     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#5b25dabcb2400a66519e205326067a8b">Pause</a>();
+<a name="l00143"></a>00143 
+<a name="l00148"></a>00148     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#b562def65b9d6ce0f5d42c66603de772">Unpause</a>();
+<a name="l00149"></a>00149 
+<a name="l00156"></a>00156     <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#a47a8505070821d2c0009494ef443668">GetPauseState</a>();
+<a name="l00157"></a>00157 
+<a name="l00163"></a>00163     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#9e3c9202880d022ef066f46688063bf9">SetLoopState</a>(<span class="keywordtype">int</span> loopstate);
+<a name="l00164"></a>00164 
+<a name="l00169"></a>00169     <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#53fbb137901a84d3300d568d7ba7e3eb">GetLoopState</a>();
+<a name="l00170"></a>00170 
+<a name="l00175"></a>00175     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#a2d40858419dc33d228bbd6636d89d24">SetPlayRatePercent</a>(<span class="keywordtype">int</span> percent);
+<a name="l00176"></a>00176 
+<a name="l00181"></a>00181     <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#d5fa2d7bf8b1601fd1d6f24b86ee0656">GetPlayRatePercent</a>();
+<a name="l00182"></a>00182 
+<a name="l00187"></a>00187     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#d9a5caa4685c26af3b7d73fa89dd7353">SetAutoUnregister</a>(<span class="keywordtype">bool</span> autounreg);
+<a name="l00188"></a>00188 
+<a name="l00193"></a>00193     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#0b88b49f8b7156f804926129501e49af">GetAutoUnregister</a>();
+<a name="l00194"></a>00194 
+<a name="l00199"></a>00199     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#73d3270b03c354a19b4be31204ab1b67">GetAutoUnregisterRequested</a>();
+<a name="l00200"></a>00200 
+<a name="l00215"></a>00215     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#62bab7900a68ef1e199a03cb492d0fa6">AdvancePosition</a>(size_t frame_delta) = 0;
+<a name="l00216"></a>00216 
+<a name="l00253"></a>00253     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#3ae2b0b0ff8426459a516be10f6f05ea">GetDataPointers</a> (size_t *position_marker, size_t max_requested_length,
+<a name="l00254"></a>00254       <span class="keywordtype">void</span> **buffer1, size_t *buffer1_bytes, <span class="keywordtype">void</span> **buffer2, size_t *buffer2_bytes);
+<a name="l00255"></a>00255 
+<a name="l00262"></a>00262     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#4ed9903e1187e4df4b1ee28081dd03f3">InitializeSourcePositionMarker</a> (size_t* position_marker);
+<a name="l00263"></a>00263 
+<a name="l00269"></a>00269     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#fdb1bb30b6d6aefcba6980cbc53415a5">ProcessNotifications</a>();
+<a name="l00270"></a>00270 
+<a name="l00271"></a>00271 
+<a name="l00273"></a>00273     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#968d1654430e55ae58856a621621df66">RegisterCallback</a>(<a class="code" href="structiSndSysStreamCallback.html">iSndSysStreamCallback</a> *pCallback);
+<a name="l00274"></a>00274 
+<a name="l00276"></a>00276     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#2eeccf36a0ef650231b1c93d68850932">UnregisterCallback</a>(<a class="code" href="structiSndSysStreamCallback.html">iSndSysStreamCallback</a> *pCallback);
+<a name="l00277"></a>00277 
+<a name="l00279"></a>00279     <span class="comment">//   it's crossed.</span>
+<a name="l00280"></a>00280     <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#6a4cd82ec062181289c5f550eb301afe">RegisterFrameNotification</a>(size_t frame_number);
+<a name="l00281"></a>00281 
+<a name="l00283"></a>00283     <span class="comment">// Internal functions</span>
+<a name="l00285"></a>00285 <span class="comment"></span>  <span class="keyword">protected</span>:
+<a name="l00287"></a>00287     <span class="comment">//</span>
+<a name="l00288"></a>00288     size_t <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#cdc756c9e292e88068ac871782c17df6">CopyBufferBytes</a> (size_t max_dest_bytes);
+<a name="l00289"></a>00289 
+<a name="l00291"></a>00291     <span class="keywordtype">void</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#9673db6bcac49c3ca4f5d6a55ed77b03">QueueNotificationEvent</a>(<a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#76e4566d647662f1098b92bf661c3250">StreamNotificationType</a> NotifyType, size_t FrameNum);
+<a name="l00292"></a>00292 
+<a name="l00293"></a>00293 
+<a name="l00295"></a>00295     <span class="comment">//  Member variables</span>
+<a name="l00297"></a>00297 <span class="comment"></span>  <span class="keyword">protected</span>:
+<a name="l00299"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#868b9d1503762f5c980c27eae8c84a2b">00299</a>     <a class="code" href="structcsSndSysSoundFormat.html">csSndSysSoundFormat</a> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#868b9d1503762f5c980c27eae8c84a2b">m_RenderFormat</a>;
+<a name="l00300"></a>00300 
+<a name="l00302"></a>00302     <span class="comment">//</span>
+<a name="l00303"></a>00303     <span class="comment">//  The cyclic buffer is used to hold recently decoded sound.  It </span>
+<a name="l00304"></a>00304     <span class="comment">//   provides functionality which allows us to add new data at any point</span>
+<a name="l00305"></a>00305     <span class="comment">//   without a lot of excess copying.</span>
+<a name="l00306"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#70ae4d719679a9227efab043f3a7dbdd">00306</a>     <a class="code" href="classCS_1_1SndSys_1_1SoundCyclicBuffer.html">SoundCyclicBuffer</a> *<a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#70ae4d719679a9227efab043f3a7dbdd">m_pCyclicBuffer</a>;
+<a name="l00307"></a>00307 
+<a name="l00309"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#912291d919b7f964bfb2d0fb577ce7c4">00309</a>     <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#912291d919b7f964bfb2d0fb577ce7c4">m_bPaused</a>;
+<a name="l00310"></a>00310 
+<a name="l00312"></a>00312     <span class="comment">//   of the data?</span>
+<a name="l00313"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#ae2ef6631db2825724b925ff8990c014">00313</a>     <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#ae2ef6631db2825724b925ff8990c014">m_bLooping</a>;
+<a name="l00314"></a>00314 
+<a name="l00316"></a>00316     <span class="comment">//</span>
+<a name="l00317"></a>00317     <span class="comment">//  This is set to true once we have completed reading the underlying data</span>
+<a name="l00318"></a>00318     <span class="comment">//   only if we are not looping. If we are looping, then we'll just start</span>
+<a name="l00319"></a>00319     <span class="comment">//   back at the beginning of the data and we will never be finished reading.</span>
+<a name="l00320"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#5dd5b15236fd53db8a9c300d86dcc120">00320</a>     <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#5dd5b15236fd53db8a9c300d86dcc120">m_bPlaybackReadComplete</a>;
+<a name="l00321"></a>00321 
+<a name="l00323"></a>00323     <span class="comment">//   furthest ahead in reading.</span>
+<a name="l00324"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#3752df1544fdab1f1b8c9023fffeb739">00324</a>     size_t <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#3752df1544fdab1f1b8c9023fffeb739">m_MostAdvancedReadPointer</a>;
+<a name="l00325"></a>00325 
+<a name="l00330"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#8e863b1d76cbbb06ba3147435e0f9ed2">00330</a>     size_t <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#8e863b1d76cbbb06ba3147435e0f9ed2">m_NewPosition</a>;
+<a name="l00331"></a>00331 
+<a name="l00336"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#477813212199c383b413a9fe53c3d143">00336</a>     <a class="code" href="classCS_1_1SndSys_1_1PCMSampleConverter.html">PCMSampleConverter</a> *<a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#477813212199c383b413a9fe53c3d143">m_pPCMConverter</a>;
+<a name="l00337"></a>00337 
+<a name="l00339"></a>00339     <span class="comment">//   for addition to the cyclic buffer.</span>
+<a name="l00340"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#9d34331eda44cc2fefda80890d3259f8">00340</a>     <span class="keywordtype">char</span> *<a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#9d34331eda44cc2fefda80890d3259f8">m_pPreparedDataBuffer</a>;
+<a name="l00341"></a>00341 
+<a name="l00343"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#760b875861a689c90191bb6b382e5720">00343</a>     <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#760b875861a689c90191bb6b382e5720">m_PreparedDataBufferSize</a>;
+<a name="l00344"></a>00344 
+<a name="l00346"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#d0c86385b34b28e240b14eb2daa5143c">00346</a>     size_t <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#d0c86385b34b28e240b14eb2daa5143c">m_PreparedDataBufferUsage</a>;
+<a name="l00347"></a>00347 
+<a name="l00349"></a>00349     <span class="comment">//   data buffer</span>
+<a name="l00350"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#0daaabd14525f2eb9186e7e37bf4f4b5">00350</a>     size_t <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#0daaabd14525f2eb9186e7e37bf4f4b5">m_PreparedDataBufferStart</a>;
+<a name="l00351"></a>00351 
+<a name="l00353"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#2f5ac02b43a5bee792c5acf0ea6ccc7d">00353</a>     <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#2f5ac02b43a5bee792c5acf0ea6ccc7d">m_RenderFrameSize</a>;
+<a name="l00354"></a>00354 
+<a name="l00356"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#f7b1ea8cd9f7ff5ee1f352b116884a7c">00356</a>     <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#f7b1ea8cd9f7ff5ee1f352b116884a7c">m_PlaybackPercent</a>;
+<a name="l00357"></a>00357 
+<a name="l00362"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#a13beeaabe1915f87748ed22484d1f65">00362</a>     <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#a13beeaabe1915f87748ed22484d1f65">m_OutputFrequency</a>;
+<a name="l00363"></a>00363 
+<a name="l00368"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#b7b9559f44749840ed67c1ef10770f8c">00368</a>     <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#b7b9559f44749840ed67c1ef10770f8c">m_NewOutputFrequency</a>;
+<a name="l00369"></a>00369 
+<a name="l00374"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#8dabf6445e95167889a7850d16a26277">00374</a>     <span class="keywordtype">int</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#8dabf6445e95167889a7850d16a26277">m_3DMode</a>;
+<a name="l00375"></a>00375 
+<a name="l00380"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#f24b34168907645d9b1fac719a9806a1">00380</a>     <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#f24b34168907645d9b1fac719a9806a1">m_bAutoUnregisterRequested</a>;
+<a name="l00381"></a>00381 
+<a name="l00383"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#ab161cc9be7635077b6d69b8a1dd95f9">00383</a>     <span class="keywordtype">bool</span> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#ab161cc9be7635077b6d69b8a1dd95f9">m_bAutoUnregisterReady</a>;
+<a name="l00384"></a>00384 
+<a name="l00386"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#e51e337e55d531dfe7d5e3f282e70f08">00386</a>     <a class="code" href="classcsRefArray.html">csRefArray&lt;iSndSysStreamCallback&gt;</a> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#e51e337e55d531dfe7d5e3f282e70f08">m_CallbackList</a>;
 <a name="l00387"></a>00387 
-<a name="l00388"></a>00388 
-<a name="l00389"></a>00389 
-<a name="l00390"></a>00390 
+<a name="l00389"></a><a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#ca46c0f8a44c2d6318dc9183fbe047f0">00389</a>     <a class="code" href="classCS_1_1SndSys_1_1Queue.html">Queue&lt;StreamNotificationEvent&gt;</a> <a class="code" href="classCS_1_1SndSys_1_1SndSysBasicStream.html#ca46c0f8a44c2d6318dc9183fbe047f0">m_NotificationQueue</a>;
+<a name="l00390"></a>00390   };
 <a name="l00391"></a>00391 
-<a name="l00392"></a>00392 <span class="preprocessor">#endif // #ifndef SNDSTREAM_H</span>
-<a name="l00393"></a>00393 <span class="preprocessor"></span>
+<a name="l00392"></a>00392 
+<a name="l00393"></a>00393  }
+<a name="l00394"></a>00394  <span class="comment">// END namespace CS::SndSys</span>
+<a name="l00395"></a>00395 }
+<a name="l00396"></a>00396 <span class="comment">// END namespace CS</span>
+<a name="l00397"></a>00397 
+<a name="l00398"></a>00398 
+<a name="l00399"></a>00399 
+<a name="l00400"></a>00400 
+<a name="l00401"></a>00401 <span class="preprocessor">#endif // #ifndef SNDSTREAM_H</span>
+<a name="l00402"></a>00402 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
