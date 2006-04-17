@@ -76,9 +76,10 @@ Inheritance diagram for csHash&lt; T, K &gt;:<p><center><img src="classcsHash__i
 <tr><td class="memItemLeft" nowrap align="right" valign="top">const T &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsHash.html#238c1cdbbd582dc63a18e0cd1c2b1298">Get</a> (const K &amp;key, const T &amp;fallback) const </td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the first element matching the given key, or <code>fallback</code> if there is none.  <a href="#238c1cdbbd582dc63a18e0cd1c2b1298"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsArray.html">csArray</a>&lt; T &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsHash.html#ec721a32d0ebff42eb060117f8dccc9e">GetAll</a> (const K &amp;key) const </td></tr>
+<tr><td class="memTemplParams" nowrap colspan="2">template&lt;typename H, typename M&gt; </td></tr>
+<tr><td class="memTemplItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsArray.html">csArray</a>&lt; T, H, M &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcsHash.html#76210ffaa007b9277e306235343a5400">GetAll</a> (const K &amp;key) const </td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get all the elements with the given key, or empty if there are none.  <a href="#ec721a32d0ebff42eb060117f8dccc9e"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get all the elements with the given key, or empty if there are none.  <a href="#76210ffaa007b9277e306235343a5400"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">T *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsHash.html#9067b054a90559ad8c84bd3f5c10b0be">GetElementPointer</a> (const K &amp;key)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a pointer to the first element matching the given key, or 0 if there is none.  <a href="#9067b054a90559ad8c84bd3f5c10b0be"></a><br></td></tr>
@@ -109,9 +110,13 @@ Inheritance diagram for csHash&lt; T, K &gt;:<p><center><img src="classcsHash__i
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsHash.html#7c3f374c1720d8236e864b81c90264da">PutUnique</a> (const K &amp;key, const T &amp;value)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Add an element to the hash table, overwriting if the key already exists.  <a href="#7c3f374c1720d8236e864b81c90264da"></a><br></td></tr>
+<tr><td colspan="2"><br><h2>Protected Types</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="6222dec2d336965816bf709606d81816"></a><!-- doxytag: member="csHash::ElementArray" ref="6222dec2d336965816bf709606d81816" args="" -->
+typedef <a class="el" href="classcsArray.html">csArray</a>&lt; <a class="el" href="structcsHash_1_1Element.html">Element</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsHash.html#6222dec2d336965816bf709606d81816">ElementArray</a></td></tr>
+
 <tr><td colspan="2"><br><h2>Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="776e02efc991952548988f2d2eec20cb"></a><!-- doxytag: member="csHash::Elements" ref="776e02efc991952548988f2d2eec20cb" args="" -->
-<a class="el" href="classcsArray.html">csArray</a>&lt; <a class="el" href="classcsArray.html">csArray</a>&lt; <a class="el" href="structcsHash_1_1Element.html">Element</a> &gt; &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsHash.html#776e02efc991952548988f2d2eec20cb">Elements</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="ab27cb6290768bc8478bb3b9eea566a2"></a><!-- doxytag: member="csHash::Elements" ref="ab27cb6290768bc8478bb3b9eea566a2" args="" -->
+<a class="el" href="classcsArray.html">csArray</a>&lt; <a class="el" href="classcsArray.html">ElementArray</a> &gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsHash.html#ab27cb6290768bc8478bb3b9eea566a2">Elements</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="5a5a6a894dd70614a5d7131d8e0581c1"></a><!-- doxytag: member="csHash::Modulo" ref="5a5a6a894dd70614a5d7131d8e0581c1" args="" -->
 size_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsHash.html#5a5a6a894dd70614a5d7131d8e0581c1">Modulo</a></td></tr>
@@ -190,11 +195,11 @@ template&lt;class T, class K = unsigned int&gt; </td>
 <p>
 Construct a hash table with an array of the given size, which for optimisation reasons should be a prime number. 
 <p>
-Grow_rate is the rate at which the hash table grows: Size doubles once there are size/grow_rate collisions. It will not grow after it reaches max_size. <p>
-Here are a few primes: 7, 11, 19, 29, 59, 79, 101, 127, 151, 199, 251, 307, 401, 503, 809, 1009, 1499, 2003, 3001, 5003, 12263, 25247, 36923, 50119, 70951, 90313, 104707. <p>
+<em>grow_rate</em> is the rate at which the hash table grows: <em>size</em> doubles once there are <em>size/<em>grow_rate</em> collisions</em>. It will not grow after it reaches <em>max_size</em>.<p>
+Here are a few primes: 7, 11, 19, 29, 59, 79, 101, 127, 151, 199, 251, 307, 401, 503, 809, 1009, 1499, 2003, 3001, 5003, 12263, 25247, 36923, 50119, 70951, 90313, 104707.<p>
 For a bigger list go to <a href="http://www.utm.edu/research/primes/">http://www.utm.edu/research/primes/</a> 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00323">323</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00324">324</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="39aa362bf9467669c4d1f5d4d41a9ed9"></a><!-- doxytag: member="csHash::csHash" ref="39aa362bf9467669c4d1f5d4d41a9ed9" args="(const csHash&lt; T &gt; &amp;o)" --><p>
@@ -230,7 +235,7 @@ Copy constructor.
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00331">331</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00332">332</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <hr><h2>Member Function Documentation</h2>
@@ -267,7 +272,7 @@ Returns whether at least one element matches the given key.
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00400">400</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
+Definition at line <a class="el" href="hash_8h-source.html#l00402">402</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
 <p>
 Referenced by <a class="el" href="set_8h-source.html#l00111">csSet&lt; csPtrKey&lt; KnownFont &gt; &gt;::Contains()</a>.    </td>
   </tr>
@@ -314,7 +319,7 @@ Delete all the elements matching the given key and value.
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00528">528</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
+Definition at line <a class="el" href="hash_8h-source.html#l00530">530</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
 <p>
 Referenced by <a class="el" href="set_8h-source.html#l00140">csSet&lt; csPtrKey&lt; KnownFont &gt; &gt;::Delete()</a>.    </td>
   </tr>
@@ -352,7 +357,7 @@ Delete all the elements matching the given key.
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00509">509</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00511">511</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="1993529ab4a5bfb6e0510a39e934f0e3"></a><!-- doxytag: member="csHash::DeleteAll" ref="1993529ab4a5bfb6e0510a39e934f0e3" args="()" --><p>
@@ -387,7 +392,7 @@ Delete all the elements.
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00496">496</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
+Definition at line <a class="el" href="hash_8h-source.html#l00498">498</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
 <p>
 Referenced by <a class="el" href="set_8h-source.html#l00127">csSet&lt; csPtrKey&lt; KnownFont &gt; &gt;::DeleteAll()</a>.    </td>
   </tr>
@@ -425,7 +430,7 @@ Delete the element pointed by the iterator.
 <p>
 This is safe for this iterator, not for the others. 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00730">730</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00732">732</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="b17bd1a266076d278efdde6296410da5"></a><!-- doxytag: member="csHash::Empty" ref="b17bd1a266076d278efdde6296410da5" args="()" --><p>
@@ -460,7 +465,7 @@ Delete all the elements. (Idiomatic alias for <a class="el" href="classcsHash.ht
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00506">506</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00508">508</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="637e58b0a1d7ad02b7d6bb9b78d097d6"></a><!-- doxytag: member="csHash::Get" ref="637e58b0a1d7ad02b7d6bb9b78d097d6" args="(const K &amp;key, T &amp;fallback)" --><p>
@@ -505,7 +510,7 @@ Get the first element matching the given key, or <code>fallback</code> if there 
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00480">480</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00482">482</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="238c1cdbbd582dc63a18e0cd1c2b1298"></a><!-- doxytag: member="csHash::Get" ref="238c1cdbbd582dc63a18e0cd1c2b1298" args="(const K &amp;key, const T &amp;fallback) const " --><p>
@@ -550,12 +555,12 @@ Get the first element matching the given key, or <code>fallback</code> if there 
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00461">461</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
+Definition at line <a class="el" href="hash_8h-source.html#l00463">463</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
 <p>
 Referenced by <a class="el" href="hashr_8h-source.html#l00088">csHashReversible&lt; T, K &gt;::GetKey()</a>.    </td>
   </tr>
 </table>
-<a class="anchor" name="ec721a32d0ebff42eb060117f8dccc9e"></a><!-- doxytag: member="csHash::GetAll" ref="ec721a32d0ebff42eb060117f8dccc9e" args="(const K &amp;key) const " --><p>
+<a class="anchor" name="76210ffaa007b9277e306235343a5400"></a><!-- doxytag: member="csHash::GetAll" ref="76210ffaa007b9277e306235343a5400" args="(const K &amp;key) const " --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -565,7 +570,11 @@ Referenced by <a class="el" href="hashr_8h-source.html#l00088">csHashReversible&
 template&lt;class T, class K = unsigned int&gt; </td>
         </tr>
         <tr>
-          <td class="md" nowrap valign="top"><a class="el" href="classcsArray.html">csArray</a>&lt;T&gt; <a class="el" href="classcsHash.html">csHash</a>&lt; T, K &gt;::GetAll           </td>
+          <td class="mdPrefix" colspan="4">
+template&lt;typename H, typename M&gt; </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap valign="top"><a class="el" href="classcsArray.html">csArray</a>&lt;T, H, M&gt; <a class="el" href="classcsHash.html">csHash</a>&lt; T, K &gt;::GetAll           </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">const K &amp;&nbsp;</td>
           <td class="mdname1" valign="top" nowrap> <em>key</em>          </td>
@@ -588,7 +597,7 @@ Get all the elements with the given key, or empty if there are none.
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00353">353</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00355">355</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="9067b054a90559ad8c84bd3f5c10b0be"></a><!-- doxytag: member="csHash::GetElementPointer" ref="9067b054a90559ad8c84bd3f5c10b0be" args="(const K &amp;key)" --><p>
@@ -624,7 +633,7 @@ Get a pointer to the first element matching the given key, or 0 if there is none
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00442">442</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00444">444</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="c57f1665bb0ffdba191308736ffc64c4"></a><!-- doxytag: member="csHash::GetElementPointer" ref="c57f1665bb0ffdba191308736ffc64c4" args="(const K &amp;key) const " --><p>
@@ -660,7 +669,7 @@ Get a pointer to the first element matching the given key, or 0 if there is none
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00423">423</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
+Definition at line <a class="el" href="hash_8h-source.html#l00425">425</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
 <p>
 Referenced by <a class="el" href="hashr_8h-source.html#l00079">csHashReversible&lt; T, K &gt;::GetKeyPointer()</a>.    </td>
   </tr>
@@ -698,7 +707,7 @@ Return an iterator for the hash, to iterate over all elements.
 <dl compact><dt><b>Warning:</b></dt><dd>Modifying the hash (except with <a class="el" href="classcsHash.html#c4ec925270514a086e079f73f9de26bb">DeleteElement()</a>) while you have open iterators will result in undefined behaviour. </dd></dl>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00754">754</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00756">756</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="7da31081f42c18feffd4e988fc91ecba"></a><!-- doxytag: member="csHash::GetIterator" ref="7da31081f42c18feffd4e988fc91ecba" args="(const K &amp;key) const " --><p>
@@ -735,7 +744,7 @@ Return an iterator for the hash, to iterate only over the elements with the give
 <dl compact><dt><b>Warning:</b></dt><dd>Modifying the hash (except with <a class="el" href="classcsHash.html#c4ec925270514a086e079f73f9de26bb">DeleteElement()</a>) while you have open iterators will result in undefined behaviour. </dd></dl>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00744">744</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00746">746</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="b45fbbedd1611f90213c8acec7be7ba4"></a><!-- doxytag: member="csHash::GetSize" ref="b45fbbedd1611f90213c8acec7be7ba4" args="() const " --><p>
@@ -770,7 +779,7 @@ Get the number of elements in the hash.
 <p>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00548">548</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
+Definition at line <a class="el" href="hash_8h-source.html#l00550">550</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
 <p>
 Referenced by <a class="el" href="set_8h-source.html#l00146">csSet&lt; csPtrKey&lt; KnownFont &gt; &gt;::GetSize()</a>.    </td>
   </tr>
@@ -809,7 +818,7 @@ Returns whether at least one element matches the given key.
 <dl compact><dt><b>Remarks:</b></dt><dd>This is rigidly equivalent to Contains(key), but may be considered more idiomatic by some. </dd></dl>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00416">416</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00418">418</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="f106fa85bda1ed8fd2b7746a7c246b3f"></a><!-- doxytag: member="csHash::IsEmpty" ref="f106fa85bda1ed8fd2b7746a7c246b3f" args="() const " --><p>
@@ -845,7 +854,7 @@ Return true if the hash is empty.
 <dl compact><dt><b>Remarks:</b></dt><dd>Rigidly equivalent to <code>return <a class="el" href="classcsHash.html#b45fbbedd1611f90213c8acec7be7ba4">GetSize()</a> == 0</code>, but more idiomatic. </dd></dl>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00558">558</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00560">560</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="312b953d8b449720adddd45162b078e9"></a><!-- doxytag: member="csHash::Put" ref="312b953d8b449720adddd45162b078e9" args="(const K &amp;key, const T &amp;value)" --><p>
@@ -888,12 +897,12 @@ template&lt;class T, class K = unsigned int&gt; </td>
 <p>
 Add an element to the hash table. 
 <p>
-<dl compact><dt><b>Remarks:</b></dt><dd>If `key' is already present, does NOT replace the existing value, but merely adds `value' as an additional value of `key'. To retrieve all values for a given key, use <a class="el" href="classcsHash.html#ec721a32d0ebff42eb060117f8dccc9e">GetAll()</a>. If you instead want to replace an existing value for 'key', use <a class="el" href="classcsHash.html#7c3f374c1720d8236e864b81c90264da">PutUnique()</a>. </dd></dl>
+<dl compact><dt><b>Remarks:</b></dt><dd>If `key' is already present, does NOT replace the existing value, but merely adds `value' as an additional value of `key'. To retrieve all values for a given key, use <a class="el" href="classcsHash.html#76210ffaa007b9277e306235343a5400">GetAll()</a>. If you instead want to replace an existing value for 'key', use <a class="el" href="classcsHash.html#7c3f374c1720d8236e864b81c90264da">PutUnique()</a>. </dd></dl>
 
 <p>
 Reimplemented in <a class="el" href="classcsHashReversible.html#9c25406a6642d4e8f2d8a7d4da52b089">csHashReversible&lt; T, K &gt;</a>.
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00342">342</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
+Definition at line <a class="el" href="hash_8h-source.html#l00343">343</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
 <p>
 Referenced by <a class="el" href="set_8h-source.html#l00103">csSet&lt; csPtrKey&lt; KnownFont &gt; &gt;::AddNoTest()</a>, and <a class="el" href="hashr_8h-source.html#l00059">csHashReversible&lt; T, K &gt;::Put()</a>.    </td>
   </tr>
@@ -941,7 +950,7 @@ Add an element to the hash table, overwriting if the key already exists.
 <dl compact><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated:</a></b></dt><dd>Use <a class="el" href="classcsHash.html#7c3f374c1720d8236e864b81c90264da">PutUnique()</a> instead. </dd></dl>
 
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00394">394</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
+Definition at line <a class="el" href="hash_8h-source.html#l00396">396</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="7c3f374c1720d8236e864b81c90264da"></a><!-- doxytag: member="csHash::PutUnique" ref="7c3f374c1720d8236e864b81c90264da" args="(const K &amp;key, const T &amp;value)" --><p>
@@ -988,7 +997,7 @@ Add an element to the hash table, overwriting if the key already exists.
 <p>
 Reimplemented in <a class="el" href="classcsHashReversible.html#9942c91231ae37ef9bfe08966348e24e">csHashReversible&lt; T, K &gt;</a>.
 <p>
-Definition at line <a class="el" href="hash_8h-source.html#l00369">369</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
+Definition at line <a class="el" href="hash_8h-source.html#l00371">371</a> of file <a class="el" href="hash_8h-source.html">hash.h</a>.
 <p>
 Referenced by <a class="el" href="hashr_8h-source.html#l00069">csHashReversible&lt; T, K &gt;::PutUnique()</a>.    </td>
   </tr>
