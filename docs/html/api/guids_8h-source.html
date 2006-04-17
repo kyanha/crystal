@@ -54,23 +54,32 @@
 <a name="l00023"></a>00023 <span class="comment">// Must appear first after cssysdef.h</span>
 <a name="l00024"></a>00024 
 <a name="l00025"></a>00025 <span class="preprocessor">#include "csextern_dx.h"</span>
-<a name="l00026"></a>00026 <span class="preprocessor">#include &lt;windows.h&gt;</span>
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028 <span class="preprocessor">#ifdef CS_BUILD_SHARED_LIBS</span>
-<a name="l00029"></a>00029 <span class="preprocessor"></span><span class="comment">// Modify DEFINE_GUID macro to do DLL importing</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#undef DEFINE_GUID</span>
-<a name="l00031"></a>00031 <span class="preprocessor"></span><span class="preprocessor">#undef GUID_EXT</span>
-<a name="l00032"></a>00032 <span class="preprocessor"></span><span class="preprocessor">#define GUID_EXT        extern CS_CSPLUGINCOMMON_DX_EXPORT</span>
-<a name="l00033"></a>00033 <span class="preprocessor"></span>
-<a name="l00034"></a>00034 <span class="preprocessor">#ifdef INITGUID</span>
-<a name="l00035"></a>00035 <span class="preprocessor"></span><span class="preprocessor">#define DEFINE_GUID(n,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) GUID_EXT const GUID n = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}</span>
-<a name="l00036"></a>00036 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-<a name="l00037"></a>00037 <span class="preprocessor"></span><span class="preprocessor">#define DEFINE_GUID(n,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) GUID_EXT const GUID n</span>
-<a name="l00038"></a>00038 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l00039"></a>00039 <span class="preprocessor"></span>
-<a name="l00040"></a>00040 <span class="preprocessor">#endif // CS_BUILD_SHARED_LIBS</span>
-<a name="l00041"></a>00041 <span class="preprocessor"></span>
-<a name="l00042"></a>00042 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_DIRECTX_GUIDS_H__</span>
+<a name="l00026"></a>00026 <span class="comment">// Hack to export GUID_NULL from crystalspace_directx, too</span>
+<a name="l00027"></a>00027 <span class="preprocessor">#ifdef CS_BUILD_SHARED_LIBS</span>
+<a name="l00028"></a>00028 <span class="preprocessor"></span><span class="preprocessor">#define GUID_NULL       _DEFAULT_GUID_NULL</span>
+<a name="l00029"></a>00029 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00030"></a>00030 <span class="preprocessor"></span><span class="preprocessor">#include &lt;windows.h&gt;</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#ifdef CS_BUILD_SHARED_LIBS</span>
+<a name="l00032"></a>00032 <span class="preprocessor"></span><span class="preprocessor">#undef GUID_NULL</span>
+<a name="l00033"></a>00033 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00034"></a>00034 <span class="preprocessor"></span>
+<a name="l00035"></a>00035 <span class="preprocessor">#ifdef CS_BUILD_SHARED_LIBS</span>
+<a name="l00036"></a>00036 <span class="preprocessor"></span><span class="comment">// Modify DEFINE_GUID macro to do DLL importing</span>
+<a name="l00037"></a>00037 <span class="preprocessor">#undef DEFINE_GUID</span>
+<a name="l00038"></a>00038 <span class="preprocessor"></span><span class="preprocessor">#undef GUID_EXT</span>
+<a name="l00039"></a>00039 <span class="preprocessor"></span><span class="preprocessor">#define GUID_EXT        extern CS_CSPLUGINCOMMON_DX_EXPORT</span>
+<a name="l00040"></a>00040 <span class="preprocessor"></span>
+<a name="l00041"></a>00041 <span class="preprocessor">#ifdef INITGUID</span>
+<a name="l00042"></a>00042 <span class="preprocessor"></span><span class="preprocessor">#define DEFINE_GUID(n,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) GUID_EXT const GUID n = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}</span>
+<a name="l00043"></a>00043 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+<a name="l00044"></a>00044 <span class="preprocessor"></span><span class="preprocessor">#define DEFINE_GUID(n,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) GUID_EXT const GUID n</span>
+<a name="l00045"></a>00045 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l00046"></a>00046 <span class="preprocessor"></span>
+<a name="l00047"></a>00047 GUID_EXT <span class="keyword">const</span> GUID GUID_NULL;
+<a name="l00048"></a>00048 
+<a name="l00049"></a>00049 <span class="preprocessor">#endif // CS_BUILD_SHARED_LIBS</span>
+<a name="l00050"></a>00050 <span class="preprocessor"></span>
+<a name="l00051"></a>00051 <span class="preprocessor">#endif // __CS_CSPLUGINCOMMON_DIRECTX_GUIDS_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
