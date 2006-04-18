@@ -663,8 +663,8 @@ Definition at line <a class="el" href="scf__interface_8h-source.html#l00086">86<
   <span class="keyword">virtual</span> <span class="keywordtype">void</span> IncRef ();                                               \
   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DecRef ();                                               \
   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetRefCount ();                                           \
-  <span class="keyword">virtual</span> <span class="keywordtype">void</span> AddRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner);                         \
-  <span class="keyword">virtual</span> <span class="keywordtype">void</span> RemoveRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner);                      \
+  <span class="keyword">virtual</span> <span class="keywordtype">void</span> AddRefOwner (<span class="keywordtype">void</span>** ref_owner);                          \
+  <span class="keyword">virtual</span> <span class="keywordtype">void</span> RemoveRefOwner (<span class="keywordtype">void</span>** ref_owner);                       \
   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *QueryInterface (<a class="code" href="group__scf.html#ge3095ac94f71a5ff42374271c90222cd">scfInterfaceID</a> iInterfaceID, <span class="keywordtype">int</span> iVersion)
 </pre></div>SCF_DECLARE_EMBEDDED_IBASE is used to declare the methods of <a class="el" href="structiBase.html">iBase</a> inside an embedded class that is exposed via QueryInterface. 
 <p>
@@ -694,7 +694,7 @@ Definition at line <a class="el" href="scf_8h-source.html#l00109">109</a> of fil
 
 <p>
 <b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordtype">int</span> scfRefCount;                <span class="comment">/* Reference counter */</span>                 \
-  <a class="code" href="classcsArray.html">csArray&lt;iBase**&gt;</a>* scfWeakRefOwners;                                   \
+  <a class="code" href="classcsArray.html">csArray&lt;void**&gt;</a>* scfWeakRefOwners;                                    \
   <span class="keywordtype">void</span> scfRemoveRefOwners ();                                           \
   <a class="code" href="group__scf.html#g1c5273660c64350850cb55a4a04f7aae">SCF_DECLARE_EMBEDDED_IBASE</a> (<a class="code" href="structiBase.html">iBase</a>)
 </pre></div>This macro should be embedded into any SCF-capable class definition to declare the minimal functionality required by <a class="el" href="structiBase.html">iBase</a> interface. 
@@ -733,8 +733,8 @@ Definition at line <a class="el" href="scf_8h-source.html#l00099">99</a> of file
   <span class="keyword">virtual</span> <span class="keywordtype">void</span> IncRef ();                                               \
   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DecRef ();                                               \
   <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetRefCount ();                                           \
-  <span class="keyword">virtual</span> <span class="keywordtype">void</span> AddRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner);                         \
-  <span class="keyword">virtual</span> <span class="keywordtype">void</span> RemoveRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner);                      \
+  <span class="keyword">virtual</span> <span class="keywordtype">void</span> AddRefOwner (<span class="keywordtype">void</span>** ref_owner);                          \
+  <span class="keyword">virtual</span> <span class="keywordtype">void</span> RemoveRefOwner (<span class="keywordtype">void</span>** ref_owner);                       \
   <span class="keyword">virtual</span> <span class="keywordtype">void</span> *QueryInterface (<a class="code" href="group__scf.html#ge3095ac94f71a5ff42374271c90222cd">scfInterfaceID</a> iInterfaceID, <span class="keywordtype">int</span> iVersion)
 </pre></div>The following macro is used in "expansion SCF classes". 
 <p>
@@ -1119,11 +1119,11 @@ Definition at line <a class="el" href="scf_8h-source.html#l00368">368</a> of fil
     <td>
 
 <p>
-<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordtype">void</span> Class::AddRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner)                             \
+<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordtype">void</span> Class::AddRefOwner (<span class="keywordtype">void</span>** ref_owner)                              \
 {                                                                       \
   scfParent-&gt;AddRefOwner (ref_owner);                                   \
 }                                                                       \
-<span class="keywordtype">void</span> Class::RemoveRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner)                          \
+<span class="keywordtype">void</span> Class::RemoveRefOwner (<span class="keywordtype">void</span>** ref_owner)                           \
 {                                                                       \
   scfParent-&gt;RemoveRefOwner (ref_owner);                                \
 }
@@ -1654,11 +1654,11 @@ Definition at line <a class="el" href="scf_8h-source.html#l00505">505</a> of fil
     <td>
 
 <p>
-<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordtype">void</span> Class::AddRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner)                             \
+<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordtype">void</span> Class::AddRefOwner (<span class="keywordtype">void</span>** ref_owner)                              \
 {                                                                       \
   __scf_superclass::AddRefOwner (ref_owner);                            \
 }                                                                       \
-<span class="keywordtype">void</span> Class::RemoveRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner)                          \
+<span class="keywordtype">void</span> Class::RemoveRefOwner (<span class="keywordtype">void</span>** ref_owner)                           \
 {                                                                       \
   __scf_superclass::RemoveRefOwner (ref_owner);                         \
 }
@@ -1834,18 +1834,18 @@ Definition at line <a class="el" href="scf_8h-source.html#l00273">273</a> of fil
     <td>
 
 <p>
-<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordtype">void</span> Class::AddRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner)                             \
+<b>Value:</b><div class="fragment"><pre class="fragment"><span class="keywordtype">void</span> Class::AddRefOwner (<span class="keywordtype">void</span>** ref_owner)                              \
 {                                                                       \
   <span class="keywordflow">if</span> (!scfWeakRefOwners)                                                \
-    scfWeakRefOwners = <span class="keyword">new</span> <a class="code" href="classcsArray.html">csArray&lt;iBase**&gt;</a> (0, 4);                     \
+    scfWeakRefOwners = <span class="keyword">new</span> <a class="code" href="classcsArray.html">csArray&lt;void**&gt;</a> (0, 4);                      \
   scfWeakRefOwners-&gt;InsertSorted (ref_owner);                           \
 }                                                                       \
-<span class="keywordtype">void</span> Class::RemoveRefOwner (<a class="code" href="structiBase.html">iBase</a>** ref_owner)                          \
+<span class="keywordtype">void</span> Class::RemoveRefOwner (<span class="keywordtype">void</span>** ref_owner)                           \
 {                                                                       \
   <span class="keywordflow">if</span> (!scfWeakRefOwners)                                                \
     <span class="keywordflow">return</span>;                                                             \
   size_t index = scfWeakRefOwners-&gt;FindSortedKey (                      \
-    <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;iBase**, iBase**&gt;</a> (ref_owner));                          \
+    <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;void**, void**&gt;</a> (ref_owner));                            \
   <span class="keywordflow">if</span> (index != <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>) scfWeakRefOwners-&gt;DeleteIndex (     \
     index);                                                             \
 }
@@ -1886,7 +1886,7 @@ Definition at line <a class="el" href="scf_8h-source.html#l00228">228</a> of fil
   <span class="keywordflow">if</span> (!scfWeakRefOwners) <span class="keywordflow">return</span>;                                        \
   <span class="keywordflow">for</span> (size_t i = 0 ; i &lt; scfWeakRefOwners-&gt;Length () ; i++)            \
   {                                                                     \
-    <a class="code" href="structiBase.html">iBase</a>** p = (*scfWeakRefOwners)[i];                                 \
+    <span class="keywordtype">void</span>** p = (*scfWeakRefOwners)[i];                                  \
     *p = 0;                                                             \
   }                                                                     \
   <span class="keyword">delete</span> scfWeakRefOwners;                                              \
@@ -2669,7 +2669,7 @@ SCF uses the following comparison criteria: if the major version numbers are equ
 <p>
 Definition at line <a class="el" href="scf__interface_8h-source.html#l00096">96</a> of file <a class="el" href="scf__interface_8h-source.html">scf_interface.h</a>.
 <p>
-Referenced by <a class="el" href="scf__implementation_8h-source.html#l00240">scfImplementation&lt; csBaseTextureFactory &gt;::QueryInterface()</a>.    </td>
+Referenced by <a class="el" href="scf__implementation_8h-source.html#l00244">scfImplementation&lt; csBaseTextureFactory &gt;::QueryInterface()</a>.    </td>
   </tr>
 </table>
 <a class="anchor" name="ge034563962e9f68c4310476b40f45884"></a><!-- doxytag: member="scf.h::scfCreateInstance" ref="ge034563962e9f68c4310476b40f45884" args="(char const *const ClassID)" --><p>

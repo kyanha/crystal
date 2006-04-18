@@ -145,20 +145,20 @@
 <a name="l00197"></a>00197     <span class="keywordflow">return</span> scfRefCount;
 <a name="l00198"></a>00198   }
 <a name="l00199"></a>00199 
-<a name="l00200"></a><a class="code" href="classscfImplementation.html#70083be0d91080040574ffaa8b972532">00200</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#0518cb684b4fe363b04dedea164e3811">AddRefOwner</a> (<a class="code" href="structiBase.html">iBase</a>** ref_owner)
+<a name="l00200"></a><a class="code" href="classscfImplementation.html#240bcf10a91bd4b235fabe701469dfdd">00200</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#5d0ec17cc4948f7bdcf668fcb52b9eb1">AddRefOwner</a> (<span class="keywordtype">void</span>** ref_owner)
 <a name="l00201"></a>00201   {
 <a name="l00202"></a>00202     <span class="keywordflow">if</span> (!this-&gt;scfWeakRefOwners)
-<a name="l00203"></a>00203       scfWeakRefOwners = <span class="keyword">new</span> <a class="code" href="classcsArray.html">csArray&lt;iBase**&gt;</a> (0, 4);
+<a name="l00203"></a>00203       scfWeakRefOwners = <span class="keyword">new</span> <a class="code" href="classcsArray.html">WeakRefOwnerArray</a> (0);
 <a name="l00204"></a>00204     scfWeakRefOwners-&gt;InsertSorted (ref_owner);
 <a name="l00205"></a>00205   }
 <a name="l00206"></a>00206 
-<a name="l00207"></a><a class="code" href="classscfImplementation.html#4a16952c1b75f48affd29e031dc37507">00207</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#45a1e69f8c99121940bb1428de1b642c">RemoveRefOwner</a> (<a class="code" href="structiBase.html">iBase</a>** ref_owner)
+<a name="l00207"></a><a class="code" href="classscfImplementation.html#6b485c4c91700bbe65249d99ee43562f">00207</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="structiBase.html#0292fc77bd2b4f8ff5ff25e9540417e0">RemoveRefOwner</a> (<span class="keywordtype">void</span>** ref_owner)
 <a name="l00208"></a>00208   {
 <a name="l00209"></a>00209     <span class="keywordflow">if</span> (!scfWeakRefOwners)
 <a name="l00210"></a>00210       <span class="keywordflow">return</span>;
 <a name="l00211"></a>00211 
 <a name="l00212"></a>00212     size_t index = scfWeakRefOwners-&gt;FindSortedKey (
-<a name="l00213"></a>00213       <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;iBase**, iBase**&gt;</a>(ref_owner));
+<a name="l00213"></a>00213       <a class="code" href="classcsArrayCmp.html">csArrayCmp&lt;void**, void**&gt;</a>(ref_owner));
 <a name="l00214"></a>00214 
 <a name="l00215"></a>00215     <span class="keywordflow">if</span> (index != <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>)
 <a name="l00216"></a>00216       scfWeakRefOwners-&gt;DeleteIndex (index);
@@ -169,50 +169,54 @@
 <a name="l00221"></a>00221 
 <a name="l00222"></a><a class="code" href="classscfImplementation.html#ed31c70c9bd3e65a7ffa6ea04100a772">00222</a>   <span class="keywordtype">int</span> scfRefCount;
 <a name="l00223"></a><a class="code" href="classscfImplementation.html#fd66881aa3adfbdb3d837fa522ecf825">00223</a>   <a class="code" href="structiBase.html">iBase</a> *scfParent;
-<a name="l00224"></a><a class="code" href="classscfImplementation.html#9f8aa67fe1fe8bcf90ad9b525652f4a7">00224</a>   <a class="code" href="classcsArray.html">csArray&lt;iBase**&gt;</a>* scfWeakRefOwners;
-<a name="l00225"></a>00225 
-<a name="l00226"></a><a class="code" href="classscfImplementation.html#b883da91edf750ac33b370e6c2979311">00226</a>   <span class="keywordtype">void</span> scfRemoveRefOwners ()
-<a name="l00227"></a>00227   {
-<a name="l00228"></a>00228     <span class="keywordflow">if</span> (!scfWeakRefOwners)
-<a name="l00229"></a>00229       <span class="keywordflow">return</span>;
-<a name="l00230"></a>00230 
-<a name="l00231"></a>00231     <span class="keywordflow">for</span> (size_t i = 0; i &lt; scfWeakRefOwners-&gt;Length (); i++)
-<a name="l00232"></a>00232     {
-<a name="l00233"></a>00233       <a class="code" href="structiBase.html">iBase</a>** p = (*scfWeakRefOwners)[i];
-<a name="l00234"></a>00234       *p = 0;
-<a name="l00235"></a>00235     }
-<a name="l00236"></a>00236     <span class="keyword">delete</span> scfWeakRefOwners;
-<a name="l00237"></a>00237     scfWeakRefOwners = 0;
-<a name="l00238"></a>00238   }
-<a name="l00239"></a>00239 
-<a name="l00240"></a><a class="code" href="classscfImplementation.html#39e24bafa13bc6e292887c25b9a40203">00240</a>   <span class="keywordtype">void</span> *QueryInterface (<a class="code" href="group__scf.html#ge3095ac94f71a5ff42374271c90222cd">scfInterfaceID</a> iInterfaceID,
-<a name="l00241"></a>00241                         <a class="code" href="group__scf.html#ga7cc38364be77246ba6f80b3c98b8c59">scfInterfaceVersion</a> iVersion)
-<a name="l00242"></a>00242   {
-<a name="l00243"></a>00243     <span class="comment">// Default, just check iBase.. all objects have iBase</span>
-<a name="l00244"></a>00244     <span class="keywordflow">if</span> (iInterfaceID == <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;iBase&gt;::GetID</a> () &amp;&amp;
-<a name="l00245"></a>00245       <a class="code" href="group__scf.html#gb72a7c621912c032409c2147c65a5598">scfCompatibleVersion</a> (iVersion, <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;iBase&gt;::GetVersion</a> ()))
-<a name="l00246"></a>00246     {
-<a name="l00247"></a>00247       scfObject-&gt;IncRef ();
-<a name="l00248"></a>00248       <span class="keywordflow">return</span> CS_STATIC_CAST(<a class="code" href="structiBase.html">iBase</a>*,scfObject);
-<a name="l00249"></a>00249     }
-<a name="l00250"></a>00250 
-<a name="l00251"></a>00251     <span class="comment">// For embedded interfaces</span>
-<a name="l00252"></a>00252     <span class="keywordflow">if</span> (scfParent)
-<a name="l00253"></a>00253       <span class="keywordflow">return</span> scfParent-&gt;QueryInterface (iInterfaceID, iVersion);
+<a name="l00224"></a>00224   <span class="keyword">typedef</span> <a class="code" href="classcsArray.html">csArray</a>&lt;<span class="keywordtype">void</span>**,
+<a name="l00225"></a>00225     <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler&lt;void**&gt;</a>,
+<a name="l00226"></a>00226     <a class="code" href="classcsArrayMemoryAllocator.html">csArrayMemoryAllocator&lt;void**&gt;</a>,
+<a name="l00227"></a><a class="code" href="classscfImplementation.html#01f9c5e937ff50cc15c2d973f3204d9f">00227</a>     <a class="code" href="classcsArrayCapacityLinear.html">csArrayCapacityLinear&lt;csArrayThresholdFixed&lt;4&gt;</a> &gt; &gt; <a class="code" href="classcsArray.html">WeakRefOwnerArray</a>;
+<a name="l00228"></a><a class="code" href="classscfImplementation.html#aaca3135ce771adc55c4352ea6486842">00228</a>   <a class="code" href="classcsArray.html">WeakRefOwnerArray</a>* scfWeakRefOwners;
+<a name="l00229"></a>00229 
+<a name="l00230"></a><a class="code" href="classscfImplementation.html#b883da91edf750ac33b370e6c2979311">00230</a>   <span class="keywordtype">void</span> scfRemoveRefOwners ()
+<a name="l00231"></a>00231   {
+<a name="l00232"></a>00232     <span class="keywordflow">if</span> (!scfWeakRefOwners)
+<a name="l00233"></a>00233       <span class="keywordflow">return</span>;
+<a name="l00234"></a>00234 
+<a name="l00235"></a>00235     <span class="keywordflow">for</span> (size_t i = 0; i &lt; scfWeakRefOwners-&gt;Length (); i++)
+<a name="l00236"></a>00236     {
+<a name="l00237"></a>00237       <span class="keywordtype">void</span>** p = (*scfWeakRefOwners)[i];
+<a name="l00238"></a>00238       *p = 0;
+<a name="l00239"></a>00239     }
+<a name="l00240"></a>00240     <span class="keyword">delete</span> scfWeakRefOwners;
+<a name="l00241"></a>00241     scfWeakRefOwners = 0;
+<a name="l00242"></a>00242   }
+<a name="l00243"></a>00243 
+<a name="l00244"></a><a class="code" href="classscfImplementation.html#39e24bafa13bc6e292887c25b9a40203">00244</a>   <span class="keywordtype">void</span> *QueryInterface (<a class="code" href="group__scf.html#ge3095ac94f71a5ff42374271c90222cd">scfInterfaceID</a> iInterfaceID,
+<a name="l00245"></a>00245                         <a class="code" href="group__scf.html#ga7cc38364be77246ba6f80b3c98b8c59">scfInterfaceVersion</a> iVersion)
+<a name="l00246"></a>00246   {
+<a name="l00247"></a>00247     <span class="comment">// Default, just check iBase.. all objects have iBase</span>
+<a name="l00248"></a>00248     <span class="keywordflow">if</span> (iInterfaceID == <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;iBase&gt;::GetID</a> () &amp;&amp;
+<a name="l00249"></a>00249       <a class="code" href="group__scf.html#gb72a7c621912c032409c2147c65a5598">scfCompatibleVersion</a> (iVersion, <a class="code" href="classscfInterfaceTraits.html">scfInterfaceTraits&lt;iBase&gt;::GetVersion</a> ()))
+<a name="l00250"></a>00250     {
+<a name="l00251"></a>00251       scfObject-&gt;IncRef ();
+<a name="l00252"></a>00252       <span class="keywordflow">return</span> CS_STATIC_CAST(<a class="code" href="structiBase.html">iBase</a>*,scfObject);
+<a name="l00253"></a>00253     }
 <a name="l00254"></a>00254 
-<a name="l00255"></a>00255     <span class="keywordflow">return</span> 0;
-<a name="l00256"></a>00256   }
-<a name="l00257"></a>00257 };
+<a name="l00255"></a>00255     <span class="comment">// For embedded interfaces</span>
+<a name="l00256"></a>00256     <span class="keywordflow">if</span> (scfParent)
+<a name="l00257"></a>00257       <span class="keywordflow">return</span> scfParent-&gt;QueryInterface (iInterfaceID, iVersion);
 <a name="l00258"></a>00258 
-<a name="l00259"></a>00259 
-<a name="l00260"></a>00260 <span class="comment">/* Here the magic happens: generate scfImplementationN and </span>
-<a name="l00261"></a>00261 <span class="comment"> * scfImplementationExtN classed */</span>
-<a name="l00262"></a><a class="code" href="group__scf.html#g32823b8dc2fa987f1e945fa97b793875">00262</a> <span class="preprocessor">#define SCF_IN_IMPLEMENTATION_H 1</span>
-<a name="l00263"></a>00263 <span class="preprocessor"></span><span class="comment">// Generation is in separate file mostly for documentation generation purposes.</span>
-<a name="l00264"></a>00264 <span class="preprocessor">#include "scf_implgen.h"</span>
-<a name="l00265"></a>00265 <span class="preprocessor">#undef SCF_IN_IMPLEMENTATION_H</span>
-<a name="l00266"></a>00266 <span class="preprocessor"></span>
-<a name="l00269"></a>00269 <span class="preprocessor">#endif</span>
+<a name="l00259"></a>00259     <span class="keywordflow">return</span> 0;
+<a name="l00260"></a>00260   }
+<a name="l00261"></a>00261 };
+<a name="l00262"></a>00262 
+<a name="l00263"></a>00263 
+<a name="l00264"></a>00264 <span class="comment">/* Here the magic happens: generate scfImplementationN and </span>
+<a name="l00265"></a>00265 <span class="comment"> * scfImplementationExtN classed */</span>
+<a name="l00266"></a><a class="code" href="group__scf.html#g32823b8dc2fa987f1e945fa97b793875">00266</a> <span class="preprocessor">#define SCF_IN_IMPLEMENTATION_H 1</span>
+<a name="l00267"></a>00267 <span class="preprocessor"></span><span class="comment">// Generation is in separate file mostly for documentation generation purposes.</span>
+<a name="l00268"></a>00268 <span class="preprocessor">#include "scf_implgen.h"</span>
+<a name="l00269"></a>00269 <span class="preprocessor">#undef SCF_IN_IMPLEMENTATION_H</span>
+<a name="l00270"></a>00270 <span class="preprocessor"></span>
+<a name="l00273"></a>00273 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
