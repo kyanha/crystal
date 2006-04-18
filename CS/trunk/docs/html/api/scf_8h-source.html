@@ -109,7 +109,7 @@
 <a name="l00094"></a>00094 <span class="comment">//-- Old style implementation</span>
 <a name="l00099"></a><a class="code" href="group__scf.html#g3a58a1f2306d454390e234d6361ddffe">00099</a> <span class="comment"></span><span class="preprocessor">#define SCF_DECLARE_IBASE                                               \</span>
 <a name="l00100"></a>00100 <span class="preprocessor">  int scfRefCount;              </span><span class="comment">/* Reference counter */</span>                 \
-<a name="l00101"></a>00101   csArray&lt;iBase**&gt;* scfWeakRefOwners;                                   \
+<a name="l00101"></a>00101   csArray&lt;void**&gt;* scfWeakRefOwners;                                    \
 <a name="l00102"></a>00102   void scfRemoveRefOwners ();                                           \
 <a name="l00103"></a>00103   SCF_DECLARE_EMBEDDED_IBASE (iBase)
 <a name="l00104"></a>00104 
@@ -119,8 +119,8 @@
 <a name="l00112"></a>00112   virtual void IncRef ();                                               \
 <a name="l00113"></a>00113   virtual void DecRef ();                                               \
 <a name="l00114"></a>00114   virtual int GetRefCount ();                                           \
-<a name="l00115"></a>00115   virtual void AddRefOwner (iBase** ref_owner);                         \
-<a name="l00116"></a>00116   virtual void RemoveRefOwner (iBase** ref_owner);                      \
+<a name="l00115"></a>00115   virtual void AddRefOwner (void** ref_owner);                          \
+<a name="l00116"></a>00116   virtual void RemoveRefOwner (void** ref_owner);                       \
 <a name="l00117"></a>00117   virtual void *QueryInterface (scfInterfaceID iInterfaceID, int iVersion)
 <a name="l00118"></a>00118 
 <a name="l00128"></a><a class="code" href="group__scf.html#g1a458452568fb70762717a993d85bb38">00128</a> <span class="preprocessor">#define SCF_CONSTRUCT_IBASE(Parent)                                     \</span>
@@ -173,7 +173,7 @@
 <a name="l00214"></a>00214 <span class="preprocessor">  if (!scfWeakRefOwners) return;                                        \</span>
 <a name="l00215"></a>00215 <span class="preprocessor">  for (size_t i = 0 ; i &lt; scfWeakRefOwners-&gt;Length () ; i++)            \</span>
 <a name="l00216"></a>00216 <span class="preprocessor">  {                                                                     \</span>
-<a name="l00217"></a>00217 <span class="preprocessor">    iBase** p = (*scfWeakRefOwners)[i];                                 \</span>
+<a name="l00217"></a>00217 <span class="preprocessor">    void** p = (*scfWeakRefOwners)[i];                                  \</span>
 <a name="l00218"></a>00218 <span class="preprocessor">    *p = 0;                                                             \</span>
 <a name="l00219"></a>00219 <span class="preprocessor">  }                                                                     \</span>
 <a name="l00220"></a>00220 <span class="preprocessor">  delete scfWeakRefOwners;                                              \</span>
@@ -181,18 +181,18 @@
 <a name="l00222"></a>00222 <span class="preprocessor">}</span>
 <a name="l00223"></a>00223 <span class="preprocessor"></span>
 <a name="l00228"></a><a class="code" href="group__scf.html#ga14ac21f00cf6a9b7ef2f5743a81f2cf">00228</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_REFOWNER(Class)                             \</span>
-<a name="l00229"></a>00229 <span class="preprocessor">void Class::AddRefOwner (iBase** ref_owner)                             \</span>
+<a name="l00229"></a>00229 <span class="preprocessor">void Class::AddRefOwner (void** ref_owner)                              \</span>
 <a name="l00230"></a>00230 <span class="preprocessor">{                                                                       \</span>
 <a name="l00231"></a>00231 <span class="preprocessor">  if (!scfWeakRefOwners)                                                \</span>
-<a name="l00232"></a>00232 <span class="preprocessor">    scfWeakRefOwners = new csArray&lt;iBase**&gt; (0, 4);                     \</span>
+<a name="l00232"></a>00232 <span class="preprocessor">    scfWeakRefOwners = new csArray&lt;void**&gt; (0, 4);                      \</span>
 <a name="l00233"></a>00233 <span class="preprocessor">  scfWeakRefOwners-&gt;InsertSorted (ref_owner);                           \</span>
 <a name="l00234"></a>00234 <span class="preprocessor">}                                                                       \</span>
-<a name="l00235"></a>00235 <span class="preprocessor">void Class::RemoveRefOwner (iBase** ref_owner)                          \</span>
+<a name="l00235"></a>00235 <span class="preprocessor">void Class::RemoveRefOwner (void** ref_owner)                           \</span>
 <a name="l00236"></a>00236 <span class="preprocessor">{                                                                       \</span>
 <a name="l00237"></a>00237 <span class="preprocessor">  if (!scfWeakRefOwners)                                                \</span>
 <a name="l00238"></a>00238 <span class="preprocessor">    return;                                                             \</span>
 <a name="l00239"></a>00239 <span class="preprocessor">  size_t index = scfWeakRefOwners-&gt;FindSortedKey (                      \</span>
-<a name="l00240"></a>00240 <span class="preprocessor">    csArrayCmp&lt;iBase**, iBase**&gt; (ref_owner));                          \</span>
+<a name="l00240"></a>00240 <span class="preprocessor">    csArrayCmp&lt;void**, void**&gt; (ref_owner));                            \</span>
 <a name="l00241"></a>00241 <span class="preprocessor">  if (index != csArrayItemNotFound) scfWeakRefOwners-&gt;DeleteIndex (     \</span>
 <a name="l00242"></a>00242 <span class="preprocessor">    index);                                                             \</span>
 <a name="l00243"></a>00243 <span class="preprocessor">}</span>
@@ -248,11 +248,11 @@
 <a name="l00334"></a>00334 <span class="preprocessor">}</span>
 <a name="l00335"></a>00335 <span class="preprocessor"></span>
 <a name="l00340"></a><a class="code" href="group__scf.html#ge4a9107b28eabdd14ce0172fe1820781">00340</a> <span class="preprocessor">#define SCF_IMPLEMENT_EMBEDDED_IBASE_REFOWNER(Class)                    \</span>
-<a name="l00341"></a>00341 <span class="preprocessor">void Class::AddRefOwner (iBase** ref_owner)                             \</span>
+<a name="l00341"></a>00341 <span class="preprocessor">void Class::AddRefOwner (void** ref_owner)                              \</span>
 <a name="l00342"></a>00342 <span class="preprocessor">{                                                                       \</span>
 <a name="l00343"></a>00343 <span class="preprocessor">  scfParent-&gt;AddRefOwner (ref_owner);                                   \</span>
 <a name="l00344"></a>00344 <span class="preprocessor">}                                                                       \</span>
-<a name="l00345"></a>00345 <span class="preprocessor">void Class::RemoveRefOwner (iBase** ref_owner)                          \</span>
+<a name="l00345"></a>00345 <span class="preprocessor">void Class::RemoveRefOwner (void** ref_owner)                           \</span>
 <a name="l00346"></a>00346 <span class="preprocessor">{                                                                       \</span>
 <a name="l00347"></a>00347 <span class="preprocessor">  scfParent-&gt;RemoveRefOwner (ref_owner);                                \</span>
 <a name="l00348"></a>00348 <span class="preprocessor">}</span>
@@ -297,8 +297,8 @@
 <a name="l00432"></a>00432 <span class="preprocessor">  virtual void IncRef ();                                               \</span>
 <a name="l00433"></a>00433 <span class="preprocessor">  virtual void DecRef ();                                               \</span>
 <a name="l00434"></a>00434 <span class="preprocessor">  virtual int GetRefCount ();                                           \</span>
-<a name="l00435"></a>00435 <span class="preprocessor">  virtual void AddRefOwner (iBase** ref_owner);                         \</span>
-<a name="l00436"></a>00436 <span class="preprocessor">  virtual void RemoveRefOwner (iBase** ref_owner);                      \</span>
+<a name="l00435"></a>00435 <span class="preprocessor">  virtual void AddRefOwner (void** ref_owner);                          \</span>
+<a name="l00436"></a>00436 <span class="preprocessor">  virtual void RemoveRefOwner (void** ref_owner);                       \</span>
 <a name="l00437"></a>00437 <span class="preprocessor">  virtual void *QueryInterface (scfInterfaceID iInterfaceID, int iVersion)</span>
 <a name="l00438"></a>00438 <span class="preprocessor"></span>
 <a name="l00445"></a><a class="code" href="group__scf.html#g8439bf789cd1e09faae47d3c591f6910">00445</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_INCREF(Class)                           \</span>
@@ -320,11 +320,11 @@
 <a name="l00473"></a>00473 <span class="preprocessor">}</span>
 <a name="l00474"></a>00474 <span class="preprocessor"></span>
 <a name="l00479"></a><a class="code" href="group__scf.html#gc364123d75a3bfd0efd48db3ae5cee77">00479</a> <span class="preprocessor">#define SCF_IMPLEMENT_IBASE_EXT_REFOWNER(Class)                 \</span>
-<a name="l00480"></a>00480 <span class="preprocessor">void Class::AddRefOwner (iBase** ref_owner)                             \</span>
+<a name="l00480"></a>00480 <span class="preprocessor">void Class::AddRefOwner (void** ref_owner)                              \</span>
 <a name="l00481"></a>00481 <span class="preprocessor">{                                                                       \</span>
 <a name="l00482"></a>00482 <span class="preprocessor">  __scf_superclass::AddRefOwner (ref_owner);                            \</span>
 <a name="l00483"></a>00483 <span class="preprocessor">}                                                                       \</span>
-<a name="l00484"></a>00484 <span class="preprocessor">void Class::RemoveRefOwner (iBase** ref_owner)                          \</span>
+<a name="l00484"></a>00484 <span class="preprocessor">void Class::RemoveRefOwner (void** ref_owner)                           \</span>
 <a name="l00485"></a>00485 <span class="preprocessor">{                                                                       \</span>
 <a name="l00486"></a>00486 <span class="preprocessor">  __scf_superclass::RemoveRefOwner (ref_owner);                         \</span>
 <a name="l00487"></a>00487 <span class="preprocessor">}</span>
