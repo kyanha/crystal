@@ -226,57 +226,61 @@
 <a name="l00291"></a>00291 
 <a name="l00292"></a>00292 };
 <a name="l00293"></a>00293 
-<a name="l00300"></a><a class="code" href="classcsJoystickDriver.html">00300</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csJoystickDriver : <span class="keyword">public</span> <a class="code" href="classcsInputDriver.html">csInputDriver</a>,
-<a name="l00301"></a>00301   <span class="keyword">public</span> <a class="code" href="classscfImplementation2.html">scfImplementation2</a>&lt;csJoystickDriver, iJoystickDriver, iEventHandler&gt;
-<a name="l00302"></a>00302 {
-<a name="l00303"></a>00303 <span class="keyword">private</span>:
-<a name="l00304"></a>00304   <span class="comment">// Generic keyboard driver (for checking modifier key states).</span>
-<a name="l00305"></a>00305   <a class="code" href="classcsRef.html">csRef&lt;iKeyboardDriver&gt;</a> Keyboard;
-<a name="l00306"></a>00306 
-<a name="l00307"></a>00307 <span class="keyword">protected</span>:
-<a name="l00312"></a><a class="code" href="classcsJoystickDriver.html#76be5be131476b8b03b955fa37d5a017">00312</a>   <span class="keywordtype">bool</span> Button [<a class="code" href="group__event__handling.html#g38fff06a3305b3802f937abd06098b47">CS_MAX_JOYSTICK_COUNT</a>][<a class="code" href="group__event__handling.html#g2085e125db1e3d3c36bb8dfcf519cbf9">CS_MAX_JOYSTICK_BUTTONS</a>];
-<a name="l00314"></a><a class="code" href="classcsJoystickDriver.html#4d925d7142157c8c095100c5bdfa8411">00314</a>   <a class="code" href="group__util.html#g56f1a81c92849566ae864511088eb7e8">int32</a> Last [<a class="code" href="group__event__handling.html#g38fff06a3305b3802f937abd06098b47">CS_MAX_JOYSTICK_COUNT</a>][<a class="code" href="group__event__handling.html#gcd40b30ac675129008f546cd98226628">CS_MAX_JOYSTICK_AXES</a>];
-<a name="l00315"></a><a class="code" href="classcsJoystickDriver.html#389b660735c7b97bb7abb0892b40f736">00315</a>   <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> Axes [<a class="code" href="group__event__handling.html#g38fff06a3305b3802f937abd06098b47">CS_MAX_JOYSTICK_COUNT</a>];
-<a name="l00317"></a>00317   <a class="code" href="structiKeyboardDriver.html">iKeyboardDriver</a>* GetKeyboardDriver();
-<a name="l00318"></a><a class="code" href="classcsJoystickDriver.html#87783151aa0993c04ac1a4ffbf108564">00318</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a>&amp; e)
-<a name="l00319"></a>00319   {
-<a name="l00320"></a>00320     <span class="keywordflow">return</span> csInputDriver::HandleEvent (e);
-<a name="l00321"></a>00321   }
-<a name="l00322"></a>00322 <span class="keyword">public</span>:
-<a name="l00323"></a>00323 
-<a name="l00325"></a>00325   csJoystickDriver (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
-<a name="l00327"></a>00327   <span class="keyword">virtual</span> ~csJoystickDriver ();
-<a name="l00328"></a>00328 
-<a name="l00329"></a>00329   <a class="code" href="group__event__handling.html#g4f7b2a21cfb5997a2bb258920fafc61f">CS_EVENTHANDLER_NAMES</a>(<span class="stringliteral">"crystalspace.inputdriver.joystick"</span>)
-<a name="l00330"></a>00330   <a class="code" href="group__event__handling.html#gfa413bca2b161c7d43cb38f46ec73a7b">CS_EVENTHANDLER_NIL_CONSTRAINTS</a>
-<a name="l00331"></a>00331 
-<a name="l00333"></a>00333   virtual <span class="keywordtype">void</span> Reset ();
-<a name="l00334"></a>00334 
-<a name="l00336"></a><a class="code" href="classcsJoystickDriver.html#d0a2ebd13aa36d7220f779d8fc14db8c">00336</a>   <a class="code" href="cssysdef_8h.html#6aa75111b26a9a9e9cc8213e8e245d97">CS_DEPRECATED_METHOD</a> <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> virtual <span class="keywordtype">int</span> GetLastX (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number)<span class="keyword"> const </span>
-<a name="l00337"></a>00337 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number][0]; }
-<a name="l00339"></a><a class="code" href="classcsJoystickDriver.html#aece06256ecfcf3857d5f5eed7570052">00339</a>   <a class="code" href="cssysdef_8h.html#6aa75111b26a9a9e9cc8213e8e245d97">CS_DEPRECATED_METHOD</a> <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetLastY (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number)<span class="keyword"> const </span>
-<a name="l00340"></a>00340 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number][0]; }
-<a name="l00341"></a><a class="code" href="classcsJoystickDriver.html#ceeea898ab3a53d7c30a12b89b8923d3">00341</a>   <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__util.html#g56f1a81c92849566ae864511088eb7e8">int32</a> *GetLast (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number)<span class="keyword"> const </span>
-<a name="l00342"></a>00342 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number]; }
-<a name="l00343"></a><a class="code" href="classcsJoystickDriver.html#58025d87ddfa39daece3b1bafcdcc9f5">00343</a>   <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetLast (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number, <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> axis)<span class="keyword"> const </span>
-<a name="l00344"></a>00344 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number][axis]; }
-<a name="l00346"></a><a class="code" href="classcsJoystickDriver.html#ab83764f5d6c3f59f80beca5962a3af2">00346</a>   <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetLastButton (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number, <span class="keywordtype">int</span> button)<span class="keyword"> const</span>
-<a name="l00347"></a>00347 <span class="keyword">  </span>{
-<a name="l00348"></a>00348     <span class="keywordflow">return</span> (number &lt; <a class="code" href="group__event__handling.html#g38fff06a3305b3802f937abd06098b47">CS_MAX_JOYSTICK_COUNT</a>
-<a name="l00349"></a>00349          &amp;&amp; button &gt;= 0 &amp;&amp; button &lt; <a class="code" href="group__event__handling.html#g2085e125db1e3d3c36bb8dfcf519cbf9">CS_MAX_JOYSTICK_BUTTONS</a>) ?
-<a name="l00350"></a>00350             Button [number][button] : <span class="keyword">false</span>;
-<a name="l00351"></a>00351   }
-<a name="l00352"></a>00352 
-<a name="l00354"></a>00354   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DoButton (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number, <span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, 
-<a name="l00355"></a>00355     <span class="keyword">const</span> <a class="code" href="group__util.html#g56f1a81c92849566ae864511088eb7e8">int32</a> *axes, <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> numAxes);
-<a name="l00357"></a>00357   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DoMotion (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number, <span class="keyword">const</span> <a class="code" href="group__util.html#g56f1a81c92849566ae864511088eb7e8">int32</a> *axes, <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> numAxes);
-<a name="l00358"></a>00358 
-<a name="l00360"></a><a class="code" href="classcsJoystickDriver.html#fdc154ce84dbdbfb8b7d380d9186875c">00360</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> LostFocus() { Reset(); }
-<a name="l00361"></a><a class="code" href="classcsJoystickDriver.html#c35c3091e9f05d3ef421495dab00e53b">00361</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GainFocus() { }
-<a name="l00362"></a>00362 
-<a name="l00363"></a>00363 };
+<a name="l00294"></a>00294 <span class="preprocessor">#include "<a class="code" href="msvc__deprecated__warn__off_8h.html">csutil/win32/msvc_deprecated_warn_off.h</a>"</span>
+<a name="l00295"></a>00295 
+<a name="l00302"></a><a class="code" href="classcsJoystickDriver.html">00302</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT csJoystickDriver : <span class="keyword">public</span> <a class="code" href="classcsInputDriver.html">csInputDriver</a>,
+<a name="l00303"></a>00303   <span class="keyword">public</span> <a class="code" href="classscfImplementation2.html">scfImplementation2</a>&lt;csJoystickDriver, iJoystickDriver, iEventHandler&gt;
+<a name="l00304"></a>00304 {
+<a name="l00305"></a>00305 <span class="keyword">private</span>:
+<a name="l00306"></a>00306   <span class="comment">// Generic keyboard driver (for checking modifier key states).</span>
+<a name="l00307"></a>00307   <a class="code" href="classcsRef.html">csRef&lt;iKeyboardDriver&gt;</a> Keyboard;
+<a name="l00308"></a>00308 
+<a name="l00309"></a>00309 <span class="keyword">protected</span>:
+<a name="l00314"></a><a class="code" href="classcsJoystickDriver.html#76be5be131476b8b03b955fa37d5a017">00314</a>   <span class="keywordtype">bool</span> Button [<a class="code" href="group__event__handling.html#g38fff06a3305b3802f937abd06098b47">CS_MAX_JOYSTICK_COUNT</a>][<a class="code" href="group__event__handling.html#g2085e125db1e3d3c36bb8dfcf519cbf9">CS_MAX_JOYSTICK_BUTTONS</a>];
+<a name="l00316"></a><a class="code" href="classcsJoystickDriver.html#4d925d7142157c8c095100c5bdfa8411">00316</a>   <a class="code" href="group__util.html#g56f1a81c92849566ae864511088eb7e8">int32</a> Last [<a class="code" href="group__event__handling.html#g38fff06a3305b3802f937abd06098b47">CS_MAX_JOYSTICK_COUNT</a>][<a class="code" href="group__event__handling.html#gcd40b30ac675129008f546cd98226628">CS_MAX_JOYSTICK_AXES</a>];
+<a name="l00317"></a><a class="code" href="classcsJoystickDriver.html#389b660735c7b97bb7abb0892b40f736">00317</a>   <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> Axes [<a class="code" href="group__event__handling.html#g38fff06a3305b3802f937abd06098b47">CS_MAX_JOYSTICK_COUNT</a>];
+<a name="l00319"></a>00319   <a class="code" href="structiKeyboardDriver.html">iKeyboardDriver</a>* GetKeyboardDriver();
+<a name="l00320"></a><a class="code" href="classcsJoystickDriver.html#87783151aa0993c04ac1a4ffbf108564">00320</a>   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> HandleEvent (<a class="code" href="structiEvent.html">iEvent</a>&amp; e)
+<a name="l00321"></a>00321   {
+<a name="l00322"></a>00322     <span class="keywordflow">return</span> csInputDriver::HandleEvent (e);
+<a name="l00323"></a>00323   }
+<a name="l00324"></a>00324 <span class="keyword">public</span>:
+<a name="l00325"></a>00325 
+<a name="l00327"></a>00327   csJoystickDriver (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>*);
+<a name="l00329"></a>00329   <span class="keyword">virtual</span> ~csJoystickDriver ();
+<a name="l00330"></a>00330 
+<a name="l00331"></a>00331   <a class="code" href="group__event__handling.html#g4f7b2a21cfb5997a2bb258920fafc61f">CS_EVENTHANDLER_NAMES</a>(<span class="stringliteral">"crystalspace.inputdriver.joystick"</span>)
+<a name="l00332"></a>00332   <a class="code" href="group__event__handling.html#gfa413bca2b161c7d43cb38f46ec73a7b">CS_EVENTHANDLER_NIL_CONSTRAINTS</a>
+<a name="l00333"></a>00333 
+<a name="l00335"></a>00335   virtual <span class="keywordtype">void</span> Reset ();
+<a name="l00336"></a>00336 
+<a name="l00338"></a><a class="code" href="classcsJoystickDriver.html#d0a2ebd13aa36d7220f779d8fc14db8c">00338</a>   <a class="code" href="cssysdef_8h.html#6aa75111b26a9a9e9cc8213e8e245d97">CS_DEPRECATED_METHOD</a> <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> virtual <span class="keywordtype">int</span> GetLastX (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number)<span class="keyword"> const </span>
+<a name="l00339"></a>00339 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number][0]; }
+<a name="l00341"></a><a class="code" href="classcsJoystickDriver.html#aece06256ecfcf3857d5f5eed7570052">00341</a>   <a class="code" href="cssysdef_8h.html#6aa75111b26a9a9e9cc8213e8e245d97">CS_DEPRECATED_METHOD</a> <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetLastY (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number)<span class="keyword"> const </span>
+<a name="l00342"></a>00342 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number][0]; }
+<a name="l00343"></a><a class="code" href="classcsJoystickDriver.html#ceeea898ab3a53d7c30a12b89b8923d3">00343</a>   <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="group__util.html#g56f1a81c92849566ae864511088eb7e8">int32</a> *GetLast (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number)<span class="keyword"> const </span>
+<a name="l00344"></a>00344 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number]; }
+<a name="l00345"></a><a class="code" href="classcsJoystickDriver.html#58025d87ddfa39daece3b1bafcdcc9f5">00345</a>   <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">int</span> GetLast (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number, <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> axis)<span class="keyword"> const </span>
+<a name="l00346"></a>00346 <span class="keyword">  </span>{ <span class="keywordflow">return</span> Last [number][axis]; }
+<a name="l00348"></a><a class="code" href="classcsJoystickDriver.html#ab83764f5d6c3f59f80beca5962a3af2">00348</a>   <a class="code" href="cssysdef_8h.html#b3427ad7a206cd0ebf118b9d40084164">CS_PURE_METHOD</a> <span class="keyword">virtual</span> <span class="keywordtype">bool</span> GetLastButton (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number, <span class="keywordtype">int</span> button)<span class="keyword"> const</span>
+<a name="l00349"></a>00349 <span class="keyword">  </span>{
+<a name="l00350"></a>00350     <span class="keywordflow">return</span> (number &lt; <a class="code" href="group__event__handling.html#g38fff06a3305b3802f937abd06098b47">CS_MAX_JOYSTICK_COUNT</a>
+<a name="l00351"></a>00351          &amp;&amp; button &gt;= 0 &amp;&amp; button &lt; <a class="code" href="group__event__handling.html#g2085e125db1e3d3c36bb8dfcf519cbf9">CS_MAX_JOYSTICK_BUTTONS</a>) ?
+<a name="l00352"></a>00352             Button [number][button] : <span class="keyword">false</span>;
+<a name="l00353"></a>00353   }
+<a name="l00354"></a>00354 
+<a name="l00356"></a>00356   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DoButton (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number, <span class="keywordtype">int</span> button, <span class="keywordtype">bool</span> down, 
+<a name="l00357"></a>00357     <span class="keyword">const</span> <a class="code" href="group__util.html#g56f1a81c92849566ae864511088eb7e8">int32</a> *axes, <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> numAxes);
+<a name="l00359"></a>00359   <span class="keyword">virtual</span> <span class="keywordtype">void</span> DoMotion (<a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> number, <span class="keyword">const</span> <a class="code" href="group__util.html#g56f1a81c92849566ae864511088eb7e8">int32</a> *axes, <a class="code" href="group__util.html#g91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> numAxes);
+<a name="l00360"></a>00360 
+<a name="l00362"></a><a class="code" href="classcsJoystickDriver.html#fdc154ce84dbdbfb8b7d380d9186875c">00362</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> LostFocus() { Reset(); }
+<a name="l00363"></a><a class="code" href="classcsJoystickDriver.html#c35c3091e9f05d3ef421495dab00e53b">00363</a>   <span class="keyword">virtual</span> <span class="keywordtype">void</span> GainFocus() { }
 <a name="l00364"></a>00364 
-<a name="l00365"></a>00365 <span class="preprocessor">#endif // __CS_CSINPUT_H__</span>
+<a name="l00365"></a>00365 };
+<a name="l00366"></a>00366 
+<a name="l00367"></a>00367 <span class="preprocessor">#include "<a class="code" href="msvc__deprecated__warn__on_8h.html">csutil/win32/msvc_deprecated_warn_on.h</a>"</span>
+<a name="l00368"></a>00368 
+<a name="l00369"></a>00369 <span class="preprocessor">#endif // __CS_CSINPUT_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
