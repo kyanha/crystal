@@ -54,36 +54,40 @@
 <a name="l00027"></a>00027 
 <a name="l00028"></a>00028 <span class="preprocessor">#include "<a class="code" href="ref_8h.html">csutil/ref.h</a>"</span>
 <a name="l00029"></a>00029 <span class="preprocessor">#include "<a class="code" href="scf__implementation_8h.html">csutil/scf_implementation.h</a>"</span>
-<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="csview_8h.html">cstool/csview.h</a>"</span>
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032 <span class="keyword">struct </span><a class="code" href="structiTextureHandle.html">iTextureHandle</a>;
-<a name="l00033"></a>00033 
-<a name="l00037"></a><a class="code" href="classcsMeshOnTexture.html">00037</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMeshOnTexture.html">csMeshOnTexture</a>
-<a name="l00038"></a>00038 {
-<a name="l00039"></a>00039 <span class="keyword">private</span>:
-<a name="l00040"></a>00040   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
-<a name="l00041"></a>00041   <a class="code" href="classcsRef.html">csRef&lt;iEngine&gt;</a> engine;
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043   <span class="comment">// We will view the object through this view.</span>
-<a name="l00044"></a>00044   <a class="code" href="classcsRef.html">csRef&lt;csView&gt;</a> view;
-<a name="l00045"></a>00045 
-<a name="l00046"></a>00046 <span class="keyword">public</span>:
-<a name="l00052"></a>00052   <a class="code" href="classcsMeshOnTexture.html">csMeshOnTexture</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
-<a name="l00053"></a>00053   
-<a name="l00055"></a>00055   <span class="keyword">virtual</span> ~<a class="code" href="classcsMeshOnTexture.html">csMeshOnTexture</a> ();
-<a name="l00056"></a>00056 
-<a name="l00062"></a><a class="code" href="classcsMeshOnTexture.html#0d293e502f6d9cbf70183d233dc51633">00062</a>   <a class="code" href="classcsView.html">csView</a>* GetView ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> view; }
-<a name="l00063"></a>00063 
-<a name="l00070"></a>00070   <span class="keywordtype">void</span> ScaleCamera (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <span class="keywordtype">int</span> txtx, <span class="keywordtype">int</span> txty);
-<a name="l00071"></a>00071 
-<a name="l00076"></a>00076   <span class="keywordtype">void</span> ScaleCamera (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <span class="keywordtype">float</span> distance);
-<a name="l00077"></a>00077 
-<a name="l00087"></a>00087   <span class="keywordtype">bool</span> Render (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* handle,
-<a name="l00088"></a>00088       <span class="keywordtype">bool</span> persistent = <span class="keyword">false</span>);
-<a name="l00089"></a>00089 };
-<a name="l00090"></a>00090 
-<a name="l00091"></a>00091 <span class="preprocessor">#endif // __CS_PROCMESH_H__</span>
-<a name="l00092"></a>00092 <span class="preprocessor"></span>
+<a name="l00030"></a>00030 <span class="preprocessor">#include "<a class="code" href="iutil_2objreg_8h.html">iutil/objreg.h</a>"</span>
+<a name="l00031"></a>00031 <span class="preprocessor">#include "<a class="code" href="csview_8h.html">cstool/csview.h</a>"</span>
+<a name="l00032"></a>00032 
+<a name="l00033"></a>00033 <span class="keyword">struct </span><a class="code" href="structiTextureHandle.html">iTextureHandle</a>;
+<a name="l00034"></a>00034 
+<a name="l00038"></a><a class="code" href="classcsMeshOnTexture.html">00038</a> <span class="keyword">class </span>CS_CRYSTALSPACE_EXPORT <a class="code" href="classcsMeshOnTexture.html">csMeshOnTexture</a>
+<a name="l00039"></a>00039 {
+<a name="l00040"></a>00040 <span class="keyword">private</span>:
+<a name="l00041"></a>00041   <a class="code" href="classcsRef.html">csRef&lt;iGraphics3D&gt;</a> g3d;
+<a name="l00042"></a>00042   <a class="code" href="classcsRef.html">csRef&lt;iEngine&gt;</a> engine;
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044   <span class="comment">// We will view the object through this view.</span>
+<a name="l00045"></a>00045   <a class="code" href="classcsRef.html">csRef&lt;csView&gt;</a> view;
+<a name="l00046"></a>00046   <span class="keywordtype">int</span> cur_w, cur_h;
+<a name="l00047"></a>00047 
+<a name="l00048"></a>00048   <span class="keywordtype">void</span> UpdateView (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h);
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 <span class="keyword">public</span>:
+<a name="l00056"></a>00056   <a class="code" href="classcsMeshOnTexture.html">csMeshOnTexture</a> (<a class="code" href="structiObjectRegistry.html">iObjectRegistry</a>* object_reg);
+<a name="l00057"></a>00057   
+<a name="l00059"></a>00059   <span class="keyword">virtual</span> ~<a class="code" href="classcsMeshOnTexture.html">csMeshOnTexture</a> ();
+<a name="l00060"></a>00060 
+<a name="l00066"></a><a class="code" href="classcsMeshOnTexture.html#0d293e502f6d9cbf70183d233dc51633">00066</a>   <a class="code" href="classcsView.html">csView</a>* GetView ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> view; }
+<a name="l00067"></a>00067 
+<a name="l00074"></a>00074   <span class="keywordtype">void</span> ScaleCamera (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <span class="keywordtype">int</span> txtw, <span class="keywordtype">int</span> txth);
+<a name="l00075"></a>00075 
+<a name="l00080"></a>00080   <span class="keywordtype">void</span> ScaleCamera (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <span class="keywordtype">float</span> distance);
+<a name="l00081"></a>00081 
+<a name="l00091"></a>00091   <span class="keywordtype">bool</span> Render (<a class="code" href="structiMeshWrapper.html">iMeshWrapper</a>* mesh, <a class="code" href="structiTextureHandle.html">iTextureHandle</a>* handle,
+<a name="l00092"></a>00092       <span class="keywordtype">bool</span> persistent = <span class="keyword">false</span>);
+<a name="l00093"></a>00093 };
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095 <span class="preprocessor">#endif // __CS_PROCMESH_H__</span>
+<a name="l00096"></a>00096 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
