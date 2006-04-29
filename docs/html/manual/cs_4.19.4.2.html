@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.19.4.2 Texturing</title>
+
+<meta name="description" content="Crystal Space: 4.19.4.2 Texturing">
+<meta name="keywords" content="Crystal Space: 4.19.4.2 Texturing">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="4.19.4.2"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.19.4.1.html#4.19.4.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.3.html#4.19.4.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.html#4.19.4" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h4 class="subsubsection"> 4.19.4.2 Texturing </h4>
+
+<p>Texturing is off by default.  In order to texture a shape you have to turn it on, and also set a texture.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">pen.SetFlag(Pen.FLAG_TEXTURE);
+pen.SetTexture(my_tex);
+</pre></td></tr></table>
+<p>To turn it back off, simply clear the flag.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">pen.ClearFlag(Pen.FLAG_TEXTURE);
+</pre></td></tr></table>
+<p>It is very important to realize that the current color set will affect the texture.  For example, if you set the current color
+to a bright white, the texture will be brighter than if you set it to black or a grey.  Setting the color to red will cause
+the texture to have a reddish cast.  Setting the alpha component will make the texture more or less translucent.
+</p>
+<p>What about texture coordinates?  All shapes are automatically textured.  The one exception is the triangle shape.  The Pen
+object currently does not have a good way to specify texture coordinates for it.  This is likely to be corrected in the future.
+</p>
+<p>For any given shape, the texture coordinates will be (0,0) at (xmin, ymin) and (1,1) at (xmax,ymax).  It is important to realize that 
+this works great for texturing an entire widget.  However, if you which to texture sub-shapes within a widget, you must modify the 
+transformation matrix so that texture coordinates will be properly generated.
+</p>
+<p>Imagine that you have a widget that is 50 x 50 pixels.  Assume that you have a small knob, that is 10 x 10 pixels, and you wish to
+texture it differently than the rest of the widget.  Note that it may also move around inside the widget.  The easiest way to do that
+is by:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">
+pen.PushTransform();
+pen.Translate(knob_x, knob_y, 0);
+
+pen.SetFlag(Pen.FLAG_TEXTURE);
+pen.SetTexture(my_tex);
+
+pen.DrawRect(0,0,10,10);
+
+pen.PopTransform();
+</pre></td></tr></table>
+<p>This will normalize the coordinates of your shape and allow the pen to create correct texture coordinates for it.
+</p>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.19.4.1.html#4.19.4.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.3.html#4.19.4.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.html#4.19.4" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

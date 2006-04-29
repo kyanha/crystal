@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.19.3 Widget object</title>
+
+<meta name="description" content="Crystal Space: 4.19.3 Widget object">
+<meta name="keywords" content="Crystal Space: 4.19.3 Widget object">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="AWS2-Widget"></a>
+<a name="4.19.3"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.19.2.html#4.19.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.html#4.19.4" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.html#4.19" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 4.19.3 Widget object </h3>
+
+<p>The Widget object is the base for any widget that will be displayed on the screen,
+or used as a container for other displayable widgets.  It has a number of methods
+and properties, and is very likely the most complex object in the system.
+</p>
+<p>Widgets that are not children, and that are not docked are top-level widgets.  
+This means that they exist in a linked list that indicates their drawing level.  Currently
+<small>AWS2</small> uses a focus-follows-mouse for widget activation/deactivation.
+</p>
+<p>The following table summarizes all of the methods that are available for a widget.
+</p>
+<dl compact="compact">
+<dt> <code>Move(x,y)</code></dt>
+<dd><p>Move the widget <strong>relative</strong> to x,y.
+</p>
+</dd>
+<dt> <code>MoveTo(x,y)</code></dt>
+<dd><p>Move the widget to <strong>absolute</strong> position x,y.
+</p>
+</dd>
+<dt> <code>Resize(width,height)</code></dt>
+<dd><p>Resize the widget <strong>relative</strong> to width,height.
+</p>
+</dd>
+<dt> <code>ResizeTo(width,height)</code></dt>
+<dd><p>Resize the widget to <strong>absolute</strong> size width,height.
+</p>
+</dd>
+<dt> <code>Invalidate()</code></dt>
+<dd><p>Indicates the the state of this widget has changed, and on the next redraw it's <code>onRedraw</code> function will be called.
+</p>
+</dd>
+<dt> <code>GetPen()</code></dt>
+<dd><p>Gets the Pen object, if any, associated with this widget.
+</p>
+</dd>
+<dt> <code>SetPen(pen)</code></dt>
+<dd><p>Sets the Pen object to be associated with this widget.
+</p>
+</dd>
+<dt> <code>AddChild(child, ...additional parms...)</code></dt>
+<dd><p>Adds a widget as a child to this widget.  If any additional parameters are specified, they will be passed to the
+onAddChild event that gets fired before this method completes.
+</p>
+</dd>
+<dt> <code>RemoveChild(child, ...additional parms...)</code></dt>
+<dd><p>Removes a widget as a child to this widget.  If any additional parameters are specified, they will be passed to the
+onRemoveChild event that gets fired before this method completes.
+</p>
+</dd>
+<dt> <code>Dock(sibling, position)</code></dt>
+<dd><p>Docks a widget to the given position.  The position may be one of the DOCK_XXXX properties listed below.  Only
+<strong>one</strong> widget should be docked to any given position.  The sibling widget's frame will be resized and/or
+moved in accordance with the frame that is being docked to.  Docking occurs in peer relationships, not parent/child.
+</p>
+</dd>
+<dt> <code>Broadcast(signal_name)</code></dt>
+<dd><p>This essential calls the function named by signal_name on all of the children of the given widget.  It does
+<strong>not</strong> propagate to grandchildren and below.
+</p>
+</dd>
+<dt> <code>SetFrameAnchor(anchor_flags)</code></dt>
+<dd><p>When a child widget sets this flag to any of the STICK_XXXX flags, the frame of the child will 
+be resized and/or moved relative to the frame of the parent. You may bitwise-or the flags together to specify more than one.
+</p>
+</dd>
+<dt> <code>ClearFrameAnchor(anchor_flags)</code></dt>
+<dd><p>Clears the given STICK_XXXX flags.  You may bitwise-or the flags together to specify more than one.
+</p>
+</dd>
+<dt> <code>SetMargin(size, where)</code></dt>
+<dd><p>Creates a spacer, or margin, for docked or anchored widgets.  <code>size</code> pixels will be inserted between
+the borders of the two widgets on the side indicated by <code>where</code>.
+</p>
+</dd>
+<dt> <code>CaptureMouse()</code></dt>
+<dd><p>Indicates that this widget wants all mouse events to come to it, irregardless of whether the mouse is over the
+widget or not.  This is useful for dragging pieces of a widget around (like the slider and scrollbars knobs).
+</p>
+</dd>
+<dt> <code>ReleaseMouse()</code></dt>
+<dd><p>If the mouse has been captured, release it.
+</p>
+</dd>
+<dt> <code>Show()</code></dt>
+<dd><p>If a widget is invisible, make it visible.
+</p>
+</dd>
+<dt> <code>Hide</code></dt>
+<dd><p>If a widget is visible, make it invisible.
+</p>
+</dd>
+</dl>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.19.2.html#4.19.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.html#4.19.4" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.html#4.19" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

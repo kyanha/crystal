@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.19.8 Gradient object</title>
+
+<meta name="description" content="Crystal Space: 4.19.8 Gradient object">
+<meta name="keywords" content="Crystal Space: 4.19.8 Gradient object">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="AWS2-Gradient"></a>
+<a name="4.19.8"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.19.7.html#4.19.7" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.9.html#4.19.9" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.html#4.19" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> 4.19.8 Gradient object </h3>
+
+<p>The Gradient object lets you make some fairly sophisticated gradients.  These can then 
+be used to texture a widget, or a part of a widget using masking.  There are currently
+only five different kinds of gradients supported.  Also, it should be realized that 
+using a gradient is more of an art than a science.  Things can get complex in a hurry.
+</p>
+<p>The basic pattern behind using a gradient is to create a new Gradient object, and then
+add colors to it.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">gr = new Gradient();
+    			
+gr.AddColor(new Color(1,1,1,1), 0.0);	
+gr.AddColor(new Color(1,1,1,1), 0.1);	
+gr.AddColor(new Color(0.6,0.6,0.6,1), 0.5);					
+gr.AddColor(new Color(0.4,0.4,0.4,1), 0.51);				
+gr.AddColor(new Color(0.7, 0.7, 0.7, 1), 0.9);
+gr.AddColor(new Color(0.0, 0.0, 0.0, 1), 1.0);
+</pre></td></tr></table>
+<p>Once you are done creating your gradient, it has to be rendered into a texture to actually be useful.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">gr.Render(tex, Gradient.VERTICAL);
+</pre></td></tr></table>
+<p>For horizontal and vertical gradients, it's best to create a texture that is 1 pixel wide and N pixels high, or vice versa, and then using
+that to texture your shape.  Other gradients require you to create a full width and height texture.
+</p>
+<p>The following table lists all possible gradient types:
+</p>
+<dl compact="compact">
+<dt> <code>HORIZONTAL</code></dt>
+<dd><p>The gradient starts at the left and runs to the right.
+</p>
+</dd>
+<dt> <code>VERTICAL</code></dt>
+<dd><p>The gradient starts at the top and runs to the bottom.
+</p>
+</dd>
+<dt> <code>RADIAL</code></dt>
+<dd><p>The gradient starts in the center and runs to the edges in all directions.
+</p>
+</dd>
+<dt> <code>LDIAG</code></dt>
+<dd><p>The gradient starts in the upper left corner and runs to the bottom right corner.
+</p>
+</dd>
+<dt> <code>RDIAG</code></dt>
+<dd><p>The gradient starts in the upper right corner and runs to the bottom left corner.
+</p>
+</dd>
+</dl>
+
+<p>The following methods are supported:
+</p>
+<dl compact="compact">
+<dt> <code>AddColor(color_object, position)</code></dt>
+<dd><p>Adds the given color at the given position.  The position must be between 0.0 and 1.0.  Colors
+will be sorted automatically, so they don't have to be added in order.
+</p>
+</dd>
+<dt> <code>Render(texture, gradient_constant)</code></dt>
+<dd><p>Renders the gradient to the given Texture object.  Whatever was in the texture is overwritten.
+</p>
+</dd>
+</dl>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.19.7.html#4.19.7" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.9.html#4.19.9" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.html#4.19" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
