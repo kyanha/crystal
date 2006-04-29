@@ -32,6 +32,8 @@
 <h1>iutil/plugin.h File Reference</h1>Plugin manager interface. <a href="#_details">More...</a>
 <p>
 <code>#include &quot;<a class="el" href="scf_8h-source.html">csutil/scf.h</a>&quot;</code><br>
+<code>#include &quot;<a class="el" href="iutil_2objreg_8h-source.html">iutil/objreg.h</a>&quot;</code><br>
+<code>#include &quot;<a class="el" href="reporter_8h-source.html">ivaria/reporter.h</a>&quot;</code><br>
 
 <p>
 <a href="plugin_8h-source.html">Go to the source code of this file.</a><table border="0" cellpadding="0" cellspacing="0">
@@ -51,10 +53,11 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scf.html#g453f1f8878aafb523944c206beb05873">CS_QUERY_PLUGIN_CLASS</a>(Object, ClassID, Interface)&nbsp;&nbsp;&nbsp;csQueryPluginClass&lt;Interface&gt; (Object, ClassID)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compatbility macro.  <a href="group__scf.html#g453f1f8878aafb523944c206beb05873"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scf.html#g3f3965d39a8d2f608e6a84dde911d4c5">CS_QUERY_REGISTRY_PLUGIN</a>(obj, object_reg, scf_id, interface)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use this macro to query the object registry, loading a plugin if needed.  <a href="group__scf.html#g3f3965d39a8d2f608e6a84dde911d4c5"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
+<tr><td class="memTemplParams" nowrap colspan="2">template&lt;class Interface&gt; </td></tr>
+<tr><td class="memTemplItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsPtr.html">csPtr</a>&lt; Interface &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__scf.html#gf4a34e36cd27e680cfcf002cca9729c7">csLoadPlugin</a> (<a class="el" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg, const char *ClassID)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Tell plugin manager to load a plugin.  <a href="group__scf.html#gf4a34e36cd27e680cfcf002cca9729c7"></a><br></td></tr>
 <tr><td class="memTemplParams" nowrap colspan="2">template&lt;class Interface&gt; </td></tr>
 <tr><td class="memTemplItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsPtr.html">csPtr</a>&lt; Interface &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__scf.html#gb779ffb37d64ca82d74d416d188d0707">csLoadPlugin</a> (<a class="el" href="structiPluginManager.html">iPluginManager</a> *mgr, const char *ClassID)</td></tr>
 
@@ -63,9 +66,21 @@
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Same as <a class="el" href="group__scf.html#gb779ffb37d64ca82d74d416d188d0707">csLoadPlugin()</a> but does not bother asking for a interface.  <a href="group__scf.html#g080cc89b6f142d13e81bd3b1e5da3cae"></a><br></td></tr>
 <tr><td class="memTemplParams" nowrap colspan="2">template&lt;class Interface&gt; </td></tr>
+<tr><td class="memTemplItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsPtr.html">csPtr</a>&lt; Interface &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__scf.html#g94cc7866d797878559c05cabf702e3fb">csLoadPluginCheck</a> (<a class="el" href="structiObjectRegistry.html">iObjectRegistry</a> *object_reg, const char *ClassID, bool report=true)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Tell plugin manager to load a plugin but first check if the plugin is not already loaded.  <a href="group__scf.html#g94cc7866d797878559c05cabf702e3fb"></a><br></td></tr>
+<tr><td class="memTemplParams" nowrap colspan="2">template&lt;class Interface&gt; </td></tr>
+<tr><td class="memTemplItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsPtr.html">csPtr</a>&lt; Interface &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__scf.html#g44411dc666c117c9eb38e7c43140a3a0">csLoadPluginCheck</a> (<a class="el" href="structiPluginManager.html">iPluginManager</a> *mgr, const char *ClassID)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Tell plugin manager to load a plugin but first check if the plugin is not already loaded.  <a href="group__scf.html#g44411dc666c117c9eb38e7c43140a3a0"></a><br></td></tr>
+<tr><td class="memTemplParams" nowrap colspan="2">template&lt;class Interface&gt; </td></tr>
 <tr><td class="memTemplItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsPtr.html">csPtr</a>&lt; Interface &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__scf.html#g4c6e52d0906212c2ca5b49fb507afb05">csQueryPluginClass</a> (<a class="el" href="structiPluginManager.html">iPluginManager</a> *mgr, const char *ClassID)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Find a plugin by its class ID.  <a href="group__scf.html#g4c6e52d0906212c2ca5b49fb507afb05"></a><br></td></tr>
+<tr><td class="memTemplParams" nowrap colspan="2">template&lt;class Interface&gt; </td></tr>
+<tr><td class="memTemplItemLeft" nowrap align="right" valign="top"><a class="el" href="classcsPtr.html">csPtr</a>&lt; Interface &gt;&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__scf.html#g4c52fd4507c44be72dcff8fa1ec8d307">csQueryRegistryOrLoad</a> (<a class="el" href="structiObjectRegistry.html">iObjectRegistry</a> *Reg, const char *classID, bool report=true)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Use this macro to query the object registry, loading a plugin if needed.  <a href="group__scf.html#g4c52fd4507c44be72dcff8fa1ec8d307"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Plugin manager interface. 
