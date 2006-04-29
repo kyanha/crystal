@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.19.4.3 Blending</title>
+
+<meta name="description" content="Crystal Space: 4.19.4.3 Blending">
+<meta name="keywords" content="Crystal Space: 4.19.4.3 Blending">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="4.19.4.3"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.19.4.2.html#4.19.4.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.4.html#4.19.4.4" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.html#4.19.4" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h4 class="subsubsection"> 4.19.4.3 Blending </h4>
+
+<p>There are two parts of blending to consider.  The first is the simplest, and involves alpha values in your color.  
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">pen.SetColor(1,1,1,1);
+</pre></td></tr></table>
+<p>This statement would set the color to a completely opaque white.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">pen.SetColor(1,1,1,0.5);
+</pre></td></tr></table>
+<p>Whereas this one would set the color to a shade that is 50% transparent.  It is easy to see how this works, in that the transparency is a 
+number from 0 to 1, where 0 is completely transparent, and 1 is completely opaque.
+</p>
+<p>There is a more sophisticated sort of blending that Pen can also perform.  This is referred to more generally as <em>compositing</em>.
+</p>
+<dl compact="compact">
+<dt> <code>SetMixMode(mixmode_constant)</code></dt>
+<dd><p>Set the blending mode used for further drawing to one of the Pen.MIX_XXX constants.  
+</p>
+</dd>
+<dt> <code>SetMixMode(mixmode_object)</code></dt>
+<dd><p>Set the blending mode used for further drawing by generating it from a Mixmode object
+that allows you to specify any of the source and destination blending operations CS
+supports.
+</p>
+</dd>
+</dl>
+
+<p>The constants that can be used for blending are as follows:
+</p>
+<dl compact="compact">
+<dt> <code>MIX_ADD</code></dt>
+<dd><p>The source color and destination colors are added together.
+</p>
+</dd>
+<dt> <code>MIX_ALPHA</code> </dt>
+<dd><p>The source and destination colors are blended using the alpha value.
+</p>
+</dd>
+<dt> <code>MIX_COPY</code></dt>
+<dd><p>The destination color is overwritten by the source color. (No blending).
+</p>
+</dd>
+<dt> <code>MIX_DST_ALPHA_ADD</code></dt>
+<dd><p>The source color is multiplied by the alpha component of the destination color
+and the result is added together.
+</p>
+</dd>
+<dt> <code>MIX_FLAT</code></dt>
+<dd><p>No shading is implemented for vertex colors.
+</p>
+</dd>
+<dt> <code>MIX_MULTIPLY</code></dt>
+<dd><p>To do
+</p>
+</dd>
+<dt> <code>MIX_MULTIPLY2</code></dt>
+<dd><p>To do
+</p>
+</dd>
+<dt> <code>MIX_PRE_MULT_ALPHA</code></dt>
+<dd><p>To do
+</p>
+</dd>
+<dt> <code>MIX_SRC_ALPHA_ADD</code></dt>
+<dd><p>To do
+</p>
+</dd>
+<dt> <code>MIX_TRANSPARENT</code></dt>
+<dd><p>To do
+</p> 
+</dd>
+<dt> <code>MIX_TRANSPARENT_TEST</code></dt>
+<dd><p>To do
+</p>  
+</dd>
+<dt> <code>MIX_DST_ALPHA</code></dt>
+<dd><p>Like MIX_DST_ALPHA_ADD, but the results are blended not added.
+</p>
+</dd>
+<dt> <code>MIX_DST_ALPHA_MASK</code></dt>
+<dd><p>To do
+</p>
+</dd>
+</dl>
+
+<p>In order to do masking, for example, you might set the pen state like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">pen.SetMixMode(Pen.MIX_COPY);
+pen.SetColor(1,1,1,1);
+pen.DrawTriangle(5,0,10,10,0,10);
+
+pen.SetMixMode(Pen.MIX_DST_ALPHA_ADD);
+pen.SetFlag(Pen.FLAG_TEXTURE);
+pen.SetTexture(my_tex);
+pen.DrawRect(0,0,20,20);
+</pre></td></tr></table>
+<p>The texture will only be drawn where the triangle was drawn.  The area around the triangle will be left clean.
+</p>
+<p>Blending allows you to do a number of interesting special effects, including highlighting and complex texturing.  For an example of the use of blending 
+see <tt>`data/aws/widgets/slider.js'</tt>
+</p>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.19.4.2.html#4.19.4.2" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.4.html#4.19.4.4" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.19.4.html#4.19.4" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
