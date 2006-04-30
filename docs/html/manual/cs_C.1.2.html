@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: C.1.2 csArray&lt;&gt; Index and Size Type Change</title>
+
+<meta name="description" content="Crystal Space: C.1.2 csArray&lt;&gt; Index and Size Type Change">
+<meta name="keywords" content="Crystal Space: C.1.2 csArray&lt;&gt; Index and Size Type Change">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Api100-csArray-Index-and-Size-Type-Change"></a>
+<a name="C.1.2"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_C.1.1.html#C.1.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.3.html#C.1.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> C.1.2 <code>csArray&lt;&gt;</code> Index and Size Type Change </h3>
+
+<p><code>csArray&lt;&gt;</code> has been changed to use <samp>`size_t'</samp> instead of
+<samp>`int'</samp> for array sizes and indices.  Probably, the most significant
+semantic difference of this change is that <samp>`size_t'</samp> is usually
+<em>unsigned</em> as opposed to <samp>`int'</samp> which is <em>signed</em>.
+</p>
+<p><strong>Read this paragraph carefully.</strong> In actual code, this change may result
+in nothing more than simple-looking compiler warnings. However, it may have
+caused <em>semantics</em> to change subtly.
+</p>
+<p>This has the greatest impact in the areas discussed below.
+</p>
+<a name="SEC922"></a>
+<h4 class="subsubheading"> Iterating Over <code>csArray&lt;&gt;</code> Contents </h4>
+
+<p>For this purpose, usually, <samp>`int'</samp> typed variables were used for keeping
+track of the index of the current item of an array iteration.  Fixing forward
+iteration over a <code>csArray&lt;&gt;</code> to instead use <samp>`size_t'</samp> is simple:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
+for (int i = 0, n = a.Length(); i &lt; n; i++)
+{
+  ...
+}
+</pre></td></tr></table>
+
+<p>Is changed to:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">...
+for (size_t i = 0, n = a.Length(); i &lt; n; i++)
+...
+</pre></td></tr></table>
+<p>Backward iteration is a bit more problematic. As mentioned before,
+<samp>`size_t'</samp> typically is unsigned, so you do not have negative values. This
+can be a problem in constructs like:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
+for (int i = a.Length() - 1; i &gt;= 0; i--)
+{
+  ...
+}
+</pre></td></tr></table>
+<p>If the <samp>`int'</samp> is changed simply to a <samp>`size_t'</samp>, this 
+<code>for</code>-loop misbehaves unexpectedly. When <samp>`i'</samp> becomes 0, the body 
+of the loop is executed correctly. However, decrementing <samp>`i'</samp> will 
+<strong>not</strong> cause <samp>`i'</samp> to have a negative value--after all, <samp>`size_t'</samp>
+is unsigned. Instead, decrementing will make <samp>`i'</samp> wrap around from 0 to
+0xffffffff (on 32-bit machines). Clearly, this is greater
+than 0, effectively causing an infinite loop. The same thing also happens when
+<samp>`a'</samp> has no items (i.e. <samp>`a.Length() == 0'</samp>). Here the
+-1 in the initialization of <samp>`i'</samp> causes wrap-around.
+</p>
+<p>Possible solutions include:
+</p>
+<ul>
+<li>
+Use an <code>int</code>-typed counter variable and cast the array length to
+<samp>`int'</samp>.  This is not entirely elegant, but it does the job in most cases.
+
+</li><li>
+Re-write the loop to deal properly with the unsigned nature of <samp>`size_t'</samp>:
+
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
+for (size_t i = a.Length(); i-- &gt; 0;)
+{
+  ...
+}
+</pre></td></tr></table>
+<p>This code does the same as the <samp>`int'</samp> version above, iterating from 
+<samp>`a.Length() - 1'</samp> to 0, inclusively. It also correctly works
+in the case <samp>`a.Length() == 0'</samp>. The &quot;trick&quot; is to place the 
+modification of <samp>`i'</samp> as a post-decrement in the loop condition. This 
+way, as soon as <samp>`i'</samp> becomes 0, the loop is terminated. The 
+post-decrement ensures that <samp>`i'</samp> has the expected value in the loop body.
+</p>
+</li></ul>
+
+<a name="SEC923"></a>
+<h4 class="subsubheading"> Searching </h4>
+
+<p>Functions like <code>csArray&lt;&gt;::FindSortedKey()</code> and <code>csArray&lt;&gt;::Find()</code>
+used to return -1 to signify that an item was not found.  This is still the
+case, but with a twist.  Now, <samp>`(size_t)-1'</samp> is returned.  For convenience,
+a constant, <samp>`csArrayItemNotFound'</samp>, has been added, which has this exact
+value.  It can be used in comparisons to make it clear what is actually being
+checked.
+</p>
+<p>Apropros comparisons: Recall that <samp>`size_t'</samp> is <em>unsigned</em>, so checking
+whether an index returned by <samp>`FindSortedKey()'</samp> or <samp>`Find()'</samp> is 
+actually a valid index by testing with <samp>`&gt;= 0'</samp> no longer works since
+<samp>`(size_t)-1'</samp> is always <code>&gt;= 0</code>. Replace such checks with tests of
+equality against <samp>`csArrayItemNotFound'</samp>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
+int index = a.Find (...);
+if (index &gt;= 0)
+{
+  /* Item found */
+  ...
+}
+else
+{
+  /* Item not found */
+  ...
+}
+</pre></td></tr></table>
+<p>Must be replaced with:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
+size_t index = a.Find (...);
+if (index != csArrayItemNotFound)
+{
+  /* Item found */
+  ...
+}
+else
+{
+  /* Item not found */
+  ...
+}
+</pre></td></tr></table>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_C.1.1.html#C.1.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.3.html#C.1.3" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
