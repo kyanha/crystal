@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: C.1.16 csList&lt;&gt;::Iterator Normalization</title>
+
+<meta name="description" content="Crystal Space: C.1.16 csList&lt;&gt;::Iterator Normalization">
+<meta name="keywords" content="Crystal Space: C.1.16 csList&lt;&gt;::Iterator Normalization">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Api100-csList-Iterator-Normalization"></a>
+<a name="C.1.16"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_C.1.15.html#C.1.15" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.17.html#C.1.17" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> C.1.16 <code>csList&lt;&gt;::Iterator</code> Normalization </h3>
+
+<p>The behavior of <code>csList&lt;&gt;::Iterator</code> has been normalized so that it
+functions identically to all other iterators in Crystal Space.  In the past, a
+newly created <code>csList&lt;&gt;::Iterator</code> already pointed at the first element in
+the container.  This differed from all other iterator implementations, in which
+the first element, like all other elements, is accessed by an invocation of
+<code>Next()</code>.
+</p>
+<p>Old code which accessed the elements of a <code>csList&lt;&gt;::Iterator</code> required a
+non-standard idiom, such as:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csList&lt;sometype&gt; list = ...;
+csList&lt;sometype&gt;::Iterator it(list);
+if (it.HasCurrent())
+{
+  do_something(*it);         // First value.
+  while (it.HasNext())
+  {
+    do_something(it.Next()); // Remaining values.
+  }
+}
+</pre></td></tr></table>
+
+<p>Or, the slightly less complicated, though still somewhat convoluted:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csList&lt;sometype&gt;::Iterator it(list);
+while (it.HasCurrent())
+{
+  do_something(*it);
+  it.Next();
+}
+</pre></td></tr></table>
+<p>Following normalization, <code>csList&lt;&gt;::Iterator</code> now works like all other
+iterators throughout the toolkit.  In particular, for forward iteration, all
+elements can be accessed via the standard <code>HasNext()</code> / <code>Next()</code>
+idiom:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csList&lt;sometype&gt;::Iterator it(list);
+while (it.HasNext())
+{
+  do_something(it.Next());
+}
+</pre></td></tr></table>
+
+<p>Likewise, for backward iteration, the <code>HasPrevious()</code> / <code>Previous()</code>
+idiom works in the obvious and expected inverse fashion.
+</p>
+<p>Finally, <code>csList&lt;&gt;::Iterator::Next()</code> and <code>Previous()</code> now return
+references to contained elements, rather than pointers.  This makes the
+interface of <code>csList&lt;&gt;::Iterator</code> internally consistent, as well as
+consistent with other iterators throughout the toolkit, in which these methods
+return references.
+</p>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_C.1.15.html#C.1.15" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.17.html#C.1.17" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

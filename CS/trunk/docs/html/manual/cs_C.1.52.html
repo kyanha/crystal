@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: C.1.52 csHash&lt;&gt; Changes</title>
+
+<meta name="description" content="Crystal Space: C.1.52 csHash&lt;&gt; Changes">
+<meta name="keywords" content="Crystal Space: C.1.52 csHash&lt;&gt; Changes">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Api100-csHash-Changes"></a>
+<a name="C.1.52"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_C.1.51.html#C.1.51" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.53.html#C.1.53" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> C.1.52 <code>csHash&lt;&gt;</code> Changes </h3>
+
+<p>The way <code>csHash&lt;&gt;</code> handles support for arbitrary key types has been
+changed. Previously, a so-called &quot;hash key handler&quot; was passed as an optional
+third template parameter that computed hash keys and was able to compare
+keys. Now, the hash computation is handled through the new
+<code>csHashComputer&lt;&gt;</code> template, and key comparison through
+<code>csComparator&lt;&gt;</code>. To provide hash computation and comparisons for specific
+types used as hash keys, specializations of the templates mentioned above are
+needed. Alternatively the default comparator uses the <samp>`operator &lt;'</samp> and
+<samp>`operator &gt;'</samp> operators, so you can also implement those operators instead
+of a <code>csComparator&lt;&gt;</code> specialization. The default <code>csHashComputer&lt;&gt;</code>
+implementation assumes that a type provides a <samp>`GetHash()'</samp> method that
+computes the hash value for an object. However, this means that integral types 
+need a specialization. As a convenience, Crystal Space already provides 
+specializations of <code>csHashComputer&lt;&gt;</code> for a number of commonly used 
+intergrals. Further, <code>csComparator&lt;&gt;</code> and/or <code>csHashComputer&lt;&gt;</code> 
+specializations are provided for the commonly used types <samp>`csString'</samp>, 
+<samp>`const char*'</samp> and <samp>`csStrKey'</samp>; and the default comparison semantics of 
+<samp>`operator &lt;'</samp> and <samp>`operator &gt;'</samp> handle the remaining fundamental types 
+and any composite types which provide these operators. Pointers (other than 
+<samp>`void*'</samp> for which exists a specialization) as hash keys are a special 
+case: to use a pointer of type <samp>`Foo*'</samp> as a hash key, employ 
+<samp>`csPtrKey&lt;Foo&gt;'</samp> as the key type in the hash declaration. 
+</p>
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_C.1.51.html#C.1.51" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.53.html#C.1.53" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

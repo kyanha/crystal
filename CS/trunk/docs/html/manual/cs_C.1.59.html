@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: C.1.59 Ball Mesh Removed</title>
+
+<meta name="description" content="Crystal Space: C.1.59 Ball Mesh Removed">
+<meta name="keywords" content="Crystal Space: C.1.59 Ball Mesh Removed">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Api100-Ball-Mesh-Removed"></a>
+<a name="C.1.59"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_C.1.58.html#C.1.58" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.2.html#C.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h3 class="subsection"> C.1.59 Ball Mesh Removed </h3>
+
+<p>The ball mesh has been removed. The genmesh mesh can now be used to generate
+spheres instead. Here is an example how you would have to change the map file. First
+here is the old way:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;ballFact&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.factory.ball&lt;/plugin&gt;
+  &lt;params /&gt;
+&lt;/meshfact&gt;
+...
+&lt;sector name=&quot;room&quot;&gt;
+  &lt;meshobj name=&quot;ball&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.ball&lt;/plugin&gt;
+    &lt;params&gt;
+      &lt;factory&gt;ballFact&lt;/factory&gt;
+      &lt;material&gt;plasma&lt;/material&gt;
+      &lt;numrim&gt;16&lt;/numrim&gt;
+      &lt;radius x=&quot;2&quot; y=&quot;1&quot; z=&quot;.5&quot; /&gt;
+      &lt;shift x=&quot;0&quot; y=&quot;.5&quot; z=&quot;0&quot; /&gt;
+      &lt;reversed /&gt;
+      &lt;toponly /&gt;
+      &lt;cylindrical /&gt;
+    &lt;/params&gt;
+    &lt;move&gt; &lt;v x=&quot;15&quot; y=&quot;4&quot; z=&quot;14&quot; /&gt; &lt;/move&gt;
+  &lt;/meshobj&gt;
+&lt;/sector&gt;
+</pre></td></tr></table>
+<p>And here is the new way:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;ballFact&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.factory.genmesh&lt;/plugin&gt;
+  &lt;params&gt;
+    &lt;sphere rimvertices=&quot;16&quot; reversed=&quot;true&quot; toponly=&quot;true&quot; cylindrical=&quot;true&quot; &gt;
+      &lt;radius x=&quot;2&quot; y=&quot;1&quot; z=&quot;.5&quot; /&gt;
+      &lt;center x=&quot;0&quot; y=&quot;.5&quot; z=&quot;0&quot; /&gt;
+    &lt;/sphere&gt;
+  &lt;/params&gt;
+&lt;/meshfact&gt;
+...
+&lt;sector name=&quot;room&quot;&gt;
+  &lt;meshobj name=&quot;transpBall&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.genmesh&lt;/plugin&gt;
+    &lt;params&gt;
+      &lt;factory&gt;ballFact&lt;/factory&gt;
+      &lt;material&gt;plasma&lt;/material&gt;
+    &lt;/params&gt;
+    &lt;move&gt; &lt;v x=&quot;15&quot; y=&quot;4&quot; z=&quot;14&quot; /&gt; &lt;/move&gt;
+  &lt;/meshobj&gt;
+&lt;/sector&gt;
+</pre></td></tr></table>
+<p>It is important to note that the geometry defining the sphere is now in the
+factory (as with all genmeshes).
+</p>
+<p>If you want to create them from code then you have to get rid of using the
+<code>iBallState</code> and instead use <code>iGeneralFactoryState-&gt;GenerateSphere()</code>
+to generate the desired sphere in a genmesh factory.
+</p>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_C.1.58.html#C.1.58" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.2.html#C.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
