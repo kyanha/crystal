@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.10 Convenience Headers</title>
+<title>Crystal Space: C.1.10 csObjectPool&lt;&gt; Removal</title>
 
-<meta name="description" content="Crystal Space: C.1.10 Convenience Headers">
-<meta name="keywords" content="Crystal Space: C.1.10 Convenience Headers">
+<meta name="description" content="Crystal Space: C.1.10 csObjectPool&lt;&gt; Removal">
+<meta name="keywords" content="Crystal Space: C.1.10 csObjectPool&lt;&gt; Removal">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-Convenience-Headers"></a>
+<a name="Api100-csObjectPool-Removal"></a>
 <a name="C.1.10"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.9.html#C.1.9" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,134 +58,20 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.10 Convenience Headers </h3>
+<h3 class="subsection"> C.1.10 <code>csObjectPool&lt;&gt;</code> Removal </h3>
 
-<p>For convenience, several top-level <em>master header</em> files have been added to
-the project. These should simplify client usage by allowing users to choose the
-level of granularity which suits them best.  The list of new header files
-follows.
+<p>The <code>csObjectPool&lt;&gt;</code> utility class has been removed since it managed
+memory poorly, and failed to invoke the destructor of contained objects at the
+time they were recycled via <code>csObjectPool&lt;&gt;::Free()</code>, which meant that the
+objects might not release their own resources in a timely fashion.  (It did
+correctly destroy the freed objects when the pool itself was destroyed, but
+should have been doing so at <code>Free()</code>-time.)
 </p>
-<dl compact="compact">
-<dt> <code>crystalspace.h</code></dt>
-<dd><p>Nearly all public headers in entire Crystal Space <small>SDK</small>.
-</p></dd>
-<dt> <code>csgeom.h</code></dt>
-<dd><p>Content of <tt>`CS/include/csgeom'</tt>.
-</p></dd>
-<dt> <code>csgfx.h</code></dt>
-<dd><p>Content of <tt>`CS/include/csgfx'</tt>.
-</p></dd>
-<dt> <code>csplugincommon.h</code></dt>
-<dd><p>Content of <tt>`CS/include/csplugincommon'</tt>.
-</p></dd>
-<dt> <code>cstool.h</code></dt>
-<dd><p>Content of <tt>`CS/include/cstool'</tt>.
-</p></dd>
-<dt> <code>csutil.h</code></dt>
-<dd><p>Content of <tt>`CS/include/csutil'</tt>.
-</p></dd>
-<dt> <code>iaws.h</code></dt>
-<dd><p>Content of <tt>`CS/include/iaws'</tt>.
-</p></dd>
-<dt> <code>iengine.h</code></dt>
-<dd><p>Content of <tt>`CS/include/iengine'</tt>.
-</p></dd>
-<dt> <code>igeom.h</code></dt>
-<dd><p>Content of <tt>`CS/include/igeom'</tt>.
-</p></dd>
-<dt> <code>igraphic.h</code></dt>
-<dd><p>Content of <tt>`CS/include/igraphic'</tt>.
-</p></dd>
-<dt> <code>imap.h</code></dt>
-<dd><p>Content of <tt>`CS/include/imap'</tt>.
-</p></dd>
-<dt> <code>imesh.h</code></dt>
-<dd><p>Content of <tt>`CS/include/imesh'</tt>.
-</p></dd>
-<dt> <code>inetwork.h</code></dt>
-<dd><p>Content of <tt>`CS/include/inetwork'</tt>.
-</p></dd>
-<dt> <code>isound.h</code></dt>
-<dd><p>Content of <tt>`CS/include/isound'</tt>.
-</p></dd>
-<dt> <code>itexture.h</code></dt>
-<dd><p>Content of <tt>`CS/include/itexture'</tt>.
-</p></dd>
-<dt> <code>iutil.h</code></dt>
-<dd><p>Content of <tt>`CS/include/iutil'</tt>.
-</p></dd>
-<dt> <code>ivaria.h</code></dt>
-<dd><p>Content of <tt>`CS/include/ivaria'</tt>.
-</p></dd>
-<dt> <code>ivideo.h</code></dt>
-<dd><p>Content of <tt>`CS/include/ivideo'</tt>.
-</p></dd>
-</dl>
-
-<p>Users new to the <small>SDK</small> will probably want to include <tt>`crystalspace.h'</tt>
-since it is simplest; whereas more advanced users may want to include
-<tt>`csutil.h'</tt>, <tt>`cstool.h'</tt>, etc.; and power users can continue to include
-only the individual headers required by a particular piece of code.
-</p>
-<p>As a corollary, the old <tt>`CS/include/css.h'</tt> header, which included many,
-though not all Crystal Space header files, has been removed. If you require
-this type functionality from a header, then include the new
-<tt>`crystalspace.h'</tt> instead.
-</p>
-<p>Be aware that there is a very small set of public headers not included in any
-of the master headers. These are omitted from the master headers because they
-reference external resources which might not be known or available to all
-clients of the master headers. Clients requiring these special-case headers
-will need to include them manually, on an as-needed basis, and arrange that the
-build system has sufficient knowledge about the external resources to satisfy
-the dependencies at build time.  The list of headers which are excluded from
-the master headers follows.
-</p>
-<dl compact="compact">
-<dt> <code>csplugincommon/directx/*.h</code></dt>
-<dd><p>DirectX-specific.
-</p></dd>
-<dt> <code>csplugincommon/macosx/*.h</code></dt>
-<dd><p>MacOS/X-specific.
-</p></dd>
-<dt> <code>csplugincommon/opengl/*.h</code></dt>
-<dd><p>OpenGL-specific.
-</p></dd>
-<dt> <code>csplugincommon/win32/*.h</code></dt>
-<dd><p>Windows-specific.
-</p></dd>
-<dt> <code>csutil/archive.h</code></dt>
-<dd><p>Requires zlib indirectly via <tt>`csutil/zip.h'</tt>.
-</p></dd>
-<dt> <code>csutil/getopt.h</code></dt>
-<dd><p>Conflicts with platform-supplied <tt>`&lt;getopt.h&gt;'</tt>.
-</p></dd>
-<dt> <code>csutil/zip.h</code></dt>
-<dd><p>Requires zlib; <a href="http://www.gzip.org/zlib/">http://www.gzip.org/zlib/</a>
-</p></dd>
-<dt> <code>inetwork/vosapi.h</code></dt>
-<dd><p>Requires <small>VOS</small>; <a href="http://www.interreality.org/">http://www.interreality.org/</a>
-</p></dd>
-<dt> <code>ivaria/ode.h</code></dt>
-<dd><p>Requires <small>ODE</small>; <a href="http://www.ode.org/">http://www.ode.org/</a>
-</p></dd>
-<dt> <code>ivideo/wxwin.h</code></dt>
-<dd><p>Requires wxWidgets; <a href="http://www.wxwidgets.org/">http://www.wxwidgets.org/</a>
-</p></dd>
-</dl>
-
-<p>As an example, if you need access to the <samp>`iWxWindow'</samp> interface, then you
-must include <tt>`ivideo/wxwin.h'</tt> manually; it will not be included as part of
-<tt>`crystalspace.h'</tt> or <tt>`ivideo.h'</tt>. Furthermore, you will need
-to let the build system know where it can find the wxWidgets resources (headers
-and libraries). Typically, this is done by adding a wxWidgets check to your
-project's <tt>`configure'</tt> script; emitting the results of the check to your
-<tt>`Jamconfig'</tt> file with the <code>CS_EMIT_BUILD_RESULT()</code> Autoconf macro;
-and finally utilizing the result of that check in your project's <tt>`Jamfile'</tt>
-by invoking the Jam rule <samp>`ExternalLibs'</samp>. For <small>MSVC</small> project files, the
-location of the wxWidgets resources will have to be added as <em>additional
-include directories</em> and <em>additional library directories</em>, in the project
-settings or globally, to ensure that <small>MSVC</small> will be able to find them.
+<p>You can use <code>csBlockAllocator&lt;&gt;</code> (see <tt>`csutil/blockallocator.h'</tt>) as a
+drop-in replacement for <code>csObjectPool&lt;&gt;</code> since the <small>API</small> of
+<code>csBlockAllocator&lt;&gt;</code> is a proper superset of the <code>csObjectPool&lt;&gt;</code>
+<small>API</small>. A global search and replace should be sufficient to account for this
+change.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

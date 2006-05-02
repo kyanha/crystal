@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.24 Old Renderer Architecture Removal</title>
+<title>Crystal Space: C.1.24 Convenience Headers</title>
 
-<meta name="description" content="Crystal Space: C.1.24 Old Renderer Architecture Removal">
-<meta name="keywords" content="Crystal Space: C.1.24 Old Renderer Architecture Removal">
+<meta name="description" content="Crystal Space: C.1.24 Convenience Headers">
+<meta name="keywords" content="Crystal Space: C.1.24 Convenience Headers">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-Old-Renderer-Architecture-Removal"></a>
+<a name="Api100-Convenience-Headers"></a>
 <a name="C.1.24"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.23.html#C.1.23" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,166 +58,135 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.24 Old Renderer Architecture Removal </h3>
+<h3 class="subsection"> C.1.24 Convenience Headers </h3>
 
-<p>The old rendering architecture along with the old renderer plugins have been
-removed. Additionally, a few plugins, applications, classes, and methods have
-been deprecated because they are not applicable to the new rendering
-architecture. The results of the old renderer removal are summarized below.
+<p>For convenience, several top-level <em>master header</em> files have been added to
+the project. These should simplify client usage by allowing users to choose the
+level of granularity which suits them best.  The list of new header files
+follows.
 </p>
-<a name="SEC950"></a>
-<h4 class="subsubheading"> Removed Plugins </h4>
+<dl compact="compact">
+<dt> <code>crystalspace.h</code></dt>
+<dd><p>Nearly all public headers in entire Crystal Space <small>SDK</small>.
+</p></dd>
+<dt> <code>csgeom.h</code></dt>
+<dd><p>Content of <tt>`CS/include/csgeom'</tt>.
+</p></dd>
+<dt> <code>csgfx.h</code></dt>
+<dd><p>Content of <tt>`CS/include/csgfx'</tt>.
+</p></dd>
+<dt> <code>csplugincommon.h</code></dt>
+<dd><p>Content of <tt>`CS/include/csplugincommon'</tt>.
+</p></dd>
+<dt> <code>cstool.h</code></dt>
+<dd><p>Content of <tt>`CS/include/cstool'</tt>.
+</p></dd>
+<dt> <code>csutil.h</code></dt>
+<dd><p>Content of <tt>`CS/include/csutil'</tt>.
+</p></dd>
+<dt> <code>iaws.h</code></dt>
+<dd><p>Content of <tt>`CS/include/iaws'</tt>.
+</p></dd>
+<dt> <code>iengine.h</code></dt>
+<dd><p>Content of <tt>`CS/include/iengine'</tt>.
+</p></dd>
+<dt> <code>igeom.h</code></dt>
+<dd><p>Content of <tt>`CS/include/igeom'</tt>.
+</p></dd>
+<dt> <code>igraphic.h</code></dt>
+<dd><p>Content of <tt>`CS/include/igraphic'</tt>.
+</p></dd>
+<dt> <code>imap.h</code></dt>
+<dd><p>Content of <tt>`CS/include/imap'</tt>.
+</p></dd>
+<dt> <code>imesh.h</code></dt>
+<dd><p>Content of <tt>`CS/include/imesh'</tt>.
+</p></dd>
+<dt> <code>inetwork.h</code></dt>
+<dd><p>Content of <tt>`CS/include/inetwork'</tt>.
+</p></dd>
+<dt> <code>isound.h</code></dt>
+<dd><p>Content of <tt>`CS/include/isound'</tt>.
+</p></dd>
+<dt> <code>itexture.h</code></dt>
+<dd><p>Content of <tt>`CS/include/itexture'</tt>.
+</p></dd>
+<dt> <code>iutil.h</code></dt>
+<dd><p>Content of <tt>`CS/include/iutil'</tt>.
+</p></dd>
+<dt> <code>ivaria.h</code></dt>
+<dd><p>Content of <tt>`CS/include/ivaria'</tt>.
+</p></dd>
+<dt> <code>ivideo.h</code></dt>
+<dd><p>Content of <tt>`CS/include/ivideo'</tt>.
+</p></dd>
+</dl>
 
-<p>The following plugin modules have been removed:
+<p>Users new to the <small>SDK</small> will probably want to include <tt>`crystalspace.h'</tt>
+since it is simplest; whereas more advanced users may want to include
+<tt>`csutil.h'</tt>, <tt>`cstool.h'</tt>, etc.; and power users can continue to include
+only the individual headers required by a particular piece of code.
 </p>
-<ul>
-<li>
-<code>terrfunc</code> (<code>crystalspace.mesh.object.terrfunc</code>)
-</li><li>
-Old <code>gl3d</code> (<tt>`plugins/video/renderer/opengl'</tt>)
-</li><li>
-Old <code>soft3d</code> (<tt>`plugins/video/renderer/software'</tt>)
-</li><li>
-Old <code>null3d</code> (<tt>`plugins/video/renderer/null'</tt>)
-</li></ul>
-
-<a name="SEC951"></a>
-<h4 class="subsubheading"> Removed Application </h4>
-
-<p>The <samp>`perftest'</samp> application has been removed, since it is no longer has any
-purpose.  For the future the <samp>`csbench'</samp> application should be extended to
-provide more information.
+<p>As a corollary, the old <tt>`CS/include/css.h'</tt> header, which included many,
+though not all Crystal Space header files, has been removed. If you require
+this type functionality from a header, then include the new
+<tt>`crystalspace.h'</tt> instead.
 </p>
-<a name="SEC952"></a>
-<h4 class="subsubheading"> Removed and Renamed Files </h4>
-
-<p>The following files were removed:
+<p>Be aware that there is a very small set of public headers not included in any
+of the master headers. These are omitted from the master headers because they
+reference external resources which might not be known or available to all
+clients of the master headers. Clients requiring these special-case headers
+will need to include them manually, on an as-needed basis, and arrange that the
+build system has sufficient knowledge about the external resources to satisfy
+the dependencies at build time.  The list of headers which are excluded from
+the master headers follows.
 </p>
-<ul>
-<li>
-<code>include/ivideo/vbufmgr.h</code>
-</li></ul>
+<dl compact="compact">
+<dt> <code>csplugincommon/directx/*.h</code></dt>
+<dd><p>DirectX-specific.
+</p></dd>
+<dt> <code>csplugincommon/macosx/*.h</code></dt>
+<dd><p>MacOS/X-specific.
+</p></dd>
+<dt> <code>csplugincommon/opengl/*.h</code></dt>
+<dd><p>OpenGL-specific.
+</p></dd>
+<dt> <code>csplugincommon/win32/*.h</code></dt>
+<dd><p>Windows-specific.
+</p></dd>
+<dt> <code>csutil/archive.h</code></dt>
+<dd><p>Requires zlib indirectly via <tt>`csutil/zip.h'</tt>.
+</p></dd>
+<dt> <code>csutil/getopt.h</code></dt>
+<dd><p>Conflicts with platform-supplied <tt>`&lt;getopt.h&gt;'</tt>.
+</p></dd>
+<dt> <code>csutil/zip.h</code></dt>
+<dd><p>Requires zlib; <a href="http://www.gzip.org/zlib/">http://www.gzip.org/zlib/</a>
+</p></dd>
+<dt> <code>inetwork/vosapi.h</code></dt>
+<dd><p>Requires <small>VOS</small>; <a href="http://www.interreality.org/">http://www.interreality.org/</a>
+</p></dd>
+<dt> <code>ivaria/ode.h</code></dt>
+<dd><p>Requires <small>ODE</small>; <a href="http://www.ode.org/">http://www.ode.org/</a>
+</p></dd>
+<dt> <code>ivideo/wxwin.h</code></dt>
+<dd><p>Requires wxWidgets; <a href="http://www.wxwidgets.org/">http://www.wxwidgets.org/</a>
+</p></dd>
+</dl>
 
-<p>The following files in <tt>`data/shader'</tt> were renamed:
+<p>As an example, if you need access to the <samp>`iWxWindow'</samp> interface, then you
+must include <tt>`ivideo/wxwin.h'</tt> manually; it will not be included as part of
+<tt>`crystalspace.h'</tt> or <tt>`ivideo.h'</tt>. Furthermore, you will need
+to let the build system know where it can find the wxWidgets resources (headers
+and libraries). Typically, this is done by adding a wxWidgets check to your
+project's <tt>`configure'</tt> script; emitting the results of the check to your
+<tt>`Jamconfig'</tt> file with the <code>CS_EMIT_BUILD_RESULT()</code> Autoconf macro;
+and finally utilizing the result of that check in your project's <tt>`Jamfile'</tt>
+by invoking the Jam rule <samp>`ExternalLibs'</samp>. For <small>MSVC</small> project files, the
+location of the wxWidgets resources will have to be added as <em>additional
+include directories</em> and <em>additional library directories</em>, in the project
+settings or globally, to ensure that <small>MSVC</small> will be able to find them.
 </p>
-<ul>
-<li>
-<code>or_lighting.xml</code> =&gt; <code>std_lighting.xml</code>
-</li><li>
-<code>or_lighting_detail.xml</code> =&gt; <code>std_lighting_detail.xml</code>
-</li><li>
-<code>or_lighting_detail_add.xml</code> =&gt; <code>std_lighting_detail_add.xml</code>
-</li><li>
-<code>or_lighting_detail_alpha.xml</code> =&gt;
-<code>std_lighting_detail_alpha.xml</code>
-</li><li>
-<code>or_lighting_portal.xml</code> =&gt; <code>std_lighting_portal.xml</code>
-</li></ul>
-
-<a name="SEC953"></a>
-<h4 class="subsubheading"> Removed Methods and Classes </h4>
-
-<p>The following methods have been removed from the <samp>`iGraphics3D'</samp> interface:
-</p>
-<ul>
-<li>
-<code>ClearCache()</code>
-</li><li>
-<code>CloseFogObject()</code>
-</li><li>
-<code>DrawFogPolygon()</code>
-</li><li>
-<code>DrawPolygonDebug()</code>
-</li><li>
-<code>DrawPolygonFX()</code>
-</li><li>
-<code>DrawPolygonMesh()</code>
-</li><li>
-<code>DrawTriangleMesh()</code>
-</li><li>
-<code>DumpCache()</code>
-</li><li>
-<code>GetVertexBufferManager()</code>
-</li><li>
-<code>GetZBuffAt()</code>
-</li><li>
-<code>OpenFogObject()</code>
-</li></ul>
-
-<p>From <samp>`iRenderView'</samp>, the following fog-related methods have been removed.
-Fog is now calculated within the renderer.
-</p>
-<ul>
-<li>
-<code>CalculateFogMesh()</code>
-</li><li>
-<code>CalculateFogPolygon()</code>
-</li></ul>
-
-<p>From <samp>`iMeshObject'</samp> and <samp>`iParticle'</samp>, the following rendering-related
-methods have been removed:
-</p>
-<ul>
-<li>
-<code>Draw()</code>
-</li><li>
-<code>DrawTest()</code>
-</li></ul>
-
-<p>From <samp>`iParticleState'</samp>, the following methods have been removed.
-Use the methods with the same name from <samp>`iMeshObject'</samp> instead.
-</p>
-<ul>
-<li>
-<code>SetColor()</code>
-</li><li>
-<code>GetColor()</code>
-</li><li>
-<code>SetMaterialWrapper()</code>
-</li><li>
-<code>GetMaterialWrapper()</code>
-</li></ul>
-
-<p>Apart from these methods, the following classes and structures have been
-removed or have become private, and are no longer available to client code:
-</p>
-<ul>
-<li>
-<code>G3DFogInfo</code>
-</li><li>
-<code>G3DPolygonDFP</code>
-</li><li>
-<code>G3DPolygonDPFX</code>
-</li><li>
-<code>G3DPolygonDPF</code>
-</li><li>
-<code>G3DPolygonDP</code>
-</li><li>
-<code>G3DPolygonMesh</code>
-</li><li>
-<code>G3DTriangleMesh</code>
-</li></ul>
-
-<p>Some methods from <samp>`iSprite3DState'</samp> have been removed that basically 
-provided functionality which was also already available through 
-<samp>`iMeshObject'</samp>:
-</p>
-<ul>
-<li>
-<code>SetBaseColor()</code>. Use <code>SetColor()</code> from <samp>`iMeshObject'</samp>.
-</li><li>
-<code>GetBaseColor()</code>. Use <code>GetColor()</code> from <samp>`iMeshObject'</samp>.
-</li></ul>
-
-<p>Likewise, the <code>GetFactory()</code> method has been removed from 
-<samp>`iThingState'</samp>. Equivalent functionality can be achieved by using
-<code>GetFactory()</code> from <samp>`iMeshObject'</samp> and querying the returned object
-for the <samp>`iThingFactoryState'</samp> interface. Example:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">  csRef&lt;iThingFactoryState&gt; thing_fact_state =
-  	scfQueryInterface&lt;iThingFactoryState&gt; (mesh-&gt;GetMeshObject ()
-	-&gt;GetFactory ());
-</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.23.html#C.1.23" title="Previous section in reading order"> &lt; </a>]</td>

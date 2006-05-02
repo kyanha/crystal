@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.28 iMaterialList Change</title>
+<title>Crystal Space: C.1.28 iDocument Changes</title>
 
-<meta name="description" content="Crystal Space: C.1.28 iMaterialList Change">
-<meta name="keywords" content="Crystal Space: C.1.28 iMaterialList Change">
+<meta name="description" content="Crystal Space: C.1.28 iDocument Changes">
+<meta name="keywords" content="Crystal Space: C.1.28 iDocument Changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-iMaterialList-Change"></a>
+<a name="Api100-iDocument-Changes"></a>
 <a name="C.1.28"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.27.html#C.1.27" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,10 +58,26 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.28 <samp>`iMaterialList'</samp> Change </h3>
+<h3 class="subsection"> C.1.28 <code>iDocument</code> Changes </h3>
 
-<p>The function <code>iMaterialList::NewMaterial()</code> now needs an additional
-name parameter. It is not recommended to change the name later.
+<p>The <code>iDocument::Parse()</code> method now accepts an optional argument
+indicating whether or not extraneous whitespace in <samp>`CS_NODE_TEXT'</samp> nodes
+should be condensed.  Most implementations of <samp>`iDocument'</samp> will attempt to
+respect this option if possible.  For implementations where it does not make
+sense, the option will be ignored.
+</p>
+<p>Previously, <small>XML</small>-based implementations of the <samp>`iDocument'</samp> interface
+condensed whitespace in <samp>`CS_NODE_TEXT'</samp> nodes at <code>Parse()</code> time.  This
+is no longer the case.  Whitespace is now preserved by default.  If the new
+behavior is unsuitable for your case, use the new argument to
+<code>iDocument::Parse()</code> to indicate that whitespace should be condensed.
+This change was made in order to conform to the latest <small>XML</small> specification
+which states that <small>XML</small> scanners must preserve whitespace by default.
+Consult the following documents for more information regarding this issue.
+</p>
+
+<p><a href="http://www.w3.org/TR/REC-xml/#sec-white-space">http://www.w3.org/TR/REC-xml/#sec-white-space</a><br>
+<a href="http://www.xml.com/axml/notes/AllWSAlways.html">http://www.xml.com/axml/notes/AllWSAlways.html</a>
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

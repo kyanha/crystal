@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.45 csObjectPool&lt;&gt; Removal</title>
+<title>Crystal Space: C.1.45 AWS Changes</title>
 
-<meta name="description" content="Crystal Space: C.1.45 csObjectPool&lt;&gt; Removal">
-<meta name="keywords" content="Crystal Space: C.1.45 csObjectPool&lt;&gt; Removal">
+<meta name="description" content="Crystal Space: C.1.45 AWS Changes">
+<meta name="keywords" content="Crystal Space: C.1.45 AWS Changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-csObjectPool-Removal"></a>
+<a name="Api100-aws-Changes"></a>
 <a name="C.1.45"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.44.html#C.1.44" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,20 +58,15 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.45 <code>csObjectPool&lt;&gt;</code> Removal </h3>
+<h3 class="subsection"> C.1.45 <small>AWS</small> Changes </h3>
 
-<p>The <code>csObjectPool&lt;&gt;</code> utility class has been removed since it managed
-memory poorly, and failed to invoke the destructor of contained objects at the
-time they were recycled via <code>csObjectPool&lt;&gt;::Free()</code>, which meant that the
-objects might not release their own resources in a timely fashion.  (It did
-correctly destroy the freed objects when the pool itself was destroyed, but
-should have been doing so at <code>Free()</code>-time.)
+<p>The trigger system in <small>AWS</small> has changed. The trigger callback function
+now has an additional <samp>`unsigned long'</samp> parameter like this:
 </p>
-<p>You can use <code>csBlockAllocator&lt;&gt;</code> (see <tt>`csutil/blockallocator.h'</tt>) as a
-drop-in replacement for <code>csObjectPool&lt;&gt;</code> since the <small>API</small> of
-<code>csBlockAllocator&lt;&gt;</code> is a proper superset of the <code>csObjectPool&lt;&gt;</code>
-<small>API</small>. A global search and replace should be sufficient to account for this
-change.
+<table><tr><td>&nbsp;</td><td><pre class="example">static void TriggerFunc (unsigned long, intptr_t, iAwsSource*);
+</pre></td></tr></table>
+<p>This extra parameter is the id of the given trigger name as returned by the
+standard string set (<samp>`crystalspace.shared.stringset'</samp>).
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

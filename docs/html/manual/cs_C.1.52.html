@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.52 csHash&lt;&gt; Changes</title>
+<title>Crystal Space: C.1.52 iConfig Renamed</title>
 
-<meta name="description" content="Crystal Space: C.1.52 csHash&lt;&gt; Changes">
-<meta name="keywords" content="Crystal Space: C.1.52 csHash&lt;&gt; Changes">
+<meta name="description" content="Crystal Space: C.1.52 iConfig Renamed">
+<meta name="keywords" content="Crystal Space: C.1.52 iConfig Renamed">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-csHash-Changes"></a>
+<a name="Api100-iConfig-Renamed"></a>
 <a name="C.1.52"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.51.html#C.1.51" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,30 +58,11 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.52 <code>csHash&lt;&gt;</code> Changes </h3>
+<h3 class="subsection"> C.1.52 <code>iConfig</code> Renamed </h3>
 
-<p>The way <code>csHash&lt;&gt;</code> handles support for arbitrary key types has been
-changed. Previously, a so-called &quot;hash key handler&quot; was passed as an optional
-third template parameter that computed hash keys and was able to compare
-keys. Now, the hash computation is handled through the new
-<code>csHashComputer&lt;&gt;</code> template, and key comparison through
-<code>csComparator&lt;&gt;</code>. To provide hash computation and comparisons for specific
-types used as hash keys, specializations of the templates mentioned above are
-needed. Alternatively the default comparator uses the <samp>`operator &lt;'</samp> and
-<samp>`operator &gt;'</samp> operators, so you can also implement those operators instead
-of a <code>csComparator&lt;&gt;</code> specialization. The default <code>csHashComputer&lt;&gt;</code>
-implementation assumes that a type provides a <samp>`GetHash()'</samp> method that
-computes the hash value for an object. However, this means that integral types 
-need a specialization. As a convenience, Crystal Space already provides 
-specializations of <code>csHashComputer&lt;&gt;</code> for a number of commonly used 
-intergrals. Further, <code>csComparator&lt;&gt;</code> and/or <code>csHashComputer&lt;&gt;</code> 
-specializations are provided for the commonly used types <samp>`csString'</samp>, 
-<samp>`const char*'</samp> and <samp>`csStrKey'</samp>; and the default comparison semantics of 
-<samp>`operator &lt;'</samp> and <samp>`operator &gt;'</samp> handle the remaining fundamental types 
-and any composite types which provide these operators. Pointers (other than 
-<samp>`void*'</samp> for which exists a specialization) as hash keys are a special 
-case: to use a pointer of type <samp>`Foo*'</samp> as a hash key, employ 
-<samp>`csPtrKey&lt;Foo&gt;'</samp> as the key type in the hash declaration. 
+<p>The <code>iConfig</code> interface has been renamed to the more fitting 
+<code>iPluginConfig</code>, and the containing header from <tt>`iutil/config.h'</tt> to
+<code>iutil/pluginconfig.h</code>. Other changes have not been made.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

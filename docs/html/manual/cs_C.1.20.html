@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.20 iTextureManager::FreeImages() Removal</title>
+<title>Crystal Space: C.1.20 Pollution Reduction</title>
 
-<meta name="description" content="Crystal Space: C.1.20 iTextureManager::FreeImages() Removal">
-<meta name="keywords" content="Crystal Space: C.1.20 iTextureManager::FreeImages() Removal">
+<meta name="description" content="Crystal Space: C.1.20 Pollution Reduction">
+<meta name="keywords" content="Crystal Space: C.1.20 Pollution Reduction">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-iTextureManager-FreeImages-Removal"></a>
+<a name="Api100-Pollution-Reduction"></a>
 <a name="C.1.20"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.19.html#C.1.19" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,14 +58,194 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.20 <code>iTextureManager::FreeImages()</code> Removal </h3>
+<h3 class="subsection"> C.1.20 Pollution Reduction </h3>
 
-<p><code>iTextureManager::FreeImages()</code> has been removed.  It was used to release
-the <samp>`iImage'</samp> objects associated with textures with the purpose of freeing
-up memory.  This happens automatically now; the images associated with a
-texture are released by the renderer as soon as the image data is converted
-into the internal texture format (that is, uploaded to the graphics hardware).
+<p>In order to avoid polluting the top-level system include directory, the Crystal
+Space header tree is now installed (via <samp>`make install'</samp> or
+<samp>`jam install'</samp>) in a subdirectory named <tt>`crystalspace'</tt>, rather than
+being installed directly in the top-level system directory. For example,
+assuming the default installation location, the Crystal Space headers are now
+installed in <tt>`/usr/local/include/crystalspace'</tt>. Previously, they would
+have been deposited directly into <tt>`/usr/local/include'</tt>. The
+<samp>`cs-config'</samp> utility script properly returns the new header location in
+response to the <samp>`--includedir'</samp>, <samp>`--cflags'</samp>, and <samp>`--cxxflags'</samp>
+options, so this relocation should be mostly transparent to external projects.
 </p>
+<p>The following global header files have been renamed in order to avoid possible
+conflict with headers installed by other packages.
+</p>
+<ul>
+<li>
+<code>platform.h</code> =&gt; <code>csplatform.h</code>
+</li><li>
+<code>qint.h</code> =&gt; <code>csqint.h</code>
+</li><li>
+<code>qsqrt.h</code> =&gt; <code>csqsqrt.h</code>
+</li><li>
+<code>volatile.h</code> =&gt; <code>csconfig.h</code>
+</li></ul>
+
+<p>The following symbols have been renamed in order to avoid pollution of the
+global namespace.
+</p>
+<ul>
+<li>
+<code>BadBraces</code> =&gt; <code>csrxBadBraces</code>
+</li><li>
+<code>BadPattern</code> =&gt; <code>csrxBadPattern</code>
+</li><li>
+<code>BadRepetition</code> =&gt; <code>csrxBadRepetition</code>
+</li><li>
+<code>big_endian_float()</code> =&gt; <code>csBigEndianFloat()</code>
+</li><li>
+<code>big_endian_long()</code> =&gt; <code>csBigEndianLong()</code>
+</li><li>
+<code>big_endian_longlong()</code> =&gt; <code>csBigEndianLongLong()</code>
+</li><li>
+<code>big_endian_short()</code> =&gt; <code>csBigEndianShort()</code>
+</li><li>
+<code>COMP_BC</code> =&gt; <code>CS_COMPILER_BCC</code>
+</li><li>
+<code>COMP_GCC</code> =&gt; <code>CS_COMPILER_GCC</code>
+</li><li>
+<code>COMP_VC</code> =&gt; <code>CS_COMPILER_MSVC</code>
+</li><li>
+<code>convert_endian()</code> =&gt; <code>csConvertEndian()</code>
+</li><li>
+<code>DO_MMX</code> =&gt; <code>CS_HAVE_MMX</code>
+</li><li>
+<code>DO_NASM</code> =&gt; <code>CS_HAVE_NASM</code>
+</li><li>
+<code>double2longlong()</code> =&gt; <code>csDoubleToLongLong()</code>
+</li><li>
+<code>ErrBraces</code> =&gt; <code>csrxErrBraces</code>
+</li><li>
+<code>ErrBrackets</code> =&gt; <code>csrxErrBrackets</code>
+</li><li>
+<code>ErrCharType</code> =&gt; <code>csrxErrCharType</code>
+</li><li>
+<code>ErrCollate</code> =&gt; <code>csrxErrCollate</code>
+</li><li>
+<code>ErrEscape</code> =&gt; <code>csrxErrEscape</code>
+</li><li>
+<code>ErrParentheses</code> =&gt; <code>csrxErrParentheses</code>
+</li><li>
+<code>ErrRange</code> =&gt; <code>csrxErrRange</code>
+</li><li>
+<code>ErrSpace</code> =&gt; <code>csrxErrSpace</code>
+</li><li>
+<code>ErrSubReg</code> =&gt; <code>csrxErrSubReg</code>
+</li><li>
+<code>ErrUnknown</code> =&gt; <code>csrxErrUnknown</code>
+</li><li>
+<code>float2long()</code> =&gt; <code>csFloatToLong()</code>
+</li><li>
+<code>float2short()</code> =&gt; <code>csFloatToShort()</code>
+</li><li>
+<code>get_le_float16()</code> =&gt; <code>csGetLittleEndianFloat16()</code>
+</li><li>
+<code>get_le_float32()</code> =&gt; <code>csGetLittleEndianFloat32()</code>
+</li><li>
+<code>get_le_long()</code> =&gt; <code>csGetLittleEndianLong()</code>
+</li><li>
+<code>get_le_short()</code> =&gt; <code>csGetLittleEndianShort()</code>
+</li><li>
+<code>IgnoreCase</code> =&gt; <code>csrxIgnoreCase</code>
+</li><li>
+<code>little_endian_float()</code> =&gt; <code>csLittleEndianFloat()</code>
+</li><li>
+<code>little_endian_long()</code> =&gt; <code>csLittleEndianLong()</code>
+</li><li>
+<code>little_endian_longlong()</code> =&gt; <code>csLittleEndianLongLong()</code>
+</li><li>
+<code>little_endian_short()</code> =&gt; <code>csLittleEndianShort()</code>
+</li><li>
+<code>long2float()</code> =&gt; <code>csLongToFloat()</code>
+</li><li>
+<code>longlong2double()</code> =&gt; <code>csLongLongToDouble()</code>
+</li><li>
+<code>MemEntry</code> =&gt; <code>csMemTrackerEntry</code>
+</li><li>
+<code>MemoryMapFile()</code> =&gt; <code>csMemoryMapFile()</code>
+</li><li>
+<code>MemoryMapWindow()</code> =&gt; <code>csMemoryMapWindow()</code>
+</li><li>
+<code>MemTrackerInfo</code> =&gt; <code>csMemTrackerInfo</code>
+</li><li>
+<code>MemTrackerModule</code> =&gt; <code>csMemTrackerModule</code>
+</li><li>
+<code>MemTrackerRegistry</code> =&gt; <code>csMemTrackerRegistry</code>
+</li><li>
+<code>MKDIR()</code> =&gt; <code>CS_MKDIR()</code>
+</li><li>
+<code>mmioInfo</code> =&gt; <code>csMemMapInfo</code>
+</li><li>
+<code>__NEED_GENERIC_ISDIR</code> =&gt; <code>CS_USE_CUSTOM_ISDIR</code>
+</li><li>
+<code>__NEED_OPENDIR_PROTOTYPE</code> =&gt; <code>CS_WIN32_USE_CUSTOM_OPENDIR</code>
+</li><li>
+<code>NewLine</code> =&gt; <code>csrxNewLine</code>
+</li><li>
+<code>NoError</code> =&gt; <code>csrxNoError</code>
+</li><li>
+<code>NoMatch</code> =&gt; <code>csrxNoMatch</code>
+</li><li>
+<code>NotBOL</code> =&gt; <code>csrxNotBOL</code>
+</li><li>
+<code>NotEOL</code> =&gt; <code>csrxNotEOL</code>
+</li><li>
+<code>OS_DOS</code> =&gt; <code>CS_PLATFORM_DOS</code>
+</li><li>
+<code>OS_MACOSX</code> =&gt; <code>CS_PLATFORM_MACOSX</code>
+</li><li>
+<code>OS_UNIX</code> =&gt; <code>CS_PLATFORM_UNIX</code>
+</li><li>
+<code>OS_WIN32</code> =&gt; <code>CS_PLATFORM_WIN32</code>
+</li><li>
+<code>PATH_DELIMITER</code> =&gt; <code>CS_PATH_DELIMITER</code>
+</li><li>
+<code>PATH_SEPARATOR</code> =&gt; <code>CS_PATH_SEPARATOR</code>
+</li><li>
+<code>PROC_arch</code> =&gt; <code>CS_PROCESSOR_arch</code> (where <samp>`arch'</samp> is
+<samp>`X86'</samp>, <samp>`M68K'</samp>, etc.)
+</li><li>
+<code>ProcEventHandler()</code> =&gt; <code>csProcTexEventHandler</code>
+</li><li>
+<code>QInt()</code> =&gt; <code>csQint()</code>
+</li><li>
+<code>QInt16()</code> =&gt; <code>csQfixed16()</code>
+</li><li>
+<code>QInt24()</code> =&gt; <code>csQfixed24()</code>
+</li><li>
+<code>QInt8()</code> =&gt; <code>csQfixed8()</code>
+</li><li>
+<code>qisqrt()</code> =&gt; <code>csQisqrt()</code>
+</li><li>
+<code>QRound()</code> =&gt; <code>csQround()</code>
+</li><li>
+<code>qsqrt()</code> =&gt; <code>csQsqrt()</code>
+</li><li>
+<code>RegisterMemoryTrackerModule()</code> =&gt; <code>mtiRegisterModule()</code>
+</li><li>
+<code>set_le_float16()</code> =&gt; <code>csSetLittleEndianFloat16()</code>
+</li><li>
+<code>set_le_float32()</code> =&gt; <code>csSetLittleEndianFloat32()</code>
+</li><li>
+<code>set_le_long()</code> =&gt; <code>csSetLittleEndianLong()</code>
+</li><li>
+<code>set_le_short()</code> =&gt; <code>csSetLittleEndianShort()</code>
+</li><li>
+<code>short2float()</code> =&gt; <code>csShortToFloat()</code>
+</li><li>
+<code>TEMP_DIR</code> =&gt; <code>CS_TEMP_DIR</code>
+</li><li>
+<code>TEMP_FILE</code> =&gt; <code>CS_TEMP_FILE</code>
+</li><li>
+<code>UnMemoryMapFile()</code> =&gt; <code>csUnMemoryMapFile()</code>
+</li><li>
+<code>WIN32_VOLATILE</code> =&gt; <code>CS_WIN32_CSCONFIG</code>
+</li></ul>
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.19.html#C.1.19" title="Previous section in reading order"> &lt; </a>]</td>

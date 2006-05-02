@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.36 String Changes</title>
+<title>Crystal Space: C.1.36 iLight Changes</title>
 
-<meta name="description" content="Crystal Space: C.1.36 String Changes">
-<meta name="keywords" content="Crystal Space: C.1.36 String Changes">
+<meta name="description" content="Crystal Space: C.1.36 iLight Changes">
+<meta name="keywords" content="Crystal Space: C.1.36 iLight Changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-String-Changes"></a>
+<a name="Api100-iLight-Changes"></a>
 <a name="C.1.36"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.35.html#C.1.35" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,41 +58,26 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.36 String Changes </h3>
+<h3 class="subsection"> C.1.36 <samp>`iLight'</samp> Changes </h3>
 
-<p>The class hierarchy of <samp>`csString'</samp> has changed. Most functionality is now
-provided by the new superclass <samp>`csStringBase'</samp>. From this,
-<code>csStringFast&lt;&gt;</code> is subclassed, and <samp>`csString'</samp> descends from
-<code>csStringFast&lt;&gt;</code>. <code>csStringFast&lt;&gt;</code> is a templated class featuring an
-internal character buffer which is used instead of dynamically heap-allocated
-memory when the string length is sufficently short (as controlled by the class
-template argument). This generalization can make <samp>`csStringFast&lt;&gt;'</samp> (and its
-subclass <samp>`csString'</samp>) much faster when used as automatic (stack-allocated)
-variables, even when declared inside <samp>`for{}'</samp>-loops, since slow
-heap-allocation often can be avoided.
+<p>The <samp>`iLight'</samp> and its implementation (<samp>`csLight'</samp>) have been extended to
+also handle spot- and directional-lights. Note that the accual computation of
+lighting does not yet support these, however the engine can now store and
+handle the required data.
 </p>
-<p>For simplification purposes, several methods have been removed from
-<samp>`csString'</samp> and <samp>`iString'</samp> (when present):
+<p>There have also been two smaller changes to the interface to make it more
+coherent. The influence radius have been renamed <em>cut-off</em> distance, and
+thus the methods <code>GetInfluenceRadius()</code> and <code>SetInfluenceRadius()</code>
+have been renamed accordingly to <code>GetCutoffDistance()</code> and
+<code>SetCutoffDistance()</code>, respectively.  Also, <code>SetAttenuation()</code> has
+been renamed to <code>SetAttenuationMode()</code> in order to avoid confusion with
+other similary named methods.  For the <code>CS_ATTN_LINEAR</code> attenuation type
+the specification has changed slightly. As a default, the distance where light
+goes out is same as the cut-off distance, but this can be changed by altering
+the first attenuation constant. See comments in
+<tt>`CS/include/iengine/light.h'</tt> for exact details of the different
+attenuation modes.
 </p>
-<ul>
-<li>
-Static <code>PadFoo()</code> methods. The same functionality can be achieved with
-the remaining instance <code>PadFoo()</code> methods.
-
-</li><li>
-<code>AsPadFoo()</code> instance methods. The same functionality can be achieved with
-the remaining instance <code>PadFoo()</code> methods.
-
-</li><li>
-Static integer and float <code>Format()</code> methods.  The same functionality can
-be achieved by utilizing the remaining <code>Replace()</code> or <code>Format()</code>
-methods.
-
-</li><li>
-<code>SetGrowsExponentially()</code> and <code>GetGrowsExponentially()</code>. The same
-functionality is provided by <code>SetGrowsBy(0)</code> and <code>GetGrowsBy()</code>.
-</li></ul>
-
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.35.html#C.1.35" title="Previous section in reading order"> &lt; </a>]</td>

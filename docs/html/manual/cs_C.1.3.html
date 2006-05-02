@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.3 Texture and Material Preparation</title>
+<title>Crystal Space: C.1.3 Input Definitions</title>
 
-<meta name="description" content="Crystal Space: C.1.3 Texture and Material Preparation">
-<meta name="keywords" content="Crystal Space: C.1.3 Texture and Material Preparation">
+<meta name="description" content="Crystal Space: C.1.3 Input Definitions">
+<meta name="keywords" content="Crystal Space: C.1.3 Input Definitions">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-Texture-and-Material-Preparation"></a>
+<a name="Api100-Input-Definitions"></a>
 <a name="C.1.3"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.2.html#C.1.2" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,23 +58,52 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.3 Texture and Material Preparation </h3>
+<h3 class="subsection"> C.1.3 Input Definitions </h3>
 
-<p>Texture and material preparation is now fully automatic. It is no longer
-necessary to <em>prepare</em> a texture or a material before you can use it. It is
-sufficient simply to register the texture or material. This means that the
-following functions have been removed (and you can just remove invocations of
-them from your applications if you used them):
+<p>The file <tt>`csutil/inpnames.h'</tt> has been renamed to
+<tt>`inputdef.h'</tt>, and the following functions have been removed:
 </p>
 <ul>
 <li>
-<code>iMaterialHandle::Prepare()</code>
+<code>csTypeOfInputDef()</code>
 </li><li>
-<code>iTextureHandle::Prepare()</code>
+<code>csParseKeyDef()</code>
 </li><li>
-<code>iTextureManager::PrepareMaterials()</code>
+<code>csGetKeyDesc()</code>
 </li><li>
-<code>iTextureManager::PrepareTextures()</code>
+<code>csParseMouseDef()</code>
+</li><li>
+<code>csGetMouseDesc()</code>
+</li><li>
+<code>csParseJoystickDef()</code>
+</li><li>
+<code>csGetJoystickDesc()</code>
+</li></ul>
+
+<p>These functions allowed you to convert a string such as <kbd><kbd>Ctrl</kbd>+A</kbd>,
+<samp>`JoystickX'</samp> or <samp>`Alt+Mouse1'</samp> into values describing input events
+and vice versa.
+</p>
+<p>The way to do this is now, however, is to use <samp>`csInputDefinition'</samp>, which
+resides in <tt>`csutil/inputdef.h'</tt>. The preferred way to convert a string to a
+definition is to construct a <samp>`csInputDefinition'</samp> from a
+<samp>`char const*'</samp>; and the preferred way to convert a definition back to a
+string (perhaps constructed some other way) is via
+<code>csInputDefinition::ToString()</code>.
+</p>
+<p>There are also static helper methods in <samp>`csInputDefinition'</samp> which accept
+arguments in a similar way to the old functions. These are convenience methods
+which perform the work of instantiating the object for you:
+</p>
+<ul>
+<li>
+<code>csInputDefinition::ParseKey()</code>
+</li><li>
+<code>csInputDefinition::GetKeyString()</code>
+</li><li>
+<code>csInputDefinition::ParseOther()</code>
+</li><li>
+<code>csInputDefinition::GetOtherString()</code>
 </li></ul>
 
 <hr size="1">

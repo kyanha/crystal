@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.43 chunklod Terrain Removal</title>
+<title>Crystal Space: C.1.43 Cg Matrix Bindings</title>
 
-<meta name="description" content="Crystal Space: C.1.43 chunklod Terrain Removal">
-<meta name="keywords" content="Crystal Space: C.1.43 chunklod Terrain Removal">
+<meta name="description" content="Crystal Space: C.1.43 Cg Matrix Bindings">
+<meta name="keywords" content="Crystal Space: C.1.43 Cg Matrix Bindings">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-chunklod-Terrain-Removal"></a>
+<a name="Api100-Cg-Matrix-Bindings"></a>
 <a name="C.1.43"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.42.html#C.1.42" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,18 +58,25 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.43 <samp>`chunklod'</samp> Terrain Removal </h3>
+<h3 class="subsection"> C.1.43 Cg Matrix Bindings </h3>
 
-<p>The <samp>`chunklod'</samp> terrain plugin has been removed:
+<p>Previously, the semantics of a Cg vertex program matrix parameter were
+determined through the variable name; e.g. a name of <samp>`ModelViewProj'</samp> bound
+the combined model view and projection matrix to the variable. This is still
+supported but deprecated. Crystal Space now requires Cg 1.3 which allows the
+matrix semantics specification in a way similar to other semantics
+specification. For example:
 </p>
+<table><tr><td>&nbsp;</td><td><pre class="example">uniform float4x4 ModelViewProj
+</pre></td></tr></table>
 
-<p><code>crystalspace.mesh.object.terrain.chunklod</code>
+<p>Becomes:
 </p>
-
-<p>Instead use the <samp>`bruteblock'</samp> terrain engine.
-</p>
-
-<p><code>crystalspace.mesh.object.terrain.bruteblock</code>
+<table><tr><td>&nbsp;</td><td><pre class="example">uniform float4x4 ModelViewProj : state.matrix.mvp
+</pre></td></tr></table>
+<p>Check the <tt>`data/shaders/'</tt> directory for further examples. For more
+detailed information, consult the Cg and <samp>`ARB_vertex_program'</samp>
+documentations.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
