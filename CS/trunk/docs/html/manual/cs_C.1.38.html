@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.38 64-Bit Portability Changes</title>
+<title>Crystal Space: C.1.38 CS_DECLARE_OBJECT_ITERATOR() Removal</title>
 
-<meta name="description" content="Crystal Space: C.1.38 64-Bit Portability Changes">
-<meta name="keywords" content="Crystal Space: C.1.38 64-Bit Portability Changes">
+<meta name="description" content="Crystal Space: C.1.38 CS_DECLARE_OBJECT_ITERATOR() Removal">
+<meta name="keywords" content="Crystal Space: C.1.38 CS_DECLARE_OBJECT_ITERATOR() Removal">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-64_002dBit-Portability-Changes"></a>
+<a name="Api100-CS_005fDECLARE_005fOBJECT_005fITERATOR-Removal"></a>
 <a name="C.1.38"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.37.html#C.1.37" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,99 +58,36 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.38 64-Bit Portability Changes </h3>
+<h3 class="subsection"> C.1.38 <code>CS_DECLARE_OBJECT_ITERATOR()</code> Removal </h3>
 
-<p>Some changes have been made to the Crystal Space <small>API</small> in order to better
-support 64-bit hardware, which is now becoming common. Additional changes to
-improve 64-bit support have also been made internally, but the internal changes
-essentially are transparent to external clients.
+<p>The <samp>`iObject'</samp> iterator creation macro <code>CS_DECLARE_OBJECT_ITERATOR()</code>
+has been replaced by the templated class <code>csTypedObjectIterator&lt;&gt;</code>. Given
+existing code, such as:
 </p>
-<p>The most significant change to the <small>API</small> involves methods and classes
-dealing with data opaquely. Historically, opaque data has been handled using
-<samp>`void*'</samp>, and programmers would cast numbers, booleans, and pointers to
-<samp>`void*'</samp> when it was necessary to deal with the data in an opaque fashion.
-This technique, however, is not portable to 64-bit platforms. For this reason,
-the new standard type <samp>`intptr_t'</samp> was introduced. This type is guaranteed
-to be large enough to store any integral numeric or pointer value regardless of
-the machine's word size.
-</p>
-<p>Crystal Space now uniformly uses <samp>`intptr_t'</samp>, rather than <samp>`void*'</samp>,
-when dealing with opaque data. Upgrading your code to reflect this change is
-usually quite simple. Where your code presently declares a variable or casts a
-value to <samp>`void*'</samp>, change it to <samp>`intptr_t'</samp>. Likewise, <samp>`void**'</samp>
-becomes <samp>`intptr_t*'</samp>. For example:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iGraphics2D canvas = ...;
-iEventOutlet* outlet = ...;
-outlet-&gt;Broadcast(cscmdCanvasExposed, (void*)canvas);
+<table><tr><td>&nbsp;</td><td><pre class="example">iObject* parent = ...;
+CS_DECLARE_OBJECT_ITERATOR(MyFooIter, iFoo);
+MyFooIter iter(parent);
+while (iter.HasNext())
+{
+  iFoo* foo = iter.Next();
+  ...
+}
 </pre></td></tr></table>
 
-<p>Becomes:
+<p>Revise the code by instantiating the new template class:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">outlet-&gt;Broadcast(cscmdCanvasExposed, (intptr_t)canvas);
-</pre></td></tr></table>
-<p>The event system is impacted by this change. Specifically, the following
-methods and data members now deal with <samp>`intptr_t'</samp> rather than <samp>`void*'</samp>
-for the opaque &quot;info&quot; member of <code>csevCommand</code>-type events.
-</p>
-<ul>
-<li>
-<code>csEvent::csEvent()</code>
-</li><li>
-<code>csEventCommandData::Info</code>
-</li><li>
-<code>iEventOutlet::Broadcast()</code>
-</li><li>
-<code>iEventOutlet::ImmediateBroadcast()</code>
-</li></ul>
-
-<p>The <small>AWS</small> plugin (Alternate Windowing System) and its interfaces have been
-been updated for 64-bit platform conformance.  Specifically, the following
-methods now deal with <samp>`intptr_t'</samp> rather than <samp>`void*'</samp> for all of
-<small>AWS</small>'s opaque data needs.
-</p>
-<ul>
-<li>
-<code>iAwsComponent::GetProperty()</code>
-</li><li>
-<code>iAwsComponent::SetProperty()</code>
-</li><li>
-<code>iAwsParmList::AddOpaque()</code>
-</li><li>
-<code>iAwsParmList::GetOpaque()</code>
-</li><li>
-<code>iAwsSink::RegisterTrigger()</code>
-</li><li>
-<code>iAwsSinkManager::CreateSink()</code>
-</li></ul>
-
-<p><small>AWS</small> callback functions (<em>triggers</em>) are likewise impacted. You need to
-change the declaration of your triggers to use <samp>`intptr_t'</samp> rather than
-<samp>`void*'</samp>. For example:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void MyTrigger(void* sink, iAwsSource* source);
+<table><tr><td>&nbsp;</td><td><pre class="example">typedef csTypedObjectIterator&lt;iFoo&gt; MyFooIter;
+MyFooIter iter(parent);
+while (iter.HasNext())
+{
 </pre></td></tr></table>
 
-<p>Becomes:
+<p>Or, even simpler without the <samp>`typedef'</samp>:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">void MyTrigger(intptr_t sink, iAwsSource* source);
+<table><tr><td>&nbsp;</td><td><pre class="example">csTypedObjectIterator&lt;iFoo&gt; iter(parent);
+while (iter.HasNext())
+{
 </pre></td></tr></table>
-<p>Since converting client <small>AWS</small> code to the new <small>API</small> can be rather onerous
-on account of the amount of repetitious manual labor involved, the old
-<samp>`void*'</samp> <small>API</small> is still present in <small>AWS</small>, though heavily
-deprecated. In the interests of 64-bit portability, the old <small>API</small> will be
-removed at some point in the future.  You are encouraged, therefore, to convert
-your code to the new <small>API</small>. As an aid to clients in upgrading their code to
-the new <small>API</small>, one of two control macros can be defined which will help to
-isolate code which needs to be updated.  Defining <samp>`AWS_OBSOLETE_VOIDP'</samp>
-(via <samp>`#define'</samp> before including <tt>`iaws/aws.h'</tt>) removes from the
-<small>API</small> all methods dealing with <samp>`void*'</samp>, thus invocations of any such
-methods will result in compilation errors. Alternately, defining
-<samp>`AWS_DEPRECATE_VOIDP'</samp>, will cause invocations of methods dealing with
-<samp>`void*'</samp> to generate compilation warnings, assuming that the compiler
-supports such deprecation warnings. (Presently, only modern version of the
-<small>GNU</small> compiler are so configured.)
-</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.37.html#C.1.37" title="Previous section in reading order"> &lt; </a>]</td>

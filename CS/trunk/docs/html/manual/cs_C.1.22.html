@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.22 VFS Changes</title>
+<title>Crystal Space: C.1.22 Library Consolidation</title>
 
-<meta name="description" content="Crystal Space: C.1.22 VFS Changes">
-<meta name="keywords" content="Crystal Space: C.1.22 VFS Changes">
+<meta name="description" content="Crystal Space: C.1.22 Library Consolidation">
+<meta name="keywords" content="Crystal Space: C.1.22 Library Consolidation">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-vfs-Changes"></a>
+<a name="Api100-Library-Consolidation"></a>
 <a name="C.1.22"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.21.html#C.1.21" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,20 +58,24 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.22 <small>VFS</small> Changes </h3>
+<h3 class="subsection"> C.1.22 Library Consolidation </h3>
 
-<p>At initialization time, <small>VFS</small> now merges all <tt>`vfs.cfg'</tt> files located
-during its start-up scan.  Previously, <small>VFS</small> stopped scanning at the first
-discovered <tt>`vfs.cfg'</tt>, and loaded only that file.  During the start-up
-scan, it searches for a file named <tt>`vfs.cfg'</tt> in the application resource
-directory (<code>csGetResourceDir()</code>), then in the directory containing the
-application (<code>csGetAppDir()</code>), and finally in the Crystal Space
-installation directory (<code>csGetConfigPath()</code>).  The full set of directories
-mounted by <small>VFS</small> following the initial configuration file scan is the union
-of the entries in all of the discovered <tt>`vfs.cfg'</tt> files.  If there are
-conflicting entries, then mounts and variable assignments specified in
-configuration files discovered earlier in the scan take precedence over those
-discovered later.
+<p>In order to simplify end-user documentation and client usage, the Crystal Space
+link libraries <tt>`csutil'</tt>, <tt>`csgeom'</tt>, <tt>`csgfx'</tt>, and <tt>`cstool'</tt>
+have been merged into a single master library named <tt>`crystalspace'</tt> 
+(i.e. <tt>`libcrystalspace.a'</tt> or <samp>`crystalspace.lib'</samp>).
+</p>
+<p>The tools <samp>`cs-config'</samp> and <samp>`jamtemplate'</samp> (see section <a href="cs_4.21.1.html#4.21.1">Creating an External Crystal Space Application</a>),
+documentation, and all other client-oriented utilities have been updated
+appropriately to reflect this change. If you had installed Crystal Space
+previously, you should manually removed the now obsolete installed libraries
+from the installation location (typically, <tt>`${prefix}/lib'</tt>).
+</p>
+<p>Developers of Crystal Space itself should note that the sources and headers
+continue to reside in their separate <tt>`csutil'</tt>, <tt>`csgeom'</tt>, etc.,
+directories; and (importantly) the modules themselves remain conceptually
+distinct. This will not change. The consolidation of the physical link library
+was an end-user convenience.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

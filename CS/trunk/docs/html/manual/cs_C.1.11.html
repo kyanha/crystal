@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.11 Procedural Texture Relocation</title>
+<title>Crystal Space: C.1.11 csStringSetIterator and csStringHashIterator Removal</title>
 
-<meta name="description" content="Crystal Space: C.1.11 Procedural Texture Relocation">
-<meta name="keywords" content="Crystal Space: C.1.11 Procedural Texture Relocation">
+<meta name="description" content="Crystal Space: C.1.11 csStringSetIterator and csStringHashIterator Removal">
+<meta name="keywords" content="Crystal Space: C.1.11 csStringSetIterator and csStringHashIterator Removal">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-Procedural-Texture-Relocation"></a>
+<a name="Api100-csStringSetIterator-and-csStringHashIterator-Removal"></a>
 <a name="C.1.11"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.10.html#C.1.10" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,42 +58,35 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.11 Procedural Texture Relocation </h3>
- 
-<p>Implementations of the standard procedural textures (dots, fire, plasma, etc.)
-now reside directly in the <tt>`stdpt'</tt> plugin
-(<tt>`CS/plugins/proctex/standard'</tt>), rather than in the <tt>`cstool'</tt>
-module. Consequently, the following previously public headers are no longer
-available:
-</p> 
-<ul>
-<li>
-<code>cstool/prdots.h</code>
-</li><li>
-<code>cstool/prfire.h</code>
-</li><li>
-<code>cstool/prplasma.h</code>
-</li><li>
-<code>cstool/prsky.h</code>
-</li><li>
-<code>cstool/prwater.h</code>
-</li></ul>
- 
-<p>Likewise, procedural textures can no longer be allocated directly (for
-instance, via <samp>`new csProcFire'</samp>).  Instead, you must now use the plugin
-system to create such textures. For example:
-</p> 
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iTextureType&gt; type = csLoadPluginCheck&lt;iTextureType&gt; (object_reg,
-  &quot;crystalspace.texture.type.fire&quot;));
-if (!type) return false;	// Error
-csRef&lt;iTextureFactory&gt; fireFact = type-&gt;NewFactory();
-csRef&lt;iTextureWrapper&gt; tex = fireFact-&gt;Generate();
-csRef&lt;iFireTexture&gt; fire = scfQueryInterface&lt;iFireTexture&gt; (tex);
-</pre></td></tr></table> 
-<p>Various procedural textures may or may not implement their own custom <small>SCF</small>
-interfaces beyond the normal interfaces implemented by all procedural
-textures. In the example above, the &quot;fire&quot; texture implements the specialized
-<samp>`iFireTexture'</samp>.
+<h3 class="subsection"> C.1.11 <samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> Removal </h3>
+
+<p><samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> have been replaced
+with the iterator classes <samp>`csStringSet::GlobalIterator'</samp> and
+<samp>`csStringHash::GlobalIterator'</samp>, respectively.  Rather than instantiating
+iterators directly, you now ask the set or hash for an iterator. This brings
+the <samp>`csStringSet'</samp> and <samp>`csStringHash'</samp> <small>API</small>'s in line with other
+container classes which vend iterators. Given old code which is using
+<samp>`csStringSetIterator'</samp>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csStringSet set;
+// ...populate set...
+csStringSetIterator iter(&amp;set);
+while (iter.HasNext())
+{
+  char const* s = iter.Next();
+  // ...do something with `s'...
+}
+</pre></td></tr></table>
+
+<p>Convert it like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csStringSet::GlobalIterator iter = set.GetIterator();
+while (iter.HasNext())
+{
+</pre></td></tr></table>
+
+<p>Code using <samp>`csStringHashIterator'</samp> can be fixed using the same simple
+transformation.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

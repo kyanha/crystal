@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.2 csArray&lt;&gt; Index and Size Type Change</title>
+<title>Crystal Space: C.1.2 iEvent Changes</title>
 
-<meta name="description" content="Crystal Space: C.1.2 csArray&lt;&gt; Index and Size Type Change">
-<meta name="keywords" content="Crystal Space: C.1.2 csArray&lt;&gt; Index and Size Type Change">
+<meta name="description" content="Crystal Space: C.1.2 iEvent Changes">
+<meta name="keywords" content="Crystal Space: C.1.2 iEvent Changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-csArray-Index-and-Size-Type-Change"></a>
+<a name="Api100-iEvent-Changes"></a>
 <a name="C.1.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.1.html#C.1.1" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,128 +58,75 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.2 <code>csArray&lt;&gt;</code> Index and Size Type Change </h3>
+<h3 class="subsection"> C.1.2 <code>iEvent</code> Changes </h3>
 
-<p><code>csArray&lt;&gt;</code> has been changed to use <samp>`size_t'</samp> instead of
-<samp>`int'</samp> for array sizes and indices.  Probably, the most significant
-semantic difference of this change is that <samp>`size_t'</samp> is usually
-<em>unsigned</em> as opposed to <samp>`int'</samp> which is <em>signed</em>.
-</p>
-<p><strong>Read this paragraph carefully.</strong> In actual code, this change may result
-in nothing more than simple-looking compiler warnings. However, it may have
-caused <em>semantics</em> to change subtly.
-</p>
-<p>This has the greatest impact in the areas discussed below.
-</p>
 <a name="SEC922"></a>
-<h4 class="subsubheading"> Iterating Over <code>csArray&lt;&gt;</code> Contents </h4>
+<h4 class="subsubheading"> Property Bags </h4>
 
-<p>For this purpose, usually, <samp>`int'</samp> typed variables were used for keeping
-track of the index of the current item of an array iteration.  Fixing forward
-iteration over a <code>csArray&lt;&gt;</code> to instead use <samp>`size_t'</samp> is simple:
+<p>The <code>iEvent::Find()</code> method was renamed to <code>Retrieve()</code> and exhibits
+different return value semantics. Rather than returning a mere boolean result,
+it now returns one of the <samp>`csEventError'</samp> enumeration constants.  Of
+particular note, in the case of success, <code>csEventErrNone</code> is returned,
+which has a value of 0. This success value could be misinterpreted as &quot;false&quot;
+by the unwary when fixing code to deal with this semantic change. Conditionals
+which test if retrieval of an attribute succeeded must be changed to take this
+new semantic into account. For instance, code such as the following:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
-for (int i = 0, n = a.Length(); i &lt; n; i++)
+<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = ...;
+if (ev-&gt;Find(...))
 {
   ...
 }
 </pre></td></tr></table>
 
-<p>Is changed to:
+<p>must be changed to perform an explicit test on the return value of
+<code>Retrieve()</code>, rather than relying upon default boolean semantics:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">...
-for (size_t i = 0, n = a.Length(); i &lt; n; i++)
-...
-</pre></td></tr></table>
-<p>Backward iteration is a bit more problematic. As mentioned before,
-<samp>`size_t'</samp> typically is unsigned, so you do not have negative values. This
-can be a problem in constructs like:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
-for (int i = a.Length() - 1; i &gt;= 0; i--)
+<table><tr><td>&nbsp;</td><td><pre class="example">if (ev-&gt;Retrieve(...) == csEventErrNone)
 {
   ...
 }
 </pre></td></tr></table>
-<p>If the <samp>`int'</samp> is changed simply to a <samp>`size_t'</samp>, this 
-<code>for</code>-loop misbehaves unexpectedly. When <samp>`i'</samp> becomes 0, the body 
-of the loop is executed correctly. However, decrementing <samp>`i'</samp> will 
-<strong>not</strong> cause <samp>`i'</samp> to have a negative value--after all, <samp>`size_t'</samp>
-is unsigned. Instead, decrementing will make <samp>`i'</samp> wrap around from 0 to
-0xffffffff (on 32-bit machines). Clearly, this is greater
-than 0, effectively causing an infinite loop. The same thing also happens when
-<samp>`a'</samp> has no items (i.e. <samp>`a.Length() == 0'</samp>). Here the
--1 in the initialization of <samp>`i'</samp> causes wrap-around.
-</p>
-<p>Possible solutions include:
-</p>
-<ul>
-<li>
-Use an <code>int</code>-typed counter variable and cast the array length to
-<samp>`int'</samp>.  This is not entirely elegant, but it does the job in most cases.
-
-</li><li>
-Re-write the loop to deal properly with the unsigned nature of <samp>`size_t'</samp>:
-
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
-for (size_t i = a.Length(); i-- &gt; 0;)
-{
-  ...
-}
-</pre></td></tr></table>
-<p>This code does the same as the <samp>`int'</samp> version above, iterating from 
-<samp>`a.Length() - 1'</samp> to 0, inclusively. It also correctly works
-in the case <samp>`a.Length() == 0'</samp>. The &quot;trick&quot; is to place the 
-modification of <samp>`i'</samp> as a post-decrement in the loop condition. This 
-way, as soon as <samp>`i'</samp> becomes 0, the loop is terminated. The 
-post-decrement ensures that <samp>`i'</samp> has the expected value in the loop body.
-</p>
-</li></ul>
-
 <a name="SEC923"></a>
-<h4 class="subsubheading"> Searching </h4>
+<h4 class="subsubheading"> Mouse, Joystick, and Command event properties </h4>
 
-<p>Functions like <code>csArray&lt;&gt;::FindSortedKey()</code> and <code>csArray&lt;&gt;::Find()</code>
-used to return -1 to signify that an item was not found.  This is still the
-case, but with a twist.  Now, <samp>`(size_t)-1'</samp> is returned.  For convenience,
-a constant, <samp>`csArrayItemNotFound'</samp>, has been added, which has this exact
-value.  It can be used in comparisons to make it clear what is actually being
-checked.
+<p>The <samp>`union'</samp> containing the <samp>`Mouse'</samp>, <samp>`Joystick'</samp>, and <samp>`Command'</samp>
+structures has been removed; all event attributes are now stored and accessed
+using the <code>Add()</code> and <code>Retrieve()</code> mechanisms.  To ease access to
+event data, use the static methods of the <samp>`csMouseEventHelper'</samp>, 
+<samp>`csJoystickEventHelper'</samp>, and <samp>`csCommandEventHelper'</samp> classes.  
+For example, code such as the following:
 </p>
-<p>Apropros comparisons: Recall that <samp>`size_t'</samp> is <em>unsigned</em>, so checking
-whether an index returned by <samp>`FindSortedKey()'</samp> or <samp>`Find()'</samp> is 
-actually a valid index by testing with <samp>`&gt;= 0'</samp> no longer works since
-<samp>`(size_t)-1'</samp> is always <code>&gt;= 0</code>. Replace such checks with tests of
-equality against <samp>`csArrayItemNotFound'</samp>:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
-int index = a.Find (...);
-if (index &gt;= 0)
-{
-  /* Item found */
-  ...
-}
-else
-{
-  /* Item not found */
-  ...
-}
+<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = ...;
+let X = ev-&gt;Mouse.X;
 </pre></td></tr></table>
-<p>Must be replaced with:
+
+<p>should be changed to:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
-size_t index = a.Find (...);
-if (index != csArrayItemNotFound)
-{
-  /* Item found */
-  ...
-}
-else
-{
-  /* Item not found */
-  ...
-}
+<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = ...;
+let X = csMouseEventHelper::GetX(ev);
 </pre></td></tr></table>
+
+<p>See the <small>API</small> documentation for details.
+</p>
+<a name="SEC924"></a>
+<h4 class="subsubheading"> Multiple mice </h4>
+
+<p>There is now support for handling input from more than one mouse.
+You can retrieve the identity (basis 0) of the mouse producing a 
+mouse event with <code>csMouseEventHelper::GetNumber()</code>.
+</p>
+<a name="SEC925"></a>
+<h4 class="subsubheading"> Joystick and Mouse axes </h4>
+
+<p>Joysticks can now have up to <samp>`CS_MAX_JOYSTICK_AXES'</samp> axes,
+and mice can have up to <samp>`CS_MAX_MOUSE_AXES'</samp>.  Their values should
+be accessed using the <code>csJoystickEventHelper::GetAxis()</code>
+and <code>csMouseEventHelper::GetAxis()</code> functions, respectively,
+where both devices and axes are enumerated basis 0.
+Each helper class also has <code>GetX()</code> and <code>GetY()</code> methods
+available; for joystick events, these are deprecated.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.1.html#C.1.1" title="Previous section in reading order"> &lt; </a>]</td>

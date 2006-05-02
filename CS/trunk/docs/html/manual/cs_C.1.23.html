@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.23 iEvent Changes</title>
+<title>Crystal Space: C.1.23 Convenience Classes and Libraries</title>
 
-<meta name="description" content="Crystal Space: C.1.23 iEvent Changes">
-<meta name="keywords" content="Crystal Space: C.1.23 iEvent Changes">
+<meta name="description" content="Crystal Space: C.1.23 Convenience Classes and Libraries">
+<meta name="keywords" content="Crystal Space: C.1.23 Convenience Classes and Libraries">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-iEvent-Changes"></a>
+<a name="Api100-Convenience-Classes-and-Libraries"></a>
 <a name="C.1.23"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.22.html#C.1.22" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,74 +58,47 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.23 <code>iEvent</code> Changes </h3>
+<h3 class="subsection"> C.1.23 Convenience Classes and Libraries </h3>
 
-<a name="SEC945"></a>
-<h4 class="subsubheading"> Property Bags </h4>
-
-<p>The <code>iEvent::Find()</code> method was renamed to <code>Retrieve()</code> and exhibits
-different return value semantics. Rather than returning a mere boolean result,
-it now returns one of the <samp>`csEventError'</samp> enumeration constants.  Of
-particular note, in the case of success, <code>csEventErrNone</code> is returned,
-which has a value of 0. This success value could be misinterpreted as &quot;false&quot;
-by the unwary when fixing code to deal with this semantic change. Conditionals
-which test if retrieval of an attribute succeeded must be changed to take this
-new semantic into account. For instance, code such as the following:
+<p>Crystal Space now publishes several convenience classes and libraries which
+eliminate much of the drudgery associated with implementing <small>SCF</small> interfaces
+in certain types of common plugin modules. For example, the <samp>`csGraphics2D'</samp>
+class implements the <samp>`iGraphics2D'</samp> interface and provides much of the
+functionality common to most canvases.  Likewise, the <samp>`csGraphics3D'</samp> class
+implements the <samp>`iGraphics3D'</samp> interface and provides much functionality
+common to renderers. You are not required to utilize these implementations when
+authoring your own plugins, but they are available for your convenience.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = ...;
-if (ev-&gt;Find(...))
-{
-  ...
-}
-</pre></td></tr></table>
-
-<p>must be changed to perform an explicit test on the return value of
-<code>Retrieve()</code>, rather than relying upon default boolean semantics:
+<p>Most of these newly published facilities are bundled in the consolidated master
+<tt>`crystalspace'</tt> library, but a few are provided in separate libraries
+because they rely upon external resources which may not be present on all
+platforms or in all installations. The convenience libraries are:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">if (ev-&gt;Retrieve(...) == csEventErrNone)
-{
-  ...
-}
-</pre></td></tr></table>
-<a name="SEC946"></a>
-<h4 class="subsubheading"> Mouse, Joystick, and Command event properties </h4>
+<dl compact="compact">
+<dt> <code>crystalspace</code></dt>
+<dd><p>Canvas, image loader, particle system, renderer, shader, sound loader, and
+sound renderer support, in addition to the normal Crystal Space classes and
+utilities.
+</p></dd>
+<dt> <code>crystalspace_directx</code></dt>
+<dd><p>DirectX support.
+</p></dd>
+<dt> <code>crystalspace_macosx</code></dt>
+<dd><p>MacOS/X canvas support.
+</p></dd>
+<dt> <code>crystalspace_opengl</code></dt>
+<dd><p>OpenGL support.
+</p></dd>
+<dt> <code>crystalspace_python</code></dt>
+<dd><p>Python support.
+</p></dd>
+<dt> <code>crystalspace_windows</code></dt>
+<dd><p>Windows support.
+</p></dd>
+</dl>
 
-<p>The <samp>`union'</samp> containing the <samp>`Mouse'</samp>, <samp>`Joystick'</samp>, and <samp>`Command'</samp>
-structures has been removed; all event attributes are now stored and accessed
-using the <code>Add()</code> and <code>Retrieve()</code> mechanisms.  To ease access to
-event data, use the static methods of the <samp>`csMouseEventHelper'</samp>, 
-<samp>`csJoystickEventHelper'</samp>, and <samp>`csCommandEventHelper'</samp> classes.  
-For example, code such as the following:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = ...;
-let X = ev-&gt;Mouse.X;
-</pre></td></tr></table>
-
-<p>should be changed to:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">iEvent* ev = ...;
-let X = csMouseEventHelper::GetX(ev);
-</pre></td></tr></table>
-
-<p>See the <small>API</small> documentation for details.
-</p>
-<a name="SEC947"></a>
-<h4 class="subsubheading"> Multiple mice </h4>
-
-<p>There is now support for handling input from more than one mouse.
-You can retrieve the identity (basis 0) of the mouse producing a 
-mouse event with <code>csMouseEventHelper::GetNumber()</code>.
-</p>
-<a name="SEC948"></a>
-<h4 class="subsubheading"> Joystick and Mouse axes </h4>
-
-<p>Joysticks can now have up to <samp>`CS_MAX_JOYSTICK_AXES'</samp> axes,
-and mice can have up to <samp>`CS_MAX_MOUSE_AXES'</samp>.  Their values should
-be accessed using the <code>csJoystickEventHelper::GetAxis()</code>
-and <code>csMouseEventHelper::GetAxis()</code> functions, respectively,
-where both devices and axes are enumerated basis 0.
-Each helper class also has <code>GetX()</code> and <code>GetY()</code> methods
-available; for joystick events, these are deprecated.
+<p>For a complete list of available convenience classes, consult the header files
+in the subdirectories of <tt>`CS/include/csplugincommon'</tt>.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

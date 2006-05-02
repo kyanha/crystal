@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.46 csStringSetIterator and csStringHashIterator Removal</title>
+<title>Crystal Space: C.1.46 Transform Split</title>
 
-<meta name="description" content="Crystal Space: C.1.46 csStringSetIterator and csStringHashIterator Removal">
-<meta name="keywords" content="Crystal Space: C.1.46 csStringSetIterator and csStringHashIterator Removal">
+<meta name="description" content="Crystal Space: C.1.46 Transform Split">
+<meta name="keywords" content="Crystal Space: C.1.46 Transform Split">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-csStringSetIterator-and-csStringHashIterator-Removal"></a>
+<a name="Api100-Transform-Split"></a>
 <a name="C.1.46"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.45.html#C.1.45" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,35 +58,14 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.46 <samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> Removal </h3>
+<h3 class="subsection"> C.1.46 Transform Split </h3>
 
-<p><samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> have been replaced
-with the iterator classes <samp>`csStringSet::GlobalIterator'</samp> and
-<samp>`csStringHash::GlobalIterator'</samp>, respectively.  Rather than instantiating
-iterators directly, you now ask the set or hash for an iterator. This brings
-the <samp>`csStringSet'</samp> and <samp>`csStringHash'</samp> <small>API</small>'s in line with other
-container classes which vend iterators. Given old code which is using
-<samp>`csStringSetIterator'</samp>:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csStringSet set;
-// ...populate set...
-csStringSetIterator iter(&amp;set);
-while (iter.HasNext())
-{
-  char const* s = iter.Next();
-  // ...do something with `s'...
-}
-</pre></td></tr></table>
-
-<p>Convert it like this:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csStringSet::GlobalIterator iter = set.GetIterator();
-while (iter.HasNext())
-{
-</pre></td></tr></table>
-
-<p>Code using <samp>`csStringHashIterator'</samp> can be fixed using the same simple
-transformation.
+<p>To allow more control over how geometry is transformed when using shaders the
+<samp>`csRenderMesh::object2camera'</samp> has been split into two transforms:
+<samp>`object2world'</samp> and <samp>`world2camera'</samp>. The <samp>`object2world'</samp> transform
+is sent via a shader variable, while <samp>`world2camera'</samp> is specified via
+<code>iGraphics3D::SetWorldToCamera()</code> (but it is also available as a shader
+variable to shader programs).
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

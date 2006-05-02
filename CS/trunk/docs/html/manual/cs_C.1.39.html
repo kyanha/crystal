@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.39 Cg Matrix Bindings</title>
+<title>Crystal Space: C.1.39 Reference Count Automation</title>
 
-<meta name="description" content="Crystal Space: C.1.39 Cg Matrix Bindings">
-<meta name="keywords" content="Crystal Space: C.1.39 Cg Matrix Bindings">
+<meta name="description" content="Crystal Space: C.1.39 Reference Count Automation">
+<meta name="keywords" content="Crystal Space: C.1.39 Reference Count Automation">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-Cg-Matrix-Bindings"></a>
+<a name="Api100-Reference-Count-Automation"></a>
 <a name="C.1.39"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.38.html#C.1.38" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,26 +58,38 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.39 Cg Matrix Bindings </h3>
+<h3 class="subsection"> C.1.39 Reference Count Automation </h3>
 
-<p>Previously, the semantics of a Cg vertex program matrix parameter were
-determined through the variable name; e.g. a name of <samp>`ModelViewProj'</samp> bound
-the combined model view and projection matrix to the variable. This is still
-supported but deprecated. Crystal Space now requires Cg 1.3 which allows the
-matrix semantics specification in a way similar to other semantics
-specification. For example:
+<p>For consistency with the bulk of the Crystal Space <small>API</small>, and in order to
+simplify reference-count management, the following methods have been changed
+to return <code>csRef&lt;&gt;</code> rather than raw pointers of which the client had to
+dispose manually via <code>DecRef()</code>.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">uniform float4x4 ModelViewProj
-</pre></td></tr></table>
+<ul>
+<li>
+<code>iEmitFactoryState::CreateBox()</code>
+</li><li>
+<code>iEmitFactoryState::CreateCone()</code>
+</li><li>
+<code>iEmitFactoryState::CreateCylinder()</code>
+</li><li>
+<code>iEmitFactoryState::CreateCylinderTangent()</code>
+</li><li>
+<code>iEmitFactoryState::CreateFixed()</code>
+</li><li>
+<code>iEmitFactoryState::CreateLine()</code>
+</li><li>
+<code>iEmitFactoryState::CreateMix()</code>
+</li><li>
+<code>iEmitFactoryState::CreateSphere()</code>
+</li><li>
+<code>iEmitFactoryState::CreateSphereTangent()</code>
+</li><li>
+<code>iHazeHullCreation::CreateBox()</code>
+</li><li>
+<code>iHazeHullCreation::CreateCone()</code>
+</li></ul>
 
-<p>Becomes:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">uniform float4x4 ModelViewProj : state.matrix.mvp
-</pre></td></tr></table>
-<p>Check the <tt>`data/shaders/'</tt> directory for further examples. For more
-detailed information, consult the Cg and <samp>`ARB_vertex_program'</samp>
-documentations.
-</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.38.html#C.1.38" title="Previous section in reading order"> &lt; </a>]</td>

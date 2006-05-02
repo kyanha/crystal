@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.14 iGraphics2D Alpha Color Support</title>
+<title>Crystal Space: C.1.14 Texture and Material Preparation</title>
 
-<meta name="description" content="Crystal Space: C.1.14 iGraphics2D Alpha Color Support">
-<meta name="keywords" content="Crystal Space: C.1.14 iGraphics2D Alpha Color Support">
+<meta name="description" content="Crystal Space: C.1.14 Texture and Material Preparation">
+<meta name="keywords" content="Crystal Space: C.1.14 Texture and Material Preparation">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-iGraphics2D-Alpha-Color-Support"></a>
+<a name="Api100-Texture-and-Material-Preparation"></a>
 <a name="C.1.14"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.13.html#C.1.13" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,18 +58,25 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.14 <code>iGraphics2D</code> Alpha Color Support </h3>
+<h3 class="subsection"> C.1.14 Texture and Material Preparation </h3>
 
-<p><samp>`iGraphics2D'</samp> now supports an alpha channel. <code>iGraphics2D::FindRGB()</code>
-accepts an optional alpha value (0 being completely transparent, and
-255 being fully opaque) which defaults to 255. All canvases will then blend 
-the pixels appropriately if the color depth is 15 bpp or higher. Furthermore, 
-as <code>iGraphics2D::Write()</code> also handles alpha in both foreground and 
-background colors, it is recommended for transparent backgrounds, instead 
-of using <samp>`-1'</samp> as the color value, to obtain a color value from 
-<code>FindRGB()</code> that has the same R, G, B components as the foreground color, 
-but an alpha component of 0.
+<p>Texture and material preparation is now fully automatic. It is no longer
+necessary to <em>prepare</em> a texture or a material before you can use it. It is
+sufficient simply to register the texture or material. This means that the
+following functions have been removed (and you can just remove invocations of
+them from your applications if you used them):
 </p>
+<ul>
+<li>
+<code>iMaterialHandle::Prepare()</code>
+</li><li>
+<code>iTextureHandle::Prepare()</code>
+</li><li>
+<code>iTextureManager::PrepareMaterials()</code>
+</li><li>
+<code>iTextureManager::PrepareTextures()</code>
+</li></ul>
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.13.html#C.1.13" title="Previous section in reading order"> &lt; </a>]</td>
