@@ -79,92 +79,94 @@
 <a name="l00075"></a><a class="code" href="classcsVertexListWalker.html#828af5a6ba8eb51b8f7a8a65584666fd">00075</a>   <span class="keyword">const</span> Tcomplex&amp; <a class="code" href="classcsVertexListWalker.html#828af5a6ba8eb51b8f7a8a65584666fd">operator*</a>()<span class="keyword"> const</span>
 <a name="l00076"></a>00076 <span class="keyword">  </span>{
 <a name="l00077"></a>00077     <a class="code" href="cssysdef_8h.html#c380bd47888ecfe73e7b7a40b6f827a1">CS_ASSERT</a>(currElement&lt;elements);
-<a name="l00078"></a>00078     <span class="keywordflow">return</span> *((Tcomplex*)convertedComps);
-<a name="l00079"></a>00079   }
-<a name="l00081"></a>00081 
+<a name="l00078"></a>00078     <span class="keyword">const</span> Tbase* x = convertedComps;
+<a name="l00079"></a>00079     <span class="keyword">const</span> Tcomplex* y = (Tcomplex*)x;
+<a name="l00080"></a>00080     <span class="keywordflow">return</span> *y;
+<a name="l00081"></a>00081   }
 <a name="l00083"></a>00083 
-<a name="l00084"></a><a class="code" href="classcsVertexListWalker.html#cf29ddde83a5e8fd0f8350c8963b958c">00084</a>   <a class="code" href="classcsVertexListWalker.html">csVertexListWalker</a>&amp; <a class="code" href="classcsVertexListWalker.html#cf29ddde83a5e8fd0f8350c8963b958c">operator++ </a>()
-<a name="l00085"></a>00085   {
-<a name="l00086"></a>00086     currElement++;
-<a name="l00087"></a>00087     FetchCurrentElement();
-<a name="l00088"></a>00088     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
-<a name="l00089"></a>00089   }
-<a name="l00091"></a>00091 
-<a name="l00093"></a><a class="code" href="classcsVertexListWalker.html#1d120e497d5937e5238ba8296e2cdbbb">00093</a>   <span class="keywordtype">void</span> <a class="code" href="classcsVertexListWalker.html#1d120e497d5937e5238ba8296e2cdbbb">ResetState</a> ()
-<a name="l00094"></a>00094   {
-<a name="l00095"></a>00095     currElement = 0;
-<a name="l00096"></a>00096     FetchCurrentElement();
-<a name="l00097"></a>00097   }
-<a name="l00098"></a>00098 <span class="keyword">private</span>:
-<a name="l00100"></a>00100   size_t elements;
-<a name="l00102"></a>00102   size_t currElement;
-<a name="l00104"></a>00104   <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock&lt;uint8&gt;</a> bufLock;
-<a name="l00105"></a>00105   
-<a name="l00107"></a>00107   size_t components;
-<a name="l00109"></a>00109   size_t bufferComponents;
-<a name="l00111"></a>00111   <span class="keyword">enum</span> { maxComponents = 4 };
-<a name="l00113"></a>00113   Tbase convertedComps[maxComponents];
-<a name="l00115"></a>00115   <span class="keyword">const</span> Tbase* <span class="keyword">const</span> defaultComponents;
-<a name="l00117"></a>00117   <a class="code" href="group__gfx3d.html#g2e793d8189bb8566ed81c168875f452b">csRenderBufferComponentType</a> compType;
-<a name="l00118"></a>00118   
-<a name="l00120"></a>00120   <span class="keyword">const</span> Tbase GetDefaultComponent (size_t n)
-<a name="l00121"></a>00121   {
-<a name="l00122"></a>00122     <span class="keywordflow">return</span> (defaultComponents != 0) ? defaultComponents[n] : 
-<a name="l00123"></a>00123       ((n == 3) ? Tbase(1) : Tbase(0));
-<a name="l00124"></a>00124   }
-<a name="l00126"></a>00126   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> C&gt;
-<a name="l00127"></a>00127   <span class="keywordtype">void</span> FetchCurrentElementReal()
-<a name="l00128"></a>00128   {
-<a name="l00129"></a>00129     <a class="code" href="group__util.html#gdde6aaee8457bee49c2a92621fe22b79">uint8</a>* data = bufLock + (currElement * bufferComponents * <span class="keyword">sizeof</span> (C));
-<a name="l00130"></a>00130     <span class="keywordflow">for</span> (size_t c = 0; c &lt; components; c++)
-<a name="l00131"></a>00131     {
-<a name="l00132"></a>00132       convertedComps[c] = 
-<a name="l00133"></a>00133         (c &lt; bufferComponents) ? Tbase(*(C*)data) :
-<a name="l00134"></a>00134         GetDefaultComponent (c);
-<a name="l00135"></a>00135       data += <span class="keyword">sizeof</span> (C);
-<a name="l00136"></a>00136     }
-<a name="l00137"></a>00137   }
-<a name="l00139"></a>00139   <span class="keywordtype">void</span> FetchCurrentElement()
-<a name="l00140"></a>00140   {
-<a name="l00141"></a>00141     <span class="comment">/* Avoid reading beyond buffer end</span>
-<a name="l00142"></a>00142 <span class="comment">     * Don't assert here since FetchCurrentElement() is also called in</span>
-<a name="l00143"></a>00143 <span class="comment">     * legitimate cases (i.e. operator++ while on the last valid element.</span>
-<a name="l00144"></a>00144 <span class="comment">     * Assert in retrieval operators, though.</span>
-<a name="l00145"></a>00145 <span class="comment">     */</span>
-<a name="l00146"></a>00146     <span class="keywordflow">if</span> (currElement &gt;= elements) <span class="keywordflow">return</span>;
-<a name="l00147"></a>00147     <span class="keywordflow">switch</span> (compType)
-<a name="l00148"></a>00148     {
-<a name="l00149"></a>00149       <span class="keywordflow">default</span>:
-<a name="l00150"></a>00150         <a class="code" href="cssysdef_8h.html#c380bd47888ecfe73e7b7a40b6f827a1">CS_ASSERT</a>(<span class="keyword">false</span>);
-<a name="l00151"></a>00151       <span class="keywordflow">case</span> CS_BUFCOMP_BYTE:
-<a name="l00152"></a>00152         FetchCurrentElementReal&lt;char&gt;();
-<a name="l00153"></a>00153         <span class="keywordflow">break</span>;
-<a name="l00154"></a>00154       <span class="keywordflow">case</span> CS_BUFCOMP_UNSIGNED_BYTE:
-<a name="l00155"></a>00155         FetchCurrentElementReal&lt;unsigned char&gt;();
-<a name="l00156"></a>00156         <span class="keywordflow">break</span>;
-<a name="l00157"></a>00157       <span class="keywordflow">case</span> CS_BUFCOMP_SHORT:
-<a name="l00158"></a>00158         FetchCurrentElementReal&lt;short&gt;();
-<a name="l00159"></a>00159         <span class="keywordflow">break</span>;
-<a name="l00160"></a>00160       <span class="keywordflow">case</span> CS_BUFCOMP_UNSIGNED_SHORT:
-<a name="l00161"></a>00161         FetchCurrentElementReal&lt;unsigned short&gt;();
-<a name="l00162"></a>00162         <span class="keywordflow">break</span>;
-<a name="l00163"></a>00163       <span class="keywordflow">case</span> CS_BUFCOMP_INT:
-<a name="l00164"></a>00164         FetchCurrentElementReal&lt;int&gt;();
-<a name="l00165"></a>00165         <span class="keywordflow">break</span>;
-<a name="l00166"></a>00166       <span class="keywordflow">case</span> CS_BUFCOMP_UNSIGNED_INT:
-<a name="l00167"></a>00167         FetchCurrentElementReal&lt;unsigned int&gt;();
-<a name="l00168"></a>00168         <span class="keywordflow">break</span>;
-<a name="l00169"></a>00169       <span class="keywordflow">case</span> CS_BUFCOMP_FLOAT:
-<a name="l00170"></a>00170         FetchCurrentElementReal&lt;float&gt;();
-<a name="l00171"></a>00171         <span class="keywordflow">break</span>;
-<a name="l00172"></a>00172       <span class="keywordflow">case</span> CS_BUFCOMP_DOUBLE:
-<a name="l00173"></a>00173         FetchCurrentElementReal&lt;double&gt;();
-<a name="l00174"></a>00174         <span class="keywordflow">break</span>;
-<a name="l00175"></a>00175     }
-<a name="l00176"></a>00176   }
-<a name="l00177"></a>00177 };
-<a name="l00178"></a>00178 
-<a name="l00179"></a>00179 <span class="preprocessor">#endif // __CS_CSGFX_VERTEXLISTWALKER_H__</span>
+<a name="l00085"></a>00085 
+<a name="l00086"></a><a class="code" href="classcsVertexListWalker.html#cf29ddde83a5e8fd0f8350c8963b958c">00086</a>   <a class="code" href="classcsVertexListWalker.html">csVertexListWalker</a>&amp; <a class="code" href="classcsVertexListWalker.html#cf29ddde83a5e8fd0f8350c8963b958c">operator++ </a>()
+<a name="l00087"></a>00087   {
+<a name="l00088"></a>00088     currElement++;
+<a name="l00089"></a>00089     FetchCurrentElement();
+<a name="l00090"></a>00090     <span class="keywordflow">return</span> *<span class="keyword">this</span>;
+<a name="l00091"></a>00091   }
+<a name="l00093"></a>00093 
+<a name="l00095"></a><a class="code" href="classcsVertexListWalker.html#1d120e497d5937e5238ba8296e2cdbbb">00095</a>   <span class="keywordtype">void</span> <a class="code" href="classcsVertexListWalker.html#1d120e497d5937e5238ba8296e2cdbbb">ResetState</a> ()
+<a name="l00096"></a>00096   {
+<a name="l00097"></a>00097     currElement = 0;
+<a name="l00098"></a>00098     FetchCurrentElement();
+<a name="l00099"></a>00099   }
+<a name="l00100"></a>00100 <span class="keyword">private</span>:
+<a name="l00102"></a>00102   size_t elements;
+<a name="l00104"></a>00104   size_t currElement;
+<a name="l00106"></a>00106   <a class="code" href="classcsRenderBufferLock.html">csRenderBufferLock&lt;uint8&gt;</a> bufLock;
+<a name="l00107"></a>00107   
+<a name="l00109"></a>00109   size_t components;
+<a name="l00111"></a>00111   size_t bufferComponents;
+<a name="l00113"></a>00113   <span class="keyword">enum</span> { maxComponents = 4 };
+<a name="l00115"></a>00115   Tbase convertedComps[maxComponents];
+<a name="l00117"></a>00117   <span class="keyword">const</span> Tbase* <span class="keyword">const</span> defaultComponents;
+<a name="l00119"></a>00119   <a class="code" href="group__gfx3d.html#g2e793d8189bb8566ed81c168875f452b">csRenderBufferComponentType</a> compType;
+<a name="l00120"></a>00120   
+<a name="l00122"></a>00122   <span class="keyword">const</span> Tbase GetDefaultComponent (size_t n)
+<a name="l00123"></a>00123   {
+<a name="l00124"></a>00124     <span class="keywordflow">return</span> (defaultComponents != 0) ? defaultComponents[n] : 
+<a name="l00125"></a>00125       ((n == 3) ? Tbase(1) : Tbase(0));
+<a name="l00126"></a>00126   }
+<a name="l00128"></a>00128   <span class="keyword">template</span>&lt;<span class="keyword">typename</span> C&gt;
+<a name="l00129"></a>00129   <span class="keywordtype">void</span> FetchCurrentElementReal()
+<a name="l00130"></a>00130   {
+<a name="l00131"></a>00131     <a class="code" href="group__util.html#gdde6aaee8457bee49c2a92621fe22b79">uint8</a>* data = bufLock + (currElement * bufferComponents * <span class="keyword">sizeof</span> (C));
+<a name="l00132"></a>00132     <span class="keywordflow">for</span> (size_t c = 0; c &lt; components; c++)
+<a name="l00133"></a>00133     {
+<a name="l00134"></a>00134       convertedComps[c] = 
+<a name="l00135"></a>00135         (c &lt; bufferComponents) ? Tbase(*(C*)data) :
+<a name="l00136"></a>00136         GetDefaultComponent (c);
+<a name="l00137"></a>00137       data += <span class="keyword">sizeof</span> (C);
+<a name="l00138"></a>00138     }
+<a name="l00139"></a>00139   }
+<a name="l00141"></a>00141   <span class="keywordtype">void</span> FetchCurrentElement()
+<a name="l00142"></a>00142   {
+<a name="l00143"></a>00143     <span class="comment">/* Avoid reading beyond buffer end</span>
+<a name="l00144"></a>00144 <span class="comment">     * Don't assert here since FetchCurrentElement() is also called in</span>
+<a name="l00145"></a>00145 <span class="comment">     * legitimate cases (i.e. operator++ while on the last valid element.</span>
+<a name="l00146"></a>00146 <span class="comment">     * Assert in retrieval operators, though.</span>
+<a name="l00147"></a>00147 <span class="comment">     */</span>
+<a name="l00148"></a>00148     <span class="keywordflow">if</span> (currElement &gt;= elements) <span class="keywordflow">return</span>;
+<a name="l00149"></a>00149     <span class="keywordflow">switch</span> (compType)
+<a name="l00150"></a>00150     {
+<a name="l00151"></a>00151       <span class="keywordflow">default</span>:
+<a name="l00152"></a>00152         <a class="code" href="cssysdef_8h.html#c380bd47888ecfe73e7b7a40b6f827a1">CS_ASSERT</a>(<span class="keyword">false</span>);
+<a name="l00153"></a>00153       <span class="keywordflow">case</span> CS_BUFCOMP_BYTE:
+<a name="l00154"></a>00154         FetchCurrentElementReal&lt;char&gt;();
+<a name="l00155"></a>00155         <span class="keywordflow">break</span>;
+<a name="l00156"></a>00156       <span class="keywordflow">case</span> CS_BUFCOMP_UNSIGNED_BYTE:
+<a name="l00157"></a>00157         FetchCurrentElementReal&lt;unsigned char&gt;();
+<a name="l00158"></a>00158         <span class="keywordflow">break</span>;
+<a name="l00159"></a>00159       <span class="keywordflow">case</span> CS_BUFCOMP_SHORT:
+<a name="l00160"></a>00160         FetchCurrentElementReal&lt;short&gt;();
+<a name="l00161"></a>00161         <span class="keywordflow">break</span>;
+<a name="l00162"></a>00162       <span class="keywordflow">case</span> CS_BUFCOMP_UNSIGNED_SHORT:
+<a name="l00163"></a>00163         FetchCurrentElementReal&lt;unsigned short&gt;();
+<a name="l00164"></a>00164         <span class="keywordflow">break</span>;
+<a name="l00165"></a>00165       <span class="keywordflow">case</span> CS_BUFCOMP_INT:
+<a name="l00166"></a>00166         FetchCurrentElementReal&lt;int&gt;();
+<a name="l00167"></a>00167         <span class="keywordflow">break</span>;
+<a name="l00168"></a>00168       <span class="keywordflow">case</span> CS_BUFCOMP_UNSIGNED_INT:
+<a name="l00169"></a>00169         FetchCurrentElementReal&lt;unsigned int&gt;();
+<a name="l00170"></a>00170         <span class="keywordflow">break</span>;
+<a name="l00171"></a>00171       <span class="keywordflow">case</span> CS_BUFCOMP_FLOAT:
+<a name="l00172"></a>00172         FetchCurrentElementReal&lt;float&gt;();
+<a name="l00173"></a>00173         <span class="keywordflow">break</span>;
+<a name="l00174"></a>00174       <span class="keywordflow">case</span> CS_BUFCOMP_DOUBLE:
+<a name="l00175"></a>00175         FetchCurrentElementReal&lt;double&gt;();
+<a name="l00176"></a>00176         <span class="keywordflow">break</span>;
+<a name="l00177"></a>00177     }
+<a name="l00178"></a>00178   }
+<a name="l00179"></a>00179 };
+<a name="l00180"></a>00180 
+<a name="l00181"></a>00181 <span class="preprocessor">#endif // __CS_CSGFX_VERTEXLISTWALKER_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
