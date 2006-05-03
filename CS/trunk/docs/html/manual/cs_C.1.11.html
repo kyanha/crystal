@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.11 csStringSetIterator and csStringHashIterator Removal</title>
+<title>Crystal Space: C.1.11 VFS Changes</title>
 
-<meta name="description" content="Crystal Space: C.1.11 csStringSetIterator and csStringHashIterator Removal">
-<meta name="keywords" content="Crystal Space: C.1.11 csStringSetIterator and csStringHashIterator Removal">
+<meta name="description" content="Crystal Space: C.1.11 VFS Changes">
+<meta name="keywords" content="Crystal Space: C.1.11 VFS Changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-csStringSetIterator-and-csStringHashIterator-Removal"></a>
+<a name="Api100-vfs-Changes"></a>
 <a name="C.1.11"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.10.html#C.1.10" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,35 +58,20 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.11 <samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> Removal </h3>
+<h3 class="subsection"> C.1.11 <small>VFS</small> Changes </h3>
 
-<p><samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> have been replaced
-with the iterator classes <samp>`csStringSet::GlobalIterator'</samp> and
-<samp>`csStringHash::GlobalIterator'</samp>, respectively.  Rather than instantiating
-iterators directly, you now ask the set or hash for an iterator. This brings
-the <samp>`csStringSet'</samp> and <samp>`csStringHash'</samp> <small>API</small>'s in line with other
-container classes which vend iterators. Given old code which is using
-<samp>`csStringSetIterator'</samp>:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csStringSet set;
-// ...populate set...
-csStringSetIterator iter(&amp;set);
-while (iter.HasNext())
-{
-  char const* s = iter.Next();
-  // ...do something with `s'...
-}
-</pre></td></tr></table>
-
-<p>Convert it like this:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csStringSet::GlobalIterator iter = set.GetIterator();
-while (iter.HasNext())
-{
-</pre></td></tr></table>
-
-<p>Code using <samp>`csStringHashIterator'</samp> can be fixed using the same simple
-transformation.
+<p>At initialization time, <small>VFS</small> now merges all <tt>`vfs.cfg'</tt> files located
+during its start-up scan.  Previously, <small>VFS</small> stopped scanning at the first
+discovered <tt>`vfs.cfg'</tt>, and loaded only that file.  During the start-up
+scan, it searches for a file named <tt>`vfs.cfg'</tt> in the application resource
+directory (<code>csGetResourceDir()</code>), then in the directory containing the
+application (<code>csGetAppDir()</code>), and finally in the Crystal Space
+installation directory (<code>csGetConfigPath()</code>).  The full set of directories
+mounted by <small>VFS</small> following the initial configuration file scan is the union
+of the entries in all of the discovered <tt>`vfs.cfg'</tt> files.  If there are
+conflicting entries, then mounts and variable assignments specified in
+configuration files discovered earlier in the scan take precedence over those
+discovered later.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

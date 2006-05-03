@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.17 iImage Changes</title>
+<title>Crystal Space: C.1.17 AWS Changes</title>
 
-<meta name="description" content="Crystal Space: C.1.17 iImage Changes">
-<meta name="keywords" content="Crystal Space: C.1.17 iImage Changes">
+<meta name="description" content="Crystal Space: C.1.17 AWS Changes">
+<meta name="keywords" content="Crystal Space: C.1.17 AWS Changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-iImage-Changes"></a>
+<a name="Api100-aws-Changes"></a>
 <a name="C.1.17"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.16.html#C.1.16" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,42 +58,15 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.17 <samp>`iImage'</samp> Changes </h3>
+<h3 class="subsection"> C.1.17 <small>AWS</small> Changes </h3>
 
-<p>The <samp>`iImage'</samp> interface has been reduced to a level where it merely serves
-as a container for pixel data; however, the image editing functionality was
-only relocated, not removed.
+<p>The trigger system in <small>AWS</small> has changed. The trigger callback function
+now has an additional <samp>`unsigned long'</samp> parameter like this:
 </p>
-<p>Forbidding direct manipulation of an <samp>`iImage'</samp>'s pixel data has the 
-following consequences:
-</p>
-<ul>
-<li>
-The <code>Clone()</code> function was removed. The
-<samp>`csImageMemory'</samp> class provides a constructor that copies the pixel data
-from another <samp>`iImage'</samp> object, providing a functionality equal to 
-<code>Clone()</code>.
-
-</li><li>
-To edit the pixel data of an image, create a clone of an image (e.g. a
-<samp>`csImageMemory'</samp> as mentioned above) and manipulate the data in the newly
-cerated instance.
-
-</li><li>
-If the image data is needed in another
-format, as the <code>SetFormat()</code> call has been removed from the interface.
-
-</li><li>
-The image editing functionality found in methods such as <code>Rescale()</code>,
-<code>Sharpen()</code> was moved into the <samp>`csImageManipulate'</samp> class.
-
-</li><li>
-The <code>CopyXXX()</code> method that copied an image into another are now provided
-by <samp>`csImageMemory'</samp>.
-</li></ul>
-
-<p>As a side-effect of these changes, the <samp>`csImageFile'</samp> and 
-<samp>`csImageMemory'</samp> were merged and the former removed.
+<table><tr><td>&nbsp;</td><td><pre class="example">static void TriggerFunc (unsigned long, intptr_t, iAwsSource*);
+</pre></td></tr></table>
+<p>This extra parameter is the id of the given trigger name as returned by the
+standard string set (<samp>`crystalspace.shared.stringset'</samp>).
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

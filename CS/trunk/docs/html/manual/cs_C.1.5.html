@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.5 csutil/garray.h Deprecated</title>
+<title>Crystal Space: C.1.5 String Changes</title>
 
-<meta name="description" content="Crystal Space: C.1.5 csutil/garray.h Deprecated">
-<meta name="keywords" content="Crystal Space: C.1.5 csutil/garray.h Deprecated">
+<meta name="description" content="Crystal Space: C.1.5 String Changes">
+<meta name="keywords" content="Crystal Space: C.1.5 String Changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-garray-Deprecated"></a>
+<a name="Api100-String-Changes"></a>
 <a name="C.1.5"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.4.html#C.1.4" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,13 +58,41 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.5 <tt>`csutil/garray.h'</tt> Deprecated </h3>
+<h3 class="subsection"> C.1.5 String Changes </h3>
 
-<p>The <tt>`csutil/garray.h'</tt> file, containing the class 
-<code>csDirtyAccessArray&lt;&gt;</code>, has been deprecated in favor of the more sensible
-file name <tt>`csutil/dirtyaccessarray.h'</tt>. No functional changes have been
-made to the class.
+<p>The class hierarchy of <samp>`csString'</samp> has changed. Most functionality is now
+provided by the new superclass <samp>`csStringBase'</samp>. From this,
+<code>csStringFast&lt;&gt;</code> is subclassed, and <samp>`csString'</samp> descends from
+<code>csStringFast&lt;&gt;</code>. <code>csStringFast&lt;&gt;</code> is a templated class featuring an
+internal character buffer which is used instead of dynamically heap-allocated
+memory when the string length is sufficently short (as controlled by the class
+template argument). This generalization can make <samp>`csStringFast&lt;&gt;'</samp> (and its
+subclass <samp>`csString'</samp>) much faster when used as automatic (stack-allocated)
+variables, even when declared inside <samp>`for{}'</samp>-loops, since slow
+heap-allocation often can be avoided.
 </p>
+<p>For simplification purposes, several methods have been removed from
+<samp>`csString'</samp> and <samp>`iString'</samp> (when present):
+</p>
+<ul>
+<li>
+Static <code>PadFoo()</code> methods. The same functionality can be achieved with
+the remaining instance <code>PadFoo()</code> methods.
+
+</li><li>
+<code>AsPadFoo()</code> instance methods. The same functionality can be achieved with
+the remaining instance <code>PadFoo()</code> methods.
+
+</li><li>
+Static integer and float <code>Format()</code> methods.  The same functionality can
+be achieved by utilizing the remaining <code>Replace()</code> or <code>Format()</code>
+methods.
+
+</li><li>
+<code>SetGrowsExponentially()</code> and <code>GetGrowsExponentially()</code>. The same
+functionality is provided by <code>SetGrowsBy(0)</code> and <code>GetGrowsBy()</code>.
+</li></ul>
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.4.html#C.1.4" title="Previous section in reading order"> &lt; </a>]</td>

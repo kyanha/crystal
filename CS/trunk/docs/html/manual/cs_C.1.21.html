@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.21 cssysdef.h Changes</title>
+<title>Crystal Space: C.1.21 Removed Features</title>
 
-<meta name="description" content="Crystal Space: C.1.21 cssysdef.h Changes">
-<meta name="keywords" content="Crystal Space: C.1.21 cssysdef.h Changes">
+<meta name="description" content="Crystal Space: C.1.21 Removed Features">
+<meta name="keywords" content="Crystal Space: C.1.21 Removed Features">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-cssysdef-Changes"></a>
+<a name="Api100-Removed-Features"></a>
 <a name="C.1.21"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.20.html#C.1.20" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_C.1.22.html#C.1.22" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.2.html#C.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
@@ -58,79 +58,298 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.21 <tt>`cssysdef.h'</tt> Changes </h3>
+<h3 class="subsection"> C.1.21 Removed Features </h3>
 
-<p>The <samp>`CS_SYSDEF_PROVIDE_FACILITY'</samp> macros, which clients would
-<code>#define</code> before including <tt>`cssysdef.h'</tt> in order to alter the
-behavior of <tt>`cssysdef.h'</tt>, have been removed. Retirement of these macros
-eliminates the polymorphic behavior of <tt>`cssysdef.h'</tt>, thus helping to pave
-the way toward eventually pre-compiling Crystal Space's headers in order to
-reduce overall compilation time.  In addition to removing these macros from
-your code, the following table explains what else (if anything) needs to be
-done to account for the removal.
+<p>In order to clean up the codebase and simplify maintenance, a couple of 
+features and plugins have been removed.
 </p>
-<dl compact="compact">
-<dt> <code>CS_SYSDEF_PROVIDE_ACCESS</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_ALLOCA</code></dt>
-<dd><p>Use the <samp>`CS_ALLOC_STACK_ARRAY()'</samp> macro, rather than <code>alloca()</code>.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_CASE</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_DIR</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_EXPAND_PATH</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_GETCWD</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_GETOPT</code></dt>
-<dd><p>Include <tt>`csutil/getopt.h'</tt>.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_MKDIR</code></dt>
-<dd><p>Use the <samp>`CS_MKDIR(path)'</samp> macro to create the directory, rather than the
-obsolete <samp>`MKDIR()'</samp> macro.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_PATH</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_SELECT</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_SOCKETS</code></dt>
-<dd><p>Include <tt>`csutil/sockets.h'</tt>.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_SOFTWARE2D</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_TEMP</code></dt>
-<dd><p>Use the <samp>`CS_TEMP_DIR'</samp> and <samp>`CS_TEMP_FILE'</samp> macros, rather than the
-obsolete <samp>`TEMP_DIR'</samp> and <samp>`TEMP_FILE'</samp> macros.
-</p></dd>
-<dt> <code>CS_SYSDEF_PROVIDE_UNLINK</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-<dt> <code>CS_SYSDEF_VFS_PROVIDE_CHECK_VAR</code></dt>
-<dd><p>No additional changes.
-</p></dd>
-</dl>
+<a name="SEC987"></a>
+<h3 class="subheading"> Ball Mesh Removed </h3>
 
-<p>The age-old restriction that <tt>`cssysdef.h'</tt> could be included only by source
-files (<tt>`.cpp'</tt>) has been lifted. This restriction was an unfortunate
-side-effect of the polymorphic behavior of <tt>`cssysdef.h'</tt> in the presence
-of various <samp>`CS_SYSDEF_PROVIDE_FACILITY'</samp> macros. It is now safe, even
-recommended, to include <tt>`cssysdef.h'</tt> in header files (<tt>`.h'</tt>). Doing so
-helps to make header files more self-contained, thus reducing the burden of
-clients of those headers.
+<p>The ball mesh has been removed. The genmesh mesh can now be used to generate
+spheres instead. Here is an example how you would have to change the map file. 
+First here is the old way:
 </p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;ballFact&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.factory.ball&lt;/plugin&gt;
+  &lt;params /&gt;
+&lt;/meshfact&gt;
+...
+&lt;sector name=&quot;room&quot;&gt;
+  &lt;meshobj name=&quot;ball&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.ball&lt;/plugin&gt;
+    &lt;params&gt;
+      &lt;factory&gt;ballFact&lt;/factory&gt;
+      &lt;material&gt;plasma&lt;/material&gt;
+      &lt;numrim&gt;16&lt;/numrim&gt;
+      &lt;radius x=&quot;2&quot; y=&quot;1&quot; z=&quot;.5&quot; /&gt;
+      &lt;shift x=&quot;0&quot; y=&quot;.5&quot; z=&quot;0&quot; /&gt;
+      &lt;reversed /&gt;
+      &lt;toponly /&gt;
+      &lt;cylindrical /&gt;
+    &lt;/params&gt;
+    &lt;move&gt; &lt;v x=&quot;15&quot; y=&quot;4&quot; z=&quot;14&quot; /&gt; &lt;/move&gt;
+  &lt;/meshobj&gt;
+&lt;/sector&gt;
+</pre></td></tr></table>
+<p>And here is the new way:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;ballFact&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.factory.genmesh&lt;/plugin&gt;
+  &lt;params&gt;
+    &lt;sphere rimvertices=&quot;16&quot; reversed=&quot;true&quot; toponly=&quot;true&quot; cylindrical=&quot;true&quot; &gt;
+      &lt;radius x=&quot;2&quot; y=&quot;1&quot; z=&quot;.5&quot; /&gt;
+      &lt;center x=&quot;0&quot; y=&quot;.5&quot; z=&quot;0&quot; /&gt;
+    &lt;/sphere&gt;
+  &lt;/params&gt;
+&lt;/meshfact&gt;
+...
+&lt;sector name=&quot;room&quot;&gt;
+  &lt;meshobj name=&quot;transpBall&quot;&gt;
+    &lt;plugin&gt;crystalspace.mesh.loader.genmesh&lt;/plugin&gt;
+    &lt;params&gt;
+      &lt;factory&gt;ballFact&lt;/factory&gt;
+      &lt;material&gt;plasma&lt;/material&gt;
+    &lt;/params&gt;
+    &lt;move&gt; &lt;v x=&quot;15&quot; y=&quot;4&quot; z=&quot;14&quot; /&gt; &lt;/move&gt;
+  &lt;/meshobj&gt;
+&lt;/sector&gt;
+</pre></td></tr></table>
+<p>It is important to note that the geometry defining the sphere is now in the
+factory (as with all genmeshes).
+</p>
+<p>If you want to create them from code then you have to get rid of using the
+<code>iBallState</code> and instead use <code>iGeneralFactoryState-&gt;GenerateSphere()</code>
+to generate the desired sphere in a genmesh factory.
+</p>
+<a name="SEC988"></a>
+<h3 class="subheading"> Stars Mesh Removed </h3>
+
+<p>Due to limited use (and it having been broken for more then a year) the
+stars mesh has been removed.
+</p>
+<a name="SEC989"></a>
+<h3 class="subheading"> Simple Console Removed </h3>
+
+<p>The simple console (<samp>`crystalspace.console.output.simple'</samp> has been
+removed. Instead use <samp>`crystalspace.console.output.standard'</samp>.
+</p>
+<a name="SEC990"></a>
+<h3 class="subheading"> Old Renderer Architecture Removal </h3>
+
+<p>The old rendering architecture along with the old renderer plugins have been
+removed. Additionally, a few plugins, applications, classes, and methods have
+been deprecated because they are not applicable to the new rendering
+architecture. The results of the old renderer removal are summarized below.
+</p>
+<a name="SEC991"></a>
+<h4 class="subsubheading"> Removed Plugins </h4>
+
+<p>The following plugin modules have been removed:
+</p>
+<ul>
+<li>
+<code>terrfunc</code> (<code>crystalspace.mesh.object.terrfunc</code>)
+</li><li>
+Old <code>gl3d</code> (<tt>`plugins/video/renderer/opengl'</tt>)
+</li><li>
+Old <code>soft3d</code> (<tt>`plugins/video/renderer/software'</tt>)
+</li><li>
+Old <code>null3d</code> (<tt>`plugins/video/renderer/null'</tt>)
+</li></ul>
+
+<a name="SEC992"></a>
+<h4 class="subsubheading"> Removed Application </h4>
+
+<p>The <samp>`perftest'</samp> application has been removed, since it is no longer has any
+purpose.  For the future the <samp>`csbench'</samp> application should be extended to
+provide more information.
+</p>
+<a name="SEC993"></a>
+<h4 class="subsubheading"> Removed and Renamed Files </h4>
+
+<p>The following files were removed:
+</p>
+<ul>
+<li>
+<code>include/ivideo/vbufmgr.h</code>
+</li></ul>
+
+<p>The following files in <tt>`data/shader'</tt> were renamed:
+</p>
+<ul>
+<li>
+<code>or_lighting.xml</code> =&gt; <code>std_lighting.xml</code>
+</li><li>
+<code>or_lighting_detail.xml</code> =&gt; <code>std_lighting_detail.xml</code>
+</li><li>
+<code>or_lighting_detail_add.xml</code> =&gt; <code>std_lighting_detail_add.xml</code>
+</li><li>
+<code>or_lighting_detail_alpha.xml</code> =&gt;
+<code>std_lighting_detail_alpha.xml</code>
+</li><li>
+<code>or_lighting_portal.xml</code> =&gt; <code>std_lighting_portal.xml</code>
+</li></ul>
+
+<a name="SEC994"></a>
+<h4 class="subsubheading"> Removed Methods and Classes </h4>
+
+<p>The following methods have been removed from the <samp>`iGraphics3D'</samp> interface:
+</p>
+<ul>
+<li>
+<code>ClearCache()</code>
+</li><li>
+<code>CloseFogObject()</code>
+</li><li>
+<code>DrawFogPolygon()</code>
+</li><li>
+<code>DrawPolygonDebug()</code>
+</li><li>
+<code>DrawPolygonFX()</code>
+</li><li>
+<code>DrawPolygonMesh()</code>
+</li><li>
+<code>DrawTriangleMesh()</code>
+</li><li>
+<code>DumpCache()</code>
+</li><li>
+<code>GetVertexBufferManager()</code>
+</li><li>
+<code>GetZBuffAt()</code>
+</li><li>
+<code>OpenFogObject()</code>
+</li></ul>
+
+<p>From <samp>`iRenderView'</samp>, the following fog-related methods have been removed.
+Fog is now calculated within the renderer.
+</p>
+<ul>
+<li>
+<code>CalculateFogMesh()</code>
+</li><li>
+<code>CalculateFogPolygon()</code>
+</li></ul>
+
+<p>From <samp>`iMeshObject'</samp> and <samp>`iParticle'</samp>, the following rendering-related
+methods have been removed:
+</p>
+<ul>
+<li>
+<code>Draw()</code>
+</li><li>
+<code>DrawTest()</code>
+</li></ul>
+
+<p>Apart from these methods, the following classes and structures have been
+removed or have become private, and are no longer available to client code:
+</p>
+<ul>
+<li>
+<code>G3DFogInfo</code>
+</li><li>
+<code>G3DPolygonDFP</code>
+</li><li>
+<code>G3DPolygonDPFX</code>
+</li><li>
+<code>G3DPolygonDPF</code>
+</li><li>
+<code>G3DPolygonDP</code>
+</li><li>
+<code>G3DPolygonMesh</code>
+</li><li>
+<code>G3DTriangleMesh</code>
+</li></ul>
+
+<a name="SEC995"></a>
+<h3 class="subheading"> <small>CSWS</small> Removal </h3>
+
+<p>The long-deprecated Crystal Space Windowing System (<small>CSWS</small>) was removed. 
+Instead use <small>AWS</small>. See section <a href="cs_4.18.html#4.18">Alternate Windowing System (<small>AWS</small>)</a>.
+</p>
+<a name="SEC996"></a>
+<h3 class="subheading"> <small>RAPID</small> Collision Detection Plugin Removal </h3>
+
+<p>The <small>RAPID</small> collision detection plugin has been removed. In addition to
+being slower than the <small>OPCODE</small> plugin and consuming more memory, its license
+prevented its use in commercial applications.  You should instead now use the
+<small>OPCODE</small> plugin.
+</p>
+<a name="SEC997"></a>
+<h3 class="subheading"> <code>CS_DECLARE_OBJECT_ITERATOR()</code> Removal </h3>
+
+<p>The <samp>`iObject'</samp> iterator creation macro <code>CS_DECLARE_OBJECT_ITERATOR()</code>
+has been replaced by the templated class <code>csTypedObjectIterator&lt;&gt;</code>. Given
+existing code, such as:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">iObject* parent = ...;
+CS_DECLARE_OBJECT_ITERATOR(MyFooIter, iFoo);
+MyFooIter iter(parent);
+while (iter.HasNext())
+{
+  iFoo* foo = iter.Next();
+  ...
+}
+</pre></td></tr></table>
+
+<p>Revise the code by instantiating the new template class:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">typedef csTypedObjectIterator&lt;iFoo&gt; MyFooIter;
+MyFooIter iter(parent);
+while (iter.HasNext())
+{
+</pre></td></tr></table>
+
+<p>Or, even simpler without the <samp>`typedef'</samp>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csTypedObjectIterator&lt;iFoo&gt; iter(parent);
+while (iter.HasNext())
+{
+</pre></td></tr></table>
+<a name="SEC998"></a>
+<h3 class="subheading"> <samp>`chunklod'</samp> Terrain Removal </h3>
+
+<p>The <samp>`chunklod'</samp> terrain plugin has been removed:
+</p>
+
+<p><code>crystalspace.mesh.object.terrain.chunklod</code>
+</p>
+
+<p>Instead use the <samp>`bruteblock'</samp> terrain engine.
+</p>
+
+<p><code>crystalspace.mesh.object.terrain.bruteblock</code>
+</p>
+<a name="SEC999"></a>
+<h3 class="subheading"> <code>csRGBVector</code> Removed </h3>
+
+<p>The <code>csRGBVector</code> class has been removed. A <code>csComparator&lt;&gt;</code> 
+specialization has been provided, so equivalent functionality can be achieved
+by simply using <code>csArray&lt;csRGBcolor*&gt;</code>.
+</p>
+<a name="SEC1000"></a>
+<h3 class="subheading"> Miscellaneous Removals </h3>
+
+<p>The following facilities have been removed because they were unused and/or of
+questionable use.
+</p>
+<ul>
+<li>
+<code>csCrystalBall</code> and <tt>`csgeom/crysball.h'</tt>
+</li><li>
+<code>csIndPrint</code> and <tt>`csutil/indprint.h'</tt>
+</li><li>
+<code>iMaterialHandle</code>.  Use <samp>`iTextureHandle'</samp> or <samp>`iMaterial'</samp> directly
+(whichever is more appropriate) to achieve equivalent functionality.
+</li><li>
+<code>csRenderMeshHolderMultiple</code>. Equivalent functionality can be achieved by 
+using <samp>`csFrameDataHolder&lt;csDirtyAccessArray&lt;csRenderMesh*&gt; &gt;'</samp>.
+</li></ul>
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.20.html#C.1.20" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_C.1.22.html#C.1.22" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.2.html#C.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
