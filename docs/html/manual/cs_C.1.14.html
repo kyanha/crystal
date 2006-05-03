@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.14 Texture and Material Preparation</title>
+<title>Crystal Space: C.1.14 New csQueryRegistryOrLoad Function</title>
 
-<meta name="description" content="Crystal Space: C.1.14 Texture and Material Preparation">
-<meta name="keywords" content="Crystal Space: C.1.14 Texture and Material Preparation">
+<meta name="description" content="Crystal Space: C.1.14 New csQueryRegistryOrLoad Function">
+<meta name="keywords" content="Crystal Space: C.1.14 New csQueryRegistryOrLoad Function">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-Texture-and-Material-Preparation"></a>
+<a name="Api100-new-csQueryRegistryOrLoad"></a>
 <a name="C.1.14"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.13.html#C.1.13" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,25 +58,19 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.14 Texture and Material Preparation </h3>
+<h3 class="subsection"> C.1.14 New <code>csQueryRegistryOrLoad</code> Function </h3>
 
-<p>Texture and material preparation is now fully automatic. It is no longer
-necessary to <em>prepare</em> a texture or a material before you can use it. It is
-sufficient simply to register the texture or material. This means that the
-following functions have been removed (and you can just remove invocations of
-them from your applications if you used them):
+<p>The function <code>csQueryRegistryOrLoad()</code> has been added to
+<tt>`iutil/plugin.h'</tt>. This is a convenience function which embodies the common
+idiom of first querying the object-registry for an object implementing some
+interface, and then asking the plugin manager to load a plugin supplying the
+desired object if it was not found in the object-registry. It also registers
+the object with the object-registry if the plugin manager loads it
+successfully:
 </p>
-<ul>
-<li>
-<code>iMaterialHandle::Prepare()</code>
-</li><li>
-<code>iTextureHandle::Prepare()</code>
-</li><li>
-<code>iTextureManager::PrepareMaterials()</code>
-</li><li>
-<code>iTextureManager::PrepareTextures()</code>
-</li></ul>
-
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iEngine&gt; engine = csQueryRegistryOrLoad&lt;iEngine&gt; (object_reg,
+  &quot;crystalspace.engine.3d&quot;);
+</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.13.html#C.1.13" title="Previous section in reading order"> &lt; </a>]</td>

@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.12 String Changes</title>
+<title>Crystal Space: C.1.12 Interface Changes</title>
 
-<meta name="description" content="Crystal Space: C.1.12 String Changes">
-<meta name="keywords" content="Crystal Space: C.1.12 String Changes">
+<meta name="description" content="Crystal Space: C.1.12 Interface Changes">
+<meta name="keywords" content="Crystal Space: C.1.12 Interface Changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-String-Changes"></a>
+<a name="Api100-Interface-Changes"></a>
 <a name="C.1.12"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.11.html#C.1.11" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,41 +58,182 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.12 String Changes </h3>
+<h3 class="subsection"> C.1.12 Interface Changes </h3>
 
-<p>The class hierarchy of <samp>`csString'</samp> has changed. Most functionality is now
-provided by the new superclass <samp>`csStringBase'</samp>. From this,
-<code>csStringFast&lt;&gt;</code> is subclassed, and <samp>`csString'</samp> descends from
-<code>csStringFast&lt;&gt;</code>. <code>csStringFast&lt;&gt;</code> is a templated class featuring an
-internal character buffer which is used instead of dynamically heap-allocated
-memory when the string length is sufficently short (as controlled by the class
-template argument). This generalization can make <samp>`csStringFast&lt;&gt;'</samp> (and its
-subclass <samp>`csString'</samp>) much faster when used as automatic (stack-allocated)
-variables, even when declared inside <samp>`for{}'</samp>-loops, since slow
-heap-allocation often can be avoided.
+<a name="SEC968"></a>
+<h4 class="subsubheading"> <samp>`iDocument'</samp> Changes </h4>
+
+<p>The <code>iDocument::Parse()</code> method now accepts an optional argument
+indicating whether or not extraneous whitespace in <samp>`CS_NODE_TEXT'</samp> nodes
+should be condensed.  Most implementations of <samp>`iDocument'</samp> will attempt to
+respect this option if possible.  For implementations where it does not make
+sense, the option will be ignored.
 </p>
-<p>For simplification purposes, several methods have been removed from
-<samp>`csString'</samp> and <samp>`iString'</samp> (when present):
+<p>Previously, <small>XML</small>-based implementations of the <samp>`iDocument'</samp> interface
+condensed whitespace in <samp>`CS_NODE_TEXT'</samp> nodes at <code>Parse()</code> time.  This
+is no longer the case.  Whitespace is now preserved by default.  If the new
+behavior is unsuitable for your case, use the new argument to
+<code>iDocument::Parse()</code> to indicate that whitespace should be condensed.
+This change was made in order to conform to the latest <small>XML</small> specification
+which states that <small>XML</small> scanners must preserve whitespace by default.
+Consult the following documents for more information regarding this issue.
+</p>
+
+<p><a href="http://www.w3.org/TR/REC-xml/#sec-white-space">http://www.w3.org/TR/REC-xml/#sec-white-space</a><br>
+<a href="http://www.xml.com/axml/notes/AllWSAlways.html">http://www.xml.com/axml/notes/AllWSAlways.html</a>
+</p>
+<a name="SEC969"></a>
+<h4 class="subsubheading"> <samp>`iGeneralMeshState'</samp>, <samp>`iInstancingMeshState'</samp> Changes </h4>
+
+<p>From <samp>`iGeneralMeshState'</samp> and <samp>`iInstancingMeshState'</samp>, the following 
+methods have been removed. Use the methods with the same name from 
+<samp>`iMeshObject'</samp> instead.
 </p>
 <ul>
 <li>
-Static <code>PadFoo()</code> methods. The same functionality can be achieved with
-the remaining instance <code>PadFoo()</code> methods.
-
+<code>SetColor()</code>
 </li><li>
-<code>AsPadFoo()</code> instance methods. The same functionality can be achieved with
-the remaining instance <code>PadFoo()</code> methods.
-
+<code>GetColor()</code>
 </li><li>
-Static integer and float <code>Format()</code> methods.  The same functionality can
-be achieved by utilizing the remaining <code>Replace()</code> or <code>Format()</code>
-methods.
-
+<code>SetMaterialWrapper()</code>
 </li><li>
-<code>SetGrowsExponentially()</code> and <code>GetGrowsExponentially()</code>. The same
-functionality is provided by <code>SetGrowsBy(0)</code> and <code>GetGrowsBy()</code>.
+<code>GetMaterialWrapper()</code>
+</li><li>
+<code>SetMixMode()</code>
+</li><li>
+<code>GetMixMode()</code>
 </li></ul>
 
+<a name="SEC970"></a>
+<h4 class="subsubheading"> <samp>`iImage'</samp> Changes </h4>
+
+<p>The <samp>`iImage'</samp> interface has been reduced to a level where it merely serves
+as a container for pixel data; however, the image editing functionality was
+only relocated, not removed.
+</p>
+<p>Forbidding direct manipulation of an <samp>`iImage'</samp>'s pixel data has the 
+following consequences:
+</p>
+<ul>
+<li>
+The <code>Clone()</code> function was removed. The
+<samp>`csImageMemory'</samp> class provides a constructor that copies the pixel data
+from another <samp>`iImage'</samp> object, providing a functionality equal to 
+<code>Clone()</code>.
+
+</li><li>
+To edit the pixel data of an image, create a clone of an image (e.g. a
+<samp>`csImageMemory'</samp> as mentioned above) and manipulate the data in the newly
+cerated instance.
+
+</li><li>
+If the image data is needed in another
+format, as the <code>SetFormat()</code> call has been removed from the interface.
+
+</li><li>
+The image editing functionality found in methods such as <code>Rescale()</code>,
+<code>Sharpen()</code> was moved into the <samp>`csImageManipulate'</samp> class.
+
+</li><li>
+The <code>CopyXXX()</code> method that copied an image into another are now provided
+by <samp>`csImageMemory'</samp>.
+</li></ul>
+
+<p>As a side-effect of these changes, the <samp>`csImageFile'</samp> and 
+<samp>`csImageMemory'</samp> were merged and the former removed.
+</p>
+<a name="SEC971"></a>
+<h4 class="subsubheading"> <code>iImageIO::Load()</code> Parameter Change </h4>
+
+<p><code>iImageIO::Load()</code> now requires the image source data in an 
+<samp>`iDataBuffer'</samp> object, instead of separate <samp>`buffer'</samp> and <samp>`size'</samp>
+parameters.
+</p>
+<a name="SEC972"></a>
+<h4 class="subsubheading"> <samp>`iLight'</samp> Changes </h4>
+
+<p>The <samp>`iLight'</samp> and its implementation (<samp>`csLight'</samp>) have been extended to
+also handle spot- and directional-lights. Note that the accual computation of
+lighting does not yet support these, however the engine can now store and
+handle the required data.
+</p>
+<p>There have also been two smaller changes to the interface to make it more
+coherent. The influence radius have been renamed <em>cut-off</em> distance, and
+thus the methods <code>GetInfluenceRadius()</code> and <code>SetInfluenceRadius()</code>
+have been renamed accordingly to <code>GetCutoffDistance()</code> and
+<code>SetCutoffDistance()</code>, respectively.  Also, <code>SetAttenuation()</code> has
+been renamed to <code>SetAttenuationMode()</code> in order to avoid confusion with
+other similary named methods.  For the <code>CS_ATTN_LINEAR</code> attenuation type
+the specification has changed slightly. As a default, the distance where light
+goes out is same as the cut-off distance, but this can be changed by altering
+the first attenuation constant. See comments in
+<tt>`CS/include/iengine/light.h'</tt> for exact details of the different
+attenuation modes.
+</p>
+<a name="SEC973"></a>
+<h4 class="subsubheading"> <samp>`iParticleState'</samp> Changes </h4>
+
+<p>From <samp>`iParticleState'</samp>, the following methods have been removed.
+Use the methods with the same name from <samp>`iMeshObject'</samp> instead.
+</p>
+<ul>
+<li>
+<code>SetColor()</code>
+</li><li>
+<code>GetColor()</code>
+</li><li>
+<code>SetMaterialWrapper()</code>
+</li><li>
+<code>GetMaterialWrapper()</code>
+</li></ul>
+
+<a name="SEC974"></a>
+<h4 class="subsubheading"> <samp>`iMaterialList'</samp> Change </h4>
+
+<p>The function <code>iMaterialList::NewMaterial()</code> now needs an additional
+name parameter. It is not recommended to change the name later.
+</p>
+<a name="SEC975"></a>
+<h4 class="subsubheading"> <samp>`iObjectModel'</samp> Change </h4>
+
+<p>The function <samp>`iObjectModel::GetObjectBoundingBox()'</samp> only has one
+parameter now. The optional <samp>`type'</samp> parameter has been removed as it
+was not implemented anywhere. In addition to that the constants
+<code>CS_BBOX_NORMAL</code>, <code>CS_BBOX_ACCURATE</code>, and <code>CS_BBOX_MAX</code>
+are also removed.
+</p>
+<a name="SEC976"></a>
+<h4 class="subsubheading"> <samp>`iSprite3DState'</samp> Changes </h4>
+
+<p>Some methods from <samp>`iSprite3DState'</samp> have been removed that basically 
+provided functionality which was also already available through 
+<samp>`iMeshObject'</samp>:
+</p>
+<ul>
+<li>
+<code>SetBaseColor()</code>. Use <code>SetColor()</code> from <samp>`iMeshObject'</samp>.
+</li><li>
+<code>GetBaseColor()</code>. Use <code>GetColor()</code> from <samp>`iMeshObject'</samp>.
+</li></ul>
+
+<p>Likewise, the <code>GetFactory()</code> method has been removed from 
+<samp>`iThingState'</samp>. Equivalent functionality can be achieved by using
+<code>GetFactory()</code> from <samp>`iMeshObject'</samp> and querying the returned object
+for the <samp>`iThingFactoryState'</samp> interface. Example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">  csRef&lt;iThingFactoryState&gt; thing_fact_state =
+  	scfQueryInterface&lt;iThingFactoryState&gt; (mesh-&gt;GetMeshObject ()
+	-&gt;GetFactory ());
+</pre></td></tr></table>
+<a name="SEC977"></a>
+<h4 class="subsubheading"> <code>iTextureManager::FreeImages()</code> Removal </h4>
+
+<p><code>iTextureManager::FreeImages()</code> has been removed.  It was used to release
+the <samp>`iImage'</samp> objects associated with textures with the purpose of freeing
+up memory.  This happens automatically now; the images associated with a
+texture are released by the renderer as soon as the image data is converted
+into the internal texture format (that is, uploaded to the graphics hardware).
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.11.html#C.1.11" title="Previous section in reading order"> &lt; </a>]</td>

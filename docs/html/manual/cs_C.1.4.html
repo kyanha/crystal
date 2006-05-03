@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.4 csArray&lt;&gt; Index and Size Type Change</title>
+<title>Crystal Space: C.1.4 Container Templates Changes</title>
 
-<meta name="description" content="Crystal Space: C.1.4 csArray&lt;&gt; Index and Size Type Change">
-<meta name="keywords" content="Crystal Space: C.1.4 csArray&lt;&gt; Index and Size Type Change">
+<meta name="description" content="Crystal Space: C.1.4 Container Templates Changes">
+<meta name="keywords" content="Crystal Space: C.1.4 Container Templates Changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-csArray-Index-and-Size-Type-Change"></a>
+<a name="Api100-Container-Changes"></a>
 <a name="C.1.4"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.3.html#C.1.3" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,7 +58,10 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.4 <code>csArray&lt;&gt;</code> Index and Size Type Change </h3>
+<h3 class="subsection"> C.1.4 Container Templates Changes </h3>
+
+<a name="SEC931"></a>
+<h3 class="subheading"> <code>csArray&lt;&gt;</code> Index and Size Type Change </h3>
 
 <p><code>csArray&lt;&gt;</code> has been changed to use <samp>`size_t'</samp> instead of
 <samp>`int'</samp> for array sizes and indices.  Probably, the most significant
@@ -71,7 +74,7 @@ caused <em>semantics</em> to change subtly.
 </p>
 <p>This has the greatest impact in the areas discussed below.
 </p>
-<a name="SEC928"></a>
+<a name="SEC932"></a>
 <h4 class="subsubheading"> Iterating Over <code>csArray&lt;&gt;</code> Contents </h4>
 
 <p>For this purpose, usually, <samp>`int'</samp> typed variables were used for keeping
@@ -136,7 +139,7 @@ post-decrement ensures that <samp>`i'</samp> has the expected value in the loop 
 </p>
 </li></ul>
 
-<a name="SEC929"></a>
+<a name="SEC933"></a>
 <h4 class="subsubheading"> Searching </h4>
 
 <p>Functions like <code>csArray&lt;&gt;::FindSortedKey()</code> and <code>csArray&lt;&gt;::Find()</code>
@@ -180,6 +183,172 @@ else
   ...
 }
 </pre></td></tr></table>
+<a name="SEC934"></a>
+<h3 class="subheading"> <tt>`csutil/garray.h'</tt> Deprecated </h3>
+
+<p>The <tt>`csutil/garray.h'</tt> file, containing the class 
+<code>csDirtyAccessArray&lt;&gt;</code>, has been deprecated in favor of the more sensible
+file name <tt>`csutil/dirtyaccessarray.h'</tt>. No functional changes have been
+made to the class.
+</p>
+<a name="SEC935"></a>
+<h3 class="subheading"> <code>csList&lt;&gt;::Iterator</code> Normalization </h3>
+
+<p>The behavior of <code>csList&lt;&gt;::Iterator</code> has been normalized so that it
+functions identically to all other iterators in Crystal Space.  In the past, a
+newly created <code>csList&lt;&gt;::Iterator</code> already pointed at the first element in
+the container.  This differed from all other iterator implementations, in which
+the first element, like all other elements, is accessed by an invocation of
+<code>Next()</code>.
+</p>
+<p>Old code which accessed the elements of a <code>csList&lt;&gt;::Iterator</code> required a
+non-standard idiom, such as:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csList&lt;sometype&gt; list = ...;
+csList&lt;sometype&gt;::Iterator it(list);
+if (it.HasCurrent())
+{
+  do_something(*it);         // First value.
+  while (it.HasNext())
+  {
+    do_something(it.Next()); // Remaining values.
+  }
+}
+</pre></td></tr></table>
+
+<p>Or, the slightly less complicated, though still somewhat convoluted:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csList&lt;sometype&gt;::Iterator it(list);
+while (it.HasCurrent())
+{
+  do_something(*it);
+  it.Next();
+}
+</pre></td></tr></table>
+<p>Following normalization, <code>csList&lt;&gt;::Iterator</code> now works like all other
+iterators throughout the toolkit.  In particular, for forward iteration, all
+elements can be accessed via the standard <code>HasNext()</code> / <code>Next()</code>
+idiom:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csList&lt;sometype&gt;::Iterator it(list);
+while (it.HasNext())
+{
+  do_something(it.Next());
+}
+</pre></td></tr></table>
+
+<p>Likewise, for backward iteration, the <code>HasPrevious()</code> / <code>Previous()</code>
+idiom works in the obvious and expected inverse fashion.
+</p>
+<p>Finally, <code>csList&lt;&gt;::Iterator::Next()</code> and <code>Previous()</code> now return
+references to contained elements, rather than pointers.  This makes the
+interface of <code>csList&lt;&gt;::Iterator</code> internally consistent, as well as
+consistent with other iterators throughout the toolkit, in which these methods
+return references.
+</p>
+<a name="SEC936"></a>
+<h3 class="subheading"> <code>csSet&lt;&gt;</code> Relocation and Changes </h3>
+
+<p>The declaration of <code>csSet&lt;&gt;</code> was moved out from <tt>`csutil/hash.h'</tt> and
+into its own header file, <tt>`csutil/set.h'</tt>. The method
+<code>csSet&lt;&gt;::GetHash()</code> has likewise been removed since it unnecessarily
+exposed an underlying implementation detail of <code>csSet&lt;&gt;</code>.
+</p>
+<p>However, this implementation detail still affects the use of <code>csSet&lt;&gt;</code> as
+for storage of pointers in a <code>csSet&lt;&gt;</code> the <code>csPtrKey&lt;&gt;</code> wrapper must
+be used.
+</p>
+<a name="SEC937"></a>
+<h3 class="subheading"> <code>csHash&lt;&gt;</code> Changes </h3>
+
+<p>The way <code>csHash&lt;&gt;</code> handles support for arbitrary key types has been
+changed. Previously, a so-called &quot;hash key handler&quot; was passed as an optional
+third template parameter that computed hash keys and was able to compare
+keys. Now, the hash computation is handled through the new
+<code>csHashComputer&lt;&gt;</code> template, and key comparison through
+<code>csComparator&lt;&gt;</code>. To provide hash computation and comparisons for specific
+types used as hash keys, specializations of the templates mentioned above are
+needed. Alternatively the default comparator uses the <samp>`operator &lt;'</samp> and
+<samp>`operator &gt;'</samp> operators, so you can also implement those operators instead
+of a <code>csComparator&lt;&gt;</code> specialization. The default <code>csHashComputer&lt;&gt;</code>
+implementation assumes that a type provides a <samp>`GetHash()'</samp> method that
+computes the hash value for an object. However, this means that integral types 
+need a specialization. As a convenience, Crystal Space already provides 
+specializations of <code>csHashComputer&lt;&gt;</code> for a number of commonly used 
+intergrals. Further, <code>csComparator&lt;&gt;</code> and/or <code>csHashComputer&lt;&gt;</code> 
+specializations are provided for the commonly used types <samp>`csString'</samp>, 
+<samp>`const char*'</samp> and <samp>`csStrKey'</samp>; and the default comparison semantics of 
+<samp>`operator &lt;'</samp> and <samp>`operator &gt;'</samp> handle the remaining fundamental types 
+and any composite types which provide these operators. Pointers (other than 
+<samp>`void*'</samp> for which exists a specialization) as hash keys are a special 
+case: to use a pointer of type <samp>`Foo*'</samp> as a hash key, employ 
+<samp>`csPtrKey&lt;Foo&gt;'</samp> as the key type in the hash declaration. 
+</p>
+<a name="SEC938"></a>
+<h3 class="subheading"> Default <code>csHash&lt;&gt;</code> (and <code>csHashReversible&lt;&gt;</code>) Table Size </h3>
+
+<p>The default hash table size and grow rate has been reduced from 257 and 64 to
+23 and 5, respectively, to have hashes use less memory.  If a hash is expected
+to contain a large quantity of elements, those two parameters can be tweaked
+upon construction of a <code>csHash&lt;&gt;</code> or <code>csHashReversible&lt;&gt;</code>.  Consult
+the Public <small>API</small> Documentation of <code>csHash&lt;&gt;</code> for more information.
+</p>
+<a name="SEC939"></a>
+<h3 class="subheading"> <samp>`csHashMap'</samp> and <samp>`csHashSet'</samp> Removal </h3>
+
+<p>The long-deprecated <samp>`csHashMap'</samp>, <samp>`csHashMapReversible'</samp>, and
+<samp>`csHashSet'</samp> classes have been removed. Instead, use the templated classes
+<code>csHash&lt;&gt;</code>, <code>csHashReversible&lt;&gt;</code>, and <code>csSet&lt;&gt;</code>.  For
+string-related <em>set</em> functionality, you may also want to consider using
+<samp>`csStringHash'</samp> and <samp>`csStringSet'</samp>.
+</p>
+<a name="SEC940"></a>
+<h3 class="subheading"> <code>csObjectPool&lt;&gt;</code> Removal </h3>
+
+<p>The <code>csObjectPool&lt;&gt;</code> utility class has been removed since it managed
+memory poorly, and failed to invoke the destructor of contained objects at the
+time they were recycled via <code>csObjectPool&lt;&gt;::Free()</code>, which meant that the
+objects might not release their own resources in a timely fashion.  (It did
+correctly destroy the freed objects when the pool itself was destroyed, but
+should have been doing so at <code>Free()</code>-time.)
+</p>
+<p>You can use <code>csBlockAllocator&lt;&gt;</code> (see <tt>`csutil/blockallocator.h'</tt>) as a
+drop-in replacement for <code>csObjectPool&lt;&gt;</code> since the <small>API</small> of
+<code>csBlockAllocator&lt;&gt;</code> is a proper superset of the <code>csObjectPool&lt;&gt;</code>
+<small>API</small>. A global search and replace should be sufficient to account for this
+change.
+</p>
+<a name="SEC941"></a>
+<h3 class="subheading"> <samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> Removal </h3>
+
+<p><samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> have been replaced
+with the iterator classes <samp>`csStringSet::GlobalIterator'</samp> and
+<samp>`csStringHash::GlobalIterator'</samp>, respectively.  Rather than instantiating
+iterators directly, you now ask the set or hash for an iterator. This brings
+the <samp>`csStringSet'</samp> and <samp>`csStringHash'</samp> <small>API</small>'s in line with other
+container classes which vend iterators. Given old code which is using
+<samp>`csStringSetIterator'</samp>:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csStringSet set;
+// ...populate set...
+csStringSetIterator iter(&amp;set);
+while (iter.HasNext())
+{
+  char const* s = iter.Next();
+  // ...do something with `s'...
+}
+</pre></td></tr></table>
+
+<p>Convert it like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">csStringSet::GlobalIterator iter = set.GetIterator();
+while (iter.HasNext())
+{
+</pre></td></tr></table>
+
+<p>Code using <samp>`csStringHashIterator'</samp> can be fixed using the same simple
+transformation.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.3.html#C.1.3" title="Previous section in reading order"> &lt; </a>]</td>
