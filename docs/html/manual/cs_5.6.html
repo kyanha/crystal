@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 5.6 map2cs Tutorial</title>
+<title>Crystal Space: 5.6 Quake Model Converter (mdl2spr)</title>
 
-<meta name="description" content="Crystal Space: 5.6 map2cs Tutorial">
-<meta name="keywords" content="Crystal Space: 5.6 map2cs Tutorial">
+<meta name="description" content="Crystal Space: 5.6 Quake Model Converter (mdl2spr)">
+<meta name="keywords" content="Crystal Space: 5.6 Quake Model Converter (mdl2spr)">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="map2cs-Tutorial"></a>
+<a name="mdl2spr"></a>
 <a name="5.6"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.5.4.html#5.5.4" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.6.1.html#5.6.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.5.html#5.5" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>
@@ -58,43 +58,93 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 5.6 <code>map2cs</code> Tutorial </h2>
+<h2 class="section"> 5.6 Quake Model Converter (<code>mdl2spr</code>) </h2>
 
+<p><em>By Nathaniel Saint Martin, <a href="mailto:noote@bigfoot.com">noote@bigfoot.com</a>.
+Back seam fix and skin resizing by Seth Galbraith,
+<a href="mailto:sgalbrai@linknet.kitsap.lib.wa.us">sgalbrai@linknet.kitsap.lib.wa.us</a>.
+Project overhauled by Eric Sunshine, <a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a>.</em>
+</p>
+<p><tt>`mdl2spr'</tt> is a model converter for Quake1 <small>MDL</small> and Quake2 <small>MD2</small>
+files.  It converts these files into Crystal Space's sprite format.  If the
+Quake1 <small>MDL</small> contains skins, they are extracted and saved as <small>PNG</small> image
+files.  If skin height or width is not a power of two, it will be resized.
+</p>
+<a name="SEC838"></a>
+<h3 class="subheading"> Usage </h3>
 
-<p><em>Originally written by Thomas Hieber, <a href="mailto:thieber@gmx.net">thieber@gmx.net</a>.
-Updated by Philip Wyett, <a href="mailto:philip.wyett@w-tech.co.uk">philip.wyett@w-tech.co.uk</a>.
-12 February, 2001.
-Updated by Leandro Ezequiel Lovisolo, <a href="mailto:lovisolo@datafull.com">lovisolo@datafull.com</a>.
-Last updated 22 February, 2003.</em>
+<p><tt>`mdl2spr'</tt> is invoked from the command line, and is given the name of an
+input <tt>`.mdl'</tt> or <tt>`.md2'</tt> model file, as well as the name of the
+desired output sprite file.
 </p>
-<p>At first look, map making can be pretty complicated, but if you follow this
-tutorial, you will soon walk around in your self-created world.
+<table><tr><td>&nbsp;</td><td><pre class="example">mdl2spr [<var>options</var>] <var>model-file</var> <var>output-sprite-name</var>
+</pre></td></tr></table>
+<p>Both <samp>`<var>model-file</var>'</samp> and <samp>`<var>output-sprite-name</var>'</samp> are required.
+<samp>`<var>model-file</var>'</samp> is the filename of the input <tt>`.mdl'</tt> or
+<tt>`.md2'</tt> model file, and <samp>`<var>output-sprite-name</var>'</samp> is the name of the
+output sprite without the trailing <tt>`.spr'</tt> extension (which will be
+appended automatically by <tt>`mdl2spr'</tt>).
 </p>
-<p>We assume you follow this tutorial step by step.  We will explain things only
-once, so if you skipped some parts, you might need to go back to them later on.
-We also assume you are using Windows. We don't have <small>GNU</small>/Linux or other
-systems installed, so you need to experiment a little yourself. If you found a
-solution for other systems or using other tools (like QuArK for example) we
-would be happy to hear from you to expand this tutorial.
+<p>If a skin is extracted from a <small>MDL</small> file, then it will be written to a file
+named <tt>`<var>output-srite-name</var>.png'</tt>.  If more than one skin exists within
+the model, then each skin will be placed in its own <small>PNG</small> file and a number
+(and possibly letter) will be appended to the sprite name before the
+<tt>`.png'</tt> extension.
 </p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_5.6.1.html#5.6.1">5.6.1 Step 1: Links to Required Tools and Data</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.2.html#5.6.2">5.6.2 Step 2: Configuring Worldcraft</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.3.html#5.6.3">5.6.3 Step 3: Configuring <tt>`map2cs'</tt></a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.4.html#5.6.4">5.6.4 Step 4: Creating a Simple Room in Worldcraft</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.5.html#5.6.5">5.6.5 Step 5: Compiling the Room and Testing It</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.6.html#5.6.6">5.6.6 Step 6: Applying Textures</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.7.html#5.6.7">5.6.7 Step 7: Adding Another Room</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.8.html#5.6.8">5.6.8 Step 8: Adding More Detail</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.9.html#5.6.9">5.6.9 Step 9: Adding Manual Sectors</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.10.html#5.6.10">5.6.10 Generating Skybox Textures</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.6.11.html#5.6.11">5.6.11 Tips for Map Creation</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+<p>Here is a summary of the options understood by <tt>`mdl2spr'</tt>:
+</p>
+<dl compact="compact">
+<dt> <code>-h</code></dt>
+<dd><p>Display usage and option summary.
+</p>
+</dd>
+<dt> <code>-s &lt;<var>float</var>&gt;</code></dt>
+<dd><p>Set the global scale of model based upon the floating point number
+<samp>`<var>float</var>'</samp>.  Default is 0.025.
+</p>
+</dd>
+<dt> <code>-d &lt;<var>int</var>&gt;</code></dt>
+<dd><p>Specify the frame delay in Quake ticks from <samp>`<var>int</var>'</samp> for frames which
+don't otherwise have a built-in delay.  Default is 100.
+</p>
+</dd>
+<dt> <code>-n</code></dt>
+<dd><p>Disable automatic naming of action frame sets.  Enabled by default.
+</p>
+</dd>
+<dt> <code>-x &lt;<var>float</var>&gt;</code></dt>
+<dd><p>Set center of sprite on X axis from <samp>`<var>float</var>'</samp>.  Default is 0.0.
+</p>
+</dd>
+<dt> <code>-y &lt;<var>float</var>&gt;</code></dt>
+<dd><p>Set center of sprite on Y axis from <samp>`<var>float</var>'</samp>.  Default is 0.0.
+</p>
+</dd>
+<dt> <code>-z &lt;<var>float</var>&gt;</code></dt>
+<dd><p>Set center of sprite on Z axis from <samp>`<var>float</var>'</samp>.  Default is 0.0.
+</p>
+</dd>
+<dt> <code>-r</code></dt>
+<dd><p>Disable automatic power-of-2 skin resizing.  Enabled by default.  This option
+only applies to Quake1 <small>MDL</small> files (not Quake2 <small>MD2</small> files).
+</p></dd>
+</dl>
+
+<a name="SEC839"></a>
+<h3 class="subheading"> Future Plans </h3>
+
+<p>This is a list of planned future enhancements to <tt>`mdl2spr'</tt>.
+</p>
+<ul>
+<li>
+Add a command-line option so user can manually specify a replacement
+<tt>`palette.lmp'</tt> file rather than using the built-in one.
+</li></ul>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.5.4.html#5.5.4" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.6.1.html#5.6.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.5.html#5.5" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>

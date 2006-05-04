@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 5.7 3D Sprites</title>
+<title>Crystal Space: 5.7.1 A Simple 3D Sprite</title>
 
-<meta name="description" content="Crystal Space: 5.7 3D Sprites">
-<meta name="keywords" content="Crystal Space: 5.7 3D Sprites">
+<meta name="description" content="Crystal Space: 5.7.1 A Simple 3D Sprite">
+<meta name="keywords" content="Crystal Space: 5.7.1 A Simple 3D Sprite">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,14 +40,14 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="g_t3D-Sprites"></a>
-<a name="5.7"></a>
+<a name="g_t3D-Sprites-Example-1"></a>
+<a name="5.7.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.6.html#5.6" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.7.1.html#5.7.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.2.html#5.7.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_6.html#6." title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -58,31 +58,62 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 5.7 3D Sprites </h2>
+<h3 class="subsection"> 5.7.1 A Simple 3D Sprite </h3>
 
-
-<p><em>Written by Seth Galbraith, <a href="mailto:sgalbrai@linknet.kitsap.lib.wa.us">sgalbrai@linknet.kitsap.lib.wa.us</a>.</em>
+<p>Let us consider a simple 3D sprite--a 24 sided prism meant to look like a
+cylinder.  Each side is made from two triangles, and the ends are made
+from 24 polygons (you could make the ends from 23 polygons, but that's not
+how artists do things :-).
 </p>
-<p>3D <em>sprites</em> are triangle-based models which can be animated by
-pre-calculated vertex animations.  This type of model is well suited for
-detailed models which are not easily represented as heightmapped terrain or
-bezier curves. 3D sprites can be used in your application through the
-mesh object plugin systems (i.e. a 3D sprite is one particular type of
-mesh object). See section <a href="cs_4.9.html#4.9">Mesh Object Plug-In System</a>.
+<p><img src="content/sprites/cylinder.jpg" alt="content/sprites/cylinder">
 </p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_5.7.1.html#5.7.1">5.7.1 A Simple 3D Sprite</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.7.2.html#5.7.2">5.7.2 Texturing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.7.3.html#5.7.3">5.7.3 Shading</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
+<p>This sprite has 96 triangles.  If we treat each triangle as a separate
+object, it has 288 vertices.  Every frame each of those 288 vertices has
+to be transformed from local coordinates to screen space coordinates.
+</p>
+<p>Each vertex is also consuming some memory.  If each vertex only has
+three 32 bit float coordinates, then the sprite uses 3456 bytes of memory,
+but in practice each vertex also has texture alignment, color, and
+surface normal data, and if the sprite has precalculated animation, that
+data is multiplied by the number of frames.
+</p>
+<p>However, the 3D sprite structure is compressed so that triangles can share
+vertices.  Instead of 288 vertices, the cylinder sprite has 48 vertices
+shared by the 96 triangles.  Each triangle is simply three indices to
+to the vertex list.
+</p>
+<ul>
+<li>
+Vertices
+<ul class="toc">
+<li>-
+3D Coordinates (X, Y, Z)
+</li><li>-
+Texture Coordinates (U, V)
+</li><li>-
+Color (R, G, B)
+</li><li>-
+Surface Normal (X, Y, Z)
+</li></ul>
+</li><li>
+Triangles
+<ul class="toc">
+<li>-
+First Vertex Index
+</li><li>-
+Second Vertex Index
+</li><li>-
+Third Vertex Index
+</li></ul>
+</li></ul>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.6.html#5.6" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.7.1.html#5.7.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.2.html#5.7.2" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_6.html#6." title="Next chapter"> &gt;&gt; </a>]</td>
 </tr></table>
 <p>

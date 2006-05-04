@@ -72,11 +72,9 @@ embedded into our class).
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;csutil/scf.h&quot;
 
-// Version number of our interface.
-SCF_VERSION(iDog, 0, 0, 1);
-
-struct iDog : public iBase
+struct iDog : public virtual iBase
 {
+  SCF_INTERFACE(iDog, 0, 0, 1);
   virtual void Walk() = 0;
   virtual void Shout(char const* Message) = 0;
 };
@@ -86,11 +84,9 @@ struct iDog : public iBase
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;csutil/scf.h&quot;
 
-// Version number of our interface.
-SCF_VERSION(iName, 0, 0, 1);
-
-struct iName : public iBase
+struct iName : public virtual iBase
 {
+  SCF_INTERFACE(iName, 0, 0, 1);
   virtual char const* GetName() = 0;
   virtual void SetName(char const*) = 0;
 };
@@ -109,53 +105,37 @@ interfaces:
 #include &quot;idog.h&quot;
 #include &quot;iname.h&quot;
 
-class csDog : public iDog
+class csDog : public scfImplementation2&lt;csDog,iDog,iName&gt;
 {
+private:
   char* Name;
-
-  // Embedded interface.
-  class csName : public iName
-  {
-  public:
-    SCF_DECLARE_EMBEDDED_IBASE(csDog);
-    virtual char const* GetName();
-    virtual void SetName(char const*);
-  } scfiName;
-  friend class csName;
 
 public:
   SCF_DECLARE_IBASE;
   csDog(iBase* Parent);
   virtual ~csDog();
+
+  // From iDog.
   virtual void Walk();
   virtual void Shout(char const*);
+
+  // From iName.
+  virtual char const* GetName();
+  virtual void SetName(char const*);
 };
 
 //---------- Implementation ---------
 
 SCF_IMPLEMENT_FACTORY(csDog)
 
-SCF_IMPLEMENT_IBASE(csDog)
-  SCF_IMPLEMENTS_INTERFACE(iDog)
-  SCF_IMPLEMENTS_EMBEDDED_INTERFACE(iName)
-SCF_IMPLEMENT_IBASE_END
-
-SCF_IMPLEMENT_EMBEDDED_IBASE(csDog::csName)
-  SCF_IMPLEMENTS_INTERFACE(iName)
-SCF_IMPLEMENT_EMBEDDED_IBASE_END
-
-csDog::csDog(iBase* Parent)
+csDog::csDog(iBase* Parent) : scfImplementationType (this, Parent)
 {
-  SCF_CONSTRUCT_IBASE(Parent);
-  SCF_CONSTRUCT_EMBEDDED_IBASE(scfiName);
   Name = strdup(&quot;&lt;noname&gt;&quot;);
 }
 
 csDog::~csDog()
 {
   free(Name);
-  SCF_DESTRUCT_EMBEDDED_IBASE(scfiName);
-  SCF_DESTRUCT_IBASE();
 }
 
 void csDog::Walk()
@@ -170,16 +150,16 @@ void csDog::Shout(char const* Message)
 
 // iName interface for dog.
 
-char const* csDog::csName::GetName()
+char const* csDog::GetName()
 {
-  return scfParent-&gt;Name;
+  return Name;
 }
 
-void csDog::csName::SetName(char const* NewName)
+void csDog::SetName(char const* NewName)
 {
-  if (scfParent-&gt;Name != 0)
-    free(scfParent-&gt;Name);
-  scfParent-&gt;Name = strdup(NewName != 0 ? NewName : &quot;&quot;);
+  if (Name != 0)
+    free(Name);
+  Name = strdup(NewName != 0 ? NewName : &quot;&quot;);
 }
 
 </pre></td></tr></table>
@@ -225,7 +205,7 @@ contained in <tt>`dog.csplugin'</tt>.
 
 static void test_dog()
 {
-  csRef&lt;iDog&gt; dog = SCF_CREATE_INSTANCE(&quot;csDog&quot;, iDog);
+  csRef&lt;iDog&gt; dog = scfCreateInstance&lt;iDog&gt; (&quot;csDog&quot;);
   if (!dog)
     fprintf(stderr, &quot;No csDog shared class!\n&quot;);
   else
