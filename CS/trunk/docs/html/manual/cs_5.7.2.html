@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 5.7 3D Sprites</title>
+<title>Crystal Space: 5.7.2 Texturing</title>
 
-<meta name="description" content="Crystal Space: 5.7 3D Sprites">
-<meta name="keywords" content="Crystal Space: 5.7 3D Sprites">
+<meta name="description" content="Crystal Space: 5.7.2 Texturing">
+<meta name="keywords" content="Crystal Space: 5.7.2 Texturing">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,14 +40,14 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="g_t3D-Sprites"></a>
-<a name="5.7"></a>
+<a name="g_t3D-Sprites-Example-2"></a>
+<a name="5.7.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.6.html#5.6" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.7.1.html#5.7.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.7.1.html#5.7.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.3.html#5.7.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_6.html#6." title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -58,31 +58,42 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="section"> 5.7 3D Sprites </h2>
+<h3 class="subsection"> 5.7.2 Texturing </h3>
 
-
-<p><em>Written by Seth Galbraith, <a href="mailto:sgalbrai@linknet.kitsap.lib.wa.us">sgalbrai@linknet.kitsap.lib.wa.us</a>.</em>
+<p>Our next challenge is texturing the sprite.  To apply a two dimensional
+texture to the 3D sprite we need to flatten it.  If we have 288 separate
+vertices (see section <a href="cs_5.7.1.html#5.7.1">A Simple 3D Sprite</a>), we can flatten the sprite any way we
+want, but when the triangles are sharing vertices we cannot separate them,
+and a flattened cylinder is sometimes difficult to texture.  Either the sides
+will be curved or the ends will be flattened.
 </p>
-<p>3D <em>sprites</em> are triangle-based models which can be animated by
-pre-calculated vertex animations.  This type of model is well suited for
-detailed models which are not easily represented as heightmapped terrain or
-bezier curves. 3D sprites can be used in your application through the
-mesh object plugin systems (i.e. a 3D sprite is one particular type of
-mesh object). See section <a href="cs_4.9.html#4.9">Mesh Object Plug-In System</a>.
+<p>We probably want to texture the sides as a single rectangular area and
+each end as a rough circle.  So we separate the ends from the sides.  This
+doubles the number of vertices.  Cutting one edge of the sides so it can be
+unwrapped adds two more vertices.
 </p>
-<table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top"><a href="cs_5.7.1.html#5.7.1">5.7.1 A Simple 3D Sprite</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.7.2.html#5.7.2">5.7.2 Texturing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-<tr><td align="left" valign="top"><a href="cs_5.7.3.html#5.7.3">5.7.3 Shading</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
-</table>
-
+<p><img src="content/sprites/skin.jpg" alt="content/sprites/skin">
+</p>
+<p>Now we have 98 vertices instead of 48.  This is a big hit, but it may be
+necessary to get the artwork done fast and well.  Fortunately, we still have
+only 98 vertices instead of 288, but can we do better than that?  Do we have
+to duplicate the 3D coordinates just because we need more texture coordinates?
+</p>
+<p>We experimented with a system where the sprite had a different set of 3D
+coordinates (vertices), texture coordinates (texels) and vertex normals (for
+shading).  For example: our cylinder could have each triangle connected to
+any 3 of the 48 unique vertices and any 3 of the 98 texels, instead of the
+current system where the triangle has 3 indices used for both vertices and
+texels.  Unfortunately our approach proved awkward, slow and difficult to
+optimize.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_5.6.html#5.6" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.7.1.html#5.7.1" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_5.7.1.html#5.7.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.3.html#5.7.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_5.html#5." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_5.html#5." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.7.html#5.7" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_6.html#6." title="Next chapter"> &gt;&gt; </a>]</td>
 </tr></table>
 <p>

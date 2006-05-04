@@ -62,7 +62,7 @@ ul.toc {list-style: none}
 
 <p>This section describes how to create a Genmesh mesh.
 </p>
-<a name="SEC302"></a>
+<a name="SEC299"></a>
 <h4 class="subsubheading"> What is Genmesh? </h4>
 
 <p>A <samp>`Genmesh'</samp> mesh object (see section <a href="cs_4.9.8.html#4.9.8">Genmesh Mesh Object</a>) is a generic
@@ -81,7 +81,7 @@ or more instances from that factory. This is a great way to save memory.
 This does mean that it is not possible to HardTransform genmeshes. It is
 only possible to HardTransform Genmesh factories.
 </p>
-<a name="SEC303"></a>
+<a name="SEC300"></a>
 <h4 class="subsubheading"> Creating a Genmesh in a Map </h4>
 
 <p>Here is an example of how to create a cube genmesh in a map file:
@@ -144,12 +144,13 @@ manually. Note that with every vertex we also specify a texture coordinate
       &lt;max x=&quot;0.1&quot; y=&quot;0.1&quot; z=&quot;0.1&quot; /&gt;
     &lt;/box&gt;
     &lt;autonormals /&gt;
+    &lt;lighting&gt;true&lt;/lighting&gt;
   &lt;/params&gt;
 &lt;/meshfact&gt;
 </pre></td></tr></table>
 <p>This is a quick way to make boxes in a map file.
 </p>
-<a name="SEC304"></a>
+<a name="SEC301"></a>
 <h4 class="subsubheading"> Creating a Genmesh Programmatically </h4>
 
 <p>Here we create the same genmesh programmatically:
@@ -174,14 +175,15 @@ factstate-&gt;CalculateNormals ();
 // Now create an instance:
 csRef&lt;iMeshWrapper&gt; mesh =
   engine-&gt;CreateMeshWrapper (fact, &quot;cube&quot;);
+mesh-&gt;GetMeshObject ()-&gt;SetMaterialWrapper (myMaterial);
 csRef&lt;iGeneralMeshState&gt; meshstate = scfQueryInterface&lt;iGeneralMeshState&gt; (
   mesh-&gt;GetMeshObject ());
-meshstate-&gt;SetMaterialWrapper (myMaterial);
+meshstate-&gt;SetLighting (true);
 ...
 </pre></td></tr></table>
 <p>This will basically create the same cube as in the map file example.
 </p>
-<a name="SEC305"></a>
+<a name="SEC302"></a>
 <h4 class="subsubheading"> Include Files </h4>
 
 <p>The include files useful for this section are:
