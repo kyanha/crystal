@@ -178,9 +178,9 @@ Inheritance diagram for iGraphics3D:<p><center><img src="structiGraphics3D__inhe
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiGraphics3D.html#18100c47238241a81415c70742f13aa9">SetRenderState</a> (<a class="el" href="graph3d_8h.html#a0747e910ca225613629d9e9d2fdd9f8">G3D_RENDERSTATEOPTION</a> op, long val)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set a renderstate value.  <a href="#18100c47238241a81415c70742f13aa9"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiGraphics3D.html#ddf4327f8b46d78c9283a91d9d52aa18">SetRenderTarget</a> (<a class="el" href="structiTextureHandle.html">iTextureHandle</a> *handle, bool persistent=false)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiGraphics3D.html#29683aee559a2b287b35d0604ebaae28">SetRenderTarget</a> (<a class="el" href="structiTextureHandle.html">iTextureHandle</a> *handle, bool persistent=false, int subtexture=0)=0</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the target of rendering.  <a href="#ddf4327f8b46d78c9283a91d9d52aa18"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the target of rendering.  <a href="#29683aee559a2b287b35d0604ebaae28"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">virtual void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="structiGraphics3D.html#f24e6c40722647326a657d1d44fa2b7b">SetShadowState</a> (int state)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Controls shadow drawing.  <a href="#f24e6c40722647326a657d1d44fa2b7b"></a><br></td></tr>
@@ -1846,7 +1846,7 @@ Set a renderstate value.
     </td>
   </tr>
 </table>
-<a class="anchor" name="ddf4327f8b46d78c9283a91d9d52aa18"></a><!-- doxytag: member="iGraphics3D::SetRenderTarget" ref="ddf4327f8b46d78c9283a91d9d52aa18" args="(iTextureHandle *handle, bool persistent=false)=0" --><p>
+<a class="anchor" name="29683aee559a2b287b35d0604ebaae28"></a><!-- doxytag: member="iGraphics3D::SetRenderTarget" ref="29683aee559a2b287b35d0604ebaae28" args="(iTextureHandle *handle, bool persistent=false, int subtexture=0)=0" --><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1861,7 +1861,13 @@ Set a renderstate value.
           <td class="md" nowrap align="right"></td>
           <td class="md"></td>
           <td class="md" nowrap>bool&nbsp;</td>
-          <td class="mdname" nowrap> <em>persistent</em> = <code>false</code></td>
+          <td class="mdname" nowrap> <em>persistent</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="md" nowrap align="right"></td>
+          <td class="md"></td>
+          <td class="md" nowrap>int&nbsp;</td>
+          <td class="mdname" nowrap> <em>subtexture</em> = <code>0</code></td>
         </tr>
         <tr>
           <td class="md"></td>
@@ -1883,7 +1889,13 @@ Set a renderstate value.
 Set the target of rendering. 
 <p>
 If this is 0 then the target will be the main screen. Otherwise it is a texture. After calling g3d-&gt;<a class="el" href="structiGraphics3D.html#d4ec53d1e6f187bad2775dd8a69c1aeb">FinishDraw()</a> the target will automatically be reset to 0 (main screen). Note that on some implementions rendering on a texture will overwrite the screen. So you should only do this BEFORE you start rendering your frame. <p>
-If 'persistent' is true then the current contents of the texture will be copied on screen before drawing occurs (in the first call to BeginDraw). Otherwise it is assumed that you fully render the texture.     </td>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>persistent</em>&nbsp;</td><td>If this is true then the current contents of the texture will be copied on screen before drawing occurs (in the first call to BeginDraw). Otherwise it is assumed that you fully render the texture. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>subtexture</em>&nbsp;</td><td>this specifies the subtexture index if the texture is a cubemap. It is in the range 0 to 5. </td></tr>
+  </table>
+</dl>
+    </td>
   </tr>
 </table>
 <a class="anchor" name="f24e6c40722647326a657d1d44fa2b7b"></a><!-- doxytag: member="iGraphics3D::SetShadowState" ref="f24e6c40722647326a657d1d44fa2b7b" args="(int state)=0" --><p>
