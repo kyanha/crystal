@@ -62,9 +62,25 @@ static char const metainfo_rendstep_std[] =
 "        </requires>"
 "      </class>"
 "      <class>"
+"        <name>crystalspace.renderloop.step.shadowmap</name>"
+"        <implementation>csShadowmapRSLoader</implementation>"
+"        <description>Shadowmap target render loop step</description>"
+"        <requires>"
+"          <class>crystalspace.graphics3d.</class>"
+"        </requires>"
+"      </class>"
+"      <class>"
 "        <name>crystalspace.renderloop.step.rendertarget.type</name>"
 "        <implementation>csTargetRSType</implementation>"
 "        <description>Render target render loop step type</description>"
+"        <requires>"
+"          <class>crystalspace.graphics3d.</class>"
+"        </requires>"
+"      </class>"
+"      <class>"
+"        <name>crystalspace.renderloop.step.shadowmap.type</name>"
+"        <implementation>csShadowmapRSType</implementation>"
+"        <description>Shadowmap render loop step type</description>"
 "        <requires>"
 "          <class>crystalspace.graphics3d.</class>"
 "        </requires>"
@@ -109,9 +125,17 @@ static char const metainfo_rendstep_std[] =
   #define csTargetRSLoader_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTargetRSLoader) 
   #endif
+  #ifndef csShadowmapRSLoader_FACTORY_REGISTER_DEFINED 
+  #define csShadowmapRSLoader_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csShadowmapRSLoader) 
+  #endif
   #ifndef csTargetRSType_FACTORY_REGISTER_DEFINED 
   #define csTargetRSType_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTargetRSType) 
+  #endif
+  #ifndef csShadowmapRSType_FACTORY_REGISTER_DEFINED 
+  #define csShadowmapRSType_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csShadowmapRSType) 
   #endif
   #ifndef csFullScreenQuadRSLoader_FACTORY_REGISTER_DEFINED 
   #define csFullScreenQuadRSLoader_FACTORY_REGISTER_DEFINED 
@@ -145,9 +169,17 @@ SCF_REGISTER_STATIC_LIBRARY(rendstep_std,metainfo_rendstep_std)
   #define csTargetRSLoader_FACTORY_REGISTERED 
     csTargetRSLoader_StaticInit csTargetRSLoader_static_init__; 
   #endif
+  #ifndef csShadowmapRSLoader_FACTORY_REGISTERED 
+  #define csShadowmapRSLoader_FACTORY_REGISTERED 
+    csShadowmapRSLoader_StaticInit csShadowmapRSLoader_static_init__; 
+  #endif
   #ifndef csTargetRSType_FACTORY_REGISTERED 
   #define csTargetRSType_FACTORY_REGISTERED 
     csTargetRSType_StaticInit csTargetRSType_static_init__; 
+  #endif
+  #ifndef csShadowmapRSType_FACTORY_REGISTERED 
+  #define csShadowmapRSType_FACTORY_REGISTERED 
+    csShadowmapRSType_StaticInit csShadowmapRSType_static_init__; 
   #endif
   #ifndef csFullScreenQuadRSLoader_FACTORY_REGISTERED 
   #define csFullScreenQuadRSLoader_FACTORY_REGISTERED 
