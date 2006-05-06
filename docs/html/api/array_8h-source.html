@@ -860,132 +860,132 @@
 <a name="l01143"></a>01143       <span class="keywordflow">return</span> <span class="keyword">false</span>;
 <a name="l01144"></a>01144   }
 <a name="l01145"></a>01145 
-<a name="l01150"></a><a class="code" href="classcsArray.html#effb2346184131f4c1e531e50d3f2ca1">01150</a>   <span class="keywordtype">void</span> DeleteRange (size_t start, size_t end)
-<a name="l01151"></a>01151   {
-<a name="l01152"></a>01152     <span class="keywordflow">if</span> (start &gt;= count) <span class="keywordflow">return</span>;
-<a name="l01153"></a>01153     <span class="comment">// Treat 'csArrayItemNotFound' as invalid indices, do nothing.</span>
-<a name="l01154"></a>01154     <span class="comment">// @@@ Assert that?</span>
-<a name="l01155"></a>01155     <span class="keywordflow">if</span> (end == <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>) <span class="keywordflow">return</span>;
-<a name="l01156"></a>01156     <span class="keywordflow">if</span> (start == <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>) <span class="keywordflow">return</span>;<span class="comment">//start = 0;</span>
-<a name="l01157"></a>01157     <span class="keywordflow">if</span> (end &gt;= count) end = count - 1;
-<a name="l01158"></a>01158     size_t i;
-<a name="l01159"></a>01159     <span class="keywordflow">for</span> (i = start ; i &lt;= end ; i++)
-<a name="l01160"></a>01160       ElementHandler::Destroy (root.p + i);
-<a name="l01161"></a>01161 
-<a name="l01162"></a>01162     size_t <span class="keyword">const</span> range_size = end - start + 1;
-<a name="l01163"></a>01163     size_t <span class="keyword">const</span> ncount = count - range_size;
-<a name="l01164"></a>01164     size_t <span class="keyword">const</span> nmove = count - end - 1;
-<a name="l01165"></a>01165     if (nmove &gt; 0)
-<a name="l01166"></a>01166       root.MemMove (root.p, start, start + range_size, nmove);
-<a name="l01167"></a>01167     SetSizeUnsafe (ncount);
-<a name="l01168"></a>01168   }
-<a name="l01169"></a>01169 
-<a name="l01175"></a><a class="code" href="classcsArray.html#34ba9b935aad19665f01e61873a25cc2">01175</a>   <span class="keywordtype">bool</span> Delete (T <span class="keyword">const</span>&amp; item)
-<a name="l01176"></a>01176   {
-<a name="l01177"></a>01177     size_t <span class="keyword">const</span> n = Find (item);
-<a name="l01178"></a>01178     <span class="keywordflow">if</span> (n != <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>)
-<a name="l01179"></a>01179       <span class="keywordflow">return</span> DeleteIndex (n);
-<a name="l01180"></a>01180     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l01181"></a>01181   }
-<a name="l01182"></a>01182 
-<a name="l01196"></a><a class="code" href="classcsArray.html#1f4fa6bd6f7f8e1a7a6f0174e5dfe1d8">01196</a>   <span class="keywordtype">bool</span> DeleteFast (T <span class="keyword">const</span>&amp; item)
-<a name="l01197"></a>01197   {
-<a name="l01198"></a>01198     size_t <span class="keyword">const</span> n = Find (item);
-<a name="l01199"></a>01199     <span class="keywordflow">if</span> (n != <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>)
-<a name="l01200"></a>01200       <span class="keywordflow">return</span> DeleteIndexFast (n);
-<a name="l01201"></a>01201     <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l01202"></a>01202   }
-<a name="l01203"></a>01203 
-<a name="l01205"></a><a class="code" href="classcsArray_1_1Iterator.html">01205</a>   <span class="keyword">class </span><a class="code" href="classcsArray_1_1Iterator.html">Iterator</a>
-<a name="l01206"></a>01206   {
-<a name="l01207"></a>01207   <span class="keyword">public</span>:
-<a name="l01209"></a><a class="code" href="classcsArray_1_1Iterator.html#0b8a3448f379841606849b1d9af27fcc">01209</a>     <a class="code" href="classcsArray_1_1Iterator.html">Iterator</a>(<a class="code" href="classcsArray_1_1Iterator.html">Iterator</a> <span class="keyword">const</span>&amp; r) :
-<a name="l01210"></a>01210       currentelem(r.currentelem), array(r.array) {}
-<a name="l01211"></a>01211 
-<a name="l01213"></a><a class="code" href="classcsArray_1_1Iterator.html#fb4c4cd108c00d5905fc6fbd904e44e9">01213</a>     <a class="code" href="classcsArray_1_1Iterator.html">Iterator</a>&amp; operator=(<a class="code" href="classcsArray_1_1Iterator.html">Iterator</a> <span class="keyword">const</span>&amp; r)
-<a name="l01214"></a>01214     { currentelem = r.<a class="code" href="classcsArray_1_1Iterator.html#c840ec2ddae21f5d08f260720a56c4c6">currentelem</a>; array = r.<a class="code" href="classcsArray_1_1Iterator.html#b7c4d1d75d6c0a5375079c22a11b7bdb">array</a>; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01215"></a>01215 
-<a name="l01217"></a><a class="code" href="classcsArray_1_1Iterator.html#7730190281e7433a6f670507329f4528">01217</a>     <span class="keywordtype">bool</span> HasNext()
-<a name="l01218"></a>01218     { <span class="keywordflow">return</span> currentelem &lt; array.<a class="code" href="classcsArray.html#8cc02d22dba31e4065f09fc16ef107a4">Length</a>(); }
-<a name="l01219"></a>01219 
-<a name="l01221"></a><a class="code" href="classcsArray_1_1Iterator.html#a83db1103b09caff76e6c7493feb0629">01221</a>     T&amp; Next()
-<a name="l01222"></a>01222     { <span class="keywordflow">return</span> array.Get(currentelem++); }
-<a name="l01223"></a>01223 
-<a name="l01225"></a><a class="code" href="classcsArray_1_1Iterator.html#cbf17a1f1976be28c2538a858bdb955e">01225</a>     <span class="keywordtype">void</span> Reset()
-<a name="l01226"></a>01226     { currentelem = 0; }
-<a name="l01227"></a>01227 
-<a name="l01228"></a>01228   <span class="keyword">protected</span>:
-<a name="l01229"></a><a class="code" href="classcsArray_1_1Iterator.html#59c7e935cfc8a11e9db88be73af2fcfe">01229</a>     <a class="code" href="classcsArray_1_1Iterator.html">Iterator</a>(<a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; newarray)
-<a name="l01230"></a>01230         : currentelem(0), array(newarray) {}
-<a name="l01231"></a><a class="code" href="classcsArray_1_1Iterator.html#513d4f4d054958d67d536c6c3c501fab">01231</a>     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsArray.html">csArray</a>&lt;T, ElementHandler&gt;;
-<a name="l01232"></a>01232 
-<a name="l01233"></a>01233   <span class="keyword">private</span>:
-<a name="l01234"></a>01234     size_t currentelem;
-<a name="l01235"></a>01235     <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; array;
-<a name="l01236"></a>01236   };
-<a name="l01237"></a>01237 
-<a name="l01239"></a><a class="code" href="classcsArray_1_1ConstIterator.html">01239</a>   <span class="keyword">class </span><a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a>
-<a name="l01240"></a>01240   {
-<a name="l01241"></a>01241   <span class="keyword">public</span>:
-<a name="l01243"></a><a class="code" href="classcsArray_1_1ConstIterator.html#07662fbb990f591ffe5300d67f651a89">01243</a>     <a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a>(<a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a> <span class="keyword">const</span>&amp; r) :
-<a name="l01244"></a>01244       currentelem(r.currentelem), array(r.array) {}
-<a name="l01245"></a>01245 
-<a name="l01247"></a><a class="code" href="classcsArray_1_1ConstIterator.html#7a0f499b62c54e670de022383c19fd48">01247</a>     <a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a>&amp; operator=(<a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a> <span class="keyword">const</span>&amp; r)
-<a name="l01248"></a>01248     { currentelem = r.<a class="code" href="classcsArray_1_1ConstIterator.html#32d399f1826fa3c44645eb28bfdfb7a5">currentelem</a>; array = r.<a class="code" href="classcsArray_1_1ConstIterator.html#b5b0fbdb1e531f0a8e1580cdd1f1b91f">array</a>; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l01249"></a>01249 
-<a name="l01251"></a><a class="code" href="classcsArray_1_1ConstIterator.html#99978f297128b177419db3ead039f9a7">01251</a>     <span class="keywordtype">bool</span> HasNext()
-<a name="l01252"></a>01252     { <span class="keywordflow">return</span> currentelem &lt; array.<a class="code" href="classcsArray.html#8cc02d22dba31e4065f09fc16ef107a4">Length</a>(); }
-<a name="l01253"></a>01253 
-<a name="l01255"></a><a class="code" href="classcsArray_1_1ConstIterator.html#4094b758f2cd6c13faccf42cf44d383f">01255</a>     <span class="keyword">const</span> T&amp; Next()
-<a name="l01256"></a>01256     { <span class="keywordflow">return</span> array.Get(currentelem++); }
-<a name="l01257"></a>01257 
-<a name="l01259"></a><a class="code" href="classcsArray_1_1ConstIterator.html#3fbaa85fa069b2d95412d9523e9cfb04">01259</a>     <span class="keywordtype">void</span> Reset()
-<a name="l01260"></a>01260     { currentelem = 0; }
-<a name="l01261"></a>01261 
-<a name="l01262"></a>01262   <span class="keyword">protected</span>:
-<a name="l01263"></a><a class="code" href="classcsArray_1_1ConstIterator.html#af4dcb6d83384edaa00a4ea11aa326f8">01263</a>     <a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a>(<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; newarray)
-<a name="l01264"></a>01264       : currentelem(0), array(newarray) {}
-<a name="l01265"></a><a class="code" href="classcsArray_1_1ConstIterator.html#513d4f4d054958d67d536c6c3c501fab">01265</a>     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsArray.html">csArray</a>&lt;T, ElementHandler&gt;;
-<a name="l01266"></a>01266 
-<a name="l01267"></a>01267   <span class="keyword">private</span>:
-<a name="l01268"></a>01268     size_t currentelem;
-<a name="l01269"></a>01269     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; array;
-<a name="l01270"></a>01270   };
-<a name="l01271"></a>01271 
-<a name="l01273"></a><a class="code" href="classcsArray.html#3cda67933291c4f269dd217c177f8279">01273</a>   Iterator <a class="code" href="classcsArray.html#3cda67933291c4f269dd217c177f8279">GetIterator</a>()
-<a name="l01274"></a>01274   { <span class="keywordflow">return</span> Iterator(*<span class="keyword">this</span>); }
-<a name="l01275"></a>01275 
-<a name="l01277"></a><a class="code" href="classcsArray.html#c7f1162e02bd1ebb4312130135821cd9">01277</a>   ConstIterator <a class="code" href="classcsArray.html#3cda67933291c4f269dd217c177f8279">GetIterator</a>()<span class="keyword"> const</span>
-<a name="l01278"></a>01278 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ConstIterator(*<span class="keyword">this</span>); }
-<a name="l01279"></a>01279   
-<a name="l01281"></a><a class="code" href="classcsArray.html#f0baa6b289636734fd93d1db8d981e7e">01281</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsArray.html#f0baa6b289636734fd93d1db8d981e7e">operator== </a>(<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&amp; other)<span class="keyword"> const</span>
-<a name="l01282"></a>01282 <span class="keyword">  </span>{
-<a name="l01283"></a>01283     <span class="keywordflow">if</span> (other.<a class="code" href="classcsArray.html#d9707ffab9a7c3f30f76189f6a1ac7c2">GetSize</a>() != <a class="code" href="classcsArray.html#d9707ffab9a7c3f30f76189f6a1ac7c2">GetSize</a>()) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l01284"></a>01284     <span class="keywordflow">for</span> (size_t i = 0; i &lt; <a class="code" href="classcsArray.html#d9707ffab9a7c3f30f76189f6a1ac7c2">GetSize</a>(); i++)
-<a name="l01285"></a>01285       <span class="keywordflow">if</span> (<a class="code" href="classcsArray.html#b4deb6da0262469c90355af478ed88a1">Get</a> (i) != other[i]) <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l01286"></a>01286     <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l01287"></a>01287   }
-<a name="l01288"></a>01288 };
-<a name="l01289"></a>01289 
-<a name="l01295"></a>01295 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
-<a name="l01296"></a><a class="code" href="classcsSafeCopyArray.html">01296</a> <span class="keyword">class </span><a class="code" href="classcsSafeCopyArray.html">csSafeCopyArray</a>
-<a name="l01297"></a>01297         : <span class="keyword">public</span> <a class="code" href="classcsArray.html">csArray</a>&lt;T,
-<a name="l01298"></a>01298                 csArrayElementHandler&lt;T&gt;,
-<a name="l01299"></a>01299                 csSafeCopyArrayMemoryAllocator&lt;T&gt; &gt;
-<a name="l01300"></a>01300 {
-<a name="l01301"></a>01301 <span class="keyword">public</span>:
-<a name="l01306"></a><a class="code" href="classcsSafeCopyArray.html#4d0342f7404e2985c4b0d114991e9ddb">01306</a>   <a class="code" href="classcsSafeCopyArray.html#4d0342f7404e2985c4b0d114991e9ddb">csSafeCopyArray</a> (size_t limit = 0, size_t threshold = 0)
-<a name="l01307"></a>01307         : <a class="code" href="classcsArray.html">csArray</a>&lt;T, <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler</a>&lt;T&gt;,
-<a name="l01308"></a>01308                      <a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">csSafeCopyArrayMemoryAllocator</a>&lt;T&gt; &gt; (limit, threshold)
-<a name="l01309"></a>01309   {
-<a name="l01310"></a>01310   }
-<a name="l01311"></a>01311 };
-<a name="l01312"></a>01312 
-<a name="l01313"></a>01313 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
-<a name="l01314"></a>01314 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
-<a name="l01315"></a>01315 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-<a name="l01316"></a>01316 <span class="preprocessor"></span>
-<a name="l01319"></a>01319 <span class="preprocessor">#endif</span>
+<a name="l01152"></a><a class="code" href="classcsArray.html#d40b13bfff60af463943fc5ca66e180e">01152</a>   <span class="keywordtype">bool</span> DeleteRange (size_t start, size_t end)
+<a name="l01153"></a>01153   {
+<a name="l01154"></a>01154     <span class="keywordflow">if</span> (start &gt;= count) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l01155"></a>01155     <span class="comment">// Treat 'csArrayItemNotFound' as invalid indices, do nothing.</span>
+<a name="l01156"></a>01156     <span class="keywordflow">if</span> (end == <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l01157"></a>01157     <span class="keywordflow">if</span> (start == <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>) <span class="keywordflow">return</span> <span class="keyword">false</span>;<span class="comment">//start = 0;</span>
+<a name="l01158"></a>01158     <span class="keywordflow">if</span> (end &gt;= count) end = count - 1;
+<a name="l01159"></a>01159     size_t i;
+<a name="l01160"></a>01160     <span class="keywordflow">for</span> (i = start ; i &lt;= end ; i++)
+<a name="l01161"></a>01161       ElementHandler::Destroy (root.p + i);
+<a name="l01162"></a>01162 
+<a name="l01163"></a>01163     size_t <span class="keyword">const</span> range_size = end - start + 1;
+<a name="l01164"></a>01164     size_t <span class="keyword">const</span> ncount = count - range_size;
+<a name="l01165"></a>01165     size_t <span class="keyword">const</span> nmove = count - end - 1;
+<a name="l01166"></a>01166     if (nmove &gt; 0)
+<a name="l01167"></a>01167       root.MemMove (root.p, start, start + range_size, nmove);
+<a name="l01168"></a>01168     SetSizeUnsafe (ncount);
+<a name="l01169"></a>01169     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l01170"></a>01170   }
+<a name="l01171"></a>01171 
+<a name="l01177"></a><a class="code" href="classcsArray.html#34ba9b935aad19665f01e61873a25cc2">01177</a>   <span class="keywordtype">bool</span> Delete (T <span class="keyword">const</span>&amp; item)
+<a name="l01178"></a>01178   {
+<a name="l01179"></a>01179     size_t <span class="keyword">const</span> n = Find (item);
+<a name="l01180"></a>01180     <span class="keywordflow">if</span> (n != <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>)
+<a name="l01181"></a>01181       <span class="keywordflow">return</span> DeleteIndex (n);
+<a name="l01182"></a>01182     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l01183"></a>01183   }
+<a name="l01184"></a>01184 
+<a name="l01198"></a><a class="code" href="classcsArray.html#1f4fa6bd6f7f8e1a7a6f0174e5dfe1d8">01198</a>   <span class="keywordtype">bool</span> DeleteFast (T <span class="keyword">const</span>&amp; item)
+<a name="l01199"></a>01199   {
+<a name="l01200"></a>01200     size_t <span class="keyword">const</span> n = Find (item);
+<a name="l01201"></a>01201     <span class="keywordflow">if</span> (n != <a class="code" href="group__util__containers.html#g7477ed9887527029069ab5d5c79e2f70">csArrayItemNotFound</a>)
+<a name="l01202"></a>01202       <span class="keywordflow">return</span> DeleteIndexFast (n);
+<a name="l01203"></a>01203     <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l01204"></a>01204   }
+<a name="l01205"></a>01205 
+<a name="l01207"></a><a class="code" href="classcsArray_1_1Iterator.html">01207</a>   <span class="keyword">class </span><a class="code" href="classcsArray_1_1Iterator.html">Iterator</a>
+<a name="l01208"></a>01208   {
+<a name="l01209"></a>01209   <span class="keyword">public</span>:
+<a name="l01211"></a><a class="code" href="classcsArray_1_1Iterator.html#0b8a3448f379841606849b1d9af27fcc">01211</a>     <a class="code" href="classcsArray_1_1Iterator.html">Iterator</a>(<a class="code" href="classcsArray_1_1Iterator.html">Iterator</a> <span class="keyword">const</span>&amp; r) :
+<a name="l01212"></a>01212       currentelem(r.currentelem), array(r.array) {}
+<a name="l01213"></a>01213 
+<a name="l01215"></a><a class="code" href="classcsArray_1_1Iterator.html#fb4c4cd108c00d5905fc6fbd904e44e9">01215</a>     <a class="code" href="classcsArray_1_1Iterator.html">Iterator</a>&amp; operator=(<a class="code" href="classcsArray_1_1Iterator.html">Iterator</a> <span class="keyword">const</span>&amp; r)
+<a name="l01216"></a>01216     { currentelem = r.<a class="code" href="classcsArray_1_1Iterator.html#c840ec2ddae21f5d08f260720a56c4c6">currentelem</a>; array = r.<a class="code" href="classcsArray_1_1Iterator.html#b7c4d1d75d6c0a5375079c22a11b7bdb">array</a>; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01217"></a>01217 
+<a name="l01219"></a><a class="code" href="classcsArray_1_1Iterator.html#7730190281e7433a6f670507329f4528">01219</a>     <span class="keywordtype">bool</span> HasNext()
+<a name="l01220"></a>01220     { <span class="keywordflow">return</span> currentelem &lt; array.<a class="code" href="classcsArray.html#8cc02d22dba31e4065f09fc16ef107a4">Length</a>(); }
+<a name="l01221"></a>01221 
+<a name="l01223"></a><a class="code" href="classcsArray_1_1Iterator.html#a83db1103b09caff76e6c7493feb0629">01223</a>     T&amp; Next()
+<a name="l01224"></a>01224     { <span class="keywordflow">return</span> array.Get(currentelem++); }
+<a name="l01225"></a>01225 
+<a name="l01227"></a><a class="code" href="classcsArray_1_1Iterator.html#cbf17a1f1976be28c2538a858bdb955e">01227</a>     <span class="keywordtype">void</span> Reset()
+<a name="l01228"></a>01228     { currentelem = 0; }
+<a name="l01229"></a>01229 
+<a name="l01230"></a>01230   <span class="keyword">protected</span>:
+<a name="l01231"></a><a class="code" href="classcsArray_1_1Iterator.html#59c7e935cfc8a11e9db88be73af2fcfe">01231</a>     <a class="code" href="classcsArray_1_1Iterator.html">Iterator</a>(<a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; newarray)
+<a name="l01232"></a>01232         : currentelem(0), array(newarray) {}
+<a name="l01233"></a><a class="code" href="classcsArray_1_1Iterator.html#513d4f4d054958d67d536c6c3c501fab">01233</a>     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsArray.html">csArray</a>&lt;T, ElementHandler&gt;;
+<a name="l01234"></a>01234 
+<a name="l01235"></a>01235   <span class="keyword">private</span>:
+<a name="l01236"></a>01236     size_t currentelem;
+<a name="l01237"></a>01237     <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; array;
+<a name="l01238"></a>01238   };
+<a name="l01239"></a>01239 
+<a name="l01241"></a><a class="code" href="classcsArray_1_1ConstIterator.html">01241</a>   <span class="keyword">class </span><a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a>
+<a name="l01242"></a>01242   {
+<a name="l01243"></a>01243   <span class="keyword">public</span>:
+<a name="l01245"></a><a class="code" href="classcsArray_1_1ConstIterator.html#07662fbb990f591ffe5300d67f651a89">01245</a>     <a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a>(<a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a> <span class="keyword">const</span>&amp; r) :
+<a name="l01246"></a>01246       currentelem(r.currentelem), array(r.array) {}
+<a name="l01247"></a>01247 
+<a name="l01249"></a><a class="code" href="classcsArray_1_1ConstIterator.html#7a0f499b62c54e670de022383c19fd48">01249</a>     <a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a>&amp; operator=(<a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a> <span class="keyword">const</span>&amp; r)
+<a name="l01250"></a>01250     { currentelem = r.<a class="code" href="classcsArray_1_1ConstIterator.html#32d399f1826fa3c44645eb28bfdfb7a5">currentelem</a>; array = r.<a class="code" href="classcsArray_1_1ConstIterator.html#b5b0fbdb1e531f0a8e1580cdd1f1b91f">array</a>; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l01251"></a>01251 
+<a name="l01253"></a><a class="code" href="classcsArray_1_1ConstIterator.html#99978f297128b177419db3ead039f9a7">01253</a>     <span class="keywordtype">bool</span> HasNext()
+<a name="l01254"></a>01254     { <span class="keywordflow">return</span> currentelem &lt; array.<a class="code" href="classcsArray.html#8cc02d22dba31e4065f09fc16ef107a4">Length</a>(); }
+<a name="l01255"></a>01255 
+<a name="l01257"></a><a class="code" href="classcsArray_1_1ConstIterator.html#4094b758f2cd6c13faccf42cf44d383f">01257</a>     <span class="keyword">const</span> T&amp; Next()
+<a name="l01258"></a>01258     { <span class="keywordflow">return</span> array.Get(currentelem++); }
+<a name="l01259"></a>01259 
+<a name="l01261"></a><a class="code" href="classcsArray_1_1ConstIterator.html#3fbaa85fa069b2d95412d9523e9cfb04">01261</a>     <span class="keywordtype">void</span> Reset()
+<a name="l01262"></a>01262     { currentelem = 0; }
+<a name="l01263"></a>01263 
+<a name="l01264"></a>01264   <span class="keyword">protected</span>:
+<a name="l01265"></a><a class="code" href="classcsArray_1_1ConstIterator.html#af4dcb6d83384edaa00a4ea11aa326f8">01265</a>     <a class="code" href="classcsArray_1_1ConstIterator.html">ConstIterator</a>(<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; newarray)
+<a name="l01266"></a>01266       : currentelem(0), array(newarray) {}
+<a name="l01267"></a><a class="code" href="classcsArray_1_1ConstIterator.html#513d4f4d054958d67d536c6c3c501fab">01267</a>     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsArray.html">csArray</a>&lt;T, ElementHandler&gt;;
+<a name="l01268"></a>01268 
+<a name="l01269"></a>01269   <span class="keyword">private</span>:
+<a name="l01270"></a>01270     size_t currentelem;
+<a name="l01271"></a>01271     <span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray&lt;T, ElementHandler&gt;</a>&amp; array;
+<a name="l01272"></a>01272   };
+<a name="l01273"></a>01273 
+<a name="l01275"></a><a class="code" href="classcsArray.html#3cda67933291c4f269dd217c177f8279">01275</a>   Iterator <a class="code" href="classcsArray.html#3cda67933291c4f269dd217c177f8279">GetIterator</a>()
+<a name="l01276"></a>01276   { <span class="keywordflow">return</span> Iterator(*<span class="keyword">this</span>); }
+<a name="l01277"></a>01277 
+<a name="l01279"></a><a class="code" href="classcsArray.html#c7f1162e02bd1ebb4312130135821cd9">01279</a>   ConstIterator <a class="code" href="classcsArray.html#3cda67933291c4f269dd217c177f8279">GetIterator</a>()<span class="keyword"> const</span>
+<a name="l01280"></a>01280 <span class="keyword">  </span>{ <span class="keywordflow">return</span> ConstIterator(*<span class="keyword">this</span>); }
+<a name="l01281"></a>01281   
+<a name="l01283"></a><a class="code" href="classcsArray.html#f0baa6b289636734fd93d1db8d981e7e">01283</a>   <span class="keywordtype">bool</span> <a class="code" href="classcsArray.html#f0baa6b289636734fd93d1db8d981e7e">operator== </a>(<span class="keyword">const</span> <a class="code" href="classcsArray.html">csArray</a>&amp; other)<span class="keyword"> const</span>
+<a name="l01284"></a>01284 <span class="keyword">  </span>{
+<a name="l01285"></a>01285     <span class="keywordflow">if</span> (other.<a class="code" href="classcsArray.html#d9707ffab9a7c3f30f76189f6a1ac7c2">GetSize</a>() != <a class="code" href="classcsArray.html#d9707ffab9a7c3f30f76189f6a1ac7c2">GetSize</a>()) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l01286"></a>01286     <span class="keywordflow">for</span> (size_t i = 0; i &lt; <a class="code" href="classcsArray.html#d9707ffab9a7c3f30f76189f6a1ac7c2">GetSize</a>(); i++)
+<a name="l01287"></a>01287       <span class="keywordflow">if</span> (<a class="code" href="classcsArray.html#b4deb6da0262469c90355af478ed88a1">Get</a> (i) != other[i]) <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l01288"></a>01288     <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l01289"></a>01289   }
+<a name="l01290"></a>01290 };
+<a name="l01291"></a>01291 
+<a name="l01297"></a>01297 <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;
+<a name="l01298"></a><a class="code" href="classcsSafeCopyArray.html">01298</a> <span class="keyword">class </span><a class="code" href="classcsSafeCopyArray.html">csSafeCopyArray</a>
+<a name="l01299"></a>01299         : <span class="keyword">public</span> <a class="code" href="classcsArray.html">csArray</a>&lt;T,
+<a name="l01300"></a>01300                 csArrayElementHandler&lt;T&gt;,
+<a name="l01301"></a>01301                 csSafeCopyArrayMemoryAllocator&lt;T&gt; &gt;
+<a name="l01302"></a>01302 {
+<a name="l01303"></a>01303 <span class="keyword">public</span>:
+<a name="l01308"></a><a class="code" href="classcsSafeCopyArray.html#4d0342f7404e2985c4b0d114991e9ddb">01308</a>   <a class="code" href="classcsSafeCopyArray.html#4d0342f7404e2985c4b0d114991e9ddb">csSafeCopyArray</a> (size_t limit = 0, size_t threshold = 0)
+<a name="l01309"></a>01309         : <a class="code" href="classcsArray.html">csArray</a>&lt;T, <a class="code" href="classcsArrayElementHandler.html">csArrayElementHandler</a>&lt;T&gt;,
+<a name="l01310"></a>01310                      <a class="code" href="classcsSafeCopyArrayMemoryAllocator.html">csSafeCopyArrayMemoryAllocator</a>&lt;T&gt; &gt; (limit, threshold)
+<a name="l01311"></a>01311   {
+<a name="l01312"></a>01312   }
+<a name="l01313"></a>01313 };
+<a name="l01314"></a>01314 
+<a name="l01315"></a>01315 <span class="preprocessor">#if defined(CS_EXTENSIVE_MEMDEBUG) || defined(CS_MEMORY_TRACKER)</span>
+<a name="l01316"></a>01316 <span class="preprocessor"></span><span class="preprocessor"># define new CS_EXTENSIVE_MEMDEBUG_NEW</span>
+<a name="l01317"></a>01317 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+<a name="l01318"></a>01318 <span class="preprocessor"></span>
+<a name="l01321"></a>01321 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
