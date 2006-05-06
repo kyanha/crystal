@@ -127,8 +127,103 @@ and various other configuration parameters for a genmesh factory.
 <a name="SEC318"></a>
 <h4 class="subsubheading"> Factory Loader </h4>
 
-<p>@@@TODO
-</p>
+<p>Here is a list of all the tags supported by a genmesh factory and their
+meaning:
+</p><ul>
+<li> <samp>`box'</samp>
+This is a shortcut for defining a box geometry. It contains two vectors
+named <samp>`min'</samp> and <samp>`max'</samp>:
+<samp>`&lt;box&gt; &lt;min x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot; /&gt; &lt;max x=&quot;1&quot; y=&quot;1&quot; z=&quot;1&quot; /&gt; &lt;/box&gt;'</samp>.
+</li><li> <samp>`sphere'</samp>
+This is a short cut for defining sphere geometry:
+<samp>`&lt;sphere rimvertices=&quot;6&quot; reversed=&quot;true&quot; cylindrical=&quot;false&quot;&gt;
+&lt;radius x=&quot;10&quot; y=&quot;10&quot; z=&quot;1&quot; /&gt; &lt;/sphere&gt;'</samp>
+</li><li> <samp>`numtri'</samp>
+Deprecated. This is the old way to specify the number of triangles this
+genmesh will use. It is no longer needed and it is most certainly not needed
+if you use <samp>`box'</samp> or <samp>`sphere'</samp>.
+</li><li> <samp>`numvt'</samp>
+Deprecated. This is the old way to specify the number of vertices this
+genmesh will use. It is no longer needed and it is most certainly not needed
+if you use <samp>`box'</samp> or <samp>`sphere'</samp>. Note that if you do not use
+<samp>`numvt'</samp> that you have to specify vertices with uv in the same <samp>`v'</samp>
+command but colors and normals have to be specified seperatelly. If you
+don't use <samp>`numvt'</samp> then you can specify everything in one statement.
+</li><li> <samp>`v'</samp>
+Unless you use <samp>`box'</samp> or <samp>`sphere'</samp> you can use this to add a
+vertex. If you don't use <samp>`numvt'</samp> (prefered) then you should specify
+all vertex information here: <samp>`&lt;v x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot; nx=&quot;1&quot; ny=&quot;0&quot; nz=&quot;0&quot;
+red=&quot;.5&quot; green=&quot;.g&quot; blue=&quot;.g&quot; u=&quot;0&quot; v=&quot;.1&quot; /&gt;'</samp>. Otherwise you must specify
+normal and color information seperatelly. Note that normal and color information
+is optional. Default color is black and default normal is the 0-vector (meaning
+you'll have to use <samp>`autonormals'</samp> then).
+</li><li> <samp>`n'</samp>
+This is only used if you specified <samp>`numvt'</samp> and it specifies the normal
+information for every vertex. You must have the same number of <samp>`n'</samp>
+statements as there are vertices. Note that if you use <samp>`autonormals'</samp>
+then you don't need to specify normals.
+</li><li> <samp>`color'</samp>
+This is only used if you specified <samp>`numvt'</samp> and it specifies the color
+information for every vertex. You must have the same number of <samp>`color'</samp>
+statements as there are vertices.
+</li><li> <samp>`submesh'</samp>
+Using submeshes you can define subsets of the factory that use different
+material and mixmode. When you don't use <samp>`submesh'</samp> the entire mesh
+will use the same material and mixmode. As soon as you use submeshes you
+should make sure that every triangle is contained in some submesh. Basically
+inside the <samp>`submesh'</samp> node you need to specify the triangle indices to
+use, the material, and the mixmode: <samp>`&lt;submesh&gt; &lt;t&gt;0&lt;/t&gt; &lt;t&gt;3&lt;/t&gt; <small class="dots">...</small>
+&lt;material&gt;stone&lt;/material&gt; &lt;mixmode&gt; &lt;add /&gt; &lt;/mixmode&gt; &lt;/submesh&gt;'</samp>.
+</li><li> <samp>`t'</samp>
+Add a triangle to the factory. You need to specify the three vertex indices
+that are used for the triangle: <samp>`&lt;t v1=&quot;3&quot; v2=&quot;1&quot; v3=&quot;10&quot; /&gt;'</samp>.
+</li><li> <samp>`material'</samp>
+The name of the master material to use for this genmesh. Mesh objects
+that are created from this factory can override this material. Also note
+that if you use submeshes then multiple materials can be used for the same
+factory/object.
+</li><li> <samp>`autonormals'</samp>
+If you use this then the normals will be calculated automatically from the
+given vertices. By default the vertex table is compressed (all doubles removed)
+in a temporary table and from that table the normal data is calculated so that
+you get a smooth result. If you don't want that compression (because you want
+to ensure that there are explicit seams in the object) you need to set
+the <samp>`normalnocompress'</samp> flag before this statement.
+</li><li> <samp>`normalnocompress'</samp>
+Disable compression of the vertex table before <samp>`autonormals'</samp> is used.
+</li><li> <samp>`back2front'</samp>
+If you have an object that uses transparency that requires perfect sorting
+from back to front (like objects using alpha transparency) then you may need
+to set this flag. This will ensure that internally there is a <small>BSP</small> tree
+to sort the polygons from back to front when rendering. Note that this slows
+down considerably so only use it if you really need it.
+</li><li> <samp>`manualcolors'</samp>
+If this flag is set then no lighting values are processed and the colors
+specified for every vertex (which are default black!) are used.
+</li><li> <samp>`lighting'</samp>
+If this flag is set (default true) then lighting information (from nearby
+lights) is added to the colors of the vertices.
+</li><li> <samp>`defaultcolor'</samp>
+This color is the default color as used for objects created from this
+factory. Objects can override this default with the <samp>`color'</samp> statement
+in the object.
+</li><li> <samp>`localshadows'</samp>
+If this flag is set (default false) then lighting calculation is not
+dynamic but instead static and precalculated. This is faster at runtime and
+additionally shadows on the genmesh object will be supported (only shadows
+calculated per vertex).
+</li><li> <samp>`noshadows'</samp>
+If this flag is set (default false) then the object will not cast shadows
+on other objects.
+</li><li> <samp>`mixmode'</samp>
+Control the transparency of this object. @@@TODO: document more!
+</li><li> <samp>`animcontrol'</samp>
+Add an animation control to the object. @@@TODO: document more!
+</li><li> <samp>`renderbuffer'</samp>
+Using this statement you can add your own user renderbuffers to the object.
+These renderbuffers can be used by shaders. @@@TODO: document more!
+</li></ul>
+
 <a name="SEC319"></a>
 <h4 class="subsubheading"> Object State Interface </h4>
 
@@ -140,8 +235,62 @@ object.  By using this interface you can access the material, blending mode
 <a name="SEC320"></a>
 <h4 class="subsubheading"> Object Loader </h4>
 
-<p>@@@TODO
+<p>Here is a list of all the tags supported by a genmesh factory and their
+meaning:
+</p><ul>
+<li> <samp>`factory'</samp>
+The name of the factory to use.
+</li><li> <samp>`material'</samp>
+For this object, override the material from the factory.
+</li><li> <samp>`mixmode'</samp>
+For this object, override the mixmode from the factory.
+</li><li> <samp>`manualcolors'</samp>
+For this object, override the manualcolors flag from the factory.
+</li><li> <samp>`lighting'</samp>
+For this object, override the lighting flag from the factory.
+</li><li> <samp>`noshadows'</samp>
+For this object, override the noshadows flag from the factory.
+</li><li> <samp>`localshadows'</samp>
+For this object, override the localshadows flag from the factory.
+</li><li> <samp>`renderbuffer'</samp>
+Add additional render buffers to this object (the ones added to the
+factory will also be valid).
+</li><li> <samp>`submesh'</samp>
+You can also define submeshes on the object level instead of the factory
+level. If you use <samp>`submesh'</samp> in the mesh then the submeshes of the
+factory are ignored.
+</li><li> <samp>`color'</samp>
+Color of this mesh (overrides <samp>`defaultcolor'</samp> from factory).
+</li></ul>
+
+<a name="SEC321"></a>
+<h4 class="subsubheading"> Lighting and Colors </h4>
+
+<p>Lighting of genmesh objects is a bit complicated. In this section we describe
+the different possibilities:
 </p>
+<ul>
+<li>
+In all cases the color array from the factory will be added to the colors
+calculated below.
+</li><li>
+If manualcolors is enabled then only the optional animation control still
+matters. No other lighting values are processed.
+</li><li>
+Otherwise if lighting is disabled then the base color of the mesh will be
+added to the factory colors.
+</li><li>
+If lighting is enabled and localshadows is disabled then lighting is calculated
+as follows: factory colors + base color + static ambient + dynamic
+ambient + lighting as calculated from nearby/relevant lights.
+</li><li>
+If both lighting and localshadows are enabled then lighting is calculated as
+follows: factory colors + base color + static ambient + dynamic
+ambient + lighting as precalculated during static lighting +
+dynamic lights
+</li></ul>
+
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.7.html#4.9.7" title="Previous section in reading order"> &lt; </a>]</td>
