@@ -356,39 +356,49 @@
 <a name="l00397"></a>00397     <span class="keywordflow">return</span> <span class="keyword">true</span>;
 <a name="l00398"></a>00398   }
 <a name="l00399"></a>00399 
-<a name="l00401"></a><a class="code" href="classcsShaderVariable.html#507564f7ecbf73565a6869963d4fc7ea">00401</a>   <span class="keywordtype">void</span> SetArraySize (size_t size)
-<a name="l00402"></a>00402   {
-<a name="l00403"></a>00403     <span class="keywordflow">if</span> (array == 0)
-<a name="l00404"></a>00404     {
-<a name="l00405"></a>00405       array = <span class="keyword">new</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a>;
-<a name="l00406"></a>00406     }
-<a name="l00407"></a>00407     array-&gt;SetSize (size);
+<a name="l00400"></a><a class="code" href="classcsShaderVariable.html#1a6f7833d6cd824e8419fe4bd0be68e5">00400</a>   <span class="keywordtype">void</span> AddVariableToArray (<a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable)
+<a name="l00401"></a>00401   {
+<a name="l00402"></a>00402     <span class="keywordflow">if</span> (array) array-&gt;Push (variable);
+<a name="l00403"></a>00403   }
+<a name="l00404"></a>00404 
+<a name="l00405"></a><a class="code" href="classcsShaderVariable.html#9b8a888ac9a4f027bc44c7587e30927d">00405</a>   <span class="keywordtype">void</span> RemoveFromArray (size_t element)
+<a name="l00406"></a>00406   {
+<a name="l00407"></a>00407     <span class="keywordflow">if</span> (array) array-&gt;DeleteIndex (element);
 <a name="l00408"></a>00408   }
 <a name="l00409"></a>00409 
-<a name="l00411"></a><a class="code" href="classcsShaderVariable.html#b0e85fe7aa3692eb49184f2c2d522559">00411</a>   size_t GetArraySize ()
+<a name="l00411"></a><a class="code" href="classcsShaderVariable.html#507564f7ecbf73565a6869963d4fc7ea">00411</a>   <span class="keywordtype">void</span> SetArraySize (size_t size)
 <a name="l00412"></a>00412   {
 <a name="l00413"></a>00413     <span class="keywordflow">if</span> (array == 0)
-<a name="l00414"></a>00414       <span class="keywordflow">return</span> 0;
-<a name="l00415"></a>00415     <span class="keywordflow">else</span>
-<a name="l00416"></a>00416       <span class="keywordflow">return</span> array-&gt;Length ();
-<a name="l00417"></a>00417   }
-<a name="l00418"></a>00418 
-<a name="l00424"></a><a class="code" href="classcsShaderVariable.html#8d93b92db2255e3c0fe222c7d4f9936a">00424</a>   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *GetArrayElement (size_t element)
-<a name="l00425"></a>00425   {
-<a name="l00426"></a>00426     <span class="keywordflow">if</span> (array != 0 &amp;&amp; element&lt;array-&gt;Length ())
-<a name="l00427"></a>00427     {
-<a name="l00428"></a>00428       <span class="keywordflow">return</span> array-&gt;Get (element);
-<a name="l00429"></a>00429     }
-<a name="l00430"></a>00430     <span class="keywordflow">return</span> 0;
-<a name="l00431"></a>00431   }
-<a name="l00432"></a>00432 
-<a name="l00436"></a><a class="code" href="classcsShaderVariable.html#f4f9daf4446ac6f609b9c219e5070a46">00436</a>   <span class="keywordtype">void</span> SetArrayElement (size_t element, <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable)
-<a name="l00437"></a>00437   {
-<a name="l00438"></a>00438     array-&gt;Put (element, variable);
-<a name="l00439"></a>00439   }
-<a name="l00440"></a>00440 };
-<a name="l00441"></a>00441 
-<a name="l00444"></a>00444 <span class="preprocessor">#endif</span>
+<a name="l00414"></a>00414     {
+<a name="l00415"></a>00415       array = <span class="keyword">new</span> <a class="code" href="classcsRefArray.html">csRefArray&lt;csShaderVariable&gt;</a>;
+<a name="l00416"></a>00416     }
+<a name="l00417"></a>00417     array-&gt;SetSize (size);
+<a name="l00418"></a>00418   }
+<a name="l00419"></a>00419 
+<a name="l00421"></a><a class="code" href="classcsShaderVariable.html#b0e85fe7aa3692eb49184f2c2d522559">00421</a>   size_t GetArraySize ()
+<a name="l00422"></a>00422   {
+<a name="l00423"></a>00423     <span class="keywordflow">if</span> (array == 0)
+<a name="l00424"></a>00424       <span class="keywordflow">return</span> 0;
+<a name="l00425"></a>00425     <span class="keywordflow">else</span>
+<a name="l00426"></a>00426       <span class="keywordflow">return</span> array-&gt;Length ();
+<a name="l00427"></a>00427   }
+<a name="l00428"></a>00428 
+<a name="l00434"></a><a class="code" href="classcsShaderVariable.html#8d93b92db2255e3c0fe222c7d4f9936a">00434</a>   <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *GetArrayElement (size_t element)
+<a name="l00435"></a>00435   {
+<a name="l00436"></a>00436     <span class="keywordflow">if</span> (array != 0 &amp;&amp; element&lt;array-&gt;Length ())
+<a name="l00437"></a>00437     {
+<a name="l00438"></a>00438       <span class="keywordflow">return</span> array-&gt;Get (element);
+<a name="l00439"></a>00439     }
+<a name="l00440"></a>00440     <span class="keywordflow">return</span> 0;
+<a name="l00441"></a>00441   }
+<a name="l00442"></a>00442 
+<a name="l00446"></a><a class="code" href="classcsShaderVariable.html#f4f9daf4446ac6f609b9c219e5070a46">00446</a>   <span class="keywordtype">void</span> SetArrayElement (size_t element, <a class="code" href="classcsShaderVariable.html">csShaderVariable</a> *variable)
+<a name="l00447"></a>00447   {
+<a name="l00448"></a>00448     array-&gt;Put (element, variable);
+<a name="l00449"></a>00449   }
+<a name="l00450"></a>00450 };
+<a name="l00451"></a>00451 
+<a name="l00454"></a>00454 <span class="preprocessor">#endif</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
