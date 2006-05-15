@@ -103,17 +103,17 @@
 <a name="l00087"></a><a class="code" href="classcsSubRectangles_1_1SubRect.html#c6a5198cc7210040acf19240d340746f">00087</a>     SubRect* children[2];
 <a name="l00088"></a>00088 
 <a name="l00089"></a>00089     SubRect ();
-<a name="l00090"></a>00090 
-<a name="l00092"></a>00092     <span class="keywordtype">void</span> TestAlloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <a class="code" href="structcsSubRectangles_1_1SubRect_1_1AllocInfo.html">AllocInfo</a>&amp; ai);
-<a name="l00094"></a>00094     SubRect* Alloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keyword">const</span> <a class="code" href="structcsSubRectangles_1_1SubRect_1_1AllocInfo.html">AllocInfo</a>&amp; ai, <a class="code" href="classcsRect.html">csRect</a>&amp; r);
-<a name="l00096"></a>00096     <span class="keywordtype">void</span> Reclaim ();
-<a name="l00098"></a>00098     <span class="keywordtype">void</span> TestCollapse ();
-<a name="l00099"></a>00099 
-<a name="l00102"></a>00102     <span class="keywordtype">void</span> DecideBestSplit (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; rect, <span class="keywordtype">int</span> splitX, <span class="keywordtype">int</span> splitY,
-<a name="l00103"></a>00103       <a class="code" href="classcsSubRectangles_1_1SubRect.html#9e6c1bfc884307f8da641a08c4612b28">SubRect::SplitType</a>&amp; splitType);
-<a name="l00104"></a>00104   };
-<a name="l00105"></a><a class="code" href="classcsSubRectangles.html#6cea3452ad7652661e084b42e1b98099">00105</a>   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>; <span class="comment">// Give MSVC6 access to enclosing protected scope.</span>
-<a name="l00106"></a>00106 
+<a name="l00090"></a>00090     SubRect&amp; operator= (<span class="keyword">const</span> SubRect&amp; other);
+<a name="l00091"></a>00091 
+<a name="l00093"></a>00093     <span class="keywordtype">void</span> TestAlloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <a class="code" href="structcsSubRectangles_1_1SubRect_1_1AllocInfo.html">AllocInfo</a>&amp; ai);
+<a name="l00095"></a>00095     SubRect* Alloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <span class="keyword">const</span> <a class="code" href="structcsSubRectangles_1_1SubRect_1_1AllocInfo.html">AllocInfo</a>&amp; ai, <a class="code" href="classcsRect.html">csRect</a>&amp; r);
+<a name="l00097"></a>00097     <span class="keywordtype">void</span> Reclaim ();
+<a name="l00099"></a>00099     <span class="keywordtype">void</span> TestCollapse ();
+<a name="l00100"></a>00100 
+<a name="l00103"></a>00103     <span class="keywordtype">void</span> DecideBestSplit (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; rect, <span class="keywordtype">int</span> splitX, <span class="keywordtype">int</span> splitY,
+<a name="l00104"></a>00104       <a class="code" href="classcsSubRectangles_1_1SubRect.html#9e6c1bfc884307f8da641a08c4612b28">SubRect::SplitType</a>&amp; splitType);
+<a name="l00105"></a>00105   };
+<a name="l00106"></a><a class="code" href="classcsSubRectangles.html#6cea3452ad7652661e084b42e1b98099">00106</a>   <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>; <span class="comment">// Give MSVC6 access to enclosing protected scope.</span>
 <a name="l00107"></a>00107 <span class="keyword">protected</span>:
 <a name="l00109"></a><a class="code" href="classcsSubRectangles.html#7cae59e075c3cac5e552c172c56ff94f">00109</a>   <a class="code" href="classcsRect.html">csRect</a> region;
 <a name="l00111"></a><a class="code" href="classcsSubRectangles.html#3254cc52f4210a18a8c518bf491b9f15">00111</a>   <a class="code" href="classcsSubRectangles_1_1SubRect.html">SubRect</a>* root;
@@ -138,26 +138,27 @@
 <a name="l00131"></a>00131   <span class="keywordtype">void</span> Grow (SubRect* sr, <span class="keywordtype">int</span> ow, <span class="keywordtype">int</span> oh, <span class="keywordtype">int</span> nw, <span class="keywordtype">int</span> nh);
 <a name="l00132"></a>00132 <span class="keyword">public</span>:
 <a name="l00134"></a>00134   <a class="code" href="classcsSubRectangles.html">csSubRectangles</a> (<span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; region);
-<a name="l00135"></a>00135 
-<a name="l00137"></a>00137   ~<a class="code" href="classcsSubRectangles.html">csSubRectangles</a> ();
-<a name="l00138"></a>00138 
-<a name="l00140"></a><a class="code" href="classcsSubRectangles.html#168fbd2ea91920f1e2dbeb688559ebc2">00140</a>   <span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; GetRectangle ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> region; }
-<a name="l00141"></a>00141 
-<a name="l00145"></a>00145   <span class="keywordtype">void</span> Clear ();
-<a name="l00146"></a>00146 
-<a name="l00150"></a>00150   SubRect* Alloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <a class="code" href="classcsRect.html">csRect</a>&amp; rect);
-<a name="l00151"></a>00151 
-<a name="l00156"></a>00156   <span class="keywordtype">void</span> Reclaim (SubRect* subrect);
-<a name="l00157"></a>00157 
-<a name="l00162"></a>00162   <span class="keywordtype">bool</span> Grow (<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight);
-<a name="l00163"></a>00163 
-<a name="l00167"></a>00167   <span class="keywordtype">void</span> Dump ();
-<a name="l00168"></a>00168 };
-<a name="l00169"></a>00169 
-<a name="l00170"></a><a class="code" href="group__geom__utils.html#g0838117dc05d2d4f8ce68a2a5b8964ef">00170</a> <span class="keyword">typedef</span> <a class="code" href="classcsSubRectangles_1_1SubRect.html">csSubRectangles::SubRect</a> <a class="code" href="classcsSubRectangles_1_1SubRect.html">csSubRect</a>;
-<a name="l00171"></a>00171 
-<a name="l00174"></a>00174 <span class="preprocessor">#endif // __CS_SUBREC_H__</span>
-<a name="l00175"></a>00175 <span class="preprocessor"></span>
+<a name="l00135"></a>00135   <a class="code" href="classcsSubRectangles.html">csSubRectangles</a> (<span class="keyword">const</span> <a class="code" href="classcsSubRectangles.html">csSubRectangles</a>&amp; other);
+<a name="l00136"></a>00136 
+<a name="l00138"></a>00138   ~<a class="code" href="classcsSubRectangles.html">csSubRectangles</a> ();
+<a name="l00139"></a>00139 
+<a name="l00141"></a><a class="code" href="classcsSubRectangles.html#168fbd2ea91920f1e2dbeb688559ebc2">00141</a>   <span class="keyword">const</span> <a class="code" href="classcsRect.html">csRect</a>&amp; GetRectangle ()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> region; }
+<a name="l00142"></a>00142 
+<a name="l00146"></a>00146   <span class="keywordtype">void</span> Clear ();
+<a name="l00147"></a>00147 
+<a name="l00151"></a>00151   SubRect* Alloc (<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h, <a class="code" href="classcsRect.html">csRect</a>&amp; rect);
+<a name="l00152"></a>00152 
+<a name="l00157"></a>00157   <span class="keywordtype">void</span> Reclaim (SubRect* subrect);
+<a name="l00158"></a>00158 
+<a name="l00163"></a>00163   <span class="keywordtype">bool</span> Grow (<span class="keywordtype">int</span> newWidth, <span class="keywordtype">int</span> newHeight);
+<a name="l00164"></a>00164 
+<a name="l00168"></a>00168   <span class="keywordtype">void</span> Dump ();
+<a name="l00169"></a>00169 };
+<a name="l00170"></a>00170 
+<a name="l00171"></a><a class="code" href="group__geom__utils.html#g0838117dc05d2d4f8ce68a2a5b8964ef">00171</a> <span class="keyword">typedef</span> <a class="code" href="classcsSubRectangles_1_1SubRect.html">csSubRectangles::SubRect</a> <a class="code" href="classcsSubRectangles_1_1SubRect.html">csSubRect</a>;
+<a name="l00172"></a>00172 
+<a name="l00175"></a>00175 <span class="preprocessor">#endif // __CS_SUBREC_H__</span>
+<a name="l00176"></a>00176 <span class="preprocessor"></span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>

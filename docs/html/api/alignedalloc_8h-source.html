@@ -51,62 +51,62 @@
 <a name="l00020"></a>00020 <span class="preprocessor">#ifndef __CS_CSUTIL_ALIGNED_ALLOC_H__</span>
 <a name="l00021"></a>00021 <span class="preprocessor"></span><span class="preprocessor">#define __CS_CSUTIL_ALIGNED_ALLOC_H__</span>
 <a name="l00022"></a>00022 <span class="preprocessor"></span>
-<a name="l00029"></a>00029 <span class="keyword">namespace </span>CS
-<a name="l00030"></a>00030 {
-<a name="l00031"></a><a class="code" href="namespaceCS_1_1Memory.html">00031</a>   <span class="keyword">namespace </span>Memory
-<a name="l00032"></a>00032   {
-<a name="l00033"></a><a class="code" href="namespaceCS_1_1Memory.html#5b054835d456a05064172a9a1dbaf4f5">00033</a>     <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="namespaceCS_1_1Memory.html#5b054835d456a05064172a9a1dbaf4f5">AlignedMalloc</a> (size_t size, size_t align)
-<a name="l00034"></a>00034     {
-<a name="l00035"></a>00035 <span class="preprocessor">    #ifdef CS_HAVE__ALIGNED_MALLOC</span>
-<a name="l00036"></a>00036 <span class="preprocessor"></span>      <span class="keywordflow">return</span> _aligned_malloc (size, align);
-<a name="l00037"></a>00037 <span class="preprocessor">    #else</span>
-<a name="l00038"></a>00038 <span class="preprocessor"></span>      <span class="keywordtype">void</span> *mallocPtr = malloc (size + align + <span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*));
-<a name="l00039"></a>00039       <a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a> ptrInt = (<a class="code" href="group__util.html#g0fbe4a4f8dd857ee04923a901f27465f">intptr_t</a>)mallocPtr;
-<a name="l00040"></a>00040     
-<a name="l00041"></a>00041       ptrInt = (ptrInt + align + <span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*)) / align * align;
-<a name="l00042"></a>00042       *(((<span class="keywordtype">void</span>**)ptrInt) - 1) = mallocPtr;
-<a name="l00043"></a>00043     
-<a name="l00044"></a>00044       <span class="keywordflow">return</span> (<span class="keywordtype">void</span>*)ptrInt;
-<a name="l00045"></a>00045 <span class="preprocessor">    #endif</span>
-<a name="l00046"></a>00046 <span class="preprocessor"></span>    }
-<a name="l00047"></a>00047     
-<a name="l00048"></a><a class="code" href="namespaceCS_1_1Memory.html#731ee669e17547977f099b95b0e657ad">00048</a>     <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespaceCS_1_1Memory.html#731ee669e17547977f099b95b0e657ad">AlignedFree</a> (<span class="keywordtype">void</span>* ptr)
-<a name="l00049"></a>00049     {
-<a name="l00050"></a>00050 <span class="preprocessor">    #ifdef CS_HAVE__ALIGNED_MALLOC</span>
-<a name="l00051"></a>00051 <span class="preprocessor"></span>      _aligned_free (ptr);
-<a name="l00052"></a>00052 <span class="preprocessor">    #else</span>
-<a name="l00053"></a>00053 <span class="preprocessor"></span>      free (*(((<span class="keywordtype">void</span>**)ptr) - 1));
-<a name="l00054"></a>00054 <span class="preprocessor">    #endif</span>
-<a name="l00055"></a>00055 <span class="preprocessor"></span>    }
-<a name="l00056"></a>00056     
-<a name="l00057"></a><a class="code" href="namespaceCS_1_1Memory.html#851bcb086482404d818bb6c60a67d9a1">00057</a>     <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="namespaceCS_1_1Memory.html#851bcb086482404d818bb6c60a67d9a1">AlignedRealloc</a> (<span class="keywordtype">void</span>* ptr, size_t size, 
-<a name="l00058"></a>00058       size_t align)
-<a name="l00059"></a>00059     {
-<a name="l00060"></a>00060 <span class="preprocessor">    #ifdef CS_HAVE__ALIGNED_MALLOC</span>
-<a name="l00061"></a>00061 <span class="preprocessor"></span>      <span class="keywordflow">return</span> _aligned_realloc (ptr, size, align);
-<a name="l00062"></a>00062 <span class="preprocessor">    #else</span>
-<a name="l00063"></a>00063 <span class="preprocessor"></span>      <span class="keywordtype">void</span>* orgPtr = *(((<span class="keywordtype">void</span>**)ptr) - 1);
-<a name="l00064"></a>00064       <a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a> offsetToData = (<a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a>)ptr - (<a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a>)orgPtr;
-<a name="l00065"></a>00065       <span class="keywordtype">void</span>* newPtr = realloc (orgPtr, size + align + <span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*));
-<a name="l00066"></a>00066       
-<a name="l00067"></a>00067       <a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a> ptrInt = (<a class="code" href="group__util.html#g0fbe4a4f8dd857ee04923a901f27465f">intptr_t</a>)newPtr;
-<a name="l00068"></a>00068       ptrInt = (ptrInt + align + <span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*)) / align * align;
-<a name="l00069"></a>00069       <a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a> newOffsetToData = ptrInt - (<a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a>)newPtr;
-<a name="l00070"></a>00070       <span class="keywordflow">if</span> (newOffsetToData != offsetToData)
-<a name="l00071"></a>00071       {
-<a name="l00072"></a>00072         <span class="comment">// Ensure realloced data is aligned again</span>
-<a name="l00073"></a>00073         memmove ((<span class="keywordtype">void</span>*)(ptrInt), (<span class="keywordtype">void</span>*)((<a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a>)newPtr + offsetToData),
-<a name="l00074"></a>00074           size);
-<a name="l00075"></a>00075       }
-<a name="l00076"></a>00076       
-<a name="l00077"></a>00077       *(((<span class="keywordtype">void</span>**)ptrInt) - 1) = newPtr;
-<a name="l00078"></a>00078       <span class="keywordflow">return</span> (<span class="keywordtype">void</span>*)ptrInt;
-<a name="l00079"></a>00079 <span class="preprocessor">    #endif</span>
-<a name="l00080"></a>00080 <span class="preprocessor"></span>    }
-<a name="l00081"></a>00081   } <span class="comment">// namespace Memory</span>
-<a name="l00082"></a>00082 } <span class="comment">// namespace CS</span>
-<a name="l00083"></a>00083 
-<a name="l00086"></a>00086 <span class="preprocessor">#endif // __CS_CSUTIL_ALIGNED_ALLOC_H__</span>
+<a name="l00030"></a>00030 <span class="keyword">namespace </span>CS
+<a name="l00031"></a>00031 {
+<a name="l00032"></a><a class="code" href="namespaceCS_1_1Memory.html">00032</a>   <span class="keyword">namespace </span>Memory
+<a name="l00033"></a>00033   {
+<a name="l00039"></a><a class="code" href="namespaceCS_1_1Memory.html#5b054835d456a05064172a9a1dbaf4f5">00039</a>     <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="namespaceCS_1_1Memory.html#5b054835d456a05064172a9a1dbaf4f5">AlignedMalloc</a> (size_t size, size_t align)
+<a name="l00040"></a>00040     {
+<a name="l00041"></a>00041 <span class="preprocessor">    #ifdef CS_HAVE__ALIGNED_MALLOC</span>
+<a name="l00042"></a>00042 <span class="preprocessor"></span>      <span class="keywordflow">return</span> _aligned_malloc (size, align);
+<a name="l00043"></a>00043 <span class="preprocessor">    #else</span>
+<a name="l00044"></a>00044 <span class="preprocessor"></span>      <span class="keywordtype">void</span> *mallocPtr = malloc (size + align + <span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*));
+<a name="l00045"></a>00045       <a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a> ptrInt = (<a class="code" href="group__util.html#g0fbe4a4f8dd857ee04923a901f27465f">intptr_t</a>)mallocPtr;
+<a name="l00046"></a>00046     
+<a name="l00047"></a>00047       ptrInt = (ptrInt + align + <span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*)) / align * align;
+<a name="l00048"></a>00048       *(((<span class="keywordtype">void</span>**)ptrInt) - 1) = mallocPtr;
+<a name="l00049"></a>00049     
+<a name="l00050"></a>00050       <span class="keywordflow">return</span> (<span class="keywordtype">void</span>*)ptrInt;
+<a name="l00051"></a>00051 <span class="preprocessor">    #endif</span>
+<a name="l00052"></a>00052 <span class="preprocessor"></span>    }
+<a name="l00053"></a>00053     
+<a name="l00055"></a><a class="code" href="namespaceCS_1_1Memory.html#731ee669e17547977f099b95b0e657ad">00055</a>     <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespaceCS_1_1Memory.html#731ee669e17547977f099b95b0e657ad">AlignedFree</a> (<span class="keywordtype">void</span>* ptr)
+<a name="l00056"></a>00056     {
+<a name="l00057"></a>00057 <span class="preprocessor">    #ifdef CS_HAVE__ALIGNED_MALLOC</span>
+<a name="l00058"></a>00058 <span class="preprocessor"></span>      _aligned_free (ptr);
+<a name="l00059"></a>00059 <span class="preprocessor">    #else</span>
+<a name="l00060"></a>00060 <span class="preprocessor"></span>      free (*(((<span class="keywordtype">void</span>**)ptr) - 1));
+<a name="l00061"></a>00061 <span class="preprocessor">    #endif</span>
+<a name="l00062"></a>00062 <span class="preprocessor"></span>    }
+<a name="l00063"></a>00063     
+<a name="l00071"></a><a class="code" href="namespaceCS_1_1Memory.html#851bcb086482404d818bb6c60a67d9a1">00071</a>     <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span>* <a class="code" href="namespaceCS_1_1Memory.html#851bcb086482404d818bb6c60a67d9a1">AlignedRealloc</a> (<span class="keywordtype">void</span>* ptr, size_t size, 
+<a name="l00072"></a>00072       size_t align)
+<a name="l00073"></a>00073     {
+<a name="l00074"></a>00074 <span class="preprocessor">    #ifdef CS_HAVE__ALIGNED_MALLOC</span>
+<a name="l00075"></a>00075 <span class="preprocessor"></span>      <span class="keywordflow">return</span> _aligned_realloc (ptr, size, align);
+<a name="l00076"></a>00076 <span class="preprocessor">    #else</span>
+<a name="l00077"></a>00077 <span class="preprocessor"></span>      <span class="keywordtype">void</span>* orgPtr = *(((<span class="keywordtype">void</span>**)ptr) - 1);
+<a name="l00078"></a>00078       <a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a> offsetToData = (<a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a>)ptr - (<a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a>)orgPtr;
+<a name="l00079"></a>00079       <span class="keywordtype">void</span>* newPtr = realloc (orgPtr, size + align + <span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*));
+<a name="l00080"></a>00080       
+<a name="l00081"></a>00081       <a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a> ptrInt = (<a class="code" href="group__util.html#g0fbe4a4f8dd857ee04923a901f27465f">intptr_t</a>)newPtr;
+<a name="l00082"></a>00082       ptrInt = (ptrInt + align + <span class="keyword">sizeof</span>(<span class="keywordtype">void</span>*)) / align * align;
+<a name="l00083"></a>00083       <a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a> newOffsetToData = ptrInt - (<a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a>)newPtr;
+<a name="l00084"></a>00084       <span class="keywordflow">if</span> (newOffsetToData != offsetToData)
+<a name="l00085"></a>00085       {
+<a name="l00086"></a>00086         <span class="comment">// Ensure realloced data is aligned again</span>
+<a name="l00087"></a>00087         memmove ((<span class="keywordtype">void</span>*)(ptrInt), (<span class="keywordtype">void</span>*)((<a class="code" href="group__util.html#g728e973c799f206f0151c8a3bd1e5699">uintptr_t</a>)newPtr + offsetToData),
+<a name="l00088"></a>00088           size);
+<a name="l00089"></a>00089       }
+<a name="l00090"></a>00090       
+<a name="l00091"></a>00091       *(((<span class="keywordtype">void</span>**)ptrInt) - 1) = newPtr;
+<a name="l00092"></a>00092       <span class="keywordflow">return</span> (<span class="keywordtype">void</span>*)ptrInt;
+<a name="l00093"></a>00093 <span class="preprocessor">    #endif</span>
+<a name="l00094"></a>00094 <span class="preprocessor"></span>    }
+<a name="l00095"></a>00095   } <span class="comment">// namespace Memory</span>
+<a name="l00096"></a>00096 } <span class="comment">// namespace CS</span>
+<a name="l00097"></a>00097 
+<a name="l00100"></a>00100 <span class="preprocessor">#endif // __CS_CSUTIL_ALIGNED_ALLOC_H__</span>
 </pre></div><hr size="1"><address><small>Generated for Crystal Space by 
 <a href="http://www.doxygen.org/index.html">doxygen</a> 1.4.6 
 </small></address> </div></body> </html>
