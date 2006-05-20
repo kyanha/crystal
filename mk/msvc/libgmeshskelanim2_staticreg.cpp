@@ -16,32 +16,19 @@
 namespace csStaticPluginInit
 {
 static char const metainfo_gmeshskelanim2[] =
-"<?xml version=\"1.0\"?>
-"
-"<!-- gmeshanimen.csplugin -->
-"
-"<plugin>
-"
-"  <scf>
-"
-"    <classes>
-"
-"      <class>
-"
-"        <name>crystalspace.mesh.anim.skeleton2</name>
-"
-"        <implementation>csGenmeshSkelAnimationControlType</implementation>
-"
-"        <description>Crystal Space General Mesh Animation Control</description>
-"
-"      </class>
-"
-"    </classes>
-"
-"  </scf>
-"
-"</plugin>
-"
+"<?xml version=\"1.0\"?>"
+"<!-- gmeshanimen.csplugin -->"
+"<plugin>"
+"  <scf>"
+"    <classes>"
+"      <class>"
+"        <name>crystalspace.mesh.anim.skeleton2</name>"
+"        <implementation>csGenmeshSkelAnimationControlType</implementation>"
+"        <description>Crystal Space General Mesh Animation Control</description>"
+"      </class>"
+"    </classes>"
+"  </scf>"
+"</plugin>"
 ;
   #ifndef csGenmeshSkelAnimationControlType_FACTORY_REGISTER_DEFINED 
   #define csGenmeshSkelAnimationControlType_FACTORY_REGISTER_DEFINED 
