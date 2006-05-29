@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 2.4.3 Microsoft Visual C++ 7, 7.1 or 8</title>
+<title>Crystal Space: 2.4.3 Windows using MinGW</title>
 
-<meta name="description" content="Crystal Space: 2.4.3 Microsoft Visual C++ 7, 7.1 or 8">
-<meta name="keywords" content="Crystal Space: 2.4.3 Microsoft Visual C++ 7, 7.1 or 8">
+<meta name="description" content="Crystal Space: 2.4.3 Windows using MinGW">
+<meta name="keywords" content="Crystal Space: 2.4.3 Windows using MinGW">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,10 +40,10 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MSVC7"></a>
+<a name="MinGW"></a>
 <a name="2.4.3"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_2.4.2.8.html#2.4.2.8" title="Previous section in reading order"> &lt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_2.4.2.html#2.4.2" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_2.4.4.html#2.4.4" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_2.html#2." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
@@ -58,383 +58,194 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 2.4.3 Microsoft Visual C++ 7, 7.1 or 8 </h3>
+<h3 class="subsection"> 2.4.3 Windows using MinGW </h3>
 
 
-<p><em>Philip Wyett <a href="mailto:philip.wyett@w-tech.co.uk">philip.wyett@w-tech.co.uk</a>.</em>
-
-<em>Last updated 18 May 2005.</em>
+<p><em>Written by Eric Sunshine, <a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a>.  Originally
+written by Philip Wyett, <a href="mailto:philip.wyett@w-tech.co.uk">philip.wyett@w-tech.co.uk</a>.  Last updated 13
+Dec 2004.</em>
 </p>
-<p>In order to successfully compile the Crystal Space 3D Software Development Kit
-(<small>SDK</small>), you will need a copy of <em>Microsoft Developer Studio <small>.NET</small></em>
-or the stand alone version of <em>Microsoft Visual C++ 7 (<small>.NET 2002</small>)</em>, 
-<em>Microsoft Visual C++ 7.1 (<small>.NET 2003</small>)</em> or 
-<em>Microsoft Visual C++ 8 (<small>.NET 2005</small>)</em>. The <em>Express Edition</em> of
-<small>MSVC</small> 8 is perfectly suitable to compile Crystal Space, once the Platform
-<small>SDK</small> was installed (more below).
+<p>These instructions are for building Crystal Space with MinGW, the
+<em>Minimalist <small>GNU</small> compiler for Windows</em>.
+</p>
+
+<p><a href="http://www.mingw.org/">http://www.mingw.org/</a>
 </p>
 <a name="SEC53"></a>
-<h4 class="subsubheading"> Getting Extra Help </h4>
+<h4 class="subsubheading"> Necessary Resources </h4>
 
-<p>If you need help with Crystal Space and Visual C++ or just Crystal Space in
-general.  You can subscribe and then post a message to the Crystal Space
-mailing list.  To subscribe see the following site and fill in the form:
+<p>Download the following packages:
 </p>
-<p><a href="http://lists.sourceforge.net/lists/listinfo/crystal-main">http://lists.sourceforge.net/lists/listinfo/crystal-main</a>
+<ul>
+<li>
+The most recent version of the MinGW compiler and related tools.  This package
+is typically named <tt>`MinGW-?.?.?-?.exe'</tt>, where the question marks stand for
+the actual version number.
+
+
+<p><a href="http://prdownloads.sourceforge.net/mingw/">http://prdownloads.sourceforge.net/mingw/</a>
 </p>
+
+<p>Or:
+</p>
+
+<p><a href="http://www.mingw.org/download.shtml">http://www.mingw.org/download.shtml</a>
+</p>
+</li><li>
+The most recent version of <small>MSYS</small>.  This is an adjunct package for MinGW
+which provides additional useful utilities as well as a convenient shell
+environment.  <small>MSYS</small> provides a more reliable and robust environment for the
+configuration and build phases of Crystal Space.  It is available from the
+MinGW web site.  This package is typically named <tt>`MSYS-?.?.?.exe'</tt>, where
+the question marks stand for the actual version number.
+
+
+<p><a href="http://prdownloads.sourceforge.net/mingw/">http://prdownloads.sourceforge.net/mingw/</a>
+</p>
+
+<p>Or:
+</p>
+
+<p><a href="http://www.mingw.org/download.shtml">http://www.mingw.org/download.shtml</a>
+</p>
+</li><li>
+The most recent Crystal Space Win32 Libs package.  This package provides a set
+of additional required and optional resources used when building Crystal Space,
+such as zlib, libpng, libjpeg, <small>ODE</small>, <small>NASM</small> (the Netwide Assembler),
+etc.  See <a href="cs_2.3.html#cs_002dwin32libs">cs-win32libs</a>.
+</li></ul>
+
 <a name="SEC54"></a>
-<h4 class="subsubheading"> Required/Optional External Libraries and Software </h4>
+<h4 class="subsubheading"> Installation </h4>
 
-<p>All the following libraries and Software Development Kits (<small>SDK</small>) unless
-stated are not required.  However, if you choose not to install them, at
-compile time you must follow the documented instructions of how to unload these
-projects from the Crystal Space build process.
+<p>Follow these instructions to install the packages which you downloaded.
+Be sure to install them in the order shown.
+</p>
+<ul>
+<li>
+Install the MinGW compiler.  The is a self-extracting executable.  The
+following instructions assume you will install the MinGW package at
+<tt>`C:\mingw32'</tt>, though you are free to install it wherever you like.
+
+</li><li>
+Install <small>MSYS</small>.  This is a self-extracting executable.  During the
+installation, you will be asked for the location of the MinGW installation.
+This allows <small>MSYS</small> to correctly locate the MinGW tools later on when
+building Crystal Space.  Be sure to enter the correct path (<tt>`C:/mingw32'</tt>,
+in our example) when prompted.
+
+</li><li>
+Install the <tt>`cs-win32libs'</tt> package.  This is a self-extracting executable.
+After the installation, you should opt to also install support for the
+<small>MSYS</small> development environment.  This will augment the <small>MSYS</small> shell
+startup file so a helper script named <tt>`cslibs-config'</tt> can be found when
+configuring Crystal Space.  This script is used by the Crystal Space configure
+script to determine where the rest of the <tt>`cs-win32libs'</tt> resources are
+located.
+
+<p>You may want to select &quot;MSYS/MinGW typical&quot; in the &quot;Select Components&quot; 
+screen. You can further adjust the selection of installed components depending 
+on your actual set up (e.g. install VisualC-related components if you plan to 
+also use CrystalSpace with VisualC++).
+</p></li></ul>
+
+<p><em>Note</em>: If you ever install a new version of <small>MSYS</small>, then you should 
+also re-install the <tt>`cs-win32libs'</tt> package.
 </p>
 <a name="SEC55"></a>
-<h4 class="subsubheading"> Platform <small>SDK</small> - required for Microsoft Visual C++ 2005 Express Edition </h4>
+<h4 class="subsubheading"> Building Crystal Space </h4>
 
-<p>All supported versions of Microsoft Visual C++ ship with a version of the
-Platform <small>SDK</small> that suffices to compile Crystal Space, except the 
-Microsoft Visual C++ 2005 Express Edition, which requires a seperate setup of 
-the Platform SDK. Follow these instructions exactly to set up the <small>PSDK</small>:
+<p>You must configure and build Crystal Space from within the <small>MSYS</small> shell
+environment.  To launch this environment, click on the <small>MSYS</small> icon which the
+installation procedure placed upon your desktop, or choose the <small>MSYS</small> item
+from the <em>Programs</em> menu.  This will launch a Unix-like shell window into
+which you type commands.
 </p>
-
-<p><a href="http://msdn.microsoft.com/vstudio/express/visualc/usingpsdk/">http://msdn.microsoft.com/vstudio/express/visualc/usingpsdk/</a>
+<p>Crystal Space can be built with either <tt>`make'</tt> or Jam (see <a href="cs_2.2.html#GettingJam">GettingJam</a>).
+Both tools work equally well.  The <tt>`cs-win32libs'</tt> package contains a
+pre-built version of Jam which you can invoke simply by typing <samp>`jam'</samp> at
+the <small>MSYS</small> command prompt.  In the examples below, wherever <samp>`make -k'</samp>
+is used, you can instead substitute <tt>`jam'</tt> if you so desire.
 </p>
+<p>At the shell prompt, go to your <tt>`CS'</tt> directory with the <samp>`cd'</samp> command.
+For example, if Crystal Space resides at <tt>`C:\work\CS'</tt>, invoke the command
+<samp>`cd /c/work/CS'</samp>.  Next, configure and build the project with the following
+sequence of commands:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">./configure
+make -k all
+</pre></td></tr></table>
+<p>The <samp>`-k'</samp> option used in <samp>`make -k all'</samp> instructs the <tt>`make'</tt>
+utility to ignore errors and continue building the project.  This may be
+necessary if you are using the bleeding-edge version of Crystal Space from the
+<small>SVN</small> repository and some module fails to build correctly.
+</p>
+<p>If you prefer to build a <em>debug</em> version of Crystal Space, substitute
+the following commands for those shown above:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">./configure --enable-debug
+make -k all
+</pre></td></tr></table>
+<p>If the Crystal Space source directory is read-only, if it is shared between
+several developers, or if you simply dislike building a project within its
+source tree, you can instead configure and build from a different directory.
+For instance:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">mkdir $HOME/builddir
+cd $HOME/builddir
+/c/work/CS/configure --enable-debug
+make -k all
+</pre></td></tr></table>
+<p>Finally, if you want to utilize Crystal Space as a software development kit
+(<small>SDK</small>), you can install it and then clean up the detritus of the build
+process:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">make install
+make distclean
+</pre></td></tr></table>
 <a name="SEC56"></a>
-<h4 class="subsubheading"> cs-win32libs - Required </h4>
+<h4 class="subsubheading"> Additional Build Options </h4>
 
-<p>Before you attempt to compile Crystal Space, you must download
-and install the &quot;cs-win32libs&quot; archive.  This archive contains alot of the
-third party header, pre-built libraries and dll files used by Crystal
-Space, i.e. <tt>`libz-cs.dll'</tt>, <tt>`libjpeg-cs.dll'</tt>, <tt>`libpng-cs.dll'</tt>, 
-etc. See <a href="cs_2.3.html#cs_002dwin32libs">cs-win32libs</a>.
+<p>Sometimes it is a good idea to remove all of the built programs and executable
+files and start from scratch.  You can do this with the following commands:
 </p>
-<p>Once you have downloaded the cs-win32libs package, execute the binary and
-follow the setup instructions.  You may want to select &quot;VC typical&quot; in the
-&quot;Select Components&quot; screen. You can further adjust the selection of installed 
-components depending on your actual set up (e.g. install MinGW-related 
-components if you plan to also use CrystalSpace with MinGW/MSYS).
+<table><tr><td>&nbsp;</td><td><pre class="example">make clean
+make -k all
+</pre></td></tr></table>
+<p>Once in a while it is even a good idea to completely clean and re-configure the
+project.  This may be required if you are using the bleeding-edge version of
+Crystal Space from the <small>SVN</small> repository after some radical change.
 </p>
+<table><tr><td>&nbsp;</td><td><pre class="example">make distclean
+./configure
+make -k all
+</pre></td></tr></table>
 <a name="SEC57"></a>
-<h4 class="subsubheading"> DirectX - Optional </h4>
+<h4 class="subsubheading"> Troubleshooting </h4>
 
-<p>In order to compile Crystal Space at its minimum i.e. the software renderer,
-you must have at least some form of the DirectX Software Development Kit 
-(<small>SDK</small>) on your system. 
-</p>
-<p>Visual C++ 7 and later come with the minimum required DirectX <small>SDK</small> 8.1 
-files in order to build Crystal Space. 
-</p>
-<p>The &quot;cs-win32libs&quot; package also come with minimum headers and libraries that 
-suffice to compile the parts of Crystal Space that utilize DirectX. However, 
-the version included in cs-win32libs is DirectX 7, so you may want to stick to 
-the DirectX 8.1 shipped with VC++ 7.
-</p>
-<p>You can optionally download the latest DirectX Software Development Kit 
-(<small>SDK</small>), which can be obtained from:
-</p>
-<p><a href="http://www.msdn.microsoft.com/directx">http://www.msdn.microsoft.com/directx</a>
-</p>
-<p>Thanks, to the miracle which is Microsoft.  If you download and install the
-latest DirectX  Software Development Kit (<small>SDK</small>) and already have Visual
-C++ installed, it will ask you if you wish to add the paths to the <small>SDK</small> to
-Visual C++ so it can use it.  We recommend you accept when offered this option.
-If it is not the latest <small>SDK</small> you install you will have to manually point
-Visual C++ to where you installed the <small>SDK</small> in-order for it to be used.
-This can be done from the Visual C++ file menu and selecting
-<em>Tools-&gt;Options-&gt;Directories</em>.  You must add the paths for both the
-include files and libraries and being that we wish Visual C++ to see and use
-this new <small>SDK</small> before all possible others on your system, you must click on
-and drag both paths you have entered to the top of the list.
+<p>If you successfully built Crystal Space, yet find that you can not run the
+applications from the <tt>`CS\'</tt> root directory, a possible cause might be that
+the pathname leading up to the <tt>`CS\'</tt> directory might have embedded
+whitespace.  For instance, if you installed the project in <tt>`C:\my
+stuff\CS'</tt>, try renaming the path to <tt>`C:\my_stuff\CS'</tt> or
+<tt>`C:\mystuff\CS'</tt>.
 </p>
 <a name="SEC58"></a>
-<h4 class="subsubheading"> Python - Optional </h4>
+<h3 class="subheading"> Blasting the Past </h3>
 
-<p>Crystal Space contains support for Python scripting and thus has projects
-within it requires that Python be installed on your system.  Make sure you add
-the Python <em>include</em> and <em>libs</em> directories to <small>MSVC</small> so that the
-compiler can see those files.  If you wish to compile with Python support you
-must install Python 2.2 or later, which can be obtained from:
+<p>If you were previously using the older, deprecated <tt>`cs_mingw_0.??.exe'</tt>
+package which contained the entire MinGW distribution along with other
+unrelated tools and resources, or the <tt>`csmingwlibs'</tt> package, it is highly
+recommended that you first remove the older package, as well as any residual
+files and resources before installing the newer MinGW, <small>MSYS</small>, and
+<tt>`cs-win32libs'</tt> packages.  For best results, it would probably be wise to
+remove the entire old <tt>`MinGW'</tt> directory (though you may want to make a
+backup copy of it just in case) and clean your environment variables of any
+references to the old resource directories.
 </p>
-<p><a href="http://www.python.org">http://www.python.org</a>
-</p>
-<p><small>NOTE</small>: To have parity with one of the latest versions of msvc_libs and take
-full advantage of the debug elements - you should have Python 2.2.3 or 2.3.0
-installed on your system. Whichever version you decide to use, make sure you
-download the comparable msvc_libs.
-</p>
-<a name="SEC59"></a>
-<h4 class="subsubheading"> Compiling Crystal Space </h4>
-
-<p>To compile Crystal Space, you'll have to perform the following steps.  If
-anything doesn't work, see the Win32 <small>FAQ</small>, <a href="#MSVC7-FAQ">MSVC7 FAQ</a>.
-</p>
-<ol>
-<li>
-Load <tt>`CS\mk\msvc\wkstypical.sln'</tt>.
-
-</li><li>
-From the file menu select <em>Build-&gt;Build Solution</em>.  <em>Note</em>: If you
-want to build a debuggable version of Crystal Space, you should select the
-<em>Debug</em> build mode; otherwise select the <em>Release</em> build mode.  Do
-not use the special-purpose <em>ExtensiveMemDebug</em> build mode.
-
-</li><li>
-After a while the compilation should finish.  The signal for a
-successful build will be come in the form of the something similar to the
-following:
-
-<table><tr><td>&nbsp;</td><td><pre class="example">Build: 1 succeeded, 0 failed, 0 skipped
-</pre></td></tr></table></li></ol>
-
-<a name="SEC60"></a>
-<h4 class="subsubheading"> Running the Demonstration Applications </h4>
-
-<p>The first app you should try is Walktest.  This program shows many of the
-features of the 3D engine.  You can run it by starting it from the windows
-explorer.  It should be at <tt>`.../cs/walktest.exe'</tt>.  Don't start it from
-other locations or from within Visual Studio.  It won't find the required files
-if you do.
-</p>
-<p>If you want to run a debug session, you first have to set the working
-directory.  First select the project you wish to debug and setting it as the
-startup project. Next open <em>Project-&gt;Properties-&gt;Debugging</em> and enter
-the base <tt>`CS\'</tt> directory as the working directory for debug sessions
-(for example, <tt>`C:\CS\'</tt>).  Be sure to to this for <em>Debug</em> and
-<em>Release</em> builds.
-</p>
-<p>You can now continue with the next platform-independent step.  The remaining
-Windows-specific sections are only important when you want to compile your own
-application using Crystal Space.
-</p>
-<a name="SEC61"></a>
-<h4 class="subsubheading"> Structure of the Workspace </h4>
-
-<p><em>Note</em>: If you find bugs in the <small>MSVC</small> project or workspace files
-coming with Crystal Space, don't send fixes for these files to the developers.
-These files are generated automatically, so your fixes would be useless.
-Better, send a description of the bug to the mailing list.
-</p>
-<p>The Crystal Space workspace is divided into several projects.  They all exist
-as separate project files (<tt>`*.vcproj'</tt>).  The projects are collected
-together by workspaces <tt>`*.sln'</tt>.  A workspace will also ensure correct
-linking between the various projects.  There are several workspaces to choose
-from.  Most users should choose the <em>typical</em> workspace, but the others
-are available for the adventurous.
-</p>
-<ul>
-<li>
-<tt>`wkstypical.sln'</tt> -- Builds the typical modules needed by most users of
-Crystal Space.
-
-</li></ul>
-
-<p>The workspace uses a prefix system for naming contained projects:
-</p>
-<ul>
-<li>
-<tt>`app'</tt> -- Prefixes application projects.
-</li><li>
-<tt>`lib'</tt> -- Prefixes library projects.
-</li><li>
-<tt>`plg'</tt> -- Prefixes plugin module projects.
-</li><li>
-<tt>`grp'</tt> -- Prefixes psuedo-groups of related projects.
-</li></ul>
-
-<p>The <em>Libraries</em> are C++ libraries that you can link into your own
-programs.  Some of these libraries are part of the core of Crystal Space.
-Their output are <tt>`.lib'</tt> files.
-</p>
-<p>The <em>Plugins</em> are also programming libraries, but they use a special
-mechanism called <small>SCF</small> as their interface to your program.  This separates
-their interface from the internals of the library and thus allows dynamic
-linking.  In fact, some of the <em>Libraries</em> also use <small>SCF</small>.  The rule
-for the <small>MSVC</small> workspace is simple: The <em>Plugins</em> are projects that
-build a dynamic library (<tt>`.dll'</tt>).  You can find more information in the
-section of this manual dealing with plug-in modules.  See section <a href="cs_4.3.html#4.3">Plugins, Reference counting, Interfaces (SCF)</a>.
-</p>
-<p>The <em>Applications</em> are programs using some of these libraries, so they
-produce <tt>`.exe'</tt> files.
-</p>
-<a name="SEC62"></a>
-<h4 class="subsubheading"> Compiling Your Own Program Using Crystal Space </h4>
-
-<p>There is a <small>HOWTO</small> which explains how to create an <small>MSVC7</small> project file
-for your own program which utilizes Crystal Space.
-See section <a href="cs_4.21.2.html#4.21.2">Creating an External <small>MSVC</small> 7, 7.1 or 8 Application</a>.
-</p>
-<a name="SEC63"></a>
-<h4 class="subsubheading"> Frequently Asked Questions (<small>FAQ</small>) </h4>
-<p><a name="MSVC7-FAQ"></a>
-</p>
-<p>This is the list of frequently asked questions for the Win32 port of Crystal
-Space.  Please consult this list if you are having difficulty building or using
-the project.
-</p>
-<a name="SEC64"></a>
-<h4 class="subsubheading"> Compilation </h4>
-
-<ul>
-<li> 
-Q. <em>I get &quot;Errors in post link&quot; and later &quot;file not found&quot; errors.</em>
-
-<p>A. Some problems with non-latin directory names have been reported (e.g.
-Hebrew).  If your <tt>`CS'</tt> directory is under such a directory, try to move it
-to a directory which name has only Latin characters in it.
-</p>
-</li><li>
-Q. <em>Where are the <tt>`zlib.h'</tt>, <tt>`png.h'</tt> and <tt>`jpeglib.h'</tt> files?</em>
-
-<p>A. Those files are not part of the Crystal Space project, but they are
-required to build it.  You must get a version of the following packages, most
-of which can be easily found on the Internet.  You can download precompiled
-versions of these libraries i.e. <em>cs-win32libs</em> or grab the source code and
-compile it yourself if you prefer.  See section <a href="cs_2.3.html#2.3">External Libraries</a>.
-</p>
-<p>The resources from these packages should be placed in the following locations.
-</p>
-</li><li>
-Q. <em>How can I reduce build times?</em>
-
-<p>A. Build only the projects you will need. You must build all the Crystal Space
-libraries, however those you may not need can be unloaded (Right click on the
-project you wish unload from the build process and click on Unload). <em>Be
-very careful when unloading projects as some of Crystal Spaces projects e.g.
-some plugins are dependent on others</em>.
-</p>
-</li><li>
-Q. <em>How can I reduce build sizes?</em>
-A. Build only the projects you will need.
-A. Turning off precompiled headers tends to save a large amount of file space
-while increasing build times somewhat.
-</li></ul>
-
-<a name="SEC65"></a>
-<h4 class="subsubheading"> Linking </h4>
-
-<ul>
-<li>
-Q. <em>Where are the files <tt>`libpng.lib'</tt> and <tt>`zlib.lib'</tt>?</em>
-
-<p>A. Just look above at the question about <tt>`zlib.h'</tt> and <tt>`png.h'</tt>.
-It's the same problem, and if you have already done what is explained there,
-I can't do much for you!
-</p>
-</li><li>
-Q. <em>I've got unresolved symbols.</em>
-
-<p>A. What kind of symbols?
-</p>
-<ul class="toc">
-<li>-
-<samp>`_png_<small class="dots">...</small>'</samp>: That means that you don't link the project with
-<tt>`libpng.lib'</tt>.  Just take a look below where it is explained how to do so.
-
-</li><li>-
-<samp>`_inflate<small class="dots">...</small>'</samp> and <samp>`_deflate<small class="dots">...</small>'</samp>: Well, it seems to your
-project lacks <tt>`zlib.lib'</tt>.  The trick is explained just below, so hang on.
-
-</li><li>-
-<samp>`_DirectDraw<small class="dots">...</small>'</samp>: Same as above, but for <tt>`ddraw.lib'</tt> (DirectX
-component), look below.
-
-</li><li>-
-Any others: Well, I always have a solution, but this one is more difficult.  It
-seems that there is a missing source file in your project.  But the question
-is, which source file?  If it isn't obvious by the name of the functions, just
-to the following: In the menu <em>Edit</em>, select the option <em>Find in
-Files<small class="dots">...</small></em>.  Put the name of the function in the field &quot;Find What&quot;, check
-that the &quot;In Folder&quot; field content is the Crystal Space source directory and
-press <em>Find</em>.  You should get a bunch of files, many of them just making a
-call to the function.  But there is surely one which contains the definition of
-the function.  Look at the position of the file where it is defined, and add it
-to the project (menu <em>Project/Add To Project/Files</em>).
-
-<p>In order to add (or remove) a library for the link process, invoke the
-<em>Project/Settings/Link</em> menu item, then select the &quot;General&quot; category
-tab..  There is a field called &quot;Object/Library Modules&quot; that lists all the
-libraries added to the project at link time.
-</p></li></ul>
-</li></ul>
-
-<p>OK, now it should link.  So you should have an executable file called
-<tt>`walktest.exe'</tt> in your src directory.  Let's run it!
-</p>
-<a name="SEC66"></a>
-<h4 class="subsubheading"> Executing </h4>
-
-<ul>
-<li>
-Q. <em>I just get a black screen.</em>
-
-<p>A. When I start <tt>`walktest'</tt> I just get a black screen, maybe with some
-text output, but after a few seconds it drops back to the normal windows
-screen without an error.
-</p>
-<p>This shouldn't happen any more, because in most cases now, <tt>`walktest'</tt> will
-display proper error messages.  Anyway, you should make sure you have set an
-appropriate directory set (see above).  Make sure you have specified the map
-file in <tt>`walktest.cfg'</tt> as <samp>`Walktest.Settings.WorldFile='</samp> (also keep
-in mind, that your current directory is, where the executable sits.)
-</p>
-</li><li>
-Q. <em>I get the following (or similar) errors:</em>
-
-<table><tr><td>&nbsp;</td><td><pre class="example">WARNING: could not load plugin
-  `crystalspace.graphics3d.software'
-WARNING: failed to initialize plugin
-  `crystalspace.engine.3d'
-FATAL: No iGraphics3D plug-in loaded!
-FATAL: No iGraphics2D plug-in loaded!
-Error initializing system!
-</pre></td></tr></table>
-<p>A. You probably did not compile everything. Compiling only the <tt>`.exe'</tt>
-file is not sufficient!  You must also compile all plug-ins you want to use.
-In the above example the software renderer is missing.
-</p>
-<p>If you are certain that everything is compiled, make sure your working
-directory is set to <tt>`CS\'</tt>.  To do this go to the <em>Project</em> menu.
-Select <em>Settings</em> and go to the <em>Debug</em> tab.  Change the debug
-executable to <tt>`X:\CS\appname'</tt> where <tt>`X:'</tt> is the drive letter where
-the Crystal Space project is installed.  Next set the working directory to
-<tt>`X:\CS'</tt>.  Click <small>OK</small> and you should be all set.
-</p>
-<p>If after doing this, you are still getting the same error, make sure that you 
-have the <tt>`libz-cs.dll'</tt> installed, the <small>VFS</small> plugin is dependent upon it.
-</p></li></ul>
-
-<a name="SEC67"></a>
-<h4 class="subsubheading"> Miscellaneous </h4>
-
-<ul>
-<li>
-Q. <em>My last update did compile, but now I got a new version from the
-<small>CVS</small> repository and everything seems to be broken.</em>
-
-<p>A. When working with Crystal Space, always keep in mind, that this is a
-multiplatform project.  So sometimes not all features will work correct on all
-platforms.  Sometimes a specific port may even be broken due to changes in
-other ports.  Since the introduction of <small>CVS</small> (see <a href="cs_1.6.html#CVS">CVS</a>) this is usually
-only for a short time, so if you got your version out of <small>CVS</small>, it usually
-pays off, to post a message describing the problems to the Crystal Space
-Mailing List describing you problem and include the exact error messages.  If
-you wait a while, this will probably be fixed, or at least be worked around.
-See section <a href="cs_1.7.html#1.7">Mailing Lists</a>.
-</p>
-</li><li>
-Q. <em>I have a problem that you haven't solved here!</em>
-
-<p>A. Try sending a note to the Crystal Space mailing list and asking your
-question there.  See section <a href="cs_1.7.html#1.7">Mailing Lists</a>.  Be sure to include any pertinent
-information, such as the operating system you are using, the compiler, which
-version of Crystal Space, and any special configuration information.
-</p></li></ul>
-
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_2.4.2.8.html#2.4.2.8" title="Previous section in reading order"> &lt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_2.4.2.html#2.4.2" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_2.4.4.html#2.4.4" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_2.html#2." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
