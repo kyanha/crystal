@@ -62,7 +62,7 @@ ul.toc {list-style: none}
 
 <p>This section describes the initialization section.
 </p>
-<a name="SEC497"></a>
+<a name="SEC483"></a>
 <h4 class="subsubheading"> Texture Specification Section </h4>
 
 <p>Here is an example texture specification section:
@@ -155,7 +155,7 @@ and correct visual appearance of objects. For a more detailed explanation
 see section <a href="cs_4.11.2.html#4.11.2">Alpha and Keycolor in Textures</a>.
 </li></ul>
 
-<a name="SEC498"></a>
+<a name="SEC484"></a>
 <h4 class="subsubheading"> Material Specification Section </h4>
 
 <p>Materials are very important in Crystal Space. Almost all objects will
@@ -225,7 +225,7 @@ shader A shader variable has two attributes: <samp>`name'</samp> and <samp>`type
 <samp>`float'</samp>,  <samp>`expr'</samp>, <samp>`expression'</samp>, or <samp>`array'</samp>.
 </li></ul>
 
-<a name="SEC499"></a>
+<a name="SEC485"></a>
 <h4 class="subsubheading"> Shader Section </h4>
 
 <p>With shaders you can describe more advanced texture and material
@@ -237,17 +237,124 @@ effects. Here is an example:
 </pre></td></tr></table>
 <p>Most of the times you simply refer to shaders from a file.
 </p>
-<a name="SEC500"></a>
+<a name="SEC486"></a>
 <h4 class="subsubheading"> Sounds Section </h4>
 
-<p>@@@Todo.
+<p>The <samp>`sounds'</samp> Section of the map file format allows you to encode
+information about the sound effects, background music, or pre-recorded
+dialogues that you want to include in the map. Here is an example of
+a 'sounds' section of a map file:
 </p>
-<a name="SEC501"></a>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;sounds&gt;
+  &lt;sound name=&quot;ear-joy.mp3&quot; mode3d=&quot;relative&quot; /&gt;
+  &lt;sound name=&quot;waterfall.mp3&quot;
+    file=&quot;waterfall_179384.mp3&quot;
+    mode3d=&quot;absolute&quot; /&gt;
+&lt;/sounds&gt;
+</pre></td></tr></table>
+<p>As you can see, you can include multiple <samp>`sound'</samp> nodes within a
+<samp>`sounds'</samp> node, and there are three attributes that determine the
+behavior of each <samp>`sound'</samp> node. Here is an overview of what each of
+the attributes do:
+</p>
+<ul class="toc">
+<li> <samp>`name'</samp>
+<samp>`String'</samp>. The <samp>`name'</samp> attribute is the internal Crystal
+Space <small>VFS</small> identifier for the sound object. This is usually identical to
+the filename for the object.
+</li><li> <samp>`file'</samp>
+<samp>`String'</samp>. The <samp>`file'</samp> attribute is the external filename for the
+sound object, which may be different than the sound object's Crystal Space
+name. Most of the time, though, the <samp>`file'</samp> attribute will be left
+blank, and its default value will be the value of the <samp>`name'</samp> attribute.
+</li><li> <samp>`mode3d'</samp>
+<samp>`Enum'</samp>.  The <samp>`mode3d'</samp> attribute can be one of: <samp>`absolute'</samp>,
+<samp>`disable'</samp>, or <samp>`relative'</samp>. If <samp>`mode3d'</samp> is not one of these
+three values or empty, then the <samp>`crystalspace.maploader.parse.sound'</samp>
+error is reported.
+</li></ul>
+
+<p>As mentioned above, it is possible to omit, the <samp>`file'</samp> attribute and
+let it default to <samp>`name'</samp>, because <samp>`name'</samp> is required. However,
+if you want the Crystal Space name to be different than the filename,
+use the <samp>`file'</samp> attribute as well. An alternative to using <samp>`file'</samp>
+attribute (for example: <samp>`file=&quot;mysound.wav&quot;'</samp> to indicate the filename
+of a sound object, you may instead use a <samp>`file'</samp> element (for example
+<samp>`&lt;file&gt;mysong.wav&lt;/file&gt;'</samp>) within a <samp>`sound'</samp> node to load a
+sound from a filename. Here is an example of how it would look:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;sounds&gt;
+  &lt;sound name=&quot;mysong.wav&quot; mode3d=&quot;disable&quot;&gt;
+    &lt;file&gt;mysong.wav&lt;/file&gt;
+  &lt;/sound&gt;
+&lt;/sounds&gt;
+</pre></td></tr></table>
+<p>As mentioned earlier, The <samp>`mode3d'</samp> enumeration is one of:
+<samp>`absolute'</samp>, <samp>`disable'</samp>, or <samp>`relative'</samp>. The following is a
+breakdown of what each of these options implies:
+</p>
+<ul class="toc">
+<li> <samp>`disabled'</samp>
+When <samp>`mode3d'</samp> is <samp>`disabled'</samp> then no signal processing is done
+to the sound object. This mode allows stereo audio to be stored in a
+sound object. Both other modes only allow one channel.
+</li><li> <samp>`relative'</samp>
+When <samp>`mode3d'</samp> is <samp>`relative'</samp> then some level of signal processing
+is done to ensure that the sound being played will have different volumes
+depending on the <samp>`position'</samp> parameter of the sound object. Note that
+only on-channel sound objects are allowed.
+</li><li> <samp>`absolute'</samp>
+When <samp>`mode3d'</samp> is <samp>`absolute'</samp> then the highest level of signal
+processing is performed. Like <samp>`relative'</samp> this mode only works with
+one-channel sound objects. Unlike <samp>`relative'</samp>, this mode translates
+absolute coordinates into relative listener coordinates, allowing the
+calculation of the sound output by finding the difference between the
+user and the sound object, so the volume of the sound object will seem
+to vary as you move about.
+</li></ul>
+
+<a name="SEC487"></a>
 <h4 class="subsubheading"> Variable Section </h4>
 
-<p>@@@Todo.
+<p>The <code>variables</code> section of a map file format allows you to define
+variables, and make shortcuts for common strings, colors, and vectors.
+Here is an example of a <code>variables</code> section of a map file:
 </p>
-<a name="SEC502"></a>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;variables&gt;
+  &lt;variable name=&quot;avatar_age&quot; value=&quot;21.0&quot; /&gt;
+  &lt;variable name=&quot;sky_color&quot;&gt;
+    &lt;color red=&quot;0.0&quot; green=&quot;0.0&quot; blue=&quot;1.0&quot; alpha=&quot;1.0&quot; /&gt;
+  &lt;/variable&gt;
+  &lt;variable name=&quot;that_way&quot;&gt;
+    &lt;v x=&quot;-0.5&quot; y=&quot;3.5&quot; z=&quot;0.5&quot; /&gt;
+  &lt;/variable&gt;
+&lt;/variables&gt;
+</pre></td></tr></table>
+<p>As you can see, the <code>variables</code> section can contain multiple
+<code>variable</code> elements, each of them defining a variable definition.
+Within each variable definition, depending on the type, you can specify
+different attributes. Here is an overview of the attributes and
+elements that can be found within a <code>variable</code> element:
+</p>
+<ul class="toc">
+<li> <samp>`name'</samp> <samp>`String'</samp> attribute,
+The name of the variable.
+</li><li> <samp>`value'</samp> <samp>`String'</samp> attribute
+A string value associated with the variable name.
+</li><li> <samp>`oolor'</samp> element
+A color value associated with the variable name. A <samp>`color'</samp> element
+can have <samp>`red'</samp>, <samp>`green'</samp>, <samp>`blue'</samp>, and optionally
+<samp>`alpha'</samp> attributes, where each attribute can be assigned a value
+between 0 and 1. If the <samp>`alpha'</samp> attribute is omitted, then it is
+assumed to have a value of 1.
+</li><li> <samp>`v'</samp> element
+A vector value associated with the variable name. A <samp>`vector'</samp> element
+can have <samp>`x'</samp>, <samp>`y'</samp>, and optionally <samp>`z'</samp> attributes, where
+each attribute is any floating point number. If the <samp>`z'</samp> attribute
+is omitted, then it is assumed to have a value of 0.
+</li></ul>
+
+<a name="SEC488"></a>
 <h4 class="subsubheading"> Plugin Section </h4>
 
 <p>The plugin section is purely for convenience later. Normally when creating
@@ -269,7 +376,7 @@ spr3d, and spr3dfact plugins:
     &lt;/plugin&gt;
 &lt;/plugins&gt;
 </pre></td></tr></table>
-<a name="SEC503"></a>
+<a name="SEC489"></a>
 <h4 class="subsubheading"> Settings Section </h4>
 
 <p>In the settings section there are a few configuration options that you can
@@ -311,7 +418,7 @@ components.
 but at this moment it only seems to pay off for objects with a high
 number of polygons. The default is 500.
 </p>
-<a name="SEC504"></a>
+<a name="SEC490"></a>
 <h4 class="subsubheading"> Start Location Section </h4>
 
 <p>A map file can contain zero or more start locations for the camera. How
@@ -356,7 +463,7 @@ to let the engine clear the z-buffer every frame (see the <samp>`settings'</samp
 section above) because you can no longer depend on geometry to do it for you
 if it is culled away.
 </p>
-<a name="SEC505"></a>
+<a name="SEC491"></a>
 <h4 class="subsubheading"> Library Specification Section </h4>
 
 <p>It is possible to define libraries that contain objects like mesh factories,
@@ -368,7 +475,7 @@ your map file:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;library&gt;/mygamedata/library&lt;/library&gt;
 </pre></td></tr></table>
-<a name="SEC506"></a>
+<a name="SEC492"></a>
 <h4 class="subsubheading"> Keys </h4>
 
 <p>Crystal Space has a system with which you can attach user data to almost
