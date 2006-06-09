@@ -166,13 +166,12 @@ happens with the <code>Check()</code> function below:
 <table><tr><td>&nbsp;</td><td><pre class="example">void Laser::Check ()
 {
   // Do a beam to check if we hit an adversary.
-  csVector3 isect;
-  iMeshWrapper* mesh = lasersector-&gt;HitBeamPortals (laserstart,
-  	laserend, isect, 0);
-  if (mesh)
+  csSectorHitBeamResult rc = lasersector-&gt;HitBeamPortals (
+  	laserstart, laserend);
+  if (rc.mesh)
   {
     csRef&lt;Adversary&gt; adv = CS_GET_CHILD_OBJECT (
-    	mesh-&gt;QueryObject (), Adversary);
+    	rc.mesh-&gt;QueryObject (), Adversary);
     if (adv)
     {
       // Hit!
