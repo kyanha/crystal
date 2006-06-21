@@ -66,16 +66,16 @@ well as in discussions of 3D graphics.
 <dl compact="compact">
 <dt> <em>3D Renderer</em></dt>
 <dd><p>The 3D renderer plugin in Crystal Space is responsible for rendering
-3D objects (polygons) on the canvas. We have several renderers but the two
+3D objects (polygons) on the canvas.  We have several renderers but the two
 most common are the software and OpenGL renderers.
 </p>
 </dd>
 <dt> <em>3D Sprite</em></dt>
 <dd><p>A 3D Sprite in Crystal Space is a mesh object based on a triangle mesh.
-It is often used for actors. The word 'Sprite' may be confusing because a
-3D Sprite is really a full 3D object. 3D Sprites support frame based animation.
-The <small>SPRCAL3D</small> mesh object also supports skeletal animation through
-the <small>CAL3D</small> library.
+It is often used for actors.  The word <samp>`Sprite'</samp> may be confusing because
+a 3D Sprite is really a full 3D object.  3D Sprites support frame based
+animation.  The <small>SPRCAL3D</small> mesh object also supports skeletal animation
+through the Cal3d library.
 </p>
 </dd>
 <dt> <em>Ambient (lighting)</em></dt>
@@ -92,28 +92,28 @@ direction is right.
 </dd>
 <dt> <em>Canvas</em></dt>
 <dd><p>A canvas is a plugin which is responsible for managing a window for
-Crystal Space. On operating systems that don't support windows the canvas
-will represent the screen. The 3D renderer will use a canvas to render on.
+Crystal Space.  On operating systems that don't support windows the canvas
+will represent the screen.  The 3D renderer will use a canvas to render on.
 </p>
 </dd>
 <dt> <em>Detail Texture</em></dt>
 <dd><p>A detail texture is a texture that is blended on top of another texture
-so that the texture gets more detail. Crystal Space supports this by
+so that the texture gets more detail.  Crystal Space supports this by
 allowing several detail layers on top of the base texture in a material.
 </p>
 </dd>
 <dt> <em>Event Queue</em></dt>
-<dd><p>Crystal Space is an event-driven framework. So a Crystal Space application
+<dd><p>Crystal Space is an event-driven framework.  So a Crystal Space application
 will also be event driven. The event queue manages the event system and
-sends events to listeners. Every module or plugin that implements
+sends events to listeners.  Every module or plugin that implements
 <code>iEventHandler</code> can register itself with the event queue so it gets
-notified when certain events happen. See also
-with <code>csInitializer::CreateEventQueue()</code> or
+notified when certain events happen. See also with
+<code>csInitializer::CreateEventQueue()</code> or
 <code>csInitializer::CreateEnvironment()</code>.
 </p>
 </dd>
 <dt> <em>Haze Mesh Object</em></dt>
-<dd><p>A haze mesh object is a bit like volumetric light. It represents a 3D
+<dd><p>A haze mesh object is a bit like volumetric light.  It represents a 3D
 volume on which a texture is applied in a fuzzy way.
 </p>
 </dd>
@@ -123,16 +123,16 @@ light-map.  Light-map space is closely related to texture space.
 </p>
 </dd>
 <dt> <em>Lumel</em></dt>
-<dd><p>A lumel is a pixel on a lightmap. A lumel corresponds with one light
+<dd><p>A lumel is a pixel on a lightmap.  A lumel corresponds with one light
 value (red, green, blue) and represents the lighting values of a block of
-texels on the original texture. Usually this block is 16x16 big.
+texels on the original texture.  Usually this block is 16x16 big.
 </p>
 </dd>
 <dt> <em>Material</em></dt>
-<dd><p>A material represents how some object or polygon looks. In the most common
+<dd><p>A material represents how some object or polygon looks.  In the most common
 case a material is just a texture. But a material can contain additional
 information like detail textures (textures that are blended on top of
-the base texture). In future materials will be able to do much more.
+the base texture).  In future materials will be able to do much more.
 </p>
 </dd>
 <dt> <em>Mesh Factory</em></dt>
@@ -141,19 +141,19 @@ See section <a href="cs_4.9.html#4.9">Mesh Object Plug-In System</a>.
 </p>
 </dd>
 <dt> <em>Mesh Object</em></dt>
-<dd><p>A mesh object represents geometry in Crystal Space. The Crystal Space engine
-is very modular. The engine itself does not know how to render. It only
-knows about mesh objects. Every mesh object is responsible for rendering
-what it represents (using the 3D renderer). Crystal Space supports several
+<dd><p>A mesh object represents geometry in Crystal Space.  The Crystal Space engine
+is very modular.  The engine itself does not know how to render.  It only
+knows about mesh objects.  Every mesh object is responsible for rendering
+what it represents (using the 3D renderer).  Crystal Space supports several
 mesh objects: things, 3D sprites, 2D sprites, particle systems, haze,
-terrain engine, ...
+terrain engine, <small class="dots">...</small>
 </p>
 </dd>
 <dt> <em>Object Registry</em></dt>
-<dd><p>The object registry (represented by the <samp>`iObjectRegistry'</samp> interface
-is the central repository for all objects in Crystal Space. Everything in
+<dd><p>The object registry (represented by the <code>iObjectRegistry</code> interface
+is the central repository for all objects in Crystal Space.  Everything in
 Crystal Space will use the object registry to get the pointer to the objects
-it is interested in. See also:
+it is interested in.  See also:
 </p>
 
 <p><code>csInitializer::CreateObjectRegistry()</code><br>
@@ -166,24 +166,25 @@ typically centered around (0,0,0).
 </p>
 </dd>
 <dt> <em>Particle System</em></dt>
-<dd><p>A particle system is another kind of mesh object. Crystal Space supports
+<dd><p>A particle system is another kind of mesh object.  Crystal Space supports
 several particle systems (snow, rain, fire, explosion, emit, ...).
 </p>
 </dd>
 <dt> <em>Plugin</em></dt>
 <dd><p>A plugin is a number of classes that can be loaded dynamically into
-a running Crystal Space application. A plugin is represented by a dynamic
-library in a format suitable for the host operating system. On Unix systems
-this is a .so file and on Windows systems this is a .dll file.
+a running Crystal Space application.  A plugin is represented by a dynamic
+library in a format suitable for the host operating system.  On Unix like
+systems this is a <tt>`.so'</tt> file and on Windows systems this is a
+<tt>`.dll'</tt> file.
 </p>
 </dd>
 <dt> <em>Plugin Manager</em></dt>
-<dd><p>The plugin manager is responsible for loading and unloading plugins. A
+<dd><p>The plugin manager is responsible for loading and unloading plugins.  A
 plugin is a shared library of functions that can be loaded dynamically
-into a running Crystal Space application. On Unix a plugin has the <tt>`.so'</tt>
-extension and on Windows the <tt>`.dll'</tt> extension is used. Almost everything
-in the Crystal Space framework is itself a plugin. So the plugin manager
-is an important object. See also
+into a running Crystal Space application.  On Unix a plugin has the
+<tt>`.so'</tt> extension and on Windows the <tt>`.dll'</tt> extension is
+used.  Almost everything in the Crystal Space framework is itself a
+plugin.  So the plugin manager is an important object.  See also
 <code>csInitializer::CreatePluginManager()</code> or
 <code>csInitializer::CreateEnvironment()</code>.
 </p>
@@ -193,38 +194,38 @@ is an important object. See also
 texture mapped (unless it has a semi-transparent texture).  Instead another
 sector (visible through that portal) will be drawn.  A portal may
 even point back into the sector in which it is contained.  This is
-useful for portals which act as mirrors. A more general form of a mirror
-is a space warping portal. This way a portal can go to any place in the
+useful for portals which act as mirrors.  A more general form of a mirror
+is a space warping portal.  This way a portal can go to any place in the
 world.
 </p>
 </dd>
 <dt> <em>Procedural Texture</em></dt>
 <dd><p>A procedural texture is a special texture that has a 3D renderer
-associated with it. This means that you can change the image on the
-procedural texture by drawing on it. Since the procedural texture
+associated with it.  This means that you can change the image on the
+procedural texture by drawing on it.  Since the procedural texture
 has a full 3D renderer associated with it you can even use the 3D
-engine to render on a texture. Procedural textures can be used on
+engine to render on a texture.  Procedural textures can be used on
 all objects in Crystal Space that can use textures.
 </p>
 </dd>
 <dt> <em>Region</em></dt>
 <dd><p>A region in Crystal Space is a collection of objects (textures, materials,
 mesh objects, mesh factories, sectors, sequences, triggers, shared variables,
-collections, <small class="dots">...</small>).
-Regions are not a geometrical concept. It is possible to define a region which
-contains all wall geometry and a region which contains all moving geometry.
-Usually though, regions represent some area in the world. You can use
-regions to dynamically load/unload parts of the world. This is useful
-if you have really big worlds that don't fit in memory at once.
+collections, <small class="dots">...</small>).  Regions are not a geometrical concept.  It is possible
+to define a region which contains all wall geometry and a region which
+contains all moving geometry.  Usually though, regions represent some area
+in the world.  You can use regions to dynamically load/unload parts of the
+world.  This is useful if you have really big worlds that don't fit in
+memory at once.
 </p>
 </dd>
 <dt> <em>Reporter</em></dt>
 <dd><p>The reporter is a plugin in Crystal Space that listens to messages.
 It supports the notion of errors, warnings, and notification messages.
 All components in Crystal Space use the reporter to report about unusual
-situations. An application can be aware of the reporter in two ways:
+situations.  An application can be aware of the reporter in two ways:
 it can either query the messages at regular intervals or else it can
-install a <em>reporter listener</em>. There is also a standard reporter
+install a <em>reporter listener</em>.  There is also a standard reporter
 listener plugin in Crystal Space which will use the console to output
 notification messages and use other means to report errors.
 </p>
@@ -248,16 +249,16 @@ Screen space is perspective corrected camera space.
 </p>
 </dd>
 <dt> <em>Sector</em></dt>
-<dd><p>A sector is simply a container of geometry. It contains several mesh objects
-which will represent the geometry of the sector. A common mesh object is
+<dd><p>A sector is simply a container of geometry.  It contains several mesh objects
+which will represent the geometry of the sector.  A common mesh object is
 the thing mesh object which is usually used to put walls around a sector
-(that way the sector represents a room). Other mesh objects like 3d sprites
+(that way the sector represents a room).  Other mesh objects like 3d sprites
 can be used for actors.
 </p>
 </dd>
 <dt> <em>Texel</em></dt>
-<dd><p>A texel is a pixel on a texture. For example, an 128x128 texture has
-128x128 texels. On screen this may result in more or fewer pixels depending
+<dd><p>A texel is a pixel on a texture.  For example, an 128x128 texture has
+128x128 texels.  On screen this may result in more or fewer pixels depending
 on how far away the object is on which the texture is used and also on how
 the texture is scaled on the object.
 </p>
@@ -274,12 +275,12 @@ in general be used to represent many more kinds of objects.
 </p>
 </dd>
 <dt> <em>Virtual Clock</em></dt>
-<dd><p>Most Crystal Space applications will be time-based. The virtual clock
-supports the notion of <small>CURRENT TIME</small> and <small>ELAPSED TIME</small>. It is
+<dd><p>Most Crystal Space applications will be time-based.  The virtual clock
+supports the notion of <small>CURRENT TIME</small> and <small>ELAPSED TIME</small>.  It is
 called a virtual clock because it doesn't necessarily have to correspond
-with real time. A game can be paused for example. Note that a well-behaved
+with real time.  A game can be paused for example.  Note that a well-behaved
 game should always take elapsed time (between two frames) into consideration
-for calculating what could have happened in that time. This is important
+for calculating what could have happened in that time.  This is important
 especially for physics calculations and also for speed of moving objects.
 You want an object moving at some speed to move with the same speed on a
 system with low framerates compared to a system with high framerates.
@@ -299,7 +300,6 @@ various platforms. Using this a Crystal Space application can read and write
 transparently from <small>ZIP</small> archives. See section <a href="cs_4.6.html#4.6">Virtual File System (<small>VFS</small>)</a>.
 </p></dd>
 </dl>
-
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
