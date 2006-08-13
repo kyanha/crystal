@@ -16,24 +16,24 @@
 namespace csStaticPluginInit
 {
 static char const metainfo_ptpdlight[] =
-"<?xml version=\"1.0\"?>"
-"<!-- ptpdlight.csplugin -->"
-"<plugin>"
-"  <scf>"
-"    <classes>"
-"      <class>"
-"        <name>crystalspace.texture.loader.pdlight</name>"
-"        <implementation>ProctexPDLightLoader</implementation>"
-"        <description>Pseudo-dynamic lightmap procedural texture loader</description>"
-"        <requires>"
-"          <class>crystalspace.graphics3d.</class>"
-"          <class>crystalspace.level.loader</class>"
-"	  <class>crystalspace.engine.</class>"
-"	</requires>"
-"      </class>"
-"    </classes>"
-"  </scf>"
-"</plugin>"
+"<?xml version=\"1.0\"?>"
+"<!-- ptpdlight.csplugin -->"
+"<plugin>"
+"  <scf>"
+"    <classes>"
+"      <class>"
+"        <name>crystalspace.texture.loader.pdlight</name>"
+"        <implementation>ProctexPDLightLoader</implementation>"
+"        <description>Pseudo-dynamic lightmap procedural texture loader</description>"
+"        <requires>"
+"          <class>crystalspace.graphics3d.</class>"
+"          <class>crystalspace.level.loader</class>"
+"	  <class>crystalspace.engine.</class>"
+"	</requires>"
+"      </class>"
+"    </classes>"
+"  </scf>"
+"</plugin>"
 ;
   #ifndef ProctexPDLightLoader_FACTORY_REGISTER_DEFINED 
   #define ProctexPDLightLoader_FACTORY_REGISTER_DEFINED 
