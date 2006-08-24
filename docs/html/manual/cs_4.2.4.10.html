@@ -264,27 +264,36 @@ explosion.
   explosion_factory = engine-&gt;CreateMeshFactory (
   	&quot;crystalspace.mesh.object.particles&quot;, &quot;explosion&quot;);
   if (!explosion_factory) return false;
-  csRef&lt;iParticlesFactoryState&gt; pstate = scfQueryInterface&lt;
-  	iParticlesFactoryState&gt; (explosion_factory-&gt;GetMeshObjectFactory ());
+
+  csRef&lt;iParticleSystemFactory&gt; pbase = scfQueryInterface&lt;
+  	iParticleSystemFactory&gt; (explosion_factory-&gt;GetMeshObjectFactory ());
 
   if (!loader-&gt;LoadTexture (&quot;explosion_texture&quot;, &quot;/lib/std/spark.png&quot;))
     return app-&gt;ReportError (&quot;Error loading 'spark' texture!&quot;);
   iMaterialWrapper* explosion_material = engine-&gt;GetMaterialList ()
   	-&gt;FindByName (&quot;explosion_texture&quot;);
-  pstate-&gt;SetMaterial (explosion_material);
-  pstate-&gt;SetParticleRadius (0.2f);
-  pstate-&gt;SetParticlesPerSecond (50);
-  pstate-&gt;SetInitialParticleCount (10);
-  pstate-&gt;SetPointEmitType ();
-  pstate-&gt;SetRadialForceType (2.0, CS_PART_FALLOFF_LINEAR);
-  pstate-&gt;SetForce (6.0);
-  pstate-&gt;SetDiffusion (1.0);
-  pstate-&gt;SetEmitTime (float (EXPLOSION_EMITTIME) / 1000.0);
-  pstate-&gt;SetTimeToLive (float (EXPLOSION_PARTTIME) / 1000.0);
-  pstate-&gt;SetTimeVariation (float (EXPLOSION_PARTVARTIME) / 1000.0f);
-  pstate-&gt;SetConstantColorMethod (csColor4 (1.0f, 0.8f, 0.5f));
-  pstate-&gt;SetMixMode (CS_FX_ADD);
-  pstate-&gt;EnableZSort (false);
+  
+  explosion_factory-&gt;GetMeshObjectFactory ()-&gt;SetMaterialWrapper (explosion_material);
+  explosion_factory-&gt;GetMeshObjectFactory ()-&gt;SetMixMode (CS_FX_ADD);
+
+  pbase-&gt;SetParticleSize (csVector2 (0.2f, 0.2f));
+  pbase-&gt;SetParticleRenderOrientation (CS_PARTICLE_CAMERAFACE_APPROX);
+//  pbase-&gt;SetDeepCreation (true);
+
+  csRef&lt;iParticleBuiltinEmitterFactory&gt; emitter_factory = 
+    csLoadPluginCheck&lt;iParticleBuiltinEmitterFactory&gt; (app-&gt;GetObjectRegistry (),
+    &quot;crystalspace.mesh.object.particles.emitter&quot;);
+  
+  csRef&lt;iParticleBuiltinEmitterSphere&gt; emitter = emitter_factory-&gt;CreateSphere ();
+  emitter-&gt;SetRadius (0);
+  emitter-&gt;SetParticlePlacement (CS_PARTICLE_BUILTIN_CENTER);
+  emitter-&gt;SetDuration (EXPLOSION_EMITTIME / 1000.0f);
+  emitter-&gt;SetInitialTTL (EXPLOSION_PARTTIMELOW / 1000.0f, EXPLOSION_PARTTIMEHIGH / 1000.0f);
+  emitter-&gt;SetUniformVelocity (false);
+  emitter-&gt;SetInitialVelocity (csVector3 (3.0f,0,0), csVector3 (0.0f));
+  emitter-&gt;SetEmissionRate (50);
+
+  pbase-&gt;AddEmitter (emitter);
 
   return true;
 }
