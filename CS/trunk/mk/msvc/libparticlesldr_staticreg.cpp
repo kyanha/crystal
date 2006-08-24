@@ -23,14 +23,15 @@ static char const metainfo_particlesldr[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.mesh.loader.factory.particles</name>"
-"        <implementation>csParticlesFactoryLoader</implementation>"
+"        <implementation>ParticlesFactoryLoader</implementation>"
 "        <description>Crystal Space Particles Factory Loader</description>"
 "      </class>"
 "      <class>"
 "        <name>crystalspace.mesh.loader.particles</name>"
-"        <implementation>csParticlesObjectLoader</implementation>"
+"        <implementation>ParticlesObjectLoader</implementation>"
 "        <description>Crystal Space Particles Mesh Loader</description>"
 "      </class>"
+"      <!--"
 "      <class>"
 "        <name>crystalspace.mesh.saver.factory.particles</name>"
 "        <implementation>csParticlesFactorySaver</implementation>"
@@ -40,18 +41,18 @@ static char const metainfo_particlesldr[] =
 "        <name>crystalspace.mesh.saver.particles</name>"
 "        <implementation>csParticlesObjectSaver</implementation>"
 "        <description>Crystal Space Particles Mesh Saver</description>"
-"      </class>"
+"      </class>-->"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csParticlesFactoryLoader_FACTORY_REGISTER_DEFINED 
-  #define csParticlesFactoryLoader_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csParticlesFactoryLoader) 
+  #ifndef ParticlesFactoryLoader_FACTORY_REGISTER_DEFINED 
+  #define ParticlesFactoryLoader_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(ParticlesFactoryLoader) 
   #endif
-  #ifndef csParticlesObjectLoader_FACTORY_REGISTER_DEFINED 
-  #define csParticlesObjectLoader_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csParticlesObjectLoader) 
+  #ifndef ParticlesObjectLoader_FACTORY_REGISTER_DEFINED 
+  #define ParticlesObjectLoader_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(ParticlesObjectLoader) 
   #endif
   #ifndef csParticlesFactorySaver_FACTORY_REGISTER_DEFINED 
   #define csParticlesFactorySaver_FACTORY_REGISTER_DEFINED 
@@ -65,13 +66,13 @@ static char const metainfo_particlesldr[] =
 class particlesldr
 {
 SCF_REGISTER_STATIC_LIBRARY(particlesldr,metainfo_particlesldr)
-  #ifndef csParticlesFactoryLoader_FACTORY_REGISTERED 
-  #define csParticlesFactoryLoader_FACTORY_REGISTERED 
-    csParticlesFactoryLoader_StaticInit csParticlesFactoryLoader_static_init__; 
+  #ifndef ParticlesFactoryLoader_FACTORY_REGISTERED 
+  #define ParticlesFactoryLoader_FACTORY_REGISTERED 
+    ParticlesFactoryLoader_StaticInit ParticlesFactoryLoader_static_init__; 
   #endif
-  #ifndef csParticlesObjectLoader_FACTORY_REGISTERED 
-  #define csParticlesObjectLoader_FACTORY_REGISTERED 
-    csParticlesObjectLoader_StaticInit csParticlesObjectLoader_static_init__; 
+  #ifndef ParticlesObjectLoader_FACTORY_REGISTERED 
+  #define ParticlesObjectLoader_FACTORY_REGISTERED 
+    ParticlesObjectLoader_StaticInit ParticlesObjectLoader_static_init__; 
   #endif
   #ifndef csParticlesFactorySaver_FACTORY_REGISTERED 
   #define csParticlesFactorySaver_FACTORY_REGISTERED 
