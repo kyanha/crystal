@@ -23,24 +23,50 @@ static char const metainfo_particles[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.mesh.object.particles</name>"
-"        <implementation>csParticlesType</implementation>"
+"        <implementation>ParticlesMeshObjectType</implementation>"
 "        <description>Crystal Space Particle System</description>"
 "      </class>"
+"      <class>"
+"        <name>crystalspace.mesh.object.particles.emitter</name>"
+"        <implementation>ParticleEmitterFactory</implementation>"
+"        <description>Crystal Space Particle System - Emitters</description>"
+"      </class>"
+"      <class>"
+"        <name>crystalspace.mesh.object.particles.effector</name>"
+"        <implementation>ParticleEffectorFactory</implementation>"
+"        <description>Crystal Space Particle System - Effectors</description>"
+"      </class>      "
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csParticlesType_FACTORY_REGISTER_DEFINED 
-  #define csParticlesType_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csParticlesType) 
+  #ifndef ParticlesMeshObjectType_FACTORY_REGISTER_DEFINED 
+  #define ParticlesMeshObjectType_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(ParticlesMeshObjectType) 
+  #endif
+  #ifndef ParticleEmitterFactory_FACTORY_REGISTER_DEFINED 
+  #define ParticleEmitterFactory_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(ParticleEmitterFactory) 
+  #endif
+  #ifndef ParticleEffectorFactory_FACTORY_REGISTER_DEFINED 
+  #define ParticleEffectorFactory_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(ParticleEffectorFactory) 
   #endif
 
 class particles
 {
 SCF_REGISTER_STATIC_LIBRARY(particles,metainfo_particles)
-  #ifndef csParticlesType_FACTORY_REGISTERED 
-  #define csParticlesType_FACTORY_REGISTERED 
-    csParticlesType_StaticInit csParticlesType_static_init__; 
+  #ifndef ParticlesMeshObjectType_FACTORY_REGISTERED 
+  #define ParticlesMeshObjectType_FACTORY_REGISTERED 
+    ParticlesMeshObjectType_StaticInit ParticlesMeshObjectType_static_init__; 
+  #endif
+  #ifndef ParticleEmitterFactory_FACTORY_REGISTERED 
+  #define ParticleEmitterFactory_FACTORY_REGISTERED 
+    ParticleEmitterFactory_StaticInit ParticleEmitterFactory_static_init__; 
+  #endif
+  #ifndef ParticleEffectorFactory_FACTORY_REGISTERED 
+  #define ParticleEffectorFactory_FACTORY_REGISTERED 
+    ParticleEffectorFactory_StaticInit ParticleEffectorFactory_static_init__; 
   #endif
 public:
  particles();
