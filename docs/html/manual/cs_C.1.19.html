@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.19 Changes for hierarchical objects</title>
+<title>Crystal Space: C.1.19 Changes for Mesh Object Writers</title>
 
-<meta name="description" content="Crystal Space: C.1.19 Changes for hierarchical objects">
-<meta name="keywords" content="Crystal Space: C.1.19 Changes for hierarchical objects">
+<meta name="description" content="Crystal Space: C.1.19 Changes for Mesh Object Writers">
+<meta name="keywords" content="Crystal Space: C.1.19 Changes for Mesh Object Writers">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-Changes-for-hierarchical-objects"></a>
+<a name="Api100-Changes-for-Mesh-Object-Writers"></a>
 <a name="C.1.19"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.18.html#C.1.18" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,38 +58,17 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.19 Changes for hierarchical objects </h3>
+<h3 class="subsection"> C.1.19 Changes for Mesh Object Writers </h3>
 
-<p>Meshes and lights can now properly be used as hierarchical objects with the
-same API. Here is how it works: meshes and lights implement the new
-<code>iSceneNode</code> interface. You can do <code>QuerySceneNode()</code> to get the
-scene object from the mesh, light, or camera without having to do
-<code>scfQueryInterface&lt;&gt;</code>. To make some object a child of another you simply
-do:
+<p><code>iMeshObject::SetLogicalParent()</code> has been renamed to
+<code>iMeshObject::SetMeshWrapper()</code>. Same for <code>GetLogicalParent()</code>.
+It also uses a <code>iMeshWrapper</code> instead of <code>iBase</code> as the type
+of the parameter.
+<code>iMeshObjectFactory::SetLogicalParent()</code> has been renamed to
+<code>iMeshObjectFactory::SetMeshFactoryWrapper()</code>.
+Same for <code>GetLogicalParent()</code>. It also uses a <code>iMeshFactoryWrapper</code>
+instead of <code>iBase</code> as the type of the parameter.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">object_child-&gt;QuerySceneNode ()-&gt;SetParent (
-	    	  object_parent-&gt;QuerySceneNode ());
-</pre></td></tr></table>
-<p>To remove some object from a parent you do:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">object_child-&gt;QuerySceneNode ()-&gt;SetParent (0);
-</pre></td></tr></table>
-<p>You can get the children by calling <code>iSceneNode-&gt;GetChildren()</code>.
-</p>
-<p>The following methods have been removed:
-</p><ul>
-<li>
-<code>iMeshWrapper-&gt;GetChildren()</code>
-</li><li>
-<code>iMeshWrapper-&gt;GetParentContainer()</code>
-</li><li>
-<code>iMeshWrapper-&gt;SetParentContainer()</code>
-</li><li>
-<code>iMovable-&gt;GetParent()</code>
-</li><li>
-<code>iMovable-&gt;SetParent()</code>
-</li></ul>
-
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.1.18.html#C.1.18" title="Previous section in reading order"> &lt; </a>]</td>
