@@ -31,17 +31,6 @@ static char const metainfo_particlesldr[] =
 "        <implementation>ParticlesObjectLoader</implementation>"
 "        <description>Crystal Space Particles Mesh Loader</description>"
 "      </class>"
-"      <!--"
-"      <class>"
-"        <name>crystalspace.mesh.saver.factory.particles</name>"
-"        <implementation>csParticlesFactorySaver</implementation>"
-"        <description>Crystal Space Particles Factory Saver</description>"
-"      </class>"
-"      <class>"
-"        <name>crystalspace.mesh.saver.particles</name>"
-"        <implementation>csParticlesObjectSaver</implementation>"
-"        <description>Crystal Space Particles Mesh Saver</description>"
-"      </class>-->"
 "    </classes>"
 "  </scf>"
 "</plugin>"
@@ -54,14 +43,6 @@ static char const metainfo_particlesldr[] =
   #define ParticlesObjectLoader_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(ParticlesObjectLoader) 
   #endif
-  #ifndef csParticlesFactorySaver_FACTORY_REGISTER_DEFINED 
-  #define csParticlesFactorySaver_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csParticlesFactorySaver) 
-  #endif
-  #ifndef csParticlesObjectSaver_FACTORY_REGISTER_DEFINED 
-  #define csParticlesObjectSaver_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csParticlesObjectSaver) 
-  #endif
 
 class particlesldr
 {
@@ -73,14 +54,6 @@ SCF_REGISTER_STATIC_LIBRARY(particlesldr,metainfo_particlesldr)
   #ifndef ParticlesObjectLoader_FACTORY_REGISTERED 
   #define ParticlesObjectLoader_FACTORY_REGISTERED 
     ParticlesObjectLoader_StaticInit ParticlesObjectLoader_static_init__; 
-  #endif
-  #ifndef csParticlesFactorySaver_FACTORY_REGISTERED 
-  #define csParticlesFactorySaver_FACTORY_REGISTERED 
-    csParticlesFactorySaver_StaticInit csParticlesFactorySaver_static_init__; 
-  #endif
-  #ifndef csParticlesObjectSaver_FACTORY_REGISTERED 
-  #define csParticlesObjectSaver_FACTORY_REGISTERED 
-    csParticlesObjectSaver_StaticInit csParticlesObjectSaver_static_init__; 
   #endif
 public:
  particlesldr();
