@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.3.1.5 Client Side</title>
+<title>Crystal Space: 4.3.1.5 Interface Versions</title>
 
-<meta name="description" content="Crystal Space: 4.3.1.5 Client Side">
-<meta name="keywords" content="Crystal Space: 4.3.1.5 Client Side">
+<meta name="description" content="Crystal Space: 4.3.1.5 Interface Versions">
+<meta name="keywords" content="Crystal Space: 4.3.1.5 Interface Versions">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="SCF-Client"></a>
+<a name="SCF-Versions"></a>
 <a name="4.3.1.5"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.4.html#4.3.1.4" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,51 +58,47 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.3.1.5 Client Side </h4>
+<h4 class="subsubsection"> 4.3.1.5 Interface Versions </h4>
 
-<p>Now let's explain how to use all this mess from client side.  First, we should
-be able to create objects that implement the interfaces we want.  For this, you
-should use the <code>scfCreateInstance()</code> macro.  It receives two arguments:
-the name of external class, and the name of the interface it implements.  So,
-if we know class <samp>`MyGraphics3D'</samp> implements the <samp>`iGraphics3D'</samp>
-interface, we can write:
+<p>Unlike <small>COM</small>, <small>SCF</small> supports interface versions.  That is, a shared class
+could implement version 0.3.6 of given interface, and if client requests that
+interface of a version lower or equal than 0.3.6, a correct interface pointer
+is returned.  For this to work you need to define inside each interface header
+file a specialization of the <code>scfInterface&lt;&gt;</code> template class for each
+interface.  This specialization must provide the interface's version number as
+the result of its <code>GetVersion()</code> method.  To correctly support different
+versions of interfaces you should follow these guidelines:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iGraphics3D&gt; G3D = scfCreateInstance&lt;iGraphics3D&gt; (&quot;MyGraphics3D&quot;);
-if (!G3D)
-{
-  fprintf(stderr,
-    &quot;Failed to create an instance of iGraphics3D!\n&quot;);
-  abort();
-}
-</pre></td></tr></table>
-<p>Now you can use the object any way you like, just like standard C++:
+<ul>
+<li>
+Do not insert new methods into existing interfaces.  Instead, you should
+append them after last defined method.
+
+</li><li>
+If your change made the interface invalid for clients that expect older
+versions of interfaces (for example, you broke the previous rule), increase
+the major version number, and set minor and micro versions to zero.
+
+</li><li>
+If your changes are relatively minor, but you do a major release, increase the
+minor version number and drop the micro version to zero.
+
+</li><li>
+If you are in the development process, and did a minor change to the
+interface, increase the micro version.
+</li></ul>
+
+<p>The possible range for major and minor version numbers is 0..255, and the
+range for micro version number is 0..65535.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">G3D-&gt;BeginDraw();
-G3D-&gt;DrawLine(...);
-G3D-&gt;DrawPolygon(...);
-G3D-&gt;EndDraw();
-</pre></td></tr></table>
-<p>When you are done using the <samp>`G3D'</samp> pointer (say, when program exits), the
-reference you own for the object should be released.  This happens
-automatically when the <code>csRef&lt;&gt;</code> goes out of scope.  If you are not using
-<code>csRef&lt;&gt;</code>, but are instead using a plain pointer, <samp>`iGraphics3D*'</samp>,
-then you must manually release the reference when you are done with it by
-calling <code>G3D-&gt;DecRef()</code>.  After this you can not use <samp>`G3D'</samp> anymore;
-you should create another instance of <samp>`iGraphics3D'</samp> if needed.
+<p>When you query an interface, you should always tell it what interface version
+are you looking for.  If a module cannot provide an interface compatible with
+the requested version, then <code>QueryInterface()</code> will return <samp>`NULL'</samp>
+(same as if interface wasn't available at all).  You can use
+<code>scfCompatibleVersion()</code> to check whether the requested version is
+compatible with interface version. To specify the version of an interface
+you can use the <code>SCF_INTERFACE()</code> macro.
 </p>
-<p>To query an object to see if it implements an interface, you should use the
-<code>scfQueryInterface</code> macro. It also receives two arguments, first being
-the object you are querying for the embedded interface, and second being the
-name of the interface you desire. Example:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iHalo&gt; halo = scfQueryInterface&lt;iHalo&gt; (G3D);
-if (!halo)
-{
-  fprintf(stderr,
-    &quot;3D graphic driver doesn't support halos!\n&quot;);
-  return;
-}
-</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.4.html#4.3.1.4" title="Previous section in reading order"> &lt; </a>]</td>

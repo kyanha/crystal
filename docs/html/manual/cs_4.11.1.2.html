@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 4.11.1.2 Shader Variables</title>
+
+<meta name="description" content="Crystal Space: 4.11.1.2 Shader Variables">
+<meta name="keywords" content="Crystal Space: 4.11.1.2 Shader Variables">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Shader-Variables"></a>
+<a name="4.11.1.2"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.11.1.1.html#4.11.1.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.2.html#4.11.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.1.html#4.11.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<h4 class="subsubsection"> 4.11.1.2 Shader Variables </h4>
+
+
+<p>Shaders need to use shader variables to be able to access the resources they need
+to do what they have to do. This includes things like the texture, the ambient
+color, the light transformation, and so on. Here is a list of all currently supported
+shader variables and their source in Crystal Space. In addition to the variables listed
+here it is often possible to add user variables that you can then use in your own
+shaders.
+</p>
+<p>Shader variables from OpenGL renderer:
+</p>
+<ul>
+<li> <samp>`standardtex fog'</samp>, type texture, texture class 'lookup'
+</li><li> <samp>`standardtex normalization map'</samp>, type texture (cubemap), texture class 'lookup'
+</li><li> <samp>`standardtex white'</samp>, type texture, 1x1 white texture
+</li><li> <samp>`vertices'</samp>, type render buffer
+</li><li> <samp>`texture coordinates'</samp>, type render buffer
+</li><li> <samp>`colors'</samp>, type render buffer
+</li><li> <samp>`indices'</samp>, type render buffer
+</li><li> <samp>`world2camera transform'</samp>, type transform
+</li><li> <samp>`tex diffuse'</samp>, type texture
+</li></ul>
+
+<p>Shader variables from null3d renderer:
+</p>
+<ul>
+<li> <samp>`standardtex fog'</samp>, type texture, texture class 'lookup'
+</li><li> <samp>`standardtex normalization map'</samp>, type texture (cubemap), texture class 'lookup'
+</li><li> <samp>`standardtex attenuation'</samp>, type texture
+</li></ul>
+
+<p>Shader variables from software renderer:
+</p>
+<ul>
+<li> <samp>`indices'</samp>, type render buffer
+</li><li> <samp>`vertices'</samp>, type render buffer
+</li><li> <samp>`texture coordinates'</samp>, type render buffer
+</li><li> <samp>`colors'</samp>, type render buffer
+</li><li> <samp>`world2camera transform'</samp>, type transform
+</li></ul>
+
+<p>Shader variables from shader manager:
+</p>
+<ul>
+<li> <samp>`standard time'</samp>, type float (current ticks in seconds)
+</li></ul>
+
+<p>Shader variables from materials:
+</p>
+<ul>
+<li> <samp>`mat diffuse'</samp>, type float
+</li><li> <samp>`mat ambient'</samp>, type float
+</li><li> <samp>`mat reflection'</samp>, type float
+</li><li> <samp>`mat flatcolor'</samp>, type color, flat color of the material
+</li><li> <samp>`tex diffuse'</samp>, default diffuse texture
+</li><li> various textures as defined in the material section
+</li></ul>
+
+<p>Shader variables from lightiterator renderstep:
+</p>
+<ul>
+<li> <samp>`light 0 position'</samp>, type vector4
+</li><li> <samp>`light 0 position world'</samp>, type vector4
+</li><li> <samp>`light 0 transform'</samp>, type transform
+</li><li> <samp>`light 0 transform world'</samp>, type transform
+</li><li> <samp>`light 0 diffuse'</samp>, type vector4
+</li><li> <samp>`light 0 specular'</samp>, type vector4
+</li><li> <samp>`light 0 attenuation'</samp>, type vector4
+</li><li> <samp>`light 0 attenuationtex'</samp>, type texture
+</li><li> <samp>`light 0 inner falloff'</samp>, type float
+</li><li> <samp>`light 0 outer falloff'</samp>, type float
+</li></ul>
+
+<p>Shader variables from brute terrain mesh:
+</p>
+<ul>
+<li> <samp>`texture lod distance'</samp>, type vector3
+</li><li> <samp>`splat alpha map'</samp>, type texture
+</li></ul>
+
+<p>Shader variables from thing mesh:
+</p>
+<ul>
+<li> <samp>`tex lightmap'</samp>, type texture
+</li></ul>
+
+<p>Shader variables from particles mesh:
+</p>
+<ul>
+<li> <samp>`point radius'</samp>, type float
+</li><li> <samp>`point scale'</samp>, type float
+</li></ul>
+
+<p>Shader variables for procedural textures:
+</p>
+<ul>
+<li> <samp>`position'</samp>, type vector2
+</li></ul>
+
+<p>Shader variables from portals:
+</p>
+<ul>
+<li> <samp>`fogplane'</samp>, type vector4
+</li><li> <samp>`fog density'</samp>, type float
+</li><li> <samp>`fog color'</samp>, type vector3
+</li></ul>
+
+<p>Shader variables from fat renderloop:
+</p>
+<ul>
+<li> <samp>`fogplane'</samp>, type vector4
+</li><li> <samp>`fog density'</samp>, type float
+</li><li> <samp>`fog color'</samp>, type vector3
+</li><li> <samp>`object2world transform'</samp>, type transform
+</li></ul>
+
+<p>Shader variables from generic renderloop:
+</p>
+<ul>
+<li> <samp>`object2world transform'</samp>, type transform
+</li><li> <samp>`light 0 type'</samp>, type integer
+</li><li> <samp>`light ambient'</samp>, type color
+</li><li> <samp>`fogplane'</samp>, type vector4
+</li><li> <samp>`fog density'</samp>, type float
+</li><li> <samp>`fog color'</samp>, type vector3
+</li><li> <samp>`fog start'</samp>, type float
+</li><li> <samp>`fog end'</samp>, type float
+</li><li> <samp>`fog mode'</samp>, type int
+</li></ul>
+
+
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.11.1.1.html#4.11.1.1" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.2.html#4.11.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.1.html#4.11.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
