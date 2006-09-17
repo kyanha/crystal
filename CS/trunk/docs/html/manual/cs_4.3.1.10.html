@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.3.1.10 Advanced Techniques</title>
+<title>Crystal Space: 4.3.1.10 Example</title>
 
-<meta name="description" content="Crystal Space: 4.3.1.10 Advanced Techniques">
-<meta name="keywords" content="Crystal Space: 4.3.1.10 Advanced Techniques">
+<meta name="description" content="Crystal Space: 4.3.1.10 Example">
+<meta name="keywords" content="Crystal Space: 4.3.1.10 Example">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="SCF-Advanced"></a>
+<a name="SCF-Example"></a>
 <a name="4.3.1.10"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.9.html#4.3.1.9" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.3.2.html#4.3.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.3.1.11.html#4.3.1.11" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.3.1.html#4.3.1" title="Up section"> Up </a>]</td>
@@ -58,83 +58,183 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.3.1.10 Advanced Techniques </h4>
+<h4 class="subsubsection"> 4.3.1.10 Example </h4>
 
-<p>The <small>SCF</small> library implements some things that you will need to know about
-to use some advanced techniques.  They are described in detail, below.
+<p>Here is a complete working example. It implements a shared class that has a
+base and an embedded interface.
 </p>
-<a name="SEC151"></a>
-<h4 class="subsubheading"> Dynamic Class Registration </h4>
+<p>These are the interface files for the <samp>`iDog'</samp> interface (the base
+interface of our class) and the <samp>`iName'</samp> interface (the interface
+embedded into our class).
+</p>
 
-<p>You can register and deregister <small>SCF</small> classes at run time.  There are times
-when you would like to provide a named <small>SCF</small> class in your main application,
-rather than in a plugin module.  In this case, you will need to manually
-register the class with <small>SCF</small> since it will not be discovered by the
-automatic scan for plugins.  To do this, the following method is provided:
+<p><em>File</em>: <tt>`idog.h'</tt>
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">bool iSCF::RegisterClass (
-  scfFactoryFunc,
-  char const* ClassName,
-  char const* Description,
-  char const* Dependencies,
-  char const* context);
-</pre></td></tr></table>
-<p>Rather than having to remember to call this method from your code, you can
-automate the registration by instead using the
-<code>SCF_REGISTER_STATIC_CLASS()</code> macro, which takes the following arguments:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">SCF_REGISTER_STATIC_CLASS(
-  C++Class,
-  &quot;scf.class.name&quot;,
-  &quot;description&quot;,
-  &quot;comma-separated dependency list&quot; or NULL)
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;csutil/scf.h&quot;
+
+struct iDog : public virtual iBase
+{
+  SCF_INTERFACE(iDog, 0, 0, 1);
+  virtual void Walk() = 0;
+  virtual void Shout(char const* Message) = 0;
+};
 </pre></td></tr></table>
 
-<p>This macro should be used at the top-level of the source file, outside of
-any function.
+<p><em>File</em>: <tt>`iname.h'</tt>
 </p>
-<p>If a class resides in a plugin module which was not discovered by the startup
-scan, and if you do not elect to have <small>SCF</small> scan for the plugin with
-<code>iSCF::ScanPluginsPath()</code> or an additional call to <code>scfInitialize()</code>,
-then you can manually tell <small>SCF</small> all about the class with the following
-method:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">bool iSCF:RegisterClass (
-  char const* ClassName,
-  char const* PluginPath,
-  char const* FactoryClass,
-  char const* Description,
-  char const* Dependencies,
-  char const* context);
-</pre></td></tr></table>
-<p>You can deregister a registered class with the following function:
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">bool iSCF::UnregisterClass(char const* ClassIName)
-</pre></td></tr></table>
-<a name="SEC152"></a>
-<h4 class="subsubheading"> Non-Registered Classes </h4>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;csutil/scf.h&quot;
 
-<p>Often, you do not need or want to register a class with the <small>SCF</small> kernel.
-That is, you create your objects manually, using <samp>`new'</samp> or some other
-method and return them to callers of your functions as pure <small>SCF</small>
-interfaces.  This is a perfectly valid use of <small>SCF</small> classes, and is often
-employed.  It is common, for instance, for a named, published <small>SCF</small> class to
-vend unnamed classes to callers of its methods.  These classes are often helper
-classes.  In this case the unnamed object is not a part of the class registry.
+struct iName : public virtual iBase
+{
+  SCF_INTERFACE(iName, 0, 0, 1);
+  virtual char const* GetName() = 0;
+  virtual void SetName(char const*) = 0;
+};
+</pre></td></tr></table>
+<p>Now here is the implementation of a class for both of the mentioned
+interfaces:
 </p>
-<a name="SEC153"></a>
-<h4 class="subsubheading"> Non-Parented Classes </h4>
 
-<p>Often, classes do not need to be parented.  This is frequently true of classes
-which are not named and part of the class registry, as noted above.  In this
-case your object is not a part of the class tree (see above) and thus does not
-have a parent.  To implement such a class, you simply don't pass a parent
-to <code>scfImplementationType()</code>.
+<p><em>File</em>: <tt>`dog.cpp'</tt>
 </p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdlib.h&gt;
+
+#include &quot;cssysdef.h&quot;
+#include &quot;idog.h&quot;
+#include &quot;iname.h&quot;
+
+class csDog : public scfImplementation2&lt;csDog,iDog,iName&gt;
+{
+private:
+  char* Name;
+
+public:
+  SCF_DECLARE_IBASE;
+  csDog(iBase* Parent);
+  virtual ~csDog();
+
+  // From iDog.
+  virtual void Walk();
+  virtual void Shout(char const*);
+
+  // From iName.
+  virtual char const* GetName();
+  virtual void SetName(char const*);
+};
+
+//---------- Implementation ---------
+
+SCF_IMPLEMENT_FACTORY(csDog)
+
+csDog::csDog(iBase* Parent) : scfImplementationType (this, Parent)
+{
+  Name = strdup(&quot;&lt;noname&gt;&quot;);
+}
+
+csDog::~csDog()
+{
+  free(Name);
+}
+
+void csDog::Walk()
+{
+  printf(&quot;%s: I'm walking\n&quot;, Name);
+}
+
+void csDog::Shout(char const* Message)
+{
+  printf(&quot;I'm %s: shout, shout, %s\n&quot;, Name, Message);
+}
+
+// iName interface for dog.
+
+char const* csDog::GetName()
+{
+  return Name;
+}
+
+void csDog::SetName(char const* NewName)
+{
+  if (Name != 0)
+    free(Name);
+  Name = strdup(NewName != 0 ? NewName : &quot;&quot;);
+}
+
+</pre></td></tr></table>
+<p>Since this is a plugin module, it requires a meta-information resource.
+Here is the meta-information for the example plugin:
+</p>
+
+<p><em>File</em>: <tt>`dog.csplugin'</tt>
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!-- dog.csplugin --&gt;
+&lt;plugin&gt;
+  &lt;scf&gt;
+    &lt;classes&gt;
+      &lt;class&gt;
+        &lt;name&gt;dog&lt;/name&gt;
+        &lt;implementation&gt;csDog&lt;/implementation&gt;
+        &lt;description&gt;A rather unusual dog&lt;/description&gt;
+      &lt;/class&gt;
+    &lt;/classes&gt;
+  &lt;/scf&gt;
+&lt;/plugin&gt;
+</pre></td></tr></table>
+<p>The above files should be built to get a plugin module named <tt>`dog.so'</tt>
+(Unix) or <tt>`dog.dll'</tt> (Windows).  The plugin module will export the
+<code>csDog_Create()</code> function which is implemented by the
+<code>SCF_IMPLEMENT_FACTORY()</code> macro, and it will publish the meta-information
+contained in <tt>`dog.csplugin'</tt>.
+</p>
+<p>Finally, here is the source code for a simple client application that uses the
+<samp>`csDog'</samp> plugin.
+</p>
+
+<p><em>File</em>: <tt>`doggy.cpp'</tt>
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;stdio.h&gt;
+
+#include &quot;cssysdef.h&quot;
+#include &quot;csutil/scf.h&quot;
+#include &quot;csutil/cfgfile.h&quot;
+#include &quot;idog.h&quot;
+#include &quot;iname.h&quot;
+
+static void test_dog()
+{
+  csRef&lt;iDog&gt; dog = scfCreateInstance&lt;iDog&gt; (&quot;csDog&quot;);
+  if (!dog)
+    fprintf(stderr, &quot;No csDog shared class!\n&quot;);
+  else
+  {
+    csRef&lt;iName&gt; name = scfQueryInterface&lt;iName&gt; (dog);
+    if (!name)
+      fprintf(stderr,
+        &quot;Dog does not support iName interface!\n&quot;);
+    else
+    {
+      name-&gt;SetName(&quot;Droopy&quot;);
+      dog-&gt;Walk();
+      dog-&gt;Shout(&quot;hello!&quot;);
+      printf(&quot;Dog's name is %s\n&quot;, name-&gt;GetName());
+    }
+  }
+}
+
+int main (int argc, char const* argv[])
+{
+  scfInitialize(argc, argv);
+  test_dog();
+  iSCF::SCF-&gt;Finish();
+}
+</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.9.html#4.3.1.9" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.3.2.html#4.3.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.3.1.11.html#4.3.1.11" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.3.1.html#4.3.1" title="Up section"> Up </a>]</td>

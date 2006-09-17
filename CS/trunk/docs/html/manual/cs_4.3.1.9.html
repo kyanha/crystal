@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.3.1.9 Example</title>
+<title>Crystal Space: 4.3.1.9 Plugin Discovery</title>
 
-<meta name="description" content="Crystal Space: 4.3.1.9 Example">
-<meta name="keywords" content="Crystal Space: 4.3.1.9 Example">
+<meta name="description" content="Crystal Space: 4.3.1.9 Plugin Discovery">
+<meta name="keywords" content="Crystal Space: 4.3.1.9 Plugin Discovery">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="SCF-Example"></a>
+<a name="SCF-Plugin-Discovery"></a>
 <a name="4.3.1.9"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.8.html#4.3.1.8" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,179 +58,45 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h4 class="subsubsection"> 4.3.1.9 Example </h4>
+<h4 class="subsubsection"> 4.3.1.9 Plugin Discovery </h4>
 
-<p>Here is a complete working example. It implements a shared class that has a
-base and an embedded interface.
+<p>At program launch time, <small>SCF</small> discovers plugins automatically by searching a
+set of directories, and creates an internal database associating available
+<small>SCF</small> class names with the plugin modules which implement them.  The
+directories which <small>SCF</small> searches by default are:
 </p>
-<p>These are the interface files for the <samp>`iDog'</samp> interface (the base
-interface of our class) and the <samp>`iName'</samp> interface (the interface
-embedded into our class).
+<ul>
+<li>
+The application resource directory as returned by <code>csGetResourceDir()</code>.
+On most platforms, this is the same as the directory containing the
+application, however, on MacOS/X, it is the <tt>`Resources'</tt> directory within
+the Cocoa application wrapper.
+
+</li><li>
+The directory containing the application (or containing the Cocoa application
+wrapper for MacOS/X) as returned by <code>csGetAppDir()</code>.
+
+</li><li>
+The installed Crystal Space resource directories as returned by
+<code>csGetConfigPath()</code>.  This is often the value of the <samp>`CRYSTAL'</samp>
+environment variable, or the <samp>`CrystalSpaceRoot'</samp> default setting on MacOS/X
+(which is often stored within the <samp>`NSGlobalDomain'</samp> domain).
+</li></ul>
+
+<p>If you would like <small>SCF</small> to scan additional directories, you can invoke
+either of these two functions:
 </p>
+<ul>
+<li>
+<code>scfInitialize (csPluginPaths const*)</code>
+</li><li>
+<code>iSCF::ScanPluginsPath(char const*, bool, char const*)</code>
+</li></ul>
 
-<p><em>File</em>: <tt>`idog.h'</tt>
+<p>Finally, if need to manually register a single plugin module with <small>SCF</small> for
+which you know the native pathname (not a <small>VFS</small> pathname), you can invoke
+<code>iSCF::RegisterPlugin()</code>.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;csutil/scf.h&quot;
-
-struct iDog : public virtual iBase
-{
-  SCF_INTERFACE(iDog, 0, 0, 1);
-  virtual void Walk() = 0;
-  virtual void Shout(char const* Message) = 0;
-};
-</pre></td></tr></table>
-
-<p><em>File</em>: <tt>`iname.h'</tt>
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;csutil/scf.h&quot;
-
-struct iName : public virtual iBase
-{
-  SCF_INTERFACE(iName, 0, 0, 1);
-  virtual char const* GetName() = 0;
-  virtual void SetName(char const*) = 0;
-};
-</pre></td></tr></table>
-<p>Now here is the implementation of a class for both of the mentioned
-interfaces:
-</p>
-
-<p><em>File</em>: <tt>`dog.cpp'</tt>
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#include &lt;stdlib.h&gt;
-
-#include &quot;cssysdef.h&quot;
-#include &quot;idog.h&quot;
-#include &quot;iname.h&quot;
-
-class csDog : public scfImplementation2&lt;csDog,iDog,iName&gt;
-{
-private:
-  char* Name;
-
-public:
-  SCF_DECLARE_IBASE;
-  csDog(iBase* Parent);
-  virtual ~csDog();
-
-  // From iDog.
-  virtual void Walk();
-  virtual void Shout(char const*);
-
-  // From iName.
-  virtual char const* GetName();
-  virtual void SetName(char const*);
-};
-
-//---------- Implementation ---------
-
-SCF_IMPLEMENT_FACTORY(csDog)
-
-csDog::csDog(iBase* Parent) : scfImplementationType (this, Parent)
-{
-  Name = strdup(&quot;&lt;noname&gt;&quot;);
-}
-
-csDog::~csDog()
-{
-  free(Name);
-}
-
-void csDog::Walk()
-{
-  printf(&quot;%s: I'm walking\n&quot;, Name);
-}
-
-void csDog::Shout(char const* Message)
-{
-  printf(&quot;I'm %s: shout, shout, %s\n&quot;, Name, Message);
-}
-
-// iName interface for dog.
-
-char const* csDog::GetName()
-{
-  return Name;
-}
-
-void csDog::SetName(char const* NewName)
-{
-  if (Name != 0)
-    free(Name);
-  Name = strdup(NewName != 0 ? NewName : &quot;&quot;);
-}
-
-</pre></td></tr></table>
-<p>Since this is a plugin module, it requires a meta-information resource.
-Here is the meta-information for the example plugin:
-</p>
-
-<p><em>File</em>: <tt>`dog.csplugin'</tt>
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;?xml version=&quot;1.0&quot;?&gt;
-&lt;!-- dog.csplugin --&gt;
-&lt;plugin&gt;
-  &lt;scf&gt;
-    &lt;classes&gt;
-      &lt;class&gt;
-        &lt;name&gt;dog&lt;/name&gt;
-        &lt;implementation&gt;csDog&lt;/implementation&gt;
-        &lt;description&gt;A rather unusual dog&lt;/description&gt;
-      &lt;/class&gt;
-    &lt;/classes&gt;
-  &lt;/scf&gt;
-&lt;/plugin&gt;
-</pre></td></tr></table>
-<p>The above files should be built to get a plugin module named <tt>`dog.so'</tt>
-(Unix) or <tt>`dog.dll'</tt> (Windows).  The plugin module will export the
-<code>csDog_Create()</code> function which is implemented by the
-<code>SCF_IMPLEMENT_FACTORY()</code> macro, and it will publish the meta-information
-contained in <tt>`dog.csplugin'</tt>.
-</p>
-<p>Finally, here is the source code for a simple client application that uses the
-<samp>`csDog'</samp> plugin.
-</p>
-
-<p><em>File</em>: <tt>`doggy.cpp'</tt>
-</p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;stdio.h&gt;
-
-#include &quot;cssysdef.h&quot;
-#include &quot;csutil/scf.h&quot;
-#include &quot;csutil/cfgfile.h&quot;
-#include &quot;idog.h&quot;
-#include &quot;iname.h&quot;
-
-static void test_dog()
-{
-  csRef&lt;iDog&gt; dog = scfCreateInstance&lt;iDog&gt; (&quot;csDog&quot;);
-  if (!dog)
-    fprintf(stderr, &quot;No csDog shared class!\n&quot;);
-  else
-  {
-    csRef&lt;iName&gt; name = scfQueryInterface&lt;iName&gt; (dog);
-    if (!name)
-      fprintf(stderr,
-        &quot;Dog does not support iName interface!\n&quot;);
-    else
-    {
-      name-&gt;SetName(&quot;Droopy&quot;);
-      dog-&gt;Walk();
-      dog-&gt;Shout(&quot;hello!&quot;);
-      printf(&quot;Dog's name is %s\n&quot;, name-&gt;GetName());
-    }
-  }
-}
-
-int main (int argc, char const* argv[])
-{
-  scfInitialize(argc, argv);
-  test_dog();
-  iSCF::SCF-&gt;Finish();
-}
-</pre></td></tr></table>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.3.1.8.html#4.3.1.8" title="Previous section in reading order"> &lt; </a>]</td>
