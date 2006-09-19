@@ -15,9 +15,9 @@
 
 namespace csStaticPluginInit
 {
-static char const metainfo_cegui[] =
+static char const metainfo_cscegui[] =
 "<?xml version=\"1.0\"?>"
-"<!-- cegui.csplugin -->"
+"<!-- cscegui.csplugin -->"
 "<plugin>"
 "  <scf>"
 "    <classes>"
@@ -39,16 +39,16 @@ static char const metainfo_cegui[] =
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csCEGUIRenderer) 
   #endif
 
-class cegui
+class cscegui
 {
-SCF_REGISTER_STATIC_LIBRARY(cegui,metainfo_cegui)
+SCF_REGISTER_STATIC_LIBRARY(cscegui,metainfo_cscegui)
   #ifndef csCEGUIRenderer_FACTORY_REGISTERED 
   #define csCEGUIRenderer_FACTORY_REGISTERED 
     csCEGUIRenderer_StaticInit csCEGUIRenderer_static_init__; 
   #endif
 public:
- cegui();
+ cscegui();
 };
-cegui::cegui() {}
+cscegui::cscegui() {}
 
 }
