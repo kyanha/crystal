@@ -44,7 +44,7 @@ ul.toc {list-style: none}
 <a name="4.11.1.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.11.1.1.html#4.11.1.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.11.2.html#4.11.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.1.3.html#4.11.1.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.11.1.html#4.11.1" title="Up section"> Up </a>]</td>
@@ -61,140 +61,177 @@ ul.toc {list-style: none}
 <h4 class="subsubsection"> 4.11.1.2 Shader Variables </h4>
 
 
-<p>Shaders need to use shader variables to be able to access the resources they need
-to do what they have to do. This includes things like the texture, the ambient
-color, the light transformation, and so on. Here is a list of all currently supported
-shader variables and their source in Crystal Space. In addition to the variables listed
-here it is often possible to add user variables that you can then use in your own
-shaders.
+<p>Shaders need to use shader variables to be able to access the resources they 
+need to do what they have to do.  This includes things like the texture, the 
+ambient color, the light transformation, and more.  Each shader uses a number
+of variables usually provided by the material, while also a number of 
+variables are automatically supplied by the engine and other components.  This
+section commonly used variables of both kinds.
 </p>
-<p>Shader variables from OpenGL renderer:
+<a name="SEC434"></a>
+<h3 class="subheading"> Variables from Materials </h3>
+
+<p>These variables are usually provided by materials.  It is also possible to 
+add custom variables that you can then use in your own materials with your 
+own shaders.  Variable names can be arbitrary, however, if you want to add
+a parameter to allow customization of a shader, you should first look into
+this list whether there might be a name that is already used for the purpose
+you desire.  If you use custom names, it's a good idea to try to somewhat 
+stick to the same conventions as used here.
 </p>
-<ul>
-<li> <samp>`standardtex fog'</samp>, type texture, texture class 'lookup'
-</li><li> <samp>`standardtex normalization map'</samp>, type texture (cubemap), texture class 'lookup'
-</li><li> <samp>`standardtex white'</samp>, type texture, 1x1 white texture
-</li><li> <samp>`vertices'</samp>, type render buffer
-</li><li> <samp>`texture coordinates'</samp>, type render buffer
-</li><li> <samp>`colors'</samp>, type render buffer
-</li><li> <samp>`indices'</samp>, type render buffer
-</li><li> <samp>`world2camera transform'</samp>, type transform
-</li><li> <samp>`tex diffuse'</samp>, type texture
-</li></ul>
+<dl compact="compact">
+<dt> <samp>`tex diffuse'</samp></dt>
+<dd><p>diffuse texture
+</p></dd>
+<dt> <samp>`tex normal'</samp></dt>
+<dd><p>normal map texture
+</p></dd>
+<dt> <samp>`tex height'</samp></dt>
+<dd><p>height map texture for parallax shading
+</p></dd>
+</dl>
 
-<p>Shader variables from null3d renderer:
+<a name="SEC435"></a>
+<h3 class="subheading"> Variables from the Crystal Space Components </h3>
+
+<p>These variables are defined by various components and are mostly useful when
+writing custom shaders.
 </p>
-<ul>
-<li> <samp>`standardtex fog'</samp>, type texture, texture class 'lookup'
-</li><li> <samp>`standardtex normalization map'</samp>, type texture (cubemap), texture class 'lookup'
-</li><li> <samp>`standardtex attenuation'</samp>, type texture
-</li></ul>
+<a name="SEC436"></a>
+<h4 class="subsubheading"> Utility textures </h4>
 
-<p>Shader variables from software renderer:
+<dl compact="compact">
+<dt> <samp>`standardtex normalization map'</samp></dt>
+<dd><p>Normalization cube map.
+</p></dd>
+<dt> <samp>`standardtex white'</samp></dt>
+<dd><p>1x1 white texture. Mostly useful as a &quot;dummy&quot; texture.
+</p></dd>
+</dl>
+
+<a name="SEC437"></a>
+<h4 class="subsubheading"> Buffers </h4>
+
+<dl compact="compact">
+<dt> <samp>`vertices'</samp></dt>
+<dd><p>Render buffer with mesh vertices.
+</p></dd>
+<dt> <samp>`texture coordinates'</samp></dt>
+<dd><p>Render buffer with texture coordinates. 
+</p></dd>
+<dt> <samp>`colors'</samp></dt>
+<dd><p>Render buffer with per-vertex colors.
+</p></dd>
+</dl>
+
+<a name="SEC438"></a>
+<h4 class="subsubheading"> Transforms </h4>
+
+<dl compact="compact">
+<dt> <samp>`world2camera transform'</samp></dt>
+<dt> <samp>`object2world transform'</samp></dt>
+</dl>
+
+<a name="SEC439"></a>
+<h4 class="subsubheading"> Lighting </h4>
+
+<p><samp>`N'</samp> denotes the light number.  The first light is light number <code>0</code>.
+The upper limit for the value of <samp>`N'</samp> depends on the shader as well as the
+render loop.
 </p>
-<ul>
-<li> <samp>`indices'</samp>, type render buffer
-</li><li> <samp>`vertices'</samp>, type render buffer
-</li><li> <samp>`texture coordinates'</samp>, type render buffer
-</li><li> <samp>`colors'</samp>, type render buffer
-</li><li> <samp>`world2camera transform'</samp>, type transform
-</li></ul>
+<dl compact="compact">
+<dt> <samp>`light ambient'</samp></dt>
+<dd><p>Ambient lighting color.
+</p></dd>
+<dt> <samp>`light N position'</samp></dt>
+<dd><p>Light position in camera space.
+</p></dd>
+<dt> <samp>`light N position world'</samp></dt>
+<dd><p>Light position in world space.
+</p></dd>
+<dt> <samp>`light N transform'</samp></dt>
+<dd><p>Light transformation in camera space.  Mostly relevant as some lights might be
+rotated.
+</p></dd>
+<dt> <samp>`light N transform world'</samp></dt>
+<dd><p>Light transformation in world space.
+</p></dd>
+<dt> <samp>`light N diffuse'</samp></dt>
+<dd><p>Light diffuse color.
+</p></dd>
+<dt> <samp>`light N specular'</samp></dt>
+<dd><p>Light specular color.
+</p></dd>
+<dt> <samp>`light N attenuation'</samp></dt>
+<dd><p>Light attenuation coefficients.
+</p></dd>
+<dt> <samp>`light N attenuationtex'</samp></dt>
+<dd><p>Light attenuation texture.
+</p></dd>
+<dt> <samp>`light N type'</samp></dt>
+<dd><p>Light type, one of the <code>csLightType</code> enumerants.
+</p></dd>
+<dt> <samp>`light N inner falloff'</samp></dt>
+<dd><p>Inner falloff for spotlights as the cosine of the angle.
+</p></dd>
+<dt> <samp>`light N outer falloff'</samp></dt>
+<dd><p>Outer falloff for spotlights as the cosine of the angle.
+</p></dd>
+</dl>
 
-<p>Shader variables from shader manager:
+<a name="SEC440"></a>
+<h4 class="subsubheading"> Terrain related </h4>
+
+<dl compact="compact">
+<dt> <samp>`texture lod distance'</samp></dt>
+<dt> <samp>`splat alpha map'</samp></dt>
+</dl>
+
+<a name="SEC441"></a>
+<h4 class="subsubheading"> Miscelleanous </h4>
+
+<dl compact="compact">
+<dt> <samp>`mat flatcolor'</samp></dt>
+<dd><p>Flat color of the material.  To be used if no diffuse texture was specified.
+</p></dd>
+<dt> <samp>`standard time'</samp></dt>
+<dd><p>Current ticks in seconds.  Useful for animations.
+</p></dd>
+<dt> <samp>`tex lightmap'</samp></dt>
+<dd><p>Lightmap texture.  Present if a mesh uses lightmap lighting.
+</p></dd>
+<dt> <samp>`texture coordinates lightmap'</samp></dt>
+<dd><p>Buffer with lightmap texture coordinates.  Present if a mesh uses lightmap 
+lighting.
+</p></dd>
+<dt> <samp>`point radius'</samp></dt>
+<dd><p>Radius when point sprites are rendered.
+</p></dd>
+<dt> <samp>`point scale'</samp></dt>
+<dd><p>Scale when point sprites are rendered.
+</p></dd>
+</dl>
+
+<a name="SEC442"></a>
+<h4 class="subsubheading"> Fog </h4>
+
+<p>Crystal Space provides some shader &quot;snippets&quot; to deal with fog, it's 
+recommended to use these to add fog support to some shader.
 </p>
-<ul>
-<li> <samp>`standard time'</samp>, type float (current ticks in seconds)
-</li></ul>
-
-<p>Shader variables from materials:
-</p>
-<ul>
-<li> <samp>`mat diffuse'</samp>, type float
-</li><li> <samp>`mat ambient'</samp>, type float
-</li><li> <samp>`mat reflection'</samp>, type float
-</li><li> <samp>`mat flatcolor'</samp>, type color, flat color of the material
-</li><li> <samp>`tex diffuse'</samp>, default diffuse texture
-</li><li> various textures as defined in the material section
-</li></ul>
-
-<p>Shader variables from lightiterator renderstep:
-</p>
-<ul>
-<li> <samp>`light 0 position'</samp>, type vector4
-</li><li> <samp>`light 0 position world'</samp>, type vector4
-</li><li> <samp>`light 0 transform'</samp>, type transform
-</li><li> <samp>`light 0 transform world'</samp>, type transform
-</li><li> <samp>`light 0 diffuse'</samp>, type vector4
-</li><li> <samp>`light 0 specular'</samp>, type vector4
-</li><li> <samp>`light 0 attenuation'</samp>, type vector4
-</li><li> <samp>`light 0 attenuationtex'</samp>, type texture
-</li><li> <samp>`light 0 inner falloff'</samp>, type float
-</li><li> <samp>`light 0 outer falloff'</samp>, type float
-</li></ul>
-
-<p>Shader variables from brute terrain mesh:
-</p>
-<ul>
-<li> <samp>`texture lod distance'</samp>, type vector3
-</li><li> <samp>`splat alpha map'</samp>, type texture
-</li></ul>
-
-<p>Shader variables from thing mesh:
-</p>
-<ul>
-<li> <samp>`tex lightmap'</samp>, type texture
-</li></ul>
-
-<p>Shader variables from particles mesh:
-</p>
-<ul>
-<li> <samp>`point radius'</samp>, type float
-</li><li> <samp>`point scale'</samp>, type float
-</li></ul>
-
-<p>Shader variables for procedural textures:
-</p>
-<ul>
-<li> <samp>`position'</samp>, type vector2
-</li></ul>
-
-<p>Shader variables from portals:
-</p>
-<ul>
-<li> <samp>`fogplane'</samp>, type vector4
-</li><li> <samp>`fog density'</samp>, type float
-</li><li> <samp>`fog color'</samp>, type vector3
-</li></ul>
-
-<p>Shader variables from fat renderloop:
-</p>
-<ul>
-<li> <samp>`fogplane'</samp>, type vector4
-</li><li> <samp>`fog density'</samp>, type float
-</li><li> <samp>`fog color'</samp>, type vector3
-</li><li> <samp>`object2world transform'</samp>, type transform
-</li></ul>
-
-<p>Shader variables from generic renderloop:
-</p>
-<ul>
-<li> <samp>`object2world transform'</samp>, type transform
-</li><li> <samp>`light 0 type'</samp>, type integer
-</li><li> <samp>`light ambient'</samp>, type color
-</li><li> <samp>`fogplane'</samp>, type vector4
-</li><li> <samp>`fog density'</samp>, type float
-</li><li> <samp>`fog color'</samp>, type vector3
-</li><li> <samp>`fog start'</samp>, type float
-</li><li> <samp>`fog end'</samp>, type float
-</li><li> <samp>`fog mode'</samp>, type int
-</li></ul>
-
-
+<dl compact="compact">
+<dt> <samp>`fogplane'</samp></dt>
+<dt> <samp>`fog density'</samp></dt>
+<dt> <samp>`fog color'</samp></dt>
+<dt> <samp>`fog start'</samp></dt>
+<dt> <samp>`fog end'</samp></dt>
+<dt> <samp>`fog mode'</samp></dt>
+<dt> <samp>`standardtex fog'</samp></dt>
+</dl>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.11.1.1.html#4.11.1.1" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.11.2.html#4.11.2" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.11.1.3.html#4.11.1.3" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.11.1.html#4.11.1" title="Up section"> Up </a>]</td>
