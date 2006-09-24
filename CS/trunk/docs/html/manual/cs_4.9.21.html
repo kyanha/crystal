@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.9.21 Explosion Mesh Object</title>
+<title>Crystal Space: 4.9.21 Particles Mesh Object</title>
 
-<meta name="description" content="Crystal Space: 4.9.21 Explosion Mesh Object">
-<meta name="keywords" content="Crystal Space: 4.9.21 Explosion Mesh Object">
+<meta name="description" content="Crystal Space: 4.9.21 Particles Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.9.21 Particles Mesh Object">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,11 +40,11 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MeshObject-Explo"></a>
+<a name="MeshObject-Particles"></a>
 <a name="4.9.21"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.20.html#4.9.20" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.9.22.html#4.9.22" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.9.html#4.9" title="Up section"> Up </a>]</td>
@@ -58,27 +58,27 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.9.21 Explosion Mesh Object </h3>
+<h3 class="subsection"> 4.9.21 Particles Mesh Object </h3>
 
-<p><em>Written by Jorrit Tyberghein,
-<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
+<p><em>Written by M&aring;rten Svanfeldt,
+<a href="mailto:developer@svanfeldt.com">developer@svanfeldt.com</a>.</em>
 </p>
-<p>Explosion is a particle system that emulates an explosion.  Also see the
-general particle system documentation which is valid for all particle systems.
-See section <a href="cs_4.9.16.html#4.9.16">Particle Systems in General</a>.
+<p>Particles is a general particle rendering and simple simulation plugin. It
+also contains a few simpler built-in implementations of particle emitters
+and effectors.
 </p>
-<a name="SEC383"></a>
+<a name="SEC378"></a>
 <h4 class="subsubheading"> Basic Structure </h4>
 
 <p>The following <small>SCF</small> class names are used (for <code>csLoadPlugin</code>):
 </p>
 <ul>
 <li>
-Type plugin: <samp>`crystalspace.mesh.object.explosion'</samp>
+Type plugin: <samp>`crystalspace.mesh.object.particles'</samp>
 </li><li>
-Loader plugin: <samp>`crystalspace.mesh.loader.explosion'</samp>
+Loader plugin: <samp>`crystalspace.mesh.loader.particles'</samp>
 </li><li>
-Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.explosion'</samp>
+Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.particles'</samp>
 </li></ul>
 
 <p>Objects in this plugin implement the following <small>SCF</small> interfaces (get
@@ -91,15 +91,15 @@ with <code>scfQueryInterface</code>):
 <li>
 Implements <samp>`iMeshObject'</samp>
 </li><li>
-Implements <samp>`iParticleState'</samp>
-</li><li>
-Implements <samp>`iExplosionState'</samp>
+Implements <samp>`iParticleSystem'</samp>
 </li></ul>
 </li><li>
 <em>MeshObjectFactory</em>
 <ul>
 <li>
 Implements <samp>`iMeshObjectFactory'</samp>
+</li><li>
+Implements <samp>`iParticleSystemFactory'</samp>
 </li></ul>
 </li><li>
 <em>MeshObjectFactory</em>
@@ -109,75 +109,354 @@ Implements <samp>`iMeshObjectType'</samp>
 </li></ul>
 </li></ul>
 
-<a name="SEC384"></a>
+<a name="SEC379"></a>
 <h4 class="subsubheading"> Factory State Interface </h4>
 
-<p>This plugin has no factory state interface.
+<p>Use the <samp>`iParticleSystemFactory'</samp> <small>SCF</small> interface to access settings for
+a particle system factory.  The definition of this interface can be found in
+<tt>`CS/include/imesh/particles.h'</tt> and that is also the include file you need
+to include in your applications to use this plugin.  Using this interface you
+can access the material, default particle billboard setup, rotation mode, 
+emitters, effectors and various other configuration parameters for a 
+particle system factory.
 </p>
-<a name="SEC385"></a>
-<h4 class="subsubheading"> Factory Loader </h4>
-
-<p>The fountain mesh factory loader has no parameters.
+<p>Notice that once a particle system have been created from a factory, changing
+the factory won't change the instance. So in the case of particle systems
+the factory should be viewed as a template rather than a &quot;parent&quot;.
 </p>
-<a name="SEC386"></a>
+<a name="SEC380"></a>
 <h4 class="subsubheading"> Object State Interface </h4>
 
-<p><samp>`iExplosionState'</samp> is the <small>SCF</small> interface that you can
-use to set/get settings for an explosion object. The definition of this
-interface can be found in <tt>`CS/include/imesh/explode.h'</tt> and that's also the
-include file you need to include in your applications to use this plugin.
-Using this interface you can access the number of particles, the size
-of the particles, and various other explosion parameters.
+<p>Use the <samp>`iParticleSystem'</samp> <small>SCF</small> interface to access settings for
+a particle system.  The definition of this interface can be found in
+<tt>`CS/include/imesh/particles.h'</tt> and that is also the include file you need
+to include in your applications to use this plugin.  Using this interface you
+can access the material, default particle billboard setup, rotation mode, 
+emitters, effectors and various other configuration parameters for a 
+particle system.
 </p>
-<p>In addition you can use <samp>`iParticleState'</samp>.
-</p>
-<a name="SEC387"></a>
-<h4 class="subsubheading"> Object Loader </h4>
+<p><a name="Particles-Factory-and-Object-Loader"></a>
+</p><a name="SEC381"></a>
+<h4 class="subsubheading"> Factory and Object Loader </h4>
 
-<p>Also see the general documentation for particle systems for other recognized
-keywords.  See section <a href="cs_4.9.16.html#4.9.16">Particle Systems in General</a>.
+<p>The factory and object loader in much recognize the same set of keywords.
 </p>
 <dl compact="compact">
-<dt> <code>&lt;dropsize w=&quot;&quot; h=&quot;&quot; /&gt;</code></dt>
-<dd><p>Size of the particles of the explosion (width and height).
+<dt> <code>&lt;renderorientation&gt;orientation&lt;/renderorientation&gt;</code></dt>
+<dd><p>Set how the particle billboards are oriented in relation to the world and the
+camera. See <a href="#Particles-billboard-setup">Particle billboard setup</a>.
 </p></dd>
-<dt> <code>&lt;center x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Center of the explosion.  In most cases you should use the origin here (0,0,0)
-and let the engine control the position of the explosion.
+<dt> <code>&lt;rotationmode&gt;rotation&lt;/rotationmode&gt;</code></dt>
+<dd><p>Set how rotation of the particles affect the visual output. Valid values are
+<samp>`none'</samp>, <samp>`texcoord'</samp> and <samp>`vertex'</samp>. Default is no effect 
+(<samp>`none'</samp>).
 </p></dd>
-<dt> <code>&lt;push x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Initial push.
+<dt> <code>&lt;sortmode&gt;sort&lt;/sortmode&gt;</code></dt>
+<dd><p>Control the particle front-to-back sorting mode. Valid values are
+<samp>`none'</samp>, <samp>`distance'</samp> and <samp>`dot'</samp>.
 </p></dd>
-<dt> <code>&lt;fade&gt;number&lt;/fade&gt;</code></dt>
-<dd><p>Fade.
+<dt> <code>&lt;integrationmode&gt;integration&lt;/integrationmode&gt;</code></dt>
+<dd><p>Velocity to position integration mode. Valid values are
+<samp>`none'</samp>, <samp>`linear'</samp> and <samp>`both'</samp>. Default is <samp>`linear'</samp>.
 </p></dd>
-<dt> <code>&lt;partradius&gt;radius&lt;/partradius&gt;</code></dt>
-<dd><p>Radius of every part.
+<dt> <code>&lt;commondirection x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Set common direction. Common direction is used as a reference direction for
+billboard setup for a few particle billboard orientations.
 </p></dd>
-<dt> <code>&lt;nrsides&gt;nrSides&lt;/nrsides&gt;</code></dt>
-<dd><p>Number of sides to use for the explosion particles.
+<dt> <code>&lt;transformmode&gt;tmode&lt;/transformmode&gt;</code></dt>
+<dd><p>Set the transform mode of the particle system and thereby the coordinate systems
+used. Valid values are <samp>`local'</samp>, <samp>`localemitter'</samp>, <samp>`world'</samp>.
 </p></dd>
-<dt> <code>&lt;spreadpos&gt;spreadPos&lt;/spreadpos&gt;</code></dt>
-<dd><p>SpreadPos.
+<dt> <code>&lt;individualsize&gt;yes/no&lt;/individualsize&gt;</code></dt>
+<dd><p>Determin if particle rendering should use the individual size associated with 
+each particle, or if the global &lt;particlesize&gt; property should be used.
 </p></dd>
-<dt> <code>&lt;spreadspeed&gt;spreadSpeed&lt;/spreadspeed&gt;</code></dt>
-<dd><p>SpreadSpeed.
+<dt> <code>&lt;particlesize x=&quot;&quot; y=&quot;&quot; /&gt;</code></dt>
+<dd><p>Set global particle size.
 </p></dd>
-<dt> <code>&lt;spreadaccel&gt;spreadAccelaration&lt;/spreadaccel&gt;</code></dt>
-<dd><p>SpreadAccel.
+<dt> <code>&lt;minbb&gt;<small class="dots">...</small>&lt;/minbb&gt;</code></dt>
+<dd><p>Set the minimum bounding box of the particles mesh. The particle system is only
+rendered when the bounding box is deemed visible (within frustum), and
+therefore it can sometimes be required to have a bigger bounding box than the
+current distribution of the particles.
 </p></dd>
-<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
-<dd><p>Disable or enable lighting for the explosion particles.
+<dt> <code>&lt;emitter type=&quot;&quot;&gt;<small class="dots">...</small>&lt;/emitter&gt;</code></dt>
+<dd><p>Add a built-in emitter to the particles system.
 </p></dd>
-<dt> <code>&lt;number&gt;numberparticles&lt;/number&gt;</code></dt>
-<dd><p>Number of particles to use.
+<dt> <code>&lt;effector type=&quot;&quot;&gt;<small class="dots">...</small>&lt;/effector&gt;</code></dt>
+<dd><p>Add a built-in effector to the particles system.
 </p></dd>
 </dl>
+
+
+<a name="SEC382"></a>
+<h4 class="subsubheading"> Factory Loader </h4>
+
+<p>Also see the general documentation for keywords recognized both by factory and 
+object. 
+See <a href="#Particles-Factory-and-Object-Loader">Factory and Object Loader</a>.
+</p>
+<dl compact="compact">
+<dt> <code>&lt;deepcreation&gt;yes/no&lt;/deepcreation&gt;</code></dt>
+<dd><p>Enable or disable deep-copy on creation of particle systems.
+</p></dd>
+<dt> <code>&lt;material&gt;materialName&lt;/material&gt;</code></dt>
+<dd><p>Set the default material for particle system factory.
+</p></dd>
+<dt> <code>&lt;mixmode&gt;mixmode&lt;/mixmode&gt;</code></dt>
+<dd><p>Set the default mixmode for particle system factory.
+</p></dd>
+</dl>
+
+<a name="SEC383"></a>
+<h4 class="subsubheading"> Object Loader </h4>
+
+<p>Also see the general documentation for keywords recognized both by factory and 
+object. 
+See <a href="#Particles-Factory-and-Object-Loader">Factory and Object Loader</a>.
+</p>
+<dl compact="compact">
+<dt> <code>&lt;factory&gt;factoryName&lt;/factory&gt;</code></dt>
+<dd><p>Set the factory to use when creating the particle system.
+</p></dd>
+<dt> <code>&lt;material&gt;materialName&lt;/material&gt;</code></dt>
+<dd><p>Set the material for particle system.
+</p></dd>
+<dt> <code>&lt;mixmode&gt;mixmode&lt;/mixmode&gt;</code></dt>
+<dd><p>Set the mixmode for particle system.
+</p></dd>
+</dl>
+
+<a name="SEC384"></a>
+<h4 class="subsubheading"> Operation of particles </h4>
+<p>The particle system have three basic parts
+</p>
+<ul>
+<li> Particle update loop
+</li><li> Particle billboard setup
+</li><li> Handling of emitters and effectors
+</li></ul>
+
+<p>Apart from this the particles plugin also contains some management code to keep
+everything together and interface the rest of Crystal Space, as well as loading
+and saving from/to files.
+</p>
+<a name="SEC385"></a>
+<h4 class="subsubheading"> Particle update loop </h4>
+<p>The main part of work related to particle creation and movement is done in the
+particle update loop. The update loop is called once per frame for every visible
+particle system.
+</p>
+<p>The steps of the update loop are:
+</p><ol>
+<li> Retirement of old particles. Particles time-to-live is decreased by
+current elapsed time, and those with zero or negative time-to-live are removed.
+</li><li> Emission of new particles. The emitters are polled one at a time to emit
+their particles into the system.
+</li><li> Apply physical (or non-physical) effects to particles. The effectors are
+ran one after another to apply their effect to the particles.
+</li><li> Position and orientation integration. Depending on the integration setting
+no integration or integration of position or position and rotation is done.
+</li></ol>
+
+<p><a name="Particles-billboard-setup"></a>
+</p><a name="SEC386"></a>
+<h4 class="subsubheading"> Particle billboard setup </h4>
+<p>The second big part of particles plugin is the particle billboard setup. In 
+computations each particle is &quot;point-like&quot; however for rendering you have to
+give it an extent. 
+</p>
+<p>The particles plugin provides rendering in form of rectangular (quadratile) 
+areas of settable size and orientation relative to the camera.
+</p>
+<dl compact="compact">
+<dt> <samp>`camface'</samp></dt>
+<dd><p>The particle billboards always face the camera location, so the camera to
+particle vector is used as normal. The camera up vector is used as up-vector
+for the billboards.
+</p></dd>
+<dt> <samp>`camface approx'</samp></dt>
+<dd><p>The billboards are aligned with the camera plane, and camera up and right
+vectors are used as billboard vectors. This is the default mode and the mode
+most other particle systems in Crystal Space have.
+</p></dd>
+<dt> <samp>`common'</samp></dt>
+<dd><p>Use common up direction as up vector for particle and as <samp>`camface'</samp>
+face the camera properly. This makes the particles look like fixed around one
+axis.
+</p></dd>
+<dt> <samp>`common approx'</samp></dt>
+<dd><p>Approximative version of <samp>`common'</samp> mode. Common up direction is used
+as billboard up direction and camera forward vector as plane normal. This mode
+is equal to old <samp>`Rain'</samp> particle system.
+</p></dd>
+<dt> <samp>`velocity'</samp></dt>
+<dd><p>Almost the same as <samp>`common'</samp> mode, but instead of using a common direction
+the particle linear velocity is used as up direction.
+</p></dd>
+<dt> <samp>`self'</samp></dt>
+<dd><p>Orients particle billboard according to the coordinate base defined by the
+quaternion in the particle (it's internal orientation). Setup is such that
+xy-plane is the billboard plane and positive z-axis normal.
+</p></dd>
+<dt> <samp>`self forward'</samp></dt>
+<dd><p>Same as <samp>`self'</samp> mode, however particles are always facing camera. It is
+equivalent to two-sided particles.
+</p></dd>
+</dl>
+
+<a name="SEC387"></a>
+<h4 class="subsubheading"> Emitters </h4>
+<p>Emitters are the entities responsible for emitting new particles into the
+particle system. Without any emitters there won't be any particles and nothing
+to see.
+</p>
+<p>In principle an emitter is any class implementing the interface 
+<samp>`iParticleEmitter'</samp>, so you can implement your own emitters, however for
+convenience there are a few built in emitter types. These can be accessed via
+the <samp>`crystalspace.mesh.object.particles.emitter'</samp> plugin class and interface
+<samp>`iParticleBuiltinEmitterFactory'</samp> interface.
+The built in emitters are also loadable via the normal particle loader using
+<code>&lt;emitter type=&quot;..&quot;&gt;</code> tags. The available types are:
+</p><ul>
+<li> <samp>`sphere'</samp>
+</li><li> <samp>`box'</samp>
+</li><li> <samp>`cylinder'</samp>
+</li><li> <samp>`cone'</samp>
+</li></ul>
+
+<p>Many of the options are same for several of the emitter types, so below is a
+description of all available options for the built in emitters and which type
+of emitters they apply to.
+</p>
+<table>
+<tr><td><p> Keyword </p></td><td><p> Applies to </p></td><td><p> Description
+</p></td></tr>
+<tr><td><p> <code>&lt;enabled&gt;yes/no&lt;/enabled&gt;</code>
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Should the emitter emit particles at all.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;starttime&gt;time&lt;/starttime&gt;</code>
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Start time of emitter relative to first time particle gets into view.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;duration&gt;time&lt;/duration&gt;</code>
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Duration for which the emitter should be active.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;emissionrate&gt;rate&lt;/emissionrate&gt;</code>	
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Emission rate in particles per second.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;initialttl min=&quot;&quot; max=&quot;&quot; /&gt;</code>
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Initial TTL of the particles will be assigned randomly between min and max
+values.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;mass min=&quot;&quot; max=&quot;&quot; /&gt;</code>
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Initial mass of the particles will be assigned randomly between min and max
+values.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;position x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code>
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Emitter center position.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;placement&gt;place&lt;/placement&gt;</code>
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Particle placement relative to emitter. Valid values <samp>`center'</samp>, 
+<samp>`volume'</samp>, <samp>`surface'</samp>. Default is <samp>`center'</samp>.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;uniformvelocity&gt;yes/no&lt;/uniformvelocity&gt;</code>
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Sets if all particles should have the same uniform velocity vector or if
+only the magnitude should be used and direction should be emitter-specific.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;initialvelocity x=&quot;&quot; y=&quot;&quot; z=&quot;&quot;/&gt;</code>
+</p></td><td><p> <samp>`all'</samp>
+</p></td><td><p> Set initial velocity vector.
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;radius&gt;rad&lt;/radius&gt;</code>
+</p></td><td><p> <samp>`sphere'</samp>, <samp>`cylinder'</samp>
+</p></td><td><p> Radius of emitting sphere/cylinder
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;extent x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code>
+</p></td><td><p> <samp>`cylinder'</samp>, <samp>`cone'</samp>
+</p></td><td><p> Extent vector defining the cone or cylinder
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;coneangle&gt;angle&lt;/coneangle&gt;</code>
+</p></td><td><p> <samp>`cone'</samp>
+</p></td><td><p> Cone opening angle in radians
+</p>
+</td></tr>
+<tr><td><p> <code>&lt;box&gt;..&lt;/box&gt;</code>
+</p></td><td><p> <samp>`box'</samp>
+</p></td><td><p> Box emitter extents
+</p></td></tr>
+</table>
+
+<a name="SEC388"></a>
+<h4 class="subsubheading"> Effectors </h4>
+<p>Just as emitters emit particles into the particle system, effectors put
+different kinds of effects on those who are already there, be it physical or
+non-physical effects.
+</p>
+
+<p>In principle an emitter is any class implementing the interface 
+<samp>`iParticleEffector'</samp>, so you can implement your own effectors, however for
+convenience there are a few built in effector types. These can be accessed via
+the <samp>`crystalspace.mesh.object.particles.effector'</samp> plugin class and
+<samp>`iParticleBuiltinEffectorFactory'</samp> interface.
+The built in effectors are also loadable via the normal particle loader using
+<code>&lt;effector type=&quot;..&quot;&gt;</code> tags. The available types are:
+</p><ul>
+<li> <samp>`force'</samp>
+</li><li> <samp>`lincolor'</samp>
+</li></ul>
+
+<p><samp>`Force'</samp> effector loader recognize following keywords:
+</p><dl compact="compact">
+<dt> <code>&lt;acceleration x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Add a constant acceleration to particles. Useful for example for gravity.
+</p></dd>
+<dt> <code>&lt;force x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Add a constant force to particles.
+</p></dd>
+<dt> <code>&lt;randomacceleration&gt;mag&lt;/randomacceleration&gt;</code></dt>
+<dd><p>Add a random acceleration with given magnitude.
+</p></dd>
+<dt> <code>&lt;randomacceleration x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
+<dd><p>Add a random acceleration with given magnitude in the form of a vector.
+</p></dd>
+</dl>
+
+<p><samp>`Lincolor'</samp> effector sets the color of particles based on their remaning
+TTL. It takes a fixed number of &quot;keypoints&quot; and then interpolates between them.
+<samp>`Lincolor'</samp> effector loader recognize following keywords:
+</p><dl compact="compact">
+<dt> <code>&lt;color red=&quot;&quot; green=&quot;&quot; blue=&quot;&quot; time=&quot;&quot;&gt;</code></dt>
+<dd><p>Set a keypoint color at given time.
+</p></dd>
+</dl>
+
+
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.20.html#4.9.20" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_4.9.22.html#4.9.22" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.html#4.10" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.9.html#4.9" title="Up section"> Up </a>]</td>
