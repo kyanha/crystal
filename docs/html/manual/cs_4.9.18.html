@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.9.18 Fire Mesh Object</title>
+<title>Crystal Space: 4.9.18 Haze Mesh Object</title>
 
-<meta name="description" content="Crystal Space: 4.9.18 Fire Mesh Object">
-<meta name="keywords" content="Crystal Space: 4.9.18 Fire Mesh Object">
+<meta name="description" content="Crystal Space: 4.9.18 Haze Mesh Object">
+<meta name="keywords" content="Crystal Space: 4.9.18 Haze Mesh Object">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="MeshObject-Fire"></a>
+<a name="MeshObject-Haze"></a>
 <a name="4.9.18"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.9.17.html#4.9.17" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,121 +58,16 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.9.18 Fire Mesh Object </h3>
+<h3 class="subsection"> 4.9.18 Haze Mesh Object </h3>
 
 <p><em>Written by Jorrit Tyberghein,
-<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>.</em>
+(<a href="mailto:jorrit.tyberghein@gmail.com">jorrit.tyberghein@gmail.com</a>).</em>
 </p>
-<p>A fire is a particle system that emulates a torch or flame.  Also see the
-general particle system documentation which is valid for all particle systems.
-See section <a href="cs_4.9.16.html#4.9.16">Particle Systems in General</a>.
+<p><strong>DOCUMENTATION NOT UP-TO-DATE</strong>
 </p>
-<a name="SEC365"></a>
-<h4 class="subsubheading"> Basic Structure </h4>
-
-<p>The following <small>SCF</small> class names are used (for <code>csLoadPlugin</code>):
+<p>This mesh object represents a 'haze' which is a bit like
+volumetric light.
 </p>
-<ul>
-<li>
-Type plugin: <samp>`crystalspace.mesh.object.fire'</samp>
-</li><li>
-Loader plugin: <samp>`crystalspace.mesh.loader.fire'</samp>
-</li><li>
-Factory loader plugin: <samp>`crystalspace.mesh.loader.factory.fire'</samp>
-</li></ul>
-
-<p>Objects in this plugin implement the following <small>SCF</small> interfaces (get
-with <code>scfQueryInterface</code>):
-</p>
-<ul>
-<li>
-<em>MeshObject</em>
-<ul>
-<li>
-Implements <samp>`iMeshObject'</samp>
-</li><li>
-Implements <samp>`iParticleState'</samp>
-</li><li>
-Implements <samp>`iFireState'</samp>
-</li></ul>
-</li><li>
-<em>MeshObjectFactory</em>
-<ul>
-<li>
-Implements <samp>`iMeshObjectFactory'</samp>
-</li></ul>
-</li><li>
-<em>MeshObjectFactory</em>
-<ul>
-<li>
-Implements <samp>`iMeshObjectType'</samp>
-</li></ul>
-</li></ul>
-
-<a name="SEC366"></a>
-<h4 class="subsubheading"> Factory State Interface </h4>
-
-<p>This plugin has no factory state interface.
-</p>
-<a name="SEC367"></a>
-<h4 class="subsubheading"> Factory Loader </h4>
-
-<p>The fire mesh factory loader has no parameters.
-</p>
-<a name="SEC368"></a>
-<h4 class="subsubheading"> Object State Interface </h4>
-
-<p><samp>`iFireState'</samp> is the <small>SCF</small> interface that you can
-use to set/get settings for a fire object. The definition of this
-interface can be found in <tt>`CS/include/imesh/fire.h'</tt> and that's also the
-include file you need to include in your applications to use this plugin.
-Using this interface you can access the number of particles, the size
-of the particles, and various other fire parameters.
-</p>
-<p>In addition you can use <samp>`iParticleState'</samp>.
-</p>
-<a name="SEC369"></a>
-<h4 class="subsubheading"> Object Loader </h4>
-
-<p>Also see the general documentation for particle systems for other recognized
-keywords.  See section <a href="cs_4.9.16.html#4.9.16">Particle Systems in General</a>.
-</p>
-<dl compact="compact">
-<dt> <code>&lt;dropsize w=&quot;&quot; h=&quot;&quot; /&gt;</code></dt>
-<dd><p>Size of the flame particles (width and height).
-</p></dd>
-<dt> <code>&lt;origin x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Origin of the flame.  Usually this is (0,0,0) and the engine is responsible for
-setting the correct position of the flame.  This works better for hierarchical
-transformations.
-</p></dd>
-<dt> <code>&lt;originbox&gt;</code></dt>
-<dd><table><tr><td>&nbsp;</td><td><pre class="example">	&lt;min x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
-	&lt;min x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;
-&lt;/originbox&gt;
-</pre></td></tr></table><p>Origin of the flame as a box. Usually this is (0,0,0, 0,0,0) and the engine
-is responsible for setting the correct position of the flame.  This works
-better for hierarchical transformations.
-</p></dd>
-<dt> <code>&lt;direction x=&quot;&quot; y=&quot;&quot; z=&quot;&quot; /&gt;</code></dt>
-<dd><p>Direction of the flame.
-</p></dd>
-<dt> <code>&lt;swirl&gt;swirlValue&lt;/swirl&gt;</code></dt>
-<dd><p>Swirl.
-</p></dd>
-<dt> <code>&lt;colorscale&gt;colorScaleValue&lt;/colorscale&gt;</code></dt>
-<dd><p>Value for color scale.
-</p></dd>
-<dt> <code>&lt;totaltime&gt;totalTime&lt;/totaltime&gt;</code></dt>
-<dd><p>Total time.
-</p></dd>
-<dt> <code>&lt;lighting&gt;yes/no&lt;/lighting&gt;</code></dt>
-<dd><p>Disable or enable lighting for the fire particles.
-</p></dd>
-<dt> <code>&lt;number&gt;nrParticles&lt;/number&gt;</code></dt>
-<dd><p>Number of particles to use.
-</p></dd>
-</dl>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
