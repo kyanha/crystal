@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.5 Release Notes from 0.90 to 0.92</title>
+<title>Crystal Space: C.5 Release Notes from 0.92 to 0.94</title>
 
-<meta name="description" content="Crystal Space: C.5 Release Notes from 0.90 to 0.92">
-<meta name="keywords" content="Crystal Space: C.5 Release Notes from 0.90 to 0.92">
+<meta name="description" content="Crystal Space: C.5 Release Notes from 0.92 to 0.94">
+<meta name="keywords" content="Crystal Space: C.5 Release Notes from 0.92 to 0.94">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Release-Notes-92"></a>
+<a name="Release-Notes-94"></a>
 <a name="C.5"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.4.html#C.4" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,164 +58,207 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h2 class="appendixsec"> C.5 Release Notes from 0.90 to 0.92 </h2>
+<h2 class="appendixsec"> C.5 Release Notes from 0.92 to 0.94 </h2>
 
-<p>This section documents the major changes between versions 0.90 and 0.92 of of
+<p>This section documents the major changes between versions 0.92 and 0.94 of of
 Crystal Space.
 </p>
-<a name="SEC1068"></a>
-<h3 class="subheading"> csInitializer changes </h3>
-
-<p><code>csInitializer::CreateEnvironment()</code> now accepts two additional
-parameters: <samp>`argc'</samp> and <samp>`argv'</samp>.
-Consequently <code>csInitializer::SetupKeyboardHandler()</code> has been removed.
-</p>
 <a name="SEC1069"></a>
-<h3 class="subheading"> iCollideSystem Changes </h3>
+<h3 class="subheading"> Loader and Saver Changes </h3>
 
-<p>The <code>iCollideSystem::Collide()</code> function now accepts
-<samp>`csReversibleTransform'</samp> transforms instead of just <samp>`csTransform'</samp>.
+<p>All plugins implementing <samp>`iLoaderPlugin'</samp> will have to be changed
+since the material and mesh factory lists are now replaced with a
+<samp>`iLoaderContext'</samp> parameter.
+</p>
+<p>This change also means that <code>iTerrFuncState::LoadMaterialGroup()</code>
+now expects an <samp>`iLoaderContext'</samp> instead of <samp>`iMaterialList'</samp>.
+</p>
+<p><em>Warning</em>: This loader change means that the searching restricted
+on the current region now actually works. This means that by default
+when loading a map it will <em>only</em> find objects defined in this map.
+</p>
+<p>The <samp>`iSaverPlugin'</samp> interface has also changed. It now uses an
+<samp>`iFile'</samp> parameter instead of <samp>`iStrVector'</samp>.
 </p>
 <a name="SEC1070"></a>
-<h3 class="subheading"> Texture Manager Changes </h3>
+<h3 class="subheading"> iCamera Changes </h3>
 
-<p>The following deregistration functions have been removed.  Instead, use the
-normal <code>DecRef()</code> mechanism.
+<p>Added <code>iCamera::SetFarPlane()</code> and changed <code>iCamera::GetFarPlane()</code>
+to return a pointer to the far plane. This function will return null if
+no far plane is used.
+</p>
+<p>The following constants have been renamed in order to avoid pollution of the
+global namespace:
 </p>
 <ul>
 <li>
-<code>iTextureManager::UnregisterTexture()</code>
+<code>VEC_FORWARD</code> =&gt; <code>CS_VEC_FORWARD</code>
 </li><li>
-<code>iTextureManager::UnregisterMaterial()</code>
+<code>VEC_BACKWARD</code> =&gt; <code>CS_VEC_BACKWARD</code>
+</li><li>
+<code>VEC_RIGHT</code> =&gt; <code>CS_VEC_RIGHT</code>
+</li><li>
+<code>VEC_LEFT</code> =&gt; <code>CS_VEC_LEFT</code>
+</li><li>
+<code>VEC_UP</code> =&gt; <code>CS_VEC_UP</code>
+</li><li>
+<code>VEC_DOWN</code> =&gt; <code>CS_VEC_DOWN</code>
+</li><li>
+<code>VEC_ROT_RIGHT</code> =&gt; <code>CS_VEC_ROT_RIGHT</code>
+</li><li>
+<code>VEC_ROT_LEFT</code> =&gt; <code>CS_VEC_ROT_LEFT</code>
+</li><li>
+<code>VEC_TILT_RIGHT</code> =&gt; <code>CS_VEC_TILT_RIGHT</code>
+</li><li>
+<code>VEC_TILT_LEFT</code> =&gt; <code>CS_VEC_TILT_LEFT</code>
+</li><li>
+<code>VEC_TILT_UP</code> =&gt; <code>CS_VEC_TILT_UP</code>
+</li><li>
+<code>VEC_TILT_DOWN</code> =&gt; <code>CS_VEC_TILT_DOWN</code>
 </li></ul>
 
 <a name="SEC1071"></a>
-<h3 class="subheading"> iRegion </h3>
+<h3 class="subheading"> Engine Changes </h3>
 
-<p>The functions <code>iRegion::Find<small class="dots">...</small>()</code> will no longer increase
-the reference count of the returned objects.
+<p>Far plane handling in the engine has changed. Polygons are no longer
+clipped exactly to the far plane but instead the polygons are rejected
+which are fully behind the far plane.
+</p>
+<p><code>iEngine::LoadMeshFactory()</code> and <code>iEngine::LoadMeshWrapper()</code>
+used to have a <samp>`classId'</samp> parameter. That parameter has now been removed.
 </p>
 <a name="SEC1072"></a>
-<h3 class="subheading"> GetThingState </h3>
+<h3 class="subheading"> Various Changes </h3>
 
-<p><code>iEngine::GetThingState()</code> has not been removed but this function
-is now deprecated. It is recommended that you get the <samp>`iMeshObjectType'</samp>
-for the thing mesh objects the usual way (i.e. by loading the plugin).
+<p><code>csPlane3::ClipPolygon()</code> will now by default consider the
+polygon to be visible on the negative side of the plane
+(<code>csPlane3::Classify()</code>) as opposed to the positive side like
+it used to be. It now has a third parameter <samp>`reversed'</samp> which
+you can set to <code>true</code> so that it behaves again as before.
 </p>
 <a name="SEC1073"></a>
-<h3 class="subheading"> iThingState </h3>
+<h3 class="subheading"> Various Constant Changes </h3>
 
-<p>The following functions were made <samp>`const'</samp> in <samp>`iThingState'</samp>:
-</p><ul>
-<li>
-<code>CurveTexel()</code>
-</li><li>
-<code>CurveVertex()</code>
-</li><li>
-<code>GetCurveVertices()</code>
-</li><li>
-<code>GetCurveVertexCount()</code>
-</li><li>
-<code>GetCurveCount()</code>
-</li><li>
-<code>GetCurvesScale()</code>
-</li><li>
-<code>GetMovingOption()</code>
-</li><li>
-<code>GetPortalCount()</code>
-</li><li>
-<code>GetPortal()</code>
-</li><li>
-<code>GetPortalPolygon()</code>
-</li><li>
-<code>GetVertexCount()</code>
-</li></ul>
-
-<p>The following methods were renamed in <samp>`iThingState'</samp>:
+<p>The following constants have been renamed in order to avoid pollution of the
+global namespace:
 </p>
 <ul>
 <li>
-<code>CurveVertex()</code> =&gt; <code>GetCurveVertex()</code>
+<code>BOX_CORNER_xy</code> =&gt; <code>CS_BOX_CORNER_xy</code>
 </li><li>
-<code>CurveTexel()</code> =&gt; <code>GetCuveTexel()</code>
+<code>BOX_CORNER_xY</code> =&gt; <code>CS_BOX_CORNER_xY</code>
+</li><li>
+<code>BOX_CORNER_Xy</code> =&gt; <code>CS_BOX_CORNER_Xy</code>
+</li><li>
+<code>BOX_CORNER_XY</code> =&gt; <code>CS_BOX_CORNER_XY</code>
+</li><li>
+<code>BOX_EDGE_xy_Xy</code> =&gt; <code>CS_BOX_EDGE_xy_Xy</code>
+</li><li>
+<code>BOX_EDGE_Xy_xy</code> =&gt; <code>CS_BOX_EDGE_Xy_xy</code>
+</li><li>
+<code>BOX_EDGE_Xy_XY</code> =&gt; <code>CS_BOX_EDGE_Xy_XY</code>
+</li><li>
+<code>BOX_EDGE_XY_xy</code> =&gt; <code>CS_BOX_EDGE_XY_Xy</code>
+</li><li>
+<code>BOX_EDGE_XY_xY</code> =&gt; <code>CS_BOX_EDGE_XY_xY</code>
+</li><li>
+<code>BOX_EDGE_xY_XY</code> =&gt; <code>CS_BOX_EDGE_xY_XY</code>
+</li><li>
+<code>BOX_EDGE_xY_xy</code> =&gt; <code>CS_BOX_EDGE_xY_xy</code>
+</li><li>
+<code>BOX_EDGE_xy_XY</code> =&gt; <code>CS_BOX_EDGE_xy_xY</code>
+</li><li>
+<code>BOX_CORNER_xyz</code> =&gt; <code>CS_BOX_CORNER_xyz</code>
+</li><li>
+<code>BOX_CORNER_xyZ</code> =&gt; <code>CS_BOX_CORNER_xyZ</code>
+</li><li>
+<code>BOX_CORNER_xYz</code> =&gt; <code>CS_BOX_CORNER_xYz</code>
+</li><li>
+<code>BOX_CORNER_xYZ</code> =&gt; <code>CS_BOX_CORNER_xYZ</code>
+</li><li>
+<code>BOX_CORNER_Xyz</code> =&gt; <code>CS_BOX_CORNER_Xyz</code>
+</li><li>
+<code>BOX_CORNER_XyZ</code> =&gt; <code>CS_BOX_CORNER_XyZ</code>
+</li><li>
+<code>BOX_CORNER_XYz</code> =&gt; <code>CS_BOX_CORNER_XYz</code>
+</li><li>
+<code>BOX_CORNER_XYZ</code> =&gt; <code>CS_BOX_CORNER_XYZ</code>
+</li><li>
+<code>BOX_SIDE_x</code> =&gt; <code>CS_BOX_SIDE_x</code>
+</li><li>
+<code>BOX_SIDE_X</code> =&gt; <code>CS_BOX_SIDE_X</code>
+</li><li>
+<code>BOX_SIDE_y</code> =&gt; <code>CS_BOX_SIDE_y</code>
+</li><li>
+<code>BOX_SIDE_Y</code> =&gt; <code>CS_BOX_SIDE_Y</code>
+</li><li>
+<code>BOX_SIDE_z</code> =&gt; <code>CS_BOX_SIDE_z</code>
+</li><li>
+<code>BOX_SIDE_Z</code> =&gt; <code>CS_BOX_SIDE_Z</code>
+</li><li>
+<code>BOX_INSIDE</code> =&gt; <code>CS_BOX_INSIDE</code>
+</li><li>
+<code>BOX_EDGE_Xyz_xyz</code> =&gt; <code>CS_BOX_EDGE_Xyz_xyz</code>
+</li><li>
+<code>BOX_EDGE_xyz_Xyz</code> =&gt; <code>CS_BOX_EDGE_xyz_Xyz</code>
+</li><li>
+<code>BOX_EDGE_xyz_xYz</code> =&gt; <code>CS_BOX_EDGE_xyz_xYz</code>
+</li><li>
+<code>BOX_EDGE_xYz_xyz</code> =&gt; <code>CS_BOX_EDGE_xYz_xyz</code>
+</li><li>
+<code>BOX_EDGE_xYz_XYz</code> =&gt; <code>CS_BOX_EDGE_xYz_XYz</code>
+</li><li>
+<code>BOX_EDGE_XYz_xYz</code> =&gt; <code>CS_BOX_EDGE_XYz_xYz</code>
+</li><li>
+<code>BOX_EDGE_XYz_Xyz</code> =&gt; <code>CS_BOX_EDGE_XYz_Xyz</code>
+</li><li>
+<code>BOX_EDGE_Xyz_XYz</code> =&gt; <code>CS_BOX_EDGE_Xyz_XYz</code>
+</li><li>
+<code>BOX_EDGE_Xyz_XyZ</code> =&gt; <code>CS_BOX_EDGE_Xyz_XyZ</code>
+</li><li>
+<code>BOX_EDGE_XyZ_Xyz</code> =&gt; <code>CS_BOX_EDGE_XyZ_Xyz</code>
+</li><li>
+<code>BOX_EDGE_XyZ_XYZ</code> =&gt; <code>CS_BOX_EDGE_XyZ_XYZ</code>
+</li><li>
+<code>BOX_EDGE_XYZ_XyZ</code> =&gt; <code>CS_BOX_EDGE_XYZ_XyZ</code>
+</li><li>
+<code>BOX_EDGE_XYZ_XYz</code> =&gt; <code>CS_BOX_EDGE_XYZ_XYz</code>
+</li><li>
+<code>BOX_EDGE_XYz_XYZ</code> =&gt; <code>CS_BOX_EDGE_XYz_XYZ</code>
+</li><li>
+<code>BOX_EDGE_XYZ_xYZ</code> =&gt; <code>CS_BOX_EDGE_XYZ_xYZ</code>
+</li><li>
+<code>BOX_EDGE_xYZ_XYZ</code> =&gt; <code>CS_BOX_EDGE_xYZ_XYZ</code>
+</li><li>
+<code>BOX_EDGE_xYZ_xYz</code> =&gt; <code>CS_BOX_EDGE_xYZ_xYz</code>
+</li><li>
+<code>BOX_EDGE_xYz_xYZ</code> =&gt; <code>CS_BOX_EDGE_xYz_xYZ</code>
+</li><li>
+<code>BOX_EDGE_xYZ_xyZ</code> =&gt; <code>CS_BOX_EDGE_xYZ_xyZ</code>
+</li><li>
+<code>BOX_EDGE_xyZ_xYZ</code> =&gt; <code>CS_BOX_EDGE_xyZ_xYZ</code>
+</li><li>
+<code>BOX_EDGE_xyZ_xyz</code> =&gt; <code>CS_BOX_EDGE_xyZ_xyz</code>
+</li><li>
+<code>BOX_EDGE_xyz_xyZ</code> =&gt; <code>CS_BOX_EDGE_xyz_xyZ</code>
+</li><li>
+<code>BOX_EDGE_xyZ_XyZ</code> =&gt; <code>CS_BOX_EDGE_xyZ_XyZ</code>
+</li><li>
+<code>BOX_EDGE_XyZ_xyZ</code> =&gt; <code>CS_BOX_EDGE_XyZ_xyZ</code>
+</li><li>
+<code>POL_FRONT</code> =&gt; <code>CS_POL_FRONT</code>
+</li><li>
+<code>POL_BACK</code> =&gt; <code>CS_POL_BACK</code>
+</li><li>
+<code>POL_SAME_PLANE</code> =&gt; <code>CS_POL_SAME_PLANE</code>
+</li><li>
+<code>POL_SPLIT_NEEDED</code> =&gt; <code>CS_POL_SPLIT_NEEDED</code>
+</li><li>
+<code>DECLARE_TYPED_QUEUE</code> =&gt; <code>CS_DECLARE_TYPED_QUEUE</code>
+</li><li>
+<code>DECLARE_TYPED_QUEUE_BASE</code> =&gt; <code>CS_DECLARE_TYPED_QUEUE_BASE</code>
 </li></ul>
 
-<p>Added several functions to <samp>`iThingState'</samp>:
-</p>
-<ul>
-<li>
-<code>FindPolygonIndex()</code>
-</li><li>
-<code>RemovePolygon()</code>
-</li><li>
-<code>RemovePolygons()</code>
-</li><li>
-<code>SetVertex()</code>
-</li><li>
-<code>DeleteVertex()</code>
-</li><li>
-<code>DeleteVertices()</code>
-</li><li>
-<code>SetCurveVertex()</code>
-</li><li>
-<code>SetCurveTexel()</code>
-</li><li>
-<code>ClearCurveVertices()</code>
-</li><li>
-<code>FindCurveIndex()</code>
-</li><li>
-<code>RemoveCurve()</code>
-</li><li>
-<code>RemoveCurves()</code>
-</li></ul>
-
-<a name="SEC1074"></a>
-<h3 class="subheading"> Isometric Engine </h3>
-
-<p>Added <code>iIsoEngine::GetMaterialList()</code> and removed all other
-material functions from <code>iIsoEngine</code> except the one to create a material
-from a <small>VFS</small> path.
-</p>
-<p>Added <code>iIsoEngine::GetMeshFactories()</code> and removed the following
-functions.
-</p>
-<ul>
-<li>
-<code>AddMeshFactory()</code>
-</li><li>
-<code>FindMeshFactory()</code>
-</li><li>
-<code>RemoveMeshFactory()</code>
-</li></ul>
-
-<a name="SEC1075"></a>
-<h3 class="subheading"> Terrain Mesh Object </h3>
-
-<p>Changed <code>iTerrFuncState::LoadMaterialGroup()</code> so that the first
-parameter is now a material list, <samp>`iMaterialList'</samp>, instead of
-<samp>`iEngine'</samp>.
-</p>
-<a name="SEC1076"></a>
-<h3 class="subheading"> Loader and Saver Plugins </h3>
-
-<p>Changed <code>iLoaderPlugin::Parse()</code> to accept a material list and mesh
-factory list (<samp>`iMaterialList'</samp> and <samp>`iMeshFactoryList'</samp>) instead of an
-<samp>`iEngine'</samp> instance.
-</p>
-<p>Changed <code>iSaverPlugin::WriteDown()</code> so that it no longer has
-the <samp>`iEngine'</samp> parameter.
-</p>
-<a name="SEC1077"></a>
-<h3 class="subheading"> iMeshObject and iMeshObjectFactory Changes </h3>
-
-<p>Added <code>SetLogicalParent()</code> and <code>GetLogicalParent()</code> to
-both <samp>`iMeshObject'</samp> and <samp>`iMeshObjectFactory'</samp>. This should
-be no issue for applications simply using mesh objects but it is an
-issue if you made your own mesh object implementation. Also beware
-that there have been some changes in the way the parser interact
-with the plugin loaders. The plugin loaders are no longer responsible
-for setting the factory pointer. The parser will now do that.
-</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_C.4.html#C.4" title="Previous section in reading order"> &lt; </a>]</td>
