@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: C.1.15 Reference Count Automation</title>
+<title>Crystal Space: C.2.18 Particle system changes</title>
 
-<meta name="description" content="Crystal Space: C.1.15 Reference Count Automation">
-<meta name="keywords" content="Crystal Space: C.1.15 Reference Count Automation">
+<meta name="description" content="Crystal Space: C.2.18 Particle system changes">
+<meta name="keywords" content="Crystal Space: C.2.18 Particle system changes">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,14 +40,14 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Api100-Reference-Count-Automation"></a>
-<a name="C.1.15"></a>
+<a name="Api100-Particle-system-changes"></a>
+<a name="C.2.18"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_C.1.14.html#C.1.14" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_C.1.16.html#C.1.16" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_C.2.17.html#C.2.17" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.2.18.1.html#C.2.18.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.2.html#C.2" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left"> &nbsp; </td>
@@ -58,45 +58,40 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> C.1.15 Reference Count Automation </h3>
+<h3 class="subsection"> C.2.18 Particle system changes </h3>
 
-<p>For consistency with the bulk of the Crystal Space <small>API</small>, and in order to
-simplify reference-count management, the following methods have been changed
-to return <code>csRef&lt;&gt;</code> rather than raw pointers of which the client had to
-dispose manually via <code>DecRef()</code>.
+<p>The <small>PARTICLES</small> mesh object have been rewritten.
 </p>
-<ul>
-<li>
-<code>iEmitFactoryState::CreateBox()</code>
-</li><li>
-<code>iEmitFactoryState::CreateCone()</code>
-</li><li>
-<code>iEmitFactoryState::CreateCylinder()</code>
-</li><li>
-<code>iEmitFactoryState::CreateCylinderTangent()</code>
-</li><li>
-<code>iEmitFactoryState::CreateFixed()</code>
-</li><li>
-<code>iEmitFactoryState::CreateLine()</code>
-</li><li>
-<code>iEmitFactoryState::CreateMix()</code>
-</li><li>
-<code>iEmitFactoryState::CreateSphere()</code>
-</li><li>
-<code>iEmitFactoryState::CreateSphereTangent()</code>
-</li><li>
-<code>iHazeHullCreation::CreateBox()</code>
-</li><li>
-<code>iHazeHullCreation::CreateCone()</code>
-</li></ul>
+<p><code>iParticlesStateBase</code>, <code>iParticlesObjectState</code>, 
+<code>iParticlesFactoryState</code> and <code>iParticlesPhysics</code> have been removed
+in favour of the new <code>iParticleSystemBase</code>, <code>iParticleSystemFactory</code>
+and <code>iParticleSystem</code>. 
+Particle emission is controlled via instances of <code>iParticleEmitter</code>,
+physical effects controlled via <code>iParticleEffector</code>.
+</p>
+<p>The full documentation for the new particle systems can be found at 
+See section <a href="cs_4.9.19.html#4.9.19">Particles Mesh Object</a>
+</p>
+<a name="IDX83"></a>
+
+<p>This section documents how to convert the various particle systems
+to the new particle system in Crystal Space.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="cs_C.2.18.1.html#C.2.18.1">C.2.18.1 Explosion</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_C.2.18.2.html#C.2.18.2">C.2.18.2 Rain</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_C.2.18.3.html#C.2.18.3">C.2.18.3 Snow</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_C.2.18.4.html#C.2.18.4">C.2.18.4 Fire</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_C.2.18.5.html#C.2.18.5">C.2.18.5 Fountain</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_C.1.14.html#C.1.14" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_C.1.16.html#C.1.16" title="Next section in reading order"> &gt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_C.2.17.html#C.2.17" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.2.18.1.html#C.2.18.1" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_C.html#C." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="cs_C.1.html#C.1" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_C.2.html#C.2" title="Up section"> Up </a>]</td>
 <td valign="middle" align="left">[<a href="cs_D.html#D." title="Next chapter"> &gt;&gt; </a>]</td>
 </tr></table>
 <p>
