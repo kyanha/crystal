@@ -89,7 +89,7 @@ for you. Here is an example on how you can do this easily:
 	scfFakeInterface&lt;MyOwnData&gt; &gt;
 {
 private:
-  int my_data_int;
+  int myDataInt;
 
 public:
   SCF_INTERFACE (MyOwnData, 1, 0, 0);
@@ -102,6 +102,11 @@ public:
   {
     ...
   }
+  
+  ...
+  
+  int GetMyData () const { return myDataInt; 
+  void SetMyData (int newData) { myDataInt = newData; 
 };
 </pre></td></tr></table>
 <p>In this example you must use some <small>SCF</small> templates so that your
@@ -111,7 +116,7 @@ properly.
 <p>Basically you create a class called <samp>`MyOwnData'</samp> which inherits
 from <code>csObject</code>. In that class you can do whatever you want
 with respect to your own game data. In the example above we only
-have a variable <samp>`my_data_int'</samp> but of course you can do whatever
+have a variable <samp>`myDataInt'</samp> but of course you can do whatever
 you want. The <small>SCF</small> templates make sure that you can later query for
 that object (using <code>scfQueryInterface</code> for example).
 </p>
@@ -122,11 +127,10 @@ that object (using <code>scfQueryInterface</code> for example).
 <code>iObject::ObjAdd()</code>. The example below shows how you can attach
 an instance of <code>MyOwnData</code> to a mesh:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">MyOwnData* mydata = new MyOwnData ();
-mydata-&gt;my_data_int = ...;
+<table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;MyOwnData&gt; mydata; mydata.AttachNew (new MyOwnData ());
+mydata-&gt;SetMyData (...);
 iMeshWrapper* mesh = ...;
 mesh-&gt;QueryObject ()-&gt;ObjAdd (mydata);
-mydata-&gt;DecRef ();
 </pre></td></tr></table>
 <p><code>mesh-&gt;QueryObject()</code> is interesting. Many Crystal Space objects
 that implement <code>iObject</code> have a convenience function called
