@@ -97,11 +97,7 @@ interfaces:
 
 <p><em>File</em>: <tt>`dog.cpp'</tt>
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#include &lt;stdlib.h&gt;
-
-#include &quot;cssysdef.h&quot;
+<table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;crystalspace.h&quot;
 #include &quot;idog.h&quot;
 #include &quot;iname.h&quot;
 
@@ -111,7 +107,6 @@ private:
   char* Name;
 
 public:
-  SCF_DECLARE_IBASE;
   csDog(iBase* Parent);
   virtual ~csDog();
 
@@ -130,12 +125,12 @@ SCF_IMPLEMENT_FACTORY(csDog)
 
 csDog::csDog(iBase* Parent) : scfImplementationType (this, Parent)
 {
-  Name = strdup(&quot;&lt;noname&gt;&quot;);
+  Name = csStrNew(&quot;&lt;noname&gt;&quot;);
 }
 
 csDog::~csDog()
 {
-  free(Name);
+  delete Name;
 }
 
 void csDog::Walk()
@@ -158,8 +153,8 @@ char const* csDog::GetName()
 void csDog::SetName(char const* NewName)
 {
   if (Name != 0)
-    free(Name);
-  Name = strdup(NewName != 0 ? NewName : &quot;&quot;);
+    delete Name;
+  Name = csStrNew(NewName != 0 ? NewName : &quot;&quot;);
 }
 
 </pre></td></tr></table>
