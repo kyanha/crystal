@@ -104,7 +104,7 @@ interfaces:
 class csDog : public scfImplementation2&lt;csDog,iDog,iName&gt;
 {
 private:
-  char* Name;
+  csString Name;
 
 public:
   csDog(iBase* Parent);
@@ -123,24 +123,23 @@ public:
 
 SCF_IMPLEMENT_FACTORY(csDog)
 
-csDog::csDog(iBase* Parent) : scfImplementationType (this, Parent)
+csDog::csDog(iBase* Parent) : scfImplementationType (this, Parent),
+  Name (&quot;&lt;noname&gt;&quot;)
 {
-  Name = csStrNew(&quot;&lt;noname&gt;&quot;);
 }
 
 csDog::~csDog()
 {
-  delete Name;
 }
 
 void csDog::Walk()
 {
-  printf(&quot;%s: I'm walking\n&quot;, Name);
+  printf(&quot;%s: I'm walking\n&quot;, Name.GetData());
 }
 
 void csDog::Shout(char const* Message)
 {
-  printf(&quot;I'm %s: shout, shout, %s\n&quot;, Name, Message);
+  printf(&quot;I'm %s: shout, shout, %s\n&quot;, Name.GetData(), Message);
 }
 
 // iName interface for dog.
@@ -152,9 +151,7 @@ char const* csDog::GetName()
 
 void csDog::SetName(char const* NewName)
 {
-  if (Name != 0)
-    delete Name;
-  Name = csStrNew(NewName != 0 ? NewName : &quot;&quot;);
+  Name = NewName != 0 ? NewName : &quot;&quot;;
 }
 
 </pre></td></tr></table>
