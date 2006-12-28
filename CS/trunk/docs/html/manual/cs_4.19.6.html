@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.19.6 Color object</title>
+<title>Crystal Space: 4.19.6 In-Depth Explanation of AWS Architecture</title>
 
-<meta name="description" content="Crystal Space: 4.19.6 Color object">
-<meta name="keywords" content="Crystal Space: 4.19.6 Color object">
+<meta name="description" content="Crystal Space: 4.19.6 In-Depth Explanation of AWS Architecture">
+<meta name="keywords" content="Crystal Space: 4.19.6 In-Depth Explanation of AWS Architecture">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,10 +40,10 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="AWS2-Color"></a>
+<a name="AWS-Architecture"></a>
 <a name="4.19.6"></a>
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_4.19.5.html#4.19.5" title="Previous section in reading order"> &lt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_4.19.5.14.html#4.19.5.14" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.19.7.html#4.19.7" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
@@ -58,50 +58,32 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.19.6 Color object </h3>
+<h3 class="subsection"> 4.19.6 In-Depth Explanation of <small>AWS</small> Architecture </h3>
 
-<p>Allows you to create an encapsulation of a color. Color components may range from 0.0 to 1.0, where
-the 0 is no intensity and 1 is full intensity of that component.
+<p>This section contains some information about the internal nature and
+architecture of <small>AWS</small>.
 </p>
-<dl compact="compact">
-<dt> <code>constructor: new Color(r,g,b,a)</code></dt>
-<dd><p>Set the color components and return a new Color object.
-</p>
-</dd>
-<dt> <code>Set(r,g,b,a)</code></dt>
-<dd><p>Set the color components.
-</p>
-</dd>
-</dl>
+<a name="SEC708"></a>
+<h4 class="subsubheading"> Signal, Slot, Sources Contract </h4>
 
-<p>An example of creating a new Color object:
+<p>This section explains the contract between signals, slots, and sources from a
+reference standpoint.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">my_color = new Color(1,0.5,1,0.5);
-</pre></td></tr></table>
-<p>You can also access the components of a Color object through it's properties.
+<p>A signal <em>source</em> maintains a list of <em>slots</em>. Thus, a source
+maintains a list of references to each slot connected to it. A
+slot maintains a list of <em>sinks</em> that it is connected to. The sink
+manager keeps a list of sinks, and thus also keeps a reference to
+each sink. Once a sink has been registered it cannot be
+unregistered. This may be changed in the future, but it is
+important to remember that a sink can not go away until all slots
+bound to it go away. The same may be said for slots: a slot
+cannot go away until the signal source it is connected to
+disconnects. A slot may be disconnected from a signal source at
+any time.
 </p>
-<dl compact="compact">
-<dt> <code>r</code></dt>
-<dd><p>Return the red component.
-</p>
-</dd>
-<dt> <code>g</code></dt>
-<dd><p>Return the green component.
-</p>
-</dd>
-<dt> <code>b</code></dt>
-<dd><p>Return the blue component.
-</p>
-</dd>
-<dt> <code>alpha</code></dt>
-<dd><p>Return the alpha component.
-</p>
-</dd>
-</dl>
-
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="cs_4.19.5.html#4.19.5" title="Previous section in reading order"> &lt; </a>]</td>
+<tr><td valign="middle" align="left">[<a href="cs_4.19.5.14.html#4.19.5.14" title="Previous section in reading order"> &lt; </a>]</td>
 <td valign="middle" align="left">[<a href="cs_4.19.7.html#4.19.7" title="Next section in reading order"> &gt; </a>]</td>
 <td valign="middle" align="left"> &nbsp; </td>
 <td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
