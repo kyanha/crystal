@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.4.1 Common Command Line Options</title>
+<title>Crystal Space: 4.4.1 Names</title>
 
-<meta name="description" content="Crystal Space: 4.4.1 Common Command Line Options">
-<meta name="keywords" content="Crystal Space: 4.4.1 Common Command Line Options">
+<meta name="description" content="Crystal Space: 4.4.1 Names">
+<meta name="keywords" content="Crystal Space: 4.4.1 Names">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Common-Command-Line-Options"></a>
+<a name="Event-Names"></a>
 <a name="4.4.1"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.4.html#4.4" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,76 +58,66 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.4.1 Common Command Line Options </h3>
+<h3 class="subsection"> 4.4.1 Names </h3>
 
-<p>All Crystal Space applications respond to a common set of command line
-options.  Many applications define additional options which are specific
-to that particular application.
+<p>Events are identified with the help of an extensible 
+tree-structured event naming layer.  This system allows event names to be 
+drilled down to arbitrary levels of specificity while simultaneously allowing 
+event subscribers to express interest in general categories or precise event 
+varieties.
 </p>
-<p>The most immediately useful command line option which all applications
-respond to is <samp>`-help'</samp>.  This command list all of the other options to
-which an application responds.
+<p>For an example: each joystick is individually named, so event consumers can listen 
+only to particular devices, or to particular flavors of events.  For example, 
+the fourth joystick can produce the event 
+<samp>`crystalspace.input.joystick.3.button.down'</samp>; an event handler may wish 
+to subscribe to <samp>`crystalspace.input.joystick.3.button.down'</samp> to only 
+receive down events from that joystick, to 
+<samp>`crystalspace.input.joystick.3.button'</samp> to receive all button events from 
+that joystick, to <samp>`crystalspace.input.joystick.3'</samp> to receive all events 
+(buttons and moves) from that joystick, to <samp>`crystalspace.input.joystick'</samp> 
+to receive all events from all joysticks, and so on.
 </p>
-<p>The default setting for each command line option is set internally in the 
-program unless there is a corresponding line for it in the configuration file.  
-Command line options always override default values.  
+<p>Event names are translated into an efficient internal representation, the 
+<samp>`csEventID'</samp>, using a singleton event name registry object 
+(<samp>`csEventNameRegistry'</samp>, implementing the <samp>`iEventNameRegistry'</samp> 
+interface) which can always be retrieved using the 
+<code>csEventNameRegistry::GetRegistry(iObjectRegistry*)</code> method.  The actual 
+name translation is performed by the <code>GetID()</code> method, which takes string 
+or <samp>`csString'</samp> arguments and returns <samp>`csEventID'</samp>s.  
+These <samp>`csEventID'</samp>s are then used in calls to subscribe to event queues 
+and in comparisons to determine the type of an event.  Many common event 
+types' <samp>`csEventID'</samp>s can be accessed using macros defined in 
+<tt>`include/csutil/eventnames.h'</tt>, e.g., <samp>`crystalspace.application.quit'</samp> 
+is <samp>`csevQuit()'</samp>, which must be called with an argument of either an 
+<samp>`iObjectRegistry'</samp> pointer or a <samp>`iEventNameRegistry'</samp> reference.  
+Since referencing an event ID via one of these macros will consume several 
+cycles, performance-sensitive code should cache the results; see, for example, 
+the <samp>`CS_DECLARE_EVENT_SHORTCUTS'</samp> and 
+<samp>`CS_INITIALIZE_EVENT_SHORTCUTS()'</samp> macros in 
+<tt>`include/csutil/eventnames.h'</tt>.
 </p>
-<p>Some interesting options to play with are:
+<p>Demultiplexing you in event handlers looks like this:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"> static bool DemoEventHandler (iEvent&amp; ev)
+ {
+   if (ev.Name == csevMouseButton (object_reg, 0))
+   {
+       ...
+   }
+   else if (ev.Name == csevMouseMove (object_reg, 0))
+   {
+       ...
+   }
+   else ...
+ }
+</pre></td></tr></table><p>This will handle mouse button and mouse move events for the first mouse.
 </p>
-<dl compact="compact">
-<dt> <code>-mode=640x480</code></dt>
-<dd><p>Use this option to set the size of the display.
+<p>You can also catch entire event hierarchies with a single test:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"> if (name_reg-&gt;IsKindOf(ev.Name, csevKeyboardEvent (name_reg)))
+ {
+     HandleKeyboardEvent(ev)
+ }
+</pre></td></tr></table><p>This will catch all keyboard events.
 </p>
-</dd>
-<dt> <code>-canvas=sdl2d</code></dt>
-<dd><p>Use this option to select the type of 2D canvas to use.
-</p>
-</dd>
-<dt> <code>-video=opengl</code></dt>
-<dd><p>(or software, ...).
-Use this option to select type of display driver to use.  Other options
-are <code>software</code>, <code>null</code>, etc.
-</p>
-</dd>
-<dt> <code>-fs</code></dt>
-<dd><p>Open in fullscreen mode (default is windowed).
-</p>
-</dd>
-<dt> <code>-verbose</code></dt>
-<dd><p>This enable very verbose output. This is useful for debugging why
-Crystal Space isn't behaving as it should. If you just specify <samp>`-verbose'</samp>
-you will get a lot of output. If your problem is not <small>SCF</small> related
-you can also do: <samp>`-verbose=-scf'</samp>.
-</p>
-</dd>
-<dt> <code>-relight</code></dt>
-<dd><p>Use this option to recalculate all lightmaps after you changed lighting
-or geometry in a level that you're trying. If you don't do this you either
-get the old lightmaps or no lightmaps at all. Note that this command
-is only for the old lightmap system as used by the thing mesh object.
-</p>
-</dd>
-<dt> <code>-fullbright</code></dt>
-<dd><p>Use this option to get fullbright rendering of all objects. This is useful
-for debugging maps if you don't want to spend time relighting them first.
-</p>
-</dd>
-<dt> <code>-plugin=<small class="dots">...</small></code></dt>
-<dd><p>This is a general commandline option with which you can load any plugin
-into your application. One common option is to use this for loading
-the <samp>`bugplug'</samp> debugging plugin like this: <samp>`-plugin=bugplug'</samp>.
-</p>
-</dd>
-<dt> <code>-cfgset=<small class="dots">...</small></code></dt>
-<dd><p>With this commandline option you can set a configuration option on
-the commandline. For example: <samp>`-cfgset=Video.OpenGL.DelaySwap=yes'</samp>.
-</p>
-</dd>
-<dt> <code>-cfgfile=<small class="dots">...</small></code></dt>
-<dd><p>This option loads an entire file to the configuration manager.
-</p></dd>
-</dl>
-
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.4.html#4.4" title="Previous section in reading order"> &lt; </a>]</td>

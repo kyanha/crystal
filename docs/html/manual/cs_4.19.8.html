@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.19.8 Gradient object</title>
+<title>Crystal Space: 4.19.8 AWS Automation: Properties and Scripting</title>
 
-<meta name="description" content="Crystal Space: 4.19.8 Gradient object">
-<meta name="keywords" content="Crystal Space: 4.19.8 Gradient object">
+<meta name="description" content="Crystal Space: 4.19.8 AWS Automation: Properties and Scripting">
+<meta name="keywords" content="Crystal Space: 4.19.8 AWS Automation: Properties and Scripting">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="AWS2-Gradient"></a>
+<a name="AWS-Automation"></a>
 <a name="4.19.8"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.19.7.html#4.19.7" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,71 +58,192 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.19.8 Gradient object </h3>
+<h3 class="subsection"> 4.19.8 <small>AWS</small> Automation: Properties and Scripting </h3>
 
-<p>The Gradient object lets you make some fairly sophisticated gradients.  These can then 
-be used to texture a widget, or a part of a widget using masking.  There are currently
-only five different kinds of gradients supported.  Also, it should be realized that 
-using a gradient is more of an art than a science.  Things can get complex in a hurry.
+<p><small>AWS</small> uses an automation mechanism to allow components to respond to each
+other, and to notify the programmer of events based upon user input.
 </p>
-<p>The basic pattern behind using a gradient is to create a new Gradient object, and then
-add colors to it.
+<a name="SEC717"></a>
+<h4 class="subsubheading"> About Properties </h4>
+
+<p>The first mechanism we'll talk about is properties.  Properties perform two
+important roles:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">gr = new Gradient();
-    			
-gr.AddColor(new Color(1,1,1,1), 0.0);	
-gr.AddColor(new Color(1,1,1,1), 0.1);	
-gr.AddColor(new Color(0.6,0.6,0.6,1), 0.5);					
-gr.AddColor(new Color(0.4,0.4,0.4,1), 0.51);				
-gr.AddColor(new Color(0.7, 0.7, 0.7, 1), 0.9);
-gr.AddColor(new Color(0.0, 0.0, 0.0, 1), 1.0);
+<ol>
+<li>
+<em>Access control</em>: That is, some properties can be read, and some can be
+written.  Others may have both access abilities enabled.
+</li><li>
+<em>Notification</em>: When a property is changed it is possible to get a
+notification of the change.
+</li></ol>
+
+<p>Every property has two signals: <samp>`Changed'</samp> and <samp>`Binding'</samp>.  The first
+signal is fired when the property is set.  The <samp>`Changed'</samp> signal doesn't
+try to differentiate between old values and new values, so the property may
+have been set to the same actual value.  The second signal is fired when the
+property is being bound to some name and property bag.  A property may be bound
+to different names, but it will only be bound to one name at a time.  It is
+possible to register a property with multiple bags, but it is not recommended
+since it will be difficult for a client to know what the property is associated
+with in that case.  (Generally clients can assume that if they are listening
+for a property, they know with what the property is associated.  Perhaps you
+have one slot that listens for a number of change signals for some component.
+In that case, you may take different steps based on the name of the property
+changed--but you <em>know</em> that all the properties belong to one given
+object.)
+</p>
+<a name="SEC718"></a>
+<h4 class="subsubheading"> Using Properties </h4>
+
+<p>Properties are very easy to use.  For example, say you have a window called
+&quot;login&quot;.  All windows have a property called <samp>`Title'</samp>.  You would like to
+set the title of the window regardless of what appears in the window definition
+file.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">login.Title.Set(&quot;Login to System&quot;);
 </pre></td></tr></table>
-<p>Once you are done creating your gradient, it has to be rendered into a texture to actually be useful.
+<p>That's it.  The window takes care of setting the value, invalidating itself,
+and getting redrawn.  What if you wanted to know when the <samp>`Title'</samp> property
+was changed?  In that case you would have to have a <em>slot</em> for that, and
+all slots must belong to some class.  You can have other things in your class
+besides slots, that way you don't have to have one object set aside for dealing
+with that stuff.  Slots can be where they ought to be: near the data and
+functions that want to know about them.
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">gr.Render(tex, Gradient.VERTICAL);
+<table><tr><td>&nbsp;</td><td><pre class="example">class myslots : public autom::has_slots&lt;&gt;
+{
+public:
+  void titleChanged(const std::string &amp;name,
+                    awsPropertyBase *property)
+  {
+    autom::keeper k;
+    if (property-&gt;Get(k))
+    {
+      std::string new_title = k-&gt;toString().Value();
+      csPrintf(&quot;Title changed to: %s\n&quot;, new_title.c_str());
+    }
+    else
+    {
+      csPrintf(&quot;Access to read title denied!\n&quot;);
+    }
+  }
+  
+  void setup(awsWindow *win)
+  {
+    win-&gt;Title.Changed.connect(this, titleChanged);
+  }
+};
 </pre></td></tr></table>
-<p>For horizontal and vertical gradients, it's best to create a texture that is 1 pixel wide and N pixels high, or vice versa, and then using
-that to texture your shape.  Other gradients require you to create a full width and height texture.
+<p>There's a little bit of code there, but let's look at each of the pieces.  The
+first thing to note is that the class <strong>must</strong> inherit from
+<code>autom::has_slots&lt;&gt;</code>; otherwise it won't have the code needed to host
+slots.
 </p>
-<p>The following table lists all possible gradient types:
+<p>The next thing to notice is the function signature for the slot.  The return
+type <strong>must</strong> be <samp>`void'</samp>, and the other two parameters must be exactly
+as shown.  Different signals may have different slot signatures, but for
+property change signals, the signature is exactly as shown above.
 </p>
-<dl compact="compact">
-<dt> <code>HORIZONTAL</code></dt>
-<dd><p>The gradient starts at the left and runs to the right.
+<p><samp>`name'</samp> is the name of the property that changed.  <samp>`property'</samp> is a
+pointer to the property that changed.  In order to get the value of the
+property, you must call the <code>Get()</code> function.  If it returns false, then
+read access is denied for that particular property.  There is no way to read a
+property that is write-only.  Finally, notice the <code>setup()</code> function. It
+calls the <samp>`connect()'</samp> function on the <samp>`Changed'</samp> signal.  This means
+that our <code>titleChanged()</code> function will be called whenever
+<code>Title.Set()</code> succeeds.
 </p>
-</dd>
-<dt> <code>VERTICAL</code></dt>
-<dd><p>The gradient starts at the top and runs to the bottom.
-</p>
-</dd>
-<dt> <code>RADIAL</code></dt>
-<dd><p>The gradient starts in the center and runs to the edges in all directions.
-</p>
-</dd>
-<dt> <code>LDIAG</code></dt>
-<dd><p>The gradient starts in the upper left corner and runs to the bottom right corner.
-</p>
-</dd>
-<dt> <code>RDIAG</code></dt>
-<dd><p>The gradient starts in the upper right corner and runs to the bottom left corner.
-</p>
-</dd>
-</dl>
+<a name="SEC719"></a>
+<h4 class="subsubheading"> Properties Q&amp;A </h4>
 
-<p>The following methods are supported:
-</p>
-<dl compact="compact">
-<dt> <code>AddColor(color_object, position)</code></dt>
-<dd><p>Adds the given color at the given position.  The position must be between 0.0 and 1.0.  Colors
-will be sorted automatically, so they don't have to be added in order.
-</p>
-</dd>
-<dt> <code>Render(texture, gradient_constant)</code></dt>
-<dd><p>Renders the gradient to the given Texture object.  Whatever was in the texture is overwritten.
-</p>
-</dd>
-</dl>
 
+<p><strong>Question:</strong> <em>How do I know with what component or window a property
+is associated?</em>
+</p>
+
+<p><strong>Answer:</strong> Currently, the code must know that somehow; either because
+you as the developer knows that a certain object's slots only ever connect to a
+given window or component, or through some other previous knowledge.
+Eventually there will be a global registry that will allow you to look up that
+sort of information.
+</p>
+
+<p><strong>Question:</strong> <em>Why don't properties store the component and/or window
+with which they are associated?</em>
+</p>
+
+<p><strong>Answer:</strong> Properties are designed to be used in a number of contexts.
+Building in information about component or window ownership implies that
+properties must belong to a component.  That may or may not be true in the
+future.
+</p>
+
+<p><strong>Question:</strong> <em>Why do I have to use a keeper and do all that
+gobbledygook with the</em> <code>toString()-&gt;Value()</code> <em>stuff?</em>
+</p>
+
+<p><strong>Answer:</strong> Property values are inherently type-agnostic.  In the case of
+a bound property, the value is always converted to the concrete type to which
+the property is bound.  However, the property may still be set with any sort of
+type supported (int, float, string).  The conversions are handled implicitly
+when needed.  The keeper is just a shorter name for <code>csRef&lt;object*&gt;</code>, and
+provides automatic lifespan handling for those types.  They go away when all
+references to them have disappeared.
+</p>
+<a name="SEC720"></a>
+<h4 class="subsubheading"> Scripting </h4>
+
+<p>Scripting is intimately related to properties, because properties use the
+scripting system to store their values.  In fact, it is entirely possible to
+have a property whose value resolves to a dynamically executed function.
+</p>
+<p>For example, imagine that you wanted to have a property that belonged to a
+progress bar widget.  The progress bar widget might be receiving updates from a
+file transfer object.  Perhaps the progress bar widget can display some text.
+For this progress bar we want the text to show below the progress display how
+many bytes have been transferred.  The widget itself doesn't know what the text
+is, or when it has changed.  You don't want to update the text at <em>every</em>
+change, because that might be slow.  Instead, you set a property called
+<samp>`Caption'</samp> as follows:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">autom::keeper k = autom::Compile(&quot;:BytesReceived@FileTransfer()&quot;)
+progress.Caption.Set(k);
+</pre></td></tr></table>
+<p>Then, when the progress bar's status is updated and it redraws, it will do
+something like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">...
+autom::keeper k;
+Caption.Get(k);
+std::string caption_text = k-&gt;toString().Value();
+...
+</pre></td></tr></table>
+<p>Instead of getting the string we set for the property, the string is evaluated
+as a function, and we get the result.  In this case it would happen to be how
+many bytes were received.  Had we set the value as a simple string, that string
+would have been displayed.
+</p>
+<a name="SEC721"></a>
+<h4 class="subsubheading"> Scripting Tutorial </h4>
+
+<p>@@@ FIXME: Write this.
+</p>
+<a name="SEC722"></a>
+<h4 class="subsubheading"> Scripting Q&amp;A </h4>
+
+
+<p><strong>Question:</strong> <em>When I call</em> <code>autom::Compile()</code> <em>with a
+string it doesn't return an automation string object.  It just returns nil.
+Why?</em>
+</p>
+
+<p><strong>Answer:</strong> If you try to compile a string it must have double quotes
+around it, just like in C and C++ and myriad other languages.  If all you are
+trying to do is generate a automation string object from a pre-existing string,
+use <samp>`new autom::string(existing_string)'</samp>.  It understands that the string
+is pre-composed and doesn't parse it.  Therefore it's also much faster.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.19.7.html#4.19.7" title="Previous section in reading order"> &lt; </a>]</td>

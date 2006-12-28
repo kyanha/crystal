@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.4.2 Configuration File</title>
+<title>Crystal Space: 4.4.2 Scheduling</title>
 
-<meta name="description" content="Crystal Space: 4.4.2 Configuration File">
-<meta name="keywords" content="Crystal Space: 4.4.2 Configuration File">
+<meta name="description" content="Crystal Space: 4.4.2 Scheduling">
+<meta name="keywords" content="Crystal Space: 4.4.2 Scheduling">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -40,7 +40,7 @@ ul.toc {list-style: none}
 
 <body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-<a name="Configuration-File"></a>
+<a name="Event-Scheduling"></a>
 <a name="4.4.2"></a>
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.4.1.html#4.4.1" title="Previous section in reading order"> &lt; </a>]</td>
@@ -58,35 +58,82 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
-<h3 class="subsection"> 4.4.2 Configuration File </h3>
+<h3 class="subsection"> 4.4.2 Scheduling </h3>
 
-<p>Many applications have an accompanying configuration file which describes
-configuration options specific to that application.  Similarly, plug-in
-modules can have configuration files.  Configuration files are named with the
-file extension <tt>`.cfg'</tt> and are typically located within the <small>VFS</small>
-virtual directory <tt>`/config/'</tt> (see section <a href="cs_4.6.html#4.6">Virtual File System (<small>VFS</small>)</a>) which is often mounted at the
-physical location <tt>`CS/data/config'</tt> for Crystal Space sample applications.
+<p>The event system provides a generic mechanism for representing the order in 
+which handlers of particular events should be invoked, regardless of the order 
+in which they are initialized or in which their respective plugins are loaded.
 </p>
-<p>The format of these files is simple. They consist of a number of <em>keys</em>,
-each of which consists of a name, a <em>value</em> and an optional comment.  Key
-names contain dots to create a pseudo-hierarchy, similar to a file system; for
-example: <samp>`Video.OpenGL.EnableDither'</samp>.  This should be interpreted as the
-<samp>`EnableDither'</samp> option in the sub-section <samp>`OpenGL.'</samp>, which resides in
-section <samp>`Video.'</samp> (note that the dots are part of the key name).
+<p>The event scheduler takes advantage of properties exposed by the 
+<code>iEventHandler</code> interface to do exactly this.  For each event name that an 
+event handler subscribes to, it may also specify essentially arbitrary 
+<em>happens-before</em> and <em>happens-after</em> relationships with other event 
+handlers, both abstractly ('I want to handle all input events before any 
+instance of the <samp>`crystalspace.aws'</samp> handler') and specifically ('I want 
+to handle the mouse event only after the <samp>`crystalspace.cel'</samp> event 
+handler').
 </p>
-<p>The file itself looks something like this:
+<p>Specifically, the functions that all <code>iEventHandler</code> implementations 
+must provide are:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">; This is the comment for the first batch of keys.
-Section.Keyname = Value
-; Comments may be
-; several lines long
-; The option 'Section.TestOption' (below) has no attached comment.
-Video.OpenGL.EnableDither = true
-Section.TestOption = false
-; Comments at the end of the file do not belong to any configuration
-; key. When a config file is loaded and saved again later this
-; end-of-file comment is retained at the end of the file.
+<ul>
+<li>
+<code>const char *GenericName()</code> Returns a simple text name common to all 
+instances of this event handler.
+</li><li>
+<code>csHandlerID GenericID()</code> A csHandlerID is a lightweight way to manage 
+generic handler names.  Under almost all circumstances, the implementation of 
+this method simply returns <code>csHandlerRegistry::GetID(this-&gt;GenericName())</code>.
+</li><li>
+<code>const csHandlerID[] GenericPrec(csEventID)</code> Returns an array 
+(terminated by <code>CS_EVENTLIST_END</code>) of <samp>`csHandlerID'</samp>s of generic 
+event handlers which, for the event name identified by the argument, should 
+always handle events with that name <em>before</em> instances of the current handler.
+</li><li>
+<code>const csHandlerID[] GenericSucc(csEventID)</code> Returns an array 
+(terminated by <code>CS_EVENTLIST_END</code>) of <samp>`csHandlerID'</samp>s of generic 
+event handlers which, for the event name identified by the argument, should 
+always handle events with that name <em>after</em> instances of the current 
+handler.
+</li><li>
+<code>const csHandlerID[] InstancePrec(csEventID)</code> Returns an array 
+(terminated by <code>CS_EVENTLIST_END</code>) of <samp>`csHandlerID'</samp>s of both generic 
+event handlers and event handler instances which, for the event name 
+identified by the argument, should always handle event with that name 
+<em>before</em> this <em>particular</em> instance of the event handler.
+</li><li>
+<code>const csHandlerID[] InstanceSucc(csEventID)</code> Returns an array 
+(terminated by <code>CS_EVENTLIST_END</code>) of <samp>`csHandlerID'</samp>s of both generic 
+event handlers and event handler instances which, for the event name 
+identified by the argument, should always handle event with that name 
+<em>after</em> this <em>particular</em> instance of the event handler.
+</li></ul>
+
+<p>In many simple cases, you will want to use default implementations of these 
+functions provided by the <code>CS_EVENTHANDLER_NAMES()</code> and 
+<code>CS_EVENTHANDLER_NIL_CONSTRAINTS</code> macros, like so:
+</p><table><tr><td>&nbsp;</td><td><pre class="example"> struct myEventHandler : public iEventHandler
+ {
+   virtual bool HandleEvent (iEvent &amp;Event)
+   {
+     foo();
+     bar();
+     return baz();
+   }
+   CS_EVENTHANDLER_NAMES(&quot;crystalspace.module.name&quot;)
+   CS_EVENTHANDLER_NIL_CONSTRAINTS
+ }
 </pre></td></tr></table>
+<p>As a convention, most csEventHandlers will implement a static method, 
+<code>const char *StaticHandlerName()</code>, which can be retrieved and converted 
+without instantiating the handler.  This name string can then be converted 
+into a <samp>`csHandlerID'</samp> by calling 
+<code>csHandlerRegistry::GetID(myHandlerClass::StaticHandlerName())</code>.  
+The <samp>`csHandlerID'</samp> of an instance of an event handler class can be 
+retrieved by passing a pointer to that class to 
+<code>csHandlerRegistry::GetID()</code>, e.g., 
+<code>csHandlerRegistry::GetID(new myHandlerClass())</code>.
+</p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="cs_4.4.1.html#4.4.1" title="Previous section in reading order"> &lt; </a>]</td>
