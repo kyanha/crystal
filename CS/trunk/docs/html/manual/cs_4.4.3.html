@@ -62,28 +62,28 @@ ul.toc {list-style: none}
 
 <p>The event scheduling system is invoked by calling the 
 <code>csEventQueue::RegisterListener()</code> or <code>csEventQueue::Subscribe()</code> 
-methods (or, if you are inheriting from <code>csBaseEventHandler</code>, 
-<code>csBaseEventHandler::RegisterQueue</code>).  For each of these, the arguments 
-of interest are the <code>csEventID</code> and <code>csEventID[]</code> parameters.  
-(Note that the <samp>`RegisterListener'</samp> form with no <samp>`csEventID'</samp> argument 
-does not subscribe the listener to anything, and must be followed by a call to 
-<code>Subscribe()</code> if you ever want the handler to receive any events.)  
-For each <code>csEventID</code> (arrays are terminated by <code>CS_EVENTLIST_END</code>), 
-these functions will subscribe the event handler to that event name 
-<em>as well as all of its children</em>.  Note, however, that it will only 
-retrieve from the event handler the ordering lists (the Prec and Succ methods) 
-for the event name to which it is <em>explicitly</em> subscribed; if you wish to 
-have one set of ordering constraints for both <samp>`crystalspace.input.keyboard'</samp> 
-and <samp>`crystalspace.input.mouse'</samp> but a different set for 
-<samp>`crystalspace.input.joystick'</samp>, you SHOULD NOT simply subscribe to 
-<samp>`crystalspace.input'</samp> and have the Prec/Succ functions return different 
-values for each of <samp>`.keyboard'</samp>, <samp>`.mouse'</samp>, and <samp>`.joystick'</samp>; 
-rather, you should subscribe to each of those three event names individually.  
-This restriction helps us avoid the introduction of hard-to-detect 
-circular ordering rules.
+methods (or, if you are inheriting from <samp>`csBaseEventHandler'</samp>,
+<code>csBaseEventHandler::RegisterQueue()</code>).  For each of these, the arguments 
+of interest are the <samp>`csEventID'</samp> and <code>csEventID[]</code> parameters.  
+(Note that the <code>RegisterListener()</code> form with no <samp>`csEventID'</samp> argument 
+does not subscribe the listener to anything, and must be followed by a call to
+<code>Subscribe()</code> if you ever want the handler to receive any events.)  For
+each <samp>`csEventID'</samp> (arrays are terminated by <samp>`CS_EVENTLIST_END'</samp>), these
+functions will subscribe the event handler to that event name <em>as well as
+all of its children</em>.  Note, however, that it will only retrieve from the event
+handler the ordering lists (the <code>Prec()</code> and <code>Succ()</code> methods) for
+the event name to which it is <em>explicitly</em> subscribed; if you wish to have
+one set of ordering constraints for both <samp>`crystalspace.input.keyboard'</samp> and
+<samp>`crystalspace.input.mouse'</samp> but a different set for
+<samp>`crystalspace.input.joystick'</samp>, you <strong>should not</strong> simply subscribe to
+<samp>`crystalspace.input'</samp> and have the <code>Prec()</code> and <code>Succ()</code>
+functions return different values for each of <samp>`.keyboard'</samp>, <samp>`.mouse'</samp>,
+and <samp>`.joystick'</samp>; rather, you should subscribe to each of those three event
+names individually.  This restriction helps us avoid the introduction of
+hard-to-detect circular ordering rules.
 </p>
 <p>Also note that you should use the <code>Subscribe()</code> and <code>Unsubscribe()</code> 
-methods to add and remove events from the set an event handler wishes to 
+methods to add and remove events from the set of events a handler wishes to 
 receive.  You should only <code>Unsubscribe()</code> from the particular 
 events to which you have <code>Subscribe()</code>d; the behavior is undefined 
 otherwise (e.g., if you subscribe to <samp>`crystalspace.input'</samp> and 
