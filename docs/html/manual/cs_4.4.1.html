@@ -60,63 +60,63 @@ ul.toc {list-style: none}
 </tr></table>
 <h3 class="subsection"> 4.4.1 Names </h3>
 
-<p>Events are identified with the help of an extensible 
-tree-structured event naming layer.  This system allows event names to be 
-drilled down to arbitrary levels of specificity while simultaneously allowing 
-event subscribers to express interest in general categories or precise event 
-varieties.
+<p>Events are identified with the help of an extensible hierarchically-structured
+event naming layer.  This system allows event names to be drilled down to
+arbitrary levels of specificity while simultaneously allowing event subscribers
+to express interest in general categories or precise event varieties.
 </p>
-<p>For an example: each joystick is individually named, so event consumers can listen 
-only to particular devices, or to particular flavors of events.  For example, 
-the fourth joystick can produce the event 
-<samp>`crystalspace.input.joystick.3.button.down'</samp>; an event handler may wish 
-to subscribe to <samp>`crystalspace.input.joystick.3.button.down'</samp> to only 
-receive down events from that joystick, to 
-<samp>`crystalspace.input.joystick.3.button'</samp> to receive all button events from 
-that joystick, to <samp>`crystalspace.input.joystick.3'</samp> to receive all events 
-(buttons and moves) from that joystick, to <samp>`crystalspace.input.joystick'</samp> 
-to receive all events from all joysticks, and so on.
+<p>For example: Each joystick is individually named, so event consumers can listen
+only to particular devices, or to particular flavors of events.  For instance,
+the fourth joystick can produce the event
+<samp>`crystalspace.input.joystick.3.button.down'</samp>; an event handler may wish to
+subscribe to <samp>`crystalspace.input.joystick.3.button.down'</samp> to only receive
+down events from that joystick, to <samp>`crystalspace.input.joystick.3.button'</samp>
+to receive all button events from that joystick, to
+<samp>`crystalspace.input.joystick.3'</samp> to receive all events (buttons and moves)
+from that joystick, to <samp>`crystalspace.input.joystick'</samp> to receive all events
+from all joysticks, and so on.
 </p>
-<p>Event names are translated into an efficient internal representation, the 
-<samp>`csEventID'</samp>, using a singleton event name registry object 
-(<samp>`csEventNameRegistry'</samp>, implementing the <samp>`iEventNameRegistry'</samp> 
-interface) which can always be retrieved using the 
-<code>csEventNameRegistry::GetRegistry(iObjectRegistry*)</code> method.  The actual 
-name translation is performed by the <code>GetID()</code> method, which takes string 
-or <samp>`csString'</samp> arguments and returns <samp>`csEventID'</samp>s.  
-These <samp>`csEventID'</samp>s are then used in calls to subscribe to event queues 
-and in comparisons to determine the type of an event.  Many common event 
-types' <samp>`csEventID'</samp>s can be accessed using macros defined in 
-<tt>`include/csutil/eventnames.h'</tt>, e.g., <samp>`crystalspace.application.quit'</samp> 
-is <samp>`csevQuit()'</samp>, which must be called with an argument of either an 
-<samp>`iObjectRegistry'</samp> pointer or a <samp>`iEventNameRegistry'</samp> reference.  
-Since referencing an event ID via one of these macros will consume several 
-cycles, performance-sensitive code should cache the results; see, for example, 
-the <samp>`CS_DECLARE_EVENT_SHORTCUTS'</samp> and 
-<samp>`CS_INITIALIZE_EVENT_SHORTCUTS()'</samp> macros in 
+<p>Event names are translated into an efficient internal representation, the
+<samp>`csEventID'</samp>, using a singleton event name registry object
+(<samp>`csEventNameRegistry'</samp>, implementing the <samp>`iEventNameRegistry'</samp>
+interface) which can always be retrieved using the
+<code>csEventNameRegistry::GetRegistry(iObjectRegistry*)</code> method.  The actual
+name translation is performed by the <code>GetID()</code> method, which takes a
+string or <samp>`csString'</samp> argument and returns a <samp>`csEventID'</samp>.  The
+<samp>`csEventID'</samp>s are then used in calls to subscribe to event queues and in
+comparisons to determine the type of an event.  Many common event types'
+<samp>`csEventID'</samp>s can be accessed using macros defined in
+<tt>`include/csutil/eventnames.h'</tt>, e.g., <samp>`crystalspace.application.quit'</samp>
+is <samp>`csevQuit()'</samp>, which must be called with an argument of either an
+<samp>`iObjectRegistry'</samp> pointer or a <samp>`iEventNameRegistry'</samp> reference.  Since
+referencing an event <small>ID</small> via one of these macros will consume several
+cycles, performance-sensitive code should cache the results; see, for example,
+the <samp>`CS_DECLARE_EVENT_SHORTCUTS'</samp> and
+<samp>`CS_INITIALIZE_EVENT_SHORTCUTS()'</samp> macros in
 <tt>`include/csutil/eventnames.h'</tt>.
 </p>
-<p>Demultiplexing you in event handlers looks like this:
-</p><table><tr><td>&nbsp;</td><td><pre class="example"> static bool DemoEventHandler (iEvent&amp; ev)
- {
-   if (ev.Name == csevMouseButton (object_reg, 0))
-   {
-       ...
-   }
-   else if (ev.Name == csevMouseMove (object_reg, 0))
-   {
-       ...
-   }
-   else ...
- }
-</pre></td></tr></table><p>This will handle mouse button and mouse move events for the first mouse.
+<p>Demultiplexing in event handlers is handled like this:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">static bool DemoEventHandler (iEvent&amp; ev)
+{
+  if (ev.Name == csevMouseButton (object_reg, 0))
+    ...
+  else if (ev.Name == csevMouseMove (object_reg, 0))
+    ...
+  else
+    ...
+}
+</pre></td></tr></table>
+<p>This will handle mouse button and mouse move events for the first mouse.
 </p>
 <p>You can also catch entire event hierarchies with a single test:
-</p><table><tr><td>&nbsp;</td><td><pre class="example"> if (name_reg-&gt;IsKindOf(ev.Name, csevKeyboardEvent (name_reg)))
- {
-     HandleKeyboardEvent(ev)
- }
-</pre></td></tr></table><p>This will catch all keyboard events.
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">if (name_reg-&gt;IsKindOf(ev.Name, csevKeyboardEvent (name_reg)))
+{
+  HandleKeyboardEvent(ev)
+}
+</pre></td></tr></table>
+<p>This will catch all keyboard events.
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
