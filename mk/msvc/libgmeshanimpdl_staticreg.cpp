@@ -23,24 +23,24 @@ static char const metainfo_gmeshanimpdl[] =
 "    <classes>"
 "      <class>"
 "        <name>crystalspace.mesh.anim.pdlight</name>"
-"        <implementation>csGenmeshAnimationPDLType</implementation>"
+"        <implementation>GenmeshAnimationPDLType</implementation>"
 "        <description>Crystal Space Genmesh animation plugin for PD lights</description>"
 "      </class>"
 "    </classes>"
 "  </scf>"
 "</plugin>"
 ;
-  #ifndef csGenmeshAnimationPDLType_FACTORY_REGISTER_DEFINED 
-  #define csGenmeshAnimationPDLType_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csGenmeshAnimationPDLType) 
+  #ifndef GenmeshAnimationPDLType_FACTORY_REGISTER_DEFINED 
+  #define GenmeshAnimationPDLType_FACTORY_REGISTER_DEFINED 
+    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(GenmeshAnimationPDLType) 
   #endif
 
 class gmeshanimpdl
 {
 SCF_REGISTER_STATIC_LIBRARY(gmeshanimpdl,metainfo_gmeshanimpdl)
-  #ifndef csGenmeshAnimationPDLType_FACTORY_REGISTERED 
-  #define csGenmeshAnimationPDLType_FACTORY_REGISTERED 
-    csGenmeshAnimationPDLType_StaticInit csGenmeshAnimationPDLType_static_init__; 
+  #ifndef GenmeshAnimationPDLType_FACTORY_REGISTERED 
+  #define GenmeshAnimationPDLType_FACTORY_REGISTERED 
+    GenmeshAnimationPDLType_StaticInit GenmeshAnimationPDLType_static_init__; 
   #endif
 public:
  gmeshanimpdl();
