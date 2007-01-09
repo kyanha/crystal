@@ -26,8 +26,6 @@ static char const metainfo_joywin[] =
 "        <implementation>csWindowsJoystick</implementation>"
 "        <description>Crystal Space Joystick plugin for Windows</description>"
 "      </class>"
-"    </classes>"
-"    <classes>"
 "      <class>"
 "        <name>crystalspace.device.joystick</name>"
 "        <implementation>csWindowsJoystick</implementation>"
