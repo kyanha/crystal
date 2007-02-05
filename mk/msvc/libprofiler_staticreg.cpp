@@ -16,19 +16,19 @@
 namespace csStaticPluginInit
 {
 static char const metainfo_profiler[] =
-"<?xml version=\"1.0\"?>"
-"<!-- profiler.csplugin -->"
-"<plugin>"
-"  <scf>"
-"    <classes>"
-"      <class>"
-"        <name>crystalspace.utilities.profiler</name>"
-"        <implementation>ProfilerFactory</implementation>"
-"        <description>Profiling utility</description>"
-"      </class>"
-"    </classes>"
-"  </scf>"
-"</plugin>"
+"<?xml version=\"1.0\"?>"
+"<!-- profiler.csplugin -->"
+"<plugin>"
+"  <scf>"
+"    <classes>"
+"      <class>"
+"        <name>crystalspace.utilities.profiler</name>"
+"        <implementation>ProfilerFactory</implementation>"
+"        <description>Profiling utility</description>"
+"      </class>"
+"    </classes>"
+"  </scf>"
+"</plugin>"
 ;
   #ifndef ProfilerFactory_FACTORY_REGISTER_DEFINED 
   #define ProfilerFactory_FACTORY_REGISTER_DEFINED 
