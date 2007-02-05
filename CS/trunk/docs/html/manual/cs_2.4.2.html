@@ -275,10 +275,25 @@ Space.  Please consult this list if you are having difficulty building or using
 the project.
 </p>
 <a name="SEC52"></a>
-<h4 class="subsubheading"> Compilation </h4>
+<h4 class="subsubheading"> Building </h4>
 
 <ul>
-<li> 
+<li>
+Q1. <em>I'm using the Visual C++ 2005 Express Edition and I get a lot of 
+&quot;file not found&quot; errors for <tt>`windef.h'</tt> and others. What is wrong?</em>
+Q2. <em>I'm using the Visual C++ 2005 Express Edition and I get a lot of 
+&quot;unresolved symbol&quot; errors for names like 
+<code>SHGetSpecialFolderLocation@12</code>. What is wrong?</em>
+
+<p>A. These errors indicate a lacking or an incomplete installation of the 
+Platform SDK. Exactly follow the instructions given on Microsoft's 
+&quot;Using Visual C++ 2005 Express Edition with the Microsoft Platform SDK&quot; 
+page:
+<a href="http://msdn.microsoft.com/vstudio/express/visualc/usingpsdk/">http://msdn.microsoft.com/vstudio/express/visualc/usingpsdk/</a>
+Also, the instructions don't say that, but if you have Visual C++ open while 
+applying those changes you need to restart it. 
+</p>
+</li><li> 
 Q. <em>I get &quot;Errors in post link&quot; and later &quot;file not found&quot; errors.</em>
 
 <p>A. Some problems with non-latin directory names have been reported (e.g.
@@ -294,29 +309,7 @@ of which can be easily found on the Internet.  You can download precompiled
 versions of these libraries i.e. <em>cs-win32libs</em> or grab the source code and
 compile it yourself if you prefer.  See section <a href="cs_2.3.html#2.3">External Libraries</a>.
 </p>
-<p>The resources from these packages should be placed in the following locations.
-</p>
 </li><li>
-Q. <em>How can I reduce build times?</em>
-
-<p>A. Build only the projects you will need. You must build all the Crystal Space
-libraries, however those you may not need can be unloaded (Right click on the
-project you wish unload from the build process and click on Unload). <em>Be
-very careful when unloading projects as some of Crystal Spaces projects e.g.
-some plugins are dependent on others</em>.
-</p>
-</li><li>
-Q. <em>How can I reduce build sizes?</em>
-A. Build only the projects you will need.
-A. Turning off precompiled headers tends to save a large amount of file space
-while increasing build times somewhat.
-</li></ul>
-
-<a name="SEC53"></a>
-<h4 class="subsubheading"> Linking </h4>
-
-<ul>
-<li>
 Q. <em>Where are the files <tt>`libpng.lib'</tt> and <tt>`zlib.lib'</tt>?</em>
 
 <p>A. Just look above at the question about <tt>`zlib.h'</tt> and <tt>`png.h'</tt>.
@@ -342,28 +335,34 @@ project lacks <tt>`zlib.lib'</tt>.  The trick is explained just below, so hang o
 component), look below.
 
 </li><li>-
-Any others: Well, I always have a solution, but this one is more difficult.  It
-seems that there is a missing source file in your project.  But the question
-is, which source file?  If it isn't obvious by the name of the functions, just
-to the following: In the menu <em>Edit</em>, select the option <em>Find in
-Files<small class="dots">...</small></em>.  Put the name of the function in the field &quot;Find What&quot;, check
-that the &quot;In Folder&quot; field content is the Crystal Space source directory and
-press <em>Find</em>.  You should get a bunch of files, many of them just making a
-call to the function.  But there is surely one which contains the definition of
-the function.  Look at the position of the file where it is defined, and add it
-to the project (menu <em>Project/Add To Project/Files</em>).
+Q. <em>How can I reduce build times?</em>
 
-<p>In order to add (or remove) a library for the link process, invoke the
-<em>Project/Settings/Link</em> menu item, then select the &quot;General&quot; category
-tab..  There is a field called &quot;Object/Library Modules&quot; that lists all the
-libraries added to the project at link time.
-</p></li></ul>
-</li></ul>
-
-<p>OK, now it should link.  So you should have an executable file called
-<tt>`walktest.exe'</tt> in your src directory.  Let's run it!
+<p>A. Build only the projects you will need. You must build all the Crystal Space
+libraries, however those you may not need can be unloaded (Right click on the
+project you wish unload from the build process and click on Unload). <em>Be
+very careful when unloading projects as some of Crystal Spaces projects e.g.
+some plugins are dependent on others</em>.
 </p>
-<a name="SEC54"></a>
+</li><li>-
+Q. <em>How can I reduce build sizes?</em>
+A. Build only the projects you will need.
+A. Turning off precompiled headers tends to save a large amount of file space
+while increasing build times somewhat.
+
+</li><li>-
+Any others: It seems that there is a missing source file in the project.  
+
+<p>For Crystal Space the MSVC project files are generated once every 24 hours, so 
+normally all missing sources should have been added after that time.  If you
+can't wait that long, or the file is still missing, contact one of the Crystal
+Space developers.
+</p>
+<p>For third party projects it's usually the best idea to contact one of it's
+developers, they should be able to tell you which file is missing.
+</p>
+</li></ul>
+</li></ul>
+<a name="SEC53"></a>
 <h4 class="subsubheading"> Executing </h4>
 
 <ul>
@@ -406,7 +405,7 @@ the Crystal Space project is installed.  Next set the working directory to
 have the <tt>`libz-cs.dll'</tt> installed, the <small>VFS</small> plugin is dependent upon it.
 </p></li></ul>
 
-<a name="SEC55"></a>
+<a name="SEC54"></a>
 <h4 class="subsubheading"> Miscellaneous </h4>
 
 <ul>
