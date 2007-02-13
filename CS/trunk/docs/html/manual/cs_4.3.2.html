@@ -138,6 +138,34 @@ csRef&lt;iSprite3DState&gt; state (scfQueryInterface&lt;iSprite3DState&gt; (
 state-&gt;SetAction (&quot;default&quot;);
 </pre></td></tr></table>
 <a name="SEC160"></a>
+<h4 class="subsubheading"> Transitioning between Smart Pointers and Normal Pointers </h4>
+
+<p>Smart pointers can be assigned to normal pointers and vice versa. However, you
+need to be aware of the interactions with reference counting.
+</p>
+<p>Assigning a smart pointer to a normal pointer \emph{does not change the 
+reference count of the object.  This can be beneficial as the reference 
+counting overhead is avoided.  It can also be dangerous, as the normal pointer 
+will become dangling when the referenced object is destroyed!  This means that
+storing in a normal pointer is suitable for short-term storage, when it's 
+certain that the referenced object won't be released durign the lifetime of
+the normal pointer.  If that's not guaranteed use a <code>csRef&lt;&gt;</code> instead.
+</p>
+<p>Assigning a normal pointer to a smart pointer \emph{does change the reference
+count: ownership is taken, ie the reference count is increased.  This can 
+cause a leaked reference in certain circumstances.  One notable instance is 
+the assignment of an object just allocated with <samp>`new'</samp> to a smart pointer:
+the object will start with a reference count of 1, but the assignment to the
+smart pointer will also increase the reference count, which errorneously 
+becomes 2. The last &quot;phantom&quot; reference will never be release, causing a 
+leak.
+</p>
+<p>The recommend way to deal with that is to \emph{never assign an object 
+allocated with <samp>`new'</samp> to a smart pointer directly.  Instead use it's
+<code>AttachNew()</code> method which will take care of the proper reference
+counting.
+</p>
+<a name="SEC161"></a>
 <h4 class="subsubheading"> When to Use csRef&lt;&gt;? </h4>
 
 <p>Use <code>csRef&lt;&gt;</code> wherever you need to own a reference to a reference-counted
@@ -168,7 +196,55 @@ created by the function on the caller's behalf.  For example:
 destroyed (not leaked) even if the caller of <code>MyFunction()</code> forgets or
 neglects to assign it to a variable.
 </p>
-<a name="SEC161"></a>
+<a name="SEC162"></a>
+<h4 class="subsubheading"> When to Use csWeakRef&lt;&gt;? </h4>
+
+<p>Another smart pointer class is <code>csWeakRef&lt;&gt;</code>.  The significant difference
+to <code>csRef&lt;&gt;</code> is that a &quot;weak&quot; reference is <em>not</em> owning.  However,
+unlike raw pointers, <code>csWeakRef&lt;&gt;</code> prevents the risk of a &quot;dangling
+pointer&quot; (a pointer referencing a freed, thus invalid, object): when the
+referenced object gets destroyed, all weak references to it are automatically
+set to null.
+</p>
+<p>A common application of weak references is the prevention of circular 
+references.  When two objects reference each other with <code>csRef&lt;&gt;</code>s 
+neither will be destructed as long as the references are held: Destruction 
+happens when the reference count of an object drops to zero -
+however, object <samp>`A'</samp> is owned by object <samp>`B'</samp>, thus it's reference
+count will not be decreased until object <samp>`B'</samp> is destructed. But object
+<samp>`B'</samp> in turn is owned by object <samp>`A'</samp>, and that reference is not 
+released until object <samp>`A'</samp> is destructed.  This circular dependency leads
+to neither objects being released automatically.
+</p>
+<p>To prevent this scenario one reference can be made a <code>csWeakRef&lt;&gt;</code> 
+instead.  If object <samp>`B'</samp> holds only a weak reference to object <samp>`A'</samp>, 
+this reference will become null when <samp>`A'</samp> is destroyed, and <samp>`B'</samp> may 
+also be destroyed if <samp>`A'</samp> held the last reference to it.
+</p>
+<p>As all weak references to an object are automatically set to null when the
+object gets destroyed care must be taken when accessing a weak referenced
+object: the reference may become null at any time, after all.  In practice
+that means that before dereferencing a weak reference you should check whether
+it still points to a valid object (with the <code>IsValid()</code> method or a
+comparison with <code>0</code>):
+</p><table><tr><td>&nbsp;</td><td><pre class="example">class MyClass
+{
+  csWeakRef&lt;iFoo&gt; foo;
+  ...
+  void MyFunction ();
+}
+
+void MyClass::MyFunction ()
+{
+  // WRONG: Weak references may become 0 at any time!
+  foo-&gt;BarMethod(...);
+  // CORRECT: Check whether weak reference is valid before use
+  if (foo.IsValid())
+    foo-&gt;FooMethod(...);
+  ...
+}
+</pre></td></tr></table>
+<a name="SEC163"></a>
 <h4 class="subsubheading"> What About csPtr&lt;&gt;? </h4>
 
 <p><code>csPtr&lt;&gt;</code> is a companion class.  Originally, it aided in the transition
@@ -297,7 +373,7 @@ csRef&lt;iView&gt; view = new csView (...);
 <em>Never</em> use a <code>csPtr&lt;&gt;</code> to store an object.  <em>Never</em> pass
 <code>csPtr&lt;&gt;</code> instances as arguments to other functions.
 </p>
-<a name="SEC162"></a>
+<a name="SEC164"></a>
 <h4 class="subsubheading"> What to do With a Function Return Value? </h4>
 
 <p>In the Crystal Space <small>API</small> there are three possible modes by which
@@ -343,7 +419,22 @@ return value from a function returning a <code>csPtr&lt;&gt;</code> since doing 
 result in a resource leak.
 </li></ul>
 
-<a name="SEC163"></a>
+<a name="SEC165"></a>
+<h4 class="subsubheading"> What to do With a Function Parameter? </h4>
+
+<p>It's not uncommon that a reference to an object is to be taken as a function
+parameter.  Using a smart pointer for that is usually not necessary: consider
+that you can usually assume that an object passed in as a parameter stays 
+valid during the function execution (a scenario where this is not the case can
+even be considered pathological). This means that having the parameter keep a 
+reference to the object passed in is unnecessary (and, considering that 
+reference keeping incurs a small overhead, possibly even undesireable).
+As smart pointers automatically convert to normal pointers it's not a problem
+to declare parameters for references as normal pointers.  Likewise, when the
+reference passed in is to be retained it's no problem to assign them to a
+<code>csRef&lt;&gt;</code> object to take ownership.
+</p>
+<a name="SEC166"></a>
 <h4 class="subsubheading"> Warnings About csPtr&lt;&gt;! </h4>
 
 <p>As noted above, only use <code>csPtr&lt;&gt;</code> for returning already incremented
@@ -371,7 +462,7 @@ engine-&gt;CreateLight (...);
 run-time test for this incorrect usage, and will throw an exception if you
 neglect to assign a returned <code>csPtr&lt;&gt;</code> to a <code>csRef&lt;&gt;</code>.
 </p>
-<a name="SEC164"></a>
+<a name="SEC167"></a>
 <h4 class="subsubheading"> Warning About IncRef() and DecRef()! </h4>
 
 <p>When using smart pointers (<code>csRef&lt;&gt;</code>) correctly you should avoid invoking
@@ -388,7 +479,7 @@ mesh = 0;
 <em>twice</em>--once when <code>DecRef()</code> is invoked explicitly, and once when 0
 is assigned to <samp>`mesh'</samp>)-which is almost certainly not what was intended.
 </p>
-<a name="SEC165"></a>
+<a name="SEC168"></a>
 <h4 class="subsubheading"> Warning About DestroyApplication()! </h4>
 
 <p>Due to the way the current implementation of
