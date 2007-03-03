@@ -75,7 +75,7 @@ easier to manage reference counting.  Instead of manually calling
 as all <small>SCF</small> classes.  The <code>csRef&lt;&gt;</code> template is defined in
 <tt>`CS/include/csutil/ref.h'</tt>.
 </p>
-<a name="SEC159"></a>
+<a name="SEC161"></a>
 <h4 class="subsubheading"> How to Use Smart Pointers </h4>
 
 <p>This is easy. For example, often you want to keep track of a few
@@ -137,13 +137,13 @@ csRef&lt;iSprite3DState&gt; state (scfQueryInterface&lt;iSprite3DState&gt; (
     sprite-&gt;GetMeshObject ()));
 state-&gt;SetAction (&quot;default&quot;);
 </pre></td></tr></table>
-<a name="SEC160"></a>
+<a name="SEC162"></a>
 <h4 class="subsubheading"> Transitioning between Smart Pointers and Normal Pointers </h4>
 
 <p>Smart pointers can be assigned to normal pointers and vice versa. However, you
 need to be aware of the interactions with reference counting.
 </p>
-<p>Assigning a smart pointer to a normal pointer \emph{does not change the 
+<p>Assigning a smart pointer to a normal pointer <em>does not</em> change the 
 reference count of the object.  This can be beneficial as the reference 
 counting overhead is avoided.  It can also be dangerous, as the normal pointer 
 will become dangling when the referenced object is destroyed!  This means that
@@ -151,7 +151,7 @@ storing in a normal pointer is suitable for short-term storage, when it's
 certain that the referenced object won't be released durign the lifetime of
 the normal pointer.  If that's not guaranteed use a <code>csRef&lt;&gt;</code> instead.
 </p>
-<p>Assigning a normal pointer to a smart pointer \emph{does change the reference
+<p>Assigning a normal pointer to a smart pointer <em>does</em> change the reference
 count: ownership is taken, ie the reference count is increased.  This can 
 cause a leaked reference in certain circumstances.  One notable instance is 
 the assignment of an object just allocated with <samp>`new'</samp> to a smart pointer:
@@ -160,12 +160,12 @@ smart pointer will also increase the reference count, which errorneously
 becomes 2. The last &quot;phantom&quot; reference will never be release, causing a 
 leak.
 </p>
-<p>The recommend way to deal with that is to \emph{never assign an object 
+<p>The recommend way to deal with that is to <em>never</em> assign an object 
 allocated with <samp>`new'</samp> to a smart pointer directly.  Instead use it's
 <code>AttachNew()</code> method which will take care of the proper reference
 counting.
 </p>
-<a name="SEC161"></a>
+<a name="SEC163"></a>
 <h4 class="subsubheading"> When to Use csRef&lt;&gt;? </h4>
 
 <p>Use <code>csRef&lt;&gt;</code> wherever you need to own a reference to a reference-counted
@@ -196,7 +196,7 @@ created by the function on the caller's behalf.  For example:
 destroyed (not leaked) even if the caller of <code>MyFunction()</code> forgets or
 neglects to assign it to a variable.
 </p>
-<a name="SEC162"></a>
+<a name="SEC164"></a>
 <h4 class="subsubheading"> When to Use csWeakRef&lt;&gt;? </h4>
 
 <p>Another smart pointer class is <code>csWeakRef&lt;&gt;</code>.  The significant difference
@@ -244,7 +244,7 @@ void MyClass::MyFunction ()
   ...
 }
 </pre></td></tr></table>
-<a name="SEC163"></a>
+<a name="SEC165"></a>
 <h4 class="subsubheading"> What About csPtr&lt;&gt;? </h4>
 
 <p><code>csPtr&lt;&gt;</code> is a companion class.  Originally, it aided in the transition
@@ -373,7 +373,7 @@ csRef&lt;iView&gt; view = new csView (...);
 <em>Never</em> use a <code>csPtr&lt;&gt;</code> to store an object.  <em>Never</em> pass
 <code>csPtr&lt;&gt;</code> instances as arguments to other functions.
 </p>
-<a name="SEC164"></a>
+<a name="SEC166"></a>
 <h4 class="subsubheading"> What to do With a Function Return Value? </h4>
 
 <p>In the Crystal Space <small>API</small> there are three possible modes by which
@@ -419,7 +419,7 @@ return value from a function returning a <code>csPtr&lt;&gt;</code> since doing 
 result in a resource leak.
 </li></ul>
 
-<a name="SEC165"></a>
+<a name="SEC167"></a>
 <h4 class="subsubheading"> What to do With a Function Parameter? </h4>
 
 <p>It's not uncommon that a reference to an object is to be taken as a function
@@ -434,7 +434,20 @@ to declare parameters for references as normal pointers.  Likewise, when the
 reference passed in is to be retained it's no problem to assign them to a
 <code>csRef&lt;&gt;</code> object to take ownership.
 </p>
-<a name="SEC166"></a>
+<table><tr><td>&nbsp;</td><td><pre class="example">// Passing a csRef&lt;iFoo&gt; as parameter: usually unnecessary
+void Bar (csRef&lt;iFoo&gt;&amp; stuff) { ... }
+
+// iFoo* is usually completely adequate
+void Baz (iFoo* stuff) 
+{ 
+  ... 
+  /* If 'stuff' runs the risk of being released you can always assign it to
+   * a csRef&lt;&gt; in the function body. */
+  csRef&lt;iFoo&gt; keepRef = stuff;
+  ... 
+}
+</pre></td></tr></table>
+<a name="SEC168"></a>
 <h4 class="subsubheading"> Warnings About csPtr&lt;&gt;! </h4>
 
 <p>As noted above, only use <code>csPtr&lt;&gt;</code> for returning already incremented
@@ -462,7 +475,7 @@ engine-&gt;CreateLight (...);
 run-time test for this incorrect usage, and will throw an exception if you
 neglect to assign a returned <code>csPtr&lt;&gt;</code> to a <code>csRef&lt;&gt;</code>.
 </p>
-<a name="SEC167"></a>
+<a name="SEC169"></a>
 <h4 class="subsubheading"> Warning About IncRef() and DecRef()! </h4>
 
 <p>When using smart pointers (<code>csRef&lt;&gt;</code>) correctly you should avoid invoking
@@ -479,7 +492,7 @@ mesh = 0;
 <em>twice</em>--once when <code>DecRef()</code> is invoked explicitly, and once when 0
 is assigned to <samp>`mesh'</samp>)-which is almost certainly not what was intended.
 </p>
-<a name="SEC168"></a>
+<a name="SEC170"></a>
 <h4 class="subsubheading"> Warning About DestroyApplication()! </h4>
 
 <p>Due to the way the current implementation of
