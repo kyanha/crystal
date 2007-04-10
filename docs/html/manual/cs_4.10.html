@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: </title>
+
+<meta name="description" content="Crystal Space: ">
+<meta name="keywords" content="Crystal Space: ">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="MeshObject"></a>
+<a name="4.10"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.9.10.html#4.9.10" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.1.html#4.10.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+
+<p>This section covers the Crystal Space Mesh Object plug-in system.  This is a
+very general system for defining various kinds of 3D objects and using them in
+the Crystal Space 3D engine.  You can use them to simulate things like
+snow, rain, fountains, fire, explosions, <small class="dots">...</small>.
+</p>
+<p>In practice you will probably want to use the following mesh objects
+in your own game:
+</p>
+<ul>
+<li>
+<samp>`GenMesh'</samp> (see section <a href="cs_4.10.8.html#4.10.8"></a>). The genmesh object is one of the
+most useful mesh objects. You can use it for static data (walls, buildings,
+floor, <small class="dots">...</small>) or for dynamic data (moving objects). It supports multiple
+materials, vertex lighting, and even animation.
+</li><li>
+<samp>`Thing'</samp> (see section <a href="cs_4.10.9.html#4.10.9"></a>). The thing object is often used
+for static geometry (walls and buildings). It is currently the only object
+that supports lightmaps (although that will change in the future). It
+doesn't support animation and in general it is less suitable for moving
+objects.
+</li><li>
+<samp>`Terrain'</samp> (see section <a href="cs_4.10.10.html#4.10.10"></a>). The terrain object is very
+useful if you want landscapes although you can do landscapes with genmesh
+too. But the terrain mesh object can do it more efficiently.
+</li><li>
+<samp>`SprCal3D'</samp> (see section <a href="cs_4.10.14.html#4.10.14"></a>). The sprcal3d object is
+one of the options you have for animated skeletal models. Both Blender
+and 3DSMax can export <small>CAL3D</small> models. The other option is to use
+the genmesh skeletal animation system.
+</li><li>
+<samp>`Particles'</samp>. If you want particles then the particles mesh is
+the best choice.
+</li></ul>
+
+<p>In the first section a general overview is given on some of the concepts
+in the mesh object system.
+</p>
+<p>In the second section you will see how you can use mesh objects in your own
+applications and how you can work with them.
+</p>
+<p>The third section covers everything needed to write your own mesh object
+plug-in modules.
+</p>
+<p>After that there is a section for every specific mesh object plugin that
+Crystal Space supports.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="cs_4.10.1.html#4.10.1">&bull; MeshObject Concepts</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.2.html#4.10.2">&bull; Using MeshObject</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Using Mesh Objects
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.3.html#4.10.3">&bull; Writing MeshObjects</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Writing Mesh Objects
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.4.html#4.10.4">&bull; HOWTO Create Thing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Creating a Thing Mesh
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.5.html#4.10.5">&bull; HOWTO Create Genmesh</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Creating a Genmesh Mesh
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.6.html#4.10.6">&bull; HOWTO Mesh LightAnim</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Mesh Lighting and Animation
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.7.html#4.10.7">&bull; HOWTO Mesh Movement</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Mesh Movement
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.8.html#4.10.8">&bull; MeshObject Genmesh</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Genmesh Mesh Object
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.9.html#4.10.9">&bull; MeshObject Thing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Thing Mesh Object
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.10.html#4.10.10">&bull; MeshObject TerrFunc</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Terrain Mesh Object
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.11.html#4.10.11">&bull; MeshObject Portal Container</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Portal Container Mesh Object
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.12.html#4.10.12">&bull; MeshObject Spr2D</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Sprite2D Mesh Object
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.13.html#4.10.13">&bull; MeshObject Spr3D</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Sprite3D Mesh Object
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.14.html#4.10.14">&bull; MeshObject SprCal3D</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> SpriteCal3D Mesh Object
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.15.html#4.10.15">&bull; MeshObject Emit</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Emitter Mesh Object
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.16.html#4.10.16">&bull; MeshObject PartSys</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Particle Systems in General
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.17.html#4.10.17">&bull; MeshObject Haze</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Haze Mesh Object
+</td></tr>
+<tr><td align="left" valign="top"><a href="cs_4.10.18.html#4.10.18">&bull; MeshObject Particles</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"> Particles Mesh Object
+</td></tr>
+</table>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="cs_4.9.10.html#4.9.10" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.10.1.html#4.10.1" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="cs_4.html#4." title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="cs_5.html#5." title="Next chapter"> &gt;&gt; </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
