@@ -11,10 +11,10 @@ Send bugs and suggestions to <users@texi2html.cvshome.org>
 
 -->
 <head>
-<title>Crystal Space: 4.2.1.3 Creating a &quot;World&quot;</title>
+<title>Crystal Space: 4.2.1.3 Creating a &ldquo;World&rdquo;</title>
 
-<meta name="description" content="Crystal Space: 4.2.1.3 Creating a &quot;World&quot;">
-<meta name="keywords" content="Crystal Space: 4.2.1.3 Creating a &quot;World&quot;">
+<meta name="description" content="Crystal Space: 4.2.1.3 Creating a &ldquo;World&rdquo;">
+<meta name="keywords" content="Crystal Space: 4.2.1.3 Creating a &ldquo;World&rdquo;">
 <meta name="resource-type" content="document">
 <meta name="distribution" content="global">
 <meta name="Generator" content="texi2html 1.76">
@@ -59,7 +59,7 @@ ul.toc {list-style: none}
 <td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
 </tr></table>
 <hr size="1">
-<h4 class="subsubsection"> 4.2.1.3 Creating a &quot;World&quot; </h4>
+<h4 class="subsubsection"> 4.2.1.3 Creating a &ldquo;World&rdquo; </h4>
 
 <p>Now we have a very exciting application which opens a black window and waits
 for the <kbd>ESC</kbd> key to quit.  We assume this is the application you always
@@ -67,7 +67,7 @@ wanted to have?  No?  Ok then, let's create some 3D stuff.
 </p>
 <p>We'll add a texture manager, a room (technically called a
 <em>sector</em>) and some lights.  First, add a pointer to our main
-sector and a function <code>CreateRoom()</code> to the <samp>`Simple'</samp> class
+sector and a function <code>CreateRoom()</code> to the <samp>&lsquo;Simple&rsquo;</samp> class
 header file:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">...
@@ -84,7 +84,7 @@ private:
   ...
 </pre></td></tr></table>
 <p>Now add these chunks of code (texture manager, room, lights) to
-<tt>`simple.cpp'</tt>:
+<tt>&lsquo;simple.cpp&rsquo;</tt>:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">bool Simple::Application ()
 {
@@ -145,21 +145,21 @@ void Simple::CreateRoom ()
 The first parameter is the name of the texture as it will be known in the
 engine; and the second is the
 actual filename on the <small>VFS</small> volume (see section <a href="VFS.html#0">Virtual File System (<small>VFS</small>)</a>).  Note, if you don't have
-the <tt>`stone4.gif'</tt> texture you can use another one.  The only requirement
+the <tt>&lsquo;stone4.gif&rsquo;</tt> texture you can use another one.  The only requirement
 is that it must have sizes which are a power of 2 (e.g. 64x64); note that
 Crystal Space will scale them automatically if this requirement is not met
 but this can
-reduce quality. This function returns a <samp>`iTextureWrapper'</samp> which we
-don't use.  Instead we use the <samp>`iMaterialWrapper'</samp> which is created
+reduce quality. This function returns a <samp>&lsquo;iTextureWrapper&rsquo;</samp> which we
+don't use.  Instead we use the <samp>&lsquo;iMaterialWrapper&rsquo;</samp> which is created
 automatically by <code>LoadTexture()</code>.
 </p>
 <p>Then, we create our room with <code>CreateSector()</code>.  This room will initially
-be empty.  A room in Crystal Space is represented by <samp>`iSector'</samp> which is
+be empty.  A room in Crystal Space is represented by <samp>&lsquo;iSector&rsquo;</samp> which is
 basically a container which can hold geometrical objects. Objects
 in Crystal Space are represented by <em>mesh objects</em> (see section <a href="MeshObject.html#0">Mesh Object Plug-In System</a>).
 There are several types of mesh objects in Crystal Space. Every type of
 mesh object represents some different way to represent geometry. In this
-tutorial we are only going to use the &quot;thing&quot; mesh object type. This mesh
+tutorial we are only going to use the &ldquo;thing&rdquo; mesh object type. This mesh
 object type is very useful for walls of indoor maps or buildings.
 </p>
 <p>Now, we want to create the six walls of our room. First, we make our thing mesh
@@ -168,31 +168,31 @@ in the engine (called <code>CreateSectorWallsMesh()</code>) which will create a
 thing mesh and add it to the given sector. The only thing that has to be
 done after this is add polygons to that mesh. The geometry of a mesh is 
 generally stored in its <em>factory</em>, thus we need to obtain an interface
-to the &quot;thing&quot; factory.
+to the &ldquo;thing&rdquo; factory.
 </p>
-<p>To do this we first need to obtain the interface to the <samp>`iMeshObject'</samp>
-interface. The <samp>`iMeshWrapper'</samp> interface, as returned by 
+<p>To do this we first need to obtain the interface to the <samp>&lsquo;iMeshObject&rsquo;</samp>
+interface. The <samp>&lsquo;iMeshWrapper&rsquo;</samp> interface, as returned by 
 <code>CreateSectorWallsMesh()</code>, has a method <code>GetMeshObject()</code> which
 gives us just that.
 </p>
 <p>In the next step, we need to query the <em>mesh factory</em>. Again, the 
-previously obtained <samp>`iMeshObject'</samp> has a method which returns an interface
+previously obtained <samp>&lsquo;iMeshObject&rsquo;</samp> has a method which returns an interface
 to the mesh factory.
 </p>
-<p>And lastly, to obtain the interface to control &quot;thing&quot;-specific aspects of
-the mesh factory, we query the interface called <samp>`iThingFactoryState'</samp> 
+<p>And lastly, to obtain the interface to control &ldquo;thing&rdquo;-specific aspects of
+the mesh factory, we query the interface called <samp>&lsquo;iThingFactoryState&rsquo;</samp> 
 from the mesh factory interface.
 We use the function <code>scfQueryInterface&lt;&gt;()</code> which is part of <small>SCF</small>
 (see section <a href="SCF.html#0">Shared Class Facility (<small>SCF</small>)</a>). This will see if the mesh factory actually implements 
-<samp>`iThingFactoryState'</samp> (which should be the case here) and, if so, it will 
-return a pointer to the implementation of <samp>`iThingFactoryState'</samp>. 
+<samp>&lsquo;iThingFactoryState&rsquo;</samp> (which should be the case here) and, if so, it will 
+return a pointer to the implementation of <samp>&lsquo;iThingFactoryState&rsquo;</samp>. 
 All mesh objects and factories implement some kind of state interface which is 
 used to set up or query the state of that mesh object or factory.
 Note that all interfaces which you query using <code>scfQueryInterface&lt;&gt;()</code>
 must be assigned to a variable of type <code>csRef&lt;&gt;</code>. This ensures that the
 reference to the interface is released once it is no longer needed.
 </p>
-<p>We now have the factory state (<samp>`iThingFactoryState'</samp>) which we can now use 
+<p>We now have the factory state (<samp>&lsquo;iThingFactoryState&rsquo;</samp>) which we can now use 
 to create polygons. There are various functions to create individual polygons, 
 if you want that, but in this case we use a convenience function to create a 
 box that can be seen from the inside. That will serve as the walls of our room.
@@ -203,7 +203,7 @@ clock-wise). The box coordinates given to <code>AddInsideBox()</code> are in obj
 space (in contrast with world space and camera space).
 </p>
 <p>The <code>SetPolygonMaterial()</code> function will set the material of the
-polygons. The first parameter is a range. We use <samp>`CS_POLYRANGE_LAST'</samp>
+polygons. The first parameter is a range. We use <samp>&lsquo;CS_POLYRANGE_LAST&rsquo;</samp>
 here to indicate that we are interested in setting the materials of the last
 created polygons (i.e. all polygons created with <code>AddInsideBox()</code>).
 </p>
@@ -216,11 +216,11 @@ perpendicular to the u-axis.  The 3rd parameter indicates that the texture will
 be scaled so that one texture tile is exactly 3x3 world units in size.
 </p>
 <p>Finally, we create some lights in our room to make sure that we actually are
-able to see the walls.  The interface <samp>`iLight'</samp> represents a light.
+able to see the walls.  The interface <samp>&lsquo;iLight&rsquo;</samp> represents a light.
 In this case we created some static lights which can not move and change
 intensity.  We create three such lights
 and add them to the room with <code>AddLight()</code>. Note that the list of lights
-in a sector is represented by an object implementing <samp>`iLightList'</samp>. To
+in a sector is represented by an object implementing <samp>&lsquo;iLightList&rsquo;</samp>. To
 get this list you call <code>iSector::GetLights()</code>.
 </p>
 <p>When creating a light we use several parameters.

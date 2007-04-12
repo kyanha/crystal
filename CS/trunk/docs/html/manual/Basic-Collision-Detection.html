@@ -66,9 +66,9 @@ this section I give a quick description of all the classes and interfaces in
 Crystal Space and what you should do to use them.
 </p>
 <a name="1"></a>
-<h4 class="subsubheading"> Loading the <samp>`iCollideSystem'</samp> </h4>
+<h4 class="subsubheading"> Loading the <samp>&lsquo;iCollideSystem&rsquo;</samp> </h4>
 
-<p>The basis of the collision detection system is the <samp>`iCollideSystem'</samp>.
+<p>The basis of the collision detection system is the <samp>&lsquo;iCollideSystem&rsquo;</samp>.
 This is an interface which is implemented by some collision detection plugin.
 At this moment we have an implementation using the <small>OPCODE</small> collision
 detection system.
@@ -115,20 +115,20 @@ system to the object registry so that other modules can find it
 </pre></td></tr></table>
 <p>This is a very general example.  It will first get the preferred collision
 detection plugin from the configuration file.  If the configuration file does
-not specify it then it will use <samp>`crystalspace.collisiondetection.opcode'</samp>
+not specify it then it will use <samp>&lsquo;crystalspace.collisiondetection.opcode&rsquo;</samp>
 which is the one we have at the moment.  If you do not want to let the users
 choose another plugin then you can also hard-code the string.  The
-<samp>`cd_sys'</samp> should be stored somewhere central (i.e. your application class).
+<samp>&lsquo;cd_sys&rsquo;</samp> should be stored somewhere central (i.e. your application class).
 </p>
 <a name="2"></a>
 <h4 class="subsubheading"> Initializing Geometry from the Mesh: The Easy Way </h4>
 
 <p>Before you can use the collision detection system you have to make
-instances of <samp>`iCollider'</samp>. Only the collide system can do that. To
-create an <samp>`iCollider'</samp> you have to give an instance of <samp>`iPolygonMesh'</samp>.
-Several meshes in Crystal Space implement <samp>`iPolygonMesh'</samp>. If you have
+instances of <samp>&lsquo;iCollider&rsquo;</samp>. Only the collide system can do that. To
+create an <samp>&lsquo;iCollider&rsquo;</samp> you have to give an instance of <samp>&lsquo;iTriangleMesh&rsquo;</samp>.
+Several meshes in Crystal Space implement <samp>&lsquo;iTriangleMesh&rsquo;</samp>. If you have
 special geometry on your own you can make your own classes to implement
-<samp>`iPolygonMesh'</samp>. The easiest way to initialize a collider for a model
+<samp>&lsquo;iTriangleMesh&rsquo;</samp>. The easiest way to initialize a collider for a model
 is to use this code:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">iMeshWrapper* mesh = ...;
@@ -137,7 +137,7 @@ csColliderWrapper* wrapper = csColliderHelper::InitializeCollisionWrapper (
 </pre></td></tr></table>
 <p>This code will create a collider (<code>iCollider</code>) for the geometry in the
 mesh. In addition to that it will also create an instance of
-<code>csColliderWrapper</code> (see <tt>`cstool/collider.h'</tt>). This is a class
+<code>csColliderWrapper</code> (see <tt>&lsquo;cstool/collider.h&rsquo;</tt>). This is a class
 that helps to keep track of your collider. The <code>csColliderWrapper</code> will
 be attached to the mesh. So if you later have a pointer to the mesh you can
 get the pointer to the collider wrapper by doing:
@@ -158,11 +158,12 @@ object instances that use the same factory).
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iCollider&gt; MyGame::InitCollider (iMeshWrapper* mesh)
 {
-  iPolygonMesh* polmesh =
-    mesh-&gt;GetMeshObject()-&gt;GetObjectModel()-&gt;GetPolygonMeshColldet();
-  if (polmesh)
+  iTriangleMesh* trimesh =
+    mesh-&gt;GetMeshObject()-&gt;GetObjectModel()-&gt;GetTriangleData(
+    	cdsys-&gt;GetTriangleDataID());
+  if (trimesh)
   {
-    csRef&lt;iCollider&gt; cd = cd_sys-&gt;CreateCollider (polmesh);
+    csRef&lt;iCollider&gt; cd = cd_sys-&gt;CreateCollider (trimesh);
     return cd;
   }
   else
@@ -198,8 +199,8 @@ without <code>csColliderHelper</code>:
   }
 }
 </pre></td></tr></table>
-<p>This example creates a new instance of <samp>`csColliderWrapper'</samp> which
-is automatically stored with the <samp>`iObject'</samp> that belongs
+<p>This example creates a new instance of <samp>&lsquo;csColliderWrapper&rsquo;</samp> which
+is automatically stored with the <samp>&lsquo;iObject&rsquo;</samp> that belongs
 with the given mesh. So there is no need to store it otherwise. Later
 on you can retrieve the collider for some mesh by using
 <code>csColliderWrapper::GetColliderWrapper()</code> again. This is more basic
@@ -254,7 +255,7 @@ every loaded mesh. You can also restrict the above code to one region.
 
 <p>Depending on the game your player might have a representation of
 geometry or not. If it doesn't you will have to make your own version
-of <samp>`iPolygonMesh'</samp> to create a collider for the player (possibly
+of <samp>&lsquo;iPolygonMesh&rsquo;</samp> to create a collider for the player (possibly
 using <code>csPolygonMeshBox</code> as explained above). Even if
 your player has geometry (i.e. a 3D sprite) it is sometimes still preferable
 to create your own special geometry for the player. The reason is
@@ -270,7 +271,7 @@ to go over small height elevations, the player collider should float slightly
 above the ground.
 </p>
 <p>The best way to make the gravity collider is to make your own implementation
-of <samp>`iPolygonMesh'</samp> using <code>csPolygonMeshBox</code>. This is very efficient.
+of <samp>&lsquo;iPolygonMesh&rsquo;</samp> using <code>csPolygonMeshBox</code>. This is very efficient.
 To keep the returned collider I recommend storing them somewhere in the player
 class or else use <code>csColliderWrapper</code> as explained above.
 </p>
@@ -278,7 +279,7 @@ class or else use <code>csColliderWrapper</code> as explained above.
 <h4 class="subsubheading"> Doing Collision Detection </h4>
 
 <p>When everything is set up it is time to do collision detection. To test
-for collisions you use the <code>Collide()</code> function in <samp>`iCollideSystem'</samp>
+for collisions you use the <code>Collide()</code> function in <samp>&lsquo;iCollideSystem&rsquo;</samp>
 or <code>Collide()</code> in <code>csColliderWrapper</code>.
 This will test the collisions between two colliders. The result of this
 will be true or false and in addition the collide system will keep a list
@@ -324,9 +325,9 @@ done in <code>SetupFrame()</code>) you can do this:
 collider_actor.Move (float (elapsed_time) / 1000.0f, 1.0f, obj_move,
 	angularVelocity);
 </pre></td></tr></table>
-<p><samp>`obj_move'</samp> is a relative movement vector in object space. For
+<p><samp>&lsquo;obj_move&rsquo;</samp> is a relative movement vector in object space. For
 example, to move the object forward you can use <code>csVector3(0,0,1)</code>.
-<samp>`angularVelocity'</samp> is a rotation vector for the model. Typically this
+<samp>&lsquo;angularVelocity&rsquo;</samp> is a rotation vector for the model. Typically this
 is something like <code>csVector3(0,1,0)</code> or the 0 vector if you don't want
 to rotate.
 </p>
@@ -338,7 +339,7 @@ and rotation.
 <p>Note that <code>csColliderActor</code> can also work with a camera instead of
 a mesh.
 </p>
-<p><samp>`csColliderActor'</samp> has a function to change gravity.
+<p><samp>&lsquo;csColliderActor&rsquo;</samp> has a function to change gravity.
 </p>
 <a name="10"></a>
 <h4 class="subsubheading"> Limitation of <small>OPCODE</small> </h4>
@@ -347,7 +348,7 @@ a mesh.
 has one important limitation. It assumes that the transform from object
 to world space will not change the size of the object; i.e. you cannot scale
 the object using the object to world transformation (which is kept in the
-<samp>`iMovable'</samp>) and expect collision detection to be ok. The only way
+<samp>&lsquo;iMovable&rsquo;</samp>) and expect collision detection to be ok. The only way
 around this limitation is to use <code>HardTransform()</code> to transform
 the object space vertices itself. But this can of course not be used
 dynamically as you would have to recalculate the collider every time
@@ -361,7 +362,7 @@ the object changes.
 <table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;iutil/object.h&gt;
 #include &lt;iutil/plugin.h&gt;
 #include &lt;ivaria/collider.h&gt;
-#include &lt;igeom/polymesh.h&gt;
+#include &lt;igeom/trimesh.h&gt;
 #include &lt;iengine/mesh.h&gt;
 #include &lt;cstool/collider.h&gt;
 </pre></td></tr></table>

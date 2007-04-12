@@ -75,17 +75,17 @@ you write and resources which you create.
 <em>Endian-ness</em>
 
 <p>Beware of code that is endian-specific.  To facilitate writing portable code,
-key off of the <samp>`CS_BIG_ENDIAN'</samp> or <samp>`CS_LITTLE_ENDIAN'</samp> macros if
+key off of the <samp>&lsquo;CS_BIG_ENDIAN&rsquo;</samp> or <samp>&lsquo;CS_LITTLE_ENDIAN&rsquo;</samp> macros if
 necessary.
 </p>
-<p>Avoid casting a <samp>`long*'</samp> or <samp>`int*'</samp> to a <samp>`short*'</samp> or <samp>`char*'</samp>
+<p>Avoid casting a <samp>&lsquo;long*&rsquo;</samp> or <samp>&lsquo;int*&rsquo;</samp> to a <samp>&lsquo;short*&rsquo;</samp> or <samp>&lsquo;char*&rsquo;</samp>
 as a slick way of checking the value of a particular sub-byte of the number
 since this trick will fail on platforms with different endian-ness.  In other
-words, given the declaration <samp>`long n = 1'</samp>, and the expression <samp>`short
-p = *((short*)&amp;n)'</samp>, on a little-endian platform, <samp>`p'</samp> will equal 1, but on
-a big-endian platform, <samp>`p'</samp> will equal 0.
+words, given the declaration <samp>&lsquo;long n = 1&rsquo;</samp>, and the expression <samp>&lsquo;short
+p = *((short*)&amp;n)&rsquo;</samp>, on a little-endian platform, <samp>&lsquo;p&rsquo;</samp> will equal 1, but on
+a big-endian platform, <samp>&lsquo;p&rsquo;</samp> will equal 0.
 </p>
-<p>Avoid using C &quot;unions&quot; to represent bit-sets since they can result in
+<p>Avoid using C &ldquo;unions&rdquo; to represent bit-sets since they can result in
 endian-related problems if improperly used or stored as persistent data.
 Using bit-masks is a much better and far more portable solution.
 </p>
@@ -96,15 +96,15 @@ endian-related problems.  Use the network functions <code>ntohl()</code>,
 <code>ntohs()</code>, <code>htonl()</code>, and <code>htons()</code> to convert numbers to
 canonical format before transmitting them over the network.  You can also make
 use of the Crystal Space endian-related conversion functions found in
-<tt>`CS/include/csutil/csendian.h'</tt>.
+<tt>&lsquo;CS/include/csutil/csendian.h&rsquo;</tt>.
 </p>
 </li><li>
 <em>Data Alignment</em>
 
 <p>Some platforms require data values to be strictly aligned in memory.  For
-instance, some processors can not access a <samp>`long'</samp> value at an odd memory
+instance, some processors can not access a <samp>&lsquo;long&rsquo;</samp> value at an odd memory
 address or at an address which is not a multiple of four (which is the size in
-bytes of the <samp>`long'</samp> data type).  In such cases, the program may crash.
+bytes of the <samp>&lsquo;long&rsquo;</samp> data type).  In such cases, the program may crash.
 Other processors may be able to access misaligned values, but at greatly
 reduced speed, which can slow down program execution significantly if done
 frequently enough.
@@ -116,9 +116,9 @@ it is up to you to ensure the proper alignment of the data before accessing
 it.
 </p>
 <p>For instance, if you are reading elements from a byte-stream and the next
-element to be read is a <samp>`long'</samp>, then the following code to extract the
+element to be read is a <samp>&lsquo;long&rsquo;</samp>, then the following code to extract the
 value is <em>incorrect</em> and <em>non-portable</em> since it does not ensure
-that the data is aligned properly for <samp>`long'</samp> access:
+that the data is aligned properly for <samp>&lsquo;long&rsquo;</samp> access:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">long extract_long(unsigned char const* stream)
 {
@@ -137,15 +137,15 @@ that the data is aligned properly for <samp>`long'</samp> access:
 </li><li>
 <em>Data type sizes</em>
 
-<p>Don't make any assumptions about the size of <samp>`int'</samp>, <samp>`long'</samp>, 
-<samp>`size_t'</samp>, <samp>`void*'</samp> etc such as <code>sizeof(int)==4</code>, 
+<p>Don't make any assumptions about the size of <samp>&lsquo;int&rsquo;</samp>, <samp>&lsquo;long&rsquo;</samp>, 
+<samp>&lsquo;size_t&rsquo;</samp>, <samp>&lsquo;void*&rsquo;</samp> etc such as <code>sizeof(int)==4</code>, 
 <code>sizeof(int)==sizeof(void*)</code>, <code>sizeof(long)==sizeof(void*)</code> and so 
 on. If a specifically sized type is needed (for example, when reading a file
 and the format specification dictates a certain word size) use the sized types
-from <tt>`cstypes.h'</tt> (e.g. <samp>`int32'</samp>, <samp>`uint8'</samp>). Consequently, also 
-avoid constructs such as casting pointers to <samp>`int'</samp>s. If there's a rare 
+from <tt>&lsquo;cstypes.h&rsquo;</tt> (e.g. <samp>&lsquo;int32&rsquo;</samp>, <samp>&lsquo;uint8&rsquo;</samp>). Consequently, also 
+avoid constructs such as casting pointers to <samp>&lsquo;int&rsquo;</samp>s. If there's a rare 
 case that no other way than casting a pointer to/from an integral type, use the 
-value of the <samp>`CS_PROCESSOR_SIZE'</samp> macro (usually 32 or 64) to determine an 
+value of the <samp>&lsquo;CS_PROCESSOR_SIZE&rsquo;</samp> macro (usually 32 or 64) to determine an 
 appropriate sized type.
 </p>
 </li><li>
@@ -154,17 +154,17 @@ appropriate sized type.
 <p>Depending upon the accuracy and representation of floating point values on
 some platforms, a number may successfully compare to (and equal) 0.0 on one
 platform or processor but fail on another.  In order to avoid such problems,
-compare numbers to a small value such as <samp>`EPSILON'</samp>.  In other words, if
-<samp>`EPSILON'</samp> is defined as a very small value, use <samp>`(val &lt; EPSILON)'</samp>
-rather than <samp>`(val == 0.0)'</samp>.
+compare numbers to a small value such as <samp>&lsquo;EPSILON&rsquo;</samp>.  In other words, if
+<samp>&lsquo;EPSILON&rsquo;</samp> is defined as a very small value, use <samp>&lsquo;(val &lt; EPSILON)&rsquo;</samp>
+rather than <samp>&lsquo;(val == 0.0)&rsquo;</samp>.
 </p>
 <p>As a corollary.  when comparing two floating point values, employ the
-<samp>`EPSILON'</samp> trick to ensure that they compare properly over a wide variety
-of platforms.  In other words, instead of <samp>`(float1 &lt; float2)'</samp>, use
-<samp>`(float1 &lt; float2 + EPSILON)'</samp>.
+<samp>&lsquo;EPSILON&rsquo;</samp> trick to ensure that they compare properly over a wide variety
+of platforms.  In other words, instead of <samp>&lsquo;(float1 &lt; float2)&rsquo;</samp>, use
+<samp>&lsquo;(float1 &lt; float2 + EPSILON)&rsquo;</samp>.
 </p>
 </li><li>
-<em>Scope of <samp>`for'</samp> Statements</em>
+<em>Scope of <samp>&lsquo;for&rsquo;</samp> Statements</em>
 
 <p>Some compilers do not properly scope a variable declared in a <code>for(;;)</code>
 statement to the loop itself.  In other words, some compilers treat the
@@ -173,23 +173,23 @@ following code:
 <table><tr><td>&nbsp;</td><td><pre class="example">for (int i = 0; ...) ...
 </pre></td></tr></table>
 
-<p>As though <samp>`i'</samp> was declared outside of the <samp>`for'</samp> statement, as in:
+<p>As though <samp>&lsquo;i&rsquo;</samp> was declared outside of the <samp>&lsquo;for&rsquo;</samp> statement, as in:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">int i;
 for (i = 0; ...) ...
 </pre></td></tr></table>
-<p>This can be a problem when several <samp>`for'</samp> loops exists at the same scoping
-level in a single block since some compilers will complain that <samp>`i'</samp> is
-being redeclared by all <samp>`for'</samp> loops following the first one.  In other
-words, the following code will generate a &quot;variable redeclaration&quot; warning
+<p>This can be a problem when several <samp>&lsquo;for&rsquo;</samp> loops exists at the same scoping
+level in a single block since some compilers will complain that <samp>&lsquo;i&rsquo;</samp> is
+being redeclared by all <samp>&lsquo;for&rsquo;</samp> loops following the first one.  In other
+words, the following code will generate a &ldquo;variable redeclaration&rdquo; warning
 with some compilers:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">for (int i = 0; ...) ...
 ... other code ...
 for (int i = 5; ...) ...
 </pre></td></tr></table>
-<p>In cases where the variable appears in only a single <samp>`for'</samp> loop, declaring
-it directly in the <samp>`for'</samp> statement is perfectly safe, but in cases where
+<p>In cases where the variable appears in only a single <samp>&lsquo;for&rsquo;</samp> loop, declaring
+it directly in the <samp>&lsquo;for&rsquo;</samp> statement is perfectly safe, but in cases where
 many such loops may want to use the same variable name, the variable should
 be declared once outside of all loops, as in the following example:
 </p>
@@ -200,7 +200,7 @@ for (i = 5; ...) ...
 </pre></td></tr></table>
 <p>The Microsoft Visual C++ compiler is known to suffer from this problem,
 however most modern C++ compilers properly scope variables declared in the
-<samp>`for'</samp> statement.
+<samp>&lsquo;for&rsquo;</samp> statement.
 </p>
 </li><li>
 <em>Avoid Global Objects With Constructors in Plug-In Modules</em>
@@ -215,7 +215,7 @@ unsafe to rely on such objects.
 
 <p>Avoid initializing global variables within a plug-in module via function
 call.  In other words, in the following example, the function <code>foo()</code>
-should not rely upon the variable <samp>`angle'</samp> as having been properly
+should not rely upon the variable <samp>&lsquo;angle&rsquo;</samp> as having been properly
 initialized, assuming that this code fragment appears in a plug-in module.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">static float angle = cos(0.23);
@@ -223,7 +223,7 @@ void foo() { printf(&quot;angle=%g\n&quot;, angle); }
 </pre></td></tr></table>
 <p>Instead, you should arrange for such variables to be initialized manually by
 some other mechanism.  Here is one possible (though not ideal) way to ensure
-that <samp>`angle'</samp> is initialized before it is accessed.
+that <samp>&lsquo;angle&rsquo;</samp> is initialized before it is accessed.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">static float angle = 0;
 void foo()
@@ -245,15 +245,15 @@ module is loaded.  See section <a href="SCF.html#0">Shared Class Facility (<smal
 <em>Pathname Syntax</em>
 
 <p>Pathname syntax varies widely from platform to platform.  For instance, a
-Unix-style pathname such as <tt>`/mnt/home/zoop.c'</tt> might appear as
-<tt>`C:\home\zoop.c'</tt> on <small>DOS</small> and Windows, and <tt>`vol:home:zoop.c'</tt> on
+Unix-style pathname such as <tt>&lsquo;/mnt/home/zoop.c&rsquo;</tt> might appear as
+<tt>&lsquo;C:\home\zoop.c&rsquo;</tt> on <small>DOS</small> and Windows, and <tt>&lsquo;vol:home:zoop.c&rsquo;</tt> on
 Macintosh.
 </p>
 <p>When programming you should always use Unix-style pathname syntax in your
-<code>#include</code> directives; that is, always use the forward slash <samp>`/'</samp>, as
+<code>#include</code> directives; that is, always use the forward slash <samp>&lsquo;/&rsquo;</samp>, as
 in <code>#include &quot;csutil/scf.h&quot;</code>.  The forward slash is understood by
 compilers on all platforms including Unix, Windows, and Macintosh.  Never use
-<samp>`\'</samp> or <samp>`:'</samp> in filenames mentioned by an <code>#include</code> directive.
+<samp>&lsquo;\&rsquo;</samp> or <samp>&lsquo;:&rsquo;</samp> in filenames mentioned by an <code>#include</code> directive.
 Even though your Windows or Macintosh compiler might accept these characters,
 the Unix compilers will not.  The obvious exception to this rule is for source
 files which are intended only for a specific platform.  Such files may use the
@@ -278,13 +278,13 @@ general, it is preferable to use entirely lower-case filenames for files which
 are shared between ports.
 </p>
 </li><li>
-<em><tt>`Jamfile'</tt>s and Project Files</em>
+<em><tt>&lsquo;Jamfile&rsquo;</tt>s and Project Files</em>
 
 <p>Some platforms use custom project files, whereas other platforms use the
-Crystal Space Jam-based build system.  If you change a <tt>`Jamfile'</tt> and then 
+Crystal Space Jam-based build system.  If you change a <tt>&lsquo;Jamfile&rsquo;</tt> and then 
 change the code so that it depends on this change, ports for other platforms 
 will probably break.  This may be unavoidable to some extent, but try to 
-minimize the breakage.  For example, devise a <tt>`configure'</tt> check for the
+minimize the breakage.  For example, devise a <tt>&lsquo;configure&rsquo;</tt> check for the
 feature and wrap the dependent code in an <code>#ifdef</code> for a definition emitted
 when the feature was detected, or at least for operating systems that 
 <em>do</em> support the change.   This will allow other systems to continue to 
@@ -296,7 +296,7 @@ to be updated in order to support your modifications.
 <em>Ensuring Rendering</em>
 
 <p>Some renderers and video drivers depend on the <code>BeginDraw()</code> and
-<code>FinishDraw()</code> calls to <samp>`iGraphics3D'</samp> or <samp>`iGraphics2D'</samp>.  Thus
+<code>FinishDraw()</code> calls to <samp>&lsquo;iGraphics3D&rsquo;</samp> or <samp>&lsquo;iGraphics2D&rsquo;</samp>.  Thus
 every <code>BeginDraw()</code> must be followed by a <code>FinishDraw()</code> or nothing
 will be rendered.  Microsoft's DirectX renderer is known to have this
 requirement, so be sure to follow this guideline for maximum portability.

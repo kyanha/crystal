@@ -76,12 +76,12 @@ to know how Crystal Space works internally.
 <p>To understand this you should know how portals are used in Crystal Space.  You
 should also read the tutorial (see section <a href="Tutorial-Simple.html#0">Simple Tutorial 1: Basic Setup, World Creation</a>) as this explains the
 basics for using Crystal Space.  This document is based upon the
-<tt>`simple'</tt> application (<tt>`CS/apps/tutorial/simple1/'</tt>) because this
+<tt>&lsquo;simple&rsquo;</tt> application (<tt>&lsquo;CS/apps/tutorial/simple1/&rsquo;</tt>) because this
 discussion looks a lot like a tutorial.
 </p>
-<p>First we start in <tt>`apps/tutorial/simple1/simple1.cpp'</tt>.  In the
+<p>First we start in <tt>&lsquo;apps/tutorial/simple1/simple1.cpp&rsquo;</tt>.  In the
 <code>main()</code> function we initialize our engine.  This is an instance of the
-plugin <samp>`iEngine'</samp> which actually represents the engine.  I will not
+plugin <samp>&lsquo;iEngine&rsquo;</samp> which actually represents the engine.  I will not
 explain how all the initialization works.  This is explained in the tutorial.
 But I will go straight to <code>iEngine::Draw()</code> which is called indirectly
 from within <code>Simple::NextFrame()</code>.  It is called indirectly because first
@@ -91,11 +91,11 @@ we call <code>iView::Draw()</code> which then calls <code>iEngine::Draw()</code>
 <h3 class="subheading"> World Rendering (<code>iEngine::Draw()</code>) </h3>
 
 <p>The method <code>iEngine::Draw()</code> is located in
-<tt>`CS/plugins/engine/3d/engine.cpp'</tt>.
+<tt>&lsquo;CS/plugins/engine/3d/engine.cpp&rsquo;</tt>.
 </p>
-<p><code>iEngine::Draw()</code> first sets up the initial <samp>`iRenderView'</samp>
+<p><code>iEngine::Draw()</code> first sets up the initial <samp>&lsquo;iRenderView&rsquo;</samp>
 structure.  This structure is defined in
-<tt>`CS/include/iengine/rview.h'</tt> and is the main structure which is
+<tt>&lsquo;CS/include/iengine/rview.h&rsquo;</tt> and is the main structure which is
 used throughout the entire rendering process.  It collects all data that
 is required for rendering the recursive portal structure.
 </p>
@@ -114,23 +114,23 @@ a portal the view is modified.
 </p>
 </dd>
 <dt> <code>clip_plane</code></dt>
-<dd><p>This is a special plane.  If <samp>`do_clip_plane'</samp> is used then we clip all
-geometry in 3D to <samp>`clip_plane'</samp>.  This is normally not used except in
+<dd><p>This is a special plane.  If <samp>&lsquo;do_clip_plane&rsquo;</samp> is used then we clip all
+geometry in 3D to <samp>&lsquo;clip_plane&rsquo;</samp>.  This is normally not used except in
 special cases where we have portals that arrive in the middle of a sector.  In
 that case the portal will be used as an extra clipping plane because we don't
 want to render everything that is behind the arrival plane of the portal.
 </p></dd>
 </dl>
 
-<p>Another important thing is that <samp>`iRenderView'</samp> is actually a subclass of
-<samp>`iCamera'</samp> (<tt>`CS/include/iengine/camera.h'</tt>) so all camera
+<p>Another important thing is that <samp>&lsquo;iRenderView&rsquo;</samp> is actually a subclass of
+<samp>&lsquo;iCamera&rsquo;</samp> (<tt>&lsquo;CS/include/iengine/camera.h&rsquo;</tt>) so all camera
 functionality is present as well.
 </p>
-<p>To set up the initial <samp>`iRenderView'</samp> structure <code>iEngine::Draw()</code>
+<p>To set up the initial <samp>&lsquo;iRenderView&rsquo;</samp> structure <code>iEngine::Draw()</code>
 creates a new instance based upon the given camera.
 </p>
 <p>After this <code>iEngine::Draw()</code> gets the current sector from the camera and
-calls <code>iSector::Draw()</code> (<tt>`CS/plugins/engine/3d/sector.cpp'</tt>).  This
+calls <code>iSector::Draw()</code> (<tt>&lsquo;CS/plugins/engine/3d/sector.cpp&rsquo;</tt>).  This
 will essentially draw the whole screen as discussed below.
 </p>
 <p>After doing this (now that the screen is fully updated) we optionally draw
@@ -141,11 +141,11 @@ the eyes.
 <h3 class="subheading"> Sector Rendering (<code>iSector::Draw()</code>) </h3>
 
 <p>This method <code>iSector::Draw()</code> is located in
-<tt>`CS/plugins/engine/3d/sector.cpp'</tt>.
+<tt>&lsquo;CS/plugins/engine/3d/sector.cpp&rsquo;</tt>.
 </p>
 <p><code>iSector::Draw()</code> is responsible for rendering everything in the current
 sector. Before it does that it will ask the current visibility culler
-(<samp>`frustvis'</samp> or <samp>`dynavis'</samp>) what objects are likely to be visible
+(<samp>&lsquo;frustvis&rsquo;</samp> or <samp>&lsquo;dynavis&rsquo;</samp>) what objects are likely to be visible
 or not. It will then render all visible objects sorted by render priority
 (see section <a href="HOWTO-Render-Priorities.html#0">Render Priorities and Objects in Sectors</a>) and using the z-buffer mode that is
 associated with every object. It is up to the map designer to make sure
@@ -169,11 +169,11 @@ The engine decides when to render an object, the object decides on how
 to render itself. Finally the 3D renderer will process the actual rendering
 operations done by the mesh object.
 </p>
-<p>The <samp>`thing'</samp> mesh object type supports portals. When such a thing containing
+<p>The <samp>&lsquo;thing&rsquo;</samp> mesh object type supports portals. When such a thing containing
 a portal is rendered the destination sector will be rendered recursively.
 This means that rendering of the current sector will be temporarily
 suspended while first the destination sector through that portal is rendered.
-Going through a portal results in the current <samp>`iRenderView'</samp>
+Going through a portal results in the current <samp>&lsquo;iRenderView&rsquo;</samp>
 instance to get a new clipper (a smaller clipper usually). Objects can use
 that clipper to decide if they want to be rendered or not. In some special
 cases a portal can also transform space (like a mirror). In that case the

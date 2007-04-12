@@ -71,19 +71,19 @@ detail about the specific Mesh Object Types that Crystal Space supports.
 <h4 class="subsubheading"> General </h4>
 
 <p>When the engine works with instances of Mesh Objects it does so through the
-<samp>`iMeshWrapper'</samp> interface.  <samp>`iMeshWrapper'</samp> holds the reference to the
-<samp>`iMeshObject'</samp> instances implementing the particular type of Mesh Object.
-<samp>`iMeshWrapper'</samp> is responsible for deciding when to draw a Mesh Object and
-when to light it.  <samp>`iMeshWrapper'</samp> also manages the position of the object
+<samp>&lsquo;iMeshWrapper&rsquo;</samp> interface.  <samp>&lsquo;iMeshWrapper&rsquo;</samp> holds the reference to the
+<samp>&lsquo;iMeshObject&rsquo;</samp> instances implementing the particular type of Mesh Object.
+<samp>&lsquo;iMeshWrapper&rsquo;</samp> is responsible for deciding when to draw a Mesh Object and
+when to light it.  <samp>&lsquo;iMeshWrapper&rsquo;</samp> also manages the position of the object
 in the world and manages possible hierarchical transformations (i.e.
-<samp>`iMeshWrapper'</samp> has an array of <samp>`iMeshWrapper'</samp> children).
+<samp>&lsquo;iMeshWrapper&rsquo;</samp> has an array of <samp>&lsquo;iMeshWrapper&rsquo;</samp> children).
 </p>
 <a name="2"></a>
 <h4 class="subsubheading"> Loading From Map File </h4>
 
 <p>The easiest way to use Mesh Objects is to simply specify them in the map file
 for your level.  There are two things that you need to do for that.  First you
-have to specify an entry at top-level (directly inside the <samp>`world'</samp>
+have to specify an entry at top-level (directly inside the <samp>&lsquo;world&rsquo;</samp>
 statement) like this (this example uses the <em>fountain</em> plug-in to make a
 fountain):
 </p>
@@ -93,10 +93,10 @@ fountain):
 &lt;/meshfact&gt;
 </pre></td></tr></table>
 <p>This will use the <em>mesh object loader</em> plug-in which is identified by the
-<small>SCF</small> name mentioned by the <samp>`plugin'</samp> statement to load a factory
-(type <samp>`iMeshObjectFactory'</samp>) and register it with the engine.  There are no
+<small>SCF</small> name mentioned by the <samp>&lsquo;plugin&rsquo;</samp> statement to load a factory
+(type <samp>&lsquo;iMeshObjectFactory&rsquo;</samp>) and register it with the engine.  There are no
 parameters for the fountain's Mesh Object Factory so that's why the
-<samp>`params'</samp> block is empty.  But you still have to specify it.  Other mesh
+<samp>&lsquo;params&rsquo;</samp> block is empty.  But you still have to specify it.  Other mesh
 object factories may accept parameters.
 </p>
 <p>Because the fountain defines no parameters for the Mesh Object Factory
@@ -104,7 +104,7 @@ you only have to create one factory in order to make all fountains you need.
 But in some cases you may have to create multiple factories depending
 on the object characteristics you want.
 </p>
-<p>To place a fountain in some room (sector) you use a <samp>`meshobj'</samp>
+<p>To place a fountain in some room (sector) you use a <samp>&lsquo;meshobj&rsquo;</samp>
 statement, within the definition of a room or sector, like this:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;fountain&quot;&gt;
@@ -134,26 +134,26 @@ statement, within the definition of a room or sector, like this:
   &lt;/move&gt;
 &lt;/meshobj&gt;
 </pre></td></tr></table>
-<p>This code fragment uses the <samp>`crystalspace.mesh.loader.fountain'</samp> loader
+<p>This code fragment uses the <samp>&lsquo;crystalspace.mesh.loader.fountain&rsquo;</samp> loader
 plug-in named to load a Mesh Object (type
-<samp>`iMeshObject'</samp>) and register it with the engine (while placing it in the
+<samp>&lsquo;iMeshObject&rsquo;</samp>) and register it with the engine (while placing it in the
 current sector).  In this case there are many parameters.  The first parameter
 should always be the name of the factory.  This is true for all Mesh Objects
 regardless of their type.  For a complete list of parameters available, you
 should refer to the fountain documentation.
 </p>
-<p>The <samp>`move'</samp> statement is outside of the <samp>`params'</samp> block.  The reason
+<p>The <samp>&lsquo;move&rsquo;</samp> statement is outside of the <samp>&lsquo;params&rsquo;</samp> block.  The reason
 for this is that the position of Mesh Objects is controlled by the engine and
 not by the Mesh Object itself.
 </p>
-<p>In addition to the above statements you can also nest other <samp>`meshobj'</samp>
+<p>In addition to the above statements you can also nest other <samp>&lsquo;meshobj&rsquo;</samp>
 statements to create a hierarchy of Mesh Objects (not shown in the example
-above).  If you do that, then the <samp>`move'</samp> statement must be interpreted
+above).  If you do that, then the <samp>&lsquo;move&rsquo;</samp> statement must be interpreted
 relative to the parent.
 </p>
 <p>When you have Mesh Objects loaded into Crystal Space using the map file syntax
 illustrated above, then you can query the parameters from your application by
-using the standard <small>API</small> in the <samp>`iEngine'</samp> interface.
+using the standard <small>API</small> in the <samp>&lsquo;iEngine&rsquo;</samp> interface.
 </p>
 <a name="3"></a>
 <h4 class="subsubheading"> Using Directly From Code </h4>
@@ -174,7 +174,7 @@ Mesh Object Type instance.
 
 </li><li>
 If the factory has parameters you can call <code>scfQueryInterface</code> to get a
-handle to the <samp>`iSomethingFactoryState'</samp> interface (replace <em>Something</em>
+handle to the <samp>&lsquo;iSomethingFactoryState&rsquo;</samp> interface (replace <em>Something</em>
 with whatever the type name of the Mesh Object is).  Then you set the
 parameters you want on that factory.
 
@@ -184,16 +184,16 @@ calling <code>NewInstance()</code> on them.
 
 </li><li>
 If the object has parameters you use <code>scfQueryInterface</code> to get a handle
-to the <samp>`iSomethingState'</samp> interface (replace <em>Something</em> with whatever
+to the <samp>&lsquo;iSomethingState&rsquo;</samp> interface (replace <em>Something</em> with whatever
 the type name of the Mesh Object is).  Then set the parameters you want on the
 Mesh Object.  Note that there are Mesh Object implementations which have
 multiple interfaces like this (for example, the particle systems implement both
-<samp>`iParticleState'</samp> plus another particle system-dependent interface).
+<samp>&lsquo;iParticleState&rsquo;</samp> plus another particle system-dependent interface).
 
 </li><li>
-For every instance of <samp>`iMeshObject'</samp> you need to create a
-<samp>`iMeshWrapper'</samp> instance for the engine.  Then you set up the
-<samp>`iMeshWrapper'</samp> by placing it in the sector that you want it and setup its
+For every instance of <samp>&lsquo;iMeshObject&rsquo;</samp> you need to create a
+<samp>&lsquo;iMeshWrapper&rsquo;</samp> instance for the engine.  Then you set up the
+<samp>&lsquo;iMeshWrapper&rsquo;</samp> by placing it in the sector that you want it and setup its
 position and rotation (transformation).
 </li></ul>
 
@@ -227,7 +227,7 @@ void SetupWorld ()
 }
 </pre></td></tr></table>
 <p>This example will load a ball using the plug-in and place it at (-3,5,-3) in
-<samp>`room'</samp>.
+<samp>&lsquo;room&rsquo;</samp>.
 </p>
 <p><code>iGeneralFactoryState</code> and <code>iGeneralMeshState</code> are the state
 interfaces for setting the characteristics of genmesh Mesh Objects.
@@ -251,8 +251,8 @@ interfaces for setting the characteristics of genmesh Mesh Objects.
   	iMeshtypeObjectState&gt; (mesh-&gt;GetMeshObject ());
   ...
 </pre></td></tr></table>
-<p>Replace <samp>`meshtype'</samp> with the correct mesh type (like <samp>`genmesh'</samp>,
-<samp>`thing'</samp>, <small class="dots">...</small>). Replace <code>iMeshtypeFactoryState</code> with the
+<p>Replace <samp>&lsquo;meshtype&rsquo;</samp> with the correct mesh type (like <samp>&lsquo;genmesh&rsquo;</samp>,
+<samp>&lsquo;thing&rsquo;</samp>, <small class="dots">...</small>). Replace <code>iMeshtypeFactoryState</code> with the
 correct factory state and <code>iMeshtypeObjectState</code> with the correct
 object state.
 </p>

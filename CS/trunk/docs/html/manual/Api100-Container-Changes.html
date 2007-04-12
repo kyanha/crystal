@@ -64,10 +64,10 @@ ul.toc {list-style: none}
 <a name="1"></a>
 <h3 class="subheading"> <code>csArray&lt;&gt;</code> Index and Size Type Change </h3>
 
-<p><code>csArray&lt;&gt;</code> has been changed to use <samp>`size_t'</samp> instead of
-<samp>`int'</samp> for array sizes and indices.  Probably, the most significant
-semantic difference of this change is that <samp>`size_t'</samp> is usually
-<em>unsigned</em> as opposed to <samp>`int'</samp> which is <em>signed</em>.
+<p><code>csArray&lt;&gt;</code> has been changed to use <samp>&lsquo;size_t&rsquo;</samp> instead of
+<samp>&lsquo;int&rsquo;</samp> for array sizes and indices.  Probably, the most significant
+semantic difference of this change is that <samp>&lsquo;size_t&rsquo;</samp> is usually
+<em>unsigned</em> as opposed to <samp>&lsquo;int&rsquo;</samp> which is <em>signed</em>.
 </p>
 <p><strong>Read this paragraph carefully.</strong> In actual code, this change may result
 in nothing more than simple-looking compiler warnings. However, it may have
@@ -78,9 +78,9 @@ caused <em>semantics</em> to change subtly.
 <a name="2"></a>
 <h4 class="subsubheading"> Iterating Over <code>csArray&lt;&gt;</code> Contents </h4>
 
-<p>For this purpose, usually, <samp>`int'</samp> typed variables were used for keeping
+<p>For this purpose, usually, <samp>&lsquo;int&rsquo;</samp> typed variables were used for keeping
 track of the index of the current item of an array iteration.  Fixing forward
-iteration over a <code>csArray&lt;&gt;</code> to instead use <samp>`size_t'</samp> is simple:
+iteration over a <code>csArray&lt;&gt;</code> to instead use <samp>&lsquo;size_t&rsquo;</samp> is simple:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
 for (int i = 0, n = a.Length(); i &lt; n; i++)
@@ -96,7 +96,7 @@ for (size_t i = 0, n = a.Length(); i &lt; n; i++)
 ...
 </pre></td></tr></table>
 <p>Backward iteration is a bit more problematic. As mentioned before,
-<samp>`size_t'</samp> typically is unsigned, so you do not have negative values. This
+<samp>&lsquo;size_t&rsquo;</samp> typically is unsigned, so you do not have negative values. This
 can be a problem in constructs like:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
@@ -105,25 +105,25 @@ for (int i = a.Length() - 1; i &gt;= 0; i--)
   ...
 }
 </pre></td></tr></table>
-<p>If the <samp>`int'</samp> is changed simply to a <samp>`size_t'</samp>, this 
-<code>for</code>-loop misbehaves unexpectedly. When <samp>`i'</samp> becomes 0, the body 
-of the loop is executed correctly. However, decrementing <samp>`i'</samp> will 
-<strong>not</strong> cause <samp>`i'</samp> to have a negative value--after all, <samp>`size_t'</samp>
-is unsigned. Instead, decrementing will make <samp>`i'</samp> wrap around from 0 to
+<p>If the <samp>&lsquo;int&rsquo;</samp> is changed simply to a <samp>&lsquo;size_t&rsquo;</samp>, this 
+<code>for</code>-loop misbehaves unexpectedly. When <samp>&lsquo;i&rsquo;</samp> becomes 0, the body 
+of the loop is executed correctly. However, decrementing <samp>&lsquo;i&rsquo;</samp> will 
+<strong>not</strong> cause <samp>&lsquo;i&rsquo;</samp> to have a negative value&mdash;after all, <samp>&lsquo;size_t&rsquo;</samp>
+is unsigned. Instead, decrementing will make <samp>&lsquo;i&rsquo;</samp> wrap around from 0 to
 0xffffffff (on 32-bit machines). Clearly, this is greater
 than 0, effectively causing an infinite loop. The same thing also happens when
-<samp>`a'</samp> has no items (i.e. <samp>`a.Length() == 0'</samp>). Here the
--1 in the initialization of <samp>`i'</samp> causes wrap-around.
+<samp>&lsquo;a&rsquo;</samp> has no items (i.e. <samp>&lsquo;a.Length() == 0&rsquo;</samp>). Here the
+-1 in the initialization of <samp>&lsquo;i&rsquo;</samp> causes wrap-around.
 </p>
 <p>Possible solutions include:
 </p>
 <ul>
 <li>
 Use an <code>int</code>-typed counter variable and cast the array length to
-<samp>`int'</samp>.  This is not entirely elegant, but it does the job in most cases.
+<samp>&lsquo;int&rsquo;</samp>.  This is not entirely elegant, but it does the job in most cases.
 
 </li><li>
-Re-write the loop to deal properly with the unsigned nature of <samp>`size_t'</samp>:
+Re-write the loop to deal properly with the unsigned nature of <samp>&lsquo;size_t&rsquo;</samp>:
 
 <table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
 for (size_t i = a.Length(); i-- &gt; 0;)
@@ -131,12 +131,12 @@ for (size_t i = a.Length(); i-- &gt; 0;)
   ...
 }
 </pre></td></tr></table>
-<p>This code does the same as the <samp>`int'</samp> version above, iterating from 
-<samp>`a.Length() - 1'</samp> to 0, inclusively. It also correctly works
-in the case <samp>`a.Length() == 0'</samp>. The &quot;trick&quot; is to place the 
-modification of <samp>`i'</samp> as a post-decrement in the loop condition. This 
-way, as soon as <samp>`i'</samp> becomes 0, the loop is terminated. The 
-post-decrement ensures that <samp>`i'</samp> has the expected value in the loop body.
+<p>This code does the same as the <samp>&lsquo;int&rsquo;</samp> version above, iterating from 
+<samp>&lsquo;a.Length() - 1&rsquo;</samp> to 0, inclusively. It also correctly works
+in the case <samp>&lsquo;a.Length() == 0&rsquo;</samp>. The &ldquo;trick&rdquo; is to place the 
+modification of <samp>&lsquo;i&rsquo;</samp> as a post-decrement in the loop condition. This 
+way, as soon as <samp>&lsquo;i&rsquo;</samp> becomes 0, the loop is terminated. The 
+post-decrement ensures that <samp>&lsquo;i&rsquo;</samp> has the expected value in the loop body.
 </p>
 </li></ul>
 
@@ -145,16 +145,16 @@ post-decrement ensures that <samp>`i'</samp> has the expected value in the loop 
 
 <p>Functions like <code>csArray&lt;&gt;::FindSortedKey()</code> and <code>csArray&lt;&gt;::Find()</code>
 used to return -1 to signify that an item was not found.  This is still the
-case, but with a twist.  Now, <samp>`(size_t)-1'</samp> is returned.  For convenience,
-a constant, <samp>`csArrayItemNotFound'</samp>, has been added, which has this exact
+case, but with a twist.  Now, <samp>&lsquo;(size_t)-1&rsquo;</samp> is returned.  For convenience,
+a constant, <samp>&lsquo;csArrayItemNotFound&rsquo;</samp>, has been added, which has this exact
 value.  It can be used in comparisons to make it clear what is actually being
 checked.
 </p>
-<p>Apropros comparisons: Recall that <samp>`size_t'</samp> is <em>unsigned</em>, so checking
-whether an index returned by <samp>`FindSortedKey()'</samp> or <samp>`Find()'</samp> is 
-actually a valid index by testing with <samp>`&gt;= 0'</samp> no longer works since
-<samp>`(size_t)-1'</samp> is always <code>&gt;= 0</code>. Replace such checks with tests of
-equality against <samp>`csArrayItemNotFound'</samp>:
+<p>Apropros comparisons: Recall that <samp>&lsquo;size_t&rsquo;</samp> is <em>unsigned</em>, so checking
+whether an index returned by <samp>&lsquo;FindSortedKey()&rsquo;</samp> or <samp>&lsquo;Find()&rsquo;</samp> is 
+actually a valid index by testing with <samp>&lsquo;&gt;= 0&rsquo;</samp> no longer works since
+<samp>&lsquo;(size_t)-1&rsquo;</samp> is always <code>&gt;= 0</code>. Replace such checks with tests of
+equality against <samp>&lsquo;csArrayItemNotFound&rsquo;</samp>:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csArray&lt;...&gt; a;
 int index = a.Find (...);
@@ -185,11 +185,11 @@ else
 }
 </pre></td></tr></table>
 <a name="4"></a>
-<h3 class="subheading"> <tt>`csutil/garray.h'</tt> Deprecated </h3>
+<h3 class="subheading"> <tt>&lsquo;csutil/garray.h&rsquo;</tt> Deprecated </h3>
 
-<p>The <tt>`csutil/garray.h'</tt> file, containing the class 
+<p>The <tt>&lsquo;csutil/garray.h&rsquo;</tt> file, containing the class 
 <code>csDirtyAccessArray&lt;&gt;</code>, has been deprecated in favor of the more sensible
-file name <tt>`csutil/dirtyaccessarray.h'</tt>. No functional changes have been
+file name <tt>&lsquo;csutil/dirtyaccessarray.h&rsquo;</tt>. No functional changes have been
 made to the class.
 </p>
 <a name="5"></a>
@@ -250,8 +250,8 @@ return references.
 <a name="6"></a>
 <h3 class="subheading"> <code>csSet&lt;&gt;</code> Relocation and Changes </h3>
 
-<p>The declaration of <code>csSet&lt;&gt;</code> was moved out from <tt>`csutil/hash.h'</tt> and
-into its own header file, <tt>`csutil/set.h'</tt>. The method
+<p>The declaration of <code>csSet&lt;&gt;</code> was moved out from <tt>&lsquo;csutil/hash.h&rsquo;</tt> and
+into its own header file, <tt>&lsquo;csutil/set.h&rsquo;</tt>. The method
 <code>csSet&lt;&gt;::GetHash()</code> has likewise been removed since it unnecessarily
 exposed an underlying implementation detail of <code>csSet&lt;&gt;</code>.
 </p>
@@ -263,27 +263,27 @@ be used.
 <h3 class="subheading"> <code>csHash&lt;&gt;</code> Changes </h3>
 
 <p>The way <code>csHash&lt;&gt;</code> handles support for arbitrary key types has been
-changed. Previously, a so-called &quot;hash key handler&quot; was passed as an optional
+changed. Previously, a so-called &ldquo;hash key handler&rdquo; was passed as an optional
 third template parameter that computed hash keys and was able to compare
 keys. Now, the hash computation is handled through the new
 <code>csHashComputer&lt;&gt;</code> template, and key comparison through
 <code>csComparator&lt;&gt;</code>. To provide hash computation and comparisons for specific
 types used as hash keys, specializations of the templates mentioned above are
-needed. Alternatively the default comparator uses the <samp>`operator &lt;'</samp> and
-<samp>`operator &gt;'</samp> operators, so you can also implement those operators instead
+needed. Alternatively the default comparator uses the <samp>&lsquo;operator &lt;&rsquo;</samp> and
+<samp>&lsquo;operator &gt;&rsquo;</samp> operators, so you can also implement those operators instead
 of a <code>csComparator&lt;&gt;</code> specialization. The default <code>csHashComputer&lt;&gt;</code>
-implementation assumes that a type provides a <samp>`GetHash()'</samp> method that
+implementation assumes that a type provides a <samp>&lsquo;GetHash()&rsquo;</samp> method that
 computes the hash value for an object. However, this means that integral types 
 need a specialization. As a convenience, Crystal Space already provides 
 specializations of <code>csHashComputer&lt;&gt;</code> for a number of commonly used 
 intergrals. Further, <code>csComparator&lt;&gt;</code> and/or <code>csHashComputer&lt;&gt;</code> 
-specializations are provided for the commonly used types <samp>`csString'</samp>, 
-<samp>`const char*'</samp> and <samp>`csStrKey'</samp>; and the default comparison semantics of 
-<samp>`operator &lt;'</samp> and <samp>`operator &gt;'</samp> handle the remaining fundamental types 
+specializations are provided for the commonly used types <samp>&lsquo;csString&rsquo;</samp>, 
+<samp>&lsquo;const char*&rsquo;</samp> and <samp>&lsquo;csStrKey&rsquo;</samp>; and the default comparison semantics of 
+<samp>&lsquo;operator &lt;&rsquo;</samp> and <samp>&lsquo;operator &gt;&rsquo;</samp> handle the remaining fundamental types 
 and any composite types which provide these operators. Pointers (other than 
-<samp>`void*'</samp> for which exists a specialization) as hash keys are a special 
-case: to use a pointer of type <samp>`Foo*'</samp> as a hash key, employ 
-<samp>`csPtrKey&lt;Foo&gt;'</samp> as the key type in the hash declaration. 
+<samp>&lsquo;void*&rsquo;</samp> for which exists a specialization) as hash keys are a special 
+case: to use a pointer of type <samp>&lsquo;Foo*&rsquo;</samp> as a hash key, employ 
+<samp>&lsquo;csPtrKey&lt;Foo&gt;&rsquo;</samp> as the key type in the hash declaration. 
 </p>
 <a name="8"></a>
 <h3 class="subheading"> Default <code>csHash&lt;&gt;</code> (and <code>csHashReversible&lt;&gt;</code>) Table Size </h3>
@@ -295,13 +295,13 @@ upon construction of a <code>csHash&lt;&gt;</code> or <code>csHashReversible&lt;
 the Public <small>API</small> Documentation of <code>csHash&lt;&gt;</code> for more information.
 </p>
 <a name="9"></a>
-<h3 class="subheading"> <samp>`csHashMap'</samp> and <samp>`csHashSet'</samp> Removal </h3>
+<h3 class="subheading"> <samp>&lsquo;csHashMap&rsquo;</samp> and <samp>&lsquo;csHashSet&rsquo;</samp> Removal </h3>
 
-<p>The long-deprecated <samp>`csHashMap'</samp>, <samp>`csHashMapReversible'</samp>, and
-<samp>`csHashSet'</samp> classes have been removed. Instead, use the templated classes
+<p>The long-deprecated <samp>&lsquo;csHashMap&rsquo;</samp>, <samp>&lsquo;csHashMapReversible&rsquo;</samp>, and
+<samp>&lsquo;csHashSet&rsquo;</samp> classes have been removed. Instead, use the templated classes
 <code>csHash&lt;&gt;</code>, <code>csHashReversible&lt;&gt;</code>, and <code>csSet&lt;&gt;</code>.  For
 string-related <em>set</em> functionality, you may also want to consider using
-<samp>`csStringHash'</samp> and <samp>`csStringSet'</samp>.
+<samp>&lsquo;csStringHash&rsquo;</samp> and <samp>&lsquo;csStringSet&rsquo;</samp>.
 </p>
 <a name="10"></a>
 <h3 class="subheading"> <code>csObjectPool&lt;&gt;</code> Removal </h3>
@@ -313,22 +313,22 @@ objects might not release their own resources in a timely fashion.  (It did
 correctly destroy the freed objects when the pool itself was destroyed, but
 should have been doing so at <code>Free()</code>-time.)
 </p>
-<p>You can use <code>csBlockAllocator&lt;&gt;</code> (see <tt>`csutil/blockallocator.h'</tt>) as a
+<p>You can use <code>csBlockAllocator&lt;&gt;</code> (see <tt>&lsquo;csutil/blockallocator.h&rsquo;</tt>) as a
 drop-in replacement for <code>csObjectPool&lt;&gt;</code> since the <small>API</small> of
 <code>csBlockAllocator&lt;&gt;</code> is a proper superset of the <code>csObjectPool&lt;&gt;</code>
 <small>API</small>. A global search and replace should be sufficient to account for this
 change.
 </p>
 <a name="11"></a>
-<h3 class="subheading"> <samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> Removal </h3>
+<h3 class="subheading"> <samp>&lsquo;csStringSetIterator&rsquo;</samp> and <samp>&lsquo;csStringHashIterator&rsquo;</samp> Removal </h3>
 
-<p><samp>`csStringSetIterator'</samp> and <samp>`csStringHashIterator'</samp> have been replaced
-with the iterator classes <samp>`csStringSet::GlobalIterator'</samp> and
-<samp>`csStringHash::GlobalIterator'</samp>, respectively.  Rather than instantiating
+<p><samp>&lsquo;csStringSetIterator&rsquo;</samp> and <samp>&lsquo;csStringHashIterator&rsquo;</samp> have been replaced
+with the iterator classes <samp>&lsquo;csStringSet::GlobalIterator&rsquo;</samp> and
+<samp>&lsquo;csStringHash::GlobalIterator&rsquo;</samp>, respectively.  Rather than instantiating
 iterators directly, you now ask the set or hash for an iterator. This brings
-the <samp>`csStringSet'</samp> and <samp>`csStringHash'</samp> <small>API</small>'s in line with other
+the <samp>&lsquo;csStringSet&rsquo;</samp> and <samp>&lsquo;csStringHash&rsquo;</samp> <small>API</small>'s in line with other
 container classes which vend iterators. Given old code which is using
-<samp>`csStringSetIterator'</samp>:
+<samp>&lsquo;csStringSetIterator&rsquo;</samp>:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csStringSet set;
 // ...populate set...
@@ -347,7 +347,7 @@ while (iter.HasNext())
 {
 </pre></td></tr></table>
 
-<p>Code using <samp>`csStringHashIterator'</samp> can be fixed using the same simple
+<p>Code using <samp>&lsquo;csStringHashIterator&rsquo;</samp> can be fixed using the same simple
 transformation.
 </p>
 <hr size="1">

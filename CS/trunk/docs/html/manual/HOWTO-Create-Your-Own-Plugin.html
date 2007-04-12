@@ -117,15 +117,15 @@ virtual int GetSomething () const = 0;
 #endif // __GAME_MYAPI_H__
 </pre></td></tr></table>
 <p>The above text should be put in a header file. Let's put it in
-<tt>`myapi.h'</tt>.
+<tt>&lsquo;myapi.h&rsquo;</tt>.
 </p>
-<p>First we include <tt>`csutil/scf.h'</tt>. This is a Crystal Space header
-for <small>SCF</small> which we need to get the definition of <samp>`iBase'</samp> and the
+<p>First we include <tt>&lsquo;csutil/scf.h&rsquo;</tt>. This is a Crystal Space header
+for <small>SCF</small> which we need to get the definition of <samp>&lsquo;iBase&rsquo;</samp> and the
 definition of the <code>SCF_INTERFACE()</code> macro.
 </p>
-<p>Then we declare <samp>`csVector3'</samp> as a class. We do this so that we
-can later use <samp>`csVector3'</samp> as a parameter in one of the <small>API</small> methods.
-We do not need the complete definition of <samp>`csVector3'</samp> since we
+<p>Then we declare <samp>&lsquo;csVector3&rsquo;</samp> as a class. We do this so that we
+can later use <samp>&lsquo;csVector3&rsquo;</samp> as a parameter in one of the <small>API</small> methods.
+We do not need the complete definition of <samp>&lsquo;csVector3&rsquo;</samp> since we
 are going to define the method so that it passes the vector by
 reference.
 </p>
@@ -136,18 +136,18 @@ want to extend the <small>API</small> without breaking existing apps. The versio
 has three parts: major, minor, and micro.
 </p>
 <p>Finally we define the <small>API</small> by making a structure that inherits from
-<samp>`iBase'</samp>.  We use <samp>`struct'</samp> instead of <samp>`class'</samp> simply because, for
-structures, the default visibility is <samp>`public'</samp> instead of <samp>`private'</samp>
+<samp>&lsquo;iBase&rsquo;</samp>.  We use <samp>&lsquo;struct&rsquo;</samp> instead of <samp>&lsquo;class&rsquo;</samp> simply because, for
+structures, the default visibility is <samp>&lsquo;public&rsquo;</samp> instead of <samp>&lsquo;private&rsquo;</samp>
 as for classes.  This is just a convenience.  There is no other difference
-between a <samp>`struct'</samp> or a <samp>`class'</samp> in C++. Note that you have to use
+between a <samp>&lsquo;struct&rsquo;</samp> or a <samp>&lsquo;class&rsquo;</samp> in C++. Note that you have to use
 virtual inheritance for <small>SCF</small> to work properly.
 </p>
-<p>The name <samp>`iMyApi'</samp> is not random.  Crystal Space uses this naming
-convention (starting a name with <samp>`i'</samp>) for <small>SCF</small> interfaces so that it
+<p>The name <samp>&lsquo;iMyApi&rsquo;</samp> is not random.  Crystal Space uses this naming
+convention (starting a name with <samp>&lsquo;i&rsquo;</samp>) for <small>SCF</small> interfaces so that it
 is easy to see that they refer to <small>SCF</small> interfaces.
 </p>
-<p>We inherit from <samp>`iBase'</samp> because it is the basis of all <small>SCF</small>
-interfaces.  All <small>SCF</small> interfaces must inherit from <samp>`iBase'</samp> either
+<p>We inherit from <samp>&lsquo;iBase&rsquo;</samp> because it is the basis of all <small>SCF</small>
+interfaces.  All <small>SCF</small> interfaces must inherit from <samp>&lsquo;iBase&rsquo;</samp> either
 directly or indirectly.  This will ensure that we have reference counting (more
 on that later) and also takes care of the other internal <small>SCF</small> issues.
 </p>
@@ -156,11 +156,11 @@ on that later) and also takes care of the other internal <small>SCF</small> issu
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">virtual ... = 0;
 </pre></td></tr></table>
-<p>The <samp>`= 0'</samp> means that we will not give an implementation here. The
+<p>The <samp>&lsquo;= 0&rsquo;</samp> means that we will not give an implementation here. The
 implementation will be provided by the plugin (see later).
 </p>
-<p>Note that it is good practice to use <samp>`const'</samp> wherever applicable.  In the
-declaration of <code>GetSomething()</code> we added <samp>`const'</samp> at the end to
+<p>Note that it is good practice to use <samp>&lsquo;const&rsquo;</samp> wherever applicable.  In the
+declaration of <code>GetSomething()</code> we added <samp>&lsquo;const&rsquo;</samp> at the end to
 indicate that this method will not change the object.  This is useful
 for a number of reasons:
 </p>
@@ -177,7 +177,7 @@ method will not modify the object.
 
 <p>After you defined the <small>API</small> for your plugin it is now time to actually
 make the plugin implementation. First you define a header called
-<tt>`myplug.h'</tt> with the following contents:
+<tt>&lsquo;myplug.h&rsquo;</tt> with the following contents:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">#ifndef __GAME_MYPLUG_H__
 #define __GAME_MYPLUG_H__
@@ -215,32 +215,32 @@ public:
 <p>This requires a little explanation.  The Crystal Space plugin framework
 requires that every <em>named</em> <small>SCF</small> class which will be requested by name
 from a plugin module via the Crystal Space plugin manager/loader must
-implement the <samp>`iComponent'</samp> interface.  This interface has a single method,
+implement the <samp>&lsquo;iComponent&rsquo;</samp> interface.  This interface has a single method,
 <code>Initialize()</code>, with which the class will be initialized after it is
 instantiated.  This gives the instance a chance to perform various
 initialization operations and it also provides the instance with a pointer to
 the global object registry.
 </p>
-<p>But, our plugin also needs to implement its own native <samp>`iMyApi'</samp> interface.
+<p>But, our plugin also needs to implement its own native <samp>&lsquo;iMyApi&rsquo;</samp> interface.
 So here is a situation where the same class needs to implement two interfaces
-at the same time. By using the <samp>`scfImplementation2'</samp> templated class
-we can easily declare the class <samp>`MyPlugin'</samp> to implement both
-<samp>`iComponent'</samp> and <samp>`iMyApi'</samp>.
+at the same time. By using the <samp>&lsquo;scfImplementation2&rsquo;</samp> templated class
+we can easily declare the class <samp>&lsquo;MyPlugin&rsquo;</samp> to implement both
+<samp>&lsquo;iComponent&rsquo;</samp> and <samp>&lsquo;iMyApi&rsquo;</samp>.
 </p>
-<p>In the declaration of <samp>`MyPlugin'</samp> we then have to implement all
-functions from both <samp>`iComponent'</samp> and <samp>`iMyApi'</samp>. To do that
+<p>In the declaration of <samp>&lsquo;MyPlugin&rsquo;</samp> we then have to implement all
+functions from both <samp>&lsquo;iComponent&rsquo;</samp> and <samp>&lsquo;iMyApi&rsquo;</samp>. To do that
 the method declarations from both interfaces are repeated here but the
-<samp>`= 0'</samp> is removed. This means that we'll actually give a concrete
+<samp>&lsquo;= 0&rsquo;</samp> is removed. This means that we'll actually give a concrete
 implementation here.
 </p>
-<p>Note that <samp>`MyPlugin'</samp> needs a constructor that accepts an <samp>`iBase*'</samp>
+<p>Note that <samp>&lsquo;MyPlugin&rsquo;</samp> needs a constructor that accepts an <samp>&lsquo;iBase*&rsquo;</samp>
 parameter. Otherwise <small>SCF</small> will not be able to intantiate this class.
 </p>
 <a name="3"></a>
 <h4 class="subsubheading"> Creating the Plugin Implementation (source) </h4>
 
 <p>Now we create the main source file containing the implementation
-of our plugin. Let's call this <tt>`myplug.cpp'</tt>:
+of our plugin. Let's call this <tt>&lsquo;myplug.cpp&rsquo;</tt>:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;cssysdef.h&gt;
 #include &lt;myplug.h&gt;
@@ -288,17 +288,17 @@ actually makes a difference; on others it does not.  For best portability,
 you should use this macro in exactly one C++ file within each plugin
 module.
 </p>
-<p>The <code>SCF_IMPLEMENT_FACTORY()</code> says that C++ class <samp>`MyPlugin'</samp>
+<p>The <code>SCF_IMPLEMENT_FACTORY()</code> says that C++ class <samp>&lsquo;MyPlugin&rsquo;</samp>
 represents an <small>SCF</small> factory which allows <small>SCF</small> to instantiate objects of
 this class.  In addition to some other administrative tasks, this macro defines
-a function capable of instantiating an object of class <samp>`MyPlugin'</samp>.  Note
+a function capable of instantiating an object of class <samp>&lsquo;MyPlugin&rsquo;</samp>.  Note
 that one plugin module can in fact define several distinct named <small>SCF</small>
 classes.  In that case you need multiple <code>SCF_IMPLEMENT_FACTORY()</code> lines;
 one for each exported <small>SCF</small> class.
 </p>
-<p>In the constructor of <samp>`MyPlugin'</samp> you must also call the constructor
+<p>In the constructor of <samp>&lsquo;MyPlugin&rsquo;</samp> you must also call the constructor
 of the templated superclass by using <code>scfImplementationType()</code>. The
-first parameter to <code>scfImplementationType()</code> is always <samp>`this'</samp>.
+first parameter to <code>scfImplementationType()</code> is always <samp>&lsquo;this&rsquo;</samp>.
 </p>
 <p>The rest of the plugin is very straightforward. It is important
 to realize that you should do most initialization of the plugin
@@ -316,12 +316,12 @@ framework.
 plugin modules implement which <small>SCF</small> classes by consulting meta-information
 associated with each plugin.  The meta-information file for your plugin must
 have the same basename as your built plugin module, but with extension
-<tt>`.csplugin'</tt>.  For instance, if the example plugin is built with the name
-<tt>`myplugin.dll'</tt> (Windows) or <tt>`myplugin.so'</tt> (Unix), then the associated
-meta-information file should be named <tt>`myplugin.csplugin'</tt>. At build-time,
+<tt>&lsquo;.csplugin&rsquo;</tt>.  For instance, if the example plugin is built with the name
+<tt>&lsquo;myplugin.dll&rsquo;</tt> (Windows) or <tt>&lsquo;myplugin.so&rsquo;</tt> (Unix), then the associated
+meta-information file should be named <tt>&lsquo;myplugin.csplugin&rsquo;</tt>. At build-time,
 the meta-information may be embedded directly into the plugin module if
 supported by the platform and if embedding is enabled. If not, then then the
-<tt>`.csplugin'</tt> file will be laid down alongside the built plugin module.
+<tt>&lsquo;.csplugin&rsquo;</tt> file will be laid down alongside the built plugin module.
 </p>
 <p>The meta-information file is a structured <small>XML</small>-format document, and can
 contain any information relevant to the plugin module; it is not limited only
@@ -329,7 +329,7 @@ to <small>SCF</small> information.  <small>SCF</small> itself expects to find a 
 <code>&lt;scf&gt;</code>, which contains <small>SCF</small>-related information about the plugin
 module.
 </p>
-<p>The <tt>`myplugin.csplugin'</tt> meta-information file for our example plugin
+<p>The <tt>&lsquo;myplugin.csplugin&rsquo;</tt> meta-information file for our example plugin
 module might look like this:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;?xml version=&quot;1.0&quot;?&gt;
@@ -383,7 +383,7 @@ type, as shown in this example (where we desire any 3D renderer).
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">#include &lt;myapi.h&gt;
 </pre></td></tr></table>
-<p>Do <em>not</em> include the <tt>`myplug.h'</tt> header file since it is
+<p>Do <em>not</em> include the <tt>&lsquo;myplug.h&rsquo;</tt> header file since it is
 implementation specific and you should not use the implementation of the plugin
 directly. Doing this invalidates the entire reason to use plugins in the first
 place.
@@ -427,7 +427,7 @@ plugin at the command line or in the configuration file (if your program has
 one).  In cases where there are multiple implementations for the same <small>API</small>
 this can be an important consideration.  It is by doing this, for example, that
 it is possible to switch between software and OpenGL renderers with the
-command-line <samp>`--video='</samp> option, or via configuration file.
+command-line <samp>&lsquo;--video=&rsquo;</samp> option, or via configuration file.
 </p>
 <p>Secondly it registers the plugin with the object registry so that
 it is easier to find your module later. This also allows other plugins
