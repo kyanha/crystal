@@ -138,20 +138,20 @@ public:
 </p>
 <ul>
 <li>
-<samp>`player'</samp>: this is an instance of <code>Player</code>.
+<samp>&lsquo;player&rsquo;</samp>: this is an instance of <code>Player</code>.
 </li><li>
-<samp>`maze'</samp>: this is an instance of <code>Maze</code>.
+<samp>&lsquo;maze&rsquo;</samp>: this is an instance of <code>Maze</code>.
 </li><li>
-<samp>`Laser'</samp>: our laserbeam (instance of <code>Laser</code>).
+<samp>&lsquo;Laser&rsquo;</samp>: our laserbeam (instance of <code>Laser</code>).
 </li><li>
-<samp>`adversaries'</samp>: this is a reference counted array containing all
+<samp>&lsquo;adversaries&rsquo;</samp>: this is a reference counted array containing all
 adversaries that are currently still active. Because <code>Adversary</code> is
 a ref counted class (uses <small>SCF</small>) it is best to use <code>csRefArray</code> here.
 </li><li>
-<samp>`explosions'</samp>: all active explosions (instances of <code>Explosion</code>)
+<samp>&lsquo;explosions&rsquo;</samp>: all active explosions (instances of <code>Explosion</code>)
 are in this array.
 </li><li>
-<samp>`adversary_factory'</samp>, <samp>`laserbeam_factory'</samp>, and <samp>`explosion_factory'</samp>:
+<samp>&lsquo;adversary_factory&rsquo;</samp>, <samp>&lsquo;laserbeam_factory&rsquo;</samp>, and <samp>&lsquo;explosion_factory&rsquo;</samp>:
 these are mesh object factories for the adversary, laserbeam, and explosion
 objects.
 </li></ul>
@@ -317,7 +317,7 @@ with it (we use other methods to detect hits of the laserbeam with adversary).
 <p>The laserbeam mesh is also special. In the <code>Laser::Check()</code> function we
 used <code>iSector::HitBeamPortals()</code> to detect if the laser hits anything.
 We don't want that function to detect the laserbeam mesh itself (which happens
-to be at that same spot) so that's why we set the <samp>`CS_ENTITY_NOHITBEAM'</samp>
+to be at that same spot) so that's why we set the <samp>&lsquo;CS_ENTITY_NOHITBEAM&rsquo;</samp>
 flag on the mesh.
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">bool Game::CreateAdversary (int x, int y, int z)
@@ -341,12 +341,12 @@ flag on the mesh.
 }
 </pre></td></tr></table>
 <p>Here we create an adversary. Note how we first make a new instance of
-<code>Adversary</code>, then we push it on the <samp>`adversaries'</samp> table and
-finally we call <code>DecRef()</code>. This is very important. The <samp>`adversaries'</samp>
+<code>Adversary</code>, then we push it on the <samp>&lsquo;adversaries&rsquo;</samp> table and
+finally we call <code>DecRef()</code>. This is very important. The <samp>&lsquo;adversaries&rsquo;</samp>
 is a ref counting array (<code>csRefArray</code>). That means that it will increase
 the reference count of all objects that you push on it. Also note that new
 objects automatically start with a reference count of 1. So that means that
-after pushing the object on <samp>`adversaries'</samp> the reference count will be 2.
+after pushing the object on <samp>&lsquo;adversaries&rsquo;</samp> the reference count will be 2.
 We must therefor release our own reference at the end by using <code>DecRef()</code>.
 </p>
 <p>In this function we also add our adversary instance as a child of the
@@ -436,19 +436,19 @@ function whenever an adversary needs to be exploded. To start the actual
 explosion mesh the <code>StartExplosion()</code> function is used. This function
 will just remove the adversary mesh from the engine (using
 <code>iEngine::RemoveObject()</code>) and then it will delete the adversary from
-the <samp>`adversaries'</samp> array. Note that these two operations will cause the
+the <samp>&lsquo;adversaries&rsquo;</samp> array. Note that these two operations will cause the
 reference count of the adversary to become 0. i.e. deleting the adversary
-from the <samp>`adversaries'</samp> array will decrease one reference and then
+from the <samp>&lsquo;adversaries&rsquo;</samp> array will decrease one reference and then
 removing the mesh from the engine will remove the other since when the mesh
 is deleted it will also release the reference to its children.
 </p>
 <p>The <code>StartExplosion()</code> function will create an explosion mesh out of
 the explosion factory at the given sector and position. The explosion mesh
-factory is created using <samp>`CS_FX_ADD'</samp> mixmode. That means that every
+factory is created using <samp>&lsquo;CS_FX_ADD&rsquo;</samp> mixmode. That means that every
 particle will be added to the background. This is a kind of transparency.
 The advantage of this transparency is that you don't have to sort the particles
-from back to front (<samp>`add'</samp> mixmode can be done in any order). We use
-<samp>`CS_ZBUF_TEST'</samp> z-buffer mode for the explosion mesh because we don't
+from back to front (<samp>&lsquo;add&rsquo;</samp> mixmode can be done in any order). We use
+<samp>&lsquo;CS_ZBUF_TEST&rsquo;</samp> z-buffer mode for the explosion mesh because we don't
 want the particles to update the z-buffer but just test against it (so
 particles will appear correctly clipped against walls that are near the camera).
 </p>

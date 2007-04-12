@@ -67,7 +67,7 @@ Crystal Space.
 <a name="1"></a>
 <h3 class="subheading"> Name Change: csWorld =&gt; csEngine </h3>
 
-<p>The class <samp>`csWorld'</samp> has been renamed to <samp>`csEngine'</samp>.  Here is a
+<p>The class <samp>&lsquo;csWorld&rsquo;</samp> has been renamed to <samp>&lsquo;csEngine&rsquo;</samp>.  Here is a
 summary of all the changes which result from this:
 </p>
 <ul>
@@ -90,13 +90,13 @@ summary of all the changes which result from this:
 <a name="2"></a>
 <h3 class="subheading"> csThingTemplate Removed </h3>
 
-<p>The class <samp>`csThingTemplate'</samp> has been removed.  Instead you use normal
-<samp>`csThing'</samp> instances and clone them using <code>csThing::MergeTemplate()</code>.
-The <samp>`thing_templates'</samp> list in <samp>`csEngine'</samp> is still there but it now
-contains instances of <samp>`csThing'</samp> instead of <samp>`csThingTemplate'</samp>.  This
-also means that <samp>`csPolygonTemplate'</samp> is removed.  Fixing applications for
-this change is not very hard.  It mostly means replacing <samp>`csThingTemplate'</samp>
-with <samp>`csThing'</samp> and then doing small modifications to the <small>API</small>.
+<p>The class <samp>&lsquo;csThingTemplate&rsquo;</samp> has been removed.  Instead you use normal
+<samp>&lsquo;csThing&rsquo;</samp> instances and clone them using <code>csThing::MergeTemplate()</code>.
+The <samp>&lsquo;thing_templates&rsquo;</samp> list in <samp>&lsquo;csEngine&rsquo;</samp> is still there but it now
+contains instances of <samp>&lsquo;csThing&rsquo;</samp> instead of <samp>&lsquo;csThingTemplate&rsquo;</samp>.  This
+also means that <samp>&lsquo;csPolygonTemplate&rsquo;</samp> is removed.  Fixing applications for
+this change is not very hard.  It mostly means replacing <samp>&lsquo;csThingTemplate&rsquo;</samp>
+with <samp>&lsquo;csThing&rsquo;</samp> and then doing small modifications to the <small>API</small>.
 </p>
 <a name="3"></a>
 <h3 class="subheading"> Configuration File Changes </h3>
@@ -112,14 +112,14 @@ KeyName = Value
 </pre></td></tr></table>
 <p>Also, key names have been changed completely.  Keys are organized in a
 pseudo-hierarchical structure by using key names such as
-<samp>`Engine.Lighting.Ambient.Red'</samp>.  To convert your own configuration files to
+<samp>&lsquo;Engine.Lighting.Ambient.Red&rsquo;</samp>.  To convert your own configuration files to
 the new format, you should take all keys from all sections and rename them
-using the template <samp>`ApplicationName.SectionName.KeyName'</samp>.  This is only a
+using the template <samp>&lsquo;ApplicationName.SectionName.KeyName&rsquo;</samp>.  This is only a
 suggestion.  You can choose whatever name you want, except that the initial
-<samp>`ApplicationName.'</samp> should be used in order to avoid naming collisions with
+<samp>&lsquo;ApplicationName.&rsquo;</samp> should be used in order to avoid naming collisions with
 keys in other configuration files.  This is done to give every option a unique
 name.  The same should be done for plugins
-(<samp>`PluginName.SectionName.KeyName'</samp>).
+(<samp>&lsquo;PluginName.SectionName.KeyName&rsquo;</samp>).
 </p>
 <p>Comments at the end of the file are preserved when saving the file.
 </p>
@@ -127,13 +127,13 @@ name.  The same should be done for plugins
 </p>
 <ul>
 <li>
-The old <samp>`csIniFile'</samp> class still exists.  All these changes refer to the
-difference between <samp>`csIniFile'</samp> and <samp>`csConfigFile'</samp>, and the difference
-between <samp>`iConfigFile'</samp> and <samp>`iConfigFileNew'</samp>.  Sorry for this mess, but
+The old <samp>&lsquo;csIniFile&rsquo;</samp> class still exists.  All these changes refer to the
+difference between <samp>&lsquo;csIniFile&rsquo;</samp> and <samp>&lsquo;csConfigFile&rsquo;</samp>, and the difference
+between <samp>&lsquo;iConfigFile&rsquo;</samp> and <samp>&lsquo;iConfigFileNew&rsquo;</samp>.  Sorry for this mess, but
 there were a few cases where I could not (yet) port modules to the new config
 system, so they still require the old system.  This will change soon.  The
-header files for the new system are <tt>`CS/csutil/cfgfile.h'</tt> and
-<tt>`icfgnew.h'</tt>.  The main system configuration file already uses the new
+header files for the new system are <tt>&lsquo;CS/csutil/cfgfile.h&rsquo;</tt> and
+<tt>&lsquo;icfgnew.h&rsquo;</tt>.  The main system configuration file already uses the new
 system.
 
 </li><li>
@@ -154,23 +154,23 @@ line:
 and <code>SetBool()</code>.
 
 </li><li>
-The <samp>`dirty'</samp> flag is now hidden inside the configuration file object. The
+The <samp>&lsquo;dirty&rsquo;</samp> flag is now hidden inside the configuration file object. The
 <code>Save()</code> method respects this flag.
 
 </li><li>
 The section and data iterators have been merged into a single object. This
 iterator can be used to cycle through all options, or through all options
 in one <em>subsection</em>, which is the initial substring of the key name.
-For example, if you iterate all options in subsection <samp>`Engine.Lighting.'</samp>,
+For example, if you iterate all options in subsection <samp>&lsquo;Engine.Lighting.&rsquo;</samp>,
 you will get all options whose name begin with this string. Note the trailing
 dot. It is part of the subsection name. This is important if you have other
-options like <samp>`Engine.LightingActivate'</samp>, which would otherwise be
+options like <samp>&lsquo;Engine.LightingActivate&rsquo;</samp>, which would otherwise be
 enumerated as well. It is also important because you can ask an iterator for
 the <em>local</em> name of the current key, which is everything but the
 subsection name. For example, If your iterator loops through
-<samp>`Engine.Lighting.'</samp>, then the key <samp>`Engine.Lighting.Ambient.Red'</samp>
-would have the local name <samp>`Ambient.Red'</samp>. If you omit the trailing dot,
-this would be <samp>`.Ambient.Red'</samp>, which may not be what you want. To
+<samp>&lsquo;Engine.Lighting.&rsquo;</samp>, then the key <samp>&lsquo;Engine.Lighting.Ambient.Red&rsquo;</samp>
+would have the local name <samp>&lsquo;Ambient.Red&rsquo;</samp>. If you omit the trailing dot,
+this would be <samp>&lsquo;.Ambient.Red&rsquo;</samp>, which may not be what you want. To
 retrieve the local name, call <code>Iterator-&gt;GetName(true);</code>.
 
 </li><li>
@@ -179,7 +179,7 @@ added to the iterators.
 
 </li><li>
 The <code>Prev()</code> method of iterators has been removed because a new planned
-implementation of the <samp>`iConfigFileNew'</samp> interface is probably not able
+implementation of the <samp>&lsquo;iConfigFileNew&rsquo;</samp> interface is probably not able
 to implement this method. Also, it was never used.
 </li></ul>
 
@@ -187,19 +187,19 @@ to implement this method. Also, it was never used.
 <h3 class="subheading"> Mesh Object Plugins </h3>
 
 <p>Particle systems, 2D sprites, and 3D sprites are now no longer in the
-engine. This means that classes like <samp>`csSprite3D'</samp>, <samp>`csSprite2D'</samp>,
-<samp>`csParticleSystem'</samp>, etc., are no longer directly accessible and now
+engine. This means that classes like <samp>&lsquo;csSprite3D&rsquo;</samp>, <samp>&lsquo;csSprite2D&rsquo;</samp>,
+<samp>&lsquo;csParticleSystem&rsquo;</samp>, etc., are no longer directly accessible and now
 have to be accessed through the new mesh object plugin system.
 </p>
-<p>In the engine the two primary mesh-related classes are now <samp>`csMeshWrapper'</samp>
-and <samp>`csMeshFactoryWrapper'</samp>.  The old <samp>`csSprite'</samp> class which was the
-superclass of all sprites has been replaced with <samp>`csMeshWrapper'</samp>
-<samp>`csMeshFactoryWrapper'</samp> is roughly similar to what <samp>`csSpriteTemplate'</samp>
+<p>In the engine the two primary mesh-related classes are now <samp>&lsquo;csMeshWrapper&rsquo;</samp>
+and <samp>&lsquo;csMeshFactoryWrapper&rsquo;</samp>.  The old <samp>&lsquo;csSprite&rsquo;</samp> class which was the
+superclass of all sprites has been replaced with <samp>&lsquo;csMeshWrapper&rsquo;</samp>
+<samp>&lsquo;csMeshFactoryWrapper&rsquo;</samp> is roughly similar to what <samp>&lsquo;csSpriteTemplate&rsquo;</samp>
 used to do except that it is now also a parent for particle system and 2D
 sprite instances.
 </p>
 <p>The explanation below mainly tells you how to port the original
-<samp>`csSprite3D'</samp> code to the new system.  The other stuff follows almost
+<samp>&lsquo;csSprite3D&rsquo;</samp> code to the new system.  The other stuff follows almost
 automatically from what you see below.
 </p>
 <p>Here is a list of things that are removed and which things
@@ -236,10 +236,10 @@ you will have to use instead. More detailed info will come later:
 </li><li>
 <code>iSpriteTemplate</code> =&gt; <code>iMeshFactoryWrapper</code>
 </li><li>
-<code>csLoader::LoadSpriteTemplate()</code> =&gt; Use <tt>`spr3dldr'</tt> plugin to
+<code>csLoader::LoadSpriteTemplate()</code> =&gt; Use <tt>&lsquo;spr3dldr&rsquo;</tt> plugin to
 load factories
 </li><li>
-<code>csLoader::LoadSprite()</code> =&gt; Use <tt>`spr3dldr'</tt> plugin to load
+<code>csLoader::LoadSprite()</code> =&gt; Use <tt>&lsquo;spr3dldr&rsquo;</tt> plugin to load
 sprites
 </li><li>
 <code>csEngine::sprites</code> =&gt; <code>csEngine::meshes</code>
@@ -253,8 +253,8 @@ sprites
 <code>csSector::sprites</code> =&gt; <code>csSector::meshes</code>
 </li></ul>
 
-<p>In addition to that the <samp>`SPRITE'</samp> keyword in map files is also no longer
-supported. Instead you should use the new <samp>`MESHOBJ'</samp> keyword.
+<p>In addition to that the <samp>&lsquo;SPRITE&rsquo;</samp> keyword in map files is also no longer
+supported. Instead you should use the new <samp>&lsquo;MESHOBJ&rsquo;</samp> keyword.
 </p>
 <p>It is recommended that anyone who wants to convert to the new system should
 first to read the general documentation about the mesh object plugin system
@@ -339,7 +339,7 @@ iSprite3DState* spstate =
 spstate-&gt;SetAction (&quot;default&quot;);
 spstate-&gt;DecRef ();
 </pre></td></tr></table>
-<p>Keep in mind that for this to work <tt>`/lib/std/sprite1'</tt> has to be modified
+<p>Keep in mind that for this to work <tt>&lsquo;/lib/std/sprite1&rsquo;</tt> has to be modified
 from old to new syntax, as well.
 </p>
 <p>Here is an example for sprite templates:
@@ -395,18 +395,18 @@ from old to new syntax, as well.
 <li>
 Notice that <code>MOVE()</code> goes outside the <code>PARAMS()</code> block for a sprite.
 </li><li>
-Note that the new <samp>`spr3d'</samp> can not work with textures. It needs materials.
-So add a definition to the <samp>`MATERIALS'</samp> section.
+Note that the new <samp>&lsquo;spr3d&rsquo;</samp> can not work with textures. It needs materials.
+So add a definition to the <samp>&lsquo;MATERIALS&rsquo;</samp> section.
 </li></ul>
 
 <a name="5"></a>
 <h3 class="subheading"> csPixmap Moved and Renamed </h3>
 
-<p><samp>`csPixmap'</samp> has moved to the new <tt>`csfx'</tt> library, so you will need to
-include the header file from that library.  Note that <samp>`csPixmap'</samp> is now
+<p><samp>&lsquo;csPixmap&rsquo;</samp> has moved to the new <tt>&lsquo;csfx&rsquo;</tt> library, so you will need to
+include the header file from that library.  Note that <samp>&lsquo;csPixmap&rsquo;</samp> is now
 also an abstract class so where you would, in the past, instantiate
-<samp>`csPixmap'</samp>, you now need to instantiate <samp>`csSimplePixmap'</samp>, instead.
-In arguments and variables it is recommended you still use <samp>`csPixmap'</samp> as
+<samp>&lsquo;csPixmap&rsquo;</samp>, you now need to instantiate <samp>&lsquo;csSimplePixmap&rsquo;</samp>, instead.
+In arguments and variables it is recommended you still use <samp>&lsquo;csPixmap&rsquo;</samp> as
 it will allow you to use other kinds of pixmaps there, as well.
 </p>
 <a name="6"></a>
@@ -414,9 +414,9 @@ it will allow you to use other kinds of pixmaps there, as well.
 
 <p>In general it is now a good idea to use <small>SCF</small> interfaces to access objects
 instead of the normal classes wherever possible.  This applies mostly to the
-engine (i.e. use methods from <samp>`iEngine'</samp> rather than <samp>`csEngine'</samp>).
-Consequently, also use <samp>`iMeshWrapper'</samp> instead of <samp>`csMeshWrapper'</samp>, and
-<samp>`iMaterialWrapper'</samp> instead of <samp>`csMaterialWrapper'</samp>, and so on.  This
+engine (i.e. use methods from <samp>&lsquo;iEngine&rsquo;</samp> rather than <samp>&lsquo;csEngine&rsquo;</samp>).
+Consequently, also use <samp>&lsquo;iMeshWrapper&rsquo;</samp> instead of <samp>&lsquo;csMeshWrapper&rsquo;</samp>, and
+<samp>&lsquo;iMaterialWrapper&rsquo;</samp> instead of <samp>&lsquo;csMaterialWrapper&rsquo;</samp>, and so on.  This
 will make the transition to version 1.0 easier when the engine will be fully
 accessible as a plugin.
 </p>
@@ -428,17 +428,17 @@ accessible as a plugin.
 <ul>
 <li>
 Some of the options in the configuration file have become redundant.  The
-others have been moved to <tt>`CS/data/config/sound.cfg'</tt>.  Have a look at this
+others have been moved to <tt>&lsquo;CS/data/config/sound.cfg&rsquo;</tt>.  Have a look at this
 file to see which options remain.
 
 </li><li>
 As before, a sound can be loaded as a static or streamed sound, but this
-difference is now expressed by using different classes: <samp>`iSoundData'</samp> and
-<samp>`iSoundStream'</samp>. You can create any number of instances (sources) of a
+difference is now expressed by using different classes: <samp>&lsquo;iSoundData&rsquo;</samp> and
+<samp>&lsquo;iSoundStream&rsquo;</samp>. You can create any number of instances (sources) of a
 static sound, but only one instance of a streamed sound. In fact, whenever
 you play a static sound, a separate sound stream is created from it. The
-definition of a static sound is now explicitly &quot;a sound of which any
-number of instances can be created&quot;.
+definition of a static sound is now explicitly &ldquo;a sound of which any
+number of instances can be created&rdquo;.
 
 </li><li>
 The system of 3D and non-3D sources has been changed a bit. Every sound source
@@ -471,11 +471,11 @@ with default orientation.
 
 <p><code>iGraphics2D::WriteChar()</code> has been removed. Use <code>Write()</code> instead.
 </p>
-<p>All <code>UpdateLighting()</code> calls now accept <samp>`iLight'</samp> pointers intead
-of <samp>`csLight'</samp> pointers. In addition <code>csEngine::GetNearbyLights()</code>
-returns an array of <samp>`iLight'</samp> pointers.
+<p>All <code>UpdateLighting()</code> calls now accept <samp>&lsquo;iLight&rsquo;</samp> pointers intead
+of <samp>&lsquo;csLight&rsquo;</samp> pointers. In addition <code>csEngine::GetNearbyLights()</code>
+returns an array of <samp>&lsquo;iLight&rsquo;</samp> pointers.
 </p>
-<p>The obsolete <samp>`CLights'</samp> class (for uniform dynamic lighting) has been
+<p>The obsolete <samp>&lsquo;CLights&rsquo;</samp> class (for uniform dynamic lighting) has been
 removed. It was not working properly anyway.
 </p>
 <p>The <code>csEngine::PrepareParticleSystems()</code> method has been removed.
@@ -485,13 +485,13 @@ Instead, use the new <code>csEngine::PrepareMeshes()</code> method.
 <code>NextFrame()</code>.  In addition <code>UpdateParticleSystems()</code> has been
 removed and is now also handled by <code>csEngine::NextFrame()</code>.
 </p>
-<p>With the new mesh object plugin system the <samp>`iParticle'</samp> interface
+<p>With the new mesh object plugin system the <samp>&lsquo;iParticle&rsquo;</samp> interface
 also changed a little. Check out the header to see the changes.
 </p>
 <p><code>FastSqrt()</code> is gone. Use <code>qsqrt()</code> instead. If you want
 to calculate <code>1/sqrt()</code> then use <code>qisqrt()</code>.
 </p>
-<p><samp>`csRenderView'</samp> has no public members anymore.  You need to access
+<p><samp>&lsquo;csRenderView&rsquo;</samp> has no public members anymore.  You need to access
 everything through <code>GetFoo()</code> and <code>SetFoo()</code> methods Check out the
 header for more details.
 </p>

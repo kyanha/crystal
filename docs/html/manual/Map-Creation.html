@@ -164,7 +164,7 @@ that do not have a lot of polygons. For example, a big wall is usually a good
 occluder. However, it is possible that the wall is created using lots of
 detailed polygons. That does not make the wall a bad occluder but it increases
 the cost of using that wall as an occluder.  To help alleviate the cost, you
-should add a dummy polygon mesh (this is called an <samp>`occlusion mesh'</samp>) to
+should add a dummy polygon mesh (this is called an <samp>&lsquo;occlusion mesh&rsquo;</samp>) to
 that object.  This occlusion mesh should have roughly the shape of the wall but
 it should only have a few polygons, which means that Dynavis can use it in a
 more efficient manner.  Below is an example on how to set an occlusion
@@ -207,7 +207,7 @@ For example, if you have a large dungeon-like map then you can put
 large simple occluding objects in the <em>void space</em> between the dungeon
 corridors (this is space where the camera should normally not be able
 to see).  When used properly, this optimization can provide a lot of gain for
-performance.  You can use standalone <em>polymesh</em> objects (see example
+performance.  You can use standalone <em>trimesh</em> objects (see example
 below) to construct this, so you don't need to make a real mesh for it.
 This optimization can also be used when you have a complex multi-part
 object. You can then put a dummy occluder inside that object which will help
@@ -222,7 +222,7 @@ object in a map file:
   &lt;params&gt;
     ...
   &lt;/params&gt;
-  &lt;polymesh&gt;
+  &lt;trimesh&gt;
     &lt;mesh&gt;
       &lt;v x=&quot;-1&quot; y=&quot;-1&quot; z=&quot;-1&quot; /&gt;
       &lt;v x=&quot;1&quot; y=&quot;-1&quot; z=&quot;-1&quot; /&gt;
@@ -231,8 +231,8 @@ object in a map file:
       &lt;t v1=&quot;0&quot; v2=&quot;1&quot; v3=&quot;2&quot; /&gt;
       &lt;t v1=&quot;0&quot; v2=&quot;2&quot; v3=&quot;3&quot; /&gt;
     &lt;/mesh&gt;
-    &lt;viscull /&gt;
-  &lt;/polymesh&gt;
+    &lt;id&gt;crystalspace.trianglemesh.viscull&lt;/id&gt;
+  &lt;/trimesh&gt;
 &lt;/meshobj&gt;
 </pre></td></tr></table>
 <p>And this is an example of how you can disable the occlusion mesh for an object:
@@ -242,9 +242,9 @@ object in a map file:
   &lt;params&gt;
     ...
   &lt;/params&gt;
-  &lt;polymesh&gt;
-    &lt;viscull /&gt;
-  &lt;/polymesh&gt;
+  &lt;trimesh&gt;
+    &lt;id&gt;crystalspace.trianglemesh.viscull&lt;/id&gt;
+  &lt;/trimesh&gt;
 &lt;/meshobj&gt;
 </pre></td></tr></table>
 <p>Here is a special note about closed versus non-closed objects in Dynavis.
@@ -300,7 +300,7 @@ Space supports many mesh objects but the most important ones are:
 materials and lightmapped, vertex based, or stencil based lighting. It is not
 easy to animate them internally so they are usually used for static
 objects. If you use lightmaps then these also will not be updated if the
-object moves, so that is another consideration. <samp>`thing'</samp> objects are
+object moves, so that is another consideration. <samp>&lsquo;thing&rsquo;</samp> objects are
 heavy-weight (use more memory than many other mesh types).  Their main
 advantage is that they support lightmaps which means that they can cast and
 receive shadows even if they only have a few polygons.  In contrast, an object
@@ -315,12 +315,12 @@ Genmeshes are very efficient with regards to memory usage and rendering speed
 (see section <a href="MeshObject-Genmesh.html#0">Genmesh Mesh Object</a>).
 
 </li><li>
-<code>sprite3d</code>: Similar to a <samp>`genmesh'</samp> except
+<code>sprite3d</code>: Similar to a <samp>&lsquo;genmesh&rsquo;</samp> except
 that it also supports frame-based animation
 (see section <a href="MeshObject-Spr3D.html#0">Sprite3D Mesh Object</a>).
 
 </li><li>
-<code>sprcal3d</code>: Similar to <samp>`sprite3d'</samp> except
+<code>sprcal3d</code>: Similar to <samp>&lsquo;sprite3d&rsquo;</samp> except
 that skeletal or bone based animation is supported.
 (see section <a href="MeshObject-SprCal3D.html#0">SpriteCal3D Mesh Object</a>).
 </li></ul>
@@ -329,21 +329,21 @@ that skeletal or bone based animation is supported.
 </p>
 <ul>
 <li>
-For static geometry, <samp>`thing'</samp> or <samp>`genmesh'</samp> objects are ideal.
-<samp>`genmesh'</samp> typically is used for high-detail objects that only need a
+For static geometry, <samp>&lsquo;thing&rsquo;</samp> or <samp>&lsquo;genmesh&rsquo;</samp> objects are ideal.
+<samp>&lsquo;genmesh&rsquo;</samp> typically is used for high-detail objects that only need a
 single material (every triangle can use other parts of the texture) and where
 there is no need for detailed shadows on the individual triangles (usually a
-<samp>`genmesh'</samp> object is either small or highly detailed so that shadows are
-accurately represented using vertex lighting only). <samp>`thing'</samp> is used in
+<samp>&lsquo;genmesh&rsquo;</samp> object is either small or highly detailed so that shadows are
+accurately represented using vertex lighting only). <samp>&lsquo;thing&rsquo;</samp> is used in
 case you want large objects that have little detail but require detailed
 lighting.
 
 </li><li>
 If you plan on using stencil lighting only, then it is probably best to
-use mostly <samp>`genmesh'</samp> objects.
+use mostly <samp>&lsquo;genmesh&rsquo;</samp> objects.
 
 </li><li>
-For moving objects you can also use <samp>`thing'</samp> or <samp>`genmesh'</samp> as long
+For moving objects you can also use <samp>&lsquo;thing&rsquo;</samp> or <samp>&lsquo;genmesh&rsquo;</samp> as long
 as there is no need to change the object's appearance (i.e. no internal
 animation is required). You have to be aware of lighting problems mentioned
 above, though.
@@ -351,19 +351,19 @@ above, though.
 </li><li>
 There are two flags that can also help performance considerably. If you have
 a mesh that will never move then you should use the <code>&lt;staticpos&gt;</code> flag
-on the mesh object in the map (or <samp>`CS_MESH_STATICPOS'</samp> flag for
-<samp>`iMeshObject'</samp>). This is a hint for the engine and the mesh object so that
+on the mesh object in the map (or <samp>&lsquo;CS_MESH_STATICPOS&rsquo;</samp> flag for
+<samp>&lsquo;iMeshObject&rsquo;</samp>). This is a hint for the engine and the mesh object so that
 it may optimize performance based on the fact that the object will never
 move. The other flag is <code>&lt;staticshape&gt;</code>. This flag can be set on factories
 and mesh objects and indicates that the object will not animate (never changes
-shape). This corresponds with the <samp>`CS_MESH_STATICSHAPE'</samp> and
-<samp>`CS_FACTORY_STATICSHAPE'</samp> flags.
+shape). This corresponds with the <samp>&lsquo;CS_MESH_STATICSHAPE&rsquo;</samp> and
+<samp>&lsquo;CS_FACTORY_STATICSHAPE&rsquo;</samp> flags.
 
 </li><li>
-Game actors and creatures should use <samp>`sprite3d'</samp> or <samp>`sprcal3d'</samp>.
+Game actors and creatures should use <samp>&lsquo;sprite3d&rsquo;</samp> or <samp>&lsquo;sprcal3d&rsquo;</samp>.
 </li></ul>
 
-<p>One important note when using <samp>`thing'</samp> meshes: it is <em>very</em> important
+<p>One important note when using <samp>&lsquo;thing&rsquo;</samp> meshes: it is <em>very</em> important
 to try to use quads instead of triangles. This is because lightmaps are
 rectangular. If you have a wall made out of two triangles then you will have
 two full square lightmaps (one for every triangle) which is a waste given
@@ -377,7 +377,7 @@ big so this really can make a huge difference on performance.
 <p>When considering on how to design your objects you should keep in mind
 what the renderer prefers. For the renderer a <em>mesh</em> is defined
 as a polygon or triangle mesh with a single material and/or shader. So, if
-you are using a <samp>`thing'</samp> mesh that uses multiple materials then this is
+you are using a <samp>&lsquo;thing&rsquo;</samp> mesh that uses multiple materials then this is
 actually a set of different meshes for the renderer. To avoid confusion we
 will call the single-material mesh that the renderer uses a <em>render-mesh</em>.
 </p>

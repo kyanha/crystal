@@ -88,11 +88,11 @@ has been modified so that the flags parameter is no longer accepted.
 <a name="2"></a>
 <h3 class="subheading"> Bezier Curve Changes </h3>
 
-<p>The notion of curve templates has been reworked. <samp>`iCurveTemplate'</samp> has
-been removed and it's functionality has moved to <samp>`iCurve'</samp> itself.
+<p>The notion of curve templates has been reworked. <samp>&lsquo;iCurveTemplate&rsquo;</samp> has
+been removed and it's functionality has moved to <samp>&lsquo;iCurve&rsquo;</samp> itself.
 As a consequence of this change the bezier addon loader has been removed.
 Also curves have been separated from the thing plugin and now live in the
-<tt>`bezier'</tt> plugin. So, a curve like this in the past:
+<tt>&lsquo;bezier&rsquo;</tt> plugin. So, a curve like this in the past:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;addon&gt;
   &lt;plugin&gt;crystalspace.mesh.loader.thing.bezier&lt;/plugin&gt;
@@ -135,30 +135,30 @@ Also curves have been separated from the thing plugin and now live in the
 &lt;/meshfact&gt;
 </pre></td></tr></table>
 <p>On the <small>API</small> side nothing much changes except that when you use
-the bezier mesh plugin you need to use <samp>`iBezierState'</samp> and
-<samp>`iBezierFactoryState'</samp>.
+the bezier mesh plugin you need to use <samp>&lsquo;iBezierState&rsquo;</samp> and
+<samp>&lsquo;iBezierFactoryState&rsquo;</samp>.
 </p>
-<p>The <samp>`iThingEnvironment'</samp> no longer has code to maintain bezier curve
+<p>The <samp>&lsquo;iThingEnvironment&rsquo;</samp> no longer has code to maintain bezier curve
 templates.
 </p>
 <a name="3"></a>
 <h3 class="subheading"> iThingState and iPolygon3D Changes </h3>
 
-<p>The interface <samp>`iThingState'</samp> no longer inherits from
-<samp>`iObject'</samp>, thus the <code>QueryObject()</code> function has been removed.
+<p>The interface <samp>&lsquo;iThingState&rsquo;</samp> no longer inherits from
+<samp>&lsquo;iObject&rsquo;</samp>, thus the <code>QueryObject()</code> function has been removed.
 </p>
-<p><samp>`iThingState'</samp> has been split into <samp>`iThingState'</samp> and
-<samp>`iThingFactoryState'</samp>. A thing mesh no longer implements both a mesh
+<p><samp>&lsquo;iThingState&rsquo;</samp> has been split into <samp>&lsquo;iThingState&rsquo;</samp> and
+<samp>&lsquo;iThingFactoryState&rsquo;</samp>. A thing mesh no longer implements both a mesh
 object and a mesh object factory. Instead things now work like usual
 mesh objects where <code>iMeshObjectType::NewFactory()</code> creates a
-factory that implements <samp>`iThingFactoryState'</samp> and
+factory that implements <samp>&lsquo;iThingFactoryState&rsquo;</samp> and
 <code>iMeshObjectFactory::NewInstance()</code> creates an instance that implements
-<samp>`iThingState'</samp>. The engine convenience functions to create a thing
+<samp>&lsquo;iThingState&rsquo;</samp>. The engine convenience functions to create a thing
 mesh will automatically create both the factory and mesh so you don't
 have to worry about that. You can use <code>iThingState::GetFactory()</code>
-from a thing mesh object to get the <samp>`iThingFactoryState'</samp> so you can
+from a thing mesh object to get the <samp>&lsquo;iThingFactoryState&rsquo;</samp> so you can
 build the polygons. Note that <code>SCF_QUERY_INTERFACE()</code> of
-<samp>`iThingFactoryState'</samp> no longer works on a thing mesh object. You must
+<samp>&lsquo;iThingFactoryState&rsquo;</samp> no longer works on a thing mesh object. You must
 use <code>GetFactory()</code>.
 </p>
 <p><code>iThingState::GetVertexC()</code> has been removed. It is no longer possible
@@ -167,8 +167,8 @@ to get camera space information from a thing.
 <p>The method <code>iThingFactoryState::GetFlags()</code> has been removed.  Use the new
 method <code>iMeshObjectFactory::GetFlags()</code> instead.
 </p>
-<p>The interface <samp>`iPolygon3D'</samp> is completely removed.  The
-<samp>`iThingFactoryState'</samp> now contains a lot of new functions to create and
+<p>The interface <samp>&lsquo;iPolygon3D&rsquo;</samp> is completely removed.  The
+<samp>&lsquo;iThingFactoryState&rsquo;</samp> now contains a lot of new functions to create and
 manipulate polygons.  Here is an example:
 </p>
 <p>First the old code:
@@ -214,8 +214,8 @@ then you can do it like this:
 <a name="4"></a>
 <h3 class="subheading"> Light Changes </h3>
 
-<p>The interfaces <samp>`iStatLight'</samp> and <samp>`iDynLight'</samp> have been removed
-and their functionality has been merged into <samp>`iLight'</samp> (this includes
+<p>The interfaces <samp>&lsquo;iStatLight&rsquo;</samp> and <samp>&lsquo;iDynLight&rsquo;</samp> have been removed
+and their functionality has been merged into <samp>&lsquo;iLight&rsquo;</samp> (this includes
 the function <code>iDynLight::Setup()</code>. There is now a new function
 <code>iLight::GetDynamicType()</code> which returns one of the following
 constants depending on the type of the light:
@@ -232,8 +232,8 @@ constants depending on the type of the light:
 <p>The method <code>iLight::IsDynamic()</code> was removed;
 use <code>iLight::GetDynamicType()</code> to get the same information.
 </p>
-<p>The following functions have been modified to work with <samp>`iLight'</samp>
-instead of <samp>`iStatLight'</samp> and <samp>`iDynLight'</samp>:
+<p>The following functions have been modified to work with <samp>&lsquo;iLight&rsquo;</samp>
+instead of <samp>&lsquo;iStatLight&rsquo;</samp> and <samp>&lsquo;iDynLight&rsquo;</samp>:
 </p>
 <ul class="toc">
 <li>
@@ -248,7 +248,7 @@ instead of <samp>`iStatLight'</samp> and <samp>`iDynLight'</samp>:
 
 <p>The last parameter of <code>iEngine::CreateLight()</code> routine has
 changed to be the dynamic type of the light (one of the above
-<samp>`CS_LIGHT_DYNAMICTYPE'</samp> constants) instead of a boolean. Thus, the
+<samp>&lsquo;CS_LIGHT_DYNAMICTYPE&rsquo;</samp> constants) instead of a boolean. Thus, the
 <code>iEngine::CreateDynLight()</code> method has been superceded by this
 function.
 </p>
@@ -261,10 +261,10 @@ specific to dynamic lights.
 <a name="5"></a>
 <h3 class="subheading"> Polygon Texture Mapping Changes </h3>
 
-<p>The following interfaces have been removed: <samp>`iPolyTexNone'</samp>,
-<samp>`iPolyTexGouraud'</samp>, <samp>`iPolyTexFlat'</samp>, and  <samp>`iPolyTexLightMap'</samp>.
-The combined <small>API</small> from <samp>`iPolyTexNone'</samp> and the <samp>`iPolyTexLightMap'</samp>
-have moved to <samp>`iThingFactoryState'</samp>.
+<p>The following interfaces have been removed: <samp>&lsquo;iPolyTexNone&rsquo;</samp>,
+<samp>&lsquo;iPolyTexGouraud&rsquo;</samp>, <samp>&lsquo;iPolyTexFlat&rsquo;</samp>, and  <samp>&lsquo;iPolyTexLightMap&rsquo;</samp>.
+The combined <small>API</small> from <samp>&lsquo;iPolyTexNone&rsquo;</samp> and the <samp>&lsquo;iPolyTexLightMap&rsquo;</samp>
+have moved to <samp>&lsquo;iThingFactoryState&rsquo;</samp>.
 </p>
 <p>It is no longer possible to set mixmode and alpha for individual polygons
 Instead use the new <code>iThingState::SetMixMode()</code> function to set the
@@ -274,10 +274,10 @@ in a separate thing mesh.
 <p>It is also no longer possible to get camera space information from polygons.
 </p>
 <p>The <code>&lt;shading&gt;</code> keyword in polygons in map files now accepts a boolean
-value instead of <samp>`NONE'</samp>, <samp>`FLAT'</samp>, <samp>`GOURAUD'</samp>, or <samp>`LIGHTMAP'</samp>.
+value instead of <samp>&lsquo;NONE&rsquo;</samp>, <samp>&lsquo;FLAT&rsquo;</samp>, <samp>&lsquo;GOURAUD&rsquo;</samp>, or <samp>&lsquo;LIGHTMAP&rsquo;</samp>.
 With this you can enable/disable lightmapping.
 </p>
-<p>If you want gouraud shaded polygons you should use the <tt>`genmesh'</tt>
+<p>If you want gouraud shaded polygons you should use the <tt>&lsquo;genmesh&rsquo;</tt>
 mesh object plugin instead.
 </p>
 <a name="6"></a>
@@ -286,28 +286,28 @@ mesh object plugin instead.
 <p>Polygon planes are removed. So it is no longer possible to use
 the plane addon loader to define texture mapping for a polygon outside
 of the polygon itself. To fix this you must specify all texture mapping
-information in the <samp>`texmap'</samp> statement of the polygon. <tt>`map2cs'</tt>
+information in the <samp>&lsquo;texmap&rsquo;</samp> statement of the polygon. <tt>&lsquo;map2cs&rsquo;</tt>
 now correctly outputs polygons like this (no longer outputs planes) and
-<tt>`levtool'</tt> can convert old style maps to new format like this:
+<tt>&lsquo;levtool&rsquo;</tt> can convert old style maps to new format like this:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">levtool -planes yourmap.zip
 </pre></td></tr></table>
-<p><samp>`iThingEnvironment'</samp> no longer has code to maintain polygon texture
+<p><samp>&lsquo;iThingEnvironment&rsquo;</samp> no longer has code to maintain polygon texture
 mapping planes.
 </p>
 <p>The plane loader and saver addons have been removed from the thing
 loader plugin.
 </p>
-<p>Removed <samp>`iPolyTxtPlane'</samp> interface.
+<p>Removed <samp>&lsquo;iPolyTxtPlane&rsquo;</samp> interface.
 </p>
 <a name="7"></a>
 <h3 class="subheading"> Portal Changes </h3>
 
-<p>Several methods in <samp>`iPortal'</samp> have changed slightly. For example,
+<p>Several methods in <samp>&lsquo;iPortal&rsquo;</samp> have changed slightly. For example,
 <code>SetMirror()</code> now expects a plane instead of a polygon.
 </p>
 <p>In the map loader the syntax for specifying warp vectors for portals has
-changed from <samp>`v'</samp> to <samp>`wv'</samp> and <samp>`w'</samp> to <samp>`ww'</samp>.
+changed from <samp>&lsquo;v&rsquo;</samp> to <samp>&lsquo;wv&rsquo;</samp> and <samp>&lsquo;w&rsquo;</samp> to <samp>&lsquo;ww&rsquo;</samp>.
 </p>
 <p>Portals in thing have been removed completely! Instead there is now a separate
 portal container object which belongs in the engine (otherwise it is just
@@ -340,14 +340,14 @@ and how to change it to new code:
 <p>In map files the old way to create portals in a polygon is still supported.
 Internally it will also create a portal container (as a child mesh of
 the thing it is in). The new way to create portals is by using the new
-<samp>`portals'</samp> and <samp>`portal'</samp> keywords in sectors or as children of
+<samp>&lsquo;portals&rsquo;</samp> and <samp>&lsquo;portal&rsquo;</samp> keywords in sectors or as children of
 other meshes.
 </p>
 <a name="8"></a>
 <h3 class="subheading"> Datatype Changes </h3>
 
-<p>The <samp>`csSome'</samp>, <samp>`csConstSome'</samp> and <samp>`uint'</samp> types have been removed.
-Use <samp>`void*'</samp>, <samp>`const void*'</samp> and <samp>`unsigned int'</samp> instead.
+<p>The <samp>&lsquo;csSome&rsquo;</samp>, <samp>&lsquo;csConstSome&rsquo;</samp> and <samp>&lsquo;uint&rsquo;</samp> types have been removed.
+Use <samp>&lsquo;void*&rsquo;</samp>, <samp>&lsquo;const void*&rsquo;</samp> and <samp>&lsquo;unsigned int&rsquo;</samp> instead.
 </p>
 <a name="9"></a>
 <h3 class="subheading"> Procedural Textures </h3>
@@ -355,7 +355,7 @@ Use <samp>`void*'</samp>, <samp>`const void*'</samp> and <samp>`unsigned int'</s
 <p>Instead of only built-in types, procedural textures have been moved into 
 plugins. That means that the <code>&lt;type&gt;</code> token now works the same way
 as the <code>&lt;plugin&gt;</code> token for meshes. That is, either specify a full
-class ID (e.g. <samp>`crystalspace.proctex.loader.fire'</samp>), or a shortcut
+class ID (e.g. <samp>&lsquo;crystalspace.proctex.loader.fire&rsquo;</samp>), or a shortcut
 specified in the <code>&lt;plugins&gt;</code> token of the world. To simulate the
 old <code>&lt;type&gt;</code> behaviour, paste the following lines into a map's 
 <code>&lt;plugin&gt;</code> section:
@@ -375,7 +375,7 @@ have to create a material which uses the procedural texture manually.
 <p>In addition, the loader now doesn't distinguish between normal and procedural
 textures any more, both are loaded with the same <code>&lt;texture&gt;</code> block. The 
 syntax recognized is a combination of both old <code>&lt;texture&gt;</code> and 
-<code>&lt;proctex&gt;</code> tokens--so renaming all <code>&lt;proctex&gt;</code> to <code>&lt;texture&gt;</code>
+<code>&lt;proctex&gt;</code> tokens&mdash;so renaming all <code>&lt;proctex&gt;</code> to <code>&lt;texture&gt;</code>
 tags is sufficient to convert a level (apart from fixing the <code>&lt;type&gt;</code>
 tokens.)
 </p>
@@ -388,7 +388,7 @@ Objects also no longer register themselves to the current region. It is
 the responsability of the object creator to do that. The standard loader
 has support for adding objects to a region now.
 </p>
-<p>The following functions have been removed from <samp>`iEngine'</samp>:
+<p>The following functions have been removed from <samp>&lsquo;iEngine&rsquo;</samp>:
 </p>
 <ul class="toc">
 <li>
@@ -402,7 +402,7 @@ has support for adding objects to a region now.
 <p>There is one new function <code>iEngine::CreateRegion()</code> which will create
 a new region.
 </p>
-<p>In <samp>`iLoader'</samp> the functions <code>LoadMapFile()</code> and
+<p>In <samp>&lsquo;iLoader&rsquo;</samp> the functions <code>LoadMapFile()</code> and
 <code>ThreadedLoadMapFile()</code> now expect an optional pointer to a region
 in addition with a boolean to restrict searching to that region.
 </p>
@@ -412,19 +412,19 @@ longer supported.
 <a name="11"></a>
 <h3 class="subheading"> Mesh Objects / Factories and iPolygonMesh </h3>
 
-<p>Some mesh factories used to support the querying of the <samp>`iPolygonMesh'</samp>
+<p>Some mesh factories used to support the querying of the <samp>&lsquo;iPolygonMesh&rsquo;</samp>
 interface (e.g. Thing, Sprite3D, Genmesh). Due to the way this was 
-implemented internally this caused leaks. So, querying <samp>`iPolygonMesh'</samp> 
+implemented internally this caused leaks. So, querying <samp>&lsquo;iPolygonMesh&rsquo;</samp> 
 directly from the object is now discouraged. Although it may still work in 
 some cases, this feature may be dropped without further notice and may not 
 work in all cases. 
 </p>
-<p>Similar for mesh objects. Querying <samp>`iPolygonMesh'</samp> is discouraged here,
+<p>Similar for mesh objects. Querying <samp>&lsquo;iPolygonMesh&rsquo;</samp> is discouraged here,
 as well.
 </p>
 <p>Instead, if you want the polygon mesh from an object, use the
-<code>GetObjectModel()</code> method from the <samp>`iMeshObject'</samp> interface;
-respectively query for the <samp>`iObjectModel'</samp> interface in case of a factory,
+<code>GetObjectModel()</code> method from the <samp>&lsquo;iMeshObject&rsquo;</samp> interface;
+respectively query for the <samp>&lsquo;iObjectModel&rsquo;</samp> interface in case of a factory,
 and utilize one of the <code>GetPolygonMeshXXX()</code> methods, depending on what
 you need (the old interface query returned the collision detection mesh.) This
 has also the advantages that you can get different meshes for different
@@ -433,11 +433,11 @@ the base mesh), and that those meshes can be overridden by user-defined meshes
 (e.g. if the collision detection mesh needs to have a shape different from the
 visible mesh.)
 </p>
-<p>In <samp>`iPolygonMesh'</samp> the <code>IsDeformable()</code> method has been replaced
+<p>In <samp>&lsquo;iPolygonMesh&rsquo;</samp> the <code>IsDeformable()</code> method has been replaced
 with the more general <code>GetFlags()</code>. In addition to that <code>Cleanup()</code>
 is removed and instead <code>Lock()</code> and <code>Unlock()</code> are added.
 </p>
-<p><samp>`iPolygonMesh'</samp> now has <code>GetTriangles()</code> and <code>GetTriangleCount()</code>.
+<p><samp>&lsquo;iPolygonMesh&rsquo;</samp> now has <code>GetTriangles()</code> and <code>GetTriangleCount()</code>.
 Check out the <small>API</small> docs for implementation details.
 </p>
 <a name="12"></a>
@@ -485,20 +485,20 @@ void Reset()             // resets iterator (not all implement this).
 canvas, use <code>iAWS::SetupCanvas()</code> instead. 
 </p>
 <p><code>iAWS::CreateTransition()</code> and <code>iAWS::CreateTransitionEx()</code> have been
-changed to take a <var>delay</var> parameter specified in <samp>`csTicks'</samp> instead of
+changed to take a <var>delay</var> parameter specified in <samp>&lsquo;csTicks&rsquo;</samp> instead of
 using a <var>step_size</var> parameter.  This change ensures that transitions take
 the same amount of time on computers having different processor speeds.
 <code>iAWS::ComponentIsInTransition()</code> has been added to allow users to query
-if a specified <samp>`iAwsComponent'</samp> is in the midst of a transition.
+if a specified <samp>&lsquo;iAwsComponent&rsquo;</samp> is in the midst of a transition.
 </p>
 <a name="14"></a>
 <h3 class="subheading"> Array Changes </h3>
 
-<p>All arrays have been modified to inherit from <samp>`csArray'</samp>. This means
+<p>All arrays have been modified to inherit from <samp>&lsquo;csArray&rsquo;</samp>. This means
 that there are some slight <small>API</small> changes because some methods were
-not consistent with <samp>`csArray'</samp>.
+not consistent with <samp>&lsquo;csArray&rsquo;</samp>.
 </p>
-<p><samp>`csGrowingArray'</samp> has been renamed to <samp>`csDirtyAccessArray'</samp> in order to
+<p><samp>&lsquo;csGrowingArray&rsquo;</samp> has been renamed to <samp>&lsquo;csDirtyAccessArray&rsquo;</samp> in order to
 better reflect its intention, which is that it publishes a method allowing the
 client to obtain access to the raw memory block containing the items in
 contiguous memory.  This potentially unsafe operation is not available in the
@@ -510,42 +510,42 @@ not understand <code>csArray&lt;&gt;</code>.
 <a name="15"></a>
 <h3 class="subheading"> csPArray Removed </h3>
 
-<p><samp>`csPArray'</samp> has been removed in favor of the <code>csArray&lt;&gt;</code> template.
+<p><samp>&lsquo;csPArray&rsquo;</samp> has been removed in favor of the <code>csArray&lt;&gt;</code> template.
 So, use <code>csArray&lt;T*&gt;</code> instead of <code>csPArray&lt;T&gt;</code>.
 </p>
 <a name="16"></a>
 <h3 class="subheading"> csStrVector and iStrVector Removed </h3>
 
-<p><samp>`csStrVector'</samp> and <samp>`iStrVector'</samp> have been removed in favor of
-<samp>`csStringArray'</samp> and <samp>`iStringArray'</samp>.  This means that functions like
+<p><samp>&lsquo;csStrVector&rsquo;</samp> and <samp>&lsquo;iStrVector&rsquo;</samp> have been removed in favor of
+<samp>&lsquo;csStringArray&rsquo;</samp> and <samp>&lsquo;iStringArray&rsquo;</samp>.  This means that functions like
 <code>iVFS::MountRoot()</code> and <code>iVFS::FindFiles()</code> now return an
-<samp>`iStringArray'</samp>.
+<samp>&lsquo;iStringArray&rsquo;</samp>.
 </p>
 <a name="17"></a>
 <h3 class="subheading"> csVector and csBasicVector Removed </h3>
 
-<p><samp>`csVector'</samp> and <samp>`csBasicVector'</samp> have been removed. Instead you
+<p><samp>&lsquo;csVector&rsquo;</samp> and <samp>&lsquo;csBasicVector&rsquo;</samp> have been removed. Instead you
 should use one of the templated arrays: <code>csArray&lt;&gt;</code>, <code>csPDelArray&lt;&gt;</code>,
 or <code>csRefArray&lt;&gt;</code>.
 </p>
-<p>If you were using a regular <samp>`csVector'</samp> then this can usually be
-replaced directly by <code>csArray&lt;type*&gt;</code> with <samp>`type'</samp> the type you
+<p>If you were using a regular <samp>&lsquo;csVector&rsquo;</samp> then this can usually be
+replaced directly by <code>csArray&lt;type*&gt;</code> with <samp>&lsquo;type&rsquo;</samp> the type you
 were storing in the vector.
 </p>
-<p>If you subclassed from <samp>`csVector'</samp> in order to override <code>FreeItem()</code>
+<p>If you subclassed from <samp>&lsquo;csVector&rsquo;</samp> in order to override <code>FreeItem()</code>
 then you have to decide what to do depending on the code in <code>FreeItem()</code>.
-If that code performed a <samp>`delete'</samp> then you can use <code>csPDelArray&lt;&gt;</code>.
+If that code performed a <samp>&lsquo;delete&rsquo;</samp> then you can use <code>csPDelArray&lt;&gt;</code>.
 If that code performed a <code>DecRef()</code> then you can use <code>csRefArray&lt;&gt;</code>
 but you still have to be careful because <code>csRefArray&lt;&gt;</code> will automatically
 invoke <code>IncRef()</code> for objects that are pushed on the array. In other cases
 you probably need to handle deletion manually.
 </p>
-<p><samp>`csVector'</samp> also allowed you to override <code>Compare()</code> and
+<p><samp>&lsquo;csVector&rsquo;</samp> also allowed you to override <code>Compare()</code> and
 <code>CompareKey()</code>, and these methods were utilized automatically by
 <code>QuickSort()</code>, <code>FindSortedKey()</code>, <code>InsertSorted()</code>, and
 <code>FindKey()</code>.  <code>csArray&lt;&gt;</code>, on the other hand, accepts a comparison
 function as an argument to its sorting and searching methods, thus providing
-much greater flexibility than <samp>`csVector'</samp>.  You can transform your
+much greater flexibility than <samp>&lsquo;csVector&rsquo;</samp>.  You can transform your
 <code>csVector</code>-based code as follows.  First, the old code:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">class MyVector : public csVector
@@ -598,10 +598,10 @@ v.InsertSorted(o, MyVector::Compare);
 </pre></td></tr></table>
 
 <p>If you do not provide a comparison function, then the array elements are
-compared against each other with <code>T::operator&lt;(T)</code> where <samp>`T'</samp> is the
+compared against each other with <code>T::operator&lt;(T)</code> where <samp>&lsquo;T&rsquo;</samp> is the
 type of the element contained in the array.  This default comparison semantic
 works nicely for all built-in types, as well as for complex types which define
-a <samp>`&lt;'</samp> operator.
+a <samp>&lsquo;&lt;&rsquo;</samp> operator.
 </p>
 <p>The methods <code>csArray&lt;&gt;::FindKey()</code> and <code>csArray&lt;&gt;::FindSortedKey()</code>
 accept a comparison <em>functor</em> which is constructed from the key for which
@@ -617,19 +617,19 @@ r = v.FindSortedKey(
               csArrayCmp&lt;MyType,MyKey&gt;(key, MyVector::CompareKey));
 </pre></td></tr></table>
 
-<p>In this example, the key's type is <samp>`MyKey'</samp> (the type expected by
+<p>In this example, the key's type is <samp>&lsquo;MyKey&rsquo;</samp> (the type expected by
 <code>MyVector::CompareKey()</code>).  It is possible and often convenient for
-<samp>`MyType'</samp> and <samp>`MyKey'</samp> to be the same type (for instance, you might
+<samp>&lsquo;MyType&rsquo;</samp> and <samp>&lsquo;MyKey&rsquo;</samp> to be the same type (for instance, you might
 search for an integer in an array of integers).  When the types of
-<samp>`MyType'</samp> and <samp>`MyKey'</samp> differ, <samp>`MyType'</samp> is often a composite type,
-and <samp>`MyKey'</samp> is the type of one attribute of <samp>`MyType'</samp>, however you are
+<samp>&lsquo;MyType&rsquo;</samp> and <samp>&lsquo;MyKey&rsquo;</samp> differ, <samp>&lsquo;MyType&rsquo;</samp> is often a composite type,
+and <samp>&lsquo;MyKey&rsquo;</samp> is the type of one attribute of <samp>&lsquo;MyType&rsquo;</samp>, however you are
 not in any way limited to this arrangements.  If you do not provide a
 comparison function when constructing the functor, then the the elements are
 compared with the search key via <code>T::operator&lt;(K)</code> and
-<code>K::operator&lt;(T)</code> where <samp>`T'</samp> and <samp>`K'</samp> are the type of the
+<code>K::operator&lt;(T)</code> where <samp>&lsquo;T&rsquo;</samp> and <samp>&lsquo;K&rsquo;</samp> are the type of the
 contained element and the type of the key, respectively.  This default
 comparison semantic is especially useful when the contained elements and key
-have the same type, provided that the type supports a useful <samp>`&lt;'</samp> operator.
+have the same type, provided that the type supports a useful <samp>&lsquo;&lt;&rsquo;</samp> operator.
 For example, if you have an array of integers which you want to sort and then
 search, you can use the default comparison semantics, rather than writing a
 custom comparison function, as shown here:
@@ -643,14 +643,14 @@ int r = v.FindSortedKey(csArrayCmp&lt;int,int&gt;(33));
 
 <p>The new template classes <code>csHash&lt;&gt;</code> and <code>csSet&lt;&gt;</code> are available for
 use by new code; and older code will be upgraded over time to use these
-template classes.  The older <samp>`csHashMap'</samp> and <samp>`csHashSet'</samp> classes are
+template classes.  The older <samp>&lsquo;csHashMap&rsquo;</samp> and <samp>&lsquo;csHashSet&rsquo;</samp> classes are
 now deprecated.
 </p>
 <a name="19"></a>
 <h3 class="subheading"> csHashMap Changes </h3>
 
-<p>The deprecated <samp>`csHashIterator'</samp> can no longer iterate over all objects.
-To do that you need to use <samp>`csGlobalHashIterator'</samp>.
+<p>The deprecated <samp>&lsquo;csHashIterator&rsquo;</samp> can no longer iterate over all objects.
+To do that you need to use <samp>&lsquo;csGlobalHashIterator&rsquo;</samp>.
 </p>
 <a name="20"></a>
 <h3 class="subheading"> Event-Related Changes </h3>
@@ -659,15 +659,15 @@ To do that you need to use <samp>`csGlobalHashIterator'</samp>.
 all now accept a reference into which to store the found item.  Previously,
 some <code>Find()</code> methods used a reference for this purpose, while others used
 a pointer.  In addition, rather than accepting a pointer to a pointer of type
-<samp>`iEvent'</samp>, the <code>Find()</code> method for finding an event now takes a
+<samp>&lsquo;iEvent&rsquo;</samp>, the <code>Find()</code> method for finding an event now takes a
 reference to a <code>csRef&lt;iEvent&gt;</code>.
 </p>
 <p>Previously, <code>iEventQueue::Post()</code> had a special case where it assumed that
-the caller was giving up ownership of the posted <samp>`iEvent'</samp> if the caller
+the caller was giving up ownership of the posted <samp>&lsquo;iEvent&rsquo;</samp> if the caller
 had allocated the event manually, rather than obtaining the event via
 <code>iEventQueue::CreateEvent()</code> or <code>iEventOutlet::CreateEvent()</code>. In
 this case, <code>Post()</code> would hijack the caller's reference to the
-<samp>`iEvent'</samp> for itself.  This special case allowed the caller to write code,
+<samp>&lsquo;iEvent&rsquo;</samp> for itself.  This special case allowed the caller to write code,
 such as the following, which appeared to leak a reference to the event, but
 which did not in fact do so.
 </p>
@@ -699,12 +699,12 @@ at the documentation on that to see how to modify your own mesh object for
 the new <small>API</small>.  In this section we describe <small>API</small> modifications that
 are relevant for user applications.
 </p>
-<p>For <samp>`iLight'</samp>: <code>SetRadius()</code>, <code>GetRadius()</code>, and
+<p>For <samp>&lsquo;iLight&rsquo;</samp>: <code>SetRadius()</code>, <code>GetRadius()</code>, and
 <code>GetSquaredRadius()</code> have been replaced with <code>SetInfluenceRadius()</code>,
 <code>GetInfluenceRadius()</code>, and <code>GetInfluenceRadiusSq()</code>.
 </p>
-<p>For <samp>`iMaterialEngine'</samp> and related: <code>GetTextureWrapper()</code> for
-layers now expects a <samp>`csStringID'</samp> instead of an integer.
+<p>For <samp>&lsquo;iMaterialEngine&rsquo;</samp> and related: <code>GetTextureWrapper()</code> for
+layers now expects a <samp>&lsquo;csStringID&rsquo;</samp> instead of an integer.
 </p>
 <a name="22"></a>
 <h3 class="subheading"> <small>SCF</small> Changes </h3>
@@ -712,7 +712,7 @@ layers now expects a <samp>`csStringID'</samp> instead of an integer.
 
 <p><em>Written by Eric Sunshine, <a href="mailto:sunshine@sunshineco.com">sunshine@sunshineco.com</a>.</em>
 </p>
-<p>The monolithic and inflexible plugin-registry database, <tt>`scf.cfg'</tt>, has
+<p>The monolithic and inflexible plugin-registry database, <tt>&lsquo;scf.cfg&rsquo;</tt>, has
 been eliminated.  Instead, plugin modules are now self-describing via a
 meta-information resource associated with each module.  It is possible to
 access this meta-information without actually loading the plugin, thus avoiding
@@ -721,8 +721,8 @@ a time-consuming and costly operation.
 <p>A plugin's meta-information is now stored in an <small>XML</small>-format file rather
 than being hard-coded via the plugin's C++ code.  The meta-information file is
 named after the associated plugin module, except with filename extension
-<tt>`.csplugin'</tt>.  For instance, the meta-information for the <tt>`vfs.so'</tt> (or
-<tt>`vfs.dll'</tt>) plugin will be named <tt>`vfs.csplugin'</tt>.
+<tt>&lsquo;.csplugin&rsquo;</tt>.  For instance, the meta-information for the <tt>&lsquo;vfs.so&rsquo;</tt> (or
+<tt>&lsquo;vfs.dll&rsquo;</tt>) plugin will be named <tt>&lsquo;vfs.csplugin&rsquo;</tt>.
 </p>
 <p>Since the meta-information is now maintained via an external resource, the
 following <small>SCF</small> macros, which were used to export this information from the
@@ -759,11 +759,11 @@ structured <small>XML</small>-format file.  For example:
     &quot;myproj.myplugin.bar1,myproj.myplugin.bar2&quot;)
 SCF_EXPORT_CLASS_TABLE_END
 </pre></td></tr></table>
-<p>This table exports two C++ classes, <samp>`MyClass1'</samp> and <samp>`MyClass2'</samp> under
-the <small>SCF</small> class names <samp>`myproj.myplugin.foo1'</samp> and
-<samp>`myproj.myplugin.foo2'</samp>, respectively.  Furthermore, the second exported
+<p>This table exports two C++ classes, <samp>&lsquo;MyClass1&rsquo;</samp> and <samp>&lsquo;MyClass2&rsquo;</samp> under
+the <small>SCF</small> class names <samp>&lsquo;myproj.myplugin.foo1&rsquo;</samp> and
+<samp>&lsquo;myproj.myplugin.foo2&rsquo;</samp>, respectively.  Furthermore, the second exported
 class has a dependency upon two other <small>SCF</small> classes,
-<samp>`myproj.myplugin.bar1'</samp> and <samp>`myproj.myplugin.bar2'</samp>.  To convert
+<samp>&lsquo;myproj.myplugin.bar1&rsquo;</samp> and <samp>&lsquo;myproj.myplugin.bar2&rsquo;</samp>.  To convert
 this to an <small>XML</small>-format meta-information resource, just copy the above
 values into the appropriate <small>XML</small> nodes.  For instance:
 </p>
@@ -802,7 +802,7 @@ depends upon other <small>SCF</small> classes, the dependencies are indicated vi
 optional <code>&lt;requires&gt;</code> group, which contains one <code>&lt;class&gt;</code> node per
 dependency.
 </p>
-<p>Meta-information in the <tt>`.csplugin'</tt> file is extensible; it is not
+<p>Meta-information in the <tt>&lsquo;.csplugin&rsquo;</tt> file is extensible; it is not
 restricted to <small>SCF</small>-only usage.  Plugin authors can choose to publish
 supplementary information about plugins in addition to the <small>SCF</small> information
 already published.  As a hypothetical example, image loading plugins might
@@ -810,7 +810,7 @@ desire to publish <em>image indentification</em> information which would allow t
 image loading multiplexor to selectively request image loading plugins
 <em>on-demand</em>, rather than requesting all plugins unconditionally, even if
 they are not needed.  Here is a possible meta-information table for a <small>PNG</small>
-image loader (with the <code>&lt;scf&gt;</code> node collapsed to <samp>`<small class="dots">...</small>'</samp> for the
+image loader (with the <code>&lt;scf&gt;</code> node collapsed to <samp>&lsquo;<small class="dots">...</small>&rsquo;</samp> for the
 sake of illustration):
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;?xml version=&quot;1.0&quot;?&gt;
@@ -839,7 +839,7 @@ By checking <small>MIME</small> type, if available.
 </li><li>
 By checking file extension, if available.
 </li><li>
-By checking for the <em>magic</em> identification string <samp>`\0x89PNG'</samp> in the
+By checking for the <em>magic</em> identification string <samp>&lsquo;\0x89PNG&rsquo;</samp> in the
 raw image data.
 </li></ul>
 
@@ -848,8 +848,8 @@ raw image data.
 will it actually request the <small>PNG</small> loader plugin.
 </p>
 <p>If you know the physical pathname of a plugin module, then you can retrieve its
-meta-information via <code>csGetPluginMetadata()</code> (<tt>`csutil/csshlib.h'</tt>),
-which returns an <samp>`iDocument'</samp>.  Alternately, if you know the name of an
+meta-information via <code>csGetPluginMetadata()</code> (<tt>&lsquo;csutil/csshlib.h&rsquo;</tt>),
+which returns an <samp>&lsquo;iDocument&rsquo;</samp>.  Alternately, if you know the name of an
 <small>SCF</small> class which a plugin exports, then you can retrieve the plugin's
 meta-information, by calling <code>iSCF::GetPluginMetadata()</code>.
 </p>
@@ -862,7 +862,7 @@ directories which <small>SCF</small> searches by default are:
 <li>
 The application resource directory as returned by <code>csGetResourceDir()</code>.
 On most platforms, this is the same as the directory containing the
-application, however, on MacOS/X, it is the <tt>`Resources'</tt> directory within
+application, however, on MacOS/X, it is the <tt>&lsquo;Resources&rsquo;</tt> directory within
 the Cocoa application wrapper.
 
 </li><li>
@@ -871,9 +871,9 @@ wrapper for MacOS/X) as returned by <code>csGetAppDir()</code>.
 
 </li><li>
 The installed Crystal Space resource directories as returned by
-<code>csGetConfigPath()</code>.  This is often the value of the <samp>`CRYSTAL'</samp>
-environment variable, or the <samp>`CrystalSpaceRoot'</samp> default setting on MacOS/X
-(which is often stored within the <samp>`NSGlobalDomain'</samp> domain).
+<code>csGetConfigPath()</code>.  This is often the value of the <samp>&lsquo;CRYSTAL&rsquo;</samp>
+environment variable, or the <samp>&lsquo;CrystalSpaceRoot&rsquo;</samp> default setting on MacOS/X
+(which is often stored within the <samp>&lsquo;NSGlobalDomain&rsquo;</samp> domain).
 </li></ul>
 
 <p>If you would like <small>SCF</small> to scan additional directories, you can invoke
@@ -921,44 +921,44 @@ instead use <code>SCF_REGISTER_STATIC_CLASS()</code>.  (A macro named
 <code>SCF_REGISTER_STATIC_LIBRARY()</code> still exists, but it has a completely
 different purpose than the original version, and is typically only used by very
 low-level mechanisms, rather than by end-users.  See
-<tt>`CS/include/csutil/scf.h'</tt> for the gory details, if you are curious.)
+<tt>&lsquo;CS/include/csutil/scf.h&rsquo;</tt> for the gory details, if you are curious.)
 </p>
-<p>The Crystal Space <tt>`configure'</tt> script option
-<samp>`--enable-meta-info-embedding'</samp> controls whether or not the build system
+<p>The Crystal Space <tt>&lsquo;configure&rsquo;</tt> script option
+<samp>&lsquo;--enable-meta-info-embedding&rsquo;</samp> controls whether or not the build system
 embeds the plugin meta-information into plugin modules (if supported by the
 platform), and whether or not the plugin loader looks for embedded
 meta-information.  If this option is disabled, or if embedding is not supported
 by the platform, then the meta-information is laid down alongside the built
-plugin module (<tt>`.so'</tt> or <tt>`.dll'</tt>) in a text file with the same name as
-the plugin module, except with extension <tt>`.csplugin'</tt>.  The
+plugin module (<tt>&lsquo;.so&rsquo;</tt> or <tt>&lsquo;.dll&rsquo;</tt>) in a text file with the same name as
+the plugin module, except with extension <tt>&lsquo;.csplugin&rsquo;</tt>.  The
 meta-information embedding option is enabled by default for most platforms, but
 is disabled by default for Unix platforms.
 </p>
 <p><em>Warning</em>: Meta-information embedding on Unix is accomplished via the
-<tt>`libbfd'</tt> library which carries a <small>GPL</small> license.  This license is
+<tt>&lsquo;libbfd&rsquo;</tt> library which carries a <small>GPL</small> license.  This license is
 incompatible with Crystal Space's <small>LGPL</small> license.  Unlike the <small>LGPL</small>
 which is compatible with closed-source projects, the <small>GPL</small> license is not.
 For this reason, embedding is disabled by default on Unix, and must be enabled
-explicitly with the <tt>`configure'</tt> script's
-<samp>`--enable-meta-info-embedding'</samp> option.  Enable this option on Unix only if
+explicitly with the <tt>&lsquo;configure&rsquo;</tt> script's
+<samp>&lsquo;--enable-meta-info-embedding&rsquo;</samp> option.  Enable this option on Unix only if
 you are certain that your project is compatible with the <small>GPL</small> license.
 </p>
 <p>The platform-specific plugin loaders are capable of reading embedded plugin
-meta-information, as well as meta-information in stand-alone <tt>`.csplugin'</tt>
+meta-information, as well as meta-information in stand-alone <tt>&lsquo;.csplugin&rsquo;</tt>
 files.  Even when configured for embedding, the plugin loaders will still be
-able to recognize and utilize external <tt>`.csplugin'</tt> resources.  This means
+able to recognize and utilize external <tt>&lsquo;.csplugin&rsquo;</tt> resources.  This means
 that Crystal Space-based projects with unsophisticated build systems, which are
 incapable of embedding meta-information into the plugin module, can still
-create usable plugins simply by placing a copy of the <tt>`.csplugin'</tt> file
-alongside the plugin executable (<tt>`.so'</tt> or <tt>`.dll'</tt>).
+create usable plugins simply by placing a copy of the <tt>&lsquo;.csplugin&rsquo;</tt> file
+alongside the plugin executable (<tt>&lsquo;.so&rsquo;</tt> or <tt>&lsquo;.dll&rsquo;</tt>).
 </p>
 <p>External projects which are based upon Crystal Space's Jam build system
-(<tt>`CS/mk/jam'</tt>) inherit, for free, the capability of embedding
+(<tt>&lsquo;CS/mk/jam&rsquo;</tt>) inherit, for free, the capability of embedding
 meta-information within plugin modules (if supported by the platform).  Simply
-grab the newer <tt>`.jam'</tt> files from <tt>`CS/mk/jam'</tt>, and add a few
-definitions to the project's <tt>`Jamconfig'</tt> file.  The exact set of
+grab the newer <tt>&lsquo;.jam&rsquo;</tt> files from <tt>&lsquo;CS/mk/jam&rsquo;</tt>, and add a few
+definitions to the project's <tt>&lsquo;Jamconfig&rsquo;</tt> file.  The exact set of
 definitions is platform-specific, so consult the appropriate Jam file
-(<tt>`unix.jam'</tt>, <tt>`win32.jam'</tt>, or <tt>`macosx.jam'</tt>) to determine
+(<tt>&lsquo;unix.jam&rsquo;</tt>, <tt>&lsquo;win32.jam&rsquo;</tt>, or <tt>&lsquo;macosx.jam&rsquo;</tt>) to determine
 precisely which which definitions are required.  Here is a list of definitions
 required at the time of writing:
 </p>
@@ -979,8 +979,8 @@ required at the time of writing:
 </p></dd>
 </dl>
 
-<p>The <tt>`scfreg'</tt> tool whose job was to manipulate the monolithic <small>SCF</small>
-plugin-registry database, <tt>`scf.cfg'</tt>, has been eliminated since it is no
+<p>The <tt>&lsquo;scfreg&rsquo;</tt> tool whose job was to manipulate the monolithic <small>SCF</small>
+plugin-registry database, <tt>&lsquo;scf.cfg&rsquo;</tt>, has been eliminated since it is no
 longer required.
 </p>
 <a name="23"></a>
@@ -1000,7 +1000,7 @@ that you should now assign the result of <code>SCF_CREATE_INSTANCE()</code> to a
 <code>csRef&lt;&gt;</code>.
 </p>
 <p>The method <code>iSCF::QueryClassList()</code>, which used to return a raw
-<samp>`iStringArray*'</samp> that the client had to dispose of manually, now returns a
+<samp>&lsquo;iStringArray*&rsquo;</samp> that the client had to dispose of manually, now returns a
 <code>csRef&lt;iStringArray&gt;</code>.
 </p>
 <p>The macros <code>SCF_SET_REF()</code>, <code>SCF_INC_REF()</code>, and <code>SCF_DEC_REF()</code>
@@ -1016,16 +1016,16 @@ following static information:
 </p>
 <ul>
 <li>
-<code>GetID()</code>--Retrieves the interface's low-level identifier as an
-<samp>`scfInterfaceID'</samp>, which is typically a small integer.  <small>SCF</small> identifies
+<code>GetID()</code>&mdash;Retrieves the interface's low-level identifier as an
+<samp>&lsquo;scfInterfaceID&rsquo;</samp>, which is typically a small integer.  <small>SCF</small> identifies
 interfaces internally by an <small>ID</small> for performance reasons.
 
 </li><li>
-<code>GetName()</code>--Retrieves the interface's name as a null-terminated
+<code>GetName()</code>&mdash;Retrieves the interface's name as a null-terminated
 C-string.
 
 </li><li>
-<code>GetVersion()</code>--Retrieves the interface's current version number.
+<code>GetVersion()</code>&mdash;Retrieves the interface's current version number.
 </li></ul>
 
 <p>Here is an example illustrating how to retrieve various pieces of information
@@ -1043,7 +1043,7 @@ possible to query <code>T</code>'s version using
 <code>scfInterface&lt;T&gt;::GetVersion()</code>.
 </p>
 <p>The old hidden, semi-private <small>API</small> for obtaining interface information via
-the global <samp>`name_VERSION'</samp> constant and global <code>name_scfGetID()</code>
+the global <samp>&lsquo;name_VERSION&rsquo;</samp> constant and global <code>name_scfGetID()</code>
 function has been removed.  Conversion from the old <small>API</small> to the new is
 straight forward.  For example:
 </p>
@@ -1074,20 +1074,20 @@ SCF_VERSION(MyProject::iMyInterface, 1, 0, 0);
 <a name="24"></a>
 <h3 class="subheading"> csSys Library Removed </h3>
 
-<p>The <tt>`cssys'</tt> library has been merged into the <tt>`csutil'</tt> library.  This
+<p>The <tt>&lsquo;cssys&rsquo;</tt> library has been merged into the <tt>&lsquo;csutil&rsquo;</tt> library.  This
 eliminates many problems resulting from the large number of circular
 dependencies which existed between these two libraries.  From the client
 viewpoint, this change manifests in two ways:
 </p>
 <ul>
 <li>
-Disappearance of the static link library <tt>`libcssys.a'</tt> (Unix) or
-<tt>`cssys.lib'</tt> (Windows).  To account for this change, simply eliminate the
+Disappearance of the static link library <tt>&lsquo;libcssys.a&rsquo;</tt> (Unix) or
+<tt>&lsquo;cssys.lib&rsquo;</tt> (Windows).  To account for this change, simply eliminate the
 reference to this library from your build scripts, makefiles, or project files.
 
 </li><li>
-Disappearance of the <tt>`CS/include/cssys'</tt> directory.  Headers have been
-moved to the <tt>`csutil'</tt> include directory.  To account for this change,
+Disappearance of the <tt>&lsquo;CS/include/cssys&rsquo;</tt> directory.  Headers have been
+moved to the <tt>&lsquo;csutil&rsquo;</tt> include directory.  To account for this change,
 simply change <code>#include &lt;cssys/header.h&gt;</code> to
 <code>#include &lt;csutil/header.h&gt;</code>.
 
@@ -1096,16 +1096,16 @@ simply change <code>#include &lt;cssys/header.h&gt;</code> to
 <a name="25"></a>
 <h3 class="subheading"> csEngine Library Removed </h3>
 
-<p>The <tt>`csengine'</tt> library has been removed.  Direct use of this library has
+<p>The <tt>&lsquo;csengine&rsquo;</tt> library has been removed.  Direct use of this library has
 long been deprecated, so its removal will probably go unnoticed by most or all
 projects.  Any projects which were using this library must now instead interact
-with the 3D engine via the <tt>`engine'</tt> plugin and the <small>SCF</small> interfaces in
-the <tt>`CS/include/iengine'</tt> directory.
+with the 3D engine via the <tt>&lsquo;engine&rsquo;</tt> plugin and the <small>SCF</small> interfaces in
+the <tt>&lsquo;CS/include/iengine&rsquo;</tt> directory.
 </p>
 <a name="26"></a>
 <h3 class="subheading"> csAppFrame Library Removed </h3>
 
-<p>The <tt>`csappframe'</tt> library has been merged into the <tt>`cstool'</tt> library.
+<p>The <tt>&lsquo;csappframe&rsquo;</tt> library has been merged into the <tt>&lsquo;cstool&rsquo;</tt> library.
 Furthermore, the <code>main()</code> function, which client application's got for
 free when linking against this library, has been removed since it proved to be
 an obstacle to making Crystal Space libraries available as <em>shared</em>
@@ -1131,34 +1131,34 @@ int main (int argc, char* argv[])
 
 <p>The <code>csString::strlwr()</code> method was renamed to <code>Downcase()</code>.  A
 complementary <code>Upcase()</code> method was added for completeness.  These methods
-were also added to <samp>`iString'</samp>.  A <code>Slice()</code> method was added to
-<samp>`iString'</samp> and <samp>`csString'</samp> which copies a sub-portion of a string.
+were also added to <samp>&lsquo;iString&rsquo;</samp>.  A <code>Slice()</code> method was added to
+<samp>&lsquo;iString&rsquo;</samp> and <samp>&lsquo;csString&rsquo;</samp> which copies a sub-portion of a string.
 <code>Slice()</code> is similar to the existing <code>SubString()</code> method, but
-follows a more natural calling convention.  Several <samp>`iString'</samp> methods
-which were incorrectly returning raw <samp>`iString*'</samp> or <samp>`iString&amp;'</samp> now
+follows a more natural calling convention.  Several <samp>&lsquo;iString&rsquo;</samp> methods
+which were incorrectly returning raw <samp>&lsquo;iString*&rsquo;</samp> or <samp>&lsquo;iString&amp;&rsquo;</samp> now
 correctly return <code>csRef&lt;iString&gt;</code>.
 </p>
-<p><samp>`csString'</samp> now makes a distinction between a null-string (think
-<samp>`(char const*)0'</samp>), and a zero-length string (think <code>&quot;&quot;</code>).  Client
+<p><samp>&lsquo;csString&rsquo;</samp> now makes a distinction between a null-string (think
+<samp>&lsquo;(char const*)0&rsquo;</samp>), and a zero-length string (think <code>&quot;&quot;</code>).  Client
 code can check for these conditions in the normal fashion by invoking
 <code>csString::GetData()</code> or <code>operator char const*()</code> to retrieve a
 C-string representation of the string.  If the result is zero, then it is a
 null-string.  If the result is non-zero but <code>csString::Length()</code> returns
 zero, then it is a zero-length string.  The new convenience method
 <code>csString::GetDataSafe()</code> will always return a valid C-string, even if the
-underlying <samp>`csString'</samp> represents a null-string (in which case a
+underlying <samp>&lsquo;csString&rsquo;</samp> represents a null-string (in which case a
 zero-length C-string <code>&quot;&quot;</code> will be returned).  This means that the result
 of <code>GetDataSafe()</code> can be used directly without performing a null check.
 </p>
-<p>In previous releases, <samp>`csString'</samp> would also sometimes return a null
+<p>In previous releases, <samp>&lsquo;csString&rsquo;</samp> would also sometimes return a null
 pointer or a zero-length string from <code>csString::GetData()</code> or
 <code>operator char const*()</code>, but there was no controlled way to know when one
-or the other would be returned since <samp>`csString'</samp> was doing so haphazardly.
-Worse, several of the <samp>`csString'</samp> methods failed to check the underlying
+or the other would be returned since <samp>&lsquo;csString&rsquo;</samp> was doing so haphazardly.
+Worse, several of the <samp>&lsquo;csString&rsquo;</samp> methods failed to check the underlying
 representation, and would crash if the string's state was not what the methods
-expected.  Now, however, <samp>`csString'</samp> itself makes a proper distinction
+expected.  Now, however, <samp>&lsquo;csString&rsquo;</samp> itself makes a proper distinction
 between these cases, and the user has direct (and documented) control over when
-a <samp>`csString'</samp> will represent a null-string or a zero-length string.
+a <samp>&lsquo;csString&rsquo;</samp> will represent a null-string or a zero-length string.
 </p>
 <a name="28"></a>
 <h3 class="subheading"> csMD5 Changes </h3>
@@ -1172,7 +1172,7 @@ the <small>MD5</small> digest using lowercase hexadecimal characters.
 <a name="29"></a>
 <h3 class="subheading"> Beam Intersection Changes </h3>
 
-<p><code>IntersectSegment()</code> for <samp>`iThingFactoryState'</samp> and <samp>`iThingState'</samp>
+<p><code>IntersectSegment()</code> for <samp>&lsquo;iThingFactoryState&rsquo;</samp> and <samp>&lsquo;iThingState&rsquo;</samp>
 has been removed. Use <code>iMeshObject::HitBeamObject()</code> instead.
 </p>
 <p><code>iMeshObject::HitBeamObject()</code> now has an optional polygon index
@@ -1195,7 +1195,7 @@ instead of a portal.
 <a name="30"></a>
 <h3 class="subheading"> Directory and Path Queries </h3>
 
-<p>The following low-level functions, declared in <tt>`csutil/syspath.h'</tt> can be
+<p>The following low-level functions, declared in <tt>&lsquo;csutil/syspath.h&rsquo;</tt> can be
 used to query various directories and paths.  Each of these functions expects
 to be passed <code>argv[0]</code> obtained from the program's <code>main()</code> function.
 </p>
@@ -1216,17 +1216,17 @@ reside.  On many platforms, resources, such as configuration files, data files,
 etc., reside in the same directory as the application itself.  On such
 platforms, this function will typically return the same directory as
 <code>csGetAppDir()</code>.  On MacOS/X, however, for <small>GUI</small> applications, this
-function will return the <tt>`Resources'</tt> directory within the Cocoa
+function will return the <tt>&lsquo;Resources&rsquo;</tt> directory within the Cocoa
 application wrapper.
 </p></dd>
 </dl>
 
 <p>Since it is rarely convenient to squirrel-away <code>argv[0]</code>, the following
-higher-level methods, declared in <tt>`iutil/cmdline.h'</tt>, are also available
+higher-level methods, declared in <tt>&lsquo;iutil/cmdline.h&rsquo;</tt>, are also available
 for obtaining the same information once the application has been initialized.
 These methods do not require access to <code>argv[0]</code>.  You can obtain a handle
-to the shared <samp>`iCommandLineParser'</samp> from the object registry,
-<samp>`iObjectRegistry'</samp>, which is declared in <tt>`iutil/objreg.h'</tt>.
+to the shared <samp>&lsquo;iCommandLineParser&rsquo;</samp> from the object registry,
+<samp>&lsquo;iObjectRegistry&rsquo;</samp>, which is declared in <tt>&lsquo;iutil/objreg.h&rsquo;</tt>.
 </p>
 <ul>
 <li>
@@ -1240,13 +1240,13 @@ to the shared <samp>`iCommandLineParser'</samp> from the object registry,
 <a name="31"></a>
 <h3 class="subheading"> <small>VFS</small> Changes </h3>
 
-<p><small>VFS</small> (see section <a href="VFS.html#0">Virtual File System (<small>VFS</small>)</a>) now understands two new pseudo-variables, <samp>`$*'</samp> and
-<samp>`$^'</samp>, in its configuration file, <tt>`vfs.cfg'</tt>, and during programmatic
+<p><small>VFS</small> (see section <a href="VFS.html#0">Virtual File System (<small>VFS</small>)</a>) now understands two new pseudo-variables, <samp>&lsquo;$*&rsquo;</samp> and
+<samp>&lsquo;$^&rsquo;</samp>, in its configuration file, <tt>&lsquo;vfs.cfg&rsquo;</tt>, and during programmatic
 mounts.  The full list of pseudo-variables is:
 </p>
 <dl compact="compact">
 <dt> <code>$/</code></dt>
-<dd><p>Platform-specific path delimiter (<tt>`/'</tt> on Unix and MacOS/X; <tt>`\'</tt> on
+<dd><p>Platform-specific path delimiter (<tt>&lsquo;/&rsquo;</tt> on Unix and MacOS/X; <tt>&lsquo;\&rsquo;</tt> on
 Windows).
 </p>
 </dd>
@@ -1265,26 +1265,26 @@ wrapper on MacOS/X; same as <code>csGetAppDir()</code>.
 </dl>
 
 
-<p>The expansions of the <samp>`$@'</samp>, <samp>`$*'</samp>, and <samp>`$^'</samp> variables always
+<p>The expansions of the <samp>&lsquo;$@&rsquo;</samp>, <samp>&lsquo;$*&rsquo;</samp>, and <samp>&lsquo;$^&rsquo;</samp> variables always
 contain a trailing path delimiter.
 </p>
 <p>At initialization time, <small>VFS</small> now searches for its configuration file,
-<tt>`vfs.cfg'</tt>, in the application resource directory
+<tt>&lsquo;vfs.cfg&rsquo;</tt>, in the application resource directory
 (<code>csGetResourceDir()</code>), then in the directory containing the application
 (<code>csGetAppDir()</code>), and finally in the Crystal Space installation directory
-(<code>csGetConfigPath()</code>).  The first <tt>`vfs.cfg'</tt> file found during this
+(<code>csGetConfigPath()</code>).  The first <tt>&lsquo;vfs.cfg&rsquo;</tt> file found during this
 search is the one used to initialize the facility.  In the past, <small>VFS</small>
-searched for <tt>`vfs.cfg'</tt> only in the Crystal Space installation directory.
+searched for <tt>&lsquo;vfs.cfg&rsquo;</tt> only in the Crystal Space installation directory.
 </p>
-<p>The <small>VFS</small> volume <tt>`/temp'</tt> has been renamed to <tt>`/varia'</tt> in the
-default <tt>`vfs.cfg'</tt> file in order to avoid confusion with the like-named
-<small>VFS</small> volume <tt>`/tmp'</tt>, which represents user-writable temporary storage.
-The <tt>`/varia'</tt> volume (n&eacute;e <tt>`/temp'</tt>), on the other hand, resides
-within <tt>`${prefix}/etc/crystal'</tt> (where <tt>`${prefix}'</tt> is the
+<p>The <small>VFS</small> volume <tt>&lsquo;/temp&rsquo;</tt> has been renamed to <tt>&lsquo;/varia&rsquo;</tt> in the
+default <tt>&lsquo;vfs.cfg&rsquo;</tt> file in order to avoid confusion with the like-named
+<small>VFS</small> volume <tt>&lsquo;/tmp&rsquo;</tt>, which represents user-writable temporary storage.
+The <tt>&lsquo;/varia&rsquo;</tt> volume (n&eacute;e <tt>&lsquo;/temp&rsquo;</tt>), on the other hand, resides
+within <tt>&lsquo;${prefix}/etc/crystal&rsquo;</tt> (where <tt>&lsquo;${prefix}&rsquo;</tt> is the
 installation location), and this location usually is not writable by the
 typical user.  External projects may, of course, still create any <small>VFS</small>
-volume desired, including <tt>`/temp'</tt>, by supplying a project-specific
-<tt>`vfs.cfg'</tt>.
+volume desired, including <tt>&lsquo;/temp&rsquo;</tt>, by supplying a project-specific
+<tt>&lsquo;vfs.cfg&rsquo;</tt>.
 </p>
 <a name="32"></a>
 <h3 class="subheading"> Internationalization </h3>
@@ -1296,7 +1296,7 @@ output.
 <a name="33"></a>
 <h4 class="subsubheading"> Unicode Helpers </h4>
 
-<p>The <samp>`csUnicodeTransform'</samp> class provides functions to deal with and convert
+<p>The <samp>&lsquo;csUnicodeTransform&rsquo;</samp> class provides functions to deal with and convert
 between <small>UTF</small>-8, <small>UTF</small>-16, and <small>UTF</small>-32 encoded strings.
 </p>
 <a name="34"></a>
@@ -1349,14 +1349,14 @@ Native Window
 <h3 class="subheading"> Keyboard Events </h3>
 
 <p>Keyboard events have changed.  The event data related to keyboard events is no
-longer stored in a structure inside <samp>`iEvent'</samp>, but instead now resides
-within <samp>`iEvent'</samp>'s property bag.  That means the way to access the event
+longer stored in a structure inside <samp>&lsquo;iEvent&rsquo;</samp>, but instead now resides
+within <samp>&lsquo;iEvent&rsquo;</samp>'s property bag.  That means the way to access the event
 data has changed slightly; you now either query for the data via
 <code>iEvent::Find()</code> to get a specific property, or you access it via the the
-<samp>`csKeyEventHelper'</samp> class.
+<samp>&lsquo;csKeyEventHelper&rsquo;</samp> class.
 </p>
-<p>Another change is that the <samp>`csevKeyDown'</samp> and <samp>`csevKeyUp'</samp> events have
-been collapsed to a single <samp>`csevKeyboard'</samp> event; the up/down information
+<p>Another change is that the <samp>&lsquo;csevKeyDown&rsquo;</samp> and <samp>&lsquo;csevKeyUp&rsquo;</samp> events have
+been collapsed to a single <samp>&lsquo;csevKeyboard&rsquo;</samp> event; the up/down information
 is transported along with the event data.
 </p>
 <p>The notion of <em>scan code</em> and <em>characters</em> has been replaced with
@@ -1418,7 +1418,7 @@ switch (e.Type)
 <h3 class="subheading"> iGraphics2D::WriteBaseline() Deprecated </h3>
 
 <p>The functionality provided by <code>WriteBaseline()</code> is now available by 
-specifying the <samp>`CS_WRITE_BASELINE'</samp> flag when calling 
+specifying the <samp>&lsquo;CS_WRITE_BASELINE&rsquo;</samp> flag when calling 
 <code>iGraphics2D::Write()</code>. Hence, <code>WriteBaseline()</code> is superfluous and
 has been deprecated.
 </p>
@@ -1496,7 +1496,7 @@ now have to set the invisible flag manually on all children in the hierarchy.
 <h3 class="subheading"> Skeletal Sprites </h3>
 
 <p>Support for skeletal sprites has been removed, along with the following related
-interfaces.  Use the <samp>`sprcal3d'</samp> mesh object instead.  It is more flexible
+interfaces.  Use the <samp>&lsquo;sprcal3d&rsquo;</samp> mesh object instead.  It is more flexible
 and works correctly.  These interfaces have been retired:
 </p>
 <ul>
@@ -1528,7 +1528,7 @@ following related interfaces:
 <h3 class="subheading"> Skyboxes </h3>
 
 <p>Meshes that use the <code>CS_ENTITY_CAMERA</code> flag no longer have to be placed
-in a render priority that has the <samp>`camera'</samp> flag set. This render
+in a render priority that has the <samp>&lsquo;camera&rsquo;</samp> flag set. This render
 priority flag is no longer required (but <code>CS_ENTITY_CAMERA</code> still is!).
 </p>
 <a name="44"></a>
@@ -1554,7 +1554,7 @@ overloads that can make life easier for calculating collisions on a path.
 <h3 class="subheading"> Isometric Engine </h3>
 
 <p>The isometric engine has been removed.  It was beyond repair.  The
-<samp>`isotest'</samp> application remains, though, and demonstrates how you can
+<samp>&lsquo;isotest&rsquo;</samp> application remains, though, and demonstrates how you can
 simulate an isometric look with the normal 3D engine.
 </p>
 <a name="47"></a>

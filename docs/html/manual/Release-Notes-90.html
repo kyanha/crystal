@@ -69,8 +69,8 @@ Crystal Space.
 
 <p>The set of <small>SCF</small> functions has been removed except for
 <code>scfInitialize()</code>.  This function creates a global instance of the
-<samp>`iSCF'</samp> interface which is always available to the application and to
-plugin modules as <samp>`iSCF::SCF'</samp>.  All other <small>SCF</small> functionality should be
+<samp>&lsquo;iSCF&rsquo;</samp> interface which is always available to the application and to
+plugin modules as <samp>&lsquo;iSCF::SCF&rsquo;</samp>.  All other <small>SCF</small> functionality should be
 accessed via this shared object.  This change makes it possible to call
 <small>SCF</small> functions from within dynamic libraries (i.e. from plugins), which
 was not possible before.  The only thing that is still not allowed is to use
@@ -78,7 +78,7 @@ the <code>SCF_REGISTER_STATIC()</code> family of macros in dynamic libraries.
 </p>
 <p><small>SCF</small> now associates a so-called <em>Interface <small>ID</small> Number</em> with every
 interface name.  You can get the number for an interface by calling
-<samp>`iSCF::SCF-&gt;GetInterfaceID(&quot;iInterface&quot;)'</samp>.  It is currently not possible
+<samp>&lsquo;iSCF::SCF-&gt;GetInterfaceID(&quot;iInterface&quot;)&rsquo;</samp>.  It is currently not possible
 to get the interface name for a given number, but this should not be needed
 anyway (see below).
 </p>
@@ -104,8 +104,8 @@ get a list of registered classes using <code>iSCF::SCF-&gt;QueryClassList()</cod
 Second, <code>scfGetRefCount()</code> has been introduced which allows access to an
 object's reference count without accessing the reference count variable
 directly.  This function should only be used for debugging, however.  Third,
-the macros which implement <samp>`iBase'</samp> functions have been split up.  For
-example, <samp>`SCF_IMPLEMENT_IBASE()'</samp> is now composed from these components:
+the macros which implement <samp>&lsquo;iBase&rsquo;</samp> functions have been split up.  For
+example, <samp>&lsquo;SCF_IMPLEMENT_IBASE()&rsquo;</samp> is now composed from these components:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">SCF_IMPLEMENT_IBASE_INCREF()
 SCF_IMPLEMENT_IBASE_DECREF()
@@ -151,8 +151,8 @@ to test if an object implements a certain interface.
 it is possible to query the class itself instead of an interface.  Assuming
 that <code>csMyClass</code> is just a set of values, and you don't want to create an
 interface with accessor functions for it.  Then you may place
-<code>SCF_DECLARE_IBASE_EXT()</code> into the class as usual (note the <samp>`EXT'</samp>
-version of the macro because it extends the interface list of <samp>`csObject'</samp>).
+<code>SCF_DECLARE_IBASE_EXT()</code> into the class as usual (note the <samp>&lsquo;EXT&rsquo;</samp>
+version of the macro because it extends the interface list of <samp>&lsquo;csObject&rsquo;</samp>).
 In addition, you must set a version number for the class using
 <code>SCF_VERSION(csMyClass, ?, ?, ?)</code>.  The interface list then looks like
 this:
@@ -164,12 +164,12 @@ SCF_IMPLEMENT_IBASE_EXT_END
 <p>Using this you can use <code>SCF_QUERY_INTERFACE(object, csMyClass)</code>, i.e.
 use the class without an interface.
 </p>
-<p>Another change is that <samp>`csObject'</samp> stores its children as <samp>`iObject'</samp>
-references now.  It does not deal with <samp>`csObject'</samp> pointers any longer.
+<p>Another change is that <samp>&lsquo;csObject&rsquo;</samp> stores its children as <samp>&lsquo;iObject&rsquo;</samp>
+references now.  It does not deal with <samp>&lsquo;csObject&rsquo;</samp> pointers any longer.
 All children are correctly reference-counted.  Also, all objects maintain a
-pointer to their &quot;parent&quot; object.  How this pointer is used is left to you.
+pointer to their &ldquo;parent&rdquo; object.  How this pointer is used is left to you.
 The pointer is not reference-counted in order to avoid circular referencing.
-Consequently, the classes <samp>`csPObject'</samp> and <samp>`csObjNoDel'</samp>, and the
+Consequently, the classes <samp>&lsquo;csPObject&rsquo;</samp> and <samp>&lsquo;csObjNoDel&rsquo;</samp>, and the
 member function <code>ObjRelease()</code> have been removed.
 </p>
 <p>This usually means that after calling <code>ObjAdd()</code>, you have to call
@@ -182,13 +182,13 @@ Similarly, if you want to unlink the object from its parent without deleting it
 <a name="3"></a>
 <h3 class="subheading"> Platform Portability Encapsulation </h3>
 
-<p>The new macro <samp>`CS_IMPLEMENT_APPLICATION'</samp> must now be invoked by exactly
+<p>The new macro <samp>&lsquo;CS_IMPLEMENT_APPLICATION&rsquo;</samp> must now be invoked by exactly
 one compilation unit of each application.  This macro encapsulates
 platform-specific implementation details for any given platform.  For instance,
 on Windows, this macro defines the <code>WinMain()</code> function required by all
 Windows <small>GUI</small> applications.
 </p>
-<p>The new macro <samp>`CS_IMPLEMENT_PLUGIN'</samp> must now be invoked by exactly one
+<p>The new macro <samp>&lsquo;CS_IMPLEMENT_PLUGIN&rsquo;</samp> must now be invoked by exactly one
 compilation unit of each plugin module.  This macro encapsulates
 platform-specific implementation details for any given platform.  For instance,
 on Windows, this macro defines the <code>DllMain()</code> function required by all
@@ -200,25 +200,25 @@ various platforms.
 </p>
 <dl compact="compact">
 <dt> Unix</dt>
-<dd><p>No longer required to link plugin modules against the <tt>`dummy.o'</tt> file.
+<dd><p>No longer required to link plugin modules against the <tt>&lsquo;dummy.o&rsquo;</tt> file.
 </p>
 </dd>
 <dt> Visual-C++</dt>
 <dd><p>No longer required to link applications against Crystal Space's
-<tt>`win32exe.lib'</tt> library.  No longer required to link plugin modules
-(<small>DLL</small>'s) against the <tt>`win32dll.lib'</tt> library.  Also, the
-<tt>`libwin32exe.dsp'</tt> and <tt>`libwin32dll.dsp'</tt> project files have been
+<tt>&lsquo;win32exe.lib&rsquo;</tt> library.  No longer required to link plugin modules
+(<small>DLL</small>'s) against the <tt>&lsquo;win32dll.lib&rsquo;</tt> library.  Also, the
+<tt>&lsquo;libwin32exe.dsp&rsquo;</tt> and <tt>&lsquo;libwin32dll.dsp&rsquo;</tt> project files have been
 removed.
 </p>
 </dd>
 <dt> Mingw</dt>
-<dd><p>No longer required to link applications with the <tt>`exeentry.o'</tt> object file.
+<dd><p>No longer required to link applications with the <tt>&lsquo;exeentry.o&rsquo;</tt> object file.
 No longer required to link plugin modules (<small>DLL</small>'s) with the
-<tt>`dllentry.o'</tt> object file.
+<tt>&lsquo;dllentry.o&rsquo;</tt> object file.
 </p>
 </dd>
 <dt> <small>OS/2</small></dt>
-<dd><p>No longer required to link plugin modules with the <tt>`dllentry.o'</tt> object
+<dd><p>No longer required to link plugin modules with the <tt>&lsquo;dllentry.o&rsquo;</tt> object
 file.
 </p></dd>
 </dl>
@@ -262,8 +262,8 @@ tag with which the loaded plugin is registered in the object registry.
 <a name="6"></a>
 <h3 class="subheading"> Image Loading </h3>
 
-<p><samp>`csImageLoader'</samp> is gone and has now become a plugin which implements
-the <samp>`iImageIO'</samp> interface. To use it you typically use the following
+<p><samp>&lsquo;csImageLoader&rsquo;</samp> is gone and has now become a plugin which implements
+the <samp>&lsquo;iImageIO&rsquo;</samp> interface. To use it you typically use the following
 code:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">#include &quot;igraphic/imageio.h&quot;
@@ -284,7 +284,7 @@ following in your configuration file:
 <table><tr><td>&nbsp;</td><td><pre class="example">System.PlugIns.iLoader = crystalspace.level.loader
 </pre></td></tr></table>
 
-<p>Or you can add <samp>`CS_REQUEST_LEVELLOADER'</samp> to the list of requested plugin
+<p>Or you can add <samp>&lsquo;CS_REQUEST_LEVELLOADER&rsquo;</samp> to the list of requested plugin
 in the call to <code>csInitializer::RequestPlugins()</code>.  Then you can get the
 level loader with:
 </p>
@@ -317,7 +317,7 @@ about this.
 </li><li>
 <code>SKY</code> =&gt; <code>MESHOBJ + RENDPRI</code>
 </li><li>
-<code>MESHOBJ</code> =&gt; <code>MESHFACT</code> -- (for factories)
+<code>MESHOBJ</code> =&gt; <code>MESHFACT</code> &mdash; (for factories)
 </li><li>
 <code>BEZIER</code> =&gt; <code>ADDON</code>
 </li><li>
@@ -339,11 +339,11 @@ priority).
 <h3 class="subheading"> Using the Engine as a Plugin </h3>
 
 <p>It is now recommended to use the engine as a plugin. Linking directly
-to the <tt>`csengine'</tt> library is still possible but strongly discouraged.
+to the <tt>&lsquo;csengine&rsquo;</tt> library is still possible but strongly discouraged.
 We will not be able to guarantee <small>API</small> compatibility on this level.
 </p>
 <p>Using the engine as a plugin means in the first loading the engine plugin
-instead of linking to the <tt>`csengine'</tt> library.  You can do this with:
+instead of linking to the <tt>&lsquo;csengine&rsquo;</tt> library.  You can do this with:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csInitializer::RequestPlugins (object_reg,
   CS_REQUEST_ENGINE,
@@ -352,8 +352,8 @@ instead of linking to the <tt>`csengine'</tt> library.  You can do this with:
 iEngine* engine = CS_QUERY_REGISTRY (object_reg, iEngine);
 </pre></td></tr></table>
 <p>You then use the engine through <small>SCF</small> interfaces.  Therefore, your programs
-should include header files from <tt>`CS/include/iengine'</tt> rather than
-<tt>`CS/include/csengine'</tt>.  Importing files from <tt>`CS/include/csengine'</tt>
+should include header files from <tt>&lsquo;CS/include/iengine&rsquo;</tt> rather than
+<tt>&lsquo;CS/include/csengine&rsquo;</tt>.  Importing files from <tt>&lsquo;CS/include/csengine&rsquo;</tt>
 is discouraged.
 </p>
 <a name="12"></a>
@@ -386,9 +386,9 @@ mesh object. In a world file this happens like this:
 <a name="13"></a>
 <h3 class="subheading"> Header Directory Changes </h3>
 
-<p>All <small>SCF</small> interfaces (class names starting with the letter <samp>`i'</samp> such as
-<samp>`iPolygon3D'</samp>) have moved from <tt>`CS/include'</tt> to individual
-subddirectories of <tt>`CS/include'</tt>.  A few brief examples:
+<p>All <small>SCF</small> interfaces (class names starting with the letter <samp>&lsquo;i&rsquo;</samp> such as
+<samp>&lsquo;iPolygon3D&rsquo;</samp>) have moved from <tt>&lsquo;CS/include&rsquo;</tt> to individual
+subddirectories of <tt>&lsquo;CS/include&rsquo;</tt>.  A few brief examples:
 </p>
 <ul>
 <li>
@@ -406,13 +406,13 @@ subddirectories of <tt>`CS/include'</tt>.  A few brief examples:
 <code>engine.h</code>, <code>texture.h</code>, <small class="dots">...</small>).
 </p></dd>
 <dt> <code>include/igame</code></dt>
-<dd><p>For the <tt>`csgame'</tt> plugin (<code>csgame.h</code>).
+<dd><p>For the <tt>&lsquo;csgame&rsquo;</tt> plugin (<code>csgame.h</code>).
 </p></dd>
 <dt> <code>include/igeom</code></dt>
-<dd><p>For the <tt>`csgeom'</tt> library (<code>clip2d.h</code>).
+<dd><p>For the <tt>&lsquo;csgeom&rsquo;</tt> library (<code>clip2d.h</code>).
 </p></dd>
 <dt> <code>include/igraphic</code></dt>
-<dd><p>For the <tt>`csgfx'</tt> library and the image loader
+<dd><p>For the <tt>&lsquo;csgfx&rsquo;</tt> library and the image loader
 plugins (<code>image.h</code>, <code>imageio.h</code>, and <code>loader.h</code>).
 </p></dd>
 <dt> <code>include/imap</code></dt>
@@ -435,7 +435,7 @@ state interfaces of mesh objects (<code>object.h</code>, <code>spr3d.h</code>,
 <code>evdefs.h</code>, <code>plugin.h</code>, <code>vfs.h</code>, and <code>system.h</code>).
 </p></dd>
 <dt> <code>include/iutil</code></dt>
-<dd><p>For the <tt>`csutil'</tt> library (<code>string.h</code>, <code>object.h</code>,
+<dd><p>For the <tt>&lsquo;csutil&rsquo;</tt> library (<code>string.h</code>, <code>object.h</code>,
 <code>config.h</code>, <small class="dots">...</small>).
 </p></dd>
 <dt> <code>include/ivideo</code></dt>
@@ -453,7 +453,7 @@ state interfaces of mesh objects (<code>object.h</code>, <code>spr3d.h</code>,
 <a name="14"></a>
 <h3 class="subheading"> Global <small>API</small> Changes </h3>
 
-<p>All <small>SCF</small> macro names are now prefixed with <samp>`SCF_'</samp> in order to avoid
+<p>All <small>SCF</small> macro names are now prefixed with <samp>&lsquo;SCF_&rsquo;</samp> in order to avoid
 polluting the global namespace.
 </p>
 <ul>
@@ -549,7 +549,7 @@ polluting the global namespace.
 <code>REGISTER_STATIC_LIBRARY</code> =&gt; <code>SCF_REGISTER_STATIC_LIBRARY</code>
 </li></ul>
 
-<p>Plugin management macro names are now prefixed with <samp>`CS_'</samp> in order to
+<p>Plugin management macro names are now prefixed with <samp>&lsquo;CS_&rsquo;</samp> in order to
 avoid polluting the global namespace.
 </p>
 <ul>
@@ -561,7 +561,7 @@ avoid polluting the global namespace.
 <code>_LOAD_PLUGIN</code> =&gt; <code>CS_LOAD_PLUGIN_ALWAYS</code>
 </li></ul>
 
-<p>Macros for classifying events are now prefixed with <samp>`CS_'</samp> in order to
+<p>Macros for classifying events are now prefixed with <samp>&lsquo;CS_&rsquo;</samp> in order to
 avoid polluting the global namespace.
 </p>
 <ul>
@@ -575,7 +575,7 @@ avoid polluting the global namespace.
 <code>IS_NETWORK_EVENT</code> =&gt; <code>CS_IS_NETWORK_EVENT</code>
 </li></ul>
 
-<p>Platform-specific configuration macros are now prefixed with <samp>`CS_'</samp> in
+<p>Platform-specific configuration macros are now prefixed with <samp>&lsquo;CS_&rsquo;</samp> in
 order to avoid polluting the global namespace.
 </p>
 <ul>
@@ -589,11 +589,11 @@ order to avoid polluting the global namespace.
 <code>SOUND_DRIVER</code> =&gt; <code>CS_SOUND_DRIVER</code>
 </li></ul>
 
-<p>All <samp>`csVector'</samp>-related macros are now prefixed with <samp>`CS_'</samp> in order to
+<p>All <samp>&lsquo;csVector&rsquo;</samp>-related macros are now prefixed with <samp>&lsquo;CS_&rsquo;</samp> in order to
 avoid polluting the global namespace.  Furthermore,
 <code>DECLARE_TYPED_SCF_VECTOR()</code> has been renamed to
 <code>CS_DECLARE_TYPED_IBASE_VECTOR()</code> in order to more clearly indicate that
-this array type works with reference-counted <samp>`iBase'</samp> objects.
+this array type works with reference-counted <samp>&lsquo;iBase&rsquo;</samp> objects.
 </p>
 <ul>
 <li>
@@ -610,10 +610,10 @@ this array type works with reference-counted <samp>`iBase'</samp> objects.
 <code>DECLARE_TYPED_SCF_VECTOR()</code> =&gt; <code>CS_DECLARE_TYPED_IBASE_VECTOR()</code>
 </li></ul>
 
-<p>All <samp>`SYSDEF_BLAH'</samp> request macros are now prefixed with <samp>`CS_'</samp> in order
+<p>All <samp>&lsquo;SYSDEF_BLAH&rsquo;</samp> request macros are now prefixed with <samp>&lsquo;CS_&rsquo;</samp> in order
 to avoid polluting the global namespace.  Furthermore, each macro name now
-contains the word &quot;provide&quot; since these macros are used by client code to
-request that <tt>`cssysdef.h'</tt> <em>provides</em> certain facilities.
+contains the word &ldquo;provide&rdquo; since these macros are used by client code to
+request that <tt>&lsquo;cssysdef.h&rsquo;</tt> <em>provides</em> certain facilities.
 </p>
 <ul>
 <li>
@@ -749,7 +749,7 @@ The following method name changes follow the pattern where
 <code>Update_Num()</code> =&gt; <code>UpdateCount()</code>
 </li></ul>
 
-<p>The prefix <samp>`cs'</samp> was added to the following list of functions, and their
+<p>The prefix <samp>&lsquo;cs&rsquo;</samp> was added to the following list of functions, and their
 names were also normalized.
 </p>
 <ul>
@@ -802,30 +802,30 @@ names were also normalized.
 <a name="15"></a>
 <h3 class="subheading"> Library Renamed: csfx </h3>
 
-<p>The <samp>`csfx'</samp> library was renamed to <samp>`cstool'</samp>.
+<p>The <samp>&lsquo;csfx&rsquo;</samp> library was renamed to <samp>&lsquo;cstool&rsquo;</samp>.
 </p>
 <a name="16"></a>
 <h3 class="subheading"> Library Removed: csobject </h3>
 
-<p>The <tt>`csobject'</tt> library has been removed. All files in that
-library have moved to <tt>`csutil'</tt>.
+<p>The <tt>&lsquo;csobject&rsquo;</tt> library has been removed. All files in that
+library have moved to <tt>&lsquo;csutil&rsquo;</tt>.
 </p>
 <a name="17"></a>
 <h3 class="subheading"> csCollider </h3>
 
-<p>The <samp>`csCollider'</samp> facility moved from <samp>`csengine'</samp> to <samp>`cstool'</samp> and
-was renamed to <samp>`csColliderWrapper'</samp>.
+<p>The <samp>&lsquo;csCollider&rsquo;</samp> facility moved from <samp>&lsquo;csengine&rsquo;</samp> to <samp>&lsquo;cstool&rsquo;</samp> and
+was renamed to <samp>&lsquo;csColliderWrapper&rsquo;</samp>.
 </p>
 <a name="18"></a>
 <h3 class="subheading"> Key/Node Mechanism </h3>
 
-<p>The <samp>`csKeyValuePair'</samp> and <samp>`csMapNode'</samp> classes moved from
-<tt>`csengine'</tt> to <tt>`cstool'</tt>.
+<p>The <samp>&lsquo;csKeyValuePair&rsquo;</samp> and <samp>&lsquo;csMapNode&rsquo;</samp> classes moved from
+<tt>&lsquo;csengine&rsquo;</tt> to <tt>&lsquo;cstool&rsquo;</tt>.
 </p>
 <a name="19"></a>
 <h3 class="subheading"> csView </h3>
 
-<p>The <samp>`csView'</samp> class moved from <samp>`csengine'</samp> to <samp>`cstool'</samp>.
+<p>The <samp>&lsquo;csView&rsquo;</samp> class moved from <samp>&lsquo;csengine&rsquo;</samp> to <samp>&lsquo;cstool&rsquo;</samp>.
 </p>
 <a name="20"></a>
 <h3 class="subheading"> <small>DDG</small> Terrain Engine Removed </h3>
@@ -847,21 +847,21 @@ standard modal fashion, but from the perspective of the application programmer
 this represents a paradigm shift since the application must now watch events
 arriving in its <code>csApp::HandleEvent()</code> method in order to determine when
 the modal session has terminated.  Notification arrives in the form of a
-<samp>`csevCommand'</samp> event with command code <code>cscmdStopModal</code>.  This is sent
-when then component's modal session terminates, such as when the &quot;<small>OK</small>&quot; or
-&quot;Cancel&quot; button is pressed.
+<samp>&lsquo;csevCommand&rsquo;</samp> event with command code <code>cscmdStopModal</code>.  This is sent
+when then component's modal session terminates, such as when the &ldquo;<small>OK</small>&rdquo; or
+&ldquo;Cancel&rdquo; button is pressed.
 </p>
 <p>With <code>StartModal()</code> you can provide a <em>userdata</em> argument (which is an
 <small>SCF</small> interface that you can implement on your own).  The userdata will be
 available at any time while the modal session is active by calling
 <code>csApp::GetTopModalUserdata()</code>.  The modal component can be retrieved with
-<code>csApp::GetTopModalComponent()</code>.  The <samp>`Event.Command.Info'</samp> field will
+<code>csApp::GetTopModalComponent()</code>.  The <samp>&lsquo;Event.Command.Info&rsquo;</samp> field will
 be an integer containing the <small>ID</small> of the pressed button (i.e.
 <code>cscmdOK</code>, <code>cscmdCancel</code>, etc.).
 </p>
 <p>A related change was made to <code>csMessageBox()</code>.  It also now returns
 immediately.  It nows sends a similar message to the application when the
-message box is closed (via &quot;<small>OK</small>&quot; or &quot;Cancel&quot;).  In this case, the
+message box is closed (via &ldquo;<small>OK</small>&rdquo; or &ldquo;Cancel&rdquo;).  In this case, the
 userdata object will implement the <small>SCF</small> interface <code>iMessageBoxData</code>,
 so you can use <code>SCF_QUERY_INTERFACE()</code> to check for this.
 </p>
@@ -933,14 +933,14 @@ do not allow to have different numbers of vertices, normals and texels. So
 <code>GetVertexCount()</code> should be used instead.
 
 </li><li>
-The <samp>`count'</samp> parameter has been removed from <code>SetVertices()</code>,
+The <samp>&lsquo;count&rsquo;</samp> parameter has been removed from <code>SetVertices()</code>,
 <code>SetNormals()</code> and <code>SetTexels()</code>. These functions only worked
-properly if the current number of vertices was passed for <samp>`count'</samp>, so
+properly if the current number of vertices was passed for <samp>&lsquo;count&rsquo;</samp>, so
 passing the parameter at all makes no sense.
 
 </li><li>
 <code>GetVertex()</code>, <code>GetNormal()</code> and <code>GetTexel()</code> now return
-<samp>`const'</samp> objects. To modify these objects, <code>SetVertex()</code>,
+<samp>&lsquo;const&rsquo;</samp> objects. To modify these objects, <code>SetVertex()</code>,
 <code>SetNormal()</code> and <code>SetTexel()</code> have been added.
 </li></ul>
 
@@ -966,9 +966,9 @@ This is now done automatically in <code>csEngine::Draw()</code>.
 work mesh wrappers will be renamed like that.
 </p>
 <p>Renamed <code>csFilenameMatches()</code> to <code>csGlobMatches()</code> (from
-<tt>`csutil'</tt> library).
+<tt>&lsquo;csutil&rsquo;</tt> library).
 </p>
-<p>From the <samp>`iEngine'</samp> interface, these two methods were removed:
+<p>From the <samp>&lsquo;iEngine&rsquo;</samp> interface, these two methods were removed:
 </p>
 <ul>
 <li>
@@ -987,10 +987,10 @@ work mesh wrappers will be renamed like that.
 <code>GetLightingCacheMode()</code>
 </li></ul>
 
-<p><samp>`FrameWidth'</samp> and <samp>`FrameHeight'</samp> are no longer available
-in <samp>`SysSystemDriver'</samp> (entire system driver is gone, in fact). Instead
+<p><samp>&lsquo;FrameWidth&rsquo;</samp> and <samp>&lsquo;FrameHeight&rsquo;</samp> are no longer available
+in <samp>&lsquo;SysSystemDriver&rsquo;</samp> (entire system driver is gone, in fact). Instead
 you have to call <code>GetWidth()</code> and <code>GetHeight()</code> on the pointer
-to the canvas (<samp>`iGraphics2D'</samp>).
+to the canvas (<samp>&lsquo;iGraphics2D&rsquo;</samp>).
 </p>
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">

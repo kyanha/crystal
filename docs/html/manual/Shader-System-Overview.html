@@ -64,25 +64,25 @@ ul.toc {list-style: none}
 <a name="1"></a>
 <h3 class="subheading"> Terminology </h3>
 
-<p>The term &quot;shader&quot; is used for a number of different things in computer
-graphics.  In DirectX, and recently OpenGL, &quot;shader&quot; is used to name
+<p>The term &ldquo;shader&rdquo; is used for a number of different things in computer
+graphics.  In DirectX, and recently OpenGL, &ldquo;shader&rdquo; is used to name
 the programs running on the <small>GPU</small> to process vertex and fragment data.
 Offline rendering packages use the term to describe the complete appearance 
 of a surface.
 </p> 
 <p>Shaders in Crystal Space are closer to the second meaning, as they are a
-generic surface description.  (&quot;Shaders&quot; in the DirectX/OpenGL sense are
-appropriately called &quot;programs&quot; in Crystal Space.)  They are generic as 
+generic surface description.  (&ldquo;Shaders&rdquo; in the DirectX/OpenGL sense are
+appropriately called &ldquo;programs&rdquo; in Crystal Space.)  They are generic as 
 a single shader describes a class of a surface, or even classes of surfaces,
 and specific aspects can be controlled via parameters.  The benefit is that
 shaders are reusable, and actual values for such parameters can be provided 
 by a material and other instances, defining the actual look of a surface.  As
-an example, you may create a shader &quot;cloth&quot; emulating a cloth-like look.
+an example, you may create a shader &ldquo;cloth&rdquo; emulating a cloth-like look.
 The shader would provide a generic description of the surface, with specific
 parameters (e.g. the actual color or pattern, whether it appears shiny or
-dull) being set as material properties. Hence you can have a lot of &quot;cloth&quot;
+dull) being set as material properties. Hence you can have a lot of &ldquo;cloth&rdquo;
 materials by just changing these properties. (The mechanism for this are the 
-&quot;shader variables&quot;, described further below.)
+&ldquo;shader variables&rdquo;, described further below.)
 </p>
 <a name="2"></a>
 <h3 class="subheading"> Components of a Shader </h3>
@@ -110,7 +110,7 @@ expanded with e.g. descriptions of the parameters that can be controlled.
 <a name="4"></a>
 <h4 class="subsubheading"> Shader Variables </h4>
 
-<p>Shader variables are &quot;parameters&quot; for shaders and are commonly used for
+<p>Shader variables are &ldquo;parameters&rdquo; for shaders and are commonly used for
 things that should be customizeable, e.g. the diffuse texture of a surface
 or its shininess. A shader variable defined in the shader itself acts like a 
 default value which can be overridden by other shader variable sources like
@@ -131,8 +131,8 @@ technique is geared towards more advanced hardware, while lower priorities
 gradually accomodate less advanced hardware (commonly also degrading the
 quality since not all effects can be achieved on all hardware).
 </p>
-<p>Another mechanism to control the shader selection are the so-called &quot;shader
-tags&quot;.  Currently, a tag can be set to be required by a technique to have
+<p>Another mechanism to control the shader selection are the so-called &ldquo;shader
+tags&rdquo;.  Currently, a tag can be set to be required by a technique to have
 the latter selected, or set to prevent a technique that has this tag to be
 selected.  Tags can be controlled from the configuration system, hence this
 mechanism offers a simple way to disable a number of techniques from a
@@ -147,7 +147,7 @@ passes.  During rendering, a mesh is drawn once for each pass in the used
 shader: essentially, the same geometry is drawn multiple times with different
 shader programs (and hence different processing).  Multiple passes can be
 used to overcome hardware limitations: for example, a lightmapped surface
-that should &quot;glow&quot; needs three textures (lightmap, diffuse texture, glow
+that should &ldquo;glow&rdquo; needs three textures (lightmap, diffuse texture, glow
 mask), however, implementing it as a single-pass technique is impossible on
 hardware that features only two texture units.  Using multiple passes can
 be used here to get around the limitation: the first pass combines normal
@@ -159,7 +159,7 @@ shells; each fur shell can be a separate pass.
 <p>Using multiple passes has its backdraws, though: obviously, drawing geometry
 multiple times is potentially more expensive than drawing it once. Also, the
 only way to propagate data between multiple passes is the framebuffer: you can
-only &quot;propagate&quot; data to the immediately following pass, and it can only be
+only &ldquo;propagate&rdquo; data to the immediately following pass, and it can only be
 combined with the this passes output via the fragment blending.  (Also, in very
 dire circumstances the alpha channel may not be available for propagation.)
 </p>
@@ -173,12 +173,12 @@ together to produce a certain effect or appearance.
 </p>
 <p>Shader programs in Crystal Space are abstracted into plugins.  Plugins exist
 for e.g. <small>ARB</small> vertex or fragment programs, Cg vertex or fragment programs
-or fixed function pipeline setup (not actually &quot;true&quot; programs, but by
+or fixed function pipeline setup (not actually &ldquo;true&rdquo; programs, but by
 Crystal Space provided by shader program plugins as well).  Even the software
 renderer's rasterization is realized as a shader plugin.
 </p>
 <p>A Crystal Space-specific feature grouped into shader programs is the support
-for &quot;vertex processors&quot;.  These are not shader programs in the sense of being
+for &ldquo;vertex processors&rdquo;.  These are not shader programs in the sense of being
 executed on the GPU, rather they're plugins that manipulate vertex data in
 software.  The motivation for this feature was to allow vertex manipulation
 that might be too complicated, or simply impossible due hardware limitations,
@@ -206,7 +206,7 @@ may have more abstract mappings (e.g. registers for <small>ARB</small> programs)
 <h3 class="subheading"> Shader Variables </h3>
 
 <p>Shader variables serve as an important carrier for data related to rendering
-in Crystal Space.  The function &quot;customize shaders&quot; is actually just a
+in Crystal Space.  The function &ldquo;customize shaders&rdquo; is actually just a
 subset of what shader variables are used for; other uses include passing
 around data inside the engine itself.
 </p>
@@ -220,37 +220,37 @@ see below.
 <p>Shader variables can contain vectors, transforms, but also textures, vertex 
 buffers and even arrays of other shader variables.
 </p>
-<p>Shader variables are provided by so-called &quot;shader variable contexts&quot;.  
+<p>Shader variables are provided by so-called &ldquo;shader variable contexts&rdquo;.  
 Before rendering a mesh, the render loop collects shader variables from the 
 contexts.  There is a hardcoded order of preference: some contexts override 
 variables from other contexts, if variables of the same name exist.
 </p>
 <p>Contexts are provided by (in order of increasing preference):
 </p><ul>
-<li> Shader manager - The shader manager provides &quot;global&quot; shader 
-variables.  Currently, only a variable <samp>`standard time'</samp> is provided, 
+<li> Shader manager - The shader manager provides &ldquo;global&rdquo; shader 
+variables.  Currently, only a variable <samp>&lsquo;standard time&rsquo;</samp> is provided, 
 which contains the time from the virtual clock, useful for animations in 
 shaders.
 </li><li> Current Light - This context contain shader variables attached to 
 the current light being used for rendering.  The idea is to potentially allow 
-light-specific effects, e.g. the ability to support &quot;projectors&quot; by having 
+light-specific effects, e.g. the ability to support &ldquo;projectors&rdquo; by having 
 a texture attached to a light.
 </li><li> Renderstep - This context is not accessible by the user.  It provides 
-shader variables that are filled from &quot;special&quot; sources as a convenience for 
-shaders, like <samp>`object2 world transform'</samp>.
+shader variables that are filled from &ldquo;special&rdquo; sources as a convenience for 
+shaders, like <samp>&lsquo;object2 world transform&rsquo;</samp>.
 </li><li> Rendermesh - This context is also not accessible by the user.  It 
 contains shader variables provided by mesh objects.  Usually these are 
 buffers with geometry, but in some special cases also textures (e.g. the 
 Thing mesh provides lightmaps, the terrain mesh splatting masks).
 </li><li> Mesh object wrapper - Shader variables can be attached to mesh objects 
-in order to realize per-mesh effects.  E.g. you can write a &quot;colorize&quot; 
+in order to realize per-mesh effects.  E.g. you can write a &ldquo;colorize&rdquo; 
 shader that renders a surface with a given tint and then attach shader 
 variables with the tint color to mesh wrappers: this will have the result 
 that different meshes are tinted differently.  Another application for this 
 mechanism is lightmaps, which are attached to a mesh object via shader 
 variables.
 </li><li> Shader - Shader variables can be defined by shaders itself.  The idea 
-behind this is to allow providing &quot;default&quot; values for shader parameters: 
+behind this is to allow providing &ldquo;default&rdquo; values for shader parameters: 
 if a shader variable isn't overridden by any context with higher precedence, 
 it still has some sensible default value.
 </li><li> Material - This is probably the context that is most used.  Shader 
@@ -282,7 +282,7 @@ require a separate shader: obviously a rather large amount of work to
 begin with and a continued maintenance headache, since a single change must
 be propagated to a number of shaders.
 </p>
-<p>Shader conditionals allow to litter &quot;conditions&quot; throughout a shader.  The
+<p>Shader conditionals allow to litter &ldquo;conditions&rdquo; throughout a shader.  The
 possible conditions include tests for the existance of shader variables and
 comparisons between variables or immediate values.
 </p>

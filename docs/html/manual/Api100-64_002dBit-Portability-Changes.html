@@ -68,18 +68,18 @@ essentially are transparent to external clients.
 </p>
 <p>The most significant change to the <small>API</small> involves methods and classes
 dealing with data opaquely. Historically, opaque data has been handled using
-<samp>`void*'</samp>, and programmers would cast numbers, booleans, and pointers to
-<samp>`void*'</samp> when it was necessary to deal with the data in an opaque fashion.
+<samp>&lsquo;void*&rsquo;</samp>, and programmers would cast numbers, booleans, and pointers to
+<samp>&lsquo;void*&rsquo;</samp> when it was necessary to deal with the data in an opaque fashion.
 This technique, however, is not portable to 64-bit platforms. For this reason,
-the new standard type <samp>`intptr_t'</samp> was introduced. This type is guaranteed
+the new standard type <samp>&lsquo;intptr_t&rsquo;</samp> was introduced. This type is guaranteed
 to be large enough to store any integral numeric or pointer value regardless of
 the machine's word size.
 </p>
-<p>Crystal Space now uniformly uses <samp>`intptr_t'</samp>, rather than <samp>`void*'</samp>,
+<p>Crystal Space now uniformly uses <samp>&lsquo;intptr_t&rsquo;</samp>, rather than <samp>&lsquo;void*&rsquo;</samp>,
 when dealing with opaque data. Upgrading your code to reflect this change is
 usually quite simple. Where your code presently declares a variable or casts a
-value to <samp>`void*'</samp>, change it to <samp>`intptr_t'</samp>. Likewise, <samp>`void**'</samp>
-becomes <samp>`intptr_t*'</samp>. For example:
+value to <samp>&lsquo;void*&rsquo;</samp>, change it to <samp>&lsquo;intptr_t&rsquo;</samp>. Likewise, <samp>&lsquo;void**&rsquo;</samp>
+becomes <samp>&lsquo;intptr_t*&rsquo;</samp>. For example:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">iGraphics2D canvas = ...;
 iEventOutlet* outlet = ...;
@@ -91,8 +91,8 @@ outlet-&gt;Broadcast(cscmdCanvasExposed, (void*)canvas);
 <table><tr><td>&nbsp;</td><td><pre class="example">outlet-&gt;Broadcast(cscmdCanvasExposed, (intptr_t)canvas);
 </pre></td></tr></table>
 <p>The event system is impacted by this change. Specifically, the following
-methods and data members now deal with <samp>`intptr_t'</samp> rather than <samp>`void*'</samp>
-for the opaque &quot;info&quot; member of <code>csevCommand</code>-type events.
+methods and data members now deal with <samp>&lsquo;intptr_t&rsquo;</samp> rather than <samp>&lsquo;void*&rsquo;</samp>
+for the opaque &ldquo;info&rdquo; member of <code>csevCommand</code>-type events.
 </p>
 <ul>
 <li>
@@ -107,7 +107,7 @@ for the opaque &quot;info&quot; member of <code>csevCommand</code>-type events.
 
 <p>The <small>AWS</small> plugin (Alternate Windowing System) and its interfaces have been
 been updated for 64-bit platform conformance.  Specifically, the following
-methods now deal with <samp>`intptr_t'</samp> rather than <samp>`void*'</samp> for all of
+methods now deal with <samp>&lsquo;intptr_t&rsquo;</samp> rather than <samp>&lsquo;void*&rsquo;</samp> for all of
 <small>AWS</small>'s opaque data needs.
 </p>
 <ul>
@@ -126,8 +126,8 @@ methods now deal with <samp>`intptr_t'</samp> rather than <samp>`void*'</samp> f
 </li></ul>
 
 <p><small>AWS</small> callback functions (<em>triggers</em>) are likewise impacted. You need to
-change the declaration of your triggers to use <samp>`intptr_t'</samp> rather than
-<samp>`void*'</samp>. For example:
+change the declaration of your triggers to use <samp>&lsquo;intptr_t&rsquo;</samp> rather than
+<samp>&lsquo;void*&rsquo;</samp>. For example:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">void MyTrigger(void* sink, iAwsSource* source);
 </pre></td></tr></table>
@@ -138,17 +138,17 @@ change the declaration of your triggers to use <samp>`intptr_t'</samp> rather th
 </pre></td></tr></table>
 <p>Since converting client <small>AWS</small> code to the new <small>API</small> can be rather onerous
 on account of the amount of repetitious manual labor involved, the old
-<samp>`void*'</samp> <small>API</small> is still present in <small>AWS</small>, though heavily
+<samp>&lsquo;void*&rsquo;</samp> <small>API</small> is still present in <small>AWS</small>, though heavily
 deprecated. In the interests of 64-bit portability, the old <small>API</small> will be
 removed at some point in the future.  You are encouraged, therefore, to convert
 your code to the new <small>API</small>. As an aid to clients in upgrading their code to
 the new <small>API</small>, one of two control macros can be defined which will help to
-isolate code which needs to be updated.  Defining <samp>`AWS_OBSOLETE_VOIDP'</samp>
-(via <samp>`#define'</samp> before including <tt>`iaws/aws.h'</tt>) removes from the
-<small>API</small> all methods dealing with <samp>`void*'</samp>, thus invocations of any such
+isolate code which needs to be updated.  Defining <samp>&lsquo;AWS_OBSOLETE_VOIDP&rsquo;</samp>
+(via <samp>&lsquo;#define&rsquo;</samp> before including <tt>&lsquo;iaws/aws.h&rsquo;</tt>) removes from the
+<small>API</small> all methods dealing with <samp>&lsquo;void*&rsquo;</samp>, thus invocations of any such
 methods will result in compilation errors. Alternately, defining
-<samp>`AWS_DEPRECATE_VOIDP'</samp>, will cause invocations of methods dealing with
-<samp>`void*'</samp> to generate compilation warnings, assuming that the compiler
+<samp>&lsquo;AWS_DEPRECATE_VOIDP&rsquo;</samp>, will cause invocations of methods dealing with
+<samp>&lsquo;void*&rsquo;</samp> to generate compilation warnings, assuming that the compiler
 supports such deprecation warnings. (Presently, only modern version of the
 <small>GNU</small> compiler are so configured.)
 </p>

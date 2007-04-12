@@ -72,9 +72,9 @@ easier to manage reference counting.  Instead of manually calling
 <code>IncRef()</code> and <code>DecRef()</code> on an object, you use a smart pointer
 (<code>csRef&lt;&gt;</code>) and let it manage the reference count automatically.  The
 <code>csRef&lt;&gt;</code> smart pointer template works with any class which provides
-<code>IncRef()</code> and <code>DecRef()</code> methods, such as <samp>`csRefCount'</samp>, as well
+<code>IncRef()</code> and <code>DecRef()</code> methods, such as <samp>&lsquo;csRefCount&rsquo;</samp>, as well
 as all <small>SCF</small> classes.  The <code>csRef&lt;&gt;</code> template is defined in
-<tt>`CS/include/csutil/ref.h'</tt>.
+<tt>&lsquo;CS/include/csutil/ref.h&rsquo;</tt>.
 </p>
 <a name="1"></a>
 <h4 class="subsubheading"> How to Use Smart Pointers </h4>
@@ -90,11 +90,11 @@ so on). To do this you just declare in your main class:
 }
 </pre></td></tr></table>
 <p>Smart pointers do not need to be initialized, so there is no need to write
-<samp>`engine = 0'</samp> in the constructor of your class.  There is also no need to
+<samp>&lsquo;engine = 0&rsquo;</samp> in the constructor of your class.  There is also no need to
 clean them up.  The reference to the engine, in the example, will be cleaned up
 automatically when the instance of <code>MyClass</code> is destroyed.
 </p>
-<p>Here is an example of assigning a valid object to the <samp>`engine'</samp> smart
+<p>Here is an example of assigning a valid object to the <samp>&lsquo;engine&rsquo;</samp> smart
 pointer and then utilizing that pointer (assuming the engine plugin is loaded):
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">iObjectRegistry* object_reg = ...;
@@ -155,14 +155,14 @@ the normal pointer.  If that's not guaranteed use a <code>csRef&lt;&gt;</code> i
 <p>Assigning a normal pointer to a smart pointer <em>does</em> change the reference
 count: ownership is taken, ie the reference count is increased.  This can 
 cause a leaked reference in certain circumstances.  One notable instance is 
-the assignment of an object just allocated with <samp>`new'</samp> to a smart pointer:
+the assignment of an object just allocated with <samp>&lsquo;new&rsquo;</samp> to a smart pointer:
 the object will start with a reference count of 1, but the assignment to the
 smart pointer will also increase the reference count, which errorneously 
-becomes 2. The last &quot;phantom&quot; reference will never be release, causing a 
+becomes 2. The last &ldquo;phantom&rdquo; reference will never be release, causing a 
 leak.
 </p>
 <p>The recommend way to deal with that is to <em>never</em> assign an object 
-allocated with <samp>`new'</samp> to a smart pointer directly.  Instead use it's
+allocated with <samp>&lsquo;new&rsquo;</samp> to a smart pointer directly.  Instead use it's
 <code>AttachNew()</code> method which will take care of the proper reference
 counting.
 </p>
@@ -201,9 +201,9 @@ neglects to assign it to a variable.
 <h4 class="subsubheading"> When to Use csWeakRef&lt;&gt;? </h4>
 
 <p>Another smart pointer class is <code>csWeakRef&lt;&gt;</code>.  The significant difference
-to <code>csRef&lt;&gt;</code> is that a &quot;weak&quot; reference is <em>not</em> owning.  However,
-unlike raw pointers, <code>csWeakRef&lt;&gt;</code> prevents the risk of a &quot;dangling
-pointer&quot; (a pointer referencing a freed, thus invalid, object): when the
+to <code>csRef&lt;&gt;</code> is that a &ldquo;weak&rdquo; reference is <em>not</em> owning.  However,
+unlike raw pointers, <code>csWeakRef&lt;&gt;</code> prevents the risk of a &ldquo;dangling
+pointer&rdquo; (a pointer referencing a freed, thus invalid, object): when the
 referenced object gets destroyed, all weak references to it are automatically
 set to null.
 </p>
@@ -211,16 +211,16 @@ set to null.
 references.  When two objects reference each other with <code>csRef&lt;&gt;</code>s 
 neither will be destructed as long as the references are held: Destruction 
 happens when the reference count of an object drops to zero -
-however, object <samp>`A'</samp> is owned by object <samp>`B'</samp>, thus it's reference
-count will not be decreased until object <samp>`B'</samp> is destructed. But object
-<samp>`B'</samp> in turn is owned by object <samp>`A'</samp>, and that reference is not 
-released until object <samp>`A'</samp> is destructed.  This circular dependency leads
+however, object <samp>&lsquo;A&rsquo;</samp> is owned by object <samp>&lsquo;B&rsquo;</samp>, thus it's reference
+count will not be decreased until object <samp>&lsquo;B&rsquo;</samp> is destructed. But object
+<samp>&lsquo;B&rsquo;</samp> in turn is owned by object <samp>&lsquo;A&rsquo;</samp>, and that reference is not 
+released until object <samp>&lsquo;A&rsquo;</samp> is destructed.  This circular dependency leads
 to neither objects being released automatically.
 </p>
 <p>To prevent this scenario one reference can be made a <code>csWeakRef&lt;&gt;</code> 
-instead.  If object <samp>`B'</samp> holds only a weak reference to object <samp>`A'</samp>, 
-this reference will become null when <samp>`A'</samp> is destroyed, and <samp>`B'</samp> may 
-also be destroyed if <samp>`A'</samp> held the last reference to it.
+instead.  If object <samp>&lsquo;B&rsquo;</samp> holds only a weak reference to object <samp>&lsquo;A&rsquo;</samp>, 
+this reference will become null when <samp>&lsquo;A&rsquo;</samp> is destroyed, and <samp>&lsquo;B&rsquo;</samp> may 
+also be destroyed if <samp>&lsquo;A&rsquo;</samp> held the last reference to it.
 </p>
 <p>As all weak references to an object are automatically set to null when the
 object gets destroyed care must be taken when accessing a weak referenced
@@ -357,13 +357,13 @@ ensures that the reference count of the new object is correctly maintained.
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iView&gt; view = csPtr&lt;iView&gt; (new csView (...));
 </pre></td></tr></table>
 <p>This works
-correctly because the new object (<samp>`new csView'</samp>) already automatically has
+correctly because the new object (<samp>&lsquo;new csView&rsquo;</samp>) already automatically has
 a reference-count of 1 at construction time.  By encapsulating the new object
 pointer in a <code>csPtr&lt;&gt;</code>, <code>csRef&lt;&gt;</code> is instructed to <em>not</em> invoke
 <code>IncRef()</code> on the incoming object, but rather to simply inherit the
 reference already owned by the <code>csPtr&lt;&gt;</code>.  By contrast, the following code
 is incorrect and will result in a resource leak since the object's
-reference-count will be 2, rather than one; one reference from the <samp>`new'</samp>
+reference-count will be 2, rather than one; one reference from the <samp>&lsquo;new&rsquo;</samp>
 operation, and one from the <code>IncRef()</code> invocation performed by the
 <code>csRef&lt;&gt;</code>.
 </p>
@@ -490,8 +490,8 @@ mesh-&gt;DecRef ();
 mesh = 0;
 </pre></td></tr></table>
 <p>The bogus code in this example will cause the reference-count to be decremented
-<em>twice</em>--once when <code>DecRef()</code> is invoked explicitly, and once when 0
-is assigned to <samp>`mesh'</samp>)-which is almost certainly not what was intended.
+<em>twice</em>&mdash;once when <code>DecRef()</code> is invoked explicitly, and once when 0
+is assigned to <samp>&lsquo;mesh&rsquo;</samp>)&ndash;which is almost certainly not what was intended.
 </p>
 <a name="10"></a>
 <h4 class="subsubheading"> Warning About DestroyApplication()! </h4>
@@ -514,12 +514,12 @@ invoking <code>DestroyApplication()</code>.  Therefore, the following code is
   return 0;
 }
 </pre></td></tr></table>
-<p>The reason this doesn't work correctly is that the <samp>`plugin_mgr'</samp> reference
+<p>The reason this doesn't work correctly is that the <samp>&lsquo;plugin_mgr&rsquo;</samp> reference
 will be cleaned up at the end of <code>main()</code>, which occurs after
 <code>DestroyApplication()</code> is invoked.  To fix this you can use several
-techniques.  Manually setting <samp>`plugin_mgr'</samp> to 0 just before calling
+techniques.  Manually setting <samp>&lsquo;plugin_mgr&rsquo;</samp> to 0 just before calling
 <code>DestroyApplication()</code> is one method.  Another technique is to put the
-initialization into another routine so that <samp>`plugin_mgr'</samp> is created in
+initialization into another routine so that <samp>&lsquo;plugin_mgr&rsquo;</samp> is created in
 another scope; a scope which is destroyed before <code>DestroyApplication()</code> is
 invoked.
 </p>
