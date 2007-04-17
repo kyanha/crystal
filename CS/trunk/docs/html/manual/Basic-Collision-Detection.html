@@ -158,9 +158,12 @@ object instances that use the same factory).
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">csRef&lt;iCollider&gt; MyGame::InitCollider (iMeshWrapper* mesh)
 {
-  iTriangleMesh* trimesh =
-    mesh-&gt;GetMeshObject()-&gt;GetObjectModel()-&gt;GetTriangleData(
-    	cdsys-&gt;GetTriangleDataID());
+  iObjectModel* objmodel = mesh-&gt;GetMeshObject ()-&gt;GetObjectModel ();
+  iTriangleMesh* trimesh;
+  if (objmodel-&gt;IsTriangleDataSet (cdsys-&gt;GetTriangleDataID ()))
+    trimesh = objmodel-&gt;GetTriangleData (cdsys-&gt;GetTriangleDataID ());
+  else
+    trimesh = objmodel-&gt;GetTriangleData (cdsys-&gt;GetBaseDataID ());
   if (trimesh)
   {
     csRef&lt;iCollider&gt; cd = cd_sys-&gt;CreateCollider (trimesh);
@@ -184,12 +187,16 @@ without <code>csColliderHelper</code>:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">bool MyGame::InitCollider (iMeshWrapper* mesh)
 {
-  iPolygonMesh* polmesh =
-    mesh-&gt;GetMeshObject()-&gt;GetObjectModel()-&gt;GetPolygonMeshColldet();
-  if (polmesh)
+  iObjectModel* objmodel = mesh-&gt;GetMeshObject ()-&gt;GetObjectModel ();
+  iTriangleMesh* trimesh;
+  if (objmodel-&gt;IsTriangleDataSet (cdsys-&gt;GetTriangleDataID ()))
+    trimesh = objmodel-&gt;GetTriangleData (cdsys-&gt;GetTriangleDataID ());
+  else
+    trimesh = objmodel-&gt;GetTriangleData (cdsys-&gt;GetBaseDataID ());
+  if (trimesh)
   {
     csColliderWrapper* wrapper = new csColliderWrapper(
-    	mesh-&gt;QueryObject(), cd_sys, polmesh);
+    	mesh-&gt;QueryObject(), cd_sys, trimesh);
     wrapper-&gt;DecRef ();
     return true;
   }
@@ -221,7 +228,7 @@ The easiest way to do that is with this code:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">iMeshWrapper* mesh = ...;
 csBox3 box (-.1, 0, -.1, .1, 1.7, .1);
-csPolygonMeshBox* pmbox = new csPolygonMeshBox (box);
+csTriangleMeshBox* pmbox = new csTriangleMeshBox (box);
 csColliderWrapper* wrapper = new csColliderWrapper (
 	mesh-&gt;QueryObject (), cs_sys, pmbox);
 pmbox-&gt;DecRef ();
