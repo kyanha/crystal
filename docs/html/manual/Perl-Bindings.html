@@ -72,6 +72,11 @@ Space applications entirely in Perl, without any C++ coding.  The rest of this
 document pertains to the second method of using Crystal Space from Perl, though
 much of the discussion is meaningful to both methods.
 </p>
+<p>As well as this document, there also exists an example Perl script located at
+<tt>&lsquo;scripts/perl5/perlsimp.pl&rsquo;</tt>. It is basically the tutorial application
+<samp>&lsquo;simple1&rsquo;</samp> re-written in Perl, and it demonstrates many of the features
+discussed in this document.
+</p>
 <p>To make use of Crystal Space classes from a pure Perl script, first make sure
 that the file <samp>&lsquo;cspace.pm&rsquo;</samp> is available to Perl.  This file is installed
 at:
@@ -102,13 +107,25 @@ Space. On Unix and MacOS/X, this file is named <tt>&lsquo;cspace.so&rsquo;</tt>;
 is named <tt>&lsquo;cspace.dll&rsquo;</tt>. The shared library file should reside in the same
 directory as the <tt>&lsquo;cspace.pm&rsquo;</tt> file. This happens automatically when you
 install Crystal Space (via <samp>&lsquo;make install&rsquo;</samp> or <samp>&lsquo;jam install&rsquo;</samp>). If you
-have not installed Crystal Space, then the shared library will be in the
-top-level build directory, along with <tt>&lsquo;cspace.pm&rsquo;</tt>.
+have not installed Crystal Space, then the shared library will be put in the
+top-level build directory, along with <tt>&lsquo;cspace.pm&rsquo;</tt>. The preferred location
+is <tt>&lsquo;scripts/perl5/&rsquo;</tt>, and <tt>&lsquo;cspace.pm&rsquo;</tt> and <tt>&lsquo;cspace.so&rsquo;</tt> can be
+copied there by doing <samp>&lsquo;jam perl5freeze&rsquo;</samp> and <samp>&lsquo;perl5freezeobj&rsquo;</samp>
+respectively.
 </p>
 <p>To actually utilize Crystal Space from within your script, begin with:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">use cspace;
 </pre></td></tr></table>
+<p>You may also import symbols and classes from the cspace module using the
+standard Perl syntax, for example:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">use cspace qw(csVector3 csMatrix3 CS_QUERY_REGISTRY SCF_QUERY_INTERFACE);
+</pre></td></tr></table>
+<p>Classes will be imported into the <code>main::</code> namespace, while other symbols
+will be imported into the namespace of the current package. This will enable
+you to use these symbols and classes without using the <code>cspace::</code> prefix.
+</p>
 <a name="1"></a>
 <h3 class="subheading"> Getting Started </h3>
 
@@ -135,9 +152,6 @@ has built-in reference counting, so if the object is still referenced in some
 other Perl code when one reference goes out of scope, it will continue to exist
 until there are no more references to it in Perl.
 </p>
-<p>You will note the obvious difference in semantics, being that everything in
-the <samp>&lsquo;cspace&rsquo;</samp> module has a <code>cspace::</code> prefix.
-</p>
 <p>There are three ways to access object properties:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">print $vect-&gt;x;			# Preferred way, conforms to Perl convention
@@ -159,7 +173,7 @@ $vect-&gt;swig_x_set(3.14);	# Swig alternate way
 <a name="3"></a>
 <h3 class="subheading"> Arrays </h3>
 
-<p>Wherever an array is expected, or wherever an array is returned, in or from
+<p>Wherever an array is expected, and wherever an array is returned, in or from
 a Crystal Space C++ function, a Perl array reference is used.
 </p>
 <a name="4"></a>
@@ -173,8 +187,8 @@ easily, using the scalar dereference operator or string interpolation:
 
 print &quot;$string_object that has been interpolated in double-quotes.\n&quot;;
 
-my $string1 = substr ${ $string_object , 0, 4;
-my $string2 = substr ${ $string_object , 8;
+my $string1 = substr ${ $string_object }, 0, 4;
+my $string2 = substr ${ $string_object }, 8;
 
 print &quot;$string1 has been extracted from $string2 using scalar dereference.\n&quot;;
 
@@ -183,6 +197,8 @@ print &quot;$string1 has been extracted from $string2 using scalar dereference.\
 # This has been extracted from a csString using scalar dereference.
 </pre></td></tr></table>
 <p>This also applies to <samp>&lsquo;iDataBuffer&rsquo;</samp>.
+</p>
+<p>To pass the null pointer as a string argument, use Perl's <code>undef</code> keyword.
 </p>
 <a name="5"></a>
 <h3 class="subheading"> Vectors, Matrices and Colors </h3>
@@ -195,7 +211,7 @@ the vector:
 
 print $vector-&gt;[1] . $vector-&gt;[0] . $vector-&gt;[2] . &quot;\n&quot;;
 
-print reverse @ . &quot;\n&quot;;
+print reverse @{ $vector } . &quot;\n&quot;;
 
 # Output:
 # 213
@@ -229,6 +245,8 @@ way, and pass them on to other functions as arguments where appropriate.
 </p>
 <p>The Perl bindings automatically and correctly handle <code>csRef&lt;&gt;</code> and
 <code>csPtr&lt;&gt;</code>.
+</p>
+<p>The null pointer is represented in Perl by the <code>undef</code> keyword.
 </p>
 <a name="8"></a>
 <h3 class="subheading"> Event Handling </h3>
@@ -369,10 +387,15 @@ call):
 <p>To workaround some shortcomings of Swig, a few methods from C++ have been
 renamed for Perl. These are:
 </p>
-<p><code>Classify(const csPlane3&amp;, csVector3*, int)</code> becomes <code>ClassifyPolygon</code>.
-<code>ComputeNormal(csVector3*, int)</code> becomes <code>ComputePolygonNormal</code>.
-<code>ComputePlane(csVector3*, int)</code> becomes <code>ComputePolygonPlane</code>.
-</p>
+<ul>
+<li>
+<code>Classify(const csPlane3&amp;, csVector3*, int)</code> becomes <code>ClassifyPolygon</code>
+</li><li>
+<code>ComputeNormal(csVector3*, int)</code> becomes <code>ComputePolygonNormal</code>
+</li><li>
+<code>ComputePlane(csVector3*, int)</code> becomes <code>ComputePolygonPlane</code>
+</li></ul>
+
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
 <tr><td valign="middle" align="left">[<a href="Java-Bindings.html#0" title="Previous section in reading order"> &lt; </a>]</td>

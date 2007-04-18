@@ -238,8 +238,9 @@ explosion.
   fstate-&gt;SetColor (csColor (1.0, 1.0, 1.0));
   // We don't want to hit the player against the laserbeam when it is
   // visible so we disable the collision detection mesh here.
+  csStringID colldet_id = app-&gt;GetStrings ()-&gt;Request (&quot;colldet&quot;);
   laserbeam_factory-&gt;GetMeshObjectFactory ()-&gt;GetObjectModel ()
-  	-&gt;SetPolygonMeshColldet (0);
+  	-&gt;SetTriangleData (colldet_id, 0);
 
   if (!loader-&gt;LoadTexture (&quot;laserbeam_texture&quot;, &quot;/lib/stdtex/blobby.jpg&quot;))
     return app-&gt;ReportError (&quot;Error loading 'blobby' texture!&quot;);
@@ -309,7 +310,7 @@ With a bit of effort we're confident that you can make a better explosion
 by tweaking the parameters and using a better texture.
 </p>
 <p>A few special remarks about the geometry above. On the laserbeam factory
-we use <code>iObjectModel::SetPolygonMeshColldet()</code> to clear the collision
+we use <code>iObjectModel::SetTriangleData()</code> to clear the collision
 detection mesh. The laserbeam mesh is generated at roughly the same spot
 as the camera. We don't want the collision detection system to detect hits
 with it (we use other methods to detect hits of the laserbeam with adversary).

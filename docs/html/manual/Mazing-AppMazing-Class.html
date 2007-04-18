@@ -99,6 +99,12 @@ private:
   csRef&lt;iVirtualClock&gt; vc;
 
   /**
+   * The string registry. This is used for common constants in
+   * Crystal Space.
+   */
+  csRef&lt;iStringSet&gt; strings;
+
+  /**
    * Set up everything that needs to be rendered on screen.  This routine is
    * called from the event handler in response to a cscmdProcess broadcast
    * message.
@@ -134,6 +140,7 @@ public:
   iCamera* GetCamera () const { return view-&gt;GetCamera (); }
   iEngine* GetEngine () const { return engine; }
   iLoader* GetLoader () const { return loader; }
+  iStringSet* GetStrings () const { return strings; }
   iCollideSystem* GetCollisionDetectionSystem () const { return cdsys; }
   Game&amp; GetGame () { return game; }
 
@@ -311,6 +318,11 @@ bool AppMazing::Application()
   vc = csQueryRegistry&lt;iVirtualClock&gt; (r);
   if (!vc)
     return ReportError(&quot;Failed to locate the virtual clock!&quot;);
+
+  strings = csQueryRegistryTagInterface&lt;iStringSet&gt; (r,
+      &quot;crystalspace.shared.stringset&quot;);
+  if (!strings)
+    return ReportError(&quot;Failed to locate the standard stringset!&quot;);
 
   // Setup game.
   if (!game.SetupGame ())
