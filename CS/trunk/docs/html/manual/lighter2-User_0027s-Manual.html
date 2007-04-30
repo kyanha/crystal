@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html401/loose.dtd">
+<html>
+<!-- Created by texi2html 1.76 -->
+<!--
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people <dev@texi2html.cvshome.org>
+Send bugs and suggestions to <users@texi2html.cvshome.org>
+
+-->
+<head>
+<title>Crystal Space: 5.6.1 lighter2 User's Manual</title>
+
+<meta name="description" content="Crystal Space: 5.6.1 lighter2 User's Manual">
+<meta name="keywords" content="Crystal Space: 5.6.1 lighter2 User's Manual">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 1.76">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.sansserif {font-family:sans-serif; font-weight:normal;}
+ul.toc {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="lighter2-User_0027s-Manual"></a>
+<a name="0"></a>
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="Using-lighter2.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="lighter2-Developer_0027s-Manual.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Using-lighter2.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<hr size="1">
+<h3 class="subsection"> 5.6.1 <code>lighter2</code> User's Manual </h3>
+
+<a name="1"></a>
+<h2 class="heading"> Introduction </h2>
+
+<p><code>lighter2</code> is a tool to compute \emph{static lighting for a CrystalSpace
+world. 
+</p>
+<p>\emph{Static means that the lighting effects on objects in the world
+are precomputed in a preprocessing step during and after modelling of the 
+world. The benefit is that it is very cheap to render; it makes no difference
+if a world uses one or one thousand lights, the runtime performance is the
+same. Shadows are supported as well. However, as the name &ldquo;static&rdquo; implies,
+the lighting can't be changed at runtime - that is, moving a light source
+won't have an effect on statically lit geometry.
+</p>
+
+<p>The oppositze is \emph{dynamic lighting which is computed entirely at runtime.
+This means that light sources can be moved as desired, with changes immediately
+being reflected; however, shadows and multiple light sources all increase the
+runtime cost of lighting.
+</p>
+<p>In practice, static and dynamic light can be mixed: lights sources that don't
+change their position (e.g. a streetlight) can be computed statically, while
+moving light sources (e.g. a flashlight held by the player) are computed
+dynamically.
+</p>
+<a name="2"></a>
+<h2 class="heading"> Basic Usage </h2>
+
+<p><code>lighter2</code> is usually invoked from the command line:
+</p>
+<table><tr><td>&nbsp;</td><td><pre class="example">$ lighter2 [options] &lt;map file&gt;
+</pre></td></tr></table>
+<p><code>options</code> optionally specify one or more command-line options (which are
+described in the course of this section). <code>map file</code> specifies the path to
+a directory or <small>ZIP</small> file containing an <small>XML</small> map file named <tt>&lsquo;world&rsquo;</tt>
+or the direct file name of an <small>XML</small> map file. \emph{Note: it is recommended
+to extract worlds in <small>ZIP</small> files before lighting as this will result in
+noticeably faster disk input/output, especially when the results are saved.
+</p>
+<p>Once started, lighting will be computed for the world without further user
+intervention being necessary.
+</p>
+<a name="3"></a>
+<h2 class="heading"> Light computation </h2>
+
+<p>Lighting for objects is either computed as a \emph{lightmap or
+\emph{per-vertex.
+</p>
+<p>\emph{Lightmap lighting can be thought of as a grid being laid over surfaces
+in the world and the lighting for a surface being computed at the grid points.
+</p>
+<p>\emph{Per-Vertex lighting means that lighting for surfaces is computed at
+its vertices.
+</p>
+
+<hr size="1">
+<table cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="Using-lighter2.html#0" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[<a href="lighter2-Developer_0027s-Manual.html#0" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="Using-lighter2.html#0" title="Up section"> Up </a>]</td>
+<td valign="middle" align="left">[<a href="Internals.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
