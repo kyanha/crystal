@@ -87,8 +87,8 @@ have to specify an entry at top-level (directly inside the <samp>&lsquo;world&rs
 statement) like this (this example uses the <em>fountain</em> plug-in to make a
 fountain):
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;fountainFactory&quot;&gt;
-  &lt;plugin&gt;crystalspace.mesh.loader.factory.fountain&lt;/plugin&gt;
+<table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshfact name=&quot;particlesFactory&quot;&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.factory.particles&lt;/plugin&gt;
   &lt;params /&gt;
 &lt;/meshfact&gt;
 </pre></td></tr></table>
@@ -99,33 +99,43 @@ parameters for the fountain's Mesh Object Factory so that's why the
 <samp>&lsquo;params&rsquo;</samp> block is empty.  But you still have to specify it.  Other mesh
 object factories may accept parameters.
 </p>
-<p>Because the fountain defines no parameters for the Mesh Object Factory
-you only have to create one factory in order to make all fountains you need.
-But in some cases you may have to create multiple factories depending
-on the object characteristics you want.
+<p>With particle systems you have the option of specifying the parameters
+in the factory and/or the mesh object. The advantage of specifying it in
+the factory is that it then becomes easier to reuse the factory for
+different particle system instances. In this example however, we define
+the particle system in the mesh object. We still need the empty mesh
+factory however.
 </p>
 <p>To place a fountain in some room (sector) you use a <samp>&lsquo;meshobj&rsquo;</samp>
 statement, within the definition of a room or sector, like this:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">&lt;meshobj name=&quot;fountain&quot;&gt;
-  &lt;plugin&gt;crystalspace.mesh.loader.fountain&lt;/plugin&gt;
+  &lt;plugin&gt;crystalspace.mesh.loader.particles&lt;/plugin&gt;
   &lt;params&gt;
-    &lt;factory&gt;fountainFactory&lt;/factory&gt;
-    &lt;number&gt;300&lt;/number&gt;
+    &lt;factory&gt;particlesFactory&lt;/factory&gt;
     &lt;material&gt;spark&lt;/material&gt;
-    &lt;origin x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot;/&gt;
-    &lt;dropsize w=&quot;.05&quot; h=&quot;.05&quot;/&gt;
-    &lt;color red=&quot;0.7&quot; green=&quot;0.9&quot; blue=&quot;1.0&quot;/&gt;
-    &lt;accel x=&quot;0&quot; y=&quot;-.1&quot; z=&quot;0&quot;/&gt;
-    &lt;falltime&gt;3&lt;/falltime&gt;
-    &lt;speed&gt;1&lt;/speed&gt;
-    &lt;elevation&gt;1.5&lt;/elevation&gt;
-    &lt;azimuth&gt;0&lt;/azimuth&gt;
-    &lt;opening&gt;.2&lt;/opening&gt;
+    &lt;particlesize x=&quot;0.025&quot; y=&quot;0.025&quot; /&gt;
+    &lt;transformmode&gt;local&lt;/transformmode&gt;
     &lt;mixmode&gt;
       &lt;add /&gt;
     &lt;/mixmode&gt;
+
+    &lt;emitter type=&quot;cone&quot;&gt;
+      &lt;enabled/&gt;
+      &lt;initialttl min=&quot;3&quot; max=&quot;3&quot; /&gt;
+      &lt;emissionrate&gt;100&lt;/emissionrate&gt;
+      &lt;position x=&quot;0&quot; y=&quot;0&quot; z=&quot;0&quot; /&gt;
+      &lt;placement&gt;center&lt;/placement&gt;
+      &lt;extent x=&quot;0&quot; y=&quot;1&quot; z=&quot;0&quot; /&gt;
+      &lt;coneangle&gt;0.2&lt;/coneangle&gt;
+      &lt;initialvelocity x=&quot;0&quot; y=&quot;1&quot; z=&quot;0&quot; /&gt;
+    &lt;/emitter&gt;
+    &lt;effector type=&quot;force&quot;&gt;
+      &lt;acceleration x=&quot;0&quot; y=&quot;-0.1&quot; z=&quot;0&quot; /&gt;
+    &lt;/effector&gt;
   &lt;/params&gt;
+  &lt;ztest /&gt;
+  &lt;priority&gt;alpha&lt;/priority&gt;
   &lt;move&gt;
     &lt;v x=&quot;-10&quot; y=&quot;-1&quot; z=&quot;14&quot;/&gt;
     &lt;matrix&gt;
@@ -134,7 +144,7 @@ statement, within the definition of a room or sector, like this:
   &lt;/move&gt;
 &lt;/meshobj&gt;
 </pre></td></tr></table>
-<p>This code fragment uses the <samp>&lsquo;crystalspace.mesh.loader.fountain&rsquo;</samp> loader
+<p>This code fragment uses the <samp>&lsquo;crystalspace.mesh.loader.particles&rsquo;</samp> loader
 plug-in named to load a Mesh Object (type
 <samp>&lsquo;iMeshObject&rsquo;</samp>) and register it with the engine (while placing it in the
 current sector).  In this case there are many parameters.  The first parameter
@@ -186,9 +196,7 @@ calling <code>NewInstance()</code> on them.
 If the object has parameters you use <code>scfQueryInterface</code> to get a handle
 to the <samp>&lsquo;iSomethingState&rsquo;</samp> interface (replace <em>Something</em> with whatever
 the type name of the Mesh Object is).  Then set the parameters you want on the
-Mesh Object.  Note that there are Mesh Object implementations which have
-multiple interfaces like this (for example, the particle systems implement both
-<samp>&lsquo;iParticleState&rsquo;</samp> plus another particle system-dependent interface).
+Mesh Object.
 
 </li><li>
 For every instance of <samp>&lsquo;iMeshObject&rsquo;</samp> you need to create a
