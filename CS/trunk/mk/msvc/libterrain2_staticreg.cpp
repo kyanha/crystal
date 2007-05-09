@@ -27,11 +27,6 @@ static char const metainfo_terrain2[] =
 "        <description>Bruteblock terrain renderer</description>"
 "      </class>"
 "      <class>"
-"        <name>crystalspace.mesh.object.terrain2.simplerenderer</name>"
-"        <implementation>csTerrainSimpleRenderer</implementation>"
-"        <description>Simple terrain renderer</description>"
-"      </class>"
-"      <class>"
 "        <name>crystalspace.mesh.object.terrain2.terraformerdatafeeder</name>"
 "        <implementation>csTerrainTerraFormerDataFeeder</implementation>"
 "        <description>Terraformer-based data feeder</description>"
@@ -59,10 +54,6 @@ static char const metainfo_terrain2[] =
   #define csTerrainBruteBlockRenderer_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrainBruteBlockRenderer) 
   #endif
-  #ifndef csTerrainSimpleRenderer_FACTORY_REGISTER_DEFINED 
-  #define csTerrainSimpleRenderer_FACTORY_REGISTER_DEFINED 
-    SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrainSimpleRenderer) 
-  #endif
   #ifndef csTerrainTerraFormerDataFeeder_FACTORY_REGISTER_DEFINED 
   #define csTerrainTerraFormerDataFeeder_FACTORY_REGISTER_DEFINED 
     SCF_DEFINE_FACTORY_FUNC_REGISTRATION(csTerrainTerraFormerDataFeeder) 
@@ -86,10 +77,6 @@ SCF_REGISTER_STATIC_LIBRARY(terrain2,metainfo_terrain2)
   #ifndef csTerrainBruteBlockRenderer_FACTORY_REGISTERED 
   #define csTerrainBruteBlockRenderer_FACTORY_REGISTERED 
     csTerrainBruteBlockRenderer_StaticInit csTerrainBruteBlockRenderer_static_init__; 
-  #endif
-  #ifndef csTerrainSimpleRenderer_FACTORY_REGISTERED 
-  #define csTerrainSimpleRenderer_FACTORY_REGISTERED 
-    csTerrainSimpleRenderer_StaticInit csTerrainSimpleRenderer_static_init__; 
   #endif
   #ifndef csTerrainTerraFormerDataFeeder_FACTORY_REGISTERED 
   #define csTerrainTerraFormerDataFeeder_FACTORY_REGISTERED 
