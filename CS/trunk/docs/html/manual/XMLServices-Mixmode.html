@@ -63,48 +63,33 @@ ul.toc {list-style: none}
 
 <p>The <code>iSyntaxService::ParseMixmode()</code> function parses a <samp>&lsquo;mixmode&rsquo;</samp>
 node which is used for defining transparency or how the source (usually
-a texture) is blended with the destination (usually a screen buffer). In the
-explanation below we use the following terms: <small>SRC</small> is the source of
-the blend operation (usually the texture or material). <small>DST</small> is the
-destination of the blend operation (usually the screen buffer or texture
-on which you are rendering). <samp>&lsquo;srcAlpha&rsquo;</samp> is the alpha component
-of the source buffer. <samp>&lsquo;dstAlpha&rsquo;</samp> is the alpha component of the destination
-buffer. The following children are supported for mixmode:
+a texture) is blended with the destination (usually a screen buffer). For
+more information about mixmodes check <a href="Renderer-Mixmodes.html#0">Mixmodes and Blending</a>.
+</p>
+<p>The following children are supported for mixmode:
 </p>
 <ul>
 <li> <samp>&lsquo;copy&rsquo;</samp>
-Blending function: <small>SRC</small>. This mode is usually default. It simply
-copies the source to the destination without blending.
+Copy blending. This mode is usually default.
 </li><li> <samp>&lsquo;multiply&rsquo;</samp>
-Blending function: <small>SRC</small>*<small>DST</small>. This is a common blend mode to
-simulate lighting.
+Multiplicative blending.
 </li><li> <samp>&lsquo;multiply2&rsquo;</samp>
-Blending function: 2*<small>SRC</small>*@src{dst}. This is a common blend mode
-to simulate brighter lighting.
+Double multiplicative blending. Often used for lighting.
 </li><li> <samp>&lsquo;add&rsquo;</samp>
-Blending function: <small>SRC</small>+<small>DST</small>. Add source and destination. This is a
-mode that allows for nice transparency effects. One of the big advantages (as
-opposed to <samp>&lsquo;alpha&rsquo;</samp>) is that this mode doesn't require objects to be
-sorted from back to front.
+Additive blending. Used for transparency effects that don't require
+back to front sorting.
 </li><li> <samp>&lsquo;alpha&rsquo;</samp>
-Blending function: <samp>&lsquo;alpha&rsquo;</samp>*<small>SRC</small> + (1-<samp>&lsquo;alpha&rsquo;</samp>)*<small>DST</small>.
-The <samp>&lsquo;alpha&rsquo;</samp> used in this formula is a combination of the <samp>&lsquo;srcAlpha&rsquo;</samp>
-and the alpha given as a parameter of this child (between 0 and 1). But this
-depends on the actual shader that is being used.
+Alpha blending. Expects and additional parameter between 0 and 1 that indicates
+the alpha value. This kind of blending requires back to front sorting to look
+right.
 </li><li> <samp>&lsquo;premultalpha&rsquo;</samp>
-Blending function: <small>SRC</small> + <small>DST</small>*(1-<samp>&lsquo;srcAlpha&rsquo;</samp>). When the
-source alpha component was multoplied into the source color then this acts
-like normal alpha blending. If it was not then it acts like additive
-blending. So this mixmode can be used to do both additive and alpha
-blending on the same triangle even and interpolate between these two
-extremes by appropriate choice of the color and alpha values.
+Premultiplied alpha blending.
 </li><li> <samp>&lsquo;destalphaadd&rsquo;</samp>
-Blending function: <samp>&lsquo;dstAlpha&rsquo;</samp>*<small>SRC</small> + <small>DST</small>.
+@@TODO
 </li><li> <samp>&lsquo;srcalphaadd&rsquo;</samp>
-Blending function: <samp>&lsquo;srcAlpha&rsquo;</samp>*<small>SRC</small> + <small>DST</small>.
+@@TODO
 </li><li> <samp>&lsquo;transparent&rsquo;</samp>
-Blending function: <small>DST</small>. This mode will simply leave the destination
-unchanged (fully transparent) except that the z-buffer is modified!
+Fully transparent but still affect Z-buffer.
 </li><li> <samp>&lsquo;mesh&rsquo;</samp>
 @@TODO
 </li><li> <samp>&lsquo;alphatest&rsquo;</samp>
@@ -128,24 +113,7 @@ This child expects two attributes: <samp>&lsquo;src&rsquo;</samp> and <samp>&lsq
 
 
 
-
 <hr size="1">
-<table cellpadding="1" cellspacing="1" border="0">
-<tr><td valign="middle" align="left">[<a href="XMLServices-Intro.html#0" title="Previous section in reading order"> &lt; </a>]</td>
-<td valign="middle" align="left">[<a href="Old-Map-File-Format.html#0" title="Next section in reading order"> &gt; </a>]</td>
-<td valign="middle" align="left"> &nbsp; </td>
-<td valign="middle" align="left">[<a href="Using-Crystal-Space.html#0" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
-<td valign="middle" align="left">[<a href="XML-Syntax-Services.html#0" title="Up section"> Up </a>]</td>
-<td valign="middle" align="left">[<a href="Working-with-Engine-Content.html#0" title="Next chapter"> &gt;&gt; </a>]</td>
-<td valign="middle" align="left"> &nbsp; </td>
-<td valign="middle" align="left"> &nbsp; </td>
-<td valign="middle" align="left"> &nbsp; </td>
-<td valign="middle" align="left"> &nbsp; </td>
-<td valign="middle" align="left">[<a href="index.html#SEC_Top" title="Cover (top) of document">Top</a>]</td>
-<td valign="middle" align="left">[<a href="cs_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
-<td valign="middle" align="left">[<a href="cs_Index.html#0" title="Index">Index</a>]</td>
-<td valign="middle" align="left">[<a href="cs_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
-</tr></table>
 <p>
  <font size="-1">
   This document was generated using <a href="http://texi2html.cvshome.org/"><em>texi2html 1.76</em></a>.
