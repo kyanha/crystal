@@ -181,24 +181,18 @@ a Crystal Space C++ function, a Perl array reference is used.
 
 <p>Most of the methods of <samp>&lsquo;csString&rsquo;</samp> and <samp>&lsquo;iString&rsquo;</samp> are inaccessible
 from Perl code, but these classes can be converted into Perl strings very
-easily, using the scalar dereference operator or string interpolation:
+easily, using string interpolation:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">my $string_object = new cspace::csString ('This is a csString');
 
 print &quot;$string_object that has been interpolated in double-quotes.\n&quot;;
 
-my $string1 = substr ${ $string_object }, 0, 4;
-my $string2 = substr ${ $string_object }, 8;
-
-print &quot;$string1 has been extracted from $string2 using scalar dereference.\n&quot;;
-
 # Output:
 # This is a csString that has been interpolated in double-quotes.
-# This has been extracted from a csString using scalar dereference.
 </pre></td></tr></table>
 <p>This also applies to <samp>&lsquo;iDataBuffer&rsquo;</samp>.
 </p>
-<p>To pass the null pointer as a string argument, use Perl's <code>undef</code> keyword.
+<p>To pass the null pointer as a char* argument, use Perl's <code>undef</code> keyword.
 </p>
 <a name="5"></a>
 <h3 class="subheading"> Vectors, Matrices and Colors </h3>
@@ -209,12 +203,13 @@ the vector:
 </p>
 <table><tr><td>&nbsp;</td><td><pre class="example">my $vector = new cspace::csVector3 (1, 2, 3);
 
-print $vector-&gt;[1] . $vector-&gt;[0] . $vector-&gt;[2] . &quot;\n&quot;;
+print $vector-&gt;[0] . $vector-&gt;[1] . $vector-&gt;[2] . &quot;\n&quot;;
 
-print reverse @{ $vector } . &quot;\n&quot;;
+my @reversed = reverse @$vector;
+print &quot;@reversed\n&quot;;
 
 # Output:
-# 213
+# 123
 # 3 2 1
 </pre></td></tr></table>
 <p>Similarly, using the array dereference operator on a <samp>&lsquo;csColor&rsquo;</samp>,

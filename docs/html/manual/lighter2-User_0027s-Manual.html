@@ -91,7 +91,7 @@ dynamically.
 
 <p><code>lighter2</code> is usually invoked from the command line:
 </p>
-<table><tr><td>&nbsp;</td><td><pre class="example">$ lighter2 [options] &lt;map file&gt;
+<table><tr><td>&nbsp;</td><td><pre class="example">lighter2 [options] &lt;map file&gt;
 </pre></td></tr></table>
 <p><code>options</code> optionally specify one or more command-line options (which are
 described in the course of this section). <code>map file</code> specifies the path to
@@ -112,9 +112,130 @@ intervention being necessary.
 <p><em>Lightmap lighting</em> can be thought of as a grid being laid over surfaces
 in the world and the lighting for a surface being computed at the grid points.
 </p>
+<p>The distribution of lighting grid points for a surface is controlled by the
+<em>lightmap density</em>. This density specifies the amount of sample points 
+in u- respectively v-direction of the surface, measured in points per world 
+unit. E.g. a density of 2 means 2 by 2 sample points for a square of 
+1 by 1 world units of a surface. If a world unit equals one meter, this would 
+mean a lighting value is computed every 0.5m.
+</p>
+<p>Increasing the lightmap density means shadows get more detailed, but lightmaps
+also get bigger (and more lightmaps may be produced).  Decreasing the lightmap
+density reduces lightmap sizes and amounts, but also means less detailed and
+blurrier shadows. However, it may make sense for cases where shadows are not
+very detailed anyway (such as large outdoor surfaces).
+</p>
 <p><em>Per-Vertex lighting</em> means that lighting for surfaces is computed at
 its vertices.
 </p>
+<a name="4"></a>
+<h3 class="subheading"> When to Use Per-vertex Lighting </h3>
+
+<p>For objects that consist of relatively large and few surfaces lightmap lighting
+is great: light is sampled at a lot of points distributed over the surfaces,
+giving good light and shadow details. Using per-vertex lighting for such kind
+of objects would mean that lighting is only sampled at the surface corner
+and interpolated over the surface, meaning much detail is lost.
+</p>
+<p>However, on highly tesselated objects (ie lots of small surfaces) lightmap 
+lighting usually produces sub-par results. Due to the way the lightmapper 
+works it can happen that a lot of seams are visible (especially when surfaces 
+are smaller than the spacing of the lightmap grid). But if an object is
+highly tesselated it usually means that there are so many vertices so close
+together that sampling lighting at these can already give sufficient light
+and shadow detail, giving results as good as lightmaps, even though lighting
+for individual surfaces is only interpolated over them.
+</p>
+
+<p>Per-vertex lighting can also be beneficial on objects quite the opposite: when
+surfaces are extremely large, lightmaps will also be. If a large object is
+lit in such a way that very few shadows are cast on it, meaning that the
+lighting is very smooth on the surfaces and varies only little, there is
+no benefit from using lightmaps, as the shadowing detail they can possible 
+provide is not present. Using per-vertex lighting on such an object can save
+resources by omitting the lightmaps with little visual difference.
+</p>
+<a name="5"></a>
+<h2 class="heading"> Setting Global Options </h2>
+
+<p>Some options are &ldquo;global&rdquo; and affect all meshes or factories or the execution
+of <code>lighter2</code> itself. These options can be set in two ways: the command
+line and a configuration file.
+</p>
+<p>For example, the global option <samp>&lsquo;foo&rsquo;</samp> can be set to the value <samp>&lsquo;bar&rsquo;</samp> 
+in any of the following ways:
+</p><ul>
+<li> On the command line by specifying <code>-foo=bar</code>.
+</li><li> In a configuration file by setting the key <samp>&lsquo;Lighter2.foo=bar&rsquo;</samp>.
+The configuration file can be utilized via CrystalSpace's <code>-cfgfile</code>
+command line option.
+</li><li> In <tt>&lsquo;lighter2.cfg&rsquo;</tt> by setting the key <samp>&lsquo;Lighter2.foo=bar&rsquo;</samp>.
+</li></ul>
+
+<p>Note that this is list is ordered by precedence &ndash; e.g. a command line option
+will always override an option set in a configuration file, and a
+user-specified configuration file will always override options from
+<tt>&lsquo;lighter2.cfg&rsquo;</tt>.
+</p>
+<a name="6"></a>
+<h2 class="heading"> List of Options </h2>
+
+<a name="7"></a>
+<h3 class="subheading"> Lightmap Density </h3>
+
+<p>Please see the &ldquo;Light computation&rdquo; section above for an explanation of
+lightmap density.
+</p>
+<ul>
+<li> Can be set on mesh factories.
+</li><li> Can be set globally: <code>lmdensityu</code>, <code>lmdensityv</code>.
+</li></ul>
+
+<a name="8"></a>
+<h3 class="subheading"> Per-Vertex Lighting </h3>
+
+<p>Per-vertex lighting means that lighting is not computed on a grid laid over the
+surfaces but at the vertices of a mesh.
+</p>
+<p>For a discussion of cases where using per-vertex lighting can be beneficial
+read the paragraph &ldquo;When to Use Per-vertex Lighting&rdquo;.
+</p>
+<ul>
+<li> Can be set on mesh factories.
+</li><li> Can be set on mesh objects. Note that if per-vertex lighting has been
+  enabled for a factory it can't be disabled for objects of that factory.
+</li></ul>
+
+<a name="9"></a>
+<h3 class="subheading"> Advanced Options </h3>
+
+<a name="10"></a>
+<h4 class="subsubheading"> Black Threshold </h4>
+
+<p>This controls the threshold of a lightmap pixel below which it is considered
+black. Can be used to &quot;cull&quot; away lightmaps that have only very, very low
+lighting values. However, while setting this value high may cause less 
+lightmaps to be produced, it may also cause visible lighting artifacts
+(as low lightmap values are actually amplified at runtime).
+</p>
+<ul>
+<li> Can be set globally: <code>blackthreshold</code>.
+</li></ul>
+
+<a name="11"></a>
+<h4 class="subsubheading"> Normals Tolerance </h4>
+
+<p>When computing the lightmap layout (that is, determining the area of the
+lightmap onto which a surface is mapped), coplanar surfaces are layouted
+adjacent to each other.  However, in practice, due to inaccuracies etc.
+some surfaces may not be exactly coplanar, but close enough to be
+practically considered as such.  The normals tolerance specifies the
+maximum angle between two surface normals (in degrees) at which the
+surfaces are still considered coplanar. 
+</p>
+<ul>
+<li> Can be set globally: <code>normalsthreshold</code>.
+</li></ul>
 
 <hr size="1">
 <table cellpadding="1" cellspacing="1" border="0">
