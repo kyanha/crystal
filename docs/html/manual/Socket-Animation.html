@@ -119,7 +119,7 @@ two sockets, one for the left hand and one for the right hand.
   if (!objectFactory) return false;
   csRef&lt;iMeshWrapper&gt; object = engine-&gt;CreateMeshWrapper (objectFactory,
   	objectFactoryName);
-  actorMesh-&gt;GetChildren ()-&gt;Add (object);
+  object-&gt;QuerySceneNode ()-&gt;SetParent (actorMesh-&gt;QuerySceneNode ());
   socket-&gt;SetMeshWrapper (object);
   // Set a relative transform to correct the orientation of the object
   // relative to the socket orientation.
@@ -146,7 +146,7 @@ currently change the relative transform.
   if (!socket) return false;
   iMeshWrapper* object = socket-&gt;GetMeshWrapper ();
   if (!object) return false;
-  actorMesh-&gt;GetChildren ()-&gt;Remove (object);
+  object-&gt;QueryScene ()-&gt;SetParent (0);
   socket-&gt;SetMeshWrapper (0);
   engine-&gt;RemoveObject (object);
   return true;
